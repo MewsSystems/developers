@@ -1,10 +1,12 @@
-const { SEED } = require('./constants');
-
+const { SEED, PAIR_COUNT, UPDATE_INTERVAL } = require('./constants');
 const Chance = require('chance');
 const chance = new Chance(SEED);
 
-const ratesGenerator = require('./ratesGenerator');
-ratesGenerator.init(chance);
+const ratesGenerator = require('./ratesGenerator')({
+    generator: chance,
+    pairCount: PAIR_COUNT,
+    updateInterval: UPDATE_INTERVAL,
+});
 
 const express = require('express');
 const server = express();
@@ -15,7 +17,7 @@ server.use((req, res, next) => {
 });
 
 server.get('/configuration', (req, res) => {
-    const appLoadTime = chance.float({ min: 3, max: 5 }) * 1000;
+    const appLoadTime = chance.floating({ min: 3, max: 5 }) * 1000;
 
     setTimeout(() => {
         res.jsonp({
@@ -25,6 +27,7 @@ server.get('/configuration', (req, res) => {
 });
 
 server.get('/rates', (req, res) => {
+    // todo match ids
     res.jsonp({
         rates: ratesGenerator.getCurrentRates(),
     });

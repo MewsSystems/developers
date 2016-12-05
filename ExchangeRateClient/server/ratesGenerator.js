@@ -1,66 +1,52 @@
-const adjustDecimal = require('./misc/adjustDecimal');
+const {
+    MIN_INITIAL_RATE,
+    MAX_INITIAL_RATE,
+    MAX_RATE_UPDATE_STEP,
+} = require('./constants');
 
-let state = {};
+module.exports = function rateGenerator({ generator, pairCount, updateInterval }) {
+    const currencyPairs = generateCurrencyPairs();
+    let currentRates = generateRates(currencyPairs);
+    setInterval(() => (currentRates = updateRates(currentRates)), updateInterval);
 
-module.exports = {
-    init({ generator, pairCount, updateInterval }) {
-        state.generator = generator;
-        state.currencyPairs = generateCurrencyPairs(pairCount);
+    return {
+        getCurrencyPairs() {
+            return Object.assign({}, currencyPairs);
+        },
 
-        // generateRates?
-        setInterval(updateRates, updateInterval);
-    },
-
-    getCurrencyPairs() {
-        return Object.assign({}, state.currencyPairs);
-    },
-
-    getCurrentRates() {
-        return Object.assing({}, state.currentRates);
-    },
-};
-
-function generateCurrencyPairs() {
-    let rates = {};
-
-    _.times(PAIRS_COUNT, () => {
-        rates[chance.guid()] = chance.currency_pair();
-    });
-
-    return rates;
-}
-
-function generateRates() {
+        getCurrentRates() {
+            return Object.assign({}, currentRates);
+        },
+    };
     
-}
+    function generateCurrencyPairs() {
+        let pairs = {};
 
-function updateRates() {
+        for (let i = 0; i != pairCount; ++i) {
+            pairs[generator.guid()] = generator.currency_pair();
+        }
 
-}
+        return pairs;
+    }
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+    function generateRates(currencyPairs) {
+        let rates = {};
 
-function generateRate(pair) {
-    rates[pair] = adjustDecimal(getRandomInt(500, 1500) / 1000, -3);
-}
+        for (let pairId of Object.keys(currencyPairs)) {
+            rates[pairId] = generator.floating({ min: MIN_INITIAL_RATE, max: MAX_INITIAL_RATE });
+        }
 
-function updateRate(pair) {
-    rates[pair] = adjustDecimal(rates[pair] + getRandomInt(-5, 5) / 1000, -3);
-}
-
-function updateRates() {
-    pairs.forEach(updateRate)
-}
-
-module.exports = {
-    init() {
-        pairs.forEach(generateRate);
-        setInterval(updateRates, UPDATE_INTERVAL);
-    },
-
-    getCurrentRates() {
         return rates;
     }
-}
+
+    function updateRates(currentRates) {
+        let updatedRates = {};
+
+        for (let pairId of Object.keys(currentRates)) {
+            const value = currentRates[pairId];
+            updatedRates[pairId] = generator.floating({ min: value + MAX_RATE_UPDATE_STEP, max: value + MAX_RATE_UPDATE_STEP })
+        }
+
+        return updatedRates;
+    }
+};
