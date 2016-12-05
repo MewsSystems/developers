@@ -68,7 +68,7 @@ In `server` folder there is a simple currency exchange rate server configured, w
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
+| --- | --- | --- | --- |
 | currencyPairs | array of currencies | required | An array of available currencies.
 
 #### Get rates
@@ -81,7 +81,7 @@ In `server` folder there is a simple currency exchange rate server configured, w
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
+| --- | --- | --- | --- |
 | currencyPairIds | array of numbers | required | An array of requested currency pairs rates. 
 
 **Response**
@@ -94,7 +94,7 @@ In `server` folder there is a simple currency exchange rate server configured, w
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
+| --- | --- | --- | --- |
 | rates | object | required | An object of new exchange rates for every requested currencyPairId.
 
 ## Starting the server and the app
