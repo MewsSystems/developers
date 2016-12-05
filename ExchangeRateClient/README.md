@@ -67,8 +67,8 @@ The graphical side of the application is not the primary focus of task, however 
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
-| currencyPairs | object of pairs | required | An array of available currencies.
+| --- | --- | --- | --- |
+| currencyPairs | object of pairs | required | An object of available currencies.
 
 #### Get rates
 
@@ -80,7 +80,7 @@ The graphical side of the application is not the primary focus of task, however 
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
+| --- | --- | --- | --- |
 | currencyPairIds | array of numbers | required | An array of requested currency pairs rates. 
 
 **Response**
@@ -93,5 +93,5 @@ The graphical side of the application is not the primary focus of task, however 
 ```
 
 | Property | Type | | Description |
-| -------- | ---- | | ----------- |
+| --- | --- | --- | --- |
 | rates | object | required | An object of new exchange rates for every requested currencyPairId.
