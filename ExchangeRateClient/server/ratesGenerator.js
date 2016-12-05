@@ -1,15 +1,42 @@
-import Chance from 'Chance';
-import pairs from './pairs';
-import {
-    SEED,
-    UPDATE_INTERVAL,
+const adjustDecimal = require('./misc/adjustDecimal');
+
+let state = {};
+
+module.exports = {
+    init({ generator, pairCount, updateInterval }) {
+        state.generator = generator;
+        state.currencyPairs = generateCurrencyPairs(pairCount);
+
+        // generateRates?
+        setInterval(updateRates, updateInterval);
+    },
+
+    getCurrencyPairs() {
+        return Object.assign({}, state.currencyPairs);
+    },
+
+    getCurrentRates() {
+        return Object.assing({}, state.currentRates);
+    },
+};
+
+function generateCurrencyPairs() {
+    let rates = {};
+
+    _.times(PAIRS_COUNT, () => {
+        rates[chance.guid()] = chance.currency_pair();
+    });
+
+    return rates;
+}
+
+function generateRates() {
     
-} from './constants';
-import adjustDecimal from './misc/adjustDecimal';
+}
 
-const chance = new Chance(SEED);
+function updateRates() {
 
-let rates = {};
+}
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

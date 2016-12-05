@@ -1,21 +1,33 @@
-const express import 'express';
-const ratesGenerator import './ratesGenerator';
+const { SEED } = require('./constants');
 
-ratesGenerator.init();
+const Chance = require('chance');
+const chance = new Chance(SEED);
+
+const ratesGenerator = require('./ratesGenerator');
+ratesGenerator.init(chance);
+
+const express = require('express');
 const server = express();
 
-server.get('/rates', (req, res) => {
+server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.jsonp({
-        rates: ratesGenerator.getCurrentRates(),
-    });
+    next();
 });
 
 server.get('/configuration', (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.jsonp({
+    const appLoadTime = chance.float({ min: 3, max: 5 }) * 1000;
 
-    })
+    setTimeout(() => {
+        res.jsonp({
+            currencyPairs: ratesGenerator.getCurrencyPairs(),
+        });
+    }, appLoadTime);
+});
+
+server.get('/rates', (req, res) => {
+    res.jsonp({
+        rates: ratesGenerator.getCurrentRates(),
+    });
 });
 
 server.listen(3000, () => {

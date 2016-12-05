@@ -11,13 +11,17 @@
 
 To install all project dependencies, run `npm install` in the root folder.
 
+## Project description
+
+In `server` folder there is a simple currency exchange rate server configured, with few api calls. It gives random exchange rate updates for a few currency pairs. Your task is to write a simple client app, that will periodically request updates from the server and display them to a user. There is a skeleton app prepared in the `app` folder.
+
 ## Your task
 
 You should start with creating a fork of the repository. When you're finished with the task, you should create a pull request.
 
 Your task is to write a client application, that will periodically request updates from the server and display them to a user. There is a skeleton app in the `app` folder you can use. The application should be composed from three main components:
 - Currency pairs selector - Allows user to filter displayed currency pairs.
-- Currency pairs rate list - Displays name, current value and trend for each selected currency pair. Trend is defined as:
+- Currency pairs rate list - Displays shortcut name, current value and trend for each selected currency pair. Shortcut is defined as `{name1}/{name2}`. Trend is defined as:
     - growing, when `prevValue < nextValue`
     - declining, when `prevValue > nextValue`
     - stagnating, when `prevValue == nextValue`
@@ -30,7 +34,6 @@ The graphical side of the application is not the primary focus of task, however 
 ### Requirements
 
 - The filtering should be done on client-side, meaning if filter changes between the updates, the change should be immediate.
-- The same applies to localization, it should change the localized parts without a reload of page.
 
 ### Bonus points
 
@@ -38,11 +41,12 @@ The graphical side of the application is not the primary focus of task, however 
 - Use some kind of modular approach to css (i.e. https://github.com/css-modules/css-modules).
 - Keep the configuration and user filters saved between application reloads.
 
-## Project description
+## Starting the server and the app
 
-In `server` folder there is a simple currency exchange rate server configured, with few api calls. It gives random exchange rate updates for a few currency pairs, and localized news messages at random time. Your task is to write a simple client app, that will periodically request updates from the server and display them to a user. There is a skeleton app prepared in the `app` folder.
+- To start the server, run `npm run start-server` in the root folder. The server will start listening on the localhost at port 3000.
+- To start the app, run `npm start` in the root folder. This will run `webpack-dev-server` on the localhost at port 8080. It also watches the app files and does incremental updates, so you can keep it running when you do changes in the app.
 
-### Api cals
+## Api cals
 
 #### Get Configuration
 
@@ -54,22 +58,17 @@ In `server` folder there is a simple currency exchange rate server configured, w
 **Response**
 ```
 {
-    currencyPairs: [
-        { name: 'EUR/GBP', id: 'id1' },
-        { name: 'USD/JPY', id: 'id2' },
+    currencyPairs: {
+        id1: [{ code: 'EUR', name: 'Euro' }, { code: 'USD', name: 'US Dollar' }],
+        id2: [{ name: 'GBP', name: 'British Pound' }, { code: 'JPY', name: 'Japanese Yen' }],
         ...
-    ],
-    languages: [
-        { name: 'English', code: 'en-US' },
-        { name: 'Czech', code: 'cs-CZ' },
-        ...
-    ]
+    }
 }
 ```
 
 | Property | Type | | Description |
 | -------- | ---- | | ----------- |
-| currencyPairs | array of currencies | required | An array of available currencies.
+| currencyPairs | object of pairs | required | An array of available currencies.
 
 #### Get rates
 
@@ -96,8 +95,3 @@ In `server` folder there is a simple currency exchange rate server configured, w
 | Property | Type | | Description |
 | -------- | ---- | | ----------- |
 | rates | object | required | An object of new exchange rates for every requested currencyPairId.
-
-## Starting the server and the app
-
-- To start the server, run `npm run start-server` in the root folder. The server will start listening on the localhost at port 3000.
-- To start the app, run `npm start` in the root folder. This will run `webpack-dev-server` on the localhost at port 8080. It also watches the app files and does incremental updates, so you can keep it running when you do changes in the app.
