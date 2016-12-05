@@ -1,7 +1,5 @@
 import { endpoint, interval } from './config';
-import startRatePolling from './startRatePolling';
 
-export function run() {
+export function run(element) {
     console.log('App is running.');
-    startRatePolling(endpoint, interval);
 }
