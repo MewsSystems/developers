@@ -27,7 +27,6 @@ server.get('/configuration', (req, res) => {
 });
 
 server.get('/rates', (req, res) => {
-    debugger;
     const hasFailed = chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
 
     if (hasFailed) {
