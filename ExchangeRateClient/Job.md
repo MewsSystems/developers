@@ -1,4 +1,4 @@
-### About Mews products
+# About Mews
 
 We develop the Mews Platform, a suite of applications and a hub for interconecting hotels, guests and other vendors from the hospitality industry.
 You can read more about our products at https://mewssystems.com/products.
@@ -13,6 +13,8 @@ Commander covers accounting, reporting, communication with channels (booking.com
 An example can be seen at http://emblemprague.com.
 - Mews Navigator - Applications (web and iOS) for communication between the guest and the hotel. It offers the ability to check-in online.
 When guest arrives to the hotel, they already have all the necessary information and it speeds up the on-site check-in.
+
+## Mews Frontend
 
 The latter two are SPAs. Distributor is done using our current React-based stack (este.js-like).
 Navigator is waiting to be migrated from Angular.js (v1).
