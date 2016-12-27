@@ -44,7 +44,10 @@ Therefore, we need someone who has an experience with React.js and has analytica
 With a small team, we do not look for people, who are willing to learn.
 We need you to be ready.
 You would extend the core of the frontend team and once the team is large enough, you would be the one, who would teach juniors how to do stuff.
+This is also, why the job cannot be remote.
+We don't want you to become "an employee" - we want you to grow with us and eventually, if everything goes well, become a leader of your own product team and therefore stay with us for a while.
 
 We need you to take your job seriously, but be passionate about it.
 If you want to work 9-5, not a minute longer, you probably wouldn't be a good match.
 On the other hand, if you code as long as you are having fun and sometimes just forget to leave your desk, you are already one of us :-)
+
