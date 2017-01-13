@@ -16,6 +16,8 @@
 .idea
 [Tt]humbs.db
 *.tgz
+.gitignore
+.vs
 
 node_modules
 bower_components
