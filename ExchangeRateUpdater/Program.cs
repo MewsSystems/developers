@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.NorwegianBank;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +25,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new NorwegianBankExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
