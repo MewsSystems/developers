@@ -8,6 +8,10 @@ using System.Net;
 
 namespace ExchangeRateUpdater.NorwegianBank.Providers
 {
+    /// <remarks>
+    /// There are rates only for exchanging to NOK on the http://www.norges-bank.no/en/Statistics/exchange_rates/ site.
+    /// Parameter currencies should contain "NOK" to retrieve a not-empty result.
+    /// </remarks>
     public class NorwegianBankExchangeRateProvider : ExchangeRateProvider
     {
         public override string Url =>
@@ -17,26 +21,32 @@ namespace ExchangeRateUpdater.NorwegianBank.Providers
         {
             string jsonString = null;
 
-            //TODO: add error handling, move to separate method
-            using (WebClient client = new WebClient())
+            if (ContainsNOK(currencyCodes))
             {
-                string url = string.Concat(Url, "&idfilter=", string.Join(",", currencyCodes));
-                //client.QueryString.Add("idfilter", string.Join(",", currencyCodes));
-                jsonString = client.DownloadString(url);
+                using (WebClient client = new WebClient())
+                {
+                    string url = string.Concat(Url, "&idfilter=", string.Join(",", currencyCodes));
+                    //client.QueryString.Add("idfilter", string.Join(",", currencyCodes));
+                    jsonString = client.DownloadString(url);
+                }
             }
 
             return jsonString;
         }
 
-        protected override IEnumerable<ExchangeRate> Convert(string response)
+        protected override IEnumerable<ExchangeRate> Convert(string response, IEnumerable<string> currencyCodes)
         {
+            if (!ContainsNOK(currencyCodes))
+                return Enumerable.Empty<ExchangeRate>();
+
             if (string.IsNullOrWhiteSpace(response))
-                throw new ArgumentNullException("Response is null");
+                throw new ArgumentNullException("response");
 
             var parsedResponse = JsonConvert.DeserializeObject<NorwegianBankExchangeDetailedResponse>(response);
             var result = parsedResponse.TableEntries.Select(x => x.ExchangeRate);
-
             return result;
         }
+
+        private bool ContainsNOK(IEnumerable<string> currencyCodes) => currencyCodes.Any(code => code == "NOK");
     }
 }

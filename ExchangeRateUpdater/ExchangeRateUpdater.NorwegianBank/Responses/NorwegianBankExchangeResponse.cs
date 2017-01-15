@@ -39,7 +39,7 @@ namespace ExchangeRateUpdater.NorwegianBank.Responses
             get
             {
                 if (string.IsNullOrWhiteSpace(this.Id))
-                    throw new ArgumentNullException("NorwegianBankExchangeResponse.Id is null");
+                    throw new ArgumentException("NorwegianBankExchangeResponse.Id is null");
 
                 return new ExchangeRate(new Currency(this.Id), new Currency("NOK"), this.CurrentValue);
             }

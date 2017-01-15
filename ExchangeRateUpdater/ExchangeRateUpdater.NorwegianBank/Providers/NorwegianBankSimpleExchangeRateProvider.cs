@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater.NorwegianBank.Providers
         public override string Url => "http://www.norges-bank.no/api/Currencies";
 
        //TODO: Implement filtering
-        protected override IEnumerable<ExchangeRate> Convert(string response)
+        protected override IEnumerable<ExchangeRate> Convert(string response, IEnumerable<string> codes)
         {
             var parsedResponse = JsonConvert.DeserializeObject<NorwegianBankExchangeResponse[]>(response);
             var result = parsedResponse.Select(x => x.ExchangeRate);

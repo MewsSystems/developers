@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,9 +10,16 @@ namespace ExchangeRateUpdater.NorwegianBank.Providers
     {
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            string response = GetStringResponse(currencies.Select(x => x.Code));
+            if (currencies == null)
+                throw new ArgumentNullException("Currencies is null");
+            if (!currencies.Any())
+                return Enumerable.Empty<ExchangeRate>();
 
-            IEnumerable<ExchangeRate> result = Convert(response);
+            var currencyCodes = currencies.Select(x => x.Code);
+
+            string response = GetStringResponse(currencyCodes);
+
+            IEnumerable<ExchangeRate> result = Convert(response, currencyCodes);
 
             return result;
         }
@@ -43,6 +51,6 @@ namespace ExchangeRateUpdater.NorwegianBank.Providers
         /// </summary>
         /// <param name="response">String with response</param>
         /// <returns></returns>
-        protected abstract IEnumerable<ExchangeRate> Convert(string response);
+        protected abstract IEnumerable<ExchangeRate> Convert(string response, IEnumerable<string> currencyCodes);
     }
 }
