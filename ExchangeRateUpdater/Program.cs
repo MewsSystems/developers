@@ -1,5 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain;
-using ExchangeRateUpdater.NorwegianBank;
+using ExchangeRateUpdater.NorwegianBank.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

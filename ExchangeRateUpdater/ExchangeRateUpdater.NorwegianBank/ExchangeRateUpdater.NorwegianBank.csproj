@@ -43,9 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NorwegianBankExchangeRateProvider.cs" />
-    <Compile Include="NorwegianBankExchangeDetailedResponse.cs" />
-    <Compile Include="NorwegianBankExchangeResponse.cs" />
+    <Compile Include="Providers\ExchangeRateProvider.cs" />
+    <Compile Include="IExhangeRate.cs" />
+    <Compile Include="Providers\NorwegianBankSimpleExchangeRateProvider.cs" />
+    <Compile Include="Providers\NorwegianBankExchangeRateProvider.cs" />
+    <Compile Include="Responses\NorwegianBankExchangeDetailedResponse.cs" />
+    <Compile Include="Responses\NorwegianBankExchangeResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
