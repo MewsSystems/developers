@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -138,50 +137,6 @@ namespace ExchangeRateProvider.Infrastructure.HttpHelper
           completeAction,
           failAction
       );
-    }
-  }
-
-  public class HttpHelperAsync: HttpHelper
-  {
-    public static void IssueRequest<TResult>(Func<HttpClient, Task<HttpResponseMessage>> request, Action<TResult> completeAction,
-                                            Action<HttpError> failAction, CancellationToken cancellationToken)
-    {
-        var client =  HttpHelper.CreateClient(TimeSpan.FromSeconds(15));
-
-        request(client).ContinueWith(httpResponseMessage =>
-        {
-          try
-          {
-            var result = httpResponseMessage.GetAwaiter().GetResult();
-
-            if (result.IsSuccessStatusCode)
-            {
-              var resultContent = result.Content.ReadAsAsync<TResult>(CancellationToken.None);
-
-              completeAction?.Invoke(resultContent.Result);
-              return;
-            }
-
-            failAction?.Invoke(result.Content.ReadAsAsync<HttpError>().Result);
-          }
-          catch (AggregateException ex)
-          {
-            if (failAction != null) failAction(new HttpError(ex.InnerExceptions[0], true));
-          }
-              // ReSharper disable once CatchAllClause
-          catch (Exception ex)
-          {
-            failAction?.Invoke(new HttpError(ex, true));
-          }
-
-        },
-
-        cancellationToken,
-        TaskContinuationOptions.PreferFairness | TaskContinuationOptions.LongRunning | TaskContinuationOptions.LazyCancellation | TaskContinuationOptions.HideScheduler,
-        TaskScheduler.Default
-
-        );
-
     }
   }
 }
