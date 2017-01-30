@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 
-namespace ExchangeRateProvider.Tests
+namespace ExchangeRateProvider.DependencyInjection
 {
     /// <summary>
     /// StructureMapServiceLocator adapter for Microsoft <c>CommonServiceLocator</c>
     /// </summary>
     public class StructureMapServiceLocator : ServiceLocatorImplBase
     {
-        private readonly IContainer container;
+        /// <summary>
+        /// IContainer
+        /// </summary>
+        private readonly IContainer _container;
 
         public StructureMapServiceLocator(IContainer container)
         {
-            this.container = container;
+            this._container = container;
         }
 
         /// <summary>
@@ -30,17 +33,17 @@ namespace ExchangeRateProvider.Tests
         {
             if (string.IsNullOrEmpty(key))
             {
-                return container.GetInstance(serviceType);
+                return _container.GetInstance(serviceType);
             }
             else
             {
-                return container.GetInstance(serviceType, key);
+                return _container.GetInstance(serviceType, key);
             }
         }
 
         /// <summary>
-        ///             When implemented by inheriting classes, this method will do the actual work of
-        ///             resolving all the requested service instances.
+        ///  When implemented by inheriting classes, this method will do the actual work of
+        ///  resolving all the requested service instances.
         /// </summary>
         /// <param name="serviceType">Type of service requested.</param>
         /// <returns>
@@ -48,7 +51,8 @@ namespace ExchangeRateProvider.Tests
         /// </returns>
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
-            foreach (object obj in container.GetAllInstances(serviceType))
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (object obj in _container.GetAllInstances(serviceType))
             {
                 yield return obj;
             }
