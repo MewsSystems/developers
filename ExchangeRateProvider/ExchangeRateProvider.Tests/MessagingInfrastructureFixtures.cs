@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,10 @@ using Moq;
 using Moq.Protected;
 using System.Threading;
 using System.Net;
+using Newtonsoft.Json;
 using NUnit.Framework;
+
+using ExchangeRateProvider.Tests.Properties;
 
 namespace ExchangeRateProvider.Tests
 {
@@ -32,6 +36,17 @@ namespace ExchangeRateProvider.Tests
         }
 
         /// <summary>
+        /// ResourceProvider
+        /// </summary>
+        internal static class ResourceProvider
+        {
+            /// <summary>
+            /// example exchange rates <c>json</c> response
+            /// </summary>
+            public static string ApiResponseJsonString {get;} = Resources.ApiResponseJsonString;
+        }
+
+        /// <summary>
         /// Should get rates over http transport via provided url
         /// </summary>
         /// <param name="ratesUrl">
@@ -39,8 +54,6 @@ namespace ExchangeRateProvider.Tests
         /// </param>
         [Test]
         [TestCase(Config.CurrenciesApiUrl)]
-
-        [TestCase("http://www.norges-bank.no/api/Currencies")]
         public async Task ShouldGetRatesOverHTTPTransportAsync(string ratesUrl = Config.CurrenciesApiUrl)
         {
             Assert.That(ratesUrl, Is.Not.Null.Or.Empty);
@@ -64,5 +77,49 @@ namespace ExchangeRateProvider.Tests
             }
         }
 
+
+        /// <summary>
+        /// Parse <c>json</c> string from HttpResponseMessage.Content
+        /// </summary>
+        /// <param name="ratesUrl">
+        /// exchange rates api
+        /// </param>
+        [Test]
+        [TestCase(Config.CurrenciesApiUrl)]
+        [Description("Mock Currency Api Response")]
+        public async Task ShouldGetJsonResponseOverHTTPTransportAsync(string ratesUrl)
+        {
+            Assert.That(ratesUrl, Is.Not.Null.Or.Empty);
+
+            var handler = new Mock<HttpMessageHandler>();
+
+            handler.Protected()
+                   .Setup<Task<HttpResponseMessage>>(@"SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                   .Returns(Task<HttpResponseMessage>.Factory.StartNew(() =>
+                        new HttpResponseMessage(HttpStatusCode.OK) {
+                            Content = new StringContent(ResourceProvider.ApiResponseJsonString),
+                        }))
+                   .Callback<HttpRequestMessage, CancellationToken>((requestMessage, cancellationToken) =>
+                       Assert.AreEqual(HttpMethod.Get, requestMessage.Method));
+
+            using (var client = new HttpClient(handler.Object))
+            {
+                Assert.That(client, Is.Not.Null);
+
+
+                var request = new HttpRequestMessage(HttpMethod.Get, ratesUrl);
+                var response = await client.SendAsync(request).ConfigureAwait(false);
+
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.IsSuccessStatusCode, Is.True);
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(jsonString);
+
+                Assert.That(responseData, Is.Not.Null);
+                Assert.That(responseData?.TableEntries, Is.Not.Null);
+                Assert.That(responseData?.TableEntries, Is.AssignableTo<IEnumerable<dynamic>>());
+            }
+        }
     }
 }
