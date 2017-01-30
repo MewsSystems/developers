@@ -2,21 +2,15 @@
 using System.Text;
 using System.Threading.Tasks;
 
-using ExchangeRateProvider;
 using ExchangeRateProvider.Infrastructure.ApiProxy;
 using ExchangeRateProvider.Infrastructure.HttpHelper;
 
-using CommonServiceLocator;
 using CommonServiceLocator.StructureMapAdapter.Unofficial;
-using FluentAssertions;
-using Moq;
-using Moq.Protected;
-using FluentAssertions.Common;
+
 using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using StructureMap;
 using StructureMap.Graph;
-using StructureMap.Pipeline;
 
 namespace ExchangeRateProvider.Tests
 {
@@ -65,6 +59,18 @@ namespace ExchangeRateProvider.Tests
 
                 Assert.That(ServiceLocator.Current, Is.Not.Null);
                 Assert.That(ServiceLocator.Current.GetInstance(typeof (IHttpHelper)), Is.Not.Null);
+            }
+        }
+
+        [Test]
+        public void ServiceLocatorShouldReturnApiProxyInstance()
+        {
+            using (var container = Container())
+            {
+                ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(container));
+
+                Assert.That(ServiceLocator.Current, Is.Not.Null);
+                Assert.That(ServiceLocator.Current.GetInstance(typeof(ApiProxy)), Is.Not.Null);
             }
         }
     }
