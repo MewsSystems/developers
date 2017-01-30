@@ -65,12 +65,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractExchangeRateProvider.cs" />
     <Compile Include="DependencyInjection\StructureMapServiceLocator.cs" />
+    <Compile Include="IExchangeRateProvider.cs" />
     <Compile Include="Infrastructure\ApiProxy\ApiErrorOccurredEventArgs.cs" />
     <Compile Include="Infrastructure\ApiProxy\ApiProxy.cs" />
     <Compile Include="Infrastructure\HttpHelper\HttpHelper.cs" />
     <Compile Include="Infrastructure\HttpHelper\HttpHelperAsync.cs" />
     <Compile Include="Infrastructure\HttpHelper\IHttpHelper.cs" />
+    <Compile Include="Model\CurrencyDto.cs" />
+    <Compile Include="Model\ExchangeRate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
