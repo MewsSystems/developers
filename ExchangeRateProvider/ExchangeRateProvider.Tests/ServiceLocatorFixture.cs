@@ -17,8 +17,7 @@ namespace ExchangeRateProvider.Tests
     [TestFixture]
     public class ServiceLocatorFixture
     {
-
-        private static Container Container()
+        public static Container Container()
         {
             var container = new Container();
             container.Configure(expr =>
@@ -35,7 +34,7 @@ namespace ExchangeRateProvider.Tests
         /// </summary>
         public sealed class CurrencyApiProxy :ApiProxy
         {
-            public CurrencyApiProxy(string controllerName = "Currency") : base(controllerName)
+            public CurrencyApiProxy(string controllerName = "/api/Currency") : base(controllerName)
             {
             }
         }
@@ -43,7 +42,17 @@ namespace ExchangeRateProvider.Tests
         [Test]
         public void ServiceLocatorProviderInstanceShouldBeCreated()
         {
-            using (var container = new Container())
+            using (var container = Container())
+            {
+                ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(container));
+                Assert.That(ServiceLocator.Current, Is.Not.Null);
+            }
+        }
+
+        [Test]
+        public void ServiceLocatorProviderInstanceShouldBeCreatedWithEmptyCompositionRoot()
+        {
+            using (var container = new StructureMap.Container())
             {
                 ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(container));
                 Assert.That(ServiceLocator.Current, Is.Not.Null);

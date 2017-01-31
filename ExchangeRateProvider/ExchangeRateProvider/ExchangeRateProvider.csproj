@@ -74,7 +74,7 @@
     <Compile Include="Infrastructure\HttpHelper\HttpHelperAsync.cs" />
     <Compile Include="Infrastructure\HttpHelper\IHttpHelper.cs" />
     <Compile Include="Model\CurrencyDto.cs" />
-    <Compile Include="Model\ExchangeRate.cs" />
+    <Compile Include="Model\ExchangeRateDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

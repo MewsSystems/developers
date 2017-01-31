@@ -18,5 +18,6 @@ namespace ExchangeRateProvider
         }
 
         public abstract IEnumerable<ExchangeRateDto> GetExchangeRates(IEnumerable<CurrencyDto> currencies);
+
     }
 }
