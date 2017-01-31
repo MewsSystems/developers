@@ -17,6 +17,7 @@ using System.Net;
 using ExchangeRateProvider.Infrastructure.ApiProxy;
 using ExchangeRateProvider.Infrastructure.HttpHelper;
 using ExchangeRateProvider.Model;
+using ExchangeRateProvider.Model.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -26,28 +27,6 @@ using StructureMap.Graph;
 
 namespace ExchangeRateProvider.Tests
 {
-    [Serializable]
-    [JsonObject]
-    public class TableEntry
-    {
-        public string Name { get; set; }
-        public string Id { get; set; }
-        public int ConversionFactor { get; set; }
-
-        public List<decimal> Values { get; set; }
-        public string GraphUrl { get; set; }
-    }
-
-    [Serializable]
-    [JsonObject]
-    public class RootObject
-    {
-        public string Updated { get; set; }
-        public string TableNameHeader { get; set; }
-        public string TableGraphHeader { get; set; }
-        public List<string> TableDynamicHeaders { get; set; }
-        public List<TableEntry> TableEntries { get; set; }
-    }
 
     [TestFixture]
     public class CurrencyApiModelFixtures
@@ -61,8 +40,11 @@ namespace ExchangeRateProvider.Tests
             var container = new Container();
             container.Configure(expr =>
             {
-                expr.For<IHttpHelper>().Use(x => new HttpHelper()).ContainerScoped();
-                expr.For<ApiProxy>().Use<ServiceLocatorFixture.CurrencyApiProxy>().Ctor<ServiceLocatorFixture.CurrencyApiProxy>("Currency").IsTheDefault().ContainerScoped();
+                expr.For<IHttpHelper>().Use(x => new HttpHelperAsync()).ContainerScoped();
+                expr.For<ApiProxy>().Use<ServiceLocatorFixture.CurrencyApiProxy>()
+                    .Ctor<ServiceLocatorFixture.CurrencyApiProxy>(MessagingInfrastructureFixtures.Config.CurrenciesApiUrl)
+                    .IsTheDefault()
+                    .ContainerScoped();
                 expr.Scan(scanner => scanner.AssembliesAndExecutablesFromApplicationBaseDirectory());
             });
             return container;
@@ -101,8 +83,6 @@ namespace ExchangeRateProvider.Tests
                 var helper = container?.GetInstance<IHttpHelper>();
                 Assert.That(helper, Is.Not.Null);
 
-                Assert.DoesNotThrow(() =>
-                {
                     helper?.Get<string>(MessagingInfrastructureFixtures.Config.CurrenciesApiUrl,
                         s =>
                         {
@@ -112,11 +92,36 @@ namespace ExchangeRateProvider.Tests
                                     Code = tableEntry?.Id
                                 });
 
-                            Assert.That(currencyList, Is.Not.Empty);
+                            Assert.That(currencyList, Is.Empty);
                         },
-                        err => { throw new HttpRequestException(err?.ExceptionMessage); });
-                });
+                        err =>
+                        {
+                            throw new HttpRequestException(err?.ExceptionMessage);
+                        });
+            }
+        }
 
+
+        [Test]
+        public void CurrencyApiTableEntriesEnumerateToExchangeRates()
+        {
+            using (var container = Container())
+            {
+                Assert.That(container, Is.Not.Null);
+                var helper = container?.GetInstance<IHttpHelper>();
+                Assert.That(helper, Is.Not.Null);
+
+                helper?.Get<string>(MessagingInfrastructureFixtures.Config.CurrenciesApiUrl,
+                    s =>
+                    {
+                        var rates = JsonConvert.DeserializeObject(s)?.As<RootObject>();
+                        var currencyList = rates?.TableEntries?.AsExchangeRateEnumerable();
+                        Assert.That(currencyList, Is.Empty);
+                    },
+                    err =>
+                    {
+                        throw new HttpRequestException(err?.ExceptionMessage);
+                    });
             }
         }
     }

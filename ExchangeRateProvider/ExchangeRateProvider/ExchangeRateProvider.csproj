@@ -70,11 +70,16 @@
     <Compile Include="IExchangeRateProvider.cs" />
     <Compile Include="Infrastructure\ApiProxy\ApiErrorOccurredEventArgs.cs" />
     <Compile Include="Infrastructure\ApiProxy\ApiProxy.cs" />
+    <Compile Include="Infrastructure\ApiProxy\CurrencyApiProxy.cs" />
+    <Compile Include="Model\Extensions\ExchangeRateExtentions.cs" />
+    <Compile Include="Model\RootObject.cs" />
+    <Compile Include="Model\TableEntry.cs" />
     <Compile Include="Infrastructure\HttpHelper\HttpHelper.cs" />
     <Compile Include="Infrastructure\HttpHelper\HttpHelperAsync.cs" />
     <Compile Include="Infrastructure\HttpHelper\IHttpHelper.cs" />
     <Compile Include="Model\CurrencyDto.cs" />
     <Compile Include="Model\ExchangeRateDto.cs" />
+    <Compile Include="NordicBankExchangeRateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
