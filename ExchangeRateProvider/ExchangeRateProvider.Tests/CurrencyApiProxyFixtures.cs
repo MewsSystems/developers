@@ -41,7 +41,7 @@ namespace ExchangeRateProvider.Tests
                     .As<CurrencyApiProxy>()
                     .GetExchangeRatesAsync();
 
-                Assert.That(exchangeRateDtos, Is.Null);
+                Assert.That(exchangeRateDtos, Is.Not.Null);
             }
         }
 

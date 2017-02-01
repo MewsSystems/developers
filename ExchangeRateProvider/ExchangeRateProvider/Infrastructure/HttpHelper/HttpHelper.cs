@@ -57,7 +57,7 @@ namespace ExchangeRateProvider.Infrastructure.HttpHelper
 
           if (result.IsSuccessStatusCode)
           {
-                  var resultContent = await result.EnsureSuccessStatusCode().Content.ReadAsAsync<TResult>();
+                  var resultContent = result.Content.ReadAsAsync<TResult>().Result;
                   completeAction(resultContent);
 
           }

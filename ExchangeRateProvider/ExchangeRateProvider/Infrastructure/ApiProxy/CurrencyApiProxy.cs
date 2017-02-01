@@ -3,9 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Batch;
 using ExchangeRateProvider.Model;
 using ExchangeRateProvider.Model.Extensions;
 using Newtonsoft.Json;
@@ -39,36 +45,17 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         /// The array is multidimensional and contains more than
         /// <see cref="System.Int32.MaxValue" /> elements.
         /// </exception>
-        public Task<IEnumerable<ExchangeRateDto>> GetExchangeRatesAsync()
+        public async Task<List<ExchangeRateDto>> GetExchangeRatesAsync()
         {
-            var taskCompletionSource =
-                new TaskCompletionSource<IEnumerable<ExchangeRateDto>>();
 
             var addr = BuildAddress($"Currencies");
-            Http.Get<string>(addr, response =>
-            {
-               var rates =  JsonConvert.DeserializeObject<IEnumerable<ExchangeRateEntry>>(response,
-                    new JsonSerializerSettings()
-                    {
-                        DefaultValueHandling = DefaultValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore,
-                        StringEscapeHandling = StringEscapeHandling.EscapeHtml | StringEscapeHandling.EscapeNonAscii,
-                        ObjectCreationHandling = ObjectCreationHandling.Auto,
-                        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                        NullValueHandling = NullValueHandling.Include,
-                        TypeNameHandling = TypeNameHandling.All
-                    });
+            var client = new HttpClient(new HttpClientHandler() {AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip});
+            var response = await client.GetAsync(new Uri(addr, UriKind.Absolute), HttpCompletionOption.ResponseContentRead);
 
-                    var currencyList = rates.AsExchangeRateEnumerable().ToList();
-                    taskCompletionSource.TrySetResult(currencyList);
-                return;
-                }, err =>
-                {
-                    taskCompletionSource.TrySetException(new HttpRequestException(err.ExceptionMessage));
-                    HandleRequestFailure(err);
-                });
+                var rates = JsonConvert.DeserializeObject<List<ExchangeRateEntry>>(await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
+                var currencyList = rates?.AsExchangeRateEnumerable().ToList();
 
-            return taskCompletionSource.Task;
+            return currencyList;
         }
     }
 }
