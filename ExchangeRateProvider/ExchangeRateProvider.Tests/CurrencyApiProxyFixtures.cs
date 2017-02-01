@@ -20,7 +20,7 @@ namespace ExchangeRateProvider.Tests
             container.Configure(expr =>
             {
 
-                expr.For<IHttpHelper>().Use(x => new HttpHelper()).ContainerScoped();
+                expr.For<IHttpHelper>().Use(x => new HttpHelperAsync()).ContainerScoped();
                 expr.For<ApiProxy>().Use<CurrencyApiProxy>()
                     .Ctor<CurrencyApiProxy>()
                     .IsTheDefault()

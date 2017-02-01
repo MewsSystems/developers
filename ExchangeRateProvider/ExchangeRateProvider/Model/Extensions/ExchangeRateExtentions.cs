@@ -8,14 +8,14 @@ namespace ExchangeRateProvider.Model.Extensions
     /// </summary>
     public static class ExchangeRateExtentions
     {
-        public static IEnumerable<ExchangeRateDto> AsExchangeRateEnumerable(this IEnumerable<TableEntry> entries, string bankCode = "NOK")
+        public static IEnumerable<ExchangeRateDto> AsExchangeRateEnumerable(this IEnumerable<ExchangeRateEntry> entries, string bankCode = "NOK")
         {
             return entries.AsEnumerable()?.Select(tableEntry =>
                 new ExchangeRateDto
                 {
                     SourceCurrency = new CurrencyDto { Code = tableEntry?.Id },
                     TargetCurrency = new CurrencyDto { Code = bankCode },
-                    Value = tableEntry.Values.Last()
+                    Value = tableEntry.CurrentValue
                 });
         }
     }

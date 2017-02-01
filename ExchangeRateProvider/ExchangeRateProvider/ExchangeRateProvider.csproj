@@ -90,6 +90,7 @@
     <Compile Include="Infrastructure\ApiProxy\ApiProxy.cs" />
     <Compile Include="Infrastructure\ApiProxy\CurrencyApiProxy.cs" />
     <Compile Include="Model\Extensions\ExchangeRateExtentions.cs" />
+    <Compile Include="Model\ResponseEntry.cs" />
     <Compile Include="Model\RootObject.cs" />
     <Compile Include="Model\TableEntry.cs" />
     <Compile Include="Infrastructure\HttpHelper\HttpHelper.cs" />

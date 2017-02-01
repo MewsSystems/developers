@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -33,28 +35,31 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         ///     GetExchangeRatesAsync
         /// </summary>
         /// <returns></returns>
+        /// <exception cref="OverflowException">
+        /// The array is multidimensional and contains more than
+        /// <see cref="System.Int32.MaxValue" /> elements.
+        /// </exception>
         public Task<IEnumerable<ExchangeRateDto>> GetExchangeRatesAsync()
         {
             var taskCompletionSource =
                 new TaskCompletionSource<IEnumerable<ExchangeRateDto>>();
 
-            var addr = BuildAddress(@"Currencies");
+            var addr = BuildAddress($"Currencies");
             Http.Get<string>(addr, response =>
             {
-               var rates = (RootObject) JsonConvert.DeserializeObject(response,
+               var rates =  JsonConvert.DeserializeObject<IEnumerable<ExchangeRateEntry>>(response,
                     new JsonSerializerSettings()
                     {
-                        Formatting = Formatting.Indented,
-                        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                        DefaultValueHandling = DefaultValueHandling.Ignore,
                         MissingMemberHandling = MissingMemberHandling.Ignore,
-                        StringEscapeHandling = StringEscapeHandling.EscapeHtml,
+                        StringEscapeHandling = StringEscapeHandling.EscapeHtml | StringEscapeHandling.EscapeNonAscii,
                         ObjectCreationHandling = ObjectCreationHandling.Auto,
                         ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-                        NullValueHandling = NullValueHandling.Ignore,
+                        NullValueHandling = NullValueHandling.Include,
                         TypeNameHandling = TypeNameHandling.All
                     });
 
-                    var currencyList = rates.TableEntries.AsExchangeRateEnumerable().ToList();
+                    var currencyList = rates.AsExchangeRateEnumerable().ToList();
                     taskCompletionSource.TrySetResult(currencyList);
                 return;
                 }, err =>

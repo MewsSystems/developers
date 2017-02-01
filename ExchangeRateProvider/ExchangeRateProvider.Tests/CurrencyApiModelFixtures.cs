@@ -114,8 +114,8 @@ namespace ExchangeRateProvider.Tests
                 helper?.Get<string>(MessagingInfrastructureFixtures.Config.CurrenciesApiUrl,
                     s =>
                     {
-                        var rates = JsonConvert.DeserializeObject(s)?.As<RootObject>();
-                        var currencyList = rates?.TableEntries?.AsExchangeRateEnumerable();
+                        var rates = JsonConvert.DeserializeObject(s)?.As<IEnumerable<ExchangeRateEntry>>();
+                        var currencyList = rates?.AsExchangeRateEnumerable();
                         Assert.That(currencyList, Is.Not.Empty);
                     },
                     err =>
