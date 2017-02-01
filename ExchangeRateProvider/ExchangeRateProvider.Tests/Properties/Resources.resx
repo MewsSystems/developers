@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApiResponseJsonString" xml:space="preserve">
+    <value>{"Updated":"2017-01-27T16:01:59Z","TableNameHeader":"Currency (code)","TableGraphHeader":"Last mth","TableDynamicHeaders":["27 Jan","26 Jan"],"TableEntries":[{"Name":"Australian dollar (AUD)","Id":"AUD","ConversionFactor":1,"Values":["6.2947","6.2805"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/aud.png"},{"Name":"Bulgarian lev (BGN)","Id":"BGN","ConversionFactor":100,"Values":["456.03","456.16"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/bgn.png"},{"Name":"Brazilian real (BRL)","Id":"BRL","ConversionFactor":1,"Values":["2.6361","2.6168"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/brl.png"},{"Name":"Canadian dollar (CAD)","Id":"CAD","ConversionFactor":1,"Values":["6.3653","6.3507"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/cad.png"},{"Name":"Swiss franc (CHF)","Id":"CHF","ConversionFactor":100,"Values":["834.41","834.33"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/chf.png"},{"Name":"Chinese yuan (CNY)","Id":"CNY","ConversionFactor":100,"Values":["121.09","121.16"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/cny.png"},{"Name":"Czech koruna (CZK)","Id":"CZK","ConversionFactor":100,"Values":["33.008","33.017"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/czk.png"},{"Name":"Danish krone (DKK)","Id":"DKK","ConversionFactor":100,"Values":["119.93","119.97"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/dkk.png"},{"Name":"Euro (EUR)","Id":"EUR","ConversionFactor":1,"Values":["8.9190","8.9215"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/eur.png"},{"Name":"British pound (GBP)","Id":"GBP","ConversionFactor":1,"Values":["10.4720","10.4780"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/gbp.png"},{"Name":"Hong Kong dollar (HKD)","Id":"HKD","ConversionFactor":1,"Values":["1.0762","1.0748"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/hkd.png"},{"Name":"Croatian kuna (HRK)","Id":"HRK","ConversionFactor":100,"Values":["119.21","119.27"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/hrk.png"},{"Name":"Hungarian forint (HUF)","Id":"HUF","ConversionFactor":100,"Values":["2.8620","2.8688"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/huf.png"},{"Name":"Import-weighted krone exchange rate (I44)","Id":"I44","ConversionFactor":0,"Values":["101.62","101.62"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/i44.png"},{"Name":"Indonesian rupiah (IDR)","Id":"IDR","ConversionFactor":100,"Values":["0.062472","0.062320"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/idr.png"},{"Name":"Israeli shekel (ILS)","Id":"ILS","ConversionFactor":1,"Values":["2.2048","2.2014"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/ils.png"},{"Name":"Indian rupee (INR)","Id":"INR","ConversionFactor":100,"Values":["12.268","12.228"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/inr.png"},{"Name":"Japanese yen (JPY)","Id":"JPY","ConversionFactor":100,"Values":["7.2506","7.2888"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/jpy.png"},{"Name":"South Korean won (KRW)","Id":"KRW","ConversionFactor":100,"Values":["0.7113","0.7148"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/krw.png"},{"Name":"Mexican peso (MXN)","Id":"MXN","ConversionFactor":100,"Values":["39.56","39.69"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/mxn.png"},{"Name":"Malaysian ringgit (MYR)","Id":"MYR","ConversionFactor":1,"Values":["1.8843","1.8826"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/myr.png"},{"Name":"New Zealand dollar (NZD)","Id":"NZD","ConversionFactor":1,"Values":["6.0566","6.0309"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/nzd.png"},{"Name":"Philippine peso (PHP)","Id":"PHP","ConversionFactor":100,"Values":["16.758","16.715"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/php.png"},{"Name":"Pakistanian rupee (PKR)","Id":"PKR","ConversionFactor":100,"Values":["7.967","7.955"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/pkr.png"},{"Name":"Polish zloty (PLN)","Id":"PLN","ConversionFactor":1,"Values":["2.0551","2.0540"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/pln.png"},{"Name":"Romanian leu (new) (RON)","Id":"RON","ConversionFactor":100,"Values":["197.94","198.51"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/ron.png"},{"Name":"Russian rouble (RUB)","Id":"RUB","ConversionFactor":100,"Values":["13.901","13.783"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/rub.png"},{"Name":"Swedish krona (SEK)","Id":"SEK","ConversionFactor":100,"Values":["94.35","94.25"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/sek.png"},{"Name":"Singapore dollar (SGD)","Id":"SGD","ConversionFactor":1,"Values":["5.8485","5.8586"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/sgd.png"},{"Name":"Thai baht (THB)","Id":"THB","ConversionFactor":100,"Values":["23.668","23.617"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/thb.png"},{"Name":"Turkish lira (new) (TRY)","Id":"TRY","ConversionFactor":100,"Values":["215.35","215.70"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/try.png"},{"Name":"Taiwan dollar (TWD)","Id":"TWD","ConversionFactor":100,"Values":["26.489","26.568"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/twd.png"},{"Name":"Trade-weighted krone exchange rate (TWI)","Id":"TWI","ConversionFactor":0,"Values":["109.41","109.40"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/twi.png"},{"Name":"US dollar (USD)","Id":"USD","ConversionFactor":1,"Values":["8.3503","8.3379"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/usd.png"},{"Name":"IMF, Special drawing rights (XDR)","Id":"XDR","ConversionFactor":1,"Values":["11.32362","11.32200"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/xdr.png"},{"Name":"South African rand (ZAR)","Id":"ZAR","ConversionFactor":1,"Values":["0.6174","0.6234"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/zar.png"},{"Name":"New Belarusian rouble (BYN)","Id":"BYN","ConversionFactor":1,"Values":["4.3165","4.2968"],"GraphUrl":"/WebDAV/stat/Valutakurser/png/byn.png"}]}</value>
+  </data>
+</root>
