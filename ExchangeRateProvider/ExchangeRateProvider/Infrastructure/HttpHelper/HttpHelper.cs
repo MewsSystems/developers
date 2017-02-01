@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace ExchangeRateProvider.Infrastructure.HttpHelper
 {
@@ -20,13 +23,14 @@ namespace ExchangeRateProvider.Infrastructure.HttpHelper
       var handler = new HttpClientHandler { UseDefaultCredentials = true };
       var client = new HttpClient(handler);
       client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("UTF-8"));
 
       return client;
     }
 
     protected static HttpClient CreateClient(TimeSpan timeout)
     {
-      var handler = new HttpClientHandler { UseDefaultCredentials = true };
+      var handler = new HttpClientHandler { UseDefaultCredentials = true,  UseCookies = false};
 
       var client = new HttpClient(handler);
 
@@ -49,13 +53,13 @@ namespace ExchangeRateProvider.Infrastructure.HttpHelper
       {
         try
         {
-          var result = await httpResponseMessage;
+          var result = await httpResponseMessage.ConfigureAwait(false);
 
           if (result.IsSuccessStatusCode)
           {
-            var resultContent = await result.Content.ReadAsAsync<TResult>();
-            completeAction?.Invoke(resultContent);
-            return;
+                  var resultContent = await result.EnsureSuccessStatusCode().Content.ReadAsAsync<TResult>();
+                  completeAction(resultContent);
+
           }
 
           failAction?.Invoke(await result.Content.ReadAsAsync<HttpError>());
@@ -69,10 +73,7 @@ namespace ExchangeRateProvider.Infrastructure.HttpHelper
          failAction?.Invoke(new HttpError(ex, true));
         }
 
-      }, TaskContinuationOptions.PreferFairness |
-         TaskContinuationOptions.LongRunning |
-         TaskContinuationOptions.LazyCancellation |
-         TaskContinuationOptions.HideScheduler);
+      }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.Default);
     }
 
     /// <summary>

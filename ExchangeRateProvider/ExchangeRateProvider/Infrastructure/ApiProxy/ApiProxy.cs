@@ -21,6 +21,7 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         public static event EventHandler<ApiErrorOccurredEventArgs> ApiErrorOccurred;
         private static string _apiAddress;
         private static readonly Lazy<IHttpHelper> _httpHelper;
+        private string _controllerName;
 
         static ApiProxy()
         {
@@ -39,8 +40,10 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         /// <summary>
         /// Gets the API address from app.config or defaults.
         /// </summary>
-        /// <returns></returns>
-        private static string GetApiAddress()
+        /// <returns>
+        /// Api url string - "http://www.norges-bank.no/api/";
+        /// </returns>
+        private string GetApiAddress()
         {
             if (!string.IsNullOrEmpty(_apiAddress)) return _apiAddress;
 
@@ -48,13 +51,23 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
 
             if (string.IsNullOrEmpty(address))
             {
-                address = $"http://{"http://www.norges-bank.no/" }/api/Currencies?frequency=D2&language=en&idfilter=none&observationlimit=2&returnsdmx=false";
+                address = @"http://www.norges-bank.no/";
             }
 
             return (_apiAddress = address);
         }
 
-        private readonly string _controllerName;
+        public virtual string ControllerName
+        {
+            get { return _controllerName; }
+            protected set { _controllerName = value; }
+        }
+
+        public virtual string ApiAddress
+        {
+            get { return _apiAddress; }
+            set { _apiAddress = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiProxy" /> class.
@@ -62,7 +75,8 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         /// <param name="controllerName">Name of the controller.</param>
         protected ApiProxy(string controllerName)
         {
-            _controllerName = controllerName;
+            // ReSharper disable once DoNotCallOverridableMethodsInConstructor
+            ControllerName = controllerName;
         }
 
         private void RaiseApiErrorOccurredEvent(HttpError error)
@@ -94,11 +108,9 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
         {
             if (addressParts == null) throw new ArgumentNullException(nameof(addressParts));
 
-            if (addressParts.Length == 0) return _controllerName;
-
+            if (addressParts.Length == 0) return ControllerName;
             var allParts = new object[addressParts.Length + 1];
-            allParts[0] = _controllerName;
-
+            allParts[0] = ControllerName;
             Array.Copy(addressParts, 0, allParts, 1, addressParts.Length);
 
             return GetApiAddress() + string.Join("/", allParts);

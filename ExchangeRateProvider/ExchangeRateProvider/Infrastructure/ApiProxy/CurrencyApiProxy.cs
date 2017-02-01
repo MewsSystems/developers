@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
 using ExchangeRateProvider.Model;
 using ExchangeRateProvider.Model.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ExchangeRateProvider.Infrastructure.ApiProxy
 {
@@ -18,36 +18,52 @@ namespace ExchangeRateProvider.Infrastructure.ApiProxy
 
     public sealed class CurrencyApiProxy : ApiProxy
     {
-        /// <summary>
-        /// CurrencyApiProxy
-        /// </summary>
-        internal CurrencyApiProxy(string apiUrl): base(apiUrl)
+        public CurrencyApiProxy() : base("api")
         {
         }
 
         /// <summary>
-        /// GetExchangeRatesAsync
+        ///     CurrencyApiProxy
+        /// </summary>
+        public CurrencyApiProxy(string apiUrl) : base(apiUrl)
+        {
+        }
+
+        /// <summary>
+        ///     GetExchangeRatesAsync
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ExchangeRateDto>> GetExchangeRatesAsync()
+        public Task<IEnumerable<ExchangeRateDto>> GetExchangeRatesAsync()
         {
-            TaskCompletionSource<IEnumerable<ExchangeRateDto>> taskCompletionSource = null;
-            taskCompletionSource = new TaskCompletionSource<IEnumerable<ExchangeRateDto>>(TaskCreationOptions.LongRunning);
+            var taskCompletionSource =
+                new TaskCompletionSource<IEnumerable<ExchangeRateDto>>();
 
-            Http.Get<string>( BuildAddress("Currency"),
-                response =>
+            var addr = BuildAddress(@"Currencies");
+            Http.Get<string>(addr, response =>
+            {
+               var rates = (RootObject) JsonConvert.DeserializeObject(response,
+                    new JsonSerializerSettings()
+                    {
+                        Formatting = Formatting.Indented,
+                        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                        MissingMemberHandling = MissingMemberHandling.Ignore,
+                        StringEscapeHandling = StringEscapeHandling.EscapeHtml,
+                        ObjectCreationHandling = ObjectCreationHandling.Auto,
+                        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.All
+                    });
+
+                    var currencyList = rates.TableEntries.AsExchangeRateEnumerable().ToList();
+                    taskCompletionSource.TrySetResult(currencyList);
+                return;
+                }, err =>
                 {
-                    var rates = JsonConvert.DeserializeObject(response) as RootObject;
-                    var currencyList = rates?.TableEntries?.AsExchangeRateEnumerable();
-                    taskCompletionSource.TrySetResult( currencyList );
-                },
-                err =>
-                {
-                    taskCompletionSource.TrySetCanceled();
+                    taskCompletionSource.TrySetException(new HttpRequestException(err.ExceptionMessage));
                     HandleRequestFailure(err);
                 });
 
-            return await taskCompletionSource.Task.ConfigureAwait(false);
+            return taskCompletionSource.Task;
         }
     }
 }

@@ -92,7 +92,7 @@ namespace ExchangeRateProvider.Tests
                                     Code = tableEntry?.Id
                                 });
 
-                            Assert.That(currencyList, Is.Empty);
+                            Assert.That(currencyList, Is.Not.Empty);
                         },
                         err =>
                         {
@@ -116,7 +116,7 @@ namespace ExchangeRateProvider.Tests
                     {
                         var rates = JsonConvert.DeserializeObject(s)?.As<RootObject>();
                         var currencyList = rates?.TableEntries?.AsExchangeRateEnumerable();
-                        Assert.That(currencyList, Is.Empty);
+                        Assert.That(currencyList, Is.Not.Empty);
                     },
                     err =>
                     {

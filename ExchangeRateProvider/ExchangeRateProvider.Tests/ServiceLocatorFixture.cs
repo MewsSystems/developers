@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
 using ExchangeRateProvider.Infrastructure.ApiProxy;
 using ExchangeRateProvider.Infrastructure.HttpHelper;
 
 using CommonServiceLocator.StructureMapAdapter.Unofficial;
-
 using Microsoft.Practices.ServiceLocation;
 using NUnit.Framework;
 using StructureMap;

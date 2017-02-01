@@ -6,7 +6,7 @@ namespace ExchangeRateProvider.Model
 {
     [Serializable]
     [JsonObject]
-    public abstract class RootObject
+    public  class RootObject
     {
         public string Updated { get; set; }
         public string TableNameHeader { get; set; }
