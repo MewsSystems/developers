@@ -16,6 +16,7 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
+            new Currency("PLN"),
             new Currency("XYZ")
         };
 
