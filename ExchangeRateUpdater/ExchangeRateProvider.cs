@@ -28,7 +28,9 @@ namespace ExchangeRateUpdater
 
             var sourceData = GetRates('a');
 
-            try //to get rates for currencies that are maybe distinct in table "A" 
+            ///to get rates for currencies that are maybe distinct in table "A"  
+            ///try because table "B" was not all time reachable during tests
+            try
             {
                 sourceData = sourceData.Union(GetRates('b'));
             }
