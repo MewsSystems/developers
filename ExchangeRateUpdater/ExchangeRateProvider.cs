@@ -1,19 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
-        /// do not return exchange rate "USD/EUR" with value calculated as 1 / "EUR/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
+        private readonly IApiWrapper _fixexApi = new FixexApi();
+
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            if (currencies == null)
+            {
+                throw new ArgumentException("Currencies cannot be null");
+            }
+            var currenciesSet = new HashSet<Currency>(currencies);
+
+            if (currenciesSet.Count < 2)
+            {
+                return Enumerable.Empty<ExchangeRate>();
+            }
+            var exchangeRates = new List<ExchangeRate>();
+            
+            var tasks = currenciesSet.Select(cur => _fixexApi.Get(cur.Code, currenciesSet)).ToArray();
+
+            Task.WaitAll(tasks.ToArray<Task>());
+
+            foreach (var t in tasks)
+            {
+                var result = t.Result;
+                if (result == null)
+                {
+                    continue;
+                }
+                exchangeRates
+                    .AddRange(result.GetRates().Select(k => new ExchangeRate(new Currency(result.GetCurrencyCode()), new Currency(k.Key), k.Value)));
+            }
+
+            return exchangeRates;
         }
     }
 }
