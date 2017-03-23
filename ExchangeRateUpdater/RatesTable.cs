@@ -8,28 +8,28 @@ using System.Threading.Tasks;
 namespace ExchangeRateUpdater
 {
     [DataContract]
-    public class RatesTable
+    public class RatesTableDto
     {
-        [DataMember]
-        public char table { get; set; }
-        [DataMember]
-        public string no { get; set; }
-        [DataMember]
-        public string effectiveDate { get; set; }
-        [DataMember]
-        public Rate[] rates { get; set; }
+        [DataMember(Name = "table", IsRequired = true)]
+        public char TableName { get; set; }
+        [DataMember(Name = "no")]
+        public string TableNumber { get; set; }
+        [DataMember(Name = "effectiveDate")]
+        public string EffectiveDate { get; set; }
+        [DataMember(Name = "rates", IsRequired = true)]
+        public Rate[] Rates { get; set; }
 
     }
 
     [DataContract]
     public class Rate
     {
-        [DataMember]
-        public string currency { get; set; }
-        [DataMember]
-        public string code { get; set; }
-        [DataMember]
-        public decimal mid { get; set; }
+        [DataMember(Name = "currency", IsRequired = true)]
+        public string Currency { get; set; }
+        [DataMember(Name = "code", IsRequired = true)]
+        public string Code { get; set; }
+        [DataMember(Name = "mid", IsRequired = true)]
+        public decimal Value { get; set; }
 
     }
 }
