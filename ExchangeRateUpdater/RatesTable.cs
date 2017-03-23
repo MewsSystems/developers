@@ -12,9 +12,9 @@ namespace ExchangeRateUpdater
     {
         [DataMember(Name = "table", IsRequired = true)]
         public char TableName { get; set; }
-        [DataMember(Name = "no")]
+   
         public string TableNumber { get; set; }
-        [DataMember(Name = "effectiveDate")]
+   
         public string EffectiveDate { get; set; }
         [DataMember(Name = "rates", IsRequired = true)]
         public Rate[] Rates { get; set; }
@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater
     [DataContract]
     public class Rate
     {
-        [DataMember(Name = "currency", IsRequired = true)]
+     
         public string Currency { get; set; }
         [DataMember(Name = "code", IsRequired = true)]
         public string Code { get; set; }

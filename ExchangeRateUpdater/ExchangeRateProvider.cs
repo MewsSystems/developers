@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -14,38 +16,43 @@ namespace ExchangeRateUpdater
     /// </summary>
     public class ExchangeRateProvider
     {
-        //protected static readonly char[] TableName = {'A', 'B'};
-
-        private readonly string _sourceUrLs = $"http://api.nbp.pl/api/exchangerates/tables/a/today/";
         private const string SourceCurrency = "PLN";
         /// <summary>
-        /// National Bank of Poland provides rates in several tables with PLN as a source currency.
+        /// National Bank of Poland provides rates thru API in two tables ("A" and "B") with PLN as a source currency.
         /// </summary>
-        /// <param name="currencies"></param>
-        /// <returns></returns>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var array = currencies as Currency[];
-            var currenciesArray = array ?? currencies.ToArray();
+            var currenciesArray = currencies as Currency[] ?? currencies.ToArray();
 
-            if (NoSourceCurrencyIn(currenciesArray))
-                return Enumerable.Empty<ExchangeRate>();
+            if (NoSourceCurrencyIn(currenciesArray)) return Enumerable.Empty<ExchangeRate>();
 
-            var sourceData = GetRates();
+            var sourceData = GetRates('a');
 
-            return sourceData
-                .Select(r => new ExchangeRate(new Currency(SourceCurrency), new Currency(r.Code), r.Value))
-                .Where(o => currenciesArray.Contains(o.TargetCurrency));
+            try //to get rates for currencies that are maybe distinct in table "A" 
+            {
+                sourceData = sourceData.Union(GetRates('b'));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Can't get rates from table 'B', service unavailable due to: {ex.Message}");
+            }
+
+
+            return sourceData?
+                   .Select(r => new ExchangeRate(new Currency(SourceCurrency), new Currency(r.Code), r.Value))
+                   .Where(c => currenciesArray.Contains(c.TargetCurrency));
         }
 
-        private static bool NoSourceCurrencyIn(IEnumerable<Currency> currencies) 
+        private static bool NoSourceCurrencyIn(IEnumerable<Currency> currencies)
                               => currencies.All(c => c.Code != SourceCurrency);
 
-        private IEnumerable<Rate> GetRates()
+        private IEnumerable<Rate> GetRates(char tableName)
         {
             RatesTableDto[] data;
+            string _sourceEndpoint = $"http://api.nbp.pl/api/exchangerates/tables/{tableName}";
 
-            var request = WebRequest.CreateHttp(_sourceUrLs);
+            var request = WebRequest.CreateHttp(_sourceEndpoint);//API call
+
             using (var response = request.GetResponse())
             {
 
@@ -58,7 +65,7 @@ namespace ExchangeRateUpdater
 
             }
 
-            return data[0].Rates;
+            return data[0]?.Rates;
         }
     }
 }
