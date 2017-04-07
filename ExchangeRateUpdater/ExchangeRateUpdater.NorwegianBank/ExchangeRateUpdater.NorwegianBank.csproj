@@ -1,20 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7B2695D6-D24C-4460-A58E-A10F08550CE0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{560F6A83-40A5-4C7B-A770-41020FA266FB}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExchangeRateUpdater</RootNamespace>
-    <AssemblyName>ExchangeRateUpdater</AssemblyName>
+    <RootNamespace>ExchangeRateUpdater.NorwegianBank</RootNamespace>
+    <AssemblyName>ExchangeRateUpdater.NorwegianBank</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,7 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,26 +44,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExchangeRateProvider.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Providers\ExchangeRateProvider.cs" />
+    <Compile Include="IExhangeRate.cs" />
+    <Compile Include="Providers\NorwegianBankSimpleExchangeRateProvider.cs" />
+    <Compile Include="Providers\NorwegianBankExchangeRateProvider.cs" />
+    <Compile Include="Responses\NorwegianBankExchangeDetailedResponse.cs" />
+    <Compile Include="Responses\NorwegianBankExchangeResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj">
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj">
       <Project>{b5586436-b9ad-4727-b852-03edf4346324}</Project>
       <Name>ExchangeRateUpdater.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="ExchangeRateUpdater.NorwegianBank\ExchangeRateUpdater.NorwegianBank.csproj">
-      <Project>{560f6a83-40a5-4c7b-a770-41020fa266fb}</Project>
-      <Name>ExchangeRateUpdater.NorwegianBank</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

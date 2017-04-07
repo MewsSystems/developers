@@ -1,20 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7B2695D6-D24C-4460-A58E-A10F08550CE0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B5586436-B9AD-4727-B852-03EDF4346324}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExchangeRateUpdater</RootNamespace>
-    <AssemblyName>ExchangeRateUpdater</AssemblyName>
+    <RootNamespace>ExchangeRateUpdater.Domain</RootNamespace>
+    <AssemblyName>ExchangeRateUpdater.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,26 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExchangeRateProvider.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="ExchangeRate.cs" />
+    <Compile Include="IExchangeRateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj">
-      <Project>{b5586436-b9ad-4727-b852-03edf4346324}</Project>
-      <Name>ExchangeRateUpdater.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="ExchangeRateUpdater.NorwegianBank\ExchangeRateUpdater.NorwegianBank.csproj">
-      <Project>{560f6a83-40a5-4c7b-a770-41020fa266fb}</Project>
-      <Name>ExchangeRateUpdater.NorwegianBank</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

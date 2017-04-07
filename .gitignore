@@ -16,7 +16,14 @@
 .idea
 [Tt]humbs.db
 *.tgz
+.vs
 
 node_modules
 bower_components
 npm-debug.log
+
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+/ExchangeRateUpdater/packages/Newtonsoft.Json.9.0.1
