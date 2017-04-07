@@ -27,9 +27,12 @@ namespace ExchangeRateUpdater
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
-                foreach (var rate in rates)
+                foreach (var rategroup in rates.GroupBy(x=>x.SourceCurrency.Code))
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine();
+                    Console.WriteLine("Exchange rate for " + rategroup.Key.ToString());
+                    foreach (var rate in rategroup)
+                        Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
