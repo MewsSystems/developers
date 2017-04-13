@@ -8,7 +8,6 @@ namespace ExchangeRateUpdater
     {
         private static IEnumerable<Currency> currencies = new[]
         {
-            new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),
             new Currency("JPY"),
@@ -19,11 +18,13 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
+        private static Currency baseCurrency = new Currency("USD");
+
         public static void Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(currencies, baseCurrency);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
