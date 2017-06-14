@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -24,7 +25,12 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+
+                ExchangeRateType rateType;
+
+                Enum.TryParse(ConfigurationManager.AppSettings["Exchange Rate Type"], out rateType);
+
+                var rates = provider.GetExchangeRates(currencies, rateType);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
                 foreach (var rate in rates)

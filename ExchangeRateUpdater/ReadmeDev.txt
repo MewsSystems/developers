@@ -1,0 +1,1 @@
+1. Source for Swedbank exchange rates https://www.swedbank.ee/business/d2d/payments/exchange/rates?language=ENG
