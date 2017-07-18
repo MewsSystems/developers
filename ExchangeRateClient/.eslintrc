@@ -1,0 +1,125 @@
+{
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended"
+	],
+	"rules": {
+		// Possible errors
+		"no-unsafe-negation": 2,
+		"no-extra-semi": 0,
+
+		// Best Practises
+		"array-callback-return": 2,
+		"block-scoped-var": 2,
+		"class-methods-use-this": 2,
+		"curly": 2,
+		"dot-notation": 2,
+		"eqeqeq": 2,
+		"no-global-assign": 2,
+		"no-loop-func": 2,
+		"no-unmodified-loop-condition": 2,
+
+		// Variable-regarding rules
+		"no-unused-vars": [2, {"vars": "all", "args": "none"}],
+		"no-use-before-define": [2, "nofunc"],
+
+		// Stylistic rules
+		"block-spacing": 2,
+		"brace-style": [2, "1tbs"],
+		"camelcase": 2,
+		"comma-dangle": [2, {
+			"arrays": "always-multiline",
+			"objects": "always-multiline",
+			"imports": "always-multiline",
+			"exports": "always-multiline",
+			"functions": "always-multiline"
+		}],
+		"comma-spacing": [2, {"before": false, "after": true}],
+		"comma-style": [2, "last"],
+		"computed-property-spacing": [2, "never"],
+		"consistent-this": [2, "self", "componentInstance"],
+		"func-style": [2, "declaration", {"allowArrowFunctions": true}],
+		"indent": ["error", 2],
+		"jsx-quotes": [2, "prefer-double"],
+		"key-spacing": 2,
+		"newline-before-return": 1,
+		"no-case-declarations": 0,
+		"no-lonely-if": 2,
+		"no-multiple-empty-lines": [2, {"max": 2}],
+		"no-spaced-func": 2,
+		"no-trailing-spaces": [2, { "skipBlankLines": true }],
+		"no-unneeded-ternary": 2,
+		"object-curly-spacing": [2, "never"],
+		"one-var": [2, "never"],
+		"operator-linebreak": [2, "after", {"overrides": {"?": "before", ":": "before"}}],
+		"quotes": [2, "single"],
+		"semi": [2, "never"],
+		"keyword-spacing": 2,
+		"space-before-blocks": 2,
+		"space-before-function-paren": [2, {
+			"anonymous": "always",
+			"named": "always",
+			"asyncArrow": "always"
+		}],
+		"space-in-parens": [2, "never"],
+		"space-infix-ops": 2,
+		"space-unary-ops": [2, {"words": true, "nonwords": false}],
+
+		// ES6 rules:
+		"arrow-body-style": [1, "as-needed"],
+		"arrow-parens": [2, "always"],
+		"arrow-spacing": 2,
+		"no-const-assign": 2,
+		"no-dupe-class-members": 2,
+		"no-useless-constructor": 2,
+		"no-var": 2,
+		"object-shorthand": 2,
+		"prefer-arrow-callback": 2,
+		"prefer-const": 2,
+		"prefer-rest-params": 2,
+		"prefer-spread": 2,
+		"prefer-template": 2,
+		"template-curly-spacing": 2,
+
+		// React plugin styles
+		"react/jsx-closing-bracket-location": 2,
+		"react/jsx-curly-spacing": [2, "never"],
+		"react/jsx-equals-spacing": 2,
+		"react/jsx-first-prop-new-line": [2, "multiline"],
+		"react/jsx-indent-props": [2],
+		"react/jsx-max-props-per-line": [2, {"maximum": 3}],
+		"react/jsx-no-duplicate-props": 2,
+		"react/jsx-uses-react": 2,
+		"react/jsx-uses-vars": 2,
+		"react/display-name": 0,
+		"react/no-danger": 0,
+		"react/no-did-update-set-state": 1,
+		"react/no-direct-mutation-state": 2,
+		"react/no-unknown-property": 2,
+		"react/prop-types": 0,
+		"react/self-closing-comp": 2,
+		"react/prefer-es6-class": 2,
+
+		// Import plugin
+		"import/no-duplicates": 2
+	},
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true
+	},
+	"parser": "babel-eslint",
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 2017,
+		"ecmaFeatures": {
+			"jsx": true,
+			"experimentalObjectRestSpread": true
+		}
+	},
+	"plugins": [
+		"react",
+		"babel",
+		"import"
+	]
+}

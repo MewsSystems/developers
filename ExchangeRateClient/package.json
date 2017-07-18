@@ -1,5 +1,6 @@
 {
   "name": "exchange-rate-client",
+  "author": "me@deniskabana.com",
   "version": "1.0.0",
   "description": "Exchange Rate Client",
   "license": "UNLICENSED",
@@ -10,24 +11,34 @@
   "main": "Sources/index.js",
   "scripts": {
     "start-server": "node server",
-    "start": "webpack-dev-server --hot --inline --progress"
+    "start": "webpack-dev-server --hot --inline --progress",
+    "test": "eslint app"
   },
   "babel": {
     "presets": [
       "es2015",
-      "stage-1"
+      "stage-0"
     ]
   },
   "dependencies": {
     "babel-core": "6.13.2",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.13.2",
-    "babel-preset-stage-1": "6.13.0",
+    "babel-preset-stage-0": "6.16.0",
     "chance": "1.0.4",
+    "eslint": "^4.2.0",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-react": "^7.1.0",
     "express": "4.14.0",
+    "extract-text-webpack-plugin": "^3.0.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
-    "webpack": "1.13.1",
-    "webpack-dev-server": "1.14.1"
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.5.1"
   }
 }
