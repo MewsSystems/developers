@@ -3,9 +3,9 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: './app/app.js',
+  entry: './src/index.js',
   output: {
-    filename: '[name].js',
+    filename: './dist/[name].js',
     library: 'app',
     libraryTarget: 'window',
   },
@@ -16,17 +16,17 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        include: path.resolve(__dirname, 'app'),
+        include: path.resolve(__dirname, 'src'),
         loader: 'babel-loader',
       },
       {
         test: /\.json$/,
-        include: path.resolve(__dirname, 'app'),
+        include: path.resolve(__dirname, 'src'),
         loader: 'json-loader',
       },
       {
         test: /\.css$/,
-        include: path.resolve(__dirname, 'app'),
+        include: path.resolve(__dirname, 'src'),
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -44,7 +44,7 @@ module.exports = {
   },
   devtool: 'cheap-eval-source-map',
   devServer: {
-    contentBase: './app',
+    contentBase: path.join(__dirname, "src"),
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
