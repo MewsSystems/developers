@@ -1,0 +1,21 @@
+.sidebar {
+	width: 30%;
+}
+.error {
+	color: red;
+}
+.sidebar ul {
+	font-size: 1.2em;
+}
+.sidebar ul li {
+	list-style-type: none;
+	padding: 0.5em;
+}
+.currencyRate {
+  font-size: 1.2em;
+}
+.app{
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+}
