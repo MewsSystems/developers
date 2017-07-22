@@ -15,6 +15,7 @@
   "babel": {
     "presets": [
       "es2015",
+      "react",
       "stage-1"
     ]
   },
@@ -27,7 +28,18 @@
     "express": "4.14.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.2",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
+  },
+  "devDependencies": {
+    "axios": "^0.16.2",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.4",
+    "redux-devtools": "^3.4.0",
+    "style-loader": "^0.18.2"
   }
 }
