@@ -11,6 +11,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.json'],
+    modules: ['node_modules', path.resolve(__dirname, 'src')],
   },
   module: {
     rules: [
