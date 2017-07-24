@@ -1,17 +1,11 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {render} from 'react-dom'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
-import {endpoint, interval} from 'config/config'
 import reducers from 'client/reducers'
+import 'babel-polyfill'
 
-class App extends Component {
-  render () {
-    return (
-      <span>Hello world!</span>
-    )
-  }
-}
+import App from 'client/App'
 
 export function run (elementId) {
   if (elementId == null) { // eslint-disable-line eqeqeq
