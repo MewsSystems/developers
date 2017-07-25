@@ -1,0 +1,10 @@
+.wrapper {
+  max-width: 600px;
+  width: 100%;
+  margin: 3em auto;
+  text-align: center;
+  background: #eee;
+  border: 1px solid #aaa;
+  padding: 1.2em;
+  border-radius: 3px;
+}

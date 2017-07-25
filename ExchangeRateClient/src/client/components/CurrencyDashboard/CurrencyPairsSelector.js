@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
-const styles = {}
+import styles from './styles/CurrencyPairsSelector.css'
 
 export default class CurrencyPairsSelector extends Component {
   _refSelect = null
@@ -65,7 +65,7 @@ export default class CurrencyPairsSelector extends Component {
     const {availableCurrencyPairs} = this.state
 
     return (
-      <div className={styles.selector}>
+      <div>
         <select onChange={this.onSelectorChange} defaultValue={-1} ref={(ref) => this._refSelect = ref}>
           <option disabled value={-1}>Select a pair...</option>
           {availableCurrencyPairs.map((pairId, index) => (
@@ -74,7 +74,10 @@ export default class CurrencyPairsSelector extends Component {
             </option>
           ))}
         </select>
-        <button onClick={this.onSelectorAddBtnClick}>
+        <button
+            onClick={this.onSelectorAddBtnClick}
+            className={styles.addBtn}
+        >
           Add
         </button>
       </div>
@@ -85,14 +88,20 @@ export default class CurrencyPairsSelector extends Component {
     const {isFilterEnabled} = this.props
 
     return (
-      <div className={styles['selector-filter-toggle']}>
-        <label onClick={this.onFilterToggle} htmlFor="selector-filter-toggle">Filter:&nbsp;</label>
+      <div className={styles.toggle}>
         <input
             type="checkbox"
             checked={isFilterEnabled}
             onChange={this.onFilterToggle}
             id="selector-filter-toggle"
+            className={styles.checkboxInput}
         />
+        <label
+            htmlFor="selector-filter-toggle"
+            className={styles.label}
+        >
+          Filter:&nbsp;
+        </label>
       </div>
     )
   }
@@ -101,7 +110,7 @@ export default class CurrencyPairsSelector extends Component {
     const {isFilterEnabled} = this.props
 
     return (
-      <div className={styles['selector-wrapper']}>
+      <div className={styles.wrapper}>
         {this.renderFilterToggle()}
         {isFilterEnabled ? this.renderSelector() : <div>Enable filter to select options...</div>}
       </div>

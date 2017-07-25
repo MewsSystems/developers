@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const styles = {}
+import styles from './styles/CurrencyPairsRateList.css'
 
 const CurrencyPairsRateList = ({
   data,
@@ -27,8 +27,8 @@ const CurrencyPairsRateList = ({
       const valueDifference = rates !== null && ((value - previousValue) || 0)
 
       return (
-        <div key={index} className={styles['currency-pair']}>
-          <div className={styles['currency-pair-text']}>
+        <div key={index} className={styles.pair}>
+          <div className={styles.pairCodes}>
             <span title={thisData[0].name}>
               {thisData[0].code}
             </span>
@@ -38,7 +38,7 @@ const CurrencyPairsRateList = ({
             </span>
           </div>
           {rates !== null && (
-            <div className={styles['currency-pair-indicatoor']}>
+            <div className={styles.pairDifference}>
               {valueDifference !== 0 && (
                 <span>{valueDifference > 0 ? '+' : '-'}&nbsp;</span>
               )}
@@ -46,8 +46,13 @@ const CurrencyPairsRateList = ({
             </div>
           )}
           {isFilterEnabled && (
-            <div className={styles['currency-pair-delete']}>
-              <button onClick={generateClickHandler(pairId)}>Delete</button>
+            <div>
+              <button
+                  onClick={generateClickHandler(pairId)}
+                  className={styles.pairDelete}
+              >
+                Delete
+              </button>
             </div>
           )}
         </div>
@@ -55,7 +60,7 @@ const CurrencyPairsRateList = ({
     })
 
   return (
-    <div className={styles['currency-pair-wrapper']}>
+    <div className={styles.rates}>
       {currencyPairs}
     </div>
   )

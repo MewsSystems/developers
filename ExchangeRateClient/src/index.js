@@ -8,6 +8,10 @@ import 'babel-polyfill'
 import App from 'client/App'
 import initialState from 'client/reducers/initialState'
 
+// Generic body styles
+import {body} from 'main.css'
+document.body.className = body
+
 export function run (elementId) {
   if (elementId == null) { // eslint-disable-line eqeqeq
     return false
@@ -18,7 +22,7 @@ export function run (elementId) {
 
   // Save state before exiting the app
   window.onbeforeunload = () => {
-    localStorage && localStorage.setItem('appState', JSON.stringify(store.getState()))
+    sessionStorage && sessionStorage.setItem('appState', JSON.stringify(store.getState()))
   }
 
   render(

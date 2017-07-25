@@ -1,0 +1,56 @@
+.addBtn {
+  composes: button from 'client/styles/button.css';
+}
+
+.toggle {
+  display: inline-block;
+  position: relative;
+  padding-right: 35px;
+  user-select: none;
+  margin-bottom: .5em;
+}
+
+.checkboxInput {
+  display: none;
+}
+
+.label {
+  line-height: 20px;
+  cursor: pointer;
+}
+.label::before,
+.label::after {
+  display: block;
+  content: '';
+  position: absolute;
+  right: 0;
+}
+.label::before {
+  width: 35px;
+  bottom: 0;
+  height: 20px;
+  background-color: #bbb;
+  border-radius: 3px;
+  transition: background-color .25s;
+}
+.label::after {
+  width: 14px;
+  height: 14px;
+  bottom: 3px;
+  background: white;
+  border-radius: 2px;
+  transform: translate3d(-18px, 0, 0);
+  transition: transform .25s;
+}
+.checkboxInput:checked + .label::before {
+  background-color: #00B16A;
+}
+.checkboxInput:checked + .label::after {
+  transform: translate3d(-4px, 0, 0);
+}
+
+.wrapper {
+  border: 1px solid #ccc;
+  padding: .6em;
+  border-radius: 3px;
+}

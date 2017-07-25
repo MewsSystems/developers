@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import CurrencyPairsRateList from './CurrencyPairsRateList'
 import CurrencyPairsSelector from './CurrencyPairsSelector'
 
-const styles = {}
+import styles from './styles/CurrencyDashboardView.css'
 
 const CurrencyDashboardView = ({
   isLoading,
@@ -30,7 +30,7 @@ const CurrencyDashboardView = ({
   }
 
   return (
-    <div className={styles['currency-dashboard']}>
+    <div className={styles.wrapper}>
       <CurrencyPairsSelector
           data={data}
           updateFilterValue={updateFilterValue}

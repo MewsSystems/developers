@@ -1,0 +1,29 @@
+.rates {
+  padding: 1em;
+}
+
+.pair {
+  display: inline-block;
+  margin: .5em;
+  border: 1px solid #ccc;
+  padding: .75em;
+  vertical-align: top;
+  box-shadow: 0 2px 2px rgba(0,0,0,.25);
+  border-radius: 4px;
+}
+
+.pairCodes {
+  font-weight: 700;
+}
+
+.pairDifference {
+  font-size: .75em;
+  margin: .25em 0;
+}
+
+.pairDelete {
+  composes: button from 'client/styles/button.css';
+  margin-top: 1em;
+  border-color: #96281B;
+  color: #96281B;
+}

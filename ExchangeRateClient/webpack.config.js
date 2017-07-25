@@ -49,5 +49,6 @@ module.exports = {
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
+    new ExtractTextPlugin('style.css'),
   ],
 }

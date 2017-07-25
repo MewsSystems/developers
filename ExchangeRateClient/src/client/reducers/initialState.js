@@ -1,4 +1,4 @@
-const savedStorage = localStorage ? JSON.parse(localStorage.getItem('appState')) : null
+const savedStorage = sessionStorage ? JSON.parse(sessionStorage.getItem('appState')) : null
 
 const initialState = savedStorage || {
   exchangeRatesReducer: {
