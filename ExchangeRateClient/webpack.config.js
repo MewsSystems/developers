@@ -1,34 +1,54 @@
-const webpack = require('webpack');
+const webpack = require('webpack')
+const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: './dist/[name].js',
+    library: 'app',
+    libraryTarget: 'window',
+  },
+  resolve: {
+    extensions: ['.js', '.json'],
+    modules: ['node_modules', path.resolve(__dirname, 'src')],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'src'),
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.json$/,
+        include: path.resolve(__dirname, 'src'),
+        loader: 'json-loader',
+      },
+      {
+        test: /\.css$/,
+        include: path.resolve(__dirname, 'src'),
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              query: {
+                modules: true,
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+              }
+            },
+          ],
+        }),
+      },
     ],
-    entry: {
-        app: './app/app.js',
-    },
-    output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
-    },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
-};
-
-module.exports = webpackConfig;
+  },
+  devtool: 'cheap-eval-source-map',
+  devServer: {
+    contentBase: path.join(__dirname, "src"),
+  },
+  plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new ExtractTextPlugin('style.css'),
+  ],
+}
