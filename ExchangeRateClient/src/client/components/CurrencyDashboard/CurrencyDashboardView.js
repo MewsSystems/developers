@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import CurrencyPairsRateList from './CurrencyPairsRateList'
+import CurrencyPairsSelector from './CurrencyPairsSelector'
+
+const styles = {}
 
 const CurrencyDashboardView = ({
   isLoading,
@@ -9,6 +12,10 @@ const CurrencyDashboardView = ({
   errorMessage,
   data,
   rates,
+  updateFilterValue,
+  toggleFilter,
+  isFilterEnabled,
+  filterValue,
 }) => {
   if (error) {
     return (
@@ -23,10 +30,22 @@ const CurrencyDashboardView = ({
   }
 
   return (
-    <CurrencyPairsRateList
-        data={data}
-        rates={rates}
-    />
+    <div className={styles['currency-dashboard']}>
+      <CurrencyPairsSelector
+          data={data}
+          updateFilterValue={updateFilterValue}
+          toggleFilter={toggleFilter}
+          isFilterEnabled={isFilterEnabled}
+          filterValue={filterValue}
+      />
+      <CurrencyPairsRateList
+          data={data}
+          rates={rates}
+          filterValue={filterValue}
+          updateFilterValue={updateFilterValue}
+          isFilterEnabled={isFilterEnabled}
+      />
+    </div>
   )
 }
 
@@ -36,6 +55,10 @@ CurrencyDashboardView.propTypes = {
   errorMessage: PropTypes.string,
   data: PropTypes.object.isRequired,
   rates: PropTypes.object,
+  updateFilterValue: PropTypes.func,
+  toggleFilter: PropTypes.func,
+  isFilterEnabled: PropTypes.bool,
+  filterValue: PropTypes.array,
 }
 
 export default CurrencyDashboardView

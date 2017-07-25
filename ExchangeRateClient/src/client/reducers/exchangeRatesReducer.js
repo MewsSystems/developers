@@ -7,7 +7,7 @@ const exchangeRateReducer = (state = {}, action) => {
   case CONSTANTS.TOGGLE_FILTER:
     return {
       ...state,
-      isFilterEnabled: payload.value,
+      isFilterEnabled: !state.isFilterEnabled,
     }
 
   case CONSTANTS.UPDATE_FILTER_VALUE:

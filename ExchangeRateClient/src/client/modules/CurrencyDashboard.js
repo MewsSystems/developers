@@ -1,10 +1,22 @@
 import React, {Component} from 'react'
 import {interval as configReloadInterval} from 'config/config'
+import {connect} from 'react-redux'
 
 import {getConfiguration, getRates} from 'client/api/exchangeRates'
+import {toggleFilter, updateFilterValue} from 'client/actions/exchangeRatesActions'
 import CurrencyDashboardView from 'client/components/CurrencyDashboard/CurrencyDashboardView'
 
-export default class CurrencyDashboard extends Component {
+const mapStateToProps = (state) => ({
+  filterValue: state.exchangeRatesReducer.filterValue,
+  isFilterEnabled: state.exchangeRatesReducer.isFilterEnabled,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleFilter: () => dispatch(toggleFilter()),
+  updateFilterValue: (value) => dispatch(updateFilterValue(value)),
+})
+
+class CurrencyDashboard extends Component {
   _getRatesInterval = null
 
   componentDidMount () {
@@ -28,6 +40,8 @@ export default class CurrencyDashboard extends Component {
     getConfiguration()
       .then((response) => {
         this.apiGetConfigurationSuccess(response)
+        this.apiGetRates()
+        this._getRatesInterval = setInterval(this.apiGetRates, configReloadInterval)
       })
       .catch((error) => {
         this.apiGetConfigurationFail(error)
@@ -53,9 +67,6 @@ export default class CurrencyDashboard extends Component {
       data: currencyPairs,
       ids,
     })
-
-    this.apiGetRates()
-    this._getRatesInterval = setInterval(this.apiGetRates, configReloadInterval)
   }
 
   apiGetConfigurationFail = (errorMessage) => {
@@ -87,17 +98,26 @@ export default class CurrencyDashboard extends Component {
 
   apiGetRatesFail = (errorMessage) => {
     this.setState({
-      error: true,
-      errorMessage: errorMessage.message,
       isLoading: false,
     })
   }
 
   render () {
+    const {filterValue, isFilterEnabled, toggleFilter, updateFilterValue} = this.props
+
     return (
       <CurrencyDashboardView
           {...this.state}
+          filterValue={filterValue}
+          isFilterEnabled={isFilterEnabled}
+          toggleFilter={toggleFilter}
+          updateFilterValue={updateFilterValue}
       />
     )
   }
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurrencyDashboard)
