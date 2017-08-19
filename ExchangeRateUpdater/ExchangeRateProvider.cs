@@ -24,11 +24,12 @@ namespace ExchangeRateUpdater
             await Task.Run(() => Parallel.ForEach(currencies, currency =>
             {
                 ReturnedCurrencies result = GetAsyncSimple<ReturnedCurrencies>(String.Format(ConfigurationManager.AppSettings.Get("SourceAPI"), currency.Code), currency.Code).Result;
+
                 if (result != null)
                 {
-                    List<Currency> newListCurrency = new List<Currency>(currencies.ToList());
+                    List<Currency> newListCurrency = currencies.ToList();
 
-                    for (int i = currencies.ToList().FindIndex(c => c.Code == currency.Code) - 1; i >= 0; i--)
+                    for (int i = newListCurrency.FindIndex(c => c.Code == currency.Code) - 1; i >= 0; i--)
                     {
                         newListCurrency.RemoveAt(i);
                     }
@@ -41,7 +42,7 @@ namespace ExchangeRateUpdater
                     
             }));
                               
-            return results;
+            return results.OrderBy(x => x.SourceCurrency.Code);
         }
 
         private HttpClient CreateHttpClient()
