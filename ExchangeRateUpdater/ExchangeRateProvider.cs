@@ -21,20 +21,26 @@ namespace ExchangeRateUpdater
         {
             List<ExchangeRate> results = new List<ExchangeRate>();
 
-            foreach (var currency in currencies)
+            await Task.Run(() => Parallel.ForEach(currencies, currency =>
             {
-
-                ReturnedCurrencies result = await GetAsyncSimple<ReturnedCurrencies>(String.Format(ConfigurationManager.AppSettings.Get("SourceAPI"), currency.Code), currency.Code);
-
+                ReturnedCurrencies result = GetAsyncSimple<ReturnedCurrencies>(String.Format(ConfigurationManager.AppSettings.Get("SourceAPI"), currency.Code), currency.Code).Result;
                 if (result != null)
                 {
-                    foreach (var item in result.rates)
+                    List<Currency> newListCurrency = new List<Currency>(currencies.ToList());
+
+                    for (int i = currencies.ToList().FindIndex(c => c.Code == currency.Code) - 1; i >= 0; i--)
+                    {
+                        newListCurrency.RemoveAt(i);
+                    }
+                    
+                    foreach (var item in result.Rates.Where(r => newListCurrency.FirstOrDefault(c => c.Code == r.Key) != null))
                     {
                         results.Add(new ExchangeRate(currency, new Currency(item.Key), item.Value));
                     }
                 }
-            }
-
+                    
+            }));
+                              
             return results;
         }
 
@@ -69,9 +75,14 @@ namespace ExchangeRateUpdater
 
         private class ReturnedCurrencies
         {
-            public string @base { get; set; }
-            public string date { get; set; }
-            public Dictionary<string, decimal> rates { get; set; }
+            [JsonProperty(PropertyName = "base")]
+            public string Base { get; set; }
+
+            [JsonProperty(PropertyName = "date")]
+            public string Date { get; set; }
+
+            [JsonProperty(PropertyName = "rates")]
+            public Dictionary<string, decimal> Rates { get; set; }
 
         }
     }
