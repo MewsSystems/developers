@@ -55,7 +55,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRateUpdater\ExchangeRateUpdater.csproj">
+    <ProjectReference Include="..\ExchangeRateUpdater.csproj">
       <Project>{7b2695d6-d24c-4460-a58e-a10f08550ce0}</Project>
       <Name>ExchangeRateUpdater</Name>
     </ProjectReference>

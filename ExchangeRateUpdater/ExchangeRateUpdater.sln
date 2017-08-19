@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "..\ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{A1B9951B-B1D7-4383-9294-A7D85BFDAE3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{A1B9951B-B1D7-4383-9294-A7D85BFDAE3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
