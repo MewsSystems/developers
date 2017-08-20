@@ -1,6 +1,8 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
-    public class ExchangeRate
+    public class ExchangeRate : IEquatable<ExchangeRate>
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
@@ -18,6 +20,15 @@
         public override string ToString()
         {
             return SourceCurrency.Code + "/" + TargetCurrency.Code + "=" + Value;
+        }
+
+        public bool Equals(ExchangeRate other)
+        {
+            if (other == null)
+                return false;
+            return other.SourceCurrency.Code.Equals(SourceCurrency.Code)
+                && other.TargetCurrency.Code.Equals(TargetCurrency.Code)
+                && other.Value.Equals(Value);
         }
     }
 }
