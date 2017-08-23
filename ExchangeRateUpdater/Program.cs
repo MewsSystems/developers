@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,25 +20,38 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+		public static void Main(string[] args)
+		{
+			var rateProvider = new CubExchangeRateProvider(new MemoryCache());
 
-                Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);
-            }
+			RunExample(rateProvider);
+			RunExample(rateProvider);
+			RunExample(rateProvider);
 
-            Console.ReadLine();
-        }
+			Console.ReadKey();
+		}
+
+		private static void RunExample(IExchangeRateProvider provider)
+		{
+			Task.Run(() =>
+			{
+				try
+				{
+					var rates = provider.GetExchangeRates(currencies);
+					PrintResult(rates);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);
+				}
+			});
+		}
+
+		private static void PrintResult(IEnumerable<ExchangeRate> rates)
+		{
+			foreach (var rate in rates)
+				Console.WriteLine(rate.ToString());
+			Console.WriteLine();
+		}
     }
 }
