@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -13,7 +14,24 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var targetCurrency = new Currency("CZK");
+
+            try
+            {
+                var rates = CreateExchangeRates(targetCurrency);
+
+                return rates.Where(t => currencies.Any(c => c.Code == t.SourceCurrency.Code) && currencies.Any(c => c.Code == t.TargetCurrency.Code));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Getting rates from National Bank failed. Addiotional information: '{ex.Message}'");
+            }
+        }
+
+        private IEnumerable<ExchangeRate> CreateExchangeRates(Currency targetCurrency)
+        {
+            return NationalBankRateProvider.GetBankRates().Select(t => new ExchangeRate(new Currency(t.Code.ToUpper()), targetCurrency, t.Rate));
         }
     }
 }
+
