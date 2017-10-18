@@ -26,15 +26,15 @@ namespace ExchangeRateUpdater
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
             }
-            catch (Exception e)
+            catch (Exception exc)
             {
-                Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);
+                Console.WriteLine($"An error occurred while retrieving exchange rates: {exc.Message}");
             }
 
             Console.ReadLine();

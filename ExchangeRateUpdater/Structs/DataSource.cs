@@ -43,11 +43,11 @@ namespace ExchangeRateUpdater
 
     public class DataSourceRefeces
     {
-        public static Dictionary<DataSourceEnum, KeyFileProperties> Codes = new Dictionary<DataSourceEnum, KeyFileProperties>()
+        public static Dictionary<DataSourceEnum, KeyFileProperties> Sources = new Dictionary<DataSourceEnum, KeyFileProperties>()
         {
             {DataSourceEnum.CzechNationalBank, new KeyFileProperties("https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt","kód","kurz","množství",'|',',') },
-            {DataSourceEnum.CustomsAdministrationTXT, new KeyFileProperties("www.celnisprava.cz/cz/aplikace/Stranky/kurzy.aspx?er=1&type=TXT","Kód","Kurz","Množství",';',',') },
-            {DataSourceEnum.CustomsAdministrationXML, new KeyFileProperties("www.celnisprava.cz/cz/aplikace/Stranky/kurzy.aspx?er=1&type=XML","MENA","KURZ","POCET",'\0',',') },
+            {DataSourceEnum.CustomsAdministrationTXT, new KeyFileProperties("http://www.celnisprava.cz/cz/aplikace/Stranky/kurzy.aspx?er=1&type=TXT","Kód","Kurz","Množství",';',',') },
+            {DataSourceEnum.CustomsAdministrationXML, new KeyFileProperties("http://www.celnisprava.cz/cz/aplikace/Stranky/kurzy.aspx?er=1&type=XML","MENA","KURZ","POCET",'\0',',') },
             {DataSourceEnum.EuropeCentralBank, new KeyFileProperties("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml","currency","rate",null,'\0','.') }
         };
     }
