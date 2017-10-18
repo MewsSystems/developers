@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater
             var eRater = new List<ExchangeRate>();
             try
             {
-                eRater = fileDownlo.GetDataFromServer(DataSourceEnum.CzechNationalBank);
+                eRater = fileDownlo.GetDataFromServer(source);
             }
             catch (System.Exception exc)
             {

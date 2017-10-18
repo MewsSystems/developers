@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -45,10 +46,29 @@ namespace ExchangeRateUpdater
             List<ExchangeRate> rates = new List<ExchangeRate>();
 
             if (fileType == false)
-                rates = ParseFromTXT(file, ca);
+                rates = ParseFromTXT(file, ca, new Currency("CZK"));
             else
             {
+                XDocument doc = XDocument.Parse(file);
                 var tarCur = new Currency("CZK");
+                var elements = doc.Root.Descendants().Where(el => el.Name.LocalName == "kurz");
+
+                foreach (var elem in elements)
+                {
+                    var innerElem = elem.Descendants();
+                    var sourceCur = new Currency(innerElem.Where(el=>el.Name.LocalName==ca.NameCode).First().Value.ToUpper());
+
+                    decimal amount = 0;
+                    decimal.TryParse(innerElem.Where(el => el.Name.LocalName == ca.NameAmout).First().Value.ToString(), out amount);
+
+                    decimal rate = 0;
+                    decimal.TryParse(innerElem.Where(el => el.Name.LocalName == ca.NameRate).First().Value.ToString(), out rate);
+
+                    rate = amount > 1 ? rate / amount : rate;
+
+                    rates.Add(new ExchangeRate(sourceCur, tarCur, rate));
+                }
+
             }
             return rates;
         }
@@ -66,8 +86,19 @@ namespace ExchangeRateUpdater
             XDocument doc = XDocument.Parse(file);
             List<ExchangeRate> rates = new List<ExchangeRate>();
             var tarCur = new Currency("EUR");
+            var elements = doc.Descendants().Where(el => el.Name.LocalName == "Cube" && el.Attribute(ecb.NameCode) != null);
 
-            throw new NotImplementedException();
+            foreach (var elem in elements)
+            {
+                var sourceCur = new Currency(elem.Attribute(ecb.NameCode).Value.ToUpper());
+                decimal rate = 0;
+                decimal.TryParse(elem.Attribute(ecb.NameRate).Value.ToString(),NumberStyles.Any,CultureInfo.InvariantCulture, out rate);
+
+
+                rates.Add(new ExchangeRate(sourceCur, tarCur, rate));
+            }
+
+            return rates;
 
         }
 
@@ -80,16 +111,15 @@ namespace ExchangeRateUpdater
                 webClient.Encoding = Encoding.UTF8;
                 file = webClient.DownloadString(cnb.WebSouce);
             }
-            List<ExchangeRate> rates = ParseFromTXT(file, cnb);
+            List<ExchangeRate> rates = ParseFromTXT(file, cnb, new Currency("CZK"));
             return rates;
         }
 
-        private List<ExchangeRate> ParseFromTXT(string file,KeyFileProperties propFile)
+        private List<ExchangeRate> ParseFromTXT(string file,KeyFileProperties propFile, Currency targetCurr)
         {
             List<ExchangeRate> rates = new List<ExchangeRate>();
             string[] lines = file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             int numCode = 0, numAmount = 0, numRate = 0;
-            var tarCur = new Currency("CZK");
             foreach (var line in lines)
             {
                 var lineDetail = line.Split(propFile.Separator);
@@ -116,7 +146,7 @@ namespace ExchangeRateUpdater
 
                     rate = amount > 1 ? rate / amount : rate;
 
-                    rates.Add(new ExchangeRate(sourceCur, tarCur, rate));
+                    rates.Add(new ExchangeRate(sourceCur, targetCurr, rate));
                 }
                 else
                 {
