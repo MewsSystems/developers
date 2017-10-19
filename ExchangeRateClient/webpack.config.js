@@ -23,7 +23,14 @@ const rules = {
         include: [PATHS.app],
         use: [
           { loader: "style-loader" },
-          { loader: "css-loader" },
+          {
+            loader: "css-loader",
+            options: {
+               modules: true,
+               importLoaders: 1,
+               localIdentName: '[name]_[local]_[hash:base64:5]'
+           }
+          },
           {
             loader: "less-loader",
             options: {
