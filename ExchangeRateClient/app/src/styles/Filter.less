@@ -1,10 +1,38 @@
+@import 'common';
+
 .filter {
-  background: cyan;
+  display: flex;
+  flex-wrap: wrap;
+  margin: (-@btn-gap) (-@btn-gap) 0 0;
 }
 
 .btn {
+  flex-grow: 1;
+  box-sizing: border-box;
+  margin: @btn-gap @btn-gap 0 0;
+  padding: 12px 24px;
+  width: @btn-size;
+  border: 1px solid @grey;
+  border-radius: 4px;
+  background-color: @white;
+
+  color: @black;
+  font-family: @font;
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus,
+  &:hover {
+    border-color: @black;
+  }
 
   &--off {
-    color: red;
+    background-color: @inactive;
   }
 }
