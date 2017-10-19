@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency.cs" />
-    <Compile Include="ExchangeRate.cs" />
-    <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="App_helpers\FileParser.cs" />
+    <Compile Include="Structs\Currency.cs" />
+    <Compile Include="Structs\DataSource.cs" />
+    <Compile Include="Structs\ExchangeRate.cs" />
+    <Compile Include="Structs\ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

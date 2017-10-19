@@ -24,17 +24,21 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
-                foreach (var rate in rates)
+                foreach (DataSourceEnum dataSource in Enum.GetValues(typeof(DataSourceEnum)))
                 {
-                    Console.WriteLine(rate.ToString());
+                    var rates = provider.GetExchangeRates(currencies, dataSource);
+
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from {dataSource.ToString()}:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
+                    Console.WriteLine("//--==--\\");
                 }
             }
-            catch (Exception e)
+            catch (Exception exc)
             {
-                Console.WriteLine("An error occurred while retrieving exchange rates: " + e.Message);
+                Console.WriteLine($"An error occurred while retrieving exchange rates: {exc.Message}");
             }
 
             Console.ReadLine();
