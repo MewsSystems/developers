@@ -2,14 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import sn from 'classnames';
-import s from '../styles/common.less';
-import {getViewRates} from '../selectors';
+import Filter from './Filter';
+import {getFilteredRates} from '../selectors';
 
 
 const App = (props) => (
-  <pre>{JSON.stringify(props.rates, null, ' ')}</pre>
+  <div>
+    <Filter />
+    <pre>{JSON.stringify(props.rates, null, ' ')}</pre>
+  </div>
 );
 
 export default connect(state => ({
-  rates: getViewRates(state)
+  rates: getFilteredRates(state)
 }))(App);
