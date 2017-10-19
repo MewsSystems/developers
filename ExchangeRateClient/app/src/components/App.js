@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import sn from 'classnames';
 import s from '../styles/common.less';
+import {getViewRates} from '../selectors';
 
 
 const App = (props) => (
-  <h1 className={s.test}>Build test</h1>
+  <pre>{JSON.stringify(props.rates, null, ' ')}</pre>
 );
 
-export default App;
+export default connect(state => ({
+  rates: getViewRates(state)
+}))(App);

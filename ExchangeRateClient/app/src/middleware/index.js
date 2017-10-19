@@ -7,7 +7,7 @@ import {getRates, getConfig} from '../utils/api';
 const watchRates = (pairs, onRateLoad, interval = 10000) => {
   return setInterval(() => {
     getRates(Object.keys(pairs))
-      .then(data => onRateLoad(data))
+      .then(data => onRateLoad(data.rates))
       .catch(e => console.log(e));
   }, interval);
 }
