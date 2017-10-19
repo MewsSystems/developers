@@ -1,7 +1,7 @@
 import {createSelector} from 'reselect';
 import {getPairTrend, getPairName} from '../utils';
 
-
+const getIsWatching = state => state.isWatching;
 const getCurrencyPairs = state => state.config.currencyPairs;
 const getFilter = state => state.filter;
 const getRates = state => state.rates;
@@ -30,4 +30,4 @@ const getFilteredRates = createSelector(
   (rates, filter) => rates.filter(rate => !~filter.indexOf(rate.id))
 );
 
-export {getCurrencyPairs, getFilter, getViewPairs, getFilteredRates};
+export {getCurrencyPairs, getFilter, getViewPairs, getFilteredRates, getIsWatching};

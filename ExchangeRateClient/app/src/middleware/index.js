@@ -1,6 +1,6 @@
-import {REHYDRATE} from 'redux-persist/constants';
-import {onConfigLoaded, onRatesLoaded} from '../actions';
-import {getCurrencyPairs} from '../selectors';
+import {WATCH_TOGGLED} from '../const/action-names';
+import {onConfigLoaded, onRatesLoaded, onWatchStart} from '../actions';
+import {getCurrencyPairs, getIsWatching} from '../selectors';
 import {getRates, getConfig} from '../utils/api';
 
 
@@ -8,7 +8,7 @@ const watchRates = (pairs, onRateLoad, interval = 10000) => {
   return setInterval(() => {
     getRates(Object.keys(pairs))
       .then(data => onRateLoad(data.rates))
-      .catch(e => console.log(e));
+      .catch(e => console.log('Rate loading was failed'));
   }, interval);
 }
 
@@ -22,30 +22,42 @@ const loadConfig = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-let isRateWatchActive = false;
-let isConfigLoading = false;
+let watcher;
+let watchAutorun = true;
+let isConfigLoaded = false;
+
 const rateWatcher = config => store => next => action => {
   next(action);
 
-  if (isRateWatchActive) {
-    return;
-  }
+  const state = store.getState();
+  const isWatching = getIsWatching(state);
 
-  if (!isConfigLoading) {
-    isConfigLoading = true;
+  if (!isConfigLoaded) {
+    isConfigLoaded = true;
     loadConfig()
       .then(config => store.dispatch(onConfigLoaded(config)))
       .catch(() => console.log('Config isn\'t available :('));
   }
 
-  const pairs = getCurrencyPairs(store.getState());
+  const pairs = getCurrencyPairs(state);
   if (pairs) {
-    isRateWatchActive = true;
-    watchRates(
-      pairs,
-      (rates) => store.dispatch(onRatesLoaded(rates)),
-      config.interval
-    );
+    if (watchAutorun) {
+      watchAutorun = false;
+      store.dispatch(onWatchStart());
+    }
+
+    if (isWatching && !watcher) {
+      watcher = watchRates(
+        pairs,
+        (rates) => store.dispatch(onRatesLoaded(rates)),
+        config.interval
+      );
+    }
+  }
+
+  if (!isWatching && watcher) {
+    clearInterval(watcher);
+    watcher = null;
   }
 };
 

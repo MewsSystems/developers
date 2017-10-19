@@ -1,13 +1,17 @@
-import {FILTER_CHANGED} from '../const/action-names';
+import {FILTER_CHANGED, FILTER_CLEARED} from '../const/action-names';
 
 
 export default (state = [], action) => {
-  if (action.type !== FILTER_CHANGED) {
-    return state;
+  switch (action.type) {
+    case FILTER_CLEARED:
+      return [];
+
+    case FILTER_CHANGED:
+      const id = action.payload;
+      const index = state.indexOf(id);
+      return ~index ? state.filter(item => item !== id) : [...state, id];
+
+    default:
+      return state;
   }
-
-  const id = action.payload;
-  const index = state.indexOf(id);
-
-  return ~index ? state.filter(item => item !== id) : [...state, id];
 };
