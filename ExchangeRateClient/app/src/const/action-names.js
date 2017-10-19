@@ -1,0 +1,3 @@
+export const CONFIG_LOADED = 'CONFIG_LOADED';
+export const RATES_LOADED = 'RATES_LOADED';
+export const FILTER_CHANGED = 'FILTER_CHANGED';
