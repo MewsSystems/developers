@@ -1,34 +1,100 @@
+const path = require('path');
 const webpack = require('webpack');
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
+
+const PATHS = {
+    app: path.join(__dirname, 'app'),
+    build: path.join(__dirname, 'app/dist'),
+};
+
+const rules = {
+    js: {
+        test: /\.(js|jsx)$/,
+        include: [PATHS.app],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['react']
+          }
+        }
+    },
+    less: {
+        test: /\.less$/,
+        include: [PATHS.app],
+        use: [
+          { loader: "style-loader" },
+          {
+            loader: "css-loader",
+            options: {
+               modules: true,
+               camelCase: true,
+               importLoaders: 1,
+               localIdentName: '[name]_[local]_[hash:base64:5]'
+           }
+          },
+          {
+            loader: "less-loader",
+            options: {
+                strictMath: true,
+                noIeCompat: true
+            }
+          }
+        ],
+    }
+};
+
+const config = {
     entry: {
-        app: './app/app.js',
+      app: [
+          'whatwg-fetch',
+          './app/src/index.js',
+      ]
     },
     output: {
+        path: PATHS.build,
         filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
+        publicPath: '/',
     },
+    target: 'web',
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['.js', '.jsx', '.json', '.less'],
+        modules: [PATHS.app, 'node_modules'],
+        enforceExtension: false,
     },
     module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
+        rules: [
+            rules.js,
+            rules.less,
+        ],
     },
-    devtool: 'eval',
+    plugins: [
+        new webpack.NoEmitOnErrorsPlugin(),
+    ],
+    devtool: 'source-map',
     devServer: {
-        contentBase: './app',
+        contentBase: path.join(__dirname, '/app/dist'),
+        staticOptions: {
+            index: 'index.html',
+        },
+        open: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000/',
+                pathRewrite: {'^/api' : ''}
+            },
+        },
+        historyApiFallback: {
+            rewrites: [{
+                from: /^\/((?!api|assets).)*$/,
+                to: '/',
+            }],
+        },
+        hot: true,
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: 1000,
+        },
     },
 };
 
-module.exports = webpackConfig;
+module.exports = config;

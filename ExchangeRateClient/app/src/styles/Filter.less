@@ -1,0 +1,17 @@
+@import 'common';
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  margin: (-@btn-gap) (-@btn-gap) 0 0;
+}
+
+.btn {
+  flex-grow: 1;
+  margin: @btn-gap @btn-gap 0 0;
+  width: @btn-size;
+
+  &--off {
+    background-color: @inactive;
+  }
+}

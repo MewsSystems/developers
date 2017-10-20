@@ -1,0 +1,25 @@
+@import 'common';
+
+.btn {
+  box-sizing: border-box;
+  padding: 12px 24px;
+  border: 1px solid @grey;
+  border-radius: 4px;
+  background-color: @white;
+
+  color: @black;
+  font-family: @font;
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background-color 0.3s ease-out, border-color 0.3s ease-out, transfrom 0.3s ease-out;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus,
+  &:hover {
+    border-color: @black;
+  }
+}
