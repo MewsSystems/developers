@@ -1,21 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import sn from 'classnames';
 import s from '../styles/App.less';
 import ControlPanel from './ControlPanel';
 import Filter from './Filter';
+import Rates from './Rates';
 import {getFilteredRates} from '../selectors';
 
 
-const App = (props) => (
-  <div className={sn(s.app)}>
+const App = () => (
+  <div className={s.app}>
     <ControlPanel />
     <Filter />
-    <pre>{JSON.stringify(props.rates, null, ' ')}</pre>
+    <Rates />
   </div>
 );
 
-export default connect(state => ({
-  rates: getFilteredRates(state)
-}))(App);
+export default App;

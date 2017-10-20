@@ -1,0 +1,46 @@
+@import 'common';
+
+.rates {
+  margin-top: 24px;
+}
+
+.item {
+  display: flex;
+  font-size: 18px;
+  font-family: @font;
+  color: @black;
+
+  & + & {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid @grey;
+  }
+}
+
+.title {
+
+}
+
+.value {
+  min-width: 90px;
+  margin-left: 12px;
+}
+
+.trend {
+  display: inline-block;
+  margin-left: 8px;
+  width: 6px;
+  height: 6px;
+  border: solid @white;
+  border-width: 2px 2px 0 0;
+
+  &--grow {
+    border-color: @green;
+    transform: rotate(-45deg) skew(-6deg, -6deg);
+  }
+
+  &--decl {
+    border-color: @red;
+    transform: rotate(135deg) skew(-6deg, -6deg) translate(-4px, 1px);
+  }
+}
