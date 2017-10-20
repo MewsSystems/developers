@@ -39,20 +39,23 @@ const rateWatcher = config => store => next => action => {
       .catch(() => console.log('Config isn\'t available :('));
   }
 
-  const pairs = getCurrencyPairs(state);
-  if (pairs) {
-    if (watchAutorun) {
-      watchAutorun = false;
-      store.dispatch(onWatchStart());
-    }
+  if (watchAutorun) {
+    watchAutorun = false;
+    store.dispatch(onWatchStart());
+  }
 
-    if (isWatching && !watcher) {
-      watcher = watchRates(
-        pairs,
-        (rates) => store.dispatch(onRatesLoaded(rates)),
-        config.interval
-      );
-    }
+  if (isWatching && !watcher) {
+    watcher = setInterval(() => {
+      const pairIds = Object.keys(getCurrencyPairs(store.getState()));
+
+      if (pairIds.length === 0) {
+        return;
+      }
+
+      getRates(pairIds)
+        .then(data => store.dispatch(onRatesLoaded(data.rates)))
+        .catch(e => {});
+    }, config.interval);
   }
 
   if (!isWatching && watcher) {
