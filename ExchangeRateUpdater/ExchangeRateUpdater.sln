@@ -1,9 +1,32 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Financial", "ExchangeRateUpdater.Financial\ExchangeRateUpdater.Financial.csproj", "{2F5019A5-2A44-4534-B096-28F23800CC22}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CD2D06-F15E-4902-BF29-11690750D26D} = {61CD2D06-F15E-4902-BF29-11690750D26D}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenExchangeRates", "OpenExchangeRates\OpenExchangeRates.csproj", "{0CFEFDCB-ED87-408A-916B-3B528D9F16ED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CD2D06-F15E-4902-BF29-11690750D26D} = {61CD2D06-F15E-4902-BF29-11690750D26D}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockchain", "Blockchain\Blockchain.csproj", "{27BEC8C2-8BFC-4FC5-B742-A798BFDAD489}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CD2D06-F15E-4902-BF29-11690750D26D} = {61CD2D06-F15E-4902-BF29-11690750D26D}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Diagnostics", "ExchangeRateUpdater.Diagnostics\ExchangeRateUpdater.Diagnostics.csproj", "{61CD2D06-F15E-4902-BF29-11690750D26D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Core", "ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{B3AC370C-03C3-4C59-879E-DE2757D48443}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Configuration", "ExchangeRateUpdater.Configuration\ExchangeRateUpdater.Configuration.csproj", "{38D78548-FE53-4085-B316-E7126193BCD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0CFA96EB-64C1-4F91-A403-F03473123E75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CeskaNarodniBanka", "CeskaNarodniBanka\CeskaNarodniBanka.csproj", "{9905C7A0-DA2E-404B-9DDB-6BBF89018557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +34,39 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F5019A5-2A44-4534-B096-28F23800CC22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F5019A5-2A44-4534-B096-28F23800CC22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F5019A5-2A44-4534-B096-28F23800CC22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F5019A5-2A44-4534-B096-28F23800CC22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CFEFDCB-ED87-408A-916B-3B528D9F16ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFEFDCB-ED87-408A-916B-3B528D9F16ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFEFDCB-ED87-408A-916B-3B528D9F16ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFEFDCB-ED87-408A-916B-3B528D9F16ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27BEC8C2-8BFC-4FC5-B742-A798BFDAD489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27BEC8C2-8BFC-4FC5-B742-A798BFDAD489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27BEC8C2-8BFC-4FC5-B742-A798BFDAD489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27BEC8C2-8BFC-4FC5-B742-A798BFDAD489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61CD2D06-F15E-4902-BF29-11690750D26D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61CD2D06-F15E-4902-BF29-11690750D26D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61CD2D06-F15E-4902-BF29-11690750D26D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61CD2D06-F15E-4902-BF29-11690750D26D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3AC370C-03C3-4C59-879E-DE2757D48443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3AC370C-03C3-4C59-879E-DE2757D48443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3AC370C-03C3-4C59-879E-DE2757D48443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3AC370C-03C3-4C59-879E-DE2757D48443}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38D78548-FE53-4085-B316-E7126193BCD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38D78548-FE53-4085-B316-E7126193BCD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38D78548-FE53-4085-B316-E7126193BCD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38D78548-FE53-4085-B316-E7126193BCD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33F35642-34D6-441D-8C5C-13FA33E66AC5}
 	EndGlobalSection
 EndGlobal

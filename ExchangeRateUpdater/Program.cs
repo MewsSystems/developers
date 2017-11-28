@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Financial;
+using Unity;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +26,9 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+				UnityConfig.Configure();
+
+				var provider = UnityConfig.Container.Resolve<IExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
