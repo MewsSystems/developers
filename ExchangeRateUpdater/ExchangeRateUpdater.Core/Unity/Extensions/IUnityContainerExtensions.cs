@@ -1,21 +1,23 @@
 ﻿namespace ExchangeRateUpdater.Core.Unity.Extensions {
+	using System.Collections.Generic;
 	using System.Linq;
 	using ExchangeRateUpdater.Diagnostics;
-	using ExchangeRateUpdater.Financial;
 	using global::Unity;
+	using global::Unity.Registration;
 
 	public static class IUnityContainerExtensions {
-		public static string[] GetProviderKeys(this IUnityContainer container) {
-			var registrations = Ensure.IsNotNull(container?.Registrations);
-
-			var result = registrations
-				.Where(r => r.RegisteredType == typeof(IExchangeRateProvider) && !Check.IsNullOrWhiteSpace(r.Name))
-				.Select(r => r.Name)
-				.ToArray();
+		private static IEnumerable<IContainerRegistration> GetRegistrations(this IUnityContainer container) {
+			var result = Ensure.IsNotNull(container?.Registrations);
 
 			return result;
 		}
 
-		
+		public static IEnumerable<IContainerRegistration> GetRegistrationsForType<T>(this IUnityContainer container, bool onlyNamed = false) {
+			var result = container
+				.GetRegistrations()
+				.Where(r => r.RegisteredType == typeof(T) && (!Check.IsNullOrWhiteSpace(r.Name) || !onlyNamed));
+
+			return result;
+		}
 	}
 }

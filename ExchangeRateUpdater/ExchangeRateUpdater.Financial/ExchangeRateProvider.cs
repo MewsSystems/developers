@@ -5,12 +5,19 @@
 	using System.Threading.Tasks;
 	using ExchangeRateUpdater.Diagnostics;
 
-	public abstract class ExchangeRateProvider : IExchangeRateProvider {
+	public abstract class ExchangeRateProvider<TOptions> : IExchangeRateProvider
+		where TOptions : IExchangeRateProviderOptions {
+
 		private readonly ICurrencyValidator _validator;
 
-		public ExchangeRateProvider(ICurrencyValidator validator) {
-			_validator = validator;
+		public ExchangeRateProvider(TOptions options) {
+			Throw.IfNull(options);
+
+			Client = Ensure.IsNotNull(options.Client);
+			_validator = Ensure.IsNotNull(options.Validator);
 		}
+
+		protected IExchangeRateClient Client { get; private set; }
 
 		/// <summary>
 		/// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -20,27 +27,40 @@
 		/// </summary>
 		public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies) {
 			try {
-				ValidateCurrencies(currencies);
+				var validationResult = _validator.Validate(currencies);
+
+				if (validationResult.Any(vr => !vr.IsValid)) {
+					var exceptions = validationResult.SelectMany(vr => vr.Errors.Select(e => new ArgumentException(e)));
+
+					throw new AggregateException(exceptions);
+				}
+
 				return await GetExchangeRateCoreAsync(currencies);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				throw new ApplicationException(ExceptionMessageResource.UnableToRetrieveExchangeRatesExceptionMessage, e);
 			}
 		}
 
-		private void ValidateCurrencies(IEnumerable<Currency> currencies) {
-			if (Check.IsNullOrEmpty(currencies)) {
-				throw new ArgumentOutOfRangeException(nameof(currencies), currencies, String.Format(ExceptionMessageResource.EnumerableNullOrEmptyExceptionMessageFormat, nameof(currencies)));
-			}
+		#region IDisposable implementation
+		private bool isDisposed = false;
 
-			var exceptions = currencies.Where(c => !_validator.Validate(c))
-				.Select(c => new ArgumentException(String.Format(ExceptionMessageResource.InvalidCurrencyExceptionMessageFormat, c.Code)));
+		void Dispose(bool disposing) {
+			if (!isDisposed) {
+				if (disposing) {
+					Client.Dispose();
+					Client = null;
+				}
 
-			if(!Check.IsNullOrEmpty(exceptions)) {
-				throw new AggregateException(exceptions);
+				isDisposed = true;
 			}
 		}
 
+		public void Dispose() {
+			Dispose(true);
+		}
+		#endregion
+
 		protected abstract Task<IEnumerable<ExchangeRate>> GetExchangeRateCoreAsync(IEnumerable<Currency> currencies);
-		public abstract void Dispose();
+		protected abstract string CreateRequestUriString(IEnumerable<Currency> currencies);
 	}
 }

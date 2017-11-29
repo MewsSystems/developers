@@ -1,6 +1,8 @@
 ﻿namespace ExchangeRateUpdater.Financial {
 
 	using System;
+	using System.Collections.Generic;
+	using ExchangeRateUpdater.Validation;
 
 	public abstract class CurrencyValidator : ICurrencyValidator {
 		protected CurrencyValidator() {
@@ -22,6 +24,8 @@
 
 		public CurrencyCodeType CurrencyCodeType { get; }
 
-		public abstract bool Validate(Currency currency);
+		public abstract ValidationResult Validate(Currency value);
+
+		public abstract IEnumerable<ValidationResult> Validate(IEnumerable<Currency> collection);
 	}
 }

@@ -26,9 +26,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Configu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0CFA96EB-64C1-4F91-A403-F03473123E75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CeskaNarodniBanka", "CeskaNarodniBanka\CeskaNarodniBanka.csproj", "{9905C7A0-DA2E-404B-9DDB-6BBF89018557}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CeskaNarodniBanka", "CeskaNarodniBanka\CeskaNarodniBanka.csproj", "{9905C7A0-DA2E-404B-9DDB-6BBF89018557}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Validation", "ExchangeRateUpdater.Validation\ExchangeRateUpdater.Validation.csproj", "{36C9632A-1C30-4668-8954-2DF33A8EC178}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -62,6 +67,10 @@ Global
 		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9905C7A0-DA2E-404B-9DDB-6BBF89018557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36C9632A-1C30-4668-8954-2DF33A8EC178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36C9632A-1C30-4668-8954-2DF33A8EC178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36C9632A-1C30-4668-8954-2DF33A8EC178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36C9632A-1C30-4668-8954-2DF33A8EC178}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

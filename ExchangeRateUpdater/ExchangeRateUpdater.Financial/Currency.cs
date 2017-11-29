@@ -10,5 +10,9 @@ namespace ExchangeRateUpdater.Financial {
 		/// Three-letter ISO 4217 code of the currency.
 		/// </summary>
 		public string Code { get; private set; }
+
+		public override string ToString() {
+			return Code;
+		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿namespace OpenExchangeRates.Http {
-	public interface IOpenExchangeRateClientOptions {
-		string AppId { get; }
-	}
+	using ExchangeRateUpdater.Financial.Http;
+
+	public interface IOpenExchangeRateClientOptions : IHttpExchangeRateClientOptions { }
 }

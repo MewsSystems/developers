@@ -1,8 +1,5 @@
 ﻿namespace Blockchain.Http {
-	using System;
-	using System.Threading.Tasks;
+	using ExchangeRateUpdater.Financial;
 
-	public interface IBlockchainExchangeRateClient : IDisposable {
-		Task<BlockchainExchangeRateDictionary> GetAsync();
-	}
+	public interface IBlockchainExchangeRateClient : IExchangeRateClient {}
 }

@@ -1,22 +1,32 @@
 ﻿namespace OpenExchangeRates {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
 	using System.Threading.Tasks;
-	using ExchangeRateUpdater.Diagnostics;
 	using ExchangeRateUpdater.Financial;
 	using OpenExchangeRates.Http;
 
-	public sealed class OpenExchangeRateProvider : ExchangeRateProvider, IDisposable {
-		private IOpenExchangeRateClient _client;
+	public sealed class OpenExchangeRateProvider : ExchangeRateProvider<IOpenExchangeRateProviderOptions> {
+		public OpenExchangeRateProvider(IOpenExchangeRateProviderOptions options)
+			: base(options) {
+			AppId = options.AppId;
+		}
 
-		public OpenExchangeRateProvider(IOpenExchangeRateClient client, ICurrencyValidator validator)
-			: base(validator) {
-			_client = Ensure.IsNotNull(client);
+		public AppId AppId { get; }
+
+		protected override string CreateRequestUriString(IEnumerable<Currency> currencies) {
+			var sb = currencies.Aggregate(new StringBuilder($"latest.json?app_id={AppId}&symbols="), (feed, item) => feed.AppendFormat("{0},", item));
+			sb.Remove(sb.Length - 1, 1);
+
+			string requestUriString = sb.ToString();
+
+			return requestUriString;
 		}
 
 		protected override async Task<IEnumerable<ExchangeRate>> GetExchangeRateCoreAsync(IEnumerable<Currency> currencies) {
-			var temp = await _client.GetAsync(currencies.Select(c => c.Code));
+			var requestUriString = CreateRequestUriString(currencies);
+
+			var temp = await Client.GetAsync<OpenExchangeRate>(requestUriString);
 
 			var result = temp.Rates
 				.Where(r => temp.Base != r.Key)
@@ -24,24 +34,5 @@
 
 			return result;
 		}
-
-		#region IDisposable implementation
-		private bool isDisposed = false;
-
-		void Dispose(bool disposing) {
-			if (!isDisposed) {
-				if (disposing) {
-					_client.Dispose();
-					_client = null;
-				}
-
-				isDisposed = true;
-			}
-		}
-
-		public override void Dispose() {
-			Dispose(true);
-		}
-		#endregion
 	}
 }

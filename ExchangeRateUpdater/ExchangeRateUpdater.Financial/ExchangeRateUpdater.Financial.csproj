@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Configuration\ExchangeRateUpdater.Configuration.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Diagnostics\ExchangeRateUpdater.Diagnostics.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Validation\ExchangeRateUpdater.Validation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

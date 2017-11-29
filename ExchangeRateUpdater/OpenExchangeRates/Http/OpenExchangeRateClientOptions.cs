@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ExchangeRateUpdater.Diagnostics;
+﻿namespace OpenExchangeRates.Http {
+	using System.Net.Http;
+	using ExchangeRateUpdater.Financial.Http;
+	using OpenExchangeRates.Http.Configuration;
 
-namespace OpenExchangeRates.Http
-{
-	public class OpenExchangeRateClientOptions : IOpenExchangeRateClientOptions {
-		public OpenExchangeRateClientOptions(string appId) {
-			AppId = Ensure.IsNotNullOrWhiteSpace(appId, nameof(appId));
+	public class OpenExchangeRateClientOptions : HttpExchangeRateClientOptions, IOpenExchangeRateClientOptions {
+		public OpenExchangeRateClientOptions(HttpClient httpClient, IOpenExchangeRateHttpClientConfiguration httpConfig)
+			: base(httpClient, httpConfig) {
 		}
-		public string AppId { get; }
 	}
 }

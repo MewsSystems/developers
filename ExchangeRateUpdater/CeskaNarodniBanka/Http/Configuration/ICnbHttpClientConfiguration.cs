@@ -2,6 +2,5 @@
 	using System.Net.Http;
 	using ExchangeRateUpdater.Configuration;
 
-	public interface ICnbHttpClientConfiguration : IConfiguration<HttpClient> {
-	}
+	public interface ICnbHttpClientConfiguration : IConfiguration<HttpClient> { }
 }

@@ -1,9 +1,5 @@
 ﻿namespace OpenExchangeRates.Http {
-	using System;
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
+	using ExchangeRateUpdater.Financial;
 
-	public interface IOpenExchangeRateClient : IDisposable {
-		Task<OpenExchangeRate> GetAsync(IEnumerable<string> currencies);
-	}
+	public interface IOpenExchangeRateClient : IExchangeRateClient { }
 }

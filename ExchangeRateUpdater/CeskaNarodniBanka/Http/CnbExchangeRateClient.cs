@@ -1,52 +1,22 @@
 ﻿namespace CeskaNarodniBanka.Http {
+	using System;
 	using System.Net.Http;
-	using System.Net.Http.Formatting;
-	using System.Runtime.Serialization;
 	using System.Threading.Tasks;
 	using System.Xml.Serialization;
-	using CeskaNarodniBanka.Http.Configuration;
-	using ExchangeRateUpdater.Diagnostics;
+	using ExchangeRateUpdater.Financial.Http;
 
-	public class CnbExchangeRateClient : ICnbExchangeRateClient {
-		private static readonly string requestUriString = "denni_kurz.xml";
-		private HttpClient _httpClient;
+	public class CnbExchangeRateClient : HttpExchangeRateClient, ICnbExchangeRateClient {
+		public CnbExchangeRateClient(ICnbExchangeRateClientOptions options)
+			: base(options) { }
 
-		public CnbExchangeRateClient(HttpClient httpClient, ICnbHttpClientConfiguration httpConfig) {
-			_httpClient = Ensure.IsNotNull(httpConfig, nameof(httpConfig))
-				.Configure(Ensure.IsNotNull(httpClient, nameof(httpClient)));
-		}
+		protected override async Task<TResult> ReadContentAsync<TResult>(HttpContent httpContent) {
+			using (var stream = await httpContent.ReadAsStreamAsync()) {
+				var serializer = new XmlSerializer(typeof(TResult), String.Empty);
 
-		public async Task<CnbExchangeRateRoot> GetAsync() {
-			var response = await _httpClient.GetAsync(requestUriString);
+				var result = (TResult)serializer.Deserialize(stream);
 
-			CnbExchangeRateRoot result;
-
-			using (var stream = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync()) {
-				var serializer = new XmlSerializer(typeof(CnbExchangeRateRoot), "");
-
-				result = (CnbExchangeRateRoot)serializer.Deserialize(stream);
-			}
-
-			return result;
-		}
-
-		#region IDisposable implementation
-		private bool isDisposed = false;
-
-		void Dispose(bool disposing) {
-			if (!isDisposed) {
-				if (disposing) {
-					_httpClient.Dispose();
-					_httpClient = null;
-				}
-
-				isDisposed = true;
+				return result;
 			}
 		}
-
-		public void Dispose() {
-			Dispose(true);
-		}
-		#endregion
 	}
 }

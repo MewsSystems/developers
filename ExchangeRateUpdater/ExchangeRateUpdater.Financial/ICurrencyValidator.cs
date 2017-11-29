@@ -1,5 +1,7 @@
 ﻿namespace ExchangeRateUpdater.Financial {
-	public interface ICurrencyValidator {
-		bool Validate(Currency currency);
+	using ExchangeRateUpdater.Validation;
+
+	public interface ICurrencyValidator : IValidator<Currency> {
+
 	}
 }

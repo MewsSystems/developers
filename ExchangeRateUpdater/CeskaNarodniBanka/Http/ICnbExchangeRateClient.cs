@@ -1,8 +1,6 @@
 ﻿namespace CeskaNarodniBanka.Http {
-	using System;
-	using System.Threading.Tasks;
+	using ExchangeRateUpdater.Financial;
 
-	public interface ICnbExchangeRateClient : IDisposable {
-		Task<CnbExchangeRateRoot> GetAsync();
+	public interface ICnbExchangeRateClient : IExchangeRateClient {
 	}
 }
