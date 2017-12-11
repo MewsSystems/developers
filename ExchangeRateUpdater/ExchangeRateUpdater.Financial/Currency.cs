@@ -3,7 +3,7 @@
 namespace ExchangeRateUpdater.Financial {
 	public struct Currency {
 		public Currency(string code) {
-			Code = Ensure.IsNotNull(code);
+			Code = Ensure.IsNotNullOrWhiteSpace(code, nameof(code));
 		}
 
 		/// <summary>
