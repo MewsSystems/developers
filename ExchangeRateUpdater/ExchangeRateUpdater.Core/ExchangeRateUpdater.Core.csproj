@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Unity" Version="5.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blockchain\Blockchain.csproj" />
+    <ProjectReference Include="..\CeskaNarodniBanka\CeskaNarodniBanka.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Diagnostics\ExchangeRateUpdater.Diagnostics.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Financial\ExchangeRateUpdater.Financial.csproj" />
+    <ProjectReference Include="..\OpenExchangeRates\OpenExchangeRates.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Strings\ConsoleMessageResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConsoleMessageResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Strings\ConsoleMessageResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConsoleMessageResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
