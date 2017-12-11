@@ -126,11 +126,14 @@
   <data name="InvalidInputConsoleMessage" xml:space="preserve">
     <value>Invalid input! Try better next time ;)</value>
   </data>
+  <data name="PressAnyKeyToContinueMessage" xml:space="preserve">
+    <value>Press any key to continue!</value>
+  </data>
   <data name="SelectExchangeRateProviderConsoleMessage" xml:space="preserve">
     <value>Please, select exchange rate provider:</value>
   </data>
   <data name="StartOverQuestionMessage" xml:space="preserve">
-    <value>Do you want to start over? Press y for yes or n for no!</value>
+    <value>Do you want to start over? Press y to start over. Otherwise console application will be terminated!</value>
   </data>
   <data name="SuccesfullyRetrivedExchangeRatesMessageFormat" xml:space="preserve">
     <value>Successfully retrieved {0} exchange rates:</value>

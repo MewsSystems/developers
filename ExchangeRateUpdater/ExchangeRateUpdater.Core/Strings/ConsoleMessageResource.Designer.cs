@@ -88,6 +88,15 @@ namespace ExchangeRateUpdater.Core.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Press any key to continue!.
+        /// </summary>
+        public static string PressAnyKeyToContinueMessage {
+            get {
+                return ResourceManager.GetString("PressAnyKeyToContinueMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, select exchange rate provider:.
         /// </summary>
         public static string SelectExchangeRateProviderConsoleMessage {
@@ -97,7 +106,7 @@ namespace ExchangeRateUpdater.Core.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to start over? Press y for yes or n for no!.
+        ///   Looks up a localized string similar to Do you want to start over? Press y to start over. Otherwise console application will be terminated!.
         /// </summary>
         public static string StartOverQuestionMessage {
             get {

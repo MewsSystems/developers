@@ -59,6 +59,7 @@
 			/// ProgramStep registration
 			container.RegisterType<IProgramStep, SelectProviderStep>("0");
 			container.RegisterType<IProgramStep, GetExchangeRatesStep>("1");
+			container.RegisterType<IProgramStep, RestartProgramStep>("2");
 
 			return container;
 		}

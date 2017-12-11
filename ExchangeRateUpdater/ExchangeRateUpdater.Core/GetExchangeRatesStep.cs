@@ -20,10 +20,12 @@
 			Console.Clear();
 
 			context.WriteMessage(String.Format(ConsoleMessageResource.SuccesfullyRetrivedExchangeRatesMessageFormat, exchangeRates.Count()));
+
 			context.WriteMessageRange(exchangeRates.Select(er => er.ToString()));
 
-			context.ReadKey();
-			Console.WriteLine();
+			context.WriteMessage(ConsoleMessageResource.PressAnyKeyToContinueMessage);
+
+			context.ReadKey();			
 
 			return true;
 		}

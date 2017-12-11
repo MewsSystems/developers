@@ -20,7 +20,7 @@
 		public IUnityContainer Container { get; private set; }
 		public bool Continue { get; private set; } = true;
 		public KeyValuePair<string, IProgramStep> CurrentStep { get; private set; }
-		public dynamic TempData { get; } = new TempData();
+		public dynamic TempData { get; private set; }
 
 		public bool ValidateInput(ConsoleKey key, IEnumerable<ConsoleKey> allowedKeys) {
 			var result = Ensure.IsNotNull(allowedKeys).Any(ak => ak == key);
@@ -45,18 +45,23 @@
 				Quit();				
 			} else {
 				SetCurrentStep(_stepNames.First());
+				TempData = new TempData();
 				IsInitialized = true;
 			}
 		}
 
-		public async Task<bool> StartAsync() {
+		public async Task<bool> RunAsync() {
 			return await CurrentStep.Value.RunAsync(this);
+		}
+
+		public void Reset() {
+			IsInitialized = false;
 		}
 
 		public void Next() {
 			var nextStep = Container
 				.GetRegistrationsForType<IProgramStep>(true)
-				.SkipWhile(r => r.Name == CurrentStep.Key)
+				.SkipWhile((r, i) => i <= int.Parse(CurrentStep.Key))
 				.FirstOrDefault();
 
 			if(nextStep == null) {

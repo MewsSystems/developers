@@ -14,11 +14,12 @@
 							context.Initialize();
 						}
 
-						var result = await context.StartAsync();
+						var result = await context.RunAsync();
 
 						if (result) {
 							context.Next();
 						}
+
 						Console.Clear();
 					} while (context.Continue);
 				}

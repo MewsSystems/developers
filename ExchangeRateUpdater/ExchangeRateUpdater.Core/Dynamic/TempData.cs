@@ -42,5 +42,9 @@
 			// so this method always returns true.
 			return true;
 		}
+
+		public void Clear() {
+			_dictionary.Clear();
+		}
 	}
 }
