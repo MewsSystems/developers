@@ -10,12 +10,10 @@
 		/// <param name="value"></param>
 		/// <param name="paramName">Optional parameter with parameter name used to describe ArgumentNullException paramName argument</param>
 		/// <returns>Returns passed object if not null, otherwise throws ArgumentNullException</returns>
-		public static T IfNull<T>(T value, string paramName = null) {
+		public static void IfNull<T>(T value, string paramName = null) {
 			if (Check.IsNull(value)) {
 				Throw.ArgumentNullException(paramName);
 			}
-
-			return value;
 		}
 
 		internal static void ArgumentNullException(string parameterName = "(name not provided)") {
