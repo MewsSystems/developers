@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {loadConfig} from './model/configuration/configurationActions';
 import {fetchRates} from './model/rates/ratesActions';
 import {selectProcessedRates} from './model/rates/ratesSelectors';
-import {setFilter} from './model/filter/filterActions';
+import {setFilter, loadSavedFilter} from './model/filter/filterActions';
 import RatesTable from './RatesTable';
 import Filter from './Filter';
 
@@ -39,6 +39,7 @@ class App extends Component {
 
     componentDidMount() {
         this.props.loadConfig();
+        this.props.loadSavedFilter();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -63,6 +64,7 @@ App = connect(state => ({
     loadConfig,
     fetchRates,
     setFilter,
+    loadSavedFilter,
 })(App);
 
 export default App;
