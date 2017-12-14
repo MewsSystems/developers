@@ -5,7 +5,9 @@ import {connect} from 'react-redux';
 import {loadConfig} from './model/configuration/configurationActions';
 import {fetchRates} from './model/rates/ratesActions';
 import {selectProcessedRates} from './model/rates/ratesSelectors';
+import {setFilter} from './model/filter/filterActions';
 import RatesTable from './RatesTable';
+import Filter from './Filter';
 
 const REFRESH_INTERVAL = 2000;
 
@@ -16,9 +18,11 @@ class App extends Component {
         this.interval = null;
     }
 
-    render() {
-        console.log(this.props);
+    onFilterChange = event => {
+        this.props.setFilter(event.target.value);
+    }
 
+    render() {
         return (
             <div className="App">
                 <header className="App-header">
@@ -26,6 +30,7 @@ class App extends Component {
                     <h1 className="App-title">Welcome to Mews</h1>
                 </header>
                 <div className="App-content">
+                    <Filter value={this.props.filter} onChange={this.onFilterChange} />
                     <RatesTable data={this.props.rates} />
                 </div>
             </div>
@@ -51,11 +56,13 @@ class App extends Component {
 }
 
 App = connect(state => ({
+    filter: state.filter,
     configLoaded: state.configuration.loaded,
     rates: selectProcessedRates(state),
 }), {
     loadConfig,
     fetchRates,
+    setFilter,
 })(App);
 
 export default App;

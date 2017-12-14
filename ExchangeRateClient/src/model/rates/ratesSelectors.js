@@ -15,7 +15,8 @@ export const matchesFilter = (currency, filter) => {
         return true;
     }
 
-    return currency.code.indexOf(filter) > -1 || currency.name.indexOf(filter) > -1;
+    return currency.code.toLowerCase().indexOf(filter.toLowerCase()) > -1 ||
+        currency.name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
 };
 
 const compare = (a, b) => {

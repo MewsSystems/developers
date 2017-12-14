@@ -1,0 +1,11 @@
+.Filter {
+    display: block;
+    width: 100%;
+    font-size: 20px;
+    box-sizing: border-box;
+    margin-bottom: 2em;
+    color: black;
+    background: white;
+    padding: 10px 20px;
+    border: 1px solid #aaaaaa;
+}
