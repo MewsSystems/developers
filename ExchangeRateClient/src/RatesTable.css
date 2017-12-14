@@ -1,0 +1,11 @@
+.RatesTable {
+    width: 100%;
+}
+
+.RatesTable th, .RatesTable td {
+    padding: 10px 20px;
+}
+
+.RatesTable th {
+    background: #cccccc;
+}
