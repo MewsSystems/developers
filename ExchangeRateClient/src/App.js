@@ -4,6 +4,7 @@ import './App.css';
 import {connect} from 'react-redux';
 import {loadConfig} from './model/configuration/configurationActions';
 import {fetchRates} from './model/rates/ratesActions';
+import {selectProcessedRates} from './model/rates/ratesSelectors';
 
 const REFRESH_INTERVAL = 2000;
 
@@ -34,7 +35,7 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.props.configuration.loaded && nextProps.configuration.loaded) {
+        if (!this.props.configLoaded && nextProps.configLoaded) {
             this.interval = setInterval(this.props.fetchRates, REFRESH_INTERVAL);
         }
     }
@@ -48,8 +49,8 @@ class App extends Component {
 }
 
 App = connect(state => ({
-    configuration: state.configuration,
-    rates: state.rates.data,
+    configLoaded: state.configuration.loaded,
+    rates: selectProcessedRates(state),
 }), {
     loadConfig,
     fetchRates,

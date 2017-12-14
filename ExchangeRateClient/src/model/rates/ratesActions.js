@@ -25,7 +25,7 @@ export function fetchRates(data) {
             })
             .then(response => response.json())
             .then(data => {
-                dispatch(setRates(data));
+                dispatch(setRates(data.rates));
             })
             .catch(() => {
                 // ignore errors, will load later
