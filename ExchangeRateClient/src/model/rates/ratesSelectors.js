@@ -47,6 +47,7 @@ export const selectProcessedRates = createSelector(
         );
 
         return filteredPairIds.map(id => ({
+            id,
             fromCurrency: currencyPairs[id][0],
             toCurrency: currencyPairs[id][1],
             rate: rates[id],

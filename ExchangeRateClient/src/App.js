@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {loadConfig} from './model/configuration/configurationActions';
 import {fetchRates} from './model/rates/ratesActions';
 import {selectProcessedRates} from './model/rates/ratesSelectors';
+import RatesTable from './RatesTable';
 
 const REFRESH_INTERVAL = 2000;
 
@@ -22,10 +23,11 @@ class App extends Component {
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
-                    <h1 className="App-title">Welcome to React</h1>
+                    <h1 className="App-title">Welcome to Mews</h1>
                 </header>
-                <p className="App-intro">
-                </p>
+                <div className="App-content">
+                    <RatesTable data={this.props.rates} />
+                </div>
             </div>
         );
     }
