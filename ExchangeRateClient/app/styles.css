@@ -1,0 +1,63 @@
+.exchange-rate {
+  width: 300px;  
+  border: 1px solid #e1e1e1;
+  box-sizing: border-box;
+}
+
+.exchange-rate__selector {
+  padding:.5rem 1rem 0;
+  margin-bottom: .5rem;
+  width: 100%;
+}
+
+.exchange-rate__selector-item {
+  float: left;
+  width: 88px;
+}
+
+.exchange-rate__checkbox {
+  background: #fcfff4;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 5px auto;
+  border: 1px solid #f1f1f1;
+}
+
+.exchange-rate__checkbox-input {
+  visibility: hidden;
+}
+
+.exchange-rate__checkbox-label {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  cursor: pointer;
+  background: #2795ae;
+   opacity: 0;
+}
+
+.exchange-rate__checkbox input[type=checkbox]:checked + label {
+    opacity: 1;
+}
+
+.exchange-rate__currency-pair-shortname {
+  text-align: center;
+}
+
+.exchange-rate__list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exchange-rate__list-item td {
+  border: 1px solid #eee;
+  padding: .1rem .3rem .1rem .5rem;
+  line-height:1.7;
+}
+
+.cl {
+  clear:both;
+}
