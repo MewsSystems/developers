@@ -1,11 +1,6 @@
 import { endpoint, interval } from './config';
 
-export function run(element) {
-    console.log('App is running.');
-}
-
 var vueInstance1;
-
 window.onload = function () {
   vueInstance1 = new Vue({
    el: "#exchange-rate-client",
