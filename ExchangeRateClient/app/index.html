@@ -4,12 +4,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
     <title>Exchange Rate Client</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div id="exchange-rate-client"></div>
-    <script>
-        app.run('#exchange-rate-client');
-    </script>
+    <div id="exchange-rate-client">
+        <div v-show="show">
+            <div class="exchange-rate">
+                <div class="exchange-rate__selector">
+                    <template v-for="(pair,id) in currencyPairs">
+                        <div class="exchange-rate__selector-item" :data-id="id">
+                            <div class="exchange-rate__checkbox">
+                                <input type="checkbox" v-model="currencyPairsFiltered" :value="id" :id="'currencyPair' + id" class="exchange-rate__checkbox-input" />
+                                <label class="exchange-rate__checkbox-label" :for="'currencyPair' + id"></label>
+                            </div>
+                            <div class="exchange-rate__currency-pair-shortname">
+                                {{pair[0].code}} / {{pair[1].code}}
+                            </div>
+                        </div>
+                    </template>
+                    <div class="cl"></div>
+                </div>
+                <table class="exchange-rate__list">
+                    <template v-for="(pair,id) in currencyPairs">
+                        <tr class="exchange-rate__list-item" v-show="shownCurrencyPairs(id)">
+                            <td :data-id="id"> {{pair[0].code}} / {{pair[1].code}} </td>
+                            <td class="exchange-rate__current-value">
+                                {{currenciesRates[id] || '?' }}
+                            </td>
+                            <td class="exchange-rate__value-trend">
+                                {{currencyRatesTrends[id] || 'stagnating' }}
+                            </td>
+                        </tr>
+                    </template>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
