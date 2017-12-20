@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        public ExchangeRateProvider(ICurrentExchangeRateProvider currentExchangeRateProvider)
+        {
+            _currentExchangeRateProvider = currentExchangeRateProvider;
+        }
+
+        readonly ICurrentExchangeRateProvider _currentExchangeRateProvider;
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
@@ -13,7 +19,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            return _currentExchangeRateProvider.GetCurrentExchangeRate(currencies);
         }
     }
 }
