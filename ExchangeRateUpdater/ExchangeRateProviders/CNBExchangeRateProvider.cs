@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace ExchangeRateUpdater.ExchangeRateProviders
 {
@@ -9,6 +8,12 @@ namespace ExchangeRateUpdater.ExchangeRateProviders
 	{
 		private const string DateFormat = "dd.MM.yyyy";
 		private static readonly Currency TargetCurrency = new Currency("CZK");
+		private readonly IContentDownloader contentDownloader;
+
+		public CNBExchangeRateProvider(IContentDownloader contentDownloader)
+		{
+			this.contentDownloader = contentDownloader;
+		}
 
 		public IEnumerable<ExchangeRate> GetExchangeRates(DateTime date)
 		{
@@ -17,10 +22,10 @@ namespace ExchangeRateUpdater.ExchangeRateProviders
 				.SelectMany(GetExchangeRates);
 		}
 
-		private static IEnumerable<ExchangeRate> GetExchangeRates(string url)
+		private IEnumerable<ExchangeRate> GetExchangeRates(string url)
 		{
 			return
-				DownloadLines(url)
+				contentDownloader.DownloadLines(url)
 					.Skip(2)
 					.Select(ParseExchangeRate);
 		}
@@ -44,15 +49,6 @@ namespace ExchangeRateUpdater.ExchangeRateProviders
 		{
 			const string ExchangeRatesUrlFormat = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_ostatnich_men/kurzy.txt?mesic={0}&rok={1}";
 			return string.Format(ExchangeRatesUrlFormat, date.Month, date.Year);
-		}
-
-		private static string[] DownloadLines(string url)
-		{
-			using (var wc = new WebClient())
-			{
-				wc.Encoding = System.Text.Encoding.UTF8;
-				return wc.DownloadString(url).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-			}
 		}
 	}
 }
