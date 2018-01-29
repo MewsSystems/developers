@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CurrenciesShouldBeSetForGettingER" xml:space="preserve">
+    <value>Měny by měly být nastaveny pro získání směnných kurzů</value>
+  </data>
+  <data name="EmptyCurrencyCode" xml:space="preserve">
+    <value>Kód měny je prázdný</value>
+  </data>
+  <data name="ErrorWhileRetrievingER" xml:space="preserve">
+    <value>Při načítání směnných kurzů došlo k chybě</value>
+  </data>
+  <data name="exchangeRates" xml:space="preserve">
+    <value>Směnné kurzy</value>
+  </data>
+  <data name="ForClosingApp" xml:space="preserve">
+    <value>pro zavření aplikace</value>
+  </data>
+  <data name="InternalErrorProviderCZK" xml:space="preserve">
+    <value>CzechNationalBankProvider - interní chyba</value>
+  </data>
+  <data name="ParsingError" xml:space="preserve">
+    <value>Chyba při analýze zdroje dat</value>
+  </data>
+  <data name="PressAnyKeyOr" xml:space="preserve">
+    <value>Stiskněte libovolné tlačítko pro aktualizaci nebo zadání</value>
+  </data>
+  <data name="SourceDataIsEmpty" xml:space="preserve">
+    <value>Údaje ze zdroje poskytovatele jsou prázdné</value>
+  </data>
+  <data name="SuccessfullyRetrieved" xml:space="preserve">
+    <value>Úspěšně načtena</value>
+  </data>
+  <data name="ErrorCurrencyCode" xml:space="preserve">
+    <value>Kód měny (tři písmena) musí být v souladu s normou ISO 4217 měny.</value>
+  </data>
+  <data name="CurrenciesShouldBeSet" xml:space="preserve">
+    <value>Měny by měly být nastaveny</value>
+  </data>
+  <data name="DuplicateInExRateList" xml:space="preserve">
+    <value>Duplicitní položka ve směnném kurzu</value>
+  </data>
+  <data name="ExchangeRateItemIsEmpty" xml:space="preserve">
+    <value>Položka směnného kurzu je prázdná</value>
+  </data>
+  <data name="CurrencyShouldBeSet" xml:space="preserve">
+    <value>Měna by měla být nastavena</value>
+  </data>
+  <data name="InternalErrorProviderExRateLab" xml:space="preserve">
+    <value>ExchangeRateLablProvider - interní chyba</value>
+  </data>
+</root>

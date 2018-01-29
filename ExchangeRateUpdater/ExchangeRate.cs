@@ -1,9 +1,13 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
     public class ExchangeRate
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
+            if (Currency.IsNullOrEmpty(sourceCurrency) || Currency.IsNullOrEmpty(targetCurrency))
+                throw new Exception(Res.CurrenciesShouldBeSet);
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
