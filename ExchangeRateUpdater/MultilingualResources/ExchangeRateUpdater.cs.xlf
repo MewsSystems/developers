@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="cs" original="EXCHANGERATEUPDATER/RES.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6810.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="EXCHANGERATEUPDATER/RES.RESX" datatype="resx">
+        <trans-unit id="CurrenciesShouldBeSetForGettingER" translate="yes" xml:space="preserve">
+          <source>The currencies should be set for getting exchange rates</source>
+          <target state="needs-review-translation">Měny by měly být nastaveny pro získání směnných kurzů</target>
+        </trans-unit>
+        <trans-unit id="EmptyCurrencyCode" translate="yes" xml:space="preserve">
+          <source>Code of currency is empty</source>
+          <target state="needs-review-translation">Kód měny je prázdný</target>
+        </trans-unit>
+        <trans-unit id="ErrorWhileRetrievingER" translate="yes" xml:space="preserve">
+          <source>An error occurred while retrieving exchange rates</source>
+          <target state="needs-review-translation">Při načítání směnných kurzů došlo k chybě</target>
+        </trans-unit>
+        <trans-unit id="exchangeRates" translate="yes" xml:space="preserve">
+          <source>exchange rates</source>
+          <target state="needs-review-translation">Směnné kurzy</target>
+        </trans-unit>
+        <trans-unit id="ForClosingApp" translate="yes" xml:space="preserve">
+          <source>for closing application</source>
+          <target state="needs-review-translation">pro zavření aplikace</target>
+        </trans-unit>
+        <trans-unit id="InternalErrorProviderCZK" translate="yes" xml:space="preserve">
+          <source>CzechNationalBankProvider - internal error</source>
+          <target state="needs-review-translation">CzechNationalBankProvider - interní chyba</target>
+        </trans-unit>
+        <trans-unit id="ParsingError" translate="yes" xml:space="preserve">
+          <source>Data source parsing error</source>
+          <target state="needs-review-translation">Chyba při analýze zdroje dat</target>
+        </trans-unit>
+        <trans-unit id="PressAnyKeyOr" translate="yes" xml:space="preserve">
+          <source>Press any key for updating or type</source>
+          <target state="needs-review-translation">Stiskněte libovolné tlačítko pro aktualizaci nebo zadání</target>
+        </trans-unit>
+        <trans-unit id="SourceDataIsEmpty" translate="yes" xml:space="preserve">
+          <source>Data from provider source is empty</source>
+          <target state="needs-review-translation">Údaje ze zdroje poskytovatele jsou prázdné</target>
+        </trans-unit>
+        <trans-unit id="SuccessfullyRetrieved" translate="yes" xml:space="preserve">
+          <source>Successfully retrieved</source>
+          <target state="needs-review-translation">Úspěšně načtena</target>
+        </trans-unit>
+        <trans-unit id="ErrorCurrencyCode" translate="yes" xml:space="preserve">
+          <source>The currency code (three-letter) must be in accordance with the ISO 4217 of the currency.</source>
+          <target state="needs-review-translation">Kód měny (tři písmena) musí být v souladu s normou ISO 4217 měny.</target>
+        </trans-unit>
+        <trans-unit id="CurrenciesShouldBeSet" translate="yes" xml:space="preserve">
+          <source>The currencies should be set</source>
+          <target state="needs-review-translation">Měny by měly být nastaveny</target>
+        </trans-unit>
+        <trans-unit id="DuplicateInExRateList" translate="yes" xml:space="preserve">
+          <source>Duplicate item in exchange rate list</source>
+          <target state="needs-review-translation">Duplicitní položka ve směnném kurzu</target>
+        </trans-unit>
+        <trans-unit id="ExchangeRateItemIsEmpty" translate="yes" xml:space="preserve">
+          <source>Exchange rate item is empty</source>
+          <target state="needs-review-translation">Položka směnného kurzu je prázdná</target>
+        </trans-unit>
+        <trans-unit id="CurrencyShouldBeSet" translate="yes" xml:space="preserve">
+          <source>Currency should be set</source>
+          <target state="needs-review-translation">Měna by měla být nastavena</target>
+        </trans-unit>
+        <trans-unit id="InternalErrorProviderExRateLab" translate="yes" xml:space="preserve">
+          <source>ExchangeRateLablProvider - internal error</source>
+          <target state="needs-review-translation">ExchangeRateLablProvider - interní chyba</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
