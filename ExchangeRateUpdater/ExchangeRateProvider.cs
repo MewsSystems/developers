@@ -13,7 +13,9 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            if (currencies == null || currencies.Count() <= 0) throw new System.Exception(Res.CurrenciesShouldBeSetForGettingER);
+            var specificProvider = new CzechNationalBankProvider(); // new ExchangeRateLabProvider(); //!
+            return (specificProvider.GetExchangeRates(currencies));
         }
     }
 }
