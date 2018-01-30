@@ -7,8 +7,8 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateLabProvider : ISpecificExchangeRateProvider
     {
-        private const string cProviderName = "Exchange rate lab";
-        private const string cBaseUrl = "http://api.exchangeratelab.com/";
+        private const string _ProviderName = "Exchange rate lab";
+        private const string _BaseUrl = "http://api.exchangeratelab.com/";
         private const string ApiKey = "C8BF1994DCC7E6AFD17347241C163CF9"; //limited! 50 requests per day!
 
         private string baseCurrencyCode = "USD";
@@ -45,7 +45,7 @@ namespace ExchangeRateUpdater
         {
             get
             {
-                return (cBaseUrl);
+                return (_BaseUrl);
             }
         }
 
@@ -56,7 +56,7 @@ namespace ExchangeRateUpdater
         {
             get
             {
-                return (cProviderName);
+                return (_ProviderName);
             }
         }
 

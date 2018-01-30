@@ -9,14 +9,14 @@ namespace ExchangeRateUpdater
 {
     public class CzechNationalBankProvider : ISpecificExchangeRateProvider
     {
-        private const string cProviderName = "Czech National Bank";
-        private const string cBaseCurrencyCode = "CZK";
-        private const string cBaseUrl = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.jsp";
+        private const string _ProviderName = "Czech National Bank";
+        private const string _BaseCurrencyCode = "CZK";
+        private const string _BaseUrl = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.jsp";
 
         private const string QuerySelector= "table.kurzy_tisk tr";
         private const string QeuryLocName = "td";
 
-        private Currency baseCurrency = new Currency(cBaseCurrencyCode);
+        private Currency baseCurrency = new Currency(_BaseCurrencyCode);
 
         public CzechNationalBankProvider()
         {
@@ -41,7 +41,7 @@ namespace ExchangeRateUpdater
         {
             get
             {
-                return (cBaseUrl);
+                return (_BaseUrl);
             }
         }
 
@@ -52,7 +52,7 @@ namespace ExchangeRateUpdater
         {
             get
             {
-                return (cProviderName);
+                return (_ProviderName);
             }
         }
 
