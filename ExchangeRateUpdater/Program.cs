@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private const string exitCmd = "exit";
+        private const string ExitCmd = "exit";
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -49,16 +49,16 @@ namespace ExchangeRateUpdater
                     Console.WriteLine($"{Res.ErrorWhileRetrievingER }{Environment.NewLine}Details: " + e.Message);
                 }
 
-                Console.WriteLine($"{Environment.NewLine}{Res.PressAnyKeyOr} '{exitCmd}' {Res.ForClosingApp}...");
+                Console.WriteLine($"{Environment.NewLine}{Res.PressAnyKeyOr} '{ExitCmd}' {Res.ForClosingApp}...");
                 cmd = Console.ReadLine();
             }
-            while (string.Compare(cmd, exitCmd)!=0);
+            while (string.Compare(cmd, ExitCmd)!=0);
         }
 
         /// <summary>
         /// Only for test purpose!!!
         /// </summary>
-        private static void changeLang(string lang)  //ONLY FOR TEST
+        private static void ChangeLang(string lang)  //ONLY FOR TEST
         {
             try
             {
