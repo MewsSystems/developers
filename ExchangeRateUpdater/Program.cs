@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +24,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(new CzechNationalBankProvider());
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
