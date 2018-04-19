@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
         /// <param name="targetCurrencies">The target currencies.</param>
-        /// <returns></returns>
+        /// <returns>Exchange rates filtered</returns>
         /// <exception cref="System.ArgumentNullException"></exception>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> targetCurrencies)
         {
