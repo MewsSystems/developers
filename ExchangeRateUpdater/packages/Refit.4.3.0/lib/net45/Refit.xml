@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Refit</name>
+    </assembly>
+    <members>
+        <member name="F:Refit.BodySerializationMethod.Default">
+            <summary>
+            JSON encodes data except for strings. Strings are set as-is
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.Json">
+            <summary>
+            Json encodes everything, including strings
+            </summary>
+        </member>
+        <member name="F:Refit.BodySerializationMethod.UrlEncoded">
+            <summary>
+            Form-UrlEncode's the values
+            </summary>
+        </member>
+        <member name="T:System.Net.Http.PushStreamContent">
+            <summary>
+            Provides an <see cref="T:System.Net.Http.HttpContent"/> implementation that exposes an output <see cref="T:System.IO.Stream"/>
+            which can be written to directly. The ability to push data to the output stream differs from the 
+            <see cref="T:System.Net.Http.StreamContent"/> where data is pulled and not pushed.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class. The
+            <paramref name="onStreamAvailable"/> action is called when an output stream
+            has become available allowing the action to write to it directly. When the 
+            stream is closed, it will signal to the content that is has completed and the 
+            HTTP request or response will be completed.
+            </summary>
+            <param name="onStreamAvailable">The action to call when an output stream is available.</param>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class. 
+            </summary>
+            <param name="onStreamAvailable">The action to call when an output stream is available. The stream is automatically
+            closed when the return task is completed.</param>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given media type.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given media type.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Action{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext},System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.#ctor(System.Func{System.IO.Stream,System.Net.Http.HttpContent,System.Net.TransportContext,System.Threading.Tasks.Task},System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Net.Http.PushStreamContent"/> class with the given <see cref="T:System.Net.Http.Headers.MediaTypeHeaderValue"/>.
+            </summary>
+        </member>
+        <member name="T:System.Net.Http.PushStreamContent.AsyncVoid">
+            <summary>
+            Used as the T in a "conversion" of a Task into a Task{T}
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.SerializeToStreamAsync(System.IO.Stream,System.Net.TransportContext)">
+            <summary>
+            When this method is called, it calls the action provided in the constructor with the output 
+            stream to write to. Once the action has completed its work it closes the stream which will 
+            close this content instance and complete the HTTP request or response.
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to which to write.</param>
+            <param name="context">The associated <see cref="T:System.Net.TransportContext"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> instance that is asynchronously serializing the object's content.</returns>
+        </member>
+        <member name="M:System.Net.Http.PushStreamContent.TryComputeLength(System.Int64@)">
+            <summary>
+            Computes the length of the stream if possible.
+            </summary>
+            <param name="length">The computed length of the stream.</param>
+            <returns><c>true</c> if the length has been computed; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:System.Net.Http.DelegatingStream">
+            <summary>
+            Stream that delegates to inner stream. 
+            This is taken from System.Net.Http
+            </summary>
+        </member>
+    </members>
+</doc>
