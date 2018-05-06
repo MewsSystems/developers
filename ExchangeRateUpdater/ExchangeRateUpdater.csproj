@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Refit, Version=4.3.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>packages\Refit.4.3.0\lib\net45\Refit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,11 +51,20 @@
   <ItemGroup>
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
+    <Compile Include="ExchangeRateParser.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="GetExchangeRateRequest.cs" />
+    <Compile Include="ICurrencyConverterApi.cs" />
+    <Compile Include="IExchangeRateParser.cs" />
+    <Compile Include="IExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\Refit.4.3.0\build\net45\refit.targets" Condition="Exists('packages\Refit.4.3.0\build\net45\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
