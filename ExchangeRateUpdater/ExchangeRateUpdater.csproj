@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,9 +50,37 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\Abstract\ICnbRatesFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\Abstract\ICnbRatesParser.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\CnbExchangeRateProviderStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\CnbRatesHttpClientFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\CnbRatesTxtParser.cs" />
+    <Compile Include="ExchangeRateStrategies\Cnb\Model\CnbRate.cs" />
+    <Compile Include="ExchangeRateStrategies\CurrencyLayer\Abstract\ICurrencyLayerRatesFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\CurrencyLayer\CurrencyLayerExchangeRateProviderStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\CurrencyLayer\CurrencyLayerHttpClientRatesFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\CurrencyLayer\Model\CurrencyLayerResponse.cs" />
+    <Compile Include="ExchangeRateStrategies\Fixer\Abstract\IFixerRatesFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\Fixer\FixerExchangeRateProviderStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\Fixer\FixerHttpClientRatesFetcher.cs" />
+    <Compile Include="ExchangeRateStrategies\Fixer\Model\FixerResponse.cs" />
+    <Compile Include="ExchangeRateStrategies\IExchangeRateProviderSourceCurrencyStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\IExchangeRateProviderStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\IExchangeRateProviderTargetCurrencyStrategy.cs" />
+    <Compile Include="ExchangeRateStrategies\NullExchangeRateProviderStrategy.cs" />
+    <Compile Include="Factory\Abstract\IProviderFactory.cs" />
+    <Compile Include="Factory\Abstract\IProviderFactoryConfig.cs" />
+    <Compile Include="Factory\DefaultConfig.cs" />
+    <Compile Include="Factory\ConfigurableProviderFactory.cs" />
+    <Compile Include="Factory\ProviderInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\HttpClientProvider.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

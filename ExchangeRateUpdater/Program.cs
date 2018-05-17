@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ExchangeRateUpdater.ExchangeRateStrategies.Cnb;
+using ExchangeRateUpdater.ExchangeRateStrategies.CurrencyLayer;
+using ExchangeRateUpdater.ExchangeRateStrategies.Fixer;
+using ExchangeRateUpdater.Factory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,9 +25,20 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            // create sample configuration with some implementaions of providers
+            var config = new DefaultConfig()
+                .AddTargetCurrencyProvider(new Currency("CZK"), () => new CnbExchangeRateProviderStrategy(
+                    new CnbRatesHttpClientFetcher(),
+                    new CnbRatesTxtParser()))
+                .AddSourceCurrencyProvider(new Currency("EUR"), () => new FixerExchangeRateProviderStrategy(
+                    new FixerHttpClientRatesFetcher()))
+                .AddSourceCurrencyProvider(new Currency("USD"), () => new CurrencyLayerExchangeRateProviderStrategy(
+                    new CurrencyLayerHttpClientRatesFetcher()));
+            var factory = new ConfigurableProviderFactory(config);
+            
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(factory);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine("Successfully retrieved " + rates.Count() + " exchange rates:");
