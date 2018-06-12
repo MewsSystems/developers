@@ -18,8 +18,7 @@ When guest arrives to the hotel, they already have all the necessary information
 
 ## Mews Frontend
 
-The latter two are SPAs. Distributor is done using our current React-based stack (este.js-like).
-Navigator is waiting to be migrated from Angular.js (v1).
+The latter two are SPAs. Both Distributor and Navigator are done using our current React-based stack.
 
 In case of Commander, the frontend is consisted of multiple SPAs and some inline JS code.
 Our current frontend team is unifying it with our React stack as quickly as possible, but as many technolgies were used there in the past, it takes some time.
@@ -29,7 +28,7 @@ Our current frontend team is unifying it with our React stack as quickly as poss
 Mews Systems needs more web developers who can improve our award-winning system. Candidates must have great knowledge of HTML5/CSS3, JavaScript and React. We're creating a World-beating application and need team members to move us forward:
 
 We are looking for someone with web development experience with a strong understanding of HTML/CSS/JavaScript/React and responsive website development
-Experience with modern frontend technologies and tooling (includes Flux (Redux), Relay, Webpack, etc.)
+Experience with modern frontend technologies and tooling (includes Redux, Webpack, etc.)
 Experience with mobile applications development (especially React Native) or others are welcome.
 Understanding of RESTful APIs
 You must be able to communicate effectively in English
