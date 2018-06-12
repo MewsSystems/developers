@@ -1,19 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly List<IExchangeRatesSource> _exchangeRatesSources;
+
+        public ExchangeRateProvider(IEnumerable<IExchangeRatesSource> exchangeRatesSources)
+        {
+            _exchangeRatesSources = exchangeRatesSources.ToList();
+        }
+
         /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
-        /// do not return exchange rate "USD/EUR" with value calculated as 1 / "EUR/USD". If the source does not provide
-        /// some of the currencies, ignore them.
+        /// Returns exchange rates among the specified currencies that are defined by the <param name="currencies"/>.
+        /// Returns only rates that are provided by the sources
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var result = new List<ExchangeRate>();
+            var currenciesLookup = currencies.ToLookup(x => x);
+            
+            foreach (var exchangeRatesSource in _exchangeRatesSources)
+            {
+                try
+                {
+                    result.AddRange(exchangeRatesSource.LoadExchangeRates()
+                        .Where(x => currenciesLookup.Contains(x.SourceCurrency) && currenciesLookup.Contains(x.TargetCurrency)));
+                }
+                catch (Exception)
+                {
+                    var message = $"Error while loading data from '{exchangeRatesSource.GetType().Name}'";
+                    Console.WriteLine(message);
+                    throw;
+                }   
+            }
+            
+            return result;
         }
     }
 }
