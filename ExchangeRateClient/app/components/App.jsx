@@ -1,9 +1,25 @@
 // App.js
-import React from 'react'
+import React, { Component } from 'react'
+import { compose } from 'lodash/fp';
+import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader'
+import { fetchCurrencyPairs } from '../modules/rates/actions';
 
-const App = () => (
-    <div>Hello, there!</div>
-);
+class App extends Component {
+    componentDidMount() {
+        this.props.fetchCurrencyPairs();
+    }
 
-export default hot(module)(App);
+    render() {
+        return (
+            <div>Hello, World!</div>
+        );
+    }
+}
+
+export default compose(
+    hot(module),
+    connect(undefined, {
+        fetchCurrencyPairs,
+    }),
+)(App);
