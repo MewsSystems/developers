@@ -20,3 +20,5 @@
 node_modules
 bower_components
 npm-debug.log
+/.vs
+/ExchangeRateUpdater/.vs/ExchangeRateUpdater/v15/Server/sqlite3
