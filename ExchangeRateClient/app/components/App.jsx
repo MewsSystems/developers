@@ -5,7 +5,6 @@ import {compose} from 'lodash/fp';
 import {connect} from 'react-redux';
 import {hot} from 'react-hot-loader';
 import {fetchCurrencyPairs} from '../modules/rates/actions';
-import {fetchCurrencyRates} from '../modules/rates/actions';
 
 class App extends Component {
     constructor(props) {
@@ -23,7 +22,6 @@ class App extends Component {
             <div>
                 <CurrencyPairs
                     currencyPairs={this.props.currencyPairs}
-                    fetchCurrencyRates={this.props.fetchCurrencyRates}
                 />
             </div>
             :
@@ -33,14 +31,13 @@ class App extends Component {
 
 function mapStateToTheProps(state) {
     return {
-        currencyPairs: state.currencyPairs
+        currencyPairs: state.currencyPairs,
     };
 }
 
 export default compose(
     hot(module),
     connect(mapStateToTheProps, {
-        fetchCurrencyPairs,
-        fetchCurrencyRates
+        fetchCurrencyPairs
     }),
 )(App);

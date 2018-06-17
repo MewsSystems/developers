@@ -24,7 +24,7 @@ export const fetchCurrencyRates = (array) => dispatch => {
 
     let query = '?currencyPairIds=' + array.join('&currencyPairIds=');
 
-    // correct url
+    // example url
     // http://localhost:3000/rates?currencyPairIds=70c6744c-cba2-5f4c-8a06-0dac0c4e43a1&currencyPairIds=41cae0fd-b74d-5304-a45c-ba000471eabd
 
     return fetch(`${API_URL}/rates` + query)

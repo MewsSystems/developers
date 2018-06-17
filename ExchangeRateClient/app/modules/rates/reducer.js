@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {FETCH_CURRENCY_PAIRS_SUCCEEDED} from './actions';
 import {FETCH_CURRENCY_RATES_SUCCEEDED} from './actions';
 

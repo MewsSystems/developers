@@ -1,30 +1,76 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {compose} from "lodash/fp";
+import {connect} from "react-redux";
+import {hot} from "react-hot-loader";
+import {fetchCurrencyRates} from "../actions";
 
+class CurrencyPairs extends Component {
+    constructor(props) {
+        super(props);
 
-// ["70c6744c-cba2-5f4c-8a06-0dac0c4e43a1", "41cae0fd-b74d-5304-a45c-ba000471eabd"]
+        this.state = {
+            timer: null
+        }
+    }
 
-const CurrencyPairs = (props) => {
-    const {currencyPairs} = props;
+    componentDidMount() {
+        let arrayOfIds = [];
+        this.props.currencyPairs.forEach(x => arrayOfIds.push(x['id']));
 
-    let arrayOfIds = [];
-    currencyPairs.forEach(x => arrayOfIds.push(x['id']));
+        let timer = setInterval(() => this.props.fetchCurrencyRates(arrayOfIds), 15000);
+        this.setState({timer});
+    }
 
-    const currencyLis = currencyPairs.map(currency => (
-        <li key={currency.id}>{currency.currency1['code'] + ' / ' + currency.currency2['code']}</li>
-    ));
+    componentWillUnmount() {
+        this.clearInterval(this.state.timer);
+    }
 
-    props.fetchCurrencyRates(arrayOfIds);
+    render() {
+        const {currencyPairs} = this.props;
 
-    return (
-        <div>
-            <ul>
-                {/*{currencyPairs.map(currency => (*/}
-                    {/*<li key={currency.id}>{currency.currency1['code'] + ' / ' + currency.currency2['code']}</li>*/}
-                {/*))}*/}
-                {currencyLis}
-            </ul>
-        </div>
-    );
+        const currencyLis = currencyPairs.map(currency => (
+            <li key={currency.id}>{currency.currency1['code'] + ' / ' + currency.currency2['code']}</li>
+        ));
+
+        let newArr = [];
+
+        for (let key in this.props.rates) {
+            if (this.props.rates.hasOwnProperty(key)) {
+                let newObj = {
+                    id: key,
+                    rate: this.props.rates[key]
+                };
+                newArr.push(newObj);
+            }
+        }
+
+        return (
+            <div>
+                <ul>
+                    {currencyLis}
+                </ul>
+                <p>yolo</p>
+                <ul>
+                    {newArr.map(currency => (
+                        <li key={currency.id}>{currency.rate}</li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
 };
 
-export default CurrencyPairs;
+// export default CurrencyPairs;
+
+function mapStateToTheProps(state) {
+    return {
+        rates: state.rates,
+    };
+}
+
+export default compose(
+    hot(module),
+    connect(mapStateToTheProps, {
+        fetchCurrencyRates
+    }),
+)(CurrencyPairs);
