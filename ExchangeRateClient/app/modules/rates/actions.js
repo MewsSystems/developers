@@ -1,4 +1,4 @@
-import createAction from "../../utils/createAction";
+import createAction from '../../utils/createAction';
 
 const API_URL = 'http://localhost:3000';
 
@@ -12,5 +12,5 @@ export const fetchCurrencyPairs = () => dispatch => {
     return fetch(`${API_URL}/configuration`)
         .then(response => response.json())
         .then(data => dispatch(createAction(FETCH_CURRENCY_PAIRS_SUCCEEDED, data)))
-        .catch(error => dispatch(createAction(FETCH_CURRENCY_PAIRS_FAILED, error)))
+        .catch(error => dispatch(createAction(FETCH_CURRENCY_PAIRS_FAILED, error)));
 };

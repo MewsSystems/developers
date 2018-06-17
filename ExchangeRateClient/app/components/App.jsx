@@ -1,25 +1,49 @@
 // App.js
-import React, { Component } from 'react'
-import { compose } from 'lodash/fp';
-import { connect } from 'react-redux';
-import { hot } from 'react-hot-loader'
-import { fetchCurrencyPairs } from '../modules/rates/actions';
+import React, {Component} from 'react';
+import CurrencyPairs from '../modules/rates/components/CurrencyPairs';
+import {compose} from 'lodash/fp';
+import {connect} from 'react-redux';
+import {hot} from 'react-hot-loader';
+import {fetchCurrencyPairs} from '../modules/rates/actions';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
         this.props.fetchCurrencyPairs();
     }
 
+    // componentDidUpdate(prevProps) {
+    //   if (this.props.currencyPairs !== prevProps.currencyPairs) {
+    //     this.props.fetchCurrencyPairs();
+    //   }
+    // }
+
     render() {
-        return (
-            <div>Hello, World!</div>
-        );
+
+        return (this.props.currencyPairs
+            ?
+            <div>
+                <CurrencyPairs
+                    currencyPairs={this.props.currencyPairs}
+                />
+            </div>
+            :
+            'Loading...')
     }
+}
+
+function mapStateToTheProps(state) {
+    return {
+        currencyPairs: state.currencyPairs
+    };
 }
 
 export default compose(
     hot(module),
-    connect(undefined, {
-        fetchCurrencyPairs,
+    connect(mapStateToTheProps, {
+        fetchCurrencyPairs
     }),
 )(App);

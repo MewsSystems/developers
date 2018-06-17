@@ -1,1 +1,1 @@
-export default (type, payload = {}) => ({ type, payload });
+export default (type, payload = {}) => ({type, payload});
