@@ -6,6 +6,18 @@ import {connect} from 'react-redux';
 import {hot} from 'react-hot-loader';
 import {fetchCurrencyPairs} from '../modules/rates/actions';
 
+const Loader = {
+    color: "#24292e",
+    textAlign: "center",
+    fontSize: "35px",
+    fontWeight: "bold",
+    display: "flex",
+    flexDirection: "column",
+    fontFamily: "Helvetica",
+    marginTop: "25%",
+    alignItems: "stretch"
+};
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -19,13 +31,11 @@ class App extends Component {
 
         return (this.props.currencyPairs
             ?
-            <div>
-                <CurrencyPairs
-                    currencyPairs={this.props.currencyPairs}
-                />
-            </div>
+            <CurrencyPairs
+                currencyPairs={this.props.currencyPairs}
+            />
             :
-            'Loading...')
+            <div style={Loader}>Loading... <i className="fas fa-spinner fa-2x" /></div>)
     }
 }
 
