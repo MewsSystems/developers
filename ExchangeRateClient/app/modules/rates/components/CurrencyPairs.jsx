@@ -44,8 +44,8 @@ class CurrencyPairs extends Component {
 
     componentDidMount() {
         this.props.fetchCurrencyRates(Object.keys(this.props.currencyPairs));
-        let timer = setInterval(() => this.props.fetchCurrencyRates(Object.keys(this.props.currencyPairs)), 10000);
-        let anotherTimer = setInterval(() => this.setState({currencyPairs: this.props.currencyPairs}), 10000);
+        let timer = setInterval(() => this.props.fetchCurrencyRates(Object.keys(this.props.currencyPairs)), 5000);
+        let anotherTimer = setInterval(() => this.setState({currencyPairs: this.props.currencyPairs}), 5000);
         this.setState({
             timer,
             anotherTimer
