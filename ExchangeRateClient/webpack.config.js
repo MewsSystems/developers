@@ -1,34 +1,38 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const path = require('path');
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
+module.exports = {
+    mode: 'development',
+    entry: [
+        './app/app.js',
     ],
-    entry: {
-        app: './app/app.js',
-    },
     output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',    
+        filename: 'app.js'
+    },
+    module : {
+        rules : [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: [
+                    'babel-loader',
+                ]
+            }
+        ]
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['*', '.js', '.jsx']
     },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'app/index.html',
+            inject: 'body',
+        }),
+        new webpack.NamedModulesPlugin(),
+        //new webpack.HotModuleReplacementPlugin()
+    ],
     devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
 };
-
-module.exports = webpackConfig;
