@@ -1,25 +1,36 @@
-import _ from 'lodash';
-import { FETCH_CURRENCY_PAIRS_SUCCEEDED } from "./actions";
+import {FETCH_CURRENCY_PAIRS_SUCCEEDED} from './actions';
+import {FETCH_CURRENCY_RATES_SUCCEEDED} from './actions';
 
 const INITIAL_STATE = {
-    /*
-    currencyPairs: {
-        // {"70c6744c-cba2-5f4c-8a06-0dac0c4e43a1":[{"code":"AMD","name":"Armenia Dram"},{"code":"GEL","name":"Georgia Lari"}],
-
-        // { [id]: { id: id, pair: [] } }
-    }*/
-}
+};
 
 export default (state = INITIAL_STATE, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case FETCH_CURRENCY_PAIRS_SUCCEEDED: {
-            const { currencyPairs } = action.payload;
+            const {currencyPairs} = action.payload;
             return {
                 ...state,
-                currencyPairs: { ...state.currencyPairs, ..._.mapValues(currencyPairs, (pair, id) => ({ id, pair })) },
+                currencyPairs: currencyPairs
             };
         }
-    }
+        case FETCH_CURRENCY_RATES_SUCCEEDED: {
+            const {rates} = action.payload;
 
-    return state;   
+            let newState = JSON.parse(JSON.stringify(state)); //dirty hack
+
+            for (let key in rates) {
+                if (rates.hasOwnProperty(key) && newState.currencyPairs.hasOwnProperty(key)) {
+                    if (newState.currencyPairs[key].length <= 2) {
+                        newState.currencyPairs[key].push({rate: rates[key]});
+                    } else {
+                        newState.currencyPairs[key][2] = {rate: rates[key]};
+                    }
+                }
+            }
+
+            return newState;
+        }
+        default:
+            return state;
+    }
 }
