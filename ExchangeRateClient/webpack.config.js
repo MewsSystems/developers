@@ -9,7 +9,7 @@ module.exports = {
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/',    
+        publicPath: '/',
         filename: 'app.js'
     },
     module : {
@@ -20,6 +20,19 @@ module.exports = {
                 use: [
                     'babel-loader',
                 ]
+            },
+            {
+                test: /\.css?$/,
+                loader: 'style-loader!css-loader'
+            },
+            {
+                test: /\.scss?$/,
+                loader: 'style-loader!css-loader!sass-loader',
+                include: path.join(__dirname, 'app', 'components')
+            },
+            {
+                test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+                loader: 'file-loader'
             }
         ]
     },
