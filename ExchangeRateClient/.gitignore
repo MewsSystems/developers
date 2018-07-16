@@ -1,0 +1,9 @@
+
+# dependencies
+/node_modules/
+
+# misc
+app/config/config.json
+
+# error logs
+yarn-error.log*
