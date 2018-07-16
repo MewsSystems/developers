@@ -1,111 +1,76 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Dialog } from 'mews-ui';
 import { map, uniq, compose, filter, without } from 'lodash/fp';
 import styled from 'styled-components';
+
+import { connect } from 'react-redux';
+import {
+	fetchConfiguration,
+	handleSelectedProducts,
+	handleProducts,
+} from '../actions/dialogActions';
+
 import Product from './Product';
 
-export default class OrderDialog extends React.Component {
-	constructor(props) {
-		super(props);
+class OrderDialog extends React.Component {
+
+	componentWillMount() {
+		this.props.fetchConfiguration();
 	}
 
-	state = {
-		products: [
-			{
-				id: 1,
-				name: "supername",
-				cost: 400,
-				quantity: 1,
-			},
-			{
-				id: 2,
-				name: "myproduct",
-				cost: 250,
-				quantity: 1,
-			},
-			{
-				id: 3,
-				name: "mymumsupernicelongproductname",
-				cost: 500,
-				quantity: 1,
-			},
-			{
-				id: 4,
-				name: "notmyproduct",
-				cost: 3250,
-				quantity: 1
-			},
-			{
-				id: 5,
-				name: "mother-in-law",
-				cost: 5,
-				quantity: 1
-			}
-		],
-		selectedProductIds: [],
-	}
-
-	renderProduct = product => <Product onClick={this.handleProductClick} key={product.id} {...product} />;
+	renderProduct = product => <Product onClick={this.onProductClick} key={product.id} {...product} />;
 
 	renderProducts = map(this.renderProduct);
 
-	handleProductClick = productId => {
-		this.setState({
-			selectedProductIds: uniq([...this.state.selectedProductIds, productId]),
-		}, () => {
-			console.log(this.state);
-		});
+	onProductClick = productId => {
+		const selectedProductIds = uniq([...this.props.selectedProductIds, productId]);
+		this.props.handleSelectedProducts(selectedProductIds);
 	}
 
-	handleProductRemove = productId => {
-		this.setState({
-			selectedProductIds: without([productId], this.state.selectedProductIds),
-		}, () => {
-			console.log(this.state);
-		});
+	onProductRemove = productId => {
+		const selectedProductIds = without([productId], this.props.selectedProductIds);
+		this.props.handleSelectedProducts(selectedProductIds);
 	}
 
 	degreseProductQuantity = productId => {
-		let products = this.state.products;
+		let products = [...this.props.products];
 		products.map((product) => {
 			if (product.id === productId && product.quantity > 1)
 				product.quantity -= 1;
 		});
-		this.setState({ products }, () => {
-			console.log(this.state);
-		});
+		this.props.handleProducts(products);
 	}
 
 	increaseProductQuantity = productId => {
-		let products = this.state.products;
+		let products = [...this.props.products];
 		products.map((product) => {
 			if (product.id === productId && product.quantity < 99)
 				product.quantity += 1;
 		});
-		this.setState({ products }, () => {
-			console.log(this.state);
-		});
+		this.props.handleProducts(products);
 	}
 
 	onDialogSubmitHandler = () => {
-		let products = this.state.products;
+		let products = [...this.props.products];
 		let result = new Array();
 		products.map((product) => {
-			if (this.state.selectedProductIds.indexOf(product.id) !== -1)
+			if (this.props.selectedProductIds.indexOf(product.id) !== -1)
 				result[product.id] = product.quantity;
 		});
 		// result for processing on the server is array in format: productId => count
 		console.log(result);
-		const s = this.state.selectedProductIds.length > 1 ? `s` : ``;
+		const s = this.props.selectedProductIds.length > 1 ? `s` : ``;
 		alert(
-			`Selected product${s} id ${this.state.selectedProductIds} \nSelected product${s} count ${Object.values(result)}`
+			`Selected product${s} id ${this.props.selectedProductIds} \nSelected product${s} count ${Object.values(result)}`
 			);
 	};
 
+	// could be another component ProductItem
 	renderSelectedProduct = product => (
 		<div key={product.id} className={`productItem`}>
 			<p>{product.name}
-				<i onClick={() => this.handleProductRemove(product.id)} className={`fa fa-trash-o`} aria-hidden={true}></i>
+				<i onClick={() => this.onProductRemove(product.id)} className={`fa fa-trash-o`} aria-hidden={true}></i>
 			</p>
 			<table>
 				<thead>
@@ -134,7 +99,9 @@ export default class OrderDialog extends React.Component {
 	);
 
 	render() {
-		const { products, selectedProductIds } = this.state;
+		// const { products, selectedProductIds } = this.props;
+		let products = this.props.products;
+		let selectedProductIds = this.props.selectedProductIds;
 		const closeClasses = `fa fa-close`;
 		let finalPrice = null;
 		products.filter(product => {
@@ -175,6 +142,22 @@ export default class OrderDialog extends React.Component {
 	};
 };
 
+OrderDialog.propTypes = {
+	fetchConfiguration: PropTypes.func.isRequired,
+	handleSelectedProducts: PropTypes.func.isRequired,
+	handleProducts: PropTypes.func.isRequired,
+	products: PropTypes.array.isRequired
+}
+
+const mapStateToProps = state => ({
+	configuration: state.dialogReducer.configuration,
+	products: state.dialogReducer.products,
+	selectedProductIds: state.dialogReducer.selectedProductIds,
+});
+
+export default connect(mapStateToProps, { fetchConfiguration, handleSelectedProducts, handleProducts })(OrderDialog);
+
+// styles could be in some different file
 const SubmitButton = styled.button`
 	font-family: 'Open Sans', sans-serif;
 	display: block;

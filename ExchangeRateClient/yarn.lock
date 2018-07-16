@@ -5615,7 +5615,7 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-redux@5.0.7:
+react-redux@^5.0.7:
   version "5.0.7"
   resolved "http://frontend-mews.westeurope.cloudapp.azure.com:4873/react-redux/-/react-redux-5.0.7.tgz#0dc1076d9afb4670f993ffaef44b8f8c1155a4c8"
   dependencies:
@@ -5798,7 +5798,11 @@ redux-logger@3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
-redux@4.0.0:
+redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "http://frontend-mews.westeurope.cloudapp.azure.com:4873/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+
+redux@^4.0.0:
   version "4.0.0"
   resolved "http://frontend-mews.westeurope.cloudapp.azure.com:4873/redux/-/redux-4.0.0.tgz#aa698a92b729315d22b34a0553d7e6533555cc03"
   dependencies:
