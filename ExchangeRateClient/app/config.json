@@ -1,4 +1,4 @@
 {
-    "endpoint": "http://localhost:3000/rates",
-    "interval": 10000
+	"endpoint": "http://localhost:3000/rates",
+	"interval": 1000
 }
