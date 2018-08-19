@@ -1,5 +1,5 @@
-import { endpoint, interval } from './config';
+import React from "react";
+import { render } from "react-dom";
+import index from "./index";
 
-export function run(element) {
-    console.log('App is running.');
-}
+render(index(), document.getElementById("root"));
