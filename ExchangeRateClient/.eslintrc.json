@@ -1,0 +1,26 @@
+{
+  "extends": ["airbnb", "prettier/react"],
+  "plugins": ["prettier", "import", "react"],
+  "parser": "babel-eslint",
+  "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", "jsx"]
+      }
+    ],
+    "prettier/prettier": "error",
+    "max-len": ["error", 80]
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "./config/webpack/webpack-dev-config.js"
+      }
+    }
+  }
+}
