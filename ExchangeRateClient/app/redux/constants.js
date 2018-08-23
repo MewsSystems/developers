@@ -1,3 +1,4 @@
-const GET_RATES = 'GET_RATES';
+const UPDATE_RATES = 'UPDATE_RATES';
+const STORE_PAIRS = 'STORE_PAIRS';
 
-export default GET_RATES;
+export { UPDATE_RATES, STORE_PAIRS };

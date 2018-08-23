@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import Rates from './rates';
+import rates from './rates';
+import pairs from './pairs';
 
 const rootReducer = combineReducers({
-  Rates,
+  rates,
+  pairs,
 });
 
 export default rootReducer;

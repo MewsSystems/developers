@@ -14,6 +14,7 @@
     "lint": "eslint . -c .eslintrc.json --ext js,jsx"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "chance": "1.0.16",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.4.2",

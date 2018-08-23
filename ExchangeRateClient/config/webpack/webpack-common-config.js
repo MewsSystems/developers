@@ -19,10 +19,11 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json'],
     modules: [path.join(__dirname, 'app'), 'node_modules'],
     alias: {
-      Containers: path.resolve(paths.appSrc, 'containers'),
       Components: path.resolve(paths.appSrc, 'components'),
-      Redux: path.resolve(paths.appSrc, 'redux'),
       Config: path.resolve(paths.appConfig),
+      Containers: path.resolve(paths.appSrc, 'containers'),
+      Redux: path.resolve(paths.appSrc, 'redux'),
+      Utils: path.resolve(paths.appSrc, 'utils'),
     },
   },
   module: {

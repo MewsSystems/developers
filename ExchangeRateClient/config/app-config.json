@@ -1,4 +1,5 @@
 {
-  "endpoint": "http://localhost:3000/rates",
+  "pairsEndpoint": "http://localhost:3000/configuration",
+  "ratesEndpoint": "http://localhost:3000/rates",
   "interval": 10000
 }

@@ -1,16 +1,16 @@
 // @flow
-import GET_RATES from '../constants';
+import { UPDATE_RATES } from '../constants';
 
-const Rates = (state: Object = {}, action: Object) => {
+const rates = (state: Object = {}, action: Object) => {
   switch (action.type) {
-    case GET_RATES:
+    case UPDATE_RATES:
       return {
         ...state,
-        rates: {},
+        ...action.rateData.rates,
       };
     default:
       return state;
   }
 };
 
-export default Rates;
+export default rates;
