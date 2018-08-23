@@ -33,14 +33,12 @@ server.get('/configuration', (req, res) => {
 
 server.get('/rates', (req, res) => {
   const hasFailed = chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
-  console.log('Get Rates');
   if (hasFailed) {
     res.sendStatus(500);
   } else {
     try {
       const allRates = ratesGenerator.getCurrentRates();
       const { currencyPairIds = [] } = req.query;
-      console.log('req.query::', req.query);
 
       let rates = {};
       for (let pairId of currencyPairIds) {
