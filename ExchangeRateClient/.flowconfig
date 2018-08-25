@@ -1,0 +1,23 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+module.file_ext=.scss
+
+module.name_mapper.extension='scss' -> 'empty/object'
+module.name_mapper='^Components' ->'<PROJECT_ROOT>/app/components'
+module.name_mapper='^Containers' ->'<PROJECT_ROOT>/app/containers'
+module.name_mapper='^Config' ->'<PROJECT_ROOT>/config'
+module.name_mapper='^Style' ->'<PROJECT_ROOT>/app/style'
+module.name_mapper='^Utils' ->'<PROJECT_ROOT>/app/utils'
+module.name_mapper='^Redux' ->'<PROJECT_ROOT>/app/redux'
+
+[strict]

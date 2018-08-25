@@ -1,0 +1,73 @@
+@import 'Style/colors';
+@import 'Style/mixins';
+
+.exchangeCard {
+  background-color: $concrete;
+  box-shadow: $alto 2px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+
+  .top {
+    display: flex;
+    flex: 1;
+
+    .second,
+    .first {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px;
+
+      .code {
+        font-size: 4rem;
+        @media (max-width: 400px) {
+          font-size: 3rem;
+        }
+      }
+
+      .name {
+        font-size: 1.4rem;
+        text-align: center;
+        @media (max-width: 400px) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .bottom {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+
+    .rate {
+      font-size: 4rem;
+    }
+
+    .loader {
+      @extend %loader;
+    }
+
+    .trend {
+      @extend %materialIcons;
+      font-size: 3rem;
+      margin-left: 20px;
+
+      .trendingUp {
+        color: $forest-green;
+      }
+
+      .trendingDown {
+        color: $red;
+      }
+
+      .trendingFlat {
+        color: $blue;
+      }
+    }
+  }
+}

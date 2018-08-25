@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 
-// import project paths
 const paths = require('../paths');
 // import common webpack config
 const common = require('./webpack-common-config.js');

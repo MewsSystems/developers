@@ -1,3 +1,4 @@
+// @flow
 import { combineReducers } from 'redux';
 import rates from './rates';
 import pairs from './pairs';

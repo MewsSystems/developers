@@ -7,4 +7,8 @@ const initialState = {
   pairs: {},
 };
 
-export default createStore(rootReducer, initialState);
+export default createStore(
+  rootReducer,
+  initialState /* eslint-disable-next-line */,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);

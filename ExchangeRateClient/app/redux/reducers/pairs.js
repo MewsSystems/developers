@@ -2,11 +2,14 @@
 import { STORE_PAIRS } from '../constants';
 
 const pairs = (state: Object = {}, action: Object) => {
-  switch (action.type) {
+  const { type, pairData } = action;
+  switch (type) {
     case STORE_PAIRS:
+      // Add pairs to local storage
+      localStorage.setItem('xChangePairsMews', JSON.stringify(pairData));
       return {
         ...state,
-        ...action.pairs.currencyPairs,
+        ...pairData.currencyPairs,
       };
     default:
       return state;

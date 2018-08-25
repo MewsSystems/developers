@@ -2,10 +2,8 @@
 import axios from 'axios';
 import config from 'Config/app-config.json';
 
-// Fetch Currency Pairs
 const FetchCurrencyPairs = (): Promise<void> => {
   const url = config.pairsEndpoint;
-
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
@@ -23,9 +21,8 @@ const FetchCurrencyPairs = (): Promise<void> => {
   });
 };
 
-const FetchCurrencyRates = (params): Promise<void> => {
+const FetchCurrencyRates = (params: Object): Promise<void> => {
   const url = config.ratesEndpoint;
-
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',

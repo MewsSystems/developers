@@ -1,0 +1,8 @@
+.exchangeList {
+  display: grid;
+  grid-area: list;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  margin: 20px;
+  min-height: 100%;
+}

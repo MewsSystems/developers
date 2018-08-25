@@ -1,26 +1,15 @@
+@import 'Style/colors';
+
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  margin: 0;
+  overflow-x: hidden;
+  padding: 0;
+}
+
 .app {
-  font-size: 24px;
-  text-align: center;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-
-  .countdown {
-    display: flex;
-    width: 100px;
-    flex-direction: column;
-
-    .circle {
-      margin-bottom: 20px;
-      width: 100px;
-      height: 100px;
-      transform: scaleY(-1);
-    }
-
-    .circle > svg {
-      width: 100%;
-      display: block;
-    }
-  }
 }

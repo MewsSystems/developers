@@ -4,9 +4,12 @@ import { hot } from 'react-hot-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FetchCurrencyPairs, FetchCurrencyRates } from 'Utils/rates';
+import { GetFilter, GetPairs } from 'Utils/localStorage';
 import { interval } from 'Config/app-config.json';
 import * as actionCreators from 'Redux/actions';
-
+import isEqual from 'lodash.isequal';
+import ExchangeListContainer from 'Containers/exchangeList';
+import Header from 'Components/header';
 import style from './app.scss';
 
 type Props = {
@@ -18,27 +21,42 @@ type Props = {
 
 type State = {
   counter: number,
+  filteredIdList: any,
 };
 
 class App extends React.Component<Props, State> {
   state = {
     counter: 0,
+    filteredIdList: [],
   };
 
   componentWillMount() {
-    const { storePairs } = this.props;
+    const { storePairs, currencyPairs } = this.props;
+    const filter = GetFilter() || '';
+    const localPairs: any = GetPairs();
 
-    FetchCurrencyPairs().then(res => {
-      storePairs(res);
+    if (localPairs && Object.keys(localPairs).length > 0) {
+      storePairs(localPairs);
+
+      this.matchExchange(filter, localPairs.currencyPairs);
+    }
+    FetchCurrencyPairs().then((res: any) => {
+      if (!isEqual(res, localPairs)) {
+        storePairs(res);
+        this.matchExchange(filter, res.currencyPairs);
+      }
+    });
+    this.rateUpdater(currencyPairs, interval);
+  }
+
+  rateUpdater = (data, time) => {
+    this.refreshTimer();
+    this.getRates();
+    setInterval(() => {
       this.refreshTimer();
       this.getRates();
-
-      setInterval(() => {
-        this.refreshTimer();
-        this.getRates();
-      }, interval);
-    });
-  }
+    }, time);
+  };
 
   refreshTimer = () => {
     let counter = interval / 1000;
@@ -67,23 +85,41 @@ class App extends React.Component<Props, State> {
     });
   };
 
+  matchExchange = (wordToMatch, currencyPairs) => {
+    const regex = new RegExp(wordToMatch, 'i');
+    let matchList: any = {};
+    Object.keys(currencyPairs).map(key => {
+      if (
+        currencyPairs[key][0].code.match(regex) ||
+        currencyPairs[key][1].code.match(regex) ||
+        currencyPairs[key][0].name.match(regex) ||
+        currencyPairs[key][1].name.match(regex)
+      ) {
+        matchList = [...matchList, key];
+      }
+      return null;
+    });
+
+    this.setState({ filteredIdList: matchList });
+  };
+
   render() {
+    const { counter, filteredIdList } = this.state;
     const { currencyPairs, currencyRates } = this.props;
-    const { counter } = this.state;
 
     return (
       <div className={style.app}>
-        <div className={style.countdown}>
-          <div>{counter}</div>
-        </div>
-        <ul>
-          {Object.keys(currencyPairs).map(key => (
-            <li key={key}>
-              ({currencyRates[key]}) {currencyPairs[key][0].code} /{' '}
-              {currencyPairs[key][1].code}
-            </li>
-          ))}
-        </ul>
+        <Header
+          matchExchange={this.matchExchange}
+          currencyPairs={currencyPairs}
+          filter={GetFilter}
+          counter={counter}
+        />
+        <ExchangeListContainer
+          filteredIdList={filteredIdList}
+          currencyPairs={currencyPairs}
+          currencyRates={currencyRates}
+        />
       </div>
     );
   }

@@ -1,9 +1,10 @@
+// @flow
 import { STORE_PAIRS, UPDATE_RATES } from '../constants';
 
-function storePairs(pairs: Object) {
+function storePairs(pairData: Object) {
   return {
     type: STORE_PAIRS,
-    pairs,
+    pairData,
   };
 }
 function storeRates(rateData: Object) {

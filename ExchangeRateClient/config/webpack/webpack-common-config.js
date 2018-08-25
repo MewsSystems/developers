@@ -16,7 +16,7 @@ module.exports = {
     publicPath: '/',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.json', '.scss'],
     modules: [path.join(__dirname, 'app'), 'node_modules'],
     alias: {
       Components: path.resolve(paths.appSrc, 'components'),
@@ -24,12 +24,13 @@ module.exports = {
       Containers: path.resolve(paths.appSrc, 'containers'),
       Redux: path.resolve(paths.appSrc, 'redux'),
       Utils: path.resolve(paths.appSrc, 'utils'),
+      Style: path.resolve(paths.appSrc, 'style'),
     },
   },
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(png|svg|jpg)$/,
         use: ['file-loader'],
       },
     ],
