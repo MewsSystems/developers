@@ -14,8 +14,8 @@ const GetFilter = () => {
 };
 
 const GetPairs = () => {
-  const localPairs = localStorage.getItem('xChangePairsMews');
-  return localPairs;
+  const localPairs: any = localStorage.getItem('xChangePairsMews');
+  return JSON.parse(localPairs);
 };
 
 export { StoreFilter, ClearFilter, GetFilter, GetPairs };
