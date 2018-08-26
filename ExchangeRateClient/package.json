@@ -15,6 +15,7 @@
     "check-staged": "lint-staged",
     "start-server": "node server",
     "start": "node config/webpack/webpack-dev-server.js",
+    "sass-lint": "sass-lint -vq -c .sass-lint.yml 'app/**/*.scss'",
     "test": "jest --runInBand",
     "test:watch": "jest --watch"
   },
@@ -81,8 +82,11 @@
     "*.{js,jsx}": [
       "eslint"
     ],
-    "*.{js,jsx,json,css,md}": [
+    "*.{js,jsx,json,md}": [
       "prettier --list-different"
+    ],
+    "app/**/*.scss": [
+      "sass-lint -vq"
     ]
   }
 }
