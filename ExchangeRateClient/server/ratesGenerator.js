@@ -52,7 +52,6 @@ module.exports = function rateGenerator({
     for (let pairId of Object.keys(currentRates)) {
       const value = currentRates[pairId];
       const change = generator.floating({ min: -0.05, max: 0.05, fixed: 4 });
-      console.log(change);
       updatedRates[pairId] = generator.floating({
         min: value + change,
         max: value + change,
