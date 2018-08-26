@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Exchange Card matches snapshot 1`] = `
+<div>
+  <div>
+    <div>
+      <div>
+        XYZ
+      </div>
+      <div>
+        ABC
+      </div>
+    </div>
+    <span>
+      arrow_right
+    </span>
+    <div>
+      <div>
+        UVW
+      </div>
+      <div>
+        DEF
+      </div>
+    </div>
+  </div>
+  <div>
+    <div>
+      1.12345
+    </div>
+    <div>
+      <span>
+        trending_down
+      </span>
+    </div>
+  </div>
+</div>
+`;

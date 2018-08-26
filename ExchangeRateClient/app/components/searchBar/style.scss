@@ -1,0 +1,20 @@
+@import 'Style/colors';
+@import 'Style/mixins';
+
+.search {
+  align-items: center;
+  display: flex;
+
+  .searchBox {
+    background-color: $search-background;
+    border: transparent;
+    color: $white;
+    font-size: 2rem;
+    font-weight: 400;
+    padding: 10px;
+    width: 95%;
+    @media (max-width: 400px) {
+      font-size: 1.8rem;
+    }
+  }
+}

@@ -9,25 +9,90 @@
   },
   "main": "Sources/index.js",
   "scripts": {
+    "develop": "concurrently -p \"[{name}]\" -n \"API,WWW\" -c \"blue.bold,magenta.bold\" \"npm:start-server\" \"npm:start\"",
+    "build": "yarn clean; webpack --config config/webpack/webpack-prod-config.js",
+    "clean": "rm -rf dist/*",
+    "lint": "eslint . -c .eslintrc.json --ext js,jsx",
+    "prettier": "prettier",
+    "check-staged": "lint-staged",
     "start-server": "node server",
-    "start": "webpack-dev-server --hot --inline --progress"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-1"
-    ]
+    "start": "node config/webpack/webpack-dev-server.js",
+    "sass-lint": "sass-lint -vq -c .sass-lint.yml 'app/**/*.scss'",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
-    "babel-core": "6.13.2",
-    "babel-loader": "6.2.4",
-    "babel-preset-es2015": "6.13.2",
-    "babel-preset-stage-1": "6.13.0",
-    "chance": "1.0.4",
-    "express": "4.14.0",
-    "json-loader": "0.5.4",
-    "json-server": "0.8.17",
-    "webpack": "1.13.1",
-    "webpack-dev-server": "1.14.1"
+    "axios": "^0.18.0",
+    "chance": "1.0.16",
+    "enzyme": "^3.5.0",
+    "enzyme-adapter-react-16": "^1.3.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "html-webpack-plugin": "^3.2.0",
+    "lodash.isequal": "^4.5.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-hot-loader": "^4.3.4",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "trend": "^0.3.0",
+    "uglifyjs-webpack-plugin": "^1.3.0",
+    "webpack": "4.17.1",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-merge": "^4.1.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-jest": "^23.4.2",
+    "babel-loader": "7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "compression-webpack-plugin": "^1.1.11",
+    "concurrently": "^4.0.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-import-resolver-webpack": "^0.10.1",
+    "eslint-loader": "^2.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-react": "^7.11.1",
+    "express": "4.16.3",
+    "flow-bin": "^0.79.1",
+    "husky": "^1.0.0-rc.13",
+    "jest": "^23.5.0",
+    "json-loader": "0.5.7",
+    "json-server": "0.14.0",
+    "lint-staged": "^7.2.2",
+    "node-sass": "^4.9.3",
+    "prettier": "^1.14.2",
+    "react-test-renderer": "^16.4.2",
+    "sass-lint": "^1.12.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.22.1",
+    "webpack-cli": "^3.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint"
+    ],
+    "*.{js,jsx,json,md}": [
+      "prettier --list-different"
+    ],
+    "app/**/*.scss": [
+      "sass-lint -vq"
+    ]
   }
 }

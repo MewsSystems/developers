@@ -1,0 +1,25 @@
+@import 'Style/colors';
+
+.header {
+  align-items: center;
+  background-color: $boston-blue;
+  box-shadow: $alto 4px 4px 4px;
+
+  display: grid;
+  grid-area: header;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 4fr 1fr;
+  height: 60px;
+
+  .name {
+    font-size: 3rem;
+    margin-left: 20px;
+  }
+
+  .countdown {
+    color: $white;
+    font-size: 2rem;
+    margin-right: 20px;
+    text-align: right;
+  }
+}

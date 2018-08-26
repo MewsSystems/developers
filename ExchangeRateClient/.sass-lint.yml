@@ -1,0 +1,21 @@
+rules:
+  leading-zero: 0
+  function-name-format:
+    - 2
+    - allow-leading-underscore: false
+      convention: camelcase
+  mixin-name-format:
+    - 2
+    - allow-leading-underscore: false
+      convention: camelcase
+  placeholder-name-format:
+    - 2
+    - allow-leading-underscore: false
+      convention: camelcase
+  class-name-format:
+    - 2
+    - allow-leading-underscore: false
+      convention: camelcase
+  nesting-depth:
+    - 3
+    - max-depth: 3
