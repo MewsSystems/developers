@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import ExchangeList from 'Components/exchangeList';
 import ExchangeCardContainer from 'Containers/exchangeCard';
+import Loader from 'Components/loader';
 
 type Props = {
   currencyPairs: Object,
@@ -40,6 +41,9 @@ class ExchangeListContainer extends PureComponent<Props> {
 
   render() {
     const { filteredIdList } = this.props;
+    if (filteredIdList.length < 1) {
+      return <Loader />;
+    }
     return (
       <ExchangeList>{this.filterExchangeCards(filteredIdList)}</ExchangeList>
     );
