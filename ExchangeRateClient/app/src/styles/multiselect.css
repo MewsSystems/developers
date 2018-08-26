@@ -1,0 +1,69 @@
+.multiselect{
+  background: #eee;
+  position: absolute;
+  width: 100%;
+}
+
+.button{
+  position: relative;
+  width: 50%;
+  text-align: center;
+  background: #ddd;
+  margin: 5px auto;
+  border: 1px solid #aaa;
+  font-size: 1.4rem;
+  padding: 6px;
+  -webkit-box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+  -moz-box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+  box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+}
+
+.enabledButton{
+  composes: button;
+  -webkit-transition: background 0.3s; /* Safari */
+  transition: background 0.3s;  
+}
+.disabledButton{
+  composes: button;
+}
+
+.enabledButton:hover{
+  background: #ccc;
+}
+
+.list{
+  position: absolute;
+  width: 50%;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: 0 auto;  
+  list-style: none;
+  background: #eee;
+  -webkit-box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+  -moz-box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+  box-shadow: 3px 3px 20px -2px rgba(150,150,150,1);
+  padding: 10px;
+  text-align: center;
+}
+
+.list li{
+  margin: 3px;
+}
+
+.opened{
+  composes: list;
+}
+
+.closed{
+  composes: list;
+  display: none;
+}
+
+.selected{
+  background: #c2c2c2;
+}
+
+.unselected{
+  
+}

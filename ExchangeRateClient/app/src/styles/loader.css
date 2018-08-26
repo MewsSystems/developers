@@ -1,0 +1,27 @@
+.dot {
+  display: inline;
+  margin: 0 0.2rem;
+  font-size: 1rem;
+  opacity: 0;
+  animation: showHideDot 2.5s ease-in-out infinite;
+}
+
+.firstDot{
+  composes: dot;
+  animation-delay: 0.2s;
+}
+.secondDot{
+  composes: dot;
+  animation-delay: 0.4s;
+}
+.thirdDot{
+  composes: dot;
+  animation-delay: 0.6s;
+}
+
+@keyframes showHideDot {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  60% { opacity: 1; }
+  100% { opacity: 0; }
+}

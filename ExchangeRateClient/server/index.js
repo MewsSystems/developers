@@ -35,6 +35,7 @@ server.get('/rates', (req, res) => {
         try {
             const allRates = ratesGenerator.getCurrentRates();
             const { currencyPairIds = [] } = req.query;
+            console.log(req.query);
 
             let rates = {};
             for (let pairId of currencyPairIds) {

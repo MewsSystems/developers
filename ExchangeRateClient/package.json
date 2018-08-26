@@ -15,19 +15,40 @@
   "babel": {
     "presets": [
       "es2015",
+      "react",
       "stage-1"
     ]
   },
   "dependencies": {
-    "babel-core": "6.13.2",
+    "autoprefixer": "^9.1.3",
+    "autoprefixer-core": "^6.0.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.13.2",
     "babel-loader": "6.2.4",
+    "babel-plugin-react-css-modules": "^3.4.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "6.13.2",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "6.13.0",
     "chance": "1.0.4",
+    "css-loader": "^1.0.0",
     "express": "4.14.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "font-awesome": "^4.7.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
+    "postcss-color-rebeccapurple": "^3.1.0",
+    "postcss-loader": "^3.0.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-to-html-webpack-plugin": "^2.2.0",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "style-loader": "^0.22.1",
     "webpack": "1.13.1",
+    "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-server": "1.14.1"
   }
 }
