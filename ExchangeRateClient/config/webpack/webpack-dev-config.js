@@ -51,7 +51,7 @@ module.exports = merge(common, {
           {
             loader: 'sass-loader',
             options: {
-              includePaths: ['src'],
+              includePaths: ['app'],
               sourceMap: true,
             },
           },
