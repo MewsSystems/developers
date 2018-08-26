@@ -9,6 +9,7 @@
   },
   "main": "Sources/index.js",
   "scripts": {
+    "develop": "concurrently -p \"[{name}]\" -n \"API,WWW\" -c \"blue.bold,magenta.bold\" \"npm:start-server\" \"npm:start\"",
     "start-server": "node server",
     "start": "node config/webpack/webpack-dev-server.js",
     "lint": "eslint . -c .eslintrc.json --ext js,jsx"
@@ -39,6 +40,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-runtime": "^6.26.0",
+    "concurrently": "^4.0.0",
     "css-loader": "^1.0.0",
     "eslint": "^5.4.0",
     "eslint-config-airbnb": "^17.1.0",
