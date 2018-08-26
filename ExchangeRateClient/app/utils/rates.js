@@ -16,7 +16,7 @@ const FetchCurrencyPairs = (): Promise<void> => {
       .then(res => resolve(res.data))
       .catch(err => {
         // eslint-disable-next-line
-        console.error('AXIOS ERROR: ', err);
+        console.warn('AXIOS ERROR: ', err);
       });
   });
 };
@@ -36,7 +36,7 @@ const FetchCurrencyRates = (params: Object): Promise<void> => {
       .then(res => resolve(res.data))
       .catch(err => {
         // eslint-disable-next-line
-        console.error('AXIOS ERROR: ', err);
+        console.warn('AXIOS ERROR: ', err);
       });
   });
 };

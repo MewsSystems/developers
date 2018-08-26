@@ -1,5 +1,5 @@
 // @flow
-import { STORE_PAIRS, UPDATE_RATES } from '../constants';
+import { STORE_PAIRS, UPDATE_RATES, UPDATE_TRENDS } from '../constants';
 
 function storePairs(pairData: Object) {
   return {
@@ -13,5 +13,12 @@ function storeRates(rateData: Object) {
     rateData,
   };
 }
+function updateTrendData(exchangeID: string, exchangeRate: number) {
+  return {
+    type: UPDATE_TRENDS,
+    exchangeID,
+    exchangeRate,
+  };
+}
 
-export { storePairs, storeRates };
+export { storePairs, storeRates, updateTrendData };

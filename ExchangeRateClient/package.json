@@ -23,6 +23,7 @@
     "react-hot-loader": "^4.3.4",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
+    "trend": "^0.3.0",
     "webpack": "4.17.1",
     "webpack-dev-server": "^3.1.5",
     "webpack-merge": "^4.1.4"

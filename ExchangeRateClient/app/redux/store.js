@@ -5,6 +5,7 @@ import rootReducer from './reducers';
 const initialState = {
   rates: {},
   pairs: {},
+  trends: {},
 };
 
 export default createStore(

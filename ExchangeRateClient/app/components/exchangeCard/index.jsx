@@ -3,10 +3,10 @@ import style from './style.scss';
 
 type Props = {
   pairInfo: Object,
-  trend: string,
+  trendDirection: string,
 };
 const ExchangeCard = (props: Props) => {
-  const { pairInfo, trend } = props;
+  const { pairInfo, trendDirection } = props;
   const { first, second, rate } = pairInfo;
 
   return (
@@ -28,16 +28,15 @@ const ExchangeCard = (props: Props) => {
           <Fragment>
             <div className={style.rate}>{rate}</div>
             <div className={style.trend}>
-              {trend === 'up' && (
+              {trendDirection === 'up' && (
                 <span className={style.trendingUp}>trending_up</span>
               )}
-              {trend === 'down' && (
+              {trendDirection === 'down' && (
                 <span className={style.trendingDown}>trending_down</span>
               )}
-              {trend === 'flat' ||
-                (trend === null && (
-                  <span className={style.trendingFlat}>trending_flat</span>
-                ))}
+              {trendDirection === 'flat' && (
+                <span className={style.trendingFlat}>trending_flat</span>
+              )}
             </div>
           </Fragment>
         )}
