@@ -10,13 +10,19 @@
   "main": "Sources/index.js",
   "scripts": {
     "develop": "concurrently -p \"[{name}]\" -n \"API,WWW\" -c \"blue.bold,magenta.bold\" \"npm:start-server\" \"npm:start\"",
+    "lint": "eslint . -c .eslintrc.json --ext js,jsx",
+    "prettier": "prettier",
+    "check-staged": "lint-staged",
     "start-server": "node server",
     "start": "node config/webpack/webpack-dev-server.js",
-    "lint": "eslint . -c .eslintrc.json --ext js,jsx"
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "chance": "1.0.16",
+    "enzyme": "^3.5.0",
+    "enzyme-adapter-react-16": "^1.3.0",
     "html-webpack-plugin": "^3.2.0",
     "lodash.isequal": "^4.5.0",
     "react": "^16.4.2",
@@ -53,12 +59,29 @@
     "eslint-plugin-react": "^7.11.1",
     "express": "4.16.3",
     "flow-bin": "^0.79.1",
+    "jest": "^23.5.0",
     "json-loader": "0.5.7",
     "json-server": "0.14.0",
+    "lint-staged": "^7.2.2",
     "node-sass": "^4.9.3",
     "prettier": "^1.14.2",
+    "react-test-renderer": "^16.4.2",
     "sass-lint": "^1.12.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.22.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint"
+    ],
+    "*.{js,jsx,json,css,md}": [
+      "prettier --list-different"
+    ]
   }
 }
