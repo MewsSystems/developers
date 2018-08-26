@@ -3,38 +3,55 @@
 
 .exchangeCard {
   background-color: $concrete;
-  box-shadow: $alto 2px 2px 2px;
+  box-shadow: $alto 1px 1px 1px;
   display: flex;
   flex-direction: column;
   min-height: 200px;
 
   .top {
+    align-items: center;
+    background-color: $mercury;
+    border-bottom: 1px solid $alto;
     display: flex;
     flex: 1;
 
     .second,
     .first {
       align-items: center;
+      color: $mine-shaft;
       display: flex;
-      flex: 1;
+      flex: 4;
       flex-direction: column;
       justify-content: center;
       padding: 5px;
 
       .code {
-        font-size: 4rem;
+        font-size: 3rem;
         @media (max-width: 400px) {
-          font-size: 3rem;
+          font-size: 2rem;
         }
       }
 
       .name {
-        font-size: 1.4rem;
+        color: $gray;
+        font-size: 1.1rem;
         text-align: center;
         @media (max-width: 400px) {
-          font-size: 1.2rem;
+          font-size: 1rem;
         }
       }
+    }
+
+    .arrow {
+      @extend %materialIcons;
+      align-items: center;
+      color: $wild-sand;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      font-family: 'Material Icons';
+      font-size: 4rem;
+      justify-content: center;
     }
   }
 
@@ -45,7 +62,9 @@
     justify-content: center;
 
     .rate {
+      color: $mine-shaft;
       font-size: 4rem;
+      font-weight: 300;
     }
 
     .loader {

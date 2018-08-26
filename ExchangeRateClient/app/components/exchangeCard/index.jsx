@@ -16,6 +16,7 @@ const ExchangeCard = (props: Props) => {
           <div className={style.code}>{first.code}</div>
           <div className={style.name}>{first.name}</div>
         </div>
+        <span className={style.arrow}>arrow_right</span>
         <div className={style.second}>
           <div className={style.code}>{second.code}</div>
           <div className={style.name}>{second.name}</div>

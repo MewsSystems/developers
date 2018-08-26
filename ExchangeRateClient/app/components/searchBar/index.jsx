@@ -23,7 +23,6 @@ const SearchBar = (props: Props) => {
         placeholder="Filter Rates"
         defaultValue={filter}
       />
-      <span className={style.searchBoxIcon}>close</span>
     </div>
   );
 };
