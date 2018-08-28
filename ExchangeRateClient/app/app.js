@@ -1,5 +1,14 @@
-import { endpoint, interval } from './config';
+import React from 'react';
+import { render } from 'react-dom';
+// redux
+import { Provider } from 'react-redux';
+import store from './store';
+// components
+import App from './components/App';
 
-export function run(element) {
-    console.log('App is running.');
-}
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("exchange-rate-client")
+);

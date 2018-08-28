@@ -1,7 +1,7 @@
 module.exports = {
     SEED: 42,
     PAIR_COUNT: 10,
-    UPDATE_INTERVAL: 15 * 1000,
+    UPDATE_INTERVAL: 3 * 1000,
     FAILURE_CHANCE: 0.1,
     MIN_INITIAL_RATE: 0.5,
     MAX_INITIAL_RATE: 3,
