@@ -8,6 +8,7 @@ import {
   FETCH_RATES_ERROR,
   PAIR_TOGGLE,
 } from '../constants/actionTypes'
+import { _reduce, _mapValues } from '../utils/lodash'
 
 const ACTION_HANDLERS = {
   [FETCH_CONFIG_REQUEST]  : (state, action) => ({ ...state, isConfigFetching: true }),
@@ -17,25 +18,23 @@ const ACTION_HANDLERS = {
   [FETCH_CONFIG_ERROR]    : (state, action) => ({ ...state, isConfigFetching: false }),
   //-----------------------------------------------------------
   [FETCH_RATES_SUCCESS]  : (state, action) => {
-    var tmp = JSON.parse(JSON.stringify(state)).config;
-    Object.keys(action.payload.rates).forEach( o => {
-      tmp[o].oldRate = tmp[o].newRate
-      tmp[o].newRate = action.payload.rates[o]
-    })
-    return({...state, config: tmp})
+    const newConfig = _reduce((res, val, id) => {
+      res[id] = {...val, oldRate: val.newRate, newRate: action.payload.rates[id]}
+      return res
+    }, {}, state.config)
+    return({...state, config: newConfig})
   },
   //-----------------------------------------------------------
   [PAIR_TOGGLE]           : (state, action) => {
-    var tmp = JSON.parse(JSON.stringify(state));
-    tmp.config[action.payload].selected = !tmp.config[action.payload].selected;
-    if(!tmp.config[action.payload].selected){
-      tmp.config[action.payload].oldRate = null
-      tmp.config[action.payload].newRate = null
-    }
-    return(tmp)
+    const newConfig = _mapValues((val, id) => {
+      if(id === action.payload){
+        if(val.selected) return {...val, selected: false}
+        else return {...val, selected: true, oldRate: null, newRate: null}
+      } else return {...val}
+    }, state.config)
+    return({...state, config: newConfig})
   }
 }
-
 
 export default function configReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

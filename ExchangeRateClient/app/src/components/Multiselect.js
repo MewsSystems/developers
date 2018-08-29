@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styles from '../styles/multiselect.css'
 import Loader from './Loader'
+import { _map } from '../utils/lodash'
 
 class Multiselect extends React.Component {
   constructor(props){
@@ -23,6 +24,13 @@ class Multiselect extends React.Component {
     this.props.onPairToggle(e)
   }
 
+  listMapper = ({selected, baseCode, secondaryCode}, id) => {
+    return(
+    <li key={id} onClick={() => this.onClick(id)} className={selected ? styles.selected : styles.unselected}>
+      {`${baseCode} ${secondaryCode}`}
+    </li>
+  )}
+
   render() {
     const {
       pairs,
@@ -36,11 +44,7 @@ class Multiselect extends React.Component {
           {isConfigFetching ? <Loader /> : 'Select pairs'}
         </div>
         <ul className={this.state.opened? styles.opened : styles.closed}>
-          {Object.keys(pairs).map(o => (
-            <li key={o} onClick={() => this.onClick(o)} className={pairs[o].selected ? styles.selected : styles.unselected}>
-              {`${pairs[o].baseCode} ${pairs[o].secondaryCode}`}
-            </li>
-          ))}
+          {_map(this.listMapper, pairs)}
         </ul>
       </div>
     )

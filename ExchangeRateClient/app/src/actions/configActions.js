@@ -9,22 +9,6 @@ import {
   PAIR_TOGGLE,
 } from '../constants/actionTypes';
 
-const normalizeConfig = ({currencyPairs}) => {
-  let normalized = {};
-  Object.keys(currencyPairs).forEach(o => {
-    normalized[o] = {
-      selected: false,
-      baseCode: currencyPairs[o][0].code,
-      baseName: currencyPairs[o][0].name,
-      secondaryCode: currencyPairs[o][1].code,
-      secondaryName: currencyPairs[o][1].name,
-      oldRate: null,
-      newRate: null,
-    }
-  });
-  return normalized;
-}
-
 export function fetchConfig () {
   return async dispatch => {
 
@@ -41,13 +25,12 @@ export function fetchConfig () {
       return onSuccess(JSON.parse(localConfig))
     }
 
-    dispatch(fetchConfigRequest())    
+    dispatch(fetchConfigRequest())
 
     try {
       var config = await api.fetchConfig();
-      const normalized = normalizeConfig(config);
-      localStorage.setItem('config', JSON.stringify(normalized));
-      return onSuccess(normalized)
+      localStorage.setItem('config', JSON.stringify(config));
+      return onSuccess(config)
     } catch (error) {
       return onError('Error fetching config: ' + error.message)
     }
@@ -69,12 +52,8 @@ export function fetchRates () {
 
     dispatch(fetchRatesRequest())
     const pairs = getState().config.config
-    var ids = []
-    Object.keys(pairs).forEach(o => {
-      if(pairs[o].selected) ids.push(o);
-    })
     try {
-      var rates = await api.fetchRates(ids)
+      var rates = await api.fetchRates(pairs)
       return onSuccess(rates)
     } catch (error) {
       return onError('Error fetching rates: ' + error.message)
