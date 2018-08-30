@@ -6,15 +6,11 @@ import {
 
 export const setCurrencyPairs = pairs => ({ 
   type: SET_CURRENCY_PAIRS, 
-  payload: pairs 
+  pairs 
 });
 
-export const setRates = rates => ({ 
+export const setRates = (rate, pair) => ({ 
   type: SET_RATES, 
-  payload: rates 
+  rate,
+  pair
 });
-
-export const selectPair = pair => ({
-  type: SELECT_PAIR,
-  payload: pair
-})
