@@ -20,7 +20,6 @@ class CurrencyPair extends Component {
   componentDidMount() {
     this.getRates(this.props.pair)
   }
-  
 
   getRates(pair) {
     if(pair !== undefined) {
@@ -69,12 +68,12 @@ class CurrencyPair extends Component {
       marginBottom: '10px',
       fontFamily: 'Verdana',
       fontSize: '10px'
-    }
+    };
     const rateTrend = {
       stagnating: { color: 'orange' },
       growing: { color: '#36c736' },
       declining: { color: 'red' }
-    }
+    };
 
     return (
       <div style={card}>

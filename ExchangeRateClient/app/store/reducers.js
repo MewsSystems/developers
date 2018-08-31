@@ -1,6 +1,7 @@
 import {
   SET_CURRENCY_PAIRS,
   SET_RATES,
+  SET_TOGGLE
 } from './constants';
 
 const initialState = {};
@@ -20,6 +21,11 @@ const reducers = (state = initialState, action) => {
           rate: action.rate 
         }
       };
+    case SET_TOGGLE:
+      return {
+        ...state,
+        togglePairs: action.togglePairs
+      }
     default:
       return state;
   }

@@ -1,7 +1,7 @@
 import { 
   SET_CURRENCY_PAIRS,
   SET_RATES,
-  SELECT_PAIR
+  SET_TOGGLE
 } from "./constants";
 
 export const setCurrencyPairs = pairs => ({ 
@@ -14,3 +14,8 @@ export const setRates = (rate, pair) => ({
   rate,
   pair
 });
+
+export const setTogglePairs = togglePairs => ({
+  type: SET_TOGGLE,
+  togglePairs
+})
