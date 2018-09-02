@@ -1,0 +1,1 @@
+export sliceForPagination from './sliceForPagination';

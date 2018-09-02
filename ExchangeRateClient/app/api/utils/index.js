@@ -1,0 +1,1 @@
+export arrayToGetParams from './arrayToGetParams';

@@ -33,6 +33,7 @@ server.get('/rates', (req, res) => {
         res.sendStatus(500);
     } else {
         try {
+            console.log(req.query);
             const allRates = ratesGenerator.getCurrentRates();
             const { currencyPairIds = [] } = req.query;
 
