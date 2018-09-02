@@ -1,0 +1,1 @@
+export prepareTableBodyData from './prepareTableBodyData';
