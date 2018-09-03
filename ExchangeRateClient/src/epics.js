@@ -1,6 +1,13 @@
 import { interval, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import { map, mergeMap, switchMap, takeUntil, catchError } from 'rxjs/operators';
+import {
+  map,
+  mergeMap,
+  switchMap,
+  startWith,
+  takeUntil,
+  catchError,
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { stringify } from 'qs';
 import {
@@ -26,8 +33,9 @@ const fetchConfigEpic = action$ =>
 const fetchRatesEpic = action$ =>
   action$.pipe(
     ofType(actionTypes.FETCH_RATES),
-    mergeMap(action =>
+    switchMap(action =>
       interval(action.payload.interval).pipe(
+        startWith(0),
         switchMap(() =>
           ajax
             .getJSON(
