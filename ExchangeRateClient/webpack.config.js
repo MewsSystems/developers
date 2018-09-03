@@ -1,34 +1,40 @@
+const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
+module.exports = {
+  mode: 'development',
+  entry: {
+    app: './src/app.js'
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        include: path.join(__dirname, 'src'),
+        loader: 'babel-loader',
+      },
     ],
-    entry: {
-        app: './app/app.js',
-    },
-    output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
-    },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
+  },
+  resolve: {
+    modules: [path.join(__dirname, 'src'), 'node_modules'],
+    extensions: ['.js', '.json', '.jsx'],
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: './dist',
+    hot: true,
+    inline: true,
+    progress: true,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+  ]
 };
-
-module.exports = webpackConfig;
