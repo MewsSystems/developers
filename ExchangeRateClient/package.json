@@ -34,6 +34,7 @@
     "redux-immutable": "^4.0.0",
     "redux-observable": "^1.0.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^3.0.1",
     "rxjs": "^6.3.1",
     "styled-components": "^3.4.5",
     "styled-tools": "^1.4.3"
