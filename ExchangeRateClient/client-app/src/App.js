@@ -2,8 +2,10 @@
 
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Provider } from "react-redux";
 
 import { ThemeProvider } from "styled-components";
+import createStore from "./store/createStore";
 import GlobalStyle from "./theme/Global";
 
 import theme from "./theme";
@@ -25,19 +27,21 @@ type Props = {
 class App extends Component<{}> {
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <React.Fragment>
-          <Root className="App">
-            <header className="App-header">
-              <Title>Welcome to Exchange Rate App</Title>
-            </header>
-            <p className="App-intro">
-              To get started, edit <code>src/App.js</code> and save to reload.
-            </p>
-          </Root>
-          <GlobalStyle />
-        </React.Fragment>
-      </ThemeProvider>
+      <Provider store={createStore()}>
+        <ThemeProvider theme={theme}>
+          <React.Fragment>
+            <Root className="App">
+              <header className="App-header">
+                <Title>Welcome to Exchange Rate App</Title>
+              </header>
+              <p className="App-intro">
+                To get started, edit <code>src/App.js</code> and save to reload.
+              </p>
+            </Root>
+            <GlobalStyle />
+          </React.Fragment>
+        </ThemeProvider>
+      </Provider>
     );
   }
 }
