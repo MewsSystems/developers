@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "styled-components": "^4.0.0-beta.2",
+    "styled-normalize": "^8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -13,9 +16,11 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow:check": "flow check",
-    "eslint": "eslint ."
+    "lint": "eslint .",
+    "test-ci": "yarn lint && yarn flow:check && yarn test"
   },
   "devDependencies": {
+    "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.0.1",

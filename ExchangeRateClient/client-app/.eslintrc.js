@@ -1,18 +1,18 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: "babel-eslint",
   env: {
-    'jest/globals': true,
+    "jest/globals": true,
   },
   extends: [
-    'airbnb',
-    'prettier',
-    'prettier/flowtype',
-    'prettier/react',
-    'plugin:jest/recommended',
-    'plugin:flowtype/recommended',
+    "airbnb",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "plugin:jest/recommended",
+    "plugin:flowtype/recommended",
   ],
-  plugins: ['prettier', 'jest', 'flowtype'],
+  plugins: ["prettier", "jest", "flowtype"],
   rules: {
-    'prettier/prettier': 'error',
+    "prettier/prettier": "error",
   },
 };
