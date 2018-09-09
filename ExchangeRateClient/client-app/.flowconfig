@@ -1,0 +1,12 @@
+[ignore]
+/node_moudles
+/public
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
