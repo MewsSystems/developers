@@ -1,49 +1,104 @@
 // @flow strict
 
-import React, { Component } from "react";
+import * as React from "react";
 import styled from "styled-components";
-import { Provider } from "react-redux";
+import { connect } from "react-redux";
+import isEqual from "lodash.isequal";
+import config from "./config";
+import Select from "./components/Select";
+import { fetchConfigAction, fetchRatesAction } from "./actions/configActions";
+import List from "./components/List";
+import { fetchRates } from "./services/requests";
+import type { ThunkAction } from "./actions/configActions";
+import ErrorBox from "./components/ErrorBox";
 
-import { ThemeProvider } from "styled-components";
-import createStore from "./store/createStore";
-import GlobalStyle from "./theme/Global";
+const Header = styled.header`
+  display: flex;
+  justify-content: center;
+  font-size: 2em;
+`;
 
-import theme from "./theme";
-
-const Root = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.color1};
+  background: ${({ theme }) =>
+    `linear-gradient(to top, ${theme.colors.color5}, ${theme.colors.color1})`};
+`;
+
+const Content = styled.div`
+  padding: 0 30px;
 `;
 
 const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.color2};
+  color: ${({ theme }) => theme.colors.color3};
 `;
 
-type Props = {
-  data: Array<string>,
-};
-class App extends Component<{}> {
+type Props = {|
+  +fetchConfigAction: () => ThunkAction,
+  +fetchRatesAction: (ids: string[]) => ThunkAction,
+  +selectedRates: string[],
+  +isFetchingConfig: boolean,
+  +configError: ?Error,
+  +ratesError: ?Error,
+|};
+
+class App extends React.Component<Props> {
+  intervalId = null;
+
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.ratesError) {
+      this.intervalId && clearInterval(this.intervalId);
+    }
+
+    if (!isEqual(prevProps.selectedRates.sort(), this.props.selectedRates.sort())) {
+      this.props.fetchRatesAction(this.props.selectedRates);
+      this.intervalId && clearInterval(this.intervalId);
+      this.intervalId = setInterval(
+        () => this.props.fetchRatesAction(this.props.selectedRates),
+        config.interval,
+      );
+    }
+  }
+
+  componentDidMount() {
+    this.props.fetchConfigAction();
+  }
+
+  renderData = () => {
+    const { isFetchingConfig } = this.props;
+    return isFetchingConfig ? (
+      <div>Loading...</div>
+    ) : (
+      <Content>
+        <Select />
+        <List />
+      </Content>
+    );
+  };
+
   render() {
+    const { configError, isFetchingConfig } = this.props;
     return (
-      <Provider store={createStore()}>
-        <ThemeProvider theme={theme}>
-          <React.Fragment>
-            <Root className="App">
-              <header className="App-header">
-                <Title>Welcome to Exchange Rate App</Title>
-              </header>
-              <p className="App-intro">
-                To get started, edit <code>src/App.js</code> and save to reload.
-              </p>
-            </Root>
-            <GlobalStyle />
-          </React.Fragment>
-        </ThemeProvider>
-      </Provider>
+      <Container className="App">
+        <Header>
+          <Title>Exchange Rate App</Title>
+        </Header>
+        {configError ? <ErrorBox error={configError} /> : this.renderData()}
+      </Container>
     );
   }
 }
 
-export default App;
+const mapStateToProps = ({ isFetchingConfig, selectedRates, configError, ratesError }) => ({
+  isFetchingConfig,
+  selectedRates,
+  configError,
+  ratesError,
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchConfigAction, fetchRatesAction },
+)(App);
