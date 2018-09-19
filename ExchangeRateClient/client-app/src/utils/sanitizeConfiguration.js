@@ -1,8 +1,5 @@
 // @flow strict
 
-// TODO name ad to const
-const DEFAULT_SELECTED_COUNT = 3;
-
 export const sanitizeConfiguration = ({
   currencyPairs,
 }: {
@@ -18,7 +15,7 @@ export const sanitizeConfiguration = ({
   const temp = ids.reduce(
     (acc, id, index) => ({
       ...acc,
-      [id]: { currencies: currencyPairs[id], isSelected: index < DEFAULT_SELECTED_COUNT && true },
+      [id]: { currencies: currencyPairs[id] },
     }),
     {},
   );

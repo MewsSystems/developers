@@ -12,7 +12,7 @@ import createStore from "./store/createStore";
 import GlobalStyle from "./theme/Global";
 
 import App from "./App";
-import type { StateTypes } from "./store/rootReducer";
+import type { StateTypes } from "./store/types";
 import type { Action } from "./actions/configActions";
 import theme from "./theme";
 

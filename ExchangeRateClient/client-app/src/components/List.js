@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 import { FaAngleDoubleUp } from "react-icons/fa";
 import Rate from "./Rate";
 import createRateLabel from "../utils/createRateLabel";
+import theme from "../theme";
+import type { Theme } from "../theme/types";
+import type { Rates, Data, SelectedRates } from "../store/types";
 
 const Item = styled.li`
   display: flex;
@@ -14,8 +17,13 @@ const Item = styled.li`
   font-size: 2rem;
   padding: 0.5rem 1rem;
   opacity: 0.7;
-  background-color: ${({ isOdd, theme }) => (isOdd ? theme.colors.color6 : "grey")};
+  background-color: ${({ isOdd, theme }: { isOdd: boolean, theme: Theme }) =>
+    isOdd ? theme.colors.color6 : "grey"};
 `;
+
+Item.defaultProps = {
+  theme,
+};
 
 const ListContainer = styled.ul`
   margin: 2em;
@@ -24,8 +32,12 @@ const ListContainer = styled.ul`
 
 const Sublabel = styled.span`
   font-size: 15px;
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }: { theme: Theme }) => theme.colors.white};
 `;
+
+Sublabel.defaultProps = {
+  theme,
+};
 
 const Label = styled.span`
   flex: 1;
@@ -33,7 +45,13 @@ const Label = styled.span`
   flex-direction: column;
 `;
 
-const List = ({ data, selectedRates, rates }) => (
+type Props = {
+  selectedRates: SelectedRates,
+  data: Data,
+  rates: Rates,
+};
+
+const List = ({ data, selectedRates, rates }: Props) => (
   <ListContainer>
     {Object.keys(rates).map((id, index) => (
       <Item key={id} isOdd={index % 2 == 0}>

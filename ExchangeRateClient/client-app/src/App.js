@@ -4,6 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import isEqual from "lodash.isequal";
+import Spiner from "./components/Spiner";
 import config from "./config";
 import Select from "./components/Select";
 import { fetchConfigAction, fetchRatesAction } from "./actions/configActions";
@@ -40,15 +41,15 @@ type Props = {|
   +fetchRatesAction: (ids: string[]) => ThunkAction,
   +selectedRates: string[],
   +isFetchingConfig: boolean,
-  +configError: ?Error,
-  +ratesError: ?Error,
+  +APIerror: ?Error,
+  +APIerror: ?Error,
 |};
 
 class App extends React.Component<Props> {
   intervalId = null;
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.ratesError) {
+    if (this.props.APIerror) {
       this.intervalId && clearInterval(this.intervalId);
     }
 
@@ -69,7 +70,7 @@ class App extends React.Component<Props> {
   renderData = () => {
     const { isFetchingConfig } = this.props;
     return isFetchingConfig ? (
-      <div>Loading...</div>
+      <Spiner />
     ) : (
       <Content>
         <Select />
@@ -79,23 +80,23 @@ class App extends React.Component<Props> {
   };
 
   render() {
-    const { configError, isFetchingConfig } = this.props;
+    const { APIerror } = this.props;
     return (
       <Container className="App">
         <Header>
           <Title>Exchange Rate App</Title>
         </Header>
-        {configError ? <ErrorBox error={configError} /> : this.renderData()}
+        {APIerror ? <ErrorBox error={APIerror} /> : this.renderData()}
       </Container>
     );
   }
 }
 
-const mapStateToProps = ({ isFetchingConfig, selectedRates, configError, ratesError }) => ({
+const mapStateToProps = ({ isFetchingConfig, selectedRates, APIerror }) => ({
   isFetchingConfig,
   selectedRates,
-  configError,
-  ratesError,
+  APIerror,
+  APIerror,
 });
 
 export default connect(

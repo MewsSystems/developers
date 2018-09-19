@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorBox render 1`] = `
+<body>
+  <div>
+    <div
+      class="sc-bdVaJa dLCTwP"
+    >
+      Mocked React Icon
+      ERROR: 
+      test error
+    </div>
+  </div>
+</body>
+`;

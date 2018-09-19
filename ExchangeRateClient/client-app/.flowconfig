@@ -1,12 +1,14 @@
 [ignore]
-/node_moudles
 /public
 [include]
 
 [libs]
-
+types/
 [lints]
 
 [options]
-
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
+suppress_comment=\\(.\\|\n\\)*\\$FlowExpected
+suppress_comment=\\(.\\|\n\\)*\\$FlowTest
 [strict]

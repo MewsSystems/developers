@@ -1,6 +1,6 @@
 // @flow strict
 import axios from "axios";
-import type { StateTypes } from "../store/rootReducer";
+import type { StateTypes } from "../store/types";
 import logger from "../services/logger";
 
 import { fetchConfiguration, fetchRates } from "../services/requests";
@@ -8,10 +8,10 @@ import { fetchConfiguration, fetchRates } from "../services/requests";
 export type Action =
   | { type: "CONFIG_FETCH_SUCCESS", payload: any }
   | { type: "CONFIGS_FETCH_START" }
-  | { type: "CONFIGS_FETCH_FAIL", payload: { error: Error } }
+  | { type: "CONFIGS_FETCH_FAIL", payload: { error: Object } }
   | { type: "RATES_FETCH_START", payload: any }
   | { type: "RATES_FETCH_SUCCESS", payload: any }
-  | { type: "RATES_FETCH_FAIL", payload: { error: Error } }
+  | { type: "RATES_FETCH_FAIL", payload: { error: Object } }
   | { type: "SELECT_RATES_IDS", payload: { ids: string[] } };
 
 type GetState = () => StateTypes;
@@ -67,7 +67,7 @@ export const selectIds = (ids: string[]) => ({
 export const fetchConfigAction = (): ThunkAction =>
   function(dispatch) {
     dispatch(fetchConfigurationStart());
-    fetchConfiguration()
+    return fetchConfiguration()
       .then(data => dispatch(fetchConfigSuccess(data)))
       .catch(err => {
         logger(err);
@@ -78,7 +78,7 @@ export const fetchConfigAction = (): ThunkAction =>
 export const fetchRatesAction = (ids: string[]): ThunkAction =>
   function(dispatch) {
     dispatch(fetchRatesStart(ids));
-    fetchRates(ids)
+    return fetchRates(ids)
       .then(data => dispatch(fetchRatesSuccess(data)))
       .catch(err => {
         logger(err);

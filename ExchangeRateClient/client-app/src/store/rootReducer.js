@@ -1,5 +1,5 @@
 // @flow
-import _merge from "lodash.merge";
+
 import {
   CONFIG_FETCH_SUCCESS,
   CONFIGS_FETCH_START,
@@ -10,23 +10,14 @@ import {
   SELECT_RATES_IDS,
   type Action,
 } from "../actions/configActions";
+import type { StateTypes } from "./types";
 
-export type StateTypes = {|
-  +isFetchingConfig: boolean,
-  +isFetchingRates: boolean,
-  +rates: { [id: string]: { current: number, before: ?number } },
-  +selectedRates: Array<string>,
-  +data: any,
-  +configError: ?Error,
-  +ratesError: ?Error,
-|};
-
-const initalState: StateTypes = {
+export const initalState: StateTypes = {
   selectedRates: [],
-  data: [],
+  data: {},
   isFetchingConfig: false,
-  configError: null,
-  ratesError: null,
+  APIerror: null,
+  APIerror: null,
   isFetchingRates: false,
   rates: {},
 };
@@ -47,7 +38,7 @@ export default (state: StateTypes = { ...initalState }, action: Action) => {
     case CONFIGS_FETCH_FAIL:
       return {
         ...initalState,
-        configError: action.payload.error,
+        APIerror: action.payload.error,
       };
     case RATES_FETCH_START:
       return {
@@ -80,7 +71,7 @@ export default (state: StateTypes = { ...initalState }, action: Action) => {
       return {
         ...state,
         isFetchingRates: false,
-        ratesError: action.payload.error,
+        APIerror: action.payload.error,
       };
 
     case SELECT_RATES_IDS:

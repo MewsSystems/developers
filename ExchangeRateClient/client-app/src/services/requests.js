@@ -1,7 +1,7 @@
 // @flow strict
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { sanitizeConfiguration } from "../utils/createSelectOptions";
+import { sanitizeConfiguration } from "../utils/sanitizeConfiguration";
 import config from "../config";
 
 const client = axios.create({ baseURL: config.endpoint, timeout: config.requestsTimeout });

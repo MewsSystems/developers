@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import * as React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
+import theme from "../theme";
 
 const Container = styled.div`
   display: flex;
@@ -10,11 +11,16 @@ const Container = styled.div`
   font-weight: bold;
   font-size: 2em;
 `;
+
+Container.defaultProps = {
+  theme,
+};
+
 const Icon = styled(FaExclamationTriangle)`
   margin-right: 20px;
 `;
 
-export default ({ error }: { error: Error }) => (
+export default ({ error }: {| +error: Error |}) => (
   <Container>
     <Icon /> ERROR: {error.message}
   </Container>
