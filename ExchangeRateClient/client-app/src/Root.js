@@ -13,7 +13,7 @@ import GlobalStyle from "./theme/Global";
 
 import App from "./App";
 import type { StateTypes } from "./store/types";
-import type { Action } from "./actions/configActions";
+import type { Action } from "./actions/index";
 import theme from "./theme";
 
 type Props = { store: ReduxStore<StateTypes, Action> };

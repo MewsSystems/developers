@@ -9,7 +9,7 @@ import {
   RATES_FETCH_FAIL,
   SELECT_RATES_IDS,
   type Action,
-} from "../actions/configActions";
+} from "../actions/index";
 import type { StateTypes } from "./types";
 
 export const initalState: StateTypes = {

@@ -4,7 +4,9 @@ import * as React from "react";
 import Select from "react-select";
 import { connect } from "react-redux";
 import config from "../records/config";
-import { fetchRatesAction, selectIds } from "../actions/configActions";
+import { fetchRatesAction, selectIds } from "../actions/index";
+import type { SelectedRates, Data } from "../store/types";
+import type { ThunkAction } from "../actions/index";
 
 import createRateLabel from "../utils/createRateLabel";
 
@@ -26,8 +28,15 @@ const customStyles = {
   },
 };
 
-const CustomSelect = props => {
-  if (props.data.length === 0) return null;
+type Props = {
+  data: Data,
+  selectedRates: SelectedRates,
+  fetchRatesAction: (ids: string[]) => ThunkAction,
+  selectIds: (ids: string[]) => { type: "SELECT_RATES_IDS", payload: { ids: string[] } },
+};
+
+const CustomSelect = (props: Props) => {
+  if (Object.keys(props.data).length === 0) return null;
   const { data, selectedRates, fetchRatesAction, selectIds } = props;
 
   const opt = Object.keys(data).reduce((acc, id) => {
@@ -40,17 +49,19 @@ const CustomSelect = props => {
   }, []);
 
   return (
-    <Select
-      styles={customStyles}
-      isMulti
-      onChange={data => selectIds(data.map(({ value }) => value))}
-      options={opt}
-      defaultValue={opt.filter(item => selectedRates.includes(item.value))}
-    />
+    <div data-testid="select">
+      <Select
+        styles={customStyles}
+        isMulti
+        onChange={data => selectIds(data.map(({ value }) => value))}
+        options={opt}
+        defaultValue={opt.filter(item => selectedRates.includes(item.value))}
+      />
+    </div>
   );
 };
 
-const mapStateToProps = ({ data, selectedRates = [] }) => ({
+const mapStateToProps = ({ data = {}, selectedRates = [] }) => ({
   data,
   selectedRates,
 });

@@ -4,14 +4,16 @@ import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import isEqual from "lodash.isequal";
+import isEmpty from "lodash.isempty";
 import Spiner from "./components/Spiner";
 import config from "./config";
 import Select from "./components/Select";
-import { fetchConfigAction, fetchRatesAction } from "./actions/configActions";
+import { fetchConfigAction, fetchRatesAction } from "./actions/index";
 import List from "./components/List";
 import { fetchRates } from "./services/requests";
-import type { ThunkAction } from "./actions/configActions";
+import type { ThunkAction } from "./actions/index";
 import ErrorBox from "./components/ErrorBox";
+import { loadState, saveState } from "./localStorage";
 
 const Header = styled.header`
   display: flex;
@@ -45,26 +47,40 @@ type Props = {|
   +APIerror: ?Error,
 |};
 
-class App extends React.Component<Props> {
-  intervalId = null;
+type State = {|
+  intervalId: ?IntervalID,
+|};
+
+class App extends React.Component<Props, State> {
+  state = { intervalId: null };
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.APIerror) {
-      this.intervalId && clearInterval(this.intervalId);
+      this.state.intervalId && clearInterval(this.state.intervalId);
+      // this.setState({ intervalId: null });
     }
 
     if (!isEqual(prevProps.selectedRates.sort(), this.props.selectedRates.sort())) {
-      this.props.fetchRatesAction(this.props.selectedRates);
-      this.intervalId && clearInterval(this.intervalId);
-      this.intervalId = setInterval(
-        () => this.props.fetchRatesAction(this.props.selectedRates),
-        config.interval,
-      );
+      this.fetchRates();
     }
   }
 
+  fetchRates = () => {
+    this.props.fetchRatesAction(this.props.selectedRates);
+    this.state.intervalId && clearInterval(this.state.intervalId);
+    const newIntervalId = setInterval(
+      () => this.props.fetchRatesAction(this.props.selectedRates),
+      config.interval,
+    );
+    this.setState({ intervalId: newIntervalId });
+  };
+
   componentDidMount() {
-    this.props.fetchConfigAction();
+    if (isEmpty(loadState())) {
+      this.props.fetchConfigAction();
+    } else {
+      this.fetchRates();
+    }
   }
 
   renderData = () => {
@@ -80,6 +96,7 @@ class App extends React.Component<Props> {
   };
 
   render() {
+    console.log(this.state);
     const { APIerror } = this.props;
     return (
       <Container className="App">

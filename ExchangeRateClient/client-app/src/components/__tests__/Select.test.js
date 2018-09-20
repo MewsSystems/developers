@@ -9,6 +9,7 @@ import store from "../../records/storeState";
 afterEach(cleanup);
 
 jest.mock("react-select", () => props => {
+  // check if right pros are sent to the Select component
   expect(props).toMatchSnapshot();
   return null;
 });
@@ -16,6 +17,6 @@ jest.mock("react-select", () => props => {
 describe("Select", () => {
   test("test if props are set properly", () => {
     const { baseElement } = renderWithRedux(<MySelect />, { initialState: store });
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeDefined();
   });
 });

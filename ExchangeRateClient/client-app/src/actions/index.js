@@ -33,7 +33,7 @@ const fetchConfigSuccess = data => ({
 });
 
 // TODO check name
-const fetchConfigurationStart = () => ({
+const fetchStartConfiguration = () => ({
   type: CONFIGS_FETCH_START,
 });
 
@@ -66,7 +66,7 @@ export const selectIds = (ids: string[]) => ({
 
 export const fetchConfigAction = (): ThunkAction =>
   function(dispatch) {
-    dispatch(fetchConfigurationStart());
+    dispatch(fetchStartConfiguration());
     return fetchConfiguration()
       .then(data => dispatch(fetchConfigSuccess(data)))
       .catch(err => {

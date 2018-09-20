@@ -95,9 +95,3 @@ Object {
   },
 }
 `;
-
-exports[`Select test if props are set properly 2`] = `
-<body>
-  <div />
-</body>
-`;

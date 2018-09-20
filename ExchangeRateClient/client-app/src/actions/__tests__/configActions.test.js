@@ -6,7 +6,7 @@ import expect from "expect";
 import configuration from "../../records/config";
 import rates from "../../records/rates";
 
-import { selectIds, fetchConfigAction, fetchRatesAction } from "../configActions";
+import { selectIds, fetchConfigAction, fetchRatesAction } from "../index";
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
