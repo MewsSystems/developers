@@ -2,6 +2,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import throttle from "lodash.throttle";
+import Omit from "lodash.omit";
 import Root from "./Root";
 import registerServiceWorker from "./registerServiceWorker";
 import createStore from "./store/createStore";
@@ -14,7 +15,7 @@ const store = createStore(persistedState);
 
 store.subscribe(
   throttle(() => {
-    saveState({ ...initalState, ...store.getState() });
+    saveState({ ...Omit(store.getState(), ["isFetchingRates", "isFetchingConfig", "APIerror"]) });
   }, 1000),
 );
 const root = document.getElementById("root");
