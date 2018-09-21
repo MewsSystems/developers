@@ -1,7 +1,6 @@
 // @flow
 import { render, cleanup } from "react-testing-library";
 import React from "react";
-import { FaExclamationTriangle } from "react-icons/fa";
 import ErrorBox from "../ErrorBox";
 
 afterEach(cleanup);

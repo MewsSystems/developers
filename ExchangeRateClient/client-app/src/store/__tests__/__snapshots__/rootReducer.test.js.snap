@@ -70,7 +70,7 @@ Object {
 }
 `;
 
-exports[`rootReducer should handle CONFIGS_FETCH_FAIL action 2`] = `
+exports[`rootReducer should handle RATES_FETCH_FAIL action 1`] = `
 Object {
   "APIerror": Object {
     "config": Object {

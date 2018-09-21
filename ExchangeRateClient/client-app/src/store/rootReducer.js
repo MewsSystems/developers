@@ -17,7 +17,6 @@ export const initalState: StateTypes = {
   data: {},
   isFetchingConfig: false,
   APIerror: null,
-  APIerror: null,
   isFetchingRates: false,
   rates: {},
 };

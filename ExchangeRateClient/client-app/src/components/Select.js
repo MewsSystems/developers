@@ -3,10 +3,8 @@
 import * as React from "react";
 import Select from "react-select";
 import { connect } from "react-redux";
-import config from "../records/config";
-import { fetchRatesAction, selectIds } from "../actions/index";
+import { selectIds } from "../actions/index";
 import type { SelectedRates, Data } from "../store/types";
-import type { ThunkAction } from "../actions/index";
 
 import createRateLabel from "../utils/createRateLabel";
 
@@ -16,7 +14,7 @@ const customStyles = {
     backgroundColor: state.isFocused ? "rgba(249, 222, 201, 1)" : base.backgroundColor,
     color: "rgba(58, 64, 90, 1)",
   }),
-  control: (base, state) => ({
+  control: base => ({
     ...base,
     backgroundColor: "transparent",
     boxShadow: "inset -11px -15px 84px -32px rgba(0,0,0,1)",
@@ -31,13 +29,11 @@ const customStyles = {
 type Props = {
   data: Data,
   selectedRates: SelectedRates,
-  fetchRatesAction: (ids: string[]) => ThunkAction,
-  selectIds: (ids: string[]) => { type: "SELECT_RATES_IDS", payload: { ids: string[] } },
+  selectIdsConnect: (ids: string[]) => { type: "SELECT_RATES_IDS", payload: { ids: string[] } },
 };
 
-const CustomSelect = (props: Props) => {
-  if (Object.keys(props.data).length === 0) return null;
-  const { data, selectedRates, fetchRatesAction, selectIds } = props;
+const CustomSelect = ({ data, selectedRates, selectIdsConnect }: Props) => {
+  if (Object.keys(data).length === 0) return null;
 
   const opt = Object.keys(data).reduce((acc, id) => {
     const item = {
@@ -53,7 +49,7 @@ const CustomSelect = (props: Props) => {
       <Select
         styles={customStyles}
         isMulti
-        onChange={data => selectIds(data.map(({ value }) => value))}
+        onChange={ids => selectIdsConnect(ids.map(({ value }) => value))}
         options={opt}
         defaultValue={opt.filter(item => selectedRates.includes(item.value))}
       />
@@ -68,5 +64,5 @@ const mapStateToProps = ({ data = {}, selectedRates = [] }) => ({
 
 export default connect(
   mapStateToProps,
-  { fetchRatesAction, selectIds },
+  { selectIdsConnect: selectIds },
 )(CustomSelect);

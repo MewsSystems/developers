@@ -2,6 +2,7 @@ module.exports = {
   parser: "babel-eslint",
   env: {
     "jest/globals": true,
+    browser: true,
   },
   extends: [
     "airbnb",
@@ -14,5 +15,7 @@ module.exports = {
   plugins: ["prettier", "jest", "flowtype"],
   rules: {
     "prettier/prettier": "error",
+    "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
+    "react/destructuring-assignment": [0],
   },
 };

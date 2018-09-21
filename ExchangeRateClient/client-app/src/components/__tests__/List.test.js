@@ -1,13 +1,13 @@
 // @flow strict
-import { render, cleanup } from "react-testing-library";
+import { cleanup } from "react-testing-library";
 import React from "react";
 import List from "../List";
-import { renderWithRedux } from "../../utils/testsUtils";
+import renderWithRedux from "../../utils/testsUtils";
 import store from "../../records/storeState";
 
 afterEach(cleanup);
 
-jest.mock("../Rate", () => ({ before, current }) => (
+jest.mock("../Rate", () => ({ before, current }: { before: ?number, current: number }) => (
   <span>
     {before} {current}
   </span>

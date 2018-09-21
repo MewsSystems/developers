@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import * as React from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
-import theme from "../theme";
+import defaulTheme from "../theme";
 
 const Container = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 Container.defaultProps = {
-  theme,
+  theme: defaulTheme,
 };
 
 const Icon = styled(FaExclamationTriangle)`

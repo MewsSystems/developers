@@ -2,7 +2,6 @@ import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
 import mockAxios from "axios";
-import expect from "expect";
 import configuration from "../../records/config";
 import rates from "../../records/rates";
 

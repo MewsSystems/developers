@@ -1,9 +1,8 @@
 // @flow
-import { render, cleanup } from "react-testing-library";
+import { cleanup } from "react-testing-library";
 import React from "react";
-import Select from "react-select";
 import MySelect from "../Select";
-import { renderWithRedux } from "../../utils/testsUtils";
+import renderWithRedux from "../../utils/testsUtils";
 import store from "../../records/storeState";
 
 afterEach(cleanup);

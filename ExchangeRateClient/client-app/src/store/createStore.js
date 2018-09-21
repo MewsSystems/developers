@@ -1,12 +1,13 @@
 // @flow strict
 
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
-import throttle from "lodash.throttle";
 import rootReducer from "./rootReducer";
 import type { StateTypes } from "./types";
 
-export default function configureStore(persistedState: StateTypes) {
-  return createStore(rootReducer, persistedState, composeWithDevTools(applyMiddleware(thunk)));
+//  eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export default function configureStore(persistedState?: StateTypes) {
+  return createStore(rootReducer, persistedState, composeEnhancers(applyMiddleware(thunk)));
 }

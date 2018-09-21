@@ -8,12 +8,11 @@ import isEmpty from "lodash.isempty";
 import Spiner from "./components/Spiner";
 import config from "./config";
 import Select from "./components/Select";
-import { fetchConfigAction, fetchRatesAction } from "./actions/index";
 import List from "./components/List";
-import { fetchRates } from "./services/requests";
 import type { ThunkAction } from "./actions/index";
 import ErrorBox from "./components/ErrorBox";
-import { loadState, saveState } from "./localStorage";
+import { loadState } from "./localStorage";
+import { fetchRatesAction, fetchConfigAction } from "./actions/index";
 
 const Header = styled.header`
   display: flex;
@@ -39,8 +38,8 @@ const Title = styled.h1`
 `;
 
 type Props = {|
-  +fetchConfigAction: () => ThunkAction,
-  +fetchRatesAction: (ids: string[]) => ThunkAction,
+  +fetchConfigConnect: () => ThunkAction,
+  +fetchRatesConnect: (ids: string[]) => ThunkAction,
   +selectedRates: string[],
   +isFetchingConfig: boolean,
   +APIerror: ?Error,
@@ -54,34 +53,37 @@ type State = {|
 class App extends React.Component<Props, State> {
   state = { intervalId: null };
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.APIerror) {
-      this.state.intervalId && clearInterval(this.state.intervalId);
-      // this.setState({ intervalId: null });
-    }
-
-    if (!isEqual(prevProps.selectedRates.sort(), this.props.selectedRates.sort())) {
-      this.fetchRates();
-    }
-  }
-
-  fetchRates = () => {
-    this.props.fetchRatesAction(this.props.selectedRates);
-    this.state.intervalId && clearInterval(this.state.intervalId);
-    const newIntervalId = setInterval(
-      () => this.props.fetchRatesAction(this.props.selectedRates),
-      config.interval,
-    );
-    this.setState({ intervalId: newIntervalId });
-  };
-
   componentDidMount() {
     if (isEmpty(loadState())) {
-      this.props.fetchConfigAction();
+      this.props.fetchConfigConnect();
     } else {
       this.fetchRates();
     }
   }
+
+  async componentDidUpdate(prevProps) {
+    const { APIerror, selectedRates } = this.props;
+    const { intervalId } = this.state;
+    if (APIerror) {
+      // eslint-disable-next-line  no-unused-expressions
+      intervalId && clearInterval(intervalId);
+    }
+
+    if (!isEqual(prevProps.selectedRates.sort(), selectedRates.sort())) {
+      this.fetchRates();
+    }
+    return null;
+  }
+
+  fetchRates = () => {
+    const { fetchRatesConnect, selectedRates } = this.props;
+    const { intervalId } = this.state;
+    fetchRatesConnect(selectedRates);
+    // eslint-disable-next-line  no-unused-expressions
+    intervalId && clearInterval(intervalId);
+    const newIntervalId = setInterval(() => fetchRatesConnect(selectedRates), config.interval);
+    this.setState({ intervalId: newIntervalId });
+  };
 
   renderData = () => {
     const { isFetchingConfig } = this.props;
@@ -96,7 +98,6 @@ class App extends React.Component<Props, State> {
   };
 
   render() {
-    console.log(this.state);
     const { APIerror } = this.props;
     return (
       <Container className="App">
@@ -113,10 +114,12 @@ const mapStateToProps = ({ isFetchingConfig, selectedRates, APIerror }) => ({
   isFetchingConfig,
   selectedRates,
   APIerror,
-  APIerror,
 });
 
 export default connect(
   mapStateToProps,
-  { fetchConfigAction, fetchRatesAction },
+  {
+    fetchRatesConnect: fetchRatesAction,
+    fetchConfigConnect: fetchConfigAction,
+  },
 )(App);

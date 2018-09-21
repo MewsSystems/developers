@@ -1,3 +1,5 @@
 /node_modules
 /public
 /flow-typed
+/coverage
+registerServiceWorker.js

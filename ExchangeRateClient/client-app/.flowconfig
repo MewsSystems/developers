@@ -3,7 +3,7 @@
 [include]
 
 [libs]
-types/
+
 [lints]
 
 [options]

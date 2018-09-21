@@ -3,12 +3,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { FaAngleDoubleUp } from "react-icons/fa";
 import Rate from "./Rate";
 import createRateLabel from "../utils/createRateLabel";
-import theme from "../theme";
+import defaultTheme from "../theme";
 import type { Theme } from "../theme/types";
-import type { Rates, Data, SelectedRates } from "../store/types";
+import type { Rates, Data } from "../store/types";
 
 const Item = styled.li`
   display: flex;
@@ -22,7 +21,7 @@ const Item = styled.li`
 `;
 
 Item.defaultProps = {
-  theme,
+  theme: defaultTheme,
 };
 
 const ListContainer = styled.ul`
@@ -36,7 +35,7 @@ const Sublabel = styled.span`
 `;
 
 Sublabel.defaultProps = {
-  theme,
+  theme: defaultTheme,
 };
 
 const Label = styled.span`
@@ -46,15 +45,14 @@ const Label = styled.span`
 `;
 
 type Props = {
-  selectedRates: SelectedRates,
   data: Data,
   rates: Rates,
 };
 
-const List = ({ data, selectedRates, rates }: Props) => (
+const List = ({ data, rates }: Props) => (
   <ListContainer>
     {Object.keys(rates).map((id, index) => (
-      <Item key={id} isOdd={index % 2 == 0}>
+      <Item key={id} isOdd={index % 2 === 0}>
         <Label>
           {`${createRateLabel(data[id].currencies)}:`}
           <Sublabel>
@@ -67,10 +65,9 @@ const List = ({ data, selectedRates, rates }: Props) => (
   </ListContainer>
 );
 
-const mapStateToProps = ({ data, selectedRates, rates }) => ({
+const mapStateToProps = ({ data, rates }) => ({
   rates,
   data,
-  selectedRates,
 });
 
 export default connect(mapStateToProps)(List);

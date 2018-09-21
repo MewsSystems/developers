@@ -1,5 +1,4 @@
 // @flow strict
-import axios from "axios";
 import type { StateTypes } from "../store/types";
 import logger from "../services/logger";
 
@@ -15,8 +14,10 @@ export type Action =
   | { type: "SELECT_RATES_IDS", payload: { ids: string[] } };
 
 type GetState = () => StateTypes;
-type PromiseAction = Promise<Action>;
+// eslint-disable-next-line no-use-before-define
 export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
+
+type PromiseAction = Promise<Action>;
 type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
 
 export const CONFIG_FETCH_SUCCESS = "CONFIG_FETCH_SUCCESS";
@@ -32,7 +33,6 @@ const fetchConfigSuccess = data => ({
   payload: data,
 });
 
-// TODO check name
 const fetchStartConfiguration = () => ({
   type: CONFIGS_FETCH_START,
 });

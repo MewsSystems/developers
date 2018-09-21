@@ -145,7 +145,6 @@ export default {
   },
   isFetchingConfig: false,
   APIerror: null,
-  APIerror: null,
   isFetchingRates: false,
   rates: {
     "1993f7b9-f9be-551a-beac-312d6befd0cf": {

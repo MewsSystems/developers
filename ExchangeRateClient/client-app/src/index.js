@@ -6,6 +6,7 @@ import Root from "./Root";
 import registerServiceWorker from "./registerServiceWorker";
 import createStore from "./store/createStore";
 import { loadState, saveState } from "./localStorage";
+import { initalState } from "./store/rootReducer";
 
 const persistedState = loadState();
 
@@ -13,8 +14,7 @@ const store = createStore(persistedState);
 
 store.subscribe(
   throttle(() => {
-    const { APIerror, isFetchingConfig, isFetchingRates, ...state } = store.getState();
-    saveState(state);
+    saveState({ ...initalState, ...store.getState() });
   }, 1000),
 );
 const root = document.getElementById("root");

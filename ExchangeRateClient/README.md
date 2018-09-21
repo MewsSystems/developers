@@ -21,13 +21,13 @@ For starting both client and server run :
 yarn dev
 ```
 
-## Tests
+## Tests Eslint Flow
 
 client
 
 ```sh
 cd client
-yarn test
+yarn test-ci
 ```
 
 ## Api cals

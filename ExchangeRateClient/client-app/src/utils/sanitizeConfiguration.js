@@ -1,6 +1,6 @@
 // @flow strict
 
-export const sanitizeConfiguration = ({
+export default ({
   currencyPairs,
 }: {
   currencyPairs: {
@@ -13,7 +13,7 @@ export const sanitizeConfiguration = ({
   const ids: string[] = Object.keys(currencyPairs);
 
   const temp = ids.reduce(
-    (acc, id, index) => ({
+    (acc, id) => ({
       ...acc,
       [id]: { currencies: currencyPairs[id] },
     }),

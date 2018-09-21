@@ -1,4 +1,4 @@
-// flow
+// @flow strict
 
 export type Data = {|
   [id: string]: {|
@@ -8,14 +8,13 @@ export type Data = {|
 
 export type SelectedRates = string[];
 
-export type Rates = {| [id: string]: {| +current: number, +before: ?number |} |};
+export type Rates = {| [id: string]: {| +current: number, +before: number |} |};
 
-export type StateTypes = {|
+export type StateTypes = {
   +isFetchingConfig: boolean,
   +isFetchingRates: boolean,
   +rates: Rates,
   +selectedRates: SelectedRates,
   +data: Data,
   +APIerror: ?Error,
-  +APIerror: ?Error,
-|};
+};

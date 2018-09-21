@@ -2,8 +2,8 @@
 import * as React from "react";
 import styled from "styled-components";
 import { FaCaretUp, FaCaretDown, FaSnowflake } from "react-icons/fa";
-import theme from "../theme";
-import type { Theme } from "../theme/types";
+import defaultTheme from "../theme";
+import type { Theme as ThemeType } from "../theme/types";
 
 type Type = "decreased" | "increased" | "default";
 
@@ -19,7 +19,7 @@ const IconContainer = styled.div`
 
 const Text = styled.span`
   margin-left: 1em;
-  color: ${({ type, theme }: { type: Type, theme: Theme }) =>
+  color: ${({ type, theme }: { type: Type, theme: ThemeType }) =>
     ({
       increased: theme.colors.success,
       decreased: theme.colors.alert,
@@ -28,30 +28,34 @@ const Text = styled.span`
 `;
 
 Text.defaultProps = {
-  theme,
+  theme: defaultTheme,
 };
 
 const DownIcon = styled(FaCaretDown)`
-  color: ${({ theme }: { theme: Theme }) => theme.colors.alert};
+  color: ${({ theme }: { theme: ThemeType }) => theme.colors.alert};
 `;
 
 DownIcon.defaultProps = {
-  theme,
+  theme: defaultTheme,
 };
 
 const UpIcon = styled(FaCaretUp)`
-  color: ${({ theme }: { theme: Theme }) => theme.colors.success};
+  color: ${({ theme }: { theme: ThemeType }) => theme.colors.success};
 `;
 
 UpIcon.defaultProps = {
-  theme,
+  theme: defaultTheme,
 };
 
 const Snowflake = styled(FaSnowflake)`
-  color: ${({ theme }: { theme: Theme }) => theme.colors.color2};
+  color: ${({ theme }: { theme: ThemeType }) => theme.colors.color2};
 `;
 
-const getRateType = (current, before): Type => {
+Snowflake.defaultProps = {
+  theme: defaultTheme,
+};
+
+const getRateType = (current, before = 0): Type => {
   if (before > current) {
     return "decreased";
   }
