@@ -26,7 +26,7 @@ yarn dev
 client
 
 ```sh
-cd client
+cd client-app
 yarn test-ci
 ```
 
