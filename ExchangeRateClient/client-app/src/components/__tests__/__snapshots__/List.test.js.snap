@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List render 1`] = `
+<body>
+  <div>
+    <ul
+      class="sc-bwzfXH jWdLoo"
+    >
+      <li
+        class="sc-bdVaJa hDbPb"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          CZK - LSL:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Czech Republic Koruna
+            - 
+            Lesotho Loti
+          </span>
+        </span>
+        <span>
+          2.6048
+          2.6136
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa ihlOSe"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          PHP - DZD:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Philippines Peso
+            - 
+            Algeria Dinar
+          </span>
+        </span>
+        <span>
+          2.1716
+          2.1669
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa hDbPb"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          LSL - AUD:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Lesotho Loti
+            - 
+            Australia Dollar
+          </span>
+        </span>
+        <span>
+          2.3991
+          2.4023
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa ihlOSe"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          QAR - JOD:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Qatar Riyal
+            - 
+            Jordan Dinar
+          </span>
+        </span>
+        <span>
+          2.8342
+          2.8389
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa hDbPb"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          HKD - FKP:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Hong Kong Dollar
+            - 
+            Falkland Islands (Malvinas) Pound
+          </span>
+        </span>
+        <span>
+          2.8459
+          2.8539
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa ihlOSe"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          DZD - MVR:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Algeria Dinar
+            - 
+            Maldives (Maldive Islands) Rufiyaa
+          </span>
+        </span>
+        <span>
+          1.7488
+          1.756
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa hDbPb"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          AMD - GEL:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Armenia Dram
+            - 
+            Georgia Lari
+          </span>
+        </span>
+        <span>
+          0.8003
+          0.8069
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa ihlOSe"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          SRD - CZK:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Suriname Dollar
+            - 
+            Czech Republic Koruna
+          </span>
+        </span>
+        <span>
+          2.3798
+          2.3794
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa hDbPb"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          BIF - CLP:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Burundi Franc
+            - 
+            Chile Peso
+          </span>
+        </span>
+        <span>
+          2.4028
+          2.412
+        </span>
+      </li>
+      <li
+        class="sc-bdVaJa ihlOSe"
+      >
+        <span
+          class="sc-bxivhb iOtzTq"
+        >
+          BDT - VEF:
+          <span
+            class="sc-htpNat jAkoja"
+          >
+            Bangladesh Taka
+            - 
+            Venezuela Bolivar
+          </span>
+        </span>
+        <span>
+          2.7308
+          2.7211
+        </span>
+      </li>
+    </ul>
+  </div>
+</body>
+`;

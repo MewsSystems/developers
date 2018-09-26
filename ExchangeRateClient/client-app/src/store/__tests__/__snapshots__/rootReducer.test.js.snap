@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rootReducer should handle CONFIG_FETCH_SUCCESS action 1`] = `
+Object {
+  "APIerror": null,
+  "data": Object {
+    "1993f7b9-f9be-551a-beac-312d6befd0cf": Object {
+      "currencies": Array [
+        Object {
+          "code": "CZK",
+          "name": "Czech Republic Koruna",
+        },
+        Object {
+          "code": "LSL",
+          "name": "Lesotho Loti",
+        },
+      ],
+    },
+    "41cae0fd-b74d-5304-a45c-ba000471eabd": Object {
+      "currencies": Array [
+        Object {
+          "code": "PHP",
+          "name": "Philippines Peso",
+        },
+        Object {
+          "code": "DZD",
+          "name": "Algeria Dinar",
+        },
+      ],
+    },
+  },
+  "isFetchingConfig": false,
+  "isFetchingRates": false,
+  "rates": Object {},
+  "selectedRates": Array [
+    "1993f7b9-f9be-551a-beac-312d6befd0cf",
+    "41cae0fd-b74d-5304-a45c-ba000471eabd",
+  ],
+}
+`;
+
+exports[`rootReducer should handle CONFIGS_FETCH_FAIL action 1`] = `
+Object {
+  "APIerror": Object {
+    "config": Object {
+      "axios-retry": Object {
+        "lastRequestTime": 1537218227843,
+        "retryCount": 0,
+      },
+      "baseURL": "http://localhost:3000/",
+      "headers": Object {
+        "Accept": "application/json, text/plain, */*",
+      },
+      "maxContentLength": -1,
+      "method": "get",
+      "timeout": 240000,
+      "transformRequest": Object {},
+      "transformResponse": Object {},
+      "url": "http://localhost:3000/configuration",
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN",
+    },
+    "request": Object {},
+  },
+  "data": Object {},
+  "isFetchingConfig": false,
+  "isFetchingRates": false,
+  "rates": Object {},
+  "selectedRates": Array [],
+}
+`;
+
+exports[`rootReducer should handle RATES_FETCH_FAIL action 1`] = `
+Object {
+  "APIerror": Object {
+    "config": Object {
+      "axios-retry": Object {
+        "lastRequestTime": 1537218227843,
+        "retryCount": 0,
+      },
+      "baseURL": "http://localhost:3000/",
+      "headers": Object {
+        "Accept": "application/json, text/plain, */*",
+      },
+      "maxContentLength": -1,
+      "method": "get",
+      "timeout": 240000,
+      "transformRequest": Object {},
+      "transformResponse": Object {},
+      "url": "http://localhost:3000/rates",
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN",
+    },
+    "request": Object {},
+  },
+  "data": Object {},
+  "isFetchingConfig": false,
+  "isFetchingRates": false,
+  "rates": Object {},
+  "selectedRates": Array [],
+}
+`;
+
+exports[`rootReducer should handle RATES_FETCH_START action 1`] = `
+Object {
+  "APIerror": null,
+  "data": Object {},
+  "isFetchingConfig": false,
+  "isFetchingRates": true,
+  "rates": Object {},
+  "selectedRates": Array [
+    "1993f7b9-f9be-551a-beac-312d6befd0cf",
+    "41cae0fd-b74d-5304-a45c-ba000471eabd",
+  ],
+}
+`;
+
+exports[`rootReducer should handle RATES_FETCH_SUCCESS action 1`] = `
+Object {
+  "APIerror": null,
+  "data": Object {},
+  "isFetchingConfig": false,
+  "isFetchingRates": false,
+  "rates": Object {
+    "1993f7b9-f9be-551a-beac-312d6befd0cf": Object {
+      "before": undefined,
+      "current": 2.4015,
+    },
+    "41cae0fd-b74d-5304-a45c-ba000471eabd": Object {
+      "before": undefined,
+      "current": 2.4907,
+    },
+  },
+  "selectedRates": Array [],
+}
+`;
+
+exports[`rootReducer should handle SELECT_RATES_IDS action 1`] = `
+Object {
+  "APIerror": null,
+  "data": Object {},
+  "isFetchingConfig": false,
+  "isFetchingRates": false,
+  "rates": Object {},
+  "selectedRates": Array [
+    "41cae0fd-b74d-5304-a45c-ba000471eabd",
+    "5b428ac9-ec57-513d-8a08-20199469fb4d",
+  ],
+}
+`;
