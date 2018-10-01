@@ -1,0 +1,23 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fadi",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "css-loader": "^1.0.0",
+    "node-sass": "^4.9.3",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-redux": "^5.0.7",
+    "react-spinners": "^0.4.5",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "style-loader": "^0.23.0"
+  }
+}
