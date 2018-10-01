@@ -8,10 +8,12 @@ const webpackConfig = {
         app: './app/app.js',
     },
     output: {
-        filename: '[name].js',
+        filename: 'app.js',
         library: 'app',
         libraryTarget: 'window',
-    },
+        publicPath: '/',
+    },   
+
     resolve: {
         extensions: ['', '.js', '.json'],
     },
@@ -23,7 +25,12 @@ const webpackConfig = {
         }, {
             test: /\.json$/,
             loader: 'json',
-        }],
+        },
+        {test: /(\.css)$/,
+       loaders: ['style-loader', 'css-loader']
+    }
+     
+    ],
     },
     devtool: 'eval',
     devServer: {

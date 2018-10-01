@@ -34,13 +34,18 @@ server.get('/rates', (req, res) => {
     } else {
         try {
             const allRates = ratesGenerator.getCurrentRates();
-            const { currencyPairIds = [] } = req.query;
+           // const { currencyPairIds = [] } = req.query;
 
             let rates = {};
-            for (let pairId of currencyPairIds) {
-                if (typeof allRates[pairId] !== 'undefined') {
-                    rates[pairId] = allRates[pairId];
-                }
+            // for (let pairId of currencyPairIds) {
+            //     if (typeof allRates[pairId] !== 'undefined') {
+            //         rates[pairId] = allRates[pairId];
+            //     }
+            // }
+            
+            let pairId = req.query.currencyPairIds;
+            if (typeof allRates[pairId] !== 'undefined') {
+                rates[pairId] = allRates[pairId];
             }
 
             res.json({ rates });
