@@ -19,5 +19,10 @@
         {
             return SourceCurrency.Code + "/" + TargetCurrency.Code + "=" + Value;
         }
+
+        public string ToStringFormatted()
+        {
+            return SourceCurrency.Code + "/" + TargetCurrency.Code + "=" + Value.ToString("N");
+        }
     }
 }
