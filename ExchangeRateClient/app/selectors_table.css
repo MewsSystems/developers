@@ -1,0 +1,87 @@
+/*--- <SELECTORS TABLE> ---*/
+#rates-selector {
+    display: inline-block;
+    width: auto;
+    margin-right: 10em;
+}
+
+.selector-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid #282828;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+.selector-table th {
+    text-align: left;
+    font-weight: normal;
+    font-family: 'Mina';
+    font-size: 20pt;
+    color: black;
+
+    padding-right: 2%;
+
+    white-space: nowrap;
+}
+
+.selector-table tr.checked {
+    background-color: #ffa500;
+}
+.selector-table tr.checked:hover {
+    background-color: #ffba3a;
+}
+.selector-table tr.unchecked {
+    background-color: #333;
+}
+.selector-table tr.unchecked:hover {
+    background-color: #555;
+}
+
+.checkbox input[type="checkbox"] {
+    opacity: 0;
+}
+.checkbox label::before{
+    content: "";
+    display: inline-block;
+    
+    height: 16px;
+    width: 16px;
+
+    margin-left: 0;
+    
+    border: 1px solid;   
+    border-radius: 2px;
+}
+.checkbox label::after {
+    content: "";
+    display: inline-block;
+    height: 6px;
+    width: 9px;
+    border-left: 2px solid;
+    border-bottom: 2px solid;
+    
+    transform: rotate(-45deg);
+}
+.checkbox label {
+    position: relative;
+}
+.checkbox label::before, .checkbox label::after {
+    position: absolute;
+}
+/*Outer-box*/
+.checkbox label::before {
+    top: 0.4em;
+    left: -0.5em;
+}
+/*Checkmark*/
+.checkbox label::after {
+    left: -0.35em;
+    top: 0.53em;
+}
+.checkbox input[type="checkbox"] + label::after {
+    content: none;
+}
+.checkbox input[type="checkbox"]:checked + label::after {
+    content: "";
+}
+/*--- </SELECTORS TABLE> ---*/

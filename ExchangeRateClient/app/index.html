@@ -4,12 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
     <title>Exchange Rate Client</title>
-    <script src="app.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="rates_table.css">
+    <link rel="stylesheet" href="selectors_table.css">
+    <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head>
 <body>
-    <div id="exchange-rate-client"></div>
-    <script>
-        app.run('#exchange-rate-client');
-    </script>
+    <div id="exchange-rate-client">
+    </div>
+
+    <script src="app.js"> </script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+/*--- <RATES TABLE> ---*/
+#rates-list {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+}
+
+.rates-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid #282828;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.rates-table th {
+    text-align: left;
+    font-weight: normal;
+    font-family: 'Mina';
+    font-size: 20pt;
+    color: white;
+
+    padding-right: 2%;
+
+    white-space: nowrap;
+}
+.rates-table th:nth-of-type(1) {
+    padding-left: 2%;
+    padding-right: 3em;
+}
+.rates-table th:nth-of-type(2) {
+    text-align: right;
+}
+
+.rates-table tr:nth-child(even) {
+    background-color: #272727;
+}
+.rates-table tr:hover {
+    background-color: #555;
+}
+
+.trend_stagnating {
+    color: yellow;
+}
+.trend_growing {
+    color: lime;
+}
+.trend_declining {
+    color: red;
+}
+/*--- </RATES TABLE> ---*/
