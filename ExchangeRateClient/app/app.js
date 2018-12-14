@@ -1,5 +1,7 @@
-import { endpoint, interval } from './config';
+// import { endpoint, interval } from './config';
 
-export function run(element) {
-    console.log('App is running.');
-}
+import React from "react";
+
+const App = () => <div>hello world</div>;
+
+export default App;
