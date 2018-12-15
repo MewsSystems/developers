@@ -11,6 +11,13 @@ namespace ExchangeRateUpdater
 {
   public class ExchangeRateProvider
   {
+    private List<ExchangeRate> exchange_rates;
+
+    public ExchangeRateProvider() 
+    {
+      this.exchange_rates = new List<ExchangeRate>();
+    }
+
     /// <summary>
     /// Get HTML code from a giver URL address.
     /// </summary>
@@ -46,43 +53,18 @@ namespace ExchangeRateUpdater
     }
 
     /// <summary>
-    /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-    /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
-    /// do not return exchange rate "USD/EUR" with value calculated as 1 / "EUR/USD". If the source does not provide
-    /// some of the currencies, ignore them.
+    /// Goes through the text version of the exchange rates table and formats information to the format needed.
     /// </summary>
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    /// <param name="table">"|"-separated text version of the exchange rate table.</param>
+    /// <param name="currencies">List of currencies we would like to get info about.</param>
+    private void ParseTable(string table, IEnumerable<Currency> currencies) 
     {
-      string url = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/";
-      string html = GetHTML(url + "daily.jsp");
-
-      // If there was some error while fetching HTML code.
-      if (html == null) 
-      {
-        return Enumerable.Empty<ExchangeRate>();
-      }
-
-      // Finding a link to the text version of the table.
-      Regex link_to_table_regex = new Regex("<a class=\"noprint\" href=\"(daily.txt.+?)\"");
-      Match link_to_table_match = link_to_table_regex.Match(html);
-
-      // Downloading HTML of the text version of the page.
-      html = GetHTML(url + link_to_table_match.Groups[1]);
-
-      // If there was some error while fetching HTML code.
-      if (html == null) 
-      {
-        return Enumerable.Empty<ExchangeRate>();
-      }
-
-      using (StringReader reader = new StringReader(html)) 
+      using (StringReader reader = new StringReader(table)) 
       {
         // First two lines of the file are not needed.
         reader.ReadLine();
         reader.ReadLine();
         
-        List<ExchangeRate> exchange_rates = new List<ExchangeRate>();
-
         // Going through all the other lines one by one.
         Regex rate_entry_regex = new Regex("(.+?)\\|(.+?)\\|(.+?)\\|(.+?)\\|(.+)");
         string line;
@@ -100,13 +82,57 @@ namespace ExchangeRateUpdater
               float  amount = float.Parse(rate_entry_match.Groups[3].ToString(), CultureInfo.InvariantCulture);
               float  rate = float.Parse(rate_entry_match.Groups[5].ToString(), CultureInfo.InvariantCulture) / amount;
 
-              exchange_rates.Add(new ExchangeRate(new Currency(code_from), new Currency(code_to), (decimal)rate));
+              this.exchange_rates.Add(new ExchangeRate(new Currency(code_from), new Currency(code_to), (decimal)rate));
             }
           }
         }
-
-        return exchange_rates;
       }
+    }
+
+    /// <summary>
+    /// Returns a table with echange rates in an easy-to-parse TXT format.
+    /// </summary>
+    /// <param name="url">Link to the main page of the exchange rates table.</param>
+    /// <param name="page">Prefix for the link (like "index.html").</param>
+    /// <param name="link_to_table_regex">Regex for finding a link to the text version of the page.</param>
+    /// <returns>String with "|"-separated exchange rates.</returns>
+    private string GetTable(string url, string page, Regex link_to_table_regex) {
+      // Downloading HTML code of the main exchange rate page.
+      string html = GetHTML(url + page);
+
+      // Finding a link to the text version of the table.
+      Match link_to_table_match = link_to_table_regex.Match(html);
+
+      // Returning the text version.
+      return GetHTML(url + link_to_table_match.Groups[1]);
+    }
+
+    /// <summary>
+    /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
+    /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
+    /// do not return exchange rate "USD/EUR" with value calculated as 1 / "EUR/USD". If the source does not provide
+    /// some of the currencies, ignore them.
+    /// </summary>
+    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    {
+      // Links to the main and the additional pages of exchange rates.
+      string url_main = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/";
+      string url_addit = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/other_currencies_fx_rates/";
+
+      // Regular expressions for finding links to text versions of the tables.
+      Regex link_to_table_regex_main = new Regex("<a class=\"noprint\" href=\"(daily.txt.+?)\"");
+      Regex link_to_table_regex_addit = new Regex("<a class=\"noprint\" href=\"(fx_rates.txt.+?)\"");
+
+      // Downloading text versions of the tables.
+      string table_main = GetTable(url_main, "daily.jsp", link_to_table_regex_main);
+      string table_addit = GetTable(url_addit, "fx_rates.jsp", link_to_table_regex_addit);
+
+      // Parsing the tables to match a format we need.
+      ParseTable(table_main, currencies);
+      ParseTable(table_addit, currencies);
+
+      // Returning the result calculated in the previous step.
+      return this.exchange_rates;
     }
   }
 }
