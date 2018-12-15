@@ -2,6 +2,25 @@
 
 _a Mews Frontend test for [the job](Job.md)_
 
+## Project Structure
+
+    ├── app                     # Source code
+    │   ├── api                 # API - all network utils and functions
+    │   ├── components          # All UI components
+    │   ├── dist                # Production build folder
+    │   ├── redux               # Redux store and DUCKs module
+    │   ├── app.js              # Application initialization - redux and redux-persist Providers, all components
+    │   ├── config.js           # Service URL and refresh interval constants
+    │   ├── globalStyle.js      # Global CSS, injected in app.js
+    │   ├── index.js            # Application entry point
+
+## 3rd party libraries and architecture
+
+- CSS: `styled-components`. Global styles are in `app/globalStyle.js`.
+- API: `axios`. Implementation in `app/api`.
+- View: `react`.
+- Data management: `redux`, `react-redux`, `redux-thunk`, `redux-persist` for state persistence. Ducks architecture is used: Actions, reducer and action creators of single domain (currency) are placed in the same file.
+
 ## Prerequisites
 
 - Node.js & npm

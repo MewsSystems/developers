@@ -16,8 +16,8 @@ function getBaseUrl() {
   return SERVICE_URL;
 }
 
-export function get(url) {
-  return getInitializedApi().get(url);
+export function get(url, config) {
+  return getInitializedApi().get(url, config);
 }
 
 export function post(url, data, config) {

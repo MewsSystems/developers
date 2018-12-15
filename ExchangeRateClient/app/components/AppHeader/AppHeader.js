@@ -6,7 +6,7 @@ const Header = styled.h1`
   line-height: normal;
   font-size: 38px;
   color: #383838;
-  padding: 90px 0 0 90px;
+  padding: 90px 0 45px 0;
 `;
 
 const AppHeader = () => <Header>Exchange Rates</Header>;

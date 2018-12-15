@@ -4,8 +4,9 @@ import styled from "styled-components";
 import CheckSvg from "./check.svg";
 
 const Form = styled.form`
-  display: flex;
-  margin-left: 90px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 90px);
+  grid-gap: 1rem;
   padding: 16px;
   border-radius: 5px;
   background-color: #fff;
@@ -16,7 +17,6 @@ const InputContainer = styled.div`
   appearance: none;
   display: flex;
   align-items: center;
-  margin-right: 28px;
 `;
 
 const InputCheckbox = styled.input`
@@ -39,8 +39,10 @@ const InputCheckbox = styled.input`
 `;
 
 const InputLabel = styled.label`
+  padding-left: 5px;
   font-size: 12px;
   color: #727272;
+  user-select: none;
 `;
 
 class RatesFilter extends Component {
@@ -67,7 +69,7 @@ class RatesFilter extends Component {
             this.props.currencyPairs[key][1].code
           }`;
           return (
-            <InputContainer key={label}>
+            <InputContainer key={key}>
               <CheckSvg
                 style={{
                   position: "absolute",

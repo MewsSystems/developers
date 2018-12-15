@@ -6,7 +6,9 @@ import { store, persistor } from "./redux/store";
 import GlobalStyle from "./globalStyle";
 import AppContainer from "./components/AppContainer";
 import AppHeader from "./components/AppHeader";
+import DataValidityMessage from "./components/DataValidityMessage";
 import RatesFilter from "./components/RatesFilter";
+import RatesList from "./components/RatesList";
 import Spinner from "./components/Spinner";
 
 const App = () => (
@@ -15,7 +17,9 @@ const App = () => (
       <AppContainer>
         <GlobalStyle />
         <AppHeader />
+        <DataValidityMessage />
         <RatesFilter />
+        <RatesList />
       </AppContainer>
     </PersistGate>
   </Provider>

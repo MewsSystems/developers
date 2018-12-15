@@ -13,13 +13,16 @@ class RatesFilterContainer extends Component {
   }
 
   render() {
-    return (
-      <RatesFilter
-        currencyPairs={this.props.currencyPairs}
-        activeCurrencyPairs={this.props.activeCurrencyPairs}
-        updateActiveCurrencyPairs={this.props.updateActiveCurrencyPairs}
-      />
-    );
+    if (this.props.currencyPairs) {
+      return (
+        <RatesFilter
+          currencyPairs={this.props.currencyPairs}
+          activeCurrencyPairs={this.props.activeCurrencyPairs}
+          updateActiveCurrencyPairs={this.props.updateActiveCurrencyPairs}
+        />
+      );
+    }
+    return null;
   }
 }
 
