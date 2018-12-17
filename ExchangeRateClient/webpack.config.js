@@ -1,28 +1,25 @@
 const webpack = require('webpack');
+const path = require('path');
 
 const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
     entry: {
-        app: './app/app.js',
+        app: './app/js/babel/exchange-rate-client.js',
+    },
+    performance: {
+        hints: false,
     },
     output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
+        filename: 'exchange-rate-client.min.js',
+        path: path.resolve(__dirname, "./app/js")
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['.js', '.json'],
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.js?$/,
             exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
+            loader: 'babel-loader',
         }],
     },
     devtool: 'eval',

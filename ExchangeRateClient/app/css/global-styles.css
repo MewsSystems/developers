@@ -1,41 +1,32 @@
-/*--- <SELECTORS TABLE> ---*/
-#rates-selector {
+body {
+    position: relative;
+    background-color: #333;
+    margin-top: 0;
+    margin-left: 0;
+}
+
+.rateSelector {
     display: inline-block;
     width: auto;
     margin-right: 10em;
 }
 
-.selector-table {
-    border-collapse: collapse;
-    width: 100%;
-    border: 2px solid #282828;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.4);
+.rateList {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
 }
 
-.selector-table th {
-    text-align: left;
-    font-weight: normal;
-    font-family: 'Mina';
-    font-size: 20pt;
-    color: black;
-
-    padding-right: 2%;
-
-    white-space: nowrap;
+.trendStagnating {
+    color: yellow;
+}
+.trendGrowing {
+    color: lime;
+}
+.trendDeclining {
+    color: red;
 }
 
-.selector-table tr.checked {
-    background-color: #ffa500;
-}
-.selector-table tr.checked:hover {
-    background-color: #ffba3a;
-}
-.selector-table tr.unchecked {
-    background-color: #333;
-}
-.selector-table tr.unchecked:hover {
-    background-color: #555;
-}
 
 .checkbox input[type="checkbox"] {
     opacity: 0;
@@ -84,4 +75,3 @@
 .checkbox input[type="checkbox"]:checked + label::after {
     content: "";
 }
-/*--- </SELECTORS TABLE> ---*/
