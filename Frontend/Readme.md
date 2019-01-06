@@ -1,15 +1,6 @@
-# Exchange Rate Client
+# Mews frontend developer task
 
-*a Mews Frontend test for [the job](Job.md)*
-
-## Prerequisites
-
-- Node.js & npm
-- Git bash or alternative
-
-## Setup
-
-To install all project dependencies, run `npm install` in the root folder.
+Before starting, make sure you have Node.js, npm and Git bash or alternative. To install all project dependencies, run `npm install` in the root folder.
 
 ## Your task
 
@@ -41,7 +32,7 @@ The graphical side of the application is not the primary focus of task, however 
 - To start the server, run `npm run start-server` in the root folder. The server will start listening on the localhost at port 3000.
 - To start the app, run `npm start` in the root folder. This will run `webpack-dev-server` on the localhost at port 8080. It also watches the app files and does incremental updates, so you can keep it running when you do changes in the app.
 
-## Api cals
+## Api calls
 
 #### Get Configuration
 
