@@ -9,15 +9,15 @@
             Value = value;
         }
 
-        public Currency SourceCurrency { get; private set; }
+        public Currency SourceCurrency { get; }
 
-        public Currency TargetCurrency { get; private set; }
+        public Currency TargetCurrency { get; }
 
-        public decimal Value { get; private set; }
+        public decimal Value { get; }
 
         public override string ToString()
         {
-            return SourceCurrency.Code + "/" + TargetCurrency.Code + "=" + Value;
+            return $"{SourceCurrency}/{TargetCurrency}={Value}";
         }
     }
 }
