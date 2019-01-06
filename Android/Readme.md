@@ -1,6 +1,5 @@
-Create an original native application for Android OS that meets the following requirements:
+# Mews Android developer task
 
-# Your task
 Download sample data from a given public REST API. Display the results in a list of cards on a screen with ability to select one card. Show a detail view based on the selected card. Create a fork of this repository. When finished with the task, create a pull request.
 
 ## Application design
