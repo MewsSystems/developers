@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MewsSystems/sample"
+    "url": "https://github.com/MewsSystems/sample "
   },
   "main": "Sources/index.js",
   "scripts": {
