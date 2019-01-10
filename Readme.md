@@ -9,3 +9,7 @@ Currently, we are seeking backend developers, frontend developers and Android de
 - [Backend task](Backend)
 - [Frontend task](Frontend)
 - [Android Task](Android)
+
+## Links
+
+- Our technology stack: https://stackshare.io/mews-systems/mews
