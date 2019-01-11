@@ -2,7 +2,7 @@
 
 Information about development job opportunities and career at Mews Systems. If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section.
 
-## Open positions
+## 💼 Open positions
 
 Currently, we are seeking backend developers, frontend developers and Android developers of all seniority levels. As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for:
 
@@ -10,7 +10,7 @@ Currently, we are seeking backend developers, frontend developers and Android de
 - [Frontend task](Frontend)
 - [Android Task](Android)
 
-## About Mews
+## ℹ️ About Mews
 
 > We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 40 countries in 700+ hotels, we have truly started a revolution.
 
