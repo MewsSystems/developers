@@ -10,7 +10,7 @@ Currently, we are seeking backend developers, frontend developers and Android de
 - [Frontend task](Frontend)
 - [Android Task](Android)
 
-## ℹ️ About Mews
+## 📖 About Mews
 
 > We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 40 countries in 700+ hotels, we have truly started a revolution.
 
@@ -18,14 +18,14 @@ That's the marketing slogan. A more down-to-earth version of it would be, that w
 
 In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews.
 
-### Technology
+### 👨‍💻Technology
 
-### Product
+### 🏨 Product
 
-### Teamwork
+### ⛹️Teamwork
 
-### 
+### 🏢 Workplace
 
-### Links
+### 🌎 Links
 
 - Our technology stack: https://stackshare.io/mews-systems/mews
