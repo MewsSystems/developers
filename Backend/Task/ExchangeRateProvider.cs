@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateAdapter;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -13,7 +14,12 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var rateAdapter = new RateAdapter();
+            var currencyCodes = currencies.Select(c => c.ToString());
+
+            var result = rateAdapter.GetExchangeRateData(currencyCodes, "CZK");
+
+            return result;
         }
     }
 }
