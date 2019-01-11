@@ -20,6 +20,8 @@ In the following sections, we'll try to answer frequently asked question that we
 
 ### 👨‍💻Technology
 
+- **Which technologies do you use?**
+
 ### 🏨 Product
 
 ### ⛹️Teamwork
