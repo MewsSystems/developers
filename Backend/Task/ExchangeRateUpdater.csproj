@@ -50,13 +50,13 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRateAdapter\ExchangeRateAdapter.csproj">
-      <Project>{7e667b66-be74-484e-9fb1-360597c5dece}</Project>
-      <Name>ExchangeRateAdapter</Name>
-    </ProjectReference>
     <ProjectReference Include="ExchangeRateAdapter.Common\ExchangeRateUpdater.Common.csproj">
       <Project>{e8dee727-7cb4-403b-bc0c-d1fbc7b229c2}</Project>
       <Name>ExchangeRateUpdater.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="ExchangeRateAdapter\ExchangeRateAdapter.csproj">
+      <Project>{7e667b66-be74-484e-9fb1-360597c5dece}</Project>
+      <Name>ExchangeRateAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -45,11 +45,11 @@
     <Compile Include="RateAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Task\ExchangeRateAdapter.Common\ExchangeRateUpdater.Common.csproj">
+    <ProjectReference Include="..\ExchangeRateAdapter.Common\ExchangeRateUpdater.Common.csproj">
       <Project>{e8dee727-7cb4-403b-bc0c-d1fbc7b229c2}</Project>
       <Name>ExchangeRateUpdater.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Task\ExchangeRateService\ExchangeRateService.csproj">
+    <ProjectReference Include="..\ExchangeRateService\ExchangeRateService.csproj">
       <Project>{fc835966-2791-4bdc-9e45-ac3d855118db}</Project>
       <Name>ExchangeRateService</Name>
     </ProjectReference>
