@@ -3,6 +3,7 @@
 Information about development job opportunities and career at Mews Systems. If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section.
 
 <a name='open-positions'/>
+
 ## 💼 Open positions
 
 Currently, we are seeking backend developers, frontend developers and Android developers of all seniority levels. As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for:
@@ -12,6 +13,7 @@ Currently, we are seeking backend developers, frontend developers and Android de
 - [Android Task](Android)
 
 <a name='about-mews'/>
+
 ## 📚 About Mews 
 
 > We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 40 countries in 700+ hotels, we have truly started a revolution.
@@ -27,6 +29,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Relocation](#relocation) - information for people outside CZ.
 
 <a name='product'/>
+
 ### 🏨 Product 
 
 - **What are the applications you are building?** The biggest part is the system for employees of hotels (receptionists, housekeepers, accountatns, revenue managers, essentially everybody). For them, we also have iOS and Android application with limited functionality to some basic tasks. Then we have web and iOS applicaton for guests of the hotels. We also offer hotels free Android kiosk application that they can put into their lobby and guests can checkin there.
@@ -35,6 +38,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Does your system have public APIs?** Yes and it's one of its strengths. We try to take it really seriously and make it as user-friendly as possible for other developers to integrate with us. We also have a dedicated team to help the integration partners and give them advices how to best connect to us. So now, we have over 150 companies consuming our APIs. You can find out more here: https://mews-systems.gitbook.io/connector-api/
 
 <a name='technology'/>
+
 ### 👨‍💻 Technology 
 
 - **Which technologies do you use?** Generally, we try to use technology that is familiar to the development community. The benefit of using common technology is that everybody knows it well, and if not, they're able to Google the answers to their own questions. We also try to avoid building in-house solutions, but rather use third party sevices for responsibilities that are not directly related to our business (e.g. Logentries for logging, Sentry for error reporting, SendGrid for mailing). We want to focus on our product. Check our [Stackshare](https://stackshare.io/mews-systems/mews) to see a full list of what we use.
@@ -45,6 +49,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **How often do you deploy?** We're on a path to continuous delivery, most of the deployment work is already automated, so now we deploy multiple times a week. As we improve our test base, we can be more confident to deploy much more often. Also since the frontend applications are hosted by backend, their deployment is tied together. So one of the steps forward is to make their deployment independent on backend. Some of our mobile apps, which are not offered via Appstores, are already delivered continuously.
 
 <a name='teamwork'/>
+
 ### ⛹️ Teamwork 
 
 - **How often do you schedule refactoring?** We do not schedule refactoring. We consider it to be an integral part of development work. When implementing a new feature, it is important to verify that all of the team code and architecture quality standards are applied. The fixes and features should all be done properly from the beginning.
@@ -63,6 +68,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **What is the company language?** In Prague office, where development is located, around 50% of people are czech and the rest is mix of many other nationalities. Therefore most of the meetings and communication is held in English. We also have native Enlish speakers, some of them former English techers in Prague, so we offer lessons for people who need to sharpen their language skills.
 
 <a name='job'/>
+
 ### 🏢 Job
 
 - **What does the office look like?** The office is located at [I.P. Pavlova square, 1789/5](https://www.google.com/maps/place/n%C3%A1m%C4%9Bst%C3%AD+I.+P.+Pavlova+1789%2F5,+120+00+Nov%C3%A9+M%C4%9Bsto/@50.0752762,14.4298992,3a,75y,184.78h,101.94t/data=!3m6!1e1!3m4!1s73pkxL_pvma3Oge6NEn3QQ!2e0!7i13312!8i6656!4m5!3m4!1s0x470b948c0ea2c643:0x3f011e15da2b48b!8m2!3d50.0749916!4d14.4298445), which is great in terms of transport options (metro line C, A, many trams).
@@ -77,6 +83,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **What are the working hours?** That really depends on you. Every person has a different rhythm to their life. As long as you accomplish what you have promised to accomplish, it's up to you. Most people are in the office between 11:00 and 17:00. Although there is a lot of flexibility, your working hours should intersect with this time period so that you have opportunities to meet with the team and consult them regarding your work.
 
 <a name='relocation'/>
+
 ### ✈️ Relocation 
 
 - **Do you help with relocation?** Yes, we do. We have an agency that would contact you to help you resolve any paperwork you might need for both our government and your own. We also provide accommodation for the first few months until you are able to find your own apartment. We have "Mews flat" in Prague and London which we manage using our own system.
