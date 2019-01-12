@@ -18,11 +18,11 @@ That's the marketing slogan. A more down-to-earth version of it would be, that w
 
 In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews:
 
-- [Product](#product) - what we build.
-- [Technology](#technology) - how we build it.
-- [Teamwork](#teamwork) - how do we cooperate.
-- [Job](#job) - offices, working hours, salaries.
-- [Relocation](#relocation) - information for people outside CZ.
+- [Product](#-product) - what we build.
+- [Technology](#-technology) - how we build it.
+- [Teamwork](#-teamwork) - how do we cooperate.
+- [Job](#-job) - offices, working hours, salaries.
+- [Relocation](#-relocation) - information for people outside CZ.
 
 ### 🏨 Product
 
@@ -31,7 +31,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Do you produce any open source code?** Yes, some of the things we have done are now open sourced, but as it takes a lot of time to maintain, we try to be very careful with what we decide to make open. We decided that we'll be open sourcing mainly fiscalization libraries (like EET), becuase it's annoying having to implement it when some government decides to introduce it. You can check our public repositories here https://github.com/MewsSystems.
 - **Does your system have public APIs?** Yes and it's one of its strengths. We try to take it really seriously and make it as user-friendly as possible for other developers to integrate with us. We also have a dedicated team to help the integration partners and give them advices how to best connect to us. So now, we have over 150 companies consuming our APIs. You can find out more here: https://mews-systems.gitbook.io/connector-api/
 
-### 👨‍💻Technology
+### 👨‍💻 Technology
 
 - **Which technologies do you use?** Generally, we try to use technology that is familiar to the development community. The benefit of using common technology is that everybody knows it well, and if not, they're able to Google the answers to their own questions. We also try to avoid building in-house solutions, but rather use third party sevices for responsibilities that are not directly related to our business (e.g. Logentries for logging, Sentry for error reporting, SendGrid for mailing). We want to focus on our product. Check our [Stackshare](https://stackshare.io/mews-systems/mews) to see a full list of what we use.
 - **What is architecture of the backend?** The "executable" is a plain ASP.NET MVC application with no extra caveats. We use Entity Framework code-first approach, and we use Azure DB (a version of MSSQL) as our database. We run the application in Azure using App Services, so we don't need to manage the web servers or virtual machines. We use the original branches of .NET Framework and Entity Framework and plan to migrate to .NET Core. In general, there is data layer to access Azure DB and Azure Storage, business layer consisting of various components and a transactional layer (web, API, background jobs).
@@ -40,7 +40,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **What is your test coverage?** We do not know. We do not measure code coverage, primarily because we do not see it as a crucial parameter. Of course, when the project started with just two people and not much time, they were not writing any tests. However, now that we have survived the startup stage, we have begun to rectify this situation and are now currently in the stage of covering of majority of the system with end-to-end integration API and UI tests. In our opinion, they bring the biggest value for cost.
 - **How often do you deploy?** We're on a path to continuous delivery, most of the deployment work is already automated, so now we deploy multiple times a week. As we improve our test base, we can be more confident to deploy much more often. Also since the frontend applications are hosted by backend, their deployment is tied together. So one of the steps forward is to make their deployment independent on backend. Some of our mobile apps, which are not offered via Appstores, are already delivered continuously.
 
-### ⛹️Teamwork
+### ⛹️ Teamwork
 
 - **How often do you schedule refactoring?** We do not schedule refactoring. We consider it to be an integral part of development work. When implementing a new feature, it is important to verify that all of the team code and architecture quality standards are applied. The fixes and features should all be done properly from the beginning.
 - **How do you handle changes in the architecture of the system?** We try to introduce changes gradually while extending the capabilities of our system. For bigger changes, both on backend and frontend, we currently have "platform" teams whose only responsibility is to improve the system architecture, develop libraries and tools for other teams that are more focused on "product".
