@@ -16,7 +16,13 @@ Currently, we are seeking backend developers, frontend developers and Android de
 
 That's the marketing slogan. A more down-to-earth version of it would be, that we work on a system for hotel employees and their guests. The main goal is to improve the guest experience, by giving them possibility to have full control over their stay, possibility to check-in online, manage their profile, pay online etc. In consequence, that decreases workload on the hotel employees, because the guests actually do the work. The second big goal is opening up the system via APIs to 3rd party companies and developers, so that they can build interesting applications on top of our system. Or connect it with something else, which was traditionally very difficult in hospitality industry.
 
-In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews.
+In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews:
+
+- [Product](#product) - what we build.
+- [Technology](#technology) - how we build it.
+- [Teamwork](#teamwork) - how do we cooperate.
+- [Job](#job) - offices, working hours, salaries.
+- [Relocation](#relocation) - information for people outside CZ.
 
 ### 🏨 Product
 
