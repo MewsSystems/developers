@@ -54,6 +54,8 @@ In the following sections, we'll try to answer frequently asked question that we
 
 ### 🏢 Workplace
 
+- **What does the office look like?**
+
 ### ✈️ Relocation
 
 - **Do you help with relocation?** Yes, we do. We have an agency that would contact you to help you resolve any paperwork you might need for both our government and your own. We also provide accommodation for the first few months until you are able to find your own apartment. We have "Mews flat" in Prague and London which we manage using our own system.
