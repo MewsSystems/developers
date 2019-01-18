@@ -9,7 +9,13 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-       private const string ApiUrl = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.txt"; 
+       private const string ApiUrl = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.txt";
+
+       private const char ColumnsSeparator = '|';
+       private const char RowsSeparator = '\n';
+       
+       private readonly Currency DefaultQuoteCurrency = new Currency("CZK");
+       
     
        /// <summary>
        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -23,7 +29,7 @@ namespace ExchangeRateUpdater
 
             if (string.IsNullOrWhiteSpace(apiResult))
             {
-                //log not data available, but web communication was successfull
+                //log no data available, but web communication was successfull
                 return Enumerable.Empty<ExchangeRate>();
             }
             
@@ -62,7 +68,7 @@ namespace ExchangeRateUpdater
         private IEnumerable<ExchangeRate> ParseResult(string apiResult)
         {
             //linux style, thats why I don't use Environment.NewLine
-            string[] ratesLines = apiResult.Split('\n');
+            string[] ratesLines = apiResult.Split(RowsSeparator);
 
             if (ratesLines.Length < 3)
             {
@@ -77,7 +83,7 @@ namespace ExchangeRateUpdater
             
             //second line is column names
             //Country|Currency|Amount|Code|Rate
-            string[] header = ratesLines[1].Split('|');
+            string[] header = ratesLines[1].Split(ColumnsSeparator);
 
             if (header.Length != 5)
             {
@@ -89,7 +95,7 @@ namespace ExchangeRateUpdater
             
             foreach (string line in ratesLines.Skip(2))
             {
-                var values = line.Split('|');
+                var values = line.Split(ColumnsSeparator);
 
                 if (values.Length != 5)
                 {
@@ -109,7 +115,7 @@ namespace ExchangeRateUpdater
                 }
                
                  //CNB has only SOURCE to CZK rate
-                var rate = new ExchangeRate(new Currency(exchangeData.Code), new Currency("CZK"), exchangeData.ValueForOne);
+                var rate = new ExchangeRate(new Currency(exchangeData.Code), DefaultQuoteCurrency , exchangeData.ValueForOne);
                  
                 rates.Add(rate);
             }
