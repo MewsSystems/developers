@@ -16,6 +16,7 @@ namespace ExchangeRateUpdater
        
        private readonly Currency DefaultQuoteCurrency = new Currency("CZK");
        
+       private readonly HttpClient httpClient = new HttpClient();
     
        /// <summary>
        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -125,8 +126,6 @@ namespace ExchangeRateUpdater
         
         private async Task<string> LoadCNBRates()
         {
-            HttpClient httpClient = new HttpClient();
-
             string rateResults = string.Empty;
             try
             {
@@ -136,7 +135,6 @@ namespace ExchangeRateUpdater
             {
                 throw new ApplicationException($"Data couldn't be retrieved from '{ApiUrl}'", e);
             }
-
 
             return rateResults;
         }
