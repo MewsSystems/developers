@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ" )
+            new Currency("XYZ")
         };
 
         public static void Main(string[] args)
