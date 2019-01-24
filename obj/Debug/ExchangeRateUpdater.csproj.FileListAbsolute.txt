@@ -1,0 +1,5 @@
+C:\Users\lolaniya\Downloads\developers-master\developers-master\Backend\Task\obj\Debug\ExchangeRateUpdater.csprojResolveAssemblyReference.cache
+C:\Users\lolaniya\Downloads\developers-master\developers-master\Backend\Task\bin\Debug\ExchangeRateUpdater.exe
+C:\Users\lolaniya\Downloads\developers-master\developers-master\Backend\Task\bin\Debug\ExchangeRateUpdater.pdb
+C:\Users\lolaniya\Downloads\developers-master\developers-master\Backend\Task\obj\Debug\ExchangeRateUpdater.exe
+C:\Users\lolaniya\Downloads\developers-master\developers-master\Backend\Task\obj\Debug\ExchangeRateUpdater.pdb
