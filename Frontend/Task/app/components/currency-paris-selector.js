@@ -1,7 +1,7 @@
-import React from 'react'; //je potřeba aby fungovala 'jsx' syntaxe
+import React, {Component} from 'react'; //je potřeba aby fungovala 'jsx' syntaxe
 import ReactDOM from 'react-dom'; //vstupní bod pro renderování react
 
-class CurrencyPairsSelector extends React.Component {
+class CurrencyPairsSelector extends Component {
 
     
     render() {

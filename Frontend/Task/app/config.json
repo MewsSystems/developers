@@ -1,5 +1,6 @@
 {
     "server": "http://localhost:3000",
     "endpoint": "http://localhost:3000/rates",
-    "interval": 10000
+    "interval": 10000,
+    "mainColor": "#000000"
 }
