@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater
     public static class Program
     {
         private static IEnumerable<Currency> currencies = new[]
-        {
+        {           
             new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),

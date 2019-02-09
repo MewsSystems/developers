@@ -1,5 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -13,7 +19,20 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var rates = new List<ExchangeRate>();
+
+            foreach (var curency in currencies)
+            {
+                var rate = ExchangeRateCacher.Instance.GetExchangeRate(curency.Code);
+                if (rate != null)
+                {
+                    rates.Add(rate);
+                }
+            }
+
+            return rates.AsEnumerable(); ;
         }
+
     }
+    
 }
