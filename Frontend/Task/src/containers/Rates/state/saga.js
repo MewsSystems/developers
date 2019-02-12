@@ -1,8 +1,9 @@
-import {takeLatest, put, call} from 'redux-saga/effects'
+import {takeLatest, put, call, delay} from 'redux-saga/effects'
 import request from 'utils/request'
 import {ratesAPIURI} from 'common/constants'
 import {SET_CONFIG} from 'containers/App/state/constants'
-import {setPairs} from './actions'
+import {setPairs, setRates} from './actions'
+import {SELECT_PAIRS} from './constants'
 
 const prepareName = (source, full) => source && `${source.code}${full ? `(${source.name})` : ``}`
 const getName = (data, full = true) => {
@@ -25,11 +26,18 @@ function *buildPairs({payload: {currencyPairs}}) {
 	yield put(setPairs(pairs))
 }
 
-function *fetchRates() {
-	const rates = yield call(request.get, `${ratesAPIURI}/rates`, {currencyPairIds: [`5b428ac9-ec57-513d-8a08-20199469fb4d`]})
-	console.log(rates)
+function *fetchRates({payload: currencyPairIds}) {
+	if (currencyPairIds.length === 0) return
+
+	yield delay(500)
+	const rates = yield call(request.get, `${ratesAPIURI}/rates`, {currencyPairIds})
+
+	if (rates) {
+		yield put(setRates(rates.rates))	
+	}
 }
 
 export default function *storageSaga() {
 	yield takeLatest(SET_CONFIG, buildPairs)
+	yield takeLatest(SELECT_PAIRS, fetchRates)
 }
