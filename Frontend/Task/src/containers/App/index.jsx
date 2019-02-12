@@ -1,11 +1,16 @@
 import React from 'react'
 import ErrorTrapper from 'components/ErrorTrapper'
-import GlobalStyle from './styles'
+import Spin from 'components/Spin'
+import GlobalStyle, {StyledContent} from './styles'
+import connect from './connect'
 
-const App = () => <React.Fragment>
-	<ErrorTrapper key="error-trapper"/>
-	<GlobalStyle/>
-	<p>rates client</p>
-</React.Fragment>
+const App = ({loading}) =>
+	<React.Fragment>
+		<ErrorTrapper key="error-trapper"/>
+		<GlobalStyle/>
+		<StyledContent>
+			{loading && <Spin/> || <p>rates selector</p>}
+		</StyledContent>
+	</React.Fragment>
 
-export default App
+export default connect(App)

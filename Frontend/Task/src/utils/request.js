@@ -1,5 +1,3 @@
-import {notification} from 'antd'
-
 const toString = query => {
 	const toJSON = param => typeof param === `object` ? JSON.stringify(param) : param
 	const urify = param => toJSON(param)
@@ -24,35 +22,28 @@ const parseJSON = response => {
 }
 
 const errorHandler = async response => {
-	const type = response.status < 500 ? `warning` : `error`
-	const config = {
-		description: `${await response.text() || ``}`,
-		duration: null,
-		message: `${response.headers.ErrorSource || ``} ${response.status} - ${response.statusText}`,
-		placement: `topLeft`
-	}
-
-	notification[type](config)
+	console.error(response)
 
 	return null
 }
 
 const request = method => (url, params) => {
-	let uri = `/${url}`
+	let uri = url
 	const opts = {
 		headers: {
 			'Accept': `application/json`,
-			'Content-Type': `application/json`
 		},
-		credentials: `same-origin`,
+		mode: `cors`,
 		method
 	}
 	if (/get|delete/.test(method) && params) {
-		uri = `/${url}?${toString(params)}`
+		uri = `${url}?${toString(params)}`
 	}
 	if (/post|put/.test(method)) {
 		opts.body = JSON.stringify(params)
+		opts.headers[`Content-Type`] = `application/json`
 	}
+
 	return fetch(uri, opts)
 		.then(checkStatus)
 		.then(parseJSON)
