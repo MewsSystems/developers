@@ -1,5 +1,6 @@
 import React from 'react'
-import {Select, Row, Col} from 'antd'
+import {Select, Col} from 'antd'
+import {MarginRow} from 'common/styles'
 
 const Option = Select.Option
 
@@ -10,11 +11,10 @@ export default props => {
 			{pairs[key].name}
 		</Option>)
 
-	return <Row type="flex" justify="center">
+	return <MarginRow type="flex" justify="center">
 		<Col span={24}>
 			<Select size="large" mode="multiple"
 				optionFilterProp="title"
-				// showSearch showArrow 
 				placeholder="Multiple rate pairs are available"
 				allowClear
 				style={{width: `100%`}}
@@ -24,5 +24,5 @@ export default props => {
 				{options}
 			</Select>
 		</Col>
-	</Row>
+	</MarginRow>
 }

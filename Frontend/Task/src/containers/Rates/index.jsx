@@ -3,6 +3,7 @@ import {Col} from 'antd'
 import {HeighRow} from 'common/styles'
 import RatesHeader from 'components/RatesHeader'
 import PairsSelector from 'components/PairsSelector'
+import RatesList from 'components/RatesList'
 import connect from './connect'
 
 class Rates extends React.Component {
@@ -15,6 +16,9 @@ class Rates extends React.Component {
 						pairs={this.props.pairs}
 						selectedPairs={this.props.selectedPairs}
 						selectPairs={this.props.selectPairs}
+					/>
+					<RatesList
+						rates={this.props.rates}
 					/>
 				</Col>
 			</HeighRow>

@@ -22,7 +22,7 @@ const parseJSON = response => {
 }
 
 const errorHandler = async response => {
-	console.error(response)
+	// console.error(response)
 
 	return null
 }
