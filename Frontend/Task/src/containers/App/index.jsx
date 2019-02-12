@@ -2,6 +2,7 @@ import React from 'react'
 import {Alert} from 'antd'
 import ErrorTrapper from 'components/ErrorTrapper'
 import Spin from 'components/Spin'
+import Rates from 'containers/Rates'
 import GlobalStyle, {StyledContent} from './styles'
 import connect from './connect'
 
@@ -9,7 +10,7 @@ const getComponent = (loading, config) => {
 	if (loading) return <Spin/>
 
 	return config
-		? <p>rates</p>
+		? <Rates/>
 		: <Alert
 			message="Error loading configuration"
 			description="Some error occured while loading configuration."
