@@ -24,10 +24,22 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var task = GetExchangeRatesAsync(currencies);
-            task.Wait();
-            if (task.IsFaulted && task.Exception?.InnerException != null)
-                throw task.Exception.InnerException;
+            Task<IEnumerable<ExchangeRate>> task;
+            try
+            {
+                task = GetExchangeRatesAsync(currencies);
+                if(!task.IsCompleted)
+                    task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException ?? ex;
+            }
+
+            if (task.IsFaulted)
+            {
+                throw task.Exception?.InnerException ?? task.Exception ?? new Exception("Asynchronous task for getting exchange rates failed without details.");
+            }
 
             return task.Result;
         }
