@@ -23,7 +23,10 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var source = new CnbRateFeedSource();
+                var parser = new CnbRateFeedParser();
+
+                var provider = new ExchangeRateProvider(source, parser);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

@@ -5,6 +5,15 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly IRateFeedSource feedSource;
+        private readonly IRateFeedParser feedParser;
+
+        public ExchangeRateProvider(IRateFeedSource feedSource, IRateFeedParser feedParser)
+        {
+            this.feedSource = feedSource;
+            this.feedParser = feedParser;
+        }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
