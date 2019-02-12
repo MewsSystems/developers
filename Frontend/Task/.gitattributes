@@ -1,0 +1,97 @@
+yarn.lock merge=ours
+package-lock.json merge=ours
+
+# source code
+*.php text eol=lf
+*.css text eol=lf
+*.sass text eol=lf
+*.scss text eol=lf
+*.less text eol=lf
+*.styl text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.coffee text eol=lf
+*.json text eol=lf
+*.htm text eol=lf
+*.html text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.ini text eol=lf
+*.inc text eol=lf
+*.pl text eol=lf
+*.rb text eol=lf
+*.py text eol=lf
+*.scm text eol=lf
+*.sql text eol=lf
+*.sh text eol=lf
+*.bat text eol=lf
+
+# templates
+*.ejs text eol=lf
+*.hbt text eol=lf
+*.jade text eol=lf
+*.haml text eol=lf
+*.hbs text eol=lf
+*.dot text eol=lf
+*.tmpl text eol=lf
+*.phtml text eol=lf
+
+# server config
+.htaccess text eol=lf
+.nginx.conf text eol=lf
+
+# git config
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.gitconfig text eol=lf
+
+# code analysis config
+.jshintrc text eol=lf
+.jscsrc text eol=lf
+.jshintignore text eol=lf
+.csslintrc text eol=lf
+
+# misc config
+*.yaml text eol=lf
+*.yml text eol=lf
+.editorconfig text eol=lf
+
+# build config
+*.npmignore text eol=lf
+*.bowerrc text eol=lf
+
+# Heroku
+Procfile text eol=lf
+.slugignore text eol=lf
+
+# Documentation
+*.md text eol=lf
+LICENSE text
+AUTHORS text
+
+
+#
+## These files are binary and should be left untouched
+#
+
+# (binary is a macro for -text -diff)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.pyc binary
+*.pdf binary
