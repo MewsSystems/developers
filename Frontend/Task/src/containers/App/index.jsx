@@ -1,15 +1,29 @@
 import React from 'react'
+import {Alert} from 'antd'
 import ErrorTrapper from 'components/ErrorTrapper'
 import Spin from 'components/Spin'
 import GlobalStyle, {StyledContent} from './styles'
 import connect from './connect'
 
-const App = ({loading}) =>
+const getComponent = (loading, config) => {
+	if (loading) return <Spin/>
+
+	return config
+		? <p>rates</p>
+		: <Alert
+			message="Error loading configuration"
+			description="Some error occured while loading configuration."
+			type="error"
+			showIcon
+		/>
+}
+
+const App = ({loading, config}) =>
 	<React.Fragment>
 		<ErrorTrapper key="error-trapper"/>
 		<GlobalStyle/>
 		<StyledContent>
-			{loading && <Spin/> || <p>rates selector</p>}
+			{getComponent(loading, config)}
 		</StyledContent>
 	</React.Fragment>
 
