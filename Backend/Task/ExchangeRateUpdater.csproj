@@ -46,6 +46,8 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="IRateFeedParser.cs" />
+    <Compile Include="IRateFeedSource.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
