@@ -1,3 +1,4 @@
+import {Map} from 'immutable'
 import {createSelector} from 'reselect'
 
 const selectRatesDomain = state => state.get(`rates`)
@@ -27,7 +28,7 @@ export const makeSelectPreparedRates = () => createSelector(
 	makeSelectLastHistory(),
 	makeSelectSelectedPairs(),
 	makeSelectPairs(),
-	(current, last, ids, pairs) => ids.map(id => ({
+	(current, last, ids, pairs) => ids.map(id => Map({
 		current: current.get(id),
 		last: last ? last.get(id) : null,
 		pair: pairs.get(id),

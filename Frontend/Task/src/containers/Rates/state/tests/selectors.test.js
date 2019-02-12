@@ -1,22 +1,48 @@
 import {fromJS} from 'immutable'
 import {initialState} from '../constants'
-import {makeSelectConfig, makeSelectLoading} from '../selectors'
+import {
+	makeSelectPairs,
+	makeSelectSelectedPairs,
+	makeSelectPreparedRates,
+} from '../selectors'
 import {testValues} from 'common/constants'
 
-const mockData = fromJS({data: testValues.string})
+const pairs = {}
+pairs[testValues.string] = {
+	name: testValues.string,
+	shortName: testValues.string,
+}
+const mockPairs = fromJS(pairs)
+const mockSelectedPairs = fromJS([testValues.string])
+const rates = {}
+rates[testValues.string] = 1
+const mockRates = fromJS(rates)
+const mockHistory = fromJS([mockRates, mockRates])
 
 const mockState = fromJS({
-	app: initialState
-		.set(`config`, mockData),
+	rates: initialState
+		.set(`pairs`, mockPairs)
+		.set(`rates`, mockRates)
+		.set(`selectedPairs`, mockSelectedPairs)
+		.set(`ratesHistory`, mockHistory)
 })
 
-describe(`App selectors`, () => {
-	it(`Should select loading param`, () => {
-		const selector = makeSelectLoading()
-		expect(selector(mockState)).toEqual(true)
+describe(`Rates selectors`, () => {
+	it(`Should select pairs`, () => {
+		const selector = makeSelectPairs()
+		expect(selector(mockState)).toEqual(mockPairs)
 	})
-	it(`Should select config param`, () => {
-		const selector = makeSelectConfig()
-		expect(selector(mockState)).toEqual(mockData)
+	it(`Should select selectedPairs`, () => {
+		const selector = makeSelectSelectedPairs()
+		expect(selector(mockState)).toEqual(mockSelectedPairs)
+	})
+	it(`Should select prepared rates`, () => {
+		const expected = fromJS([{
+			current: 1,
+			last: 1,
+			pair: mockPairs.get(testValues.string),
+		}])
+		const selector = makeSelectPreparedRates()
+		expect(selector(mockState)).toEqual(expected)
 	})
 })
