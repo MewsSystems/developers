@@ -18,12 +18,14 @@ namespace ExchangeRateUpdater
             new Currency("TRY"),
             new Currency("XYZ")
         };
+        
+        private const string CnbFeedUrl = @"http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt";
 
         public static void Main(string[] args)
         {
             try
             {
-                var source = new CnbRateFeedSource();
+                var source = new CnbRateFeedSource(CnbFeedUrl);
                 var parser = new CnbRateFeedParser();
 
                 var provider = new ExchangeRateProvider(source, parser);
