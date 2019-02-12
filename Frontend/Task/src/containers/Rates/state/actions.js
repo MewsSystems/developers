@@ -1,10 +1,10 @@
-import {SET_CONFIG, SET_LOADING} from './constants'
+import {SET_PAIRS, SELECT_PAIRS} from './constants'
 
-export const setConfig = config => ({
-	type: SET_CONFIG,
-	payload: config,
+export const setPairs = data => ({
+	type: SET_PAIRS,
+	payload: data,
 })
-export const setLoading = value => ({
-	type: SET_LOADING,
-	payload: value,
+export const selectPairs = pairs => ({
+	type: SELECT_PAIRS,
+	payload: pairs,
 })

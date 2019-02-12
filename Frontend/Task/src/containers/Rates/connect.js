@@ -1,9 +1,14 @@
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
-import {makeSelectConfig} from 'container/state/selectors'
+import {makeSelectPairs, makeSelectSelectedPairs} from './state/selectors'
+import {selectPairs} from './state/actions'
 
 const props = createStructuredSelector({
-	loading: makeSelectLoading(),
+	pairs: makeSelectPairs(),
+	selectedPairs: makeSelectSelectedPairs(),
 })
+const actions = {
+	selectPairs,
+}
 
-export default Component => connect(props)(Component)
+export default Component => connect(props, actions)(Component)

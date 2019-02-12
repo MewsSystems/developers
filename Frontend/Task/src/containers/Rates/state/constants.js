@@ -1,12 +1,13 @@
 import {fromJS} from 'immutable'
+import storage from 'utils/local-storage'
 
-// export const SET_CONFIG = `App/SET_CONFIG`
-// export const SET_LOADING = `App/SET_LOADING`
+export const SET_PAIRS = `Rates/SET_PAIRS`
+export const SELECT_PAIRS = `Rates/SELECT_PAIRS`
 
 export const initialState = fromJS({
-	pairs: null,
-	loadingPairs: null,
-	selectedPairs: null,
-	rates: null,
-	ratesHistory: null,
+	pairs: {},
+	loadingPairs: [],
+	selectedPairs: storage.selectedPairs || [],
+	rates: {},
+	ratesHistory: [],
 })

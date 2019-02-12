@@ -1,9 +1,6 @@
 import styled from 'styled-components'
-import {Row, Spin} from 'antd'
+import {Spin} from 'antd'
 
-export const StyledRow = styled(Row)`
-	flex: auto;
-`
 export const StyledSpin = styled(Spin)`
 	> span.ant-spin-dot {
 		font-size: 60px;

@@ -1,11 +1,11 @@
 import {createSelector} from 'reselect'
 
-const selectAppDomain = state => state.get(`app`)
-export const makeSelectConfig = () => createSelector(
-	selectAppDomain,
-	app => app.get(`config`)
+const selectRatesDomain = state => state.get(`rates`)
+export const makeSelectPairs = () => createSelector(
+	selectRatesDomain,
+	rates => rates.get(`pairs`)
 )
-export const makeSelectLoading = () => createSelector(
-	selectAppDomain,
-	app => app.get(`loading`)
+export const makeSelectSelectedPairs = () => createSelector(
+	selectRatesDomain,
+	rates => rates.get(`selectedPairs`)
 )
