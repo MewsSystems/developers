@@ -26,7 +26,7 @@ const webpackConfig = {
         },
         {
             test: /\.css$/, loader: 'style!css'
-        }    
+          }    
     ],
     },
     devtool: 'eval',
