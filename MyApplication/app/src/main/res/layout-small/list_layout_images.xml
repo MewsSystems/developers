@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    android:layout_width="match_parent"
+                                    android:layout_margin="5dp"
+                                    android:layout_height="wrap_content">
+    <LinearLayout
+            android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:background="#ff3847">
+            <ImageView
+                    android:id="@+id/imageView"
+                    android:visibility="visible" tools:ignore="ContentDescription"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="#FF0000"
+                    android:scaleType="fitCenter"/>
+            <TextView
+                    android:id="@+id/textViewName"
+                    android:layout_width="0dp" android:layout_weight="15"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:textSize="5sp"
+                    android:text="accusamus beatae ad facilis cum similique qui sunt" android:padding="5dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse" />
+            <TextView
+                    android:id="@+id/textViewDetail"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_width="0dp" android:layout_weight="5"
+                    android:layout_height="20dp"
+                    android:background="@drawable/capsule"
+                    android:layout_gravity="center" android:gravity="center_horizontal"
+                    android:textSize="5sp"
+                    android:text="Detail" android:padding="5dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                android:visibility="gone">
+            <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp">
+                <TableRow>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Image Id   " />
+                    <TextView
+                            android:id="@+id/textViewImageId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="The number of image "
+                            android:textStyle="bold" />
+                </TableRow>
+                <!--
+                <TableRow>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Real Name   " />
+
+                    <TextView
+                            android:id="@+id/textViewRealName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="The url address of the image thumbnail "
+                            android:textStyle="bold" />
+                </TableRow>
+                -->
+                <TableRow>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Album Id   " />
+                    <TextView
+                            android:id="@+id/textViewAlbumId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="The number of album "
+                            android:textStyle="bold" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
