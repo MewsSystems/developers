@@ -20,8 +20,8 @@
                     android:layout_width="0dp" android:layout_weight="15"
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
-                    android:textSize="32sp"
-                    android:text="accusamus beatae ad facilis cum similique qui sunt" android:padding="10dp"
+                    android:textSize="30sp"
+                    android:text="accusamus beatae ad facilis cum similique qui sunt" android:padding="15dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse" />
             <TextView
                     android:id="@+id/textViewDetail"
@@ -31,8 +31,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/capsule"
                     android:layout_gravity="center" android:gravity="center_horizontal"
-                    android:textSize="32sp"
-                    android:text="Detail" android:padding="10dp"
+                    android:textSize="30sp"
+                    android:text="Detail" android:padding="15dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse"/>
         </LinearLayout>
 
@@ -44,16 +44,18 @@
             <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="15dp">
+                    android:padding="20dp">
                 <TableRow>
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="30sp"
                             android:text="Image Id   " />
                     <TextView
                             android:id="@+id/textViewImageId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="30sp"
                             android:text="The number of image "
                             android:textStyle="bold" />
                 </TableRow>
@@ -76,11 +78,13 @@
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="30sp"
                             android:text="Album Id   " />
                     <TextView
                             android:id="@+id/textViewAlbumId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="30sp"
                             android:text="The number of album "
                             android:textStyle="bold" />
                 </TableRow>

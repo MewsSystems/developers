@@ -49,11 +49,13 @@
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="17sp"
                             android:text="Image Id   " />
                     <TextView
                             android:id="@+id/textViewImageId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="17sp"
                             android:text="The number of image "
                             android:textStyle="bold" />
                 </TableRow>
@@ -76,11 +78,13 @@
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="17sp"
                             android:text="Album Id   " />
                     <TextView
                             android:id="@+id/textViewAlbumId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="17sp"
                             android:text="The number of album "
                             android:textStyle="bold" />
                 </TableRow>
