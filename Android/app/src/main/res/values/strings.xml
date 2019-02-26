@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">Mews Task</string>
+    <string name="detail_page_title"></string>
+
+    <string name="list_loading_message">Items are loading …</string>
+    <string name="list_empty_message">No items available. Enable data and swipe to refresh.</string>
+
+    <string name="list_preview_description">Preview image</string>
+    <string name="detail_image_description">Image</string>
+
+</resources>

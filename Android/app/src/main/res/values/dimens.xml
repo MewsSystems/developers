@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="list_landscape_width">300dp</dimen>
+
+    <!-- List Page -->
+
+    <dimen name="list_padding_recycler">8dp</dimen>
+    <dimen name="list_margin_holder">8dp</dimen>
+    <dimen name="list_corner_holder">4dp</dimen>
+
+    <dimen name="list_message_width">200dp</dimen>
+    <dimen name="list_text_size">16sp</dimen>
+    <dimen name="list_image_size">72dp</dimen>
+
+    <!-- Detail Page -->
+
+    <dimen name="detail_margin">16dp</dimen>
+    <dimen name="detail_text_size">24sp</dimen>
+    <dimen name="detail_image_size">300dp</dimen>
+
+</resources>

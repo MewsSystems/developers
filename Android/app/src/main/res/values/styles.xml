@@ -1,0 +1,40 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppToolbar" parent="AppTheme">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/colorTitle</item>
+    </style>
+
+    <style name="ListTitle" parent="AppTheme">
+        <item name="android:textSize">@dimen/list_text_size</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="ListPrompt" parent="AppTheme">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/list_text_size</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="DetailHolder" parent="AppTheme">
+        <item name="cardCornerRadius">@dimen/list_corner_holder</item>
+        <item name="cardBackgroundColor">@color/colorSecondary</item>
+
+    </style>
+
+    <style name="DetailPage" parent="AppTheme">
+        <item name="android:background">@color/colorSecondary</item>
+    </style>
+
+    <style name="DetailTitle" parent="AppTheme">
+        <item name="android:textSize">@dimen/detail_text_size</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+</resources>
