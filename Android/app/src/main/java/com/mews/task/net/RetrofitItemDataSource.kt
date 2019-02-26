@@ -36,14 +36,16 @@ private class RetrofitItemDataSource(
     private val disposables = mutableListOf<Disposable>()
 
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Item>) {
+        val startPosition = getStartPosition(params.requestedStartPosition)
+
         load(
             onCall = {
                 networkStateModel.postState(NetworkLoading)
-                itemService.listRepos(params.requestedStartPosition, params.requestedLoadSize)
+                itemService.listRepos(startPosition, params.requestedLoadSize)
             },
             onSuccess = { items ->
                 networkStateModel.postState(NetworkSuccess)
-                callback.onResult(items, params.requestedStartPosition)
+                callback.onResult(items, startPosition)
             },
             onError = { throwable ->
                 networkStateModel.postState(NetworkError(throwable))
@@ -65,6 +67,14 @@ private class RetrofitItemDataSource(
                 networkStateModel.postState(NetworkError(throwable))
             }
         )
+    }
+
+    private fun getStartPosition(requestedStartPosition: Int): Int {
+        return if (requestedStartPosition < 0) {
+            0
+        } else {
+            requestedStartPosition
+        }
     }
 
     private fun load(onCall: () -> Call<List<ItemDTO>>,

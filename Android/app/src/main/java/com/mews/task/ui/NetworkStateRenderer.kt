@@ -8,7 +8,9 @@ import com.mews.task.data.NetworkState
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class NetworkStateRenderer(override val containerView: View?) : LayoutContainer {
+class NetworkStateRenderer(
+    override val containerView: View
+) : LayoutContainer {
 
     private var hasData = false
 
@@ -44,7 +46,7 @@ class NetworkStateRenderer(override val containerView: View?) : LayoutContainer 
             list_empty_message.visibility = View.VISIBLE
         }
         val message = throwable.message ?: throwable::class.java.simpleName
-        Snackbar.make(list_coordinator_layout, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(containerView, message, Snackbar.LENGTH_LONG).show()
     }
 
     companion object {
