@@ -19,15 +19,18 @@ import org.json.JSONException
 import java.util.ArrayList
 import android.util.Log
 
-class MainActivity : AppCompatActivity(), ImageAdapter.CustomItemClickListener {
+class MainActivity : AppCompatActivity(), ImageAdapter.CustomItemClickListener, MarvelAdapter.CustomItemClickListener {
 
     var start = 0
     var limit = 30
     lateinit var recyclerView: RecyclerView
     private var adapter: ImageAdapter? = null
+    private var adapter2: MarvelAdapter? = null
     private var imageList: MutableList<Image>? = null
+    private var marvelList: MutableList<Marvel>? = null
     var imageViewDetail: ImageView? = null
     private var listener: ImageAdapter.CustomItemClickListener? = null
+    private var listener2: MarvelAdapter.CustomItemClickListener? = null
     lateinit var layoutManager: LinearLayoutManager
     private var loading: Boolean = false
     private lateinit var recyclerViewState: Parcelable
@@ -69,9 +72,19 @@ class MainActivity : AppCompatActivity(), ImageAdapter.CustomItemClickListener {
             }
         })
 
+        /*
         imageList = ArrayList()
 
         loadImagess(start, limit)
+        */
+
+
+        marvelList = ArrayList()
+
+        loadMarvels()
+
+        Glide.with(this@MainActivity).load("https://www.simplifiedcoding.net/demos/marvel/captainamerica.jpg").into(imageViewDetail)
+
     }
 
     override fun onItemClick(context: Context, imagePath: String) {
@@ -107,7 +120,7 @@ class MainActivity : AppCompatActivity(), ImageAdapter.CustomItemClickListener {
                         imageList?.add(image)
                     }
 
-                    adapter = ImageAdapter(imageList, applicationContext, listener)
+                    adapter = ImageAdapter.MySingleton.getInstance(imageList, applicationContext, listener)
                     if (start > 0) {
                         adapter!!.notifyDataSetChanged()
                         // Restore state
@@ -117,6 +130,55 @@ class MainActivity : AppCompatActivity(), ImageAdapter.CustomItemClickListener {
                         recyclerView.adapter = adapter
                     }
                     adapter!!.setCustomItemClickListener(this@MainActivity)
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            },
+            Response.ErrorListener { error -> Log.e("Volley Error: ", error.message) })
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(stringRequest)
+    }
+
+    override fun onItemClickMarvel(context: Context, imagePath: String) {
+        Glide.with(context).load(imagePath).into(imageViewDetail)
+    }
+
+    override fun onItemScrollDownMarvel(currentPosition: Int, itemsCount: Int, offsetPosition: Int) {
+        layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+        if (currentPosition == lastVisiblePosition) {
+            layoutManager.scrollToPosition(lastVisiblePosition + offsetPosition)
+        }
+    }
+
+    private fun loadMarvels() {
+        val stringRequest = StringRequest(Request.Method.GET, "https://simplifiedcoding.net/demos/marvel/",
+            Response.Listener<String> { response ->
+                try {
+                    val jsonArray = JSONArray(response)
+                    loading = true
+
+                    for (i in 0 until jsonArray.length()) {
+                        val obj = jsonArray.getJSONObject(i)
+
+                        val marvel = Marvel(
+                            obj.getString("name"),
+                            obj.getString("realname"),
+                            obj.getString("team"),
+                            obj.getString("firstappearance"),
+                            obj.getString("createdby"),
+                            obj.getString("publisher"),
+                            obj.getString("imageurl"),
+                            obj.getString("bio")
+                        )
+
+                        marvelList?.add(marvel)
+                    }
+
+                    adapter2 = MarvelAdapter.MySingleton.getInstance(marvelList, applicationContext, listener2)
+                    recyclerView.adapter = adapter2
+                    adapter2!!.setCustomItemClickListener(this@MainActivity)
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
