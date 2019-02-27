@@ -2,7 +2,7 @@
 
 Information about development job opportunities and career at Mews Systems. If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) with latest information.
 
-**You can always reach us at [hr@mewssystems.com](mailto://hr@mewssystems.com).**
+**You can always reach us at [jobs@mewssystems.com](mailto://jobs@mewssystems.com).**
 
 <a name='open-positions'/>
 
