@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import androidx.paging.PositionalDataSource
 import com.mews.task.data.*
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -31,9 +32,22 @@ class RetrofitItemDataSourceFactory(
 private class RetrofitItemDataSource(
     private val itemService: ItemService,
     private val networkStateModel: NetworkStateModel
-) : PositionalDataSource<Item>() {
+) : PositionalDataSource<Item>(), Disposable {
 
-    private val disposables = mutableListOf<Disposable>()
+    private val compositeDisposable = CompositeDisposable()
+
+    override fun isDisposed(): Boolean {
+        return compositeDisposable.isDisposed
+    }
+
+    override fun dispose() {
+        compositeDisposable.dispose()
+    }
+
+    override fun invalidate() {
+        super.invalidate()
+        dispose()
+    }
 
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<Item>) {
         val startPosition = getStartPosition(params.requestedStartPosition)
@@ -77,17 +91,18 @@ private class RetrofitItemDataSource(
         }
     }
 
-    private fun load(onCall: () -> Call<List<ItemDTO>>,
-                     onSuccess: (List<Item>) -> Unit,
-                     onError: (Throwable) -> Unit) {
-
+    private fun load(
+        onCall: () -> Call<List<ItemDTO>>,
+        onSuccess: (List<Item>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
         Single.fromCallable { onCall().execute() }
             .retry(RETRY_COUNT)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = { response ->
                     if (response.isSuccessful) {
-                        val dtoItems= response.body() ?: emptyList()
+                        val dtoItems = response.body() ?: emptyList()
                         val domainItems = dtoItems.map { it.toDomain() }
                         onSuccess(domainItems)
 
@@ -98,8 +113,8 @@ private class RetrofitItemDataSource(
                 onError = { throwable ->
                     onError(throwable)
                 }
-            ).also {
-                disposables.add(it)
+            ).also { disposable ->
+                compositeDisposable.add(disposable)
             }
     }
 

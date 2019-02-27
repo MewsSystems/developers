@@ -7,6 +7,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.mews.task.net.ItemDataSourceFactory
 import com.mews.task.net.NetworkStateModel
+import io.reactivex.disposables.Disposable
 import toothpick.Scope
 
 class ListViewModel @RestrictTo(RestrictTo.Scope.TESTS) constructor(
@@ -20,6 +21,16 @@ class ListViewModel @RestrictTo(RestrictTo.Scope.TESTS) constructor(
 
     fun reload() {
         items.value?.dataSource?.invalidate()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        items.value?.dataSource?.also { dataSource ->
+            if (dataSource is Disposable) {
+                dataSource.dispose()
+            }
+        }
     }
 
     companion object {
