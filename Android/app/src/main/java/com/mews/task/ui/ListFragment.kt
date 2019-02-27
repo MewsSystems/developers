@@ -75,10 +75,10 @@ class ListFragment : Fragment() {
     private fun setupViewModel(itemAdapter: ItemAdapter) {
         listViewModel = getViewModel { scope -> ListViewModel.create(scope) }
 
-        listViewModel.items.observe(this, Observer { list ->
+        listViewModel.items.observe(viewLifecycleOwner, Observer { list ->
             itemAdapter.submitList(list)
         })
-        listViewModel.networkState.observe(this, Observer { state ->
+        listViewModel.networkState.observe(viewLifecycleOwner, Observer { state ->
             networkStateRenderer.render(state)
         })
     }
