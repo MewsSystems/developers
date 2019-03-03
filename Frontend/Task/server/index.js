@@ -1,6 +1,7 @@
 const { SEED, PAIR_COUNT, UPDATE_INTERVAL, FAILURE_CHANCE } = require('./constants');
 const Chance = require('chance');
 const chance = new Chance(SEED);
+const env = process.env;
 
 const ratesGenerator = require('./ratesGenerator')({
     generator: chance,
@@ -17,7 +18,7 @@ server.use((req, res, next) => {
 });
 
 server.get('/configuration', (req, res) => {
-    const appLoadTime = chance.integer({ min: 3000, max: 5000 });
+    const appLoadTime = env.DEBUG ? 0 : chance.integer({ min: 3000, max: 5000 });
 
     setTimeout(() => {
         res.json({
@@ -27,7 +28,7 @@ server.get('/configuration', (req, res) => {
 });
 
 server.get('/rates', (req, res) => {
-    const hasFailed = chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
+    const hasFailed = env.DEBUG ? false : chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
 
     if (hasFailed) {
         res.sendStatus(500);
