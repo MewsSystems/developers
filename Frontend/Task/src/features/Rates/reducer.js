@@ -49,7 +49,8 @@ export default function(state = initialState, action) {
           isLoading: false,
           isRejected: false,
         },
-        currencyPairs: payload.currencyPairs,
+        currencyPairs:
+          payload && payload.currencyPairs ? payload.currencyPairs : {},
       };
 
     case errorT(FETCH_CONFIGURATION):
@@ -81,7 +82,7 @@ export default function(state = initialState, action) {
           isRejected: false,
         },
         previous: state.current,
-        current: payload.rates,
+        current: payload && payload.rates ? payload.rates : [],
       };
 
     case errorT(FETCH_RATES):

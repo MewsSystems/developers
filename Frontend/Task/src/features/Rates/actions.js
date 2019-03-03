@@ -22,17 +22,27 @@ export const setRates = rates => ({
 export const fetchConfiguration = () => ({
   type: FETCH_CONFIGURATION,
   payload: fetch('http://localhost:3001/configuration').then(response =>
-    response.json().catch(response => response),
+    response.json().catch(error => console.log(error)),
   ),
 });
+
+const arrayToParams = (property, list) => {
+  return list.reduce((acc, cur, idx) => {
+    if (idx === 0) {
+      return `${property}[]=${cur}`;
+    }
+    return `${acc}&${property}[]=${cur}`;
+  }, '');
+};
 
 export const fetchRates = currencyPairs => ({
   type: FETCH_RATES,
   payload: fetch(
-    `http://localhost:3001/rates?currencyPairIds=${JSON.stringify(
+    `http://localhost:3001/rates?${arrayToParams(
+      'currencyPairIds',
       currencyPairs,
     )}`,
-  ).then(response => response.json().catch(response => response)),
+  ).then(response => response.json().catch(error => console.log(error))),
 });
 
 // components:
