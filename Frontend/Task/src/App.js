@@ -20,6 +20,7 @@ class App extends Component {
           >
             Learn React
           </a>
+          {this.props.config.endpoint}
         </header>
       </div>
     );
