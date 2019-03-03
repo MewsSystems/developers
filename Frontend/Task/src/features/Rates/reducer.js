@@ -95,13 +95,17 @@ export default function(state = initialState, action) {
       };
 
     case SET_RATES:
-    case ADD_RATE:
-      const newSelected = [...state.rates.selected];
-      return newSelected.push(payload);
       return {
         ...state,
-        selectedRates: newSelected,
+        selected: payload,
       };
+    // case ADD_RATE:
+    //   const newSelected = [...state.rates.selected];
+    //   return newSelected.push(payload);
+    //   return {
+    //     ...state,
+    //     selectedRates: newSelected,
+    //   };
     // case REMOVE_RATE:
     default:
       return state;

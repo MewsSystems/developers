@@ -1,28 +1,59 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addRate, fetchConfiguration, fetchRates } from './actions';
+import { fetchConfiguration, fetchRates, setRates } from './actions';
 import useInterval from '../../lib/hooks/useInterval';
 
-const Rates = ({ addRate, fetchConfiguration, fetchRates, rates }) => {
+import CurrencySelect from './CurrencySelect';
+
+const Rates = ({
+  addRate,
+  fetchConfiguration,
+  fetchRates,
+  setRates,
+  rates,
+}) => {
+  const { currencyPairs, selected } = rates;
+
   useEffect(() => {
     fetchConfiguration();
-    rates.selected.length > 1 && fetchRates(rates.selected);
-  }, [fetchConfiguration, fetchRates, rates.selected]);
+  }, [fetchConfiguration]);
 
-  // useEffect(() => {
-  //   addRate(Object.values(rates.currencyPairs)[0]);
-  // }, [rates.currencyPairs]);
+  useEffect(() => {
+    if (selected.length > 0) {
+      fetchRates(selected.map(a => a.value));
+    }
+  }, [fetchRates, selected]);
 
-  useInterval(fetchConfiguration, 20000);
+  useInterval(() => {
+    if (selected.length > 0) {
+      fetchRates(selected.map(a => a.value));
+    }
+  }, 20000);
 
-  const handleClick = () => {
-    console.log(rates.currencyPairs);
-    fetchRates([Object.keys(rates.currencyPairs)[0]]);
+  const pairToLabel = currencyPair => {
+    const [from, to] = currencyPair;
+    return `${from.code}/${to.code} - ${from.name}/${to.name}`;
+  };
+
+  const pairsToOptions = currencyPairs => {
+    return Object.keys(currencyPairs).reduce((acc, cur) => {
+      return [
+        ...acc,
+        {
+          value: cur,
+          label: pairToLabel(currencyPairs[cur]),
+        },
+      ];
+    }, []);
   };
 
   return (
     <div className="rates">
-      <button onClick={handleClick}>abc</button>
+      <CurrencySelect
+        handleChange={setRates}
+        value={selected}
+        options={pairsToOptions(currencyPairs)}
+      />
     </div>
   );
 };
@@ -30,9 +61,9 @@ const Rates = ({ addRate, fetchConfiguration, fetchRates, rates }) => {
 const mapStateToProps = ({ rates }) => ({ rates });
 
 const mapDispatchToProps = {
-  addRate,
   fetchConfiguration,
   fetchRates,
+  setRates,
 };
 export default connect(
   mapStateToProps,

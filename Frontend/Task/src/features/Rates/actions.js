@@ -4,25 +4,25 @@ export const SET_RATES = 'SET_RATES';
 export const ADD_RATE = 'ADD_RATE';
 export const REMOVE_RATE = 'REMOVE_RATE';
 
-export const addRate = rate => ({
-  type: ADD_RATE,
-  payload: rate,
-});
+// export const addRate = rate => ({
+//   type: ADD_RATE,
+//   payload: rate,
+// });
 
 // export const removeRate = rate => ({
 //   type: REMOVE_RATE,
 //   payload: rate,
 // });
 
-// export const setRates = rates => ({
-//   type: SET_RATES,
-//   payload: rates,
-// });
+export const setRates = rates => ({
+  type: SET_RATES,
+  payload: rates,
+});
 
 export const fetchConfiguration = () => ({
   type: FETCH_CONFIGURATION,
   payload: fetch('http://localhost:3001/configuration').then(response =>
-    response.json(),
+    response.json().catch(response => response),
   ),
 });
 
@@ -32,7 +32,7 @@ export const fetchRates = currencyPairs => ({
     `http://localhost:3001/rates?currencyPairIds=${JSON.stringify(
       currencyPairs,
     )}`,
-  ).then(response => response.json()),
+  ).then(response => response.json().catch(response => response)),
 });
 
 // components:
