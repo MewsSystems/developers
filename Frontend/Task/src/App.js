@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { endpoint, interval } from './config';
 import logo from './logo.svg';
 import './App.css';
+import Rates from './features/Rates';
 
 class App extends Component {
   render() {
@@ -20,7 +21,7 @@ class App extends Component {
           >
             Learn React
           </a>
-          {this.props.config.endpoint}
+          <Rates />
         </header>
       </div>
     );
