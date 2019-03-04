@@ -5,7 +5,12 @@ import promise from 'redux-promise-middleware';
 import rootReducer from './rootReducer';
 
 export default function configureStore(preloadedState, config, env) {
-  const middlewares = [thunkMiddleware, promise];
+  const middlewares = [
+    thunkMiddleware.withExtraArgument({
+      getConfig: () => config,
+    }),
+    promise,
+  ];
 
   if (env.NODE_ENV !== 'production') {
     const logger = require('redux-logger'); // eslint-disable-line

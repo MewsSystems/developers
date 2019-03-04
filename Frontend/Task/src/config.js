@@ -1,4 +1,4 @@
 export default {
-  endpoint: 'http://localhost:3000/rates',
+  endpoint: 'http://localhost:3001',
   interval: 10000,
 };
