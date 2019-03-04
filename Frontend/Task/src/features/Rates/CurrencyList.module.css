@@ -1,0 +1,16 @@
+.currencyList {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.up {
+ color: limegreen;
+}
+
+.down {
+ color: crimson;
+}
+
+.unknown {
+  color: gold;
+}

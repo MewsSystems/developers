@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
-import Rates from './features/Rates';
 import { ToastContainer } from 'react-toastify';
+
+import styles from './App.module.css';
 import 'react-toastify/dist/ReactToastify.css';
+
+import Rates from './features/Rates';
 
 class App extends Component {
   render() {
@@ -11,12 +13,14 @@ class App extends Component {
     } = this.props;
 
     return (
-      <div className="App">
-        <header className="App-header">
+      <>
+        <main className={styles.app}>
           <Rates updateInterval={interval} />
-        </header>
-        <ToastContainer autoClose={interval} />
-      </div>
+        </main>
+        <footer>
+          <ToastContainer autoClose={interval} />
+        </footer>
+      </>
     );
   }
 }

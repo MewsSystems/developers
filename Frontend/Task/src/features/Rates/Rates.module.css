@@ -1,0 +1,10 @@
+.rates  {
+  width: 90%;
+
+}
+
+@media (min-width: 768px) {
+  .rates {
+    width: 60%;
+  }
+}

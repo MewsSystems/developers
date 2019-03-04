@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchConfiguration, fetchRates, setRates } from './actions';
 import useInterval from '../../lib/hooks/useInterval';
 
-import logo from '../../logo.svg';
+import styles from './Rates.module.css';
 import CurrencySelect from './CurrencySelect';
 import CurrencyList, {
   TREND_UP,
@@ -11,6 +11,7 @@ import CurrencyList, {
   TREND_EQUAL,
   TREND_UNKNOWN,
 } from './CurrencyList';
+import Spinner from '../../components/Spinner';
 
 const Rates = ({
   fetchConfiguration,
@@ -80,23 +81,26 @@ const Rates = ({
     ),
   }));
 
-  if (currencyPairs.length <= 1) {
+  if (currencyPairs.length === 0) {
     return 'Sorry, there are no currency pairs...';
   }
 
   if (configStatus.isLoading) {
-    return <img src={logo} className="App-logo" alt="logo" />;
+    return <Spinner />;
   }
 
   return (
-    <div className="rates">
+    <article className={styles.rates}>
+      <header>
+        <h1>Exchange rates</h1>
+      </header>
       <CurrencySelect
         handleChange={setRates}
         value={selected}
         options={pairsToOptions(currencyPairs)}
       />
       <CurrencyList currencyList={currencyList} />
-    </div>
+    </article>
   );
 };
 
