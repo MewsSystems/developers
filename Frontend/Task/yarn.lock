@@ -8284,6 +8284,11 @@ react-select@^2.4.1:
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
 
+react-toastify-redux@^1.0.0-rc.2:
+  version "1.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/react-toastify-redux/-/react-toastify-redux-1.0.0-rc.2.tgz#4a4dec9589dc580af6ce1fd6726bc2d23772ff91"
+  integrity sha512-uyrhx745pcTayhJF4bOtEVVi8nnDCALWWahq25ydmwRXZxf2IDnbaen18n6v2LHFn+Qq32Mao4gRdteNVWWNyw==
+
 react-transition-group@^2.2.1:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.6.0.tgz#3c41cbdd9c044c5f8604d4e8d319e860919c9fae"

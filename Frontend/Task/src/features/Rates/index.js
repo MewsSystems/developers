@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchConfiguration, fetchRates, setRates } from './actions';
 import useInterval from '../../lib/hooks/useInterval';
 
+import logo from '../../logo.svg';
 import CurrencySelect from './CurrencySelect';
 import CurrencyList, {
   TREND_UP,
@@ -12,7 +13,7 @@ import CurrencyList, {
 } from './CurrencyList';
 
 const Rates = ({ fetchConfiguration, fetchRates, setRates, rates }) => {
-  const { currencyPairs, current, previous, selected } = rates;
+  const { currencyPairs, current, previous, selected, configStatus } = rates;
 
   useEffect(() => {
     fetchConfiguration();
@@ -72,6 +73,14 @@ const Rates = ({ fetchConfiguration, fetchRates, setRates, rates }) => {
       current[item.value] ? current[item.value] : null,
     ),
   }));
+
+  if (currencyPairs.length <= 1) {
+    return 'Sorry, there are no currency pairs...';
+  }
+
+  if (configStatus.isLoading) {
+    return <img src={logo} className="App-logo" alt="logo" />;
+  }
 
   return (
     <div className="rates">

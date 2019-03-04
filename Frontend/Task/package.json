@@ -31,6 +31,7 @@
     "react-redux": "^6.0.1",
     "react-scripts": "2.1.5",
     "react-select": "^2.4.1",
+    "react-toastify-redux": "^1.0.0-rc.2",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-promise-middleware": "^6.1.0",
