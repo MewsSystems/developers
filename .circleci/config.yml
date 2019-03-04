@@ -1,0 +1,38 @@
+version: 2
+jobs:
+  buildFE:
+    docker:
+      - image: circleci/node:10
+        environment:
+          TERM: xterm
+    steps:
+      - checkout
+      - run: 
+          name: "Setup custom environment variables"
+          command: |
+            echo 'export FE_PATH="Frontend/Task/"' >> $BASH_ENV
+      - restore_cache:
+          keys:
+            - v1-deps-build-FE-{{ .Branch }}-{{ checksum "Frontend/Task/yarn.lock" }}
+            - v1-deps-build-FE-{{ .Branch }}
+            - v1-deps-build-FE
+      - run: cd ${FE_PATH} && yarn install --frozen-lockfile
+      - save_cache:
+          key: v1-deps-build-FE-{{ .Branch }}-{{ checksum "Frontend/Task/yarn.lock" }}
+          paths:
+            - ~/.cache
+      - run: 
+          command: |
+            cd ${FE_PATH}
+            yarn test
+            yarn format
+            git diff --exit-code
+            yarn build
+      - store_artifacts:
+          path: Frontend/Task/build
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - buildFE

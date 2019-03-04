@@ -13,7 +13,7 @@
     "start-server": "node server",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "format:js": "prettier --write \"src/**/*.js\" && yarn eslint src --fix",
     "format:styles": "prettier --write \"src/**/*.module.css\" && stylelint --config=.stylelintrc \"src/**/*.module.css\" --fix",
