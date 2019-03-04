@@ -12,7 +12,13 @@ import CurrencyList, {
   TREND_UNKNOWN,
 } from './CurrencyList';
 
-const Rates = ({ fetchConfiguration, fetchRates, setRates, rates }) => {
+const Rates = ({
+  fetchConfiguration,
+  fetchRates,
+  setRates,
+  rates,
+  updateInterval,
+}) => {
   const { currencyPairs, current, previous, selected, configStatus } = rates;
 
   useEffect(() => {
@@ -29,7 +35,7 @@ const Rates = ({ fetchConfiguration, fetchRates, setRates, rates }) => {
     if (selected.length > 0) {
       fetchRates(selected.map(a => a.value));
     }
-  }, 2000);
+  }, updateInterval);
 
   const pairToLabel = currencyPair => {
     const [from, to] = currencyPair;

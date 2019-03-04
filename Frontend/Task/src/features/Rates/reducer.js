@@ -75,8 +75,8 @@ export default function(state = initialState, action) {
           isLoading: false,
           isRejected: false,
         },
-        previous: state.current,
-        current: payload && payload.rates ? payload.rates : [],
+        previous: payload && payload.rates ? state.current : state.previous,
+        current: payload && payload.rates ? payload.rates : state.current,
       };
 
     case errorT(FETCH_RATES):
