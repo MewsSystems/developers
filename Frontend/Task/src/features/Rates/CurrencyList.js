@@ -25,17 +25,17 @@ const CurrencyList = ({ currencyList }) => {
     <table className={styles.currencyList}>
       <thead>
         <tr>
-          <th>From</th>
-          <th>To</th>
+          <th>From/To</th>
+          <th>Value</th>
           <th>Trend</th>
         </tr>
       </thead>
       <tbody>
-        {currencyList.map(({ from, value, to, trend }) => {
+        {currencyList.map(({ from, value, moneyValue, to, trend }) => {
           return (
             <tr key={value}>
-              <td>{from.code}</td>
-              <td>{to.code}</td>
+              <td>{`${from.code}/${to.code}`}</td>
+              <td>{moneyValue}</td>
               <td className={styles[trend]}>{getTrendSymbol(trend)}</td>
             </tr>
           );

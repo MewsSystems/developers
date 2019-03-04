@@ -79,21 +79,16 @@ const Rates = ({
       previous[item.value] ? previous[item.value] : null,
       current[item.value] ? current[item.value] : null,
     ),
+    moneyValue: current[item.value],
   }));
-
-  if (currencyPairs.length === 0) {
-    return 'Sorry, there are no currency pairs...';
-  }
-
-  // if (configStatus.isLoading) {
-  //   return <Spinner />;
-  // }
 
   return (
     <article className={styles.rates}>
       <header>
         <h1>Exchange rates</h1>
       </header>
+
+      {configStatus.isLoading && <Spinner />}
       <CurrencySelect
         handleChange={setRates}
         value={selected}
