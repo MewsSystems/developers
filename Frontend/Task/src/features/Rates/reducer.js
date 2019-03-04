@@ -19,6 +19,7 @@ const initialState = {
     isRejected: false,
     error: null,
   },
+  lastUpdate: null,
 };
 
 export default function(state = initialState, action) {

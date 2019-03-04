@@ -85,9 +85,9 @@ const Rates = ({
     return 'Sorry, there are no currency pairs...';
   }
 
-  if (configStatus.isLoading) {
-    return <Spinner />;
-  }
+  // if (configStatus.isLoading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <article className={styles.rates}>

@@ -1,10 +1,19 @@
 import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import promise from 'redux-promise-middleware';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import rootReducer from './rootReducer';
 
-export default function configureStore(preloadedState, config, env) {
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export function configureStore(preloadedState, config, env) {
   const middlewares = [
     thunkMiddleware.withExtraArgument({
       getConfig: () => config,
@@ -18,8 +27,12 @@ export default function configureStore(preloadedState, config, env) {
   }
 
   return createStore(
-    rootReducer,
+    persistedReducer,
     preloadedState,
     applyMiddleware(...middlewares),
   );
+}
+
+export function getPersistor(store) {
+  return persistStore(store);
 }
