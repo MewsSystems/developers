@@ -1,10 +1,4 @@
-import {
-  FETCH_CONFIGURATION,
-  FETCH_RATES,
-  SET_RATES,
-  ADD_RATE,
-  REMOVE_RATE,
-} from './actions';
+import { FETCH_CONFIGURATION, FETCH_RATES, SET_RATES } from './actions';
 
 export const startT = type => `${type}_PENDING`;
 export const successT = type => `${type}_FULFILLED`;
@@ -100,14 +94,7 @@ export default function(state = initialState, action) {
         ...state,
         selected: payload,
       };
-    // case ADD_RATE:
-    //   const newSelected = [...state.rates.selected];
-    //   return newSelected.push(payload);
-    //   return {
-    //     ...state,
-    //     selectedRates: newSelected,
-    //   };
-    // case REMOVE_RATE:
+
     default:
       return state;
   }
