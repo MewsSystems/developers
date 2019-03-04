@@ -4,6 +4,7 @@ import promise from 'redux-promise-middleware';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
+import errorMiddleware from './lib/middlewares/errorMiddleware';
 import rootReducer from './rootReducer';
 
 const persistConfig = {
@@ -18,6 +19,7 @@ export function configureStore(preloadedState, config, env) {
     thunkMiddleware.withExtraArgument({
       getConfig: () => config,
     }),
+    errorMiddleware,
     promise,
   ];
 
