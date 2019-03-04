@@ -1,0 +1,14 @@
+{
+  "plugins": ["stylelint-order", "stylelint-prettier"],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-css-modules",
+    "stylelint-prettier/recommended",
+  ],
+  "rules": {
+    "declaration-empty-line-before": "never",
+    "no-descending-specificity": null,
+    "prettier/prettier": true,
+    "order/properties-alphabetical-order": true,
+  }
+}

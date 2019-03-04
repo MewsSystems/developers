@@ -15,7 +15,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**/*.js\" && yarn eslint src --fix"
+    "format:js": "prettier --write \"src/**/*.js\" && yarn eslint src --fix",
+    "format:styles": "prettier --write \"src/**/*.module.css\" && stylelint --config=.stylelintrc \"src/**/*.module.css\" --fix",
+    "format": "concurrently \"yarn format:js\" \"yarn format:styles\""
   },
   "browserslist": [
     ">0.2%",
@@ -40,7 +42,14 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "eslint-plugin-react-hooks": "^1.4.0",
-    "prettier": "^1.15.3"
+    "prettier": "^1.15.3",
+    "stylelint": "^9.10.1",
+    "stylelint-config-css-modules": "^1.3.0",
+    "stylelint-config-prettier": "^5.0.0",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-order": "^2.1.0",
+    "stylelint-prettier": "^1.0.6"
   }
 }
