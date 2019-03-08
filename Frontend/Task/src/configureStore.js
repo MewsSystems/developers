@@ -5,6 +5,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import errorMiddleware from './lib/middlewares/errorMiddleware';
+import { fetchJSON } from './lib/fetch';
 import rootReducer from './rootReducer';
 
 const persistConfig = {
@@ -18,6 +19,7 @@ export function configureStore(preloadedState, config, env) {
   const middlewares = [
     thunkMiddleware.withExtraArgument({
       getConfig: () => config,
+      fetchJSON: fetchJSON(config.endpoint),
     }),
     errorMiddleware,
     promise,

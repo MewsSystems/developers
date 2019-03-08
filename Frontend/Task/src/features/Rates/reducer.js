@@ -52,7 +52,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         configStatus: {
-          error: payload,
+          error: payload.data.message,
           isLoading: false,
           isRejected: true,
         },
@@ -76,15 +76,15 @@ export default function(state = initialState, action) {
           isLoading: false,
           isRejected: false,
         },
-        previous: payload && payload.rates ? state.current : state.previous,
-        current: payload && payload.rates ? payload.rates : state.current,
+        previous: payload.rates ? state.current : state.previous,
+        current: payload.rates ? payload.rates : state.current,
       };
 
     case errorT(FETCH_RATES):
       return {
         ...state,
         ratesStatus: {
-          error: payload,
+          error: payload.data.message,
           isLoading: false,
           isRejected: true,
         },

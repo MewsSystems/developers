@@ -18,7 +18,7 @@ class App extends Component {
           <Rates interval={interval} />
         </main>
         <footer>
-          <ToastContainer autoClose={interval} />
+          <ToastContainer />
         </footer>
       </>
     );

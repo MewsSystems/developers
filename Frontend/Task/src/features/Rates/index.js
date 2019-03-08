@@ -47,13 +47,14 @@ const Rates = ({
         <h1>Exchange rates</h1>
       </header>
 
-      {configStatus.isLoading && <Spinner />}
       <CurrencySelect
         handleChange={setRates}
         value={selected}
         currencyPairs={currencyPairs}
       />
       <CurrencyList currencyList={currencyList} />
+
+      {configStatus.isLoading && <Spinner />}
     </article>
   );
 };
