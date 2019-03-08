@@ -2,23 +2,31 @@ import React from 'react';
 
 import styles from './CurrencyList.module.css';
 
-export const TREND_UP = 'up';
-export const TREND_DOWN = 'down';
-export const TREND_EQUAL = 'equal';
-export const TREND_UNKNOWN = 'unknown';
+const UP = 'up';
+const DOWN = 'down';
+const EQUAL = 'equal';
+const UNKNOWN = 'unknown';
 
 const CurrencyList = ({ currencyList }) => {
-  const getTrendSymbol = trend => {
-    switch (trend) {
-      case TREND_UP:
-        return '⇧';
-      case TREND_DOWN:
-        return '⇩';
-      case TREND_EQUAL:
-        return '=';
-      default:
-        return '?';
+  const getTrend = (prevValue, nextValue) => {
+    if (!prevValue || !nextValue) {
+      return UNKNOWN;
     }
+    if (prevValue < nextValue) {
+      return UP;
+    } else if (prevValue > nextValue) {
+      return DOWN;
+    } else if (prevValue === nextValue) {
+      return EQUAL;
+    }
+    return UNKNOWN;
+  };
+
+  const trendSymbols = {
+    [UP]: '⇧',
+    [DOWN]: '⇩',
+    [EQUAL]: '=',
+    [UNKNOWN]: '?',
   };
 
   return (
@@ -31,12 +39,13 @@ const CurrencyList = ({ currencyList }) => {
         </tr>
       </thead>
       <tbody>
-        {currencyList.map(({ from, value, moneyValue, to, trend }) => {
+        {currencyList.map(({ curValue, data, label, prevValue, value }) => {
+          const trend = getTrend(prevValue, curValue);
           return (
             <tr key={value}>
-              <td>{`${from.code}/${to.code}`}</td>
-              <td>{moneyValue}</td>
-              <td className={styles[trend]}>{getTrendSymbol(trend)}</td>
+              <td>{label}</td>
+              <td>{curValue}</td>
+              <td className={styles[trend]}>{trendSymbols[trend]}</td>
             </tr>
           );
         })}

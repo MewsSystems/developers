@@ -15,7 +15,7 @@ class App extends Component {
     return (
       <>
         <main className={styles.app}>
-          <Rates updateInterval={interval} />
+          <Rates interval={interval} />
         </main>
         <footer>
           <ToastContainer autoClose={interval} />

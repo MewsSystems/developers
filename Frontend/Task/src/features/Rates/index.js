@@ -5,12 +5,7 @@ import useInterval from '../../lib/hooks/useInterval';
 
 import styles from './Rates.module.css';
 import CurrencySelect from './CurrencySelect';
-import CurrencyList, {
-  TREND_UP,
-  TREND_DOWN,
-  TREND_EQUAL,
-  TREND_UNKNOWN,
-} from './CurrencyList';
+import CurrencyList from './CurrencyList';
 import Spinner from '../../components/Spinner';
 
 const Rates = ({
@@ -18,7 +13,7 @@ const Rates = ({
   fetchRates,
   setRates,
   rates,
-  updateInterval,
+  interval,
 }) => {
   const { currencyPairs, current, previous, selected, configStatus } = rates;
 
@@ -36,50 +31,14 @@ const Rates = ({
     if (selected.length > 0) {
       fetchRates(selected.map(a => a.value));
     }
-  }, updateInterval);
+  }, interval);
 
-  const pairToLabel = currencyPair => {
-    const [from, to] = currencyPair;
-    return `${from.code}/${to.code}`;
-  };
-
-  // TODO: Don't return duplicates - from, label?
-  const pairsToOptions = currencyPairs => {
-    return Object.keys(currencyPairs).reduce((acc, cur) => {
-      const [from, to] = currencyPairs[cur];
-      return [
-        ...acc,
-        {
-          value: cur,
-          label: pairToLabel(currencyPairs[cur]),
-          from,
-          to,
-        },
-      ];
-    }, []);
-  };
-
-  const getTrend = (prevValue, nextValue) => {
-    if (!prevValue || !nextValue) {
-      return TREND_UNKNOWN;
-    }
-    if (prevValue < nextValue) {
-      return TREND_UP;
-    } else if (prevValue > nextValue) {
-      return TREND_DOWN;
-    } else if (prevValue === nextValue) {
-      return TREND_EQUAL;
-    }
-    return TREND_UNKNOWN;
-  };
-
-  const currencyList = selected.map(item => ({
-    ...item,
-    trend: getTrend(
-      previous[item.value] ? previous[item.value] : null,
-      current[item.value] ? current[item.value] : null,
-    ),
-    moneyValue: current[item.value],
+  const currencyList = selected.map(({ data, label, value }) => ({
+    curValue: current[value] ? current[value] : null,
+    data,
+    label,
+    prevValue: previous[value] ? previous[value] : null,
+    value,
   }));
 
   return (
@@ -92,7 +51,7 @@ const Rates = ({
       <CurrencySelect
         handleChange={setRates}
         value={selected}
-        options={pairsToOptions(currencyPairs)}
+        currencyPairs={currencyPairs}
       />
       <CurrencyList currencyList={currencyList} />
     </article>

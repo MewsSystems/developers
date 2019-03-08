@@ -24,7 +24,7 @@ export function configureStore(preloadedState, config, env) {
   ];
 
   if (env.NODE_ENV !== 'production') {
-    const logger = require('redux-logger'); // eslint-disable-line
+    const logger = require('redux-logger');
     middlewares.push(logger.createLogger({ collapsed: true }));
   }
 
