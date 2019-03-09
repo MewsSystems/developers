@@ -11,7 +11,6 @@ const CurrencySelect = ({ currencyPairs, handleChange, value }) => {
 
   const pairsToOptions = currencyPairs => {
     return Object.entries(currencyPairs).map(([key, value]) => ({
-      data: value,
       label: pairToLabel(value),
       value: key,
     }));

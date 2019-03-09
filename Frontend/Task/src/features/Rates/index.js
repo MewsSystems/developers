@@ -44,7 +44,6 @@ const Rates = ({
 
   const currencyList = selected.map(({ data, label, value }) => ({
     curValue: current[value] ? current[value] : null,
-    data,
     label,
     prevValue: previous[value] ? previous[value] : null,
     value,
