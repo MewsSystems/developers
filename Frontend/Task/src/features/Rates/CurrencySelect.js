@@ -9,12 +9,10 @@ const CurrencySelect = ({ currencyPairs, handleChange, value }) => {
     return `${from.code}/${to.code}`;
   };
 
-  const pairsToOptions = currencyPairs => {
-    return Object.entries(currencyPairs).map(([key, value]) => ({
-      label: pairToLabel(value),
-      value: key,
-    }));
-  };
+  const options = Object.entries(currencyPairs).map(([key, keyValue]) => ({
+    label: pairToLabel(keyValue),
+    value: key,
+  }));
 
   return (
     <Select
@@ -22,7 +20,7 @@ const CurrencySelect = ({ currencyPairs, handleChange, value }) => {
       isMulti
       value={value}
       onChange={handleChange}
-      options={pairsToOptions(currencyPairs)}
+      options={options}
     />
   );
 };

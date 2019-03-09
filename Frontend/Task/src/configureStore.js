@@ -2,6 +2,7 @@ import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import { persistStore } from 'redux-persist';
+import { toast } from 'react-toastify';
 
 import errorMiddleware from './lib/middlewares/errorMiddleware';
 import { fetchJSON } from './lib/fetch';
@@ -12,6 +13,7 @@ export function configureStore(preloadedState, config, env) {
     thunkMiddleware.withExtraArgument({
       getConfig: () => config,
       fetchJSON: fetchJSON(config.endpoint),
+      toast,
     }),
     errorMiddleware,
     promise,

@@ -1,5 +1,3 @@
-import { toast } from 'react-toastify';
-
 export const FETCH_CONFIGURATION = 'RATES/FETCH_CONFIGURATION';
 export const FETCH_RATES = 'RATES/FETCH_RATES';
 export const SET_RATES = 'RATES/SET_RATES';
@@ -10,7 +8,7 @@ export const setRates = rates => ({
 });
 
 export const fetchConfiguration = () => {
-  return (dispatch, _, { fetchJSON, getConfig }) => {
+  return (dispatch, _, { fetchJSON, toast }) => {
     dispatch({
       type: FETCH_CONFIGURATION,
       payload: fetchJSON({
@@ -28,7 +26,7 @@ export const fetchConfiguration = () => {
 };
 
 export const fetchRates = currencyPairs => {
-  return (dispatch, _, { fetchJSON, getConfig }) => {
+  return (dispatch, _, { fetchJSON, toast }) => {
     dispatch({
       type: FETCH_RATES,
       payload: fetchJSON({

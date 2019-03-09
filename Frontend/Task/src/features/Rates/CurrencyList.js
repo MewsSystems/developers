@@ -39,7 +39,7 @@ const CurrencyList = ({ currencyList }) => {
         </tr>
       </thead>
       <tbody>
-        {currencyList.map(({ curValue, data, label, prevValue, value }) => {
+        {currencyList.map(({ curValue, label, prevValue, value }) => {
           const trend = getTrend(prevValue, curValue);
           return (
             <tr key={value}>
