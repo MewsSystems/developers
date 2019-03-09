@@ -18,7 +18,7 @@ module.exports = function rateGenerator({ generator, pairCount, updateInterval }
             return Object.assign({}, currentRates);
         },
     };
-    
+
     function generateCurrencyPairs() {
         let pairs = {};
 
@@ -44,7 +44,7 @@ module.exports = function rateGenerator({ generator, pairCount, updateInterval }
 
         for (let pairId of Object.keys(currentRates)) {
             const value = currentRates[pairId];
-            updatedRates[pairId] = generator.floating({ min: value + MAX_RATE_UPDATE_STEP, max: value + MAX_RATE_UPDATE_STEP })
+            updatedRates[pairId] = generator.floating({ min: value - MAX_RATE_UPDATE_STEP, max: value + MAX_RATE_UPDATE_STEP })
         }
 
         return updatedRates;
