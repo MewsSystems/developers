@@ -25,7 +25,7 @@ const CurrencyList = ({ currencyList }) => {
   const trendSymbols = {
     [UP]: '⇧',
     [DOWN]: '⇩',
-    [EQUAL]: '=',
+    [EQUAL]: '-',
     [UNKNOWN]: '?',
   };
 
