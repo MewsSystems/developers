@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { format, parse } from 'date-fns';
 import { fetchConfiguration, fetchRates, setRates } from './actions';
 import useInterval from '../../lib/hooks/useInterval';
 
@@ -15,7 +16,14 @@ const Rates = ({
   rates,
   interval,
 }) => {
-  const { currencyPairs, current, previous, selected, configStatus } = rates;
+  const {
+    configStatus,
+    currencyPairs,
+    current,
+    lastUpdate,
+    previous,
+    selected,
+  } = rates;
 
   useEffect(() => {
     fetchConfiguration();
@@ -47,14 +55,16 @@ const Rates = ({
         <h1>Exchange rates</h1>
       </header>
 
+      <p>{`Last update: ${
+        lastUpdate ? format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss') : 'Never'
+      }`}</p>
       <CurrencySelect
         handleChange={setRates}
         value={selected}
         currencyPairs={currencyPairs}
       />
       <CurrencyList currencyList={currencyList} />
-
-      {configStatus.isLoading && <Spinner />}
+      {!lastUpdate && configStatus.isLoading && <Spinner />}
     </article>
   );
 };

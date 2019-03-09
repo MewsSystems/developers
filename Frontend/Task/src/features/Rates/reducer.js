@@ -78,6 +78,7 @@ export default function(state = initialState, action) {
         },
         previous: payload.rates ? state.current : state.previous,
         current: payload.rates ? payload.rates : state.current,
+        lastUpdate: new Date().toISOString(),
       };
 
     case errorT(FETCH_RATES):
