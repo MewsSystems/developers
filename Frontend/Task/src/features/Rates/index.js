@@ -17,9 +17,10 @@ const Rates = ({
   interval,
 }) => {
   const {
-    configStatus,
     currencyPairs,
     current,
+    isLoadingConfig,
+    isLoadingRates,
     lastUpdate,
     previous,
     selected,
@@ -64,7 +65,7 @@ const Rates = ({
         currencyPairs={currencyPairs}
       />
       <CurrencyList currencyList={currencyList} />
-      {!lastUpdate && configStatus.isLoading && <Spinner />}
+      {!lastUpdate && (isLoadingConfig || isLoadingRates) && <Spinner />}
     </article>
   );
 };

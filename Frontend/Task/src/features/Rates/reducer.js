@@ -9,16 +9,8 @@ const initialState = {
   previous: {},
   current: {},
   selected: [],
-  configStatus: {
-    isLoading: false,
-    isRejected: false,
-    error: null,
-  },
-  ratesStatus: {
-    isLoading: false,
-    isRejected: false,
-    error: null,
-  },
+  isLoadingConfig: false,
+  isLoadingRates: false,
   lastUpdate: null,
 };
 
@@ -29,66 +21,41 @@ export default function(state = initialState, action) {
     case startT(FETCH_CONFIGURATION):
       return {
         ...state,
-        configStatus: {
-          error: null,
-          isLoading: true,
-          isRejected: false,
-        },
+        isLoadingConfig: true,
       };
 
     case successT(FETCH_CONFIGURATION):
       return {
         ...state,
-        configStatus: {
-          error: null,
-          isLoading: false,
-          isRejected: false,
-        },
-        currencyPairs:
-          payload && payload.currencyPairs ? payload.currencyPairs : {},
+        currencyPairs: payload.currencyPairs ? payload.currencyPairs : {},
+        isLoadingConfig: false,
       };
 
     case errorT(FETCH_CONFIGURATION):
       return {
         ...state,
-        configStatus: {
-          error: payload.data.message,
-          isLoading: false,
-          isRejected: true,
-        },
+        isLoadingConfig: false,
       };
 
     case startT(FETCH_RATES):
       return {
         ...state,
-        ratesStatus: {
-          error: null,
-          isLoading: true,
-          isRejected: false,
-        },
+        isLoadingRates: true,
       };
 
     case successT(FETCH_RATES):
       return {
         ...state,
-        ratesStatus: {
-          error: null,
-          isLoading: false,
-          isRejected: false,
-        },
-        previous: payload.rates ? state.current : state.previous,
         current: payload.rates ? payload.rates : state.current,
+        isLoadingRates: false,
         lastUpdate: new Date().toISOString(),
+        previous: payload.rates ? state.current : state.previous,
       };
 
     case errorT(FETCH_RATES):
       return {
         ...state,
-        ratesStatus: {
-          error: payload.data.message,
-          isLoading: false,
-          isRejected: true,
-        },
+        isLoadingRates: false,
       };
 
     case SET_RATES:
