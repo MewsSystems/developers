@@ -22,8 +22,8 @@ const getTrend = (prevValue, nextValue) => {
 };
 
 const trendSymbols = {
-  [UP]: '⇧',
-  [DOWN]: '⇩',
+  [UP]: '▲',
+  [DOWN]: '▼',
   [EQUAL]: '-',
   [UNKNOWN]: '?',
 };
