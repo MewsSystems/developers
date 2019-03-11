@@ -1,62 +1,68 @@
 import { FETCH_CONFIGURATION, FETCH_RATES, SET_RATES } from './actions';
 
-export const startT = type => `${type}_PENDING`;
-export const successT = type => `${type}_FULFILLED`;
-export const errorT = type => `${type}_REJECTED`;
+export const start = type => `${type}_PENDING`;
+export const success = type => `${type}_FULFILLED`;
+export const error = type => `${type}_REJECTED`;
 
 const initialState = {
   currencyPairs: {},
-  previous: {},
   current: {},
-  selected: [],
+  fetchRatesId: null,
   isLoadingConfig: false,
   isLoadingRates: false,
   lastUpdate: null,
+  previous: {},
+  selected: [],
 };
 
 export default function(state = initialState, action) {
-  const { payload, type } = action;
+  const { meta, payload, type } = action;
 
   switch (type) {
-    case startT(FETCH_CONFIGURATION):
+    case start(FETCH_CONFIGURATION):
       return {
         ...state,
         isLoadingConfig: true,
       };
 
-    case successT(FETCH_CONFIGURATION):
+    case success(FETCH_CONFIGURATION):
       return {
         ...state,
         currencyPairs: payload.currencyPairs ? payload.currencyPairs : {},
         isLoadingConfig: false,
       };
 
-    case errorT(FETCH_CONFIGURATION):
+    case error(FETCH_CONFIGURATION):
       return {
         ...state,
         isLoadingConfig: false,
       };
 
-    case startT(FETCH_RATES):
+    case start(FETCH_RATES):
       return {
         ...state,
+        fetchRatesId: meta.fetchRatesId,
         isLoadingRates: true,
       };
 
-    case successT(FETCH_RATES):
-      return {
-        ...state,
-        current: payload.rates ? payload.rates : state.current,
-        isLoadingRates: false,
-        lastUpdate: new Date().toISOString(),
-        previous: payload.rates ? state.current : state.previous,
-      };
+    case success(FETCH_RATES):
+      return meta.fetchRatesId === state.fetchRatesId
+        ? {
+            ...state,
+            current: payload.rates ? payload.rates : state.current,
+            isLoadingRates: false,
+            lastUpdate: new Date().toISOString(),
+            previous: payload.rates ? state.current : state.previous,
+          }
+        : state;
 
-    case errorT(FETCH_RATES):
-      return {
-        ...state,
-        isLoadingRates: false,
-      };
+    case error(FETCH_RATES):
+      return meta.fetchRatesId === state.fetchRatesId
+        ? {
+            ...state,
+            isLoadingRates: false,
+          }
+        : state;
 
     case SET_RATES:
       return {

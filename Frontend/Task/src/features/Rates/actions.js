@@ -25,6 +25,9 @@ export const fetchRates = currencyPairs => {
   return (dispatch, _, { fetchJSON, toast }) => {
     dispatch({
       type: FETCH_RATES,
+      meta: {
+        fetchRatesId: Math.random(),
+      },
       payload: fetchJSON({
         url: `/rates?currencyPairIds[]=${currencyPairs.join(
           '&currencyPairIds[]=',
