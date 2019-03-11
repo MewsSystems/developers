@@ -46,7 +46,7 @@ The graphical side of the application is not the primary focus of task, however 
 {
     currencyPairs: {
         id1: [{ code: 'EUR', name: 'Euro' }, { code: 'USD', name: 'US Dollar' }],
-        id2: [{ name: 'GBP', name: 'British Pound' }, { code: 'JPY', name: 'Japanese Yen' }],
+        id2: [{ code: 'GBP', name: 'British Pound' }, { code: 'JPY', name: 'Japanese Yen' }],
         ...
     }
 }
