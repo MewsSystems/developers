@@ -1,0 +1,4 @@
+export default {
+  endpoint: 'http://localhost:3000',
+  interval: 10000,
+};
