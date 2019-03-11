@@ -43,13 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency.cs" />
-    <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="CnbExchangeRateResponseParser.cs" />
+    <Compile Include="CnbExchangeRatesFilter.cs" />
+    <Compile Include="Models\Currency.cs" />
+    <Compile Include="Models\ExchangeRate.cs" />
+    <Compile Include="Interfaces\IExchangeRatesFilter.cs" />
+    <Compile Include="Interfaces\IExchangeRateResponseParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Models\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
