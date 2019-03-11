@@ -1,0 +1,13 @@
+{
+  "plugins": ["jasmine"],
+  "extends": ["airbnb", "plugin:jasmine/recommended"],
+  "env": {
+    "jasmine": true,
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "rules": {
+    "react/require-default-props": [false]
+  }
+}
