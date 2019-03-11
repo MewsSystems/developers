@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
-import sk.cll.mewsapp.dummy.DummyContent;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -19,16 +21,7 @@ import sk.cll.mewsapp.dummy.DummyContent;
  * on handsets.
  */
 public class ItemDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    private Photo mPhoto;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,17 +33,21 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if (getArguments().containsKey("photo")) {
+                Gson g = new Gson();
+                mPhoto = g.fromJson(getArguments().getString("photo"), Photo.class);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+                Activity activity = this.getActivity();
+                if (activity != null) {
+                    CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
+                    if (appBarLayout != null) {
+                        appBarLayout.setTitle(mPhoto.getTitle());
+                        Picasso.get().load(mPhoto.getUrl())
+                                .into(((ImageView) activity.findViewById(R.id.img_photo)));
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                    }
+                }
             }
         }
     }
@@ -61,8 +58,11 @@ public class ItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
+        if (mPhoto != null) {
+            ((TextView) rootView.findViewById(R.id.tv_id))
+                    .setText(String.format("ID: %d", mPhoto.getId()));
+            ((TextView) rootView.findViewById(R.id.tv_albumId))
+                    .setText(String.format("Album ID: %d", mPhoto.getAlbumId()));
         }
 
         return rootView;
