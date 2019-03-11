@@ -9,6 +9,12 @@ import CurrencySelect from './CurrencySelect';
 import CurrencyList from './CurrencyList';
 import Spinner from '../../components/Spinner';
 
+const fetchSelected = (selected, fetchRates) => {
+  if (selected.length > 0) {
+    fetchRates(selected.map(a => a.value));
+  }
+};
+
 const Rates = ({
   fetchConfiguration,
   fetchRates,
@@ -31,15 +37,11 @@ const Rates = ({
   }, [fetchConfiguration]);
 
   useEffect(() => {
-    if (selected.length > 0) {
-      fetchRates(selected.map(a => a.value));
-    }
+    fetchSelected(selected, fetchRates);
   }, [fetchRates, selected]);
 
   useInterval(() => {
-    if (selected.length > 0) {
-      fetchRates(selected.map(a => a.value));
-    }
+    fetchSelected(selected, fetchRates);
   }, interval);
 
   const currencyList = selected.map(({ label, value }) => ({
@@ -55,9 +57,17 @@ const Rates = ({
         <h1>Exchange rates</h1>
       </header>
 
-      <p>{`Last update: ${
-        lastUpdate ? format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss') : 'Never'
-      }`}</p>
+      {lastUpdate && (
+        <p>
+          Last update:{' '}
+          <time dateTime={lastUpdate}>
+            {format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss')}
+          </time>
+        </p>
+      )}
+
+      {!lastUpdate && <p>Last update: Never</p>}
+
       <CurrencySelect
         handleChange={setRates}
         value={selected}
@@ -76,6 +86,7 @@ const mapDispatchToProps = {
   fetchRates,
   setRates,
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

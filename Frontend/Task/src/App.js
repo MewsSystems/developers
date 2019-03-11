@@ -17,9 +17,7 @@ class App extends Component {
         <main className={styles.app}>
           <Rates interval={interval} />
         </main>
-        <footer>
-          <ToastContainer />
-        </footer>
+        <ToastContainer />
       </>
     );
   }

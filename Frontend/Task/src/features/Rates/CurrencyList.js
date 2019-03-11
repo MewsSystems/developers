@@ -7,28 +7,28 @@ const DOWN = 'down';
 const EQUAL = 'equal';
 const UNKNOWN = 'unknown';
 
-const CurrencyList = ({ currencyList }) => {
-  const getTrend = (prevValue, nextValue) => {
-    if (!prevValue || !nextValue) {
-      return UNKNOWN;
-    }
-    if (prevValue < nextValue) {
-      return UP;
-    } else if (prevValue > nextValue) {
-      return DOWN;
-    } else if (prevValue === nextValue) {
-      return EQUAL;
-    }
+const getTrend = (prevValue, nextValue) => {
+  if (!prevValue || !nextValue) {
     return UNKNOWN;
-  };
+  }
+  if (prevValue < nextValue) {
+    return UP;
+  } else if (prevValue > nextValue) {
+    return DOWN;
+  } else if (prevValue === nextValue) {
+    return EQUAL;
+  }
+  return UNKNOWN;
+};
 
-  const trendSymbols = {
-    [UP]: '⇧',
-    [DOWN]: '⇩',
-    [EQUAL]: '-',
-    [UNKNOWN]: '?',
-  };
+const trendSymbols = {
+  [UP]: '⇧',
+  [DOWN]: '⇩',
+  [EQUAL]: '-',
+  [UNKNOWN]: '?',
+};
 
+const CurrencyList = ({ currencyList }) => {
   return (
     <table className={styles.currencyList}>
       <thead>

@@ -13,14 +13,10 @@ export const fetchConfiguration = () => {
       type: FETCH_CONFIGURATION,
       payload: fetchJSON({
         url: '/configuration',
-      })
-        .catch(e => {
-          toast.error(e.data.message);
-          throw e;
-        })
-        .then(response => {
-          return response;
-        }),
+      }).catch(e => {
+        toast.error(e.data.message);
+        throw e;
+      }),
     });
   };
 };
@@ -34,14 +30,10 @@ export const fetchRates = currencyPairs => {
           '&currencyPairIds[]=',
         )}
         `,
-      })
-        .catch(e => {
-          toast.warn('Failed to update data. Displayed data can be outdated.');
-          throw e;
-        })
-        .then(response => {
-          return response;
-        }),
+      }).catch(e => {
+        toast.warn('Failed to update data. Displayed data can be outdated.');
+        throw e;
+      }),
     });
   };
 };
