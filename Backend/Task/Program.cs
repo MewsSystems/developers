@@ -25,22 +25,9 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
-
-        static async Task MainAsync()
-        {
             try
             {
-                string url = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.txt";
-                var targetCurrency = new Currency("CZK");
-                var parser = new CnbExchangeRateResponseParser();
-                var filter = new CnbExchangeRatesFilter();
-                var provider = new ExchangeRateProvider(parser, filter, _httpClient, url, targetCurrency);
-
-                var rates = await provider.GetExchangeRatesAsync(currencies);
-
+                var rates = GetExchangeRatesAsync().Result;
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
@@ -50,8 +37,27 @@ namespace ExchangeRateUpdater
             catch (SystemException e)
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+
             }
+            Console.ReadLine();
         }
 
+        static async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync()
+        {
+            var provider = GetInitializedExchangeRatesProvider();
+            var rates = await provider.GetExchangeRatesAsync(currencies);
+            return rates;
+        }
+
+        static ExchangeRateProvider GetInitializedExchangeRatesProvider()
+        {
+            string url = "https://www.cnb.cz/en/financial_markets/foreign_exchange_market/exchange_rate_fixing/daily.txt";
+            var targetCurrency = new Currency("CZK");
+            var parser = new CnbExchangeRateResponseParser();
+            var filter = new CnbExchangeRatesFilter();
+            var provider = new ExchangeRateProvider(parser, filter, _httpClient, url, targetCurrency);
+
+            return provider;
+        }
     }
 }
