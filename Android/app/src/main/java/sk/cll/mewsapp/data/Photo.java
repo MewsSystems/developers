@@ -1,4 +1,4 @@
-package sk.cll.mewsapp;
+package sk.cll.mewsapp.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
