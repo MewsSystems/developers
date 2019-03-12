@@ -7,7 +7,6 @@ import sk.cll.mewsapp.activities.ItemListActivity;
 public abstract class PaginationScrollListener extends RecyclerView.OnScrollListener {
 
     public PaginationScrollListener() {
-
     }
 
     @Override
@@ -24,11 +23,9 @@ public abstract class PaginationScrollListener extends RecyclerView.OnScrollList
                 loadMoreItems();
             }
         }
-
     }
 
     protected abstract void loadMoreItems();
-
 
     public abstract boolean isLoading();
 

@@ -7,5 +7,5 @@
     <string name="no_data">No data. Click to refresh</string>
     <string name="select">Select an image</string>
     <string name="error_downloading">Error while downloading data. Try again later please.</string>
-    <string name="downloading">Downloading...</string>
+    <string name="downloading">Downloading…</string>
 </resources>

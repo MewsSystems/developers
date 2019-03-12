@@ -1,7 +1,6 @@
 package sk.cll.mewsapp.activities;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,32 +28,19 @@ import sk.cll.mewsapp.data.Photo;
 import sk.cll.mewsapp.data.utils.MyAdapter;
 import sk.cll.mewsapp.data.utils.MyViewModel;
 import sk.cll.mewsapp.data.utils.PaginationScrollListener;
-import sk.cll.mewsapp.paging.Urls;
-import sk.cll.mewsapp.services.PhotoService;
+import sk.cll.mewsapp.api.PhotoService;
+import sk.cll.mewsapp.api.Repository;
 
 
 public class ItemListActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "http://jsonplaceholder.typicode.com/";
     public static final int LIMIT = 30;
-    public static final int PAGE_START = 0;
-    private int currentPage = PAGE_START;
+
     private boolean isLoading = false;
-    int itemCount = 0;
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
     private List<Photo> mPhotos;
     private CompositeDisposable mCompositeDisposable;
-    PhotoService service = new Retrofit.Builder()
-            .baseUrl(Urls.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(new OkHttpClient.Builder().build())
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build().create(PhotoService.class);
+    private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +51,14 @@ public class ItemListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        mTwoPane = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        mRepository = new Repository(new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder().build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build().create(PhotoService.class));
+
         mPhotos = new ArrayList<>();
         RecyclerView recyclerView = findViewById(R.id.item_list);
         mCompositeDisposable = new CompositeDisposable();
@@ -73,7 +66,7 @@ public class ItemListActivity extends AppCompatActivity {
         if (mPhotos.isEmpty()) {
             recyclerView.setAdapter(new MyAdapter(mPhotos, this));
             if (savedInstanceState == null) {
-                preparedListItem();
+                downloadNewData();
             } else {
                 findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
                 View v = findViewById(R.id.tv_select);
@@ -87,9 +80,7 @@ public class ItemListActivity extends AppCompatActivity {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentPage++;
-                preparedListItem();
-
+                downloadNewData();
             }
 
             @Override
@@ -97,9 +88,7 @@ public class ItemListActivity extends AppCompatActivity {
                 return isLoading;
             }
         });
-
-        findViewById(R.id.tv_empty_view).setOnClickListener(v -> preparedListItem());
-
+        findViewById(R.id.tv_empty_view).setOnClickListener(v -> downloadNewData());
     }
 
     /**
@@ -110,6 +99,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     public void downloadNewData() {
+        Toast.makeText(ItemListActivity.this, R.string.downloading, Toast.LENGTH_SHORT).show();
         if (!checkInternetConnection(this)) {
             Toast.makeText(ItemListActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             setLoadingFalse();
@@ -121,7 +111,7 @@ public class ItemListActivity extends AppCompatActivity {
                 }
             }
         } else {
-            mCompositeDisposable.add(service.getPhotos(mPhotos.size(), LIMIT)
+            mCompositeDisposable.add(mRepository.executePhotoApi(mPhotos.size())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(this::onSuccess, this::onError));
@@ -137,20 +127,13 @@ public class ItemListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-//                        setupRecyclerView((RecyclerView) recyclerView);
-
 
         mPhotos.addAll(photos);
-//        recyclerView.setAdapter(new MyAdapter(mPhotos, this, mTwoPane));
         recyclerView.getAdapter().notifyDataSetChanged();
         setLoadingFalse();
 
-
-
         MyViewModel model = ViewModelProviders.of(this).get(MyViewModel.class);
         model.addPhotos(photos);
-
-
     }
 
     public void setList() {
@@ -161,13 +144,7 @@ public class ItemListActivity extends AppCompatActivity {
             RecyclerView recyclerView = findViewById(R.id.item_list);
             recyclerView.setAdapter(new MyAdapter(mPhotos, this));
             recyclerView.getAdapter().notifyDataSetChanged();
-
         }
-    }
-
-    private void preparedListItem() {
-        Toast.makeText(ItemListActivity.this, R.string.downloading, Toast.LENGTH_SHORT).show();
-        downloadNewData();
     }
 
     public void onError(Throwable error) {
@@ -182,12 +159,6 @@ public class ItemListActivity extends AppCompatActivity {
 
         Toast.makeText(ItemListActivity.this, R.string.error_downloading, Toast.LENGTH_LONG).show();
         Log.e("ItemList", error.getLocalizedMessage());
-    }
-
-    //todo
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     public static boolean checkInternetConnection(Context context) {

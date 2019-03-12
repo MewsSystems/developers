@@ -21,8 +21,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:scaleType="centerInside"
             android:contentDescription="@string/image"
+            android:scaleType="centerInside"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"/>
@@ -37,7 +37,7 @@
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:paddingTop="8dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="20sp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -68,16 +68,13 @@
             android:id="@+id/btn_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/details"
             android:layout_marginEnd="16dp"
             android:padding="8dp"
+            android:text="@string/details"
+            android:visibility="gone"
             card_view:layout_constraintBottom_toBottomOf="@+id/tv_albumId"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="@+id/tv_id"/>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </com.google.android.material.card.MaterialCardView>

@@ -21,6 +21,7 @@
                                                app:spanCount="3"
                                                tools:context=".activities.ItemListActivity"
                                                tools:listitem="@layout/item_list_content"/>
+
     <TextView
         android:id="@+id/tv_empty_view"
         android:layout_width="wrap_content"

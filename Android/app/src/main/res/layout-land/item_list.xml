@@ -10,8 +10,8 @@
         android:id="@+id/tv_empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_gravity="center"
+        android:gravity="center"
         android:text="@string/no_data"
         android:textSize="30sp"
         android:visibility="gone"/>
@@ -24,12 +24,6 @@
                   android:baselineAligned="false"
                   android:orientation="horizontal"
                   tools:context=".activities.ItemListActivity">
-
-        <!--
-        This layout is a two-pane layout for the Items
-        master/detail flow.
-
-        -->
 
         <androidx.recyclerview.widget.RecyclerView android:id="@+id/item_list"
                                                    android:name="sk.cll.mewsapp.ItemListFragment"
@@ -51,14 +45,13 @@
             android:layout_weight="2">
 
             <TextView
+                android:id="@+id/tv_select"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:id="@+id/tv_select"
                 android:text="@string/select"/>
 
         </FrameLayout>
-
     </LinearLayout>
 </FrameLayout>

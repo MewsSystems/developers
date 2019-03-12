@@ -1,4 +1,4 @@
-package sk.cll.mewsapp.services;
+package sk.cll.mewsapp.api;
 
 import java.util.List;
 
@@ -11,7 +11,4 @@ public interface PhotoService {
 
     @GET("photos")
     Observable<List<Photo>> getPhotos(@Query("_start") int start, @Query("_limit") int limit);
-
-    @GET("photos")
-    List<Photo> getPhotos2(@Query("_start") int start, @Query("_limit") int limit);
 }

@@ -1,7 +1,6 @@
 package sk.cll.mewsapp.data.utils;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,7 +32,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-
         private final TextView title;
         private final TextView id;
         private final TextView albumId;
@@ -78,7 +75,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             holder.albumId.setVisibility(View.GONE);
             holder.details.setVisibility(View.GONE);
         }
-//        holder.itemView.setOnClickListener(mOnClickListener);
 
         holder.itemView.setOnClickListener(v -> {
             if (mPhotos.get(position).isExpanded()) {
@@ -95,26 +91,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
 
         holder.details.setOnClickListener(view -> {
-
             MyViewModel model = ViewModelProviders.of((AppCompatActivity) mContext).get(MyViewModel.class);
             model.setSelected(mPhotos.get(position));
 
-            Gson g = new Gson();
-                Bundle arguments = new Bundle();
-                arguments.putString("photo", g.toJson(mPhotos.get(position)));
-
-                ItemDetailFragment fragment = new ItemDetailFragment();
-                fragment.setArguments(arguments);
-                FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
-                Fragment old = fm.findFragmentByTag("detail");
-                if (old != null) {
-                    fm.beginTransaction().remove(old).commit();
-                }
-                fm.beginTransaction()
-                        .addToBackStack("detail")
-                        .replace(R.id.item_detail_container, fragment, "detail")
-                        .commit();
-
+            ItemDetailFragment fragment = new ItemDetailFragment();
+            FragmentManager fm = ((AppCompatActivity) mContext).getSupportFragmentManager();
+            Fragment old = fm.findFragmentByTag("detail");
+            if (old != null) {
+                fm.beginTransaction().remove(old).commit();
+            }
+            fm.beginTransaction()
+                    .addToBackStack("detail")
+                    .replace(R.id.item_detail_container, fragment, "detail")
+                    .commit();
         });
     }
 
