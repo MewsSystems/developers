@@ -18,9 +18,9 @@ const fetchSelected = (selected, fetchRates) => {
 const Rates = ({
   fetchConfiguration,
   fetchRates,
-  setRates,
-  rates,
   interval,
+  rates,
+  setRates,
 }) => {
   const {
     currencyPairs,

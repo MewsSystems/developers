@@ -7,6 +7,13 @@ const DOWN = 'down';
 const EQUAL = 'equal';
 const UNKNOWN = 'unknown';
 
+const trendSymbols = {
+  [UP]: '▲',
+  [DOWN]: '▼',
+  [EQUAL]: '-',
+  [UNKNOWN]: '?',
+};
+
 const getTrend = (prevValue, nextValue) => {
   if (!prevValue || !nextValue) {
     return UNKNOWN;
@@ -19,13 +26,6 @@ const getTrend = (prevValue, nextValue) => {
     return EQUAL;
   }
   return UNKNOWN;
-};
-
-const trendSymbols = {
-  [UP]: '▲',
-  [DOWN]: '▼',
-  [EQUAL]: '-',
-  [UNKNOWN]: '?',
 };
 
 const CurrencyList = ({ currencyList }) => {
