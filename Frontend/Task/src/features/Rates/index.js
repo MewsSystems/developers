@@ -57,16 +57,16 @@ const Rates = ({
         <h1>Exchange rates</h1>
       </header>
 
-      {lastUpdate && (
-        <p>
-          Last update:{' '}
+      <p>
+        Last update:{' '}
+        {lastUpdate ? (
           <time dateTime={lastUpdate}>
             {format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss')}
           </time>
-        </p>
-      )}
-
-      {!lastUpdate && <p>Last update: Never</p>}
+        ) : (
+          'Never'
+        )}
+      </p>
 
       <CurrencySelect
         handleChange={setRates}
