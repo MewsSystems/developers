@@ -99,6 +99,10 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     public void downloadNewData() {
+        if (isLoading) {
+            return;
+        }
+        isLoading = true;
         Toast.makeText(ItemListActivity.this, R.string.downloading, Toast.LENGTH_SHORT).show();
         if (!checkInternetConnection(this)) {
             Toast.makeText(ItemListActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
@@ -136,6 +140,9 @@ public class ItemListActivity extends AppCompatActivity {
         model.addPhotos(photos);
     }
 
+    /**
+     * Tries to load data from ViewModel
+     */
     public void setList() {
         MyViewModel model = ViewModelProviders.of(this).get(MyViewModel.class);
         List<Photo> photos = model.getPhotos();

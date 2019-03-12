@@ -28,6 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:text="@string/no_data"
         android:textSize="30sp"
         android:visibility="gone"/>
