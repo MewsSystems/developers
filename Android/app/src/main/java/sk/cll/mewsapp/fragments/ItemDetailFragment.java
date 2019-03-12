@@ -8,24 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import sk.cll.mewsapp.R;
-import sk.cll.mewsapp.activities.ItemListActivity;
 import sk.cll.mewsapp.data.Photo;
 import sk.cll.mewsapp.data.utils.MyViewModel;
-import sk.cll.mewsapp.paging.ItemDetailActivity;
 
-/**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
- * on handsets.
- */
+
 public class ItemDetailFragment extends Fragment {
     private Photo mPhoto;
 
@@ -49,16 +41,14 @@ public class ItemDetailFragment extends Fragment {
                     Gson g = new Gson();
                     mPhoto = g.fromJson(getArguments().getString("photo"), Photo.class);
 
-                    Activity activity = getActivity();
-
-
-                    if (activity != null) {
-                        CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
-                        if (appBarLayout != null) {
-                            appBarLayout.setTitle(mPhoto.getTitle());
-
-                        }
-                    }
+//                    Activity activity = getActivity();
+//                    if (activity != null) {
+//                        CollapsingToolbarLayout appBarLayout = activity.findViewById(R.id.toolbar_layout);
+//                        if (appBarLayout != null) {
+//                            appBarLayout.setTitle(mPhoto.getTitle());
+//
+//                        }
+//                    }
                 }
             }
         }

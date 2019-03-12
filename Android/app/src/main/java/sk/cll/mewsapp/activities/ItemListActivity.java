@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -28,18 +29,10 @@ import sk.cll.mewsapp.data.Photo;
 import sk.cll.mewsapp.data.utils.MyAdapter;
 import sk.cll.mewsapp.data.utils.MyViewModel;
 import sk.cll.mewsapp.data.utils.PaginationScrollListener;
-import sk.cll.mewsapp.paging.ItemDetailActivity;
 import sk.cll.mewsapp.paging.Urls;
 import sk.cll.mewsapp.services.PhotoService;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
+
 public class ItemListActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "http://jsonplaceholder.typicode.com/";
@@ -79,7 +72,15 @@ public class ItemListActivity extends AppCompatActivity {
         setList();
         if (mPhotos.isEmpty()) {
             recyclerView.setAdapter(new MyAdapter(mPhotos, this));
-            downloadNewData();
+            if (savedInstanceState == null) {
+                preparedListItem();
+            } else {
+                findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+                View v = findViewById(R.id.tv_select);
+                if (v != null) {
+                    v.setVisibility(View.GONE);
+                }
+            }
         }
 
         recyclerView.addOnScrollListener(new PaginationScrollListener() {
@@ -97,16 +98,28 @@ public class ItemListActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.tv_empty_view).setOnClickListener(v -> {
-           downloadNewData();
-        });
+        findViewById(R.id.tv_empty_view).setOnClickListener(v -> preparedListItem());
 
+    }
+
+    /**
+     * Sets isLoading to false after 1 second, so the download is not invoked many times while scrolling
+     */
+    private void setLoadingFalse() {
+        new Handler().postDelayed(() -> isLoading = false, 1000);
     }
 
     public void downloadNewData() {
         if (!checkInternetConnection(this)) {
             Toast.makeText(ItemListActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-            findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+            setLoadingFalse();
+            if (mPhotos.isEmpty()) {
+                findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+                View v = findViewById(R.id.tv_select);
+                if (v != null) {
+                    v.setVisibility(View.GONE);
+                }
+            }
         } else {
             mCompositeDisposable.add(service.getPhotos(mPhotos.size(), LIMIT)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -117,6 +130,10 @@ public class ItemListActivity extends AppCompatActivity {
 
     public void onSuccess(List<Photo> photos) {
         findViewById(R.id.tv_empty_view).setVisibility(View.GONE);
+        View v = findViewById(R.id.tv_select);
+        if (v != null) {
+            v.setVisibility(View.VISIBLE);
+        }
 
         RecyclerView recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
@@ -126,7 +143,8 @@ public class ItemListActivity extends AppCompatActivity {
         mPhotos.addAll(photos);
 //        recyclerView.setAdapter(new MyAdapter(mPhotos, this, mTwoPane));
         recyclerView.getAdapter().notifyDataSetChanged();
-        isLoading = false;
+        setLoadingFalse();
+
 
 
         MyViewModel model = ViewModelProviders.of(this).get(MyViewModel.class);
@@ -153,9 +171,16 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     public void onError(Throwable error) {
-        findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+        if (mPhotos.isEmpty()) {
+            findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+            View v = findViewById(R.id.tv_select);
+            if (v != null) {
+                v.setVisibility(View.GONE);
+            }
+        }
+        setLoadingFalse();
 
-        Toast.makeText(ItemListActivity.this, R.string.error_downloading, Toast.LENGTH_SHORT).show();
+        Toast.makeText(ItemListActivity.this, R.string.error_downloading, Toast.LENGTH_LONG).show();
         Log.e("ItemList", error.getLocalizedMessage());
     }
 
