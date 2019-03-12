@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:baselineAligned="false"
-              tools:context=".activities.ItemListActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:baselineAligned="false"
+             tools:context=".activities.ItemListActivity">
 
-<androidx.recyclerview.widget.RecyclerView android:id="@+id/item_list"
-                                           android:name="sk.cll.mewsapp.ItemListFragment"
-                                           xmlns:android="http://schemas.android.com/apk/res/android"
-                                           xmlns:app="http://schemas.android.com/apk/res-auto"
-                                           xmlns:tools="http://schemas.android.com/tools"
-                                           android:layout_width="match_parent"
-                                           android:layout_height="match_parent"
-                                           android:layout_marginLeft="16dp"
-                                           android:layout_marginRight="16dp"
-                                           app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                           android:orientation="vertical"
-                                           app:spanCount="3"
-                                           tools:context=".activities.ItemListActivity"
-                                           tools:listitem="@layout/item_list_content"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/item_list"
+                                               android:name="sk.cll.mewsapp.ItemListFragment"
+                                               xmlns:android="http://schemas.android.com/apk/res/android"
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               xmlns:tools="http://schemas.android.com/tools"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="match_parent"
+                                               android:layout_marginLeft="16dp"
+                                               android:layout_marginRight="16dp"
+                                               android:orientation="vertical"
+                                               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                               app:spanCount="3"
+                                               tools:context=".activities.ItemListActivity"
+                                               tools:listitem="@layout/item_list_content"/>
+    <TextView
+        android:id="@+id/tv_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_data"
+        android:textSize="30sp"
+        android:visibility="gone"/>
 
-<FrameLayout
-android:id="@+id/item_detail_container"
-android:layout_width="match_parent"
-android:layout_height="match_parent"/>
+    <FrameLayout
+        android:id="@+id/item_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

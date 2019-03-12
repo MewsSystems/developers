@@ -64,8 +64,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.title.setText(mPhotos.get(position).getTitle());
         holder.id.setText(String.format("Photo id: %d", mPhotos.get(position).getId()));
         holder.albumId.setText(String.format("Album id: %d", mPhotos.get(position).getAlbumId()));
-
-        Picasso.get().load(mPhotos.get(position).getThumbnailUrl()).into(holder.thumbnail);
+        Picasso.get().load(mPhotos.get(position).getThumbnailUrl())
+                .placeholder(R.drawable.placeholder_small).into(holder.thumbnail);
 
         holder.itemView.setTag(mPhotos.get(position));
         if (mPhotos.get(position).isExpanded()) {
@@ -94,11 +94,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             }
         });
 
-//        PhotosViewModel model = ViewModelProviders.of((ItemListActivity)mContext).get(PhotosViewModel.class);
-//        holder.details.setOnClickListener(item -> {
-//                    model.select(item);
-//
-//                });
         holder.details.setOnClickListener(view -> {
 
             MyViewModel model = ViewModelProviders.of((AppCompatActivity) mContext).get(MyViewModel.class);

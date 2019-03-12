@@ -1,7 +1,12 @@
 package sk.cll.mewsapp.activities;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -11,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -19,14 +23,14 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import sk.cll.mewsapp.R;
+import sk.cll.mewsapp.data.Photo;
 import sk.cll.mewsapp.data.utils.MyAdapter;
 import sk.cll.mewsapp.data.utils.MyViewModel;
 import sk.cll.mewsapp.data.utils.PaginationScrollListener;
-import sk.cll.mewsapp.data.Photo;
-import sk.cll.mewsapp.services.PhotoService;
-import sk.cll.mewsapp.R;
 import sk.cll.mewsapp.paging.ItemDetailActivity;
 import sk.cll.mewsapp.paging.Urls;
+import sk.cll.mewsapp.services.PhotoService;
 
 /**
  * An activity representing a list of Items. This activity
@@ -36,7 +40,7 @@ import sk.cll.mewsapp.paging.Urls;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ItemListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ItemListActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "http://jsonplaceholder.typicode.com/";
     public static final int LIMIT = 30;
@@ -93,16 +97,27 @@ public class ItemListActivity extends AppCompatActivity implements SwipeRefreshL
             }
         });
 
+        findViewById(R.id.tv_empty_view).setOnClickListener(v -> {
+           downloadNewData();
+        });
+
     }
 
     public void downloadNewData() {
-        mCompositeDisposable.add(service.getPhotos(mPhotos.size(), LIMIT)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::onSuccess, this::onError));
+        if (!checkInternetConnection(this)) {
+            Toast.makeText(ItemListActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+        } else {
+            mCompositeDisposable.add(service.getPhotos(mPhotos.size(), LIMIT)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(this::onSuccess, this::onError));
+        }
     }
 
     public void onSuccess(List<Photo> photos) {
+        findViewById(R.id.tv_empty_view).setVisibility(View.GONE);
+
         RecyclerView recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
 //                        setupRecyclerView((RecyclerView) recyclerView);
@@ -111,7 +126,6 @@ public class ItemListActivity extends AppCompatActivity implements SwipeRefreshL
         mPhotos.addAll(photos);
 //        recyclerView.setAdapter(new MyAdapter(mPhotos, this, mTwoPane));
         recyclerView.getAdapter().notifyDataSetChanged();
-        Toast.makeText(ItemListActivity.this, "on next", Toast.LENGTH_SHORT).show();
         isLoading = false;
 
 
@@ -134,23 +148,38 @@ public class ItemListActivity extends AppCompatActivity implements SwipeRefreshL
     }
 
     private void preparedListItem() {
-        Toast.makeText(ItemListActivity.this, "on load more items", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ItemListActivity.this, R.string.downloading, Toast.LENGTH_SHORT).show();
         downloadNewData();
     }
 
-    @Override
-    public void onRefresh() {
-        Toast.makeText(ItemListActivity.this, "on refresh", Toast.LENGTH_SHORT).show();
-
-    }
-
     public void onError(Throwable error) {
-        Toast.makeText(ItemListActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        findViewById(R.id.tv_empty_view).setVisibility(View.VISIBLE);
+
+        Toast.makeText(ItemListActivity.this, R.string.error_downloading, Toast.LENGTH_SHORT).show();
+        Log.e("ItemList", error.getLocalizedMessage());
     }
 
     //todo
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public static boolean checkInternetConnection(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            return false;
+        } else {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (NetworkInfo anInfo : info) {
+                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:scaleType="centerInside"
-            android:src="@drawable/test"
             android:contentDescription="@string/image"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"

@@ -69,18 +69,22 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+
         if (mPhoto != null) {
             ((TextView) rootView.findViewById(R.id.tv_id))
                     .setText(String.format("ID: %d", mPhoto.getId()));
             ((TextView) rootView.findViewById(R.id.tv_albumId))
                     .setText(String.format("Album ID: %d", mPhoto.getAlbumId()));
+            ((TextView) rootView.findViewById(R.id.tv_title))
+                    .setText(mPhoto.getTitle());
             Activity activity = this.getActivity();
             if (activity != null) {
                 Picasso.get().load(mPhoto.getUrl())
+                        .placeholder(R.drawable.placeholder_large)
                         .into(((ImageView) rootView.findViewById(R.id.img_photo)));
-                //todo title
             }
+
+
         }
 
         return rootView;

@@ -3,4 +3,9 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="details">Details</string>
     <string name="image">image</string>
+    <string name="no_internet">No Internet! Check your connection and try again later.</string>
+    <string name="no_data">No data</string>
+    <string name="select">Select an image</string>
+    <string name="error_downloading">Error while downloading data. Try again later please.</string>
+    <string name="downloading">Downloading...</string>
 </resources>
