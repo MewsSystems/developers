@@ -4,7 +4,7 @@ export const handleFetchError = async error => {
   const { res } = error;
   const genericError = new Error('Fetch error');
   genericError.res = res;
-  genericError.data = { success: false, message: 'An error occured.' };
+  genericError.data = { message: 'An error occured.' };
   genericError.originalError = error;
 
   try {
