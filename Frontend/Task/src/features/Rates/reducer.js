@@ -28,7 +28,7 @@ export default function(state = initialState, action) {
     case success(FETCH_CONFIGURATION):
       return {
         ...state,
-        currencyPairs: payload.currencyPairs ? payload.currencyPairs : {},
+        currencyPairs: payload.currencyPairs || state.currencyPairs,
         isLoadingConfig: false,
       };
 
@@ -49,7 +49,7 @@ export default function(state = initialState, action) {
       return meta.fetchRatesId === state.fetchRatesId
         ? {
             ...state,
-            current: payload.rates ? payload.rates : state.current,
+            current: payload.rates || state.current,
             isLoadingRates: false,
             lastUpdate: new Date().toISOString(),
             previous: payload.rates ? state.current : state.previous,
