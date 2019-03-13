@@ -79,7 +79,6 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.addOnScrollListener(new PaginationScrollListener() {
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
                 downloadNewData();
             }
 
