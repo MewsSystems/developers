@@ -26,7 +26,6 @@ const Rates = ({
     currencyPairs,
     current,
     isLoadingConfig,
-    isLoadingRates,
     lastUpdate,
     previous,
     selected,
@@ -51,6 +50,9 @@ const Rates = ({
     value,
   }));
 
+  const hasCurrencyPairs = Object.keys(currencyPairs).length > 0;
+  const hasSelected = selected.length > 0;
+
   return (
     <article className={styles.rates}>
       <header>
@@ -69,12 +71,36 @@ const Rates = ({
       </p>
 
       <CurrencySelect
+        isDisabled={!hasCurrencyPairs}
         handleChange={setRates}
         value={selected}
         currencyPairs={currencyPairs}
       />
-      <CurrencyList currencyList={currencyList} />
-      {!lastUpdate && (isLoadingConfig || isLoadingRates) && <Spinner />}
+
+      {hasSelected && <CurrencyList currencyList={currencyList} />}
+
+      {!hasSelected && hasCurrencyPairs && (
+        <p>Please select some currencies.</p>
+      )}
+
+      {isLoadingConfig && !hasCurrencyPairs && <Spinner />}
+
+      {!isLoadingConfig && !hasCurrencyPairs && (
+        <>
+          <p>It seems we don't have any currencies you could choose from.</p>
+          <p>
+            Could you try clicking the Reload button or reloading the page in a
+            while?
+          </p>
+          <button
+            className={styles.button}
+            type="button"
+            onClick={fetchConfiguration}
+          >
+            Reload currency pairs
+          </button>
+        </>
+      )}
     </article>
   );
 };

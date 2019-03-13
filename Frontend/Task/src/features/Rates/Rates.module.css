@@ -2,6 +2,12 @@
   width: 90%;
 }
 
+.button {
+  font-size: 16px;
+  margin-top: 16px;
+  padding: 12px;
+}
+
 @media (min-width: 768px) {
   .rates {
     width: 60%;

@@ -8,7 +8,7 @@ const pairToLabel = currencyPair => {
   return `${from.code}/${to.code}`;
 };
 
-const CurrencySelect = ({ currencyPairs, handleChange, value }) => {
+const CurrencySelect = ({ currencyPairs, handleChange, isDisabled, value }) => {
   const options = Object.entries(currencyPairs).map(([key, keyValue]) => {
     return {
       label: pairToLabel(keyValue),
@@ -20,6 +20,7 @@ const CurrencySelect = ({ currencyPairs, handleChange, value }) => {
     <Select
       className={styles.currencySelect}
       isMulti
+      isDisabled={isDisabled}
       value={value}
       onChange={handleChange}
       options={options}
