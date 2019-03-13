@@ -63,7 +63,7 @@ const Rates = ({
         Last update:{' '}
         {lastUpdate ? (
           <time dateTime={lastUpdate}>
-            {format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss')}
+            {format(parse(lastUpdate), 'YYYY/MM/DD, hh:mm:ss a')}
           </time>
         ) : (
           'Never'
