@@ -22,15 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".paging.ItemDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".activities.ItemListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="sk.cll.mewsapp.activities.ItemListActivity"/>
-        </activity>
     </application>
 
 </manifest>
