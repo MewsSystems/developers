@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">APIReader</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error">Error! Retry</string>
+    <string name="sorry_error_detected">Sorry, Error detected</string>
+</resources>
