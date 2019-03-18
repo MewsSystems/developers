@@ -1,0 +1,20 @@
+<div>
+    <currency-filter [exchangeRateList]="exchangeRateList" [(selectedIds)]="selectedIds" (updateRatesClick)="onUpdateRatesClick()" (filterChanged)="onFilterChanged()"></currency-filter>
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Source Currency</th>
+            <th>Target Currency</th>
+            <th>Rate</th>
+        </tr>
+        <tr *ngFor="let rate of getFilterdRates()" [ngClass]="getRowClass(rate)">
+            <td>{{rate.status}}</td>
+            <td>{{rate.sourceCurrency.name}} ({{rate.sourceCurrency.code}})</td>
+            <td>{{rate.targetCurrency.name}} ({{rate.targetCurrency.code}})</td>
+            <td>{{rate.rate}}</td>
+        </tr>
+    </table>
+    <div class="errorMessageBox" *ngIf="errorMessage">
+        <p>{{errorMessage}}</p>
+    </div>
+</div>

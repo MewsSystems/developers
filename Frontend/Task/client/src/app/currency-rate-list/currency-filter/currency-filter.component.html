@@ -1,0 +1,24 @@
+<div class="filterBlock">
+    <div class="selectBox">
+        <ng-select
+            [items]="exchangeRateList"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="false"
+            bindLabel="selectedRates"
+            placeholder="Select Exchange Rate"
+            bindLabel="id" 
+            bindValue="id"
+            (change)="onSelectedIdsChange()"
+            [(ngModel)]="selectedIds">
+            <ng-template ng-label-tmp let-item="item">
+                {{item.sourceCurrency.code}}/{{item.targetCurrency.code}}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item">
+                {{item.sourceCurrency.code}}/{{item.targetCurrency.code}}
+            </ng-template>
+        </ng-select>        
+    </div>
+
+    <button class="filterBtn" type="button" (click)='onUpdateRatesClick()'>Update Rates</button>
+</div>

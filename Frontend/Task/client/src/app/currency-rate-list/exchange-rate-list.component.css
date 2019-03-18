@@ -1,0 +1,33 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+  
+.growingRow {
+    background-color: #409447;
+    color: #fff;
+}
+
+.decliningRow {
+    background-color: #b93f3f;
+    color: #fff;
+}
+
+.stagnatingRow {
+    background-color: #fff;
+    color: #000;
+}
+
+.errorMessageBox {
+    margin: 20px;
+    padding: 5px;
+    background-color: #d15757;
+    color: #fff;
+
+}

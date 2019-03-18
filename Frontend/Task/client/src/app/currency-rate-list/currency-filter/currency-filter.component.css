@@ -1,0 +1,25 @@
+.filterBlock {
+    display: flex;
+    margin: 20px;
+}
+
+.selectBox {
+    min-width: 300px;
+}
+
+.filterBtn {
+    max-height: 50px;
+    min-width: 150px;
+    color: #fff;
+    background-color: #3f51b5;
+    border-color: transparent;
+    margin-left: 30px;
+}
+
+.filterBtn:hover {
+    background-color: #586bd8;
+}
+
+.filterBtn:active {
+    background-color: #5d75ff;
+}
