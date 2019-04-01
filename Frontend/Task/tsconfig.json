@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "app/.",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true  
+  },
+  "include": ["app/src"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}

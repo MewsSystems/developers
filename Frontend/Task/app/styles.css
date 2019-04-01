@@ -1,0 +1,31 @@
+.green {
+    color: #117137;
+}
+.red {
+    color: #950000;
+}
+.blue {
+    color: #005993;
+}
+
+.small {
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.tab {
+    border: 1px solid #000000;
+    border-bottom: none;
+    border-radius: 2px 2px;
+    margin-right: 2px;
+    padding: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background: #bbbbbb;
+}
+
+.tab.selected {
+    background: #ffffff;
+}
