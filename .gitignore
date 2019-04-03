@@ -20,3 +20,9 @@
 node_modules
 bower_components
 npm-debug.log
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/storage.ide-wal
+/Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/storage.ide-shm
+/Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/storage.ide
+/Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/db.lock
