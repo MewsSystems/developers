@@ -22,7 +22,9 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  saveState(store.getState());
+  saveState({
+    rates: store.getState().rates,
+  });
 });
 
 if (module.hot) {
