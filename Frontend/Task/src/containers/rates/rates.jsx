@@ -9,7 +9,7 @@ import { getRates, setRates } from '../../actions/rates';
 import { getRatesFromApi } from '../../helpers/common';
 
 import styles from './rates.module.scss';
-import getCurrenciesList, { getCurrencyPairs } from './selectors';
+import getCurrenciesList, { getCurrencyPairs } from '../../helpers/selectors';
 
 class Rates extends Component {
   componentDidMount() {
