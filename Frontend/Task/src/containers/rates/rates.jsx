@@ -35,6 +35,7 @@ class Rates extends Component {
       selected,
       setRates: setSelectedRates,
       currenciesList,
+      isError,
     } = this.props;
 
     const hasSelectedPairs = selected && selected.length > 0;
@@ -49,10 +50,14 @@ class Rates extends Component {
             handleChange={setSelectedRates}
           />
         </div>
-
         <div className={styles.ratesListWrapper}>
+          {isError && (
+            <h4>
+              There was an error while updating rates.
+              Will try to update again soon
+            </h4>
+          )}
           {hasSelectedPairs && <RatesList items={currenciesList} />}
-
           {!hasSelectedPairs && currencyPairs && (
             <h3>Please select currencies to display rates</h3>
           )}
@@ -65,9 +70,11 @@ class Rates extends Component {
 Rates.defaultProps = {
   selected: [],
   currencyPairs: null,
+  isError: false,
 };
 
 Rates.propTypes = {
+  isError: PropTypes.bool,
   currencyPairs: PropTypes.object,
   currenciesList: PropTypes.array.isRequired,
   selected: PropTypes.array,

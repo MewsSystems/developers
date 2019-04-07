@@ -48,4 +48,4 @@ RatesListItem.propTypes = {
   prev: PropTypes.number,
 };
 
-export default RatesListItem;
+export default React.memo(RatesListItem);

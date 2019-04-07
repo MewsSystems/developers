@@ -53,4 +53,4 @@ CurrencySelector.propTypes = {
   value: PropTypes.array,
 };
 
-export default CurrencySelector;
+export default React.memo(CurrencySelector);
