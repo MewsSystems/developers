@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import "colors";
+@import "mixins";
+
+html {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: Poppin, sans-serif;
+  font-size: 1rem;
+  line-height: 1.25;
+
+  color: rgb(0, 0, 0);
+}
+
+body {
+  position: relative;
+}
+
+#root {
+  height: 100%;
+}
+
+html,
+button,
+input,
+select,
+textarea {
+  font-family: Poppin, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  color:inherit;
+  font:inherit;
+  margin:0
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+
+  color: inherit;
+  cursor: pointer;
+}
+
+.green {
+  color: $green;
+}
+
+.red {
+  color: $red;
+}
+
+.grey {
+  color: $dark-grey;
+}

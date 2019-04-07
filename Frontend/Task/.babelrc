@@ -1,0 +1,20 @@
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "transform-class-properties"
+  ],
+  "env": {
+    "AVA": {
+      "plugins": [
+        ["babel-plugin-webpack-loaders", {
+          "config": "${CONFIG}",
+          "verbose": true
+        }],
+        "babel-plugin-rewire"
+      ]
+    }
+  }
+}

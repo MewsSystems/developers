@@ -1,0 +1,13 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "arrow-parens": ["off", { "requireForBlockBody": true }],
+    "react/forbid-prop-types": ["off"],
+    "import/extensions": ["off"],
+    "jsx-quotes": ["off"]
+  }
+}

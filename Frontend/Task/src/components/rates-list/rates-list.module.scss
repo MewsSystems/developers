@@ -1,0 +1,29 @@
+@import '../../assets/styles/colors';
+
+.ratesList {
+  list-style: none;
+  padding: 0;
+}
+
+.ratesListItemWrapper {
+  width: 300px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 6px;
+  background-color: #f7efec;
+  margin-bottom: 8px;
+
+  span {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    i {
+      font-size: 16px;
+    }
+  }
+}
