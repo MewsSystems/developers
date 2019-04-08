@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater
 {
     public class CNBProvider : ICustomExchangeProvider
     {
-        private const string CNBURL = "http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt";
+        private const string CNB_URL = "http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt";
 
         public async Task<IEnumerable<ExchangeRate>> GetData(string baseCurrencyCode, IEnumerable<Currency> currencies)
         {
@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater
 
             try
             {
-                var data = await HttpHelper.LoadData(CNBURL); // načtení dat
+                var data = await HttpHelper.LoadData(CNB_URL); // načtení dat
                 ParseData(data, baseCurrencyCode, currencies, exchangeRates); // zpracování dat
             }
             catch (Exception ex)

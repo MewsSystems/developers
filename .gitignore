@@ -26,3 +26,4 @@ npm-debug.log
 /Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/storage.ide-shm
 /Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/storage.ide
 /Backend/Task/.vs/ExchangeRateUpdater/v15/Server/sqlite3/db.lock
+/.vs/VSWorkspaceState.json
