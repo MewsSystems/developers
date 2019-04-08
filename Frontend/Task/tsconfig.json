@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"target": "ES2015",
+		"lib": ["dom", "es2015"],
+		"moduleResolution":"node"
+	}
+}

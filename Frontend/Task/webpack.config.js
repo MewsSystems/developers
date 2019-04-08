@@ -1,34 +1,30 @@
 const webpack = require('webpack');
 
 const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
-    entry: {
-        app: './app/app.js',
-    },
+    // plugins: [
+    //     new webpack.NoErrorsPlugin(),
+    // ],
+    entry: ['@babel/polyfill', './app/js/index.tsx'],
     output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
+        filename: 'app.js'
     },
     module: {
-        loaders: [{
-            test: /\.js?$/,
+        rules: [{
+            test: /\.(js|ts)x?$/,
             exclude: /(node_modules|Generated)/,
-            loader: 'babel',
+            loader: 'babel-loader',
         }, {
             test: /\.json$/,
             loader: 'json',
         }],
     },
-    devtool: 'eval',
+    devtool: 'source-map',
     devServer: {
         contentBase: './app',
     },
+    resolve: {
+        extensions: ['.js', '.json', '.ts', '.tsx'],
+    }
 };
 
 module.exports = webpackConfig;
