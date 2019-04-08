@@ -47,8 +47,17 @@ namespace ExchangeRateUpdater
                         continue;
                     }
 
-                    var amount = int.Parse(parts[2]);
-                    var rate = decimal.Parse(parts[4]);
+                    int amount = 0;
+                    if (!int.TryParse(parts[2], out amount))
+                    {
+                        throw new FormatException($"Nepovedlo se naparsovat amount hodnotu '{parts[2]}' na int.");
+                    }
+
+                    decimal rate = 0m;
+                    if (!decimal.TryParse(parts[4], out rate))
+                    {
+                        throw new FormatException($"Nepovedlo se naparsovat rate hodnotu '{parts[4]}' na decimal.");
+                    }
 
                     var currency = new Currency(currencyCode);
                     var exchangeRate = new ExchangeRate(baseCurrency, currency, rate / amount); // některé měny nejsou 1:1, ale např. Filipíny|peso|100|PHP|43,861 => za 100 peso dostanu 43 korun.
