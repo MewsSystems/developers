@@ -13,7 +13,7 @@ In `server` folder there is a simple currency exchange rate server configured, w
     - declining, when `prevValue > nextValue`
     - stagnating, when `prevValue == nextValue`
 
-When is the aplication loaded, it should downloads the configuration from the `/configuration` api. From the configuration, it should take a list of available exchange rates and use it to display the proper controls to the user. After that, start the periodical requests for updates through `/rates` api, with proper parameters, and display the results to the user.
+When is the aplication loaded, it should download the configuration from the `/configuration` api. From the configuration, it should take a list of available exchange rates and use it to display the proper controls to the user. After that, start the periodical requests for updates through `/rates` api, with proper parameters, and display the results to the user.
 
 The filtering of currency pairs should be done on client-side, meaning if filter changes between the updates, the change should be immediate.
 
