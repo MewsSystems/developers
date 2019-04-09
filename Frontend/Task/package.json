@@ -43,6 +43,7 @@
     "react-select": "^2.4.2",
     "react-spinners": "^0.5.4",
     "redux": "^4.0.1",
+    "redux-persist": "^5.10.0",
     "sanitize.css": "^8.0.0",
     "styled-components": "^4.2.0",
     "webpack": "1.13.1",

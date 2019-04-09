@@ -23,4 +23,5 @@ export const Wrapper = styled.div`
 export const Status = styled.div`
   margin-top: 2.5rem;
   color: ${theme.color.red};
+  text-transform: uppercase;
 `

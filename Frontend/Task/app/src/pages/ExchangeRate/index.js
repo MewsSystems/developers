@@ -11,6 +11,7 @@ import { getRates } from '../../api/get-rates'
 
 import { loadConfig } from '../../store/config/actions'
 import { loadRates } from '../../store/rates/actions'
+import { addPairs } from '../../store/pairs/actions'
 
 import { theme } from '../../../styles/theme'
 import { RateItem } from './components/RateItem'
@@ -19,8 +20,7 @@ import { Wrapper, Aside, List, Content, Status } from './styled'
 class ExchnageRateView extends Component {
   state = {
     error: null,
-    isLoading: true,
-    showedRates: [],
+    isLoading: Object.values(this.props.config).length === 0,
   }
 
   async componentDidMount() {
@@ -60,12 +60,12 @@ class ExchnageRateView extends Component {
   }
 
   handleChange = values => {
-    this.setState({ showedRates: values })
+    this.props.addPairs(values)
   }
 
   render() {
-    const { config, rates } = this.props
-    const { error, showedRates, isLoading } = this.state
+    const { config, rates, pairs } = this.props
+    const { error, isLoading } = this.state
 
     const options = Object.entries(config).map(item => ({
       value: item[0],
@@ -76,6 +76,7 @@ class ExchnageRateView extends Component {
       <Wrapper>
         <Aside>
           <Select
+            defaultValue={pairs}
             closeMenuOnSelect={false}
             components={makeAnimated()}
             isMulti
@@ -97,8 +98,8 @@ class ExchnageRateView extends Component {
         </Aside>
         <Content>
           <List>
-            {showedRates.length !== 0 &&
-              showedRates.map(item => (
+            {pairs.length !== 0 &&
+              pairs.map(item => (
                 <RateItem
                   key={item.value}
                   pair={item.label}
@@ -113,14 +114,16 @@ class ExchnageRateView extends Component {
   }
 }
 
-const mapStateToProps = ({ config, rates }) => ({
+const mapStateToProps = ({ config, rates, pairs }) => ({
   config,
   rates,
+  pairs,
 })
 
 const mapDispatchToProps = {
   loadConfig,
   loadRates,
+  addPairs,
 }
 
 const ExchnageRate = connect(
