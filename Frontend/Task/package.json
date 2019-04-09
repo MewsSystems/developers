@@ -14,19 +14,37 @@
   },
   "babel": {
     "presets": [
+      "react",
       "es2015",
       "stage-1"
     ]
   },
   "dependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "babel-core": "6.13.2",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.13.2",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "6.13.0",
     "chance": "1.0.4",
     "express": "4.14.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
+    "prettier": "^1.16.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^6.0.1",
+    "react-select": "^2.4.2",
+    "react-spinners": "^0.5.4",
+    "redux": "^4.0.1",
+    "sanitize.css": "^8.0.0",
+    "styled-components": "^4.2.0",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
   }
