@@ -24,4 +24,5 @@ RatesList.propTypes = {
   items: PropTypes.array,
 };
 
+export { RatesList };
 export default React.memo(RatesList);

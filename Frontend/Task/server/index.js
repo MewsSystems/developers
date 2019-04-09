@@ -48,7 +48,7 @@ server.get('/rates', (req, res) => {
 
       const rates = {};
       // eslint-disable-next-line
-      for (let pairId of currencyPairIds) {
+      for (let pairId of currencyPairIds.split(',')) {
         if (typeof allRates[pairId] !== 'undefined') {
           rates[pairId] = allRates[pairId];
         }

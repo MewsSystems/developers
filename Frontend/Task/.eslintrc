@@ -8,6 +8,7 @@
     "arrow-parens": ["off", { "requireForBlockBody": true }],
     "react/forbid-prop-types": ["off"],
     "import/extensions": ["off"],
-    "jsx-quotes": ["off"]
+    "jsx-quotes": ["off"],
+    "react/jsx-filename-extension": ["off"]
   }
 }

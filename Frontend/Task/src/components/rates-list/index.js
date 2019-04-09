@@ -1,3 +1,5 @@
-import RatesList from './rates-list.jsx';
+import RatesListComponent from './rates-list.jsx';
+import RatesListItemComponent from './rates-list-item.jsx';
 
-export default RatesList;
+export { RatesListItemComponent };
+export default RatesListComponent;
