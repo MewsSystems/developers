@@ -6,7 +6,8 @@
     "outDir": "app/.",
     "strict": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true  
+    "esModuleInterop": true,
+    "jsx": "preserve"
   },
   "include": ["app/src", "app/**/*"],
   "exclude": ["node_modules", "**/__tests__/*"]

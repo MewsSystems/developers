@@ -34,3 +34,7 @@
 .localForm {
     border: 1px solid;
 }
+
+div.CurrencyTable {
+    border: 1px solid black;
+}

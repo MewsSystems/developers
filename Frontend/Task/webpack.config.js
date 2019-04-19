@@ -13,13 +13,17 @@ const webpackConfig = {
         libraryTarget: 'window',
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['', '.js', '.json', '.jsx'],
     },
     module: {
         loaders: [{
-            test: /\.js?$/,
+            test: /\.(js|jsx)$/,
             exclude: /(node_modules|Generated)/,
             loader: 'babel',
+            query:
+            {
+                presets:['react']
+            }
         }, {
             test: /\.json$/,
             loader: 'json',
