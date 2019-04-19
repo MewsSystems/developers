@@ -21,11 +21,16 @@
     padding: 4px;
     padding-left: 10px;
     padding-right: 10px;
-    margin-bottom: 10px;
     cursor: pointer;
     background: #bbbbbb;
+    height: 16px;
 }
 
 .tab.selected {
     background: #ffffff;
+    height: 17px;
+}
+
+.localForm {
+    border: 1px solid;
 }

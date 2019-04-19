@@ -20,7 +20,6 @@
     ]
   },
   "dependencies": {
-    "@types/jquery": "^3.3.29",
     "babel-cli": "^6.26.0",
     "babel-core": "6.13.2",
     "babel-loader": "6.2.4",
@@ -31,16 +30,20 @@
     "express": "4.14.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
-    "tsc": "^1.20150623.0",
     "webpack": "1.13.1",
-    "webpack-dev-server": "1.14.1"
+    "webpack-dev-server": "1.14.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "2.1.8"
   },
   "bugs": {
     "url": "https://github.com/MewsSystems/sample/issues"
   },
   "homepage": "https://github.com/MewsSystems/sample#readme",
   "devDependencies": {
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.1",
+    "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.4"
   },
   "keywords": [],
   "author": ""

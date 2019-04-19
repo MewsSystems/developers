@@ -1,6 +1,8 @@
 import { endpoint, interval } from '../config.json';
 import { Rates } from './Rates';
 import { Settings } from './Settings';
+import ApiCall from './modules/ApiCall';
+import AppCore from './AppCore';
 
 export class CurrencyPairs {
     public ratesObjectPointer?: Rates = undefined;
@@ -23,38 +25,38 @@ export class CurrencyPairs {
         }
     }
 
-    public loadCurrencyPairs() {
-        var dfd = $.Deferred();
+    public async loadCurrencyPairs() {
         var me = this;
         // load from localstorage
         var savedData = localStorage.getItem("currencyPairsSelection");
-        var savedCurrencyPairs: Array<string>;
+        var savedCurrencyPairs: Array<string> = [];
         if (savedData !== undefined && savedData !== null) {
             savedCurrencyPairs = JSON.parse(savedData);
         }
 
-        $.get(endpoint.replace("/rates", "") + "/configuration").then(function(result) {
-            me._currencyPairs = result.currencyPairs;
-            
-            // we launch savedPairs or if not exists, then all loaded ids
-            me.currencyPairsSelection = savedCurrencyPairs || me.getPairIds;
-            
-            // clcear element
-            me._renderElement.innerHTML = "";
-            me.createTabs(); 
-            
-            (new Settings(me)).render();
-            me.ratesObjectPointer = new Rates(me);
-
-            dfd.resolve();
-        }, function(err, trace) {
+        var ac = new ApiCall();
+        ac.endpoint = (<AppCore>AppCore.instance).endpointUrl;
+        ac.method = "configuration";
+        let result = await ac.sendRequest<ICurrencyPairsResponse>().catch(function(err) {
             if (confirm("Aplikaci se nepodařilo inicializovat. Přejete si provést inicializaci znovu?")) {
                 me.loadCurrencyPairs();
             }
-
-            dfd.reject(err);
         });
-        return dfd.promise();
+
+        me._currencyPairs = (<any>result).currencyPairs;
+            
+        // we launch savedPairs or if not exists, then all loaded ids
+        me.currencyPairsSelection = savedCurrencyPairs || me.getPairIds;
+        
+        // clcear element
+        me._renderElement.innerHTML = "";
+        me.createTabs(); 
+        
+        (new Settings(me)).render();
+        me.ratesObjectPointer = new Rates(me);
+        console.log(result);
+        
+        return result;
     }
 
     public createTabs() {
@@ -109,10 +111,10 @@ export class CurrencyPairs {
 
         if (selectedTab == "tabSettings") {
             tabSettings.classList.add("selected");
-            $(this.listRenderElement).hide();
+            this.listRenderElement.style.display = "block";
         } else {
             tabList.classList.add("selected");
-            $(this.settingsRenderElement).hide();
+            this.settingsRenderElement.style.display = "none";
         }
     }
 
@@ -142,6 +144,10 @@ export class CurrencyPairs {
             this._lastRates[item] = newValues[item];
         }
     }
+}
+
+interface ICurrencyPairsResponse {
+    currencyPairs: { [key: string] : [ICurrecy, ICurrecy] }
 }
 
 interface ICurrecy {

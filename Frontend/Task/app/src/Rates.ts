@@ -1,5 +1,8 @@
 import { endpoint, interval } from '../config.json';
 import { CurrencyPairs } from './CurrencyPairs';
+import ApiCall from './modules/ApiCall.js';
+import AppCore from './AppCore.js';
+import ERequestMethod from "./abstracts/ERequestMethod";
 
 export class Rates {
     private _currencyPairsObjectPointer: CurrencyPairs;
@@ -26,7 +29,7 @@ export class Rates {
         setInterval(function() { me.getPairs() }, interval);
     }
     
-    public getPairs() {
+    public async getPairs() {
         var me = this;
         let pairsArray: Array<string> = me._currencyPairsObjectPointer.getPairIds;
         /* // we send always request for all currencies, because refresh is faster, when changing selector of currencies
@@ -40,20 +43,24 @@ export class Rates {
         // refresh of last values
         me._currencyPairsObjectPointer.refreshLastValues(me._cachedResult);
 
-        $.get({
-            url: endpoint, 
-            data: {currencyPairIds: pairsArray},
-            dataType: "json"
-        }).then(function(result) {
+        //console.log(JSON.stringify({ currencyPairIds: pairsArray }));
+
+        var ac = new ApiCall();
+        ac.endpoint = (<AppCore>AppCore.instance).endpointUrl;
+        
+        ac.method = "rates";
+        ac.requestMethod(ERequestMethod.GET);
+        ac.addParam("currencyPairIds", pairsArray);
+        try {
+            let result = await ac.sendRequest<any>();
             me._cachedResult = result.rates;
             me.render();
-            $(me._errorRenderPanel).hide();
-            console.log(result);
-        }).fail(function(err) {
+            me._errorRenderPanel.style.display = "none";
+        } catch (error) {
             // if request failed
             me._errorRenderPanel.innerHTML = "Došlo k chybě při načítání, data nemusí odpovídat nejnovějším hodnotě.";
-            $(me._errorRenderPanel).show();
-        })
+            me._errorRenderPanel.style.display = "block";
+        }
     }
 
     public render() {
