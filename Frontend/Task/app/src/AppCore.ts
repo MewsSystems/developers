@@ -11,39 +11,42 @@ import CurrencyPairsModel from './models/CurrencyPairsModel.js';
 import ICurrencyPairsResponse from './abstracts/ICurrencyPairsResponse';
 import ICurrencyDisplayChanged from './abstracts/ICurrencyDisplayChanged';
 import IRatesResponse from './abstracts/IRatesResponse.js';
+import { Menu } from './views/Menu.jsx';
+import AppStore from './modules/AppStore.js';
 
 class AppCore extends Singleton {
     private _endpointUrl: string;
     private _events: EventAggregator = <EventAggregator>EventAggregator.instance;
-
+    private _store: AppStore = <AppStore>AppStore.instance;
     private _currencyPairsModel: Array<CurrencyPairsModel> = [];
 
     constructor() {
         super();
         this._endpointUrl = endpoint.replace("/rates", "");
-        
-        this._events.subscribe(this.eaListener.bind(this));
-
-        //@todo - remove
-        (<any>window)["ea"] = this._events;
+        this._events.subscribe(this.notifyAction.bind(this));
     }
 
     public get endpointUrl(): string {
         return this._endpointUrl;
     }
 
-    public eaListener(message: EEventMessages, value: any) {
+    public notifyAction(message: EEventMessages, value: any) {
         if (message == EEventMessages.CurrencyDisplayChanged) {
             let data = value as ICurrencyDisplayChanged;
             if (data.newState) {
-                this.storeCurrencyAdd(data.exchangeCode);
+                this._store.currencyAdd(data.exchangeCode);
             } else {
-                this.storeCurrencyRemove(data.exchangeCode);
+                this._store.currencyRemove(data.exchangeCode);
             }
         }
     }
 
     public async render() {
+        ReactDOM.render(
+            React.createElement(Menu, {}, null),
+            document.getElementById('exchange-rate-client')
+        );
+
         ReactDOM.render(
             React.createElement(Settings, {}, null),
             document.getElementById('root')
@@ -54,43 +57,20 @@ class AppCore extends Singleton {
             document.getElementById('root-rates')
         );
 
-        await this.getConfiguration();
+        await this.getConfiguration();        
         setInterval(this.updateRates.bind(this), interval);
+        this.updateRates();
+        
+        let tab = this._store.getTab();
+        this._events.notify(EEventMessages.MenuTabSelected, { tab: tab });
     }
-
-    //@todo -> přesunout do samostatné třídy
-    public getSaveState(): Array<string> {
-        let response: Array<string> = [];
-        try {
-            let saveStateCurrencyPairsSelection = window.localStorage.getItem("currencyPairsSelection");
-            if (saveStateCurrencyPairsSelection !== null) {
-                response = JSON.parse(saveStateCurrencyPairsSelection);
-            }
-        } catch (e) {
-            console.error("store-expection");
-        }
-
-        return response;
-    }
-    public storeCurrencyAdd(key: string) {
-        let data = this.getSaveState();
-        data = data.filter(function(x) { return x !== key });
-        data.push(key);
-        window.localStorage.setItem("currencyPairsSelection", JSON.stringify(data));
-    }
-    public storeCurrencyRemove(key: string) {
-        let data = this.getSaveState();
-        data = data.filter(function(x) { return x !== key });
-        window.localStorage.setItem("currencyPairsSelection", JSON.stringify(data));
-    }
-    // --- store ---
 
     private async getConfiguration() {
         let api = new ApiCall();
         api.endpoint = this.endpointUrl;
         api.method = "configuration";
 
-        let saveState = this.getSaveState();
+        let saveState = this._store.currencyGet();
 
         try {
             let data = await api.sendRequest<ICurrencyPairsResponse>();
@@ -123,7 +103,7 @@ class AppCore extends Singleton {
             var data = await api.sendRequest<IRatesResponse>();
             this._events.notify(EEventMessages.RatesRefreshed, data);
         } catch (exception) {
-            console.error(exception);
+            this._events.notify(EEventMessages.RatesRefreshFailed);
         }
     }
 }

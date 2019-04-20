@@ -13,10 +13,16 @@
     font-size: 0.8em;
 }
 
+div.paddingBottom10 {
+    padding-bottom: 10px;
+}
+
 .tab {
     border: 1px solid #000000;
     border-bottom: none;
     border-radius: 2px 2px;
+    border-bottom-left-radius: 0 0;
+    border-bottom-right-radius: 0 0;
     margin-right: 2px;
     padding: 4px;
     padding-left: 10px;
@@ -35,6 +41,12 @@
     border: 1px solid;
 }
 
-div.CurrencyTable {
+div.currencyTable {
     border: 1px solid black;
+    margin-top: -1px;
+    padding: 5px;
+}
+
+div.appMenuBar {
+    display: flex;
 }

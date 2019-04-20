@@ -13,7 +13,6 @@ class EventAggregator extends Singleton {
     }
 
     public notify(eventName: EEventMessages, value: any = {}) {
-        console.log(eventName);
         for (var item of this._subscribed) {
             item(eventName, value);
         }

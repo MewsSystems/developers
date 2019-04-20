@@ -1,7 +1,8 @@
 enum EExchangeRateTrend {
     UP = "UP",
     DOWN = "DOWN",
-    EQUAL = "EQUAL"
+    EQUAL = "EQUAL",
+    UNKNOWN = "UNKNOWN"
 }
 
 export = EExchangeRateTrend

@@ -10,7 +10,9 @@ class CurrencyPairsModel {
     public enabledInView: boolean = true;
 
     public trend(): EExchangeRateTrend {
-        let trend = this._lastRate - this._rate;
+        if (this._lastRate == null) return EExchangeRateTrend.UNKNOWN;
+
+        let trend = this._lastRate - this.rate;
         let response = EExchangeRateTrend.EQUAL
         if (trend > 0) {
             response = EExchangeRateTrend.DOWN;
@@ -21,16 +23,16 @@ class CurrencyPairsModel {
         return response;
     }
 
-    private _rate: number = 0;
+    private _rate: number | null = null;
     public set rate(value: number) {
         this._lastRate = this._rate;
         this._rate = value;
     }
     public get rate(): number {
-        return this._rate;
+        return this._rate || 0;
     }
 
-    private _lastRate: number = 0;
+    private _lastRate: number | null = null;
 
     public get currencyTitle(): string {
         return this.currencyNameFrom + "/" + this.currencyNameTo;
