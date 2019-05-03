@@ -1,47 +1,57 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Pair extends React.Component {
-
-  state = {trend: 'declining'};
+  state = { trend: null };
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.rate !== this.props.rate;
+    const { rate } = this.props;
+    return nextProps.rate !== rate;
   }
 
   componentDidUpdate(prevProps) {
-    this.setTrend(prevProps.rate, this.props.rate);
+    const { rate } = this.props;
+    this.setTrend(prevProps.rate, rate);
   }
 
   setTrend = (prev, next) => {
     let trend = 'growing';
     if (prev === next) {
-      trend = 'declining';
+      trend = 'stagnating';
     } else if (prev < next) {
       trend = 'growing';
     }
-    this.setState({trend})
-  };
-
-  getTrend = () => {
-    return this.state.trend;
+    this.setState({ trend });
   };
 
   render() {
-    const [pairOne, pairTwo] = this.props.pairs;
+    const { pairs, rate } = this.props;
+    const [pairOne, pairTwo] = pairs;
+    const { trend } = this.state;
+
     return (
       <tr>
         <td>
           {`${pairOne.code}/${pairTwo.code}`}
         </td>
         <td>
-          {this.props.rate}
+          {!rate ? <i>fetching course</i> : rate}
         </td>
         <td>
-          {this.getTrend()}
+          {!trend ? <i>waiting for data</i> : trend}
         </td>
       </tr>
     );
   }
 }
+
+Pair.propTypes = {
+  rate: PropTypes.number,
+  pairs: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+};
+
+Pair.defaultProps = {
+  rate: null,
+};
 
 export default Pair;

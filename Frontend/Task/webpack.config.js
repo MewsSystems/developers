@@ -23,6 +23,10 @@ const webpackConfig = {
     }, {
       test: /\.json$/,
       loader: 'json',
+    },
+    {
+      test: /\.css$/,
+      loaders: ['style-loader', 'css-loader'],
     }],
   },
   devtool: 'eval',

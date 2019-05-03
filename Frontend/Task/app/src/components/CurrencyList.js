@@ -1,77 +1,113 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import { fetchCurrencies, fetchRates } from '../actions';
 import Pair from './Pair';
+import Spinner from './Spinner';
 
 class CurrencyList extends React.Component {
   componentDidMount() {
-    this.props.fetchCurrencies();
+    const { fetchCurrencies } = this.props;
+    fetchCurrencies();
   }
 
 
   componentWillReceiveProps(nextProps, nextContext) {
-    if (!_.isEqual(this.props.currencies, nextProps.currencies)) {
+    const { currencies, fetchRates } = this.props;
+
+    if (!_.isEqual(currencies, nextProps.currencies)) {
       if (nextProps.currencies) {
-        this.props.fetchRates(Object.keys(nextProps.currencies));
+        fetchRates(Object.keys(nextProps.currencies));
         setInterval(() => {
-          this.props.fetchRates(Object.keys(this.props.currencies));
-        }, 500);
+          fetchRates(Object.keys(nextProps.currencies));
+        }, 2000);
       }
     }
   }
 
   getRateById = (uid) => {
-    if (!this.props.allRates) {
+    const { allRates } = this.props;
+    if (!allRates) {
       return null;
     }
 
-    return this.props.allRates[uid];
+    return allRates[uid];
   };
 
+  isPairValid = pair => ((!this.props.filteredValue) ? true : `${pair[0].code}/${pair[1].code}`.toLowerCase()
+    .includes(this.props.filteredValue.toLowerCase()));
 
   renderPairs = () => {
+    const { currencies } = this.props;
     const renderPairs = [];
 
-    for (const pair in this.props.currencies) {
-      if (this.props.currencies.hasOwnProperty(pair)) {
-        renderPairs.push(
-          <Pair
-            key={pair}
-            pairs={this.props.currencies[pair]}
-            rate={this.getRateById(pair)}
-          />,
-        );
-      }
-    }
+    Object.keys(currencies)
+      .forEach((pair) => {
+        if (Object.prototype.hasOwnProperty.call(currencies, pair)) {
+          const pairArr = currencies[pair];
+          if (this.isPairValid(pairArr)) {
+            renderPairs.push(
+              <Pair
+                key={pair}
+                pairs={pairArr}
+                rate={this.getRateById(pair)}
+              />,
+            );
+          }
+        }
+      });
 
     return renderPairs;
   };
 
   render() {
-    if (_.isEmpty(this.props.currencies)) {
-      return <div>Loading Currencies...</div>;
+    const { currencies } = this.props;
+
+    if (_.isEmpty(currencies)) {
+      return <Spinner />;
     }
 
     return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Currency pair</th>
-            <th>Actual course</th>
-            <th>Trend</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderPairs()}
-        </tbody>
-      </table>
+      <div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Currency pair</th>
+              <th>Actual course</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderPairs()}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }
 
+/* for eslint */
+CurrencyList.propTypes = {
+  fetchCurrencies: PropTypes.func.isRequired,
+  currencies: PropTypes.shape({ root: PropTypes.object }),
+  fetchRates: PropTypes.func.isRequired,
+  allRates: PropTypes.objectOf(PropTypes.number),
+  filteredValue: PropTypes.string,
+};
+
+CurrencyList.defaultProps = {
+  currencies: {},
+  allRates: {},
+  filteredValue: '',
+};
+
 const mapStateToProps = state => ({
-  currencies: state.currencies,
+  currencies: state.currencies.currencies,
   allRates: state.rates.rates,
+  filteredValue: state.currencies.filteredValue,
 });
-export default connect(mapStateToProps, { fetchCurrencies, fetchRates })(CurrencyList);
+export default connect(mapStateToProps, {
+  fetchCurrencies,
+  fetchRates,
+})(CurrencyList);
