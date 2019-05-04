@@ -6,6 +6,7 @@ import reduxThunk from 'redux-thunk';
 import reducers from './src/reducers';
 import App from './src/App';
 
+// eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers, /* preloadedState, */

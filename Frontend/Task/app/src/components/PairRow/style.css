@@ -1,0 +1,11 @@
+/* not neccessary.. */
+
+.growing {
+    color: #28a745;
+}
+.stagnating {
+    color: #007bff;
+}
+.declining {
+    color: #dc3545;
+}

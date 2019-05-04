@@ -12,16 +12,24 @@ const CurrencyFilter = (props) => {
   });
 
   return (
-    <div className="container">
+    <div className="p-3">
       <form>
         <div>
-          <label htmlFor="filterInput">Filter currency</label>
-          <input
-            id="filterInput"
-            name="filteredValue"
-            onChange={e => setValue(e.target.value)}
-            value={value}
-          />
+          <div className="input-group input-group-sm">
+            <div className="input-group-prepend">
+              <span className="input-group-text" id="inputGroup-sizing-sm">Filter currency:</span>
+            </div>
+            <input
+              type="text"
+              id="filterInput"
+              name="filteredValue"
+              className="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm"
+              onChange={e => setValue(e.target.value)}
+              value={value}
+            />
+          </div>
         </div>
       </form>
     </div>

@@ -1,13 +1,17 @@
-import { FETCH_CURRENCIES, FETCH_RATES, FETCHING_RATES_ERROR, SET_FILTER_VALUE } from './types';
+import {
+  FETCH_CURRENCIES,
+  FETCH_RATES,
+  FETCHING_RATES_ERROR,
+  SET_FILTER_VALUE,
+} from './types';
 import currenciesApi from '../api/dataServer';
 
 export const fetchCurrencies = () => (dispatch) => {
-  // dispatch({ type: FETCH_CURRENCIES, payload: testResponse.currencyPairs });
   currenciesApi.get('/configuration')
     .then((response) => {
       dispatch({ type: FETCH_CURRENCIES, payload: response.data.currencyPairs });
     }).catch(() => {
-      /* Trying connect server */
+      /* Trying re-connect server */
       setTimeout(() => {
         fetchCurrencies()(dispatch);
       }, 2000);
