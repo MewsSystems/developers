@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
 
-
 class PairRow extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { rate } = this.props;
@@ -36,9 +35,9 @@ class PairRow extends React.Component {
           {pair}
         </td>
         <td>
-          {!rate ? <i>fetching course</i> : rate}
+          {!rate ? <i>fetching rate</i> : rate}
           {oldRate ? (
-            <small title="previous course" className="text-secondary super-small"><i>{`(${oldRate})`}</i></small>
+            <small title="previous rate" className="text-secondary super-small"><i>{`(${oldRate})`}</i></small>
           ) : null}
 
         </td>

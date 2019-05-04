@@ -90,7 +90,7 @@ class CurrencyList extends React.Component {
           <thead className="thead-dark">
             <tr>
               <th>Currency pair</th>
-              <th>Actual course</th>
+              <th>Actual exchange rate</th>
               <th className="text-right">Trend</th>
             </tr>
           </thead>

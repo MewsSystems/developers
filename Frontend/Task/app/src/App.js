@@ -3,7 +3,7 @@ import CurrencyList from './components/CurrencyList';
 import CurrencyFilter from './components/CurrencyFilter';
 import LastFetched from './components/LastFetched';
 import Footer from './components/Footer';
-import Errorisplayer from './components/ErrorDisplayer';
+import ErrorDisplayer from './components/ErrorDisplayer';
 
 const App = () => (
   <div className="container">
@@ -13,7 +13,7 @@ const App = () => (
     <section>
       <div className="d-flex p-2 bg-dark text-white justify-content-between">
         <CurrencyFilter />
-        <Errorisplayer />
+        <ErrorDisplayer />
         <LastFetched />
       </div>
       <CurrencyList />

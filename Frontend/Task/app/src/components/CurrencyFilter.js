@@ -29,8 +29,6 @@ const CurrencyFilter = (props) => {
               id="filterInput"
               name="filteredValue"
               className="form-control"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-sm"
               onChange={e => changeValue(e.target.value)}
               value={filteredValue}
             />
