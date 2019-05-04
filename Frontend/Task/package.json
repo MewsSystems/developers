@@ -42,6 +42,7 @@
     "react-redux": "^7.0.3",
     "redux": "^4.0.1",
     "redux-form": "^8.2.0",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"

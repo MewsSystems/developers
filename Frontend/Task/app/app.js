@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import reduxThunk from 'redux-thunk';
-import reducers from './src/reducers';
+import { PersistGate } from 'redux-persist/integration/react';
+import storeConfig from './src/storeConfig';
 import App from './src/App';
 
-// eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  reducers, /* preloadedState, */
-  composeEnhancers(
-    applyMiddleware(reduxThunk),
-  ),
-);
+const { store, persistor } = storeConfig();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>, document.getElementById('exchange-rate-client'),
 );

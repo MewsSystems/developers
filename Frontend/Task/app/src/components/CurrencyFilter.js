@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setFilterValue } from '../actions';
 
 
 const CurrencyFilter = (props) => {
-  const [value, setValue] = useState('');
+  const { filteredValue } = props;
 
   useEffect(() => {
-    props.setFilterValue(value);
+    props.setFilterValue(filteredValue);
   });
+
+  const changeValue = (val) => {
+    props.setFilterValue(val);
+  };
+
 
   return (
     <div className="p-3">
@@ -26,8 +31,8 @@ const CurrencyFilter = (props) => {
               className="form-control"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm"
-              onChange={e => setValue(e.target.value)}
-              value={value}
+              onChange={e => changeValue(e.target.value)}
+              value={filteredValue}
             />
           </div>
         </div>
@@ -38,6 +43,11 @@ const CurrencyFilter = (props) => {
 
 CurrencyFilter.propTypes = {
   setFilterValue: PropTypes.func.isRequired,
+  filteredValue: PropTypes.string,
 };
+CurrencyFilter.defaultProps = {
+  filteredValue: '',
+};
+const mapStateToProps = state => ({ filteredValue: state.currencies.filteredValue });
 
-export default connect(null, { setFilterValue })(CurrencyFilter);
+export default connect(mapStateToProps, { setFilterValue })(CurrencyFilter);

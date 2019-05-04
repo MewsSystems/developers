@@ -8,7 +8,7 @@ import Errorisplayer from './components/ErrorDisplayer';
 const App = () => (
   <div className="container">
     <header className="text-center">
-      <h1 className="display-1">Exchange Rate Client</h1>
+      <h1 className="display-1">Currencies Fetch Client</h1>
     </header>
     <section>
       <div className="d-flex p-2 bg-dark text-white justify-content-between">

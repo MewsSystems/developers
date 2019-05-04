@@ -10,6 +10,9 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case FETCH_RATES:
+      if (!action.payload) {
+        return state;
+      }
       return {
         ...state,
         rates: action.payload,

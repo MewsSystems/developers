@@ -11,21 +11,17 @@ class CurrencyList extends React.Component {
   componentDidMount() {
     const { callFetchCurrencies } = this.props;
     callFetchCurrencies();
+    setInterval(() => {
+      this.callForRates();
+    }, 2000);
   }
 
-
-  componentWillReceiveProps(nextProps) {
-    const { currencies, callFetchRates } = this.props;
-
-    if (!_.isEqual(currencies, nextProps.currencies)) {
-      if (nextProps.currencies) {
-        callFetchRates(Object.keys(nextProps.currencies));
-        setInterval(() => {
-          callFetchRates(Object.keys(nextProps.currencies));
-        }, 2000);
-      }
+  callForRates = () => {
+    const { callFetchRates, currencies } = this.props;
+    if (currencies) {
+      callFetchRates(Object.keys(currencies));
     }
-  }
+  };
 
   getRateById = (rates, uid) => {
     if (!rates) {

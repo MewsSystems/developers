@@ -6,7 +6,7 @@ const LastFetched = ({ date = null }) => {
   const getStringDate = () => ((date) ? (new Date(date)).toLocaleTimeString() : '');
   const getReturn = () => (
     <div>
-      <i style={{ marginRight: '10px' }}>Last updated:</i>
+      <i style={{ marginRight: '10px' }}>Last update:</i>
       {getStringDate(date)}
     </div>
   );
