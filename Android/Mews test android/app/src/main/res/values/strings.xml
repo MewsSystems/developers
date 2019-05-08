@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Mews Android Test</string>
+
+    <!--Network errors-->
+    <string name="error_no_internet">Please check your internet connection and try again</string>
+    <string name="error_socket_timeout">Server connection timed out, please try again later</string>
+    <string name="error_json">JSON syntax error occurred</string>
+    <string name="error_unknown">Unknown error occurred</string>
+    <string name="error_internal_server">Server is under maintenance, please try again later</string>
+    <string name="error_generic">Oops, something went wrong! Try again later</string>
+
+    <!--Mews Photos fragment-->
+    <string name="title_mews_photos">Mews photos</string>
+    <string name="title_loading">Loading</string>
+    <string name="title_photo_id">Photo id:</string>
+    <string name="title_album_id">Album id:</string>
+
+</resources>

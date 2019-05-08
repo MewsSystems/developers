@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar_mews_photos"
+        layout="@layout/layout_toolbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25"/>
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vGuideLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_mews_photos"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_view"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_mews_photos">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</android.support.constraint.ConstraintLayout>
