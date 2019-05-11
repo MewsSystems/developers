@@ -1,0 +1,52 @@
+$fa-font-path: "../../../node_modules/font-awesome/fonts";
+@import "../../../node_modules/font-awesome/scss/font-awesome";
+
+.container {
+	font-size: 1.2em;
+}
+
+.table {
+	width: 100%;
+	border-spacing: 0;
+	td {
+		padding: 0.2em;
+		border-top: 1px solid #ccc;
+		& + td {
+			border-left: 1px solid #ccc;
+		}
+	}
+} 
+
+@mixin icon {
+	@extend .fa;
+    margin: 0 0.3em;
+}
+
+.declining {
+	color: #e84e4e;
+	i {
+		@include icon;
+		@extend .fa-arrow-circle-down;
+	}
+}
+.stangating {
+	color: grey;
+	i {
+		@include icon;
+		@extend .fa-arrow-circle-right;
+	}
+}
+.growing {
+	color: green;
+	i {
+		@include icon;
+		@extend .fa-arrow-circle-up;
+	}
+}
+.unknown {
+	color: #cecece;
+	i {
+		@include icon;
+		@extend .fa-question-circle;
+	}
+}

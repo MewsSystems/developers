@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css?family=Luckiest+Guy");
+@import url("https://fonts.googleapis.com/css?family=Rokkitt:500,800");
+
+
+.container {
+	max-width: 480px;
+	margin: 0 auto;
+	box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background: #fff;
+	padding: 1rem;
+	margin-top: 3rem;
+
+}
+/* applying global styling for the app */
+body {
+	background: grey;
+	color: #333;
+	font-family: Rokkitt, sans-serif;
+}
+
+.container h1 {
+	font-family: "Luckiest Guy", serif;
+	font-weight: normal;
+	text-align: center;
+	color: #838cd0;
+}

@@ -29,25 +29,27 @@ server.get('/configuration', (req, res) => {
 server.get('/rates', (req, res) => {
     const hasFailed = chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
 
-    if (hasFailed) {
-        res.sendStatus(500);
-    } else {
-        try {
-            const allRates = ratesGenerator.getCurrentRates();
-            const { currencyPairIds = [] } = req.query;
+    setTimeout(() => {
+        if (hasFailed) {
+            res.sendStatus(500);
+        } else {
+            try {
+                const allRates = ratesGenerator.getCurrentRates();
+                const { currencyPairIds = [] } = req.query;
 
-            let rates = {};
-            for (let pairId of currencyPairIds) {
-                if (typeof allRates[pairId] !== 'undefined') {
-                    rates[pairId] = allRates[pairId];
+                let rates = {};
+                for (let pairId of currencyPairIds) {
+                    if (typeof allRates[pairId] !== 'undefined') {
+                        rates[pairId] = allRates[pairId];
+                    }
                 }
-            }
 
-            res.json({ rates });
-        } catch (e) {
-            res.sendStatus(400);
+                res.json({ rates });
+            } catch (e) {
+                res.sendStatus(400);
+            }
         }
-    }
+    }, 5000)
 });
 
 server.listen(3000, () => {
