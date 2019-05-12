@@ -1,4 +1,8 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
