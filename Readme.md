@@ -1,7 +1,3 @@
-### [🍺 Book a drink or meeting with us](https://demo.mews.li/distributor/70ed9a32-4efa-4286-9e29-f567602af93f)
-
----
-
 # Mews developers
 
 Information about development job opportunities and career at Mews Systems. If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) with latest information.
