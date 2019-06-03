@@ -37,7 +37,9 @@ server.get('/rates', (req, res) => {
             const { currencyPairIds = [] } = req.query;
 
             let rates = {};
-            for (let pairId of currencyPairIds) {
+            
+            for (let pairId of currencyPairIds.split(',')) {
+              
                 if (typeof allRates[pairId] !== 'undefined') {
                     rates[pairId] = allRates[pairId];
                 }

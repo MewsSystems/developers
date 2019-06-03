@@ -9,6 +9,7 @@
     "@babel/plugin-transform-react-constant-elements",
     "@babel/plugin-proposal-function-bind",
     "@babel/plugin-proposal-export-default-from",
-    "@babel/plugin-proposal-object-rest-spread"
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-throw-expressions"
   ]
 }

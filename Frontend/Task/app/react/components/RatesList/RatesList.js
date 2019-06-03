@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 
 class RatesList extends PureComponent {
   render() {
-    const { ratesList } = this.props;
+    const { rates } = this.props;
     return (
-      <div className='rates__list'>
+      <div className='rates--list'>
         <ul>
           {
-            ratesList.map(rate => {
+            rates.map(rate => {
               return (
-                <li>rate</li>
+                <li key={rate.id}>{rate.label} {rate.rate} {rate.dynamic}</li>
               );
             })
           }
@@ -21,7 +21,7 @@ class RatesList extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  ratesList: state.currencies.ratesList
+  rates: state.currencies.rates
 });
 
 export default connect(mapStateToProps, null)(RatesList);
