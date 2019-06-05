@@ -103,7 +103,7 @@ class ExchangeComponent extends React.Component<ExchangeProps, ExchangeState> {
       <ExchangeWrapper>
         <InputText onChange={this.findRate} placeholder="find currency" />
         <List>
-          <ListItem withBorder>
+          <ListItem>
             <ExchangeRateTitles />
           </ListItem>
           {filteredValue
