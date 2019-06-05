@@ -1,34 +1,50 @@
-const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const prod = process.argv.indexOf('-p') !== -1;
+const path = require('path');
 
 const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
-    entry: {
-        app: './app/app.js',
-    },
+    entry: path.join(__dirname, '/app/app.tsx'),
     output: {
+        path: path.join(__dirname, '/dist'),
         filename: '[name].js',
         library: 'app',
         libraryTarget: 'window',
     },
+
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: prod ? "source-map" : "eval-source-map",
+
     resolve: {
-        extensions: ['', '.js', '.json'],
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: [".ts", ".tsx", ".js", ".json"]
     },
+
     module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
+        rules: [
+            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+            {
+                test: /\.tsx?$/,
+                loader: 'awesome-typescript-loader',
+                exclude: /(node_modules|Generated|dist|server)/
+            },
+        ]
     },
-    devtool: 'eval',
     devServer: {
+        open: true,
+        overlay: true,
+        port: 9876,
+        clientLogLevel: "warning",
+        historyApiFallback: true,
+        inline: true,
+        hot: true,
         contentBase: './app',
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './app/index.html'
+        })
+    ]
 };
 
 module.exports = webpackConfig;
