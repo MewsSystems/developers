@@ -12,7 +12,8 @@
     "start-server": "node server",
     "start": "webpack-dev-server",
     "build": "webpack -p",
-    "prettier": "prettier --write \"./app/**/*.{ts,tsx}\""
+    "prettier": "prettier --write \"./app/**/*.{ts,tsx}\"",
+    "typescript": "tsc -p ./tsconfig.json --pretty --noEmit"
   },
   "dependencies": {
     "chance": "1.0.4",

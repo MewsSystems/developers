@@ -107,7 +107,7 @@ class ExchangeComponent extends React.Component<ExchangeProps, ExchangeState> {
             <ExchangeRateTitles />
           </ListItem>
           {filteredValue
-            ? this.renderFilteredValue(filteredValue)
+            ? this.renderFilteredValue(filteredValue as any) // already asking TS if it exits
             : this.renderRates(rates)}
         </List>
         {showLoader && <Loader />}
