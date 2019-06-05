@@ -8,9 +8,10 @@ class Message extends PureComponent {
       <>
         {
           requestError &&
-          <div className='message__error'>
-            Server internal error<br/>
-            Data will be updated after some period of time
+          <div className='message message__error'>
+            Oops! Error!<br/>
+            Something went wrong, but don't worry!<br />
+            The data will be updated after some period of time.
           </div>
         }
       </>

@@ -51,6 +51,7 @@ body {
 }
 
 .message {
+  box-shadow: 0 10px 6px -6px #777;
   &__error {
     position: absolute;
     bottom: 1rem;

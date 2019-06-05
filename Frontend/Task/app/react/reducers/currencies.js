@@ -67,8 +67,10 @@ const reducer = (state = initialState, action) => {
               newRates[i].dynamic = 'growing'
             } else if (oldRates.find(oldRate => oldRate.id === newRates[i].id)?.rate > newRates[i].rate) {
               newRates[i].dynamic = 'declining'
-            } else {
+            } else if (oldRates.find(oldRate => oldRate.id === newRates[i].id)?.rate === newRates[i].rate) {
               newRates[i].dynamic = 'stagnating'
+            } else {
+              newRates[i].dynamic = ''
             }
           }
         }

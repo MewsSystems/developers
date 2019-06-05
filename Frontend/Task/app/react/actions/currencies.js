@@ -26,7 +26,9 @@ export const fetchRate = ids => ({
         }
         return response.json();
       })
-      .catch(response => throw new Error(response))
+      .catch(response => {
+        throw new Error(response)
+      })
     }
 });
 
