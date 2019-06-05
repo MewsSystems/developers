@@ -2,7 +2,14 @@ import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Select from 'react-select';
-import { fetchRate, clearData, setSelectValue, setIntervalId } from '../../actions/currencies.js';
+import {
+  fetchRate, clearData,
+  setSelectValue, setIntervalId,
+  setTimerIntervalId
+} from '../../actions/currencies.js';
+// import countDown from '../../lib/countDown';
+
+import { TIMEOUT } from '../../constants/timeout.js';
 
 class PairsSelector extends PureComponent {
   constructor() {
@@ -22,18 +29,19 @@ class PairsSelector extends PureComponent {
     if (value?.length > 0) {
       clearInterval(intervalId);
       
+      const ids = value.map(x => x.value);
+      
       window.localStorage.setItem('select', JSON.stringify(value));
       
+      actions.fetchRate(ids);
       actions.setIntervalId(
         setInterval(() => {
-          actions.fetchRate(value.map(x => x.value));
-        }, 2000)
+          actions.fetchRate(ids);
+        }, TIMEOUT)
       );
     } else {
       clearInterval(intervalId);
       window.localStorage.setItem('select', '');
-      // window.localStorage.removeItem('select');
-      // window.localStorage.clear();
       actions.clearData();
     }
   }
@@ -41,12 +49,15 @@ class PairsSelector extends PureComponent {
   render() {
     const { selectedPair, options } = this.props;
     return (
-      <div>
+      <div className='select--container'>
+        <h2 className='select--header'>Currency pairs filter</h2>
         <Select
           options={options}
           value={selectedPair}
           onChange={this.onSelectChange}
           isMulti
+          className='select'
+          placeholder='Select a pair of currencies...'
         />
       </div>
     );
@@ -61,7 +72,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators({ fetchRate, clearData, setSelectValue, setIntervalId }, dispatch)
+  actions: bindActionCreators({
+    fetchRate, clearData,
+    setSelectValue, setIntervalId,
+    setTimerIntervalId
+  }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PairsSelector);

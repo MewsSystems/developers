@@ -1,7 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 .react-root {
   width: 100%;
   height : 100vh;
+  padding: 0;
+  display: flex;
 }
+
+.rates {
+  flex: 0 1 60%;
+  padding: 0 1rem;
+  &--list {
+    padding: 0;
+    &--item {
+      display: flex;
+      align-items: center;
+      & > * {
+        padding : .25rem;
+      }
+    }
+  }
+}
+
+.rate {
+  &-label {
+    width: 100px;
+  }
+  &-rate {
+    width: 60px;
+  }
+  &-dynamic {
+    border-radius : .2rem;
+    &__growing { background-color : limegreen}
+    &__stagnating { background-color : darkgray}
+    &__declining { background-color : tomato}
+  }
+}
+
+.select {
+  &--container {
+    flex: 0 1 40%;
+    padding : 0 1rem;
+  }
+}
+
+.message {
+  &__error {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 30%;
+    padding: .5rem 1rem;
+    background-color: sandybrown;
+    border-radius: 3px;
+  }
+}
+
+
 
 .spinner,
 .spinner:after {

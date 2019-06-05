@@ -2,10 +2,14 @@ import React, { PureComponent } from 'react';
 import './App.scss';
 
 import RatesList from '../RatesList';
-import PairsSelector from '../PairsSelector'
+import PairsSelector from '../PairsSelector';
+import Message from '../Message';
+
 import { fetchConfig, restoreConfig, fetchRate, setIntervalId } from '../../actions/currencies.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
+import { TIMEOUT } from '../../constants/timeout.js';
 
 class App extends PureComponent {
   componentDidMount() {
@@ -14,20 +18,20 @@ class App extends PureComponent {
     const select = window.localStorage.getItem('select');
     const config = window.localStorage.getItem('config');
     
-    console.log('config', config);
-    console.log('select', select);
-    
-    if (select && config) {
+    if (select) {
       const selectedValue = select !== 'undefined' ? JSON.parse(select) : undefined;
       const restoredConfig = JSON.parse(config);
       
       const { actions } = this.props;
       actions.restoreConfig(restoredConfig, selectedValue);
+      
       if (selectedValue) {
+        const ids = selectedValue.map(x => x.value);
+        actions.fetchRate(ids);
         actions.setIntervalId(
           setInterval(() => {
-            actions.fetchRate(selectedValue.map(x => x.value));
-          }, 2000)
+            actions.fetchRate(ids);
+          }, TIMEOUT)
         );
       }
     } else {
@@ -38,7 +42,7 @@ class App extends PureComponent {
   render() {
     const { loadingConfig } = this.props;
     return (
-      <div className="react-root">
+      <>
         {
           loadingConfig &&
             <div className='spinner--container'>
@@ -50,12 +54,10 @@ class App extends PureComponent {
           <>
             <PairsSelector/>
             <RatesList/>
-            <div>
-            
-            </div>
+            <Message />
           </>
         }
-      </div>
+      </>
     );
   }
 }

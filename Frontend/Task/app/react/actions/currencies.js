@@ -26,7 +26,7 @@ export const fetchRate = ids => ({
         }
         return response.json();
       })
-      .catch(reason => throw new Error(reason))
+      .catch(response => throw new Error(response))
     }
 });
 
@@ -47,4 +47,9 @@ export const setIntervalId = id => ({
 export const restoreConfig = (config, selectedPair) => ({
   type: constants.RESTORE_CONFIG,
   payload: { config, selectedPair }
+});
+
+export const setTimerIntervalId = (countDownId) => ({
+  type: constants.SET_TIMER_INTERVAL_ID,
+  payload: countDownId
 });

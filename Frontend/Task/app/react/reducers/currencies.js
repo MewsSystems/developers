@@ -8,6 +8,8 @@ const initialState = {
   rates: [],
   intervalId: null,
   newIntervalId: null,
+  requestError: false,
+  updateTime: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,7 +17,8 @@ const reducer = (state = initialState, action) => {
     case constants.FETCH_CONFIG_START: {
       return {
         ...state,
-        loadingConfig: true
+        loadingConfig: true,
+        
       }
     }
     case constants.FETCH_CONFIG_SUCCESS: {
@@ -37,6 +40,13 @@ const reducer = (state = initialState, action) => {
         currencyPairs,
         options,
         loadingConfig: false
+      }
+    }
+    
+    case constants.FETCH_RATES_START: {
+      return {
+        ...state,
+        requestError: false,
       }
     }
     
@@ -65,11 +75,18 @@ const reducer = (state = initialState, action) => {
   
         return {
           ...state,
-          rates: newRates
+          rates: newRates,
         };
       }
       
       return state;
+    }
+  
+    case constants.FETCH_RATES_ERROR: {
+      return {
+        ...state,
+        requestError: true
+      }
     }
     
     case constants.RESTORE_CONFIG: {
@@ -89,7 +106,6 @@ const reducer = (state = initialState, action) => {
     }
     
     case constants.SET_INTERVAL_ID: {
-      console.log('newIntervalId', action.payload);
       return {
         ...state,
         intervalId: action.payload,

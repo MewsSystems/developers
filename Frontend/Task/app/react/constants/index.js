@@ -7,4 +7,5 @@ export default keyMirror([
   'SET_SELECT_VALUE',
   'SET_INTERVAL_ID',
   'RESTORE_CONFIG',
+  'SET_TIMER_INTERVAL_ID',
 ]);
