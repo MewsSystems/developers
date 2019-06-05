@@ -10,24 +10,36 @@
   "main": "Sources/index.js",
   "scripts": {
     "start-server": "node server",
-    "start": "webpack-dev-server --hot --inline --progress"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-1"
-    ]
+    "start": "webpack-dev-server",
+    "build": "webpack -p",
+    "prettier": "prettier --write \"./app/**/*.{ts,tsx}\""
   },
   "dependencies": {
-    "babel-core": "6.13.2",
-    "babel-loader": "6.2.4",
-    "babel-preset-es2015": "6.13.2",
-    "babel-preset-stage-1": "6.13.0",
     "chance": "1.0.4",
     "express": "4.14.0",
-    "json-loader": "0.5.4",
-    "json-server": "0.8.17",
-    "webpack": "1.13.1",
-    "webpack-dev-server": "1.14.1"
+    "lodash": "^4.17.11",
+    "polished": "^3.4.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-promise-middleware": "^6.1.0",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.2.1",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.133",
+    "@types/react": "^16.8.18",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.9",
+    "@types/redux-promise-middleware": "^0.0.11",
+    "@types/styled-components": "^4.1.16",
+    "awesome-typescript-loader": "^5.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "prettier": "^1.17.1",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
   }
 }
