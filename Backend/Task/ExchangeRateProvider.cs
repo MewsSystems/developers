@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 
@@ -7,9 +8,12 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        private const string RateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
-        private const string StandardCurrencyCode = "CZK";
-        private const char Pipe = '|';
+        CultureInfo cultureInfo;
+
+        public ExchangeRateProvider()
+        {
+            cultureInfo = new CultureInfo(Constants.EnUs);
+        }
 
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -19,41 +23,55 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            var exchangeRateList = new List<ExchangeRate>();
+
+            string txtResponse = LoadTextData();
+            string[] txtLines = txtResponse.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string line in txtLines)
+            {
+                var lineValues = line.Split(Constants.Pipe);
+
+                if (lineValues.Count() > 1)
+                {
+                    var sourceCurrency = currencies.SingleOrDefault(q => q.Code == lineValues[3]);
+
+                    if (sourceCurrency != null)
+                    {
+                        exchangeRateList.Add(new ExchangeRate(sourceCurrency,
+                                                              new Currency(Constants.CzechCurrencyCode),
+                                                              decimal.Parse(lineValues[4], cultureInfo) / decimal.Parse(lineValues[2])
+                                                             ));
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            return exchangeRateList;
+        }
+
+        private string LoadTextData()
+        {
+            string response = string.Empty;
+
             using (var httpClient = new HttpClient())
             {
                 try
                 {
-                    var exchangeRateList = new List<ExchangeRate>();
-
-                    string txtResponse = httpClient.GetStringAsync(RateUrl).ConfigureAwait(false).GetAwaiter().GetResult();
-                    string[] txtLines = txtResponse.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (string line in txtLines)
-                    {
-                        var lineValues = line.Split(Pipe);
-
-                        if (lineValues.Count() > 1)
-                        {
-                            var sourceCurrency = currencies.SingleOrDefault(q => q.Code == lineValues[3]);
-
-                            if (sourceCurrency != null)
-                            {
-                                exchangeRateList.Add(new ExchangeRate(sourceCurrency, new Currency(StandardCurrencyCode), decimal.Parse(lineValues[4])));
-                            }
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-
-                    return exchangeRateList;
+                    response = httpClient.GetStringAsync(string.Format(Constants.RateUrl, Constants.Url)).ConfigureAwait(false).GetAwaiter().GetResult();
                 }
-                catch
+                catch (HttpRequestException)
                 {
-                    throw;
+                    // Falls back to Czech version
+                    cultureInfo = new CultureInfo(Constants.CsCz);
+                    response = httpClient.GetStringAsync(string.Format(Constants.RateUrlCzech, Constants.Url)).ConfigureAwait(false).GetAwaiter().GetResult();
                 }
             }
+
+            return response;
         }
     }
 }
