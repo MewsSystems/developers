@@ -1,0 +1,14 @@
+version: '3.6'
+
+services:
+  exchange-api:
+    image: mews/exchange-api
+    container_name: "mews-exchange-api"
+    build:
+      context: .
+      dockerfile: Mews.Backend.Task.Api/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      EXCHANGE_URL: "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt"

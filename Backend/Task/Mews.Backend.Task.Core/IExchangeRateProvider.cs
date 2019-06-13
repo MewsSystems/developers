@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace Mews.Backend.Task.Core
 {
-    public class ExchangeRateProvider
+    public interface IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -11,9 +11,6 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/EUR" with value calculated as 1 / "EUR/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
-        {
-            return Enumerable.Empty<ExchangeRate>();
-        }
+        Task<List<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies);
     }
 }

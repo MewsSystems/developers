@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Mews.Backend.Task.Core
 {
     public class Currency
     {
