@@ -1,0 +1,91 @@
+button {
+  padding: 10px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: all .3s;
+
+  &.btn-success {
+    background-color: @colors[green];
+    color: @colors[white];
+    
+    &:hover {
+      background-color: lighten(@colors[green], 10%);
+    }
+    
+    &:active {
+      background-color: darken(@colors[green], 10%);
+    }
+    
+    &:disabled {
+      background-color: lighten(@colors[green], 15%);
+      cursor: not-allowed;
+    }
+  }
+
+  &.btn-link {
+    padding: 0;
+    background-color: @colors[transparent];
+    text-decoration: underline;
+  }
+
+  .fas.fa-spinner {
+    margin-right: 10px;
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+  }
+}
+
+.currency-filter {
+  position: relative;
+  float: left;
+
+  button {
+    width: 150px;
+
+    .fas.fa-chevron-down, .fas.fa-chevron-up {
+      margin-left: 10px;
+    }
+  }
+
+  .currency-dropdown {
+    box-shadow: 0 0 2rem 0 fade(@colors[lightblue], 25%);
+    top: 40px;
+    position: absolute;
+    background-color: @colors[white];
+    width: 100%;
+    height: 250px;
+    overflow: auto;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all .3s;
+
+        &:hover {
+          background-color: fade(@colors[green], 20%);
+        }
+
+        &.selected {
+          background-color: fade(@colors[green], 20%);
+
+          &::after {
+            content:'\2713';
+            right: 10px;
+            position: absolute;
+            display: inline-block;
+            color: @colors[green];
+          }
+        }
+      }
+    }
+  }
+}

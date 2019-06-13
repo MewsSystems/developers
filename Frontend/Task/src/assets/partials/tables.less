@@ -1,0 +1,68 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &.currency-table {
+    box-shadow: 0 0 2rem 0 fade(@colors[lightblue], 25%);
+
+    thead {
+
+      tr {
+  
+        th {
+          color: @colors[white];
+          background-color: @colors[green];
+          padding: 20px 5px;
+        }
+      }
+    }
+  
+    tbody {
+      
+      tr {
+        cursor: pointer;
+        background-color: @colors[white];
+        transition: all .3s;
+        
+        td {
+          padding: 15px 5px;
+          text-align: center;
+
+          .fas.fa-caret-up {
+            color: @colors[green];
+          }
+
+          .fas.fa-caret-down {
+            color: @colors[red];
+          }
+        }
+
+        &:nth-child(2n) {
+          background-color: @colors[lightgrey];
+        }
+
+        &:hover {
+          background-color: fade(@colors[green], 20%);
+        }
+      }
+    }
+  }
+}
+
+.error-message {
+  margin-top: 10px;
+  color: @colors[red];
+  font-size: 12px;
+  text-align: center;
+}
+
+.loading {
+  padding: 20px 0;
+
+  i {
+    font-size: 40px;
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+  }
+}
