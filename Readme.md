@@ -14,7 +14,11 @@ Currently, we are seeking backend developers, frontend developers and Android de
 - [Task](Frontend) for [Frontend developer](Frontend/Job.md) candidates.
 - [Task](Android) for [Android developer](Android/Job.md) candidates.
 
-For all current openings, even outside development, check our [Breezy](https://mews-systems.breezy.hr/) where you can also apply.
+For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/):
+- [Senior backend developer](https://mews-systems.workable.com/j/AA7C6F1D43?viewed=true)
+- [Senior frontend developer](https://mews-systems.workable.com/j/FDC35CE6E9?viewed=true)
+- [Backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true)
+- [Frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true)
 
 <a name='about-mews'/>
 
