@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater
             var providedExchanges = GetAllExchangeRates();
 
             return providedExchanges
-                .Where(q => currencies.Contains(q.TargetCurrency));
+                .Where(q => currencies.Contains(q.TargetCurrency, new CurrencyEqualityComparer()));
         }
 
         public IEnumerable<ExchangeRate> GetAllExchangeRates()
