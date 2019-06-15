@@ -8,17 +8,15 @@ Information about development job opportunities and career at [Mews Systems](htt
 
 ## 💼 Open positions
 
-Currently, we are seeking backend developers, frontend developers and Android developers of all seniority levels. As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for:
+Currently, we are seeking backend developers, frontend developers and Android developers of all seniority levels. For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/). As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for. If you'd like to first talk to us, that's an option as well, the task is not a mandatory thing.
 
-- [Task](Backend) for [Backend developer](Backend/Job.md) candidates.
-- [Task](Frontend) for [Frontend developer](Frontend/Job.md) candidates.
-- [Task](Android) for [Android developer](Android/Job.md) candidates.
-
-For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/):
-- [Senior backend developer](https://mews-systems.workable.com/j/AA7C6F1D43?viewed=true)
-- [Senior frontend developer](https://mews-systems.workable.com/j/FDC35CE6E9?viewed=true)
-- [Backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true)
-- [Frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true)
+- [Task](Backend) for backend candidates:
+    - [Senior backend developer](https://mews-systems.workable.com/j/AA7C6F1D43?viewed=true)
+    - [Backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true)
+- [Task](Frontend) for frontend candidates:
+    - [Senior frontend developer](https://mews-systems.workable.com/j/FDC35CE6E9?viewed=true)
+    - [Frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true)
+- [Task](Android) for Android candidates.
 
 <a name='about-mews'/>
 
@@ -26,7 +24,7 @@ For all current openings, even outside development, check our open positions on 
 
 > We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 40 countries in 700+ hotels, we have truly started a revolution.
 
-That's the marketing slogan. A more down-to-earth version of it would be, that we work on a system for hotel employees and their guests. The main goal is to improve the guest experience, by giving them possibility to have full control over their stay, possibility to check-in online, manage their profile, pay online etc. In consequence, that decreases workload on the hotel employees, because the guests actually do the work. The second big goal is opening up the system via APIs to 3rd party companies and developers, so that they can build interesting applications on top of our system. Or connect it with something else, which was traditionally very difficult in hospitality industry.
+That's the marketing slogan. A more down-to-earth version of it would be, that we work on a system for hotel employees and their guests. The main goal is to improve the guest experience, by giving them possibility to have full control over their stay, possibility to check-in online, manage their profile, pay online etc. In consequence, that decreases workload on the hotel employees, because the guests actually do the work. The second big goal is opening up the system via APIs to 3rd party companies and developers, so that they can build interesting applications on top of our system. Or connect it with something else, which was traditionally very difficult in hospitality industry. If you'd like to know more, check this sample [sales-pitch](https://www.facebook.com/MewsSystems/videos/351045845603219/) which explains what we offer to our clients and which problems we solve.
 
 In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews:
 
@@ -40,7 +38,7 @@ In the following sections, we'll try to answer frequently asked question that we
 
 ### 🏨 Product 
 
-- **What are the applications you are building?** The biggest part is the system for employees of hotels (receptionists, housekeepers, accountants, revenue managers, essentially everybody). For them, we also have iOS and Android application with limited functionality to some basic tasks. Then we have web and iOS applicaton for guests of the hotels. We also offer hotels free Android kiosk application that they can put into their lobby and guests can checkin there.
+- **What are the applications you are building?** The biggest part is the system for employees of hotels (receptionists, housekeepers, accountants, revenue managers, essentially everybody). For them, we also have iOS and Android application with limited functionality to some basic tasks. Then we have web and iOS applicaton for guests of the hotels. We also offer hotels free Android kiosk application that they can put into their lobby and guests can checkin there. 
 - **How do you handle if different hotels want different features?** We have some features that hotels can choose to enable or disable, according to their preferences. However, all of the various features are available to all hotels. Being SaaS, we have only one feature set and one live instance of the application.
 - **Do you produce any open source code?** Yes, some of the things we have done are now open sourced, but as it takes a lot of time to maintain, we try to be very careful with what we decide to make open. We decided that we'll be open sourcing mainly fiscalization libraries (like EET), becuase it's annoying having to implement it when some government decides to introduce it. You can check our public repositories here https://github.com/MewsSystems.
 - **Does your system have public APIs?** Yes and it's one of its strengths. We try to take it really seriously and make it as user-friendly as possible for other developers to integrate with us. We also have a dedicated team to help the integration partners and give them advices how to best connect to us. So now, we have over 150 companies consuming our APIs. You can find out more here: https://mews-systems.gitbook.io/connector-api/
