@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +24,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                // In other scenarios, the concrete implementation can be passed using dependency injection
+                IExchangeRateProvider provider = new ExchangeRateProviderCNB();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

@@ -44,9 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Currency.cs" />
+    <Compile Include="ExchangeProviderParser.cs" />
     <Compile Include="ExchangeRate.cs" />
-    <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Helpers\HttpHelperClient.cs" />
+    <Compile Include="Model\ExchangeRateProviderModel.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Providers\ExchangeRateProviderCNB.cs" />
+    <Compile Include="Providers\IExchangeRateProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
