@@ -23,7 +23,7 @@ namespace ExchangeRateUpdater
                 .Where(q => currencies.Contains(q.TargetCurrency, new CurrencyEqualityComparer()));
         }
 
-        public IEnumerable<ExchangeRate> GetAllExchangeRates(string sourceUrl)
+        private IEnumerable<ExchangeRate> GetAllExchangeRates(string sourceUrl)
         {
             var rawExchangeRates = GetRawExchangeRates(sourceUrl);
             
@@ -41,12 +41,12 @@ namespace ExchangeRateUpdater
         private ExchangeRate BuildExchangeRateByLine(string currencyLine)
         {
             if(string.IsNullOrWhiteSpace(currencyLine))
-                throw new ArgumentNullException(nameof(currencyLine));
+                { throw new ArgumentNullException(nameof(currencyLine)); }
 
             var items = currencyLine.Split('|');
 
             if (items.Length != 5)
-                throw new ArgumentOutOfRangeException($"expected 5 items in currency line {currencyLine}");
+                { throw new ArgumentOutOfRangeException($"expected 5 items in currency line {currencyLine}"); }
 
 
             var targetCode = items[3];
@@ -66,7 +66,7 @@ namespace ExchangeRateUpdater
         }
 
 
-        private string GetRawExchangeRates(string urlAddress)
+        public virtual string GetRawExchangeRates(string urlAddress)
         {
             using (var wc = new WebClient())
             {
