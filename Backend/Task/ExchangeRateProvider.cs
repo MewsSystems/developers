@@ -18,11 +18,12 @@ namespace ExchangeRateUpdater
         /// 
         string newLine = "\n";
         char delimeter = '|';
+        string dataSourceUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=[dd]+[MMM]+[yyyy]";
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
            
                 var result = new List<ExchangeRate>();
-                var rateUrl = ConfigurationManager.AppSettings["cnbrates"];
+                var rateUrl = dataSourceUrl;
                 var dt = DateTime.Today;
                 rateUrl = rateUrl.Replace("[dd]", dt.Day.ToString()).Replace("[MMM]", GetAbbrMonthString(dt.Month)).Replace("[yyyy]", dt.Year.ToString());
 
