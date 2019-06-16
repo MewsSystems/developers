@@ -17,15 +17,15 @@ namespace ExchangeRateUpdater
 
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var providedExchanges = GetAllExchangeRates();
+            var providedExchanges = GetAllExchangeRates(_sourceUrl);
 
             return providedExchanges
                 .Where(q => currencies.Contains(q.TargetCurrency, new CurrencyEqualityComparer()));
         }
 
-        public IEnumerable<ExchangeRate> GetAllExchangeRates()
+        public IEnumerable<ExchangeRate> GetAllExchangeRates(string sourceUrl)
         {
-            var rawExchangeRates = GetRawExchangeRates();
+            var rawExchangeRates = GetRawExchangeRates(sourceUrl);
             
             var currencyLines = GetCurrencyLines(rawExchangeRates);
 
@@ -40,7 +40,7 @@ namespace ExchangeRateUpdater
 
         private ExchangeRate BuildExchangeRateByLine(string currencyLine)
         {
-            if(string.IsNullOrEmpty(currencyLine))
+            if(string.IsNullOrWhiteSpace(currencyLine))
                 throw new ArgumentNullException(nameof(currencyLine));
 
             var items = currencyLine.Split('|');
@@ -66,11 +66,11 @@ namespace ExchangeRateUpdater
         }
 
 
-        private string GetRawExchangeRates()
+        private string GetRawExchangeRates(string urlAddress)
         {
             using (var wc = new WebClient())
             {
-                return wc.DownloadString(_sourceUrl);
+                return wc.DownloadString(urlAddress);
             }
         }
     }

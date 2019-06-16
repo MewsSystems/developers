@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater
 {
     public class Currency
     {
@@ -18,12 +16,5 @@ namespace ExchangeRateUpdater
         {
             return Code;
         }
-    }
-
-    public class CurrencyEqualityComparer : IEqualityComparer<Currency>
-    {
-        public bool Equals(Currency x, Currency y) => y != null && (x != null && x.Code.Equals(y.Code));
-
-        public int GetHashCode(Currency obj) => obj.GetHashCode();
     }
 }
