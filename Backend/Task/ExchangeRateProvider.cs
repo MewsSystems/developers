@@ -1,6 +1,6 @@
                 {
-                    // Internet connection/file availability 
-                    throw ex;
+                    // Internet connection/file availability
+                    throw new Exception($"Check Internet connection or source file availability - {ex.Message}");
                 }
 
                 // Validate webData has content
