@@ -26,19 +26,40 @@ namespace ExchangeRateUpdater
                 var rateUrl = dataSourceUrl;
                 var dt = DateTime.Today;
                 rateUrl = rateUrl.Replace("[dd]", dt.Day.ToString()).Replace("[MMM]", GetAbbrMonthString(dt.Month)).Replace("[yyyy]", dt.Year.ToString());
+                var czkCurr= new Currency("CZK");
 
                 var webData = "";
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rateUrl);
 
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
+                try
                 {
-                    webData = reader.ReadToEnd();
+                    using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                    using (Stream stream = response.GetResponseStream())
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        webData = reader.ReadToEnd();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    // Internet connection/file availability 
+                    throw ex;
+                }
+
+                // Validate webData has content
+                if(string.IsNullOrEmpty(webData))
+                {
+                    throw new Exception("Source data is empty!");
                 }
 
                 var currLines = webData.Split(new string[] { newLine }, StringSplitOptions.None);
+                
+                if(currLines.length<3)
+                {
+                    throw new Exception("No data found!");
+                }
 
+                // ignore header information by starting at line 3
                 for (int i = 2; i < currLines.Length; i++)
                 {
                     var linecontent = currLines[i].Split(delimeter);
@@ -52,7 +73,7 @@ namespace ExchangeRateUpdater
                     var rate = decimal.Parse(linecontent[4]);
                     if (currencies.Any(o => o.Code.Equals(currCode, StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        result.Add(new ExchangeRate(new Currency(currCode), new Currency("CZK"), rate / amt));
+                        result.Add(new ExchangeRate(new Currency(currCode), czkCurr, rate / amt));
                     }
                 }
 
