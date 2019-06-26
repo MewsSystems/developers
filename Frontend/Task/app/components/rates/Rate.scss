@@ -1,0 +1,28 @@
+@import '../../styles/mixins';
+@import '../../styles/variables';
+@import '../../styles/colors';
+
+.Rate {
+  @include Card();
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(auto-fill, minmax($cardItemSize, 1fr));
+
+  &__displayName {
+    font-weight: bold;
+  }
+
+  &__trend {
+    &--growing {
+      color: $green-500;
+    }
+
+    &--stagnating{
+      color: $orange-500;
+    }
+
+    &--declining {
+      color: $red-500;
+    }
+  }
+}

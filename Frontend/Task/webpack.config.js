@@ -1,11 +1,12 @@
-const webpack = require('webpack');
+/* eslint-disable no-undef */
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackConfig = {
     plugins: [
-        new webpack.NoErrorsPlugin(),
+        new HtmlWebpackPlugin({ template: './app/index.html' })
     ],
     entry: {
-        app: './app/app.js',
+        app: './app/App.jsx',
     },
     output: {
         filename: '[name].js',
@@ -13,21 +14,39 @@ const webpackConfig = {
         libraryTarget: 'window',
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['.js', '.jsx', '.json'],
     },
     module: {
-        loaders: [{
-            test: /\.js?$/,
+        rules: [{
+            test: /\.(js|jsx)$/,
             exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
+            loader: 'babel-loader',
+        },
+        {
+            test: /\.scss$/,
+            use: [
+                "style-loader",
+                "css-loader",
+                "sass-loader"
+            ]
+        },
+        {
+            test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+            use: [{
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: 'fonts/'
+                }
+            }]
         }],
     },
     devtool: 'eval',
     devServer: {
         contentBase: './app',
+        proxy: {
+            '*': 'http://localhost:3000'
+        }
     },
 };
 
