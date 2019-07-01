@@ -1,52 +1,62 @@
 const {
-    MIN_INITIAL_RATE,
-    MAX_INITIAL_RATE,
-    MAX_RATE_UPDATE_STEP,
+  MIN_INITIAL_RATE,
+  MAX_INITIAL_RATE,
+  MAX_RATE_UPDATE_STEP
 } = require('./constants');
 
-module.exports = function rateGenerator({ generator, pairCount, updateInterval }) {
-    const currencyPairs = generateCurrencyPairs();
-    let currentRates = generateRates(currencyPairs);
-    setInterval(() => (currentRates = updateRates(currentRates)), updateInterval);
+module.exports = function rateGenerator({
+  generator,
+  pairCount,
+  updateInterval
+}) {
+  const currencyPairs = generateCurrencyPairs();
+  let currentRates = generateRates(currencyPairs);
+  setInterval(() => (currentRates = updateRates(currentRates)), updateInterval);
 
-    return {
-        getCurrencyPairs() {
-            return Object.assign({}, currencyPairs);
-        },
+  return {
+    getCurrencyPairs() {
+      return Object.assign({}, currencyPairs);
+    },
 
-        getCurrentRates() {
-            return Object.assign({}, currentRates);
-        },
-    };
-    
-    function generateCurrencyPairs() {
-        let pairs = {};
+    getCurrentRates() {
+      return Object.assign({}, currentRates);
+    }
+  };
 
-        for (let i = 0; i != pairCount; ++i) {
-            pairs[generator.guid()] = generator.currency_pair();
-        }
+  function generateCurrencyPairs() {
+    let pairs = {};
 
-        return pairs;
+    for (let i = 0; i != pairCount; ++i) {
+      pairs[generator.guid()] = generator.currency_pair();
     }
 
-    function generateRates(currencyPairs) {
-        let rates = {};
+    return pairs;
+  }
 
-        for (let pairId of Object.keys(currencyPairs)) {
-            rates[pairId] = generator.floating({ min: MIN_INITIAL_RATE, max: MAX_INITIAL_RATE });
-        }
+  function generateRates(currencyPairs) {
+    let rates = {};
 
-        return rates;
+    for (let pairId of Object.keys(currencyPairs)) {
+      rates[pairId] = generator.floating({
+        min: MIN_INITIAL_RATE,
+        max: MAX_INITIAL_RATE
+      });
     }
 
-    function updateRates(currentRates) {
-        let updatedRates = {};
+    return rates;
+  }
 
-        for (let pairId of Object.keys(currentRates)) {
-            const value = currentRates[pairId];
-            updatedRates[pairId] = generator.floating({ min: value + MAX_RATE_UPDATE_STEP, max: value + MAX_RATE_UPDATE_STEP })
-        }
+  function updateRates(currentRates) {
+    let updatedRates = {};
 
-        return updatedRates;
+    for (let pairId of Object.keys(currentRates)) {
+      const value = currentRates[pairId];
+      updatedRates[pairId] = generator.floating({
+        min: value + MAX_RATE_UPDATE_STEP,
+        max: value + MAX_RATE_UPDATE_STEP
+      });
     }
+
+    return updatedRates;
+  }
 };

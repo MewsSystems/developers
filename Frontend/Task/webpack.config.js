@@ -1,32 +1,32 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
   // plugins: [new webpack.NoEmitOnErrorsPlugin()],
   entry: {
-    app: "./app/src/index.js"
+    app: './app/src/index.js'
   },
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "bundle.js"
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js'
   },
   resolve: {
-    extensions: [".js", ".json"]
+    extensions: ['.js', '.json']
   },
   module: {
     rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
+        loader: 'babel-loader'
       },
       {
         test: /\.json$/,
-        loader: "json-loader"
+        loader: 'json-loader'
       }
     ]
   },
-  devtool: "eval",
+  devtool: 'eval',
   devServer: {
-    contentBase: "./app"
+    contentBase: './app'
   }
 };

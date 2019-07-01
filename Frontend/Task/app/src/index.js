@@ -1,8 +1,39 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
-import App from "./App";
+import { fetchConfigSaga } from './store/sagas';
+import configReducer from './store/reducers/configReducer';
+import ratesReducer from './store/reducers/ratesReducer';
+import App from './App';
 
-const root = document.getElementById("exchange-rate-client");
+const composeEnhancers =
+  process.env.NODE_ENV === 'development'
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : null || compose;
 
-ReactDOM.render(<App />, root);
+const rootReducer = combineReducers({
+  config: configReducer,
+  rates: ratesReducer
+});
+
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(sagaMiddleware))
+);
+
+sagaMiddleware.run(fetchConfigSaga);
+
+const root = document.getElementById('exchange-rate-client');
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+
+  root
+);
