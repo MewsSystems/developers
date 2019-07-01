@@ -5,8 +5,9 @@ export {
 } from './configActions';
 
 export {
-  fetchRatesSuccess,
+  updateRatesSuccess,
   fetchRatesInit,
   fetchRatesFail,
-  updateRates
+  updateRates,
+  fetchRatesRetry
 } from './ratesActions';
