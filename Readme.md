@@ -8,7 +8,7 @@ Information about development job opportunities and career at [Mews Systems](htt
 
 ## 💼 Open positions
 
-Currently, we are seeking backend developers, frontend developers and Android developers of all seniority levels. For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
+Currently, we are seeking backend developers, frontend developers, data analysts and Android developers of all seniority levels. For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
 
 As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for. If you'd like to first talk to us, that's an option as well, the task is not a mandatory thing.
 
