@@ -12,10 +12,8 @@ export function* fetchConfigSaga() {
     // starts the task in the background
     const syncRatesTask = yield fork(syncRates);
 
-    // wait for the user stop action
-    yield take(actionTypes.FETCH_RATES_RETRY);
-    // user clicked stop. cancel the background task
-    // this will cause the forked bgSync task to jump into its finally block
+    yield take(actionTypes.UPDATE_RATES);
+
     yield cancel(syncRatesTask);
   }
 }

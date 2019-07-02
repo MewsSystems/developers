@@ -7,6 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import { fetchConfigSaga } from './store/sagas';
 import configReducer from './store/reducers/configReducer';
 import ratesReducer from './store/reducers/ratesReducer';
+import filterReducer from './store/reducers/filterReducer';
 import App from './App';
 
 const composeEnhancers =
@@ -16,7 +17,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   config: configReducer,
-  rates: ratesReducer
+  rates: ratesReducer,
+  filter: filterReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

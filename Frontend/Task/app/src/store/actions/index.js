@@ -13,3 +13,5 @@ export {
   updateRates,
   fetchRatesRetry
 } from './ratesActions';
+
+export { filter, resetFilter } from './filterActions';

@@ -16,7 +16,7 @@ export function* syncRates() {
     }
   } finally {
     if (yield cancelled()) {
-      console.log('Show user that we actually care...');
+      console.log('Sync cancelled, set to renew');
     }
   }
 }
