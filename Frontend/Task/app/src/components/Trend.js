@@ -1,8 +1,9 @@
 import React from 'react';
 
-import IconGrow from '../assets/IconGrow';
-import IconDecline from '../assets/IconDecline';
-import IconStagnate from '../assets/IconStagnate';
+import IconGrow from '../assets/Icons/IconGrow';
+import IconDecline from '../assets/Icons/IconDecline';
+import IconStagnate from '../assets/Icons/IconStagnate';
+import { CurrencyTrend } from '../assets/Styles';
 
 const Trend = ({ rate }) => {
   let trendIcon = <IconStagnate />;
@@ -14,13 +15,15 @@ const Trend = ({ rate }) => {
       trendIcon = <IconDecline />;
     }
   }
-
-  return (
-    <span>
-      {rate && `rate is ${rate.rate} and trend is`}
-      {trendIcon}
-    </span>
-  );
+  if (rate) {
+    return (
+      <CurrencyTrend direction={rate.trend}>
+        <span>{rate.rate}</span>
+        {trendIcon}
+      </CurrencyTrend>
+    );
+  }
+  return 'loading...';
 };
 
 export default Trend;

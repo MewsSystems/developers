@@ -1,37 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as R from 'ramda';
 import { connect } from 'react-redux';
 
-import { filter, resetFilter } from '../store/actions';
+import { filterCurrencies, resetFilter } from '../store/actions';
+import { FilterWrapper, FilterItem, FilterReset } from '../assets/Styles';
+import Spinner from '../assets/UI/Spinner';
 
-const Filter = ({ config, filter, resetFilter }) => {
-  const [state, setstate] = useState([]);
+const Filter = ({ config, filterCurrencies, resetFilter, filtered }) => {
   const handleSelect = item => {
-    filter(item);
-    if (state.includes(item)) {
-      setstate(state.filter(i => i !== item));
-    } else {
-      setstate([...state, item]);
-    }
+    filterCurrencies(item);
   };
-  return (
-    <>
-      <ul>
-        {R.keys(config).map(cur => (
-          <li key={cur} onClick={() => handleSelect(cur)}>
-            {`${config[cur][0].code}/${config[cur][1].code}`}{' '}
-          </li>
-        ))}
-        <li onClick={() => resetFilter()}>clear selection</li>
-      </ul>
-    </>
-  );
+  const renderFilter = () => {
+    if (!R.isEmpty(config)) {
+      return (
+        <FilterWrapper>
+          {R.keys(config).map(cur => (
+            <FilterItem
+              key={cur}
+              onClick={() => handleSelect(cur)}
+              active={filtered.includes(cur)}
+            >
+              {`${config[cur][0].code}/${config[cur][1].code}`}{' '}
+            </FilterItem>
+          ))}
+          <FilterReset onClick={() => resetFilter()}>reset</FilterReset>
+        </FilterWrapper>
+      );
+    }
+    return <Spinner />;
+  };
+  return renderFilter();
+};
+
+const mapStateToProps = state => {
+  return {
+    filtered: state.filtered
+  };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   {
-    filter,
+    filterCurrencies,
     resetFilter
   }
 )(Filter);

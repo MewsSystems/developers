@@ -1,13 +1,16 @@
 import React from 'react';
 
 import CurrencyList from './components/CurrencyList';
+import { AppWrapper, Header } from './assets/Styles';
 
 const App = () => {
   return (
-    <div>
-      Exchange rates App
-      <CurrencyList />
-    </div>
+    <>
+      <Header>Exchange rates App</Header>
+      <AppWrapper>
+        <CurrencyList />
+      </AppWrapper>
+    </>
   );
 };
 

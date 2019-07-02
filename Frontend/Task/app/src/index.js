@@ -9,6 +9,8 @@ import configReducer from './store/reducers/configReducer';
 import ratesReducer from './store/reducers/ratesReducer';
 import filterReducer from './store/reducers/filterReducer';
 import App from './App';
+import 'normalize.css';
+import './index.css';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -18,7 +20,7 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   config: configReducer,
   rates: ratesReducer,
-  filter: filterReducer
+  filtered: filterReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

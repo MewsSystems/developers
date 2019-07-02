@@ -14,4 +14,4 @@ export {
   fetchRatesRetry
 } from './ratesActions';
 
-export { filter, resetFilter } from './filterActions';
+export { filterCurrencies, resetFilter } from './filterActions';

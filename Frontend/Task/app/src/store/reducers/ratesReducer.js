@@ -12,7 +12,9 @@ const updateRates = (state, action) => {
     if (prev < next) {
       return 'growing';
     }
-    return 'stagnating';
+    if (prev === next) {
+      return 'stagnating';
+    }
   };
   let trend;
   let rate;

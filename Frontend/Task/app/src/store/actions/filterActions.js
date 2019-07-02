@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-export const filter = item => {
+export const filterCurrencies = item => {
   return {
     type: actionTypes.FILTER,
     payload: item

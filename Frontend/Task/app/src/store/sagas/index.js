@@ -8,7 +8,7 @@ export function* fetchConfigSaga() {
   yield all([takeLatest(actionTypes.FETCH_CONFIG, fetchConfig)]);
   yield all([takeLatest(actionTypes.FETCH_CONFIG_INIT, checkConfig)]);
   yield all([takeLatest(actionTypes.UPDATE_RATES, syncRates)]);
-  while (yield take(actionTypes.UPDATE_RATES)) {
+  while (yield take(actionTypes.FETCH_RATES_RETRY)) {
     // starts the task in the background
     const syncRatesTask = yield fork(syncRates);
 

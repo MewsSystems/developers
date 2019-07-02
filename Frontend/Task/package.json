@@ -28,6 +28,7 @@
     "express": "4.17.1",
     "json-loader": "0.5.7",
     "json-server": "0.15.0",
+    "normalize.css": "^8.0.1",
     "qs": "^6.7.0",
     "ramda": "^0.26.1",
     "react": "^16.8.6",
@@ -42,11 +43,13 @@
   },
   "devDependencies": {
     "concurrently": "^4.1.1",
+    "css-loader": "^3.0.0",
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.2",
     "eslint-plugin-react-hooks": "^1.6.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "style-loader": "^0.23.1"
   }
 }
