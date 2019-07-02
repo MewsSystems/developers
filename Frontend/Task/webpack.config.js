@@ -1,7 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  // plugins: [new webpack.NoEmitOnErrorsPlugin()],
+  target: 'web',
+  mode: 'development',
   entry: {
     app: './app/src/index.js'
   },
@@ -10,12 +11,17 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.json']
+    extensions: ['.js', '.json', 'ts', 'tsx']
   },
   module: {
     rules: [
       {
         test: /\.js?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.tsx?/,
         exclude: /node_modules/,
         loader: 'babel-loader'
       },
