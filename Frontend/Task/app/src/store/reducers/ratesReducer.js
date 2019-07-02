@@ -4,7 +4,6 @@ const initialState = {};
 
 const updateRates = (state, action) => {
   const newState = action.payload;
-  console.log('new state ', newState);
   const keys = Object.keys(action.payload);
   const setTrend = (prev, next) => {
     if (prev > next) {
@@ -15,16 +14,16 @@ const updateRates = (state, action) => {
     }
     return 'stagnating';
   };
+  let trend;
+  let rate;
   keys.forEach(key => {
-    if (state[key]) {
-      return (newState[key] = {
-        rate: newState[key],
-        trend: setTrend(state[key].rate, newState[key])
-      });
-    }
+    rate = newState[key];
+    state[key] !== undefined
+      ? (trend = setTrend(state[key].rate, newState[key]))
+      : (trend = 'stagnating');
     return (newState[key] = {
-      rate: newState[key],
-      trend: 'stagnating'
+      rate,
+      trend
     });
   });
   return newState;
@@ -33,7 +32,6 @@ const fetchFails = (state, action) => {
   return state;
 };
 const reducer = (state = initialState, action) => {
-  console.log('[ratesReducer]', action);
   switch (action.type) {
     case actionTypes.UPDATE_RATES_SUCCESS:
       return updateRates(state, action);

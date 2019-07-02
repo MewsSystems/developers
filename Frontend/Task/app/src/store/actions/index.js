@@ -1,7 +1,9 @@
 export {
   fetchConfigSuccess,
   fetchConfigInit,
-  fetchConfigFail
+  fetchConfigFail,
+  fetchConfig,
+  checkConfig
 } from './configActions';
 
 export {

@@ -6,6 +6,19 @@ export const fetchConfigInit = () => {
   };
 };
 
+export const checkConfig = () => {
+  return {
+    type: actionTypes.CHECK_CONFIG
+  };
+};
+
+export const fetchConfig = config => {
+  return {
+    type: actionTypes.FETCH_CONFIG,
+    payload: config
+  };
+};
+
 export const fetchConfigSuccess = config => {
   return {
     type: actionTypes.FETCH_CONFIG_SUCCESS,
