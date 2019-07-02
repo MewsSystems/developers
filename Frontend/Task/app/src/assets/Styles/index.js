@@ -73,6 +73,7 @@ export const FilterItem = styled.li`
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 3px;
+  cursor: pointer;
   &:hover {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 2px 3px rgba(0, 0, 0, 0.24);
   }
@@ -88,6 +89,7 @@ export const FilterReset = styled.div`
   padding: 0.5rem 2rem;
   border-radius: 6px;
   background-color: #ef5350;
+  cursor: pointer;
   color: #fff;
   &:hover {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 2px 3px rgba(0, 0, 0, 0.24);
