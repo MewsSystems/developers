@@ -4,24 +4,16 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { fetchConfigSaga } from './store/sagas';
-import configReducer from './store/reducers/configReducer';
-import ratesReducer from './store/reducers/ratesReducer';
-import filterReducer from './store/reducers/filterReducer';
+import { fetchData } from './store/sagas';
+import rootReducer from './store/reducers/';
 import App from './App';
 import 'normalize.css';
 import './index.css';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null || compose;
-
-const rootReducer = combineReducers({
-  config: configReducer,
-  rates: ratesReducer,
-  filtered: filterReducer
-});
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -30,7 +22,7 @@ const store = createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware))
 );
 
-sagaMiddleware.run(fetchConfigSaga);
+sagaMiddleware.run(fetchData);
 
 const root = document.getElementById('exchange-rate-client');
 
@@ -38,6 +30,5 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-
   root
 );

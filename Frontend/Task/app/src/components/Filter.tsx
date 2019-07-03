@@ -1,20 +1,26 @@
 import React from 'react';
-import * as R from 'ramda';
+import { isEmpty, keys } from 'ramda';
 import { connect } from 'react-redux';
 
 import { filterCurrencies, resetFilter } from '../store/actions';
 import { FilterWrapper, FilterItem, FilterReset } from '../assets/Styles';
 import Spinner from '../assets/UI/Spinner';
+import { FilterProps, FilterState } from '../types';
 
-const Filter = ({ config, filterCurrencies, resetFilter, filtered }) => {
-  const handleSelect = item => {
+const Filter: React.FC<FilterProps> = ({
+  config,
+  filterCurrencies,
+  resetFilter,
+  filtered
+}) => {
+  const handleSelect = (item: string) => {
     filterCurrencies(item);
   };
   const renderFilter = () => {
-    if (!R.isEmpty(config)) {
+    if (!isEmpty(config)) {
       return (
         <FilterWrapper>
-          {R.keys(config).map(cur => (
+          {keys(config).map(cur => (
             <FilterItem
               key={cur}
               onClick={() => handleSelect(cur)}
@@ -32,7 +38,7 @@ const Filter = ({ config, filterCurrencies, resetFilter, filtered }) => {
   return renderFilter();
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: FilterState) => {
   return {
     filtered: state.filtered
   };

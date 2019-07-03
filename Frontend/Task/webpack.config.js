@@ -1,42 +1,42 @@
-const path = require('path');
+const path = require("path")
 
 module.exports = {
-  target: 'web',
-  mode: 'development',
+  target: "web",
+  mode: "development",
   entry: {
-    app: './app/src/index.js'
+    app: "./app/src/index.tsx"
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, "build"),
+    filename: "bundle.js"
   },
   resolve: {
-    extensions: ['.js', '.json', 'ts', 'tsx']
+    extensions: [".js", ".json", ".ts", ".tsx"]
   },
   module: {
     rules: [
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: "babel-loader"
       },
       {
         test: /\.tsx?/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        loader: "babel-loader"
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: "json-loader"
       },
       {
         test: /\.css$/,
-        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }]
       }
     ]
   },
-  devtool: 'eval',
+  devtool: "eval",
   devServer: {
-    contentBase: './app'
+    contentBase: "./app"
   }
-};
+}

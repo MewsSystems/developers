@@ -1,11 +1,11 @@
 import * as actionTypes from './actionTypes';
 
-export const fetchRatesInit = rates => {
-  return {
-    type: actionTypes.FETCH_RATES_INIT,
-    payload: rates
-  };
-};
+// export const fetchRatesInit = rates => {
+//   return {
+//     type: actionTypes.FETCH_RATES_INIT,
+//     payload: rates
+//   };
+// };
 
 export const updateRatesSuccess = rates => {
   return {
@@ -14,13 +14,13 @@ export const updateRatesSuccess = rates => {
   };
 };
 
-export const updateRates = () => {
+export const syncRates = () => {
   return {
-    type: actionTypes.UPDATE_RATES
+    type: actionTypes.SYNC_RATES
   };
 };
 
-export const fetchRatesFail = error => {
+export const fetchRatesFail = (error: any) => {
   return {
     type: actionTypes.FETCH_RATES_FAIL,
     payload: error

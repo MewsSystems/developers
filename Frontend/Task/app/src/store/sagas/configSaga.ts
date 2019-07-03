@@ -1,9 +1,12 @@
 import { put } from 'redux-saga/effects';
-import * as R from 'ramda';
+import promise from 'es6-promise';
+import fetch from 'isomorphic-fetch';
+import 'babel-polyfill';
+promise.polyfill();
 
 import * as actions from '../actions';
 
-export function* fetchConfig(action) {
+export function* fetchConfig() {
   try {
     yield getCofig();
   } catch (error) {
@@ -18,7 +21,7 @@ function* getCofig() {
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error(500);
+          throw new Error('500');
         }
       }
     );
@@ -27,18 +30,18 @@ function* getCofig() {
       JSON.stringify(response.currencyPairs)
     );
     yield put(actions.fetchConfigSuccess(response.currencyPairs));
-    yield put(actions.updateRates());
+    yield put(actions.syncRates());
   } catch (error) {
     console.log(error);
   }
 }
 
-export function* checkConfig(action) {
+export function* checkConfig() {
   const config = yield JSON.parse(localStorage.getItem('config'));
   if (!config) {
     yield put(actions.fetchConfig());
   } else {
     yield put(actions.fetchConfigSuccess(config));
-    yield put(actions.updateRates());
+    yield put(actions.syncRates());
   }
 }

@@ -12,10 +12,9 @@ export const checkConfig = () => {
   };
 };
 
-export const fetchConfig = config => {
+export const fetchConfig = () => {
   return {
-    type: actionTypes.FETCH_CONFIG,
-    payload: config
+    type: actionTypes.FETCH_CONFIG
   };
 };
 

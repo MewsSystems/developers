@@ -8,7 +8,7 @@ export const FETCH_RATES_INIT = 'FETCH_RATES_INIT';
 export const FETCH_RATES_FAIL = 'FETCH_RATES_FAIL';
 export const UPDATE_RATES_SUCCESS = 'UPDATE_RATES_SUCCESS';
 export const FETCH_RATES_RETRY = 'FETCH_RATES_RETRY';
-export const UPDATE_RATES = 'UPDATE_RATES';
+export const SYNC_RATES = 'SYNC_RATES';
 
 export const FILTER = 'FILTER';
 

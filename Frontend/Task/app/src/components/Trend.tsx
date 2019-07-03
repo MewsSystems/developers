@@ -4,8 +4,9 @@ import IconGrow from '../assets/Icons/IconGrow';
 import IconDecline from '../assets/Icons/IconDecline';
 import IconStagnate from '../assets/Icons/IconStagnate';
 import { CurrencyTrend } from '../assets/Styles';
+import { RateInterface } from '../types';
 
-const Trend = ({ rate }) => {
+const Trend: React.FC<RateInterface> = ({ rate }) => {
   let trendIcon = <IconStagnate />;
   if (rate) {
     if (rate.trend === 'growing') {
@@ -23,7 +24,7 @@ const Trend = ({ rate }) => {
       </CurrencyTrend>
     );
   }
-  return 'loading...';
+  return null;
 };
 
 export default Trend;

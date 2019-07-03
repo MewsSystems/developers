@@ -8,9 +8,8 @@ export {
 
 export {
   updateRatesSuccess,
-  fetchRatesInit,
   fetchRatesFail,
-  updateRates,
+  syncRates,
   fetchRatesRetry
 } from './ratesActions';
 

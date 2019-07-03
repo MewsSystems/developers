@@ -63,8 +63,10 @@ export const FilterWrapper = styled.ul`
     flex-flow: column;
   }
 `;
-
-export const FilterItem = styled.li`
+interface FilterItemProps {
+  active: boolean;
+}
+export const FilterItem = styled.li<FilterItemProps>`
   margin: 0 0.25rem 0.75rem;
   width: 6rem;
   padding: 0.5rem 0;
@@ -117,8 +119,10 @@ export const RatesHeader = styled.h2`
   display: inline-block;
   margin-bottom: 2rem;
 `;
-
-export const CurrencyTrend = styled.div`
+interface CurrencyTrendProps {
+  direction: string;
+}
+export const CurrencyTrend = styled.div<CurrencyTrendProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;

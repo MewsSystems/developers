@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import * as R from 'ramda';
+import { isEmpty, keys } from 'ramda';
 
 import { fetchConfigInit } from '../store/actions';
 import Currency from './Currency';
@@ -15,21 +15,27 @@ import {
   SingleCurrency
 } from '../assets/Styles';
 import Spinner from '../assets/UI/Spinner';
+import { CurrencyListProps, CurrencyListState } from '../types';
 
-const CurrencyList = ({ fetchConfigInit, rates, config, filtered }) => {
+const CurrencyList: React.FC<CurrencyListProps> = ({
+  fetchConfigInit,
+  rates,
+  config,
+  filtered
+}) => {
   useEffect(() => {
     fetchConfigInit();
   }, [fetchConfigInit]);
 
   const renderList = () => {
-    if (!R.isEmpty(config)) {
+    if (!isEmpty(config)) {
       const filterApplied = filtered.length;
-      let CurrencyKeys = filterApplied ? filtered : R.keys(config);
+      let CurrencyKeys = filterApplied ? filtered : keys(config);
       return (
         <>
           <CurrencyHeader>Currency</CurrencyHeader>
           <RatesHeader>Rate</RatesHeader>
-          {CurrencyKeys.map(cur => (
+          {CurrencyKeys.map((cur: string) => (
             <SingleCurrency key={cur}>
               <Currency currency={config[cur]} />
               <Trend rate={rates[cur]} />
@@ -45,15 +51,11 @@ const CurrencyList = ({ fetchConfigInit, rates, config, filtered }) => {
       <FilterContainer>
         <Filter config={config} />
       </FilterContainer>
-      <CurrenciesContainer>
-        {/* <CurrencyHeader>Currency</CurrencyHeader> */}
-        {/* <RatesHeader>Rate</RatesHeader> */}
-        {renderList()}
-      </CurrenciesContainer>
+      <CurrenciesContainer>{renderList()}</CurrenciesContainer>
     </ListContainer>
   );
 };
-const mapStateToProps = state => {
+const mapStateToProps = (state: CurrencyListState) => {
   return {
     config: state.config,
     rates: state.rates,

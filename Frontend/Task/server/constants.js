@@ -6,4 +6,4 @@ module.exports = {
   MIN_INITIAL_RATE: 0.5,
   MAX_INITIAL_RATE: 3,
   MAX_RATE_UPDATE_STEP: 0.01
-};
+}
