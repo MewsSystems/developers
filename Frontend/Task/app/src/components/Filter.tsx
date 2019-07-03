@@ -1,21 +1,21 @@
-import React from 'react';
-import { isEmpty, keys } from 'ramda';
-import { connect } from 'react-redux';
+import React from 'react'
+import { isEmpty, keys } from 'ramda'
+import { connect } from 'react-redux'
 
-import { filterCurrencies, resetFilter } from '../store/actions';
-import { FilterWrapper, FilterItem, FilterReset } from '../assets/Styles';
-import Spinner from '../assets/UI/Spinner';
-import { FilterProps, FilterState } from '../types';
+import { filterCurrencies, resetFilter } from '../store/actions'
+import { FilterWrapper, FilterItem, FilterReset } from '../assets/Styles'
+import Spinner from '../assets/UI/Spinner'
+import { FilterProps, FilterState } from '../types'
 
 const Filter: React.FC<FilterProps> = ({
   config,
   filterCurrencies,
   resetFilter,
-  filtered
+  filtered,
 }) => {
   const handleSelect = (item: string) => {
-    filterCurrencies(item);
-  };
+    filterCurrencies(item)
+  }
   const renderFilter = () => {
     if (!isEmpty(config)) {
       return (
@@ -31,23 +31,23 @@ const Filter: React.FC<FilterProps> = ({
           ))}
           <FilterReset onClick={() => resetFilter()}>reset</FilterReset>
         </FilterWrapper>
-      );
+      )
     }
-    return <Spinner />;
-  };
-  return renderFilter();
-};
+    return <Spinner />
+  }
+  return renderFilter()
+}
 
 const mapStateToProps = (state: FilterState) => {
   return {
-    filtered: state.filtered
-  };
-};
+    filtered: state.filtered,
+  }
+}
 
 export default connect(
   mapStateToProps,
   {
     filterCurrencies,
-    resetFilter
+    resetFilter,
   }
-)(Filter);
+)(Filter)

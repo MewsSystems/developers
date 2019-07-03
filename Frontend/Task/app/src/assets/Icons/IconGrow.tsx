@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const IconGrow: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const IconGrow: React.FC = () => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default IconGrow;
+export default IconGrow

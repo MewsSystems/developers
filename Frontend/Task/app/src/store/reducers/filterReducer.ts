@@ -1,18 +1,18 @@
-import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from '../actions/actionTypes'
 import {
   filterCurrenciesInterface,
-  resetFilterInterface
-} from '../actions/types';
+  resetFilterInterface,
+} from '../actions/types'
 
-const initialState = [];
+const initialState = []
 
 const addFilter = (state: Array<string>, action: filterCurrenciesInterface) => {
   if (!state.includes(action.payload)) {
-    return [...state, action.payload];
+    return [...state, action.payload]
   } else {
-    return state.filter(i => i !== action.payload);
+    return state.filter(i => i !== action.payload)
   }
-};
+}
 
 const reducer = (
   state: Array<string> = initialState,
@@ -20,12 +20,12 @@ const reducer = (
 ) => {
   switch (action.type) {
     case actionTypes.FILTER:
-      return addFilter(state, action);
+      return addFilter(state, action)
     case actionTypes.RESET_FILTER:
-      return initialState;
+      return initialState
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer

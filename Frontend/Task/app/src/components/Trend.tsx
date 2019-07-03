@@ -1,19 +1,19 @@
-import React from 'react';
+import React from 'react'
 
-import IconGrow from '../assets/Icons/IconGrow';
-import IconDecline from '../assets/Icons/IconDecline';
-import IconStagnate from '../assets/Icons/IconStagnate';
-import { CurrencyTrend } from '../assets/Styles';
-import { RateInterface } from '../types';
+import IconGrow from '../assets/Icons/IconGrow'
+import IconDecline from '../assets/Icons/IconDecline'
+import IconStagnate from '../assets/Icons/IconStagnate'
+import { CurrencyTrend } from '../assets/Styles'
+import { RateInterface } from '../types'
 
 const Trend: React.FC<RateInterface> = ({ rate }) => {
-  let trendIcon = <IconStagnate />;
+  let trendIcon = <IconStagnate />
   if (rate) {
     if (rate.trend === 'growing') {
-      trendIcon = <IconGrow />;
+      trendIcon = <IconGrow />
     }
     if (rate.trend === 'declining') {
-      trendIcon = <IconDecline />;
+      trendIcon = <IconDecline />
     }
   }
   if (rate) {
@@ -22,9 +22,9 @@ const Trend: React.FC<RateInterface> = ({ rate }) => {
         <span>{rate.rate}</span>
         {trendIcon}
       </CurrencyTrend>
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
-export default Trend;
+export default Trend

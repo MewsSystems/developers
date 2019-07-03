@@ -1,15 +1,15 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const CurrencyItem = styled.span`
   width: 75%;
   display: inline-block;
   }
-`;
+`
 
 export const AppWrapper = styled.article`
   max-width: 75rem;
   margin: 0 auto;
-`;
+`
 
 export const Header = styled.header`
   display: flex;
@@ -20,11 +20,11 @@ export const Header = styled.header`
   background-color: #304ffe;
   font-size: 2.5rem;
   color: #fff;
-`;
+`
 export const ListContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
-`;
+`
 
 export const FilterContainer = styled.div`
   width: calc(100% - 2rem);
@@ -37,7 +37,7 @@ export const FilterContainer = styled.div`
   @media screen and (min-width: 800px) {
     width: calc(100% / 3 - 2rem);
   }
-`;
+`
 export const CurrenciesContainer = styled.div`
   width: calc(100% - 2rem);
   margin: 0 1rem;
@@ -49,7 +49,7 @@ export const CurrenciesContainer = styled.div`
   @media screen and (min-width: 800px) {
     width: calc(200% / 3 - 2rem);
   }
-`;
+`
 
 export const FilterWrapper = styled.ul`
   display: inline-block;
@@ -62,9 +62,9 @@ export const FilterWrapper = styled.ul`
   @media screen and (min-width: 800px) {
     flex-flow: column;
   }
-`;
+`
 interface FilterItemProps {
-  active: boolean;
+  active: boolean
 }
 export const FilterItem = styled.li<FilterItemProps>`
   margin: 0 0.25rem 0.75rem;
@@ -82,7 +82,7 @@ export const FilterItem = styled.li<FilterItemProps>`
   @media screen and (min-width: 800px) {
     margin: 0 0 0.75rem;
   }
-`;
+`
 
 export const FilterReset = styled.div`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -97,7 +97,7 @@ export const FilterReset = styled.div`
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.12), 0 2px 3px rgba(0, 0, 0, 0.24);
     background-color: #b61827;
   }
-`;
+`
 
 export const CurrencyHeader = styled.h2`
   margin: 0;
@@ -108,7 +108,7 @@ export const CurrencyHeader = styled.h2`
   width: 75%;
   display: inline-block;
   margin-bottom: 2rem;
-`;
+`
 export const RatesHeader = styled.h2`
   margin: 0;
   padding: 0;
@@ -118,9 +118,9 @@ export const RatesHeader = styled.h2`
   width: 25%;
   display: inline-block;
   margin-bottom: 2rem;
-`;
+`
 interface CurrencyTrendProps {
-  direction: string;
+  direction: string
 }
 export const CurrencyTrend = styled.div<CurrencyTrendProps>`
   display: inline-flex;
@@ -141,7 +141,7 @@ export const CurrencyTrend = styled.div<CurrencyTrendProps>`
   span {
     margin-right: 0.25rem;
   }
-`;
+`
 
 export const SingleCurrency = styled.div`
   box-sizing: border-box;
@@ -153,7 +153,7 @@ export const SingleCurrency = styled.div`
     background-color: #f5f6ff;
     border-radius: 6px;
   }
-`;
+`
 
 export const StyledSpinner = styled.div`
   display: block;
@@ -217,4 +217,4 @@ export const StyledSpinner = styled.div`
       opacity: 0;
     }
   }
-`;
+`

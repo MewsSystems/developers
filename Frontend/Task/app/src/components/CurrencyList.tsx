@@ -1,36 +1,36 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { isEmpty, keys } from 'ramda';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { isEmpty, keys } from 'ramda'
 
-import { fetchConfigInit } from '../store/actions';
-import Currency from './Currency';
-import Trend from './Trend';
-import Filter from './Filter';
+import { fetchConfigInit } from '../store/actions'
+import Currency from './Currency'
+import Trend from './Trend'
+import Filter from './Filter'
 import {
   ListContainer,
   FilterContainer,
   CurrenciesContainer,
   CurrencyHeader,
   RatesHeader,
-  SingleCurrency
-} from '../assets/Styles';
-import Spinner from '../assets/UI/Spinner';
-import { CurrencyListProps, CurrencyListState } from '../types';
+  SingleCurrency,
+} from '../assets/Styles'
+import Spinner from '../assets/UI/Spinner'
+import { CurrencyListProps, CurrencyListState } from '../types'
 
 const CurrencyList: React.FC<CurrencyListProps> = ({
   fetchConfigInit,
   rates,
   config,
-  filtered
+  filtered,
 }) => {
   useEffect(() => {
-    fetchConfigInit();
-  }, [fetchConfigInit]);
+    fetchConfigInit()
+  }, [fetchConfigInit])
 
   const renderList = () => {
     if (!isEmpty(config)) {
-      const filterApplied = filtered.length;
-      let CurrencyKeys = filterApplied ? filtered : keys(config);
+      const filterApplied = filtered.length
+      let CurrencyKeys = filterApplied ? filtered : keys(config)
       return (
         <>
           <CurrencyHeader>Currency</CurrencyHeader>
@@ -42,10 +42,10 @@ const CurrencyList: React.FC<CurrencyListProps> = ({
             </SingleCurrency>
           ))}
         </>
-      );
+      )
     }
-    return <Spinner />;
-  };
+    return <Spinner />
+  }
   return (
     <ListContainer>
       <FilterContainer>
@@ -53,17 +53,17 @@ const CurrencyList: React.FC<CurrencyListProps> = ({
       </FilterContainer>
       <CurrenciesContainer>{renderList()}</CurrenciesContainer>
     </ListContainer>
-  );
-};
+  )
+}
 const mapStateToProps = (state: CurrencyListState) => {
   return {
     config: state.config,
     rates: state.rates,
-    filtered: state.filtered
-  };
-};
+    filtered: state.filtered,
+  }
+}
 
 export default connect(
   mapStateToProps,
   { fetchConfigInit }
-)(CurrencyList);
+)(CurrencyList)

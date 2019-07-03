@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
-import CurrencyList from './components/CurrencyList';
-import { AppWrapper, Header } from './assets/Styles';
+import CurrencyList from './components/CurrencyList'
+import { AppWrapper, Header } from './assets/Styles'
 
 const App: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const App: React.FC = () => {
         <CurrencyList />
       </AppWrapper>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

@@ -1,8 +1,8 @@
-import * as actionTypes from '../actions/actionTypes';
-import { fetchConfigSuccessInterface } from '../actions/types';
-import { ConfigInterface } from '../../types';
+import * as actionTypes from '../actions/actionTypes'
+import { fetchConfigSuccessInterface } from '../actions/types'
+import { ConfigInterface } from '../../types'
 
-const initialState = {};
+const initialState = {}
 
 const reducer = (
   state: ConfigInterface = initialState,
@@ -10,10 +10,10 @@ const reducer = (
 ) => {
   switch (action.type) {
     case actionTypes.FETCH_CONFIG_SUCCESS:
-      return action.payload;
+      return action.payload
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer

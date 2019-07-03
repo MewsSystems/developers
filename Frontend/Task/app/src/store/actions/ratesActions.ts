@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './actionTypes'
 
 // export const fetchRatesInit = rates => {
 //   return {
@@ -10,25 +10,25 @@ import * as actionTypes from './actionTypes';
 export const updateRatesSuccess = rates => {
   return {
     type: actionTypes.UPDATE_RATES_SUCCESS,
-    payload: rates
-  };
-};
+    payload: rates,
+  }
+}
 
 export const syncRates = () => {
   return {
-    type: actionTypes.SYNC_RATES
-  };
-};
+    type: actionTypes.SYNC_RATES,
+  }
+}
 
 export const fetchRatesFail = (error: any) => {
   return {
     type: actionTypes.FETCH_RATES_FAIL,
-    payload: error
-  };
-};
+    payload: error,
+  }
+}
 
 export const fetchRatesRetry = () => {
   return {
-    type: actionTypes.FETCH_RATES_RETRY
-  };
-};
+    type: actionTypes.FETCH_RATES_RETRY,
+  }
+}

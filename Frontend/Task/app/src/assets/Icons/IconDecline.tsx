@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const IconDecline: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const IconDecline: React.FC = () => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default IconDecline;
+export default IconDecline

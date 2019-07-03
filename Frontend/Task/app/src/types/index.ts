@@ -1,45 +1,45 @@
 export interface ConfigInterface {
   currencyPairs?: {
-    currency: CurrencyArray;
-  };
+    currency: CurrencyArray
+  }
 }
 
 export interface CurrencyArray {
-  currency: Array<CurrencyInterface>;
+  currency: Array<CurrencyInterface>
 }
 export interface CurrencyInterface {
-  code: string;
-  name: string;
+  code: string
+  name: string
 }
 
 export interface RatesInterface {
-  rates?: Array<RateInterface>;
+  rates?: Array<RateInterface>
 }
 
 export interface RateInterface {
-  rate: { rate: number; trend: string };
+  rate: { rate: number; trend: string }
 }
 
 export interface CurrencyListProps {
-  fetchConfigInit: Function;
-  rates: RatesInterface;
-  config: ConfigInterface;
-  filtered: Array<string>;
+  fetchConfigInit: Function
+  rates: RatesInterface
+  config: ConfigInterface
+  filtered: Array<string>
 }
 
 export interface CurrencyListState {
-  config: ConfigInterface;
-  rates: RatesInterface;
-  filtered: Array<string>;
+  config: ConfigInterface
+  rates: RatesInterface
+  filtered: Array<string>
 }
 
 export interface FilterProps {
-  config: ConfigInterface;
-  filterCurrencies: Function;
-  resetFilter: Function;
-  filtered: Array<string>;
+  config: ConfigInterface
+  filterCurrencies: Function
+  resetFilter: Function
+  filtered: Array<string>
 }
 
 export interface FilterState {
-  filtered: Array<string>;
+  filtered: Array<string>
 }

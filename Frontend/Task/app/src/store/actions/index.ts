@@ -3,14 +3,14 @@ export {
   fetchConfigInit,
   fetchConfigFail,
   fetchConfig,
-  checkConfig
-} from './configActions';
+  checkConfig,
+} from './configActions'
 
 export {
   updateRatesSuccess,
   fetchRatesFail,
   syncRates,
-  fetchRatesRetry
-} from './ratesActions';
+  fetchRatesRetry,
+} from './ratesActions'
 
-export { filterCurrencies, resetFilter } from './filterActions';
+export { filterCurrencies, resetFilter } from './filterActions'
