@@ -22,9 +22,13 @@ function* fetchGetRate() {
 		} else {
 			pairsList = Object.keys(configuration);
 		}
-		
+
+		const rates = yield call(() => fetch(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`).then(res => res.json()));
+
 		console.log(configuration);
+		console.log(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`);
 		console.log(pairsList);
+		console.log(rates);
 
 	} catch (error) {
 		console.log(`Error getting rate, ${error}`);
@@ -33,8 +37,8 @@ function* fetchGetRate() {
 
 function* fetchConfiguration () {
 	try {
-		const data = yield call(() => fetch(`${host}/configuration`).then(res => res.json()));
-		yield put(configurationSucceeded(data));
+		const configuration = yield call(() => fetch(`${host}/configuration`).then(res => res.json()));
+		yield put(configurationSucceeded(configuration));
 		yield put(getRate());
 	} catch (error) {
 		console.log(`Error getting config, ${error}`);
