@@ -1,14 +1,16 @@
 const webpack = require('webpack');
+const path = require('path');
 
 const webpackConfig = {
     plugins: [
         new webpack.NoErrorsPlugin(),
     ],
     entry: {
-        app: './app/app.js',
+        app: './app/index.js',
     },
     output: {
-        filename: '[name].js',
+	      path: path.resolve(__dirname, 'dist'),
+	      filename: 'bundle.js',
         library: 'app',
         libraryTarget: 'window',
     },
@@ -17,9 +19,9 @@ const webpackConfig = {
     },
     module: {
         loaders: [{
-            test: /\.js?$/,
+	        test: /\.(js|jsx)$/,
             exclude: /(node_modules|Generated)/,
-            loader: 'babel',
+            loader: 'babel-loader',
         }, {
             test: /\.json$/,
             loader: 'json',

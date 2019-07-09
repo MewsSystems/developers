@@ -35,9 +35,10 @@ server.get('/rates', (req, res) => {
         try {
             const allRates = ratesGenerator.getCurrentRates();
             const { currencyPairIds = [] } = req.query;
+            const parsedCurrencyPairIds = typeof currencyPairIds === 'string' ? JSON.parse(currencyPairIds) : currencyPairIds;
 
             let rates = {};
-            for (let pairId of currencyPairIds) {
+            for (let pairId of parsedCurrencyPairIds) {
                 if (typeof allRates[pairId] !== 'undefined') {
                     rates[pairId] = allRates[pairId];
                 }

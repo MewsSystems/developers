@@ -16,7 +16,9 @@
 .idea
 [Tt]humbs.db
 *.tgz
-
+yarn.lock
+package-lock.json
+dist
 node_modules
 bower_components
 npm-debug.log
