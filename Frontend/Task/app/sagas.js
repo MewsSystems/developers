@@ -23,13 +23,27 @@ function* fetchGetRate() {
 			pairsList = Object.keys(configuration);
 		}
 
-		const rates = yield call(() => fetch(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`).then(res => res.json()));
+		console.log('pairsList', pairsList);
 
-		console.log(configuration);
-		console.log(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`);
-		console.log(pairsList);
-		console.log(rates);
+		const data = yield call(() => fetch(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`).then(res => {console.log('res', res); ; res.json()}));
+		const currencyPairsRateList = [];
 
+		if (data) {
+			const rates = data.rates || {};
+
+			for (let rate in rates) {
+				currencyPairsRateList.push({pairId: rate, rate: rates[rate], pairs: configuration[rate]})
+			}
+
+			yield put(rateSucceeded(currencyPairsRateList));
+
+			// console.log(configuration);
+			// // console.log(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`);
+			// console.log(pairsList);
+			// console.log(rates);
+			// console.log(currencyPairsRateList);
+
+		}
 	} catch (error) {
 		console.log(`Error getting rate, ${error}`);
 	}

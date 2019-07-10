@@ -24,32 +24,14 @@ const reducer = (state = initialState, action) => {
 				...state,
 				currencyPairsRateList: action.data
 			};
+		case 'SELECT_CURRENCY':
+			return {
+				...state,
+				pairsSelector: action.data
+			};
 		default:
 			return state;
 	}
-
-	// switch (action.type) {
-	// 	case 'REQUESTED_DOG':
-	// 		return {
-	// 			url: '',
-	// 			loading: true,
-	// 			error: false,
-	// 		};
-	// 	case 'REQUESTED_DOG_SUCCEEDED':
-	// 		return {
-	// 			url: action.url,
-	// 			loading: false,
-	// 			error: false,
-	// 		};
-	// 	case 'REQUESTED_DOG_FAILED':
-	// 		return {
-	// 			url: '',
-	// 			loading: false,
-	// 			error: true,
-	// 		};
-	// 	default:
-	// 		return state;
-	// }
 };
 
 export default reducer;
