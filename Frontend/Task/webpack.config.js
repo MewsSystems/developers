@@ -25,7 +25,15 @@ const webpackConfig = {
         }, {
             test: /\.json$/,
             loader: 'json',
-        }],
+        },
+	        {
+		        test: /\.scss$/,
+		        use: [
+			        "style-loader",
+			        "css-loader",
+			        "sass-loader"
+		        ]
+	        }],
     },
     devtool: 'eval',
     devServer: {
