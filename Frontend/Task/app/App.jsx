@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import CurrencyPairsRateList from './CurrencyPairsRateList.jsx';
 import PairsSelector from './PairsSelector.jsx';
 import { getConfiguration, getRate, selectCurrency } from "./actions";
+import { currencyLocalDB } from './localDb';
 
 class App extends React.Component {
 	getConfig;
@@ -17,7 +18,9 @@ class App extends React.Component {
 	}
 
 	componentDidMount () {
-		const { getConfiguration } = this.props;
+		const { getConfiguration, configuration } = this.props;
+
+		this.setConfiguration(configuration);
 
 		let getConfig = setTimeout(function runGetConfig () {
 			getConfiguration();
@@ -28,18 +31,8 @@ class App extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const prevConfiguration = prevProps.configuration;
 		const prevCurrencyPairsRateList = prevProps.currencyPairsRateList;
-		const { configuration, currencyPairsRateList } = this.props;
-
-		if (JSON.stringify(prevConfiguration) !== JSON.stringify(configuration)) {
-			const currencyPairs = Object.keys(configuration).map((key) => {
-				return { key: key, pair: configuration[key] };
-			});
-			this.setState({
-				currencyPairs
-			})
-		}
+		const { currencyPairsRateList } = this.props;
 
 		if (JSON.stringify(prevCurrencyPairsRateList) !== JSON.stringify(currencyPairsRateList)) {
 			const rateList = [];
@@ -76,6 +69,15 @@ class App extends React.Component {
 		clearTimeout(this.getConfig);
 	}
 
+	setConfiguration = (configuration) => {
+		const currencyPairs = Object.keys(configuration).map((key) => {
+			return { key: key, pair: configuration[key] };
+		});
+		this.setState({
+			currencyPairs
+		})
+	};
+
 	setCurrency = (id) => {
 		const { pairsSelector, selectCurrency } = this.props;
 		let newPairsSelector = [];
@@ -87,6 +89,7 @@ class App extends React.Component {
 		}
 
 		selectCurrency(newPairsSelector);
+		currencyLocalDB.set('currency_user_selection', newPairsSelector);
 	};
 
 	getSelectedCurrency = () => {
@@ -96,7 +99,7 @@ class App extends React.Component {
 	render () {
 		return (
 			<div>
-				<PairsSelector currencyPairs={this.state.currencyPairs} onChange={this.setCurrency}/>
+				<PairsSelector currencyPairs={this.state.currencyPairs} rateList={this.state.rateList} onChange={this.setCurrency}/>
 				<button onClick={this.getSelectedCurrency}>Get selected pairs</button>
 				<CurrencyPairsRateList rateList={this.state.rateList}/>
 			</div>

@@ -8,7 +8,8 @@ export default class PairsSelector extends React.Component {
 	};
 
 	render () {
-		const { currencyPairs } = this.props;
+		const { currencyPairs, rateList } = this.props;
+		console.log(rateList);
 
 		return (
 			<fieldset>
