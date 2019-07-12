@@ -3,7 +3,8 @@ export const getConfiguration = () => {
 };
 
 export const configurationSucceeded = (data = {}) => {
-	return { type: 'CONFIGURATION_SUCCEEDED', data: data.currencyPairs || {} }
+	console.log('data', data);
+	return { type: 'CONFIGURATION_SUCCEEDED', data: data }
 };
 
 export const getRate = () => {

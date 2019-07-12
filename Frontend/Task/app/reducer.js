@@ -1,8 +1,12 @@
+import { currencyLocalDB } from './localDb';
+
 const initialState = {
-	configuration: {},
+	configuration: currencyLocalDB.get('currency_configuration_item') || {},
 	currencyPairsRateList: [],
-	pairsSelector: [],
+	pairsSelector:  currencyLocalDB.get('currency_user_selection') || [],
 };
+
+console.log(initialState);
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
