@@ -16,6 +16,5 @@ export const rateSucceeded = (data = {}) => {
 
 
 export const selectCurrency = (data = []) => {
-	console.log('data', data);
 	return { type: 'SELECT_CURRENCY', data }
 };

@@ -5,32 +5,75 @@ import PairsSelector from './PairsSelector.jsx';
 import { getConfiguration, getRate, selectCurrency } from "./actions";
 
 class App extends React.Component {
+	getConfig;
+
 	constructor () {
 		super();
 
 		this.state = {
-			currencyPairs: []
-
-	}
+			currencyPairs: [],
+			rateList: []
+		}
 	}
 
 	componentDidMount () {
-		this.props.getConfiguration()
+		const { getConfiguration } = this.props;
+
+		let getConfig = setTimeout(function runGetConfig () {
+			getConfiguration();
+			getConfig = setTimeout(runGetConfig, 30000);
+		}, 400);
+
+		this.getConfig = getConfig;
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate (prevProps) {
 		const prevConfiguration = prevProps.configuration;
-		const { configuration } = this.props;
+		const prevCurrencyPairsRateList = prevProps.currencyPairsRateList;
+		const { configuration, currencyPairsRateList } = this.props;
 
-		console.log('JSON.stringify(prevConfiguration) !== JSON.stringify(configuration)', JSON.stringify(prevConfiguration) !== JSON.stringify(configuration));
 		if (JSON.stringify(prevConfiguration) !== JSON.stringify(configuration)) {
 			const currencyPairs = Object.keys(configuration).map((key) => {
-				return {key: key, pair: configuration[key]};
+				return { key: key, pair: configuration[key] };
 			});
 			this.setState({
 				currencyPairs
 			})
 		}
+
+		if (JSON.stringify(prevCurrencyPairsRateList) !== JSON.stringify(currencyPairsRateList)) {
+			const rateList = [];
+
+			currencyPairsRateList.forEach(currentPair => {
+				const prevPair = prevCurrencyPairsRateList.find(prevPair => prevPair.pairId === currentPair.pairId);
+				let pairRateStatus = 'new choice';
+
+				if (prevPair) {
+					const dif = currentPair.rate - prevPair.rate;
+
+					if (!dif) {
+						pairRateStatus = 'stagnating';
+					} else if (dif > 0) {
+						pairRateStatus = 'growing';
+					} else if (dif < 0) {
+						pairRateStatus = 'declining';
+					}
+				}
+
+				rateList.push({
+					pairId: currentPair.pairId,
+					currency: `${currentPair.pairs[0].code}/${currentPair.pairs[1].code}`,
+					rate: currentPair.rate,
+					trend: pairRateStatus
+				});
+			});
+
+			this.setState({rateList});
+		}
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.getConfig);
 	}
 
 	setCurrency = (id) => {
@@ -51,21 +94,18 @@ class App extends React.Component {
 	};
 
 	render () {
-		console.log('this.props', this.props);
-		console.log('this.state', this.state.currencyPairs);
-
 		return (
 			<div>
-				<PairsSelector currencyPairs={this.state.currencyPairs} onChange={this.setCurrency} />
+				<PairsSelector currencyPairs={this.state.currencyPairs} onChange={this.setCurrency}/>
 				<button onClick={this.getSelectedCurrency}>Get selected pairs</button>
-				<CurrencyPairsRateList/>
+				<CurrencyPairsRateList rateList={this.state.rateList}/>
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = function () {
-	return { }
+	return {}
 };
 
 const mapDispatchToProps = (dispatch) => {
