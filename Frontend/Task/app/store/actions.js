@@ -3,7 +3,6 @@ export const getConfiguration = () => {
 };
 
 export const configurationSucceeded = (data = {}) => {
-	console.log('data', data);
 	return { type: 'CONFIGURATION_SUCCEEDED', data: data }
 };
 
