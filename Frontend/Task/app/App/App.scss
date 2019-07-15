@@ -1,0 +1,12 @@
+@import "../common";
+
+body {
+  background-color: $main-bg;
+  color: $main-color;
+  font-family: $font;
+}
+
+h3 {
+  color: $header-color;
+  font-weight: 700;
+}

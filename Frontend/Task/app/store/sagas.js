@@ -1,8 +1,8 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { configurationSucceeded, rateSucceeded, getRate } from "./actions";
-import { host } from "./api";
+import { host } from "../api";
 import { getPairsSelector, getConfiguration } from "./selector";
-import { currencyLocalDB } from './localDb';
+import { currencyLocalDB } from '../localDb';
 
 export function* watchGetConfiguration() {
 	yield takeEvery('GET_CONFIGURATION', fetchConfiguration);
@@ -23,8 +23,7 @@ function* fetchGetRate() {
 		} else {
 			pairsList = Object.keys(configuration);
 		}
-    console.log(pairsList);
-    console.log(configuration);
+
 		const data = yield call(() => fetch(`${host}/rates?currencyPairIds=${JSON.stringify(pairsList)}`).then(res => res.json()));
 		const currencyPairsRateList = [];
 
@@ -46,6 +45,7 @@ function* fetchGetRate() {
 function* fetchConfiguration () {
 	try {
 		let configuration = currencyLocalDB.get('currency_configuration_item');
+
 		if (!configuration) {
 			configuration = yield call(() => fetch(`${host}/configuration`).then(res => res.json()));
 			currencyLocalDB.set('currency_configuration_item', configuration.currencyPairs);

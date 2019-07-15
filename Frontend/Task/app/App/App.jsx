@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CurrencyPairsRateList from './CurrencyPairsRateList.jsx';
-import PairsSelector from './PairsSelector.jsx';
-import { getConfiguration, getRate, selectCurrency } from "./actions";
-import { currencyLocalDB } from './localDb';
+import PairsRateList from '../PairsRateList/PairsRateList.jsx';
+import PairsSelector from '../PairsSelector/PairsSelector.jsx';
+import { getConfiguration, getRate, selectCurrency } from "../store/actions";
+import { currencyLocalDB } from '../localDb';
+import './App.scss';
 
 class App extends React.Component {
 	getConfig;
@@ -12,15 +13,15 @@ class App extends React.Component {
 		super();
 
 		this.state = {
-			currencyPairs: [],
+			pairs: [],
 			rateList: []
 		}
 	}
 
 	componentDidMount () {
-		const { getConfiguration, configuration } = this.props;
+		const { getConfiguration, configuration, pairsSelector } = this.props;
 
-		this.setConfiguration(configuration);
+		this.setConfiguration(configuration, pairsSelector);
 
 		let getConfig = setTimeout(function runGetConfig () {
 			getConfiguration();
@@ -39,7 +40,7 @@ class App extends React.Component {
 
 			currencyPairsRateList.forEach(currentPair => {
 				const prevPair = prevCurrencyPairsRateList.find(prevPair => prevPair.pairId === currentPair.pairId);
-				let pairRateStatus = 'new choice';
+				let pairRateStatus = '';
 
 				if (prevPair) {
 					const dif = currentPair.rate - prevPair.rate;
@@ -69,18 +70,29 @@ class App extends React.Component {
 		clearTimeout(this.getConfig);
 	}
 
-	setConfiguration = (configuration) => {
-		const currencyPairs = Object.keys(configuration).map((key) => {
-			return { key: key, pair: configuration[key] };
+	setConfiguration = (configuration, pairsSelector) => {
+		const pairs = Object.keys(configuration).map((key) => {
+			return { key: key, pair: configuration[key], selected: pairsSelector.includes(key) };
 		});
+
 		this.setState({
-			currencyPairs
+			pairs: pairs
 		})
 	};
 
-	setCurrency = (id) => {
+	selectPair = (id) => {
 		const { pairsSelector, selectCurrency } = this.props;
+		const { pairs } = this.state;
+
 		let newPairsSelector = [];
+		let newPairs = [...pairs];
+
+		newPairs.map(pair => {
+			if (pair.key === id) {
+				pair.selected = !pair.selected;
+			}
+			return pair;
+		});
 
 		if (pairsSelector.includes(id)) {
 			newPairsSelector = pairsSelector.filter(pairId => pairId !== id);
@@ -90,18 +102,23 @@ class App extends React.Component {
 
 		selectCurrency(newPairsSelector);
 		currencyLocalDB.set('currency_user_selection', newPairsSelector);
+
+		this.setState({
+			pairs: newPairs
+		});
+
+		this.getSelectedCurrencyRate();
 	};
 
-	getSelectedCurrency = () => {
+	getSelectedCurrencyRate = () => {
 		this.props.getRate();
 	};
 
 	render () {
 		return (
-			<div>
-				<PairsSelector currencyPairs={this.state.currencyPairs} rateList={this.state.rateList} onChange={this.setCurrency}/>
-				<button onClick={this.getSelectedCurrency}>Get selected pairs</button>
-				<CurrencyPairsRateList rateList={this.state.rateList}/>
+			<div className='container'>
+				<PairsSelector pairs={this.state.pairs} onChange={this.selectPair}/>
+				<PairsRateList rateList={this.state.rateList}/>
 			</div>
 		)
 	}
