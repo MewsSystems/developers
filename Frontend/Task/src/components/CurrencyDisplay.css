@@ -1,0 +1,113 @@
+.currency__wrap {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  justify-content: space-evenly;
+  align-content: space-around;
+  width: 100vw;
+  padding: 1rem;
+  background: hsla(0, 0%, 0%, 1);
+  margin: 0;
+  padding: 0;
+}
+
+.currency__container {
+  text-align: center;
+  display: grid;
+  width: 100vw;
+  background: hsla(0, 0%, 95%, 1);
+  color: hsla(0, 0%, 0%, 1);
+}
+
+.dash__display {
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  grid-gap: 1.1rem 0.5rem;
+  justify-items: center;
+  align-items: center;
+  justify-content: space-evenly;
+  align-content: space-around;
+  background-color: lightgray;
+  width: 100vw;
+}
+
+.dash__currency__box {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0.1rem 0.5rem;
+  justify-content: space-around;
+  justify-items: center;
+  align-items: center;
+  align-content: space-around;
+  background-color: hsla(0, 0%, 0%, 1);
+  width: 100%;
+}
+
+.currency__name {
+  width: 100%;
+  background-color: black;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.2rem;
+  color: whitesmoke;
+}
+
+.currency__rate {
+  width: 100%;
+  background-color: black;
+  font-size: 1.5rem;
+  font-weight: 400;
+  padding: 0.2rem;
+  color: white;
+}
+
+.currency__symbol {
+  text-align: center;
+  width: 100%;
+  background-color: black;
+  font-size: 1.5rem;
+  font-weight: 300;
+  padding: 0.2rem;
+  color: lightgray;
+}
+
+.empty__box {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  min-height: 30vh;
+  padding: 0.2rem;
+  color: whitesmoke;
+}
+
+.info__text {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding: 0.2rem;
+  color: lightgray;
+}
+
+.anim-enter {
+  opacity: 0;
+}
+.anim-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0rem);
+  transition: all 500ms ease-in-out;
+}
+.anim-exit {
+  transform: scale(1) translateY(0);
+}
+.anim-exit-active {
+  transition: all 500ms ease-in-out;
+  transform: scale(0.97) translateY(100vh);
+}
+
+.anim-exit-done {
+  transition: opacity 500ms ease-in-out;
+  opacity: 0;
+}
