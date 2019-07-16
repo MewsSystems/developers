@@ -1,34 +1,40 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
+const path = require("path");
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
-    entry: {
-        app: './app/app.js',
-    },
-    output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
-    },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
+const config = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        use: "babel-loader",
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  resolve: {
+    extensions: [".js", ".jsx"]
+  },
+  devServer: {
+    contentBase: "./dist"
+  }
 };
 
-module.exports = webpackConfig;
+module.exports = config;
