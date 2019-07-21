@@ -8,12 +8,6 @@ namespace Tests
 {
     public class ExchangeRateProviderTests
     {
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
         [Test]
         public void ReturnsCorrectValue()
         {

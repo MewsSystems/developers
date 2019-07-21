@@ -33,14 +33,12 @@ namespace ExchangeRateUpdater
             List<string> exchangeRateSourceUrls = new List<string> {ExchangeRateFixingSourceUrl, ExchangeRateOfOtherCurrenciesSourceUrl};
             var exchangeRateRawSources = provider.GetRateSourcesByUrl(exchangeRateSourceUrls);
             var exchangeRateSource = _rateSourceParcer.ParceRateSource(exchangeRateRawSources);
-
-            var rates = MatchExchangeRates(exchangeRateSource, currencies);
-
-            return rates;
+            
+            return MatchExchangeRates(exchangeRateSource, currencies);
         }
 
         /// <summary>
-        /// Create all the possible pairs from requested currencies. Match it with provided echange rate source
+        /// Mathes provided requested currencies pairs with available exchange rates
         /// </summary>
         /// <param name="source">Exchange rate source</param>
         /// <param name="requestedCurrencies">Requested currencies to match rates</param>
@@ -60,7 +58,9 @@ namespace ExchangeRateUpdater
             }
         }
 
-        
+        /// <summary>
+        /// Creates all the possible pairs from requested currencies. Match it with provided echange rate source
+        /// </summary>
         IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
         {
             if (length == 1) return list.Select(t => new T[] { t });
