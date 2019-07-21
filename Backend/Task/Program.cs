@@ -23,7 +23,10 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                IRateSourceParcer rateSourceParcer = new RateSourceParcer();
+                IRateSourceProvider rateSourceProvider = new RateSourceProvider();
+
+                var provider = new ExchangeRateProvider(rateSourceParcer, rateSourceProvider);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

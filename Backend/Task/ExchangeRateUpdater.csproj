@@ -46,7 +46,12 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Interfaces\IExchangeRateProvider.cs" />
+    <Compile Include="Interfaces\IRateSourceParcer.cs" />
+    <Compile Include="Interfaces\IRateSourceProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="RateSourceParcer.cs" />
+    <Compile Include="RateSourceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
