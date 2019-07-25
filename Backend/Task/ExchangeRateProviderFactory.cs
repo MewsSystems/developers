@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProviderFactory
     {
-        public Dictionary<ExchangeRateProviderType, IExchangeRateProvider> exchangeRateProviders { get; private set; }
+        private Dictionary<ExchangeRateProviderType, IExchangeRateProvider> exchangeRateProviders { get; set; }
         public ExchangeRateProviderFactory()
         {
             //get all exchange rate providers that implements the corresponding interface

@@ -84,12 +84,13 @@ namespace ExchangeRateUpdater
 
         private async Task<string> GetExchangeRatesSourceData()
         {
-            using(var client = new HttpClient())
-                using (var stream = await client.GetStreamAsync(cnbExchangeRateUrl))
-                    using(var streamReader = new StreamReader(stream))
-                    {
-                        return await streamReader.ReadToEndAsync();
-                    }
+            var content = "";
+            using (var client = new HttpClient()) {
+                content = await client.GetStringAsync(cnbExchangeRateUrl);
+            }
+
+            return content;
+                    
         }
     }
 }
