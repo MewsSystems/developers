@@ -16,5 +16,18 @@
         {
             return Code;
         }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Currency)
+            {
+                return Code == ((Currency)obj).Code;
+            }
+            else
+            {
+                return base.Equals(obj);
+            }
+            
+        }
     }
 }
