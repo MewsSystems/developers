@@ -12,12 +12,14 @@
     "start-server": "node server",
     "start": "webpack-dev-server --hot --inline --progress",
     "build": "webpack",
-    "lint": "eslint app/"
+    "lint": "eslint app/",
+    "flow": "flow app/"
   },
   "babel": {
     "presets": [
       "@babel/env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      "@babel/preset-flow"
     ]
   },
   "dependencies": {
@@ -32,10 +34,12 @@
   "devDependencies": {
     "@babel/cli": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
+    "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@kiwicom/eslint-config": "^6.5.0",
     "babel-loader": "^8.0.6",
     "eslint": "^6.1.0",
+    "flow-bin": "^0.104.0",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
