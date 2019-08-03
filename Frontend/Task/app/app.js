@@ -1,5 +1,14 @@
-import { endpoint, interval } from './config';
+// @flow strict
 
-export function run(element) {
-    console.log('App is running.');
-}
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const App = () => <span>Hello world!</span>;
+
+  const appContainer = document.getElementById('exchange-rate-client');
+
+  if (appContainer) {
+    ReactDOM.render(<App />, appContainer);
+  }
+});
