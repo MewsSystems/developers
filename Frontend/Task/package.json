@@ -13,7 +13,9 @@
     "start": "webpack-dev-server --hot --inline --progress",
     "build": "webpack",
     "lint": "eslint app/",
-    "flow": "flow app/"
+    "flow": "flow app/",
+    "test": "jest",
+    "test-ci": "npm run lint && npm run flow && npm run test"
   },
   "babel": {
     "presets": [
@@ -24,6 +26,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
+    "@testing-library/jest-dom": "^4.0.0",
     "babel-preset-stage-1": "6.13.0",
     "chance": "1.0.4",
     "express": "^4.17.1",
@@ -37,9 +40,12 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@kiwicom/eslint-config": "^6.5.0",
+    "@testing-library/react": "^8.0.7",
     "babel-loader": "^8.0.6",
     "eslint": "^6.1.0",
     "flow-bin": "^0.104.0",
+    "jest": "^24.8.0",
+    "node-fetch": "^2.6.0",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"

@@ -1,0 +1,4 @@
+jest.config.js
+webpack.config.js
+jestSetup/
+**/__tests__/**

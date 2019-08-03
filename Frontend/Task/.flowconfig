@@ -1,8 +1,10 @@
 [ignore]
+jest.config
 
 [include]
 
 [libs]
+./flow-typed
 
 [lints]
 
