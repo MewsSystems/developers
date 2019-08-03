@@ -1,5 +1,3 @@
-import { endpoint, interval } from './config';
+import { endpoint, intervale } from './config';
 
-export function run(element) {
-    console.log('App is running.');
-}
+console.log('App is running.');
