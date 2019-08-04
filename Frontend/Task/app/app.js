@@ -3,9 +3,9 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const App = () => <span>Hello world!</span>;
+import App from './src';
 
+document.addEventListener('DOMContentLoaded', () => {
   const appContainer = document.getElementById('exchange-rate-client');
 
   if (appContainer) {

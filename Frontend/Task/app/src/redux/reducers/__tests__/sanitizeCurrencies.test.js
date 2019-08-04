@@ -1,0 +1,46 @@
+// @flow
+
+import { INITIAL_STATE, ACTIONS } from '../../constants';
+import sanitizeCurrencies from '../sanitizeCurrencies';
+
+describe('sanitizeCurrencies', () => {
+  it('sanitizes currencies from API', () => {
+    const expectedResult = {
+      currencyPairs: [
+        {
+          id: 'first-pair',
+          currencies: [
+            { code: 'fst-code', name: 'fst-name' },
+            { code: 'snd-code', name: 'smd-name' },
+          ],
+        },
+        {
+          id: 'snd-pair',
+          currencies: [
+            { code: 'fst-code', name: 'fst-name' },
+            { code: 'snd-code', name: 'smd-name' },
+          ],
+        },
+      ],
+      filteredCurrencies: [],
+    };
+
+    const result = sanitizeCurrencies(INITIAL_STATE, {
+      type: ACTIONS.SANITIZE_CURRENCIES,
+      payload: {
+        currencyPairsApi: {
+          'first-pair': [
+            { code: 'fst-code', name: 'fst-name' },
+            { code: 'snd-code', name: 'smd-name' },
+          ],
+          'snd-pair': [
+            { code: 'fst-code', name: 'fst-name' },
+            { code: 'snd-code', name: 'smd-name' },
+          ],
+        },
+      },
+    });
+
+    expect(result).toEqual(expectedResult);
+  });
+});
