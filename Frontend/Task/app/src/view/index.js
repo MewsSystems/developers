@@ -1,7 +1,11 @@
-// @flow
+// @flow strict
 
 import * as React from 'react';
 import styled from 'styled-components';
+
+import Box from '../components/Box';
+import CurrencyPairsSelector from './CurrencyPairsSelector';
+import CoursesList from './CoursesList';
 
 const Container = styled.div`
   height: 100vh;
@@ -10,17 +14,14 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Box = styled.div`
-  width: 400px;
-  height: 400px;
-  border: 1px solid #000;
-  overflow-y: scroll;
-`;
-
 const View = () => (
   <Container>
-    <Box />
-    <Box />
+    <Box heading="Filter currency pairs">
+      <CurrencyPairsSelector />
+    </Box>
+    <Box heading="Currency courses">
+      <CoursesList />
+    </Box>
   </Container>
 );
 

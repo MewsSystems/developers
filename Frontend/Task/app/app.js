@@ -3,7 +3,7 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from '.';
+import App from './src';
 
 document.addEventListener('DOMContentLoaded', () => {
   const appContainer = document.getElementById('exchange-rate-client');

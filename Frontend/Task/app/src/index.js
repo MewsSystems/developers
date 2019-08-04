@@ -10,7 +10,10 @@ import View from './view';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  font-family: 'Roboto', sans-serif;`;
+  * {
+      font-family: 'Roboto', sans-serif!important;
+      line-height: 1.5!important;
+  }`;
 
 const App = () => (
   <Provider store={store}>
