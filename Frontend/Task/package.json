@@ -32,7 +32,9 @@
     "express": "^4.17.1",
     "json-server": "^0.15.0",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",
@@ -41,6 +43,7 @@
     "@babel/preset-react": "^7.0.0",
     "@kiwicom/eslint-config": "^6.5.0",
     "@testing-library/react": "^8.0.7",
+    "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
     "eslint": "^6.1.0",
     "flow-bin": "^0.104.0",
