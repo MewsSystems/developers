@@ -4,7 +4,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { FaDollarSign } from 'react-icons/fa';
 
-import { SIZES } from '../utils/constants';
+import { SIZES, COLORS } from '../utils/constants';
 
 type Props = {|
   +checked: boolean,
@@ -21,7 +21,7 @@ const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+  background-color: ${COLORS.BAKCGROUND};
   height: 16px;
   width: 16px;
   border-radius: 3px;
@@ -39,7 +39,7 @@ const IconContainer = styled.div`
 `;
 
 const TextContainer = styled.span`
-  color: #000;
+  color: ${COLORS.DEFAULT};
   font-size: ${({ size }) => SIZES[size]};
   padding-left: 4px;
   vertical-align: middle;
@@ -54,12 +54,12 @@ const Label = styled.label`
   cursor: pointer;
 
   ${IconContainer} {
-    color: #85bb65;
-    border: 1px solid #9b65bb;
+    color: ${COLORS.CHECKBOX_ICON};
+    border: 1px solid ${COLORS.CHECKBOX_BORDER};
   }
 
   &:hover ${IconContainer}, &:focus ${IconContainer} {
-    border-color: #ac76cc;
+    border-color: ${COLORS.CHECKBOX_BORDER_HOVER};
   }
 `;
 
