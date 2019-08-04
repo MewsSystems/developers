@@ -14,6 +14,7 @@ namespace ExchangeRateUpdater
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             return Enumerable.Empty<ExchangeRate>();
+            //test commit
         }
     }
 }
