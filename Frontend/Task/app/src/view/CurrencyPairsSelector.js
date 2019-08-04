@@ -10,21 +10,23 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const CurrencyPairsSelector = () => (
-  <Container>
-    <CurrencyPairInput checked onChange={() => {}}>
-      ABC/EFG
-    </CurrencyPairInput>
-    <CurrencyPairInput checked onChange={() => {}}>
-      ABC/EFG
-    </CurrencyPairInput>
-    <CurrencyPairInput checked onChange={() => {}}>
-      ABC/EFG
-    </CurrencyPairInput>
-    <CurrencyPairInput checked={false} onChange={() => {}}>
-      ABC/EFG
-    </CurrencyPairInput>
-  </Container>
-);
+const CurrencyPairsSelector = () => {
+  return (
+    <Container>
+      <CurrencyPairInput checked onChange={() => {}}>
+        ABC/EFG
+      </CurrencyPairInput>
+      <CurrencyPairInput checked onChange={() => {}}>
+        ABC/EFG
+      </CurrencyPairInput>
+      <CurrencyPairInput checked onChange={() => {}}>
+        ABC/EFG
+      </CurrencyPairInput>
+      <CurrencyPairInput checked={false} onChange={() => {}}>
+        ABC/EFG
+      </CurrencyPairInput>
+    </Container>
+  );
+};
 
 export default CurrencyPairsSelector;

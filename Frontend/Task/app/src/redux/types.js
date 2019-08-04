@@ -19,11 +19,16 @@ export type CurrencyPair = {|
 export type State = {|
   +currencyPairs: CurrencyPair[],
   +filteredCurrencies: [],
+  +isLoadingConfig: boolean,
+  +fetchConfigError: ?Error,
 |};
 
 export type Action = {|
   +type: string,
   +payload: {|
     +currencyPairsApi?: CurrencyPairApi,
+    +error?: Error,
   |},
 |};
+
+export type Dispatch = (action: Action) => void;

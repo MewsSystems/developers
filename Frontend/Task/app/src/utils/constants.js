@@ -16,7 +16,8 @@ export const COLORS = {
   CRITICAL: '#D8000C',
   DEFAULT: '#000',
   BAKCGROUND: '#FFF',
-  CHECKBOX_BORDER: '#9b65bb;',
-  CHECKBOX_BORDER_HOVER: '#ac76cc;',
+  CHECKBOX_BORDER: '#9b65bb',
+  CHECKBOX_BORDER_HOVER: '#ac76cc',
   CHECKBOX_ICON: '#85bb65',
+  LOADER: '#a4acd7',
 };

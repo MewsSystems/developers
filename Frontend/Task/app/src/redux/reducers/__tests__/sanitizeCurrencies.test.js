@@ -6,6 +6,7 @@ import sanitizeCurrencies from '../sanitizeCurrencies';
 describe('sanitizeCurrencies', () => {
   it('sanitizes currencies from API', () => {
     const expectedResult = {
+      ...INITIAL_STATE,
       currencyPairs: [
         {
           id: 'first-pair',
@@ -22,7 +23,7 @@ describe('sanitizeCurrencies', () => {
           ],
         },
       ],
-      filteredCurrencies: [],
+      isLoadingConfig: false,
     };
 
     const result = sanitizeCurrencies(INITIAL_STATE, {
