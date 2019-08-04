@@ -8,17 +8,17 @@ import Checkbox from '../components/Checkbox';
 type Props = {|
   +checked: boolean,
   +onChange: (e: SyntheticInputEvent<HTMLInputElement>) => void,
-  +children: string,
+  +label: string,
 |};
 
 const Container = styled.div`
   padding-bottom: 8px;
 `;
 
-const CurrencyPairInput = ({ checked, onChange, children }: Props) => (
+const CurrencyPairInput = ({ checked, onChange, label }: Props) => (
   <Container>
-    <Checkbox onChange={onChange} label={children} checked={checked} />
+    <Checkbox onChange={onChange} label={label} checked={checked} />
   </Container>
 );
 
-export default CurrencyPairInput;
+export default React.memo<Props>(CurrencyPairInput);

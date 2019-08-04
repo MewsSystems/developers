@@ -18,7 +18,7 @@ export type CurrencyPair = {|
 
 export type State = {|
   +currencyPairs: CurrencyPair[],
-  +filteredCurrencies: [],
+  +filteredCurrencyPairs: string[],
   +isLoadingConfig: boolean,
   +fetchConfigError: ?Error,
 |};
@@ -28,6 +28,7 @@ export type Action = {|
   +payload: {|
     +currencyPairsApi?: CurrencyPairApi,
     +error?: Error,
+    +filteredCurrencyPairId?: string,
   |},
 |};
 
