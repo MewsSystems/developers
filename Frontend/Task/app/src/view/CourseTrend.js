@@ -3,11 +3,11 @@
 import * as React from 'react';
 
 import Text from '../components/Text';
-import { TRENDS } from '../utils/constants';
+import { TRENDS, COLORS } from '../utils/constants';
 
 type Props = {|
   +currentCourse: number,
-  +previousCourse?: number,
+  +previousCourse?: ?number,
 |};
 
 const Trend = ({ currentCourse, previousCourse }: Props) => {
@@ -21,14 +21,14 @@ const Trend = ({ currentCourse, previousCourse }: Props) => {
 
   if (Math.max(currentCourse, previousCourse) === currentCourse) {
     return (
-      <Text element="span" color="#4bb543" bold>
+      <Text element="span" color={COLORS.SUCCESS} bold>
         {TRENDS.GROWING}
       </Text>
     );
   }
 
   return (
-    <Text element="span" color="#D8000C" bold>
+    <Text element="span" color={COLORS.CRITICAL} bold>
       {TRENDS.DECLINING}
     </Text>
   );

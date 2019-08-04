@@ -3,6 +3,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { COLORS } from '../utils/constants';
+
 type Props = {|
   +element?: 'h1' | 'h2' | 'h3' | 'h4',
   +color?: string,
@@ -10,7 +12,7 @@ type Props = {|
 |};
 
 const Container = styled.h2`
-  color: ${({ color }) => color || '#000'};
+  color: ${({ color }) => color || COLORS.DEFAULT};
   font-size: 24px;
 `;
 

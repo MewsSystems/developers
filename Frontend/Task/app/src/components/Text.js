@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { SIZES } from '../utils/constants';
+import { SIZES, COLORS } from '../utils/constants';
 
 type Props = {|
   +element?: 'span' | 'div' | 'p',
@@ -15,7 +15,7 @@ type Props = {|
 |};
 
 const Container = styled.p`
-  color: ${({ color }) => color || '#000'};
+  color: ${({ color }) => color || COLORS.DEFAULT};
   font-size: ${({ size }) => SIZES[size]};
   font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
   font-style: ${({ italic }) => (italic ? 'italic' : 'normal')};
