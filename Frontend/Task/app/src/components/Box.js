@@ -15,8 +15,9 @@ const Container = styled.div`
   height: 400px;
   border: 1px solid #000;
   overflow-y: scroll;
-flex-direction: column;
-  padding: 16px;s
+  flex-direction: column;
+  padding: 16px;
+  position: relative;
 `;
 
 const HeadingWrapper = styled.div`
