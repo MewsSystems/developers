@@ -7,6 +7,8 @@ export const INITIAL_STATE: State = {
   filteredCurrencyPairs: [],
   isLoadingConfig: false,
   fetchConfigError: null,
+  fetchRatesError: null,
+  isLoadingRates: false,
 };
 
 export const ACTIONS = {
@@ -15,6 +17,9 @@ export const ACTIONS = {
   FETCH_CURRENCIES_CONFIG_ERROR: 'FETCH_CURRENCIES_CONFIG_ERROR',
   ADD_FILTERED_CURRENCY_PAIR: 'ADD_FILTERED_CURRENCY_PAIR',
   REMOVE_FILTERED_CURRENCY_PAIR: 'REMOVE_FILTERED_CURRENCY_PAIR',
+  FETCH_RATES_PENDING: 'FETCH_RATES_PENDING',
+  FETCH_RATES_ERROR: 'FETCH_RATES_ERROR',
+  ADD_RATES: 'ADD_RATES',
 };
 
 export const BASE_API_URL = 'http://localhost:3000';

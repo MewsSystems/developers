@@ -9,6 +9,7 @@ import {
   addFilteredCurrencyPair,
   removeFilteredCurrencyPair,
 } from './filteredCurrencyPairReducers';
+import { setRatesError, setRatesLoading, addRates } from './ratesReducers';
 
 const rootReducer = (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
@@ -26,6 +27,16 @@ const rootReducer = (state: State = INITIAL_STATE, action: Action): State => {
 
     case ACTIONS.REMOVE_FILTERED_CURRENCY_PAIR:
       return removeFilteredCurrencyPair(state, action);
+
+    case ACTIONS.FETCH_RATES_PENDING:
+      return setRatesLoading(state);
+
+    case ACTIONS.FETCH_RATES_ERROR:
+      return setRatesError(state, action);
+
+    case ACTIONS.ADD_RATES:
+      return addRates(state, action);
+
     default:
       return state;
   }

@@ -4,30 +4,30 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import Text from '../components/Text';
-import Trend from './CourseTrend';
+import Trend from './RateTrend';
 
 type Props = {|
   +currencyPair: string,
-  +courses: number[],
+  +rates: number[],
 |};
 
 const Container = styled.li`
   padding-bottom: 8px;
 `;
 
-const CoursesListItem = ({ currencyPair, courses }: Props) => {
-  const recentCourses = courses.slice(-2);
+const RatesListItem = ({ currencyPair, rates }: Props) => {
+  const recentRates = rates.slice(-2);
 
-  const currentCourse = recentCourses[recentCourses.length > 1 ? 1 : 0];
-  const previousCourse = recentCourses.length === 2 ? recentCourses[0] : null;
+  const currentRate = recentRates[recentRates.length > 1 ? 1 : 0];
+  const previousRate = recentRates.length === 2 ? recentRates[0] : null;
 
   return (
     <Container>
       <Text bold>
         {currencyPair}: <Text element="span">current course:</Text>{' '}
-        {currentCourse ? (
+        {currentRate ? (
           <Text element="span" bold>
-            {currentCourse}, <Trend currentCourse={currentCourse} previousCourse={previousCourse} />
+            {currentRate}, <Trend currentRate={currentRate} previousRate={previousRate} />
           </Text>
         ) : (
           <Text element="span">unknown</Text>
@@ -37,4 +37,4 @@ const CoursesListItem = ({ currencyPair, courses }: Props) => {
   );
 };
 
-export default CoursesListItem;
+export default RatesListItem;

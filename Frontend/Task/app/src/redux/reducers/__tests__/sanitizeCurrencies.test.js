@@ -10,6 +10,7 @@ describe('sanitizeCurrencies', () => {
       currencyPairs: [
         {
           id: 'first-pair',
+          rates: [],
           currencies: [
             { code: 'fst-code', name: 'fst-name' },
             { code: 'snd-code', name: 'smd-name' },
@@ -17,6 +18,7 @@ describe('sanitizeCurrencies', () => {
         },
         {
           id: 'snd-pair',
+          rates: [],
           currencies: [
             { code: 'fst-code', name: 'fst-name' },
             { code: 'snd-code', name: 'smd-name' },

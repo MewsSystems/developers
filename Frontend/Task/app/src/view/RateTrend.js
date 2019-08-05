@@ -6,12 +6,12 @@ import Text from '../components/Text';
 import { TRENDS, COLORS } from '../utils/constants';
 
 type Props = {|
-  +currentCourse: number,
-  +previousCourse?: ?number,
+  +currentRate: number,
+  +previousRate?: ?number,
 |};
 
-const Trend = ({ currentCourse, previousCourse }: Props) => {
-  if (!previousCourse || previousCourse === currentCourse) {
+const Trend = ({ currentRate, previousRate }: Props) => {
+  if (!previousRate || previousRate === currentRate) {
     return (
       <Text element="span" bold>
         {TRENDS.STAGNATING}
@@ -19,7 +19,7 @@ const Trend = ({ currentCourse, previousCourse }: Props) => {
     );
   }
 
-  if (Math.max(currentCourse, previousCourse) === currentCourse) {
+  if (Math.max(currentRate, previousRate) === currentRate) {
     return (
       <Text element="span" color={COLORS.SUCCESS} bold>
         {TRENDS.GROWING}
