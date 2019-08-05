@@ -10,10 +10,15 @@ export type CurrencyPairApi = {
   ...,
 };
 
+export type RatesApi = {
+  [key: string]: number,
+  ...,
+};
+
 export type CurrencyPair = {|
   +id: string,
   +currencies: [Currency, Currency],
-  +rates?: number[],
+  +rates: number[],
 |};
 
 export type State = {|
@@ -21,6 +26,8 @@ export type State = {|
   +filteredCurrencyPairs: string[],
   +isLoadingConfig: boolean,
   +fetchConfigError: ?Error,
+  +isLoadingRates: boolean,
+  +fetchRatesError: ?Error,
 |};
 
 export type Action = {|
@@ -29,6 +36,7 @@ export type Action = {|
     +currencyPairsApi?: CurrencyPairApi,
     +error?: Error,
     +filteredCurrencyPairId?: string,
+    +ratesApi?: RatesApi,
   |},
 |};
 

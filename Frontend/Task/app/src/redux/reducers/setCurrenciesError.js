@@ -2,7 +2,7 @@
 
 import type { State, Action } from '../types';
 
-const sanitizeCurrencies = (state: State, { payload }: Action): State => {
+const setCurrenciesError = (state: State, { payload }: Action): State => {
   const { error } = payload;
   if (!error) {
     return state;
@@ -15,4 +15,4 @@ const sanitizeCurrencies = (state: State, { payload }: Action): State => {
   };
 };
 
-export default sanitizeCurrencies;
+export default setCurrenciesError;

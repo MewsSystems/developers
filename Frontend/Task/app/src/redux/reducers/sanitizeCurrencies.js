@@ -11,6 +11,7 @@ const sanitizeCurrencies = (state: State, { payload }: Action): State => {
   const currencyPairs = Object.keys(currencyPairsApi).map(key => ({
     id: key,
     currencies: currencyPairsApi[key],
+    rates: [],
   }));
 
   return {

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '../components/Box';
 import Loader from '../components/Loader';
 import CurrencyPairsSelector from './CurrencyPairsSelector';
-import CoursesList from './CoursesList';
+import RatesList from './RatesList';
 import fetchCurrenciesConfig from '../redux/actions/fetchCurrenciesConfig';
 
 const Container = styled.div`
@@ -33,7 +33,7 @@ const View = () => {
         {isLoadingConfig ? <Loader /> : <CurrencyPairsSelector />}
       </Box>
       {/* $FlowFixMe looks like some bug on flow generic types in HOC, props is empty object but it doesnt pass */}
-      <Box heading="Currency courses">{isLoadingConfig ? <Loader /> : <CoursesList />}</Box>
+      <Box heading="Currency courses">{isLoadingConfig ? <Loader /> : <RatesList />}</Box>
     </Container>
   );
 };

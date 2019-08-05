@@ -36,6 +36,7 @@
     "core-js": "^3.1.4",
     "express": "^4.17.1",
     "json-server": "^0.15.0",
+    "query-string": "^6.8.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
