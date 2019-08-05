@@ -5,6 +5,10 @@ import styled, { keyframes } from 'styled-components';
 
 import { COLORS } from '../utils/constants';
 
+type Props = {|
+  +dataTest?: string,
+|};
+
 const animation = keyframes`
   0% {
     top: 28px;
@@ -21,7 +25,7 @@ const animation = keyframes`
     opacity: 0;
   }`;
 
-const Container = styled.div`
+const Container = styled.div.attrs(({ dataTest }) => ({ 'data-testid': dataTest }))`
   display: inline-block;
   position: absolute;
   top: 50%;
@@ -43,8 +47,8 @@ const Container = styled.div`
   }
 `;
 
-const Loader = () => (
-  <Container>
+const Loader = ({ dataTest }: Props) => (
+  <Container dataTest={dataTest}>
     <div />
     <div className="delayed" />
   </Container>

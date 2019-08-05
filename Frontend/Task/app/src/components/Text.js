@@ -12,6 +12,7 @@ type Props = {|
   +italic?: boolean,
   +size?: $Keys<typeof SIZES>,
   +children: React.Node,
+  +className?: string,
 |};
 
 const Container = styled.p`
@@ -21,8 +22,23 @@ const Container = styled.p`
   font-style: ${({ italic }) => (italic ? 'italic' : 'normal')};
 `;
 
-const Text = ({ element = 'p', color, bold, italic, size = 'normal', children }: Props) => (
-  <Container as={element} color={color} bold={bold} otalic={italic} size={size}>
+const Text = ({
+  element = 'p',
+  color,
+  bold,
+  italic,
+  size = 'normal',
+  children,
+  className,
+}: Props) => (
+  <Container
+    as={element}
+    color={color}
+    bold={bold}
+    italic={italic}
+    size={size}
+    className={className}
+  >
     {children}
   </Container>
 );

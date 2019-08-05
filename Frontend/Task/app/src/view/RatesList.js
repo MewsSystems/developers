@@ -7,7 +7,22 @@ import qs from 'query-string';
 
 import fetchRates from '../redux/actions/fetchRates';
 import { withErrorBoundary } from '../components/ErrorBoundary';
+import TextLoader from '../components/TextLoader';
+import Text from '../components/Text';
 import ListItem from './RatesListItem';
+import { COLORS, RATES_FETCH_INTERVAL } from '../utils/constants';
+import useInterval from '../utils/useInterval';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Info = styled.div`
+  align-self: center;
+  padding-top: 14px;
+`;
 
 const List = styled.ul`
   list-style-type: none;
@@ -21,7 +36,6 @@ const CoursesList = () => {
   }
 
   const currencyPairs = useSelector(state => state.currencyPairs);
-  const filteredCurrencyPairs = useSelector(state => state.filteredCurrencyPairs);
 
   const query = React.useMemo(
     () =>
@@ -36,26 +50,44 @@ const CoursesList = () => {
     dispatch(fetchRates(query));
   }, [dispatch, query]);
 
+  useInterval(() => {
+    dispatch(fetchRates(query));
+  }, RATES_FETCH_INTERVAL);
+
+  const filteredCurrencyPairs = useSelector(state => state.filteredCurrencyPairs);
+  const isLoadingRates = useSelector(state => state.isLoadingRates);
+  const fetchRatesError = useSelector(state => state.fetchRatesError);
+
   return (
-    <List>
-      {currencyPairs.reduce((listItems, currencyPair) => {
-        const { id, currencies, rates } = currencyPair;
-        if (filteredCurrencyPairs.includes(id)) {
-          return listItems;
-        }
+    <Container>
+      <List>
+        {currencyPairs.reduce((listItems, currencyPair) => {
+          const { id, currencies, rates } = currencyPair;
+          if (filteredCurrencyPairs.includes(id)) {
+            return listItems;
+          }
 
-        const [firstCurrency, secondCurrency] = currencies;
+          const [firstCurrency, secondCurrency] = currencies;
 
-        return [
-          ...listItems,
-          <ListItem
-            key={id}
-            rates={rates}
-            currencyPair={`${firstCurrency.code}/${secondCurrency.code}`}
-          />,
-        ];
-      }, [])}
-    </List>
+          return [
+            ...listItems,
+            <ListItem
+              key={id}
+              rates={rates}
+              currencyPair={`${firstCurrency.code}/${secondCurrency.code}`}
+            />,
+          ];
+        }, [])}
+      </List>
+      <Info>
+        {isLoadingRates && <TextLoader>Updating currency rates</TextLoader>}
+        {fetchRatesError && (
+          <Text color={COLORS.CRITICAL}>
+            Fetching rates data failed, rates are possibly out of date!
+          </Text>
+        )}
+      </Info>
+    </Container>
   );
 };
 

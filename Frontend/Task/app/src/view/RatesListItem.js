@@ -24,7 +24,7 @@ const RatesListItem = ({ currencyPair, rates }: Props) => {
   return (
     <Container>
       <Text bold>
-        {currencyPair}: <Text element="span">current course:</Text>{' '}
+        {currencyPair}: <Text element="span">current rate:</Text>{' '}
         {currentRate ? (
           <Text element="span" bold>
             {currentRate}, <Trend currentRate={currentRate} previousRate={previousRate} />

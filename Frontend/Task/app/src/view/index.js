@@ -29,11 +29,17 @@ const View = () => {
   return (
     <Container>
       <Box heading="Filter currency pairs">
-        {/* $FlowFixMe looks like some bug on flow generic types, in HOC props is empty object but it doesnt pass */}
-        {isLoadingConfig ? <Loader /> : <CurrencyPairsSelector />}
+        {isLoadingConfig ? (
+          <Loader dataTest="currency-pairs-selector-loader" />
+        ) : (
+          /* $FlowFixMe looks like some bug on flow generic types, in HOC props is empty object but it doesnt pass */
+          <CurrencyPairsSelector />
+        )}
       </Box>
-      {/* $FlowFixMe looks like some bug on flow generic types in HOC, props is empty object but it doesnt pass */}
-      <Box heading="Currency courses">{isLoadingConfig ? <Loader /> : <RatesList />}</Box>
+      <Box heading="Currency rates">
+        {/* $FlowFixMe looks like some bug on flow generic types in HOC, props is empty object but it doesnt pass */}
+        {isLoadingConfig ? <Loader dataTest="rates-list-loader" /> : <RatesList />}
+      </Box>
     </Container>
   );
 };
