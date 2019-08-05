@@ -20,4 +20,7 @@ export const COLORS = {
   CHECKBOX_BORDER_HOVER: '#ac76cc',
   CHECKBOX_ICON: '#85bb65',
   LOADER: '#a4acd7',
+  INFO: '#3d3ccb',
 };
+
+export const RATES_FETCH_INTERVAL = 10000;

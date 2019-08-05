@@ -16,7 +16,7 @@ export const setRatesError = (state: State, { payload }: Action): State => {
 };
 
 export const setRatesLoading = (state: State): State => {
-  return { ...state, isLoadingRates: true };
+  return { ...state, isLoadingRates: true, fetchRatesError: null };
 };
 
 export const addRates = (state: State, { payload }: Action): State => {
@@ -49,5 +49,6 @@ export const addRates = (state: State, { payload }: Action): State => {
     ...state,
     currencyPairs,
     isLoadingRates: false,
+    fetchRatesError: null,
   };
 };
