@@ -43,9 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractExchangeRateProvider.cs" />
+    <Compile Include="CNBExchangeRateProvider.cs" />
+    <Compile Include="ExchangeRateRecord.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="ICurrentExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
