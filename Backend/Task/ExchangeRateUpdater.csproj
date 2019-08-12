@@ -46,7 +46,11 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Models\CnbResponse.cs" />
+    <Compile Include="Models\CnbResponseTable.cs" />
+    <Compile Include="Models\CnbResponseTableRow.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Utils\WebRequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
