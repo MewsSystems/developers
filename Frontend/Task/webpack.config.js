@@ -3,6 +3,7 @@
 const path = require('path');
 const env = process.env.NODE_ENV || 'development';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     mode: env,
@@ -16,7 +17,8 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].bundle.css',
             chunkFilename: '[name].chunk.css',
-        })
+        }),
+        new Dotenv()
     ],
     module: {
         rules: [
@@ -45,6 +47,9 @@ module.exports = {
                         plugins: [
                             '@babel/proposal-class-properties',
                             '@babel/proposal-object-rest-spread',
+                            ['@babel/transform-runtime', {
+                                "regenerator": true
+                            }]
                         ],
                     },
                 },

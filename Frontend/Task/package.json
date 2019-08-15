@@ -29,10 +29,16 @@
     "@types/react-router-dom": "^4.3.4",
     "autoprefixer": "^9.6.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "bootstrap": "^4.3.1",
+    "chance": "1.0.4",
     "classnames": "^2.2.6",
     "concurrently": "^4.1.1",
     "css-loader": "^3.0.0",
+    "dotenv-webpack": "^1.7.0",
+    "express": "4.14.0",
+    "json-loader": "0.5.4",
+    "json-server": "0.8.17",
     "mini-css-extract-plugin": "^0.8.0",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
@@ -55,11 +61,7 @@
     "typescript-fsa": "^3.0.0-beta-2",
     "typescript-fsa-reducers": "^1.2.1",
     "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5",
-    "chance": "1.0.4",
-    "express": "4.14.0",
-    "json-loader": "0.5.4",
-    "json-server": "0.8.17"
+    "webpack-cli": "^3.3.5"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.7.2"

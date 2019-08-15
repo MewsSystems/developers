@@ -26,7 +26,8 @@ export interface RatesObject {
 }
 
 export enum Storage {
-    'currentRates' = 'current-rates'
+    'currentRates' = 'current-rates',
+    'currentConfig' = 'current-config'
 }
 
 export interface ParsedCurrency {

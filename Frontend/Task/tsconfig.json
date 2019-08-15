@@ -12,7 +12,10 @@
     "isolatedModules": true,
     // Settings for React.
     "jsx": "react",
-    "lib": ["es6"]
+    "lib": [
+      "es2017",
+      "dom"
+    ]
   },
   "include": [
     "src"

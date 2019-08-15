@@ -5,7 +5,6 @@ export enum UserAction {
 
 export enum AppAction {
     toggleLoading = 'toggle-loading',
-    setRates = 'set-rates',
     getRates = 'get-rates',
     getConfig = 'get-config'
 }
