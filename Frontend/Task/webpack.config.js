@@ -1,34 +1,67 @@
-const webpack = require('webpack');
+'use strict';
 
-const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
-    entry: {
-        app: './app/app.js',
-    },
+const path = require('path');
+const env = process.env.NODE_ENV || 'development';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+    mode: env,
+    entry: './app/app.tsx',
     output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
+        path: path.resolve(__dirname, 'public'),
+        filename: 'main.js',
+        publicPath: '/',
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].bundle.css',
+            chunkFilename: '[name].chunk.css',
+        })
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            [
+                                '@babel/env',
+                                {
+                                    'targets': {
+                                        'browsers': [
+                                            '>0.25%',
+                                            'not ie 11',
+                                            'not op_mini all',
+                                        ],
+                                    },
+                                },
+                            ],
+                            '@babel/react',
+                            '@babel/typescript',
+                        ],
+                        plugins: [
+                            '@babel/proposal-class-properties',
+                            '@babel/proposal-object-rest-spread',
+                        ],
+                    },
+                },
+            },
+            {
+                test: /\.(sass|scss)$/,
+                exclude: /node_modules/,
+                loaders: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+            }
+        ],
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['.ts', '.tsx', '.js'],
     },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
+    devtool: 'source-map',
     devServer: {
-        contentBase: './app',
+        contentBase: path.resolve(__dirname, 'public'),
+        historyApiFallback: true,
     },
 };
-
-module.exports = webpackConfig;
