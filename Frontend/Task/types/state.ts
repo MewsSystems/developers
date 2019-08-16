@@ -7,6 +7,8 @@ export interface RootState {
 
 export interface AppState {
     loading: boolean;
+    error: boolean;
+    date: string;
     rates: RatesObject;
     currencies: CurrencyObject;
 }

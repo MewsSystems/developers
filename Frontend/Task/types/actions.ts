@@ -6,7 +6,10 @@ export enum UserAction {
 export enum AppAction {
     toggleLoading = 'toggle-loading',
     getRates = 'get-rates',
-    getConfig = 'get-config'
+    getConfig = 'get-config',
+    clearRates = 'clear-rates',
+    toggleError = 'toggle-error',
+    setRateCallTime = 'set-rate-call-time'
 }
 
 export interface ReducerAction<T> {

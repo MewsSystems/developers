@@ -10,6 +10,10 @@ export default (state: AppState = initialStore.app, action: ReducerAction<AppAct
             return {...state, currencies: action.data};
         case AppAction.getRates:
             return {...state, rates: action.data};
+        case AppAction.setRateCallTime:
+            return {...state, date: action.data};
+        case AppAction.toggleError:
+            return {...state, error: action.data};
     }
 
     return state;

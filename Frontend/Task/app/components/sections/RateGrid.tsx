@@ -1,11 +1,14 @@
 import * as React from 'react';
 import {ParsedRate} from "../../../types/app";
+import * as moment from 'moment';
 
 import './RateGrid.scss';
 
 interface RateGridProps {
     loading: boolean;
     rates: ParsedRate[];
+    date: string;
+    error: boolean;
 }
 
 export default class RateGrid extends React.Component<RateGridProps, any> {
@@ -30,7 +33,17 @@ export default class RateGrid extends React.Component<RateGridProps, any> {
     public renderContent() {
         return (
             <div className="content">
+                {this.props.date && this.renderTimeHeader()}
                 {this.props.rates && this.props.rates.length ? this.renderEntries() : this.renderNoEntries()}
+            </div>
+        );
+    }
+
+    public renderTimeHeader() {
+        return (
+            <div className="time-header">
+                {this.props.error && (<i title="Something went wrong with last request, please wait" className="fas fa-exclamation-triangle" />)}
+                <span>Last successful request: {moment(this.props.date).format('HH:mm:ss DD/MM/YYYY')}</span>
             </div>
         );
     }

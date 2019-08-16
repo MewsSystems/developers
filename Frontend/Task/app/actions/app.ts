@@ -31,3 +31,23 @@ export const getRates = (rates: RatesObject) => {
         data: rates
     }
 };
+
+export const setError = (state: boolean) => {
+   return {
+       type: AppAction.toggleError,
+       data: state
+   };
+};
+
+export const setRateCallTime = (time: string) => {
+  return {
+      type: AppAction.setRateCallTime,
+      data: time
+  };
+};
+
+export const clearRates = () => {
+    return {
+        type: AppAction.clearRates
+    };
+};

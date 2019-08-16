@@ -29,6 +29,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-wrap: wrap;
+
+      .time-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-shrink: 0;
+        width: 100%;
+        margin-bottom: 2px;
+
+        i {
+          font-size: 15px;
+          color: #dd0202;
+          margin: 0 3px 3px 0;
+        }
+
+        span {
+          font-size: $font-size-sm;
+          font-style: italic;
+          font-weight: 300;
+        }
+      }
 
       .no-entries {
         display: flex;

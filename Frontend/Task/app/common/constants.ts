@@ -4,7 +4,9 @@ export const initialStore = {
     app: {
         loading: false,
         rates: {},
-        currencies: {}
+        currencies: {},
+        error: false,
+        date: ''
     },
     user: {
         userRates: []
