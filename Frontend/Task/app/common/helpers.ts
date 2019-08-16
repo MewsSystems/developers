@@ -1,4 +1,6 @@
 import {CurrencyObject, ParsedCurrency, ParsedRate, RatesObject, RateType} from "../../types/app";
+import {RootState} from "../../types/state";
+import {appConfig, userRates} from "./storage";
 
 export const parseRates = (rates: RatesObject, currencies: ParsedCurrency[]): ParsedRate[] => {
     let result = [] as ParsedRate[];
@@ -57,4 +59,13 @@ export const compareRates = (oldRates: ParsedRate[], newRates: ParsedRate[]): Pa
   }
 
   return newRates;
+};
+
+export const injectCache = (store: RootState) => {
+  const newState = {...store};
+
+  newState.user.userRates = userRates.get();
+  newState.app.currencies = appConfig.get();
+
+  return newState;
 };

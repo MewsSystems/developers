@@ -69,7 +69,9 @@ class MainPage extends React.Component<MainPageProps, MainPageState> {
     }
 
     public async componentDidMount() {
-        await this.props.getConfig();
+        if (!this.props.currencies || !this.props.currencies.length) {
+            await this.props.getConfig();
+        }
 
         if (this.props.userRates && this.props.userRates.length) {
             this.runWorker();
