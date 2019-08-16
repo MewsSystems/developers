@@ -41,7 +41,7 @@
 
         i {
           font-size: 15px;
-          color: #dd0202;
+          color: $error-color;
           margin: 0 3px 3px 0;
         }
 
@@ -52,6 +52,30 @@
         }
       }
 
+      table {
+        .icon-column {
+          display: flex;
+          align-items: center;
+
+          i {
+            font-size: 15px;
+            margin-left: 3px;
+
+            &.fa-arrow-up {
+              color: $success-color;
+            }
+
+            &.fa-arrow-down {
+              color: $error-color;
+            }
+
+            &.fa-grip-lines {
+              color: $warning-color;
+            }
+          }
+        }
+      }
+
       .no-entries {
         display: flex;
         justify-content: center;
@@ -59,7 +83,7 @@
 
         i {
           font-size: 25px;
-          color: #f2d709;
+          color: $warning-color;
         }
 
         b {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ParsedRate} from "../../../types/app";
+import {ParsedRate, RateType} from "../../../types/app";
 import * as moment from 'moment';
 
 import './RateGrid.scss';
@@ -30,7 +30,7 @@ export default class RateGrid extends React.Component<RateGridProps, any> {
         );
     }
 
-    public renderContent() {
+    private renderContent() {
         return (
             <div className="content">
                 {this.props.date && this.renderTimeHeader()}
@@ -39,16 +39,17 @@ export default class RateGrid extends React.Component<RateGridProps, any> {
         );
     }
 
-    public renderTimeHeader() {
+    private renderTimeHeader() {
         return (
             <div className="time-header">
-                {this.props.error && (<i title="Something went wrong with last request, please wait" className="fas fa-exclamation-triangle" />)}
+                {this.props.error && (<i title="Something went wrong with last request, please wait"
+                                         className="fas fa-exclamation-triangle"/>)}
                 <span>Last successful request: {moment(this.props.date).format('HH:mm:ss DD/MM/YYYY')}</span>
             </div>
         );
     }
 
-    public renderEntries() {
+    private renderEntries() {
         return (
             <table className="table table-striped table-sm">
                 <thead>
@@ -65,19 +66,32 @@ export default class RateGrid extends React.Component<RateGridProps, any> {
         );
     }
 
-    public renderRows() {
+    private renderRows() {
         return this.props.rates.map(rate => {
             return (
                 <tr key={rate.id}>
                     <td>{rate.name}</td>
                     <td>{rate.value}</td>
-                    <td>{rate.type ? rate.type.toUpperCase() : '-'}</td>
+                    <td className="icon-column">{rate.type ? rate.type.toUpperCase() : '-'} {this.renderTrendIcon(rate.type)}</td>
                 </tr>
             );
         });
     }
 
-    public renderNoEntries() {
+    private renderTrendIcon(type: RateType) {
+        switch (type) {
+            case RateType.growing:
+                return <i className="fas fa-arrow-up"/>;
+            case RateType.declining:
+                return <i className="fas fa-arrow-down"/>;
+            case RateType.stagnating:
+                return <i className="fas fa-grip-lines"/>;
+        }
+
+        return null;
+    }
+
+    private renderNoEntries() {
         return (
             <div className="no-entries">
                 <i className="fas fa-times-circle"/>
@@ -86,7 +100,7 @@ export default class RateGrid extends React.Component<RateGridProps, any> {
         );
     }
 
-    public renderLoading() {
+    private renderLoading() {
         return (
             <i className="fas fa-spinner fa-spin"/>
         );
