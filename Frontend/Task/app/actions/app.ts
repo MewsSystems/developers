@@ -1,5 +1,5 @@
 import {AppAction, ReducerAction} from "../../types/actions";
-import {CurrencyList} from "../../types/app";
+import {CurrencyList, RatesObject} from "../../types/app";
 
 export const toggleProgress = (status: boolean): ReducerAction<AppAction> => {
     return {
@@ -23,4 +23,11 @@ export const getConfig = () => dispatch => {
                 resolve();
             });
     });
+};
+
+export const getRates = (rates: RatesObject) => {
+    return {
+        type: AppAction.getRates,
+        data: rates
+    }
 };

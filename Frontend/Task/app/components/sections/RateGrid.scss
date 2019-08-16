@@ -1,0 +1,50 @@
+@import '../../../styles/variables';
+
+.rate-grid-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: $spacing-10;
+
+  .card {
+    width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 25px;
+    }
+
+    .card-body {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .no-entries {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        i {
+          font-size: 25px;
+          color: #f2d709;
+        }
+
+        b {
+          margin-left: $spacing-5;
+          font-size: $font-size;
+        }
+      }
+    }
+  }
+}

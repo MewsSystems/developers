@@ -12,6 +12,7 @@ module.exports = {
         path: path.resolve(__dirname, 'public'),
         filename: 'main.js',
         publicPath: '/',
+        globalObject: 'this'
     },
     plugins: [
         new MiniCssExtractPlugin({
