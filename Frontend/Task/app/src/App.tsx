@@ -5,17 +5,17 @@ import CurrencyPairsFilter from './Components/CurrencyPairsFilter/CurrencyPairsF
 import Error from './Components/Error/Error';
 
 function App() {
-    return (
-      <Wrapper>
-        <GlobalStyles />
-        <h1>Mews frontend developer task</h1>
-        <div className="Container">
-          <CurrencyPairsRateList />
-          <CurrencyPairsFilter />
-        </div>
-        <Error />
-      </Wrapper>
-    );  
+  return (
+    <Wrapper>
+      <GlobalStyles />
+      <div className="Container">
+        <CurrencyPairsRateList />
+        <CurrencyPairsFilter />
+      </div>
+      <Error />
+    </Wrapper>
+  );  
 }
+
 export default App;
 
