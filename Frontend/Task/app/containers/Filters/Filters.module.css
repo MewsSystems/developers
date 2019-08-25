@@ -1,0 +1,19 @@
+.filterwrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-top: 2.5rem;
+}
+
+.sortBtn {
+  background-color: transparent;
+  border: 1px solid #E94279;
+  color: #E94279;
+  margin: 0 0.5rem;
+}
+
+.sortBtn:focus, .sortBtn:hover {
+  background-color: #E94279;
+  border: 1px solid #E94279;
+  color: #fff;
+}
