@@ -5,6 +5,8 @@ import * as api from './api/index';
 
 import List from './components/List/List';
 
+import './app.css';
+
 class App extends Component {
 	componentDidMount() {
     api.getConfiguration();

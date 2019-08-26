@@ -57,11 +57,11 @@ class List extends React.Component {
     <Filter selectOptions={rates} onSelectOptions={this.handleChange} />
     <table className={styles.table}>
       <thead>
-        <tr>
-          <th>Name</th>
-          <th>Old Value</th>
-          <th>Value</th>
-          <th>Type</th>
+        <tr className={styles.tr}>
+          <th className={styles.th}>Name</th>
+          <th className={styles.th}>Old Value</th>
+          <th className={styles.th}>Value</th>
+          <th className={styles.th}>Type</th>
         </tr>
       </thead>
       <tbody>
@@ -74,10 +74,10 @@ class List extends React.Component {
 
 	renderRate = (rates) => rates.map((rate) => (
   <tr key={rate.id}>
-    <td>{rate.name}</td>
-    <td>{rate.oldValue}</td>
-    <td>{rate.value}</td>
-    <td>{rate.type}</td>
+    <td className={styles.td}>{rate.name}</td>
+    <td className={styles.td}>{rate.oldValue}</td>
+    <td className={styles.td}>{rate.value}</td>
+    <td className={styles.td}>{rate.type}</td>
   </tr>
 		))
 
@@ -85,7 +85,7 @@ class List extends React.Component {
 		const { status } = this.props;
 	  return (
   <div>
-    {status !== 200 ? this.renderError() : 'Loading Rates...'}
+    {status !== 200 ? this.renderError() : <div>Loading Rates...</div>}
   </div>
 	  );
   }

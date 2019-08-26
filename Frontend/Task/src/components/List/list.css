@@ -1,3 +1,29 @@
 table {
-	background:red;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th {
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.4;
+  background-color: #6c7ae0;
+	padding-top: 18px;
+	padding-bottom: 18px;
+}
+
+td {
+    font-size: 15px;
+    color: gray;
+    line-height: 1.4;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		text-align: center;
+}
+tr:nth-child(even) {
+    background-color: #f8f6ff;
+}
+
+.loading {
+		font-size: 48px;
 }
