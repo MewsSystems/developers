@@ -3,10 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as api from './api/index';
 
-import List from './components/List';
-
-import './static/app.css';
-
+import List from './components/List/List';
 
 class App extends Component {
 	componentDidMount() {

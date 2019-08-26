@@ -1,7 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import Filter from '../Filter';
 
-import Filter from './Filter';
+import styles from './list.css';
 
 class List extends React.Component {
 	constructor(props) {
@@ -54,7 +55,7 @@ class List extends React.Component {
 		return (
   <>
     <Filter selectOptions={rates} onSelectOptions={this.handleChange} />
-    <table>
+    <table className={styles.table}>
       <thead>
         <tr>
           <th>Name</th>
