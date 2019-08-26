@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill','./src/index.js'],
+  entry: ['babel-polyfill','./src/index.jsx'],
   module: {
     rules: [
       {
@@ -12,13 +12,14 @@ module.exports = {
         exclude: /node_modules/,
         use: ['babel-loader'],
       }, {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+         test:/\.css$/,
+				exclude: /node_modules/,
+        use:['style-loader','css-loader']
       },
     ],
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx','.css'],
   },
   output: {
     path: `${__dirname}/dist`,

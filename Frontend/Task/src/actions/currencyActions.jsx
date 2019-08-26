@@ -1,6 +1,5 @@
 import * as types from './types';
 
-
 export function getConfigurationSuccess(configuration) {
   return {
     type: types.GET_CONFIGURATION_SUCCESS,
