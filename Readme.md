@@ -34,6 +34,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Technology](#technology) - how we build it.
 - [Teamwork](#teamwork) - how do we cooperate.
 - [Job](#job) - offices, working hours, salaries.
+- [Students](#students) - part-time opportunities for students.
 - [Relocation](#relocation) - information for people outside CZ.
 
 <a name='product'/>
@@ -90,6 +91,14 @@ In the following sections, we'll try to answer frequently asked question that we
     - When taking home office, we expect that you do not need anyone to help you accomplish your tasks that day and that you will not need to interrupt people via any communication channel.
     - When you start working with us, you should probably spend the first several weeks in the office, as otherwise, you would surely be in conflict with rule no. 2.
 - **What are the working hours?** That really depends on you. Every person has a different rhythm to their life. As long as you accomplish what you have promised to accomplish, it's up to you. Most people are in the office between 11:00 and 17:00. Although there is a lot of flexibility, your working hours should intersect with this time period so that you have opportunities to meet with the team and consult them regarding your work.
+
+<a name='students'/>
+
+### 🎓 Students
+
+- **Is it possible to work for Mews while studying?** Yes, we have many students in the team, especially from [MFF UK](https://www.mff.cuni.cz/en) and [CVUT](https://www.cvut.cz/en). We treat students just like any other employees, which means they're working on real projects, in product teams with other standard developers and getting market salary. Students have more flexibility in terms of time because of their school schedules.
+- **Do you provide any support for students?** Because Mews development team was founded by a group of students that met in school and were still studying, we know what it means to both work and study. Therefore we're OK with you having a month break during exam periods, so that you can prepare for the exams. And since we have graduates from both of the aforementioned schools in our team, we can also help with the studying.
+- **Can I do a bechelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses.
 
 <a name='relocation'/>
 
