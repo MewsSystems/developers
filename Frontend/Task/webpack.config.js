@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill','./src/index.jsx'],
+  entry: ['babel-polyfill','./app/index.jsx'],
   module: {
     rules: [
       {
@@ -31,7 +31,7 @@ module.exports = {
 		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
       inject: 'body',
-      template: './src/index.html',
+      template: './app/index.html',
     }),
 		new MiniCssExtractPlugin({
         filename: '[name].bundle.css',
