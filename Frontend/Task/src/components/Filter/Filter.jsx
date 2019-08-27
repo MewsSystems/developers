@@ -1,6 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './filter.css';
+
 class Filter extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +24,8 @@ class Filter extends React.Component {
       <select
         value={value}
         onChange={this.handleChange}
+        data-test="filterComponent"
+        className={styles.select}
       >
         <option value="0">Please Select A Pair To Filter</option>
         {

@@ -25,5 +25,27 @@ tr:nth-child(even) {
 }
 
 .loading {
-		font-size: 48px;
+	position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+h2{
+	position: relative;
+	padding: .75rem 1.25rem;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+	color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+	display: block;
+}
+
+h3{
+	margin-left: 15px;
+	font-size: 15px;
+	color: gray;
+	line-height: 1.4;
 }

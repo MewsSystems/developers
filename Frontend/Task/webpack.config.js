@@ -20,7 +20,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx','.css'],
+    extensions: ['*', '.js', '.jsx'],
   },
   output: {
     path: `${__dirname}/dist`,

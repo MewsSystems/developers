@@ -14,7 +14,7 @@ class App extends Component {
 
   render() {
 		const {
-		isLoadingConfiguration, isLoadingRates, rates, status,
+		isLoadingConfiguration, isLoadingRates, rates, status, timestamp,
 			} = this.props;
 		return (
   <List
@@ -22,6 +22,7 @@ class App extends Component {
     isLoadingRates={isLoadingRates}
     rates={rates}
     status={status}
+    timestamp={timestamp}
 		/>
 		);
 	}
@@ -31,6 +32,7 @@ const mapStateToProps = (state) => ({
 	isLoadingConfiguration: state.CurrencyReducer.isLoadingConfiguration,
 	isLoadingRates: state.CurrencyReducer.isLoadingRates,
 	status: state.CurrencyReducer.status,
+	timestamp: state.CurrencyReducer.timestamp,
 });
 
 App.propTypes = {
@@ -38,6 +40,7 @@ App.propTypes = {
 	isLoadingConfiguration: PropTypes.bool,
 	isLoadingRates: PropTypes.bool,
 	status: PropTypes.number,
+	timestamp: PropTypes.string,
 };
 
 App.defaultProps = {
@@ -45,6 +48,7 @@ App.defaultProps = {
 	status: 200,
 	isLoadingConfiguration: true,
 	isLoadingRates: true,
+	timestamp: '',
 };
 
 export default connect(mapStateToProps)(App);

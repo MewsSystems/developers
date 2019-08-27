@@ -1,5 +1,7 @@
 import * as types from '../actions/types';
-import { set, get, checkTrend } from '../utils/index';
+import {
+ set, get, checkTrend, parseDate,
+} from '../utils/index';
 
 const configuration = get('configuration');
 
@@ -10,6 +12,7 @@ const initialState = {
 	isLoadingRates: true,
 	status: 200,
 	request: '',
+	timestamp: '',
 };
 
 const CurrencyReducer = (state = initialState, action) => {
@@ -42,11 +45,13 @@ const CurrencyReducer = (state = initialState, action) => {
         });
 
 				set('rates', mappedRates);
+
 				return {
 					...state,
 					rates: mappedRates,
 					isLoadingRates: false,
 					status: 200,
+					timestamp: parseDate(new Date()),
 				};
 			}
 				case types.RESPONSE_ERROR: {

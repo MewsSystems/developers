@@ -51,7 +51,7 @@ export const getRates = (id) => {
 const asyncUpdate = (id) => (dispatch) => {
     const updateRates = async () => {
       await dispatch(getRates(id));
-				// setTimeout(updateRates, 5000);
+				// setTimeout(updateRates, 1000);
     };
     updateRates();
   };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Filter from '../Filter';
+import Filter from '../Filter/Filter';
 
 import styles from './list.css';
 
@@ -26,21 +26,21 @@ class List extends React.Component {
 		const { rates } = this.props;
     return (
       <div>
-        {rates ? this.renderRates() : this.renderLoading()}
+        {rates.length > 0 ? this.renderRates() : this.renderLoading()}
       </div>
     );
   }
 
 	renderError = () => {
 	const { rates } = this.props;
-		if (!rates) {
+		if (rates.length === 0) {
 			return (
-  <div>Something Went Wrong with the fetch API.</div>
+  <div className="loading">Something Went Wrong with the fetch API.</div>
 			);
 		}
 		return (
   <div>
-    <h2>
+    <h2 className={styles.h2}>
 		Something Went Wrong with the fetch API,
 		showing you the old rates if we have any...
     </h2>
@@ -50,10 +50,14 @@ class List extends React.Component {
 	}
 
   renderRates = () => {
-		const { rates } = this.props;
+		const { rates, timestamp } = this.props;
 		const { rateToShow } = this.state;
 		return (
   <>
+    <h3 className={styles.h3}>
+			Last Fetched at:
+      {timestamp}
+    </h3>
     <Filter selectOptions={rates} onSelectOptions={this.handleChange} />
     <table className={styles.table}>
       <thead>
@@ -65,7 +69,7 @@ class List extends React.Component {
         </tr>
       </thead>
       <tbody>
-        {rateToShow ? this.renderRate(rateToShow) : this.renderRate(rates)}
+        {rateToShow !== '' ? this.renderRate(rateToShow) : this.renderRate(rates)}
       </tbody>
     </table>
   </>
@@ -85,7 +89,7 @@ class List extends React.Component {
 		const { status } = this.props;
 	  return (
   <div>
-    {status !== 200 ? this.renderError() : <div>Loading Rates...</div>}
+    {status !== 200 ? this.renderError() : <div className="loading">Loading Rates...</div>}
   </div>
 	  );
   }
@@ -93,11 +97,9 @@ class List extends React.Component {
   render() {
 		const { isLoadingRates, status, isLoadingConfiguration } = this.props;
     return (
-      <div>
-        <div>
-          {(isLoadingRates === true && isLoadingConfiguration === true) || status !== 200
+      <div className="wrapper" data-test="listComponent">
+        {(isLoadingRates === true && isLoadingConfiguration === true) || status !== 200
 						? this.renderLoading() : this.renderContent()}
-        </div>
       </div>
     );
   }
@@ -108,6 +110,7 @@ List.propTypes = {
 	isLoadingConfiguration: PropTypes.bool,
 	isLoadingRates: PropTypes.bool,
 	status: PropTypes.number,
+	timestamp: PropTypes.string,
 };
 
 List.defaultProps = {
@@ -115,6 +118,7 @@ List.defaultProps = {
 	status: 200,
 	isLoadingConfiguration: true,
 	isLoadingRates: true,
+	timestamp: '',
 };
 
 export default List;
