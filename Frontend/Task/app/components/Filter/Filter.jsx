@@ -1,31 +1,27 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import styles from './filter.css';
 
 class Filter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: '' };
-  }
-
   handleChange = (event) => {
 		const { onSelectOptions } = this.props;
 		const { selectedIndex } = event.target.options;
 		const key = event.target.options[selectedIndex].getAttribute('data-key');
     onSelectOptions(key);
-		this.setState({ value: event.target.value });
   }
 
   render() {
-		const { selectOptions } = this.props;
-		const { value } = this.state;
+		const { selectOptions, rateId } = this.props;
+
     return (
       <select
-        value={value}
         onChange={this.handleChange}
         data-test="filterComponent"
         className={styles.select}
+        multiple={false}
+        defaultValue={typeof rateId !== 'string' ? '0' : rateId}
       >
         <option value="0">Please Select A Pair To Filter</option>
         {
@@ -33,7 +29,7 @@ class Filter extends React.Component {
               <option
                 key={item.id}
                 data-key={item.id}
-                value={item.value}
+                value={item.id}
               >
                 {item.name}
               </option>
@@ -43,6 +39,10 @@ class Filter extends React.Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+	rateId: state.CurrencyReducer.rateId,
+});
+
 Filter.propTypes = {
   selectOptions: PropTypes.array,
 	onSelectOptions: PropTypes.func,
@@ -52,4 +52,4 @@ Filter.defaultProps = {
   selectOptions: [],
 };
 
-export default Filter;
+export default connect(mapStateToProps)(Filter);

@@ -1,6 +1,11 @@
 import * as actions from '../../actions/currencyActions';
 import * as types from '../../actions/types';
 
+
+/**
+ * [checks for each action if it works properly by giving the required parameters]
+ * @type {Object}
+ */
 describe('actions', () => {
   it('should create an action GET_CONFIGURATION_SUCCESS', () => {
     const configuration = {
@@ -49,5 +54,14 @@ describe('actions', () => {
       status,
     };
     expect(actions.responseError(status)).toEqual(expectedAction);
+  });
+
+	it('should create an action FILTER', () => {
+    const rateId = '0c6744c-cba2-5f4c-8a06-0dac0c4e43a1';
+    const expectedAction = {
+      type: types.FILTER,
+      rateId,
+    };
+    expect(actions.filter(rateId)).toEqual(expectedAction);
   });
 });

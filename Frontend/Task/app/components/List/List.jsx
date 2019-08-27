@@ -1,25 +1,16 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Filter from '../Filter/Filter';
+
+import * as actions from '../../actions/currencyActions';
 
 import styles from './list.css';
 
 class List extends React.Component {
-	constructor(props) {
-    super(props);
-		this.state = {
-			rateToShow: '',
-		};
-  }
-
 	handleChange = (key) => {
-		const { rates } = this.props;
-		if (!key) {
-			this.setState({ rateToShow: '' });
-		} else {
-			const rate = (rates).filter((item) => item.id === key);
-			this.setState({ rateToShow: rate });
-		}
+		const { filter } = this.props;
+		filter(key);
 	}
 
 	renderContent = () => {
@@ -50,8 +41,8 @@ class List extends React.Component {
 	}
 
   renderRates = () => {
-		const { rates, timestamp } = this.props;
-		const { rateToShow } = this.state;
+		const { rates, timestamp, rateId } = this.props;
+		const rateToShow = (rates).filter((item) => item.id === rateId);
 		return (
   <>
     <h3 className={styles.h3}>
@@ -69,7 +60,7 @@ class List extends React.Component {
         </tr>
       </thead>
       <tbody>
-        {rateToShow !== '' ? this.renderRate(rateToShow) : this.renderRate(rates)}
+        {rateToShow.length > 0 ? this.renderRate(rateToShow) : this.renderRate(rates)}
       </tbody>
     </table>
   </>
@@ -95,7 +86,9 @@ class List extends React.Component {
   }
 
   render() {
-		const { isLoadingRates, status, isLoadingConfiguration } = this.props;
+		const {
+ isLoadingRates, status, isLoadingConfiguration,
+} = this.props;
     return (
       <div className="wrapper" data-test="listComponent">
         {(isLoadingRates === true && isLoadingConfiguration === true) || status !== 200
@@ -107,6 +100,7 @@ class List extends React.Component {
 
 List.propTypes = {
   rates: PropTypes.array,
+	filter: PropTypes.func,
 	isLoadingConfiguration: PropTypes.bool,
 	isLoadingRates: PropTypes.bool,
 	status: PropTypes.number,
@@ -121,4 +115,14 @@ List.defaultProps = {
 	timestamp: '',
 };
 
-export default List;
+const mapStateToProps = (state) => ({
+	rateId: state.CurrencyReducer.rateId,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  filter: (rateId) => {
+     dispatch(actions.filter(rateId));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

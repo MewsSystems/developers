@@ -25,3 +25,10 @@ export function responseError(status) {
     status,
 	};
 }
+
+export function filter(rateId) {
+  return {
+    type: types.FILTER,
+    rateId,
+	};
+}

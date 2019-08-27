@@ -8,7 +8,10 @@ import {
   requestError,
 } from '../actions/currencyActions';
 
-// get configuration from server
+/**
+ * [dispatch configuration and then updated rates based on the configuration]
+ * @return {Promise}
+ */
 export const getConfiguration = async () => {
 	try {
         const response = await axios.get('http://localhost:3000/configuration');
@@ -24,6 +27,10 @@ export const getConfiguration = async () => {
         }
     }
 };
+/**
+ * [get rates based on given pair then dispatch it]
+ * @param  {[Object]} id [id object to map to check the convenient rate value]
+ */
 export const getRates = (id) => {
 	// for each key get the rate.
   const ids = [];
@@ -48,10 +55,14 @@ export const getRates = (id) => {
   };
 };
 
+/**
+ * [asyncUpdate the rates based on interval of 10 secs]
+ * @param  {[Object]} id [id object to map to check the convenient rate value]
+ */
 const asyncUpdate = (id) => (dispatch) => {
     const updateRates = async () => {
       await dispatch(getRates(id));
-				// setTimeout(updateRates, 1000);
+				setTimeout(updateRates, 10000);
     };
     updateRates();
   };

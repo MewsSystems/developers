@@ -13,6 +13,7 @@ const initialState = {
 	status: 200,
 	request: '',
 	timestamp: '',
+	rateId: get('rateId'),
 };
 
 const CurrencyReducer = (state = initialState, action) => {
@@ -43,7 +44,6 @@ const CurrencyReducer = (state = initialState, action) => {
 						type: checkTrend(oldRateItem.value, action.rates[key]),
            });
         });
-
 				set('rates', mappedRates);
 
 				return {
@@ -52,6 +52,13 @@ const CurrencyReducer = (state = initialState, action) => {
 					isLoadingRates: false,
 					status: 200,
 					timestamp: parseDate(new Date()),
+				};
+			}
+			case types.FILTER: {
+				set('rateId', action.rateId);
+				return {
+					...state,
+					rateId: action.rateId,
 				};
 			}
 				case types.RESPONSE_ERROR: {

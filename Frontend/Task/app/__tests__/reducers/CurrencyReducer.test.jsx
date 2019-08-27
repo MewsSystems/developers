@@ -4,6 +4,11 @@ import {
  parseDate,
 } from '../../utils/index';
 
+
+/**
+ * [checks if reducer is working as expected with given state and action type.]
+ * @type {Array}
+ */
 describe('Currency Reducer', () => {
 	it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({
@@ -14,6 +19,7 @@ describe('Currency Reducer', () => {
 	 	 	status: 200,
 	 	 	request: '',
 	 	 	timestamp: '',
+			rateId: [],
 		});
   });
 
@@ -90,6 +96,18 @@ describe('Currency Reducer', () => {
  		).toEqual(
  			{
  				request: 'Oopps',
+ 			},
+ 		);
+	});
+	it('FILTER', () => {
+		expect(
+ 			reducer([], {
+ 				type: types.FILTER,
+				rateId: '70c6744c-cba2-5f4c-8a06-0dac0c4e43a1',
+ 			}),
+ 		).toEqual(
+ 			{
+ 				rateId: '70c6744c-cba2-5f4c-8a06-0dac0c4e43a1',
  			},
  		);
 	});

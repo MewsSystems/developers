@@ -14,7 +14,7 @@ class App extends Component {
 
   render() {
 		const {
-		isLoadingConfiguration, isLoadingRates, rates, status, timestamp,
+		isLoadingConfiguration, isLoadingRates, rates, status, timestamp, oldRates,
 			} = this.props;
 		return (
   <List
