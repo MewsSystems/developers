@@ -18,7 +18,6 @@ server.use((req, res, next) => {
 
 server.get('/configuration', (req, res) => {
     const appLoadTime = chance.integer({ min: 3000, max: 5000 });
-
     setTimeout(() => {
         res.json({
             currencyPairs: ratesGenerator.getCurrencyPairs(),
