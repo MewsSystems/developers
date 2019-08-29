@@ -13,10 +13,8 @@ Currently, we are seeking backend developers, frontend developers, data analysts
 As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for. If you'd like to first talk to us, that's an option as well, the task is not a mandatory thing.
 
 - [Task](Backend) for backend candidates:
-    - [Senior backend developer](https://mews-systems.workable.com/j/AA7C6F1D43?viewed=true)
     - [Backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true)
 - [Task](Frontend) for frontend candidates:
-    - [Senior frontend developer](https://mews-systems.workable.com/j/FDC35CE6E9?viewed=true)
     - [Frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true)
 - [Task](Android) for Android candidates.
 
