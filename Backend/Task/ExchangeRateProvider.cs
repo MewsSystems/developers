@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            return ExchangeRateProxy.GetExchangeRates(currencies);
         }
     }
 }
