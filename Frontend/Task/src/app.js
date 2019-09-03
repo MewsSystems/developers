@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import AppRouter from './routers/AppRouter';
 import configureStore from './store/configureStore';
-// import { addPair, filterPair } from 'actions/currencyPairs'
 
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';

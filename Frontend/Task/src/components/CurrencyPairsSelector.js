@@ -5,7 +5,7 @@ import { generateCurrencyPairs } from 'helperFunctions/generateCurrencyPairs'
 import { addPair, filterPair } from 'actions/currencyPairs'
 import CurrencyPairsRateList from 'components/CurrencyPairsRateList'
 
-const HomePage = ({ addPairAction, filterPairAction, filteredCurrencyPairs }) => {
+const CurrencyPairsSelector = ({ addPairAction, filterPairAction, filteredCurrencyPairs }) => {
 
   const [welcomeText, setWelcomeText] = useState('Fetching currency pairs...')
   const [currencyPairs, setCurrencyPairs] = useState([])
@@ -32,7 +32,7 @@ const HomePage = ({ addPairAction, filterPairAction, filteredCurrencyPairs }) =>
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchConfiguration = async () => {
       try {
         const { data } = await axios.get('http://localhost:3000/configuration')
         const currencyPairs = generateCurrencyPairs(data.currencyPairs, addPairAction)
@@ -44,7 +44,7 @@ const HomePage = ({ addPairAction, filterPairAction, filteredCurrencyPairs }) =>
         setWelcomeText('Could not fetch the currency data. Please try again...')
       }
     }
-    fetchData()
+    fetchConfiguration()
 
   }, [])
 
@@ -66,4 +66,4 @@ const mapDispatchToProps = (dispatch) => ({
   filterPairAction: (pair) => dispatch(filterPair(pair)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(CurrencyPairsSelector)
