@@ -2,15 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const Header = () => (
-  <header>
-    <ul>
-      <li>
-        <Link to="/">
-          Exchange Rate Client
+  <header className="header">
+    <h1 className="header__title">Exchange Rate Client</h1>
+    <ul className="nav">
+      <li className="nav__item">
+        <Link
+          className="nav__link"
+          to="/">
+          Home
         </Link>
       </li>
-      <li>
-        <Link to="/author">
+      <li className="nav__item">
+        <Link
+          className="nav__link"
+          to="/author">
           Author
         </Link>
       </li>

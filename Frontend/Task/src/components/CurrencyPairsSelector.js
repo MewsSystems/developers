@@ -66,9 +66,13 @@ const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPair
 
   const renderAllPossiblePairs = (currencyPairs) => {
     return currencyPairs.map(pair => (
-      <label key={pair.name}>
+      <label
+        key={pair.name}
+        className="filters__label"
+      >
         {pair.name}
         <input
+          className="filters__input"
           type="checkbox"
           name={pair.name}
           defaultChecked={filters.includes(pair.name)}
@@ -85,14 +89,18 @@ const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPair
   }
 
   return (
-    <div>
-      {initialText}
-      {allPossibleCurrencyPairs && <form>{renderAllPossiblePairs(allPossibleCurrencyPairs)}</form>}
-      {renderCurrencyPairsRateList(currencyPairs)}
+    <section className="filters">
+      <p className="filters__text">{initialText}</p>
+      {allPossibleCurrencyPairs && <form className="filters__form">{renderAllPossiblePairs(allPossibleCurrencyPairs)}</form>}
       <button
         disabled={initialText === defaultInitialText ? true : false}
-        onClick={() => handleBtnClick()}>Fetch rates</button>
-    </div>
+        onClick={() => handleBtnClick()}
+        className="filters__button nav__link">
+        Fetch rates</button>
+      <div className="rates">
+        {renderCurrencyPairsRateList(currencyPairs)}
+      </div>
+    </section>
   )
 }
 

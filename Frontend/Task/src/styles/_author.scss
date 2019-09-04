@@ -1,0 +1,10 @@
+.author {
+  @include flexbox(center, center);
+  background-color: lighten($main-color, 10%);
+  min-height: 300px;
+  text-align: center;
+}
+
+.author__link {
+  color: $white;
+}

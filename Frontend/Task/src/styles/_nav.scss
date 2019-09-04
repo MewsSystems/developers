@@ -1,0 +1,23 @@
+.nav {
+  @include flexbox(center, center);
+  list-style: none;
+  padding: 0;
+}
+
+.nav__link {
+  background-color: $white;
+  border: none;
+  color: black;
+  display: block;
+  font-size: $font-size-l;
+  margin: $xs-size;
+  width: 25rem;
+  padding: $m-size;
+  text-align: center;
+  text-decoration: none;
+  transition: .2s;
+
+  &:hover {
+    font-weight: bold;
+  }
+}

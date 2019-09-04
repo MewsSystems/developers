@@ -1,0 +1,40 @@
+.filters {
+  min-width: 300px;
+  text-align: center;
+  width: 100%;
+}
+
+.filters__form {
+  @include flexbox(center, center);
+  margin-bottom: $l-size;
+}
+
+.filters__text {
+  color: $white;
+  font-size: $font-size-xl;
+}
+
+.filters__label {
+  @include flexbox(center, center);
+  background-color: lighten($main-color, 10%);
+  border-radius: 5rem;
+  cursor: pointer;
+  font-size: $font-size-l;
+  flex-basis: 100%;
+  margin: $s-size;
+  min-height: 70px;
+  padding: $s-size;
+
+  @media (min-width: $tablet-breakpoint) {
+    flex-basis: 15%;
+  }
+}
+
+.filters__input {
+  margin: $s-size;
+  transform: scale(1.5)
+}
+
+.filters__button {
+  margin: 0 auto;
+}

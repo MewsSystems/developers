@@ -1,6 +1,13 @@
+@mixin flexbox($align: flex-start, $justify: flex-start) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: $align;
+  justify-content: $justify
+}
+
 // Colors
-$transparent-black: rgba(20, 20, 20, .95);
 $white: rgb(239, 232, 232);
+$main-color: #00675b;
 // Font Size
 $font-size-xxl: 7.0rem;
 $font-size-xl: 3.0rem;

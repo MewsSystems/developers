@@ -1,0 +1,32 @@
+.rates {
+  @include flexbox(center, center);
+  margin: $m-size;
+}
+
+.rates__item {
+  @include flexbox(center, center);
+  align-content: flex-start;
+  background-color: lighten($main-color, 10%);
+  flex-basis: 100%;
+  margin: $m-size;
+  min-height: 25rem;
+
+  @media (min-width: $tablet-breakpoint) {
+    flex-basis: 30%;
+  }
+}
+
+.rates__content {
+  font-size: $font-size-l;
+
+  &:first-child {
+    color: $white;
+    font-size: $font-size-xl;
+    font-weight: bold;
+  }
+}
+
+.rates__error {
+  font-size: $font-size-s;
+  font-weight: bold;
+}

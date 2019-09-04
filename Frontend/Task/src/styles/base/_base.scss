@@ -12,6 +12,17 @@ body {
   line-height: 1.6;
 }
 
+.wrapper {
+  @include flexbox(flex-start, center);
+  align-content: flex-start;
+  background-color: $main-color;
+  box-shadow: 0 0 15px 10px rgb(200, 200, 200);
+  margin: 0 auto;
+  max-width: 1400px;
+  min-height: 100vh;
+  padding: $s-size;
+}
+
 button {
   cursor: pointer;
 }

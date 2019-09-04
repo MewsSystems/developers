@@ -1,0 +1,11 @@
+.content__text {
+  flex-basis: 100%;
+  font-size: $font-size-xl;
+  margin: $s-size;
+  text-align: center;
+}
+
+.content__link {
+  color: $white;
+  text-decoration: none;
+}

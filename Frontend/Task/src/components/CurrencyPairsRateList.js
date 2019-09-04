@@ -4,7 +4,7 @@ import { computeTrend } from 'helperFunctions/computeTrend'
 import { interval } from 'config.json'
 
 const CurrencyPairsRateList = ({ currencyPair }) => {
-  const { display: shouldDisplayRate, name, id } = currencyPair
+  const { name, id } = currencyPair
 
   const [currentPairRate, setCurrentPairRate] = useState(null)
   const [isError, setIsError] = useState(false)
@@ -49,14 +49,12 @@ const CurrencyPairsRateList = ({ currencyPair }) => {
 
 
   return (
-    <>
-      {shouldDisplayRate && <div>
-        {shouldDisplayRate && <p>{name}</p>}
-        {shouldDisplayRate && <p>{currentPairRate}</p>}
-        {shouldDisplayRate && <p>{trend}</p>}
-        {isError && <p>Server error! Your rate is not up to date.</p>}
-      </div>}
-    </>
+    <section className="rates__item">
+      <p className="rates__content content__text">{name}</p>
+      <p className="rates__content content__text">{Math.round(currentPairRate * 100) / 100}</p>
+      <p className="rates__content content__text">{trend}</p>
+      {isError && <p className="rates__content rates__error content__text">Server error! Your rate is not up to date.</p>}
+    </section>
   )
 }
 
