@@ -5,6 +5,7 @@ export const currencyPairsReducer = (state = [], action) => {
         ...state,
         action.pair
       ]
+
     case 'SET_DISPLAY':
       return state.map((pair) => {
         if (action.pairs.includes(pair.name)) {
@@ -19,6 +20,7 @@ export const currencyPairsReducer = (state = [], action) => {
           }
         }
       })
+
     default: return state
   }
 }

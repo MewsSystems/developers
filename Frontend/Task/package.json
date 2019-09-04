@@ -10,7 +10,8 @@
   "main": "Sources/index.js",
   "scripts": {
     "start-server": "node server",
-    "start": "webpack-dev-server --hot --inline --progress"
+    "start": "webpack-dev-server --hot --inline --progress",
+    "test": "jest --config=jest.config.json --watchAll"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
