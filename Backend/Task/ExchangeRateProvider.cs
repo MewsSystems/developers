@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        private static string ServiceUrl = "https://cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
+        
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "EUR/USD" but not "USD/EUR",
@@ -19,22 +19,24 @@ namespace ExchangeRateUpdater
         {
             var culture = CultureInfo.CreateSpecificCulture("cs-CZ");
 
-            using (XmlTextReader reader = new XmlTextReader(ServiceUrl))
+            using (XmlTextReader reader = new XmlTextReader(Consts.ServiceUrl))
             {
                 var requestedCurrencies = currencies.Select(c => c.Code).ToArray();
 
                 while (reader.Read())
                 {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name.Equals("radek"))
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name.Equals(Consts.XmlElementName))
                     {
-                        var currentCode = reader["kod"];
+                        var currentCode = reader[Consts.XmlAtrributeCode];
                         decimal currentValue = 0;
+                        decimal multiplyValue = 0;
 
                         if (requestedCurrencies.Contains(currentCode))
                         {
-                            decimal.TryParse(reader["kurz"], NumberStyles.Any, culture, out currentValue);
-
-                            yield return new ExchangeRate(new Currency("CZK"), new Currency(currentCode), currentValue);
+                            if(decimal.TryParse(reader[Consts.XmlAtrributeExchRate], NumberStyles.Any, culture, out currentValue) && decimal.TryParse(reader[Consts.XmlAtrributeQuantity], NumberStyles.Any, culture, out multiplyValue))
+                            {
+                                yield return new ExchangeRate(new Currency(Consts.SourceCurrency), new Currency(currentCode), currentValue / multiplyValue);
+                            }
                         }
                     }
                 }
