@@ -3,7 +3,7 @@ export const addPair = (pair) => ({
   pair
 })
 
-export const filterPair = (pairName) => ({
-  type: 'FILTER_PAIR',
-  pairName
+export const setDisplay = (pairs) => ({
+  type: 'SET_DISPLAY',
+  pairs,
 })

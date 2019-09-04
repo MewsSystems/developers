@@ -5,17 +5,20 @@ export const currencyPairsReducer = (state = [], action) => {
         ...state,
         action.pair
       ]
-    case 'FILTER_PAIR':
+    case 'SET_DISPLAY':
       return state.map((pair) => {
-        if (pair.name === action.pairName) {
+        if (action.pairs.includes(pair.name)) {
           return {
             ...pair,
-            ...pair.display = !pair.display
+            ...pair.display = true
+          }
+        } else {
+          return {
+            ...pair,
+            ...pair.display = false
           }
         }
-        return pair
       })
-
     default: return state
   }
 }

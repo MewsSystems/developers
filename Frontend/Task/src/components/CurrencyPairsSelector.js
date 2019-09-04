@@ -2,65 +2,78 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { generateCurrencyPairs } from 'helperFunctions/generateCurrencyPairs'
-import { getStoragedConfig } from 'helperFunctions/getStoragedConfig'
+import { getStoragedData } from 'helperFunctions/getStoragedData'
 import { setStorage } from 'helperFunctions/setStorage'
-import { addPair, filterPair } from 'actions/currencyPairs'
+import { addPair, setDisplay } from 'actions/currencyPairs'
+import { addToFilters, removeFromFilters } from 'actions/filters'
 import CurrencyPairsRateList from 'components/CurrencyPairsRateList'
 
-const CurrencyPairsSelector = ({ addPairAction, filterPairAction, currencyPairs }) => {
+const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPairs, filters, setDisplayAction, removeFromFiltersAction }) => {
 
   const defaultInitialText = 'Fetching currency pairs...'
 
   const [initialText, setInitialText] = useState(defaultInitialText)
-  const [allCurrencyPairs, setAllCurrencyPairs] = useState([])
-  const [pairsToFilter, setPairsToFilter] = useState([])
+  const [allPossibleCurrencyPairs, setAllPossibleCurrencyPairs] = useState([])
 
   useEffect(() => {
     const updateStates = (configData, action) => {
       const currencyPairs = generateCurrencyPairs(configData, action)
-      setAllCurrencyPairs(currencyPairs)
+      setAllPossibleCurrencyPairs(currencyPairs)
       setInitialText('Filter currency pairs:')
     }
 
     const fetchConfiguration = async () => {
-      if (getStoragedConfig() !== null) {
-        console.log('storage')
-        updateStates(getStoragedConfig(), addPairAction)
+      if (getStoragedData('currencyPairs') !== null) {
+        return updateStates(getStoragedData('currencyPairs'), addPairAction)
       }
 
-      else {
-        console.log('fetch')
-        try {
-          const { data } = await axios.get('http://localhost:3000/configuration')
-          setStorage('currencyPairs', data.currencyPairs)
-          updateStates(data.currencyPairs, addPairAction)
-        }
-        catch (error) {
-          setInitialText('Could not fetch the currency data. Please try again...')
-        }
+      try {
+        const { data } = await axios.get('http://localhost:3000/configuration')
+        setStorage('currencyPairs', data.currencyPairs)
+        updateStates(data.currencyPairs, addPairAction)
+      }
+      catch (error) {
+        setInitialText('Could not fetch the currency data. Please try again...')
       }
     }
 
+
+    const fetchFilters = () => {
+      const storagedFilters = getStoragedData('filters')
+      storagedFilters.forEach((filter) => addToFiltersAction(filter))
+    }
+
     fetchConfiguration()
+    fetchFilters()
 
   }, [])
 
-  const showAllPossiblePairs = (currencyPairs) => {
+
+  useEffect(() => {
+    setStorage('filters', filters)
+  }, [filters])
+
+  const handleCheckboxChange = (e) => {
+    const pair = e.target.name
+    e.target.checked ? addToFiltersAction(pair) : removeFromFiltersAction(pair)
+  }
+
+  const handleBtnClick = () => {
+    setDisplayAction(filters)
+  }
+
+  const renderAllPossiblePairs = (currencyPairs) => {
     return currencyPairs.map(pair => (
       <label key={pair.name}>
         {pair.name}
         <input
           type="checkbox"
           name={pair.name}
-          onChange={(e) => filterCurrencyPairs(e)}
+          defaultChecked={filters.includes(pair.name)}
+          onChange={(e) => handleCheckboxChange(e)}
         />
       </label>
     ))
-  }
-
-  const filterCurrencyPairs = (e) => {
-    const pair = e.target.name
-    setPairsToFilter((prevValue) => [...prevValue, pair])
   }
 
   const renderCurrencyPairsRateList = (currencyPairs) => {
@@ -70,31 +83,28 @@ const CurrencyPairsSelector = ({ addPairAction, filterPairAction, currencyPairs 
   }
 
 
-  const handleClick = () => {
-    setPairsToFilter([])
-    pairsToFilter.map(pair => filterPairAction(pair))
-  }
-
-
   return (
     <div>
       {initialText}
-      {allCurrencyPairs && <form>{showAllPossiblePairs(allCurrencyPairs)}</form>}
+      {allPossibleCurrencyPairs && <form>{renderAllPossiblePairs(allPossibleCurrencyPairs)}</form>}
       {renderCurrencyPairsRateList(currencyPairs)}
       <button
         disabled={initialText === defaultInitialText ? true : false}
-        onClick={() => handleClick()}>Fetch rates</button>
+        onClick={() => handleBtnClick()}>Fetch rates</button>
     </div>
   )
 }
 
-const mapStateToProps = ({ currencyPairs }) => ({
-  currencyPairs
+const mapStateToProps = ({ currencyPairs, filters }) => ({
+  currencyPairs,
+  filters,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   addPairAction: (pair) => dispatch(addPair(pair)),
-  filterPairAction: (pair) => dispatch(filterPair(pair)),
+  addToFiltersAction: (pair) => dispatch(addToFilters(pair)),
+  removeFromFiltersAction: (pair) => dispatch(removeFromFilters(pair)),
+  setDisplayAction: (pair) => dispatch(setDisplay(pair)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrencyPairsSelector)
