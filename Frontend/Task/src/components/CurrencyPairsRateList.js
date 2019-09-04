@@ -8,11 +8,12 @@ const CurrencyPairsRateList = ({ currencyPair }) => {
 
   const [currentPairRate, setCurrentPairRate] = useState(null)
   const [isError, setIsError] = useState(false)
-  const [intervalId, setIntervalId] = useState(null)
   const [trend, setTrend] = useState(null)
+
 
   useEffect(() => {
     const fetchRate = async () => {
+
       try {
         const { data } = await axios.get(`http://localhost:3000/rates?currencyPairIds[]=${id}`)
         const newestRate = data.rates[id]
@@ -33,22 +34,19 @@ const CurrencyPairsRateList = ({ currencyPair }) => {
       }
     }
 
-    const startInterval = (shouldDisplayRate, currentPairRate) => {
-      if (shouldDisplayRate) {
-        if (currentPairRate === null) {
-          fetchRate()
-        }
-        const intervalId = setInterval(() => {
-          fetchRate()
-        }, interval)
-        setIntervalId(intervalId)
-      }
+
+    if (currentPairRate === null) {
+      fetchRate()
     }
+    const intervalId = setInterval(() => {
+      fetchRate()
+    }, interval)
 
-    startInterval(shouldDisplayRate, currentPairRate)
-    clearInterval(intervalId)
+    return () => clearInterval(intervalId)
 
-  }, [shouldDisplayRate, currentPairRate])
+
+  }, [currentPairRate])
+
 
   return (
     <>

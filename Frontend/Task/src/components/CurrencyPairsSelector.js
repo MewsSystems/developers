@@ -5,12 +5,15 @@ import { generateCurrencyPairs } from 'helperFunctions/generateCurrencyPairs'
 import { addPair, filterPair } from 'actions/currencyPairs'
 import CurrencyPairsRateList from 'components/CurrencyPairsRateList'
 
-const CurrencyPairsSelector = ({ addPairAction, filterPairAction, filteredCurrencyPairs }) => {
+const CurrencyPairsSelector = ({ addPairAction, filterPairAction, currencyPairs }) => {
 
-  const [welcomeText, setWelcomeText] = useState('Fetching currency pairs...')
-  const [currencyPairs, setCurrencyPairs] = useState([])
+  const defaultInitialText = 'Fetching currency pairs...'
 
-  const renderCurrencyPairs = (currencyPairs) => {
+  const [initialText, setInitialText] = useState(defaultInitialText)
+  const [allCurrencyPairs, setAllCurrencyPairs] = useState([])
+  const [pairsToFilter, setPairsToFilter] = useState([])
+
+  const showAllCurrencyPairs = (currencyPairs) => {
     return currencyPairs.map(pair => (
       <label key={pair.name}>
         {pair.name}
@@ -24,11 +27,14 @@ const CurrencyPairsSelector = ({ addPairAction, filterPairAction, filteredCurren
   }
 
   const filterCurrencyPairs = (e) => {
-    filterPairAction(e.target.name)
+    const pair = e.target.name
+    setPairsToFilter((prevValue) => [...prevValue, pair])
   }
 
-  const renderFilteredCurrencyPairs = (filteredCurrencyPairs) => {
-    return filteredCurrencyPairs.map((pair) => <CurrencyPairsRateList key={pair.name} currencyPair={pair} />)
+  const renderCurrencyPairsRateList = (currencyPairs) => {
+    return currencyPairs
+      .filter((pair) => pair.display === true)
+      .map((pair) => <CurrencyPairsRateList key={pair.name} currencyPair={pair} />)
   }
 
   useEffect(() => {
@@ -36,29 +42,37 @@ const CurrencyPairsSelector = ({ addPairAction, filterPairAction, filteredCurren
       try {
         const { data } = await axios.get('http://localhost:3000/configuration')
         const currencyPairs = generateCurrencyPairs(data.currencyPairs, addPairAction)
-        setCurrencyPairs(currencyPairs)
-        setWelcomeText('Filter currency pairs:')
+        setAllCurrencyPairs(currencyPairs)
+        setInitialText('Filter currency pairs:')
       }
 
       catch (error) {
-        setWelcomeText('Could not fetch the currency data. Please try again...')
+        setInitialText('Could not fetch the currency data. Please try again...')
       }
     }
     fetchConfiguration()
 
   }, [])
 
+  const handleClick = () => {
+    setPairsToFilter([])
+    pairsToFilter.map(pair => filterPairAction(pair))
+  }
+
   return (
     <div>
-      {welcomeText}
-      {currencyPairs && <form>{renderCurrencyPairs(currencyPairs)}</form>}
-      {renderFilteredCurrencyPairs(filteredCurrencyPairs)}
+      {initialText}
+      {allCurrencyPairs && <form>{showAllCurrencyPairs(allCurrencyPairs)}</form>}
+      {renderCurrencyPairsRateList(currencyPairs)}
+      <button
+        disabled={initialText === defaultInitialText ? true : false}
+        onClick={() => handleClick()}>Fetch rates</button>
     </div>
   )
 }
 
 const mapStateToProps = ({ currencyPairs }) => ({
-  filteredCurrencyPairs: currencyPairs
+  currencyPairs
 })
 
 const mapDispatchToProps = (dispatch) => ({
