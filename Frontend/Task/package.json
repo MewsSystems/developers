@@ -9,6 +9,8 @@
   },
   "main": "Sources/index.js",
   "scripts": {
+    "build": "webpack -p --env production",
+    "serve": "node production_server/server",
     "start-server": "node server",
     "start": "webpack-dev-server --hot --inline --progress",
     "test": "jest --config=jest.config.json --watchAll"
