@@ -3,9 +3,19 @@ import { Link } from 'react-router-dom';
 
 export const Header = () => (
   <header>
-    <Link to="/">
-      <h1>Boilerplate</h1>
-    </Link>
+    <ul>
+      <li>
+        <Link to="/">
+          Exchange Rate Client
+        </Link>
+      </li>
+      <li>
+        <Link to="/author">
+          Author
+        </Link>
+      </li>
+    </ul>
+
   </header>
 );
 
