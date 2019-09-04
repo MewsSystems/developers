@@ -39,8 +39,10 @@ const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPair
 
 
     const fetchFilters = () => {
-      const storagedFilters = getStoragedData('filters')
-      storagedFilters.forEach((filter) => addToFiltersAction(filter))
+      if (getStoragedData('currencyPairs') !== null) {
+        const storagedFilters = getStoragedData('filters')
+        storagedFilters.forEach((filter) => addToFiltersAction(filter))
+      }
     }
 
     fetchConfiguration()
@@ -81,7 +83,6 @@ const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPair
       .filter((pair) => pair.display === true)
       .map((pair) => <CurrencyPairsRateList key={pair.name} currencyPair={pair} />)
   }
-
 
   return (
     <div>
