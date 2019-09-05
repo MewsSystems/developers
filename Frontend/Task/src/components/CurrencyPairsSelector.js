@@ -11,6 +11,7 @@ import CurrencyPairsRateList from 'components/CurrencyPairsRateList'
 const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPairs, filters, setDisplayAction, removeFromFiltersAction }) => {
 
   const defaultInitialText = 'Fetching currency pairs...'
+  const successInitialText = 'Filter currency pairs:'
 
   const [initialText, setInitialText] = useState(defaultInitialText)
   const [allPossibleCurrencyPairs, setAllPossibleCurrencyPairs] = useState([])
@@ -92,11 +93,10 @@ const CurrencyPairsSelector = ({ addPairAction, addToFiltersAction, currencyPair
     <section className="filters">
       <p className="filters__text">{initialText}</p>
       {allPossibleCurrencyPairs && <form className="filters__form">{renderAllPossiblePairs(allPossibleCurrencyPairs)}</form>}
-      <button
-        disabled={initialText === defaultInitialText ? true : false}
+      {initialText === successInitialText && <button
         onClick={() => handleBtnClick()}
         className="filters__button nav__link">
-        Fetch rates</button>
+        Fetch rates</button>}
       <div className="rates">
         {renderCurrencyPairsRateList(currencyPairs)}
       </div>
