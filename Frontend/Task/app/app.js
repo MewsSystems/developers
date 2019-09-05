@@ -128,21 +128,21 @@ class App extends React.Component {
     }
 
     getConfiguration() {
-        let json =  fetch('/configuration', {
+        let json =  fetch('/api/configuration', {
             method: 'GET',
             headers: {'Content-Type': 'application/json'}
         }).then(function(res) {
-            console.log("RES", res)
+            // // console.log("RES", res)
             return res
         }).then(function(json){
-            console.log("JSON", json)
+            // // console.log("JSON", json)
             return json
         })
         return json
     }
 
     onFilterChange(filter){
-      console.log("OFC", filter)
+      // // console.log("OFC", filter)
       this.setState({
         filter: filter
       })

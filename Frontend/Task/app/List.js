@@ -7,31 +7,55 @@ export default class List extends React.Component {
             configuration: [],
             rates: []
         }
+        this.interval = this.interval.bind(this)
     }
-
+    
     componentDidMount(){
-        console.log("PROPS", this.props.configuration.currencyPairs["70c6744c-cba2-5f4c-8a06-0dac0c4e43a1"]
-        )
+        // console.log("PROPS", this.props.configuration.currencyPairs["70c6744c-cba2-5f4c-8a06-0dac0c4e43a1"])
         let pairs = this.props.configuration.currencyPairs
         let configuration = []
         let rates = []
+        let count = -1
         for( var pair in pairs){
-            console.log("CDM", pair )
-            configuration.push(pairs[pair])
+            count ++
+            // console.log("CDM", pair )
+            configuration.push(
+                {id:pair, value:pairs[pair] ,rate: Math.random(), state:"stagnating"} //normally this would be "rate: this.getRate(pair)"
+            )
+            rates.push(count)
         }
         this.setState({
             configuration: configuration,
             rates: rates
+        },() => {
+            setInterval(this.interval,  1000)
         })
-        setInterval(function() {
-            for( var pair in pairs){
-                console.log("CDM", pair )
-                rates.push(getRate(pair))
-            }
-        }, 5000)
-        // console.log(configuration)
+        
+        // console.log(configuration) //TODO: compare rats and give state
         
 
+    }
+
+
+    interval() {
+        let rates = this.state.rates
+        let count = -1
+        console.log("RATES", rates)
+        if(rates !== []){
+            count++
+            let conf = this.state.configuration
+            conf.map(pair => {  
+                let currentRate  =  Math.random()  //This normally would call to getRates(pair.id)
+                pair.state = this.calculateTrend(pair.rate, currentRate)
+                print.rate = currentRate
+                console.log(pair.rate)
+            } )
+            this.setState({
+                configuration: conf, rates: rates
+            }, () => {
+               console.log( "CONFIG", conf)
+            })
+        }
     }
 
     getRate(id){
@@ -45,10 +69,10 @@ export default class List extends React.Component {
             body: JSON.stringify(contentBody),
             headers: {'Content-Type': 'application/json'}
         }).then(function(res) {
-            console.log("RES", res)
+            // console.log("RES", res)
             return res
         }).then(function(json){
-            console.log("JSON", json)
+            // console.log("JSON", json)
             json.rates[id]
             return json.rates[id]
         })
@@ -56,11 +80,16 @@ export default class List extends React.Component {
 
     }
 
+    calculateTrend(previousTrend, currentTrend){
+        if(previousTrend < currentTrend) return "growing"
+        if(previousTrend === currentTrend) return "stagnating"
+        if(previousTrend > currentTrend) return "declining"
+    }
 
-    pairMatchesFilter(pair) {
+    pairMatchesFilter(pair ) {
         const filter =  this.props.filter
-        console.log("filter", filter)
-        console.log("name0",pair[0].name)
+        // console.log("filter", filter)
+        // console.log("name0",pair[0].name)
         var match0 =  pair[0].name.match(filter)
         var match1 =  pair[1].name.match(filter)
         if(filter == "" || (match0 || match1)){
@@ -80,19 +109,23 @@ export default class List extends React.Component {
                     e('thead',null,
                         e('tr', null,
                             e('th', null, 'Name'),
+                            e('th', null, 'Rate'),
                             e('th', null, 'Trend '),
 
                             ),
                     ),
                     e('tbody',null, this.state.configuration.map(pair => {
+                        let couple = pair.value
+                        // console.log(couple)
                         count++
-                        let matches = this.pairMatchesFilter(pair)
-                        console.log("PAIR", pair)
+                        let matches = this.pairMatchesFilter(pair.value)
+                        // console.log("PAIR", pair)
                          if(matches)  {
                                return  e('tr', null, 
                             [   
-                                e('td', {key: pair[0].name+'/'+pair[1].name},pair[0].name+'/'+pair[1].name),
-                                e('td', {key: pair[0].name}, this.state.rates[count]),
+                                e('td', {key: couple[0].name+'/'+couple[1].name},couple[0].name+'/'+couple[1].name),
+                                e('td', {key: couple[0].name},  pair.rate),
+                                e('td', {key: couple[0].name},  pair.state),
  
                             ]
                              )

@@ -1,5 +1,10 @@
 const webpack = require('webpack');
 
+// const proxySetting = require(paths.appPackageJson).proxy;
+// const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
+
+// const devServer = new WebpackDevServer(compiler, serverConfig);
+
 const webpackConfig = {
     plugins: [
         new webpack.NoErrorsPlugin(),

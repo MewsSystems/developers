@@ -29,5 +29,11 @@
     "json-server": "0.8.17",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3000",
+      "changeOrigin": true
+    }
   }
 }
