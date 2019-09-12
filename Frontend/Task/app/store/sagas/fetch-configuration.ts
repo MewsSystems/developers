@@ -1,12 +1,12 @@
 import "regenerator-runtime/runtime";
-import React from 'react';
+
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 import { fetchConfigurationApi, FetchConfigurationApiResponse } from '../../services/fetchConfigurationApi';
 
 import { Actions, types } from '../reducers/currencyPairs.reducer';
 
-import { ConfigurationState, CurrencyPair } from '../types';
+import { ConfigurationState } from '../types';
 
 export default function* watchFetchConfiguration() {
     yield takeLatest(types.FETCH_CONFIGURATION, function* (action: any) {

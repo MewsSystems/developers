@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { ApplicationState, ConnectedReduxProps, KeyByCurrencyPair } from '../store/types';
+import { ApplicationState, KeyByCurrencyPair } from '../store/types';
 import { Actions as ConfigurationActions } from '../store/reducers/currencyPairs.reducer';
 import CurrencyPairsTable from './CurrencyPairsTable';
 
@@ -32,7 +32,6 @@ class ExchangeRates extends React.Component<AllProps, {}> {
 
         return (
             <React.Fragment>
-                <div>Eddy</div>
                 {loading
                     ? <div>Loading</div>
                     : <CurrencyPairsTable currencyPairs={currencyPairs} currencyPairsIdList={currencyPairsIdList} />

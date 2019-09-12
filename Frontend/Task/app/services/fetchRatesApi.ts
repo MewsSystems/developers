@@ -1,6 +1,6 @@
 import { CurrencyPair } from "../store/types";
+import { API_URL } from "../constants";
 
-const API_URL = 'http://localhost:3000';
 let resultStatus = 0;
 
 export interface FetchRatesApiResponse {

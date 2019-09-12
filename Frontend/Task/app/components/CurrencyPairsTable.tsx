@@ -1,6 +1,3 @@
-/**
- * Represent Active, Disabled & Locked Trusted Shares
- */
 import React from 'react'
 
 import { KeyByCurrencyPair } from '../store/types';
@@ -33,6 +30,5 @@ const CurrencyPairsTable: React.FC<CurrencyPairsTableProps> = ({ currencyPairs, 
 );
 
 CurrencyPairsTable.displayName = 'CurrencyPairsTable';
-
 
 export default CurrencyPairsTable;

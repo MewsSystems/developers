@@ -1,15 +1,12 @@
 import "regenerator-runtime/runtime";
-import React from 'react';
-import { call, put, takeLatest } from 'redux-saga/effects';
+
+import { call, takeLatest } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
 import { fetchRatesApi, FetchRatesApiResponse } from '../../services/fetchRatesApi';
 
 import { Actions, types } from '../reducers/currencyPairs.reducer';
-
-import { ConfigurationState, CurrencyPair } from '../types';
-import fetchRates from "./fetch-rates";
-import watchFetchRates from "./fetch-rates";
+import { TIME_TO_UPDATE } from "../../constants";
 
 export default function* watchFetchRatesPolling() {
     yield takeLatest(types.FETCH_RATES_POLLING, function* (action: any) {
@@ -25,7 +22,7 @@ export default function* watchFetchRatesPolling() {
 
             }
 
-            yield delay(5000);
+            yield delay(TIME_TO_UPDATE);
           }
     });
 }

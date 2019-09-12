@@ -10,12 +10,10 @@ interface PropsFromDispatch {
     [key: string]: any
 }
 
-// Any additional component props go here.
 interface OwnProps {
     store: Store<ApplicationState>
 }
 
-// Create an intersection type of the component props and our Redux props.
 type AllProps = PropsFromDispatch & OwnProps;
 
 class Application extends React.Component<AllProps> {
