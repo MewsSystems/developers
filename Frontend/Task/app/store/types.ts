@@ -1,18 +1,24 @@
 import { Dispatch } from "redux";
 
-interface Currerncy {
+export interface Currency {
     code: string,
     name: string
 }
 
-export interface CurrencyPair {
-    [id: number]: Currerncy
+export type CurrencyPair = {
+    [0]: Currency,
+    [1]: Currency
+}
+
+export interface KeyByCurrencyPair {
+    [id: string]: CurrencyPair
 }
 
 export interface ConfigurationState {
     [key: string]: any,
     loading: boolean,
-    currencyPairs: CurrencyPair[]
+    currencyPairs: KeyByCurrencyPair[]
+    currencyPairsIdList: string[]
 }
 
 export interface ApplicationState {

@@ -3,13 +3,15 @@
  */
 import React from 'react'
 
-import { CurrencyPair } from '../store/types';
+import { KeyByCurrencyPair } from '../store/types';
+import TableRow from './TableRow';
 
 interface CurrencyPairsTableProps {
-    currencyPairs: CurrencyPair[]
+    currencyPairs: KeyByCurrencyPair[],
+    currencyPairsIdList: string[]
 }
 
-const CurrencyPairsTable: React.FC<CurrencyPairsTableProps> = ({ currencyPairs }: CurrencyPairsTableProps) => (
+const CurrencyPairsTable: React.FC<CurrencyPairsTableProps> = ({ currencyPairs, currencyPairsIdList }: CurrencyPairsTableProps) => (
     <>
         <div className="Table">
             <div className="Table__Header">
@@ -17,13 +19,10 @@ const CurrencyPairsTable: React.FC<CurrencyPairsTableProps> = ({ currencyPairs }
                 <span>Value</span>
             </div>
             <div className="TableBody">
-            {currencyPairs && currencyPairs.length > 0 &&
-                    currencyPairs.map((pair: CurrencyPair, i: number) => {
+            {currencyPairsIdList && currencyPairsIdList.length > 0 &&
+                    currencyPairsIdList.map((id: string) => {
                         return (
-                            <div className="Table__Row" key={i}>
-                                <span>{`${pair[0].code}/${pair[1].code}`}</span>
-                                <span></span>
-                            </div>
+                            <TableRow key={id} id={id} currencyPair={currencyPairs[id as any] as any} />
                         )
                     })
             }

@@ -1,10 +1,10 @@
-import { CurrencyPair } from "../store/types";
+import { KeyByCurrencyPair } from "../store/types";
 
 const API_URL = 'http://localhost:3000';
-let resultStatus;
+let resultStatus = 0;
 
 export interface FetchConfigurationApiResponse {
-    currencyPairs: CurrencyPair[]
+    currencyPairs: KeyByCurrencyPair[]
 
     // frontend use
     success: boolean;
@@ -33,14 +33,14 @@ export const fetchConfigurationApi = (): Promise<FetchConfigurationApiResponse> 
             return {
                 ...resultJSON,
                 success: false,
-                errorMessage: "Server is not responding"
+                errorMessage: "Error in connection."
             }
         }
     })
     .catch(err => {
         return {
             success: false,
-            errorMessage: "Something went wrong from server side, please contact support team",
+            errorMessage: "Something went wrong.",
         }
     })
 );

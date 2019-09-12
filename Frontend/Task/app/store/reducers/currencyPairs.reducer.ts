@@ -1,14 +1,18 @@
+import React from 'react';
 import { Reducer } from 'redux'
 import { ConfigurationState } from '../types';
 
 export const types = {
     UPDATE_STATE: '@exchange_rate/UPDATE_STATE',
     FETCH_CONFIGURATION: '@exchange_rate/FETCH_CONFIGURATION',
+    FETCH_RATES: '@exchange_rate/FETCH_RATES',
+    FETCH_RATES_POLLING: '@exchange_rate/FETCH_RATES_POLLING',
 }
 
 const initialState: ConfigurationState = {
     loading: false,
-    currencyPairs: []
+    currencyPairs: [],
+    currencyPairsIdList: []
 }
 
 const reducer: Reducer<ConfigurationState> = (state = initialState, action) => {
@@ -37,6 +41,8 @@ const reducer: Reducer<ConfigurationState> = (state = initialState, action) => {
 export const Actions = {
     updateState: (payload: ConfigurationState) => ({ type: types.UPDATE_STATE, payload }),
     fetchConfiguration: () => ({ type: types.FETCH_CONFIGURATION}),
+    fetchRates: (payload: string[]) => ({ type: types.FETCH_RATES, payload}),
+    fetchRatesPolling: (payload: string[]) => ({ type: types.FETCH_RATES_POLLING, payload})
 }
 
 export default reducer;

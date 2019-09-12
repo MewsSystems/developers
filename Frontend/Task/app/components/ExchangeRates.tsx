@@ -2,15 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-
-import { ApplicationState, ConnectedReduxProps, CurrencyPair } from '../store/types';
+import { ApplicationState, ConnectedReduxProps, KeyByCurrencyPair } from '../store/types';
 import { Actions as ConfigurationActions } from '../store/reducers/currencyPairs.reducer';
 import CurrencyPairsTable from './CurrencyPairsTable';
 
-
 interface PropsFromState {
     loading: boolean,
-    currencyPairs: CurrencyPair[]
+    currencyPairs: KeyByCurrencyPair[],
+    currencyPairsIdList: string[]
 }
 
 interface PropsFromDispatch {
@@ -22,11 +21,6 @@ type AllProps = PropsFromState & PropsFromDispatch;
 class ExchangeRates extends React.Component<AllProps, {}> {
     constructor(props: AllProps) {
         super(props);
-
-        this.state = {
-            extenstionModalMinDate: '',
-            showExtenstionModal: false,
-        }
     }
 
     componentDidMount() {
@@ -34,13 +28,14 @@ class ExchangeRates extends React.Component<AllProps, {}> {
     }
 
     public render() {
-        const { loading, currencyPairs } = this.props;
+        const { loading, currencyPairs, currencyPairsIdList } = this.props;
 
         return (
             <React.Fragment>
+                <div>Eddy</div>
                 {loading
                     ? <div>Loading</div>
-                    : <CurrencyPairsTable currencyPairs={currencyPairs} />
+                    : <CurrencyPairsTable currencyPairs={currencyPairs} currencyPairsIdList={currencyPairsIdList} />
                 }
             </React.Fragment>
         )
@@ -49,7 +44,8 @@ class ExchangeRates extends React.Component<AllProps, {}> {
 
 const mapStateToProps = ({ configuration }: ApplicationState) => ({
     loading: configuration.loading,
-    currencyPairs: configuration.currencyPairs
+    currencyPairs: configuration.currencyPairs,
+    currencyPairsIdList: configuration.currencyPairsIdList
 } as PropsFromState);
 
 

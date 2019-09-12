@@ -1,7 +1,7 @@
 import { CurrencyPair } from "../store/types";
 
 const API_URL = 'http://localhost:3000';
-let resultStatus;
+let resultStatus = 0;
 
 export interface FetchRatesApiResponse {
     rates: CurrencyPair[]
@@ -11,17 +11,16 @@ export interface FetchRatesApiResponse {
     errorMessage: string;
 }
 
-export const fetchRatesApi = (currencyPairIds: number[]): Promise<FetchRatesApiResponse> => (
-    fetch(
-        `${API_URL}/rates`,
-        {
-            body:  JSON.stringify({currencyPairIds: currencyPairIds})
-        }
-
-    )
+export const fetchRatesApi = (currencyPairIds: string[]): Promise<FetchRatesApiResponse> => (
+    fetch(`${API_URL}/rates?currencyPairIds=[${currencyPairIds[0]}]`)
     .then(result => {
         resultStatus = result.status;
-        return result.json()
+        if(resultStatus == 500) {
+            return ""
+        } else {
+            return result.json();
+        }
+
     })
     .then(resultJSON => {
         if (resultStatus >= 200 && resultStatus < 300) {
@@ -39,14 +38,14 @@ export const fetchRatesApi = (currencyPairIds: number[]): Promise<FetchRatesApiR
             return {
                 ...resultJSON,
                 success: false,
-                errorMessage: "Server is not responding"
+                errorMessage: "Error in connection."
             }
         }
     })
     .catch(err => {
         return {
             success: false,
-            errorMessage: "Something went wrong from server side, please contact support team",
+            errorMessage: "Something went wrong.",
         }
     })
 );

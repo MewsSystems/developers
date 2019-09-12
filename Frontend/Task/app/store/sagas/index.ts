@@ -1,9 +1,13 @@
 import { all, fork } from 'redux-saga/effects';
 
-import configurationSagas from './configuration';
+import fetchConfigurationSagas from './fetch-configuration';
+import fetchRatesSaga from './fetch-rates';
+import fetchRatesPollingSaga from './fetch-rates-polling';
 
 export function* rootSaga() {
     yield all([
-        fork(configurationSagas)
+        fork(fetchConfigurationSagas),
+        fork(fetchRatesSaga),
+        fork(fetchRatesPollingSaga)
     ])
 }
