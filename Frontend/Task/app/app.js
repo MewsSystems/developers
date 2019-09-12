@@ -1,5 +1,8 @@
-import { endpoint, interval } from './config';
 
-export function run(element) {
-    console.log('App is running.');
-}
+
+import configureApp from './configureApp';
+
+render(
+    configureApp(),
+    document.getElementById('exchange-rate-client')
+)

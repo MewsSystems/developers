@@ -1,3 +1,4 @@
+
 const webpack = require('webpack');
 
 const webpackConfig = {
@@ -23,6 +24,12 @@ const webpackConfig = {
         }, {
             test: /\.json$/,
             loader: 'json',
+        }, {
+
+            test: /\.tsx?$/,
+            exclude: /node_modules|Generated/,
+            use: [{loader: 'babel-loader'}, {loader: 'ts-loader',   options: {configFile: './app/tsconfig.json'}}]
+
         }],
     },
     devtool: 'eval',
