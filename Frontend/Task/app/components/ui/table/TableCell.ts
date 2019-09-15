@@ -20,6 +20,7 @@ export const TextTableCell = styled(TableCell)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0;
 `
 
 export const HeaderTextTableCell = styled(TextTableCell)`

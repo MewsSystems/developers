@@ -1,9 +1,19 @@
+import { AlertMessagesProps } from "@components/ui/AlertMessages";
 
 export interface ApplicationState {
+    currencyState: CurrencyState,
+    ratesState: RatesState,
+    alert: AlertMessagesProps
+}
+
+export interface CurrencyState {
     loading: boolean,
     currencyPairs: StringTMap<CurrencyPair>,
     currencyPairsIds: string[],
-    rates: StringTMap<Rate>,
+}
+
+export interface RatesState {
+    rates: StringTMap<Rate>
 }
 
 export interface KeyByCurrencyPair {

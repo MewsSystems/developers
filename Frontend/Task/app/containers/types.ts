@@ -1,11 +1,11 @@
 import { Rate, StringTMap, CurrencyPair } from "@store/types";
-import { Actions as CurrencyPairsActions } from '@store/reducers/currencyPairs.reducer';
+import { Actions as CurrencyPairsActions } from '@store/reducers/currency-pairs.reducer';
 
 export interface PropsFromState {
     loading: boolean,
     currencyPairs:  StringTMap<CurrencyPair>,
     currencyPairsIds: string[],
-    rates: StringTMap<Rate>,
+    rates: StringTMap<Rate>
 }
 
 export interface PropsFromDispatch {

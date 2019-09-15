@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
 
-import reducer from './currencyPairs.reducer';
+import currencyState from './currency-pairs.reducer';
+import ratesState from './rates.reducer';
+import alert from './alert.reducer';
 
-export const createReducer = () => reducer
-
+export const createReducer = () =>
+    combineReducers({
+        currencyState,
+        ratesState,
+        alert,
+    });

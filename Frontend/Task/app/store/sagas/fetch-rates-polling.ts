@@ -4,11 +4,12 @@ import { call, takeLatest, put, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 
 import { fetchRatesApi, FetchRatesApiResponse } from '@services/fetchRatesApi';
-
-import { Actions, types } from '@store/reducers/currencyPairs.reducer';
 import { TIME_TO_UPDATE } from "@constants/config";
-import { ApplicationState } from "@store/types";
+import { RatesState } from "@store/types";
 import { normalizeRates } from "@utils/normalizeRates";
+
+import { Actions as RatesActions, types } from '@store/reducers/rates.reducer';
+import { Actions as AlertActions } from '../reducers/alert.reducer';
 
 export default function* watchFetchRatesPolling() {
     yield takeLatest(types.FETCH_RATES_POLLING, function* (action: any) {
@@ -19,16 +20,18 @@ export default function* watchFetchRatesPolling() {
             if (responseData.success) {
                 const payload = {
                     rates: normalizeRates(rates, responseData.rates)
-                } as ApplicationState;
+                } as RatesState;
 
-                yield put(Actions.updateState(payload));
+                yield put(RatesActions.updateState(payload));
 
             } else {
-
-
+                yield put(AlertActions.showAlert({
+                    show: true,
+                    message: responseData.errorMessage
+                }));
             }
 
             yield delay(TIME_TO_UPDATE);
-          }
+        }
     });
 }

@@ -4,9 +4,10 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 
 import { fetchCurrencyPairsApi, FetchCurrencyPairsApiResponse } from '@services/fetchCurrencyPairsApi';
 
-import { Actions, types } from '@store/reducers/currencyPairs.reducer';
+import { Actions as CurrencyActions, types } from '@store/reducers/currency-pairs.reducer';
+import { Actions as RatesActions } from '@store/reducers/rates.reducer';
 
-import { ApplicationState } from '../types';
+import { CurrencyState } from '../types';
 
 export default function* watchFetchCurrencyPairs() {
     yield takeLatest(types.FETCH_CURRENCY_PAIRS, function* (action: any) {
@@ -21,17 +22,17 @@ export default function* watchFetchCurrencyPairs() {
                     currencyPairs,
                     currencyPairsIds,
                     loading: false
-                } as ApplicationState;
+                } as CurrencyState;
 
-                yield put(Actions.updateState(payload));
-                yield put(Actions.fetchRatesPolling(currencyPairsIds));
+                yield put(CurrencyActions.updateState(payload));
+                yield put(RatesActions.fetchRatesPolling(currencyPairsIds));
 
             } else {
-                yield put(Actions.updateState({ loading: false } as ApplicationState));
+                yield put(CurrencyActions.updateState({ loading: false } as CurrencyState));
 
             }
         } catch (err) {
-            yield put(Actions.updateState({ loading: false } as ApplicationState));
+            yield put(CurrencyActions.updateState({ loading: false } as CurrencyState));
         }
     });
 }

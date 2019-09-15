@@ -1,10 +1,11 @@
-import { Rate } from "@store/types";
-import { API_URL } from "@constants/config";
+import axios from 'axios';
+import { StringTMap } from "../store/types";
+import { API_URL } from "../constants";
 
 let resultStatus = 0;
 
 export interface FetchRatesApiResponse {
-    rates: Rate[]
+    rates: StringTMap<number>,
 
     // frontend use
     success: boolean;
@@ -27,17 +28,11 @@ export const fetchRatesApi = (currencyPairIds: string[]) => (
                 ...resultJSON,
                 success: true
             };
-        } else if (resultStatus >= 400 && resultStatus < 500) {
-            return {
-                ...resultJSON,
-                success: false,
-                errorMessage: resultJSON.detail || "Something went wrong, please try again later"
-            }
         } else if (resultStatus == 500) {
             return {
                 ...resultJSON,
                 success: false,
-                errorMessage: "Error in connection."
+                errorMessage: "Couldn't update rates."
             }
         }
     })

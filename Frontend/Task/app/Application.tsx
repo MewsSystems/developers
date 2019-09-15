@@ -4,25 +4,19 @@ import { Provider } from 'react-redux'
 import { Store } from 'redux'
 
 import { ApplicationState } from './store/types';
-import ExchangeRates from './containers/ExchangeRates';
+import MainPage from '@components/MainPage';
 
-interface PropsFromDispatch {
-    [key: string]: any
-}
-
-interface OwnProps {
+interface ApplicationProps {
     store: Store<ApplicationState>
 }
 
-type AllProps = PropsFromDispatch & OwnProps;
-
-class Application extends React.Component<AllProps> {
+class Application extends React.Component<ApplicationProps> {
     public render() {
         const { store } = this.props;
 
         return (
             <Provider store={store}>
-                <ExchangeRates />
+                <MainPage />
             </Provider>
         )
     }
