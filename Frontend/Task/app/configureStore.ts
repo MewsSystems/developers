@@ -4,8 +4,14 @@ import createSagaMiddleware from 'redux-saga';
 
 import { createReducer } from './store/reducers';
 import { rootSaga } from './store/sagas';
+import { ApplicationState } from 'store/types';
 
-const initialState = {};
+const initialState = {
+    loading: false,
+    currencyPairs: {},
+    rates: {},
+    currencyPairsIds: [],
+} as ApplicationState;
 
 export default function configureStore(): Store<any> {
     const sagaMiddleware = createSagaMiddleware()

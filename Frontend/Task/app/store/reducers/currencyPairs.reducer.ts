@@ -1,19 +1,20 @@
 import { Reducer } from 'redux'
-import { ConfigurationState } from '../types';
+import { ApplicationState } from '../types';
 
 export const types = {
     UPDATE_STATE: '@exchange_rate/UPDATE_STATE',
-    FETCH_CONFIGURATION: '@exchange_rate/FETCH_CONFIGURATION',
+    FETCH_CURRENCY_PAIRS: '@exchange_rate/FETCH_CURRENCY_PAIRS',
     FETCH_RATES_POLLING: '@exchange_rate/FETCH_RATES_POLLING',
 }
 
-const initialState: ConfigurationState = {
+const initialState: ApplicationState = {
     loading: false,
-    currencyPairs: [],
-    currencyPairsIdList: []
+    currencyPairs: {},
+    rates: {},
+    currencyPairsIds: []
 }
 
-const reducer: Reducer<ConfigurationState> = (state = initialState, action) => {
+const reducer: Reducer<ApplicationState> = (state = initialState, action) => {
     switch (action.type) {
 
         case types.UPDATE_STATE: {
@@ -23,7 +24,7 @@ const reducer: Reducer<ConfigurationState> = (state = initialState, action) => {
             }
         }
 
-        case types.FETCH_CONFIGURATION: {
+        case types.FETCH_CURRENCY_PAIRS: {
             return {
                 ...state,
                 loading: true
@@ -37,8 +38,8 @@ const reducer: Reducer<ConfigurationState> = (state = initialState, action) => {
 }
 
 export const Actions = {
-    updateState: (payload: ConfigurationState) => ({ type: types.UPDATE_STATE, payload }),
-    fetchConfiguration: () => ({ type: types.FETCH_CONFIGURATION}),
+    updateState: (payload: ApplicationState) => ({ type: types.UPDATE_STATE, payload }),
+    fetchCurrencyPairs: () => ({ type: types.FETCH_CURRENCY_PAIRS}),
     fetchRatesPolling: (payload: string[]) => ({ type: types.FETCH_RATES_POLLING, payload})
 }
 

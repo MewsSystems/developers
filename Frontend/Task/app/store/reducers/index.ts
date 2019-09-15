@@ -1,9 +1,6 @@
 import { combineReducers } from 'redux';
 
-import configuration from './currencyPairs.reducer';
+import reducer from './currencyPairs.reducer';
 
-export const createReducer = () =>
-    combineReducers({
-        configuration
-    });
+export const createReducer = () => reducer
 

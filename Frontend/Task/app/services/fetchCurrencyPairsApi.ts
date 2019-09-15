@@ -1,17 +1,17 @@
-import { KeyByCurrencyPair } from "../store/types";
-import { API_URL } from "../constants";
+import { StringTMap, CurrencyPair } from "@store/types";
+import { API_URL } from "@constants/config";
 
 let resultStatus = 0;
 
-export interface FetchConfigurationApiResponse {
-    currencyPairs: KeyByCurrencyPair[]
+export interface FetchCurrencyPairsApiResponse {
+    currencyPairs:  StringTMap<CurrencyPair>
 
     // frontend use
     success: boolean;
     errorMessage: string;
 }
 
-export const fetchConfigurationApi = (): Promise<FetchConfigurationApiResponse> => (
+export const fetchCurrencyPairsApi = (): Promise<FetchCurrencyPairsApiResponse> => (
     fetch(`${API_URL}/configuration`)
     .then(result => {
         resultStatus = result.status;

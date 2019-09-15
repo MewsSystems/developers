@@ -1,0 +1,1 @@
+export type IconPath = string | [string, string];

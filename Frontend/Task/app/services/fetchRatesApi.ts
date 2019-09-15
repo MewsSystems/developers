@@ -1,26 +1,25 @@
-import { CurrencyPair } from "../store/types";
-import { API_URL } from "../constants";
+import { Rate } from "@store/types";
+import { API_URL } from "@constants/config";
 
 let resultStatus = 0;
 
 export interface FetchRatesApiResponse {
-    rates: CurrencyPair[]
+    rates: Rate[]
 
     // frontend use
     success: boolean;
     errorMessage: string;
 }
 
-export const fetchRatesApi = (currencyPairIds: string[]): Promise<FetchRatesApiResponse> => (
-    fetch(`${API_URL}/rates?currencyPairIds=[${currencyPairIds[0]}]`)
+export const fetchRatesApi = (currencyPairIds: string[]) => (
+    fetch(`${API_URL}/rates?currencyPairIds[]=${currencyPairIds.join('&currencyPairIds[]=')}`)
     .then(result => {
         resultStatus = result.status;
-        if(resultStatus == 500) {
-            return ""
-        } else {
+        if(resultStatus >= 200 && resultStatus < 300) {
             return result.json();
+        } else {
+            return ""
         }
-
     })
     .then(resultJSON => {
         if (resultStatus >= 200 && resultStatus < 300) {

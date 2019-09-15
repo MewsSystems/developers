@@ -16,7 +16,13 @@
         "sourceMap": true,
         "baseUrl": ".",
         "paths": {
-            "@services/*":         ["services/*"],
+            "@services/*":   ["services/*"],
+            "@components/*": ["components/*"],
+            "@ui/*":         ["services/ui/*"],
+            "@constants/*":  ["constants/*"],
+            "@utils/*":      ["utils/*"],
+            "@store/*":      ["store/*"],
+            "@icons/*":      ["icons/*"]
         }
     },
     "exclude": [

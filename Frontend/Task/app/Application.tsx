@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { Store } from 'redux'
 
 import { ApplicationState } from './store/types';
-import ExchangeRates from './components/ExchangeRates';
+import ExchangeRates from './containers/ExchangeRates';
 
 interface PropsFromDispatch {
     [key: string]: any

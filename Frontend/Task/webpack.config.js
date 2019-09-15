@@ -39,7 +39,16 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx', '.ts', '.tsx']
+        extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
+        alias: {
+            '@services':    path.resolve(__dirname, 'app/services'),
+            '@components':  path.resolve(__dirname, 'app/components'),
+            '@ui':          path.resolve(__dirname, 'app/components/ui'),
+            '@constants':   path.resolve(__dirname, 'app/constants'),
+            '@utils':       path.resolve(__dirname, 'app/utils'),
+            '@store':       path.resolve(__dirname, 'app/store'),
+            '@icons':       path.resolve(__dirname, 'app/icons')
+          },
     },
     plugins: [
         new HtmlWebpackPlugin({

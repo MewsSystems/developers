@@ -1,8 +1,13 @@
-import { Dispatch } from "redux";
 
-export interface Currency {
-    code: string,
-    name: string
+export interface ApplicationState {
+    loading: boolean,
+    currencyPairs: StringTMap<CurrencyPair>,
+    currencyPairsIds: string[],
+    rates: StringTMap<Rate>,
+}
+
+export interface KeyByCurrencyPair {
+    [key: string]: CurrencyPair
 }
 
 export type CurrencyPair = {
@@ -10,21 +15,16 @@ export type CurrencyPair = {
     [1]: Currency
 }
 
-export interface KeyByCurrencyPair {
-    [id: string]: CurrencyPair
+export interface Currency {
+    code: string,
+    name: string
 }
 
-export interface ConfigurationState {
-    [key: string]: any,
-    loading: boolean,
-    currencyPairs: KeyByCurrencyPair[]
-    currencyPairsIdList: string[]
+export interface Rate {
+    value: number,
+    trend: Trend
 }
 
-export interface ApplicationState {
-    configuration: ConfigurationState
-}
+export type Trend = "growing" | "declining" | "stagnating";
 
-export interface ConnectedReduxProps {
-    dispatch: Dispatch
-}
+export interface StringTMap<T> { [key: string]: T; };
