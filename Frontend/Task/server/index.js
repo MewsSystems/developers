@@ -9,12 +9,9 @@ const ratesGenerator = require('./ratesGenerator')({
 });
 
 const express = require('express');
-const server = express();
-
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-});
+const server = express()
+var cors = require('cors')
+server.use(cors())
 
 server.get('/configuration', (req, res) => {
     const appLoadTime = chance.integer({ min: 3000, max: 5000 });
@@ -37,7 +34,7 @@ server.get('/rates', (req, res) => {
             const { currencyPairIds = [] } = req.query;
 
             let rates = {};
-            for (let pairId of currencyPairIds) {
+            for (let pairId of JSON.parse(currencyPairIds)) {
                 if (typeof allRates[pairId] !== 'undefined') {
                     rates[pairId] = allRates[pairId];
                 }
