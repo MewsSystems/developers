@@ -1,5 +1,5 @@
-import React, { Component, ReactNode } from 'react';
-import { TableRow } from './ui/table/TableRow';
+import React, { Component } from 'react';
+import { TableRow } from '../ui/table/TableRow';
 import { Rate } from '@store/types';
 
 interface RatesTableRowProps {

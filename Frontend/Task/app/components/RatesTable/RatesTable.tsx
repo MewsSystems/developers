@@ -1,17 +1,30 @@
 import React from 'react'
-
-import { Rate, StringTMap, CurrencyPair } from '@store/types';
+import { connect } from 'react-redux';
+import { Rate, StringTMap, CurrencyPair, ApplicationState } from '@store/types';
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableCell,
+    TextTableCell,
+    HeaderTextTableCell,
+    TableRowHeader
+} from '../ui/table';
 import RatesTableRow from './RatesTableRow';
-import { Table, TableHeader, TableBody, TableCell, TextTableCell, HeaderTextTableCell, TableRowHeader } from './ui/table';
 import Trend from './Trend';
+import { UrlParams } from 'containers/types';
+import { RatesTableProps } from './types';
+import { getFilteredState } from '@selectors/getFilteredState';
+import NoFiltersResult from './NoFilterResults';
 
-interface RatesTableProps {
+export interface PropsFromState {
+    urlParams: UrlParams
     currencyPairs:  StringTMap<CurrencyPair>,
-    currencyPairsIdList: string[],
+    currencyPairsIds: string[],
     rates: StringTMap<Rate>
 }
 
-const RatesTable: React.FC<RatesTableProps> = ({ currencyPairs, currencyPairsIdList, rates }: RatesTableProps) => (
+const RatesTable: React.FC<PropsFromState> = ({ currencyPairs, currencyPairsIds, rates, urlParams }: PropsFromState) => (
     <Table>
         <TableHeader>
             <TableRowHeader>
@@ -27,8 +40,12 @@ const RatesTable: React.FC<RatesTableProps> = ({ currencyPairs, currencyPairsIdL
             </TableRowHeader>
         </TableHeader>
         <TableBody>
-            {currencyPairsIdList && currencyPairsIdList.length > 0 &&
-                currencyPairsIdList.map((id: string) => {
+            {currencyPairsIds.length == 0 && urlParams.searchTerm !== "" &&
+                <NoFiltersResult searchTerm={urlParams.searchTerm} />
+            }
+
+            {currencyPairsIds && currencyPairsIds.length > 0 &&
+                currencyPairsIds.map((id: string) => {
                     return (
                         <RatesTableRow key={id} id={id} rate={rates[id]}>
                             <TableCell>
@@ -50,4 +67,14 @@ const RatesTable: React.FC<RatesTableProps> = ({ currencyPairs, currencyPairsIdL
 
 RatesTable.displayName = 'RatesTable';
 
-export default RatesTable;
+
+const mapStateToProps = ({currencyState, ratesState}: ApplicationState, props: RatesTableProps) => ({
+    urlParams: props.urlParams,
+    currencyPairs: currencyState.currencyPairs,
+    currencyPairsIds: getFilteredState(currencyState, props),
+    rates: ratesState.rates,
+} as PropsFromState);
+
+export default connect(
+    mapStateToProps
+)(RatesTable)

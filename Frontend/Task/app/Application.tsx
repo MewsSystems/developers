@@ -1,22 +1,27 @@
 
 import React from 'react';
-import { Provider } from 'react-redux'
-import { Store } from 'redux'
+import { Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { Store } from 'redux';
+import { History } from 'history';
 
-import { ApplicationState } from './store/types';
 import MainPage from '@components/MainPage';
+import { ApplicationState } from './store/types';
 
 interface ApplicationProps {
-    store: Store<ApplicationState>
+    store: Store<ApplicationState>,
+    history: History
 }
 
 class Application extends React.Component<ApplicationProps> {
     public render() {
-        const { store } = this.props;
+        const { store, history } = this.props;
 
         return (
             <Provider store={store}>
-                <MainPage />
+                <Router history={history}>
+                    <MainPage />
+                </Router>
             </Provider>
         )
     }

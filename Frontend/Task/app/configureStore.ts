@@ -6,7 +6,7 @@ import { createReducer } from './store/reducers';
 import { rootSaga } from './store/sagas';
 import { ApplicationState } from 'store/types';
 
-const initialState = {} as ApplicationState;
+const initialState = {};
 
 export default function configureStore(): Store<ApplicationState> {
     const sagaMiddleware = createSagaMiddleware()

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { StringTMap } from "../store/types";
 import { API_URL } from "../constants";
 

@@ -16,13 +16,14 @@
         "sourceMap": true,
         "baseUrl": ".",
         "paths": {
-            "@services/*":   ["services/*"],
             "@components/*": ["components/*"],
-            "@ui/*":         ["services/ui/*"],
             "@constants/*":  ["constants/*"],
-            "@utils/*":      ["utils/*"],
+            "@icons/*":      ["icons/*"],
+            "@selectors/*":  ["selectors/*"],
+            "@services/*":   ["services/*"],
             "@store/*":      ["store/*"],
-            "@icons/*":      ["icons/*"]
+            "@ui/*":         ["services/ui/*"],
+            "@utils/*":      ["utils/*"]
         }
     },
     "exclude": [

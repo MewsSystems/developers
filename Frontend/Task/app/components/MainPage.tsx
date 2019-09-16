@@ -12,6 +12,7 @@ import ExchangeRates from '../containers/ExchangeRates';
 import CenterContainer from './ui/CenterContainer';
 import { ErrorBoundary } from './ui/ErrorBoundary';
 import { AlertMessages, AlertMessagesProps } from './ui/AlertMessages';
+import { Switch, Route } from 'react-router-dom';
 
 interface PropsFromState {
     alert: AlertMessagesProps
@@ -30,7 +31,10 @@ class MainPage extends Component<MainPageProps, {}> {
             <CenterContainer>
                 <ErrorBoundary>
                     <h1>Live Exchange Rates</h1>
-                    <ExchangeRates />
+                    <Switch>
+                        <Route exact path="" component={ExchangeRates} />
+                    </Switch>
+                    {/*<ExchangeRates />*/}
                     <AlertMessages {...alert} onHide={hideAlert} />
                 </ErrorBoundary>
             </CenterContainer>
