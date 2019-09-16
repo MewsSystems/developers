@@ -11,11 +11,11 @@ interface TrendProps {
 }
 
 const Trend: React.FC<TrendProps> = ({ rate }: TrendProps): any => {
-    if (rate.trend === "growing") {
+    if (rate && rate.trend === "growing") {
         return (
             <Icon svgPaths={IconArrowUp} style={{color: "#36b37e"}} />
         )
-    } else if (rate.trend === "declining") {
+    } else if (rate && rate.trend === "declining") {
         return  (
             <Icon svgPaths={IconArrowUp} style={{color: "#cc625d", transform: "rotate(180deg)"}} />
         )
