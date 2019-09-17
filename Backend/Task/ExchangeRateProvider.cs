@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater
             var response = await client.GetAsync("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
 
             var stream = await response.Content.ReadAsStreamAsync();
-            Console.WriteLine(response.Content);
+            
             StreamReader readStream = new StreamReader(stream , Encoding.UTF8);
             var output = readStream.ReadToEnd();
 
