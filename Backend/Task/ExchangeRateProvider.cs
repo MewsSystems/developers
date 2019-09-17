@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater
             var response = await client.GetAsync("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
 
             var stream = await response.Content.ReadAsStreamAsync();
-            
+
             StreamReader readStream = new StreamReader(stream , Encoding.UTF8);
             var output = readStream.ReadToEnd();
 
@@ -47,12 +47,12 @@ namespace ExchangeRateUpdater
                     line = reader.ReadLine();
                     if (line != null)
                     {
-                        string[] words = line.Split(delimiterChars);
-                        if (words.Length == 5 && (string)words.GetValue(0) != "Country")
+                        string[] values = line.Split(delimiterChars);
+                        if (values.Length == 5 && (string)values.GetValue(0) != "Country")
                         {
-                            int divisor = int.Parse((string)words.GetValue(2));
-                            var code = (string)words.GetValue(3);
-                            decimal rate = decimal.Parse((string)words.GetValue(4));
+                            int divisor = int.Parse((string)values.GetValue(2));
+                            var code = (string)values.GetValue(3);
+                            decimal rate = decimal.Parse((string)values.GetValue(4));
 
                             rates.Add(new ExchangeRate(new Currency(code), new Currency("CZK"), rate / divisor));
                         }
@@ -67,7 +67,7 @@ namespace ExchangeRateUpdater
 
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var rawData = getRawRates().GetAwaiter().GetResult();
+            string rawData = getRawRates().GetAwaiter().GetResult();
 
             return ParseRawRates(rawData); 
         }
