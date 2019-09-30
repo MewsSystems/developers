@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ExchangeRateUpdater.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CNB_XmlUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml</Value>
+    </Setting>
+    <Setting Name="CNB_XmlElementName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">radek</Value>
+    </Setting>
+    <Setting Name="CNB_XmlAttrCode" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">kod</Value>
+    </Setting>
+    <Setting Name="CNB_XmlAttrAmount" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">mnozstvi</Value>
+    </Setting>
+    <Setting Name="CNB_XmlAttrRate" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">kurz</Value>
+    </Setting>
+    <Setting Name="CacheExpirationMinutes" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="CzkCode" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CZK</Value>
+    </Setting>
+    <Setting Name="CNB_XmlCultureCode" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cs-CZ</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
