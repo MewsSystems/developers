@@ -16,6 +16,9 @@ As part of the interview process, we'd like to see some code. If you have someth
 - [Task](Frontend) for [frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true) candidates.
 - [Task](Android) for Android candidates.
 
+
+I can support the idea of interacting thru GitHub with developers. Yet keep all the posted solution public is, at least weird. Still let me comment on something else. Architectural proposal for exchange rate provider is all wrong. Do not forget you are working with external resource you have absolutely no control over. What leads you to an idea to page that interface, esp. main method synchronous? I just want to understand. Or is there a secret task for architect? If not, you should have one. :-)
+
 <a name='about-mews'/>
 
 ## 📚 About Mews 
