@@ -1,0 +1,16 @@
+/* styles for ErrorBoundary component */
+
+.wrapper {
+  background-color: #fff;
+  border: 2px solid #a00;
+  border-radius: 10px;
+  color: #a00;
+  margin: 1rem;
+  padding: 0.5rem 0;
+}
+.title {
+  margin: 1rem;
+}
+.message {
+  margin: 1rem;
+}

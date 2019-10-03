@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './CurrencyPair.module.css';
+
 // The CurrencyPair component renders an individual currency pair to be selected
 const CurrencyPair = ({
   currencyPair,
@@ -13,15 +15,16 @@ const CurrencyPair = ({
   const shortcutCode = `${code1}/${code2}`;
   const shortcutName = `${name1}/${name2}`;
   return (
-    <div>
+    <div className={styles.wrapper}>
       <input
         type="checkbox"
         name={currencyPairId}
         checked={isSelected}
         onChange={toggleCurrencyPairSelection}
+        className={styles.checkbox}
       />
-      <span>{shortcutName}</span>
-      <span>{`(${shortcutCode})`}</span>
+      <span className={styles.names}>{shortcutName}</span>
+      <span className={styles.codes}>{`(${shortcutCode})`}</span>
     </div>
   );
 };

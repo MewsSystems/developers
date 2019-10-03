@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CurrencyPairRateItem from './CurrencyPairRateItem';
+import styles from './CurrencyPairRateList.module.css';
 
 // The CurrencyPairRateList component renders a list of selected currency pairs
 const CurrencyPairRateList = ({
@@ -19,11 +20,11 @@ const CurrencyPairRateList = ({
   });
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       {(errorIsPersistent)
         ? ''
         : (
-          <ul>
+          <ul className={styles.list}>
             {currencyRatesArray}
           </ul>
         )}

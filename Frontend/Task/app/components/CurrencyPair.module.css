@@ -1,0 +1,15 @@
+/* styles for CurrencyPair component */
+
+.wrapper {
+  padding: 0.2rem 0;
+}
+.checkbox {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+.names {
+  margin-right: 0.5rem;
+}
+.codes {
+  font-style: italic;
+}

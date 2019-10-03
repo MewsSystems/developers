@@ -1,0 +1,39 @@
+/* styles for CurrencyPairSelector component */
+
+.wrapper {
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+.header {
+  background-color: #000;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+}
+.filter {
+  margin: 1rem auto 1rem 1rem;
+  padding: 0.25rem;
+  min-width: 20rem;
+}
+.selectionButton {
+  border: none;
+  background-color: #fff;
+  margin: 1rem;
+  padding: 0.35rem 0.5rem;
+}
+.currencyPairList {
+  list-style: none;
+  margin: 1rem;
+  padding: 0 0 1rem 0;
+}
+.loading,
+.error,
+.noMatch {
+  font-size: 110%;
+  padding: 1rem 2rem;
+}
+.error {
+  border: 1px solid #a00;
+  border-radius: 15px;
+  color: #a00;
+}

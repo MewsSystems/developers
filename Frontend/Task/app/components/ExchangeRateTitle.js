@@ -1,9 +1,11 @@
 import React from 'react';
 
+import styles from './ExchangeRateTitle.module.css';
+
 const ExchangeRateTitle = () => {
   return (
-    <div>
-      <h1>Exchange Rate Tracker</h1>
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>Exchange Rate Tracker</h1>
       <p>
         Use this page to track the current exchange rates between a selection of
         currency pairs as listed below.

@@ -20,6 +20,18 @@ const webpackConfig = {
       test: /\.js?$/,
       exclude: /(node_modules|Generated)/,
       loader: 'babel-loader',
+    }, {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            importLoaders: 1,
+            modules: true,
+          },
+        },
+      ],
     }],
   },
   devtool: 'eval',

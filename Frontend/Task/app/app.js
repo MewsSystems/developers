@@ -7,6 +7,7 @@ import reduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import ErrorBoundary from './components/ErrorBoundary'; // top level error boundary
 import ExchangeRateContainer from './containers/ExchangeRateContainer'; // main container
+import './app.css'; // global CSS
 
 const store = createStore(
   reducers,

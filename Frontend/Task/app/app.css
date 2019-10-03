@@ -1,0 +1,11 @@
+html {
+  box-sizing: border-box;
+  display: block;
+}
+body {
+  background-color: yellow;
+  margin: 0 auto;
+  padding: 0;
+  width: 90%;
+  max-width: 50rem;
+}

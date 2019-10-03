@@ -1,0 +1,8 @@
+/* styles for ExchangeRateTitle component */
+
+.wrapper {
+}
+.title {
+  font-size: 250%;
+  font-weight: 700;
+}

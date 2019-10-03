@@ -1,0 +1,24 @@
+/* styles for CurrencyPairRateItem component */
+
+.wrapper {
+  background-color: #fff;
+  border-radius: 10px;
+  display: flex;
+  margin: 1rem 0;
+  padding: 0.75rem;
+}
+.shortcutName {
+  flex: 0 0 75%;
+}
+.currentValue {
+  flex: 0 0 10%;
+}
+.trend {
+  flex: 0 0 15%;
+}
+.growing {
+  color: #0a0;
+}
+.declining {
+  color: #a00;
+}

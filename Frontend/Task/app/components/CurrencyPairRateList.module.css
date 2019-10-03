@@ -1,0 +1,8 @@
+/* styles for CurrencyPairRateList component */
+
+.wrapper {
+}
+.list {
+  list-style: none;
+  padding: 0;
+}
