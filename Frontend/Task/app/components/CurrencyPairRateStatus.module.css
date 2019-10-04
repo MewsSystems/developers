@@ -1,0 +1,40 @@
+/* styles for CurrencyPairRateStatus */
+
+.wrapper {
+  margin: 2em 0;
+}
+.greenDot,
+.yellowDot,
+.redDot {
+  border-radius: 50%;
+  box-shadow: 1px 1px #666;
+  display: inline-block;
+  height: 1rem;
+  margin: 0 0 -0.2rem 1rem;
+  width: 1rem;
+}
+.greenDot {
+  background-color: #0a0;
+}
+.yellowDot {
+  background-color: #cc0;
+}
+.redDot {
+  background-color: #a00;
+}
+.loading,
+.error {
+  border: 1px solid #000;
+  background-color: #fff;
+  border-radius: 10px;
+  font-size: 110%;
+  margin: 0;
+  padding: 0.5rem 1rem;
+}
+.error {
+  border-color: #a00;
+  color: #a00;
+}
+.status {
+  margin-top: 2rem;
+}

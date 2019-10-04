@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './ExchangeRateTitle.module.css';
 
+// The ExchangeRateTitle component renders a simple title for the page
 const ExchangeRateTitle = () => {
   return (
     <div className={styles.wrapper}>

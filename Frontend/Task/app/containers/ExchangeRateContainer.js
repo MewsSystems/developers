@@ -20,6 +20,8 @@ import CurrencyPairRateList from '../components/CurrencyPairRateList';
 // The ExchangeRateContainer component manages state and coordinates other components
 // that render information to the user
 class ExchangeRateContainer extends Component {
+  state = { scrollToBottom: false };
+
   // get configuration and start regular polling for rates
   componentDidMount() {
     const {
@@ -27,6 +29,16 @@ class ExchangeRateContainer extends Component {
     } = this.props;
     getConfiguration(endpoint);
     this.getRatesIntervalId = setInterval(() => this.getCurrencyPairRates(), interval);
+  }
+
+  // trigger scroll to bottom of screen when new exchange rates are shown
+  componentDidUpdate() {
+    const { scrollToBottom } = this.state;
+    /* eslint react/no-did-update-set-state: 0 */
+    if (scrollToBottom) { // setState safe due to condition
+      window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: 'smooth' });
+      this.setState({ scrollToBottom: false });
+    }
   }
 
   // stop polling for rates when closing page and save settings to localStorage
@@ -125,6 +137,7 @@ class ExchangeRateContainer extends Component {
         selectCurrencyPair(currencyPairId);
       }
     });
+    this.setState({ scrollToBottom: true });
   }
 
   // update filter based on contents of input element
@@ -146,6 +159,7 @@ class ExchangeRateContainer extends Component {
       deselectCurrencyPair(currencyPairId);
     } else {
       selectCurrencyPair(currencyPairId);
+      this.setState({ scrollToBottom: true });
     }
   }
 
