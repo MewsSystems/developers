@@ -109,13 +109,11 @@ In the following sections, we'll try to answer frequently asked question that we
 
 ### 📰 Media
 
-For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) and didn't really mind as we never focused on clients in Czech Republic (only 5% of all). However, as we want to grow our tech team in Prague we need to be known and visible. And it would be pity if people didn't know about us. Year 2019 was a breakthrough in this sense in terms of media presence and public appearances.
+For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) and didn't really mind as we never focused on clients in Czech Republic (only 5% of all). But things are changing...
 
 - **English**
     - [TechCrunch](https://techcrunch.com/2019/08/29/mews-grabs-33m-series-b-to-modernize-hotel-administration/) - announcement of the Series B investment.
     - [Travel Tech Conference Russia](https://www.youtube.com/watch?v=EvZSfzKccC0) - Richard (founder) talking about why hotels should think like tech companies.
-
-
 - **Czech**
     - [Lupa.cz](https://www.lupa.cz/clanky/jan-siroky-mews-na-nasem-softwaru-funguje-asi-tisic-hotelu-hilton-zatim-nemame/) - technical interview with the CTO Honza.
     - [Forbes](https://www.forbes.cz/velka-rana-nenapadny-cesky-startup-mews-ziskava-investici-768-milionu-korun/) - announcement of the Series B investment.
