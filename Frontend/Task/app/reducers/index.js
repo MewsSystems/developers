@@ -24,6 +24,16 @@ export const INITIAL_STATE = {
   selectedCurrencyPairs: [], // array of pairIds
 };
 
+// save configuration and filter settings to localStorage
+const saveSettingsToLocalStorage = (settings) => {
+  try {
+    const stringifiedSettings = JSON.stringify(settings);
+    localStorage.setItem('ExchangeRateSettings', stringifiedSettings);
+  } catch {
+    // ignore errors so application continues to function if access to localStorage is blocked
+  }
+};
+
 const reducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
   // console.log(`Action of type ${type}, payload is: ${JSON.stringify(payload, null, 2)}`);
@@ -46,6 +56,11 @@ const reducer = (state = INITIAL_STATE, action) => {
       };
     case API_RECEIVED_CONFIGURATION:
       // payload is response.currencyPairs
+      saveSettingsToLocalStorage({
+        currencyPairs: payload,
+        filter: state.filter,
+        selectedCurrencyPairs: state.selectedCurrencyPairs,
+      });
       return {
         ...state,
         currencyPairs: payload,
@@ -84,6 +99,11 @@ const reducer = (state = INITIAL_STATE, action) => {
       };
     case UI_CURRENCY_FILTER:
       // payload is updated input string
+      saveSettingsToLocalStorage({
+        currencyPairs: state.currencyPairs,
+        filter: payload,
+        selectedCurrencyPairs: state.selectedCurrencyPairs,
+      });
       return {
         ...state,
         filter: payload,
@@ -98,6 +118,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         // has gone very wrong
         throw new Error('Attempt to select an invalid currency pair');
       }
+      saveSettingsToLocalStorage({
+        currencyPairs: state.currencyPairs,
+        filter: state.filter,
+        selectedCurrencyPairs: [...state.selectedCurrencyPairs, payload],
+      });
       return {
         ...state,
         selectedCurrencyPairs: [...state.selectedCurrencyPairs, payload],
@@ -108,6 +133,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         // remove
         const newSelectedCurrencyPairs = state.selectedCurrencyPairs.filter((pairId) => {
           return (pairId !== payload);
+        });
+        saveSettingsToLocalStorage({
+          currencyPairs: state.currencyPairs,
+          filter: state.filter,
+          selectedCurrencyPairs: newSelectedCurrencyPairs,
         });
         return {
           ...state,
