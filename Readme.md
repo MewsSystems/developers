@@ -32,6 +32,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Job](#job) - offices, working hours, salaries.
 - [Students](#students) - part-time opportunities for students.
 - [Relocation](#relocation) - information for people outside CZ.
+- [Media&](#media) - Mews PR.
 
 <a name='product'/>
 
@@ -103,3 +104,17 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Do you help with relocation?** Yes, we do. We have an agency that would contact you to help you resolve any paperwork you might need for both our government and your own. We also provide accommodation for the first few months until you are able to find your own apartment. We have "Mews flat" in Prague and London which we manage using our own system.
 - **What is the cost of living in Prague?** You can find it and compare with other cities at https://www.numbeo.com/cost-of-living/in/Prague.
 - **How long does it take to relocate?** Unfortunately, it takes a lot of time; usually around 6 months. First, we must submit the the job posting announcing your position to the Czech Labour office, where it must be pending publicly for 30 days for potential employees. After that, the paperwork is processed, and both governments have 30-60 days to finish the procedure. Regrettably, these offices like to take their time and therefore, it is difficult to give an exact estimate about how long it takes from start to finish.
+
+<a name='media'/>
+
+### 📰 Media
+
+For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) and didn't really mind as we never focused on clients in Czech Republic (only 5% of all). But things are changing...
+
+- **English**
+    - [TechCrunch](https://techcrunch.com/2019/08/29/mews-grabs-33m-series-b-to-modernize-hotel-administration/) - announcement of the Series B investment.
+    - [Travel Tech Conference Russia](https://www.youtube.com/watch?v=EvZSfzKccC0) - Richard (founder) talking about why hotels should think like tech companies.
+- **Czech**
+    - [Lupa.cz](https://www.lupa.cz/clanky/jan-siroky-mews-na-nasem-softwaru-funguje-asi-tisic-hotelu-hilton-zatim-nemame/) - technical interview with the CTO Honza.
+    - [Forbes](https://www.forbes.cz/velka-rana-nenapadny-cesky-startup-mews-ziskava-investici-768-milionu-korun/) - announcement of the Series B investment.
+    - [CzechCrunch](https://www.czechcrunch.cz/2019/08/snil-o-psani-a-filmarine-dnes-richard-valtr-po-celem-svete-stavi-superhotely-a-buduje-miliardovy-startup-mews/) - interview with the founder Richard about his visions behind Mews.
