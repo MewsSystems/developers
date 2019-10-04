@@ -32,7 +32,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Job](#job) - offices, working hours, salaries.
 - [Students](#students) - part-time opportunities for students.
 - [Relocation](#relocation) - information for people outside CZ.
-- [Media&](#media) - Mews public image.
+- [Media&](#media) - Mews PR.
 
 <a name='product'/>
 
