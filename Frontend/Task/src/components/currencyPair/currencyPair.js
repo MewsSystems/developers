@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { endpoint, interval } from './../../assets/config';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 export default class CurrencyPair extends Component {
 
     CONF_URL = "http://localhost:3000/configuration";
@@ -37,6 +38,7 @@ export default class CurrencyPair extends Component {
                         loaded: true,
                         currencies: json_obj.currencyPairs
                     });
+                    this.loadPrices();
                 } else {
                     console.error(xhr.statusText);
                 }
@@ -76,7 +78,6 @@ export default class CurrencyPair extends Component {
                     for (const [key, value] of Object.entries(rates)) {
 
                         if (this.rates != null && this.rates[key] != null) {
-                            console.log(parseFloat(this.rates[key]["value"]) < parseFloat(value), parseFloat(this.rates[key]["value"]) > parseFloat(value));
                             if (parseFloat(this.rates[key]["value"]) < parseFloat(value)) {
                                 this.rates[key] = {
                                     value: value,
@@ -100,7 +101,7 @@ export default class CurrencyPair extends Component {
                             this.rates[key] = {
                                 value: value,
                                 trend: null,
-                                display: true
+                                display: Math.random() >= 0.5
                             };
                         }
                     }
@@ -122,23 +123,30 @@ export default class CurrencyPair extends Component {
         };
         xhr.send(null);
     }
-    render() {
-        var rates = this.rates;
-        var tmp = Object.keys(rates).map(function (key) {
-            if (rates[key]["display"] === true) {
-                if (rates[key]["trend"] === true) {
-                    return <li>UP: {rates[key]["value"]}</li>
-                } else if (rates[key]["trend"] === false) {
-                    return <li>DOWN: {rates[key]["value"]}</li>
-                } else {
-                    return <li>NO CHANGE: {rates[key]["value"]}</li>
+    
+    prepareRates() {
+        const rates = [];
+        for (const [key, value] of Object.entries(this.rates)) {
+            if(this.rates[key]["display"] === true) {
+                const tmp = {
+                    key: key,
+                    name: this.state.currencies[key][0]["code"] + "/" + this.state.currencies[key][1]["code"],
+                    value: this.rates[key]["value"],
+                    trend: this.rates[key]["trend"]
                 }
+                rates.push(tmp);
             }
-        });
+        }
+        return rates;
+    }
+    
+    render() {
+        const rates = this.prepareRates();
         return (
-                <ul>
-                    {tmp}
-                </ul>
+                <BootstrapTable data={rates} striped>
+                    <TableHeaderColumn isKey dataField='name'></TableHeaderColumn>
+                    <TableHeaderColumn dataField='value'>Value</TableHeaderColumn>
+                </BootstrapTable>
                 )
     }
 }
