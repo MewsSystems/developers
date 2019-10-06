@@ -1,0 +1,3 @@
+{
+    "message": "Hi, welcome to Matěj's testing task for Mews. This app uses React and Bootstrap for React. It keeps configuration in cookies between reloads and it displays trend of the forex. (Un)fortunately the provided market is so awesome and prices keeps up and never go down. You can select which forex you would like to appear. By default you can see all of them. You can easily uncheck any market by clicking on the 'Yes' or 'No' text in the left table. Yes, there is a lot of ideas how to improve this app, we can talk about it on interview. Thank you. TIP: Change 'maxErrorStrike' to 1 in config file and wait for ERROR 500 to test what happend when server cries."
+}

@@ -1,0 +1,26 @@
+.loader {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    background: white;
+}
+.loader > .spinner-border {
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+}
+.loader.hidden {
+    display: none;
+}
+
+.toast {
+    position: absolute;
+    top: 20px;
+    z-index: 1;
+    background-color: #EA2027 !Important;
+}
+
+p {
+    text-align: justify;
+}
