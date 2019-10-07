@@ -25,39 +25,57 @@ namespace ExchangeRateUpdater
         //open URL and parse rates
         private void AddRates(String url, IEnumerable<Currency> currencies)
         {
-            //open URL in StreamReader
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead(url);
-            StreamReader reader = new StreamReader(stream);
 
-            List<Currency> listCur = currencies.ToList();
-            string line;
-            int counter = 0;
-            //checks if list contain default currency
-            bool defaultSet = listCur.Exists(x => x.Code == defaultCurrency.Code);
-
-            while ((line = reader.ReadLine()) != null)
+            try
             {
-                counter++;
-                if (counter > 2 && defaultSet)
+                //try to open URL in StreamReader
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead(url);
+                StreamReader reader = new StreamReader(stream);
+
+                List<Currency> listCur = currencies.ToList();
+                string line;
+                //checks if list contain default currency
+                bool defaultSet = listCur.Exists(x => x.Code == defaultCurrency.Code);
+                if (defaultSet)
                 {
+                    //set number delimiter to ","
                     var numberFormatInfo = new NumberFormatInfo
                     { NumberDecimalSeparator = "," };
-                    //split and convert line into proper values
-                    string[] values = line.Split('|');
-                    decimal quantity = 0m;
-                    decimal.TryParse(values[2], out quantity);
-                    decimal rate = 0m;
-                    decimal.TryParse(values[4], NumberStyles.Any, numberFormatInfo, out rate);
 
-                    //if list of currencies caontain this currency, adds new rate to final list
-                    if (listCur.Exists(x => x.Code == values[3]) && quantity > 0m && rate > 0m)
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        ExRates.Add(new ExchangeRate(new Currency(values[3]), defaultCurrency, rate / quantity));
+                        //split and convert line into proper values
+                        string[] values = line.Split('|');
+                        //check if line have proper format
+                        if (values.Length == 5)
+                        {
+                            decimal quantity = 0m;
+                            decimal.TryParse(values[2], out quantity);
+                            decimal rate = 0m;
+                            decimal.TryParse(values[4], NumberStyles.Any, numberFormatInfo, out rate);
+
+                            //if list of currencies caontain this currency, adds new rate to final list
+                            if (listCur.Exists(x => x.Code == values[3]) && quantity > 0m && rate > 0m)
+                            {
+                                ExRates.Add(new ExchangeRate(new Currency(values[3]), defaultCurrency, rate / quantity));
+                            }
+                        }
                     }
-
                 }
-
+                stream.Close();
+            }
+            catch (WebException webex)
+            {
+                HttpWebResponse webResp = (HttpWebResponse)webex.Response;
+                if (webex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    Console.WriteLine("URL address: " + url + " is probably wrong or server is not working");
+                }
+                else
+                {
+                    Console.WriteLine("You are probably not connected to internet. Check connection!");
+                }
             }
         }
 
