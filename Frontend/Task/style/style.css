@@ -1,0 +1,81 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: lightskyblue !important;
+}
+
+.input_loader {
+  width: 100%;
+}
+
+.result {
+  height: 60px;
+  border: 1px solid lightgrey;
+  margin-bottom: 1em;
+  background-color: white;
+}
+
+#id-header {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+}
+
+.jumbo-text,
+.footer-text {
+  color: white;
+  font-family: 'Comic Sans MS', sans-serif;
+}
+
+.font-result {
+  padding: 4px;
+}
+
+.components {
+  width: 320px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.grid-item {
+  width: 104px;
+  margin-bottom: 4px;
+}
+
+.keyboard-button {
+  height: 69px;
+  width: 104px;
+  border: 0px;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+button:focus {
+  outline: 0px !important;
+}
+
+.keyboard-display1,
+.keyboard-display2 {
+  margin-bottom: 0px;
+  color: white;
+}
+
+.keyboard-icon,
+.footer-text {
+  color: white;
+}
+
+@media (max-height: 700px) {
+  footer {
+    position: relative !important;
+  }
+  .grid {
+    margin-bottom: 8px;
+  }
+}
