@@ -3,7 +3,7 @@ const webpackConfig = {
         noEmitOnErrors: true,
     },
     entry: {
-        app: './app/app.js',
+        app: './app/app.ts',
     },
     output: {
         filename: '[name].js',
@@ -11,13 +11,13 @@ const webpackConfig = {
         libraryTarget: 'window',
     },
     resolve: {
-        extensions: ['.js', '.json'],
+        extensions: ['.js', '.json', '.ts', '.tsx'],
     },
     module: {
         rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: 'babel-loader',
+            test: /\.[jt]sx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/
         }],
     },
     devtool: 'eval',
