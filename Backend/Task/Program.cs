@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +20,12 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -32,6 +33,7 @@ namespace ExchangeRateUpdater
                     Console.WriteLine(rate.ToString());
                 }
             }
+            // FIXME: this statement should only catch exceptions relevant to reading and parsing exchange rates
             catch (Exception e)
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
