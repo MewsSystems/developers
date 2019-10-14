@@ -47,6 +47,8 @@
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Rate.cs" />
+    <Compile Include="RateTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
