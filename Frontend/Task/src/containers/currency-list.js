@@ -1,109 +1,67 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-export default class CurrencyList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      configuration: [],
-      rates: [],
-    };
-    this.getConfiguration();
-  }
+import { getConfiguration, test } from '../actions';
 
-  getConfiguration() {
-    console.log('run1');
-    Axios.get('http://localhost:3000/configuration', { timeout: 10000 }).then(
-      response => {
-        const configuration = Object.entries(response.data.currencyPairs);
-        console.log('RUN', configuration);
-        this.setState({
-          configuration,
-        });
-        this.getRates(configuration);
-      }
-    );
-  }
-
-  getRates(configurationRates) {
-    console.log('run2', configurationRates[0][0]);
-
-    configurationRates.forEach(key => {
-      const request = {
-        params: {
-          currencyPairIds: [key[0]],
-        },
-      };
-
-      // const call = async () => {
-      //   const res = await Axios.get('http://localhost:3000/rates', request, {
-      //     timeout: 10000,
-      //   });
-      //   const rate = res.data.rates;
-      //   console.log('rate', rate);
-      //   const R1 = Object.entries(res.data.rates);
-      //   const R2 = Object.keys(res.data.rates);
-      //   this.setState({ rates: [...this.state.rates, [R1, R2]] });
-      // };
-
-      // call();
-
-      Axios.get('http://localhost:3000/rates', request, {
-        timeout: 10000,
-      })
-        .then(response => {
-          const rate = Object.entries(response.data.rates);
-          // const R2 = Object.keys(response.data.rates);
-          this.setState(state => {
-            const rates = [...state.rates, rate];
-            return {
-              rates,
-            };
-          });
-        })
-        .catch(error => console.log('error', error));
-    });
+class CurrencyList extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    console.log('run-currencyList');
+    dispatch(test);
+    dispatch(getConfiguration()); // run & break
   }
 
   render() {
-    const { configuration, rates } = this.state;
+    const { configuration, test3 } = this.props;
 
-    console.log('run3 - C', configuration);
-    // console.log('run3 - R', rates);
-    // console.log('run3 - C', configuration instanceof Array);
-    const currencyCouples = configuration.map(key => {
-      // const strollo = rates[i] ? rates[i][0][0][1] : 'n/c';
-      let rate = [];
-
-      if (rates) {
-        console.log('YES');
-        rates.filter(j => {
-          if (j[0][0] === key[0]) {
-            console.log('RATE-x', j);
-            rate = j[0][1];
-          }
-        });
-      }
-
-      // rates.filter(j => j[0][0] === key[0]);
-
-      // if (rates[any][0][0] === key[0]) {return rates[0][0][1]};
-      // forEach
-      console.log('KEY-C', key[0]);
-      console.log('KEY-R', rates);
-      return (
-        <li className="list-group-item" key={key[0]}>
-          <p>element: {key[0]}</p>
-          <p>code1: {key[1][0].code}</p>
-          <p>name1: {key[1][0].name}</p>
-          <p>code2: {key[1][1].code}</p>
-          <p>name2: {key[1][1].name}</p>
-          <br />
-          <p>rates: {rate.length !== 0 ? rate : 'n/c'}</p>
-        </li>
-      );
-    });
-
+    console.log('render2', configuration);
+    if (Object.entries(configuration).length === 0) {
+      console.log('here');
+      return <div>Loading...{test3}</div>;
+    }
+    console.log('render');
+    const currencyCouples = Object.keys(configuration).map(key => (
+      <li className="list-group-item" key={key[0]}>
+        <p>Key: {key[0]}</p>
+        <p>
+          Rate: {key[1][0].name} / {key[1][1].name}
+        </p>
+      </li>
+    ));
     return <ul className="list-group">{currencyCouples}</ul>;
   }
 }
+
+CurrencyList.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  configuration: PropTypes.object,
+  test3: PropTypes.string.isRequired,
+};
+
+CurrencyList.defaultProps = {
+  configuration: '',
+};
+
+function mapStateToProps(state) {
+  return {
+    configuration: state.configuration,
+    test3: state.test,
+  };
+}
+
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators(
+//     {
+//       configurationLoader: getConfiguration,
+//       test2: test,
+//     },
+//     dispatch
+//   );
+// }
+
+export default connect(
+  mapStateToProps
+  // mapDispatchToProps
+)(CurrencyList);
