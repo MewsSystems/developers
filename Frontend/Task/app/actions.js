@@ -1,16 +1,27 @@
 export const Constants = {
-    SET_RATES: "SET_RATES"
+    SET_PAIRS: "SET_PAIRS",
+    FETCHING_PAIRS: "FETCHING_PAIRS",
+    TOGGLE_PAIR: "TOGGLE_PAIR"
 };
 
-export const setRates = rates => ({
-    type: Constants.SET_RATES,
-    payload: rates
+export const setPairs = pairs => ({
+    type: Constants.SET_PAIRS,
+    payload: pairs
 });
 
-export const getRates = () => (dispatch, getState) => {
+export const fetchingPairs = () => ({
+    type: Constants.FETCHING_PAIRS
+});
+
+export const getPairs = () => (dispatch, getState) => {
+    dispatch(fetchingPairs());
+
     fetch("http://localhost:3000/configuration")
         .then(result => result.json())
-        .then(json => {
-            dispatch(setRates(json));
-        });
+        .then(json => dispatch(setPairs(json)));
 };
+
+export const togglePair = pair => ({
+    type: Constants.TOGGLE_PAIR,
+    payload: pair
+});
