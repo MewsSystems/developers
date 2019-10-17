@@ -1,6 +1,7 @@
 const { SEED, PAIR_COUNT, UPDATE_INTERVAL, FAILURE_CHANCE } = require('./constants');
 const Chance = require('chance');
 const chance = new Chance(SEED);
+const bodyParser = require("body-parser");
 
 const ratesGenerator = require('./ratesGenerator')({
     generator: chance,
@@ -11,6 +12,7 @@ const ratesGenerator = require('./ratesGenerator')({
 const express = require('express');
 const server = express();
 
+server.use(bodyParser.json());
 server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
@@ -34,7 +36,7 @@ server.get('/rates', (req, res) => {
     } else {
         try {
             const allRates = ratesGenerator.getCurrentRates();
-            const { currencyPairIds = [] } = req.query;
+            const { currencyPairIds = [] } = req.body;
 
             let rates = {};
             for (let pairId of currencyPairIds) {

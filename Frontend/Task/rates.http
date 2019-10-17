@@ -1,0 +1,11 @@
+### Get configuration
+GET http://localhost:3000/configuration HTTP/1.1
+Content-Type: application/json
+
+### Get rates
+GET http://localhost:3000/rates HTTP/1.1
+Content-Type: application/json
+
+{
+	"currencyPairIds": ["b7fdd67f-5051-58b7-a3c6-84f5da637df5", "41cae0fd-b74d-5304-a45c-ba000471eabd"]
+}
