@@ -1,24 +1,37 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware, compose } from "redux";
-import appReducer from "./reducers";
+import appReducer from "./store/reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { getPairs } from "./actions";
+import { getPairs, pollRates, persistChanges } from "./store/middleware";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import Pairs from "./components/PairList";
+import Rates from "./components/RateList";
+import { endpoint, interval } from "./config.json";
 
-const store = createStore(
-    appReducer,
-    compose(
-        applyMiddleware(thunk),
-        composeWithDevTools()
-    )
-);
+const [initialState, store] = (() => {
+    const persistedData = localStorage["exchange"];
+    const initialState = persistedData ? JSON.parse(persistedData) : null;
+
+    let store;
+    if (initialState) {
+        store = createStore(appReducer, initialState, compose(applyMiddleware(thunk, persistChanges), composeWithDevTools()));
+    } else {
+        store = createStore(appReducer, compose(applyMiddleware(thunk, persistChanges), composeWithDevTools()));
+    }
+    return [initialState, store];
+})();
 
 const App = () => {
     useEffect(() => {
-        store.dispatch(getPairs());
+        if (!initialState) {
+            store.dispatch(getPairs());
+        }
+
+        const handler = setInterval(() => {
+            store.dispatch(pollRates(endpoint));
+        }, interval);
     }, []);
 
     return (
@@ -30,6 +43,7 @@ const App = () => {
                         <Pairs />
                     </div>
                     <div className="col-9 p-2">
+                        <Rates />
                     </div>
                 </div>
             </div>

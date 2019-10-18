@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { togglePair } from "../actions";
+import { togglePair } from "../store/actions";
 
 const mapStateToProps = state => {
     const processPair = entry => {
@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
     return {
         pairs,
-        fetching: state.fetching,
+        fetchingPairs: state.fetchingPairs,
         pairFilter: state.pairFilter
     };
 };
@@ -22,8 +22,8 @@ const mapDispatchToProps = {
     togglePair
 };
 
-const Pairs = ({ pairs, fetching, togglePair, pairFilter }) => {
-    if (fetching) {
+const PairsList = ({ pairs, fetchingPairs, togglePair, pairFilter }) => {
+    if (fetchingPairs) {
         return <h3>Loading rates...</h3>;
     }
 
@@ -41,7 +41,4 @@ const Pairs = ({ pairs, fetching, togglePair, pairFilter }) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Pairs);
+export default connect(mapStateToProps, mapDispatchToProps)(PairsList);

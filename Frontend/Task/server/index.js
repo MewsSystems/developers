@@ -2,6 +2,7 @@ const { SEED, PAIR_COUNT, UPDATE_INTERVAL, FAILURE_CHANCE } = require('./constan
 const Chance = require('chance');
 const chance = new Chance(SEED);
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const ratesGenerator = require('./ratesGenerator')({
     generator: chance,
@@ -12,6 +13,7 @@ const ratesGenerator = require('./ratesGenerator')({
 const express = require('express');
 const server = express();
 
+server.use(cors());
 server.use(bodyParser.json());
 server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -28,7 +30,7 @@ server.get('/configuration', (req, res) => {
     }, appLoadTime);
 });
 
-server.get('/rates', (req, res) => {
+server.post('/rates', (req, res) => {
     const hasFailed = chance.floating({ min: 0, max: 1 }) < FAILURE_CHANCE;
 
     if (hasFailed) {
