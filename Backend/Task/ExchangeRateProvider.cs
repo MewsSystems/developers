@@ -17,77 +17,93 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var textData = DataDownloader();
-            var exchangeRates = DataParser(textData, currencies);
+            IExchangeRatesReader exRatesReader = new CnbExchangeRatesReader();
+
+            var textData = exRatesReader.DataDownloader();
+            var exchangeRates = exRatesReader.DataParser(textData, currencies);
 
             return exchangeRates;
         }
 
-        public List<string> DataDownloader()
+        public interface IExchangeRatesReader
         {
-            List<string> listOfTextLines = new List<string>();
+            List<string> DataDownloader();
+            IEnumerable<ExchangeRate> DataParser(List<string> listOfTextLines, IEnumerable<Currency> currencies);
+        }
 
-            try
+        public class CnbExchangeRatesReader : IExchangeRatesReader
+        {
+
+            public List<string> DataDownloader()
             {
-                WebClient client = new WebClient();
-                StreamReader reader = new StreamReader(
-                    // Central bank exchange rate fixing - link downloads current data in txt format in english culture settings
-                    client.OpenRead("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")
-                );
+                List<string> listOfTextLines = new List<string>();
 
-                string text;
-                while ((text = reader.ReadLine()) != null)
+                try
                 {
-                    listOfTextLines.Add(text);
+                    using (WebClient client = new WebClient())
+                    {
+                        using (StreamReader reader = new StreamReader(
+                            // Central bank exchange rate fixing - link downloads current data in txt format in english culture settings
+                            client.OpenRead("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")
+                        ))
+                        {
+
+                            string text;
+                            while ((text = reader.ReadLine()) != null)
+                            {
+                                listOfTextLines.Add(text);
+                            }
+                        }
+                    }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine("The file could not be read:");
+                    Console.WriteLine(e.Message);
+                }
+
+                // table header remove
+                listOfTextLines.RemoveRange(0, 2);
+
+                return listOfTextLines;
             }
-            catch (Exception e)
+
+            public IEnumerable<ExchangeRate> DataParser(List<string> listOfTextLines, IEnumerable<Currency> currencies)
             {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
+                if (listOfTextLines == null)
+                {
+                    throw new ArgumentNullException("No data provided.");
+                }
+
+                List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+                CultureInfo culture = new CultureInfo("en-US");
+
+                foreach (var line in listOfTextLines)
+                {
+                    // skip if no string is passed
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    // example line - Austrálie|dolar|1|AUD|23,282
+                    var fields = line.Split('|');
+
+                    var sourceCurrency = new Currency(fields[3]);
+
+                    // skip if the currency is not contained in the list of our currencies
+                    if (currencies.FirstOrDefault(x => x.Code == sourceCurrency.Code) == null)
+                        continue;
+
+                    // current format of the source provides rate into CZK only
+                    var targetCurrency = new Currency("CZK");
+                    var parsedExchangeRate = decimal.Parse(fields[4], culture);
+                    var parsedMultiplier = decimal.Parse(fields[2], culture);
+
+                    var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, parsedExchangeRate / parsedMultiplier);
+                    exchangeRates.Add(exchangeRate);
+                }
+
+                return exchangeRates;
             }
-
-            // table header remove
-            listOfTextLines.RemoveRange(0, 2);
-
-            return listOfTextLines;
-        }
-
-        public IEnumerable<ExchangeRate> DataParser(List<string> listOfTextLines, IEnumerable<Currency> currencies)
-        {
-            if (listOfTextLines == null)
-            {
-                throw new ArgumentNullException("No data provided.");
-            }
-
-            List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
-            CultureInfo culture = new CultureInfo("en-US");
-
-            foreach (var line in listOfTextLines)
-            {
-                // skip if no string is passed
-                if (string.IsNullOrEmpty(line))
-                    continue;
-
-                // example line - Austrálie|dolar|1|AUD|23,282
-                var fields = line.Split('|');
-
-                var sourceCurrency = new Currency(fields[3]);
-
-                // skip if the currency is not contained in the list of our currencies
-                if (currencies.FirstOrDefault(x => x.Code == sourceCurrency.Code) == null)
-                    continue;
-
-                // current format of the source provides rate into CZK only
-                var targetCurrency = new Currency("CZK");
-                var parsedExchangeRate = decimal.Parse(fields[4], culture);
-                var parsedMultiplier = decimal.Parse(fields[2], culture);
-
-                var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, parsedExchangeRate / parsedMultiplier);
-                exchangeRates.Add(exchangeRate);
-            }
-
-            return exchangeRates;
         }
     }
 }
