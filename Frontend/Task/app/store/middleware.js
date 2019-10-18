@@ -19,7 +19,7 @@ export const persistChanges = store => next => action => {
 /**
  * Thunk middleware for fetching pairs.
  */
-export const getPairs = () => (dispatch, getState) => {
+export const getPairs = () => dispatch => {
     dispatch(fetchingPairs());
 
     fetch("http://localhost:3000/configuration")

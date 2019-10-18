@@ -12,14 +12,9 @@ import { endpoint, interval } from "./config.json";
 
 const [initialState, store] = (() => {
     const persistedData = localStorage["exchange"];
-    const initialState = persistedData ? JSON.parse(persistedData) : null;
+    const initialState = persistedData ? JSON.parse(persistedData) : undefined;
+    const store = createStore(appReducer, initialState, compose(applyMiddleware(thunk, persistChanges), composeWithDevTools()));
 
-    let store;
-    if (initialState) {
-        store = createStore(appReducer, initialState, compose(applyMiddleware(thunk, persistChanges), composeWithDevTools()));
-    } else {
-        store = createStore(appReducer, compose(applyMiddleware(thunk, persistChanges), composeWithDevTools()));
-    }
     return [initialState, store];
 })();
 
@@ -28,26 +23,29 @@ const App = () => {
         if (!initialState) {
             store.dispatch(getPairs());
         }
-
         const handler = setInterval(() => {
             store.dispatch(pollRates(endpoint));
         }, interval);
+
+        return () => clearInterval(handler);
     }, []);
 
     return (
-        <Provider store={store}>
-            <h1>Mews Exchange Rate</h1>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-3 p-2">
-                        <Pairs />
-                    </div>
-                    <div className="col-9 p-2">
-                        <Rates />
+        <div className="App">
+            <Provider store={store}>
+                <h1>Mews Exchange Rate</h1>
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-3 p-2">
+                            <Pairs />
+                        </div>
+                        <div className="col-9 p-2">
+                            <Rates />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Provider>
+            </Provider>
+        </div>
     );
 };
 

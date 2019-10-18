@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => {
     const {
         pairs,
         pairFilter,
-        rates: { current, previous, message }
+        rates: { current, previous, error }
     } = state;
 
     const filteredRates = pairFilter.map(key => ({
@@ -17,22 +18,51 @@ const mapStateToProps = state => {
 
     return {
         filteredRates,
-        message
+        error
     };
 };
 
-const RatesList = ({ filteredRates }) => {
+const RatesList = ({ filteredRates, error }) => {
+    if (error) {
+        return <img src="./robot.gif" />;
+    }
+
+    const processRate = ({ currentValue, previousValue }) => {
+        let style = "bg-dark";
+        let value = currentValue;
+
+        if (!currentValue) {
+            value = "Loading"
+        }
+
+        if (currentValue && previousValue) {
+            if (currentValue > previousValue) {
+                style = "bg-success";
+            } else if (currentValue < previousValue) {
+                style = "bg-danger";
+            }
+        }
+
+        return [style, value];
+    }
+
     return (
         <div>
-            {filteredRates.map(rate => (
-                <div key={rate.key} className="card m-1 p-1 bg-light">
-                    <h4>
-                        {rate.text} - {rate.currentValue} - {rate.previousValue}
-                    </h4>
-                </div>
-            ))}
+            {filteredRates.map(rate => {
+                const [style, value] = processRate(rate);
+                return (
+                    <div key={rate.key} className={`card m-1 p-1 text-white ${style}`}>
+                        <h4>{rate.text} - {value}</h4>
+                    </div>
+                );
+            })}
         </div>
     );
+};
+
+RatesList.propTypes = {
+    filteredRates: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.bool.isRequired
 };
 
 export default connect(mapStateToProps)(RatesList);

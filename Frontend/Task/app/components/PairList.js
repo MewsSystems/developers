@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { togglePair } from "../store/actions";
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => {
     const processPair = entry => {
@@ -40,5 +41,12 @@ const PairsList = ({ pairs, fetchingPairs, togglePair, pairFilter }) => {
         </div>
     );
 };
+
+PairsList.propTypes = {
+    pairs: PropTypes.arrayOf(PropTypes.object).isRequired,
+    fetchingPairs: PropTypes.bool.isRequired,
+    togglePair: PropTypes.func.isRequired,
+    pairFilter: PropTypes.arrayOf(PropTypes.string).isRequired
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PairsList);
