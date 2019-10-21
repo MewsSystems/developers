@@ -19,6 +19,7 @@
   "plugins": ["react", "jest"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-console": "off"
+    "no-console": "off",
+    "no-nested-ternary": "off"
   }
 }

@@ -6,10 +6,11 @@ import thunk from 'redux-thunk';
 
 import App from './components/app';
 
-import { configuration, test } from './reducers';
+import { configuration, data, test } from './reducers';
 
 const allReducers = combineReducers({
   configuration,
+  data,
   test,
 });
 
