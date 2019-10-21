@@ -1,10 +1,12 @@
+
 import * as actionTypes from '../actions/actionTypes.js'
 import { updateObject } from "../../shared/utility";
 
 const initialState = {
     rates: [],
     loading: false,
-    error: null
+    error: null,
+    allRates: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +21,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_RATES_SUCCESS:
             return updateObject(state, {
                 loading: false,
-                rates: action.rates,
+                allRates: action.allRates,
                 error: null
             })
         case actionTypes.FETCH_RATES_FAILED:
@@ -30,10 +32,11 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_RATES:
             return updateObject(state, {
                 rates: action.rates,
-            })    
+            })
         default:
             return state
     }
 }
 
 export default reducer
+

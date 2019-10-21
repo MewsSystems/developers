@@ -27,7 +27,8 @@
     "express": "4.14.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
+    "use-global-hook": "^0.1.11",
     "webpack": "4.41.0",
-    "webpack-dev-server": "1.14.1"
+    "webpack-dev-server": "3.2.1"
   }
 }

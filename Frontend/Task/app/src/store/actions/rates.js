@@ -1,6 +1,4 @@
 import * as actionTypes from './actionTypes.js'
-import axios from "../../axios.js";
-import { mapKeys } from 'lodash'
 
 export const fetchRatesStart = () => {
     return {
@@ -8,10 +6,10 @@ export const fetchRatesStart = () => {
     }
 }
 
-export const fetchRatesSuccess = (rates) => {
+export const fetchRatesSuccess = (allRates) => {
     return {
         type: actionTypes.FETCH_RATES_SUCCESS,
-        rates: rates
+        allRates: allRates
     }
 }
 
@@ -29,40 +27,4 @@ export const updateRates = (rates) => {
     }
 }
 
-export const fetchRates = (rates) => {
-    if( rates ) {
-        return dispatch => {
-            dispatch(fetchRatesStart())
-    
-            let linkArr = []
-            
-            rates.map(item => {
-                linkArr.push(`currencyPairIds[${item.idx}]=${item.id}`)
-            })
-    
-            let link = linkArr[0]
 
-            if (linkArr.length > 1) {
-                link = linkArr.join('&')
-            }
-        
-            axios.get(`/rates?${link}`)
-                .then(res => {
-                     mapKeys((res.data.rates), function(val, key) {
-                        rates.map(item => {
-                            if (item.id === key) {
-                                item.coef = val
-                            }
-                        })
-                    })
-
-                    dispatch(fetchRatesSuccess(rates))
-                })
-                .catch(
-                    error => {
-                        dispatch(fetchRatesFail(error))
-                    }
-                )
-        }
-    }    
-}

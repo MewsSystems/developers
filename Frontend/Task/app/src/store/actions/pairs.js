@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes.js'
 import axios from "../../axios";
 import { mapKeys } from 'lodash'
+import {fetchRatesFail, fetchRatesStart, fetchRatesSuccess} from "./rates";
 
 export const fetchPairsStart = () => {
     return {
@@ -29,12 +30,19 @@ export const updatePairs = (pairs) => {
     }
 }
 
+export const setPairsLinks = (pairsLinks) => {
+    return {
+        type: actionTypes.SET_PAIRS_LINKS,
+        pairsLinks: pairsLinks
+    }
+}
+
 export const fetchPairs = () => {
     return dispatch => {
         dispatch(fetchPairsStart())
         axios.get(`/configuration`)
             .then(res => {
-                const arrPairs = []              
+                const arrPairs = []
 
                 mapKeys((res.data.currencyPairs), function(val, key) {
                     arrPairs.push({
@@ -49,7 +57,15 @@ export const fetchPairs = () => {
                     pairsToShow.push(el)
                 })
 
+                const arrPairsLinks = []
+                arrPairs.map((el, idx) => {
+                    arrPairsLinks.push([el.id, el.idx])
+                })
+
                 dispatch(fetchPairsSuccess(pairsToShow))
+                dispatch(setPairsLinks(arrPairsLinks))
+                dispatch(getRates(arrPairsLinks))
+
             })
             .catch(
                 error => {
@@ -58,3 +74,90 @@ export const fetchPairs = () => {
             )
     }
 }
+
+export const getRates = (pairsLinks) => {
+    console.log(pairsLinks)
+    return dispatch => {
+
+        let getRates = setInterval(
+            () => {
+                dispatch(fetchRatesStart())
+
+                let linkArr = []
+
+                pairsLinks.map(item => {
+                    linkArr.push(`currencyPairIds[${item[1]}]=${item[0]}`)
+                })
+
+                let link = linkArr[0]
+
+                if (linkArr.length > 1) {
+                    link = linkArr.join('&')
+                }
+
+                axios.get(`/rates?${link}`)
+                    .then(res => {
+
+                        const allRates =[]
+
+                        mapKeys((res.data.rates), function(val, key) {
+                            allRates.push({id: key, coef: val})
+                        })
+
+                        dispatch(fetchRatesSuccess(allRates))
+                    })
+                    .catch(
+                        error => {
+                            dispatch(fetchRatesFail(error))
+                        }
+                    )
+            }, 5000
+        )
+    }
+}
+
+export const fetchRates = (pairsLinks) => {
+    console.log(pairsLinks)
+    return dispatch => {
+
+        let getRates = setInterval(
+            () => {
+                dispatch(fetchRatesStart())
+
+                let linkArr = []
+
+                pairsLinks.map(item => {
+                    linkArr.push(`currencyPairIds[${item[1]}]=${item[0]}`)
+                })
+
+                let link = linkArr[0]
+
+                if (linkArr.length > 1) {
+                    link = linkArr.join('&')
+                }
+
+                axios.get(`/rates?${link}`)
+                    .then(res => {
+
+                        const allRates =[]
+
+                        mapKeys((res.data.rates), function(val, key) {
+
+                            console.log('received rates')
+                            console.log(val, key)
+                            allRates.push({id: key, coef: val})
+                        })
+
+                        dispatch(fetchRatesSuccess(allRates))
+                    })
+                    .catch(
+                        error => {
+                            dispatch(fetchRatesFail(error))
+                        }
+                    )
+            }, 2000
+        )
+    }
+
+}
+

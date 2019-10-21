@@ -4,7 +4,8 @@ import { updateObject } from "../../shared/utility";
 const initialState = {
     pairs: [],
     loading: false,
-    error: null
+    error: null,
+    pairsLinks: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -31,7 +32,12 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, {
                 pairs: action.pairs
             })
-            
+        case actionTypes.SET_PAIRS_LINKS:
+            return updateObject(state, {
+                pairsLinks: action.pairsLinks
+            })
+
+
         default:
             return state
     }

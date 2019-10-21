@@ -4,6 +4,6 @@ export {
 } from './pairs'
 
 export {
-    fetchRates,
+    //fetchRates,
     updateRates
 } from './rates'

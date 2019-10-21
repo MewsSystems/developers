@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Provider } from 'react-redux'
+//import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+import {StoreContext} from 'redux-react-hook';
 import thunk from 'redux-thunk'
 
 import pairsReducer from './store/reducers/pairs'
@@ -21,9 +22,9 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 const app = (
-    <Provider store={store}>
+    <StoreContext.Provider value={store}>
         <App />
-    </Provider>
+    </StoreContext.Provider>
 )
 
 ReactDOM.render(app, document.getElementById('root'));

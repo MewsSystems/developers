@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useMappedState} from 'redux-react-hook';
 
 import { differenceBy } from 'lodash'
 
@@ -40,15 +40,14 @@ export const MainContent = () => {
     setChecked(newChecked);
   };
 
-  const handleAllRight = () => {   
+  const handleAllRight = () => {
     onUpdatePairs([])
     onUpdateRates(rates.concat(left))
-    onInitRates(rates.concat(left))
     setChecked([]);
   };
 
   const handleCheckedRight = () => {
-    let updatedPairs = [];    
+    let updatedPairs = [];
 
     leftChecked.forEach(elem => {
       left.map(pair => {
@@ -56,78 +55,86 @@ export const MainContent = () => {
           updatedPairs.push(pair)
         } else {
           return null
-        }          
+        }
       })
     })
 
-    let newLeft = differenceBy(left, updatedPairs, 'id')  
-    let newRates = rates.concat(updatedPairs)    
+    let newLeft = differenceBy(left, updatedPairs, 'id')
+    let newRates = rates.concat(updatedPairs)
 
     onUpdatePairs(newLeft)
     onUpdateRates(newRates)
-    onInitRates(newRates)
     setChecked([])
   };
 
   const handleCheckedLeft = () => {
-    let updatedPairs = [];    
+    let updatedPairs = [];
 
     rightChecked.forEach(elem => {
       right.map(pair => {
         if (pair.id === elem) {
           updatedPairs.push(pair)
-        }   
+        }
       })
     })
 
-    let newRates = differenceBy(right, updatedPairs, 'id')  
-    let newLeft = pairs.concat(updatedPairs)    
+    let newRates = differenceBy(right, updatedPairs, 'id')
+    let newLeft = pairs.concat(updatedPairs)
 
-    onUpdatePairs(newLeft)
-    onUpdateRates(newRates)
-    onInitRates(newRates)
-    setChecked([])
+    /*onUpdatePairs(newLeft)
+    //onUpdateRates(newRates)
+    setChecked([])*/
   };
 
   const handleAllLeft = () => {
-    onUpdatePairs(pairs.concat(right))
-    onUpdateRates([])
-    setChecked([])
-  };  
+    /*onUpdatePairs(pairs.concat(right))
+    //onUpdateRates([])
+    setChecked([])*/
+  };
 
   const dispatch = useDispatch()
   const onInitPairs = useCallback(() => dispatch(actions.fetchPairs()), [dispatch])
-  const onInitRates = useCallback((rates) => dispatch(actions.fetchRates(rates)), [dispatch])
+  //const onInitRates = useCallback((pairsLinks) => dispatch(actions.fetchRates(pairsLinks)), [dispatch])
   const onUpdatePairs = (pairs) => dispatch(actions.updatePairs(pairs))
   const onUpdateRates = useCallback((rates) => dispatch(actions.updateRates(rates)), [dispatch])
 
-  const pairs = useSelector(state => {
-    return state.pairs.pairs
-  })
+  const mapState = useCallback(
+      (state) => {
+        console.log(state)
+        return {
+          pairs: state.pairs.pairs,
+          rates: state.rates.rates,
+          pairsLinks: state.pairs.pairsLinks,
+          allRates: state.rates.allRates
+        }
+      },
+      []
+  )
 
-  const rates = useSelector(state => {
-    return state.rates.rates
-  })
+  const {pairs, rates, pairsLinks, allRates} = useMappedState(mapState);
 
   useEffect(() => {
     onInitPairs()
-  }, [onInitPairs])
+  }, [])
 
   useEffect(() => {
-    onUpdateRates(rates)
-  }, [onUpdateRates, rates])
-
-  useEffect(() => {
-    onInitRates(rates)
-  }, [onInitRates, rates])
-
-  useEffect(() => {
-    setLeft(pairs)
-  }, [pairs])  
+     setLeft(pairs)
+  }, [pairs])
 
   useEffect(() => {
     setRight(rates)
-  }, [rates])  
+  }, [rates])
+  /*
+
+
+      useEffect(() => {
+          onUpdateRates(rates)
+      }, [onUpdateRates])*/
+
+/*    useEffect(() => {
+        onInitRates(pairsLinks)
+    }, [onInitRates])*/
+
 
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState(pairs);
@@ -138,10 +145,10 @@ export const MainContent = () => {
 
   return (
     <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-      <PairsList handleToggle={handleToggle} items={left} checked={checked}/>
+      <PairsList handleToggle={handleToggle} items={left} checked={checked} type='left'/>
       <Grid item>
         <Grid container direction="column" alignItems="center">
-          <CustomButton 
+          <CustomButton
             variant="outlined"
             size="small"
             classes={classes.button}
@@ -159,14 +166,14 @@ export const MainContent = () => {
             ariaLabel="move selected right"
             img="&gt;"
           />
-          <CustomButton
+          {/*<CustomButton
             variant="outlined"
             size="small"
             classes={classes.button}
             onclick={handleCheckedLeft}
             disabled={rightChecked.length === 0}
             ariaLabel="move selected left"
-            img="&lt;"            
+            img="&lt;"
           />
           <CustomButton
             variant="outlined"
@@ -176,10 +183,10 @@ export const MainContent = () => {
             disabled={right.length === 0}
             ariaLabel="move all left"
             img="≪"
-          />
+          />*/}
         </Grid>
       </Grid>
-      <PairsList handleToggle={handleToggle} items={right} checked={checked}/>
+      <PairsList handleToggle={handleToggle} items={right} checked={checked} type='right' allRates={allRates}/>
     </Grid>
   );
 }
