@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import {StoreContext} from 'redux-react-hook';
+import { initialStatePairs } from "./store/reducers/pairs";
+import { initialStateRates } from "./store/reducers/rates";
+
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk'
 
 import pairsReducer from './store/reducers/pairs'
@@ -19,12 +21,38 @@ const rootReducer = combineReducers({
     rates: ratesReducer,
 })
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+const initialState = { initialStatePairs, initialStateRates}
+
+const loadSessionStorage = () => {
+    if (sessionStorage.length > 0) {
+
+        const pairs = JSON.parse(sessionStorage.getItem('pairs'))
+        const rates = JSON.parse(sessionStorage.getItem('rates'))
+        const pairsLinks = JSON.parse(sessionStorage.getItem('pairsLinks'))
+        const allRates = JSON.parse(sessionStorage.getItem('allRates'))
+
+        return {
+            pairs: {
+                pairs: pairs ? pairs : [],
+                pairsLinks: pairsLinks ? pairsLinks : []
+            },
+            rates: {
+                rates: rates ? rates : [],
+                allRates: allRates ? allRates : []
+            },
+        };
+    } else {
+        return initialState
+    }
+};
+
+
+const store = createStore(rootReducer, loadSessionStorage(), composeEnhancers(applyMiddleware(thunk)))
 
 const app = (
-    <StoreContext.Provider value={store}>
+    <Provider store={store}>
         <App />
-    </StoreContext.Provider>
+    </Provider>
 )
 
 ReactDOM.render(app, document.getElementById('root'));

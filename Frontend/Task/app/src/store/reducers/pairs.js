@@ -1,14 +1,14 @@
 import * as actionTypes from '../actions/actionTypes.js'
 import { updateObject } from "../../shared/utility";
 
-const initialState = {
+export const initialStatePairs = {
     pairs: [],
     loading: false,
     error: null,
     pairsLinks: []
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialStatePairs, action) => {
     switch (action.type) {
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
@@ -9,55 +9,74 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import { findIndex } from 'lodash'
+import {findIndex} from 'lodash'
 
 const useStyles = makeStyles(theme => ({
     paper: {
-      width: 300,
-      height: 700,
-      overflow: 'auto',
+        width: '100%',
+        maxWidth: '1300px',
+        height: 300,
+        overflow: 'auto',
     }
-  }));
+}));
 
 export const PairsList = props => {
     if (props.type === 'right' && props.allRates.length > 0) {
-        console.log(props.items)
-        console.log(props.allRates)
 
         props.items.map(elem => {
             let idx = findIndex(props.allRates, {'id': elem.id})
-            console.log(props.allRates[idx].coef)
             elem.coef = props.allRates[idx].coef
+            elem.status = props.allRates[idx].status
+            return elem
         })
     }
-    const classes = useStyles();
-    return (
-      <Grid item>
-        <Paper className={classes.paper}>
-          <List dense component="div" role="list">
-            {props.items.map(item => {
-              const labelId = `transfer-list-item-${item.id}-label`;
 
-              return (
-                <ListItem key={item.id} role="listitem" button onClick={props.handleToggle(item.id)}>
-                  <ListItemIcon>
-                    <Checkbox
-                      checked={props.checked.indexOf(item.id) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                      id={labelId}
-                      primary={`${item.pair[0].name}/${item.pair[1].name} ${item.pair[0].code}/${item.pair[1].code} ${item.idx} ${props.type === 'right' ? item.coef : ''}`}
-                  />
-                </ListItem>
-              );
-            })}
-            <ListItem />
-          </List>
-        </Paper>
-      </Grid>
-    );
+    const classes = useStyles();
+
+    let content = <></>
+
+    if (props.error) {
+        content = (
+            <Grid item>
+                <Paper className={classes.paper}>
+                    <List dense component="div" role="list">
+                        <p>
+                            Something' wrong. Please try later!
+                        </p>
+                    </List>
+                </Paper>
+            </Grid>
+        )
+    } else {
+        content = (
+            <Grid item>
+                <Paper className={classes.paper}>
+                    <List dense component="div" role="list">
+                        {props.items.map(item => {
+                            const labelId = `transfer-list-item-${item.id}-label`;
+                            return (
+                                <ListItem key={item.id} role="listitem" button onClick={props.handleToggle(item.id)}
+                                >
+                                    <ListItemIcon>
+                                        <Checkbox
+                                            checked={props.checked.indexOf(item.id) !== -1}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{'aria-labelledby': labelId}}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        id={labelId}
+                                        primary={`${item.pair[0].name}/${item.pair[1].name} ${item.pair[0].code}/${item.pair[1].code} ${props.type === 'right' && item.coef !== undefined ? item.coef : ''} ${props.type === 'right' && item.status !== undefined ? item.status : ''}`}
+                                    />
+                                </ListItem>
+                            );
+                        })}
+                        <ListItem/>
+                    </List>
+                </Paper>
+            </Grid>
+        )
+    }
+    return content
 }

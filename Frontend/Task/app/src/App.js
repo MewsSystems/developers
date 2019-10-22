@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import { MainContent } from './pages/MainContent'
+import MainContent from './pages/MainContent'
 
 const App = props => {
 
