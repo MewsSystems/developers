@@ -14,7 +14,7 @@ import {findIndex} from 'lodash'
 const useStyles = makeStyles(theme => ({
     paper: {
         width: '100%',
-        maxWidth: '1300px',
+        maxWidth: '500px',
         height: 300,
         overflow: 'auto',
     }

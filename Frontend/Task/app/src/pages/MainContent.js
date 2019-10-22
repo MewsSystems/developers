@@ -16,7 +16,9 @@ import Spinner from '../components/UI/Spinner/Spinner'
 const useStyles = makeStyles(theme => ({
     root: {
         margin: 'auto',
+        flexDirection: 'column',
     },
+
     button: {
         margin: theme.spacing(0.5, 0),
     },
