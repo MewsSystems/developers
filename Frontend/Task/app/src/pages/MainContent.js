@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme => ({
         margin: 'auto',
         flexDirection: 'column',
     },
+    btns: {
+        transform: 'rotate(90deg)'
+    },
 
     button: {
         margin: theme.spacing(0.5, 0),
@@ -44,12 +47,6 @@ export const MainContent = () => {
         setChecked(newChecked);
     };
 
-    const handleAllRight = () => {
-        onUpdatePairs([])
-        onUpdateRates(rates.concat(left))
-        setChecked([]);
-    };
-
     const handleCheckedRight = () => {
         let updatedPairs = [];
 
@@ -60,6 +57,7 @@ export const MainContent = () => {
                 } else {
                     return null
                 }
+                return false
             })
         })
 
@@ -79,6 +77,7 @@ export const MainContent = () => {
                 if (pair.id === elem) {
                     updatedPairs.push(pair)
                 }
+                return false
             })
         })
 
@@ -87,12 +86,6 @@ export const MainContent = () => {
 
         onUpdatePairs(newLeft)
         onUpdateRates(newRates)
-        setChecked([])
-    };
-
-    const handleAllLeft = () => {
-        onUpdatePairs(pairs.concat(right))
-        onUpdateRates([])
         setChecked([])
     };
 
@@ -136,8 +129,14 @@ export const MainContent = () => {
 
 
     useEffect(() => {
-        onInitPairs()
-    }, [onInitPairs])
+        if (pairs.length === 0) {
+            onInitPairs()
+        } else {
+            onInitRates(pairsLinks)
+        }
+
+
+    }, [onInitPairs, onInitRates, pairsLinks, pairs.length])
 
     useEffect(() => {
         setLeft(pairs)
@@ -150,7 +149,7 @@ export const MainContent = () => {
 
     useEffect(() => {
         onUpdateRates(rates)
-    }, [onUpdateRates])
+    }, [onUpdateRates, rates])
 
     const [checked, setChecked] = useState([]);
     const [left, setLeft] = useState(pairs);
@@ -166,16 +165,7 @@ export const MainContent = () => {
             <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
                 <PairsList handleToggle={handleToggle} items={left} checked={checked} type='left' error={errorPairs}/>
                 <Grid item>
-                    <Grid container direction="column" alignItems="center">
-                        <CustomButton
-                            variant="outlined"
-                            size="small"
-                            classes={classes.button}
-                            onclick={handleAllRight}
-                            disabled={left.length === 0}
-                            ariaLabel="move all right"
-                            img="≫"
-                        />
+                    <Grid container direction="column" alignItems="center" className={classes.btns}>
                         <CustomButton
                             variant="outlined"
                             size="small"
@@ -193,15 +183,6 @@ export const MainContent = () => {
                             disabled={rightChecked.length === 0}
                             ariaLabel="move selected left"
                             img="&lt;"
-                        />
-                        <CustomButton
-                            variant="outlined"
-                            size="small"
-                            classes={classes.button}
-                            onclick={handleAllLeft}
-                            disabled={right.length === 0}
-                            ariaLabel="move all left"
-                            img="≪"
                         />
                     </Grid>
                 </Grid>
