@@ -67,11 +67,13 @@ export const fetchPairs = () => {
                 arrPairs.map((el, idx) => {
                     el.idx = idx
                     pairsToShow.push(el)
+                    return false
                 })
 
                 const arrPairsLinks = []
                 arrPairs.map((el, idx) => {
                     arrPairsLinks.push([el.id, el.idx])
+                    return false
                 })
 
                 dispatch(fetchPairsSuccess(pairsToShow))
@@ -90,7 +92,7 @@ export const fetchPairs = () => {
 export const getRates = (pairsLinks) => {
     return dispatch => {
 
-        let getRates = setInterval(
+        setInterval(
             () => {
                 dispatch(fetchRatesStart())
 
@@ -98,6 +100,7 @@ export const getRates = (pairsLinks) => {
 
                 pairsLinks.map(item => {
                     linkArr.push(`currencyPairIds[${item[1]}]=${item[0]}`)
+                    return false
                 })
 
                 let link = linkArr[0]
