@@ -28,7 +28,7 @@ export const getData = () => (dispatch, getState) => {
       timeout: 12000,
     })
       .then(response => {
-        const { data } = getState();
+        // const { data } = getState();
         const rate = parseFloat(Object.values(response.data.rates));
         let trend = 'N/A';
         if (oldData) {
@@ -54,7 +54,7 @@ export const getData = () => (dispatch, getState) => {
         });
       })
       .catch(error => {
-        const { data } = getState();
+        // const { data } = getState();
         data[key] = {
           rate: 'N/A',
           status: error.response.status,

@@ -9,8 +9,8 @@ class CurrencyList extends Component {
     const { dispatch, data } = this.props;
     // console.log('run-currencyList');
     dispatch(getConfiguration());
-    setInterval(() => dispatch(getData()), 10000);
-    // console.log('DATA', data);
+    setInterval(() => dispatch(getData()), 7500);
+    console.log('DATA', data);
   }
 
   render() {
@@ -26,18 +26,8 @@ class CurrencyList extends Component {
     }
 
     const currencyCouples = Object.keys(configuration).map(key => {
-      let rate;
-
-      if (Object.keys(data).length !== 0) {
-        Object.keys(data).forEach(j => {
-          // console.log('RATE-y', Object.keys(j).toString());
-          // console.log('RATE-z', key);
-          if (Object.keys(j).toString() === key) {
-            // console.log('RATE-x', Object.entries(j)[0][1]);
-            rate = Object.entries(j)[0][1];
-          }
-        });
-      }
+      // let rate;
+      // console.log('HERE2', data);
 
       return (
         <li className="list-group-item" key={key}>
@@ -48,7 +38,10 @@ class CurrencyList extends Component {
             Currency couple: {configuration[key][0].name} /{' '}
             {configuration[key][1].name}
           </p>
-          <p>Rate: {rate}</p>
+          <p>Rate: {data[key] ? data[key].rate : ''}</p>
+          <p>Status: {data[key] ? data[key].status : ''}</p>
+          <p>StatusText: {data[key] ? data[key].statusText : ''}</p>
+          <p>Trend: {data[key] ? data[key].trend : ''}</p>
         </li>
       );
     });
@@ -59,7 +52,7 @@ class CurrencyList extends Component {
 CurrencyList.propTypes = {
   dispatch: PropTypes.func.isRequired,
   configuration: PropTypes.objectOf(PropTypes.array),
-  data: PropTypes.objectOf(PropTypes.array),
+  data: PropTypes.objectOf(PropTypes.object),
   test3: PropTypes.string.isRequired,
 };
 
