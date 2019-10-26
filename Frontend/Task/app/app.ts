@@ -4,5 +4,5 @@ import { Main } from './Main';
 import * as React from 'react';
 
 export function run(element: HTMLElement) {
-    render(React.createElement(Main), element);
+  render(React.createElement(Main), element);
 }

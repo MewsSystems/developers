@@ -1,5 +1,5 @@
-import * as React from "react";
+import * as React from 'react';
 
 export const Main = () => {
-    return <div>Hello World</div>
+  return <div>Hello World</div>;
 };
