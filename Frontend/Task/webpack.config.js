@@ -3,7 +3,7 @@ const webpackConfig = {
     noEmitOnErrors: true,
   },
   entry: {
-    app: './app/app.ts',
+    app: './app/app.tsx',
   },
   output: {
     filename: '[name].js',

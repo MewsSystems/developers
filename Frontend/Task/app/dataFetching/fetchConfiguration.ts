@@ -12,6 +12,8 @@ const configCodec = t.interface({
   currencyPairs: t.record(t.string, pairCodec),
 });
 
+export type Config = t.TypeOf<typeof configCodec>;
+
 export async function fetchConfiguration(url: string) {
   const response = await fetch(url);
   const body = await response.json();
