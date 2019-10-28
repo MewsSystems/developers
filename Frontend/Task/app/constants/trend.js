@@ -1,0 +1,5 @@
+export default {
+  STAGNATING: 'STAGNATING',
+  GROWING: 'GROWING',
+  DECLINING: 'DECLINING',
+}

@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "es2015",
+    "stage-1",
+    "react"
+  ],
+  "plugins": [
+    [
+      "styled-components",
+      {
+        "displayName": true
+      }
+    ]
+  ]
+}
