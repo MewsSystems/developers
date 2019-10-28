@@ -1,18 +1,17 @@
 import { trend } from '../constants'
 
-export default (rates, prevRates) => {
-  const rateTrends = Object.assign({}, rates)
-
-  Object.keys(rateTrends).map(key => {
+export default (rates, prevRates) =>
+  Object.keys(rates).reduce((newObject, key) => {
     switch (true) {
       case rates[key] > prevRates[key]:
-        return (rateTrends[key] = trend.GROWING)
+        newObject[key] = trend.GROWING
+        break
       case rates[key] < prevRates[key]:
-        return (rateTrends[key] = trend.DECLINING)
+        newObject[key] = trend.DECLINING
+        break
       default:
-        return (rateTrends[key] = trend.STAGNATING)
+        newObject[key] = trend.STAGNATING
     }
-  })
 
-  return rateTrends
-}
+    return newObject
+  }, {})

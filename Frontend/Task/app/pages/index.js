@@ -7,7 +7,6 @@ import { getPairs, getRates } from '../actions'
 import {
   getCurrencyPairIds,
   getPairListState,
-  getRateListState,
   getInitialLoadSuccessful,
 } from '../selectors'
 
@@ -56,7 +55,6 @@ const mapStateToProps = state => ({
   currencyPairIds: getCurrencyPairIds(state),
   isRatesLoaded: getInitialLoadSuccessful(state),
   pairListState: getPairListState(state),
-  rateListState: getRateListState(state),
 })
 
 const mapDispatchToProps = dispatch => ({
