@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Config, fetchConfiguration } from './dataFetching/fetchConfiguration';
+import { PairsSelector } from './PairsSelector';
 
 type Props = {
   configUrl: string;
@@ -9,6 +10,19 @@ type Props = {
 export const Main = ({ configUrl }: Props) => {
   const [config, setConfig] = useState<Config | null>(null);
   const [loadingFailed, setLoadingFailed] = useState(false);
+  const [selectedPairIds, setSelectedPairs] = useState<ReadonlyArray<string>>(
+    [],
+  );
+
+  const togglePair = useCallback((togglingId: string) => {
+    setSelectedPairs(selectedPairs => {
+      if (selectedPairs.includes(togglingId)) {
+        return selectedPairs.filter(selectedId => selectedId !== togglingId);
+      }
+      return [...selectedPairs, togglingId];
+    });
+  }, []);
+
   useEffect(() => {
     fetchConfiguration(configUrl)
       .then(setConfig)
@@ -18,7 +32,17 @@ export const Main = ({ configUrl }: Props) => {
   }, [configUrl]);
 
   if (config) {
-    return <div>Config loaded</div>;
+    const pairs = Object.entries(config.currencyPairs).map(([id, pair]) => ({
+      id,
+      currencies: pair,
+      selected: selectedPairIds.includes(id),
+    }));
+
+    return (
+      <>
+        <PairsSelector pairs={pairs} togglePair={togglePair} />
+      </>
+    );
   }
   if (loadingFailed) {
     return <div>Config loading failed</div>;
