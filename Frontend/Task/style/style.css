@@ -6,6 +6,10 @@ body {
   background-color: lightsalmon !important;
 }
 
+.displayNone {
+  display: none !important;
+}
+
 .input_loader {
   width: 100%;
 }

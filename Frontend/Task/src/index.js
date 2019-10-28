@@ -4,14 +4,14 @@ import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import App from './components/app';
+import App from './components/App';
 
-import { configuration, data, test } from './reducers';
+import { configuration, data, searchText } from './reducers';
 
 const allReducers = combineReducers({
   configuration,
   data,
-  test,
+  searchText,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -16,9 +16,9 @@ export const data = (state = {}, action) => {
   }
 };
 
-export const test = (state = 'empty', action) => {
+export const searchText = (state = '', action) => {
   switch (action.type) {
-    case 'TEST':
+    case 'SEARCH_TEXT':
       return action.payload;
     default:
       return state;

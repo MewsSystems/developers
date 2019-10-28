@@ -14,30 +14,36 @@ class CurrencyList extends Component {
   }
 
   render() {
-    const { configuration, data, test3 } = this.props;
+    const { configuration, data, searchText } = this.props;
     // console.log('render2');
 
-    if (data.length !== 0) {
-      console.log('HERE', data);
-    }
+    const filterX = searchText.toUpperCase();
+    let displayClass = '';
+    let noResultPre = true;
+    let noResult = '';
 
-    if (Object.entries(configuration).length === 0) {
-      return <div>Loading...</div>;
-    }
+    const loading =
+      Object.entries(configuration).length === 0
+        ? React.createElement('div', { className: 'mt-4 ml-5' }, 'Loading...')
+        : '';
 
     const currencyCouples = Object.keys(configuration).map(key => {
-      // let rate;
-      // console.log('HERE2', data);
+      const currencyCoupleLabel = `${configuration[key][0].name} / ${configuration[key][1].name}`;
+
+      if (currencyCoupleLabel.toUpperCase().indexOf(filterX) > -1) {
+        displayClass = '';
+        noResultPre = false;
+      } else {
+        displayClass = 'displayNone';
+      }
+      noResult = noResultPre
+        ? React.createElement('div', { className: 'mt-4 ml-5' }, 'No Results')
+        : '';
 
       return (
-        <li className="list-group-item" key={key}>
-          <p>
-            Key: {key} {test3}
-          </p>
-          <p>
-            Currency couple: {configuration[key][0].name} /{' '}
-            {configuration[key][1].name}
-          </p>
+        <li className={`list-group-item ${displayClass}`} key={key}>
+          <p>Key: {key}</p>
+          <p>Currency couple: {currencyCoupleLabel}</p>
           <p>Rate: {data[key] ? data[key].rate : ''}</p>
           <p>Status: {data[key] ? data[key].status : ''}</p>
           <p>StatusText: {data[key] ? data[key].statusText : ''}</p>
@@ -45,7 +51,13 @@ class CurrencyList extends Component {
         </li>
       );
     });
-    return <ul className="list-group">{currencyCouples}</ul>;
+    return (
+      <div className="col-md-12 app-list p-0">
+        {loading}
+        {noResult}
+        <ul className="list-group">{currencyCouples}</ul>
+      </div>
+    );
   }
 }
 
@@ -53,19 +65,20 @@ CurrencyList.propTypes = {
   dispatch: PropTypes.func.isRequired,
   configuration: PropTypes.objectOf(PropTypes.array),
   data: PropTypes.objectOf(PropTypes.object),
-  test3: PropTypes.string.isRequired,
+  searchText: PropTypes.string,
 };
 
 CurrencyList.defaultProps = {
   configuration: {},
   data: {},
+  searchText: '',
 };
 
 function mapStateToProps(state) {
   return {
     configuration: state.configuration,
     data: state.data,
-    test3: state.test,
+    searchText: state.searchText,
   };
 }
 
