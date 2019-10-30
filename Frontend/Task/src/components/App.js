@@ -14,26 +14,31 @@ class App extends Component {
   render() {
     return (
       <div className="main">
-        <nav className="navbar navbar-light">
-          <h5 className="navbar-brand mx-auto mb-2" href="">
-            Currency Converter
-          </h5>
-          <form className="form-inline my-2 my-lg-0">
-            <div className="form-control mr-sm-2">
-              <i className="fas fa-search" />
-              <input
-                type="text"
-                className="ml-2 border-0"
-                placeholder="Currency Pair Filter"
-                onChange={event => this.onTextChange(event.target.value)}
-              />
-            </div>
-          </form>
-          <a href="xxx-Github" target="_blank">
-            <i className="fab fa-github fa-2x" />
-          </a>
-          <CurrencyList />
+        <nav className="navbar navbar-light bd-navbar row">
+          <div className="col-md-6 d-flex justify-content-center">
+            <h3 className="navbar-brand m-0" href="">
+              Currency Converter
+            </h3>
+          </div>
+          <div className="col-md-6 d-flex">
+            <form className="d-inline-block flex-grow-1">
+              <div className="form-control d-flex">
+                <i className="fas fa-search mr-2 mt-1" />
+                <input
+                  id="input-text"
+                  type="text"
+                  className="border-0 flex-grow-1"
+                  placeholder="Currency Pair Filter"
+                  onChange={event => this.onTextChange(event.target.value)}
+                />
+              </div>
+            </form>
+            <a className="d-inline-block">
+              <i className="fab fa-github fa-2x github-icon mt-1 ml-5 align-middle" />
+            </a>
+          </div>
         </nav>
+        <CurrencyList />
       </div>
     );
   }
