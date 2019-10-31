@@ -1,0 +1,18 @@
+{
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "options": {
+        "parser": "babel"
+      }
+    },
+    {
+      "files": ["*.scss"],
+      "options": {
+        "parser": "scss"
+      }
+    }
+  ],
+  "singleQuote": true,
+  "trailingComma": "es5"
+}

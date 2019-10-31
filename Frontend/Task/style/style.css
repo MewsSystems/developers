@@ -1,0 +1,31 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #f1efef;
+}
+
+.github-icon {
+  color: black;
+}
+
+.displayNone {
+  display: none !important;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 35px;
+}
+
+.grid-item {
+  width: 104px;
+  margin-bottom: 4px;
+}
+
+input:focus {
+  outline: 0px;
+}
