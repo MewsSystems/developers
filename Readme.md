@@ -1,13 +1,3 @@
-# Events on 30th October
-
-## 👨‍🎓👩‍🎓 CTU Workshop
-
-If you are visiting us today at the Career Day at the [Faculty of Information Technology at CTU in Prague](https://fit.cvut.cz/en) and you are attending our workshop that starts at **13:00** please refer to the [assignment](https://github.com/MewsSystems/developers/blob/master/workshop_CTU/assignment.md). Have fun!
-
-## 🏓🍺 ReactPong
-
-And if you are at the ReactiveConf today and you'd like to chat a bit more with us and have some beer and play some ping pong at our [office](https://www.google.com/maps/place/Mews+Systems/@50.074992,14.4276563,17z/data=!3m1!4b1!4m5!3m4!1s0x470b9486dc430db5:0x3e6516a6c67deb9c!8m2!3d50.074992!4d14.429845) tonight at 20:00! You can register using our [Booking engine](https://demo.mews.li/distributor/757d2d2c-4216-4626-9ef1-aaf1012157fa). ✌ See you there!
-
 # Mews developers
 
 Information about development job opportunities and career at [Mews Systems](https://www.mewssystems.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
