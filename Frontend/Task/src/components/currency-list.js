@@ -6,10 +6,9 @@ import { getConfiguration, getData } from '../actions';
 
 class CurrencyList extends Component {
   componentDidMount() {
-    const { dispatch, data } = this.props;
+    const { dispatch } = this.props;
     dispatch(getConfiguration());
     setInterval(() => dispatch(getData()), 7500);
-    console.log('DATA', data);
   }
 
   render() {
@@ -63,19 +62,19 @@ class CurrencyList extends Component {
 
       return (
         <div className={`${displayClass} row bg-white d-flex my-1`} key={key}>
-          <div className="col-md-6 align-self-center my-4">
+          <div className="col-6 align-self-center my-4">
             <h6 className="text-center m-0">{currencyCoupleLabel}</h6>
           </div>
-          <div className="col-md-2 align-self-center">
+          <div className="col-2 align-self-center">
             <p className="text-center m-0">{data[key] && data[key].rate}</p>
           </div>
-          <div className={`col-md-2 align-self-center ${colorStatus}`}>
+          <div className={`col-2 align-self-center ${colorStatus}`}>
             <p className="text-center mb-1">{data[key] && data[key].status}</p>
             <p className="text-center mb-1">
               {data[key] && `(${data[key].statusText})`}
             </p>
           </div>
-          <div className="col-md-2 align-self-center">
+          <div className="col-2 align-self-center">
             {data[key] && (
               <div className="d-flex justify-content-center">{trendIcon}</div>
             )}
@@ -84,21 +83,21 @@ class CurrencyList extends Component {
       );
     });
     return (
-      <div className="col-md-12 app-list p-0">
+      <div className="col-12 app-list p-0">
         {loading}
         {noResult}
         {!loading && !noResult && (
           <div className="row bg-secondary">
-            <div className="col-md-6 mt-2">
+            <div className="col-6 mt-2">
               <h6 className="text-center text-white">Currency Couples</h6>
             </div>
-            <div className="col-md-2 mt-2">
+            <div className="col-2 mt-2">
               <h6 className="text-center text-white">Rates</h6>
             </div>
-            <div className="col-md-2 mt-2">
+            <div className="col-2 mt-2">
               <h6 className="text-center text-white">Server Status</h6>
             </div>
-            <div className="col-md-2 mt-2">
+            <div className="col-2 mt-2">
               <h6 className="text-center text-white">Trend</h6>
             </div>
           </div>

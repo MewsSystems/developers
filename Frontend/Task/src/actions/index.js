@@ -41,6 +41,7 @@ export const getData = () => (dispatch, getState) => {
               ? 'EQUAL'
               : 'N/A';
         }
+
         data[key] = {
           rate,
           status: response.status,
