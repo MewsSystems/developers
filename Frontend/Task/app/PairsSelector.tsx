@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
+import { Currency } from './Currency';
 
 type CheckboxProps = {
   id: string;
@@ -13,11 +14,6 @@ const Checkbox = ({ id, checked, togglePair }: CheckboxProps) => {
   }, [id, togglePair]);
 
   return <input type="checkbox" checked={checked} onChange={click} />;
-};
-
-type Currency = {
-  code: string;
-  name: string;
 };
 
 type Props = {

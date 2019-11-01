@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Config, fetchConfiguration } from './dataFetching/fetchConfiguration';
 import { PairsSelector } from './PairsSelector';
+import { RateList } from './RateList';
+import { Trend } from './Trend';
 
 type Props = {
   configUrl: string;
@@ -36,11 +38,15 @@ export const Main = ({ configUrl }: Props) => {
       id,
       currencies: pair,
       selected: selectedPairIds.includes(id),
+      rate: null,
+      trend: Trend.Stagnating,
     }));
+    const selectedPairs = pairs.filter(pair => pair.selected);
 
     return (
       <>
         <PairsSelector pairs={pairs} togglePair={togglePair} />
+        <RateList pairs={selectedPairs} />
       </>
     );
   }
