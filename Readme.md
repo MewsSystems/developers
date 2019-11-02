@@ -1,3 +1,7 @@
+# DotNet Days in Prague
+
+Are you at the [Dot Net Days conference](https://www.dotnetdays.cz/) today? Our backend developers prepared a little quiz for you. How good are you? Try the challenge [**here**](https://mews-challenge.firebaseapp.com/#/events/dotnetdays).
+
 # Mews developers
 
 Information about development job opportunities and career at [Mews Systems](https://www.mewssystems.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
