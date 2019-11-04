@@ -10,7 +10,7 @@
   "main": "Sources/index.js",
   "scripts": {
     "start-server": "node server",
-    "start": "webpack-dev-server --hot --inline --progress"
+    "start": "cd client && npm start"
   },
   "babel": {
     "presets": [
