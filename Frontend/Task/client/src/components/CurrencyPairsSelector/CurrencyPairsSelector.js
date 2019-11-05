@@ -1,7 +1,7 @@
 import React from 'react';
 import { reduxForm } from 'redux-form';
 import { Field } from 'redux-form';
-import { CheckboxGroup } from '../../components';
+import CheckboxGroup from '../CheckboxGroup';
 
 const buildCurrencyPairsSelectorOptions = (currencyPairs = {}) => {
 

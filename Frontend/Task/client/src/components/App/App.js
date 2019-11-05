@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { isEmpty } from 'ramda';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
+import CurrencyPairsSelector from '../CurrencyPairsSelector';
+import CurrencyPairsRatesList from '../CurrencyPairsRatesList';
 import { fetchCurrencyPairs, selectCurrencyPairs } from '../../redux/ducks/currencyPairs';
 import { fetchCurrencyPairsRates, selectCurrencyPairsRates } from '../../redux/ducks/currencyPairsRates';
-import CurrencyPairsSelector from '../CurrencyPairsSelector';
-import { CurrencyPairsRatesList } from '../../components';
 import { useInterval } from '../../hooks';
 
 const selector = formValueSelector('currencyPairsSelector');
@@ -27,7 +27,7 @@ const App = ({
                 fetchCurrencyPairsRates(selectedCurrencyPairsIds);
             }
         }
-    }, 5000);
+    }, 2000);
 
     useEffect(() => {
         fetchCurrencyPairs();

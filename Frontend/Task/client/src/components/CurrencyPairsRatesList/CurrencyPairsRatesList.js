@@ -4,12 +4,7 @@ import { usePrevious } from '../../hooks';
 
 const CurrencyPairsRatesList = ({currencyPairs = {}, currencyPairsRates = {}}) => {
 
-    // console.log('CurrencyPairsRatesList/currencyPairs =', currencyPairs);
-    // console.log('CurrencyPairsRatesList/currencyPairsRates =', currencyPairsRates);
-
     const prevCurrencyPairsRates = usePrevious(currencyPairsRates);
-
-    console.log('previousCurrencyPairsRates', prevCurrencyPairsRates);
 
     const list = Object.keys(currencyPairsRates).map(currencyPairId => {
         return {
