@@ -65,7 +65,7 @@ namespace ExchangeRateUpdater
             {
                 if (int.TryParse(currencyMatchResult[0], out var amount))
                 {
-                    return value / amount; //I suppose it is not in contradiction with task description
+                    return value / amount; //I suppose it is not in contradiction with task description 
                 }
                 return null;
             }
