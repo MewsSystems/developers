@@ -1,0 +1,10 @@
+.container {
+    border: 1px solid rgb(128, 128, 128);
+    padding: 2rem;
+    margin-bottom: 4rem;
+}
+
+.form-header {
+    font-weight: bold;
+    margin-bottom: 2rem;
+}

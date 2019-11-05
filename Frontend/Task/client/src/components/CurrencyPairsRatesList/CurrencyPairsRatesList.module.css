@@ -1,0 +1,40 @@
+.table {
+    width: 30rem;
+    margin: 0 auto;
+    border: 1px solid rgb(128, 128, 128);
+}
+
+.table-row {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 4rem;
+}
+
+.table-row--header {
+    background-color: #F5F5F5;
+}
+
+.table-column {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.table-column--shortcut {
+    width: 15rem;
+}
+
+.table-column--rate {
+    width: 10rem;
+}
+
+.table-column--icon {
+    width: 5rem;
+}
+
+.shortcut {
+    font-weight: bold;
+}

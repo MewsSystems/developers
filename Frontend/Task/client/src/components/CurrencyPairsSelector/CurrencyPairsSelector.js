@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { Field } from 'redux-form';
 import CheckboxGroup from '../CheckboxGroup';
+import styles from './CurrencyPairsSelector.module.css';
 
 const buildCurrencyPairsSelectorOptions = (currencyPairs = {}) => {
 
@@ -22,14 +23,25 @@ let LoanForm = ({handleSubmit, currencyPairs = {}}) => {
     const currencyPairsSelectorOptions = buildCurrencyPairsSelectorOptions(currencyPairs);
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Field
-                type="checkbox"
-                component={CheckboxGroup}
-                name="selectedCurrencyPairsIds"
-                options={currencyPairsSelectorOptions}
-            />
-        </form>
+        <div
+            className={styles['container']}
+        >
+            <div
+                className={styles['form-header']}
+            >
+                Select Currency Pairs
+            </div>
+            <form
+                onSubmit={handleSubmit}
+            >
+                <Field
+                    type="checkbox"
+                    component={CheckboxGroup}
+                    name="selectedCurrencyPairsIds"
+                    options={currencyPairsSelectorOptions}
+                />
+            </form>
+        </div>
     );
 };
 

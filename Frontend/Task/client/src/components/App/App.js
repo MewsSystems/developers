@@ -7,6 +7,7 @@ import CurrencyPairsRatesList from '../CurrencyPairsRatesList';
 import { fetchCurrencyPairs, selectCurrencyPairs } from '../../redux/ducks/currencyPairs';
 import { fetchCurrencyPairsRates, selectCurrencyPairsRates } from '../../redux/ducks/currencyPairsRates';
 import { useInterval } from '../../hooks';
+import styles from './App.module.css';
 
 const selector = formValueSelector('currencyPairsSelector');
 
@@ -33,33 +34,45 @@ const App = ({
         fetchCurrencyPairs();
     }, [fetchCurrencyPairs]);
 
-    return isEmpty(currencyPairs.data)
-        ? (
-            <div>
-                Loading configuration...
-            </div>
-        )
-        : (
-            <div>
+    const renderCurrencyPairsSelector = () => (
+        isEmpty(currencyPairs.data)
+            ? (
+                <div>
+                    Loading configuration...
+                </div>
+            )
+            : (
                 <CurrencyPairsSelector
                     currencyPairs={currencyPairs.data}
                 />
-                {
-                    isEmpty(currencyPairsRates.data)
-                        ? (
-                            <div>
-                                Loading rates...
-                            </div>
-                        )
-                        : (
-                            <CurrencyPairsRatesList
-                                currencyPairs={currencyPairs.data}
-                                currencyPairsRates={currencyPairsRates.data}
-                            />
-                        )
-                }
-            </div>
-        );
+            )
+    );
+
+    const renderCurrencyPairsRatesList = () => (
+        isEmpty(currencyPairs.data)
+            ? null
+            : isEmpty(currencyPairsRates.data)
+            ? (
+                <div>
+                    Loading rates...
+                </div>
+            )
+            : (
+                <CurrencyPairsRatesList
+                    currencyPairs={currencyPairs.data}
+                    currencyPairsRates={currencyPairsRates.data}
+                />
+            )
+    );
+
+    return (
+        <div
+            className={styles['content']}
+        >
+            {renderCurrencyPairsSelector()}
+            {renderCurrencyPairsRatesList()}
+        </div>
+    );
 };
 
 const mapStateToProps = state => ({
