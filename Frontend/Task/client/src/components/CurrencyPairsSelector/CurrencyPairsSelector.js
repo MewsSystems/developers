@@ -3,26 +3,11 @@ import { reduxForm } from 'redux-form';
 import { Field } from 'redux-form';
 import CheckboxGroup from '../CheckboxGroup';
 import styles from './CurrencyPairsSelector.module.css';
+import { isEmpty } from 'ramda';
 
-const buildCurrencyPairsSelectorOptions = (currencyPairs = {}) => {
+const CurrencyPairsSelector = ({handleSubmit, options = [], loading = false, error = null}) => {
 
-    const options = [];
-
-    for (let key in currencyPairs) {
-        options.push({
-            value: key,
-            label: `${currencyPairs[key][0].code} / ${currencyPairs[key][1].code} - ${currencyPairs[key][0].name} / ${currencyPairs[key][1].name}`
-        });
-    }
-
-    return options;
-};
-
-let LoanForm = ({handleSubmit, currencyPairs = {}}) => {
-
-    const currencyPairsSelectorOptions = buildCurrencyPairsSelectorOptions(currencyPairs);
-
-    return (
+    return isEmpty(options) || loading || error ? null : (
         <div
             className={styles['container']}
         >
@@ -38,7 +23,7 @@ let LoanForm = ({handleSubmit, currencyPairs = {}}) => {
                     type="checkbox"
                     component={CheckboxGroup}
                     name="selectedCurrencyPairsIds"
-                    options={currencyPairsSelectorOptions}
+                    options={options}
                 />
             </form>
         </div>
@@ -51,4 +36,4 @@ export default reduxForm({
     initialValues: {
         selectedCurrencyPairsIds: [],
     }
-})(LoanForm);
+})(CurrencyPairsSelector);

@@ -1,7 +1,7 @@
 import React from 'react';
 // credit to https://github.com/redux-form/redux-form/issues/1037
 
-const CheckboxGroup = ({options, input: {name, value, onChange}}) => (
+const CheckboxGroup = ({options = [], input: {name, value, onChange}}) => (
     <div>
         {options.map((option, index) => (
             <div

@@ -2,7 +2,7 @@ import { ofType } from 'redux-observable';
 import { ajax } from 'rxjs/ajax';
 import { path, isEmpty } from 'ramda';
 import { of } from 'rxjs';
-import { map, switchMap, catchError, debounceTime } from 'rxjs/operators';
+import { map, switchMap, catchError } from 'rxjs/operators';
 import { combineReducers } from 'redux';
 
 export const FETCH_CURRENCY_PAIRS_RATES_REQUEST = 'FETCH_CURRENCY_PAIRS_RATES_REQUEST';
@@ -41,7 +41,6 @@ const getUrl = (currencyPairsIds = []) => {
 
 export const fetchCurrencyPairsRatesEpic = (action$) => action$.pipe(
     ofType(FETCH_CURRENCY_PAIRS_RATES_REQUEST),
-    debounceTime(500),
     switchMap(action => {
         const currencyPairsIds = action.payload;
         return ajax.getJSON(getUrl(currencyPairsIds))
