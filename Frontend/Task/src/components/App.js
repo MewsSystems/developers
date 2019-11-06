@@ -12,6 +12,8 @@ class App extends Component {
   }
 
   render() {
+    const { text } = this.props;
+
     return (
       <div className="main">
         <nav className="navbar navbar-light bd-navbar row">
@@ -29,6 +31,7 @@ class App extends Component {
                   type="text"
                   className="border-0 flex-grow-1"
                   placeholder="Currency Pair Filter"
+                  value={text}
                   onChange={event => this.onTextChange(event.target.value)}
                 />
               </div>
@@ -46,11 +49,16 @@ class App extends Component {
 
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  text: PropTypes.string,
+};
+
+App.defaultProps = {
+  text: '',
 };
 
 function mapStateToProps(state) {
   return {
-    text: state.text,
+    text: state.searchText,
   };
 }
 
