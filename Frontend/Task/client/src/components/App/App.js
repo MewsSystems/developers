@@ -5,9 +5,10 @@ import { formValueSelector } from 'redux-form';
 import CurrencyPairsSelector from '../CurrencyPairsSelector';
 import { fetchCurrencyPairs, selectCurrencyPairs } from '../../redux/ducks/currencyPairs';
 import { fetchCurrencyPairsRates, selectCurrencyPairsRates } from '../../redux/ducks/currencyPairsRates';
-import { useInterval, usePrevious } from '../../hooks';
+import { useInterval, usePrevious, useSessionStorage } from '../../hooks';
 import styles from './App.module.css';
 import CurrencyPairsRatesList from '../CurrencyPairsRatesList';
+import LoadingOverlay from 'react-loading-overlay';
 
 const getCurrencyPairsMap = (data = {}) => {
     if (!isEmpty(data)) {
@@ -62,15 +63,31 @@ const App = ({
 
     const [currencyPairsMap, setCurrencyPairsMap] = useState([]);
 
+    const [
+        selectedCurrencyPairsIdsInitialValue,
+        setSelectedCurrencyPairsIdsInitialValue,
+    ] = useSessionStorage('selectedCurrencyPairsIds');
+
+    const prevRates = usePrevious(currencyPairsRates.data);
+    const currencyPairsRatesList = getCurrencyPairsRatesList(currencyPairsMap, prevRates, currencyPairsRates.data, selectedCurrencyPairsIds);
+    const currencyPairsSelectorOptions = getCurrencyPairsSelectorOptions(currencyPairsMap);
+
     useEffect(() => {
         fetchCurrencyPairs();
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         if (isEmpty(currencyPairsMap)) {
             setCurrencyPairsMap(getCurrencyPairsMap(currencyPairs.data));
         }
+        // eslint-disable-next-line
     }, [currencyPairs]);
+
+    useEffect(() => {
+        setSelectedCurrencyPairsIdsInitialValue(selectedCurrencyPairsIds);
+        // eslint-disable-next-line
+    }, [selectedCurrencyPairsIds]);
 
 
     useInterval(() => {
@@ -79,23 +96,29 @@ const App = ({
         }
     }, 2000);
 
-
-    const prevRates = usePrevious(currencyPairsRates.data);
-
     return (
-        <div
-            className={styles['content']}
+        <LoadingOverlay
+            active={isEmpty(currencyPairsSelectorOptions) || isEmpty(currencyPairsRatesList)}
+            spinner
+            text='Loading App...'
         >
-            <CurrencyPairsSelector
-                options={getCurrencyPairsSelectorOptions(currencyPairsMap)}
-                loading={currencyPairs.loading}
-                error={currencyPairs.error}
-            />
-            <CurrencyPairsRatesList
-                currencyPairsRatesList={getCurrencyPairsRatesList(currencyPairsMap, prevRates, currencyPairsRates.data, selectedCurrencyPairsIds)}
-                error={currencyPairsRates.error}
-            />
-        </div>
+            <div
+                className={styles['content']}
+            >
+                <CurrencyPairsSelector
+                    options={currencyPairsSelectorOptions}
+                    loading={currencyPairs.loading}
+                    error={currencyPairs.error}
+                    initialValues={{
+                        selectedCurrencyPairsIds: selectedCurrencyPairsIdsInitialValue || []
+                    }}
+                />
+                <CurrencyPairsRatesList
+                    currencyPairsRatesList={currencyPairsRatesList}
+                    error={currencyPairsRates.error}
+                />
+            </div>
+        </LoadingOverlay>
     );
 };
 

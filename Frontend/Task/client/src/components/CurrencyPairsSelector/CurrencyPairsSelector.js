@@ -33,7 +33,4 @@ const CurrencyPairsSelector = ({handleSubmit, options = [], loading = false, err
 export default reduxForm({
     // a unique name for the form
     form: 'currencyPairsSelector',
-    initialValues: {
-        selectedCurrencyPairsIds: [],
-    }
 })(CurrencyPairsSelector);
