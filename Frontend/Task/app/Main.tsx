@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Config, fetchConfiguration } from './dataFetching/fetchConfiguration';
 import { PairsSelector } from './PairsSelector';
 import { RateList } from './RateList';
 import { fetchRates, Rates } from './dataFetching/fetchRates';
 import { compareRates } from './compareRates';
+import { useConfig } from './useConfig';
 
 type Props = {
   configUrl: string;
@@ -17,8 +17,7 @@ export const Main = ({
   ratesRefreshMilliseconds,
   ratesUrl,
 }: Props) => {
-  const [config, setConfig] = useState<Config | null>(null);
-  const [loadingFailed, setLoadingFailed] = useState(false);
+  const [config, loadingFailed] = useConfig(configUrl);
   const [selectedPairIds, setSelectedPairs] = useState<ReadonlyArray<string>>(
     [],
   );
@@ -31,14 +30,6 @@ export const Main = ({
       return [...selectedPairs, togglingId];
     });
   }, []);
-
-  useEffect(() => {
-    fetchConfiguration(configUrl)
-      .then(setConfig)
-      .catch(() => {
-        setLoadingFailed(true);
-      });
-  }, [configUrl]);
 
   const [[currentRates, previousRates], setRates] = useState<[Rates, Rates]>([
     {},
