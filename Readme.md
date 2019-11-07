@@ -1,6 +1,6 @@
 # Mews developers
 
-Information about development job opportunities and career at [Mews Systems](https://www.mewssystems.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
+Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](https://calendar.google.com/calendar/embed?src=mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com&ctz=Europe%2FPrague) of the events we organize or attend and let's get in touch! You can also add it to your calendar via the [iCal](https://calendar.google.com/calendar/ical/mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com/public/basic.ics) to never miss a Mews thing!
 
@@ -10,13 +10,13 @@ Would you like to meet us? Hear us talk or check if we're coming to your area? C
 
 ## 💼 Open positions
 
-Currently, we are seeking backend developers, frontend developers, data analysts and Android developers of all seniority levels. For all current openings, even outside development, check our open positions on [Workable](https://mews-systems.workable.com/). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
+Currently, we are seeking backend developers, frontend developers, data analysts and Android developers of all seniority levels. For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
 
 As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for. If you'd like to first talk to us, that's an option as well, the task is not a mandatory thing.
 
 - [Task](Backend) for [backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true) candidates.
 - [Task](Frontend) for [frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true) candidates.
-- [Task](Android) for Android candidates.
+- [Task](Android) for [android developer](https://apply.workable.com/mews/j/24478C334B/) c
 
 <a name='about-mews'/>
 
@@ -120,3 +120,4 @@ For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) 
     - [Lupa.cz](https://www.lupa.cz/clanky/jan-siroky-mews-na-nasem-softwaru-funguje-asi-tisic-hotelu-hilton-zatim-nemame/) - technical interview with the CTO Honza.
     - [Forbes](https://www.forbes.cz/velka-rana-nenapadny-cesky-startup-mews-ziskava-investici-768-milionu-korun/) - announcement of the Series B investment.
     - [CzechCrunch](https://www.czechcrunch.cz/2019/08/snil-o-psani-a-filmarine-dnes-richard-valtr-po-celem-svete-stavi-superhotely-a-buduje-miliardovy-startup-mews/) - interview with the founder Richard about his visions behind Mews.
+    - [Radiozurnal](https://radiozurnal.rozhlas.cz/spolupraci-firem-a-vysokych-skol-si-pochvaluji-obe-strany-partneri-jsou-ale-take-8096412)
