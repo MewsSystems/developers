@@ -4,5 +4,12 @@ import { Main } from './Main';
 import * as React from 'react';
 
 export function run(element: HTMLElement) {
-  render(<Main configUrl={endpoints.config} />, element);
+  render(
+    <Main
+      configUrl={endpoints.config}
+      ratesUrl={endpoints.rates}
+      ratesRefreshMilliseconds={interval}
+    />,
+    element,
+  );
 }
