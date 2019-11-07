@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Xml;
 
 namespace ExchangeRateUpdater
 {
@@ -13,7 +15,23 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+             var xmlPath = "http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
+
+            using (XmlTextReader reader = new XmlTextReader(xmlPath))
+            {
+                XmlDocument document = new XmlDocument();
+                document.Load(reader);
+
+                XmlNodeList xmlCurrency = document.GetElementsByTagName("radek");
+                foreach (XmlNode item in xmlCurrency)
+                {
+                    var currency = currencies.FirstOrDefault(o => o.Code == item.Attributes["kod"].InnerText);
+                    if (currency != null)
+                    {
+                        yield return new ExchangeRate(currency, new Currency("CZK"), decimal.Parse(item.Attributes["kurz"].InnerText));
+                    }
+                }
+            }
         }
     }
 }
