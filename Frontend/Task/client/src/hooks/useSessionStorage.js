@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { prop, isNil, identity } from 'ramda';
+import { prop, isNil } from 'ramda';
 
 const supportsSessionStorage = () => {
     if (prop('sessionStorage', window) && !isNil(window.sessionStorage)) {
@@ -10,24 +10,24 @@ const supportsSessionStorage = () => {
     }
 };
 
-export default function (sessionStorageKey) {
+// I cannot add cleanup here because for some reason it is triggered at page refresh
+// I use then session storage instead of local storage, to have data cleaned up at the end of session
+export default function (sessionStorageKey, initialValue) {
 
     if (!supportsSessionStorage()) {
-        return [null, identity];
+        return useState(initialValue);
     } else {
-        const [storedValue, setStoredValue] = useState(() => {
+        const [value, setValue] = useState(() => {
                 return prop(sessionStorageKey, sessionStorage)
                     ? JSON.parse(sessionStorage.getItem(sessionStorageKey))
-                    : null;
+                    : initialValue;
             }
         );
 
         useEffect(() => {
-            sessionStorage.setItem(sessionStorageKey, JSON.stringify(storedValue));
-            return () => sessionStorage.clear();
-        }, [storedValue, sessionStorageKey]);
+            sessionStorage.setItem(sessionStorageKey, JSON.stringify(value));
+        }, [value]);
 
-        return [storedValue, setStoredValue];
+        return [value, setValue];
     }
-
 };

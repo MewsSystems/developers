@@ -18,87 +18,94 @@ const CurrencyPairsRatesList = ({currencyPairsRatesList = [], error = null}) => 
         }
     };
 
-    return isEmpty(currencyPairsRatesList) ? null : (
-        <div
-            className={styles['table']}
-        >
-            <LoadingOverlay
-                active={!isNil(error)}
-                text='Reconnecting to server...'
+    return isEmpty(currencyPairsRatesList)
+        ? (
+            <div
+                style={{textAlign: 'center'}}
+            >Loading rates...
+            </div>
+        )
+        : (
+            <div
+                className={styles['table']}
             >
-                <div
-                    className={classNames(
-                        styles['table-row'],
-                        styles['table-row--header'],
-                    )}
+                <LoadingOverlay
+                    active={!isNil(error)}
+                    text='Reconnecting to server...'
                 >
                     <div
                         className={classNames(
-                            styles['table-column'],
-                            styles['table-column--shortcut'],
+                            styles['table-row'],
+                            styles['table-row--header'],
                         )}
                     >
-                        <span>Currency Pair</span>
+                        <div
+                            className={classNames(
+                                styles['table-column'],
+                                styles['table-column--shortcut'],
+                            )}
+                        >
+                            <span>Currency Pair</span>
+                        </div>
+                        <div
+                            className={classNames(
+                                styles['table-column'],
+                                styles['table-column--rate'],
+                            )}
+                        >
+                            <span>Rate</span>
+                        </div>
+                        <div
+                            className={classNames(
+                                styles['table-column'],
+                                styles['table-column--icon'],
+                            )}
+                        >
+                        </div>
                     </div>
-                    <div
-                        className={classNames(
-                            styles['table-column'],
-                            styles['table-column--rate'],
-                        )}
-                    >
-                        <span>Rate</span>
-                    </div>
-                    <div
-                        className={classNames(
-                            styles['table-column'],
-                            styles['table-column--icon'],
-                        )}
-                    >
-                    </div>
-                </div>
-                {
-                    currencyPairsRatesList.map((it, index) => {
+                    {
+                        currencyPairsRatesList.map((it, index) => {
 
-                        return !it.selected ? null : (
-                            <div
-                                key={index}
-                                className={styles['table-row']}
-                            >
+                            return !it.selected ? null : (
                                 <div
-                                    className={classNames(
-                                        styles['table-column'],
-                                        styles['table-column--shortcut']
-                                    )}
+                                    key={index}
+                                    className={styles['table-row']}
                                 >
+                                    <div
+                                        className={classNames(
+                                            styles['table-column'],
+                                            styles['table-column--shortcut']
+                                        )}
+                                    >
                             <span
                                 className={styles['shortcut']}
                             >
                                 {it.code}
                             </span>
+                                    </div>
+                                    <div
+                                        className={classNames(
+                                            styles['table-column'],
+                                            styles['table-column--rate']
+                                        )}
+                                    >
+                                        <span>{it.rate}</span>
+                                    </div>
+                                    <div
+                                        className={classNames(
+                                            styles['table-column'],
+                                            styles['table-column--icon']
+                                        )}
+                                    >
+                                        {renderIcon(it.prevRate, it.rate)}
+                                    </div>
                                 </div>
-                                <div
-                                    className={classNames(
-                                        styles['table-column'],
-                                        styles['table-column--rate']
-                                    )}
-                                >
-                                    <span>{it.rate}</span>
-                                </div>
-                                <div
-                                    className={classNames(
-                                        styles['table-column'],
-                                        styles['table-column--icon']
-                                    )}
-                                >
-                                    {renderIcon(it.prevRate, it.rate)}
-                                </div>
-                            </div>
-                        );
-                    })
-                }
-            </LoadingOverlay>
-        </div>
-    );
+                            );
+                        })
+                    }
+                </LoadingOverlay>
+            </div>
+        );
 };
 
 export default CurrencyPairsRatesList;

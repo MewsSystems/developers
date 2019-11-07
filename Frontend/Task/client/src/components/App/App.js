@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { isEmpty } from 'ramda';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
@@ -12,40 +12,46 @@ import LoadingOverlay from 'react-loading-overlay';
 
 const getCurrencyPairsMap = (data = {}) => {
     if (!isEmpty(data)) {
-        return Object.keys(data).map(currencyPairId => {
-            return {
-                id: currencyPairId,
+        const map = {};
+        for (let currencyPairId in data) {
+            map[currencyPairId] = {
                 code: `${data[currencyPairId][0].code} / ${data[currencyPairId][1].code}`,
                 name: `${data[currencyPairId][0].name} / ${data[currencyPairId][1].name}`,
             };
-        });
+        }
+        return map;
     } else {
-        return [];
+        return {};
     }
 };
 
-const getCurrencyPairsSelectorOptions = (currencyPairsMap = []) => {
+const getCurrencyPairsSelectorOptions = (currencyPairsMap = {}) => {
     const options = [];
     if (!isEmpty(currencyPairsMap)) {
-        for (let currencyPair of currencyPairsMap) {
+        for (let currencyPairId in currencyPairsMap) {
             options.push({
-                value: currencyPair.id,
-                label: `${currencyPair.code} - ${currencyPair.name}`
+                value: currencyPairId,
+                label: `${currencyPairsMap[currencyPairId].code} - ${currencyPairsMap[currencyPairId].name}`
             });
         }
     }
     return options;
 };
 
-const getCurrencyPairsRatesList = (currencyPairsMap = [], prevRates = {}, rates = {}, selectedCurrencyPairsIds = []) => {
+const getCurrencyPairsRatesList = ({
+                                       currencyPairsMap = {},
+                                       rates = {},
+                                       prevRates = {},
+                                       selectedCurrencyPairsIds = [],
+                                   }) => {
     const list = [];
     if (!isEmpty(currencyPairsMap) && !isEmpty(rates)) {
-        for (let currencyPair of currencyPairsMap) {
+        for (let currencyPairId in currencyPairsMap) {
             list.push({
-                ...currencyPair,
-                rate: rates[currencyPair.id],
-                prevRate: isEmpty(prevRates) ? undefined : prevRates[currencyPair.id],
-                selected: isEmpty(selectedCurrencyPairsIds) ? true : selectedCurrencyPairsIds.includes(currencyPair.id)
+                ...currencyPairsMap[currencyPairId],
+                rate: rates[currencyPairId],
+                prevRate: isEmpty(prevRates) ? undefined : prevRates[currencyPairId],
+                selected: isEmpty(selectedCurrencyPairsIds) ? true : selectedCurrencyPairsIds.includes(currencyPairId)
             });
         }
     }
@@ -56,67 +62,75 @@ const getCurrencyPairsRatesList = (currencyPairsMap = [], prevRates = {}, rates 
 const App = ({
                  fetchCurrencyPairs,
                  fetchCurrencyPairsRates,
-                 currencyPairs = {data: {}, loading: false, error: null},
+                 configuration = {data: {}, loading: false, error: null},
                  currencyPairsRates = {data: {}, loading: false, error: null},
                  selectedCurrencyPairsIds = []
              }) => {
 
-    const [currencyPairsMap, setCurrencyPairsMap] = useState([]);
-
-    const [
-        selectedCurrencyPairsIdsInitialValue,
-        setSelectedCurrencyPairsIdsInitialValue,
-    ] = useSessionStorage('selectedCurrencyPairsIds');
-
+    const [cachedConfiguration, setCachedConfiguration] = useSessionStorage('configuration', {});
+    const [cachedSelectedCurrencyPairsIds, setCachedSelectedCurrencyPairsIds] = useSessionStorage('selectedCurrencyPairsIds', []);
+    const currencyPairsMap = useMemo(() => getCurrencyPairsMap(cachedConfiguration), [cachedConfiguration]);
+    const currencyPairsSelectorOptions = useMemo(() => getCurrencyPairsSelectorOptions(currencyPairsMap), [currencyPairsMap]);
     const prevRates = usePrevious(currencyPairsRates.data);
-    const currencyPairsRatesList = getCurrencyPairsRatesList(currencyPairsMap, prevRates, currencyPairsRates.data, selectedCurrencyPairsIds);
-    const currencyPairsSelectorOptions = getCurrencyPairsSelectorOptions(currencyPairsMap);
+    const currencyPairsRatesList = getCurrencyPairsRatesList({
+        currencyPairsMap,
+        rates: currencyPairsRates.data,
+        prevRates: prevRates,
+        selectedCurrencyPairsIds: cachedSelectedCurrencyPairsIds,
+    });
 
+    // Fetch Configuration
     useEffect(() => {
-        fetchCurrencyPairs();
+        if (isEmpty(cachedConfiguration)) {
+            fetchCurrencyPairs();
+        }
         // eslint-disable-next-line
     }, []);
 
+    // Cache Configuration
     useEffect(() => {
-        if (isEmpty(currencyPairsMap)) {
-            setCurrencyPairsMap(getCurrencyPairsMap(currencyPairs.data));
+        if (!isEmpty(configuration.data)) {
+            setCachedConfiguration(configuration.data);
         }
         // eslint-disable-next-line
-    }, [currencyPairs]);
+    }, [configuration.data]);
 
+    // Cache user selectedCurrencyPairsIds
     useEffect(() => {
-        setSelectedCurrencyPairsIdsInitialValue(selectedCurrencyPairsIds);
+        setCachedSelectedCurrencyPairsIds(selectedCurrencyPairsIds);
         // eslint-disable-next-line
     }, [selectedCurrencyPairsIds]);
 
-
     useInterval(() => {
-        if (!isEmpty(currencyPairs.data)) {
-            fetchCurrencyPairsRates(Object.keys(currencyPairs.data));
+        if (!isEmpty(currencyPairsMap)) {
+            fetchCurrencyPairsRates(Object.keys(currencyPairsMap));
         }
     }, 2000);
 
     return (
         <LoadingOverlay
-            active={isEmpty(currencyPairsSelectorOptions) || isEmpty(currencyPairsRatesList)}
+            active={isEmpty(currencyPairsSelectorOptions)}
             spinner
-            text='Loading App...'
+            text='Loading Configuration...'
         >
             <div
                 className={styles['content']}
             >
                 <CurrencyPairsSelector
                     options={currencyPairsSelectorOptions}
-                    loading={currencyPairs.loading}
-                    error={currencyPairs.error}
+                    loading={configuration.loading}
+                    error={configuration.error}
                     initialValues={{
-                        selectedCurrencyPairsIds: selectedCurrencyPairsIdsInitialValue || []
+                        selectedCurrencyPairsIds: cachedSelectedCurrencyPairsIds,
                     }}
                 />
-                <CurrencyPairsRatesList
-                    currencyPairsRatesList={currencyPairsRatesList}
-                    error={currencyPairsRates.error}
-                />
+                {
+                    !isEmpty(currencyPairsSelectorOptions) &&
+                    <CurrencyPairsRatesList
+                        currencyPairsRatesList={currencyPairsRatesList}
+                        error={currencyPairsRates.error}
+                    />
+                }
             </div>
         </LoadingOverlay>
     );
@@ -125,7 +139,7 @@ const App = ({
 const selector = formValueSelector('currencyPairsSelector');
 
 const mapStateToProps = state => ({
-    currencyPairs: selectCurrencyPairs(state),
+    configuration: selectCurrencyPairs(state),
     currencyPairsRates: selectCurrencyPairsRates(state),
     selectedCurrencyPairsIds: selector(state, 'selectedCurrencyPairsIds')
 });
