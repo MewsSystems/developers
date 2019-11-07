@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
 import { PairsSelector } from './PairsSelector';
 import { RateList } from './RateList';
 import { compareRates } from './compareRates';
 import { useConfig } from './useConfig';
 import { useRates } from './useRates';
+import { useRatesSelect } from './useRatesSelect';
 
 type Props = {
   configUrl: string;
@@ -18,19 +18,7 @@ export const Main = ({
   ratesUrl,
 }: Props) => {
   const [config, loadingFailed] = useConfig(configUrl);
-  const [selectedPairIds, setSelectedPairs] = useState<ReadonlyArray<string>>(
-    [],
-  );
-
-  const togglePair = useCallback((togglingId: string) => {
-    setSelectedPairs(selectedPairs => {
-      if (selectedPairs.includes(togglingId)) {
-        return selectedPairs.filter(selectedId => selectedId !== togglingId);
-      }
-      return [...selectedPairs, togglingId];
-    });
-  }, []);
-
+  const [selectedPairIds, togglePair] = useRatesSelect();
   const [currentRates, previousRates] = useRates(
     config,
     ratesUrl,
