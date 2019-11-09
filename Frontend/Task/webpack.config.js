@@ -13,11 +13,11 @@ const webpackConfig = {
         libraryTarget: 'window',
     },
     resolve: {
-        extensions: ['', '.js', '.json'],
+        extensions: ['', '.js', '.jsx', '.json'],
     },
     module: {
         loaders: [{
-            test: /\.js?$/,
+            test: /\.jsx?$/,
             exclude: /(node_modules|Generated)/,
             loader: 'babel',
         }, {
