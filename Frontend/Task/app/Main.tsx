@@ -5,6 +5,14 @@ import { compareRates } from './compareRates';
 import { useConfig } from './useConfig';
 import { useRates } from './useRates';
 import { useRatesSelect } from './useRatesSelect';
+import styled from 'styled-components';
+
+const Layout = styled.div`
+  max-width: 500px;
+  @media (min-width: 550px) {
+    margin: 100px auto;
+  }
+`;
 
 type Props = {
   configUrl: string;
@@ -36,14 +44,14 @@ export const Main = ({
     const selectedPairs = pairs.filter(pair => pair.selected);
 
     return (
-      <>
+      <Layout>
         <PairsSelector pairs={pairs} togglePair={togglePair} />
         <RateList pairs={selectedPairs} />
-      </>
+      </Layout>
     );
   }
   if (loadingFailed) {
-    return <div>Config loading failed</div>;
+    return <Layout>Config loading failed</Layout>;
   }
-  return <div>Loading config...</div>;
+  return <Layout>Loading config...</Layout>;
 };
