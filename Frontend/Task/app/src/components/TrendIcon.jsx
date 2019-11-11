@@ -22,16 +22,15 @@ const useStyles = makeStyles(theme => ({
 const TrendIcon = (props) => {
     const {actualRate, lastRate} = props;
 
-    if (actualRate === null && lastRate === null) {
+    if (actualRate === null || lastRate === null) {
         return <MoreHorizIcon/>;
     }
 
-    const trend = lastRate - actualRate;
     const classes = useStyles();
 
-    if (trend === 0) {
+    if (lastRate === actualRate) {
         return <DragHandleIcon className={classes.stagnating}/>;
-    } else if (trend > 0) {
+    } else if (lastRate < actualRate) {
         return <ExpandLessIcon className={classes.growing}/>;
     } else {
         return <ExpandMoreIcon className={classes.declining}/>;
