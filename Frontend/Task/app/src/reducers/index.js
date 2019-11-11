@@ -1,8 +1,12 @@
 import {combineReducers} from 'redux';
-import currencyPairsConfig from "./CurrencyPairsConfigReducer";
+import config from "./ConfigReducer";
+import currencyPairsValues from "./CurrencyPairsValuesReducer";
+import filter from "./FilterReducer";
 
 const exchangeAppReducer = combineReducers({
-    currencyPairsConfig
+    config,
+    currencyPairsValues,
+    filter
 });
 
 export default exchangeAppReducer;

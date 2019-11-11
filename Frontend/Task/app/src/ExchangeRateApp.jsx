@@ -4,6 +4,20 @@ import {Provider} from "react-redux";
 import reducer from './reducers/index'
 import MainContainer from "./containers/MainContainer";
 import thunk from "redux-thunk";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import {makeStyles} from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        margin: 'auto',
+        maxWidth: 800,
+    }
+}));
 
 const store = createStore(
     reducer,
@@ -14,9 +28,19 @@ const store = createStore(
 );
 
 const ExchangeRateApp = () => {
+    const classes = useStyles();
+
     return (
         <Provider store={store}>
-            <MainContainer/>
+            <div className={classes.root}>
+                <Paper className={classes.paper}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <MainContainer/>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </div>
         </Provider>
     );
 };

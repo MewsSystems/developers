@@ -20,6 +20,8 @@
     ]
   },
   "dependencies": {
+    "@material-ui/core": "^4.6.0",
+    "@material-ui/icons": "^4.5.1",
     "babel-core": "6.13.2",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.13.2",
