@@ -1,7 +1,3 @@
-# Mews challenge
-
-Are you at the [Devfest](https://2019.devfest.cz/home) conference or are you just playful? Try out one of our challenges **[here](https://mews-challenge.firebaseapp.com/).** We've got covered frontend, backend, fullstack and even designers!
-
 # Mews developers
 
 Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
