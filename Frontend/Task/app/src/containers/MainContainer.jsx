@@ -36,8 +36,11 @@ const MainContainer = (props) => {
     return (
         <React.Fragment>
             <Grid container>
+                <Grid item xs={12}>
+                    <h1>Exchange rates</h1>
+                </Grid>
                 <Grid item xs={10}>
-                    <Filter config={config} filter={filter} onFilterChange={onFilterChange}/>
+                    <Filter filter={filter} onFilterChange={onFilterChange}/>
                 </Grid>
                 <Grid item xs={2}>
                     <ExchangeRateUpdate fetchRates={fetchCurrencyPairsValues} pairIds={Object.keys(config)}/>

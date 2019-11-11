@@ -27,7 +27,15 @@ const RatesList = (props) => {
                         return true;
                     }
 
-                    return value === filter;
+                    const currencyPair = config[value][0].code + config[value][1].code;
+
+                    return currencyPair
+                        .toLowerCase()
+                        .includes(
+                            filter.replace(/\//g, '')
+                                .replace(/\s+/g, '')
+                                .toLowerCase()
+                        );
                 }).map(key => (
                     <TableRow key={key}>
                         <TableCell>{config[key][0].code} / {config[key][1].code}</TableCell>
