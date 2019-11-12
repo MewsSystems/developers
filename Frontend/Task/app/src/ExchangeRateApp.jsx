@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStore, applyMiddleware, compose} from "redux";
 import {Provider} from "react-redux";
-import reducer from './reducers/index'
+import reducer, {INITIAL_STATE} from './reducers/index'
 import MainContainer from "./containers/MainContainer";
 import thunk from "redux-thunk";
 import Grid from "@material-ui/core/Grid";
@@ -20,8 +20,26 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+const getInitialState = () => {
+    const localState = localStorage.getItem('ExchangeRateAppLocalState');
+    if (!localState) {
+        return INITIAL_STATE;
+    }
+
+    const {config, filter} = JSON.parse(localState);
+    console.log(JSON.parse(localState));
+    console.log('baba');
+
+    return {
+        currencyPairsValues: INITIAL_STATE.currencyPairsValues,
+        config,
+        filter: ''
+    }
+};
+
 const store = createStore(
     reducer,
+    getInitialState(),
     compose(
         applyMiddleware(thunk),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

@@ -30,7 +30,8 @@ export const fetchConfig = () => dispatch => {
     }).then(response => {
         if (response.status === 200) {
             response.json().then(data => {
-                dispatch(receiveCurrencyPairsConfig(data.currencyPairs))
+                dispatch(receiveCurrencyPairsConfig(data.currencyPairs));
+                saveLocalState(data.currencyPairs);
             });
         }
     }).catch(error => {
@@ -52,4 +53,8 @@ export const fetchCurrencyPairsValues = (pairsCodes) => dispatch => {
     }).catch(error => {
         console.log(error);
     });
+};
+
+const saveLocalState = (config) => {
+    const result = localStorage.setItem('ExchangeRateAppLocalState', JSON.stringify({config}));
 };
