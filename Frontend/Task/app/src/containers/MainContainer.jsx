@@ -8,7 +8,6 @@ import ConfigLoader from "../components/ConfigLoader";
 import ExchangeRateUpdate from "../components/ExchangeRateUpdate";
 import RatesList from "../components/RatesList";
 import Filter from "../components/Filter";
-import Grid from "@material-ui/core/Grid";
 
 const mapStateToProps = state => {
     return {
@@ -35,20 +34,10 @@ const MainContainer = (props) => {
 
     return (
         <React.Fragment>
-            <Grid container>
-                <Grid item xs={12}>
-                    <h1>Exchange rates</h1>
-                </Grid>
-                <Grid item xs={10}>
-                    <Filter filter={filter} onFilterChange={onFilterChange}/>
-                </Grid>
-                <Grid item xs={2}>
-                    <ExchangeRateUpdate fetchRates={fetchCurrencyPairsValues} pairIds={Object.keys(config)}/>
-                </Grid>
-                <Grid item xs={12}>
-                    <RatesList {...props} />
-                </Grid>
-            </Grid>
+            <ExchangeRateUpdate fetchRates={fetchCurrencyPairsValues} pairIds={Object.keys(config)}/>
+            <h1 align='center'>Exchange rates</h1>
+            <Filter filter={filter} onFilterChange={onFilterChange}/>
+            <RatesList {...props} />
         </React.Fragment>
     );
 };

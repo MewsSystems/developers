@@ -1,5 +1,5 @@
 import React from 'react'
-import CircularProgress from "@material-ui/core/CircularProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 class ExchangeRateUpdate extends React.Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class ExchangeRateUpdate extends React.Component {
 
     render() {
         return (
-            <CircularProgress variant="determinate" value={this.state.progress}/>
+            <LinearProgress variant="determinate" value={this.state.progress}/>
         );
     }
 }
