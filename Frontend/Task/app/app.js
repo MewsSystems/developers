@@ -1,5 +1,13 @@
+import React, { Component } from 'react';
 import { endpoint, interval } from './config';
 
-export function run(element) {
-    console.log('App is running.');
+class App extends Component {
+  render() {
+    return (
+      <div>
+        APP
+      </div>
+    );
+  }
 }
+export default App;

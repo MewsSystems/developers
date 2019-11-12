@@ -1,34 +1,38 @@
 const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './app/index.html',
+    }),
+  ],
+  entry: {
+    app: './app/index.js',
+  },
+  output: {
+    filename: '[name].js',
+    path: path.join(__dirname, '/build'),
+    library: 'app',
+    libraryTarget: 'window',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /(node_modules)/,
+        use: [
+          'thread-loader',
+          'babel-loader?cacheDirectory',
+        ],
+      },
     ],
-    entry: {
-        app: './app/app.js',
-    },
-    output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
-    },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
+  },
+  devtool: 'eval',
+  devServer: {
+    contentBase: './app',
+  },
 };
 
 module.exports = webpackConfig;
