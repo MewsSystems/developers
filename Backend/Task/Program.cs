@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    static class Program
     {
+
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -19,17 +21,32 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
+
+            var cnbFxRatesUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                using (var client = new HttpClient())
                 {
-                    Console.WriteLine(rate.ToString());
+                    var provider = new ExchangeRateProvider(
+                        client, // Passing client in the constructor to make the dependency explicit
+                        cnbFxRatesUrl, 
+                        new CNBExchangeRatesParser()
+                    );
+
+                    // Using await/async because I thought that if it was to be used somewhere
+                    // where blocking the main thread is not a good idea this approach might come in handy.
+                    // It's pointless here but being ready didn't cost me anything in this case:)
+                    var rates = provider.GetExchangeRates(currencies).Result;
+
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
+
                 }
             }
             catch (Exception e)
