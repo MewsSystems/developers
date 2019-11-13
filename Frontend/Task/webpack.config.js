@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 const webpackConfig = {
     plugins: [
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
     ],
     entry: {
         app: './app/app.js',
@@ -13,17 +13,19 @@ const webpackConfig = {
         libraryTarget: 'window',
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.json'],
+        extensions: ['.js', '.jsx', '.json'],
     },
     module: {
-        loaders: [{
-            test: /\.jsx?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
+        rules: [
+            {
+                test: /\.jsx?$/,
+                exclude: /(node_modules|Generated)/,
+                loader: 'babel-loader',
+            }, {
+                test: /\.json$/,
+                loader: 'json',
+            }
+        ],
     },
     devtool: 'eval',
     devServer: {
