@@ -27,23 +27,18 @@ const getInitialState = () => {
     }
 
     const {config, filter} = JSON.parse(localState);
-    console.log(JSON.parse(localState));
-    console.log('baba');
 
     return {
         currencyPairsValues: INITIAL_STATE.currencyPairsValues,
-        config,
-        filter: ''
+        config: config !== undefined ? config : INITIAL_STATE.config,
+        filter: filter !== undefined ? filter : INITIAL_STATE.filter,
     }
 };
 
 const store = createStore(
     reducer,
     getInitialState(),
-    compose(
-        applyMiddleware(thunk),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+    applyMiddleware(thunk)
 );
 
 const ExchangeRateApp = () => {

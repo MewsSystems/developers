@@ -3,35 +3,40 @@ import {RECEIVE_CURRENCY_PAIRS_CONFIG} from "../reducers/ConfigReducer";
 import {RECEIVE_CURRENCY_PAIRS_VALUES} from "../reducers/CurrencyPairsValuesReducer";
 import {RECEIVE_FILTER} from "../reducers/FilterReducer";
 
-const receiveCurrencyPairsConfig = (config) => {
+const receiveCurrencyPairsConfig = config => {
     return {
         type: RECEIVE_CURRENCY_PAIRS_CONFIG,
         config
     }
 };
 
-const receiveCurrencyPairsValues = (row) => {
+const receiveCurrencyPairsValues = row => {
     return {
         type: RECEIVE_CURRENCY_PAIRS_VALUES,
         row
     }
 };
 
-export const setFilter = (filter) => {
+const receiveFilter = filter => {
     return {
         type: RECEIVE_FILTER,
         filter
     }
 };
 
-export const fetchConfig = () => dispatch => {
+export const setFilter = filter => (dispatch, getState) => {
+    dispatch(receiveFilter(filter));
+    saveLocalState(getState().config, filter);
+};
+
+export const fetchConfig = () => (dispatch, getState) => {
     fetch(getConfigurationUrl(), {
         method: 'GET'
     }).then(response => {
         if (response.status === 200) {
             response.json().then(data => {
                 dispatch(receiveCurrencyPairsConfig(data.currencyPairs));
-                saveLocalState(data.currencyPairs);
+                saveLocalState(data.currencyPairs, getState().filter);
             });
         }
     }).catch(error => {
@@ -55,6 +60,6 @@ export const fetchCurrencyPairsValues = (pairsCodes) => dispatch => {
     });
 };
 
-const saveLocalState = (config) => {
-    const result = localStorage.setItem('ExchangeRateAppLocalState', JSON.stringify({config}));
+const saveLocalState = (config, filter) => {
+    localStorage.setItem('ExchangeRateAppLocalState', JSON.stringify({config, filter}));
 };
