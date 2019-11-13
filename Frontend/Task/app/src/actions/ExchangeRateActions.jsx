@@ -52,8 +52,6 @@ export const fetchCurrencyPairsValues = (pairsCodes) => dispatch => {
             response.json().then(data => {
                 dispatch(receiveCurrencyPairsValues(data.rates));
             });
-        } else {
-            console.log('errorr');
         }
     }).catch(error => {
         console.log(error);
