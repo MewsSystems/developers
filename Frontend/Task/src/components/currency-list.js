@@ -6,9 +6,14 @@ import { getConfiguration, getData } from '../actions';
 
 class CurrencyList extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, configuration } = this.props;
     dispatch(getConfiguration());
-    setInterval(() => dispatch(getData()), 7500);
+
+    if (Object.entries(configuration).length !== 0) {
+      dispatch(getData());
+    }
+
+    setInterval(() => dispatch(getData()), 15000);
   }
 
   render() {

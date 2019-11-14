@@ -77,7 +77,6 @@ export const getConfiguration = () => dispatch => {
         type: 'CONFIGURATION',
         payload: configuration,
       });
-      dispatch(getData());
     })
     .catch(error => console.log('getConfiguration error', error));
 };
