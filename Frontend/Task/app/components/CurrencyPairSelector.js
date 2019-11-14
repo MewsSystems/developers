@@ -19,14 +19,14 @@ const CurrencyPairSelector = ({
   handleSetCurrencyFilter,
   toggleCurrencyPairSelection,
 }) => {
-  if (currencyPairs.length === 0 && isFetchingConfiguration) { // render loading placeholder
+  if (Object.keys(currencyPairs).length === 0 && isFetchingConfiguration) { // render loading placeholder
     return (
       <div className={styles.wrapper}>
         <p className={styles.loading}>Loading currency pair list, please wait.</p>
       </div>
     );
   }
-  if (currencyPairs.length === 0 && errorFetchingConfiguration) {
+  if (Object.keys(currencyPairs).length === 0 && errorFetchingConfiguration) {
     // render error message if API failure and nothing from localStorage
     return (
       <div className={styles.wrapper}>
@@ -83,7 +83,7 @@ const CurrencyPairSelector = ({
           Deselect all shown
         </button>
       </p>
-      {(currencyPairs.length > 0 && currencyPairArray.length === 0)
+      {(currencyPairArray.length === 0)
         ? <p className={styles.noMatch}>Sorry, no currency pairs match your search criteria.</p>
         : (
           <ul className={styles.currencyPairList}>
