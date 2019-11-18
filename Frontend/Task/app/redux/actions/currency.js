@@ -1,3 +1,3 @@
-import { SET_CURRENCY } from '../constants';
+import { LOAD_CURRENCY_CONFIGURATION } from '../constants';
 
-export const setCurrency = () => ({ type: SET_CURRENCY });
+export const loadCurrencyConfiguration = () => ({ type: LOAD_CURRENCY_CONFIGURATION });
