@@ -1,11 +1,19 @@
 import { SET_CURRENCY_CONFIGURATION } from '../constants';
 
-export default function (state = {}, action) {
+const initState = {
+  currencyPairs: null,
+};
+
+export default function (state = initState, action) {
+
   switch (action.type) {
     case SET_CURRENCY_CONFIGURATION:
       return {
         ...state,
-        currency: state.currency,
+        ...action.data,
       };
+
+    default:
+      return state;
   }
 }

@@ -11,7 +11,6 @@ class Currency {
   static async loadConfiguration() {
     try {
       const response = await createGetRequest('/configuration');
-      console.log('');
 
       return response.data;
     } catch (response) {

@@ -1,10 +1,10 @@
 import { applyMiddleware, createStore } from 'redux';
 
-import currency from './reducers/currency';
 import { currencyMiddleware } from './middleware/currency';
+import rootReducer from './reducers';
 
 export default createStore(
-  currency,
+  rootReducer,
   applyMiddleware(
     currencyMiddleware,
   ),

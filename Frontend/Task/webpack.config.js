@@ -27,6 +27,10 @@ const webpackConfig = {
           'babel-loader?cacheDirectory',
         ],
       },
+      {
+        test: /\.css?$/,
+        use: ['css-loader', 'style-loader'],
+      },
     ],
   },
   devtool: 'eval',

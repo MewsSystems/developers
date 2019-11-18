@@ -9,13 +9,13 @@ export const currencyMiddleware = (store) => (next) => (action) => {
       api
         .get('/configuration')
         .send()
-        .then((data) => {
+        .then((response) => {
           next({
             type: SET_CURRENCY_CONFIGURATION,
             data: {
-              currencyPairs: data,
+              currencyPairs: response.data.currencyPairs,
             }
-          })
+          });
         })
         .catch((error) => {
           alert(error);
