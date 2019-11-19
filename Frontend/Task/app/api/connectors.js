@@ -10,7 +10,7 @@ const Connector = function(params = {}) {
 };
 
 Connector.prototype.parameters = function(params) {
-  return new Connector({ ...this.params, ...params });
+  return new Connector({ ...this.params, params });
 };
 
 Connector.prototype.get = function(url) {

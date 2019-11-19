@@ -1,0 +1,12 @@
+:global(html) {
+  height: 100%;
+  width: 100%;
+}
+
+:global(body) {
+  background: linear-gradient(0deg, rgba(6, 6, 6, 1) 0%, rgba(56, 56, 56, 1) 100%);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}

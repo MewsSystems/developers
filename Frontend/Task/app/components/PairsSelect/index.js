@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
+import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 
-import { Select, MenuItem } from '@material-ui/core';
+import styles from './style.scss';
 
 class PairsSelect extends Component {
   static propTypes = {
     currencyPairs: PropTypes.object,
+    updateState: PropTypes.func.isRequired,
+    value: PropTypes.array,
   };
 
   state = {
@@ -19,28 +22,45 @@ class PairsSelect extends Component {
       const pairs = [];
       Object.keys(currencyPairs).forEach((key) => {
         pairs.push({
-          value: currencyPairs[key],
           key,
+          value: currencyPairs[key],
           name: `${currencyPairs[key][0].name} / ${currencyPairs[key][1].name}`,
         })
       });
+
+      this.props.updateState({ name: 'selectValue', value: [...pairs.map((pair) => pair.key)] });
 
       this.setState({ pairs });
     }
   }
 
   render() {
-    const { pairs, selectValue } = this.state;
+    const { updateState, value } = this.props;
+    const { pairs } = this.state;
 
     return (
-      <div>
-        <Select
-          labelId="Pairs"
-          value={selectValue || ''}
-          onChange={(e) => this.setState({ selectValue: e.target.value })}
+      <div className={styles.wrap}>
+        <FormControl
+          classes={{ root: styles.control }}
         >
-          {pairs.map((pair) => <MenuItem value={pair.key}>{pair.name}</MenuItem>)}
-        </Select>
+          <InputLabel
+            classes={{
+              root: styles.label
+            }}
+          >Currencies</InputLabel>
+          <Select
+            variant="outlined"
+            classes={{
+              root: styles.selectRoot
+            }}
+            labelId="Pairs"
+            value={value || []}
+            multiple
+            onChange={(e) => updateState({ name: 'selectValue', value: e.target.value })}
+          >
+            {pairs.map((pair, index) => <MenuItem key={index} value={pair.key}>{pair.name}</MenuItem>)}
+          </Select>
+        </FormControl>
       </div>
     );
   }

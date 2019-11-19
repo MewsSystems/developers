@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { loadCurrencyConfiguration } from './redux/actions/currency';
 
+import './index.scss';
+
 import App from './app';
 
 store.dispatch(loadCurrencyConfiguration());

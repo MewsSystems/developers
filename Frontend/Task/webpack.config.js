@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -28,8 +27,17 @@ const webpackConfig = {
         ],
       },
       {
-        test: /\.css?$/,
-        use: ['css-loader', 'style-loader'],
+        test: /\.scss?$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          'sass-loader',
+        ],
       },
     ],
   },
