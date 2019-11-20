@@ -46,8 +46,12 @@ Connector.prototype.send = function() {
     };
 
     axios(params)
-      .then((response) => resolve(response, response.data))
-      .catch((response) => reject(response))
+      .then((response) => {
+        return resolve(response, response.data);
+      })
+      .catch((response) => {
+        return reject(response);
+      })
   });
 };
 

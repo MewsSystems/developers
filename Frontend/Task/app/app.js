@@ -50,6 +50,10 @@ class App extends Component {
     if (this.interval) {
       clearInterval(this.interval);
     }
+
+    if (this.countdown) {
+      clearInterval(this.countdown);
+    }
   }
 
   /**

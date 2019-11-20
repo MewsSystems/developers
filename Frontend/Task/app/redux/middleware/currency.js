@@ -22,6 +22,7 @@ export const currencyMiddleware = (store) => (next) => (action) => {
           });
         })
         .catch((error) => {
+          console.log('error', error);
           alert('Failed to load configuration, please refresh page');
         });
   }

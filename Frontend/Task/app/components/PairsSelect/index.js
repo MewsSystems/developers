@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 
+import Cookies from 'universal-cookie';
+
 import styles from './style.scss';
+
+const cookie = new Cookies();
 
 /**
  * Pairs select component
@@ -21,26 +25,50 @@ class PairsSelect extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.currencyPairs !== prevProps.currencyPairs) {
-      const { currencyPairs } = this.props;
-
-      const pairs = [];
-
-      /**
-       * Collect data
-       * for select component
-       **/
-      Object.keys(currencyPairs).forEach((key) => {
-        pairs.push({
-          key,
-          value: currencyPairs[key],
-          name: `${currencyPairs[key][0].name} / ${currencyPairs[key][1].name}`,
-        })
-      });
-
-      this.props.updateState({ name: 'selectValue', value: [...pairs.map((pair) => pair.key)] });
-
-      this.setState({ pairs });
+      this.setPairs();
     }
+  }
+
+  setPairs() {
+    const { currencyPairs } = this.props;
+
+    let pairs = [];
+
+    /**
+     * Collect data
+     * for select component
+     **/
+    Object.keys(currencyPairs).forEach((key) => {
+      pairs.push({
+        key,
+        value: currencyPairs[key],
+        name: `${currencyPairs[key][0].name} / ${currencyPairs[key][1].name}`,
+      })
+    });
+
+    this.filterPairsByCookieValues(pairs);
+
+    this.props.updateState({
+      name: 'selectValue',
+      value: [...this.filterPairsByCookieValues(pairs).map((pair) => pair.key)] });
+
+    this.setState({ pairs });
+  }
+
+  /**
+   * Filter currency pair by cookie values if exist
+   * @param {Array} pairs
+   * @return {*}
+   */
+  filterPairsByCookieValues(pairs) {
+    /** Load data from cookie and filter pairs **/
+    const cookieConfig = cookie.get('config');
+
+    if (cookieConfig) {
+      return pairs.filter((pair) => cookieConfig.indexOf(pair.key) !== -1);
+    }
+
+    return pairs;
   }
 
   render() {
@@ -60,7 +88,10 @@ class PairsSelect extends Component {
             labelId="Pairs"
             value={value || []}
             multiple
-            onChange={(e) => updateState({ name: 'selectValue', value: e.target.value })}
+            onChange={(e) => {
+              updateState({ name: 'selectValue', value: e.target.value });
+              cookie.set('config', e.target.value);
+            }}
           >
             {pairs.map((pair, index) => <MenuItem key={index} value={pair.key}>{pair.name}</MenuItem>)}
           </Select>
