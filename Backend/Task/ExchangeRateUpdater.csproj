@@ -45,7 +45,12 @@
   <ItemGroup>
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
+    <Compile Include="ExchangeRateMemorySource.cs" />
+    <Compile Include="Cnb\ExchangeRateParser.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Cnb\ExchangeRateWebSource.cs" />
+    <Compile Include="ExchangeRateProviderException.cs" />
+    <Compile Include="IExchangeRateSource.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
