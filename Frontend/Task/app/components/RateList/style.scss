@@ -1,0 +1,19 @@
+.wrap {
+  width: 100%;
+  margin: 10px;
+  background: white;
+  border-radius: 5px;
+}
+
+.growing {
+  color: green;
+}
+
+.declining {
+  color: red;
+  transform: scaleY(-1);
+}
+
+.stagnating {
+  color: darkgray;
+}

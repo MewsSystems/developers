@@ -5,6 +5,9 @@ import { Select, MenuItem, InputLabel, FormControl } from '@material-ui/core';
 
 import styles from './style.scss';
 
+/**
+ * Pairs select component
+ */
 class PairsSelect extends Component {
   static propTypes = {
     currencyPairs: PropTypes.object,
@@ -19,7 +22,13 @@ class PairsSelect extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.props.currencyPairs !== prevProps.currencyPairs) {
       const { currencyPairs } = this.props;
+
       const pairs = [];
+
+      /**
+       * Collect data
+       * for select component
+       **/
       Object.keys(currencyPairs).forEach((key) => {
         pairs.push({
           key,
@@ -44,15 +53,10 @@ class PairsSelect extends Component {
           classes={{ root: styles.control }}
         >
           <InputLabel
-            classes={{
-              root: styles.label
-            }}
+            classes={{ root: styles.label }}
           >Currencies</InputLabel>
           <Select
             variant="outlined"
-            classes={{
-              root: styles.selectRoot
-            }}
             labelId="Pairs"
             value={value || []}
             multiple

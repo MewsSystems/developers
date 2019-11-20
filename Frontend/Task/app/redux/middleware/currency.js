@@ -5,6 +5,10 @@ export const currencyMiddleware = (store) => (next) => (action) => {
   next(action);
 
   switch (action.type) {
+    /** During initialization of the application
+     * configuration will be loaded from API
+     * and stored in redux
+     * **/
     case LOAD_CURRENCY_CONFIGURATION:
       api
         .get('/configuration')
@@ -18,8 +22,7 @@ export const currencyMiddleware = (store) => (next) => (action) => {
           });
         })
         .catch((error) => {
-          alert(error);
+          alert('Failed to load configuration, please refresh page');
         });
-
   }
 };

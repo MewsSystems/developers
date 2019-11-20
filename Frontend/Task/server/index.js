@@ -19,14 +19,11 @@ server.use((req, res, next) => {
 server.get('/configuration', (req, res) => {
     const appLoadTime = chance.integer({ min: 3000, max: 5000 });
 
-    res.json({
-        currencyPairs: ratesGenerator.getCurrencyPairs(),
-    });
-
-    // @todo revert
-    // setTimeout(() => {
-    //
-    // }, appLoadTime);
+    setTimeout(() => {
+        res.json({
+            currencyPairs: ratesGenerator.getCurrencyPairs(),
+        });
+    }, appLoadTime);
 });
 
 server.get('/rates', (req, res) => {
@@ -53,6 +50,6 @@ server.get('/rates', (req, res) => {
     }
 });
 
-server.listen(3000, () => {
-    console.log('Server is running on port 3000.');
+server.listen(5432, () => {
+    console.log('Server is running on port 5432.');
 });
