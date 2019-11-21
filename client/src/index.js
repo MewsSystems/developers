@@ -12,7 +12,7 @@ import storage from 'redux-persist/lib/storage';
 import {Loader} from './ui';
 
 const persistConfig = {
-  key: Math.random() + '',
+  key: 'ppp',
   storage,
 };
 const persistedReducer = persistReducer (persistConfig, combinedReducers);
