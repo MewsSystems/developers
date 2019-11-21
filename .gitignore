@@ -26,6 +26,8 @@ npm-debug.log
 # dependencies
 client/node_modules
 client/.pnp
+client/src/build
+client/build
 client/.pnp.js
 
 # testing
