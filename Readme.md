@@ -120,4 +120,4 @@ For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) 
     - [Lupa.cz](https://www.lupa.cz/clanky/jan-siroky-mews-na-nasem-softwaru-funguje-asi-tisic-hotelu-hilton-zatim-nemame/) - technical interview with the CTO Honza.
     - [Forbes](https://www.forbes.cz/velka-rana-nenapadny-cesky-startup-mews-ziskava-investici-768-milionu-korun/) - announcement of the Series B investment.
     - [CzechCrunch](https://www.czechcrunch.cz/2019/08/snil-o-psani-a-filmarine-dnes-richard-valtr-po-celem-svete-stavi-superhotely-a-buduje-miliardovy-startup-mews/) - interview with the founder Richard about his visions behind Mews.
-    - [Radiozurnal](https://radiozurnal.rozhlas.cz/spolupraci-firem-a-vysokych-skol-si-pochvaluji-obe-strany-partneri-jsou-ale-take-8096412)
+    - [Radiozurnal](https://radiozurnal.rozhlas.cz/spolupraci-firem-a-vysokych-skol-si-pochvaluji-obe-strany-partneri-jsou-ale-take-8096412) - discussion about why it's important to support Universities.
