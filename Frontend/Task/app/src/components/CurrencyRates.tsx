@@ -2,6 +2,7 @@ import React from "react";
 import { PropsFromRedux } from "./CurrencyRatesContainer";
 import Loading from "./Loading";
 import ActiveRate from "./ActiveRate";
+import PassiveRate from "./PassiveRate";
 
 export const CurrencyRates: React.FC<PropsFromRedux> = ({
   currencyPairs,
@@ -21,6 +22,7 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
       .filter(id => currencyPairs[id].shown)
       .map(id => (
         <ActiveRate
+          key={"active-" + id}
           id={id}
           currencyPair={currencyPairs[id]}
           toggleVisibility={toggleVisibility}
@@ -29,7 +31,8 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
     const passive = Object.keys(currencyPairs)
       .filter(id => !currencyPairs[id].shown)
       .map(id => (
-        <ActiveRate
+        <PassiveRate
+          key={"passive-" + id}
           id={id}
           currencyPair={currencyPairs[id]}
           toggleVisibility={toggleVisibility}

@@ -7,7 +7,7 @@ import Currency from "../models/Currency";
  */
 
 const destination = "http://localhost:3000";
-export function getRatesDTP(ids: string[]): Promise<RatesDTO> {
+export function getRatesDTO(ids: string[]): Promise<RatesDTO> {
   const createURLquery = (input: string[]): string =>
     input.map(id => "currencyPairIds=" + id).join("&");
 
