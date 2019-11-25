@@ -12,7 +12,7 @@ You have been given a task to look into data of one hotel and find some answers 
 
 First, answer the questions using SQL and with your answer provide also the final SQL queries and output.
 
-Then, build a report/dashboard idealy using Power BI that also help answering the questions. You may also use python and build a jupyter notebook.
+Then, build a report/dashboard ideally using Power BI that also help answering the questions. You may also use python and build a jupyter notebook.
 
 Include the comments to present your solution and send it to vojta@mews.com. 
 
