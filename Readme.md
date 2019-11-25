@@ -17,6 +17,7 @@ As part of the interview process, we'd like to see some code. If you have someth
 - [Task](Backend) for [backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true) candidates.
 - [Task](Frontend) for [frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true) candidates.
 - [Task](Android) for [android developer](https://apply.workable.com/mews/j/24478C334B/) candidates.
+- [Task](DataScience) for [data analyst](https://apply.workable.com/mews/j/1591AF3922/) candidates.
 
 <a name='about-mews'/>
 
