@@ -4,9 +4,9 @@
 
 You have been given a task to look into data of one hotel and find some answers and insights for the following questions:
 
-1) What are the popular choices of booking rates (table rate, columns ShortRateName or RateName) for different segments of customers (table reservation, columns AgeGroup, Gender, NationalityCode)?
+1) What are the popular choices of booking rates (table `rate`, columns `ShortRateName` or `RateName`) for different segments of customers (table `reservation`, columns `AgeGroup`, `Gender`, `NationalityCode`)?
 
-2) What are the typical guests who do online check-in? Is it somehow different when you compare reservations created across different weekdays (table reservation, IsOnlineCheckin column)?
+2) What are the typical guests who do online check-in? Is it somehow different when you compare reservations created across different weekdays (table `reservation`, `IsOnlineCheckin` column)?
 
 3) Look at the average night cost per single occupied capacity. What guest segment is the most profitable per occupied space unit? And what guest segment is the least profitable?
 
