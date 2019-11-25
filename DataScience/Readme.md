@@ -2,7 +2,7 @@
 
 ## Your task
 
-You have been given a task to look into data of one really nice hotel and find some answers and insights for following questions:
+You have been given a task to look into data of one hotel and find some answers and insights for the following questions:
 
 1) What are the popular choices of booking rates (table rate, columns ShortRateName or RateName) for different segments of customers (table reservation, columns AgeGroup, Gender, NationalityCode)?
 
