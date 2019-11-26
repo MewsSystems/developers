@@ -6,3 +6,10 @@ export type CurrencyPairConfigDTO = Record<
 >; /**Object from /configuration => id -> pair of currencies */
 
 export type RatesDTO = Record<string, Number>; /**Rates - id -> rate */
+
+export type LocalStorageDTO = {
+  [id: string]: {
+    currencies: Currency[];
+    shown: Boolean;
+  };
+};

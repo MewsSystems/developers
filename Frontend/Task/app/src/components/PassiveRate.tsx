@@ -9,7 +9,7 @@ const PassiveRate: React.FC<{
   return (
     <button onClick={() => toggleVisibility(id)}>
       {" "}
-      {currencyPair.currencies[0].code} /{currencyPair.currencies[0].code}{" "}
+      {currencyPair.currencies[0].code} /{currencyPair.currencies[1].code}{" "}
     </button>
   );
 };

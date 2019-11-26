@@ -1,4 +1,8 @@
-import { CurrencyPairConfigDTO, RatesDTO } from "../models/DTOs";
+import {
+  CurrencyPairConfigDTO,
+  RatesDTO,
+  LocalStorageDTO
+} from "../models/DTOs";
 
 export enum ActionTypes {
   SET_CONFIG_LOADED = "SET_CONFIG_LOADED" /**Sets the config loaded property */,
@@ -6,7 +10,8 @@ export enum ActionTypes {
   LOAD_CONFIG = "LOAD_CONFIG" /** Loads the config from the server and creates */,
   SAVE_RATES = "SAVE_RATES" /**save rates for the first time */,
   UPDATE_RATES = "UPDATE_RATES" /**Updates the rates */,
-  TOGGLE_PAIR_VISIBILITY = "TOGGLE_PAIR_VISIBILITY" /**Toggles the hidden property */
+  TOGGLE_PAIR_VISIBILITY = "TOGGLE_PAIR_VISIBILITY" /**Toggles the hidden property */,
+  LOAD_CONFIG_LOCAL_STORAGE = "LOAD_CONFIG_LOCAL_STORAGE"
 }
 
 export interface SetConfigLoadedAction {
@@ -30,6 +35,10 @@ export interface UpdateRatesAction {
   type: ActionTypes.UPDATE_RATES;
   payload: RatesDTO;
 }
+export interface LoadConfigLocalStorage {
+  type: ActionTypes.LOAD_CONFIG_LOCAL_STORAGE;
+  payload: LocalStorageDTO;
+}
 
 export interface TogglePairVisibilityAction {
   type: ActionTypes.TOGGLE_PAIR_VISIBILITY;
@@ -42,7 +51,8 @@ export type Action =
   | LoadConfigAction
   | SaveRatesAction
   | UpdateRatesAction
-  | TogglePairVisibilityAction;
+  | TogglePairVisibilityAction
+  | LoadConfigLocalStorage;
 export function setConfigLoaded(value: Boolean): SetConfigLoadedAction {
   return {
     type: ActionTypes.SET_CONFIG_LOADED,
@@ -85,5 +95,13 @@ export function togglePairVisibilityAction(
   return {
     type: ActionTypes.TOGGLE_PAIR_VISIBILITY,
     id: id
+  };
+}
+export function loadConfigLocalStorageAction(
+  payload: LocalStorageDTO
+): LoadConfigLocalStorage {
+  return {
+    type: ActionTypes.LOAD_CONFIG_LOCAL_STORAGE,
+    payload
   };
 }

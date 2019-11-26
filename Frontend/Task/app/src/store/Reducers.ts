@@ -7,7 +7,8 @@ import {
   TogglePairVisibilityAction,
   SetConfigLoadedAction,
   SetFirstRatesLoadedAction,
-  SaveRatesAction
+  SaveRatesAction,
+  LoadConfigLocalStorage
 } from "./Actions";
 import CurrencyPair from "../models/Pair";
 import Trend from "../models/Trend";
@@ -55,6 +56,28 @@ function currencyPairReducer(
         };
         currencyPairWithId[key] = currencyPair;
       }
+      return currencyPairWithId;
+    }
+    case ActionTypes.LOAD_CONFIG_LOCAL_STORAGE: {
+      let loadAction = action as LoadConfigLocalStorage;
+
+      let {
+        payload
+      } = loadAction; /**Z payloadu chceme vytvorit náš želaný state */
+
+      /**Vytvoríme 1 currency pair */
+      /**chceme dostat currency pairs do curr. pairs with ids */
+      let currencyPairWithId: CurrencyPairWithId = {};
+      for (let key in payload) {
+        let currencyPair: CurrencyPair = {
+          currencies: payload[key].currencies,
+          shown: payload[key].shown,
+          rate: 0.0,
+          trend: Trend.STABLE
+        };
+        currencyPairWithId[key] = currencyPair;
+      }
+
       return currencyPairWithId;
     }
     case ActionTypes.UPDATE_RATES: {

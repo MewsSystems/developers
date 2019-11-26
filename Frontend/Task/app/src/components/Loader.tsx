@@ -1,18 +1,21 @@
 import React from "react";
 import { store } from "../store/store";
 import { getConfigDTO, getRatesDTO } from "../services/RatesService";
+import LocalStorageService from "../services/LocalStorageService";
 import {
   loadConfigAction,
   setConfigLoaded,
   saveRatesAction,
   setFirstRatesLoaded,
-  updateRatesAction
+  updateRatesAction,
+  loadConfigLocalStorageAction
 } from "../store/Actions";
 import { interval, endpoint } from "../../config.json";
 import { StoreShape } from "../models/StoreShape";
 import { Dispatch } from "redux";
 import { connect, ConnectedProps } from "react-redux";
 import Currency from "../models/Currency";
+import { LocalStorageDTO } from "../models/DTOs";
 
 /* const sleep = (m: number) => new Promise(r => setTimeout(r, m)); */
 
@@ -26,20 +29,31 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
       intervalId: undefined
     };
   }
-  async saveConfig() {
+  async saveConfig(): Promise<string[]> {
     try {
       const configDTO = await getConfigDTO();
       const { loadConfigActionDispatch, setConfigLoadedDispatch } = this.props;
       loadConfigActionDispatch(configDTO);
       setConfigLoadedDispatch(true);
+      LocalStorageService.backup(this.props.currencyPairs);
+      return Object.keys(configDTO);
     } catch (e) {
-      this.saveConfig();
+      return this.saveConfig();
     }
   }
-  async saveRates() {
-    try {
-      var ids: string[] = Object.keys(this.props.currencyPairs);
+  saveLocalStorageConfig(localStorageDTO: LocalStorageDTO): string[] {
+    const {
+      loadConfigLocalStorageDispatch,
+      setConfigLoadedDispatch
+    } = this.props;
+    loadConfigLocalStorageDispatch(localStorageDTO);
+    setConfigLoadedDispatch(true);
+    return Object.keys(localStorageDTO);
 
+    console.log(this.props);
+  }
+  async saveRates(ids: string[]) {
+    try {
       let ratesDTO = await getRatesDTO(ids);
       const {
         saveRatesActionDispatch,
@@ -47,8 +61,9 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
       } = this.props;
       saveRatesActionDispatch(ratesDTO);
       setFirstRatesLoadedDispatch(true);
+      return ratesDTO;
     } catch (e) {
-      this.saveRates();
+      this.saveRates(ids);
     }
   }
   async updateRates() {
@@ -63,18 +78,28 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!this.props.configLoaded) {
-      await this.saveConfig();
-    }
-    if (!this.props.firstRatesLoaded) {
-      await this.saveRates();
+      var localStorageConfig = LocalStorageService.load();
+
+      if (localStorageConfig == false) {
+        this.saveConfig().then(record => {
+          if (record != undefined) {
+            return this.saveRates(record);
+          }
+        });
+      } else {
+        var DTO = this.saveLocalStorageConfig(localStorageConfig);
+        this.saveRates(DTO);
+
+        /* this.saveLocalStorageConfig(localStorageConfig);
+        console.log(this.props); */
+      }
     }
 
     this.setState({
       intervalId: window.setInterval(
         (() => {
-          console.log("loading new rates");
           this.updateRates();
         }).bind(this),
         10000
@@ -112,6 +137,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     },
     updateRatesActionDispatch: (payload: Record<string, Number>) => {
       dispatch(updateRatesAction(payload));
+    },
+    loadConfigLocalStorageDispatch: (payload: LocalStorageDTO) => {
+      dispatch(loadConfigLocalStorageAction(payload));
     }
   };
 };
