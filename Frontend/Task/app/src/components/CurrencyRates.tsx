@@ -39,10 +39,21 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
         />
       ));
     return (
-      <div>
-        Aktívne
-        {active}
-        Pasívne {passive}
+      <div className="flexContainer">
+        <div className="shrink2">
+          <div>
+            <div className="flexRow">Aktívne</div>
+          </div>
+
+          <div>
+            <div className="flexRow">{active}</div>
+          </div>
+        </div>
+
+        <div className="shrink1">
+          <div className="flexRow">Pasívne</div>
+          <div className="flexRow">{passive}</div>
+        </div>
       </div>
     );
   }

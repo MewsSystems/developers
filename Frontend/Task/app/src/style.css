@@ -1,0 +1,32 @@
+.flexContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+  min-height: 100vh;
+}
+.flexRow {
+  display: flex;
+  flex-wrap: wrap;
+}
+.shrink1 {
+  flex: 1;
+}
+.shrink2 {
+  flex: 2;
+}
+.rising {
+  color: green;
+}
+.falling {
+  color: red;
+}
+.stable {
+  color: black;
+}
+.active {
+  min-width: 100px;
+  width: 10vw;
+  height: 10vw;
+  min-height: 100px;
+}

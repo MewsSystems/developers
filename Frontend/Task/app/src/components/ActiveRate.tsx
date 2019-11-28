@@ -8,22 +8,24 @@ const ActiveRate: React.FC<{
   currencyPair: CurrencyPair;
   toggleVisibility: (s: string) => void;
 }> = ({ id, currencyPair, toggleVisibility }) => {
-  var trend = (tr: Trend) => {
+  var trend = (tr: Trend): string => {
     switch (tr) {
       case Trend.FALLING:
-        return "F";
+        return "falling";
 
       case Trend.RAISING:
-        return "R";
+        return "rising";
       case Trend.STABLE:
-        return "S";
+        return "stable";
     }
   };
   return (
-    <div>
+    <div className="active">
       <button onClick={() => toggleVisibility(id)}>X</button>
-      {currencyPair.currencies[0].code}/{currencyPair.currencies[1].code} -
-      {currencyPair.rate} -{trend(currencyPair.trend)}
+      <p className={trend(currencyPair.trend)}>
+        {currencyPair.currencies[0].code}/{currencyPair.currencies[1].code}
+      </p>
+      <p>{currencyPair.rate}</p>
     </div>
   );
 };
