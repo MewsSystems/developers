@@ -6,16 +6,5 @@ interface CurrencyPair {
   shown: Boolean;
   rate: Number;
   trend: Trend;
-  /* constructor(
-    currencies: Currency[],
-    shown: Boolean,
-    rate: Number,
-    trend: Trend
-  ) {
-    this.currencies = currencies;
-    this.shown = shown;
-    this.trend = trend;
-    this.rate = rate;
-  } */
 }
 export default CurrencyPair;

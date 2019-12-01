@@ -2,13 +2,8 @@ import CurrencyPair from "../models/Pair";
 import { LocalStorageDTO } from "../models/DTOs";
 import Currency from "../models/Currency";
 
-/**Generates a class, which will handle local storage. On init -> check if LS can be used,
- *  then use that storage on call whether the LS can be used  */
-/**Pointa - uložiť ids a is saved */
-/**Uložit to vo formáte, ako to vieme dofre deserializovať, t.j.všetko o CurrencyPair - cucrr[] a show  */
-/**TODO: fix reducers - new reducer, action -> RESOLVE_CONFIG */
+/**Used as singleton */
 
-/**Potrebujeme to savenut po prvom ulozeni */
 class LocalStorageService {
   storage: Storage;
   canBackup: Boolean;
@@ -17,6 +12,9 @@ class LocalStorageService {
     this.storage = window.localStorage;
     this.canBackup = this.canBackupCheck();
   }
+  /**
+   * Returns true if LocalStorage exists and can be used
+   */
   canBackupCheck(): Boolean {
     try {
       var testString = "testjnsdfosodfkoisdfsdxcvxxvc";
@@ -28,7 +26,11 @@ class LocalStorageService {
       return false;
     }
   }
-
+  /**
+   *
+   * @param currencyPairs from state
+   * Returns true if object is saved to localStorage
+   */
   backup(currencyPairs: Record<string, CurrencyPair>): Boolean {
     var backupObject: LocalStorageDTO = {};
     Object.keys(currencyPairs).forEach(id => {
@@ -49,6 +51,10 @@ class LocalStorageService {
       return false;
     }
   }
+  /**
+   * Returns false if LS is not accessible in the browser or when no data are stored,
+   * LocalStorageDTO elsewhere
+   */
   load(): LocalStorageDTO | false {
     if (this.canBackup) {
       var data: string | null = this.storage.getItem("configData");

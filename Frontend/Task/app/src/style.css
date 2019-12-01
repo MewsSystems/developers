@@ -1,8 +1,14 @@
+body {
+  background: #212121;
+  font-family: "Roboto", sans-serif;
+  color: white;
+}
+
 .flexContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100vw;
+
   min-height: 100vh;
 }
 .flexRow {
@@ -13,20 +19,103 @@
   flex: 1;
 }
 .shrink2 {
-  flex: 2;
+  flex: 1.61;
 }
 .rising {
-  color: green;
+  font-weight: 600;
+  color: #4c8c4a;
 }
 .falling {
-  color: red;
+  font-weight: 600;
+  color: #f05545;
 }
 .stable {
-  color: black;
+  font-weight: 600;
+  color: white;
+}
+h1 {
+  margin-left: 8px;
 }
 .active {
-  min-width: 100px;
-  width: 10vw;
-  height: 10vw;
-  min-height: 100px;
+  background-color: #484848;
+  font-size: 20px;
+  min-width: 144px;
+  min-height: 144px;
+  width: 10.416vw;
+  height: 10.416vw;
+  margin: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 4px;
+}
+.active button {
+  font-size: 20px;
+  border: none;
+  color: white;
+  align-self: flex-end;
+  background: none;
+  margin-right: 8px;
+}
+
+.passive {
+  background-color: #484848;
+  padding: 4px 8px;
+  margin: 8px;
+  border-radius: 4px;
+}
+.passive button {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  border: none;
+  color: lightgray;
+  background-color: inherit;
+}
+
+button {
+  outline: 0;
+}
+
+.lds-circle {
+  display: inline-block;
+  transform: translateZ(1px);
+}
+.lds-circle > div {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  background: #fff;
+  animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+@keyframes lds-circle {
+  0%,
+  100% {
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+  }
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(1800deg);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  100% {
+    transform: rotateY(3600deg);
+  }
+}
+
+.center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+@media only screen and (max-width: 600px) {
+  .flexContainer {
+    flex-direction: column;
+  }
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import CurrencyPair from "../models/Pair";
-import { CurrencyRates } from "./CurrencyRates";
 import Trend from "../models/Trend";
 
 const ActiveRate: React.FC<{
@@ -21,11 +20,11 @@ const ActiveRate: React.FC<{
   };
   return (
     <div className="active">
-      <button onClick={() => toggleVisibility(id)}>X</button>
-      <p className={trend(currencyPair.trend)}>
+      <button onClick={() => toggleVisibility(id)}>x</button>
+      <div>
         {currencyPair.currencies[0].code}/{currencyPair.currencies[1].code}
-      </p>
-      <p>{currencyPair.rate}</p>
+      </div>
+      <div className={trend(currencyPair.trend)}>{currencyPair.rate}</div>
     </div>
   );
 };

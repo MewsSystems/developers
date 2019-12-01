@@ -4,13 +4,13 @@ import CurrencyPair from "../models/Pair";
 const PassiveRate: React.FC<{
   id: string;
   currencyPair: CurrencyPair;
-  toggleVisibility: (s: string) => void;
+  toggleVisibility: (id: string) => void;
 }> = ({ id, currencyPair, toggleVisibility }) => {
   return (
-    <button onClick={() => toggleVisibility(id)}>
-      {" "}
-      {currencyPair.currencies[0].code} /{currencyPair.currencies[1].code}{" "}
-    </button>
+    <div className="passive">
+      <button onClick={() => toggleVisibility(id)}>+</button>
+      {currencyPair.currencies[0].code} / {currencyPair.currencies[1].code}{" "}
+    </div>
   );
 };
 

@@ -35,7 +35,7 @@ export interface UpdateRatesAction {
   type: ActionTypes.UPDATE_RATES;
   payload: RatesDTO;
 }
-export interface LoadConfigLocalStorage {
+export interface LoadConfigLocalStorageAction {
   type: ActionTypes.LOAD_CONFIG_LOCAL_STORAGE;
   payload: LocalStorageDTO;
 }
@@ -52,7 +52,7 @@ export type Action =
   | SaveRatesAction
   | UpdateRatesAction
   | TogglePairVisibilityAction
-  | LoadConfigLocalStorage;
+  | LoadConfigLocalStorageAction;
 export function setConfigLoaded(value: Boolean): SetConfigLoadedAction {
   return {
     type: ActionTypes.SET_CONFIG_LOADED,
@@ -99,7 +99,7 @@ export function togglePairVisibilityAction(
 }
 export function loadConfigLocalStorageAction(
   payload: LocalStorageDTO
-): LoadConfigLocalStorage {
+): LoadConfigLocalStorageAction {
   return {
     type: ActionTypes.LOAD_CONFIG_LOCAL_STORAGE,
     payload

@@ -7,13 +7,18 @@ import Currency from "../models/Currency";
  */
 
 const destination = "http://localhost:3000";
+
+/**
+ *
+ * @param ids Currency ids, which rates needs to be updated
+ */
 export function getRatesDTO(ids: string[]): Promise<RatesDTO> {
   const createURLquery = (input: string[]): string =>
     input.map(id => "currencyPairIds=" + id).join("&");
 
   return fetch(destination + "/rates?" + createURLquery(ids), { method: "GET" })
     .then(response => {
-      if (response.status == 500) {
+      if (response.status === 500) {
         throw new Error("500 status code");
       } else {
         return response.json();
@@ -23,9 +28,8 @@ export function getRatesDTO(ids: string[]): Promise<RatesDTO> {
       /**Shape of data: 
          * {
             rates: {
-                id2: 1.0345 
-    }
-}   
+                id2: 1.0345 }
+          }   
          */
       let rates = data.rates;
       let ids = Object.keys(rates);
@@ -35,10 +39,12 @@ export function getRatesDTO(ids: string[]): Promise<RatesDTO> {
       });
 
       return returnObject;
-      /* return Object.keys(rates).map((id) => rates[id] as Number) */
     });
 }
 
+/**
+ * Called to get the config data, returns a promise
+ */
 export function getConfigDTO(): Promise<CurrencyPairConfigDTO> {
   //DATA SHAPE
   /* {

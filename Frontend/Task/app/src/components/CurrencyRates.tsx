@@ -42,7 +42,10 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
       <div className="flexContainer">
         <div className="shrink2">
           <div>
-            <div className="flexRow">Aktívne</div>
+            <div className="flexRow">
+              {" "}
+              <h1>Visible currency rates</h1>
+            </div>
           </div>
 
           <div>
@@ -51,7 +54,9 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
         </div>
 
         <div className="shrink1">
-          <div className="flexRow">Pasívne</div>
+          <div className="flexRow">
+            <h1>Hidden currency rates</h1>
+          </div>
           <div className="flexRow">{passive}</div>
         </div>
       </div>

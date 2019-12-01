@@ -1,5 +1,3 @@
-import "react";
-import React from "react";
 import { StoreShape } from "../models/StoreShape";
 import { connect, ConnectedProps } from "react-redux";
 import { CurrencyRates } from "./CurrencyRates";

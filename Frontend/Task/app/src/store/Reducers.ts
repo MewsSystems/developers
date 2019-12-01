@@ -8,7 +8,7 @@ import {
   SetConfigLoadedAction,
   SetFirstRatesLoadedAction,
   SaveRatesAction,
-  LoadConfigLocalStorage
+  LoadConfigLocalStorageAction
 } from "./Actions";
 import CurrencyPair from "../models/Pair";
 import Trend from "../models/Trend";
@@ -24,28 +24,28 @@ function currencyPairReducer(
   action: Action
 ): CurrencyPairWithId {
   switch (action.type) {
+    /** Used to save rates on first /rates call */
     case ActionTypes.SAVE_RATES: {
       /**Recreate the currency pair with id populated with rates */
-      let saveRateAction = action as SaveRatesAction;
-      let ids = Object.keys(saveRateAction.payload);
+      let { payload } = action as SaveRatesAction;
       let returnObject: CurrencyPairWithId = {};
-      ids.forEach(id => {
+      for (let id in payload) {
         returnObject[id] = {
           ...state[id],
-          rate: saveRateAction.payload[id],
+          rate: payload[id],
           trend: Trend.STABLE
         };
-      });
+      }
+
       return returnObject;
     }
+    /** */
     case ActionTypes.LOAD_CONFIG: {
       let loadAction = action as LoadConfigAction;
       let {
         payload
       } = loadAction; /**Z payloadu chceme vytvorit náš želaný state */
 
-      /**Vytvoríme 1 currency pair */
-      /**chceme dostat currency pairs do curr. pairs with ids */
       let currencyPairWithId: CurrencyPairWithId = {};
       for (let key in payload) {
         let currencyPair: CurrencyPair = {
@@ -58,15 +58,14 @@ function currencyPairReducer(
       }
       return currencyPairWithId;
     }
+    /**Used to set the currencyPairs with object from localstorage */
     case ActionTypes.LOAD_CONFIG_LOCAL_STORAGE: {
-      let loadAction = action as LoadConfigLocalStorage;
+      let loadAction = action as LoadConfigLocalStorageAction;
 
       let {
         payload
       } = loadAction; /**Z payloadu chceme vytvorit náš želaný state */
 
-      /**Vytvoríme 1 currency pair */
-      /**chceme dostat currency pairs do curr. pairs with ids */
       let currencyPairWithId: CurrencyPairWithId = {};
       for (let key in payload) {
         let currencyPair: CurrencyPair = {
@@ -80,13 +79,14 @@ function currencyPairReducer(
 
       return currencyPairWithId;
     }
+    /**Called when rates are already populated in state, so the second etc call of /rates, sets the trend in the copied object */
     case ActionTypes.UPDATE_RATES: {
       var updateRatesAction = action as UpdateRatesAction;
       let { payload } = updateRatesAction;
       let currencyPairWithId: CurrencyPairWithId = {};
       for (let key in payload) {
-        let newRate = payload[key];
-        let oldRate = state[key].rate;
+        let newRate: Number = payload[key];
+        let oldRate: Number = state[key].rate;
         if (newRate > oldRate) {
           currencyPairWithId[key] = {
             ...state[key],
@@ -105,13 +105,14 @@ function currencyPairReducer(
       }
       return currencyPairWithId;
     }
+    /**Returns state object with one pair with [id] visibility changed */
     case ActionTypes.TOGGLE_PAIR_VISIBILITY: {
       let togglePairVisibilityAction = action as TogglePairVisibilityAction;
       let id = togglePairVisibilityAction.id;
 
       let currencyPairWithId: CurrencyPairWithId = {};
       for (let key in state) {
-        if (key == id) {
+        if (key === id) {
           currencyPairWithId[key] = { ...state[key] };
           currencyPairWithId[key].shown = !currencyPairWithId[key].shown;
         } else {
@@ -147,6 +148,12 @@ function firstRatesLoadedReducer(state: Boolean, action: Action): Boolean {
   }
 }
 
+/**
+ *
+ * @param state StoreShape object
+ * @param action Action object with payload
+ * Returns new StoreShape
+ */
 export function appReducer(state = initialState, action: Action): StoreShape {
   return {
     currencyPairs: currencyPairReducer(state.currencyPairs, action),

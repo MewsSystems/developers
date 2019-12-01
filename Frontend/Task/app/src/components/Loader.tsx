@@ -1,5 +1,5 @@
 import React from "react";
-import { store } from "../store/store";
+
 import { getConfigDTO, getRatesDTO } from "../services/RatesService";
 import LocalStorageService from "../services/LocalStorageService";
 import {
@@ -10,7 +10,7 @@ import {
   updateRatesAction,
   loadConfigLocalStorageAction
 } from "../store/Actions";
-import { interval, endpoint } from "../../config.json";
+import { interval } from "../config.json";
 import { StoreShape } from "../models/StoreShape";
 import { Dispatch } from "redux";
 import { connect, ConnectedProps } from "react-redux";
@@ -22,6 +22,9 @@ import { LocalStorageDTO } from "../models/DTOs";
 interface LoaderState {
   intervalId: number | undefined;
 }
+/**
+ * Used as a loader, with Children components
+ */
 class Loader extends React.Component<LoaderProps, LoaderState> {
   constructor(props: LoaderProps) {
     super(props);
@@ -29,18 +32,21 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
       intervalId: undefined
     };
   }
+  /**Used to load the /congiguration - ids and currency pairs. Returns array of ids of currency pairs*/
   async saveConfig(): Promise<string[]> {
     try {
       const configDTO = await getConfigDTO();
       const { loadConfigActionDispatch, setConfigLoadedDispatch } = this.props;
       loadConfigActionDispatch(configDTO);
       setConfigLoadedDispatch(true);
+      /**Backup data to LS */
       LocalStorageService.backup(this.props.currencyPairs);
       return Object.keys(configDTO);
     } catch (e) {
       return this.saveConfig();
     }
   }
+  /**Saves local storage object to store and returns currency pair Ids */
   saveLocalStorageConfig(localStorageDTO: LocalStorageDTO): string[] {
     const {
       loadConfigLocalStorageDispatch,
@@ -49,9 +55,8 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
     loadConfigLocalStorageDispatch(localStorageDTO);
     setConfigLoadedDispatch(true);
     return Object.keys(localStorageDTO);
-
-    console.log(this.props);
   }
+  /**Used to save rates on initial /rates call */
   async saveRates(ids: string[]) {
     try {
       let ratesDTO = await getRatesDTO(ids);
@@ -66,8 +71,8 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
       this.saveRates(ids);
     }
   }
+  /**Used to update rates on second etc. /rates call */
   async updateRates() {
-    console.log("updateRates called");
     try {
       var ids: string[] = Object.keys(this.props.currencyPairs);
       let ratesDTO = await getRatesDTO(ids);
@@ -78,42 +83,42 @@ class Loader extends React.Component<LoaderProps, LoaderState> {
     }
   }
 
+  setPeriodicRatesUpdates() {
+    this.setState({
+      intervalId: window.setInterval(() => {
+        this.updateRates();
+      }, interval)
+    });
+  }
+  /**
+   * Loading logic applied here, distinguish between cases, where LocalStorage was used or not
+   */
   componentDidMount() {
     if (!this.props.configLoaded) {
       var localStorageConfig = LocalStorageService.load();
 
-      if (localStorageConfig == false) {
-        this.saveConfig().then(record => {
-          if (record != undefined) {
-            return this.saveRates(record);
-          }
-        });
+      if (localStorageConfig === false) {
+        this.saveConfig()
+          .then(ids => {
+            if (ids !== undefined) {
+              return this.saveRates(ids);
+            }
+          })
+          .then(() => this.setPeriodicRatesUpdates());
       } else {
         var DTO = this.saveLocalStorageConfig(localStorageConfig);
-        this.saveRates(DTO);
-
-        /* this.saveLocalStorageConfig(localStorageConfig);
-        console.log(this.props); */
+        this.saveRates(DTO).then(() => this.setPeriodicRatesUpdates());
       }
     }
-
-    this.setState({
-      intervalId: window.setInterval(
-        (() => {
-          this.updateRates();
-        }).bind(this),
-        10000
-      )
-    });
   }
-
+  /**Unsets the interval */
   componentWillUnmount() {
     if (this.state.intervalId !== undefined) {
       window.clearInterval(this.state.intervalId);
     }
   }
 
-  /**Loads the config, loads first rates and then  */
+  /**Renders the content of the application*/
   render() {
     return <div>{this.props.children}</div>;
   }
@@ -143,6 +148,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     }
   };
 };
+
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export type LoaderProps = ConnectedProps<typeof connector>;
+export type LoaderProps = ConnectedProps<typeof connector>; //Prop type of Loader
 export default connector(Loader);
