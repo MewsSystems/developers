@@ -1,6 +1,7 @@
 import React from "react";
 import CurrencyPair from "../models/Pair";
 import Trend from "../models/Trend";
+import styles from "../style.module.css";
 
 const ActiveRate: React.FC<{
   id: string;
@@ -10,16 +11,17 @@ const ActiveRate: React.FC<{
   var trend = (tr: Trend): string => {
     switch (tr) {
       case Trend.FALLING:
-        return "falling";
+        return styles.falling;
 
       case Trend.RAISING:
-        return "rising";
+        return styles.rising;
       case Trend.STABLE:
-        return "stable";
+        return styles.stable;
     }
   };
+
   return (
-    <div className="active">
+    <div className={styles.active}>
       <button onClick={() => toggleVisibility(id)}>x</button>
       <div>
         {currencyPair.currencies[0].code}/{currencyPair.currencies[1].code}

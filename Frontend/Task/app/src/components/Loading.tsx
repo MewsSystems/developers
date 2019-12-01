@@ -1,10 +1,11 @@
 import React from "react";
+import styles from "../style.module.css";
 
 const Loading: React.FC<{ message: string }> = ({ message }) => {
   return (
-    <div className="center">
+    <div className={styles.center}>
       <div>{message}</div>
-      <div className="lds-circle">
+      <div className={styles.ldsCircle}>
         <div></div>
       </div>
     </div>

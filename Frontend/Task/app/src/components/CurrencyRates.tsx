@@ -3,6 +3,7 @@ import { PropsFromRedux } from "./CurrencyRatesContainer";
 import Loading from "./Loading";
 import ActiveRate from "./ActiveRate";
 import PassiveRate from "./PassiveRate";
+import styles from "../style.module.css";
 
 export const CurrencyRates: React.FC<PropsFromRedux> = ({
   currencyPairs,
@@ -39,25 +40,25 @@ export const CurrencyRates: React.FC<PropsFromRedux> = ({
         />
       ));
     return (
-      <div className="flexContainer">
-        <div className="shrink2">
+      <div className={styles.flexContainer}>
+        <div className={styles.shrink2}>
           <div>
-            <div className="flexRow">
+            <div className={styles.flexRow}>
               {" "}
               <h1>Visible currency rates</h1>
             </div>
           </div>
 
           <div>
-            <div className="flexRow">{active}</div>
+            <div className={styles.flexRow}>{active}</div>
           </div>
         </div>
 
-        <div className="shrink1">
-          <div className="flexRow">
+        <div className={styles.shrink1}>
+          <div className={styles.flexRow}>
             <h1>Hidden currency rates</h1>
           </div>
-          <div className="flexRow">{passive}</div>
+          <div className={styles.flexRow}>{passive}</div>
         </div>
       </div>
     );
