@@ -13,7 +13,9 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var rateEntries = CnbClient.GetRateEntries().ToDictionary(r => r.Currency.Code, r => r);
+            return currencies.Select(c => rateEntries.TryGetValue(c.Code, out var rate) ? rate.ToExchangeRate(new Currency("CZK"), c) : null)
+                .Where(e => e != null);
         }
     }
 }

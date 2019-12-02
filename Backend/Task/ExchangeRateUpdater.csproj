@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CnbClient.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="RateEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
