@@ -1,5 +1,5 @@
-import {server as API_URL} from '../../src/config';
 import {stringifyQuery} from '../utils';
+
 
 const apiCall = async (...args) => {
   const [route, query, params = {}] = args;
@@ -29,8 +29,10 @@ const apiCall = async (...args) => {
 export default apiCall;
 
 function getApiUrl (route, queryObject) {
+  const API_URL = window.location.origin;
+
   let query = stringifyQuery (queryObject);
-  const endpoint = `${API_URL}${route}`;
+  const endpoint = `${API_URL}/api${route}`;
   const hasQuery = queryObject && query.trim ().length > 0;
   if (hasQuery) query = '?' + query;
   return `${endpoint}${query}`;

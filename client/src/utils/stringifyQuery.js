@@ -6,9 +6,7 @@ export default (query) => {
     const key = encodeURIComponent (String(name).trim());
     const value = encodeURIComponent (String(query[name]).trim());
     const validated = key.length > 0 && value.length > 0;
-
     if (!validated) return '';
-    
     return `${key}=${value}`;
   });
 

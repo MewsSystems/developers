@@ -1,5 +1,4 @@
 {
-    "server": "http://localhost:3001",
     "interval": 1000,
     "tableColumns": 5
 }

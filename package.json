@@ -8,17 +8,18 @@
     "url": "https://github.com/MewsSystems/sample"
   },
   "scripts": {
-    "start": "npm run dev",
-    "dev": "concurrently --kill-others \"npm run backend\" \"npm run client-dev\"",
-    "prod": "concurrently --kill-others \"npm run backend\" \"npm run client-prod\"",
+    "start": "npm run prod",
+    "dev": "concurrently --kill-others \"NODE_ENV=development npm run backend\" \"npm run client-dev\"",
+    "prod": "npm run client-prod; NODE_ENV=production npm run backend",
     "deps": "cd client && npm i && cd .. && npm install",
     "backend": "cd backend/server && node index.js",
     "client-dev": "cd client && npm start",
-    "client-prod": "cd client && npm run-script build && cd .. && serve -s client/build -l 3000"
+    "client-prod": "cd client && npm run-script build"
   },
   "dependencies": {
     "chance": "1.0.4",
     "express": "4.14.0",
+    "express-http-proxy": "^1.6.0",
     "json-loader": "0.5.4",
     "json-server": "0.8.17",
     "serve": "^11.2.0"

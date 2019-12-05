@@ -5,9 +5,11 @@ const {
   FAILURE_CHANCE,
 } = require ('../constants');
 
+const path = require('path')
 const Chance = require ('chance');
 const chance = new Chance (SEED);
-
+const PORT = 3087;
+ 
 const ratesGenerator = require ('../ratesGenerator') ({
   generator: chance,
   pairCount: PAIR_COUNT,
@@ -15,14 +17,17 @@ const ratesGenerator = require ('../ratesGenerator') ({
 });
 
 const express = require ('express');
+const proxy = require('express-http-proxy');
 const server = express ();
+
+const apiRouter = express.Router()
 
 server.use ((req, res, next) => {
   res.header ('Access-Control-Allow-Origin', '*');
   next ();
 });
 
-server.get ('/configuration', (req, res) => {
+apiRouter.get ('/configuration', (req, res) => {
   const appLoadTime = chance.integer ({min: 1000, max: 1001});
   setTimeout (() => {
     res.json ({
@@ -31,7 +36,7 @@ server.get ('/configuration', (req, res) => {
   }, appLoadTime);
 });
 
-server.get ('/rates', (req, res) => {
+apiRouter.get ('/rates', (req, res) => {
   const hasFailed = chance.floating ({min: 0, max: 1}) < FAILURE_CHANCE;
 
   if (hasFailed) return res.sendStatus (500);
@@ -52,5 +57,22 @@ server.get ('/rates', (req, res) => {
   }
 });
 
-const PORT = 3087;
+server.use('/api', apiRouter)
+
+
+if (process.env.NODE_ENV === 'development') {
+  /**
+   * If we are developing then we proxy the fe requests 
+   * to server started by react-scripts
+   */
+  server.use(proxy('http://localhost:3000'));
+} else {
+  /**
+   * If we are in production we serve build folder straight away
+   */
+  const bundleDirectory = path.join(__dirname, '../../client/build');
+  console.log(bundleDirectory)
+  server.use('/', express.static(bundleDirectory))
+}
+
 server.listen (PORT, () => console.log (`Server is running on port ${PORT}`));
