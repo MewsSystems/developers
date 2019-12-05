@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { values } from 'lodash';
 import {
-    fetchConfigurationList,
+    initializeConfigurationList,
     getList,
     getLoading,
     getLoaded,
@@ -13,7 +13,7 @@ import CurrencyPairSelector from './CurrencyPairSelector';
 class RateList extends Component {
 
     componentDidMount() {
-        this.props.fetchConfigurationList();
+        this.props.initializeConfigurationList();
     }
 
     render() {
@@ -72,7 +72,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    fetchConfigurationList: () => dispatch(fetchConfigurationList())
+    initializeConfigurationList: () => dispatch(initializeConfigurationList())
 });
 
 export default connect(

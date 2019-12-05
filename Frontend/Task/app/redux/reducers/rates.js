@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { keys, result } from 'lodash';
+import Cookies  from 'js-cookie';
 import {
     FETCH_CURRENCY_LIST,
     FETCH_CURRENCY_LIST_SUCCESS,
@@ -7,9 +8,16 @@ import {
     UPDATE_CURRENCY_RATES,
     UPDATE_CURRENCY_RATES_SUCCESS,
     UPDATE_CURRENCY_RATES_ERROR,
-    SET_FILTER } from '../actionTypes';
+    SET_FILTER,
+    SET_LOADED_CURRENCY_LIST
+} from '../actionTypes';
 import { TREND, ALL_CURRENCIES } from '../../constants/rates';
 import { RATES_REQUEST_INTERVAL, ENDPOINT} from '../../configuration';
+
+const COOKIE = {
+    FILTER_BY: 'rates_filter_by',
+    LIST: 'ratest_list'
+};
 
 const INITIAL_ERROR_STATE = {
     configurationList: null,
@@ -31,9 +39,14 @@ export const getFilterBy = state => {
 export const getList = state => {
     const filterValue = getFilterBy(state);
 
+    if (keys(state.rates.list).length === 0) {
+        return {};
+    }
+
     if (state.rates.filterBy === 'ALL_CURRENCIES') {
         return result(state, 'rates.list', undefined)
     }
+
     const filteredItem = state.rates.list[filterValue];
     return {
         filterValue: filteredItem
@@ -52,11 +65,30 @@ export const getError = state => {
     return result(state, 'rates.error');
 };
 
-export const setFilterBy = currencyId => {
+const setFilterBy = currencyId => {
     return {
         type: SET_FILTER,
         payload: currencyId
     };
+};
+
+export const setFilterValue = filterValue => dispatch => {
+  Cookies.set(COOKIE.FILTER_BY, filterValue);
+  dispatch(setFilterBy(filterValue));
+};
+
+const setCurrencyConfiguration = data => {
+    return {
+        type: FETCH_CURRENCY_LIST_SUCCESS,
+        payload: data
+    }
+};
+
+const setLoadedCurrencyConfiguration = data => {
+    return {
+        type: SET_LOADED_CURRENCY_LIST,
+        payload: data
+    }
 };
 
 export const fetchConfigurationSuccess =  data => {
@@ -75,13 +107,25 @@ export const fetchConfigurationSuccess =  data => {
         return summary;
     }, {});
 
-    return {
-        type: FETCH_CURRENCY_LIST_SUCCESS,
-        payload: currencyData
-    }
+    return setCurrencyConfiguration(currencyData);
 };
 
-export const fetchConfigurationList = () => dispatch => {
+export const initializeConfigurationList = () => dispatch => {
+    const filterBy = Cookies.get(COOKIE.FILTER_BY) || ALL_CURRENCIES;
+    let currencyConfiguration = Cookies.get(COOKIE.LIST) || '{}';
+    currencyConfiguration = JSON.parse(currencyConfiguration);
+
+    if (keys(currencyConfiguration).length === 0) {
+        dispatch(fetchConfigurationList());
+    } else {
+        dispatch(setLoadedCurrencyConfiguration(currencyConfiguration));
+        dispatch(fetchRates());
+    }
+
+    dispatch(setFilterBy(filterBy));
+};
+
+const fetchConfigurationList = () => dispatch => {
     dispatch({type: FETCH_CURRENCY_LIST });
 
     axios.get(ENDPOINT.CONFIGURATION)
@@ -120,6 +164,7 @@ export const fetchRatesSuccess = (ratesData, list) => {
         return data;
     }, {});
 
+    Cookies.set(COOKIE.LIST, updatedList);
     return {
         type: UPDATE_CURRENCY_RATES_SUCCESS,
         payload: updatedList
@@ -134,7 +179,6 @@ const processRatesRequest = ({ getState, dispatch }) => {
 
     axios.get(ENDPOINT.RATES, {params:{currencyPairIds: ids } })
         .then(response => {
-            console.log('getting rates');
             dispatch(fetchRatesSuccess(result(response, 'data.rates', {}), list));
         })
         .catch(error => {
@@ -172,6 +216,14 @@ export default function(state = initialState, action) {
                 loading: false,
                 error: { ...state.error,  configurationList: action.error }
             }
+        }
+        case SET_LOADED_CURRENCY_LIST: {
+            return {
+                ...state,
+                list: action.payload,
+                loaded: true,
+                loading: false
+            };
         }
         case UPDATE_CURRENCY_RATES: {
             return {
