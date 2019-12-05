@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "chance": "1.0.4",
+    "countly-sdk-web": "^19.8.0",
     "express": "4.14.0",
     "express-http-proxy": "^1.6.0",
     "json-loader": "0.5.4",

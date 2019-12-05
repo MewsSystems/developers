@@ -6,9 +6,15 @@ import RatesTable from './components/RatesTable';
 import {setCurrencyPairs} from './actions/pairsActions';
 import styled, {createGlobalStyle} from 'styled-components';
 import {Loader} from './ui';
+import Countly from 'countly-sdk-web';
+import countlyConfig from './countly'
 
 const App = () => {
   const {loading} = useConfigurationFetcher ();
+
+  const {url, app_key} = countlyConfig;
+  useAnalytics(url, app_key)
+  
   if (loading) return <Loader />;
   return (
     <AppWrapper>
@@ -50,3 +56,12 @@ const useConfigurationFetcher = () => {
   });
   return {loading};
 };
+
+const useAnalytics = (url, app_key) => {
+  const countlyParams = {
+    app_key,
+    url,
+  };
+  Countly.init (countlyParams);
+  Countly.track_sessions ();
+}
