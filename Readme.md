@@ -5,9 +5,9 @@
 ## Task may be found at ./Task.md
 ### Start the app
 ```
-npm run deps && npm run dev
+$ npm run deps && npm run dev
 ```
 ### Start the app in production
 ```
-npm run deps && npm start
+$ npm run deps && npm start
 ```
