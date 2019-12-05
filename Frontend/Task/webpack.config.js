@@ -8,7 +8,7 @@ const webpackConfig = {
         app: './app/app.js',
     },
     output: {
-        filename: '[name].js',
+        filename: 'bundle.js',
         library: 'app',
         libraryTarget: 'window',
     },
