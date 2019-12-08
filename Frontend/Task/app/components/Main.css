@@ -1,0 +1,17 @@
+.main {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    line-height: 1.5;
+    color: #3b4859;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.left-container {
+    flex: 1;
+}
+
+.right-container {
+    flex: 2;
+    display: flex;
+}

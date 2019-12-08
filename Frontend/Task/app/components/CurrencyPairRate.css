@@ -1,0 +1,11 @@
+.listitem>td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.center {
+    flex: 3;
+}
+.right {
+    flex: 1;
+}

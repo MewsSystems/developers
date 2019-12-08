@@ -1,0 +1,18 @@
+.listitem {
+    display: flex;
+    cursor: default;
+}
+
+.listitem-content {
+    flex: 1;
+    text-align: center;
+}
+
+.unselected {
+    background: white;
+}
+
+.selected {
+    background: blue;
+    color: white;
+}
