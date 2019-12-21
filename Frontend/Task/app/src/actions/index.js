@@ -1,6 +1,6 @@
 import * as types from "./types";
 import { createDefaultFilter } from "./filter";
-import { endpoint as ENDPOINT, interval as INTERVAL } from "./config.json";
+import { configuration as CONFIGURATION, endpoint as ENDPOINT, interval as INTERVAL } from "../config.json";
 
 export const setLoadingStatus = status => ({
   type: types.SET_LOADING_STATUS,
@@ -36,10 +36,11 @@ const connectionSimulator = dispatch => {
 
 //Handler for create dataConfiguration
 export const getConfiguration = () => {
+  
   return async dispatch => {
     await dispatch(setLoadingStatus(true));
 
-    const response = await fetch("http://localhost:3000/configuration");
+    const response = await fetch(`${CONFIGURATION}`);
 
     if (response.status === 200) {
       const config = await response.json();
