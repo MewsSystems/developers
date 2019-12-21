@@ -1,0 +1,176 @@
+@import url("https://fonts.googleapis.com/css?family=Abel&display=swap");
+
+body {
+  box-sizing: border-box;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 2em;
+  max-width: 1024px;
+  background-color: white;
+  border: double 3px #ddd;
+  border-top: none;
+  border-bottom: none;
+}
+
+html {
+  height: 100%;
+  background-color: #eee;
+  font-family: "Abel", sans-serif;
+  font-size: 1.2em;
+}
+
+.loading {
+  display: flex;
+  /* background-color: red; */
+  margin-top: 150px;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  /* overflow: auto; */
+}
+
+.Rtable {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.rates-table-title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  color: #1680a1;
+  flex-wrap: wrap;
+  background-color: #fd6722;
+  color: #094164;
+  font-weight: bold;
+  position: relative;
+}
+
+.FilterCell {
+  width: 5%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff9868;
+}
+
+.FilterShow {
+  background-color: #094164;
+  color: #fd6722;
+  cursor: pointer;
+}
+
+.FilterCell:hover {
+  background-color: #094164;
+  color: #fd6722;
+  cursor: pointer;
+}
+
+.dropdown-filter {
+  display: none;
+  position: absolute;
+  background-color: #094164;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.filterItem {
+  width: 100%;
+  position: relative;
+}
+
+.filterCheckBox {
+  color: "#fd6722";
+  box-sizing: border-box;
+  /* flex-grow: 1; */
+  width: 20px;
+  /* min-width: 110px; */
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.filterIndex {
+  box-sizing: border-box;
+  width: 115px;
+  padding: 0.8em 1.2em;
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.filterIndex:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.Rtable4--cols {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  color: #1680a1;
+  border-bottom: grey 1px dotted;
+  flex-wrap: wrap;
+}
+
+.Rtable4--cols:hover {
+  background-color: #094164;
+  color: #fd6722;
+  cursor: pointer;
+  position: relative;
+}
+
+.Rate-cell0 {
+  width: 5%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.Rate-cell1 {
+  box-sizing: border-box;
+  flex-grow: 1;
+  width: 35%;
+  min-width: 110px;
+  padding: 0.8em 1.2em;
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.Rate-cell2 {
+  box-sizing: border-box;
+  width: 35%;
+  padding: 0.8em 1.2em;
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.Rate-cell3 {
+  box-sizing: border-box;
+  width: 10%;
+  padding: 0.8em 1.2em;
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.Rate-cell4 {
+  box-sizing: border-box;
+  width: 15%;
+  padding: 0.8em 1.2em;
+  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}

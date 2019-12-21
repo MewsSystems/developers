@@ -1,0 +1,6 @@
+export const SET_LOADING_STATUS = "SET_LOADING_STATUS";
+export const GET_CONFIG = "GET_CONFIG";
+export const GET_RATES = "GET_RATES";
+export const GET_COMBINED_RATES = "GET_COMBINED_RATES";
+export const GET_RATES_DATA = "GET_RATES_DATA";
+export const CHANGE_FILTER = "CHANGE_FILTER";
