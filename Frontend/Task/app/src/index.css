@@ -86,9 +86,7 @@ html {
 .filterCheckBox {
   color: "#fd6722";
   box-sizing: border-box;
-  /* flex-grow: 1; */
   width: 20px;
-  /* min-width: 110px; */
   overflow: hidden;
   list-style: none;
   display: flex;

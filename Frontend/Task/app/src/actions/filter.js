@@ -6,6 +6,7 @@ export const changeFilterAction = filter => ({
   filter
 });
 
+//Handler for defaul filterConfig, (allow all)
 export const createDefaultFilter = () => {
   return async (dispatch, getState) => {
     const config = await getState().config;
@@ -17,6 +18,7 @@ export const createDefaultFilter = () => {
   };
 };
 
+//Handler for change filter, worked by 2 types (1-select by one rate, 2-select several rates by dropDownFilter)
 export const changeFilter = (key, type) => {
   return async (dispatch, getState) => {
     let filter = await Object.assign({}, getState().filter);

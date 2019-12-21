@@ -27,12 +27,14 @@ export const getCombinedRatesAction = combinedRates => ({
   combinedRates
 });
 
+//Hanlder to getUpdateCallback by interval(from config)
 const connectionSimulator = dispatch => {
   return setTimeout(() => {
     dispatch(getRatesStoreUpdate());
   }, INTERVAL);
 };
 
+//Handler for create dataConfiguration
 export const getConfiguration = () => {
   return async dispatch => {
     await dispatch(setLoadingStatus(true));
@@ -52,6 +54,7 @@ export const getConfiguration = () => {
   };
 };
 
+//Handler for create combine data && reduxStore Update
 export const getRatesStoreUpdate = () => {
   return async (dispatch, getState) => {
     const config = await getState().config;
@@ -102,7 +105,7 @@ export const getRatesStoreUpdate = () => {
   };
 };
 
-//COMPONENTS DATA
+//Method for create actual data for components
 export const getRatesDataAction = () => {
   return async (dispatch, getState) => {
     const { filter, combinedRates } = await getState();

@@ -4,6 +4,7 @@ import "react-activity/dist/react-activity.css";
 import { connect } from "react-redux";
 import { getConfiguration } from "./actions/index";
 import { changeFilter } from "./actions/filter";
+
 import DropdownFilter from "./components/DropownFilter";
 import TableTitle from "./components/TableTitle";
 import RatesTable from "./components/RatesTable";
