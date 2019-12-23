@@ -20,3 +20,7 @@
 node_modules
 bower_components
 npm-debug.log
+/Backend/Task/.vs/ExchangeRateUpdater
+packages
+obj
+bin
