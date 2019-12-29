@@ -1,34 +1,45 @@
-const webpack = require('webpack');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const webpackConfig = {
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-    ],
-    entry: {
-        app: './app/app.js',
-    },
-    output: {
-        filename: '[name].js',
-        library: 'app',
-        libraryTarget: 'window',
-    },
-    resolve: {
-        extensions: ['', '.js', '.json'],
-    },
-    module: {
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /(node_modules|Generated)/,
-            loader: 'babel',
-        }, {
-            test: /\.json$/,
-            loader: 'json',
-        }],
-    },
-    devtool: 'eval',
-    devServer: {
-        contentBase: './app',
-    },
+  target: "web",
+  mode: "development",
+  entry: {
+    app: "./app/src/index.tsx"
+  },
+  output: {
+    path: path.resolve(__dirname, "build"),
+    filename: "bundle.js"
+  },
+  resolve: {
+    extensions: [".js", ".json", ".ts", ".tsx"]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.tsx?/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+      }
+    ]
+  },
+  devtool: "eval",
+  devServer: {
+    contentBase: "./app"
+  }
 };
 
 module.exports = webpackConfig;
