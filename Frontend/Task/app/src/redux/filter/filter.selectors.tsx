@@ -1,14 +1,12 @@
 import {createSelector} from 'reselect'
 
-
 const selectConfig = (state) => state.configuration.currencies
-const selectSearchTerm = (state) => state.configuration.searchTerm
-
+const selectSearchTerm = (state) => state.filter.searchTerm
 
 const getArrayFromObject = createSelector(
   selectConfig,
   (config) => {
-    return Object.entries(config).map(e =>({id: e[0], name: e[1].name, code: e[1].code}))
+    return Object.entries(config).map(el =>({id: el[0], name: el[1].name, code: el[1].code}))
   }
 )
 

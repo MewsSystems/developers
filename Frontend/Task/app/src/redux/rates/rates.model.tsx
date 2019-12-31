@@ -1,9 +1,7 @@
 import {
   FETCH_RATES_FAILURE,
   FETCH_RATES_SUCCESS,
-  FETCH_RATES_REQUEST,
-  FETCH_RATES_RETRY,
-  SEARCH_RATES
+  FETCH_RATES_REQUEST
 }
 from './rates.constants'
 import {ThunkDispatch} from 'redux-thunk'
@@ -24,15 +22,11 @@ export interface IFetchRatesFailure {
 }
 
 export interface RatesData {
-  ratesList?: IRate
+  rates?: IRate
 }
 
 export interface IRate {
-  name: string,
-  code: string,
-  currentRate: number,
-  previousRate: number,
-  trend: string,
+  rate: number
 }
 
 export type RateReducerState = {
@@ -41,7 +35,6 @@ export type RateReducerState = {
     isLoading: boolean,
     error: string
   }
-  fetchRates: Function,
 }
 
-export type RatesDispatch = ThunkDispatch<RateReducerState, void, Action>
+export type RatesDispatch = ThunkDispatch<RatesData, void, Action>

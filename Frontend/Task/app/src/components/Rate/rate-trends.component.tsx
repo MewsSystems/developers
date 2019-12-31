@@ -2,17 +2,22 @@ import React from 'react'
 import './styles.module.css'
 import Emoji from '../emoji/emoji.component'
 
-const RateTrends = ({currentRate, previousRate, trend}) => {
+type Props = {
+  currentRate: string,
+  previousRate: string,
+  trend: "N/A" | "stagnating" | "growing" | "declining"
+}
+
+const RateTrends: React.FC<Props> = ({currentRate, previousRate, trend}) => {
   let icon;
-  if(trend === "N/A") icon = "➡️"
+  if(trend === "N/A" || trend === "stagnating") icon = "➡️"
   if(trend === "growing") icon = "↗️"
   if(trend === "declining") icon = "↘️"
-  if(trend === "stagnating") icon = "➡️"
   return (
     <>
       <td scope="col">{currentRate}</td>
       <td scope="col">{previousRate}</td>
-      <td scope="col">{trend} <Emoji symbol={icon}/> </td>
+      <td scope="col">{trend} <Emoji label="trend" symbol={icon}/> </td>
     </>
   )
 }

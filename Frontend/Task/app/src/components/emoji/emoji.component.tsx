@@ -1,14 +1,18 @@
 import React from 'react'
 
+type Props = {
+  label: string,
+  symbol: string
+}
 
-const Emoji = (props) => (
+const Emoji: React.FC<Props> = ({label, symbol}) => (
   <span
     className="emoji"
     role="img"
-    aria-label={props.label ? props.label : ""}
-    aria-hidden={props.label ? "false" : "true"}
+    aria-label={label ? label : ""}
+    aria-hidden={label ? "false" : "true"}
   >
-    {props.symbol}
+    {symbol}
 </span>
 )
 

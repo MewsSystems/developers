@@ -1,6 +1,7 @@
 import React from 'react'
-import RatesList from './components/RatesList/rates-list.component';
-import Header from './components/Header/header.component'
+import RatesList from './components/rates-list/rates-list.component';
+import Header from './components/header/header.component'
+import './App.css'
 
 const App: React.FC = () => {
   return(

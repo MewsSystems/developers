@@ -18,7 +18,7 @@ export const fetchConfigFailure = error => ({
 });
 
 export const fetchConfigAsync = () => {
-  return async (dispatch: ConfigDispatch, getState) => {
+  return async (dispatch: ConfigDispatch) => {
         dispatch(fetchConfigRequest())
       try {
           const response = await fetch('http://localhost:3000/configuration')

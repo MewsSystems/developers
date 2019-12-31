@@ -50,7 +50,7 @@ const RatesList: React.FC<Props> = (props) => {
 
   }, [fetchRates])
 
-  const handleChange = (value) => {
+  const handleChange = (value: string) => {
     searchCurrency(value)
   }
   return (

@@ -1,5 +1,3 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
 import {
   FETCH_RATES_FAILURE,
   FETCH_RATES_RETRY,
@@ -7,6 +5,8 @@ import {
   FETCH_RATES_SUCCESS}
 from './rates.constants'
 import {queryStringBuilder, setTrend} from '../../utils'
+import {RatesDispatch} from './rates.model'
+import { RootState } from '../../types'
 
 export const fetchRatesRequest = () => ({
   type: FETCH_RATES_REQUEST
@@ -22,15 +22,10 @@ export const fetchRatesFailure = (error) => ({
   payload: error
 })
 
-export const fetchRatesRetry = (rates) => ({
-  type: FETCH_RATES_RETRY,
-  payload: rates
-})
-
-
 export const fetchRatesAsync = () => {
-  return async (dispatch, getState) => {
+  return async (dispatch: RatesDispatch, getState: () => RootState) => {
     dispatch(fetchRatesRequest())
+    console.log("getState", getState())
     try {
       const {currencies} = getState().configuration;
       const {ratesList} = getState().rates

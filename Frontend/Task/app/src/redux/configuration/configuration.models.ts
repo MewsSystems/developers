@@ -44,4 +44,4 @@ export type ConfigReducerState = {
   }
 }
 
-export type ConfigDispatch = ThunkDispatch<ConfigReducerState, void, Action>
+export type ConfigDispatch = ThunkDispatch<ConfigurationData, void, Action>
