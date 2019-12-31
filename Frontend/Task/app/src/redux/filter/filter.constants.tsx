@@ -1,0 +1,1 @@
+export const SEARCH_CURRENCY = 'SEARCH_CURRENCY'

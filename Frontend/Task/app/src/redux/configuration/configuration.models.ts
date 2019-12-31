@@ -1,7 +1,8 @@
 import {
   FETCH_CONFIGURATION_FAILURE,
   FETCH_CONFIGURATION_SUCCESS,
-  FETCH_CONFIGURATION_REQUEST}
+  FETCH_CONFIGURATION_REQUEST
+}
 from './configuration.constants'
 import {ThunkDispatch} from 'redux-thunk'
 import {Action} from 'redux'
@@ -35,14 +36,12 @@ export interface ICurrency {
   name: string
 }
 
-
 export type ConfigReducerState = {
   configuration: {
     currencies: ConfigurationData,
     isLoading: boolean,
     error: string
   }
-  fetchConfig: Function,
 }
 
 export type ConfigDispatch = ThunkDispatch<ConfigReducerState, void, Action>

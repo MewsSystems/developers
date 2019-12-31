@@ -34,7 +34,7 @@ export default (state = INITIAL_STATE, action: ConfigAction) => {
         ...state,
         error: action.payload
       }
-      default:
-        return state
+    default:
+      return state
   }
 }

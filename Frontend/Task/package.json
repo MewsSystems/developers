@@ -30,6 +30,7 @@
     "reactstrap": "^8.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {

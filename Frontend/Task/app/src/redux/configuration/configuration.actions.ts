@@ -1,7 +1,7 @@
 import {
   FETCH_CONFIGURATION_FAILURE,
   FETCH_CONFIGURATION_REQUEST,
-  FETCH_CONFIGURATION_SUCCESS
+  FETCH_CONFIGURATION_SUCCESS,
 } from "./configuration.constants";
 import {ConfigDispatch} from './configuration.models'
 
@@ -18,21 +18,21 @@ export const fetchConfigFailure = error => ({
 });
 
 export const fetchConfigAsync = () => {
-  return async (dispatch: ConfigDispatch) => {
+  return async (dispatch: ConfigDispatch, getState) => {
         dispatch(fetchConfigRequest())
       try {
-        const response = await fetch('http://localhost:3000/configuration')
-        const data = await response.json()
-        let newConfig = {}
-        const {currencyPairs} = await data
-        Object.keys(currencyPairs).map(id => {
-          const name = `${currencyPairs[id][0].name} / ${currencyPairs[id][1].name}`
-          const code = `${currencyPairs[id][0].code} / ${currencyPairs[id][1].code}`
-          return newConfig[id] = {
-            name,
-            code
-          }
-        })
+          const response = await fetch('http://localhost:3000/configuration')
+          const data = await response.json()
+          const {currencyPairs} = await data;
+          let newConfig = {}
+          Object.keys(currencyPairs).map(id => {
+            const name = `${currencyPairs[id][0].name} / ${currencyPairs[id][1].name}`
+            const code = `${currencyPairs[id][0].code} / ${currencyPairs[id][1].code}`
+            return newConfig[id] = {
+              name,
+              code
+            }
+          })
         dispatch(fetchConfigSuccess(newConfig))
       } catch(err) {
         dispatch(fetchConfigFailure(err))

@@ -6,7 +6,7 @@ import {
   FETCH_RATES_REQUEST,
   FETCH_RATES_SUCCESS}
 from './rates.constants'
-import {queryStringBuilder} from '../../utils'
+import {queryStringBuilder, setTrend} from '../../utils'
 
 export const fetchRatesRequest = () => ({
   type: FETCH_RATES_REQUEST
@@ -55,15 +55,5 @@ export const fetchRatesAsync = () => {
     } catch(err) {
       dispatch(fetchRatesFailure(err))
     }
-  }
-}
-
-const setTrend = (prev, cur) => {
-  if(cur > prev) {
-    return "growing"
-  } else if(cur < prev) {
-    return "declining"
-  } else if(cur === prev) {
-    return "stagnating"
   }
 }

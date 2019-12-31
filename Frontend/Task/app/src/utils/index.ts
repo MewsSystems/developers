@@ -4,3 +4,13 @@ export const queryStringBuilder = (ids) => {
   }).join("&")
   return idsArray;
 }
+
+export const setTrend = (prev, cur) => {
+  if(cur > prev) {
+    return "growing"
+  } else if(cur < prev) {
+    return "declining"
+  } else if(cur === prev) {
+    return "stagnating"
+  }
+}

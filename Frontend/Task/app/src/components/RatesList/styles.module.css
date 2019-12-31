@@ -26,3 +26,17 @@ tbody {
   height: 50px;
   margin: 20px auto;
 }
+
+.input-search {
+  width: 200px;
+  height: 40px;
+  outline: none;
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px solid rgb(2, 4, 80);
+}
+
+.input-search::placeholder {
+  padding: 10px;
+  font-size: 16px;
+}
