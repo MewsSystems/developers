@@ -1,10 +1,12 @@
 import React from 'react'
-
+import RatesList from './components/RatesList/rates-list.component';
+import Header from './components/Header/header.component'
 
 const App: React.FC = () => {
   return(
     <div>
-      <h1>Hello</h1>
+      <Header/>
+      <RatesList/>
     </div>
   )
 }
