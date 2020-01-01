@@ -8,7 +8,7 @@ type Props = {
   trend: "N/A" | "stagnating" | "growing" | "declining"
 }
 
-const RateTrends: React.FC<Props> = ({currentRate, previousRate, trend}) => {
+const RateTrends: React.FC<Props> = ({currentRate, trend}) => {
   let icon;
   if(trend === "N/A" || trend === "stagnating") icon = "➡️"
   if(trend === "growing") icon = "↗️"
@@ -16,7 +16,6 @@ const RateTrends: React.FC<Props> = ({currentRate, previousRate, trend}) => {
   return (
     <>
       <td scope="col">{currentRate}</td>
-      <td scope="col">{previousRate}</td>
       <td scope="col">{trend} <Emoji label="trend" symbol={icon}/> </td>
     </>
   )

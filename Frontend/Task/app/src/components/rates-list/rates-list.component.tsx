@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import { ConfigDispatch, ConfigReducerState } from '../../redux/configuration/configuration.models'
 import { fetchConfigAsync } from '../../redux/configuration/configuration.actions'
@@ -6,13 +6,15 @@ import { searchCurrency } from '../../redux/filter/filter.actions'
 import { fetchRatesAsync } from '../../redux/rates/rates.actions'
 import { RateReducerState } from '../../redux/rates/rates.model'
 import { getFilteredCurrencies } from '../../redux/filter/filter.selectors'
-import { Table } from 'reactstrap'
 import Rate from '../Rate/rate.component'
 import RateName from '../Rate/rate-name.component'
 import RateTrends from '../Rate/rate-trends.component'
+import Alert from '../alert/alert.component'
+import Input from '../form-input/form-input.component'
 import { RootState } from '../../types'
 import './styles.module.css'
 import Spinner from 'react-spinkit'
+import { toast } from 'react-toastify';
 
 const TableHeader = () => (
   <thead>
@@ -20,7 +22,6 @@ const TableHeader = () => (
       <th scope="col">Name</th>
       <th scope="col">Code</th>
       <th scope="col">Current value</th>
-      <th scope="col">Previous value</th>
       <th scope="col">Trend</th>
     </tr>
   </thead>
@@ -32,10 +33,11 @@ type Props = {
   searchCurrency: Function,
   rates: RateReducerState,
   config: ConfigReducerState,
+  isError: boolean
 }
 
 const RatesList: React.FC<Props> = (props) => {
-  const {fetchConfig, fetchRates, rates, config, searchCurrency} = props
+  const {fetchConfig, fetchRates, rates, config, searchCurrency, isError} = props
 
   useEffect(() =>{
     const { fetchConfig } = props
@@ -46,27 +48,30 @@ const RatesList: React.FC<Props> = (props) => {
       const interval = setInterval(() => {
         fetchRates()
       }, 10000)
+      isError && notify()
     return () => clearInterval(interval)
 
-  }, [fetchRates])
+  }, [fetchRates, isError])
 
   const handleChange = (value: string) => {
     searchCurrency(value)
   }
+
+  const notify = () => toast.error('500 Internal Server Error!!');
+
   return (
     <>
-    <div className="select-wrapper">
-     <input
+      <Alert/>
+      <Input
         type="search"
+        handleChange={handleChange}
         className="input-search"
-        onChange={(e) => handleChange(e.target.value)}
-        placeholder="Search by name..."
-     />
-    </div>
-     <Table className="table">
+        placeholder="Search by name"
+      />
+     <table className="table">
      <TableHeader/>
         <tbody>
-          {config.map(rate => {
+          {config ? (config.map(rate => {
             return (
               <Rate key={rate.name}>
                 <RateName
@@ -77,7 +82,6 @@ const RatesList: React.FC<Props> = (props) => {
                 rates[rate.id] ?
                 (<RateTrends
                   currentRate={rates[rate.id].currentRate}
-                  previousRate={rates[rate.id].previousRate}
                   trend={rates[rate.id].trend}
                   />)
                   :
@@ -85,9 +89,9 @@ const RatesList: React.FC<Props> = (props) => {
                 }
               </Rate>
             )
-          })}
+          })) : (<Spinner name="ball-spin-fade-loader" />)}
         </tbody>
-      </Table>
+      </table>
     </>
 
   )
@@ -97,6 +101,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     config: getFilteredCurrencies(state),
     rates: state.rates.ratesList,
+    isError: state.rates.showErrorAlert,
     searchTerm: state.rates.searchTerm
   }
 }

@@ -1,7 +1,8 @@
 import {
   FETCH_RATES_FAILURE,
   FETCH_RATES_SUCCESS,
-  FETCH_RATES_REQUEST
+  FETCH_RATES_REQUEST,
+  HTTP_500_ERROR
 }
 from './rates.constants'
 import {ThunkDispatch} from 'redux-thunk'
@@ -21,6 +22,9 @@ export interface IFetchRatesFailure {
   payload: string
 }
 
+export interface IHTTP500Error {
+  type: typeof HTTP_500_ERROR
+}
 export interface RatesData {
   rates?: IRate
 }

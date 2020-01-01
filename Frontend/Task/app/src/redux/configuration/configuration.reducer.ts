@@ -5,7 +5,7 @@ import {IFetchConfigRequest, IFetchConfigSuccess, IFetchConfigFailure} from './c
 export type ConfigState = {
     currencies: ConfigurationData,
     isLoading: boolean,
-    error: string
+    errorMessage: string
 }
 
 export type ConfigAction = IFetchConfigRequest | IFetchConfigSuccess | IFetchConfigFailure
@@ -13,7 +13,7 @@ export type ConfigAction = IFetchConfigRequest | IFetchConfigSuccess | IFetchCon
 const INITIAL_STATE: ConfigState = {
   currencies: {},
   isLoading: false,
-  error: ''
+  errorMessage: ''
 }
 
 export default (state = INITIAL_STATE, action: ConfigAction) => {
@@ -32,7 +32,7 @@ export default (state = INITIAL_STATE, action: ConfigAction) => {
     case actions.FETCH_CONFIGURATION_FAILURE:
       return {
         ...state,
-        error: action.payload
+        errorMessage: action.payload
       }
     default:
       return state

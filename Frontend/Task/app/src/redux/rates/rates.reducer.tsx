@@ -1,23 +1,26 @@
 import {
   FETCH_RATES_FAILURE,
   FETCH_RATES_SUCCESS,
-  FETCH_RATES_REQUEST}
+  FETCH_RATES_REQUEST,
+  HTTP_500_ERROR}
 from './rates.constants'
-import {RatesData, IFetchRatesFailure, IFetchRatesRequest, IFetchRatesSuccess} from './rates.model'
+import {RatesData, IFetchRatesFailure, IFetchRatesRequest, IFetchRatesSuccess, IHTTP500Error} from './rates.model'
 
 export type RatesState = {
     ratesList: RatesData,
     isLoading: boolean,
-    error: string
+    errorMessage: string,
+    showErrorAlert: boolean
 }
 
-export type RatesAction = IFetchRatesRequest | IFetchRatesSuccess | IFetchRatesFailure
+export type RatesAction = IFetchRatesRequest | IFetchRatesSuccess | IFetchRatesFailure | IHTTP500Error
 
 
 const INITIAL_STATE: RatesState = {
   ratesList: {},
   isLoading: false,
-  error: ''
+  errorMessage: '',
+  showErrorAlert: false
 }
 
 export default (state = INITIAL_STATE, action: RatesAction) => {
@@ -31,12 +34,19 @@ export default (state = INITIAL_STATE, action: RatesAction) => {
       return {
         ...state,
         isLoading: false,
-        ratesList: action.payload
+        ratesList: action.payload,
+        showErrorAlert: false
       }
     case FETCH_RATES_FAILURE:
       return {
         ...state,
-        error: action.payload
+        errorMessage: action.payload,
+        showErrorAlert: false
+      }
+    case HTTP_500_ERROR:
+      return {
+        ...state,
+        showErrorAlert: true
       }
     default:
       return state

@@ -1,12 +1,11 @@
 import {
   FETCH_RATES_FAILURE,
-  FETCH_RATES_RETRY,
+  HTTP_500_ERROR,
   FETCH_RATES_REQUEST,
   FETCH_RATES_SUCCESS}
 from './rates.constants'
 import {queryStringBuilder, setTrend} from '../../utils'
 import {RatesDispatch} from './rates.model'
-import { RootState } from '../../types'
 
 export const fetchRatesRequest = () => ({
   type: FETCH_RATES_REQUEST
@@ -22,16 +21,22 @@ export const fetchRatesFailure = (error) => ({
   payload: error
 })
 
+export const handle500Error = () => ({
+  type: HTTP_500_ERROR
+})
+
 export const fetchRatesAsync = () => {
-  return async (dispatch: RatesDispatch, getState: () => RootState) => {
+  return async (dispatch: RatesDispatch, getState) => {
     dispatch(fetchRatesRequest())
-    console.log("getState", getState())
     try {
       const {currencies} = getState().configuration;
       const {ratesList} = getState().rates
       const ids = Object.keys(currencies)
       const qs = queryStringBuilder(ids)
       const response = await fetch(`http://localhost:3000/rates?${qs}`)
+      if(response.status === 500) {
+        dispatch(handle500Error())
+      }
       const data = await response.json();
       const {rates} = await data;
       let newRates = {};
@@ -42,7 +47,6 @@ export const fetchRatesAsync = () => {
         ratesList[id] !== undefined ? (trend = setTrend(previousRate, currentRate)): (trend = "N/A")
         return newRates[id] = {
           currentRate,
-          previousRate,
           trend
         }
       })
