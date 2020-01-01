@@ -14,7 +14,7 @@ export const filterSearch = createSelector(
   getArrayFromObject,
   selectSearchTerm,
   (arrayFromObject, searchTerm) => {
-      return arrayFromObject.filter(val => val.name.toLowerCase().indexOf(searchTerm) != -1)
+      return arrayFromObject.filter(val => val.name.includes(searchTerm))
 
   }
 )

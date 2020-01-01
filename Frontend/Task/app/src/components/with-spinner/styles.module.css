@@ -1,0 +1,18 @@
+.spinner-tbody {
+  height: 60vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.spinner-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-trend {
+  padding-left: 40px;
+}

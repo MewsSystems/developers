@@ -18,7 +18,7 @@ export type RatesAction = IFetchRatesRequest | IFetchRatesSuccess | IFetchRatesF
 
 const INITIAL_STATE: RatesState = {
   ratesList: {},
-  isLoading: false,
+  isLoading: true,
   errorMessage: '',
   showErrorAlert: false
 }
