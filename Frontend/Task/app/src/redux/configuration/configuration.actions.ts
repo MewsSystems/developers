@@ -29,14 +29,14 @@ export const fetchConfigAsync = () => {
         const response = await fetch('http://localhost:3000/configuration')
         const data = await response.json()
         const {currencyPairs} = await data;
-        let newConfig = {}
+        let newConfig = {};
         Object.keys(currencyPairs).map(id => {
           const name = `${currencyPairs[id][0].name} / ${currencyPairs[id][1].name}`
           const code = `${currencyPairs[id][0].code} / ${currencyPairs[id][1].code}`
-          return newConfig[id] = {
-            name,
-            code
-          }
+            return newConfig[id] = {
+              name,
+              code
+            }
         })
         saveState("config", newConfig)
         dispatch(fetchConfigSuccess(newConfig))

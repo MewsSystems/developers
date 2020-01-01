@@ -33,14 +33,16 @@ export const saveState = (key: string, state: object) => {
 };
 
 export const namesArray = [
- "Armenia Dram / Georgia Lari",
- "Philippines Peso / Algeria Dinar",
- "Lesotho Loti / Australia Dollar",
- "Bangladesh Taka / Venezuela Bolivar",
- "Qatar Riyal / Jordan Dinar",
- "Suriname Dollar / Czech Republic Koruna",
- "Czech Republic Koruna / Lesotho Loti",
- "Algeria Dinar / Maldives (Maldive Islands) Rufiyaa",
- "Burundi Franc / Chile Peso",
- "Hong Kong Dollar / Falkland Islands (Malvinas) Pound"
+  {name: "Show all", value: ""},
+  {name: "Armenia Dram / Georgia Lari", value: "Armenia Dram / Georgia Lari"},
+  {name: "Philippines Peso / Algeria Dinar", value: "Philippines Peso / Algeria Dinar"},
+  {name:  "Lesotho Loti / Australia Dollar", value:  "Lesotho Loti / Australia Dollar"},
+  {name: "Bangladesh Taka / Venezuela Bolivar", value: "Bangladesh Taka / Venezuela Bolivar"},
+  {name:  "Qatar Riyal / Jordan Dinar", value:  "Qatar Riyal / Jordan Dinar"},
+  {name: "Suriname Dollar / Czech Republic Koruna", value: "Suriname Dollar / Czech Republic Koruna"},
+  {name: "Czech Republic Koruna / Lesotho Loti", value: "Czech Republic Koruna / Lesotho Loti"},
+  {name: "Algeria Dinar / Maldives (Maldive Islands) Rufiyaa", value: "Algeria Dinar / Maldives (Maldive Islands) Rufiyaa"},
+  {name: "Burundi Franc / Chile Peso", value: "Burundi Franc / Chile Peso"},
+  {name: "Hong Kong Dollar / Falkland Islands (Malvinas) Pound", value: "Hong Kong Dollar / Falkland Islands (Malvinas) Pound"}
+
 ]

@@ -1,4 +1,5 @@
 import {createSelector} from 'reselect'
+import { loadState } from '../../utils'
 
 const selectConfig = (state) => state.configuration.currencies
 const selectSearchTerm = (state) => state.filter.searchTerm
@@ -13,8 +14,8 @@ const getArrayFromObject = createSelector(
 export const filterSearch = createSelector(
   getArrayFromObject,
   selectSearchTerm,
-  (arrayFromObject, searchTerm) => {
-      return arrayFromObject.filter(val => val.name.includes(searchTerm))
+  (arrayFromObject) => {
+      return arrayFromObject.filter(val =>  val.name.includes(loadState("select")))
 
   }
 )

@@ -6,11 +6,10 @@ const Select = ({handleChange, value, options, ...otherProps}) => {
    <select
       className="select"
       value={value}
-      onChange={(e) => handleChange(e.target.value)}
+      onChange={(e) => handleChange(e)}
       {...otherProps}
    >
-      <option value="">Show all</option>
-      {options}
+   {options}
    </select>
   )
 }

@@ -6,7 +6,7 @@ import { searchCurrency } from '../../redux/filter/filter.actions'
 import { fetchRatesAsync } from '../../redux/rates/rates.actions'
 import { RateReducerState } from '../../redux/rates/rates.model'
 import { getFilteredCurrencies } from '../../redux/filter/filter.selectors'
-import {namesArray} from '../../utils'
+import {namesArray, saveState, loadState } from '../../utils'
 import Alert from '../alert/alert.component'
 import Select from '../select/select.component'
 import TableHeader from './table-header'
@@ -46,12 +46,16 @@ const RatesList: React.FC<Props> = (props) => {
 
   }, [fetchRates, isError])
 
-  const handleChange = (value: string) => {
-    searchCurrency(value)
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    saveState("select", e.target.value)
+    searchCurrency(e.target.value)
+
   }
 
   const notify = () => toast.error('500 Internal Server Error!!');
-  const renderOptions = namesArray.map(name => <option value={name}>{name}</option>)
+  const renderOptions = namesArray.map(cur => {
+    return <option selected={cur.value === loadState("select")} key={cur.name} value={cur.value}>{cur.name}</option>
+  })
   return (
     <>
       <Alert/>
