@@ -1,9 +1,12 @@
-.rate {
-  display: flex;
-  flex-direction: row;
-  font-size: 16px;
+.name {
+  text-align: center;
 }
 
 .trend {
   padding-left: 30px;
+  display: flex;
+}
+
+.trend span {
+  padding: 0 15px;
 }

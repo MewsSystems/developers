@@ -27,43 +27,43 @@ export const saveState = (key: string, state: string) => {
 export const namesArray = [
   { label: "Show all", value: "" },
   {
-    label: "Armenia Dram / Georgia Lari",
-    value: "70c6744c-cba2-5f4c-8a06-0dac0c4e43a1"
+    label: "Mozambique Metical / Ghana Cedi",
+    value: "f70c6744-c2cb-5a28-b4c6-5aa0680dac0c"
   },
   {
-    label: "Philippines Peso / Algeria Dinar",
-    value: "41cae0fd-b74d-5304-a45c-ba000471eabd"
+    label: "Bosnia and Herzegovina Convertible Marka / Albania Lek",
+    value: "43a1ae34-1cae-50fd-bb74-d13042a845c2"
   },
   {
-    label: "Lesotho Loti / Australia Dollar",
-    value: "5b428ac9-ec57-513d-8a08-20199469fb4d"
+    label: "Mongolia Tughrik / Colombia Peso",
+    value: "000471ea-bd5d-525b-828a-c91ec57e13d3"
   },
   {
-    label: "Bangladesh Taka / Venezuela Bolivar",
-    value: "f816e384-0e43-5ce7-a017-deaa8d666774"
+    label: "Moldova Leu / Fiji Dollar",
+    value: "a0872019-9469-5fb4-a3a0-f816e384f0e4"
   },
   {
-    label: "Qatar Riyal / Jordan Dinar",
-    value: "5b98842f-bfe5-5564-b321-068763d7e2a3"
+    label: "Cambodia Riel / Guatemala Quetzal",
+    value: "ce7cba01-71de-5aa8-a666-774b9f5b9884"
   },
   {
-    label: "Suriname Dollar / Czech Republic Koruna",
-    value: "a2bda952-4369-5d41-9d0b-e6c9947e5b82"
+    label: "Netherlands Antilles Guilder / Kenya Shilling",
+    value: "bbfe5f56-45e9-5321-a068-763d7e2a361b"
   },
   {
-    label: "Czech Republic Koruna / Lesotho Loti",
-    value: "1993f7b9-f9be-551a-beac-312d6befd0cf"
+    label: "Brunei Darussalam Dollar / Tuvalu Dollar",
+    value: "bda952f4-369c-5d41-87dd-0b4e6c9947e5"
   },
   {
-    label: "Algeria Dinar / Maldives (Maldive Islands) Rufiyaa",
-    value: "61fb0e0d-626e-5e0a-831a-ef95d5c32203"
+    label: "Djibouti Franc / Pakistan Rupee",
+    value: "27dc1993-f7b9-5ff9-aed5-1a8f8eac3312"
   },
   {
-    label: "Burundi Franc / Chile Peso",
-    value: "b7fdd67f-5051-58b7-a3c6-84f5da637df5"
+    label: "Iceland Krona / Aruba Guilder",
+    value: "befd0cfd-3361-5fb0-b0de-626ece0ae403"
   },
   {
-    label: "Hong Kong Dollar / Falkland Islands (Malvinas) Pound",
-    value: "611398c5-6bd9-596e-8803-3ed0b093995d"
+    label: "Bahrain Dinar / Suriname Dollar",
+    value: "aef95d5c-3220-53d4-8b7f-dd67f2505138"
   }
 ];

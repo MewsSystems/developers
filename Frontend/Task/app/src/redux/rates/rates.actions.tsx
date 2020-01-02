@@ -25,16 +25,6 @@ export const handle500Error = () => ({
   type: HTTP_500_ERROR
 });
 
-const setTrend = (prev: number, cur: number) => {
-  if (cur > prev) {
-    return "growing";
-  } else if (cur < prev) {
-    return "declining";
-  } else if (cur === prev) {
-    return "stagnating";
-  }
-};
-
 export const fetchRatesAsync = () => {
   return async (dispatch: RatesDispatch, getState) => {
     dispatch(fetchRatesRequest());
@@ -50,20 +40,31 @@ export const fetchRatesAsync = () => {
       const data = await response.json();
       const { rates } = await data;
       let trend;
-      const formattedRates = ids.map(id => {
-        const rate = rates[id];
-        const previousRate = ratesList[id] && ratesList[id].rate;
+      let formattedRates = {};
+      ids.map(id => {
+        const currentRate = rates[id];
+        const previousRate = (ratesList[id] && ratesList[id].currentRate) || 0;
         ratesList[id] !== undefined
-          ? (trend = setTrend(previousRate, rate))
+          ? (trend = setTrend(previousRate, currentRate))
           : (trend = "N/A");
-        return {
-          rate,
+        return (formattedRates[id] = {
+          currentRate,
           trend
-        };
+        });
       });
       dispatch(fetchRatesSuccess(formattedRates));
     } catch (err) {
       dispatch(fetchRatesFailure(err));
     }
   };
+};
+
+const setTrend = (prev: number, cur: number) => {
+  if (cur > prev) {
+    return "growing";
+  } else if (cur < prev) {
+    return "declining";
+  } else if (cur === prev) {
+    return "stagnating";
+  }
 };

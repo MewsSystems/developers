@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { ConfigDispatch } from "../../redux/configuration/configuration.models";
 import { fetchConfigAsync } from "../../redux/configuration/configuration.actions";
@@ -11,21 +11,11 @@ import { saveState } from "../../utils";
 import Alert from "../alert/alert.component";
 import Select from "../select/select.component";
 import Spinner from "react-spinkit";
-import { RootState } from "../../types";
+import { RootState, Props } from "../../types";
 import "./styles.module.css";
 import { toast } from "react-toastify";
 
 const INTERVAL = 10000;
-
-interface Props {
-  fetchConfig: () => void;
-  fetchRates: () => void;
-  searchCurrency: (value: string) => void;
-  isError: boolean;
-  loadingConfig: boolean;
-  searchTerm: string;
-  rates: any;
-}
 
 const RatesList: React.FC<Props> = props => {
   const {
@@ -38,7 +28,7 @@ const RatesList: React.FC<Props> = props => {
     loadingConfig,
     searchTerm
   } = props;
-  console.log("config", config);
+
   useEffect(() => {
     const { fetchConfig } = props;
     fetchConfig();
@@ -53,8 +43,9 @@ const RatesList: React.FC<Props> = props => {
   }, [fetchRates, isError]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    saveState("select", e.target.value);
-    searchCurrency(e.target.value);
+    const { value } = e.target;
+    saveState("select", value);
+    searchCurrency(value);
   };
 
   const notify = () => toast.error("500 Internal Server Error!!");
@@ -64,20 +55,26 @@ const RatesList: React.FC<Props> = props => {
       <Alert />
       <Select handleChange={handleChange} value={searchTerm} />
       {loadingConfig ? (
-        <Spinner name="ball-spin-fade-loader" />
+        <div className="rates-container">
+          <Spinner name="ball-spin-fade-loader" />
+        </div>
       ) : (
         <div className="rates-container">
-          {Object.keys(config).map((id, i) => {
+          {Object.keys(config).map(id => {
             return (
-              <div className="rate-wrapper" key={id}>
+              <div className="rate-container" key={id}>
                 <RateName currency={config[id]} />
-                {rates[i] ? (
-                  <RateTrend
-                    rate={rates[i] && rates[i].rate}
-                    trend={rates[i] && rates[i].trend}
-                  />
+                {rates[id] ? (
+                  <div className="trend-container">
+                    <RateTrend
+                      rate={rates[id] && rates[id].currentRate}
+                      trend={rates[id] && rates[id].trend}
+                    />
+                  </div>
                 ) : (
-                  <Spinner name="circle" />
+                  <div className="trend-container">
+                    <Spinner name="circle" />
+                  </div>
                 )}
               </div>
             );

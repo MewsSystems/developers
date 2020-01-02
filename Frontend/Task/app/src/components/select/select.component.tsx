@@ -1,33 +1,19 @@
 import React from "react";
 import "./styles.module.css";
-import { loadState, namesArray } from "../../utils";
+import { namesArray } from "../../utils";
+import { FilterProps } from "../../redux/filter/filter.models";
 
-const renderOptions = namesArray.map(cur => {
-  return (
-    <option
-      selected={cur.value === loadState("select")}
-      key={cur.value}
-      value={cur.value}
-    >
-      {cur.label}
-    </option>
-  );
-});
-
-type Props = {
-  handleChange: Function;
-  value: string;
-};
-
-const Select: React.FC<Props> = ({ handleChange, value, ...otherProps }) => {
+const Select: React.FC<FilterProps> = ({ handleChange, value }) => {
   return (
     <select
       className="select"
+      placeholder="select by name"
       value={value}
-      onChange={e => handleChange(e)}
-      {...otherProps}
+      onChange={handleChange}
     >
-      {renderOptions}
+      {namesArray.map(cur => (
+        <option value={cur.value}>{cur.label}</option>
+      ))}
     </select>
   );
 };

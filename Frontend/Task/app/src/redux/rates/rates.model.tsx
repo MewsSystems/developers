@@ -25,21 +25,26 @@ export interface IHTTP500Error {
   type: typeof HTTP_500_ERROR;
 }
 export interface RatesData {
-  rates?: IRate;
+  [key: string]: IRate;
 }
 
 export interface IRate {
-  rate: number;
+  currentRate: number;
   trend: "N/A" | "growing" | "declining" | "stagnating";
 }
 
 export interface RateReducerState {
   rates: {
-    ratesList?: RatesData;
+    ratesList: RatesData;
     isLoading: boolean;
     error: string;
   };
 }
+
+export type RateProps = {
+  rate: number;
+  trend: "N/A" | "stagnating" | "growing" | "declining";
+};
 
 export interface RatesState {
   ratesList?: RatesData;

@@ -27,7 +27,7 @@ export interface ConfigurationData {
 }
 
 export interface ServerData {
-  currency: Array<ICurrency>;
+  [key: string]: Array<ICurrency>;
 }
 
 export interface ICurrency {

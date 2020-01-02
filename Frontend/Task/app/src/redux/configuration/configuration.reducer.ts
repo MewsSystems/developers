@@ -7,7 +7,7 @@ const INITIAL_STATE: ConfigState = {
   errorMessage: ""
 };
 
-export default (state = INITIAL_STATE, action: ConfigAction) => {
+export default (state = INITIAL_STATE, action: ConfigAction): ConfigState => {
   switch (action.type) {
     case actions.FETCH_CONFIGURATION_REQUEST:
       return {

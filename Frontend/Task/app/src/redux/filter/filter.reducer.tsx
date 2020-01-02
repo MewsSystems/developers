@@ -5,7 +5,7 @@ const INITIAL_STATE: FilterState = {
   searchTerm: ""
 };
 
-export default (state = INITIAL_STATE, action: FilterAction) => {
+export default (state = INITIAL_STATE, action: FilterAction): FilterState => {
   switch (action.type) {
     case SEARCH_CURRENCY:
       return {

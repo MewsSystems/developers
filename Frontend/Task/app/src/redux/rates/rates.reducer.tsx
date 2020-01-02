@@ -13,7 +13,7 @@ const INITIAL_STATE: RatesState = {
   showErrorAlert: false
 };
 
-export default (state = INITIAL_STATE, action: RatesAction) => {
+export default (state = INITIAL_STATE, action: RatesAction): RatesState => {
   switch (action.type) {
     case FETCH_RATES_REQUEST:
       return {

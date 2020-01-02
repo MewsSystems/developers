@@ -1,19 +1,29 @@
 import { ConfigurationData } from "../redux/configuration/configuration.models";
 import { RatesData } from "../redux/rates/rates.model";
-
 export interface RootState {
   configuration: {
-    currencies?: ConfigurationData;
+    currencies: ConfigurationData;
     isLoading: boolean;
-    error: string;
+    errorMessage: string;
   };
   rates: {
-    ratesList?: RatesData;
+    ratesList: RatesData;
     isLoading: boolean;
-    error: string;
+    errorMessage: string;
     showErrorAlert: boolean;
   };
   filter: {
     searchTerm: string;
   };
+}
+
+export interface Props {
+  fetchConfig: () => void;
+  fetchRates: () => void;
+  searchCurrency: (value: string) => void;
+  isError: boolean;
+  loadingConfig: boolean;
+  searchTerm: string;
+  rates: RatesData;
+  config: ConfigurationData;
 }
