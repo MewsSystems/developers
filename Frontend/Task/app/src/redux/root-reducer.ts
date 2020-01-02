@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import configurationReducer from './configuration/configuration.reducer';
-import ratesReducer from './rates/rates.reducer'
-import filterReducer from './filter/filter.reducer'
+import configurationReducer from "./configuration/configuration.reducer";
+import ratesReducer from "./rates/rates.reducer";
+import filterReducer from "./filter/filter.reducer";
 
 const rootReducer = combineReducers({
   configuration: configurationReducer,

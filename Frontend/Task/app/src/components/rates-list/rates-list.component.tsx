@@ -1,99 +1,109 @@
-import React, {useEffect} from 'react'
-import { connect } from 'react-redux'
-import { ConfigDispatch, ConfigReducerState } from '../../redux/configuration/configuration.models'
-import { fetchConfigAsync } from '../../redux/configuration/configuration.actions'
-import { searchCurrency } from '../../redux/filter/filter.actions'
-import { fetchRatesAsync } from '../../redux/rates/rates.actions'
-import { RateReducerState } from '../../redux/rates/rates.model'
-import { getFilteredCurrencies } from '../../redux/filter/filter.selectors'
-import {namesArray, saveState, loadState } from '../../utils'
-import Alert from '../alert/alert.component'
-import Select from '../select/select.component'
-import TableHeader from './table-header'
-import TableBody from './table-body'
-import { RootState } from '../../types'
-import './styles.module.css'
-import { toast } from 'react-toastify';
-import{ WithSpinnerBody} from '../with-spinner/with-spinner.component'
+import React, { useEffect, Fragment } from "react";
+import { connect } from "react-redux";
+import { ConfigDispatch } from "../../redux/configuration/configuration.models";
+import { fetchConfigAsync } from "../../redux/configuration/configuration.actions";
+import { searchCurrency } from "../../redux/filter/filter.actions";
+import { fetchRatesAsync } from "../../redux/rates/rates.actions";
+import RateName from "../rate/rate-name.component";
+import RateTrend from "../rate/rate-trend.component";
+import { getFilteredCurrencies } from "../../redux/filter/filter.selectors";
+import { saveState } from "../../utils";
+import Alert from "../alert/alert.component";
+import Select from "../select/select.component";
+import Spinner from "react-spinkit";
+import { RootState } from "../../types";
+import "./styles.module.css";
+import { toast } from "react-toastify";
 
-const TableBodyWithSpinner = WithSpinnerBody(TableBody)
+const INTERVAL = 10000;
 
-type Props = {
-  fetchConfig: Function,
-  fetchRates: Function,
-  searchCurrency: Function,
-  rates: RateReducerState,
-  config: ConfigReducerState,
-  isError: boolean,
-  loadingConfig: boolean,
-  loadingRates: boolean
+interface Props {
+  fetchConfig: () => void;
+  fetchRates: () => void;
+  searchCurrency: (value: string) => void;
+  isError: boolean;
+  loadingConfig: boolean;
+  searchTerm: string;
+  rates: any;
 }
 
-const RatesList: React.FC<Props> = (props) => {
-  const {fetchConfig, fetchRates, rates, config, searchCurrency, isError, loadingConfig, loadingRates, searchTerm} = props
-
-  useEffect(() =>{
-    const { fetchConfig } = props
-    fetchConfig()
-  }, [fetchConfig])
+const RatesList: React.FC<Props> = props => {
+  const {
+    fetchConfig,
+    fetchRates,
+    rates,
+    config,
+    searchCurrency,
+    isError,
+    loadingConfig,
+    searchTerm
+  } = props;
+  console.log("config", config);
+  useEffect(() => {
+    const { fetchConfig } = props;
+    fetchConfig();
+  }, [fetchConfig]);
 
   useEffect(() => {
-      const interval = setInterval(() => {
-        fetchRates()
-      }, 10000)
-      isError && notify()
-    return () => clearInterval(interval)
-
-  }, [fetchRates, isError])
+    const interval = setInterval(() => {
+      fetchRates();
+    }, INTERVAL);
+    isError && notify();
+    return () => clearInterval(interval);
+  }, [fetchRates, isError]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    saveState("select", e.target.value)
-    searchCurrency(e.target.value)
+    saveState("select", e.target.value);
+    searchCurrency(e.target.value);
+  };
 
-  }
+  const notify = () => toast.error("500 Internal Server Error!!");
 
-  const notify = () => toast.error('500 Internal Server Error!!');
-  const renderOptions = namesArray.map(cur => {
-    return <option selected={cur.value === loadState("select")} key={cur.name} value={cur.value}>{cur.name}</option>
-  })
   return (
     <>
-      <Alert/>
-      <Select
-        handleChange={handleChange}
-        value={searchTerm}
-        options={renderOptions}
-      />
-     <table className="table">
-        <TableHeader/>
-        <TableBodyWithSpinner
-            config={config}
-            rates={rates}
-            isLoading={loadingConfig}
-            loadingRates={loadingRates}
-        />
-      </table>
+      <Alert />
+      <Select handleChange={handleChange} value={searchTerm} />
+      {loadingConfig ? (
+        <Spinner name="ball-spin-fade-loader" />
+      ) : (
+        <div className="rates-container">
+          {Object.keys(config).map((id, i) => {
+            return (
+              <div className="rate-wrapper" key={id}>
+                <RateName currency={config[id]} />
+                {rates[i] ? (
+                  <RateTrend
+                    rate={rates[i] && rates[i].rate}
+                    trend={rates[i] && rates[i].trend}
+                  />
+                ) : (
+                  <Spinner name="circle" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: RootState) => {
   return {
     config: getFilteredCurrencies(state),
     loadingConfig: state.configuration.isLoading,
     rates: state.rates.ratesList,
-    loadingRates: state.rates.isLoading,
     isError: state.rates.showErrorAlert,
-    searchTerm: state.rates.searchTerm
-  }
-}
+    searchTerm: state.filter.searchTerm
+  };
+};
 
 const mapDispatchToProps = (dispatch: ConfigDispatch) => {
   return {
     fetchConfig: () => dispatch(fetchConfigAsync()),
     fetchRates: () => dispatch(fetchRatesAsync()),
     searchCurrency: (value: string) => dispatch(searchCurrency(value))
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RatesList);

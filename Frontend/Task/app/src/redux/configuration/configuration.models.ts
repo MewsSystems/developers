@@ -2,46 +2,55 @@ import {
   FETCH_CONFIGURATION_FAILURE,
   FETCH_CONFIGURATION_SUCCESS,
   FETCH_CONFIGURATION_REQUEST
-}
-from './configuration.constants'
-import {ThunkDispatch} from 'redux-thunk'
-import {Action} from 'redux'
+} from "./configuration.constants";
+import { ThunkDispatch } from "redux-thunk";
+import { Action } from "redux";
 
 export interface IFetchConfigRequest {
-  type: typeof FETCH_CONFIGURATION_REQUEST
+  type: typeof FETCH_CONFIGURATION_REQUEST;
 }
 
 export interface IFetchConfigSuccess {
-  type: typeof FETCH_CONFIGURATION_SUCCESS
-  payload: ConfigurationData
+  type: typeof FETCH_CONFIGURATION_SUCCESS;
+  payload: ConfigurationData;
 }
 
 export interface IFetchConfigFailure {
-  type: typeof FETCH_CONFIGURATION_FAILURE,
-  payload: string,
+  type: typeof FETCH_CONFIGURATION_FAILURE;
+  payload: string;
 }
 
 export interface ConfigurationData {
   currencyPairs?: {
-    currency: ServerData,
-  }
+    currency: ServerData;
+  };
 }
 
 export interface ServerData {
-  currency: Array<ICurrency>
+  currency: Array<ICurrency>;
 }
 
 export interface ICurrency {
-  code: string,
-  name: string
+  code: string;
+  name: string;
 }
 
-export type ConfigReducerState = {
+export interface ConfigReducerState {
   configuration: {
-    currencies: ConfigurationData,
-    isLoading: boolean,
-    error: string
-  }
+    currencies?: ConfigurationData;
+    isLoading: boolean;
+    errorMessage: string;
+  };
 }
 
-export type ConfigDispatch = ThunkDispatch<ConfigurationData, void, Action>
+export interface ConfigState {
+  currencies?: ConfigurationData;
+  isLoading: boolean;
+  errorMessage: string;
+}
+
+export type ConfigAction =
+  | IFetchConfigRequest
+  | IFetchConfigSuccess
+  | IFetchConfigFailure;
+export type ConfigDispatch = ThunkDispatch<ConfigurationData, void, Action>;

@@ -1,9 +1,9 @@
-tr {
-  border-bottom: 1px solid #000;
-  margin: 50px auto;
+.rate {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
 }
 
-td {
-  font-size: 20px;
-
+.trend {
+  padding-left: 30px;
 }

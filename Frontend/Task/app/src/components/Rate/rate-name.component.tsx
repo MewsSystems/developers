@@ -1,18 +1,13 @@
-import React from 'react'
-import './styles.module.css'
+import React from "react";
+import "./styles.module.css";
 
-type Props = {
-  name: string,
-  code: string,
-}
-
-const RateName: React.FC<Props> = ({name, code}) => {
+const RateName: React.FC<{}> = ({ currency }) => {
   return (
     <>
-    <td scope="col">{name}</td>
-    <td scope="col">{code}</td>
+      <span>{`${currency[0].name} / ${currency[1].name}`}</span>
+      <span>{`${currency[0].code} / ${currency[1].code}`}</span>
     </>
-  )
-}
+  );
+};
 
-export default RateName
+export default RateName;

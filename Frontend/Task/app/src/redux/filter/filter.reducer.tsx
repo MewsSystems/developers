@@ -1,24 +1,18 @@
-import { SEARCH_CURRENCY } from './filter.constants'
-import { ISearchCurrency } from './filter.models'
-
-export type FilterState = {
-  searchTerm: string
-}
-
-export type FilterAction = ISearchCurrency
+import { SEARCH_CURRENCY } from "./filter.constants";
+import { FilterAction, FilterState } from "./filter.models";
 
 const INITIAL_STATE: FilterState = {
-  searchTerm: ''
-}
+  searchTerm: ""
+};
 
 export default (state = INITIAL_STATE, action: FilterAction) => {
-  switch(action.type) {
+  switch (action.type) {
     case SEARCH_CURRENCY:
       return {
         ...state,
         searchTerm: action.payload
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
