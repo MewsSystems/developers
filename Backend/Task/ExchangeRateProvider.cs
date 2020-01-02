@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateProvider;
+using ExchangeRateUpdater.Infrastructure;
+using ExchangeRateUpdater.Infrastructure.Factories;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -13,7 +17,23 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+
+            IRateProvider rateProvider = RateProviderFactory.Create();
+
+            IDictionary<string, decimal> exchangeRatesDictionary = rateProvider.GetExchangeRates();
+
+            foreach (Currency currency in currencies)
+            {
+                if (exchangeRatesDictionary.ContainsKey(currency.Code))
+                {
+                    ExchangeRate exchangeRate = ExchangeRateFactory.Create(rateProvider.SourceCurrencyCode, currency, exchangeRatesDictionary[currency.Code]);
+
+                    exchangeRates.Add(exchangeRate);
+                }
+            }
+
+            return exchangeRates;
         }
     }
 }
