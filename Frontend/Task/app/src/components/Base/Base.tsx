@@ -22,7 +22,6 @@ class Base extends React.Component<BaseProps> {
     }
 
     render() {
-        console.log(this.props.loading);
         return (
             <div>
                 {this.props.loading && (
