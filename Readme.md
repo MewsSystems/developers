@@ -1,6 +1,6 @@
 # Mews developers
 
-Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mewssystems.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
+Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](https://calendar.google.com/calendar/embed?src=mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com&ctz=Europe%2FPrague) of the events we organize or attend and let's get in touch! You can also add it to your calendar via the [iCal](https://calendar.google.com/calendar/ical/mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com/public/basic.ics) to never miss a Mews thing!
 
