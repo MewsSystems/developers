@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "jsx-a11y"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [1, {"extensions": [".js"]}],
+    "comma-dangle": ["error",
+      {
+        "arrays": "always",
+        "objects": "always",
+        "imports": "always",
+        "exports": "always",
+        "functions": "only-multiline"
+      }
+    ],
+    "arrow-parens": ["error", "always"],
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "array-bracket-spacing": ["error", "always"],
+    "react/forbid-prop-types": ["error", { "forbid": ["any", "array"] }],
+    "react/no-multi-comp": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/state-in-constructor": "off"
+  }
+}
