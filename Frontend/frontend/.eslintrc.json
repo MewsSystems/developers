@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "airbnb",
     "plugin:jsx-a11y/recommended"
