@@ -14,11 +14,11 @@ export const DATA__GET_RATES_CONFIGURATION = 'DATA__GET_RATES_CONFIGURATION';
  */
 export const getRatesConfigurationAction = () => async (dispatch, getState) => {
   try {
-    const { data: { ratesConfigurationReducer, }, } = getState();
+    const { data: { ratesConfiguration, }, } = getState();
 
     // if first time - check localStore for backup
     let lsData = null;
-    if (!ratesConfigurationReducer.data && !ratesConfigurationReducer.error) {
+    if (!ratesConfiguration.data && !ratesConfiguration.error) {
       lsData = getItemLS(LS__RATES_CONFIGURATION);
     }
 

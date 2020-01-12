@@ -5,8 +5,8 @@ import {
 import { connect, } from 'react-redux';
 import { bindActionCreators, } from 'redux';
 
-import { getRatesConfigurationAction, } from '../../actions/ratesConfigurationActions';
-import { getRatesAction, } from '../../actions/ratesActions';
+import { getRatesConfigurationAction, } from '../../../Main/dataActions/ratesConfigurationActions';
+import { getRatesAction, } from '../../../Main/dataActions/ratesActions';
 import RowsView from './RowsView';
 
 
@@ -86,21 +86,21 @@ class Rows extends Component {
 const mapStateToProps = (state) => {
   const {
     data: {
-      ratesConfigurationReducer,
+      ratesConfiguration,
     },
     rateListPage: {
-      rateListUIReducer,
+      rateList,
     },
   } = state;
 
   return {
     ratesConfigurationData: {
-      loading: ratesConfigurationReducer.loading && !ratesConfigurationReducer.data,
-      error: ratesConfigurationReducer.error && !ratesConfigurationReducer.data,
-      timestamp: ratesConfigurationReducer.timestamp,
+      loading: ratesConfiguration.loading && !ratesConfiguration.data,
+      error: ratesConfiguration.error && !ratesConfiguration.data,
+      timestamp: ratesConfiguration.timestamp,
     },
-    rows: rateListUIReducer.rows,
-    rates: rateListUIReducer.rates,
+    rows: rateList.rows,
+    rates: rateList.rates,
   };
 };
 

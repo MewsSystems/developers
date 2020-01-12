@@ -4,7 +4,7 @@ import { connect, } from 'react-redux';
 import { bindActionCreators, } from 'redux';
 
 import { FILTER_REFRESH_TIMEOUT, } from '../../../../globals';
-import { changeFilterValueAction, } from '../../actions/rateListUIActions';
+import { changeFilterValueAction, } from '../../actions/rateListActions';
 import FilterView from './FilterView';
 
 
@@ -101,12 +101,12 @@ class Filter extends Component {
 const mapStateToProps = (state) => {
   const {
     rateListPage: {
-      rateListUIReducer,
+      rateList,
     },
   } = state;
 
   return {
-    filter: rateListUIReducer.filter,
+    filter: rateList.filter,
   };
 };
 

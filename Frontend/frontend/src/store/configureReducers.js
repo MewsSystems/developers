@@ -1,8 +1,8 @@
 import { combineReducers, } from 'redux';
 
-import rateListUIReducer from '../modules/RateList/reducers/rateListUIReducer';
-import ratesConfigurationReducer from '../modules/RateList/reducers/ratesConfigurationReducer';
-import ratesReducer from '../modules/RateList/reducers/ratesReducer';
+import rateListReducer from '../modules/RateList/reducers/rateListReducer';
+import ratesConfigurationReducer from '../modules/Main/dataReducers/ratesConfigurationReducer';
+import ratesReducer from '../modules/Main/dataReducers/ratesReducer';
 
 
 /**
@@ -10,10 +10,10 @@ import ratesReducer from '../modules/RateList/reducers/ratesReducer';
  */
 export default combineReducers({
   data: combineReducers({
-    ratesConfigurationReducer,
-    ratesReducer,
+    ratesConfiguration: ratesConfigurationReducer,
+    rates: ratesReducer,
   }),
   rateListPage: combineReducers({
-    rateListUIReducer,
+    rateList: rateListReducer,
   }),
 });

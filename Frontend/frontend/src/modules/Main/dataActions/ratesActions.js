@@ -12,7 +12,7 @@ export const DATA__GET_RATES = 'DATA__GET_RATES';
  */
 export const getRatesAction = () => async (dispatch, getState) => {
   try {
-    const { data: { ratesConfigurationReducer, }, } = getState();
+    const { data: { ratesConfiguration, }, } = getState();
 
     dispatch({
       type: `${DATA__GET_RATES}__${PENDING}`,
@@ -21,8 +21,8 @@ export const getRatesAction = () => async (dispatch, getState) => {
     const response = await fetchData({
       method: 'get',
       url: `${process.env.REACT_APP_API_URL}/rates`,
-      params: ratesConfigurationReducer.data
-        ? { currencyPairIds: Object.keys(ratesConfigurationReducer.data), }
+      params: ratesConfiguration.data
+        ? { currencyPairIds: Object.keys(ratesConfiguration.data), }
         : undefined,
     });
 

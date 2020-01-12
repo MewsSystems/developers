@@ -1,6 +1,6 @@
 import {
   DATA__GET_RATES,
-} from '../actions/ratesActions';
+} from '../dataActions/ratesActions';
 import {
   PENDING, FULFILLED, REJECTED,
 } from '../../../globals';

@@ -1,6 +1,6 @@
 import {
   DATA__GET_RATES_CONFIGURATION,
-} from '../actions/ratesConfigurationActions';
+} from '../dataActions/ratesConfigurationActions';
 import {
   PENDING, FULFILLED, REJECTED,
 } from '../../../globals';

@@ -4,7 +4,7 @@ import { Provider as ReduxProvider, } from 'react-redux';
 
 import { theme, } from './theme';
 import { configureStore, } from './store/configureStore';
-import RateListPage from './modules/RateList/pages/RateListPage';
+import MainLayout from './modules/Main/MainLayout';
 
 
 /**
@@ -17,7 +17,7 @@ const App = () => (
   <ReduxProvider store={store}>
     <ThemeProvider theme={theme}>
 
-      <RateListPage />
+      <MainLayout />
 
     </ThemeProvider>
   </ReduxProvider>

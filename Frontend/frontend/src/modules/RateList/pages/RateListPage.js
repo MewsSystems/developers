@@ -3,7 +3,7 @@ import { func, } from 'prop-types';
 import { connect, } from 'react-redux';
 import { bindActionCreators, } from 'redux';
 
-import { getRatesConfigurationAction, } from '../actions/ratesConfigurationActions';
+import { getRatesConfigurationAction, } from '../../Main/dataActions/ratesConfigurationActions';
 import RateListView from '../components/RateList/RateListView';
 
 

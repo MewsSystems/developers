@@ -1,6 +1,8 @@
 import {
-  TREND_ASC, TREND_DES, TREND_EQL, RATES_TABLE_FILTERS, SORT_ASC, SORT_DES, SORT_UNSET,
+  TREND_ASC, TREND_DES, TREND_EQL, RATES_TABLE_FILTERS,
 } from '../../../globals';
+import { clearString, } from '../../../utils/string';
+import { comparatorCommon, } from '../../../utils/filter';
 
 
 /**
@@ -13,26 +15,6 @@ const getNewTrend = (oldRate, newRate) => {
   if (oldRate < newRate) return TREND_ASC;
   if (oldRate > newRate) return TREND_DES;
   return TREND_EQL;
-};
-
-
-/**
- * Clear string for filter purposes
- * @param {String} s
- */
-const clearString = (s) => {
-  const trimmed = s.trim();
-  return trimmed.toLowerCase();
-};
-
-
-/**
- * Compare functions for sorting
- */
-const SORT_COMPARATORS = {
-  [SORT_ASC]: (a, b) => ((a < b) ? -1 : ((a > b) ? 1 : 0)), // eslint-disable-line no-nested-ternary
-  [SORT_DES]: (a, b) => ((a > b) ? -1 : ((a < b) ? 1 : 0)), // eslint-disable-line no-nested-ternary
-  [SORT_UNSET]: () => 0,
 };
 
 
@@ -114,7 +96,7 @@ export const applyFilter = (rows, rates, filter) => {
     switch (sort.name) {
       // from unfiltered rows
       case RATES_TABLE_FILTERS.NAME: {
-        return SORT_COMPARATORS[sort.order](a.nameClean, b.nameClean);
+        return comparatorCommon(a.nameClean, b.nameClean, sort.order);
       }
 
       // from rates
@@ -126,7 +108,7 @@ export const applyFilter = (rows, rates, filter) => {
         const tmpBVal = Object.prototype.hasOwnProperty.call(rates, b.id)
           ? rates[b.id][sort.name]
           : null;
-        return SORT_COMPARATORS[sort.order](tmpAVal, tmpBVal);
+        return comparatorCommon(tmpAVal, tmpBVal, sort.order);
       }
 
       default: return 0;

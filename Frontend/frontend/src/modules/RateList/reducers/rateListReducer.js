@@ -1,6 +1,6 @@
-import { RATE_LIST__CHANGE_FILTER_VALUE, } from '../actions/rateListUIActions';
-import { DATA__GET_RATES, } from '../actions/ratesActions';
-import { DATA__GET_RATES_CONFIGURATION, } from '../actions/ratesConfigurationActions';
+import { RATE_LIST__CHANGE_FILTER_VALUE, } from '../actions/rateListActions';
+import { DATA__GET_RATES, } from '../../Main/dataActions/ratesActions';
+import { DATA__GET_RATES_CONFIGURATION, } from '../../Main/dataActions/ratesConfigurationActions';
 import { FULFILLED, SORT_UNSET, } from '../../../globals';
 import { fulfilledRates, parseConfiguration, applyFilter, } from './utils';
 
