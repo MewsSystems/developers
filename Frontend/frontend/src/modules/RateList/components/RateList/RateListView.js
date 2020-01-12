@@ -1,14 +1,13 @@
 import React from 'react';
 
+import Filter from './Filter';
 import Rows from './Rows';
 
 
 const RateListView = () => (
   <table>
     <thead>
-      <tr>
-        <th>hh</th>
-      </tr>
+      <Filter />
     </thead>
     <tbody>
       <Rows />

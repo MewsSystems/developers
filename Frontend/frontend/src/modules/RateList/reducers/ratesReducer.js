@@ -29,7 +29,6 @@ const reducer = (state = initialState, action) => {
     }
 
     case `${DATA__GET_RATES}__${FULFILLED}`: {
-      console.log('payload', payload)
       return {
         ...state,
         loading: false,

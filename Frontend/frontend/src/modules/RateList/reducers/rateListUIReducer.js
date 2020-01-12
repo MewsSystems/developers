@@ -1,3 +1,6 @@
+import { RATE_LIST__CHANGE_FILTER_VALUE, } from '../actions/rateListUIActions';
+
+
 const initialState = {
   /**
    * Table filter
@@ -18,6 +21,10 @@ const initialState = {
    * Table rows
    */
   rows: [],
+  /**
+   * Rates
+   */
+  rates: {},
 };
 
 
@@ -29,6 +36,14 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const { type, payload, } = action;
   switch (type) {
+    case RATE_LIST__CHANGE_FILTER_VALUE: {
+      return {
+        ...state,
+        filter: payload,
+      };
+    }
+
+
     default:
       return state;
   }
