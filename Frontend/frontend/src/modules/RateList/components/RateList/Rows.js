@@ -54,33 +54,28 @@ class Rows extends Component {
     const {
       ratesConfigurationData,
       rows,
+      rates,
       getRatesConfiguration,
     } = this.props;
 
     if (ratesConfigurationData.loading) {
       return (
-        <tr><td>Loading</td></tr>
+        <tbody><tr><td>Loading</td></tr></tbody>
       );
     }
 
 
     if (ratesConfigurationData.error) {
       return (
-        <tr><td>Error</td></tr>
+        <tbody><tr><td>Error</td></tr></tbody>
       );
     }
-
-
-    if (rows.length < 1) {
-      return (
-        <tr><td>no Data</td></tr>
-      );
-    }
-
 
     return (
       <RowsView
         key={ratesConfigurationData.timestamp}
+        rows={rows}
+        rates={rates}
         startRatesInterval={this.handleStartRatesInterval}
       />
     );
@@ -105,6 +100,7 @@ const mapStateToProps = (state) => {
       timestamp: ratesConfigurationReducer.timestamp,
     },
     rows: rateListUIReducer.rows,
+    rates: rateListUIReducer.rates,
   };
 };
 
@@ -121,6 +117,7 @@ Rows.propTypes = {
     timestamp: number,
   }).isRequired,
   rows: arrayOf(object).isRequired,
+  rates: object.isRequired,
   getRatesConfiguration: func.isRequired,
   getRates: func.isRequired,
 };

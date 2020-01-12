@@ -3,13 +3,15 @@ import {
   func, shape, string, object,
 } from 'prop-types';
 
+import { RATES_TABLE_FILTERS, } from '../../../../globals';
 import SortableTH from '../../../../components/Table/SortableTH';
 
 
 const FilterView = ({
   filter: {
-    currencyL,
-    currencyR,
+    values: {
+      name,
+    },
     sort,
   },
   onChangeSort,
@@ -18,25 +20,19 @@ const FilterView = ({
   <>
     <tr>
       <SortableTH
-        id="from"
-        label="From"
+        id={RATES_TABLE_FILTERS.NAME}
+        label="Name"
         value={sort}
         onChangeSort={onChangeSort}
       />
       <SortableTH
-        id="to"
-        label="To"
-        value={sort}
-        onChangeSort={onChangeSort}
-      />
-      <SortableTH
-        id="rate"
+        id={RATES_TABLE_FILTERS.RATE}
         label="Rate"
         value={sort}
         onChangeSort={onChangeSort}
       />
       <SortableTH
-        id="trend"
+        id={RATES_TABLE_FILTERS.TREND}
         label="Trend"
         value={sort}
         onChangeSort={onChangeSort}
@@ -45,14 +41,8 @@ const FilterView = ({
     <tr>
       <th>
         <input
-          value={currencyL}
-          onChange={(e) => onChangeValue('currencyL', e.target.value)}
-        />
-      </th>
-      <th>
-        <input
-          value={currencyR}
-          onChange={(e) => onChangeValue('currencyR', e.target.value)}
+          value={name}
+          onChange={(e) => onChangeValue('name', e.target.value)}
         />
       </th>
       <th />
@@ -64,8 +54,9 @@ const FilterView = ({
 
 FilterView.propTypes = {
   filter: shape({
-    currencyL: string.isRequired,
-    currencyR: string.isRequired,
+    values: shape({
+      name: string.isRequired,
+    }).isRequired,
     sort: object,
   }).isRequired,
   onChangeSort: func.isRequired,

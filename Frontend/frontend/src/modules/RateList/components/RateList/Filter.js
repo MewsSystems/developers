@@ -16,8 +16,7 @@ class Filter extends Component {
 
     this.state = {
       actualFilter: {
-        currencyL: '',
-        currencyR: '',
+        name: '',
       },
     };
   }
@@ -34,7 +33,7 @@ class Filter extends Component {
 
     this.clearFilterChangeTimeout();
     changeFilterValue({
-      ...actualFilter,
+      values: actualFilter,
       sort: {
         name,
         order,
@@ -68,7 +67,7 @@ class Filter extends Component {
     this.clearFilterChangeTimeout();
     changeFilterValue({
       ...filter,
-      ...actualFilter,
+      values: actualFilter,
     });
   }
 
@@ -88,7 +87,7 @@ class Filter extends Component {
     return (
       <FilterView
         filter={{
-          ...actualFilter,
+          values: actualFilter,
           sort,
         }}
         onChangeSort={this.handleChangeSort}

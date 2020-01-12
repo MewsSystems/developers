@@ -9,9 +9,7 @@ const RateListView = () => (
     <thead>
       <Filter />
     </thead>
-    <tbody>
-      <Rows />
-    </tbody>
+    <Rows />
   </table>
 );
 

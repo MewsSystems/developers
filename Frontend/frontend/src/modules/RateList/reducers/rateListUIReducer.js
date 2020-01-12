@@ -1,4 +1,8 @@
 import { RATE_LIST__CHANGE_FILTER_VALUE, } from '../actions/rateListUIActions';
+import { DATA__GET_RATES, } from '../actions/ratesActions';
+import { DATA__GET_RATES_CONFIGURATION, } from '../actions/ratesConfigurationActions';
+import { FULFILLED, SORT_UNSET, } from '../../../globals';
+import { fulfilledRates, parseConfiguration, applyFilter, } from './utils';
 
 
 const initialState = {
@@ -6,15 +10,16 @@ const initialState = {
    * Table filter
    */
   filter: {
-    currencyL: '',
-    currencyR: '',
-    sort: {
+    values: {
       name: '',
-      order: '',
+    },
+    sort: {
+      name: null,
+      order: SORT_UNSET,
     },
   },
   /**
-   * Unfiltered formated rows for table
+   * Unfiltered formated table rows
    */
   unfilteredRows: [],
   /**
@@ -36,10 +41,42 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const { type, payload, } = action;
   switch (type) {
+    /**
+     * Change Filter
+     */
     case RATE_LIST__CHANGE_FILTER_VALUE: {
       return {
         ...state,
         filter: payload,
+        rows: applyFilter(state.unfilteredRows, state.rates, payload),
+      };
+    }
+
+
+    /**
+     * Configuration Fulfilled
+     */
+    case `${DATA__GET_RATES_CONFIGURATION}__${FULFILLED}`: {
+      const parsed = parseConfiguration(payload.currencyPairs);
+
+      return {
+        ...state,
+        unfilteredRows: parsed,
+        rows: applyFilter(parsed, state.rates, state.filter),
+      };
+    }
+
+
+    /**
+     * Rates Fulfilled
+     */
+    case `${DATA__GET_RATES}__${FULFILLED}`: {
+      const newRates = fulfilledRates(state.rates, payload.rates);
+
+      return {
+        ...state,
+        rates: newRates,
+        rows: applyFilter(state.unfilteredRows, newRates, state.filter),
       };
     }
 

@@ -1,5 +1,7 @@
 import React, { Component, } from 'react';
-import { func, } from 'prop-types';
+import {
+  func, arrayOf, shape, string, object,
+} from 'prop-types';
 
 
 class RowsView extends Component {
@@ -11,11 +13,29 @@ class RowsView extends Component {
 
 
   render() {
+    const {
+      rows,
+      rates,
+    } = this.props;
+
     return (
       <tbody>
-        <tr>
-          <td>ahoj</td>
-        </tr>
+        {rows.map((row) => {
+          const { id, name, } = row;
+          const rate = Object.prototype.hasOwnProperty.call(rates, id)
+            ? rates[id].rate
+            : null;
+          const trend = Object.prototype.hasOwnProperty.call(rates, id)
+            ? rates[id].trend
+            : null;
+          return (
+            <tr key={id}>
+              <td>{name}</td>
+              <td>{rate}</td>
+              <td>{trend}</td>
+            </tr>
+          );
+        })}
       </tbody>
     );
   }
@@ -23,6 +43,10 @@ class RowsView extends Component {
 
 
 RowsView.propTypes = {
+  rows: arrayOf(shape({
+    name: string.isRequired,
+  })).isRequired,
+  rates: object.isRequired,
   startRatesInterval: func.isRequired,
 };
 

@@ -15,10 +15,18 @@ const SORT_ICONS = {
 
 class SortableTH extends Component {
   handleChangeSort = () => {
-    const { id, value, onChangeSort, } = this.props;
+    const {
+      id,
+      value: { name, order, },
+      onChangeSort,
+    } = this.props;
 
+    // init order
     let newValue = SORT_ASC;
-    if (value.order === SORT_ASC) newValue = SORT_DES;
+    // first click
+    if (id !== name) newValue = SORT_ASC;
+    // repeated click
+    else if (order === SORT_ASC) newValue = SORT_DES;
 
     onChangeSort(id, newValue);
   }
@@ -58,8 +66,8 @@ SortableTH.propTypes = {
   id: oneOfType([ string, number, ]).isRequired,
   label: string.isRequired,
   value: shape({
-    name: string.isRequired,
-    order: string.isRequired,
+    name: oneOfType([ string, number, ]),
+    order: string,
   }).isRequired,
   onChangeSort: func.isRequired,
 };
