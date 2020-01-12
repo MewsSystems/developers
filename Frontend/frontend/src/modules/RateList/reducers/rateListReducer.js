@@ -19,6 +19,10 @@ const initialState = {
     },
   },
   /**
+   * Fetched Time
+   */
+  timestampConfiguration: null,
+  /**
    * Unfiltered formated table rows
    */
   unfilteredRows: [],
@@ -35,8 +39,6 @@ const initialState = {
 
 /**
  * Rates List UI Reducer
- * @param {Object} state
- * @param {Object} action
  */
 const reducer = (state = initialState, action) => {
   const { type, payload, } = action;
@@ -63,6 +65,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         unfilteredRows: parsed,
         rows: applyFilter(parsed, state.rates, state.filter),
+        timestampConfiguration: Date.parse(new Date()),
       };
     }
 

@@ -10,14 +10,11 @@ const initialState = {
   loading: true,
   data: null,
   error: null,
-  timestamp: null,
 };
 
 
 /**
  * Rates Configuration Reducer
- * @param {Object} state
- * @param {Object} action
  */
 const reducer = (state = initialState, action) => {
   const { type, payload, } = action;
@@ -35,7 +32,6 @@ const reducer = (state = initialState, action) => {
         loading: false,
         data: payload.currencyPairs,
         error: null,
-        timestamp: Date.parse(new Date()),
       };
     }
 

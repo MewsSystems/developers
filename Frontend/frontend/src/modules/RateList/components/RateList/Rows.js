@@ -1,6 +1,6 @@
 import React, { Component, } from 'react';
 import {
-  func, bool, shape, object, number, arrayOf,
+  func, bool, shape, object, number, arrayOf, string,
 } from 'prop-types';
 import { connect, } from 'react-redux';
 import { bindActionCreators, } from 'redux';
@@ -44,9 +44,9 @@ class Rows extends Component {
 
 
   fetchRates = () => {
-    const { getRates, } = this.props;
+    const { unfilteredRows, getRates, } = this.props;
 
-    getRates();
+    getRates(unfilteredRows.map((row) => row.id));
   }
 
 
@@ -95,11 +95,11 @@ const mapStateToProps = (state) => {
 
   return {
     ratesConfigurationData: {
-      loading: ratesConfiguration.loading && !ratesConfiguration.data,
-      error: ratesConfiguration.error && !ratesConfiguration.data,
-      timestamp: ratesConfiguration.timestamp,
+      loading: ratesConfiguration.loading && !rateList.timestampConfiguration,
+      error: ratesConfiguration.error && !rateList.timestampConfiguration,
     },
     rows: rateList.rows,
+    unfilteredRows: rateList.unfilteredRows,
     rates: rateList.rates,
   };
 };
@@ -117,6 +117,9 @@ Rows.propTypes = {
     timestamp: number,
   }).isRequired,
   rows: arrayOf(object).isRequired,
+  unfilteredRows: arrayOf(shape({
+    id: string.isRequired,
+  })).isRequired,
   rates: object.isRequired,
   getRatesConfiguration: func.isRequired,
   getRates: func.isRequired,

@@ -15,8 +15,6 @@ const initialState = {
 
 /**
  * Rates Reducer
- * @param {Object} state
- * @param {Object} action
  */
 const reducer = (state = initialState, action) => {
   const { type, payload, } = action;

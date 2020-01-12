@@ -7,13 +7,12 @@ import { fetchData, } from '../../../utils/fetchData';
 export const DATA__GET_RATES = 'DATA__GET_RATES';
 
 
-/*
+/**
  * GET Rates
+ * @param {Array} currencyPairIds
  */
-export const getRatesAction = () => async (dispatch, getState) => {
+export const getRatesAction = (currencyPairIds) => async (dispatch) => {
   try {
-    const { data: { ratesConfiguration, }, } = getState();
-
     dispatch({
       type: `${DATA__GET_RATES}__${PENDING}`,
     });
@@ -21,9 +20,9 @@ export const getRatesAction = () => async (dispatch, getState) => {
     const response = await fetchData({
       method: 'get',
       url: `${process.env.REACT_APP_API_URL}/rates`,
-      params: ratesConfiguration.data
-        ? { currencyPairIds: Object.keys(ratesConfiguration.data), }
-        : undefined,
+      params: {
+        currencyPairIds,
+      },
     });
 
     dispatch({

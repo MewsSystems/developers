@@ -1,6 +1,10 @@
 import axios from 'axios';
 
 
+/**
+ * Axios fetch
+ * @param {Object} param
+ */
 export const fetchData = ({
   method = 'get',
   headers = {
