@@ -1,6 +1,6 @@
 import React, { Component, } from 'react';
 import {
-  func, bool, shape, object, number,
+  func, bool, shape, object, number, arrayOf,
 } from 'prop-types';
 import { connect, } from 'react-redux';
 import { bindActionCreators, } from 'redux';
@@ -53,6 +53,8 @@ class Rows extends Component {
   render() {
     const {
       ratesConfigurationData,
+      rows,
+      getRatesConfiguration,
     } = this.props;
 
     if (ratesConfigurationData.loading) {
@@ -67,6 +69,14 @@ class Rows extends Component {
         <tr><td>Error</td></tr>
       );
     }
+
+
+    if (rows.length < 1) {
+      return (
+        <tr><td>no Data</td></tr>
+      );
+    }
+
 
     return (
       <RowsView
@@ -83,6 +93,9 @@ const mapStateToProps = (state) => {
     data: {
       ratesConfigurationReducer,
     },
+    rateListPage: {
+      rateListUIReducer,
+    },
   } = state;
 
   return {
@@ -91,6 +104,7 @@ const mapStateToProps = (state) => {
       error: ratesConfigurationReducer.error && !ratesConfigurationReducer.data,
       timestamp: ratesConfigurationReducer.timestamp,
     },
+    rows: rateListUIReducer.rows,
   };
 };
 
@@ -106,6 +120,7 @@ Rows.propTypes = {
     error: object,
     timestamp: number,
   }).isRequired,
+  rows: arrayOf(object).isRequired,
   getRatesConfiguration: func.isRequired,
   getRates: func.isRequired,
 };

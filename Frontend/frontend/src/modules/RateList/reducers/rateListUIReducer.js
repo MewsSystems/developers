@@ -1,5 +1,23 @@
 const initialState = {
-  todo: {},
+  /**
+   * Table filter
+   */
+  filter: {
+    currencyL: '',
+    currencyR: '',
+    sort: {
+      name: '',
+      order: '',
+    },
+  },
+  /**
+   * Unfiltered formated rows for table
+   */
+  unfilteredRows: [],
+  /**
+   * Table rows
+   */
+  rows: [],
 };
 
 

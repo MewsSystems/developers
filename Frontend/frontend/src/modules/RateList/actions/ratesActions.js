@@ -1,13 +1,15 @@
 import {
   PENDING, FULFILLED, REJECTED,
 } from '../../../globals';
-import { fetchData, } from '../../../utils.js/fetchData';
+import { fetchData, } from '../../../utils/fetchData';
+
+
+export const DATA__GET_RATES = 'DATA__GET_RATES';
 
 
 /*
  * GET Rates
  */
-export const DATA__GET_RATES = 'DATA__GET_RATES';
 export const getRatesAction = () => async (dispatch, getState) => {
   try {
     const { data: { ratesConfigurationReducer, }, } = getState();
@@ -19,7 +21,9 @@ export const getRatesAction = () => async (dispatch, getState) => {
     const response = await fetchData({
       method: 'get',
       url: `${process.env.REACT_APP_API_URL}/rates`,
-      params: { currencyPairIds: Object.keys(ratesConfigurationReducer.data), },
+      params: ratesConfigurationReducer.data
+        ? { currencyPairIds: Object.keys(ratesConfigurationReducer.data), }
+        : undefined,
     });
 
     dispatch({

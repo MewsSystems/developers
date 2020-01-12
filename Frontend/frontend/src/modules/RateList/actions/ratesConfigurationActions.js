@@ -1,15 +1,17 @@
 import {
   PENDING, FULFILLED, REJECTED,
 } from '../../../globals';
-import { fetchData, } from '../../../utils.js/fetchData';
-import { saveRatesConfigurationLS, getRatesConfigurationLS, } from '../../../utils.js/localStore';
+import { fetchData, } from '../../../utils/fetchData';
+import { setItemLS, getItemLS, LS__RATES_CONFIGURATION, } from '../../../utils/localStore';
+
+
+export const DATA__GET_RATES_CONFIGURATION = 'DATA__GET_RATES_CONFIGURATION';
 
 
 /*
  * GET Rates Configuration
  *  - backup: localStorage
  */
-export const DATA__GET_RATES_CONFIGURATION = 'DATA__GET_RATES_CONFIGURATION';
 export const getRatesConfigurationAction = () => async (dispatch, getState) => {
   try {
     const { data: { ratesConfigurationReducer, }, } = getState();
@@ -17,7 +19,7 @@ export const getRatesConfigurationAction = () => async (dispatch, getState) => {
     // if first time - check localStore for backup
     let lsData = null;
     if (!ratesConfigurationReducer.data && !ratesConfigurationReducer.error) {
-      lsData = getRatesConfigurationLS();
+      lsData = getItemLS(LS__RATES_CONFIGURATION);
     }
 
     // if backup fill store and send update request
@@ -42,7 +44,7 @@ export const getRatesConfigurationAction = () => async (dispatch, getState) => {
       payload: response.data,
     });
 
-    saveRatesConfigurationLS(response.data);
+    setItemLS(LS__RATES_CONFIGURATION, response.data);
   } catch (error) {
     dispatch({
       type: `${DATA__GET_RATES_CONFIGURATION}__${REJECTED}`,

@@ -10,7 +10,9 @@ const RateListView = () => (
         <th>hh</th>
       </tr>
     </thead>
-    <Rows />
+    <tbody>
+      <Rows />
+    </tbody>
   </table>
 );
 
