@@ -8,7 +8,7 @@ import MainLayout from './modules/Main/MainLayout';
 
 
 /**
- * Set Redux Store
+ * Create Redux Store
  */
 const store = configureStore();
 
