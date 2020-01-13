@@ -36,7 +36,7 @@ class RowsView extends Component {
                 {name}
               </td>
               <td>
-                {rate}
+                {rate === null ? '-' : rate}
               </td>
               <td className="rateList--table-td3">
                 <TrendIcon trend={trend} />

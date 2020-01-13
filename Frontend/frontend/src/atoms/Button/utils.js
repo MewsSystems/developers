@@ -1,3 +1,6 @@
+/**
+ * Get Button Size
+ */
 export const getSizeBtn = ({ size, }) => {
   const sizes = {
     xs: `

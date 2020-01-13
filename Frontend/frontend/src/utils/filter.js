@@ -15,8 +15,8 @@ const SORT_COMPARATORS = {
 
 /**
  * Sort comparator
- * @param {OneOfType([ String, number, ])} a
- * @param {OneOfType([ String, number, ])} b
+ * @param {Any} a
+ * @param {Any} b
  * @param {String} order
  */
 export const comparatorCommon = (a, b, order) => {

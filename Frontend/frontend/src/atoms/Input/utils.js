@@ -1,3 +1,6 @@
+/**
+ * Get Input Size
+ */
 export const getSizeInput = ({ size, }) => {
   const sizes = {
     sm: `

@@ -28,13 +28,15 @@ const ButtonIcon = styled.button`
   color: ${(p) => p.theme.white};
   background: ${(p) => p.theme.grey.t700};
   border-color: ${(p) => p.theme.grey.t700};
+
+  ${getSizeBtn}
+
   &:focus:not([disabled]) {
   }
+
   &:hover:not([disabled]) , &:active:not([disabled]) {
     background: ${(p) => p.theme.grey.t800};
   }
-
-  ${getSizeBtn}
   
   &:disabled {
     cursor: default;

@@ -5,7 +5,6 @@ import media from '../../utils/media';
 
 /**
  * Container
- *  @fluid: false
  */
 const Container = styled.div`
   width: 100%;
