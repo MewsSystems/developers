@@ -15,9 +15,6 @@ const SORT_COMPARATORS = {
 
 /**
  * Sort comparator
- * @param {Any} a
- * @param {Any} b
- * @param {String} order
  */
 export const comparatorCommon = (a, b, order) => {
   if (!order) return 0;
