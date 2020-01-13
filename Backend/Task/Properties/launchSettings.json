@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExchangeRateUpdaterV2": {
+      "commandName": "Project",
+      "commandLineArgs": "USD EUR CZK JPY KES RUB THB TRY XYZ"
+    }
+  }
+}
