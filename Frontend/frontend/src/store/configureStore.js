@@ -8,21 +8,19 @@ import rootReducer from './configureReducers';
 // Redux Dev tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+// Redux Middlewares
+const middleWares = [ thunkMiddleware, ];
 
-// Redux: Store
+// Redux Store
 const store = createStore(
   rootReducer,
   composeEnhancers(
-    applyMiddleware(
-      thunkMiddleware,
-    ),
+    applyMiddleware(...middleWares),
   )
 );
 
-
-// Middleware: Redux Persist Persister
+// Redux Persist Persister
 const persistor = persistStore(store);
-
 
 export {
   store,

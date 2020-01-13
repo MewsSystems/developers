@@ -7,8 +7,6 @@ import { comparatorCommon, } from '../../../utils/filter';
 
 /**
  * Get trend
- * @param {Number} oldT
- * @param {Number} newT
  */
 const getNewTrend = (oldRate, newRate) => {
   if (!oldRate) return null;
@@ -20,8 +18,6 @@ const getNewTrend = (oldRate, newRate) => {
 
 /**
  * Parse Rates
- * @param {Object} ratesState
- * @param {Object} newRates
  */
 export const fulfilledRates = (ratesState, newRates) => {
   const ret = { ...ratesState, };
@@ -50,7 +46,6 @@ export const fulfilledRates = (ratesState, newRates) => {
 
 /**
  * Parse Configuration data to rows
- * @param {Object} data Configuration Data
  */
 export const parseConfiguration = (data) => {
   const ret = [];
@@ -77,9 +72,6 @@ export const parseConfiguration = (data) => {
 
 /**
  * Apply filter to rows
- * @param {Array} rows
- * @param {Object} rates
- * @param {Object} filter
  */
 export const applyFilter = (rows, rates, filter) => {
   const { values, sort, } = filter;

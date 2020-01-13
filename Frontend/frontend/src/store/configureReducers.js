@@ -8,7 +8,7 @@ import ratesConfigurationReducer from '../modules/Main/dataReducers/ratesConfigu
 import ratesReducer from '../modules/Main/dataReducers/ratesReducer';
 
 
-// Persist Rate List
+// Persist Rate List Config
 const persistRateListConfig = {
   key: 'rateListReducer',
   storage,

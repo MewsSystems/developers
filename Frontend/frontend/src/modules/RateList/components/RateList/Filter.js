@@ -22,11 +22,17 @@ class Filter extends Component {
   }
 
 
+  /**
+   * Unmount - Clear timeouts
+   */
   componentWillUnmount() {
     this.clearFilterChangeTimeout();
   }
 
 
+  /**
+   * Sort changed
+   */
   handleChangeSort = (name, order) => {
     const { actualFilter, } = this.state;
     const { changeFilterValue, } = this.props;
@@ -42,6 +48,9 @@ class Filter extends Component {
   }
 
 
+  /**
+   * Filter Changed
+   */
   handleChangeValue = (name, value) => {
     this.startFilterChangeTimeout();
     this.setState((prevState) => ({
@@ -54,12 +63,18 @@ class Filter extends Component {
   }
 
 
+  /**
+   * Start Filter Timeout
+   */
   startFilterChangeTimeout = () => {
     this.clearFilterChangeTimeout();
     this.filterChangeTimeoutId = setTimeout(this.doneFilterChangeTimeout, FILTER_REFRESH_TIMEOUT);
   }
 
 
+  /**
+   * Done Filter Timeout
+   */
   doneFilterChangeTimeout = () => {
     const { actualFilter, } = this.state;
     const { filter, changeFilterValue, } = this.props;
@@ -72,6 +87,9 @@ class Filter extends Component {
   }
 
 
+  /**
+   * Clear Filter Timeout
+   */
   clearFilterChangeTimeout = () => {
     if (this.filterChangeTimeoutId !== null) {
       clearInterval(this.filterChangeTimeoutId);

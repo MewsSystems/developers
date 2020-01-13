@@ -9,7 +9,6 @@ export const DATA__GET_RATES = 'DATA__GET_RATES';
 
 /**
  * GET Rates
- * @param {Array} currencyPairIds
  */
 export const getRatesAction = (currencyPairIds) => async (dispatch) => {
   try {

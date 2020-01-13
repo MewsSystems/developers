@@ -20,11 +20,17 @@ class Rows extends Component {
   }
 
 
+  /**
+   * Unmount - Clear intervals
+   */
   componentWillUnmount() {
     this.clearRatesInterval();
   }
 
 
+  /**
+   * Start Rates Updating Interval
+   */
   handleStartRatesInterval = () => {
     this.clearRatesInterval();
 
@@ -37,6 +43,9 @@ class Rows extends Component {
   }
 
 
+  /**
+   * Clear Rates Updating Interval
+   */
   clearRatesInterval = () => {
     if (this.ratesIntervalId !== null) {
       clearInterval(this.ratesIntervalId);
@@ -45,6 +54,9 @@ class Rows extends Component {
   }
 
 
+  /**
+   * Fetch Rates
+   */
   fetchRates = () => {
     const { unfilteredRows, getRates, } = this.props;
 
