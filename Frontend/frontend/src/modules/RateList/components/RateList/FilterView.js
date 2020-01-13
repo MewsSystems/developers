@@ -5,6 +5,7 @@ import {
 
 import { RATES_TABLE_FILTERS, } from '../../../../globals';
 import SortableTH from '../../../../components/Table/SortableTH';
+import Input from '../../../../atoms/Input/Input';
 
 
 const FilterView = ({
@@ -17,38 +18,42 @@ const FilterView = ({
   onChangeSort,
   onChangeValue,
 }) => (
-  <>
+  <thead>
     <tr>
       <SortableTH
         id={RATES_TABLE_FILTERS.NAME}
         label="Name"
         value={sort}
         onChangeSort={onChangeSort}
+        className="rateList--table-th1"
       />
       <SortableTH
         id={RATES_TABLE_FILTERS.RATE}
         label="Rate"
         value={sort}
         onChangeSort={onChangeSort}
+        className="rateList--table-th2"
       />
       <SortableTH
         id={RATES_TABLE_FILTERS.TREND}
         label="Trend"
         value={sort}
         onChangeSort={onChangeSort}
+        className="rateList--table-th3"
       />
     </tr>
     <tr>
       <th>
-        <input
+        <Input
           value={name}
           onChange={(e) => onChangeValue('name', e.target.value)}
+          size="sm"
         />
       </th>
       <th />
       <th />
     </tr>
-  </>
+  </thead>
 );
 
 

@@ -4,12 +4,15 @@ import {
 } from 'prop-types';
 
 import { SORT_ASC, SORT_DES, SORT_UNSET, } from '../../globals';
+import SortAsc from '../../atoms/Icons/SortAsc';
+import SortDes from '../../atoms/Icons/SortDes';
+import SortUnset from '../../atoms/Icons/SortUnset';
 
 
 const SORT_ICONS = {
-  [SORT_ASC]: <span>ASC</span>,
-  [SORT_DES]: <span>DES</span>,
-  [SORT_UNSET]: <span>UNS</span>,
+  [SORT_ASC]: <SortAsc />,
+  [SORT_DES]: <SortDes />,
+  [SORT_UNSET]: <SortUnset />,
 };
 
 
@@ -47,15 +50,24 @@ class SortableTH extends Component {
 
   render() {
     const {
+      id,
       label,
+      value,
+      className,
+      onChangeSort,
+      ...rest
     } = this.props;
 
     return (
       <th
+        className={`table--th-sortable ${className}`}
         onClick={this.handleChangeSort}
+        {...rest}
       >
-        <span>{label}</span>
-        {this.renderSortIcon()}
+        <div className="table--th-sortable-content">
+          <span className="table--th-sortable-label">{label}</span>
+          <span className="table--th-sortable-icon">{this.renderSortIcon()}</span>
+        </div>
       </th>
     );
   }
@@ -69,7 +81,12 @@ SortableTH.propTypes = {
     name: oneOfType([ string, number, ]),
     order: string,
   }).isRequired,
+  className: string,
   onChangeSort: func.isRequired,
+};
+
+SortableTH.defaultProps = {
+  className: '',
 };
 
 

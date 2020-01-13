@@ -85,4 +85,16 @@ export const theme = {
     t800: '#9a3908',
     t900: '#8b2904',
   },
+  common: {
+    paddingXS: '0.5rem',
+    paddingSM: '1rem',
+    paddingMD: '1.5rem',
+    paddingLG: '2rem',
+  },
+  input: {
+    borderRadius: 0,
+    borderWidthTopBottom: '1px',
+    borderWidthLeftRight: '1px',
+    borderStyle: 'solid',
+  },
 };

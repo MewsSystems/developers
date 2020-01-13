@@ -2,6 +2,7 @@ import React, { Component, } from 'react';
 import {
   func, arrayOf, shape, string, object,
 } from 'prop-types';
+import TrendIcon from '../../../../components/TrendIcon/TrendIcon';
 
 
 class RowsView extends Component {
@@ -28,11 +29,18 @@ class RowsView extends Component {
           const trend = Object.prototype.hasOwnProperty.call(rates, id)
             ? rates[id].trend
             : null;
+
           return (
             <tr key={id}>
-              <td>{name}</td>
-              <td>{rate}</td>
-              <td>{trend}</td>
+              <td>
+                {name}
+              </td>
+              <td>
+                {rate}
+              </td>
+              <td className="rateList--table-td3">
+                <TrendIcon trend={trend} />
+              </td>
             </tr>
           );
         })}

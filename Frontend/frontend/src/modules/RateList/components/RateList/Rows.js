@@ -8,6 +8,8 @@ import { bindActionCreators, } from 'redux';
 import { getRatesConfigurationAction, } from '../../../Main/dataActions/ratesConfigurationActions';
 import { getRatesAction, } from '../../../Main/dataActions/ratesActions';
 import RowsView from './RowsView';
+import TableLoading from '../../../../components/Table/TableLoading';
+import TableError from '../../../../components/Table/TableError';
 
 
 class Rows extends Component {
@@ -60,20 +62,22 @@ class Rows extends Component {
 
     if (ratesConfigurationData.loading) {
       return (
-        <tbody><tr><td>Loading</td></tr></tbody>
+        <TableLoading colSpan={3} />
       );
     }
 
 
     if (ratesConfigurationData.error) {
       return (
-        <tbody><tr><td>Error</td></tr></tbody>
+        <TableError
+          colSpan={3}
+          onRefresh={getRatesConfiguration}
+        />
       );
     }
 
     return (
       <RowsView
-        key={ratesConfigurationData.timestamp}
         rows={rows}
         rates={rates}
         startRatesInterval={this.handleStartRatesInterval}
