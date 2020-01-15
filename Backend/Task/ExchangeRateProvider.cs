@@ -20,6 +20,8 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            if (currencies is null) throw new System.ArgumentNullException(nameof(currencies));
+
             var distinctCurrencyCodes = currencies
                 .Select(c => c.Code)
                 .Distinct();
