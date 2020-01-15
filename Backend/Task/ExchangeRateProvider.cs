@@ -5,6 +5,13 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly IExchangeRateLoader _exchangeRateLoader;
+
+        public ExchangeRateProvider(IExchangeRateLoader exchangeRateLoader)
+        {
+            _exchangeRateLoader = exchangeRateLoader ?? throw new System.ArgumentNullException(nameof(exchangeRateLoader));
+        }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -13,7 +20,16 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var distinctCurrencyCodes = currencies
+                .Select(c => c.Code)
+                .Distinct();
+
+            var requestedCurrencies = new HashSet<string>(distinctCurrencyCodes);
+
+            var exchangeRates = _exchangeRateLoader.LoadExchangeRates()
+                .GetAwaiter().GetResult();
+
+            return exchangeRates.Where(e => requestedCurrencies.Contains(e.TargetCurrency.Code));
         }
     }
 }

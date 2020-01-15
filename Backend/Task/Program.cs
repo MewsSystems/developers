@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -21,9 +22,12 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            IExchangeRateLoader loader = new XmlExchangeRateLoader(
+                new Uri(ConfigurationManager.AppSettings["ExchangeRateEndpointXml"]));
+
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(loader);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
