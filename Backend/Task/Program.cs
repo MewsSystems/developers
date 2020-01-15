@@ -22,8 +22,16 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var logger = ConsoleLogger.Instance;
+
+            if (!Uri.TryCreate(ConfigurationManager.AppSettings["ExchangeRateEndpointXml"], UriKind.Absolute, out var exchangeRateUri))
+            {
+                logger.Log("Invalid exchange rate URI. Correct the value in App.config file.");
+            }
+
             IExchangeRateLoader loader = new XmlExchangeRateLoader(
-                new Uri(ConfigurationManager.AppSettings["ExchangeRateEndpointXml"]));
+                exchangeRateUri,
+                ConsoleLogger.Instance);
 
             try
             {

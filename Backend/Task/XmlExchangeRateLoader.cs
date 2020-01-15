@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,12 +11,15 @@ namespace ExchangeRateUpdater
     public class XmlExchangeRateLoader : IExchangeRateLoader
     {
         private readonly Uri _exchangeRateEndpoint;
+        private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
 
-        public XmlExchangeRateLoader(Uri exchangeRateEndpoint)
+        public XmlExchangeRateLoader(Uri exchangeRateEndpoint, ILogger logger)
         {
             _exchangeRateEndpoint = exchangeRateEndpoint
                 ?? throw new ArgumentNullException(nameof(exchangeRateEndpoint));
+            _logger = logger
+                ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = new HttpClient();
         }
 
@@ -26,7 +30,14 @@ namespace ExchangeRateUpdater
 
             if (!response.IsSuccessStatusCode)
             {
-                // log the response
+                var content = response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                _logger.Log(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Exchange rate source returned status {0} with response: {1}",
+                    response.StatusCode,
+                    content));
+
                 return new List<ExchangeRate>();
             }
 
