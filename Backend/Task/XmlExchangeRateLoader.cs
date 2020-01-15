@@ -57,8 +57,11 @@ namespace ExchangeRateUpdater
             return document.Descendants("radek")
                 .Select(e =>
                 {
-                    var code = e.Attribute("kod").Value;
-                    var exchangeRate = e.Attribute("kurz").Value;
+                    var code = e.Attribute("kod")?.Value;
+
+                    if (code is null) return null;
+
+                    var exchangeRate = e.Attribute("kurz")?.Value;
 
                     if (decimal.TryParse(exchangeRate, out var value))
                     {

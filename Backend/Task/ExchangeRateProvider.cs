@@ -26,12 +26,12 @@ namespace ExchangeRateUpdater
                 .Select(c => c.Code)
                 .Distinct();
 
-            var requestedCurrencies = new HashSet<string>(distinctCurrencyCodes);
+            var requestedCurrencyCodes = new HashSet<string>(distinctCurrencyCodes);
 
             var exchangeRates = _exchangeRateLoader.LoadExchangeRates()
                 .GetAwaiter().GetResult();
 
-            return exchangeRates.Where(e => requestedCurrencies.Contains(e.TargetCurrency.Code));
+            return exchangeRates.Where(e => requestedCurrencyCodes.Contains(e.TargetCurrency.Code));
         }
     }
 }
