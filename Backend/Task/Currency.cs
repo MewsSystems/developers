@@ -2,6 +2,8 @@
 {
     public class Currency
     {
+        public static readonly Currency Czech = new Currency("CZK");
+
         public Currency(string code)
         {
             Code = code;
