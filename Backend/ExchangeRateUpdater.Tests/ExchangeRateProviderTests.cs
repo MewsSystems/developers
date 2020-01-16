@@ -35,12 +35,34 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [TestMethod]
-        public void OneCorrectValues_Success()
+        public void OneCorrectValue_Success()
         {
             var testCurrencies = new[]
             {
                 TestCurrencies.American,
                 TestCurrencies.ImaginationLand
+            };
+
+            var exchangeRates = new ExchangeRateProvider(new DummyLoaderWithValues())
+                .GetExchangeRates(testCurrencies)
+                .ToList();
+
+            var czkToUsd = exchangeRates.FirstOrDefault(e => e.TargetCurrency.Code == "USD");
+
+            Assert.AreEqual(1, exchangeRates.Count);
+
+            Assert.IsNotNull(czkToUsd);
+
+            Assert.AreEqual(24.5M, czkToUsd.Value);
+        }
+
+        [TestMethod]
+        public void OneCorrectValueOneNullValue_Success()
+        {
+            var testCurrencies = new[]
+            {
+                TestCurrencies.American,
+                null
             };
 
             var exchangeRates = new ExchangeRateProvider(new DummyLoaderWithValues())
@@ -97,6 +119,22 @@ namespace ExchangeRateUpdater.Tests
             var exchangeRates = new ExchangeRateProvider(null)
                 .GetExchangeRates(null)
                 .ToList();
+        }
+
+        [TestMethod]
+        public void LoaderWithNoValues_Success()
+        {
+            var testCurrencies = new[]
+            {
+                TestCurrencies.American,
+                TestCurrencies.Espagnol
+            };
+
+            var exchangeRates = new ExchangeRateProvider(new DummyLoaderWithoutValues())
+                .GetExchangeRates(testCurrencies)
+                .ToList();
+
+            Assert.AreEqual(0, exchangeRates.Count);
         }
 
         private class DummyLoaderWithValues : IExchangeRateLoader
