@@ -23,6 +23,7 @@ namespace ExchangeRateUpdater
             if (currencies is null) throw new System.ArgumentNullException(nameof(currencies));
 
             var distinctCurrencyCodes = currencies
+                .Where(c => c != null)
                 .Select(c => c.Code)
                 .Distinct();
 
