@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +24,13 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var serviceProvider = new ServiceCollection()
+                    .AddHttpClient().AddTransient(a => currencies)
+                    .AddTransient<CNBExchangeRateProvider>()
+                    .BuildServiceProvider();
+                var service = serviceProvider.GetService<CNBExchangeRateProvider>();
+
+                var rates = service.GetExchangeRates();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -34,7 +40,7 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'- '{e.InnerException.Message}'.");
             }
 
             Console.ReadLine();
