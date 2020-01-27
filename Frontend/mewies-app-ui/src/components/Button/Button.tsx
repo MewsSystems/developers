@@ -2,7 +2,7 @@ import React from 'react'
 import { Default } from './Button.styles'
 
 interface ButtonProps {
-    onClick?: (event: React.MouseEvent<Element>) => void
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
     disabled?: boolean
     type?: 'submit' | 'reset' | 'button'
 }

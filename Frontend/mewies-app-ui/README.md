@@ -38,13 +38,13 @@ After creating an app, it should look something like:
 │   ├── [...]
 ├── package.json
 ├── pages
-│   └── index.ts
+│   └── [search-query].ts
 ├── static
 │   └── favicon.ico
 └── yarn.lock
 ```
 
-Routing in Next.js is based on the file system, so `./pages/index.ts` maps to the `/` route and
+Routing in Next.js is based on the file system, so `./pages/[search-query].ts` maps to the `/` route and
 `./pages/about.js` would map to `/about`.
 
 The `./static` directory maps to `/static` in the `next` server, so you can put all your
