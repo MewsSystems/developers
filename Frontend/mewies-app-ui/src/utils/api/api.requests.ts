@@ -11,15 +11,3 @@ export const getRequest = <K>(
         .catch((err: Error) => {
             throw new Error(err.message)
         })
-
-export const postRequest = <K, T>(
-    url: string,
-    body: K,
-    config?: AxiosRequestConfig
-): Promise<T> =>
-    axios
-        .post(url, body, config)
-        .then(res => res.data)
-        .catch((err: Error) => {
-            throw new Error(err.message)
-        })

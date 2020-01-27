@@ -13,6 +13,12 @@ export const Row = styled.div`
 `
 
 export const Col = styled.div<Col>`
+    ${props => props.flex && 'display: flex'};
+    ${props => props.flex && props.alignCenter && 'align-items: center'};
+    ${props => props.flex && props.justifyCenter && 'justify-content: center'};
+    ${props =>
+        props.flex && props.justifyBetween && 'justify-content: space-between'};
+    ${props => props.flex && props.column && 'flex-direction: column'};
     flex: ${props => props.size};
-    padding: 0 5px 0 5px;
+    flex-basis: ${props => (props.size / 12) * 100}%;
 `
