@@ -1,0 +1,31 @@
+@import './variables.scss';
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+  /* 10px */
+}
+
+body {
+  font-family: 'Lato', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: $color-grey-dark-1;
+
+  @media only screen and (max-width: $bp-largest) {
+    font-size: 50%;
+  }
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+}

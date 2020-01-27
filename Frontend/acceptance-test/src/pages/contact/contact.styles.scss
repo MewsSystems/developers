@@ -1,0 +1,13 @@
+@import '../../styles/variables.scss';
+
+.contactUs {
+    font-size: 5rem;
+    height: 70.2vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media only screen and (max-width: $bp-small) {
+        height: 80vh;
+    }
+}

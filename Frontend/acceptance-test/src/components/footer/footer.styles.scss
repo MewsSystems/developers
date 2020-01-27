@@ -1,0 +1,25 @@
+@import '../../styles/variables.scss';
+
+.footer {
+    background: $color-grey-dark-3;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.6rem;
+
+    @media only screen and (max-width: $bp-medium) {
+        font-size: 1.3rem;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+        font-size: 1rem;
+    }
+
+    .logo {
+        margin-right: 80rem;
+
+        @media only screen and (max-width: $bp-largest) {
+            margin-right: 18rem;
+        }
+    }
+}

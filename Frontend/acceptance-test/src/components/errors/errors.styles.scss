@@ -1,0 +1,16 @@
+@import '../../styles//variables.scss';
+
+.errors {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+    font-size: 4rem;
+    background: $color-secondary-dark;
+    width: 130rem;
+    border-radius: 10px;
+    word-break: break-all;
+    padding: 5rem;
+    margin-top: -5rem;
+}

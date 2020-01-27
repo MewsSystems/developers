@@ -1,0 +1,62 @@
+@import '../../styles/variables.scss';
+
+.container {
+    background: $color-grey-light-1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    grid-gap: 1rem;
+    justify-content: center;
+    padding-bottom: 5rem;
+
+    .nodata {
+        grid-column: 1/-1;
+        justify-self: center;
+        align-self: center;
+        place-self: center;
+        margin: 7rem 2.5rem 7.5rem 2.5rem;
+        font-size: 6rem;
+    }
+
+    &__title {
+        grid-column: 1/-1;
+        justify-self: center;
+        align-self: center;
+        place-self: center;
+        margin: 7rem 2.5rem 3rem 2.5rem;
+        font-size: 6rem;
+        transition: all .3s;
+        cursor: pointer;
+        text-transform: uppercase;
+        backface-visibility: hidden;
+        background-image: linear-gradient(to right, $color-primary-light, $color-primary-dark);
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        &:hover {
+            transform: scale(1.01);
+            text-shadow: .5rem 1rem 2rem rgba($color-black, .2);
+        }
+
+    }
+
+    .errors {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        color: white;
+        font-size: 4rem;
+        background: $color-secondary-dark;
+        width: 105rem;
+        border-radius: 10px;
+        word-break: break-all;
+        padding: 5rem;
+        margin-top: -5rem;
+
+        @media only screen and (max-width: $bp-small) {
+            width: 55rem;
+        }
+    }
+
+}

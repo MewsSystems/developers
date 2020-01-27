@@ -1,0 +1,17 @@
+@import '../../styles/variables.scss';
+
+.nav {
+    ul.nav__list {
+        list-style: none;
+        display: flex;
+
+        li a {
+            margin: .7rem;
+            color: white;
+
+            @media only screen and (max-width: $bp-small) {
+                margin: .3rem;
+            }
+        }
+    }
+}

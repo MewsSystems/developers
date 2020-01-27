@@ -1,0 +1,58 @@
+@import '../../styles/variables.scss';
+
+.search {
+    outline: none;
+    flex: 0 0 60%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media only screen and (max-width: $bp-small) {
+        flex: 0 0 65%;
+        justify-content: center;
+    }
+
+    &__input {
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        background-color: $color-grey-light-2;
+        border: none;
+        padding: .7rem 2rem;
+        border-radius: 6px;
+        width: 25%;
+        margin-right: -3.25rem;
+        transition: all .2s;
+
+        &::-webkit-input-placeholder {
+            font-weight: 100;
+            color: $color-grey-dark-1;
+        }
+
+        &:focus {
+            outline: none;
+            width: 35%;
+            background-color: $color-grey-light-2;
+        }
+
+    }
+
+    &__button {
+        border: none;
+        background-color: $color-grey-light-2;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:active {
+            transform: translateY(2px);
+
+        }
+    }
+
+    &__icon {
+        height: 2rem;
+        width: 2rem;
+    }
+}

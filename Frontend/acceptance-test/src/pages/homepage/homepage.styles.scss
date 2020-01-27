@@ -1,0 +1,24 @@
+@import '../../styles/variables.scss';
+
+.App {
+    color: white;
+    font-size: 2rem;
+    display: grid;
+    grid-template-rows: [header-start] 10vh [header-end carousel-start] 90vh [carousel-end content-start] max-content[content-end footer-start]auto-fit[footer-end];
+
+    @media only screen and (max-width: $bp-small) {
+        grid-template-rows: 5vh 95vh max-content auto-fit;
+    }
+
+}
+
+.logo {
+    cursor: pointer;
+    font-size: 7rem;
+    font-family: 'zilap_monogramaregular';
+    color: $color-white;
+
+    @media only screen and (max-width: $bp-small) {
+        font-size: 3rem;
+    }
+}

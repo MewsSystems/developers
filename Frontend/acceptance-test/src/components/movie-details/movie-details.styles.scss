@@ -1,0 +1,27 @@
+@import '../../styles/variables.scss';
+
+.movie-details__list {
+    text-decoration: none;
+    list-style: none;
+    display: flex;
+    font-size: 1.6rem;
+    flex-direction: column;
+    margin-left: 1rem;
+
+    @media only screen and (max-width: $bp-small) {
+        font-size: 1.3rem;
+    }
+
+    li {
+        margin-bottom: .9rem;
+    }
+
+    &-title {
+        color: $color-primary;
+        text-transform: uppercase;
+    }
+
+    &-detail {
+        color: $color-grey-dark-3
+    }
+}

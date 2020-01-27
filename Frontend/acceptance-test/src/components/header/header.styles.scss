@@ -1,0 +1,15 @@
+@import '../../styles/variables.scss';
+
+.header {
+    background: $color-primary;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.9rem;
+
+
+    @media only screen and (max-width: $bp-small) {
+        font-size: .9rem;
+        height: 7rem;
+    }
+}
