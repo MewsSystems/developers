@@ -17,13 +17,7 @@ namespace ExchangeRateUpdater
             this.currencies = currencyCodes;
             this.baseCode = IsSearchedCode(baseCode) ?? throw new ArgumentException();
 
-            using (HttpClient client = new HttpClient())
-            {
-                Stream stream = client.GetStreamAsync(webPage).GetAwaiter().GetResult();
-                streamReader = new StreamReader(stream);
-            }
-
-            ReadHeader();
+            SetUpStreamReader(webPage);
         }
 
         public void ReadHeader()
@@ -68,10 +62,8 @@ namespace ExchangeRateUpdater
             streamReader?.Dispose();
         }
 
-        public void ChangeWebPage(string webPage)
+        private void SetUpStreamReader(string webPage)
         {
-            streamReader.Dispose();
-
             using (HttpClient client = new HttpClient())
             {
                 Stream stream = client.GetStreamAsync(webPage).GetAwaiter().GetResult();
@@ -79,6 +71,12 @@ namespace ExchangeRateUpdater
 
                 ReadHeader();
             }
+        }
+
+        public void ChangeWebPage(string webPage)
+        {
+            streamReader.Dispose();
+            SetUpStreamReader(webPage);
         }
     }
 }
