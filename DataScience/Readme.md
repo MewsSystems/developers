@@ -2,7 +2,13 @@
 
 ## Your task
 
-You have been given a task to look into data of one hotel and find some answers and insights for the following questions:
+You have been given a task to look into data of one hotel in a form of following [YouTrack](https://www.jetbrains.com/youtrack/) issue:
+
+-------------
+
+**Summary**: Analyse reservations of this hotel
+
+**Description**:
 
 1) What are the popular choices of booking rates (table `rate`, columns `ShortRateName` or `RateName`) for different segments of customers (table `reservation`, columns `AgeGroup`, `Gender`, `NationalityCode`)?
 
@@ -10,9 +16,13 @@ You have been given a task to look into data of one hotel and find some answers 
 
 3) Look at the average night cost per single occupied capacity. What guest segment is the most profitable per occupied space unit? And what guest segment is the least profitable?
 
-First, answer the questions using SQL and with your answer provide also the final SQL queries and output.
+------------
 
-Then, build a report/dashboard ideally using Power BI that also help answering the questions. You may also use python and build a jupyter notebook.
+There are two scenarios that you should provide solutions for:
+
+In the first scenario, this task is assigned to you by a tech lead, he already commented on the task that he needed a one-time ad-hoc analysis. For the purpose of this interview task, use SQL.
+
+In the second scenario, this task is assigned to you by a product manager who wants you to build a report so that she can keep track of the situation and it's easy for her to check the answers. Also she mentioned she'll have few more questions later. For the purpose of this interview task, we prefer you use Power BI. You may also use Excel, jupyter notebook, or similar tool.
 
 Include the comments to present your solution and send it to vojta@mews.com. 
 
