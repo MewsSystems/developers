@@ -1,20 +1,18 @@
 import React from 'react'
 import Head from '../components/Head/Head'
-import { Button } from '../components/Button/Button'
 import { Col, Container, Row } from '../utils/layout/grid.layout'
 
-const Home = () => (
+const Movie = () => (
     <Container>
-        <Head url={''} ogImage={''} title="Movies list" description={''} />
+        <Head url={''} ogImage={''} title="Movie" description={''} />
         <Row>
             <Col size={12}>
                 <div style={{ textAlign: 'center' }}>
-                    <h1>Mewies App</h1>
-                    <Button onClick={() => alert('Hello!')}>Click</Button>
+                    <h1>About selected movie</h1>
                 </div>
             </Col>
         </Row>
     </Container>
 )
 
-export default Home
+export default Movie
