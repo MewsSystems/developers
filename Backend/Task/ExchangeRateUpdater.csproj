@@ -44,9 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Currency.cs" />
+    <Compile Include="DataClientException.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="HttpDataClient.cs" />
+    <Compile Include="IDataClient.cs" />
+    <Compile Include="IRateExtractor.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="TxtCnbRateExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
