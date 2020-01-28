@@ -1,31 +1,15 @@
 import produce from 'immer'
 import { AppConstants } from './app.constants'
-import {
-    CloseNotification,
-    EndLoading,
-    PushNotification,
-    StartLoading,
-} from './app.actions'
+import { EndLoading, StartLoading } from './app.actions'
 
-type AppActions =
-    | StartLoading
-    | EndLoading
-    | PushNotification
-    | CloseNotification
-
-export interface Notification {
-    title: string
-    desc?: string
-}
+type AppActions = StartLoading | EndLoading
 
 export interface AppState {
     isLoading: boolean
-    notifications: Notification[]
 }
 
 const initialState: AppState = {
     isLoading: false,
-    notifications: [],
 }
 
 export const app = (state = initialState, action: AppActions) =>
@@ -38,12 +22,6 @@ export const app = (state = initialState, action: AppActions) =>
                 break
             case AppConstants.EndLoading:
                 draft.isLoading = false
-                break
-            case AppConstants.PushNotification:
-                draft.notifications.push({ title: action.title })
-                break
-            case AppConstants.CloseNotification:
-                draft.notifications.splice(action.index)
                 break
         }
     })
