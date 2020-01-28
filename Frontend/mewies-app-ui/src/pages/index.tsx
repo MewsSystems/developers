@@ -16,6 +16,7 @@ import { MovieElement } from '../components/Movie/MovieElement/MovieElement'
 import { MovieList } from '../components/Movie/MovieList/MovieList'
 import { MovieModel } from '../utils/types/model'
 import { usePagination } from '../utils/hooks/usePagination'
+import { MovieSearchQueryResultDto } from '../utils/types/dto'
 
 const Home = () => {
     const [searchValue, setValue] = useState<string>('')
@@ -44,7 +45,7 @@ const Home = () => {
         suggestions,
         handleSearchQuery,
         clearSuggestions,
-    } = useAutosuggest({
+    } = useAutosuggest<MovieSearchQueryResultDto>({
         onFetch: getMoviesByQuery,
         onSelect: handleMovieSelect,
         onPipeData: mapMovieSearchQueryResultToSuggestions,

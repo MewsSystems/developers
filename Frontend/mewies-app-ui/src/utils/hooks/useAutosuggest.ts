@@ -12,18 +12,18 @@ export enum KeyCodes {
     ArrowDown = 40,
 }
 
-interface AutosuggestSettings {
+interface AutosuggestSettings<K> {
     // GET request with query as a param - returning any data
-    onFetch?(query: string): Promise<any>
+    onFetch(query: string): Promise<K>
     onSelect?(suggestion: Suggestion): void
     onClear?(): void
     // Map function which maps any payload from fetch to Suggestion[]
-    onPipeData(data: any): Suggestion[]
+    onPipeData(data: K): Suggestion[]
     initialSuggestions?: Suggestion[]
     initialSelection?: Suggestion
 }
 
-export const useAutosuggest = (options: AutosuggestSettings) => {
+export const useAutosuggest = <K>(options: AutosuggestSettings<K>) => {
     const [suggestions, setSuggestions] = useState<Suggestion[]>([])
     const [selected, setSelected] = useState<Suggestion | null>(null)
     const [query, setQuery] = useState<string>('')
@@ -31,10 +31,8 @@ export const useAutosuggest = (options: AutosuggestSettings) => {
     // Im using debounce to not shoot API every keystroke
     const debouncedQuery = useDebounce(query, 300)
 
-    const fetchSuggestions = async (): Promise<any> => {
-        if (options.onFetch) {
-            return await options.onFetch(query)
-        }
+    const fetchSuggestions = async (): Promise<K> => {
+        return await options.onFetch(query)
     }
 
     const prepareSuggestions = (data: Suggestion[], filterBy: string) => {
