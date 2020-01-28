@@ -27,6 +27,9 @@ const Home = () => {
     const searchResults = useSelector(
         (state: ApplicationState) => state.movies.results
     )
+    const isLoading = useSelector(
+        (state: ApplicationState) => state.app.isLoading
+    )
 
     const {
         paginatedData,
@@ -52,11 +55,6 @@ const Home = () => {
         initialSuggestions: [],
     })
 
-    function handleMovieSelect({ value }: Suggestion) {
-        setValue(value)
-        router.push({ pathname: AppRoutes.Movie, query: { id: value } })
-    }
-
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         clearSuggestions()
@@ -68,25 +66,61 @@ const Home = () => {
         setValue(e.currentTarget.value)
     }
 
+    function handleMovieSelect({ value, label }: Suggestion) {
+        setValue(label)
+        handleViewMovie(value)()
+    }
+
+    const handleViewMovie = (movieID: string) => {
+        return () => {
+            router.push({ pathname: AppRoutes.Movie, query: { id: movieID } })
+        }
+    }
+
     const renderMovies = (movies: MovieModel[]) =>
         useMemo(() => {
-            return movies.map(movie => (
-                <MovieElement
-                    title={movie.title}
-                    posterPath={movie.posterPath}
-                    releaseDate={movie.releaseDate}
-                />
-            ))
+            return isLoading ? (
+                <li>Loading mewies...</li>
+            ) : (
+                movies.map(movie => (
+                    <MovieElement
+                        title={movie.title}
+                        posterPath={movie.posterPath}
+                        releaseDate={movie.releaseDate}
+                        onClick={handleViewMovie(movie.id)}
+                    />
+                ))
+            )
         }, [searchResults, paginatedData])
+
+    const renderSearchingByValueBar = () =>
+        useMemo(() => {
+            return (
+                isDataToPaginate &&
+                searchValue && (
+                    <p>
+                        Displaying results for: <strong>{searchValue}</strong>
+                    </p>
+                )
+            )
+        }, [searchResults, isDataToPaginate])
 
     return (
         <>
-            <Head url={''} ogImage={''} title="Movies list" description={''} />
+            <Head
+                url={''}
+                ogImage={''}
+                title="Mewies App"
+                description={'Find your mewie!'}
+            />
             <MovieSearchHeader>
                 <Container>
                     <Row>
                         <Col size={12}>
-                            <h1>Mewies App</h1>
+                            <img
+                                src="/static/mewies_logo.png"
+                                alt="Mewies - logo of movie search application"
+                            />
                             <MovieSearchForm onSubmit={handleSearchSubmit}>
                                 <InputAutosuggest
                                     placeholder={'search for a movie...'}
@@ -98,6 +132,7 @@ const Home = () => {
                                 />
                                 <Button type={'submit'}>Search</Button>
                             </MovieSearchForm>
+                            {renderSearchingByValueBar()}
                         </Col>
                     </Row>
                 </Container>

@@ -1,9 +1,6 @@
 module.exports = {
-    webpack: config => {
-        // Fixes npm packages that depend on `fs` module
-        config.node = {
-            fs: 'empty',
-        }
-        return config
+    env: {
+        API_KEY: '03b8572954325680265531140190fd2a',
+        API_URL: 'https://api.themoviedb.org/3',
     },
 }

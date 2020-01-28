@@ -1,11 +1,6 @@
 import { MovieConstants } from './movies.constants'
 import { Dispatch } from 'redux'
-import {
-    AsyncActionType,
-    endLoading,
-    pushNotification,
-    startLoading,
-} from '../app/app.actions'
+import { AsyncActionType, endLoading, startLoading } from '../app/app.actions'
 import { getMoviesByQuery } from '../../utils/api/movie.requests'
 import { MovieModel } from '../../utils/types/model'
 import { mapMovieDtoToModel } from '../../utils/mappers/movie.mappers'
@@ -32,7 +27,6 @@ export const submitSearchQuery = (query: string) => {
             dispatch(endLoading())
         } catch (e) {
             dispatch(endLoading())
-            dispatch(pushNotification(e))
         }
     }
 }

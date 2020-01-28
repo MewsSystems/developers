@@ -17,3 +17,7 @@ export const setMargin = (margin: Array<0 | 4 | 8 | 16 | 32>): string => {
         bottom ? bottom : 0
     }px ${left ? left : 0}px;`
 }
+
+export const formatReleaseDate = (date: string) => {
+    return date.split('-')[0] ? date.split('-')[0] : ''
+}

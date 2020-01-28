@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const dev = process.env.NODE_ENV !== 'production'
 
-const baseURL = 'https://api.themoviedb.org/3'
+const baseURL = process.env.API_URL
 
 const axiosInstance = axios.create({
     baseURL,
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(config => {
     config.params = config.params || {}
-    config.params['api_key'] = '03b8572954325680265531140190fd2a'
+    config.params['api_key'] = process.env.API_KEY
     return config
 })
 
