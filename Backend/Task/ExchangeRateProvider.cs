@@ -60,7 +60,7 @@ namespace ExchangeRateUpdater
         {
             if (string.IsNullOrEmpty(context))
             {
-                return null;
+                return "";
             }
 
             var currencyDetail = context.Split('|');
