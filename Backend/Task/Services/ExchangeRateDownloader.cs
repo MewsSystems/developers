@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Text;
 
 namespace ExchangeRateUpdater.Services
 {
@@ -14,8 +16,9 @@ namespace ExchangeRateUpdater.Services
 		public string Download()
 		{
 			using (var client = new WebClient())
-			{
-				return client.DownloadString(url);
+			{				
+					var data = client.DownloadData(url);
+					return Encoding.UTF8.GetString(data);					
 			}
 		}
 	}

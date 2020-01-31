@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container\ExchangeRateUpdaterInstaller.cs" />
+    <Compile Include="Exceptions\IncorrectCsvFormatException.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\ExchangeRate.cs" />
     <Compile Include="Services\ExchangeRateDownloader.cs" />

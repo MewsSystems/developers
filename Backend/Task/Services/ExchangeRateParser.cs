@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Models;
+﻿using ExchangeRateUpdater.Exceptions;
+using ExchangeRateUpdater.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,10 +18,11 @@ namespace ExchangeRateUpdater.Services
 
 		private readonly int rateColumnIndex;
 		private readonly int quantityColumnIndex;
-		private readonly int targetCurrencyColumnIndex;		
+		private readonly int targetCurrencyColumnIndex;
+		private string expectedHeader;
 
 		public ExchangeRateParser(string defaultCurrency, string decimalFormatProvider, char lineSeparator, char valueSeparator, int skippedRows,
-			int rateColumnIndex, int quantityColumnIndex, int targetCurrencyColumnIndex)
+			int rateColumnIndex, int quantityColumnIndex, int targetCurrencyColumnIndex, string expectedHeader)
 		{
 			this.defaultCurrency = new Currency(defaultCurrency);
 			this.decimalFormatProvider = new CultureInfo(decimalFormatProvider);
@@ -31,17 +34,29 @@ namespace ExchangeRateUpdater.Services
 			this.quantityColumnIndex = quantityColumnIndex;
 			this.targetCurrencyColumnIndex = targetCurrencyColumnIndex;
 
+			this.expectedHeader = expectedHeader;
 		}
 
 
 		public IEnumerable<ExchangeRate> Parse(string csv)
 		{
-			var lines = csv.Split(lineSeparator).Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+			var lines = csv.Split(lineSeparator)
+						   .Where(l => !string.IsNullOrWhiteSpace(l))
+						   .ToList();
 
-			return lines.Skip(skippedRows).Select(LineToExchangeRate);
+			CheckHeader(lines.Skip(skippedRows).First());
+
+			return lines.Skip(skippedRows + 1)
+						.Select(LineToExchangeRate);
 		}
 
-	
+		private void CheckHeader(string header)
+		{
+			if(!header.Equals(expectedHeader, StringComparison.InvariantCultureIgnoreCase))
+			{
+				throw new IncorrectCsvFormatException(expectedHeader, header);
+			}
+		}
 
 		private string[] GetValues(string line)
 		{

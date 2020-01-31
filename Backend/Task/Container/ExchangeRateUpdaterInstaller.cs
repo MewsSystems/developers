@@ -24,7 +24,8 @@ namespace ExchangeRateUpdater.Container
 									Dependency.OnAppSettingsValue("skippedRows"),
 									Dependency.OnAppSettingsValue("rateColumnIndex"),
 									Dependency.OnAppSettingsValue("quantityColumnIndex"),
-									Dependency.OnAppSettingsValue("targetCurrencyColumnIndex"))
+									Dependency.OnAppSettingsValue("targetCurrencyColumnIndex"),
+									Dependency.OnAppSettingsValue("expectedHeader"))
 				);
 		}
 	}
