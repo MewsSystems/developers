@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Castle.Windsor;
+using ExchangeRateUpdater.Container;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +27,11 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+				var container = new WindsorContainer();
+				container.Install(new ExchangeRateUpdaterInstaller());
+
+
+				var provider = container.Resolve<ExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
