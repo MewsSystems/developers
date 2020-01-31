@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Castle;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -18,7 +15,17 @@ namespace ExchangeRateUpdater.Container
 			container.Register(
 				Component.For<ExchangeRateDownloader>()
 						 .DependsOn(Dependency.OnAppSettingsValue("url")),
-				Component.For<ExchangeRateProvider>());
+				Component.For<ExchangeRateProvider>(),
+				Component.For<ExchangeRateParser>()
+						 .DependsOn(Dependency.OnAppSettingsValue("defaultCurrency"),
+									Dependency.OnAppSettingsValue("decimalFormatProvider"),
+									Dependency.OnAppSettingsValue("lineSeparator"),
+									Dependency.OnAppSettingsValue("valueSeparator"),
+									Dependency.OnAppSettingsValue("skippedRows"),
+									Dependency.OnAppSettingsValue("rateColumnIndex"),
+									Dependency.OnAppSettingsValue("quantityColumnIndex"),
+									Dependency.OnAppSettingsValue("targetCurrencyColumnIndex"))
+				);
 		}
 	}
 }

@@ -57,6 +57,7 @@
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\ExchangeRate.cs" />
     <Compile Include="Services\ExchangeRateDownloader.cs" />
+    <Compile Include="Services\ExchangeRateParser.cs" />
     <Compile Include="Services\ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>

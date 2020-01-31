@@ -7,10 +7,12 @@ namespace ExchangeRateUpdater.Services
     public class ExchangeRateProvider
     {
 		private readonly ExchangeRateDownloader exchangeRateDownloader;
+		private readonly ExchangeRateParser exchangeRateParser;
 
-		public ExchangeRateProvider(ExchangeRateDownloader exchangeRateDownloader)
+		public ExchangeRateProvider(ExchangeRateDownloader exchangeRateDownloader, ExchangeRateParser exchangeRateParser)
 		{
 			this.exchangeRateDownloader = exchangeRateDownloader;
+			this.exchangeRateParser = exchangeRateParser;
 		}
 
         /// <summary>
@@ -22,8 +24,8 @@ namespace ExchangeRateUpdater.Services
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
 			string csv = exchangeRateDownloader.Download();
-
-            return Enumerable.Empty<ExchangeRate>();
+			var availableRates = exchangeRateParser.Parse(csv);
+			return availableRates.Where(r => currencies.Contains(r.TargetCurrency));
         }
     }
 }
