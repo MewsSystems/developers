@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-export default function App (){
+export default function SearchView (){
     return (
         <div>init</div>
     )
-
 }

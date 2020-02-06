@@ -63,7 +63,8 @@ module.exports = {
     filename: "scripts.min.js",
     publicPath: '/',
      },
-  devServer: {    
+  devServer: {
+    historyApiFallback: true,
     contentBase: path.join(__dirname, 'src'),
     watchContentBase: true,
     compress: true,
