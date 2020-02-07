@@ -3,6 +3,7 @@ import * as React from "react";
 import styled from 'styled-components';
 
 const Div = styled.div`
+min-height: 12em;
   & >div{
   width: 90%;  
   display: inline-block;
@@ -23,10 +24,9 @@ const Div = styled.div`
 
 export default function Movie(props) {
     let movie = props.movie;
-    //console.log(movie);
     return(
         <Div>
-            <img src={`http://image.tmdb.org/t/p/w92${movie.poster_path}`} />
+            <img alt="Smiley face" src={`http://image.tmdb.org/t/p/w92${movie.poster_path}`} />
             <div>
                 <div className="title">{movie.title} </div>
                 <div className="overview">{movie.overview}</div>

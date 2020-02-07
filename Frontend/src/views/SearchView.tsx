@@ -2,10 +2,8 @@ import * as React from 'react';
 import * as actions from '../redux/moviesActions'
 import styled from 'styled-components';
 import {connect} from 'react-redux';
-import store from "../redux/store";
-import thunk from 'redux-thunk';
 import Movie from "../components/Movie";
-
+import Paginator from "../components/Paginator";
 
 const Form = styled.form`
 text-align:center;
@@ -24,6 +22,7 @@ width:60%;
 margin:0 auto;
 margin-top: 10px;
 `
+
 export default connect(
     (store)=>{
         return {
@@ -33,28 +32,31 @@ export default connect(
     },
 )(
 function SearchView (props){
-    let maped
+    let maped;
     function handleSubmit(e){
         e.preventDefault();
         const searchPhrase = e.target.querySelector('input[name=searchPhrase]').value;
-        props.dispatch(actions.fetchMovies(searchPhrase,1));
+        props.dispatch(actions.fetchMovies(1,searchPhrase));
     }
-    console.log(props.paginator)
     if(props.movies.fetched) {
         maped = props.movies.movies.map((movie) => {
             return <Movie key={movie.id} movie={movie} />
         })
     }
-
+    function check(e) {
+        console.log(e)
+    }
+    console.log(props.movies)
     return (
         <div>
             <Form onSubmit={(event)=>handleSubmit(event)}>
-            <Input type="text" name="searchPhrase"/>
+            <Input type="text" name="searchPhrase" default={props.movies.searchPhrase}/>
             <Input type="submit" value="search"/>
             </Form>
             <ul>
                 { maped }
             </ul>
+            <Paginator searchPhrase={props.movies.searchPhrase} pages={props.paginator}/>
         </div>
     )
 }
