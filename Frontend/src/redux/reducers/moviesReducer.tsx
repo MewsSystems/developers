@@ -1,18 +1,16 @@
-import movie from '../models/movie'
+import movie from '../../models/movie'
 const defaul={
     fetching: null as boolean ,
     fetched:null as boolean,
     movies: null as movie[]
-
 }
-
 export default function moviesReducer(state = {...defaul, fetched: false,fetching: false},action) {
     switch (action.type) {
         case "FETCH_MOVIES_SUCCEED":{
             return { ...state,
                 fetching: false,
                 fetched: true,
-                movies: action.payload,
+                movies: action.payload.results,
             }
         }
         case "FETCH_MOVIES_STARTED":{

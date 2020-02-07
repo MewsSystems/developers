@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {connect} from 'react-redux';
 import store from "../redux/store";
 import thunk from 'redux-thunk';
+import Movie from "../components/Movie";
+
 
 const Form = styled.form`
 text-align:center;
@@ -24,7 +26,10 @@ margin-top: 10px;
 `
 export default connect(
     (store)=>{
-        return {movies:store}
+        return {
+            movies:store.moviesReducer,
+            paginator: store.paginatorReducer,
+        }
     },
 )(
 function SearchView (props){
@@ -34,13 +39,13 @@ function SearchView (props){
         const searchPhrase = e.target.querySelector('input[name=searchPhrase]').value;
         props.dispatch(actions.fetchMovies(searchPhrase,1));
     }
-
+    console.log(props.paginator)
     if(props.movies.fetched) {
         maped = props.movies.movies.map((movie) => {
-            return <li key={movie.id}>{movie.title}</li>
+            return <Movie key={movie.id} movie={movie} />
         })
     }
-    console.log(props.movies.movies)
+
     return (
         <div>
             <Form onSubmit={(event)=>handleSubmit(event)}>
