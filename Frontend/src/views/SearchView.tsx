@@ -28,20 +28,28 @@ export default connect(
     },
 )(
 function SearchView (props){
+    let maped
     function handleSubmit(e){
         e.preventDefault();
         const searchPhrase = e.target.querySelector('input[name=searchPhrase]').value;
         props.dispatch(actions.fetchMovies(searchPhrase,1));
-
     }
-    console.log(props)
+
+    if(props.movies.fetched) {
+        maped = props.movies.movies.map((movie) => {
+            return <li key={movie.id}>{movie.title}</li>
+        })
+    }
+    console.log(props.movies.movies)
     return (
         <div>
             <Form onSubmit={(event)=>handleSubmit(event)}>
             <Input type="text" name="searchPhrase"/>
             <Input type="submit" value="search"/>
             </Form>
-
+            <ul>
+                { maped }
+            </ul>
         </div>
     )
 }
