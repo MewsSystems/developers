@@ -28,7 +28,6 @@ export default connect(
 function Paginator(props) {
     let previous= null;
     let next= null;
-    console.log(props.pages)
     if(props.pages.currentPage > 1){
         previous = <button onClick={()=>props.dispatch(actions.fetchMovies(props.pages.currentPage-1,props.searchPhrase)) } >Previous</button>
     }
