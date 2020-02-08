@@ -7,10 +7,9 @@ const DIV = styled.div`
 margin: 0 auto;
 margin-bottom: 50px;
 width: 400px;
-  & button{
-  width: 100%;
-  }
-
+    & button{
+    width: 100%;
+    }
     & >div{
     display: inline-block;
     width: 33%;
