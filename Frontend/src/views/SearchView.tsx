@@ -38,6 +38,7 @@ function SearchView (props){
         const searchPhrase = e.target.querySelector('input[name=searchPhrase]').value;
         props.dispatch(actions.fetchMovies(1,searchPhrase));
     }
+    console.log(props.movies)
     if(props.movies.fetched) {
         maped = props.movies.movies.map((movie) => {
             return <Movie key={movie.id} movie={movie} />

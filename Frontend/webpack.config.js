@@ -2,7 +2,6 @@ var debug = process.env.NODE_ENV !== "production";
 var path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -18,7 +17,7 @@ module.exports = {
     new MiniCssExtractPlugin({filename: "assets/style.min.css", }),   
       ],
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [
       new TerserPlugin({
         test: /\.ts(\?.*)?$/i,
