@@ -1,6 +1,5 @@
 import axios, {AxiosResponse} from "axios";
 import Movie from "../models/movie";
-import thunk from 'redux-thunk';
 
 export function fetchMovies(page,searchPhrase) {
     if(searchPhrase) {
@@ -12,7 +11,6 @@ export function fetchMovies(page,searchPhrase) {
                     response.data.results = response.data.results.map((movie)=>{
                         return new Movie( movie.id, movie.title, movie.poster_path, movie.overview)
                     })
-                    console.log(response.data.results)
                     dispatch({type: "FETCH_MOVIES_SUCCEED", payload: {...response.data, searchPhrase: searchPhrase}});
                 })
                 .catch(error => {

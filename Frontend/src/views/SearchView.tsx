@@ -1,11 +1,10 @@
 import * as React from 'react';
-import * as actions from '../redux/moviesActions'
 import styled from 'styled-components';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import Paginator from '../components/Paginator';
+import * as actions from '../redux/moviesActions';
 import Movie from "../components/Movie";
-import Paginator from "../components/Paginator";
-
-const Form = styled.form`
+const Form = styled.form`;
 text-align:center;
 & *{
   font-size: 24px;
@@ -22,7 +21,10 @@ width:60%;
 margin:0 auto;
 margin-top: 10px;
 `
-
+const UL = styled.ul`
+  list-style: none;
+  padding: 10px 10px 10px 10px;
+`
 export default connect(
     (store)=>{
         return {
@@ -53,9 +55,9 @@ function SearchView (props){
             <Input type="text" name="searchPhrase" default={props.movies.searchPhrase}/>
             <Input type="submit" value="search"/>
             </Form>
-            <ul>
+            <UL>
                 { maped }
-            </ul>
+            </UL>
             <Paginator searchPhrase={props.movies.searchPhrase} pages={props.paginator}/>
         </div>
     )

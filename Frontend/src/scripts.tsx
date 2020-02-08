@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import styled from 'styled-components';
-import {Provider} from 'react-redux';
-import store from "./redux/store";
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
-//import App from "./components/App";
+// import App from "./components/App";
 import RouterComponent from './components/RouterComponent';
 
-const app = document.getElementById("app");
+const app = document.getElementById('app');
 ReactDOM.render(
-    <Provider store={store}>
-                <RouterComponent />
-    </Provider>,app)
+  <Provider store={store}>
+    <RouterComponent />
+  </Provider>, app,
+);

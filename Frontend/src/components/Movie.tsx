@@ -1,11 +1,18 @@
-import link from 'react-router-dom';
 import * as React from "react";
 import styled from 'styled-components';
-//import * as url from '../assets/noimg.png' ;
-const noimg =require('../assets/noimg.png');
-const Div = styled.div`
+import { Link } from 'react-router-dom';
+// @ts-ignore
+import noimg from '../assets/noimg.png';
+const LI = styled.li`
 min-height: 12em;
-  & >div{
+width:100%;
+  & >a{
+  list-style: none;
+  width: 100%;
+  display: inline-block;
+  border: 1px solid green;
+  }
+  & >a>div{
   padding: 8px 8px 8px 8px;
   width: 80%;  
   min-width: 400px;
@@ -27,8 +34,9 @@ min-height: 12em;
   }
 `
 
+
 export default function Movie(props) {
-    let movie = props.movie;
+    const movie = props.movie;
     let img=<img alt="xd"></img>;
     if(movie.poster_path){
         img = <img alt="Smiley face" src={`http://image.tmdb.org/t/p/w92${movie.poster_path}`} />
@@ -37,12 +45,16 @@ export default function Movie(props) {
         img = <img alt="Smiley face" src={noimg} />
     }
     return(
-        <Div>
-            { img }
-            <div>
-                <div className="title">{movie.title} </div>
-                <div className="overview">{movie.overview}</div>
-            </div>
-        </Div>
+        <LI>
+            <Link to={`/details/${movie.id}`} >
+                { img }
+                <div>
+                    <div className="title">{movie.title} </div>
+                    <div className="overview">{movie.overview}</div>
+                </div>
+            </Link>
+        </LI>
     )
 }
+
+
