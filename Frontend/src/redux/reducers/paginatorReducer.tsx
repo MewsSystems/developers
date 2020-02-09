@@ -1,4 +1,4 @@
-import movie from '../../models/movie'
+import movie from '../../models/Movie'
 const defaul={
     currentPage: null as number,
     maxPage: null as number

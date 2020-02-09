@@ -1,4 +1,4 @@
-import movie from '../../models/movie'
+import movie from '../../models/Movie'
 const defaul={
     fetching: null as boolean ,
     fetched:null as boolean,

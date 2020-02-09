@@ -34,7 +34,6 @@ width:100%;
   }
 `
 
-
 export default function Movie(props) {
     const movie = props.movie;
     let img=<img alt="xd"></img>;
