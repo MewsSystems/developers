@@ -6,11 +6,19 @@ import noimg from '../assets/noimg.png';
 const LI = styled.li`
 min-height: 12em;
 width:100%;
+  & *{
+  transition-duration: 1s;
+  }
   & >a{
+  background-color: aliceblue;
+  color: black;
   list-style: none;
   width: 100%;
   display: inline-block;
   border: 1px solid green;
+  }
+  & >a:hover{
+  background-color: beige;
   }
   & >a>div{
   padding: 8px 8px 8px 8px;

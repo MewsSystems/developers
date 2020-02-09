@@ -14,13 +14,13 @@ width:60%;
 margin:0 auto;
 `
 const Input = styled.input`
-
 position: relative;
 box-sizing: border-box;
 width:60%;
 margin:0 auto;
 margin-top: 10px;
 `
+
 const UL = styled.ul`
   list-style: none;
   padding: 10px 10px 10px 10px;
@@ -44,9 +44,6 @@ function SearchView (props){
         maped = props.movies.movies.map((movie) => {
             return <Movie key={movie.id} movie={movie} />
         })
-    }
-    function check(e) {
-        console.log(e)
     }
 
     return (
