@@ -121,6 +121,7 @@ For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) 
     - [TechCrunch](https://techcrunch.com/2019/08/29/mews-grabs-33m-series-b-to-modernize-hotel-administration/) - announcement of the Series B investment.
     - [HospitalityTech](https://www.hospitalitynet.org/news/4096068.html) - Mews' acquisition of Planet Winner PMS.
     - [Travel Tech Conference Russia](https://www.youtube.com/watch?v=EvZSfzKccC0) - Richard (founder) talking about why hotels should think like tech companies.
+    - [TechUncovered](https://www.youtube.com/watch?v=WQ90qs8iA30) - First #TechUncovered event organized by us with cooperation with productboard, STRV, SCS Software and Pipedrive. CTO's, founders and tech leads discussing scaling tech teams.
 - **Czech**
     - [CzechCrunch podcast](https://www.czechcrunch.cz/2019/12/cesti-jednorozci-v-cekarne-zakladatele-mews-a-productboardu-v-czechcrunch-podcastu-o-budovani-miliardovych-firem/) - Intervirew with the founder of Mews Richard Valtr and CEO of Productboard Hubert Palan.
     - [Forbes podcast](https://www.forbes.cz/stres-je-nezadouci-a-omluva-pro-neznalost-neexistuje-rika-v-podcastu-filozof-ktery-meni-hotelnictvi/) - Another philosophical podcast featuring founder Richard.
