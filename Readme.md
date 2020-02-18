@@ -1,6 +1,6 @@
 # Mews developers
 
-Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com) and [Twitter](https://twitter.com/MewsDevs) with latest information.
+Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, tech stack and life of devs at Mews.
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](https://calendar.google.com/calendar/embed?src=mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com&ctz=Europe%2FPrague) of the events we organize or attend and let's get in touch! You can also add it to your calendar via the [iCal](https://calendar.google.com/calendar/ical/mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com/public/basic.ics) to never miss a Mews thing!
 
@@ -123,8 +123,10 @@ For 7 years we went rather unnoticed (mainly in our home base - Czech Republic) 
     - [Travel Tech Conference Russia](https://www.youtube.com/watch?v=EvZSfzKccC0) - Richard (founder) talking about why hotels should think like tech companies.
 - **Czech**
     - [CzechCrunch podcast](https://www.czechcrunch.cz/2019/12/cesti-jednorozci-v-cekarne-zakladatele-mews-a-productboardu-v-czechcrunch-podcastu-o-budovani-miliardovych-firem/) - Intervirew with the founder of Mews Richard Valtr and CEO of Productboard Hubert Palan.
+    - [Forbes podcast](https://www.forbes.cz/stres-je-nezadouci-a-omluva-pro-neznalost-neexistuje-rika-v-podcastu-filozof-ktery-meni-hotelnictvi/) - Another philosophical podcast featuring founder Richard.
     - [Lupa.cz](https://www.lupa.cz/clanky/jan-siroky-mews-na-nasem-softwaru-funguje-asi-tisic-hotelu-hilton-zatim-nemame/) - technical interview with the CTO Honza.
     - [Forbes](https://www.forbes.cz/velka-rana-nenapadny-cesky-startup-mews-ziskava-investici-768-milionu-korun/) - announcement of the Series B investment.
     - [CzechCrunch](https://www.czechcrunch.cz/2019/08/snil-o-psani-a-filmarine-dnes-richard-valtr-po-celem-svete-stavi-superhotely-a-buduje-miliardovy-startup-mews/) - interview with the founder Richard about his visions behind Mews.
     - [E15](https://www.e15.cz/byznys/budoucnost-byznysu/jejich-aplikaci-vyuziva-pres-tisic-svetovych-hotelu-ted-cesti-mews-dobyvaji-usa-1365579) - changing the hospitality industry.
     - [Radiozurnal](https://radiozurnal.rozhlas.cz/spolupraci-firem-a-vysokych-skol-si-pochvaluji-obe-strany-partneri-jsou-ale-take-8096412) - discussion about why it's important to support Universities.
+    - [Computerworld](https://computerworld.cz/udalosti/jak-to-chodi-v-uspesnem-start-upu-55815) - Interview with CPO Jirka about how it is going in a growing start-up.
