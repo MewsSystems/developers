@@ -4,7 +4,7 @@ import { HeaderWrapper } from './Header.styles'
 const Header = (props) => {
   return (
     <HeaderWrapper>
-     {props.text}
+      { props.text }
     </HeaderWrapper>
   );
 };

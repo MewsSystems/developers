@@ -1,5 +1,5 @@
 import React from "react";
-import { CardWrapper, InfoFormWrapper } from './MovieItem.style';
+import { CardWrapper } from './MovieItem.style';
 
 const Movie = ({ movie: { title, id, poster_path, popularity } }) => (
   <CardWrapper>

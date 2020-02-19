@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createLogger } from 'redux-logger';
 import rootReducer from '../rootReducer';
-import thunkMiddleware from 'redux-thunk';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import rootSaga from '../rootSaga';

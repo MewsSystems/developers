@@ -12,9 +12,4 @@ const CardWrapper = styled.div`
     margin-bottom: 15px;
 `;
 
-const CardInfoWrapper = styled.div`
-  margin: 20px auto 40px;
-`;
-
-
-export { CardWrapper, CardInfoWrapper };
+export { CardWrapper };

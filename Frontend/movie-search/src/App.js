@@ -7,9 +7,9 @@ import { ConnectedRouter } from 'connected-react-router';
 import Movies from './movies/Movies';
 import { history } from './store/Store';
 
-const App=()=>(
+const App = () => (
   <Provider store={ store }>
-    <ConnectedRouter history={history}>
+    <ConnectedRouter history={ history }>
       <Switch>
         <Route
           exact
@@ -21,7 +21,7 @@ const App=()=>(
           component={ Movies }
         />
 
-        {/*<Route component={ FourOhFour } />*/}
+        { /*<Route component={ FourOhFour } />*/ }
       </Switch>
     </ConnectedRouter>
   </Provider>

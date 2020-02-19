@@ -19,10 +19,6 @@ const SpinnerWrapper = styled.div`
   height: 150px;
 `;
 
-const CardInfoWrapper = styled.div`
-  margin: 20px auto 40px;
-`;
-
 const SearchWrapper = styled.div`
   margin-bottom: 25px;
   margin-top: 70px;
@@ -38,4 +34,4 @@ const SearchWrapper = styled.div`
 `;
 
 
-export { MoviesContainer, MoviesListWrapper, CardInfoWrapper, SpinnerWrapper,SearchWrapper };
+export { MoviesContainer, MoviesListWrapper, SpinnerWrapper,SearchWrapper };

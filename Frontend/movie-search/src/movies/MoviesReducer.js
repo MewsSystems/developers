@@ -19,10 +19,16 @@ export default function moviesReducer(state = initialState, action) {
 
     case moviesActionTypes.FETCH_MOVIES_SUCCESS:
       const { movies } = payload || {};
-debugger;
+
       return {
         ...state,
         movies: movies,
+        loading: false,
+      };
+
+     case moviesActionTypes.FETCH_MOVIES_ERROR:
+      return {
+        ...state,
         loading: false,
       };
 
