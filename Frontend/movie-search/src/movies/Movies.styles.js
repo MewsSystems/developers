@@ -29,7 +29,6 @@ const SearchWrapper = styled.div`
   justify-content: center;
   font-size: 25px;
   color: white;
-  //position: fixed;
   width: 100%;
 `;
 

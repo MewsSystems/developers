@@ -11,6 +11,7 @@ const HeaderWrapper = styled.div`
   width: 100%;
   height: 50px;
   background-color: #282c34;
+  cursor: pointer;
 `;
 
 export { HeaderWrapper};

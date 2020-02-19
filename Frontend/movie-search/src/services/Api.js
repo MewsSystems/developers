@@ -10,6 +10,6 @@ export function processRequest(url = '', method = 'GET') {
     method,
     headers,
     crossDomain: true,
-    url: `${BASE_API_URL}${url}&api_key=03b8572954325680265531140190fd2a`,
+    url: `${BASE_API_URL}${url}api_key=03b8572954325680265531140190fd2a`,
   })
 }

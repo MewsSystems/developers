@@ -1,8 +1,9 @@
 import React from "react";
 import { CardWrapper } from './MovieItem.style';
+import { withRouter } from 'react-router-dom';
 
-const Movie = ({ movie: { title, id, poster_path, popularity } }) => (
-  <CardWrapper>
+const Movie = ({ movie: { title, id, poster_path, popularity }, history }) => (
+  <CardWrapper onClick={ () => history.push(`/${id}`) }>
     <h2>{ title }</h2>
     <div>
       <img
@@ -14,4 +15,4 @@ const Movie = ({ movie: { title, id, poster_path, popularity } }) => (
   </CardWrapper>
 );
 
-export default Movie;
+export default withRouter(Movie);

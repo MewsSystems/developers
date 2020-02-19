@@ -12,7 +12,7 @@ export default function* () {
 export function* handleGetMoviesRequest(action) {
   try {
     const { query, page } = action.payload;
-    const {data} = yield call(processRequest, `search/movie?query=${query}&page=${page}`);
+    const {data} = yield call(processRequest, `search/movie?query=${query}&page=${page}&`);
 
     yield put(moviesActions.fetchMoviesSuccess(data));
   } catch(e) {

@@ -47,12 +47,19 @@ const Movies = ({
       <Header text="Movies"/>
       <SearchWrapper>
         <input
+          style={{
+            padding: '5px',
+            fontSize: '16px'
+          }}
           placeholder="Search Movies"
           onChange={ handleSearchTerm }
         />
       </SearchWrapper>
+      {
+        !debouncedSearchTerm &&
+        <div>Start searching to display movies</div>
+      }
 
-      <div>Start searching to display movies</div>
       {
         loading
           ? (
@@ -77,14 +84,8 @@ const Movies = ({
               }
             </MoviesListWrapper>
             <RCPagination
-              //locale={ localeInfo }
-              // pageSizeOptions={['5', '10', '20', '50']}
-              // selectComponentClass={Select}
-              // showSizeChanger={window.screen.width >= 600}
-              //showQuickJumper={ window.screen.width >= 600 && { goButton: <button>Open</button> }}
               defaultPageSize={ 20 }
               defaultCurrent={ currentPage }
-              // onShowSizeChange={onChangePagination}
               onChange={ changePage }
               total={ total_results }
               showTotal={ (total, range) => `${range[0]} - ${range[1]} of ${total} items` }

@@ -1,12 +1,13 @@
 import React from "react";
-import { HeaderWrapper } from './Header.styles'
+import { HeaderWrapper } from './Header.styles';
+import { withRouter } from 'react-router-dom';
 
 const Header = (props) => {
   return (
-    <HeaderWrapper>
+    <HeaderWrapper onClick={ () => props.history.push('/') }>
       { props.text }
     </HeaderWrapper>
   );
 };
 
-export default Header;
+export default withRouter(Header);

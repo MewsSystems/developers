@@ -5,6 +5,7 @@ import { store } from './store/Store';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import Movies from './movies/Movies';
+import MovieDetails from './movieDetails/MovieDetails';
 import { history } from './store/Store';
 
 const App = () => (
@@ -18,7 +19,7 @@ const App = () => (
         />
         <Route
           path="/:movieId"
-          component={ Movies }
+          component={ MovieDetails }
         />
 
         { /*<Route component={ FourOhFour } />*/ }
