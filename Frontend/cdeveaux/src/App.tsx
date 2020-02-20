@@ -5,17 +5,15 @@ import {
   Route,
 } from 'react-router-dom';
 
-import Search from './screens/Search/index';
+import Search from './screens/Search';
+import Detail from './screens/Detail';
 
-console.error(Search);
 const App = () => {
   return (
     <Router>
       <Switch>
         <Route path="/" exact component={Search}/>
-        <Route path="/:assetId">
-
-        </Route>
+        <Route path="/:assetId" exact component={Detail}/>
       </Switch>
     </Router>
   );

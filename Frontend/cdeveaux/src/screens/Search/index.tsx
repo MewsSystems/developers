@@ -12,13 +12,16 @@ class Search extends React.PureComponent<{}> {
     }];
 
     return (
-      <ul>
-        {items.map(item => (
-          <Link to={item.id}>
-            {item.title}
-          </Link>
-        ))}
-      </ul>
+      <>
+        <input type="text"/>
+        <ul>
+          {items.map(item => (
+            <Link key={item.id} to={item.id}>
+              {item.title}
+            </Link>
+          ))}
+        </ul>
+      </>
     );
   }
 };
