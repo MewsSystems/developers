@@ -1,0 +1,49 @@
+{
+    "name": "movie-search-engine",
+    "version": "0.1.0",
+    "description": "Movie Search Engine",
+    "main": "./src/index.tsx",
+    "scripts": {
+        "build": "webpack",
+        "build:dev": "webpack --env development",
+        "build:prod": "webpack --env production",
+        "develop": "webpack-dev-server --open --env development",
+        "lint": "eslint ./src --ext jsx,js,tsx,ts",
+        "tsc": "tsc"
+    },
+    "author": "Michal Ozogán",
+    "license": "UNLICENSED",
+    "devDependencies": {
+        "@babel/core": "^7.8.4",
+        "@babel/plugin-transform-runtime": "^7.8.3",
+        "@babel/preset-env": "^7.8.4",
+        "@babel/preset-react": "^7.8.3",
+        "@babel/preset-typescript": "^7.8.3",
+        "@hot-loader/react-dom": "^16.11.0",
+        "@socifi/eslint-config": "^2.10.2",
+        "@types/react": "^16.9.17",
+        "@types/react-dom": "^16.9.4",
+        "@types/react-redux": "^7.1.7",
+        "@types/react-router-dom": "^5.1.3",
+        "@types/styled-components": "^4.4.3",
+        "babel-loader": "^8.0.6",
+        "clean-webpack-plugin": "^3.0.0",
+        "core-js": "^3.6.4",
+        "html-webpack-plugin": "^3.2.0",
+        "typescript": "^3.7.5",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.10.1",
+        "react-hot-loader": "^4.12.18"
+    },
+    "dependencies": {
+        "react": "^16.12.0",
+        "react-dom": "^16.12.0",
+        "react-redux": "^7.2.0",
+        "react-router-dom": "^5.1.2",
+        "redux": "^4.0.5",
+        "redux-thunk": "^2.3.0",
+        "rest-api-handler": "^2.9.0",
+        "styled-components": "^5.0.1"
+    }
+}
