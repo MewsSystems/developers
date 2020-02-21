@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test CircleIcon Tests snapshot 1`] = `
+<styled.div
+  size="small"
+>
+  <Icon
+    color="#FFF"
+    icon="times"
+    size="xs"
+  />
+</styled.div>
+`;
+
+exports[`Test CircleIcon Tests snapshot 2`] = `
+<styled.div
+  size="large"
+>
+  <Icon
+    color="#FFF"
+    icon="times"
+    size="sm"
+  />
+</styled.div>
+`;
+
+exports[`Test Container Tests snapshot 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: #DBDBDB;
+  border-radius: 50%;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Test Container Tests snapshot 2`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: #DBDBDB;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (hover:hover) {
+  .c0:hover {
+    border: initial;
+    background: #53B2DB;
+  }
+}
+
+<div
+  class="c0"
+/>
+`;

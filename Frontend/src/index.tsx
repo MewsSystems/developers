@@ -1,3 +1,4 @@
+import { addIconsToLibrary } from 'constants/icons'
 import { store } from 'state/store'
 import initializeTracking from 'tracking'
 import GlobalStyle from 'GlobalStyle'
@@ -9,6 +10,7 @@ import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 
+addIconsToLibrary()
 initializeTracking()
 
 ReactDOM.render(

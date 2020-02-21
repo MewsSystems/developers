@@ -1,0 +1,200 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Container component Tests snapshot 1`] = `
+.c0 {
+  position: relative;
+  display: inline-block;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Test Container component Tests snapshot 2`] = `
+.c0 {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Test Input component Tests snapshot 1`] = `
+<div>
+  <styled.div
+    fullWidth={false}
+  >
+    <styled.input
+      fullWidth={false}
+      inputSize="small"
+    />
+  </styled.div>
+</div>
+`;
+
+exports[`Test Input component Tests snapshot 2`] = `
+<div>
+  <styled.div
+    fullWidth={false}
+  >
+    <styled.input
+      fullWidth={false}
+      inputSize="large"
+    />
+  </styled.div>
+</div>
+`;
+
+exports[`Test StyledCircleIcon component Tests snapshot 1`] = `
+.c2 svg {
+  vertical-align: initial;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: #DBDBDB;
+  border-radius: 50%;
+}
+
+.c1 {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.6rem;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-times fa-w-11 fa-xs "
+      color="#FFF"
+      data-icon="times"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      viewBox="0 0 352 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+        fill="currentColor"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`Test StyledCircleIcon component Tests snapshot 2`] = `
+.c2 svg {
+  vertical-align: initial;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: #DBDBDB;
+  border-radius: 50%;
+}
+
+.c1 {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.6rem;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2"
+  >
+    <svg
+      aria-hidden="true"
+      class="svg-inline--fa fa-times fa-w-11 fa-xs "
+      color="#FFF"
+      data-icon="times"
+      data-prefix="fas"
+      focusable="false"
+      role="img"
+      viewBox="0 0 352 512"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+        fill="currentColor"
+      />
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`Test StyledInput component Tests snapshot 1`] = `
+.c0 {
+  min-width: 16rem;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #DBDBDB;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+}
+
+.c0:focus {
+  border-color: #53B2DB;
+  outline: none;
+}
+
+<input
+  class="c0"
+/>
+`;
+
+exports[`Test StyledInput component Tests snapshot 2`] = `
+.c0 {
+  min-width: 16rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid #DBDBDB;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+}
+
+.c0:focus {
+  border-color: #53B2DB;
+  outline: none;
+}
+
+<input
+  class="c0"
+/>
+`;
