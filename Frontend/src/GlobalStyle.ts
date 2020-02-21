@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
   html {
     width: 100%;
     min-height: 100vh;
+    font-size: 16px;
   }
 `
 

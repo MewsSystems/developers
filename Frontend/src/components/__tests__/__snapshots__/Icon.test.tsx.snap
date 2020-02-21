@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Container component Tests snapshot 1`] = `
+.c0 svg {
+  vertical-align: initial;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Test Container component Tests snapshot 2`] = `
+.c0 svg {
+  vertical-align: initial;
+}
+
+@media (hover:hover) {
+  .c0 svg:hover {
+    color: #FFF;
+  }
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Test Icon component Tests snapshot 1`] = `
+<styled.div>
+  <FontAwesomeIcon
+    border={false}
+    className=""
+    color="#000"
+    fixedWidth={false}
+    flip={null}
+    icon="times"
+    inverse={false}
+    listItem={false}
+    mask={null}
+    pull={null}
+    pulse={false}
+    rotation={null}
+    size="1x"
+    spin={false}
+    swapOpacity={false}
+    symbol={false}
+    title=""
+    transform={null}
+  />
+</styled.div>
+`;
