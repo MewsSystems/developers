@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Input component Tests snapshot 1`] = `
+<ForwardRef
+  allowClear={true}
+  fullWidth={true}
+  inputSize="large"
+  onChange={[Function]}
+  onClear={[Function]}
+  onKeyDown={[Function]}
+  placeholder="placeholder"
+  type="text"
+  value=""
+/>
+`;

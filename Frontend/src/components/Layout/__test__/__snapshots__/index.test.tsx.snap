@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Layout Tests snapshot 1`] = `
+<div>
+  <styled.div>
+    <Header />
+    <Spacing
+      inner="2rem"
+      outer="0 0 54px;"
+    >
+      test
+    </Spacing>
+  </styled.div>
+  <Footer />
+</div>
+`;

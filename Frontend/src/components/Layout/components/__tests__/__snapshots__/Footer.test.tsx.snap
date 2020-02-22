@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Footer Tests snapshot 1`] = `
+<styled.div>
+  footer.copyright
+</styled.div>
+`;

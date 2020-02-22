@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Navigation component Tests snapshot 1`] = `
+<styled.div>
+  <Styled(Component)
+    key="test"
+    to="/test"
+  >
+    Test
+  </Styled(Component)>
+</styled.div>
+`;

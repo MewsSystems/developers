@@ -1,3 +1,14 @@
 {
-  "html-title": "Movie DB App"
+  "html-title": "Movie DB App",
+  "header": {
+    "title": "MDB",
+    "navigation": {
+      "home": "Home",
+      "favourite": "Favourite",
+      "recomended": "Recomended"
+    }
+  },
+  "footer": {
+    "copyright": "© MDB {{year}}"
+  }
 }

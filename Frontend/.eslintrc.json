@@ -37,10 +37,12 @@
     "import/no-named-as-default-member": "off",
     "import/namespace": "off",
 
-    "import/order": [
+    // TODO: Fix import order config
+
+    /* "import/order": [
       "error",
       { "groups": ["builtin", "external", "parent", "sibling", "index"] }
-    ],
+    ], */
 
     "react/prop-types": "off",
     "react/display-name": "off",

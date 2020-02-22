@@ -10,7 +10,7 @@ export const Container = styled.div<Pick<CircleIconProps, 'size' | 'onClick'>>`
   justify-content: center;
   width: ${({ size }) => (size === 'small' ? '1.25rem' : '2rem')};
   height: ${({ size }) => (size === 'small' ? '1.25rem' : '2rem')};
-  background: ${COLORS.GRAY};
+  background: ${COLORS.DARK_GRAY};
   border-radius: 50%;
 
   ${({ onClick }) =>
