@@ -1,3 +1,4 @@
+import { Layout } from 'components/Layout'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +12,7 @@ const App: React.FC = () => {
       <Helmet>
         <title>{t('html-title')}</title>
       </Helmet>
-      <div>App</div>
+      <Layout>App</Layout>
     </>
   )
 }

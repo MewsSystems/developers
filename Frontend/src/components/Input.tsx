@@ -1,7 +1,7 @@
 import { COLORS } from 'constants/colors'
-import { BORDER_RADIUS, BOX_SHADOW } from 'constants/index'
+import { BOX_SHADOW } from 'constants/index'
 import { CircleIcon } from 'components/CircleIcon'
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 
 export const StyledCircleIcon = styled(CircleIcon)<
@@ -25,8 +25,7 @@ export const StyledInput = styled.input<
   min-width: 16rem;
   padding: ${({ inputSize }) =>
     inputSize === 'small' ? '0.45rem 0.5rem' : '0.8rem 1rem'};
-  border: 1px solid ${COLORS.GRAY};
-  border-radius: ${BORDER_RADIUS.MEDIUM};
+  border-bottom: 1px solid ${COLORS.GRAY};
   box-shadow: ${BOX_SHADOW.MEDIUM};
 
   &:focus {
@@ -43,26 +42,36 @@ export interface InputProps
   fullWidth?: boolean
 }
 
-export const Input: React.FC<InputProps> = ({
-  inputSize = 'small',
-  allowClear = false,
-  fullWidth = false,
-  onClear,
-  className,
-  ...rest
-}) => {
-  return (
-    <div className={className}>
-      <Container fullWidth={fullWidth}>
-        <StyledInput inputSize={inputSize} fullWidth={fullWidth} {...rest} />
-        {allowClear && (
-          <StyledCircleIcon
-            icon="times"
-            onClick={onClear}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      inputSize = 'small',
+      allowClear = false,
+      fullWidth = false,
+      onClear,
+      className,
+      ...rest
+    },
+    ref
+  ) => {
+    return (
+      <div className={className}>
+        <Container fullWidth={fullWidth}>
+          <StyledInput
+            ref={ref}
             inputSize={inputSize}
+            fullWidth={fullWidth}
+            {...rest}
           />
-        )}
-      </Container>
-    </div>
-  )
-}
+          {allowClear && (
+            <StyledCircleIcon
+              icon="times"
+              onClick={onClear}
+              inputSize={inputSize}
+            />
+          )}
+        </Container>
+      </div>
+    )
+  }
+)

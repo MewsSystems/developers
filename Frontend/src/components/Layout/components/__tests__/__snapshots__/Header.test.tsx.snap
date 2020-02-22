@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Header Tests snapshot 1`] = `
+<styled.div>
+  <Styled(Spacing)
+    outer="0 0 1rem"
+  >
+    <styled.span>
+      header.title
+    </styled.span>
+    <Styled(Navigation)
+      items={
+        Array [
+          Object {
+            "key": "home",
+            "title": "header.navigation.home",
+            "to": "/",
+          },
+          Object {
+            "key": "favourite",
+            "title": "header.navigation.favourite",
+            "to": "/favourite",
+          },
+          Object {
+            "key": "recomended",
+            "title": "header.navigation.recomended",
+            "to": "/recomended",
+          },
+        ]
+      }
+    />
+  </Styled(Spacing)>
+  <Styled(Search) />
+</styled.div>
+`;

@@ -40,7 +40,7 @@ exports[`Test Container Tests snapshot 1`] = `
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: #DBDBDB;
+  background: #595959;
   border-radius: 50%;
 }
 
@@ -65,7 +65,7 @@ exports[`Test Container Tests snapshot 2`] = `
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: #DBDBDB;
+  background: #595959;
   border-radius: 50%;
   cursor: pointer;
 }

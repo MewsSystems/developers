@@ -69,7 +69,7 @@ exports[`Test StyledCircleIcon component Tests snapshot 1`] = `
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  background: #DBDBDB;
+  background: #595959;
   border-radius: 50%;
 }
 
@@ -125,7 +125,7 @@ exports[`Test StyledCircleIcon component Tests snapshot 2`] = `
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  background: #DBDBDB;
+  background: #595959;
   border-radius: 50%;
 }
 
@@ -165,8 +165,7 @@ exports[`Test StyledInput component Tests snapshot 1`] = `
 .c0 {
   min-width: 16rem;
   padding: 0.45rem 0.5rem;
-  border: 1px solid #DBDBDB;
-  border-radius: 4px;
+  border-bottom: 1px solid #DBDBDB;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
 }
 
@@ -184,8 +183,7 @@ exports[`Test StyledInput component Tests snapshot 2`] = `
 .c0 {
   min-width: 16rem;
   padding: 0.8rem 1rem;
-  border: 1px solid #DBDBDB;
-  border-radius: 4px;
+  border-bottom: 1px solid #DBDBDB;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
 }
 
