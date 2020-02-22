@@ -1,20 +1,20 @@
-import {
-  RecentMoviesState,
-  recentMoviesInitialState,
-  recentMoviesReducer,
-} from 'state/reducers/movies/recent'
 import { combineReducers } from 'redux'
 import { PersistState } from 'redux-persist'
+import {
+  ConfigurationState,
+  configurationInitialState,
+} from './actions/configuration'
+import { configurationReducer } from './reducers/configuration'
 
 export interface State {
-  recentMovies: RecentMoviesState
+  configuration: ConfigurationState
   _persist?: PersistState
 }
 
 export const initialState: State = {
-  recentMovies: recentMoviesInitialState,
+  configuration: configurationInitialState,
 }
 
 export const rootReducer = combineReducers({
-  recentMovies: recentMoviesReducer,
+  configuration: configurationReducer,
 })
