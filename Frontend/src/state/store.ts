@@ -1,4 +1,3 @@
-import { recentMoviesInitialState } from 'state/reducers/movies/recent'
 import { rootReducer, initialState, State } from './rootReducer'
 import { applyMiddleware, createStore, Store } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
@@ -11,13 +10,14 @@ import {
   PersistedState,
 } from 'redux-persist/es/types'
 import createDebounce from 'redux-debounced'
+import { configurationInitialState } from './actions/configuration'
 
 export const STORE_VERSION = 1
 
 const migrations: MigrationManifest = {
-  1: (state: PersistedState): any => {
+  1: (state: PersistedState) => {
     if (state) {
-      return { ...state, recentMovies: recentMoviesInitialState }
+      return { ...state, configuration: configurationInitialState }
     }
   },
 }
@@ -26,7 +26,7 @@ const persistConfig: PersistConfig<State> = {
   key: 'root',
   version: STORE_VERSION,
   storage,
-  whitelist: ['recentMovies'],
+  whitelist: ['configuration'],
   migrate: createMigrate(migrations, {
     debug: process.env.NODE_ENV === 'development',
   }),
@@ -35,7 +35,7 @@ const persistConfig: PersistConfig<State> = {
 const configureStore = (): Store<State, any> =>
   createStore(
     persistReducer(persistConfig, rootReducer),
-    initialState as any, // TODO: fix conflict between State and _persist types
+    initialState,
     composeWithDevTools(applyMiddleware(createDebounce(), thunk))
   )
 
