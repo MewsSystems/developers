@@ -9,6 +9,14 @@ exports[`Test Home scene Tests snapshot 1`] = `
     >
       trending
     </Heading>
+    <MovieList
+      items={Array []}
+      loading={false}
+      onLoadMore={[Function]}
+      onMovieClick={[Function]}
+      page={1}
+      totalPages={0}
+    />
   </styled.div>
 </Fragment>
 `;

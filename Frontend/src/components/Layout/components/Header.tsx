@@ -4,10 +4,15 @@ import { Search } from 'components/Search'
 import { Spacing } from 'components/Spacing'
 import { StyledInput } from 'components/Input'
 import { Navigation, NavigationItemProps } from 'components/Navigation'
-import { Logo } from '../../Logo'
 import styled from 'styled-components'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { navigate } from '@reach/router'
+import { useThunkDispatch } from 'hooks/useThunkDispatch'
+import { setSearchValue } from 'state/actions/search'
+import { useSelector } from 'react-redux'
+import { State } from 'state/rootReducer'
+import { Logo } from 'components/Logo'
 
 const Top = styled(Spacing)`
   display: grid;
@@ -45,6 +50,8 @@ const { PUBLIC_URL } = process.env
 
 export const Header: React.FC = () => {
   const { t } = useTranslation()
+  const dispatch = useThunkDispatch()
+  const searchValue = useSelector((state: State) => state.search.value)
 
   const navigationItems: NavigationItemProps[] = [
     {
@@ -65,13 +72,32 @@ export const Header: React.FC = () => {
     },
   ]
 
+  const handleSearch = useCallback(
+    (value: string) => {
+      if (value.length > 0) {
+        dispatch(setSearchValue(value))
+        navigate(`${PUBLIC_URL}/search`)
+      }
+    },
+    [dispatch]
+  )
+
+  const handleClear = useCallback(() => {
+    dispatch(setSearchValue(''))
+    navigate(`${PUBLIC_URL}/`)
+  }, [dispatch])
+
   return (
     <StyledHeader>
       <Top outer="0 0 1rem">
         <Logo>{t('header.title')}</Logo>
         <StyledNavigation items={navigationItems} />
       </Top>
-      <StyledSearch />
+      <StyledSearch
+        value={searchValue}
+        onPressEnter={handleSearch}
+        onClear={handleClear}
+      />
     </StyledHeader>
   )
 }

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Loading component Tests snapshot 1`] = `
+<styled.div>
+  <Spacing
+    outer="2rem 0"
+  >
+    <styled.div
+      height="2rem"
+      width="16rem"
+    />
+  </Spacing>
+  <Spacing
+    outer="2rem 0"
+  >
+    <styled.div
+      height="1rem"
+      width="12rem"
+    />
+  </Spacing>
+  <styled.div>
+    <Card />
+    <Card />
+    <Card />
+  </styled.div>
+</styled.div>
+`;

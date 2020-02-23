@@ -3,14 +3,12 @@
 exports[`Test PageNotFound scene Tests snapshot 1`] = `
 <Fragment>
   <SceneMeta />
-  <Spacing
-    outer="2rem"
-  >
+  <styled.div>
     <Heading
       level={1}
     >
       Page not found
     </Heading>
-  </Spacing>
+  </styled.div>
 </Fragment>
 `;

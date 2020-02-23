@@ -28,7 +28,7 @@ export class SearchApi {
     return axios({
       ...config,
       method: 'GET',
-      url: `/search/movies`,
+      url: `/search/movie`,
       params: {
         query,
         page,

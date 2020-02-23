@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Credits scene Tests snapshot 1`] = `
+<Fragment>
+  <styled.div />
+  <styled.div>
+    <styled.div
+      height="2rem"
+      width="80%"
+    />
+  </styled.div>
+</Fragment>
+`;

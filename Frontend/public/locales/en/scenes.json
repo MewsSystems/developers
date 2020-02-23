@@ -2,5 +2,8 @@
   "home": {
     "title": "Home",
     "description": "Amazing Movie DB app"
+  },
+  "search": {
+    "title": "Search Results: "
   }
 }

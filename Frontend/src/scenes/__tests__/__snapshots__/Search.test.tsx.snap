@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Search scene Tests snapshot 1`] = `
+<Fragment>
+  <SceneMeta
+    title="undefined "
+  />
+  <styled.div>
+    <Heading
+      level={1}
+    >
+      search-results
+    </Heading>
+    <Heading
+      level={2}
+    >
+      no-search-value
+    </Heading>
+  </styled.div>
+</Fragment>
+`;

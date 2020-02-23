@@ -1,9 +1,9 @@
 import { Header } from '../Header'
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallowWithStore } from 'test/shallowWithStore'
 
 describe('Test Header', () => {
   it('Tests snapshot', () => {
-    expect(shallow(<Header />)).toMatchSnapshot()
+    expect(shallowWithStore(<Header />)).toMatchSnapshot()
   })
 })
