@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Loading App Tests snapshot 1`] = `
+<Fragment>
+  <styled.div />
+  <styled.div>
+    <Spacing
+      outer="2rem 0"
+    >
+      <styled.div
+        height="2rem"
+        width="20rem"
+      />
+    </Spacing>
+  </styled.div>
+</Fragment>
+`;

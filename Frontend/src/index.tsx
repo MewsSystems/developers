@@ -10,6 +10,7 @@ import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import { configureAxiosInterceptors } from 'axiosConfig'
+import { App as AppLoading } from 'components/Loading/App'
 
 configureAxiosInterceptors()
 addIconsToLibrary()
@@ -18,7 +19,7 @@ initializeTracking()
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistStore(store)}>
-      <Suspense fallback={<>Loading...</>}>
+      <Suspense fallback={<AppLoading />}>
         <App />
         <GlobalStyle />
       </Suspense>
