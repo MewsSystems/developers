@@ -5,22 +5,27 @@ exports[`Test rating component Tests snapshot 1`] = `
   <styled.div>
     <Star
       color="#F7E400"
+      key="0"
       type="full"
     />
     <Star
       color="#F7E400"
+      key="1"
       type="full"
     />
     <Star
       color="#F7E400"
+      key="2"
       type="full"
     />
     <Star
       color="#F7E400"
+      key="3"
       type="half"
     />
     <Star
       color="#F7E400"
+      key="4"
       type="empty"
     />
   </styled.div>

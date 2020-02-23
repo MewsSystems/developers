@@ -46,17 +46,17 @@ export const Rating: React.FC<RatingProps> = ({ rating, total }) => {
               const ratingDiff = Math.abs(i - rating)
 
               if (ratingDiff > 0 && ratingDiff <= 0.25) {
-                return <Star type="empty" color={COLORS.GOLD} />
+                return <Star key={i} type="empty" color={COLORS.GOLD} />
               } else if (ratingDiff > 0.25 && ratingDiff <= 0.75) {
-                return <Star type="half" color={COLORS.GOLD} />
+                return <Star key={i} type="half" color={COLORS.GOLD} />
               } else {
-                return <Star type="full" color={COLORS.GOLD} />
+                return <Star key={i} type="full" color={COLORS.GOLD} />
               }
             } else {
-              return <Star type="full" color={COLORS.GOLD} />
+              return <Star key={i} type="full" color={COLORS.GOLD} />
             }
           } else {
-            return <Star type="empty" color={COLORS.GOLD} />
+            return <Star key={i} type="empty" color={COLORS.GOLD} />
           }
         }),
     [rating]
