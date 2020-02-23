@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import truncate from 'truncate'
 import { COLORS } from 'constants/colors'
 import { BORDER_RADIUS, BOX_SHADOW, LINEAR_GRADIENT } from 'constants/index'
+import { useTrackEvent } from 'hooks/useTrackEvent'
+import { EVENT_CATEGORY, EVENT_ACTION } from 'constants/tracking'
 
 export const StyledCard = styled.div`
   display: flex;
@@ -78,13 +80,23 @@ export const MovieCard: React.FC<CardProps> = ({
   language,
   onClick,
 }) => {
+  const { setTrackEvent } = useTrackEvent()
   const backgroundImage = `${LINEAR_GRADIENT.NORMAL}, url(${background})`
 
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      setTrackEvent({
+        eventCategory: EVENT_CATEGORY.CARD,
+        eventAction: EVENT_ACTION.CARD.CLICK,
+        eventLabel: String(id),
+      })
+
+      onClick(id)
+    }
+  }, [setTrackEvent, onClick, id])
+
   return (
-    <StyledCard
-      style={{ backgroundImage }}
-      onClick={() => onClick && onClick(id)}
-    >
+    <StyledCard style={{ backgroundImage }} onClick={handleClick}>
       <TitleContainer>
         <Title>{title}</Title>
         <Language>{language}</Language>

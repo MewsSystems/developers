@@ -4,6 +4,7 @@ exports[`Test Navigation component Tests snapshot 1`] = `
 <styled.div>
   <Styled(Component)
     key="test"
+    onClick={[Function]}
     to="/test"
   >
     Test
