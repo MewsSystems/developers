@@ -6,13 +6,13 @@ import styled from 'styled-components'
 import { CastCard } from 'components/CastCard'
 import { useGetImagePath } from 'hooks/useGetImagePath'
 import { ConfigurationProfileSizesEnum } from 'model/api/ConfigurationProfileSizes'
-import { Loading } from './Loading'
 import { ErrorContent } from 'components/ErrorContent'
+import { AnimatedLine } from 'components/Loading/AnimatedLine'
 
 const Grid = styled.div`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 `
 
 export interface CreditsProps {
@@ -31,13 +31,14 @@ export const Credits: React.FC<CreditsProps> = ({ id }) => {
         text={t('error-content.text')}
       />
     )
-  if (isLoading) return <Loading />
+
+  if (isLoading) return <AnimatedLine width="20rem" height="2rem" />
 
   if (credits) {
     const { cast, crew } = credits
 
     return (
-      <>
+      <div>
         <Heading level={2}>{t('cast')}</Heading>
         <Grid>
           {cast.map(({ id, profile_path, name, character }, index) => (
@@ -60,7 +61,7 @@ export const Credits: React.FC<CreditsProps> = ({ id }) => {
             />
           ))}
         </Grid>
-      </>
+      </div>
     )
   }
 

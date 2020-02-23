@@ -12,6 +12,7 @@ import { ErrorContent } from 'components/ErrorContent'
 import { useTranslation } from 'react-i18next'
 import { Rating } from 'components/Rating'
 import { Loading } from './components/Loading'
+import { Info } from './components/Info'
 
 const StyledHeroBanner = styled(HeroBanner)`
   display: flex;
@@ -30,6 +31,12 @@ const Overview = styled.p`
   margin: 1rem 0 0;
   color: ${COLORS.WHITE};
   text-shadow: 1px 1px 0 ${COLORS.BLACK};
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: auto 24rem;
 `
 
 export interface DetailProps extends RouteComponentProps {
@@ -71,7 +78,10 @@ export const Detail: React.FC<DetailProps> = ({ id }) => {
           </Content>
         </StyledHeroBanner>
         <Content>
-          <Credits id={id} />
+          <Grid>
+            <Credits id={id} />
+            <Info data={movieDetail} />
+          </Grid>
         </Content>
       </>
     )

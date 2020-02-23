@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test InfoItem component Tests snapshot 1`] = `
+<styled.div>
+  <strong>
+    test
+  </strong>
+  <div />
+</styled.div>
+`;
