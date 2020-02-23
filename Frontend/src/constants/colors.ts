@@ -9,5 +9,6 @@ export const COLORS = {
   GREEN: '#70C1B3',
   LIGHT_GREEN: '#B2DBBF',
   YELLOW: '#F3FFBD',
+  GOLD: '#F7E400',
   RED: '#FF1654',
 }

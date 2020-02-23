@@ -11,6 +11,7 @@ import { Content } from 'components/Content'
 import { ErrorContent } from 'components/ErrorContent'
 import { useTranslation } from 'react-i18next'
 import { Loading } from './components/Loading'
+import { Rating } from 'components/Rating'
 
 const StyledHeroBanner = styled(HeroBanner)`
   display: flex;
@@ -20,11 +21,13 @@ const StyledHeroBanner = styled(HeroBanner)`
 `
 
 const Title = styled(Heading)`
+  margin-bottom: 0.2rem;
   text-shadow: 1px 1px 0 ${COLORS.BLACK};
 `
 
 const Overview = styled.p`
   max-width: 45rem;
+  margin: 1rem 0 0;
   color: ${COLORS.WHITE};
   text-shadow: 1px 1px 0 ${COLORS.BLACK};
 `
@@ -47,7 +50,13 @@ export const Detail: React.FC<DetailProps> = ({ id }) => {
   if (isLoading) return <Loading />
 
   if (movieDetail) {
-    const { backdrop_path, title, overview } = movieDetail
+    const {
+      backdrop_path,
+      title,
+      overview,
+      vote_average,
+      vote_count,
+    } = movieDetail
 
     return (
       <>
@@ -57,6 +66,7 @@ export const Detail: React.FC<DetailProps> = ({ id }) => {
             <Title level={1} color={COLORS.WHITE}>
               {title}
             </Title>
+            <Rating rating={vote_average / 2} total={vote_count} />
             <Overview>{overview}</Overview>
           </Content>
         </StyledHeroBanner>

@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test rating component Tests snapshot 1`] = `
+<styled.div>
+  <styled.div>
+    <Star
+      color="#F7E400"
+      type="full"
+    />
+    <Star
+      color="#F7E400"
+      type="full"
+    />
+    <Star
+      color="#F7E400"
+      type="full"
+    />
+    <Star
+      color="#F7E400"
+      type="half"
+    />
+    <Star
+      color="#F7E400"
+      type="empty"
+    />
+  </styled.div>
+  <div>
+    <styled.span>
+      3.5
+    </styled.span>
+     
+    <styled.span>
+      (
+      out-of
+      )
+    </styled.span>
+  </div>
+</styled.div>
+`;
