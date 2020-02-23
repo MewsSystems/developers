@@ -1,5 +1,5 @@
-import { Card, StyledCard } from 'components/Card'
-import { shallow, render } from 'enzyme'
+import { Card } from 'components/Card'
+import { shallow } from 'enzyme'
 import 'jest-styled-components'
 import React from 'react'
 
@@ -16,11 +16,5 @@ describe('Test Card component', () => {
         />
       )
     ).toMatchSnapshot()
-  })
-})
-
-describe('Test StyledCard component', () => {
-  it('Tests snapshot', () => {
-    expect(render(<StyledCard background="test.jpg" />)).toMatchSnapshot()
   })
 })

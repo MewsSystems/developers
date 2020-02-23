@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Heading component Tests snapshot 1`] = `
+<styled.div
+  as="h1"
+  color="#000"
+  fontSize="2rem"
+  margin="1.3rem 0"
+/>
+`;
+
+exports[`Test StyledHeading component Tests snapshot 1`] = `
+.c0 {
+  margin: 1rem;
+  color: black;
+  font-size: 2rem;
+}
+
+<div
+  class="c0"
+  color="black"
+  font-size="2rem"
+/>
+`;
