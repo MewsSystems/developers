@@ -1,6 +1,8 @@
 import { Input } from 'components/Input'
 import React, { useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useTrackEvent } from 'hooks/useTrackEvent'
+import { EVENT_CATEGORY, EVENT_ACTION } from 'constants/tracking'
 
 export interface SearchProps {
   value?: string
@@ -18,6 +20,7 @@ export const Search: React.FC<SearchProps> = ({
   className,
 }) => {
   const { t } = useTranslation('search')
+  const { setTrackEvent } = useTrackEvent()
   const [searchValue, setSearchValue] = useState(value)
   const inputRef = useRef<HTMLInputElement>()
 
@@ -31,17 +34,31 @@ export const Search: React.FC<SearchProps> = ({
 
   const handleKeyDown = useCallback(
     ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
-      if (key === 'Enter' && onPressEnter) onPressEnter(searchValue)
+      if (key === 'Enter' && onPressEnter) {
+        onPressEnter(searchValue)
+
+        setTrackEvent({
+          eventCategory: EVENT_CATEGORY.SEARCH,
+          eventAction: EVENT_ACTION.SEARCH.SUBMIT,
+          eventLabel: searchValue,
+        })
+      }
     },
-    [onPressEnter, searchValue]
+    [onPressEnter, searchValue, setTrackEvent]
   )
 
   const handleClear = useCallback(() => {
     setSearchValue('')
+
+    setTrackEvent({
+      eventCategory: EVENT_CATEGORY.SEARCH,
+      eventAction: EVENT_ACTION.SEARCH.CLEAR,
+    })
+
     onClear && onClear()
 
     inputRef.current && inputRef.current.focus()
-  }, [onClear])
+  }, [onClear, setTrackEvent])
 
   return (
     <Input
