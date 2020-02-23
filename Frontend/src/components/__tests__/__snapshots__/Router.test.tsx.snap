@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Router component Tests snapshot 1`] = `
+<Router>
+  <Home
+    description="home.desciption"
+    path="/"
+    title="home.title"
+  />
+  <PageNotFound
+    path="/*"
+  />
+</Router>
+`;

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Loading AnimatedLine Tests snapshot 1`] = `
+.c0 {
+  width: 10rem;
+  height: 10rem;
+  background: linear-gradient( 90deg, rgba(195,195,195,1) 0%, rgba(246,246,246,1) 100% );
+  -webkit-animation: AnimationName 5s ease infinite;
+  animation: AnimationName 5s ease infinite;
+}
+
+<div
+  class="c0"
+  height="10rem"
+  width="10rem"
+/>
+`;

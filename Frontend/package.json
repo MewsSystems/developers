@@ -43,6 +43,7 @@
     "i18next-xhr-backend": "2.0.1",
     "jest-styled-components": "^6.3.1",
     "nock": "^10.0.6",
+    "polished": "^3.4.4",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
     "react": "^16.9.0",

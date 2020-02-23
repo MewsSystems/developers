@@ -4,19 +4,26 @@ import truncate from 'truncate'
 import { COLORS } from 'constants/colors'
 import { BORDER_RADIUS, BOX_SHADOW } from 'constants/index'
 
-export const StyledCard = styled.div<{ background: string }>`
+export const StyledCard = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 0;
   justify-content: flex-end;
   height: 18rem;
   padding: 1rem;
-  background: url(${({ background }) => background}) no-repeat 50% 50%;
-  background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover, cover;
   border: 1px solid ${COLORS.GRAY};
   border-radius: ${BORDER_RADIUS.MEDIUM};
   box-shadow: ${BOX_SHADOW.MEDIUM};
   cursor: pointer;
+  opacity: 0.85;
+  transition: opacity ease-in 0.3s;
+
+  :hover {
+    opacity: 1;
+    transition: opacity ease-in 0.3s;
+  }
 `
 
 const Title = styled.h2`
@@ -70,13 +77,26 @@ export const Card: React.FC<CardProps> = ({
   overviewMaxLength = 120,
   language,
   onClick,
-}) => (
-  <StyledCard background={background} onClick={() => onClick && onClick(id)}>
-    <TitleContainer>
-      <Title>{title}</Title>
-      <Language>{language}</Language>
-    </TitleContainer>
+}) => {
+  const backgroundImage = `linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.2) 55%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    url(${background})`
 
-    <Overview>{truncate(overview, overviewMaxLength)}</Overview>
-  </StyledCard>
-)
+  return (
+    <StyledCard
+      style={{ backgroundImage }}
+      onClick={() => onClick && onClick(id)}
+    >
+      <TitleContainer>
+        <Title>{title}</Title>
+        <Language>{language}</Language>
+      </TitleContainer>
+
+      <Overview>{truncate(overview, overviewMaxLength)}</Overview>
+    </StyledCard>
+  )
+}

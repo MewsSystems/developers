@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useThunkDispatch } from 'hooks/useThunkDispatch'
 import { hydrateConfiguration } from 'state/actions/configuration'
+import { Router } from 'components/Router'
 import './i18n'
 
 const App: React.FC = () => {
@@ -19,7 +20,9 @@ const App: React.FC = () => {
       <Helmet>
         <title>{t('html-title')}</title>
       </Helmet>
-      <Layout>App</Layout>
+      <Layout>
+        <Router />
+      </Layout>
     </>
   )
 }

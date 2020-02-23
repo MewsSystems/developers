@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test PageNotFound scene Tests snapshot 1`] = `
+<Fragment>
+  <SceneMeta />
+  <Heading
+    level={1}
+  >
+    Page not found
+  </Heading>
+</Fragment>
+`;

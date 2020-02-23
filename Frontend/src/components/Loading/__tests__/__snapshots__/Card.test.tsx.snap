@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Loading Card Tests snapshot 1`] = `
+<styled.div>
+  <Spacing
+    outer="0 0 1rem"
+  >
+    <styled.div
+      height="2rem"
+      width="100%"
+    />
+  </Spacing>
+  <styled.div
+    height="1rem"
+    width="100%"
+  />
+</styled.div>
+`;
