@@ -7,6 +7,9 @@ exports[`Test Router component Tests snapshot 1`] = `
     path="/"
     title="home.title"
   />
+  <Detail
+    path="/movie/:id"
+  />
   <PageNotFound
     path="/*"
   />

@@ -5,7 +5,6 @@ exports[`Test Layout Tests snapshot 1`] = `
   <styled.div>
     <Header />
     <Spacing
-      inner="2rem"
       outer="0 0 54px;"
     >
       test

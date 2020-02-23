@@ -16,9 +16,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => (
   <div>
     <Container>
       <Header />
-      <Spacing inner="2rem" outer="0 0 54px;">
-        {children}
-      </Spacing>
+      <Spacing outer="0 0 54px;">{children}</Spacing>
     </Container>
     <Footer />
   </div>

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import truncate from 'truncate'
 import { COLORS } from 'constants/colors'
-import { BORDER_RADIUS, BOX_SHADOW } from 'constants/index'
+import { BORDER_RADIUS, BOX_SHADOW, LINEAR_GRADIENT } from 'constants/index'
 
 export const StyledCard = styled.div`
   display: flex;
@@ -69,7 +69,7 @@ export interface CardProps {
   onClick?: (id: number) => void
 }
 
-export const Card: React.FC<CardProps> = ({
+export const MovieCard: React.FC<CardProps> = ({
   id,
   background,
   title,
@@ -78,13 +78,7 @@ export const Card: React.FC<CardProps> = ({
   language,
   onClick,
 }) => {
-  const backgroundImage = `linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.2) 55%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    url(${background})`
+  const backgroundImage = `${LINEAR_GRADIENT.NORMAL}, url(${background})`
 
   return (
     <StyledCard

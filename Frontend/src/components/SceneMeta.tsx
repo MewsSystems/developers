@@ -2,7 +2,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 
 export interface SceneMetaProps {
-  title: string
+  title?: string
   description?: string
 }
 

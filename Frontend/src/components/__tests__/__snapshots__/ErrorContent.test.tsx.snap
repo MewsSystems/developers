@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test ErrorContent Tests snapshot 1`] = `
+<styled.div>
+  <Heading
+    level={1}
+  >
+    test
+  </Heading>
+  <p>
+    test
+  </p>
+</styled.div>
+`;
