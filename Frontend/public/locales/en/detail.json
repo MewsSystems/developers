@@ -1,4 +1,11 @@
 {
   "cast": "Cast",
-  "crew": "Crew"
+  "crew": "Crew",
+  "info": {
+    "title": "Info",
+    "release-date": "Release date",
+    "homepage": "Homepage",
+    "runtime": "Runtime",
+    "original-title": "Original title"
+  }
 }

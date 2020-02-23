@@ -34,10 +34,12 @@ const Bottom = styled.div`
 const Name = styled(Heading)`
   margin: 0 0 0.3rem;
   font-size: 0.8rem;
+  text-align: center;
 `
 
 const Role = styled.p`
   font-size: 0.6rem;
+  text-align: center;
 `
 
 export interface CastCardProps {

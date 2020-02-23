@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Info component Tests snapshot 1`] = `
+<div>
+  <Heading
+    level={2}
+  >
+    info.title
+  </Heading>
+  <styled.div>
+    <InfoItem
+      label="info.release-date"
+    >
+      30. 05. 2019
+    </InfoItem>
+    <InfoItem
+      label="info.homepage"
+    />
+    <InfoItem
+      label="info.runtime"
+    >
+      123
+       
+      minutes
+    </InfoItem>
+    <InfoItem
+      label="info.original-title"
+    >
+      test
+    </InfoItem>
+  </styled.div>
+</div>
+`;
