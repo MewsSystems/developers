@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Star component Tests snapshot 1`] = `
+<Icon
+  icon={
+    Array [
+      "far",
+      "star",
+    ]
+  }
+/>
+`;
+
+exports[`Test Star component Tests snapshot 2`] = `
+<Icon
+  icon="star-half-alt"
+/>
+`;
+
+exports[`Test Star component Tests snapshot 3`] = `
+<Icon
+  icon="star"
+/>
+`;
