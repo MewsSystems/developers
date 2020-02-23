@@ -1,6 +1,6 @@
 import React from 'react'
 import { AnimatedLine } from './AnimatedLine'
-import { StyledCard } from 'components/Card'
+import { StyledCard } from 'components/MovieCard'
 import { Spacing } from 'components/Spacing'
 
 export const Card: React.FC = () => (

@@ -1,4 +1,4 @@
-import { Card } from 'components/Card'
+import { MovieCard } from 'components/MovieCard'
 import { shallow } from 'enzyme'
 import 'jest-styled-components'
 import React from 'react'
@@ -7,7 +7,7 @@ describe('Test Card component', () => {
   it('Tests snapshot', () => {
     expect(
       shallow(
-        <Card
+        <MovieCard
           id={1}
           background="test.jpg"
           language="en"

@@ -14,7 +14,7 @@ export class MoviesApi {
 
   static getMovieDetail(
     movie_id: number,
-    append_to_response: string,
+    append_to_response?: string,
     config?: RequestConfig
   ): AxiosPromise<MovieDetail> {
     return axios({

@@ -5,7 +5,7 @@ import { MovieGenre } from './MovieGenre'
 
 export interface MovieDetail {
   adult: boolean
-  backgrop_path: string | null
+  backdrop_path: string | null
   belongs_to_collection: any
   budget: number
   genres: MovieGenre[]

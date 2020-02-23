@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Card component Tests snapshot 1`] = `
+<styled.div>
+  <styled.div
+    style={
+      Object {
+        "backgroundImage": "url(test.jpg)",
+      }
+    }
+  />
+  <styled.div>
+    <Styled(Heading)
+      level={3}
+    >
+      test
+    </Styled(Heading)>
+    <styled.p>
+      test
+    </styled.p>
+  </styled.div>
+</styled.div>
+`;

@@ -5,13 +5,7 @@ exports[`Test Card component Tests snapshot 1`] = `
   onClick={[Function]}
   style={
     Object {
-      "backgroundImage": "linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.2) 55%,
-      rgba(0, 0, 0, 0.5) 100%
-    ),
-    url(test.jpg)",
+      "backgroundImage": "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 55%, rgba(0, 0, 0, 0.5) 100%), url(test.jpg)",
     }
   }
 >

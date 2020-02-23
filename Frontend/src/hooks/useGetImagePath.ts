@@ -18,5 +18,5 @@ export const useGetImagePath = (size: SizeEnum) => {
     images: { base_url },
   } = useSelector((state: State) => state.configuration)
 
-  return (url: string) => `${base_url}${size}/${url}`
+  return (url: string) => `${base_url}${size}${url}`
 }

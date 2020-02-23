@@ -37,18 +37,26 @@ export interface HeadingProps {
   level: HeadingLevel
   color?: string
   children?: React.ReactNode | ReactNodeArray
+  className?: string
 }
 
 export const Heading: React.FC<HeadingProps> = ({
   level,
   color = COLORS.BLACK,
   children,
+  className,
 }) => {
   const { fontSize, margin } = getFontStyle(level)
   const as = `h${level}` as HeadingTags
 
   return (
-    <StyledHeading fontSize={fontSize} margin={margin} color={color} as={as}>
+    <StyledHeading
+      fontSize={fontSize}
+      margin={margin}
+      color={color}
+      className={className}
+      as={as}
+    >
       {children}
     </StyledHeading>
   )

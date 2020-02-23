@@ -3,10 +3,12 @@
 exports[`Test Home scene Tests snapshot 1`] = `
 <Fragment>
   <SceneMeta />
-  <Heading
-    level={1}
-  >
-    trending
-  </Heading>
+  <styled.div>
+    <Heading
+      level={1}
+    >
+      trending
+    </Heading>
+  </styled.div>
 </Fragment>
 `;
