@@ -14,5 +14,6 @@
   "error-content": {
     "title": "Somethin wrong happend :(",
     "text": "Seems like this content doesn't exists. Go back to homepage and try to navigate from there..."
-  }
+  },
+  "load-more": "Load More"
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { SceneMetaProps, SceneMeta } from 'components/SceneMeta'
 import { Heading } from 'components/Heading'
-import { Spacing } from 'components/Spacing'
+import { Content } from 'components/Content'
 
 export const PageNotFound: React.FC<RouteComponentProps<SceneMetaProps>> = ({
   title,
@@ -10,8 +10,8 @@ export const PageNotFound: React.FC<RouteComponentProps<SceneMetaProps>> = ({
 }) => (
   <>
     <SceneMeta title={title} description={description} />
-    <Spacing outer="2rem">
+    <Content>
       <Heading level={1}>Page not found</Heading>
-    </Spacing>
+    </Content>
   </>
 )

@@ -30,6 +30,10 @@ exports[`Test Header Tests snapshot 1`] = `
       }
     />
   </Styled(Spacing)>
-  <Styled(Search) />
+  <Styled(Search)
+    onClear={[Function]}
+    onPressEnter={[Function]}
+    value=""
+  />
 </styled.div>
 `;

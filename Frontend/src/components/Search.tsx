@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 export interface SearchProps {
   value?: string
   onChange?: (value: string) => void
+  onClear?: () => void
   onPressEnter?: (value: string) => void
   className?: string
 }
@@ -12,6 +13,7 @@ export interface SearchProps {
 export const Search: React.FC<SearchProps> = ({
   value = '',
   onChange,
+  onClear,
   onPressEnter,
   className,
 }) => {
@@ -36,10 +38,10 @@ export const Search: React.FC<SearchProps> = ({
 
   const handleClear = useCallback(() => {
     setSearchValue('')
-    onChange && onChange('')
+    onClear && onClear()
 
     inputRef.current && inputRef.current.focus()
-  }, [onChange])
+  }, [onClear])
 
   return (
     <Input

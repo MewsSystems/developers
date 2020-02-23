@@ -1,3 +1,7 @@
 {
-  "placeholder": "Enter movie name, director or genre"
+  "placeholder": "Enter movie name, director or genre",
+  "search-results": "Search Results",
+  "searching-for": "Searching for:",
+  "no-search-value": "You need to search for something first.",
+  "no-search-results": "There is nothing like \"{{searchValue}}\". Sorry :("
 }

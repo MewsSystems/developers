@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test MovieList component Tests snapshot with items 1`] = `
+<Fragment>
+  <styled.div>
+    <MovieCard
+      background="testw780test.jpg"
+      id={1}
+      key="1"
+      language="en"
+      onClick={[MockFunction]}
+      overview="test test"
+      title="test"
+    />
+  </styled.div>
+  <Spacing
+    outer="2rem 0 0"
+  >
+    <Button
+      disabled={true}
+      fullWidth={true}
+      onClick={[MockFunction]}
+    >
+      load-more
+    </Button>
+  </Spacing>
+</Fragment>
+`;
+
+exports[`Test MovieList component Tests snapshot with no items 1`] = `""`;

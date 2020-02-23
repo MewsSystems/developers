@@ -71,7 +71,8 @@
     "stylelint-processor-styled-components": "^1.8.0",
     "truncate": "^2.1.0",
     "typescript": "3.5.2",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "query-string": "^6.11.0"
   },
   "scripts": {
     "start": "react-scripts start",

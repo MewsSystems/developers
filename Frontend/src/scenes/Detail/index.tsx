@@ -10,8 +10,8 @@ import { Credits } from './components/Credits'
 import { Content } from 'components/Content'
 import { ErrorContent } from 'components/ErrorContent'
 import { useTranslation } from 'react-i18next'
-import { Loading } from './components/Loading'
 import { Rating } from 'components/Rating'
+import { Loading } from './components/Loading'
 
 const StyledHeroBanner = styled(HeroBanner)`
   display: flex;
