@@ -1,0 +1,27 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.renderWhitespace": "boundary",
+  "editor.rulers": [120],
+  "editor.formatOnSave": true,
+  "editor.detectIndentation":true,
+  "files.encoding": "utf8",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "typescript.preferences.quoteStyle": "single",
+  "search.exclude": {
+    "public/**": true,
+    "node_modules/**": true
+  },
+  /* Disable this to stop ESLint Output window diagnostics */
+  "eslint.trace.server": "messages",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
