@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater
                     {
                         var specifiedCurrencies = o.Currencies?.Select(c => new Currency(c)) ?? currencies;
 
-                        var provider = new ExchangeRateProvider();
+                        var provider = new ExchangeRateProviders.CNBExchangeRateProvider();
                         var rates = provider.GetExchangeRates(specifiedCurrencies, o.Date);
 
                         Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

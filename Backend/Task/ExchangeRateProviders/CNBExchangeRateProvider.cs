@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.ExchangeRateProviders
 {
-    public class ExchangeRateProvider
+    public class CNBExchangeRateProvider
     {
         const string EXCHANGE_RATE_BASE_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt";
 
         readonly Currency TARGET_CURRENCY = new Currency("CZK");
 
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies, DateTime? date = null)
         {
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
@@ -33,8 +26,7 @@ namespace ExchangeRateUpdater
                     EXCHANGE_RATE_BASE_URL;
 
                 IEnumerable<ExchangeRate> exchangeRates = client.DownloadString(url)
-                    .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(l => l.Trim())
+                    .Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
                     .Skip(2)
                     .Select(line => ParseExchangeRate(line))
                     .Where(c => currencies.Contains(c.SourceCurrency)); // TODO: sort based on input?
@@ -45,7 +37,7 @@ namespace ExchangeRateUpdater
             }
         }
 
-        public ExchangeRate ParseExchangeRate(string line)
+        private ExchangeRate ParseExchangeRate(string line)
         {
             const char DELIMITER = '|';
 
