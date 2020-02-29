@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies, DateTime? date = null)
         {
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
@@ -31,7 +31,11 @@ namespace ExchangeRateUpdater
                 Encoding = Encoding.UTF8
             };
 
-            IEnumerable<ExchangeRate> exchangeRates = client.DownloadString(EXCHANGE_RATE_BASE_URL)
+            string url = date.HasValue ?
+                $"{EXCHANGE_RATE_BASE_URL}?date={date.Value.ToString("dd.MM.yyyy")}" :
+                EXCHANGE_RATE_BASE_URL;
+
+            IEnumerable <ExchangeRate> exchangeRates = client.DownloadString(url)
                 .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(l => l.Trim())
                 .Skip(2)
