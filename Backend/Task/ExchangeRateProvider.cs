@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace ExchangeRateUpdater
 {
@@ -21,6 +23,9 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+
             WebClient client = new WebClient()
             {
                 Encoding = Encoding.UTF8
@@ -32,6 +37,7 @@ namespace ExchangeRateUpdater
                 .Skip(2)
                 .Select(line => ParseExchangeRate(line));
 
+            Thread.CurrentThread.CurrentCulture = currentCulture;
 
             return exchangeRates;
         }
