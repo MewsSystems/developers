@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using System.Collections.Generic;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
@@ -15,6 +17,23 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Currency currency)
+            {
+                return currency.Code == this.Code;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return -434485196 + EqualityComparer<string>.Default.GetHashCode(Code);
         }
     }
 }

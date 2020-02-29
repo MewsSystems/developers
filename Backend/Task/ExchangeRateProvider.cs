@@ -35,7 +35,8 @@ namespace ExchangeRateUpdater
                 .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(l => l.Trim())
                 .Skip(2)
-                .Select(line => ParseExchangeRate(line));
+                .Select(line => ParseExchangeRate(line))
+                .Where(c => currencies.Contains(c.SourceCurrency)); // TODO: sort based on input?
 
             Thread.CurrentThread.CurrentCulture = currentCulture;
 
