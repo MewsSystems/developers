@@ -27,8 +27,10 @@ namespace ExchangeRateUpdater
                 {
                     try
                     {
+                        var specifiedCurrencies = o.Currencies?.Select(c => new Currency(c)) ?? currencies;
+
                         var provider = new ExchangeRateProvider();
-                        var rates = provider.GetExchangeRates(currencies, o.Date);
+                        var rates = provider.GetExchangeRates(specifiedCurrencies, o.Date);
 
                         Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                         foreach (var rate in rates)
