@@ -26,25 +26,23 @@ namespace ExchangeRateUpdater
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
 
-            WebClient client = new WebClient()
+            using (WebClient client = new WebClient() { Encoding = Encoding.UTF8 })
             {
-                Encoding = Encoding.UTF8
-            };
+                string url = date.HasValue ?
+                    $"{EXCHANGE_RATE_BASE_URL}?date={date.Value.ToString("dd.MM.yyyy")}" :
+                    EXCHANGE_RATE_BASE_URL;
 
-            string url = date.HasValue ?
-                $"{EXCHANGE_RATE_BASE_URL}?date={date.Value.ToString("dd.MM.yyyy")}" :
-                EXCHANGE_RATE_BASE_URL;
+                IEnumerable<ExchangeRate> exchangeRates = client.DownloadString(url)
+                    .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(l => l.Trim())
+                    .Skip(2)
+                    .Select(line => ParseExchangeRate(line))
+                    .Where(c => currencies.Contains(c.SourceCurrency)); // TODO: sort based on input?
 
-            IEnumerable <ExchangeRate> exchangeRates = client.DownloadString(url)
-                .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(l => l.Trim())
-                .Skip(2)
-                .Select(line => ParseExchangeRate(line))
-                .Where(c => currencies.Contains(c.SourceCurrency)); // TODO: sort based on input?
+                Thread.CurrentThread.CurrentCulture = currentCulture;
 
-            Thread.CurrentThread.CurrentCulture = currentCulture;
-
-            return exchangeRates;
+                return exchangeRates;
+            }
         }
 
         public ExchangeRate ParseExchangeRate(string line)
