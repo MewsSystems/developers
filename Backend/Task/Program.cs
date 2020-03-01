@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static IEnumerable<Currency> defaultCurrencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -27,7 +27,9 @@ namespace ExchangeRateUpdater
                 {
                     try
                     {
-                        var specifiedCurrencies = o.Currencies?.Select(c => new Currency(c)) ?? currencies;
+                        var specifiedCurrencies = (o.Currencies != null && o.Currencies.Any()) ?
+                            o.Currencies?.Select(c => new Currency(c)) :
+                            defaultCurrencies;
 
                         var provider = new ExchangeRateProviders.CNBExchangeRateProvider();
                         var rates = provider.GetExchangeRates(specifiedCurrencies, o.Date);
