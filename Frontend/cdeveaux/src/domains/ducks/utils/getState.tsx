@@ -1,4 +1,4 @@
-type Action = { readonly type: string };
-export const getState = (reducer, defaultState, name) => (actions: Action[]) => ({
+// @ts-nocheck
+export const getState = (reducer, defaultState, name) => (actions) => ({
   [name]: actions.reduce((acc, action) => reducer(acc, action), defaultState)
 });

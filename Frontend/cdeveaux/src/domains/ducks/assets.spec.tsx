@@ -1,5 +1,5 @@
 import React from 'react';
-import configureStore from 'redux-mock-store' //ES6 modules
+import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk'
 import MockAdapter from 'axios-mock-adapter';
 import throttle from 'lodash/throttle';

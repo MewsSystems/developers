@@ -6,18 +6,9 @@ import { getBaseUrl } from 'domains/ducks/config';
 import { RootState } from 'domains/reducers';
 import constants from 'cssConstants';
 
-type PosterSize =
-  | 92
-  | 154
-  | 185
-  | 342
-  | 500
-  | 780;
 type OwnProps = {
   path: string,
   size: number,
-  width: number,
-  height: number,
   className?: string,
 };
 const mapStateToProps = (rootState: RootState, ownProps: OwnProps) => ({
@@ -37,8 +28,6 @@ const Background = styled.div`
 class Image extends React.PureComponent<Props> {
   static defaultProps = {
     size: 185,
-    width: 100,
-    height: 100,
   };
 
   render() {

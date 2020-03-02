@@ -9,7 +9,6 @@ import { getAssetById } from 'domains/ducks/assets';
 
 type OwnProps = {
   id: string,
-  withOverlay?: boolean,
 }
 
 const mapStateToProps = (rootState: RootState, ownProps: OwnProps) => ({
@@ -65,11 +64,6 @@ const Overlay = styled.div`
 `;
 
 class Item extends React.PureComponent<Props> {
-  static defaultProps = {
-    withOverlay: true,
-
-  };
-
   render() {
     const {
       asset,
