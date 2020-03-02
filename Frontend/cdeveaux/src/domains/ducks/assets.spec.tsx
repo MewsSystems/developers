@@ -14,10 +14,12 @@ import reducer, {
   clearResults,
   fetchAssets,
   setTimestamp,
-  getAssets,
   getAssetById,
+  getAssets,
+  getCurrentPage,
   getResultIds,
   getTimestamp,
+  getTotalPages,
 } from './assets';
 
 const mock = new MockAdapter(axios);
@@ -106,14 +108,20 @@ describe('Assets reducer', () => {
     // State with results
     store.dispatch(fetchResultsSuccess({
       ids: assetIds,
-      page: 1,
-      totalPages: 2,
+      page: 2,
+      totalPages: 3,
     }));
-    expect(getResultIds(getState(store.getActions()))).toEqual(assetIds);
+    let state = getState(store.getActions());
+    expect(getResultIds(state)).toEqual(assetIds);
+    expect(getCurrentPage(state)).toEqual(2);
+    expect(getTotalPages(state)).toEqual(3);
 
     // Store cleared
     store.dispatch(clearResults());
-    expect(getResultIds(getState(store.getActions()))).toEqual([])
+    state = getState(store.getActions());
+    expect(getResultIds(state)).toEqual([])
+    expect(getCurrentPage(state)).toEqual(1);
+    expect(getTotalPages(state)).toEqual(1);
   });
 
   it('should handle SET_TIMESTAMP', () => {

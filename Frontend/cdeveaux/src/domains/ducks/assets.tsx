@@ -143,6 +143,8 @@ const reducer = (state: AssetsState = defaultState, action: Action): AssetsState
       return {
         ...state,
         resultIds: [],
+        page: 1,
+        totalPages: 1,
       }
     }
     case SET_TIMESTAMP: {
