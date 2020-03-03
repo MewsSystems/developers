@@ -62,25 +62,26 @@ namespace ExchangeRateUpdater
 
             using (var client = new HttpClientWrapper())
             {
-                var reader = new StreamReader(await client.GetStreamAsync(URL, retriesLimit: 5));
-
-                await SkipHeader(reader);
-
-                string line;
-                while ((line = await reader.ReadLineAsync()) != null)
+                using (var reader = new StreamReader(await client.GetStreamAsync(URL, retriesLimit: 5)))
                 {
-                    string[] entries = line.Split(DELIMETER);
+                    await SkipHeader(reader);
 
-                    if (currencies.Select(c => c.Code).Contains(entries[CODE_FIELD])) // check if we need the line before parsing data
+                    string line;
+                    while ((line = await reader.ReadLineAsync()) != null)
                     {
+                        string[] entries = line.Split(DELIMETER);
 
-                        if (decimal.TryParse(entries[AMOUNT_FIELD], out decimal amount) && decimal.TryParse(entries[RATE_FIELD], out decimal rate))
+                        if (currencies.Select(c => c.Code).Contains(entries[CODE_FIELD])) // check if we need the line before parsing data
                         {
-                            result.Add(new ExchangeRate(new Currency(entries[CODE_FIELD]), _targetCurrency, rate / amount)); // some entries represent exchange rate per 100 or per 1000 units
-                        }
-                        else
-                        {
-                            throw new InvalidDataException($"Malformed line recieved from \"{URL}\": \"{line}\".");
+
+                            if (decimal.TryParse(entries[AMOUNT_FIELD], out decimal amount) && decimal.TryParse(entries[RATE_FIELD], out decimal rate))
+                            {
+                                result.Add(new ExchangeRate(new Currency(entries[CODE_FIELD]), _targetCurrency, rate / amount)); // some entries represent exchange rate per 100 or per 1000 units
+                            }
+                            else
+                            {
+                                throw new InvalidDataException($"Malformed line recieved from \"{URL}\": \"{line}\".");
+                            }
                         }
                     }
                 }
