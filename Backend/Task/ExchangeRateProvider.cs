@@ -62,7 +62,7 @@ namespace ExchangeRateUpdater
 
             using (var client = new HttpClientWrapper())
             {
-                using (var reader = new StreamReader(await client.GetStreamAsync(URL, retriesLimit: 5)))
+                using (var reader = new StreamReader(await client.GetStreamAsync(URL)))
                 {
                     await SkipHeaderAsync(reader);
 

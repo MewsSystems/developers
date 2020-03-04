@@ -23,7 +23,7 @@ namespace ExchangeRateUpdater
         /// <param name="URL">URL to get from.</param>
         /// <param name="retriesLimit">Number of times to retry the request.</param>
         /// <returns>Content from URL as stream.</returns>
-        public async Task<Stream> GetStreamAsync(string URL, byte retriesLimit)
+        public async Task<Stream> GetStreamAsync(string URL, byte retriesLimit = 5)
         {
             var response = await _client.GetAsync(URL);
             byte attempts = 0;
