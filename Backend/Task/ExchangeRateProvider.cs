@@ -28,10 +28,10 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var basic = GetExchangeRatesFromURL(currencies, CNB_URL_BASIC);
-            var others = GetExchangeRatesFromURL(currencies, CNB_URL_OTHERS);
+            var basic = GetExchangeRatesFromURLAsync(currencies, CNB_URL_BASIC);
+            var others = GetExchangeRatesFromURLAsync(currencies, CNB_URL_OTHERS);
 
             await Task.WhenAll(basic, others);
 
@@ -44,7 +44,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         /// <param name="reader">Reader obtained from file URL</param>
         /// <returns></returns>
-        private async Task SkipHeader(StreamReader reader)
+        private async Task SkipHeaderAsync(StreamReader reader)
         {
             await reader.ReadLineAsync();
             await reader.ReadLineAsync();
@@ -56,7 +56,7 @@ namespace ExchangeRateUpdater
         /// <param name="currencies">Desired currencies.</param>
         /// <param name="URL">URL of source data.</param>
         /// <returns>Collection of exchange rates present in data from URL.</returns>
-        private async Task<IEnumerable<ExchangeRate>> GetExchangeRatesFromURL(IEnumerable<Currency> currencies, string URL)
+        private async Task<IEnumerable<ExchangeRate>> GetExchangeRatesFromURLAsync(IEnumerable<Currency> currencies, string URL)
         {
             List<ExchangeRate> result = new List<ExchangeRate>();
 
@@ -64,7 +64,7 @@ namespace ExchangeRateUpdater
             {
                 using (var reader = new StreamReader(await client.GetStreamAsync(URL, retriesLimit: 5)))
                 {
-                    await SkipHeader(reader);
+                    await SkipHeaderAsync(reader);
 
                     string line;
                     while ((line = await reader.ReadLineAsync()) != null)
