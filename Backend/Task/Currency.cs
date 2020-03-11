@@ -4,7 +4,7 @@
     {
         public Currency(string code)
         {
-            Code = code;
+            this.Code = code;
         }
 
         /// <summary>
@@ -15,6 +15,16 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Code.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Currency other && this.Code.Equals(other.Code);
         }
     }
 }

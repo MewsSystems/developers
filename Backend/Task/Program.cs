@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using ExchangeRateUpdater.Cnb;
+
+[assembly: InternalsVisibleTo("ExchangeRateUpdater.Tests")]
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +27,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(new CnbRatesProvider(new CnbApiDataSource()));
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
