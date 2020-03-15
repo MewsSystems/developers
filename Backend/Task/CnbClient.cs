@@ -57,7 +57,7 @@ namespace ExchangeRateUpdater
                     Code = items[3],
                     Rate = decimal.Parse(items[4])
                 };
-                return new ExchangeRate(new Currency(record.Code), new Currency(TargetCurrencyCode), record.Rate);
+                return new ExchangeRate(new Currency(record.Code), new Currency(TargetCurrencyCode), record.Rate/record.Amount);
             }
             catch (Exception ex)
             {
