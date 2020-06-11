@@ -4,7 +4,7 @@ Information about development job opportunities and career at [Mews](https://mew
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](https://calendar.google.com/calendar/embed?src=mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com&ctz=Europe%2FPrague) of the events we organize or attend and let's get in touch! You can also add it to your calendar via the [iCal](https://calendar.google.com/calendar/ical/mewssystems.com_gd584gn109i0avrbhe5d700kmo%40group.calendar.google.com/public/basic.ics) to never miss a Mews thing!
 
-**You can always reach us at [`tech.dr@mews.com`](mailto:tech.dr@mews.com).**
+**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
 
 <a name='about-mews'/>
 
