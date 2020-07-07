@@ -6,6 +6,18 @@ Would you like to meet us? Hear us talk or check if we're coming to your area? C
 
 **You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
 
+<a name='open-positions'/>
+
+## 💼 Open positions
+
+Currently, we are seeking backend developers, frontend developers and data analysts of all seniority levels. For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
+
+As part of the interview process, we'd like to see some code. If you have something existing that you can share with us, then great! Send us a link to your public repository or send the code attached to the email. Otherwise, if you don't have anything shareable at the moment, feel free to complete one of the following tasks depending on the position you are applying for. If you'd like to first talk to us, that's an option as well, the task is not a mandatory thing.
+
+- [Task](Backend) for [backend developer](https://mews-systems.workable.com/j/A351B0CD2C?viewed=true) candidates.
+- [Task](Frontend) for [frontend developer](https://mews-systems.workable.com/j/02C70D4EE1?viewed=true) candidates.
+- [Task](DataScience) for [data analyst](https://apply.workable.com/mews/j/1591AF3922/) candidates.
+
 <a name='about-mews'/>
 
 ## 📚 About Mews 
