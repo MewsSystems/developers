@@ -96,8 +96,8 @@ In the following sections, we'll try to answer frequently asked question that we
 ### 🎓 Students
 
 - **Is it possible to work for Mews while studying?** Yes, we have many students in the team, especially from [MFF CUNI](https://www.mff.cuni.cz/en) and [CTU](https://www.cvut.cz/en). We treat students just like any other employees, which means they're working on real projects, in product teams with other developers and getting market salary.
-- **Do you provide any support for students?** Due to current situation we don't have capacity we once had to provide with thorough support of helping young students develop themselves into more senior developers. However, as mentioned above, we have students in the team and we are not a-priori against new student hires. We understand that there are exam periods and compulsory classes. So there is flexibility.
-- **Can I do a bechelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses.
+- **Do you provide any support for students?** Because Mews development team was founded by a group of students that met in school and were still studying, we know what it means to both work and study. Therefore we're OK with you having a month break during exam periods, so that you can prepare for the exams. Students also have lot of time flexibility because of their school schedules. And since we have graduates from both of the aforementioned schools in our team, we can also help with the studying.
+- **Can I do a bechelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses. Just reach out to us and we can discuss the possibilities.
 
 <a name='relocation'/>
 
