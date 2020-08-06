@@ -1,0 +1,46 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: #000;
+  color: #fff;
+}
+
+// react-paginate library doesn't provide api to replace its componets
+// so I didn't find a way to use styled components with it
+.Search-Page-Pagination {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  margin: 2rem 0;
+
+  .previous,
+  .next {
+    display: none;
+  }
+
+  li {
+    border: 1px solid #fff;
+    margin: 0 0.25rem;
+    padding: 0;
+    cursor: pointer;
+
+    &.break {
+      border: none;
+    }
+
+    &.selected {
+      background: #fff;
+      color: #000;
+      border-color: #000;
+    }
+  }
+
+  a {
+    display: block;
+    padding: 0.5rem;
+  }
+}
