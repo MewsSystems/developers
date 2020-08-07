@@ -9,10 +9,10 @@ Information about development job opportunities and career at [Mews](https://mew
 ## 💼 Open positions
 
 Currently, we are seeking highly experienced people for the following positions:
-- [Senior Backend Developer - .NET C#](https://www.mews.com/careers/jobs/senior-backend-developer-.NETC-007)
-- [Senior Azure Architect](https://www.mews.com/careers/jobs/senior-azure-architect-008)
-- [Senior Frontend Developer for a Design System](https://www.mews.com/careers/jobs/senior-frontend-developer-for-a-design-system009)
-- [Data Engineer](https://www.mews.com/careers/jobs/data-engineer010)
+- [Mid/Senior Backend Developer - .NET C#](https://mewssystems.bamboohr.com/jobs/view.php?id=8)
+- [Mid/Senior Frontend Developer for a Design System](https://mewssystems.bamboohr.com/jobs/view.php?id=9)
+- [Senior Azure Architect](https://mewssystems.bamboohr.com/jobs/view.php?id=7)
+- [Data Engineer](https://mewssystems.bamboohr.com/jobs/view.php?id=5)
 
 For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
 
