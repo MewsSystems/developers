@@ -1,6 +1,6 @@
 # Mews developers
 
-Information about development job opportunities and career at [Mews](https://mews.com). If you're looking for specification of interview tasks for our open positions, check [Open positions](#open-positions). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, tech stack and life of devs at Mews.
+Information about development job opportunities and career at [Mews](https://mews.com). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, tech stack and life of devs at Mews.
 
 **You can always reach us at [`jan@mews.com`](mailto:jan@mews.com).**
 
