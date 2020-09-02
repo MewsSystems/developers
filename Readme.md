@@ -31,7 +31,6 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Teamwork](#teamwork) - how do we cooperate.
 - [Job](#job) - offices, working hours, salaries.
 - [Students](#students) - part-time opportunities for students.
-- [Relocation](#relocation) - information for people outside CZ.
 - [Media](#media) - Mews PR.
 
 <a name='product'/>
@@ -75,7 +74,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **How often do you schedule refactoring?** We do not schedule refactoring. We consider it to be an integral part of development work. When implementing a new feature, it is important to verify that all of the team code and architecture quality standards are applied. The fixes and features should all be done properly from the beginning.
 - **How do you handle changes in the architecture of the system?** We try to introduce changes gradually while extending the capabilities of our system. For bigger changes, both on backend and frontend, we currently have "platform" teams whose only responsibility is to improve the system architecture, develop libraries and tools for other teams that are more focused on "product".
 - **How many meetings would I have in a day?** That's up to team to decide, in most teams there is a short daily standup meeting. Each team also has an open weekly meeting (around 30 minutes), that anyone in the company can join to see what the team is currently up-to, what is planned for short-term future.
-- **What is the company language?** In Prague office, where development is located, around 50% of people are czech and the rest is mix of many other nationalities. Therefore most of the meetings and communication is held in English. We also have native English speakers, some of them former English teachers in Prague, so we offer lessons for people who need to sharpen their language skills.
+- **What is the company language?** In Prague office, where development is located, around 50% of people are Czech and the rest is mix of many other nationalities. Therefore most of the meetings and communication is held in English.
 
 <a name='job'/>
 
@@ -98,14 +97,6 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Is it possible to work for Mews while studying?** Yes, we have many students in the team, especially from [MFF CUNI](https://www.mff.cuni.cz/en) and [CTU](https://www.cvut.cz/en). We treat students just like any other employees, which means they're working on real projects, in product teams with other developers and getting market salary.
 - **Do you provide any support for students?** Because Mews development team was founded by a group of students that met in school and were still studying, we know what it means to both work and study. Therefore we're OK with you having a month break during exam periods, so that you can prepare for the exams. Students also have lot of time flexibility because of their school schedules. And since we have graduates from both of the aforementioned schools in our team, we can also help with the studying.
 - **Can I do a bechelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses. Just reach out to us and we can discuss the possibilities.
-
-<a name='relocation'/>
-
-### ✈️ Relocation 
-
-- **Do you help with relocation?** Yes, we do. We have an agency that would contact you to help you resolve any paperwork you might need for both our government and your own. We also provide accommodation for the first few months until you are able to find your own apartment. We have "Mews flat" in Prague and London which we manage using our own system.
-- **What is the cost of living in Prague?** You can find it and compare with other cities at https://www.numbeo.com/cost-of-living/in/Prague.
-- **How long does it take to relocate?** Unfortunately, it takes a lot of time; usually around 6 months. First, we must submit the the job posting announcing your position to the Czech Labour office, where it must be pending publicly for 30 days for potential employees. After that, the paperwork is processed, and both governments have 30-60 days to finish the procedure. Regrettably, these offices like to take their time and therefore, it is difficult to give an exact estimate about how long it takes from start to finish.
 
 <a name='media'/>
 
