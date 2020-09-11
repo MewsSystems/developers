@@ -11,7 +11,7 @@ Information about development job opportunities and career at [Mews](https://mew
 Currently, we are seeking highly experienced people for the following positions:
 - [Mid/Senior Backend Developer - .NET C#](https://mews.bamboohr.com/jobs/view.php?id=8)
 - [Senior Azure Architect](https://mews.bamboohr.com/jobs/view.php?id=7)
-- [Data Engineer](https://mews.bamboohr.com/jobs/view.php?id=5)
+- [Mid/Senior Data Engineer](https://mews.bamboohr.com/jobs/view.php?id=5)
 - [QA Engineer](https://mews.bamboohr.com/jobs/view.php?id=17)
 
 For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
