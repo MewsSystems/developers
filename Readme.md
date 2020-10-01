@@ -2,6 +2,8 @@
 
 Information about development job opportunities and career at [Mews](https://mews.com). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, tech stack and life of devs at Mews.
 
+Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](http://outlook.office365.com/owa/calendar/8d78330ef41342eb9bdd41a4774bafaf@mews.com/446ddf3c92164cb797c1af5e6a0ec76b4623161975935404223/calendar.html) of the events we organize or attend to never miss a Mews thing!
+
 **You can always reach us at [`jan@mews.com`](mailto:jan@mews.com).**
 
 <a name='open-positions'/>
