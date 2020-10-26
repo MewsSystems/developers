@@ -46,6 +46,9 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="ExchangeRateProviderCNB.cs" />
+    <Compile Include="ExchangeRateProviderCSV.cs" />
+    <Compile Include="IExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
