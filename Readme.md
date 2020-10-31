@@ -33,6 +33,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - [Teamwork](#teamwork) - how do we cooperate.
 - [Job](#job) - offices, working hours, salaries.
 - [Students](#students) - part-time opportunities for students.
+- [Relocation](#relocatoin) - for non Czech-based candidates.
 - [Media](#media) - Mews PR.
 
 <a name='product'/>
@@ -99,6 +100,12 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Is it possible to work for Mews while studying?** Yes, we have many students in the team, especially from [MFF CUNI](https://www.mff.cuni.cz/en) and [CTU](https://www.cvut.cz/en). We treat students just like any other employees, which means they're working on real projects, in product teams with other developers and getting market salary.
 - **Do you provide any support for students?** Because Mews development team was founded by a group of students that met in school and were still studying, we know what it means to both work and study. Therefore we're OK with you having a month break during exam periods, so that you can prepare for the exams. Students also have lot of time flexibility because of their school schedules. And since we have graduates from both of the aforementioned schools in our team, we can also help with the studying.
 - **Can I do a bechelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses. Just reach out to us and we can discuss the possibilities.
+
+<a name='relocation'/>
+
+### ✈️ Relocation
+What is the cost of living in Prague? You can find it and compare with other cities at https://www.numbeo.com/cost-of-living/in/Prague.
+How long does it take to relocate? Unfortunately, it takes a lot of time; usually around 6 months. First, we must submit the the job posting announcing your position to the Czech Labour office, where it must be pending publicly for 30 days for potential employees. After that, the paperwork is processed, and both governments have 30-60 days to finish the procedure. Regrettably, these offices like to take their time and therefore, it is difficult to give an exact estimate about how long it takes from start to finish.
 
 <a name='media'/>
 
