@@ -15,6 +15,10 @@ Currently, we are seeking highly experienced people for the following positions:
 - [Senior Azure Architect](https://mews.bamboohr.com/jobs/view.php?id=7)
 - [Senior Frontend Developer](https://mews.bamboohr.com/jobs/view.php?id=29)
 - [Senior Frontend Developer - Platform Team](https://mews.bamboohr.com/jobs/view.php?id=34)
+- [Mid/Senior Azure Data Engineer](https://mews.bamboohr.com/jobs/view.php?id=5)
+- [Data Analyst](https://mews.bamboohr.com/jobs/view.php?id=44)
+- [IT Security Engineer](https://mews.bamboohr.com/jobs/view.php?id=42)
+- [IT Specialist](https://mews.bamboohr.com/jobs/view.php?id=41)
 
 For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
 
