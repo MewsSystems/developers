@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ExchangeRateUpdater
 {
     public partial class ExchangeRateProvider
     {
-        private readonly IExchangeRateClient exchangeClient;
+        private readonly IExchangeRateClient exchangeRateClient;
 
-        public ExchangeRateProvider(IExchangeRateClient exchangeClient)
+        public ExchangeRateProvider(IExchangeRateClient exchangeRateClient)
         {
-            this.exchangeClient = exchangeClient;
+            this.exchangeRateClient = exchangeRateClient;
         }
 
         /// <summary>
@@ -19,7 +20,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            await foreach (var exchange in exchangeClient.GetExchanges(currencies))
+            await foreach (var exchange in exchangeRateClient.GetExchanges(currencies))
             {
                 var newRate = exchange.rate / exchange.amout;
 

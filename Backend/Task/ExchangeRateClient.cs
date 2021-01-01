@@ -23,6 +23,7 @@ namespace ExchangeRateUpdater
         public async IAsyncEnumerable<(int amout, string code, decimal rate)> GetExchanges(IEnumerable<Currency> currencies)
         {
             var currencyCodes = currencies.Select(s => s.Code);
+
             foreach (var url in urls)
             {
                 using (var stream = await httpClient.GetStreamAsync(url))
@@ -33,21 +34,37 @@ namespace ExchangeRateUpdater
                         {
                             var line = await streamReader.ReadLineAsync();
 
-                            var data = line.Split('|');
-                            if (data != null &&
-                                data.Count() == 5 &&
-                                currencyCodes.Contains(data[codeIndex]))
+                            if (IsValid(line, out var code, out var amount, out var rate))
                             {
-                                if (int.TryParse(data[amountIndex], out var amount) &&
-                                    decimal.TryParse(data[rateIndex], out var rate) &&
-                                    !string.IsNullOrEmpty(data[codeIndex]))
-                                {
-                                    yield return (amount, data[codeIndex], rate);
-                                }
-
+                                yield return (amount, code, rate);
                             }
                         }
                     }
+                }
+            }
+
+            bool IsValid(string line, out string code, out int amount, out decimal rate)
+            {
+                try
+                {
+                    var data = line.Split('|');
+
+                    code = data[codeIndex];
+                    amount = int.Parse(data[amountIndex]);
+                    rate = decimal.Parse(data[rateIndex]);
+
+                    return data != null &&
+                           data.Count() == 5 &&
+                           currencyCodes.Contains(data[codeIndex]) &&
+                           !string.IsNullOrEmpty(code);
+                }
+                catch (System.Exception)
+                {
+                    code = string.Empty;
+                    amount = 0;
+                    rate = 0;
+
+                    return false;
                 }
             }
         }

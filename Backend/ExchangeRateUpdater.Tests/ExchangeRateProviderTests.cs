@@ -22,13 +22,12 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetExchangeRates_WithNoCurrencies_ReturnsNoExchanges()
         {
             var empty = Enumerable.Empty<Currency>();
-            exchangeClient.GetExchanges(empty)
-                .Returns(AsyncEnumerable.Empty<(int amout, string code, decimal rate)>());
 
             var exhangeRates = await exchangeRateProvider
                 .GetExchangeRates(empty)
                 .ToListAsync();
 
+            exchangeClient.GetExchanges(Arg.Any<IEnumerable<Currency>>()).DidNotReceive();
             Assert.IsTrue(exhangeRates.Count == 0);
         }
 
