@@ -55,7 +55,7 @@ namespace ExchangeRateUpdater
 
                     return data != null &&
                            data.Count() == 5 &&
-                           currencyCodes.Contains(data[codeIndex]) &&
+                           currencyCodes.Contains(code) &&
                            !string.IsNullOrEmpty(code);
                 }
                 catch (System.Exception)
