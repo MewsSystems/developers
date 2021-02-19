@@ -1,5 +1,0 @@
-# Since the last matching pattern takes the most precedence, ensure that you 
-# include code owners from the more general rules if needed. Therefore, sort
-# the rules from general to specific.
-
-/Backend/Task/                          @OndrejMews @MewsSystems/tech-be-hiring  
