@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CNB\CnbClient.cs" />
+    <Compile Include="CNB\CnbResponseParser.cs" />
+    <Compile Include="CNB\ExchangeRateDto.cs" />
+    <Compile Include="CNB\ExchangeRatesCollectionDto.cs" />
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
