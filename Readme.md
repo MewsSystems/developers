@@ -4,21 +4,21 @@ Information about development job opportunities and career at [Mews](https://mew
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out the [calendar](http://outlook.office365.com/owa/calendar/8d78330ef41342eb9bdd41a4774bafaf@mews.com/446ddf3c92164cb797c1af5e6a0ec76b4623161975935404223/calendar.html) of the events we organize or attend to never miss a Mews thing!
 
-**You can always reach us at [`jan@mews.com`](mailto:jan@mews.com).**
+**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
 
 <a name='open-positions'/>
 
 ## 💼 Open positions
 
 Currently, we are seeking highly experienced people for the following positions:
-- [Mid/Senior Backend Developer - .NET C#](https://mews.bamboohr.com/jobs/view.php?id=8)
-- [Senior Azure Architect](https://mews.bamboohr.com/jobs/view.php?id=7)
-- [Senior Frontend Developer](https://mews.bamboohr.com/jobs/view.php?id=29)
-- [Senior Frontend Developer - Platform Team](https://mews.bamboohr.com/jobs/view.php?id=34)
-- [Mid/Senior Azure Data Engineer](https://mews.bamboohr.com/jobs/view.php?id=5)
-- [Data Analyst](https://mews.bamboohr.com/jobs/view.php?id=44)
-- [IT Security Engineer](https://mews.bamboohr.com/jobs/view.php?id=42)
-- [IT Specialist](https://mews.bamboohr.com/jobs/view.php?id=41)
+- [Mid/Senior Backend Developer - .NET C#](https://apply.workable.com/mews/j/094EDDB116/)
+- [Senior Frontend Developer](https://apply.workable.com/mews/j/E8D97BFEB1/)
+- [Senior Frontend Developer - Platform Team](https://apply.workable.com/mews/j/3FB93D9C0E/)
+- [Senior Frontend Developer for Design System](https://apply.workable.com/mews/j/3AD8DE723A/)
+- [QA Automation Engineer](https://apply.workable.com/mews/j/55580F9394/)
+- [QA Engineer](https://apply.workable.com/mews/j/15C60AF3DC/)
+- [Mid/Senior Azure Data Engineer](https://apply.workable.com/mews/j/5975E7C0EB/)
+- [Data Analyst](https://apply.workable.com/mews/j/5F83C23824/)
 
 For all current openings, even outside development, check our [open positions](https://www.mews.com/careers/jobs). If you don't match exactly any of the candidate profiles, but you feel you could contribute in some other way, let us know as well and we can figure it out.
 
@@ -26,7 +26,7 @@ For all current openings, even outside development, check our [open positions](h
 
 ## 📚 About Mews 
 
-> We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 60+ countries in 1600+ hotels, we have truly started a revolution.
+> We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 65+ countries in 2000+ hotels, we have truly started a revolution.
 
 That's the marketing slogan. A more down-to-earth version of it would be, that we work on a system for hotel employees and their guests. The main goal is to improve the guest experience, by giving them possibility to have full control over their stay, possibility to check-in online, manage their profile, pay online etc. In consequence, that decreases workload on the hotel employees, because the guests actually do the work. The second big goal is opening up the system via APIs to 3rd party companies and developers, so that they can build interesting applications on top of our system. Or connect it with something else, which was traditionally very difficult in hospitality industry. If you'd like to know more, check this sample [sales-pitch](https://www.facebook.com/MewsSystems/videos/351045845603219/) which explains what we offer to our clients and which problems we solve.
 
