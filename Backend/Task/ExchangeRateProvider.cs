@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
 
-            var rows = document.DocumentNode.SelectNodes("//table[@class='currency-table']//tr");
+            var rows = document.DocumentNode.SelectNodes("//table[@class='" + ConfigurationManager.AppSettings["TableClass"] + "']//tr");
             if (rows != null && rows.Count > 0)
             {
                 rows.RemoveAt(0); //remove header
