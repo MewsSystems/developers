@@ -79,9 +79,9 @@ namespace ExchangeRateUpdater
         {
             if (cols != null && cols.Count >= 5)
             {
-                foreach (var item in cols)
+                for (int i = 2; i < cols.Count; i++)
                 {
-                    if (String.IsNullOrWhiteSpace(item.InnerText))
+                    if (String.IsNullOrWhiteSpace(cols[i].InnerText))
                         return false;
                 }
 
