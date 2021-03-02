@@ -1,10 +1,9 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
+using System.Configuration;
 
 namespace ExchangeRateUpdater
 {
@@ -19,7 +18,7 @@ namespace ExchangeRateUpdater
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             List<ExchangeRate> exchangeRateList = new List<ExchangeRate>();
-            Uri url = new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/");
+            Uri url = new Uri(ConfigurationManager.AppSettings["ExchangeRatesURLToCrawl"]);
             WebClient client = new WebClient();
             string html = client.DownloadString(url);
             HtmlDocument document = new HtmlDocument();
@@ -63,7 +62,7 @@ namespace ExchangeRateUpdater
                             {
                                 currencyValue = value == null ? 0 : (decimal)value;
                             }
-                            exchangeRateList.Add(item: new ExchangeRate(new Currency(sourceCurrency), new Currency("CZK"), currencyValue));
+                            exchangeRateList.Add(item: new ExchangeRate(new Currency(sourceCurrency), new Currency(ConfigurationManager.AppSettings["TargetCurrency"]), currencyValue));
                         }
                     }
                 }
