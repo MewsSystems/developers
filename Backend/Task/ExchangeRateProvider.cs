@@ -16,15 +16,32 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        {            
+            return ParseHtmlTableAndReturnExchangeRates(LoadHtmlFromUrl(), currencies);
+        }
+
+        /// <summary>Loads and returns HTML content from specified URL in config./// </summary>
+        /// <returns>HtmlDocument</returns>
+        private static HtmlDocument LoadHtmlFromUrl()
         {
-            List<ExchangeRate> exchangeRateList = new List<ExchangeRate>();
             Uri url = new Uri(ConfigurationManager.AppSettings["ExchangeRatesURLToCrawl"]);
             WebClient client = new WebClient();
             string html = client.DownloadString(url);
             HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
+            return document;
+        }
 
-            var rows = document.DocumentNode.SelectNodes("//table[@class='" + ConfigurationManager.AppSettings["TableClass"] + "']//tr");
+        /// <summary>
+        /// Parses loaded Html and returns exchange rate list
+        /// </summary>
+        /// <param name="htmlDocument">Html documnet loaded</param>
+        /// <param name="currencies">List of currencies to be extracted</param>
+        /// <returns></returns>
+        private IEnumerable<ExchangeRate> ParseHtmlTableAndReturnExchangeRates(HtmlDocument htmlDocument, IEnumerable<Currency> currencies)
+        {
+            List<ExchangeRate> exchangeRateList = new List<ExchangeRate>();
+            var rows = htmlDocument.DocumentNode.SelectNodes("//table[@class='" + ConfigurationManager.AppSettings["TableClass"] + "']//tr");
             if (rows != null && rows.Count > 0)
             {
                 rows.RemoveAt(0); //remove header
@@ -47,7 +64,7 @@ namespace ExchangeRateUpdater
                             decimal? value = decimal.TryParse((string)cols[4].InnerText, out tmpValue) ?
                                               tmpValue : (decimal?)null;
 
-                            if (amount != null)
+                            if (amount != null && amount != 0)
                             {
                                 try
                                 {
