@@ -1,26 +1,21 @@
 import React from 'react';
-import { PageHeader, PageContainer, PageFooter, PageMain } from './styled';
+import Flex from '../common/Flex';
+import { PageHeader, PageFooter, PageMain } from './styled';
 
 interface LayoutProps {
   header: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  isFullWidth?: boolean;
 }
 
-const Layout = ({
-  header,
-  footer,
-  children,
-  isFullWidth = true,
-}: LayoutProps) => {
+function Layout({ header, footer, children }: LayoutProps) {
   return (
-    <PageContainer isFullWidth={isFullWidth}>
+    <Flex flexDirection="column" flexWrap="nowrap" full>
       <PageHeader>{header}</PageHeader>
       <PageMain>{children}</PageMain>
       {footer && <PageFooter>{footer}</PageFooter>}
-    </PageContainer>
+    </Flex>
   );
-};
+}
 
 export default Layout;

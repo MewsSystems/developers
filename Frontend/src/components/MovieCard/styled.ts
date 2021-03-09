@@ -7,12 +7,12 @@ export interface CardProps {
 
 export const Card = styled.div<CardProps>`
   display: flex;
-  border: 1px solid ${(props) => props.theme.colors.secondaryDark};
-  box-shadow: 2px 2px 2px ${(props) => props.theme.colors.secondaryDark};
-  width: ${(props) => props.width || 'auto'};
-  height: ${(props) => props.height};
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.secondaryLight};
+  border: 1px solid ${({ theme }) => theme.colors.secondaryDark};
+  box-shadow: 2px 2px 2px ${({ theme }) => theme.colors.secondaryDark};
+  width: ${({ width }) => width || 'auto'};
+  height: ${({ height }) => height};
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.secondaryLight};
   text-decoration: none;
 
   :hover {
@@ -42,7 +42,7 @@ export const CardTitle = styled.h3`
 
   > small {
     font-style: italic;
-    color: ${(props) => props.theme.colors.secondaryDark};
+    color: ${({ theme }) => theme.colors.secondaryDark};
   }
 `;
 
@@ -55,8 +55,8 @@ export const CardText = styled.div`
 `;
 
 export const CardsList = styled.div`
-  padding-top: ${(props) => props.theme.space[5]};
-  padding-bottom: ${(props) => props.theme.space[5]};
+  padding-top: ${({ theme }) => theme.space[5]};
+  padding-bottom: ${({ theme }) => theme.space[5]};
 
   ${Card} + ${Card} {
     margin-top: 1em;

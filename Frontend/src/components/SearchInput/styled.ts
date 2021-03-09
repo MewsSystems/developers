@@ -7,7 +7,7 @@ export const Input = styled.input`
   outline: none;
   width: inherit;
   background-color: inherit;
-  font-size: ${(props) => props.theme.fontSizes.l};
+  font-size: inherit;
 `;
 
 export interface InputContainerProps {
@@ -15,26 +15,25 @@ export interface InputContainerProps {
 }
 
 export const InputContainer = styled.div<InputContainerProps>`
-  max-width: ${(props) => props.maxWidth || 'none'};
+  max-width: ${({ maxWidth }) => maxWidth || 'none'};
   width: 100%;
   position: relative;
-  border: ${(props) => props.theme.borders.thin};
-  border-color: ${(props) => props.theme.colors.secondaryDark};
+  border: ${({ theme }) => theme.borders.thin};
+  border-color: ${({ theme }) => theme.colors.secondaryDark};
   display: flex;
   align-items: center;
-  background-color: ${(props) => props.theme.colors.background};
-  font-size: ${(props) => props.theme.fontSizes.l};
-  color: ${(props) => props.theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 
   :focus-within {
-    border-color: ${(props) => props.theme.colors.primaryLight};
+    border-color: ${({ theme }) => theme.colors.primaryLight};
   }
 `;
 
 export const InputIconContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: ${(props) => props.theme.space[3]};
+  padding: ${({ theme }) => theme.space[3]};
 `;
 
 export const InputClearButton = styled(Button).attrs({
@@ -42,8 +41,8 @@ export const InputClearButton = styled(Button).attrs({
 })`
   border: none;
   background-color: inherit !important;
-  color: ${(props) => props.theme.colors.secondaryDark};
-  padding: ${(props) => props.theme.space[3]};
+  color: ${({ theme }) => theme.colors.secondaryDark};
+  padding: ${({ theme }) => theme.space[3]};
 
   &:hover:not(:disabled),
   &:active:not(:disabled),

@@ -1,2 +1,3 @@
 export { default } from './EmptyState';
-export * from './ErrorState';
+export { default as ErrorState } from './ErrorState';
+export { default as LoadingState } from './LoadingState';
