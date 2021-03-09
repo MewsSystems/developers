@@ -6,6 +6,8 @@ import {
   loadingStarted,
   loadingSucceeded,
 } from '../services/utils';
+import { AppSelector } from '../store';
+import { updateState } from './utils';
 
 type MovieState = LoadingState & MovieDetail;
 
@@ -20,9 +22,13 @@ const initialState = {
   id: 0,
   title: '',
   original_title: '',
+  original_language: '',
   release_date: '',
   overview: '',
   poster_path: '',
+  vote_average: 0,
+  vote_count: 0,
+  genres: [],
   isLoading: false,
   error: null,
   timestamp: null,
@@ -40,12 +46,7 @@ const movieSlice = createSlice({
 
     builder.addCase(fetchMovieDetails.fulfilled, (state, { payload }) => {
       loadingSucceeded(state);
-      state.id = payload.id;
-      state.title = payload.title;
-      state.overview = payload.overview;
-      state.original_title = payload.original_title;
-      state.release_date = payload.release_date;
-      state.poster_path = payload.poster_path;
+      updateState(state, payload);
     });
 
     builder.addCase(fetchMovieDetails.rejected, (state, action) => {
@@ -53,5 +54,8 @@ const movieSlice = createSlice({
     });
   },
 });
+
+export const movieSelector: AppSelector<MovieState> = (state) =>
+  state[movieSlice.name];
 
 export default movieSlice.reducer;

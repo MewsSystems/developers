@@ -17,10 +17,12 @@ if (isDevelopmentEnv && module.hot) {
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
 export type AppSelector<ReturnType, T extends any[] = []> = (
   state: RootState,
   ...args: T
 ) => ReturnType;
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

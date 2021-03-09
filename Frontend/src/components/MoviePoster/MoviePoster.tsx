@@ -1,43 +1,40 @@
 import { useState } from 'react';
-import { useImageConfig } from '../../hooks';
-import { MoviePosterSkeleton } from './styled';
+import { usePosterUrls } from '../../hooks';
+import { Placeholder } from './styled';
 
 interface MoviePosterProps extends React.HTMLAttributes<HTMLImageElement> {
   posterPath: string;
   alt: HTMLImageElement['alt'];
-  width: string;
-  height?: string;
+  width: number;
+  height?: number;
 }
 
-const MoviePoster = ({
+function MoviePoster({
   posterPath,
   alt,
   width,
   height,
   ...props
-}: MoviePosterProps) => {
-  const { poster_sizes, getURLs } = useImageConfig();
-  const posterURLs = getURLs(posterPath, poster_sizes);
-  const srcSet = posterURLs
-    .map((url, index) => `${url} ${index + 1}x`)
-    .join(', ');
-  const hasPosterPath = posterPath !== null;
-  const [showSkeleton, setShowSkeleton] = useState(!hasPosterPath);
+}: MoviePosterProps) {
+  const getUrls = usePosterUrls(posterPath, width);
+  const [showSkeleton, setShowSkeleton] = useState(!posterPath);
+  const [imgSrc] = getUrls();
+  const srcSet = getUrls(true).join(', ');
 
   return (
-    <MoviePosterSkeleton width={width} height={height}>
+    <Placeholder width={`${width}px`} height={height ? `${height}px` : 'auto'}>
       <img
         loading="lazy"
         alt={alt}
-        src={posterURLs[0]}
+        src={imgSrc}
         srcSet={srcSet}
         style={showSkeleton ? { display: 'none' } : {}}
         onLoad={() => setShowSkeleton(false)}
         onError={() => setShowSkeleton(true)}
         {...props}
       />
-    </MoviePosterSkeleton>
+    </Placeholder>
   );
-};
+}
 
 export default MoviePoster;

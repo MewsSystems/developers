@@ -1,21 +1,40 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import {
+  configurationSelector,
+  fetchConfigurationIfNeeded,
+} from './redux/configurationReducer';
 import { clear, fetchSearchResults } from './redux/searchReducer';
 import { RootState, AppDispatch } from './store';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useImageConfig = () => {
-  const { images } = useAppSelector((state) => state.configuration);
+export const usePosterUrls = (path: string, width: number) => {
+  const dispatch = useAppDispatch();
+  const { images } = useAppSelector(configurationSelector);
+  const { poster_sizes, secure_base_url } = images;
 
-  return {
-    ...images,
-    getURLs: (path: string, sizes: string[]) =>
-      path && sizes
-        ? sizes.map((size) => `${images.secure_base_url}${size}${path}`)
-        : [],
-  };
+  useEffect(() => {
+    dispatch(fetchConfigurationIfNeeded());
+  }, [dispatch]);
+
+  return useCallback(
+    (withoutX = true) =>
+      poster_sizes.map((size) => {
+        const url = `${secure_base_url}${size}${path}`;
+
+        if (withoutX || size === 'original') {
+          return url;
+        }
+
+        const sizeNum = parseInt(size.replace(/\D/g, ''));
+        const xDescriptor = Math.round((sizeNum / width) * 100) / 100;
+
+        return `${url} ${xDescriptor}x`;
+      }),
+    [path, poster_sizes, secure_base_url, width]
+  );
 };
 
 export const useMovieSearch = () => {

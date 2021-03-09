@@ -6,17 +6,28 @@ import {
   loadingStarted,
   loadingSucceeded,
 } from '../services/utils';
-import { RootState } from '../store';
+import { AppSelector, RootState } from '../store';
+import { getCurrentTime } from '../utils';
 
 type ConfigurationState = LoadingState & ConfigurationData;
 
 export const NAME = 'configuration';
 
-export const fetchConfiguration = createAsyncThunk<
+export const fetchConfigurationIfNeeded = createAsyncThunk<
   ConfigurationData,
   void,
   { state: RootState }
->(`${NAME}/fetch`, getConfiguration);
+>(`${NAME}/fetch`, getConfiguration, {
+  condition: (_, { getState }) => {
+    const { configuration } = getState();
+    const lastFetchTime = configuration.timestamp || 0;
+    const invalidationTime = 1000 * 60 * 60 * 24; // = 1 day
+    return (
+      (!configuration.isLoading && !lastFetchTime) ||
+      lastFetchTime + invalidationTime < getCurrentTime()
+    );
+  },
+});
 
 const initialState = {
   images: {
@@ -36,19 +47,25 @@ const configurationSlice = createSlice({
   reducers: {},
 
   extraReducers: (builder) => {
-    builder.addCase(fetchConfiguration.pending, (state) => {
+    builder.addCase(fetchConfigurationIfNeeded.pending, (state) => {
       loadingStarted(state);
     });
 
-    builder.addCase(fetchConfiguration.fulfilled, (state, { payload }) => {
-      loadingSucceeded(state);
-      state.images = payload.images;
-    });
+    builder.addCase(
+      fetchConfigurationIfNeeded.fulfilled,
+      (state, { payload }) => {
+        loadingSucceeded(state);
+        state.images = payload.images;
+      }
+    );
 
-    builder.addCase(fetchConfiguration.rejected, (state, action) => {
+    builder.addCase(fetchConfigurationIfNeeded.rejected, (state, action) => {
       loadingFailed(state, action);
     });
   },
 });
+
+export const configurationSelector: AppSelector<ConfigurationState> = (state) =>
+  state[configurationSlice.name];
 
 export default configurationSlice.reducer;

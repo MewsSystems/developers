@@ -1,12 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { SearchMovieResults, getMovieSearchResults } from '../services/tmdbApi';
+import {
+  SearchMovieResults,
+  getMovieSearchResults,
+  SearchMovieParams,
+} from '../services/tmdbApi';
 import {
   LoadingState,
   loadingStarted,
   loadingSucceeded,
   loadingFailed,
 } from '../services/utils';
-import { isActionAborted } from './utils';
+import { AppSelector, RootState } from '../store';
+import { isActionAborted, updateState } from './utils';
 
 type SearchState = LoadingState &
   SearchMovieResults & {
@@ -17,10 +22,33 @@ export const NAME = 'search';
 
 export const fetchSearchResults = createAsyncThunk(
   `${NAME}/fetchResults`,
-  getMovieSearchResults
+  getMovieSearchResults,
+  { condition: ({ query }) => query !== initialState.query }
 );
 
-const initialState = {
+export const setSearchPage = createAsyncThunk<
+  SearchMovieResults,
+  SearchMovieParams['page'],
+  {
+    state: RootState;
+    dispatch: any;
+  }
+>(
+  `${NAME}/setPage`,
+  async (page, { getState, dispatch }) => {
+    const query = querySelector(getState());
+    const action = await dispatch(fetchSearchResults({ query, page }));
+    return action;
+  },
+  {
+    condition: (_, { getState }) => {
+      const query = querySelector(getState());
+      return query !== initialState.query;
+    },
+  }
+);
+
+export const initialState = {
   query: '',
   results: [],
   page: 1,
@@ -55,10 +83,7 @@ const searchSlice = createSlice({
 
     builder.addCase(fetchSearchResults.fulfilled, (state, { payload }) => {
       loadingSucceeded(state);
-      state.page = payload.page;
-      state.total_results = payload.total_results;
-      state.total_pages = payload.total_pages;
-      state.results = payload.results;
+      updateState(state, payload);
     });
 
     builder.addCase(fetchSearchResults.rejected, (state, action) => {
@@ -70,5 +95,12 @@ const searchSlice = createSlice({
 });
 
 export const { clear } = searchSlice.actions;
+
+export const searchSelector: AppSelector<SearchState> = (state) =>
+  state[searchSlice.name];
+export const querySelector: AppSelector<SearchState['query']> = (state) =>
+  searchSelector(state).query;
+export const pageSelector: AppSelector<SearchState['page']> = (state) =>
+  searchSelector(state).page;
 
 export default searchSlice.reducer;

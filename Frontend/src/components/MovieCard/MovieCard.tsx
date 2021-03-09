@@ -31,8 +31,7 @@ const MovieCard = (
       <MoviePoster
         posterPath={props.poster_path}
         alt={props.title}
-        width="92px"
-        height={'inherit'}
+        width={92}
       />
       <CardBody>
         <CardTitle>

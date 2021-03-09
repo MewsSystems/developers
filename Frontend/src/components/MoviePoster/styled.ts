@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-interface MoviePosterSkeletonProps {
+interface PlaceholderProps {
   height?: string;
   width?: string;
 }
 
-export const MoviePosterSkeleton = styled.div<MoviePosterSkeletonProps>`
+export const Placeholder = styled.div<PlaceholderProps>`
   background-color: gray;
   height: ${(props) => props.height || '100%'};
   width: ${(props) => props.width || '100%'};
