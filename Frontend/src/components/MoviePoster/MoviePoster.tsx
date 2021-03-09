@@ -17,7 +17,7 @@ function MoviePoster({
   ...props
 }: MoviePosterProps) {
   const getUrls = usePosterUrls(posterPath, width);
-  const [showSkeleton, setShowSkeleton] = useState(!posterPath);
+  const [showPlaceholder, setShowPlaceholder] = useState(!posterPath);
   const [imgSrc] = getUrls();
   const srcSet = getUrls(true).join(', ');
 
@@ -28,9 +28,9 @@ function MoviePoster({
         alt={alt}
         src={imgSrc}
         srcSet={srcSet}
-        style={showSkeleton ? { display: 'none' } : {}}
-        onLoad={() => setShowSkeleton(false)}
-        onError={() => setShowSkeleton(true)}
+        style={showPlaceholder ? { display: 'none' } : {}}
+        onLoad={() => setShowPlaceholder(false)}
+        onError={() => setShowPlaceholder(true)}
         {...props}
       />
     </Placeholder>

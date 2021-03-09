@@ -20,11 +20,11 @@ export const usePosterUrls = (path: string, width: number) => {
   }, [dispatch]);
 
   return useCallback(
-    (withoutX = true) =>
+    (withX: boolean = false) =>
       poster_sizes.map((size) => {
         const url = `${secure_base_url}${size}${path}`;
 
-        if (withoutX || size === 'original') {
+        if (!withX || size === 'original') {
           return url;
         }
 
