@@ -9,12 +9,6 @@ const store = configureStore({
   devTools: isDevelopmentEnv,
 });
 
-if (isDevelopmentEnv && module.hot) {
-  module.hot.accept('./redux/rootReducer', () => {
-    store.replaceReducer(rootReducer);
-  });
-}
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

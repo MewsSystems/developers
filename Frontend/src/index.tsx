@@ -5,25 +5,16 @@ import { ThemeProvider } from 'styled-components';
 import store from './store';
 import theme from './theme/theme';
 import { GlobalStyles } from './theme/GlobalStyles';
+import App from './App';
 
-const render = () => {
-  const App = require('./App').default;
-
-  ReactDOM.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          <App />
-        </ThemeProvider>
-      </Provider>
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-};
-
-if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./App', render);
-}
-
-render();
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
