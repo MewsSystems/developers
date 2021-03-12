@@ -20,11 +20,20 @@ type SearchState = LoadingState &
 
 export const NAME = 'search';
 
-export const fetchSearchResults = createAsyncThunk(
-  `${NAME}/fetchResults`,
-  getMovieSearchResults,
-  { condition: ({ query }) => query !== initialState.query }
-);
+export const fetchSearchResults = createAsyncThunk<
+  SearchMovieResults,
+  SearchMovieParams,
+  {
+    state: RootState;
+  }
+>(`${NAME}/fetchResults`, getMovieSearchResults, {
+  condition: ({ query, page = initialState.page }, { getState }) => {
+    const { search } = getState();
+    const isEmptyQuery = query === '';
+    const isCached = query === search.query && page === search.page;
+    return !isEmptyQuery && !isCached;
+  },
+});
 
 export const setSearchPage = createAsyncThunk<
   SearchMovieResults,

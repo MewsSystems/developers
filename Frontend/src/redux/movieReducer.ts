@@ -1,22 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getMovieDetail, MovieDetail } from '../services/tmdbApi';
+import { getMovieDetail, MovieDetail, MovieParams } from '../services/tmdbApi';
 import {
   LoadingState,
   loadingFailed,
   loadingStarted,
   loadingSucceeded,
 } from '../services/utils';
-import { AppSelector } from '../store';
+import { AppSelector, RootState } from '../store';
 import { updateState } from './utils';
 
 type MovieState = LoadingState & MovieDetail;
 
 export const NAME = 'movie';
 
-export const fetchMovieDetails = createAsyncThunk(
-  `${NAME}/fetch`,
-  getMovieDetail
-);
+export const fetchMovieDetails = createAsyncThunk<
+  MovieDetail,
+  MovieParams,
+  {
+    state: RootState;
+  }
+>(`${NAME}/fetch`, getMovieDetail, {
+  condition: ({ movieId }, { getState }) => {
+    const movie = movieSelector(getState());
+    return parseInt(movieId, 10) !== movie.id;
+  },
+});
 
 const initialState = {
   id: 0,
