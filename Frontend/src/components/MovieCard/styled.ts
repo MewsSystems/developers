@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Title } from '../common/Title';
 
 export interface CardProps {
   width?: string;
@@ -34,16 +35,13 @@ export const CardBody = styled.div`
   }
 `;
 
-export const CardTitle = styled.h3`
+export const CardTitle = styled(Title).attrs({
+  as: 'h3',
+})`
   margin: 0 0 0.3em 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  > small {
-    font-style: italic;
-    color: ${({ theme }) => theme.colors.secondaryDark};
-  }
 `;
 
 export const CardText = styled.div`
