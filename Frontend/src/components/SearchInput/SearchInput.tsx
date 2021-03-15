@@ -1,5 +1,7 @@
 import { Search, TimesCircle } from '@styled-icons/fa-solid';
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { UrlUpdateType } from 'use-query-params';
 import {
   InputContainer,
   Input,
@@ -7,31 +9,64 @@ import {
   InputClearButton,
   InputIconContainer,
 } from './styled';
+import { useMovieSearch, useSearchQueryParams } from '../../hooks';
 
 interface SearchInputProps extends InputContainerProps {
   placeholderText?: string;
-  value: string;
-  onChange: (value: string) => void;
+  resultsPath: string;
 }
 
-const SearchInput = (props: SearchInputProps) => {
+const SearchInput = ({
+  maxWidth,
+  resultsPath,
+  placeholderText = 'Search...',
+}: SearchInputProps) => {
+  const searchMovies = useMovieSearch();
   const inputRef = useRef<HTMLInputElement>(null);
   const focusInput = () => inputRef.current && inputRef.current.focus();
+  const history = useHistory();
+  const match = useRouteMatch({ path: resultsPath, exact: true });
+  const [{ query, page }, setQueryParams] = useSearchQueryParams();
+
+  const setSearchQuery = useCallback(
+    (value) => {
+      let updateType: UrlUpdateType = 'pushIn';
+
+      // redirect to results page
+      if (!match) {
+        history.push(resultsPath);
+        updateType = 'replaceIn';
+      }
+
+      setQueryParams(
+        { query: value !== '' ? value : undefined, page: undefined },
+        updateType
+      );
+    },
+    [history, resultsPath, setQueryParams, match]
+  );
+
+  // call API whenever url search params change
+  useEffect(() => {
+    if (match?.isExact) {
+      searchMovies(query || '', page || undefined);
+    }
+  }, [query, page, searchMovies, match?.isExact]);
 
   return (
-    <InputContainer maxWidth={props.maxWidth}>
+    <InputContainer maxWidth={maxWidth}>
       <InputIconContainer>
         <Search size="1.5rem" onClick={focusInput} />
       </InputIconContainer>
       <Input
         ref={inputRef}
         type="text"
-        value={props.value}
-        onChange={(e) => props.onChange(e.currentTarget.value)}
-        placeholder={props.placeholderText}
+        value={query || ''}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder={placeholderText}
       />
-      {props.value && (
-        <InputClearButton type="button" onClick={() => props.onChange('')}>
+      {query && (
+        <InputClearButton type="button" onClick={() => setSearchQuery('')}>
           <TimesCircle size="1.5rem" />
         </InputClearButton>
       )}

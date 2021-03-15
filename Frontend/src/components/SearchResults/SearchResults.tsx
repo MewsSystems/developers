@@ -1,36 +1,29 @@
-import { useAppSelector } from '../../hooks';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Binoculars } from '@styled-icons/fa-solid';
+
 import Container from '../common/Container';
 import MovieCard, { CardsList } from '../MovieCard';
 import Pagination from '../Pagination';
-import EmptyState from '../EmptyState';
-import { Link } from 'react-router-dom';
+import EmptyState, { ErrorState, LoadingState } from '../EmptyState';
 import Button from '../common/Button';
-import ErrorState from '../EmptyState/ErrorState';
-import { Binoculars } from '@styled-icons/fa-solid';
+import { searchSelector } from '../../redux/searchReducer';
+import { useSearchQueryParams } from '../../hooks';
 
-interface SearchResultsProps {
-  onPageClick: (page: number) => void;
-}
+function SearchResults() {
+  const search = useSelector(searchSelector);
+  const [, setQueryParams] = useSearchQueryParams();
+  const setPage = (page: number) => setQueryParams({ page });
 
-const SearchResults = ({ onPageClick }: SearchResultsProps) => {
-  const {
-    isLoading,
-    error,
-    page,
-    total_pages,
-    results,
-    query,
-  } = useAppSelector((state) => state.search);
-
-  if (isLoading) {
-    return <EmptyState title="Searching..." />;
+  if (search.isLoading) {
+    return <LoadingState title="Searching..." />;
   }
 
-  if (error) {
+  if (search.error) {
     return (
-      <ErrorState title={error?.name || 'Unknown Error'}>
+      <ErrorState title={search.error?.name || 'Unknown Error'}>
         <div>
-          {error?.message}
+          {search.error?.message}
           <Link to="/" component={Button}>
             Refresh
           </Link>
@@ -39,10 +32,18 @@ const SearchResults = ({ onPageClick }: SearchResultsProps) => {
     );
   }
 
-  if (query && !results.length) {
+  if (search.query && !search.results.length) {
     return (
       <EmptyState title="No Movies Found" icon={<Binoculars size="5rem" />}>
-        Couldn't find movies for the query: <em>{query}</em>
+        Couldn't find movies for the query: <em>{search.query}</em>
+      </EmptyState>
+    );
+  }
+
+  if (!search.query) {
+    return (
+      <EmptyState title="Movie Search">
+        Start typing on the search box above to find a movie.
       </EmptyState>
     );
   }
@@ -50,10 +51,10 @@ const SearchResults = ({ onPageClick }: SearchResultsProps) => {
   return (
     <Container>
       <CardsList>
-        {results.map((movie) => (
+        {search.results.map((movie) => (
           <MovieCard
-            key={movie.id}
             {...movie}
+            key={movie.id}
             height="140px"
             isLink
             to={`/movie/${movie.id}`}
@@ -61,12 +62,12 @@ const SearchResults = ({ onPageClick }: SearchResultsProps) => {
         ))}
       </CardsList>
       <Pagination
-        page={page}
-        pageCount={total_pages}
-        onPageClick={onPageClick}
+        page={search.page}
+        pageCount={search.total_pages}
+        onPageClick={setPage}
       />
     </Container>
   );
-};
+}
 
 export default SearchResults;

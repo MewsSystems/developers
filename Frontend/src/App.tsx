@@ -1,34 +1,56 @@
-import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
+  useRouteMatch,
 } from 'react-router-dom';
-import { useAppDispatch } from './hooks';
-import MovieDetail from './pages/MovieDetail';
-import MovieSearch from './pages/MovieSearch';
-import { fetchConfiguration } from './redux/configurationReducer';
+import { QueryParamProvider } from 'use-query-params';
+import Layout from './components/Layout';
+import SearchInput from './components/SearchInput';
+import SearchResults from './components/SearchResults';
+import MovieDetail from './components/MovieDetail';
+import BackButton from './components/BackButton';
+import Flex from './components/common/Flex';
+import Container from './components/common/Container';
 
-function App() {
-  const dispatch = useAppDispatch();
+const SEARCH_RESULTS_PATH = '/';
 
-  useEffect(() => {
-    // prefetch the configuration
-    dispatch(fetchConfiguration());
-  });
+const Header = () => {
+  const match = useRouteMatch({ path: SEARCH_RESULTS_PATH, exact: true });
 
   return (
+    <Container padding="0">
+      <Flex flexWrap="nowrap" gap="2rem">
+        {!match && <BackButton />}
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <SearchInput
+            maxWidth="900px"
+            placeholderText="Search Movies"
+            resultsPath={SEARCH_RESULTS_PATH}
+          />
+        </QueryParamProvider>
+      </Flex>
+    </Container>
+  );
+};
+
+function App() {
+  return (
     <Router>
-      <Switch>
-        <Route path="/movie/:movieId">
-          <MovieDetail />
-        </Route>
-        <Route path="/" exact>
-          <MovieSearch />
-        </Route>
-        <Redirect from="*" to="/" />
-      </Switch>
+      <Layout header={<Header />}>
+        <Switch>
+          <Route path="/movie/:movieId" exact>
+            <MovieDetail />
+          </Route>
+          <Route path={SEARCH_RESULTS_PATH} exact>
+            <QueryParamProvider ReactRouterRoute={Route}>
+              <SearchResults />
+            </QueryParamProvider>
+          </Route>
+          <Redirect from="*" to={SEARCH_RESULTS_PATH} />
+        </Switch>
+      </Layout>
     </Router>
   );
 }

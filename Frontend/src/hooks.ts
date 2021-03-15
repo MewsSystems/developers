@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 import {
   configurationSelector,
   fetchConfigurationIfNeeded,
@@ -10,6 +11,7 @@ import { RootState, AppDispatch } from './store';
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
+// create poster urls
 export const usePosterUrls = (path: string, width: number) => {
   const dispatch = useAppDispatch();
   const { images } = useAppSelector(configurationSelector);
@@ -37,35 +39,31 @@ export const usePosterUrls = (path: string, width: number) => {
   );
 };
 
+// fetch/clear search results
 export const useMovieSearch = () => {
   const dispatch = useAppDispatch();
-  const lastActionRef = useRef<any>(null);
-  const { query, page, isLoading, results, error } = useAppSelector(
-    (state) => state.search
-  );
+  const prevActionRef = useRef<any>(null);
 
   const searchMovies = useCallback(
     (query: string, page: number = 1) => {
-      if (isLoading && typeof lastActionRef.current.abort === 'function') {
-        lastActionRef.current.abort();
-      }
+      prevActionRef.current?.abort?.();
 
       if (query) {
-        lastActionRef.current = dispatch(fetchSearchResults({ query, page }));
+        prevActionRef.current = dispatch(fetchSearchResults({ query, page }));
       } else {
         dispatch(clear());
-        lastActionRef.current = null;
+        prevActionRef.current = null;
       }
     },
-    [dispatch, isLoading]
+    [dispatch, prevActionRef]
   );
 
-  return {
-    query,
-    page,
-    isLoading,
-    results,
-    error,
-    searchMovies,
-  };
+  return searchMovies;
+};
+
+export const useSearchQueryParams = () => {
+  return useQueryParams({
+    query: StringParam,
+    page: NumberParam,
+  });
 };

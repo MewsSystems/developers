@@ -40,6 +40,7 @@ const initialState = {
   isLoading: false,
   error: null,
   timestamp: null,
+  runtime: 0,
 } as MovieState;
 
 const movieSlice = createSlice({

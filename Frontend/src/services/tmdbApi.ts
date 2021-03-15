@@ -49,6 +49,7 @@ export interface MovieDetail {
   vote_average: number;
   vote_count: number;
   genres: Array<{ id: number; name: string }>;
+  runtime: number;
 }
 
 export interface MovieParams {
