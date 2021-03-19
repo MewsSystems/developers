@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ConfigurationData, getConfiguration } from '../services/tmdbApi';
 import {
-  LoadingState,
+  RequestState,
   loadingFailed,
   loadingStarted,
   loadingSucceeded,
@@ -9,7 +9,7 @@ import {
 import { AppSelector, RootState } from '../store';
 import { getCurrentTime } from '../utils';
 
-type ConfigurationState = LoadingState & ConfigurationData;
+type ConfigurationState = RequestState & ConfigurationData;
 
 export const NAME = 'configuration';
 

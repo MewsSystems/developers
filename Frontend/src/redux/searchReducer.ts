@@ -5,7 +5,7 @@ import {
   SearchMovieParams,
 } from '../services/tmdbApi';
 import {
-  LoadingState,
+  RequestState,
   loadingStarted,
   loadingSucceeded,
   loadingFailed,
@@ -13,7 +13,7 @@ import {
 import { AppSelector, RootState } from '../store';
 import { isActionAborted, updateState } from './utils';
 
-type SearchState = LoadingState &
+type SearchState = RequestState &
   SearchMovieResults & {
     query: string;
   };

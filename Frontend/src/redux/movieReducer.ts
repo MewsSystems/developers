@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getMovieDetail, MovieDetail, MovieParams } from '../services/tmdbApi';
 import {
-  LoadingState,
+  RequestState,
   loadingFailed,
   loadingStarted,
   loadingSucceeded,
@@ -9,7 +9,7 @@ import {
 import { AppSelector, RootState } from '../store';
 import { updateState } from './utils';
 
-type MovieState = LoadingState & MovieDetail;
+type MovieState = RequestState & MovieDetail;
 
 export const NAME = 'movie';
 

@@ -1,7 +1,7 @@
 import { PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import { getCurrentTime } from '../utils';
 
-export interface LoadingState {
+export interface RequestState {
   isLoading: boolean;
   error: SerializedError | null;
   timestamp: number | null;
@@ -11,26 +11,26 @@ export const createLoadingState = ({
   isLoading = false,
   error = null,
   timestamp = null,
-}: LoadingState): LoadingState => ({
+}: RequestState): RequestState => ({
   isLoading,
   error,
   timestamp,
 });
 
-export function loadingStarted(state: Required<LoadingState>) {
+export function loadingStarted(state: RequestState) {
   state.isLoading = true;
   state.timestamp = getCurrentTime();
   state.error = null;
 }
 
-export function loadingSucceeded(state: Required<LoadingState>) {
+export function loadingSucceeded(state: RequestState) {
   state.isLoading = false;
   state.timestamp = getCurrentTime();
   state.error = null;
 }
 
 export function loadingFailed(
-  state: Required<LoadingState>,
+  state: RequestState,
   action: PayloadAction<unknown, string, any, SerializedError>
 ) {
   state.isLoading = false;
