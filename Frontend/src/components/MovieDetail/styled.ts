@@ -8,7 +8,7 @@ export const MovieDetailContainer = styled(Container)`
   }
 `;
 
-export const MovieTitle = styled(Title).attrs({
+export const MovieDetailTitle = styled(Title).attrs({
   as: 'h1',
 })`
   margin-top: 0;

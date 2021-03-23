@@ -50,6 +50,7 @@ const movieSlice = createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(fetchMovieDetails.pending, (state) => {
+      updateState(state, initialState);
       loadingStarted(state);
     });
 

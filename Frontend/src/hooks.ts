@@ -12,7 +12,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // create poster urls
-export const usePosterUrls = (path: string, width: number) => {
+export const usePosterUrls = (path: string) => {
   const dispatch = useAppDispatch();
   const { images } = useAppSelector(configurationSelector);
   const { poster_sizes, secure_base_url } = images;
@@ -22,11 +22,11 @@ export const usePosterUrls = (path: string, width: number) => {
   }, [dispatch]);
 
   return useCallback(
-    (withX: boolean = false) =>
+    (width?: number) =>
       poster_sizes.map((size) => {
         const url = `${secure_base_url}${size}${path}`;
 
-        if (!withX || size === 'original') {
+        if (!width || size === 'original') {
           return url;
         }
 
@@ -35,7 +35,7 @@ export const usePosterUrls = (path: string, width: number) => {
 
         return `${url} ${xDescriptor}x`;
       }),
-    [path, poster_sizes, secure_base_url, width]
+    [path, poster_sizes, secure_base_url]
   );
 };
 
@@ -66,4 +66,19 @@ export const useSearchQueryParams = () => {
     query: StringParam,
     page: NumberParam,
   });
+};
+
+// set page title
+export const useDocumentTitle = (title: string) => {
+  const [originalTitle] = useState(document.title);
+
+  useEffect(() => {
+    if (title) {
+      document.title = title;
+    }
+
+    return () => {
+      document.title = originalTitle;
+    };
+  }, [originalTitle, title]);
 };

@@ -16,10 +16,10 @@ function MoviePoster({
   height,
   ...props
 }: MoviePosterProps) {
-  const getUrls = usePosterUrls(posterPath, width);
+  const getUrls = usePosterUrls(posterPath);
   const [showPlaceholder, setShowPlaceholder] = useState(!posterPath);
   const [imgSrc] = getUrls();
-  const srcSet = getUrls(true).join(', ');
+  const srcSet = getUrls(width).join(', ');
 
   return (
     <Placeholder width={`${width}px`} height={height ? `${height}px` : 'auto'}>
