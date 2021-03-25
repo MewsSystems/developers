@@ -12,6 +12,8 @@ import MovieDetail from './components/MovieDetail';
 import Flex from './components/common/Flex';
 import Container from './components/common/Container';
 import BackToSearchResults from './components/BackButton/BackToSearchResults';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from './components/ErrorFallback';
 
 const SEARCH_RESULTS_PATH = '/';
 
@@ -36,17 +38,19 @@ function App() {
   return (
     <Router>
       <Layout header={<Header />}>
-        <Switch>
-          <Route path="/movie/:movieId" exact>
-            <MovieDetail />
-          </Route>
-          <Route path={SEARCH_RESULTS_PATH} exact>
-            <QueryParamProvider ReactRouterRoute={Route}>
-              <SearchResults />
-            </QueryParamProvider>
-          </Route>
-          <Redirect from="*" to={SEARCH_RESULTS_PATH} />
-        </Switch>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Switch>
+            <Route path="/movie/:movieId" exact>
+              <MovieDetail />
+            </Route>
+            <Route path={SEARCH_RESULTS_PATH} exact>
+              <QueryParamProvider ReactRouterRoute={Route}>
+                <SearchResults />
+              </QueryParamProvider>
+            </Route>
+            <Redirect from="*" to={SEARCH_RESULTS_PATH} />
+          </Switch>
+        </ErrorBoundary>
       </Layout>
     </Router>
   );

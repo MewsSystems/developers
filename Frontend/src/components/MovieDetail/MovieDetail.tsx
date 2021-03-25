@@ -19,8 +19,8 @@ function MoviePage() {
 
   if (error) {
     return (
-      <ErrorState title="Movie Not Found">
-        Type the name of the movie in the search box above
+      <ErrorState title={error.name}>
+        <p>{error.message}</p>
       </ErrorState>
     );
   }

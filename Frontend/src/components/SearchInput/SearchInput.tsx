@@ -64,6 +64,7 @@ const SearchInput = ({
         value={query || ''}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder={placeholderText}
+        autoFocus
       />
       {query && (
         <InputClearButton type="button" onClick={() => setSearchQuery('')}>
