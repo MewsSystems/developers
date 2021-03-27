@@ -4,6 +4,8 @@ A simple application that searches for movies on [The Movie Database (TMDB)](htt
 
 > **TMDB api key:** set your api key in an env variable named `REACT_APP_TMDB_API_KEY`
 
+To learn how to add environment variables click [here](https://create-react-app.dev/docs/adding-custom-environment-variables/#adding-temporary-environment-variables-in-your-shell).
+
 ---
 
 

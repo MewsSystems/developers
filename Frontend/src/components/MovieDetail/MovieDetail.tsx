@@ -19,8 +19,8 @@ function MoviePage() {
 
   if (error) {
     return (
-      <ErrorState title={error.name}>
-        <p>{error.message}</p>
+      <ErrorState title={error.name || 'Unknown Error'}>
+        {error.message}
       </ErrorState>
     );
   }

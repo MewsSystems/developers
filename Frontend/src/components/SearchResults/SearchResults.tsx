@@ -1,12 +1,9 @@
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Binoculars } from '@styled-icons/fa-solid';
-
 import Container from '../common/Container';
 import MovieCard, { CardsList } from '../MovieCard';
 import Pagination from '../Pagination';
 import EmptyState, { ErrorState, LoadingState } from '../EmptyState';
-import Button from '../common/Button';
 import { searchSelector } from '../../redux/searchReducer';
 import { useSearchQueryParams } from '../../hooks';
 
@@ -21,13 +18,8 @@ function SearchResults() {
 
   if (search.error) {
     return (
-      <ErrorState title={search.error?.name || 'Unknown Error'}>
-        <div>
-          {search.error?.message}
-          <Link to="/" component={Button}>
-            Refresh
-          </Link>
-        </div>
+      <ErrorState title={search.error.name || 'Unknown Error'}>
+        {search.error.message}
       </ErrorState>
     );
   }

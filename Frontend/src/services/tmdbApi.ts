@@ -1,8 +1,14 @@
 import { AsyncThunkPayloadCreator } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY || '';
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 const API_URL_BASE = 'https://api.themoviedb.org/3/';
+
+if (!API_KEY) {
+  console.error(
+    `API key is not defined! Set the api key in an env variable named 'REACT_APP_TMDB_API_KEY'`
+  );
+}
 
 // create an axios instance and configure it to interact with the api
 const tmdbAPI = axios.create({ baseURL: API_URL_BASE });
