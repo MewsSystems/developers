@@ -1,16 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
+using System.Text.RegularExpressions;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
         private const string TODAY_EXCHANGE_RATE_URL = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt";
-
         private const string DEFAULT_SOURCE_EXCHANGE_RATE_CODE = "CZK";
+
+        private const int HEADER_LINES_COUNT = 2;
+        private const int AMOUNT_INDEX = 2;
+        private const int RATE_CODE_INDEX = 3;
+        private const int EXCHANGE_RATE_INDEX = 4;
+
+        private IFileDownloadService _fileDownloadService;
+        private Regex _exchangeFileRegex;
+
+        public ExchangeRateProvider(IFileDownloadService fileDownloadService)
+        {
+            _fileDownloadService = fileDownloadService;
+            _exchangeFileRegex = new Regex(@"^\d{2}\.\d{2}\.\d{4} #\d+\nzemě\|měna\|množství\|kód\|kurz\n\w+\|\w+\|\d+\|\w+\|\d+(,\d+){0,1}");
+        }
+
 
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -20,54 +33,38 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            string[] desiredCurrencies = FlattenCurrencyCodes(currencies);
+            var exchangeRateFileContent = _fileDownloadService.DownloadFileContent(TODAY_EXCHANGE_RATE_URL);
 
-            var exchangeRateFileContent = RetrieveExchangeRatesFileContent();
+            if (!_exchangeFileRegex.IsMatch(exchangeRateFileContent))
+            {
+                throw new Exception("Exchange rate file is in invalid format.");
+            }
+
+            var currencyCodesFlat = currencies.Select(currency => currency.Code);
+            var desiredCurrencies = new HashSet<string>(currencyCodesFlat);
 
             var linesInExRateFile = exchangeRateFileContent.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             var exchangeRates = new List<ExchangeRate>();
 
-            for (int i = 2; i < linesInExRateFile.Length; i++)
+            foreach (var line in linesInExRateFile.Skip(HEADER_LINES_COUNT))
             {
-                string line = linesInExRateFile[i];
                 var colValues = line.Split('|');
-                var rateCode = colValues[3];
-                var rate = decimal.Parse(colValues[4].Replace(',', '.'));
+
+                var rateCode = colValues[RATE_CODE_INDEX];
+                var amount = colValues[AMOUNT_INDEX];
+                var rate = decimal.Parse(colValues[EXCHANGE_RATE_INDEX].Replace(',', '.'));
+                rate = rate / int.Parse(amount);
 
                 if (desiredCurrencies.Contains(rateCode))
                 {
-                    Currency sourceCurrency = new Currency(DEFAULT_SOURCE_EXCHANGE_RATE_CODE);
-                    Currency targetCurrency = new Currency(rateCode);
+                    var sourceCurrency = new Currency(DEFAULT_SOURCE_EXCHANGE_RATE_CODE);
+                    var targetCurrency = new Currency(rateCode);
 
                     exchangeRates.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate));
                 }
             }
 
             return exchangeRates;
-        }
-
-        private string[] FlattenCurrencyCodes(IEnumerable<Currency> currencies)
-        {
-            var desiredCurrencies = new string[currencies.Count()];
-
-            var i = 0;
-            foreach (var currency in currencies)
-            {
-                desiredCurrencies[i] = currency.Code;
-                i++;
-            }
-
-            return desiredCurrencies;
-        }
-
-        private string RetrieveExchangeRatesFileContent()
-        {
-            var webClient = new WebClient();
-            using (var stream = webClient.OpenRead(TODAY_EXCHANGE_RATE_URL))
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
         }
     }
 }

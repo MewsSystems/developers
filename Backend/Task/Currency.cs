@@ -16,5 +16,11 @@
         {
             return Code;
         }
+
+        public override bool Equals(object obj)
+        {
+            var otherCurrency = obj as Currency;
+            return otherCurrency != null && otherCurrency.Code == Code;
+        }
     }
 }

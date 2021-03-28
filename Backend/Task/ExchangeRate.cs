@@ -19,5 +19,15 @@
         {
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
         }
+
+        public override bool Equals(object obj)
+        {
+            var otherRate = obj as ExchangeRate;
+
+            return otherRate != null
+                && otherRate.TargetCurrency.Equals(TargetCurrency)
+                && otherRate.SourceCurrency.Equals(SourceCurrency)
+                && otherRate.Value == Value;
+        }
     }
 }
