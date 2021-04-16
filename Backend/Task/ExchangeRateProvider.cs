@@ -16,12 +16,12 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             var lSourceCurrency = new Currency("CZK");
 
             var lResult = new List<ExchangeRate>();
-            var lCnbRateList = await GetCnbRateList();
+            var lCnbRateList = GetCnbRateList().GetAwaiter().GetResult();
 
             foreach (var lCurrency in currencies)
             {
