@@ -8,6 +8,7 @@ namespace ExchangeRateUpdater
     {
         private static IEnumerable<Currency> currencies = new[]
         {
+            //Not sure that we need a separate object for one string property, would rather use enum.
             new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),
@@ -23,14 +24,20 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(new HttpClientWrapper());
+                var results = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                Console.WriteLine($"Successfully retrieved {results.Where(c => c.Success).Count()} exchange rates:");
+               
+                foreach (var result in results.Where(c => c.Success))
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine(result.Rate.ToString());
                 }
+
+                foreach (var rate in results.Where(c => !c.Success))
+                {
+                    Console.WriteLine(rate.Message);
+                }                
             }
             catch (Exception e)
             {
