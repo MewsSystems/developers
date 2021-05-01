@@ -11,6 +11,7 @@
 *.DS_Store
 *.userprefs
 *.iml
+*.env
 *.ncrunch*
 .*crunch*.local.xml
 .idea
