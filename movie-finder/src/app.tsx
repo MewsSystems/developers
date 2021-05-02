@@ -1,15 +1,13 @@
 import React from "react";
-import { SearchView } from "./views/search-view";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 import { GlobalStyle } from "./styles/globalStyles";
+import { AppRouter } from "./components/app-router";
 
 export const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-        <SearchView />
-      </div>
+      <AppRouter />
       <GlobalStyle />
     </ThemeProvider>
   );

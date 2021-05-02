@@ -3,8 +3,7 @@ import axios from "axios";
 import { MovieTile } from "../components/movie-tile";
 import { debounce } from "lodash";
 import styled from "styled-components";
-
-const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY;
+import { API_KEY } from "../constants";
 
 type Movie = {
   adult: boolean;

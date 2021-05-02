@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Button } from "./button";
+import { useHistory } from "react-router-dom";
+import { Routes } from "./app-router";
 
 export interface IMovieTileProps {
   movieId: number;
@@ -25,8 +27,10 @@ export const MovieTile: React.FC<IMovieTileProps> = (props) => {
     posterSrc,
   } = props;
 
+  const history = useHistory();
+
   const handleGetMovieDetailClick = () => {
-    // TODO: redirect to movie detail view
+    history.push(Routes.DETAIL.replace(":movieId", `${movieId}`));
   };
 
   return (
