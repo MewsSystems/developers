@@ -3,7 +3,9 @@ export const theme = {
         black: "#000000",
         white: "#FFFFFF",
         blue: "#1976d2",
-        grey: "#f5f5f5"
+        grey: "#f5f5f5",
+        grey2:"#e3e3e3",
+        darkBlue:'#1566b7',
     },
     fontSize: {
         xs: "",
@@ -12,4 +14,7 @@ export const theme = {
         large: "1.2em",
         xl:"",
     },
+    offset: {
+
+    }
 }

@@ -4,19 +4,8 @@ import { MovieTile } from "../components/movie-tile";
 import { debounce } from "lodash";
 import styled from "styled-components";
 import { API_KEY } from "../constants";
-
-type Movie = {
-  adult: boolean;
-  backdrop_path: string;
-  id: number;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  release_date: string;
-  title: string;
-  vote_average: number;
-  vote_count: number;
-};
+import { InputText } from "../components/input";
+import { Movie } from "../types";
 
 interface ISearchViewProps {
   children?: never;
@@ -46,10 +35,13 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
 
   return (
     <SearchViewLayout>
-      <input
-        value={movieTitle}
-        onChange={(event) => setMovieTitle(event.target.value)}
-      />
+      <InputContainer>
+        <InputText
+          value={movieTitle}
+          placeholder={"Find your favourite movie"}
+          onChange={(event) => setMovieTitle(event.target.value)}
+        />
+      </InputContainer>
       <MoviesContainer>
         {movies.map((movie) => {
           const {
@@ -77,6 +69,8 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
   );
 };
 
+const TOP_VIEW_OFFSET = "4rem";
+
 const SearchViewLayout = styled.div`
   width: 100%;
   height: 100%;
@@ -88,7 +82,7 @@ const SearchViewLayout = styled.div`
     "search search"
     "movies movies"
     "pagination pagination";
-  padding: 0 1rem;
+  padding: ${TOP_VIEW_OFFSET} 0 0 0;
   background: ${(props) => props.theme.color.grey};
 `;
 
@@ -97,9 +91,22 @@ const MoviesContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  min-height: 100vw;
+  margin-top: ${TOP_VIEW_OFFSET};
   & > div {
     margin: 1rem;
     max-width: 45%;
     min-width: 30rem;
+  }
+`;
+
+const InputContainer = styled.div`
+  grid-area: search;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  & > input {
+    width: 30rem;
   }
 `;

@@ -43,7 +43,7 @@ export const MovieTile: React.FC<IMovieTileProps> = (props) => {
       </ImgContainer>
       <Title>{originalTitle}</Title>
       <Description>{overview}</Description>
-      <Score>{`Score ${voteAverage}/10  (${voteCount})`}</Score>
+      <Score>{`Score ${voteAverage} \u002F 10  (${voteCount})`}</Score>
       <ActionContainer>
         <Button
           onClick={handleGetMovieDetailClick}

@@ -9,7 +9,8 @@ export const GlobalStyle = createGlobalStyle`
       padding: 0;
       border: 0;
       vertical-align: baseline;
-      line-height: 1;
+      line-height: 1.2;
+      height: 100vh;
     }
   }
   
@@ -22,4 +23,5 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
     padding: 0;
   }
+  
 `
