@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo } from "react";
 import axios from "axios";
 import { MovieTile } from "../components/movie-tile";
 import { debounce } from "lodash";
 import styled from "styled-components";
 import { API_KEY } from "../constants";
 import { InputText } from "../components/input";
+import { Button } from "../components/button";
+import { useDispatch, useSelector } from "react-redux";
+import { appActionCreators } from "../redux/actions";
+import { AppReduxState } from "../redux/state";
 import { Movie } from "../types";
 
 interface ISearchViewProps {
@@ -12,34 +16,60 @@ interface ISearchViewProps {
 }
 
 export const SearchView: React.FC<ISearchViewProps> = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [movieTitle, setMovieTitle] = useState("");
+  const dispatch = useDispatch();
+
+  const searchValue = useSelector<AppReduxState, string>(
+    (state) => state.searchMovieTitle
+  );
+  const currentPage = useSelector<AppReduxState, number>(
+    (state) => state.currentPage
+  );
+
+  const movies = useSelector<AppReduxState, Movie[]>((state) => {
+    const page = state.moviePages.find(
+      (page) =>
+        page.searchValue === searchValue && page.pageNumber === currentPage
+    );
+    return page?.movies || [];
+  });
+
+  const handleMovieTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch(appActionCreators.setSearchMovieTitle(event.target.value));
+  };
 
   const debouncedFetchMoviesByTitle = useMemo(
     () =>
       debounce((movieTitle: string) => {
         axios
           .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
+            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieTitle}&page=${currentPage}&include_adult=false`
           )
-          .then((response) => setMovies(response.data.results));
+          .then((response) =>
+            dispatch(
+              appActionCreators.setMoviePage({
+                pageNumber: currentPage,
+                movies: response.data.results,
+                searchValue: movieTitle,
+              })
+            )
+          );
       }, 1500),
     []
   );
 
   useEffect(() => {
-    if (movieTitle) {
-      debouncedFetchMoviesByTitle(movieTitle);
+    if (searchValue) {
+      debouncedFetchMoviesByTitle(searchValue);
     }
-  }, [movieTitle, debouncedFetchMoviesByTitle]);
+  }, [searchValue, debouncedFetchMoviesByTitle]);
 
   return (
     <SearchViewLayout>
       <InputContainer>
         <InputText
-          value={movieTitle}
+          value={searchValue}
           placeholder={"Find your favourite movie"}
-          onChange={(event) => setMovieTitle(event.target.value)}
+          onChange={handleMovieTitleChange}
         />
       </InputContainer>
       <MoviesContainer>
@@ -65,6 +95,14 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
           );
         })}
       </MoviesContainer>
+      <PaginationContainer>
+        <Button
+          content={"1"}
+          onClick={() => {}}
+          isDisabled={false}
+          variant={"primary"}
+        />
+      </PaginationContainer>
     </SearchViewLayout>
   );
 };
@@ -109,4 +147,9 @@ const InputContainer = styled.div`
   & > input {
     width: 30rem;
   }
+`;
+
+const PaginationContainer = styled.div`
+  grid-area: pagination;
+  display: flex;
 `;
