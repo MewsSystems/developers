@@ -5,6 +5,7 @@ export enum ActionTypes {
   SET_LOADING = "app/SET_LOADING",
   SET_SEARCH_MOVIE_TITLE = "app/SET_SEARCH_MOVIE_TITLE",
   SET_CURRENT_PAGE = "app/SET_CURRENT_PAGE",
+  SET_PAGE_TO_SEARCH = "app/SET_PAGE_TO_SEARCH",
   SET_TOTAL_PAGES = "app/SET_TOTAL_PAGES",
   SET_MOVIE_PAGE = "app/SET_MOVIE_PAGE",
 }
@@ -24,6 +25,11 @@ export interface SetCurrentPageAction extends Action {
   payload: number;
 }
 
+export interface SetPageToSearchAction extends Action {
+  type: ActionTypes.SET_PAGE_TO_SEARCH;
+  payload: number;
+}
+
 export interface SetTotalPagesAction extends Action {
   type: ActionTypes.SET_TOTAL_PAGES;
   payload: number;
@@ -39,4 +45,5 @@ export type AppActions =
   | SetSearchMovieTitleAction
   | SetCurrentPageAction
   | SetTotalPagesAction
-  | SetMoviePageAction;
+  | SetMoviePageAction
+  | SetPageToSearchAction;

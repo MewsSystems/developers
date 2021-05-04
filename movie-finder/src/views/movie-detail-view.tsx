@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { API_KEY } from "../constants";
 import styled from "styled-components";
 import {
   getCategory,
   getGenres,
-  getMovieImgSrcBig,
+  getMovieImgSrc,
   getReleaseDate,
   getRevenue,
 } from "../helpers";
 import { MovieDetail, MovieDetailViewParams } from "../types";
+import { movieDbApi } from "../api/movie-db-api";
+import { IMAGE_URL, MOVIE_DB_IMG_WIDTH } from "../constants";
 
 interface IMovieDetailViewProps {
   children?: never;
@@ -22,10 +22,8 @@ export const MovieDetailView: React.FC<IMovieDetailViewProps> = () => {
   const [movieDetail, setMovieDetail] = useState<MovieDetail>();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=en-US`
-      )
+    movieDbApi
+      .getMovieDetail(movieId)
       .then((response) => setMovieDetail(response.data));
   }, [movieId]);
 
@@ -33,9 +31,12 @@ export const MovieDetailView: React.FC<IMovieDetailViewProps> = () => {
     <MovieDetailViewLayout>
       <ImgContainer>
         <Img
-          src={getMovieImgSrcBig(
-            `https://image.tmdb.org/t/p/w300/${movieDetail?.poster_path}`
-          )}
+          src={getMovieImgSrc({
+            baseImgUrl: IMAGE_URL.BASE_MOVIE_DB,
+            placeholderUrl: IMAGE_URL.BASE_PLACEHOLDER,
+            imgSrc: movieDetail?.poster_path,
+            imgWidth: MOVIE_DB_IMG_WIDTH.PX_300,
+          })}
           alt="movie preview"
         />
       </ImgContainer>

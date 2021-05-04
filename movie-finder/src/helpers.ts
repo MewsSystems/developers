@@ -1,5 +1,6 @@
 import moment from "moment";
 import {Genres} from "./types";
+import {MOVIE_DB_IMG_WIDTH} from "./constants";
 
 export const getGenres = (arr: Genres[]): string => {
     const result: string[] = [];
@@ -24,9 +25,16 @@ export const getRevenue = (revenue: number | undefined )=>{
     return revenue ? formatter.format(revenue) : `-`
 }
 
-//TODO: optimize functions
 
-export const getMovieImgSrc = (imgSrc: string): string =>
-    !imgSrc.endsWith("null") ? imgSrc : "http://via.placeholder.com/185x280";
-export const getMovieImgSrcBig = (imgSrc: string): string =>
-    !imgSrc.endsWith("null") ? imgSrc : "http://via.placeholder.com/300x460";
+export const getMovieImgSrc = (options: {baseImgUrl: string,imgSrc: string| null| undefined, imgWidth: MOVIE_DB_IMG_WIDTH, placeholderUrl: string}): string => {
+    const {imgSrc,
+    baseImgUrl,
+    imgWidth,
+    placeholderUrl} = options
+if(!imgSrc){
+    const placeholderHeight = imgWidth === MOVIE_DB_IMG_WIDTH.PX_185 ? "280" : "460"
+    return `${placeholderUrl}/${imgWidth}x${placeholderHeight}`
+}
+
+   return `${baseImgUrl}/w${imgWidth}/${imgSrc}`
+}

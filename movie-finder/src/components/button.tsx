@@ -51,8 +51,8 @@ const ButtonWrapper = styled.button<{ variant: string; isDisabled: boolean }>`
 const activeButtonStyle = css`
   background: ${(props) => props.theme.color.darkBlue};
   color: ${(props) => props.theme.color.grey};
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   &:hover {
     color: ${(props) => props.theme.color.blue};
     background: rgba(25, 118, 210, 0.04);
@@ -60,8 +60,8 @@ const activeButtonStyle = css`
   }
 `;
 const secondaryButtonStyle = css`
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   margin: 0 3px;
   border: ${({ theme }) => `1px solid ${theme.color.blue}`};
   background: ${(props) => props.theme.color.white};

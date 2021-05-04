@@ -5,6 +5,7 @@ import { MoviesPage } from "../types";
 export type AppReduxState = {
   searchMovieTitle: string;
   currentPage: number;
+  pageToSearch: number | undefined;
   loading: boolean;
   moviePages: MoviesPage[];
 };
@@ -12,6 +13,7 @@ export type AppReduxState = {
 export const initialState: AppReduxState = {
   searchMovieTitle: "",
   currentPage: 1,
+  pageToSearch: undefined,
   loading: false,
   moviePages: [],
 };

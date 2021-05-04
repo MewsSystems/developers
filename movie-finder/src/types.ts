@@ -34,9 +34,20 @@ export type Movie = {
     vote_count: number;
 };
 
-export type MoviesPage={
+export type GetMoviesResponse = {
+    results:Movie[],
+    total_pages: number,
+    page: number
+}
+
+export type MoviesPage = {
     pageNumber: number,
     movies: Movie[],
     searchValue: string,
     totalPages: number,
+}
+
+export type Size = {
+    width: number,
+    height: number
 }

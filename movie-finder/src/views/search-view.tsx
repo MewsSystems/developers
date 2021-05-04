@@ -1,15 +1,15 @@
 import React, { ChangeEvent, useEffect, useMemo } from "react";
-import axios from "axios";
 import { MovieTile } from "../components/movie-tile";
 import { debounce } from "lodash";
 import styled from "styled-components";
-import { API_KEY } from "../constants";
 import { InputText } from "../components/input";
 import { useDispatch, useSelector } from "react-redux";
 import { appActionCreators } from "../redux/actions";
 import { AppReduxState } from "../redux/state";
 import { MoviesPage } from "../types";
 import { Pagination } from "../components/pagination";
+import { appSelectors } from "../redux/selectors";
+import { movieDbApi } from "../api/movie-db-api";
 
 interface ISearchViewProps {
   children?: never;
@@ -19,11 +19,10 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
   const dispatch = useDispatch();
 
   const searchValue = useSelector<AppReduxState, string>(
-    (state) => state.searchMovieTitle
+    appSelectors.getSearchMovieTitle
   );
-  const currentPage = useSelector<AppReduxState, number>(
-    (state) => state.currentPage
-  );
+  const currentPage = useSelector(appSelectors.getCurrentPage);
+  const shouldFetchMovies = useSelector(appSelectors.shouldFetchMovies);
 
   const { movies, totalPages } = useSelector<AppReduxState, MoviesPage>(
     (state) => {
@@ -41,21 +40,17 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
     dispatch(appActionCreators.setSearchMovieTitle(event.target.value));
   };
 
-  const handleNextPageClick = () => {
-    if (currentPage < totalPages) {
-      dispatch(appActionCreators.setCurrentPage(currentPage + 1));
-    } else {
-      dispatch(appActionCreators.setCurrentPage(totalPages));
-    }
-  };
+  const handleNextPageClick = () =>
+    dispatch(
+      appActionCreators.setCurrentPage(
+        currentPage < totalPages ? currentPage + 1 : totalPages
+      )
+    );
 
-  const handlePreviousPageClick = () => {
-    if (currentPage > 1) {
-      dispatch(appActionCreators.setCurrentPage(currentPage - 1));
-    } else {
-      dispatch(appActionCreators.setCurrentPage(1));
-    }
-  };
+  const handlePreviousPageClick = () =>
+    dispatch(
+      appActionCreators.setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)
+    );
 
   const handleExactPageClick = (page: number) => {
     dispatch(appActionCreators.setCurrentPage(page));
@@ -64,10 +59,9 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
   const debouncedFetchMoviesByTitle = useMemo(
     () =>
       debounce((movieTitle: string, page: number) => {
-        axios
-          .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieTitle}&page=${page}&include_adult=false`
-          )
+        dispatch(appActionCreators.setLoading(true));
+        movieDbApi
+          .getMovies(movieTitle, page)
           .then((response) =>
             dispatch(
               appActionCreators.setMoviePage({
@@ -77,16 +71,27 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
                 searchValue: movieTitle,
               })
             )
-          );
+          )
+          .finally(() => dispatch(appActionCreators.setLoading(false)));
       }, 1500),
-    []
+    [dispatch]
   );
 
+  // Data fetching
   useEffect(() => {
-    if (searchValue) {
+    if (searchValue && shouldFetchMovies) {
       debouncedFetchMoviesByTitle(searchValue, currentPage);
     }
-  }, [searchValue, debouncedFetchMoviesByTitle, currentPage]);
+  }, [
+    searchValue,
+    debouncedFetchMoviesByTitle,
+    currentPage,
+    shouldFetchMovies,
+  ]);
+  // Scrolling effect
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [movies]);
 
   return (
     <SearchViewLayout>
@@ -129,7 +134,6 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
           onExactPageClick={handleExactPageClick}
         />
       </PaginationContainer>
-      {}
     </SearchViewLayout>
   );
 };

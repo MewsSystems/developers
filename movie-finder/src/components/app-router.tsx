@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { SearchView } from "../views/search-view";
 import { MovieDetailView } from "../views/movie-detail-view";
+import { AppLayout } from "./app-layout";
 
 export enum Routes {
   HOME = "/",
@@ -16,7 +17,7 @@ export enum Routes {
 
 export const AppRouter: React.FC = () => {
   return (
-    <>
+    <AppLayout>
       <Router>
         <Switch>
           <Route exact path={Routes.SEARCH} component={SearchView} />
@@ -24,6 +25,6 @@ export const AppRouter: React.FC = () => {
           <Redirect to={Routes.HOME} />
         </Switch>
       </Router>
-    </>
+    </AppLayout>
   );
 };

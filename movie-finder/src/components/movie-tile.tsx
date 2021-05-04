@@ -4,6 +4,7 @@ import { Button } from "./button";
 import { useHistory } from "react-router-dom";
 import { Routes } from "./app-router";
 import { getMovieImgSrc } from "../helpers";
+import { IMAGE_URL, MOVIE_DB_IMG_WIDTH } from "../constants";
 
 export interface IMovieTileProps {
   movieId: number;
@@ -35,7 +36,12 @@ export const MovieTile: React.FC<IMovieTileProps> = (props) => {
     <TileContainer>
       <ImgContainer>
         <Img
-          src={getMovieImgSrc(`https://image.tmdb.org/t/p/w185/${posterSrc}`)}
+          src={getMovieImgSrc({
+            imgWidth: MOVIE_DB_IMG_WIDTH.PX_185,
+            imgSrc: posterSrc,
+            placeholderUrl: IMAGE_URL.BASE_PLACEHOLDER,
+            baseImgUrl: IMAGE_URL.BASE_MOVIE_DB,
+          })}
           alt="movie preview"
         />
       </ImgContainer>

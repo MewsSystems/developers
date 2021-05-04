@@ -3,6 +3,7 @@ import {
   SetCurrentPageAction,
   SetLoadingAction,
   SetMoviePageAction,
+  SetPageToSearchAction,
   SetSearchMovieTitleAction,
   SetTotalPagesAction,
 } from "./types";
@@ -23,6 +24,11 @@ const setCurrentPage = (currentPage: number): SetCurrentPageAction => ({
   payload: currentPage,
 });
 
+const setPageToSearch = (pageToSearch: number): SetPageToSearchAction => ({
+  type: ActionTypes.SET_PAGE_TO_SEARCH,
+  payload: pageToSearch,
+});
+
 const setTotalPages = (totalPages: number): SetTotalPagesAction => ({
   type: ActionTypes.SET_TOTAL_PAGES,
   payload: totalPages,
@@ -37,6 +43,7 @@ export const appActionCreators = {
   setLoading,
   setSearchMovieTitle,
   setCurrentPage,
+  setPageToSearch,
   setTotalPages,
   setMoviePage,
 };
