@@ -5,11 +5,11 @@ import { debounce } from "lodash";
 import styled from "styled-components";
 import { API_KEY } from "../constants";
 import { InputText } from "../components/input";
-import { Button } from "../components/button";
 import { useDispatch, useSelector } from "react-redux";
 import { appActionCreators } from "../redux/actions";
 import { AppReduxState } from "../redux/state";
-import { Movie } from "../types";
+import { MoviesPage } from "../types";
+import { Pagination } from "../components/pagination";
 
 interface ISearchViewProps {
   children?: never;
@@ -25,29 +25,54 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
     (state) => state.currentPage
   );
 
-  const movies = useSelector<AppReduxState, Movie[]>((state) => {
-    const page = state.moviePages.find(
-      (page) =>
-        page.searchValue === searchValue && page.pageNumber === currentPage
-    );
-    return page?.movies || [];
-  });
+  const { movies, totalPages } = useSelector<AppReduxState, MoviesPage>(
+    (state) => {
+      const page = state.moviePages.find(
+        (page) =>
+          page.searchValue === searchValue && page.pageNumber === currentPage
+      );
+      return (
+        page || { totalPages: 0, movies: [], pageNumber: 1, searchValue: "" }
+      );
+    }
+  );
 
   const handleMovieTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(appActionCreators.setSearchMovieTitle(event.target.value));
   };
 
+  const handleNextPageClick = () => {
+    if (currentPage < totalPages) {
+      dispatch(appActionCreators.setCurrentPage(currentPage + 1));
+    } else {
+      dispatch(appActionCreators.setCurrentPage(totalPages));
+    }
+  };
+
+  const handlePreviousPageClick = () => {
+    if (currentPage > 1) {
+      dispatch(appActionCreators.setCurrentPage(currentPage - 1));
+    } else {
+      dispatch(appActionCreators.setCurrentPage(1));
+    }
+  };
+
+  const handleExactPageClick = (page: number) => {
+    dispatch(appActionCreators.setCurrentPage(page));
+  };
+
   const debouncedFetchMoviesByTitle = useMemo(
     () =>
-      debounce((movieTitle: string) => {
+      debounce((movieTitle: string, page: number) => {
         axios
           .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieTitle}&page=${currentPage}&include_adult=false`
+            `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieTitle}&page=${page}&include_adult=false`
           )
           .then((response) =>
             dispatch(
               appActionCreators.setMoviePage({
-                pageNumber: currentPage,
+                pageNumber: page,
+                totalPages: response.data.total_pages,
                 movies: response.data.results,
                 searchValue: movieTitle,
               })
@@ -59,9 +84,9 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
 
   useEffect(() => {
     if (searchValue) {
-      debouncedFetchMoviesByTitle(searchValue);
+      debouncedFetchMoviesByTitle(searchValue, currentPage);
     }
-  }, [searchValue, debouncedFetchMoviesByTitle]);
+  }, [searchValue, debouncedFetchMoviesByTitle, currentPage]);
 
   return (
     <SearchViewLayout>
@@ -96,13 +121,15 @@ export const SearchView: React.FC<ISearchViewProps> = () => {
         })}
       </MoviesContainer>
       <PaginationContainer>
-        <Button
-          content={"1"}
-          onClick={() => {}}
-          isDisabled={false}
-          variant={"primary"}
+        <Pagination
+          currentPage={currentPage}
+          maxPages={totalPages}
+          onNextPageClick={handleNextPageClick}
+          onPreviousPageClick={handlePreviousPageClick}
+          onExactPageClick={handleExactPageClick}
         />
       </PaginationContainer>
+      {}
     </SearchViewLayout>
   );
 };
@@ -115,7 +142,7 @@ const SearchViewLayout = styled.div`
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 2rem 1fr 2rem;
+  grid-template-rows: 2rem 1fr 4rem;
   grid-template-areas:
     "search search"
     "movies movies"
@@ -151,5 +178,4 @@ const InputContainer = styled.div`
 
 const PaginationContainer = styled.div`
   grid-area: pagination;
-  display: flex;
 `;

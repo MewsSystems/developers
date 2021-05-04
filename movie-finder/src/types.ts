@@ -38,4 +38,5 @@ export type MoviesPage={
     pageNumber: number,
     movies: Movie[],
     searchValue: string,
+    totalPages: number,
 }

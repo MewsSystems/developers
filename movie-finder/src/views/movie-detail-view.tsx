@@ -3,7 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_KEY } from "../constants";
 import styled from "styled-components";
-import { getCategory, getGenres, getReleaseDate, getRevenue } from "../helpers";
+import {
+  getCategory,
+  getGenres,
+  getMovieImgSrcBig,
+  getReleaseDate,
+  getRevenue,
+} from "../helpers";
 import { MovieDetail, MovieDetailViewParams } from "../types";
 
 interface IMovieDetailViewProps {
@@ -27,7 +33,9 @@ export const MovieDetailView: React.FC<IMovieDetailViewProps> = () => {
     <MovieDetailViewLayout>
       <ImgContainer>
         <Img
-          src={`https://image.tmdb.org/t/p/w300/${movieDetail?.poster_path}`}
+          src={getMovieImgSrcBig(
+            `https://image.tmdb.org/t/p/w300/${movieDetail?.poster_path}`
+          )}
           alt="movie preview"
         />
       </ImgContainer>

@@ -24,4 +24,9 @@ export const getRevenue = (revenue: number | undefined )=>{
     return revenue ? formatter.format(revenue) : `-`
 }
 
-export const getCeilScore = (score:number )=> Math.ceil(score)
+//TODO: optimize functions
+
+export const getMovieImgSrc = (imgSrc: string): string =>
+    !imgSrc.endsWith("null") ? imgSrc : "http://via.placeholder.com/185x280";
+export const getMovieImgSrcBig = (imgSrc: string): string =>
+    !imgSrc.endsWith("null") ? imgSrc : "http://via.placeholder.com/300x460";

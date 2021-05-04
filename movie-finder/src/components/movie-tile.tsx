@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button } from "./button";
 import { useHistory } from "react-router-dom";
 import { Routes } from "./app-router";
+import { getMovieImgSrc } from "../helpers";
 
 export interface IMovieTileProps {
   movieId: number;
@@ -13,9 +14,6 @@ export interface IMovieTileProps {
   posterSrc: string | null;
   children?: never;
 }
-
-const getMovieImgSrc = (imgSrc: string): string =>
-  !imgSrc.endsWith("null") ? imgSrc : "http://via.placeholder.com/185x280";
 
 export const MovieTile: React.FC<IMovieTileProps> = (props) => {
   const {
