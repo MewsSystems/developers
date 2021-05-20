@@ -1,19 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
+        private string _data;
+        private List<ExchangeRate> _exchangeRates;
+        private Currency _sourceCurrency;
+        public ExchangeRateProvider(string data)
+        {
+            _data = data;
+            _exchangeRates = new List<ExchangeRate>();
+            _sourceCurrency = new Currency("CZK");
+        }
+
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            ConvertStringToExchangeRate(currencies);
+            return _exchangeRates;
+        }
+
+        private void ConvertStringToExchangeRate(IEnumerable<Currency> currencies)
+        {
+            var delims = new[] {'\n'};
+            var exchangeData = _data.Split(delims,
+                StringSplitOptions.RemoveEmptyEntries).Skip(2).ToArray();
+
+            foreach (var singleLine in exchangeData)
+            {
+                var info = singleLine.Split('|');
+                var code = info[3];
+                if (!currencies.Any(currency => currency.Code == info[3])) continue;
+                var amount = Convert.ToInt16(info[2]);
+                var rate = float.Parse(info[4]);
+                
+                var exchangeRate = new ExchangeRate(_sourceCurrency, new Currency(code), (decimal) (amount / rate));
+                _exchangeRates.Add(exchangeRate);
+            }
         }
     }
 }
