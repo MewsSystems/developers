@@ -13,6 +13,8 @@ Would you like to meet us? Hear us talk or check if we're coming to your area? C
 Currently, we are seeking highly experienced people for the following positions:
 - [Mid/Senior Backend Developer - .NET C#](https://apply.workable.com/mews/j/094EDDB116/)
 - [Senior Frontend Developer](https://apply.workable.com/mews/j/E8D97BFEB1/)
+- [Agile Coach](https://apply.workable.com/mews/j/392C22FEAB/)
+- [Mid/Senior Frontend Developer for a Design System](https://apply.workable.com/mews/j/3AD8DE723A/)
 - [Senior Frontend Developer - Platform Team](https://apply.workable.com/mews/j/3FB93D9C0E/)
 - [QA Automation Engineer](https://apply.workable.com/mews/j/55580F9394/)
 - [QA Engineer](https://apply.workable.com/mews/j/15C60AF3DC/)
