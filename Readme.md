@@ -10,6 +10,7 @@ Would you like to meet us? Hear us talk or check if we're coming to your area? C
 
 ## 💼 Open positions
 
+We are continously looking for talented and experienced individuals with passion for technology and lifelong learning. See the technologies we're working with on our [Stackshare](https://stackshare.io/mews/mews) profile and check out all the open tech positions [here](https://github.com/MewsSystems/developers/blob/master/Open%20Positions.md).
 
 <a name='about-mews'/>
 
