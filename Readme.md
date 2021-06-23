@@ -1,16 +1,10 @@
 # Mews developers
 
-Information about development job opportunities and career at [Mews](https://mews.com). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, technical topics and life of devs at Mews.
+Information about development, engineering, work and life in [Mews](https://mews.com). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsDevs) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, technical topics and life of devs at Mews.
 
 Would you like to meet us? Hear us talk or check if we're coming to your area? Check out our [Eventbrite](https://www.eventbrite.com/o/mewsdevs-30252533666) for the events we organize. Recordings of our past talks can be found on our [YouTube](https://www.youtube.com/channel/UCrepPB-0Yryop41OuQbQR3w/playlists) channel.
 
-**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
-
-<a name='open-positions'/>
-
-## 💼 Open positions
-
-We are continously looking for talented and experienced individuals with passion for technology and lifelong learning. See the technologies we're working with on our [Stackshare](https://stackshare.io/mews/mews) profile and check out all the open tech positions [here](https://github.com/MewsSystems/developers/blob/master/Open%20Positions.md).
+We are continously looking for talented and experienced people with passion for technology and lifelong learning. See the technologies we're working with on our [Stackshare](https://stackshare.io/mews/mews) profile and check out all the [open positions](https://github.com/MewsSystems/developers/blob/master/jobs). **You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
 
 <a name='about-mews'/>
 
