@@ -17,6 +17,7 @@ namespace ExchangeRateUpdater
 
         private const char Separator = '|';
 
+        private int _amountIndex = -1;
         private int _codeIndex = -1;
         private int _rateIndex = -1;
 
@@ -31,7 +32,6 @@ namespace ExchangeRateUpdater
             string url = string.Format(Url, _dateProvider.GetCurrentDate("dd.MM.yyyy"));
             
             string responseString = await _httpClient.GetStringAsync(url);
-
             
             if (string.IsNullOrEmpty(responseString))
             {
@@ -61,10 +61,10 @@ namespace ExchangeRateUpdater
                         break;
                     }
                     default:
-                        var exchangeRate = GetExchangeRate(line);
+                        var exchangeRate = GetExchangeRate(line, currencies);
                         if (exchangeRate is not null)
                         {
-                            exchangeRates.Add(GetExchangeRate(line));
+                            exchangeRates.Add(exchangeRate);
                         }
                         break;
                 }
@@ -82,6 +82,9 @@ namespace ExchangeRateUpdater
             {
                 switch (headers[i])
                 {
+                    case "Amount":
+                        _amountIndex = i;
+                        break;
                     case "Code":
                         _codeIndex = i;
                         break;
@@ -92,18 +95,34 @@ namespace ExchangeRateUpdater
             }
         }
 
-        private bool IsFieldIndexValid() => _codeIndex != -1 && _rateIndex != -1;
+        private bool IsFieldIndexValid() => _amountIndex != -1 && _codeIndex != -1 && _rateIndex != -1;
 
-        private ExchangeRate GetExchangeRate(string line)
+        private ExchangeRate GetExchangeRate(string line, IEnumerable<Currency> currencies)
         {
             string[] fields = line.Split(Separator);
-            var targetCurrency = new Currency(fields[_codeIndex]);
+            string currencyCode = fields[_codeIndex];
 
-            return Decimal.TryParse(fields[_rateIndex], out var value) 
-                ? new ExchangeRate(GetSourceCurrency(), targetCurrency, value) 
-                : null;
+            var sourceCurrency = currencies.FirstOrDefault(currency => currency.Code == currencyCode);
+            if (sourceCurrency is null)
+            {
+                return null;
+            }
+
+            if (!Int32.TryParse(fields[_amountIndex], out int amount))
+            {
+                return null;
+            }
+
+            if (!Decimal.TryParse(fields[_rateIndex], out decimal rate) )
+            {
+                return null;
+            }
+
+            decimal exchangeRate = rate / amount;
+            
+            return new ExchangeRate(sourceCurrency, GetTargetCurrency(), exchangeRate);
         }
 
-        private static Currency GetSourceCurrency() => new Currency("CZK");
+        private static Currency GetTargetCurrency() => new Currency("CZK");
     }
 }
