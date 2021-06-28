@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -9,29 +10,24 @@ namespace ExchangeRateUpdater
 {
     public class CnbExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly HttpClient _httpClient;
-        private readonly IDateProvider _dateProvider;
-
-        private const string Url =
-            "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date={0}";
-
         private const char Separator = '|';
+        private const int AmountIndex = 2;
+        private const int CodeIndex = 3;
+        private const int RateIndex = 4;
+        
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        private int _amountIndex = -1;
-        private int _codeIndex = -1;
-        private int _rateIndex = -1;
-
-        public CnbExchangeRateProvider(HttpClient httpClient, IDateProvider dateProvider)
+        public CnbExchangeRateProvider(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _dateProvider = dateProvider;
+            _configuration = configuration;
         }
         
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            string url = string.Format(Url, _dateProvider.GetCurrentDate("dd.MM.yyyy"));
-            
-            string responseString = await _httpClient.GetStringAsync(url);
+            string apiUrl = _configuration.GetAppSettingValue("CnbApiUrl");
+            string responseString = await _httpClient.GetStringAsync(apiUrl);
             
             if (string.IsNullOrEmpty(responseString))
             {
@@ -47,19 +43,9 @@ namespace ExchangeRateUpdater
             {
                 switch (lineIndex)
                 {
-                    case 0:
-                        // do nothing
+                    case 0: // The first line of the text consists of the date for which the exchange rate was declared in DD.MM.YYYY format.
+                    case 1: // This second line consists of a header in the following form: Country|Currency|Amount|Code|Rate
                         break;
-                    case 1:
-                    {
-                        PopulateFieldIndex(line);
-                        if (!IsFieldIndexValid())
-                        {
-                            return Enumerable.Empty<ExchangeRate>();
-                        }
-
-                        break;
-                    }
                     default:
                         var exchangeRate = GetExchangeRate(line, currencies);
                         if (exchangeRate is not null)
@@ -75,32 +61,10 @@ namespace ExchangeRateUpdater
             return exchangeRates;
         }
 
-        private void PopulateFieldIndex(string line)
-        {
-            string[] headers = line.Split(Separator);
-            for (var i = 0; i < headers.Length; i++)
-            {
-                switch (headers[i])
-                {
-                    case "Amount":
-                        _amountIndex = i;
-                        break;
-                    case "Code":
-                        _codeIndex = i;
-                        break;
-                    case "Rate":
-                        _rateIndex = i;
-                        break;
-                }
-            }
-        }
-
-        private bool IsFieldIndexValid() => _amountIndex != -1 && _codeIndex != -1 && _rateIndex != -1;
-
-        private ExchangeRate GetExchangeRate(string line, IEnumerable<Currency> currencies)
+        private static ExchangeRate GetExchangeRate(string line, IEnumerable<Currency> currencies)
         {
             string[] fields = line.Split(Separator);
-            string currencyCode = fields[_codeIndex];
+            string currencyCode = fields[CodeIndex];
 
             var sourceCurrency = currencies.FirstOrDefault(currency => currency.Code == currencyCode);
             if (sourceCurrency is null)
@@ -108,12 +72,12 @@ namespace ExchangeRateUpdater
                 return null;
             }
 
-            if (!Int32.TryParse(fields[_amountIndex], out int amount))
+            if (!Int32.TryParse(fields[AmountIndex], out int amount))
             {
                 return null;
             }
 
-            if (!Decimal.TryParse(fields[_rateIndex], out decimal rate) )
+            if (!Decimal.TryParse(fields[RateIndex], out decimal rate) )
             {
                 return null;
             }

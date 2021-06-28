@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider(new HttpClient(), new DateProvider());
+                var provider = new CnbExchangeRateProvider(new HttpClient(), new Configuration());
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
