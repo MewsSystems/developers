@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -26,6 +25,11 @@ namespace ExchangeRateUpdater
         
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
+            if (currencies is null || !currencies.Any())
+            {
+                return Enumerable.Empty<ExchangeRate>();
+            }
+            
             string apiUrl = _configuration.GetAppSettingValue("CnbApiUrl");
             string responseString = await _httpClient.GetStringAsync(apiUrl);
             
@@ -33,12 +37,11 @@ namespace ExchangeRateUpdater
             {
                 return Enumerable.Empty<ExchangeRate>();
             }
+            
+            int lineIndex = 0;
+            var exchangeRates = new List<ExchangeRate>();
 
             using var reader = new StringReader(responseString);
-            int lineIndex = 0;
-
-            var exchangeRates = new List<ExchangeRate>();
-            
             for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())
             {
                 switch (lineIndex)
