@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
+    /// <summary>
+    /// Handle exchange rate from Czech National bank
+    /// See https://www.cnb.cz/en/faq/Format-of-the-foreign-exchange-market-rates/
+    /// </summary>
     public class CnbExchangeRateProvider : IExchangeRateProvider
     {
         private const char Separator = '|';
