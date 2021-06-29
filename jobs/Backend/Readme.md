@@ -7,3 +7,5 @@ The solution has to be buildable, runnable and the test program should output th
 This is to implement a fully functional provider based on real world public data source of the assigned bank. For some of the banks, the fastest applicants managed to implement this in less than an hour.
 
 To submit your solution, just open a new pull request to this repository.
+
+Please write the code like you would if you needed this to run on production environment and had to take care of it long-term.
