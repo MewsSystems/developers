@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
+        private const string EXCHANGE_RATE_ENDPOINT = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -19,17 +22,19 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                using (var provider = new ExchangeRateProvider(EXCHANGE_RATE_ENDPOINT))
                 {
-                    Console.WriteLine(rate.ToString());
+                    var rates = await provider.GetExchangeRates(currencies);
+
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
             }
             catch (Exception e)

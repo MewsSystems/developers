@@ -47,6 +47,7 @@
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="SourceFormatException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
