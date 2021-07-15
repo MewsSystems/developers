@@ -1,0 +1,41 @@
+--The query shows top 1 choice of booking rate for each country. For this purpose the column "rank" has been calculated. To see more results modify
+--the filter for "rank" in WHERE clause
+select * 
+from (select count("RateName") as "Reservations",
+"NationalityCode",
+row_number() over (partition by "NationalityCode" order by "Reservations" DESC) as "rank",
+rates."RateName",
+rates."ShortRateName"
+from  reservations
+join  rates on rates."RateId"=reservations."RateId"
+where "NationalityCode" != 'NULL'
+group by "NationalityCode", rates."RateName", rates."ShortRateName")
+where "rank"=1
+order by "NationalityCode" asc, "rank" asc
+
+--The query shows top 3 choices of booking rates among each gender. To be clarified if gender=0 is a missing value or a gender category.
+select * from (select count("RateName") as "Reservations",
+"Gender",
+row_number() over (partition by "Gender" order by "Reservations" DESC) as "rank",
+rates."RateName",
+rates."ShortRateName"
+from reservations
+join rates on rates."RateId"=reservations."RateId"
+--where "Gender"!=0
+group by "Gender", rates."RateName", rates."ShortRateName")
+where "rank"<=3
+order by "Gender" asc, "rank" asc
+
+
+--shows top 3 choices of booking rates among each age group. Needs further clarifications if age group=0 is a missing value or an age category.
+
+select * from (select count("RateName") as "Reservations",
+"AgeGroup",
+row_number() over (partition by "AgeGroup" order by "Reservations" DESC) as "rank",
+rates."RateName",
+rates."ShortRateName"
+from reservations
+join rates on rates."RateId"=reservations."RateId"
+group by "AgeGroup", rates."RateName", rates."ShortRateName")
+where "rank"<=3
+order by "AgeGroup"*1 asc, "rank" asc

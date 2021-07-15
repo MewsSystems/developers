@@ -1,0 +1,19 @@
+--Average night cost per single occupied capacity.
+--Profitability by age group
+select avg("NightCost_Sum"/"OccupiedSpace_Sum") as "AvgCostPerCapacity", "AgeGroup" from reservations
+where "OccupiedSpace_Sum"!=0
+group by "AgeGroup"
+order by "AvgCostPerCapacity" desc
+
+--Profitability by country
+select avg("NightCost_Sum"/"OccupiedSpace_Sum") as "AvgCostPerCapacity", "NationalityCode" from reservations
+where "OccupiedSpace_Sum"!=0
+and "NationalityCode"!='NULL'
+group by "NationalityCode"
+order by "AvgCostPerCapacity" desc
+
+--profitability by gender
+select avg("NightCost_Sum"/"OccupiedSpace_Sum") as "AvgCostPerCapacity", "Gender" from reservations
+where "OccupiedSpace_Sum"!=0
+group by "Gender"
+order by "AvgCostPerCapacity" desc

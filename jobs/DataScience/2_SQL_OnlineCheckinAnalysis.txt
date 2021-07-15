@@ -1,0 +1,51 @@
+--The query analyzes the online check-in reservations accross all customer categories.
+--The results shows that the typical guests for online check-in are mostly from US and GB, at the age group 23,35,45, 55 and Gender 1
+select top 10 count("IsOnlineCheckin") as "OnlineCheckinCount", "AgeGroup","Gender", "NationalityCode" from reservations
+where "IsOnlineCheckin"=1
+group by "Gender", "AgeGroup", "NationalityCode"
+order by "OnlineCheckinCount" desc
+
+--the query shows the number of online check-in reservations for each age group in the descending order.
+select count("IsOnlineCheckin") as "OnlineCheckinCount", "AgeGroup" from reservations
+where "IsOnlineCheckin"=1
+group by "AgeGroup"
+order by "OnlineCheckinCount" desc
+
+
+--the query shows the number of online check-in reservations per country in the descending order.
+select count("IsOnlineCheckin") as "OnlineCheckinCount", "NationalityCode" from reservations
+where "IsOnlineCheckin"=1
+group by "NationalityCode"
+order by "OnlineCheckinCount" desc
+
+--the query shows the number of online check-in reservations for each gender.
+select count("IsOnlineCheckin") as "OnlineCheckinCount", "Gender" from reservations
+where "IsOnlineCheckin"=1
+group by "Gender"
+order by "OnlineCheckinCount" desc
+
+--Online check-in reservations for each weekday. The most popular days of the week for online check-ins are Tuesday, Monday, Wednesday, Thursday
+select SUM("IsOnlineCheckin") as "OnlineCheckinCount", DAYNAME(CAST("CreatedUtc" AS DATETIME)) as "DayName" from reservations
+where "IsOnlineCheckin"=1
+group by "DayName"
+order by "OnlineCheckinCount" DESC
+
+--Online check-in reservations per weekday and age group
+select SUM("IsOnlineCheckin") as "OnlineCheckinCount", DAYNAME(CAST("CreatedUtc" AS DATETIME)) as "DayName", DAYOFWEEK(CAST("CreatedUtc" AS DATETIME)) as "Weekday", "AgeGroup" from reservations
+where "IsOnlineCheckin"=1
+group by "Weekday", "DayName", "AgeGroup"
+order by "Weekday" ASC, "OnlineCheckinCount" DESC
+
+--Online check-in reservations per weekday and gender
+select SUM("IsOnlineCheckin") as "OnlineCheckinCount", DAYNAME(CAST("CreatedUtc" AS DATETIME)) as "DayName", DAYOFWEEK(CAST("CreatedUtc" AS DATETIME)) as "Weekday", "Gender" from reservations
+where "IsOnlineCheckin"=1
+group by "Weekday", "DayName", "Gender"
+order by "Weekday" ASC, "OnlineCheckinCount" DESC
+
+--Online check-in reservations per weekday and country
+select* from (select SUM("IsOnlineCheckin") as "OnlineCheckinCount", DAYNAME(CAST("CreatedUtc" AS DATETIME)) as "DayName", DAYOFWEEK(CAST("CreatedUtc" AS DATETIME)) as "Weekday", "NationalityCode" from reservations
+where "IsOnlineCheckin"=1
+and "NationalityCode" != 'NULL'
+group by "Weekday", "DayName", "NationalityCode"
+order by "Weekday" ASC, "OnlineCheckinCount" DESC)
+where "OnlineCheckinCount">1
