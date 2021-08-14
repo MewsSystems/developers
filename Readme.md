@@ -4,7 +4,7 @@ Information about development, engineering, **work and life** in [Mews](https://
 
 Would you like to **meet us**? Hear us talk or check if we're coming to your area? Check out our [Eventbrite](https://www.eventbrite.com/o/mewsdevs-30252533666) for the events we organize. Recordings of our past talks can be found on our [YouTube](https://www.youtube.com/channel/UCrepPB-0Yryop41OuQbQR3w/playlists) channel. We are continously looking for talented and experienced people with passion for technology and **lifelong learning**. See the technologies we're working with on our [Stackshare](https://stackshare.io/mews/mews) profile and check out all the [open positions](https://github.com/MewsSystems/developers/blob/master/jobs).
 
-**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com)**.
+**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
 
 <a name='about-mews'/>
 
