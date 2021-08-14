@@ -4,7 +4,7 @@
     {
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency.Code}/{TargetCurrency.Code}={Value}";
         }
     }
 }

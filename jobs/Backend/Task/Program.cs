@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +22,15 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                // A bit awkward here, but useful for .NET Core configs and DI.
+                var options = Options.Create(new ExchangeRateProviderOptions());
+                using var downloadTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                var provider = new ExchangeRateProvider(options);
+                var rates = await provider.GetExchangeRates(currencies, downloadTimeout.Token);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
