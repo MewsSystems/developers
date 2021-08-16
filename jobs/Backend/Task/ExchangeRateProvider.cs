@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 
 namespace ExchangeRateUpdater
 {
     public sealed class ExchangeRateProvider
     {
-        readonly ExchangeRateProviderOptions options;
+        readonly IExchangeRateDownloader downloader;
+        readonly ExchangeRateParser parser;
 
-        public ExchangeRateProvider(IOptions<ExchangeRateProviderOptions> options)
+        public ExchangeRateProvider(
+            IExchangeRateDownloader downloader,
+            ExchangeRateParser parser)
         {
-            this.options = options.Value;
+            this.downloader = downloader;
+            this.parser = parser;
         }
         
         /// <summary>
@@ -31,19 +27,12 @@ namespace ExchangeRateUpdater
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(
             IEnumerable<Currency> currencies, CancellationToken cancellation)
         {
-            var response = await DownloadExhangeRatesContent(cancellation);
-            using var responseReader = new StringReader(response);
-            // Throw away the first response line with date and ID.
-            responseReader.ReadLine(); 
-            // the rest of the file is a CSV with | as a separator and Czech culture for number styles.
-            using var csv = new CsvReader(responseReader,
-                new CsvConfiguration(CultureInfo.GetCultureInfo("cs-CZ")) { Delimiter = "|" });
-            var parsedRates = csv.GetRecords<ParsedRate>();
-            // We need to materialize the list because the csv reader will get disposed.
-            return FilterAndMapRates(parsedRates, currencies).ToList();
+            var response = await downloader.DownloadExchangeRatesAsync(cancellation);
+            var parsedRates = parser.ParseRates(response);
+            return FilterAndMapRates(parsedRates, currencies);
         }
 
-        private IEnumerable<ExchangeRate> FilterAndMapRates(IEnumerable<ParsedRate> parsedRates,
+        private IEnumerable<ExchangeRate> FilterAndMapRates(IEnumerable<ExchangeRateParser.ParsedRate> parsedRates,
             IEnumerable<Currency> requestedCurrencies)
         {
             // CNB rates assume CZK as source currency for all rates
@@ -57,26 +46,10 @@ namespace ExchangeRateUpdater
                 .Where(r => currencyFilter.Contains(r.Code)) // .NET 6 will finally bring IntersectBy(source, keys, selector)
                 .Select(r => new ExchangeRate(sourceCurrency, new Currency(r.Code), r.Rate / r.Amount));
         }
-
-        private async Task<string> DownloadExhangeRatesContent(CancellationToken cancellation)
-        {
-            using var httpClient = new HttpClient();
-            using var response = await httpClient.GetAsync(options.DownloadUri, cancellation);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
-        }
-
-        class ParsedRate
-        {
-            [Index(2)] public int Amount { get; set; }
-            [Index(3)] public string Code { get; set; } = "";
-            [Index(4)] public decimal Rate { get; set; }
-        };
     }
 
-    public sealed record ExchangeRateProviderOptions(Uri? downloadUri = default, TimeSpan? downloadTimeout = default)
+    public interface IExchangeRateDownloader
     {
-        public Uri DownloadUri { get; init; } = downloadUri ??
-            new Uri("https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt");
+        Task<string> DownloadExchangeRatesAsync(CancellationToken cancellation);
     }
 }

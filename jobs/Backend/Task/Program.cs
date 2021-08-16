@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,14 +23,21 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
+        static ExchangeRateProvider ComposeProvider()
+        {
+            var parserOptions = Options.Create(new ExchangeRateParserOptions());
+            var parser = new ExchangeRateParser(parserOptions);
+            var downloaderOptions = Options.Create(new ExchangeRateDownloaderOptions());
+            var downloader = new ExchangeRateDownloader(downloaderOptions);
+            return new ExchangeRateProvider(downloader, parser);
+        }
+
         public static async Task Main(string[] args)
         {
             try
             {
-                // A bit awkward here, but useful for .NET Core configs and DI.
-                var options = Options.Create(new ExchangeRateProviderOptions());
+                var provider = ComposeProvider();
                 using var downloadTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var provider = new ExchangeRateProvider(options);
                 var rates = await provider.GetExchangeRates(currencies, downloadTimeout.Token);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
