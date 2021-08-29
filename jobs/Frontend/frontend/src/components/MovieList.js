@@ -35,6 +35,15 @@ const MovieList = () => {
       return movieList.data.map((movie) => {
         return (
           <div key={movie.id}>
+            {movie.poster_path === null ? (
+              <img src={`http://placekitten.com/200/300`} alt="movie poster" />
+            ) : (
+              <img
+                src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
+                alt="movie poster"
+              />
+            )}
+
             <p>{movie.title}</p>
             <Link to={`/movie/${movie.id}`}>View</Link>
           </div>

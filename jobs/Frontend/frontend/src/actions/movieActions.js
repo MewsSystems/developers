@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const GetMovieList = (searchTerm) => async (dispatch) => {
-  const apiKey = process.env.REACT_APP_API;
+const apiKey = process.env.REACT_APP_API;
 
+export const GetMovieList = (searchTerm) => async (dispatch) => {
   try {
     dispatch({
       type: 'MOVIE_LIST_LOADING',
@@ -20,6 +20,28 @@ export const GetMovieList = (searchTerm) => async (dispatch) => {
   } catch (e) {
     dispatch({
       type: 'MOVIE_LIST_FAIL',
+    });
+  }
+};
+
+export const GetMovie = (movieId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'MOVIE_MULTIPLE_LOADING',
+    });
+
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`,
+    );
+
+    dispatch({
+      type: 'MOVIE_MULTIPLE_SUCCESS',
+      payload: res.data,
+      Id: movieId,
+    });
+  } catch (e) {
+    dispatch({
+      type: 'MOVIE_MULTIPLE_FAIL',
     });
   }
 };
