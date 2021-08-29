@@ -22,6 +22,7 @@ Output to both console and file (requires change in the script - Write-Host to W
 ## Algorithm
 With normal distribution there is approx. 16% chance that items will be **above** the average more that the standard deviation.
 Using a floating window of measurements of size `FloatingAvgBatchSize`, the code is iterating over the collection and comparing when values got too slow when compared to the floating average. To flag the call as potential introduction of a bug, there need to be a number of consecutive slow calls higher than the `Threshold` parameter provided.
+The script will never alert for the first `FloatingAvgBatchSize` number of measurements (training the model, even for such a naive algorithm).
 
 ### Possible improvements
 - Different formula for computing average of the floating window, but this way we lose the information about standard deviation of the floating window. We could also compute the standard deviation less frequently.
