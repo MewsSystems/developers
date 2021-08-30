@@ -1,0 +1,90 @@
+/* SEARCHAREA */
+
+form {
+  padding: 20px 0 40px 0;
+  background-color: #276278;
+  margin-bottom: 40px;
+}
+
+form div {
+  width: 80%;
+  margin: 0 auto;
+}
+
+input {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  border-radius: 20px;
+  border: none;
+  padding: 5px 20px;
+}
+
+span {
+  padding-right: 4px;
+}
+
+/* MOVIELIST */
+.container_movies {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.container_movie {
+  width: 45%;
+}
+
+.movie_poster img {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.container_movie a {
+  font-weight: 600;
+  font-size: 12px;
+  width: 20%;
+}
+
+.container_movie p {
+  font-size: 12px;
+  margin: 0 0 5px 0;
+}
+
+/* MOVIEDETAIL */
+
+.container_detail {
+  width: 90vw;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+.detail_poster {
+  margin: 0 auto;
+  width: 50%;
+}
+
+.container_detail img {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 15px;
+}
+
+.detail_header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.detail_header h3 {
+  font-weight: normal;
+  margin-bottom: 8px;
+  color: #276278;
+}
+
+.detail_date {
+  margin: 0;
+  color: #d29f3a;
+}

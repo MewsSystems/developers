@@ -37,7 +37,7 @@ export const GetMovie = (movieId) => async (dispatch) => {
     dispatch({
       type: 'MOVIE_MULTIPLE_SUCCESS',
       payload: res.data,
-      Id: movieId,
+      movieId: movieId,
     });
   } catch (e) {
     dispatch({

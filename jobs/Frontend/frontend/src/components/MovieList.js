@@ -32,24 +32,33 @@ const MovieList = () => {
 
   const ShowData = () => {
     if (!_.isEmpty(movieList.data)) {
-      return movieList.data.map((movie) => {
-        return (
-          <div key={movie.id}>
-            {movie.poster_path === null ? (
-              <img src={`http://placekitten.com/200/300`} alt="movie poster" />
-            ) : (
-              <img
-                src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
-                alt="movie poster"
-              />
-            )}
-
-            <p>{movie.title}</p>
-            <Link to={`/movie/${movie.id}`}>View</Link>
-          </div>
-        );
-      });
+      return (
+        <div className="container_movies">
+          {movieList.data.map((movie) => {
+            return (
+              <div className="container_movie" key={movie.id}>
+                <div className="movie_poster">
+                  {movie.poster_path === null ? (
+                    <img
+                      src={`http://placekitten.com/200/300`}
+                      alt="movie poster"
+                    />
+                  ) : (
+                    <img
+                      src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
+                      alt="movie poster"
+                    />
+                  )}
+                </div>
+                <Link to={`/movie/${movie.id}`}>{movie.title}</Link>
+                <p> {movie.release_date && movie.release_date.slice(0, 4)}</p>
+              </div>
+            );
+          })}
+        </div>
+      );
     }
+
     if (movieList.loading) {
       return <p>Loading ...</p>;
     }
