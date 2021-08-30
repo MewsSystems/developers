@@ -9,3 +9,4 @@ Your task is to choose any language to write a program, that reads this file and
 **Output**: Name of endpoints that regressed and the time when it approximately happened.
 
 Note that the quality of the code is not the most important aspect, since this is not a task for a backend engineer.
+Since the task is pretty vague, it is also ok to make some reasonable assumptions about the form of regression. Just make sure to state them with your solution.
