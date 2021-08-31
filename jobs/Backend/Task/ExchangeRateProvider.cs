@@ -8,11 +8,12 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        private readonly ResponseParser responseParser = new ResponseParser();
+        private readonly ResponseParser responseParser;
         private readonly string exchangeRatesSource;
 
         public ExchangeRateProvider()
         {
+            responseParser = new ResponseParser();
             exchangeRatesSource = ConfigurationManager.AppSettings.Get("ExchangeRatesSource");
         }
 
