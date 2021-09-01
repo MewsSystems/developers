@@ -2,6 +2,38 @@ import _ from 'lodash';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetMovie } from '../actions/movieActions';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  width: 90vw;
+  margin: 0 auto;
+  padding-top: 40px;
+`;
+
+const StyledDivImg = styled.div`
+  margin: 0 auto;
+  width: 50%;
+
+  img {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 15px;
+  }
+`;
+
+const StyledDivInfo = styled.div`
+  h3 {
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 8px;
+    color: #276278;
+  }
+  p {
+    margin: 0;
+    text-align: center;
+    color: #d29f3a;
+  }
+`;
 
 const MovieDetail = (props) => {
   const movieId = props.match.params.movieId;
@@ -12,17 +44,14 @@ const MovieDetail = (props) => {
     dispatch(GetMovie(movieId));
   }, []);
 
-  console.log(movieState.data);
-  // console.log(movieState.data.undefined.title);
-
   const ShowData = () => {
     if (!_.isEmpty(movieState.data[movieId])) {
       const movie = movieState.data[movieId];
       console.log(movieId);
 
       return (
-        <div className="container_detail">
-          <div className="detail_poster">
+        <Wrapper>
+          <StyledDivImg>
             {movie.poster_path === null ? (
               <img src={`http://placekitten.com/200/300`} alt="movie poster" />
             ) : (
@@ -31,24 +60,23 @@ const MovieDetail = (props) => {
                 alt="movie poster"
               />
             )}
-          </div>
+          </StyledDivImg>
+
           <div>
-            <div className="detail_info">
-              <div className="detail_header">
-                <h3>{movie.title.toUpperCase()}</h3>
-                <p className="detail_date">
-                  {movie.release_date &&
-                    movie.release_date
-                      .substring(5)
-                      .split('-')
-                      .concat(movie.release_date.substring(0, 4))
-                      .join('/')}
-                </p>
-              </div>
-              <p>{movie.overview}</p>
-            </div>
+            <StyledDivInfo>
+              <h3>{movie.title.toUpperCase()}</h3>
+              <p>
+                {movie.release_date &&
+                  movie.release_date
+                    .substring(5)
+                    .split('-')
+                    .concat(movie.release_date.substring(0, 4))
+                    .join('/')}
+              </p>
+            </StyledDivInfo>
+            <p>{movie.overview}</p>
           </div>
-        </div>
+        </Wrapper>
       );
     }
 

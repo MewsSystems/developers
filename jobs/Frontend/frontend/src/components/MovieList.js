@@ -1,81 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import SearchArea from './SearchArea';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import _ from 'lodash';
-import { GetMovieList } from '../actions/movieActions';
 import { Link } from 'react-router-dom';
-import useDebounce from '../hook/useDebounce';
+import styled from 'styled-components';
 
-const MovieList = () => {
-  const dispatch = useDispatch();
-  const movieList = useSelector((state) => state.MovieList);
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+`;
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+const StyledDiv = styled.div`
+  width: 45%;
+  margin-bottom: 10px;
+`;
 
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+const StyledImg = styled.img`
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  box-shadow: 2px 2px 10px #222121af;
+`;
 
-  const FetchData = (searchTerm = debouncedSearchTerm) => {
-    dispatch(GetMovieList(searchTerm));
-  };
+const StyledDivInfo = styled.div`
+  width: 85%;
+  margin: 0 auto;
+  font-size: 13px;
 
-  useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        FetchData(debouncedSearchTerm);
-      }
-    },
-    [debouncedSearchTerm], // Only call effect if debounced search term changes
-  );
+  a {
+    font-weight: 600;
+  }
 
+  p {
+    margin: 5px 0;
+    color: gray;
+  }
+`;
+
+const MovieList = ({ movieList }) => {
   const ShowData = () => {
     if (!_.isEmpty(movieList.data)) {
       return (
-        <div className="container_movies">
+        <Wrapper>
           {movieList.data.map((movie) => {
             return (
-              <div className="container_movie" key={movie.id}>
-                <div className="movie_poster">
-                  {movie.poster_path === null ? (
-                    <img
-                      src={`http://placekitten.com/200/300`}
-                      alt="movie poster"
-                    />
-                  ) : (
-                    <img
-                      src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
-                      alt="movie poster"
-                    />
-                  )}
-                </div>
-                <Link to={`/movie/${movie.id}`}>{movie.title}</Link>
-                <p> {movie.release_date && movie.release_date.slice(0, 4)}</p>
-              </div>
+              <StyledDiv key={movie.id}>
+                {movie.poster_path === null ? (
+                  <StyledImg
+                    src={`http://placekitten.com/200/300`}
+                    alt="movie poster"
+                  />
+                ) : (
+                  <StyledImg
+                    src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
+                    alt="movie poster"
+                  />
+                )}
+
+                <StyledDivInfo>
+                  <Link to={`/movie/${movie.id}`}>{movie.title}</Link>
+                  <p> {movie.release_date && movie.release_date.slice(0, 4)}</p>
+                </StyledDivInfo>
+              </StyledDiv>
             );
           })}
-        </div>
+        </Wrapper>
       );
     }
 
     if (movieList.loading) {
       return <p>Loading ...</p>;
     }
-
-    // if (movieList.errorMsg !== '') {
-    //   return <p>{movieList.errorMsg}</p>;
-    // }
-
-    // return <p>unable to get data</p>;
   };
 
-  return (
-    <>
-      <SearchArea handleChange={handleChange} />
-      <div>{ShowData()}</div>
-    </>
-  );
+  return <div>{ShowData()}</div>;
 };
 
 export default MovieList;

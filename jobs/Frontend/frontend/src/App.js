@@ -5,20 +5,19 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import Nav from './components/Nav';
-import MovieDetail from './components/MovieDetail';
-import MovieList from './components/MovieList';
-// import SearchArea from './components/SearchArea';
+import NavBar from './components/NavBar';
+import MovieDetail from './pages/MovieDetail';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Nav />
+        <NavBar />
 
         <Switch>
           <Route path={'/'} exact>
-            <MovieList />
+            <HomePage />
           </Route>
           <Route path={'/movie/:movieId'} exact component={MovieDetail} />
           <Redirect to={'/'} />
