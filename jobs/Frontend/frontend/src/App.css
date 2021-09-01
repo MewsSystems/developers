@@ -10,3 +10,10 @@ a {
   color: black;
   cursor: pointer;
 }
+
+/* @media (min-width: 768px) {
+  div {
+    width: 20%;
+    height: 100%;
+  }
+} */

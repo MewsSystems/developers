@@ -8,6 +8,14 @@ const Wrapper = styled.div`
   width: 90vw;
   margin: 0 auto;
   padding-top: 40px;
+
+  @media (min-width: 768px) {
+    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 `;
 
 const StyledDivImg = styled.div`
@@ -19,19 +27,32 @@ const StyledDivImg = styled.div`
     margin: 0 auto;
     border-radius: 15px;
   }
+
+  @media (min-width: 768px) {
+    margin: 0;
+    width: 20%;
+  }
 `;
 
 const StyledDivInfo = styled.div`
   h3 {
     font-weight: normal;
+    font-size: 24px;
     text-align: center;
     margin-bottom: 8px;
-    color: #276278;
+    color: #bd7898;
   }
   p {
-    margin: 0;
     text-align: center;
-    color: #d29f3a;
+  }
+
+  @media (min-width: 768px) {
+    width: 75%;
+
+    h3,
+    p {
+      text-align: left;
+    }
   }
 `;
 
@@ -62,20 +83,18 @@ const MovieDetail = (props) => {
             )}
           </StyledDivImg>
 
-          <div>
-            <StyledDivInfo>
-              <h3>{movie.title.toUpperCase()}</h3>
-              <p>
-                {movie.release_date &&
-                  movie.release_date
-                    .substring(5)
-                    .split('-')
-                    .concat(movie.release_date.substring(0, 4))
-                    .join('/')}
-              </p>
-            </StyledDivInfo>
+          <StyledDivInfo>
+            <h3>{movie.title.toUpperCase()}</h3>
+            <p>
+              {movie.release_date &&
+                movie.release_date
+                  .substring(5)
+                  .split('-')
+                  .concat(movie.release_date.substring(0, 4))
+                  .join('/')}
+            </p>
             <p>{movie.overview}</p>
-          </div>
+          </StyledDivInfo>
         </Wrapper>
       );
     }

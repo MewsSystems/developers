@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Form = styled.form`
-  padding: 20px 0 40px 0;
-  background-color: #276278;
+  padding: 10px 0 40px 0;
+  background-color: #bd7898;
   margin-bottom: 40px;
 
   div {
@@ -19,6 +19,18 @@ const Form = styled.form`
     padding: 5px 5%;
     width: 90%;
   }
+
+  @media (min-width: 768px) {
+    input {
+      padding: 10px 5%;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    div {
+      max-width: 1000px;
+    }
+  }
 `;
 
 const SearchArea = (props) => {
@@ -29,11 +41,7 @@ const SearchArea = (props) => {
       }}
     >
       <div>
-        <input
-          placeholder="Search movie"
-          type="text"
-          onChange={props.handleChange}
-        />
+        <input placeholder="Search" type="text" onChange={props.handleChange} />
       </div>
     </Form>
   );

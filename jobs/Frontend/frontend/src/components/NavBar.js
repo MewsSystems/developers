@@ -2,33 +2,29 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Nav = styled.nav`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 15px 20px;
-  background-color: #276278;
+  padding: 15px 10%;
+  text-align: right;
+  background-color: #bd7898;
 
-  p,
   a {
     font-size: 22px;
-    color: #d29f3a;
-  }
-
-  p {
-    margin: 0;
+    color: #1c0f27;
   }
 
   span {
     font-size: 20px;
+  }
+
+  @media (min-width: 768px) {
+    padding: 20px 10%;
   }
 `;
 
 const NavBar = () => {
   return (
     <Nav>
-      <p>MOVIE</p>
       <NavLink to={'/'}>
-        <span>&#128270;</span>Search
+        <span>&#128270;</span>Search Movie
       </NavLink>
     </Nav>
   );

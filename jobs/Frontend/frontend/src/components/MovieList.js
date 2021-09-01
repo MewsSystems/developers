@@ -8,12 +8,15 @@ const Wrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
 `;
 
 const StyledDiv = styled.div`
   width: 45%;
   margin-bottom: 10px;
+
+  @media (min-width: 768px) {
+    width: 18%;
+  }
 `;
 
 const StyledImg = styled.img`
@@ -25,12 +28,16 @@ const StyledImg = styled.img`
 `;
 
 const StyledDivInfo = styled.div`
+  margin-left: 10%;
+  font-size: 14px;
   width: 85%;
-  margin: 0 auto;
-  font-size: 13px;
 
   a {
     font-weight: 600;
+  }
+
+  a:hover {
+    color: #bd7898;
   }
 
   p {
