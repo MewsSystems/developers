@@ -63,6 +63,7 @@ const MovieDetail = (props) => {
 
   useEffect(() => {
     dispatch(GetMovie(movieId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ShowData = () => {

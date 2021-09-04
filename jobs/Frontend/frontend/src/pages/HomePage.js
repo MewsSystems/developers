@@ -41,6 +41,7 @@ const HomePage = () => {
       FetchData(debouncedSearchTerm);
       OnePage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   const handleChange = (e) => {

@@ -1,4 +1,5 @@
 import './App.css';
+import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,6 +11,10 @@ import MovieDetail from './pages/MovieDetail';
 import HomePage from './pages/HomePage';
 
 function App() {
+  useEffect(() => {
+    document.title = 'Movie';
+  }, []);
+
   return (
     <Router>
       <div className="App">
