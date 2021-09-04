@@ -52,11 +52,15 @@ const HomePage = () => {
       <SearchArea handleChange={handleChange} />
       <Wrapper>
         <MovieList movieList={movieList} />
-        <Pagination
-          pages={allMovie.pages}
-          nextPage={OnePage}
-          currentPage={currentPage}
-        />
+        {allMovie.pages > 1 ? (
+          <Pagination
+            pages={allMovie.pages}
+            nextPage={OnePage}
+            currentPage={currentPage}
+          />
+        ) : (
+          ''
+        )}
       </Wrapper>
     </>
   );

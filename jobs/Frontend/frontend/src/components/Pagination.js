@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { css } from 'styled-components';
 
 const Ul = styled.ul`
   padding: 0;
@@ -21,15 +22,18 @@ const Ul = styled.ul`
 
 const Button = styled.button`
   font-size: 16px;
-  margin-right: 13px;
+  margin-right: 10px;
   font-family: 'Roboto', sans-serif;
   border: none;
   background-color: transparent;
   cursor: pointer;
 
-  &:hover {
-    color: ${(props) => (props.primary ? '#bd7898' : 'black')};
-  }
+  ${(props) =>
+    props.primary &&
+    css`
+      color: #bd7898;
+      font-weight: bold;
+    `}
 
   @media (min-width: 768px) {
     font-size: 16px;
@@ -45,7 +49,7 @@ const Pagination = (props) => {
 
     pageLinks.push(
       <li key={i} onClick={() => props.nextPage(i)}>
-        <Button primary type="button" as="a" href="#">
+        <Button primary={props.currentPage === i ? true : false} type="button">
           {i}
         </Button>
       </li>,
@@ -53,10 +57,10 @@ const Pagination = (props) => {
   }
 
   return (
-    <Ul>
+    <Ul onClick={() => window.scrollTo(0, 0)}>
       {props.currentPage > 1 ? (
         <li onClick={() => props.nextPage(props.currentPage - 1)}>
-          <Button href="#">←</Button>
+          <Button>←</Button>
         </li>
       ) : (
         ''
@@ -64,7 +68,7 @@ const Pagination = (props) => {
       {pageLinks}
       {props.currentPage < props.pages ? (
         <li onClick={() => props.nextPage(props.currentPage + 1)}>
-          <Button href="#">→</Button>
+          <Button>→</Button>
         </li>
       ) : (
         ''
