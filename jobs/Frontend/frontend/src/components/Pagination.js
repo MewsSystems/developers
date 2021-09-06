@@ -44,9 +44,6 @@ const Pagination = (props) => {
   const pageLinks = [];
 
   for (let i = 1; i <= props.pages; i += 1) {
-    // let active = props.currentPage === i ? 'active' : '';
-    // nastavit jako třídu
-
     pageLinks.push(
       <li key={i} onClick={() => props.nextPage(i)}>
         <Button primary={props.currentPage === i ? true : false} type="button">

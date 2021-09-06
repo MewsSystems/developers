@@ -69,7 +69,6 @@ const MovieDetail = (props) => {
   const ShowData = () => {
     if (!_.isEmpty(movieState.data[movieId])) {
       const movie = movieState.data[movieId];
-      console.log(movieId);
 
       return (
         <Wrapper>

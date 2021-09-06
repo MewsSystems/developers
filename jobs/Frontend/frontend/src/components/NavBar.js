@@ -23,7 +23,7 @@ const Nav = styled.nav`
 const NavBar = () => {
   return (
     <Nav>
-      <NavLink to={'/'}>
+      <NavLink to="/">
         <span>&#128270;</span>Search Movie
       </NavLink>
     </Nav>

@@ -15,6 +15,10 @@ function useDebounce(value, delay) {
       // .. within the delay period. Timeout gets cleared and restarted.
       return () => {
         clearTimeout(handler);
+
+        if (value !== '') {
+          sessionStorage.setItem('search', value);
+        }
       };
     },
     [value, delay], // Only re-call effect if value or delay changes
