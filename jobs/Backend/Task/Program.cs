@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using ExchangeRateUpdater.Parsing;
 
 namespace ExchangeRateUpdater
 {
@@ -23,18 +25,27 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                Trace.AutoFlush = true;
+                Trace.Listeners.Add(new ConsoleTraceListener());
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var configurationProvider = new ConfigurationProvider();
+                var factory = new ExchangeRateParserFactory();
+
+                var parser = factory.CreateParser(configurationProvider.Parser);
+
+                var provider = new ExchangeRateProvider(new HttpCommunicator(configurationProvider.BaseUrl, configurationProvider.DateFormat), parser);
+
+                var rates = provider.GetExchangeRates(currencies).Result;
+
+                Trace.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    Trace.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Trace.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
             Console.ReadLine();

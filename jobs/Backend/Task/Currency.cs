@@ -4,7 +4,7 @@
     {
         public Currency(string code)
         {
-            Code = code;
+            Code = code?.Trim();
         }
 
         /// <summary>
@@ -15,6 +15,15 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public bool Equals(Currency otherCurrency)
+        {
+            if(otherCurrency == null)
+            {
+                return false;
+            }
+            return string.Equals(Code, otherCurrency.Code, System.StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
