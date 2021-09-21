@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Communication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,12 +20,16 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async System.Threading.Tasks.Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                //it's expected that DI will be used on production environment 
+                var provider = new ExchangeRateProvider(
+                    new TextCnbParser(),
+                    new ExchangeRateConfiguration(),
+                    new HttpsClientAdapter());
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

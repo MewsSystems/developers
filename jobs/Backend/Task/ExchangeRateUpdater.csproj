@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,13 +44,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency.cs" />
-    <Compile Include="ExchangeRate.cs" />
+    <Compile Include="Communication\HttpsClientAdapter.cs" />
+    <Compile Include="Communication\IHttpsClientAdapter.cs" />
+    <Compile Include="Configuration\IExchangeRateConfiguration.cs" />
+    <Compile Include="Data\Currency.cs" />
+    <Compile Include="Data\ExchangeRate.cs" />
+    <Compile Include="ExchangeRateConfiguration.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Exceptions\InvalidFormatException.cs" />
+    <Compile Include="Parsers\IParser.cs" />
+    <Compile Include="Parsers\ITextParser.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Parsers\TextCnbParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
