@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- 
+    The new dotnet tooling for the new .csproj format looks for test adapters in the build output directory 
+    and this msbuild script is ensuring we are copying everything needed.
+
+    It is ran automatically for us by simply being in the "build" folder in the nuget package.
+
+    MSBuildThisFileDirectory will be the full path to the relevant framework the build is running for.
+  -->
+  <ItemGroup>
+    
+    <!-- .NET Framework only -->
+
+    <Content Include="$(MSBuildThisFileDirectory)Mono.Cecil.dll" Condition="Exists('$(MSBuildThisFileDirectory)Mono.Cecil.dll')">
+      <Link>Mono.Cecil.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Mono.Cecil.Mdb.dll" Condition="Exists('$(MSBuildThisFileDirectory)Mono.Cecil.Mdb.dll')">
+      <Link>Mono.Cecil.Mdb.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Mono.Cecil.Pdb.dll" Condition="Exists('$(MSBuildThisFileDirectory)Mono.Cecil.Pdb.dll')">
+      <Link>Mono.Cecil.Pdb.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Mono.Cecil.Rocks.dll" Condition="Exists('$(MSBuildThisFileDirectory)Mono.Cecil.Rocks.dll')">
+      <Link>Mono.Cecil.Rocks.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+    
+    <!-- All -->
+    <Content Include="$(MSBuildThisFileDirectory)Machine.TestAdapter.dll">
+      <Link>Machine.TestAdapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+  </ItemGroup>
+</Project>
