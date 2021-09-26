@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExchangeRateUpdater</RootNamespace>
     <AssemblyName>ExchangeRateUpdater</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\StructureMap.4.7.1\lib\net45\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,13 +50,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Currency.cs" />
-    <Compile Include="ExchangeRate.cs" />
-    <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="ExchangeRateUpdaterRegistry.cs" />
+    <Compile Include="Mappings\CnbExRatesToExRatesMapping.cs" />
+    <Compile Include="ViewModels\Currencies.cs" />
+    <Compile Include="ViewModels\Currency.cs" />
+    <Compile Include="ViewModels\ExchangeRate.cs" />
+    <Compile Include="Services\ExchangeRateProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Services\IExchangeRateProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\ExchangeRateUpdater.Utilities\ExchangeRateUpdater.Utilities.csproj">
+      <Project>{27a130be-fd5b-4e8f-b06b-65639e31f665}</Project>
+      <Name>ExchangeRateUpdater.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExchangeRateUpdater.CnbProxy\ExchangeRateUpdater.CnbProxy.csproj">
+      <Project>{6e7cb7f4-4846-4369-bf3e-a28383c2ffcc}</Project>
+      <Name>ExchangeRateUpdater.CnbProxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
