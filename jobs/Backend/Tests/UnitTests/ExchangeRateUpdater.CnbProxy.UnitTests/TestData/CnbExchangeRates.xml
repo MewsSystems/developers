@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<kurzy banka="CNB" datum="23.09.2021" poradi="185">
-  <tabulka typ="XML_TYP_CNB_KURZY_DEVIZOVEHO_TRHU">
-    <radek kod="AUD" mena="dolar" mnozstvi="1" kurz="15,719" zeme="Austrálie"/>
-    <radek kod="GBP" mena="libra" mnozstvi="1" kurz="29,649" zeme="Velká Británie"/>
-  </tabulka>
-</kurzy>
