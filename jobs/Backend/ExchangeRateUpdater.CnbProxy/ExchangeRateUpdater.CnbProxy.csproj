@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
-      <HintPath>..\..\Task\packages\Polly.7.2.2\lib\net472\Polly.dll</HintPath>
+      <HintPath>..\ExchangeRateUpdater\packages\Polly.7.2.2\lib\net472\Polly.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\Task\packages\StructureMap.4.7.1\lib\net45\StructureMap.dll</HintPath>
+      <HintPath>..\ExchangeRateUpdater\packages\StructureMap.4.7.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
