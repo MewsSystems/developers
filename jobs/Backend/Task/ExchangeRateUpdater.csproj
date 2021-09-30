@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExchangeRateUpdater</RootNamespace>
     <AssemblyName>ExchangeRateUpdater</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -46,6 +46,8 @@
     <Compile Include="Currency.cs" />
     <Compile Include="ExchangeRate.cs" />
     <Compile Include="ExchangeRateProvider.cs" />
+    <Compile Include="Factories\CurrencyFactory.cs" />
+    <Compile Include="Factories\ExchangeRateFactory.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
