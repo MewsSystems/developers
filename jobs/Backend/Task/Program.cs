@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace ExchangeRateUpdater
@@ -23,7 +24,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var urlString = ConfigurationManager.AppSettings["CNBExchnageRateUrl"];
+                var provider = new CNBExchangeProvider(urlString);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
