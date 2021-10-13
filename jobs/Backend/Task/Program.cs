@@ -21,10 +21,11 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = provider.GetExchangeRates(currencies).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
