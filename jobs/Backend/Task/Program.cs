@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Application;
+using Domain;
+using Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace UI
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> _currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,12 +24,16 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            DependencyInjection.Configure();
+
+            var service = ActivatorUtilities.CreateInstance<ExchangeRateService>(DependencyInjection._host.Services);
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateCalculator(service);
+                var rates = await provider.GetExchangeRates(_currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -36,8 +45,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
-            Console.ReadLine();
         }
     }
 }

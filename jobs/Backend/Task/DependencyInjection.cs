@@ -10,7 +10,7 @@ using Serilog;
 using Serilog.Core;
 using System.IO;
 
-namespace ExchangeRateUpdater
+namespace UI
 {
     public static class DependencyInjection
     {
