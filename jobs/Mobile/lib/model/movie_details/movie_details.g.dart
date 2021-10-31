@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'movie_list_item.dart';
+part of 'movie_details.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_MovieListItem _$$_MovieListItemFromJson(Map<String, dynamic> json) =>
-    _$_MovieListItem(
+_$_MoviesDetails _$$_MoviesDetailsFromJson(Map<String, dynamic> json) =>
+    _$_MoviesDetails(
       adult: json['adult'] as bool,
       id: json['id'] as int,
       originalTitle: json['original_title'] as String? ?? '',
@@ -15,7 +15,7 @@ _$_MovieListItem _$$_MovieListItemFromJson(Map<String, dynamic> json) =>
       releaseDate: json['release_date'] as String? ?? '',
     );
 
-Map<String, dynamic> _$$_MovieListItemToJson(_$_MovieListItem instance) =>
+Map<String, dynamic> _$$_MoviesDetailsToJson(_$_MoviesDetails instance) =>
     <String, dynamic>{
       'adult': instance.adult,
       'id': instance.id,

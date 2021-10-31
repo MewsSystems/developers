@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_search/api/api_manager.dart';
-import 'package:movie_search/screen/list_screen.dart';
+import 'package:movie_search/screen/list/list_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {

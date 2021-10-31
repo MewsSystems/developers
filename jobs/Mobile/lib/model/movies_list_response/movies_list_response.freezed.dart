@@ -22,10 +22,14 @@ class _$MoviesListResponseTearOff {
   const _$MoviesListResponseTearOff();
 
   _MovieListResponse call(
-      {required int page,
-      @JsonKey(name: 'total_pages') required int totalPages,
-      @JsonKey(name: 'total_results') required int totalResults,
-      @JsonKey(name: 'results') required List<MovieListItem> items}) {
+      {@JsonKey(name: 'page', defaultValue: 1)
+          required int page,
+      @JsonKey(name: 'total_pages', defaultValue: 0)
+          required int totalPages,
+      @JsonKey(name: 'total_results', defaultValue: 0)
+          required int totalResults,
+      @JsonKey(name: 'results', defaultValue: [])
+          required List<MovieListItem> items}) {
     return _MovieListResponse(
       page: page,
       totalPages: totalPages,
@@ -44,12 +48,13 @@ const $MoviesListResponse = _$MoviesListResponseTearOff();
 
 /// @nodoc
 mixin _$MoviesListResponse {
+  @JsonKey(name: 'page', defaultValue: 1)
   int get page => throw _privateConstructorUsedError;
-  @JsonKey(name: 'total_pages')
+  @JsonKey(name: 'total_pages', defaultValue: 0)
   int get totalPages => throw _privateConstructorUsedError;
-  @JsonKey(name: 'total_results')
+  @JsonKey(name: 'total_results', defaultValue: 0)
   int get totalResults => throw _privateConstructorUsedError;
-  @JsonKey(name: 'results')
+  @JsonKey(name: 'results', defaultValue: [])
   List<MovieListItem> get items => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,10 +69,10 @@ abstract class $MoviesListResponseCopyWith<$Res> {
           MoviesListResponse value, $Res Function(MoviesListResponse) then) =
       _$MoviesListResponseCopyWithImpl<$Res>;
   $Res call(
-      {int page,
-      @JsonKey(name: 'total_pages') int totalPages,
-      @JsonKey(name: 'total_results') int totalResults,
-      @JsonKey(name: 'results') List<MovieListItem> items});
+      {@JsonKey(name: 'page', defaultValue: 1) int page,
+      @JsonKey(name: 'total_pages', defaultValue: 0) int totalPages,
+      @JsonKey(name: 'total_results', defaultValue: 0) int totalResults,
+      @JsonKey(name: 'results', defaultValue: []) List<MovieListItem> items});
 }
 
 /// @nodoc
@@ -115,10 +120,10 @@ abstract class _$MovieListResponseCopyWith<$Res>
       __$MovieListResponseCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int page,
-      @JsonKey(name: 'total_pages') int totalPages,
-      @JsonKey(name: 'total_results') int totalResults,
-      @JsonKey(name: 'results') List<MovieListItem> items});
+      {@JsonKey(name: 'page', defaultValue: 1) int page,
+      @JsonKey(name: 'total_pages', defaultValue: 0) int totalPages,
+      @JsonKey(name: 'total_results', defaultValue: 0) int totalResults,
+      @JsonKey(name: 'results', defaultValue: []) List<MovieListItem> items});
 }
 
 /// @nodoc
@@ -164,25 +169,30 @@ class __$MovieListResponseCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MovieListResponse extends _MovieListResponse {
   const _$_MovieListResponse(
-      {required this.page,
-      @JsonKey(name: 'total_pages') required this.totalPages,
-      @JsonKey(name: 'total_results') required this.totalResults,
-      @JsonKey(name: 'results') required this.items})
+      {@JsonKey(name: 'page', defaultValue: 1)
+          required this.page,
+      @JsonKey(name: 'total_pages', defaultValue: 0)
+          required this.totalPages,
+      @JsonKey(name: 'total_results', defaultValue: 0)
+          required this.totalResults,
+      @JsonKey(name: 'results', defaultValue: [])
+          required this.items})
       : super._();
 
   factory _$_MovieListResponse.fromJson(Map<String, dynamic> json) =>
       _$$_MovieListResponseFromJson(json);
 
   @override
+  @JsonKey(name: 'page', defaultValue: 1)
   final int page;
   @override
-  @JsonKey(name: 'total_pages')
+  @JsonKey(name: 'total_pages', defaultValue: 0)
   final int totalPages;
   @override
-  @JsonKey(name: 'total_results')
+  @JsonKey(name: 'total_results', defaultValue: 0)
   final int totalResults;
   @override
-  @JsonKey(name: 'results')
+  @JsonKey(name: 'results', defaultValue: [])
   final List<MovieListItem> items;
 
   @override
@@ -220,26 +230,30 @@ class _$_MovieListResponse extends _MovieListResponse {
 
 abstract class _MovieListResponse extends MoviesListResponse {
   const factory _MovieListResponse(
-          {required int page,
-          @JsonKey(name: 'total_pages') required int totalPages,
-          @JsonKey(name: 'total_results') required int totalResults,
-          @JsonKey(name: 'results') required List<MovieListItem> items}) =
-      _$_MovieListResponse;
+      {@JsonKey(name: 'page', defaultValue: 1)
+          required int page,
+      @JsonKey(name: 'total_pages', defaultValue: 0)
+          required int totalPages,
+      @JsonKey(name: 'total_results', defaultValue: 0)
+          required int totalResults,
+      @JsonKey(name: 'results', defaultValue: [])
+          required List<MovieListItem> items}) = _$_MovieListResponse;
   const _MovieListResponse._() : super._();
 
   factory _MovieListResponse.fromJson(Map<String, dynamic> json) =
       _$_MovieListResponse.fromJson;
 
   @override
+  @JsonKey(name: 'page', defaultValue: 1)
   int get page;
   @override
-  @JsonKey(name: 'total_pages')
+  @JsonKey(name: 'total_pages', defaultValue: 0)
   int get totalPages;
   @override
-  @JsonKey(name: 'total_results')
+  @JsonKey(name: 'total_results', defaultValue: 0)
   int get totalResults;
   @override
-  @JsonKey(name: 'results')
+  @JsonKey(name: 'results', defaultValue: [])
   List<MovieListItem> get items;
   @override
   @JsonKey(ignore: true)

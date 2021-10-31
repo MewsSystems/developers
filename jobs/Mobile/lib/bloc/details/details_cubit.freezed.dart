@@ -2,7 +2,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'list_cubit.dart';
+part of 'details_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,8 +14,8 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$ListStateTearOff {
-  const _$ListStateTearOff();
+class _$DetailsStateTearOff {
+  const _$DetailsStateTearOff();
 
   Initial initial() {
     return const Initial();
@@ -25,48 +25,46 @@ class _$ListStateTearOff {
     return const Loading();
   }
 
-  LoadedData loadedData(List<MovieListItem> items) {
+  LoadedData loadedData(MovieDetails details) {
     return LoadedData(
-      items,
+      details,
     );
   }
 
-  Error error(List<MovieListItem> items, String errorMessage) {
+  Error error(String errorMessage) {
     return Error(
-      items,
       errorMessage,
     );
   }
 }
 
 /// @nodoc
-const $ListState = _$ListStateTearOff();
+const $DetailsState = _$DetailsStateTearOff();
 
 /// @nodoc
-mixin _$ListState {
+mixin _$DetailsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<MovieListItem> items) loadedData,
-    required TResult Function(List<MovieListItem> items, String errorMessage)
-        error,
+    required TResult Function(MovieDetails details) loadedData,
+    required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -98,18 +96,19 @@ mixin _$ListState {
 }
 
 /// @nodoc
-abstract class $ListStateCopyWith<$Res> {
-  factory $ListStateCopyWith(ListState value, $Res Function(ListState) then) =
-      _$ListStateCopyWithImpl<$Res>;
+abstract class $DetailsStateCopyWith<$Res> {
+  factory $DetailsStateCopyWith(
+          DetailsState value, $Res Function(DetailsState) then) =
+      _$DetailsStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$ListStateCopyWithImpl<$Res> implements $ListStateCopyWith<$Res> {
-  _$ListStateCopyWithImpl(this._value, this._then);
+class _$DetailsStateCopyWithImpl<$Res> implements $DetailsStateCopyWith<$Res> {
+  _$DetailsStateCopyWithImpl(this._value, this._then);
 
-  final ListState _value;
+  final DetailsState _value;
   // ignore: unused_field
-  final $Res Function(ListState) _then;
+  final $Res Function(DetailsState) _then;
 }
 
 /// @nodoc
@@ -119,7 +118,7 @@ abstract class $InitialCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$InitialCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
+class _$InitialCopyWithImpl<$Res> extends _$DetailsStateCopyWithImpl<$Res>
     implements $InitialCopyWith<$Res> {
   _$InitialCopyWithImpl(Initial _value, $Res Function(Initial) _then)
       : super(_value, (v) => _then(v as Initial));
@@ -135,7 +134,7 @@ class _$Initial implements Initial {
 
   @override
   String toString() {
-    return 'ListState.initial()';
+    return 'DetailsState.initial()';
   }
 
   @override
@@ -152,9 +151,8 @@ class _$Initial implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<MovieListItem> items) loadedData,
-    required TResult Function(List<MovieListItem> items, String errorMessage)
-        error,
+    required TResult Function(MovieDetails details) loadedData,
+    required TResult Function(String errorMessage) error,
   }) {
     return initial();
   }
@@ -164,8 +162,8 @@ class _$Initial implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
   }) {
     return initial?.call();
   }
@@ -175,8 +173,8 @@ class _$Initial implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -223,7 +221,7 @@ class _$Initial implements Initial {
   }
 }
 
-abstract class Initial implements ListState {
+abstract class Initial implements DetailsState {
   const factory Initial() = _$Initial;
 }
 
@@ -234,7 +232,7 @@ abstract class $LoadingCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LoadingCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
+class _$LoadingCopyWithImpl<$Res> extends _$DetailsStateCopyWithImpl<$Res>
     implements $LoadingCopyWith<$Res> {
   _$LoadingCopyWithImpl(Loading _value, $Res Function(Loading) _then)
       : super(_value, (v) => _then(v as Loading));
@@ -250,7 +248,7 @@ class _$Loading implements Loading {
 
   @override
   String toString() {
-    return 'ListState.loading()';
+    return 'DetailsState.loading()';
   }
 
   @override
@@ -267,9 +265,8 @@ class _$Loading implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<MovieListItem> items) loadedData,
-    required TResult Function(List<MovieListItem> items, String errorMessage)
-        error,
+    required TResult Function(MovieDetails details) loadedData,
+    required TResult Function(String errorMessage) error,
   }) {
     return loading();
   }
@@ -279,8 +276,8 @@ class _$Loading implements Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
   }) {
     return loading?.call();
   }
@@ -290,8 +287,8 @@ class _$Loading implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -338,7 +335,7 @@ class _$Loading implements Loading {
   }
 }
 
-abstract class Loading implements ListState {
+abstract class Loading implements DetailsState {
   const factory Loading() = _$Loading;
 }
 
@@ -347,11 +344,13 @@ abstract class $LoadedDataCopyWith<$Res> {
   factory $LoadedDataCopyWith(
           LoadedData value, $Res Function(LoadedData) then) =
       _$LoadedDataCopyWithImpl<$Res>;
-  $Res call({List<MovieListItem> items});
+  $Res call({MovieDetails details});
+
+  $MovieDetailsCopyWith<$Res> get details;
 }
 
 /// @nodoc
-class _$LoadedDataCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
+class _$LoadedDataCopyWithImpl<$Res> extends _$DetailsStateCopyWithImpl<$Res>
     implements $LoadedDataCopyWith<$Res> {
   _$LoadedDataCopyWithImpl(LoadedData _value, $Res Function(LoadedData) _then)
       : super(_value, (v) => _then(v as LoadedData));
@@ -361,28 +360,35 @@ class _$LoadedDataCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? items = freezed,
+    Object? details = freezed,
   }) {
     return _then(LoadedData(
-      items == freezed
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<MovieListItem>,
+      details == freezed
+          ? _value.details
+          : details // ignore: cast_nullable_to_non_nullable
+              as MovieDetails,
     ));
+  }
+
+  @override
+  $MovieDetailsCopyWith<$Res> get details {
+    return $MovieDetailsCopyWith<$Res>(_value.details, (value) {
+      return _then(_value.copyWith(details: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$LoadedData implements LoadedData {
-  const _$LoadedData(this.items);
+  const _$LoadedData(this.details);
 
   @override
-  final List<MovieListItem> items;
+  final MovieDetails details;
 
   @override
   String toString() {
-    return 'ListState.loadedData(items: $items)';
+    return 'DetailsState.loadedData(details: $details)';
   }
 
   @override
@@ -390,12 +396,11 @@ class _$LoadedData implements LoadedData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is LoadedData &&
-            const DeepCollectionEquality().equals(other.items, items));
+            (identical(other.details, details) || other.details == details));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(items));
+  int get hashCode => Object.hash(runtimeType, details);
 
   @JsonKey(ignore: true)
   @override
@@ -407,11 +412,10 @@ class _$LoadedData implements LoadedData {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<MovieListItem> items) loadedData,
-    required TResult Function(List<MovieListItem> items, String errorMessage)
-        error,
+    required TResult Function(MovieDetails details) loadedData,
+    required TResult Function(String errorMessage) error,
   }) {
-    return loadedData(items);
+    return loadedData(details);
   }
 
   @override
@@ -419,10 +423,10 @@ class _$LoadedData implements LoadedData {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
   }) {
-    return loadedData?.call(items);
+    return loadedData?.call(details);
   }
 
   @override
@@ -430,12 +434,12 @@ class _$LoadedData implements LoadedData {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (loadedData != null) {
-      return loadedData(items);
+      return loadedData(details);
     }
     return orElse();
   }
@@ -478,10 +482,10 @@ class _$LoadedData implements LoadedData {
   }
 }
 
-abstract class LoadedData implements ListState {
-  const factory LoadedData(List<MovieListItem> items) = _$LoadedData;
+abstract class LoadedData implements DetailsState {
+  const factory LoadedData(MovieDetails details) = _$LoadedData;
 
-  List<MovieListItem> get items;
+  MovieDetails get details;
   @JsonKey(ignore: true)
   $LoadedDataCopyWith<LoadedData> get copyWith =>
       throw _privateConstructorUsedError;
@@ -491,11 +495,11 @@ abstract class LoadedData implements ListState {
 abstract class $ErrorCopyWith<$Res> {
   factory $ErrorCopyWith(Error value, $Res Function(Error) then) =
       _$ErrorCopyWithImpl<$Res>;
-  $Res call({List<MovieListItem> items, String errorMessage});
+  $Res call({String errorMessage});
 }
 
 /// @nodoc
-class _$ErrorCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
+class _$ErrorCopyWithImpl<$Res> extends _$DetailsStateCopyWithImpl<$Res>
     implements $ErrorCopyWith<$Res> {
   _$ErrorCopyWithImpl(Error _value, $Res Function(Error) _then)
       : super(_value, (v) => _then(v as Error));
@@ -505,14 +509,9 @@ class _$ErrorCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? items = freezed,
     Object? errorMessage = freezed,
   }) {
     return _then(Error(
-      items == freezed
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<MovieListItem>,
       errorMessage == freezed
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -524,16 +523,14 @@ class _$ErrorCopyWithImpl<$Res> extends _$ListStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Error implements Error {
-  const _$Error(this.items, this.errorMessage);
+  const _$Error(this.errorMessage);
 
-  @override
-  final List<MovieListItem> items;
   @override
   final String errorMessage;
 
   @override
   String toString() {
-    return 'ListState.error(items: $items, errorMessage: $errorMessage)';
+    return 'DetailsState.error(errorMessage: $errorMessage)';
   }
 
   @override
@@ -541,14 +538,12 @@ class _$Error implements Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Error &&
-            const DeepCollectionEquality().equals(other.items, items) &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(items), errorMessage);
+  int get hashCode => Object.hash(runtimeType, errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -560,11 +555,10 @@ class _$Error implements Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<MovieListItem> items) loadedData,
-    required TResult Function(List<MovieListItem> items, String errorMessage)
-        error,
+    required TResult Function(MovieDetails details) loadedData,
+    required TResult Function(String errorMessage) error,
   }) {
-    return error(items, errorMessage);
+    return error(errorMessage);
   }
 
   @override
@@ -572,10 +566,10 @@ class _$Error implements Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
   }) {
-    return error?.call(items, errorMessage);
+    return error?.call(errorMessage);
   }
 
   @override
@@ -583,12 +577,12 @@ class _$Error implements Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<MovieListItem> items)? loadedData,
-    TResult Function(List<MovieListItem> items, String errorMessage)? error,
+    TResult Function(MovieDetails details)? loadedData,
+    TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(items, errorMessage);
+      return error(errorMessage);
     }
     return orElse();
   }
@@ -631,10 +625,9 @@ class _$Error implements Error {
   }
 }
 
-abstract class Error implements ListState {
-  const factory Error(List<MovieListItem> items, String errorMessage) = _$Error;
+abstract class Error implements DetailsState {
+  const factory Error(String errorMessage) = _$Error;
 
-  List<MovieListItem> get items;
   String get errorMessage;
   @JsonKey(ignore: true)
   $ErrorCopyWith<Error> get copyWith => throw _privateConstructorUsedError;

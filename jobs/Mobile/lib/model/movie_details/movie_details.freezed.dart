@@ -2,7 +2,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'movie_list_item.dart';
+part of 'movie_details.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,15 +13,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-MovieListItem _$MovieListItemFromJson(Map<String, dynamic> json) {
-  return _MovieListItem.fromJson(json);
+MovieDetails _$MovieDetailsFromJson(Map<String, dynamic> json) {
+  return _MoviesDetails.fromJson(json);
 }
 
 /// @nodoc
-class _$MovieListItemTearOff {
-  const _$MovieListItemTearOff();
+class _$MovieDetailsTearOff {
+  const _$MovieDetailsTearOff();
 
-  _MovieListItem call(
+  _MoviesDetails call(
       {required bool adult,
       required int id,
       @JsonKey(name: 'original_title', defaultValue: '')
@@ -30,7 +30,7 @@ class _$MovieListItemTearOff {
           required String description,
       @JsonKey(name: 'release_date', defaultValue: '')
           required String releaseDate}) {
-    return _MovieListItem(
+    return _MoviesDetails(
       adult: adult,
       id: id,
       originalTitle: originalTitle,
@@ -39,16 +39,16 @@ class _$MovieListItemTearOff {
     );
   }
 
-  MovieListItem fromJson(Map<String, Object?> json) {
-    return MovieListItem.fromJson(json);
+  MovieDetails fromJson(Map<String, Object?> json) {
+    return MovieDetails.fromJson(json);
   }
 }
 
 /// @nodoc
-const $MovieListItem = _$MovieListItemTearOff();
+const $MovieDetails = _$MovieDetailsTearOff();
 
 /// @nodoc
-mixin _$MovieListItem {
+mixin _$MovieDetails {
   bool get adult => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'original_title', defaultValue: '')
@@ -60,15 +60,15 @@ mixin _$MovieListItem {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $MovieListItemCopyWith<MovieListItem> get copyWith =>
+  $MovieDetailsCopyWith<MovieDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MovieListItemCopyWith<$Res> {
-  factory $MovieListItemCopyWith(
-          MovieListItem value, $Res Function(MovieListItem) then) =
-      _$MovieListItemCopyWithImpl<$Res>;
+abstract class $MovieDetailsCopyWith<$Res> {
+  factory $MovieDetailsCopyWith(
+          MovieDetails value, $Res Function(MovieDetails) then) =
+      _$MovieDetailsCopyWithImpl<$Res>;
   $Res call(
       {bool adult,
       int id,
@@ -78,13 +78,12 @@ abstract class $MovieListItemCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$MovieListItemCopyWithImpl<$Res>
-    implements $MovieListItemCopyWith<$Res> {
-  _$MovieListItemCopyWithImpl(this._value, this._then);
+class _$MovieDetailsCopyWithImpl<$Res> implements $MovieDetailsCopyWith<$Res> {
+  _$MovieDetailsCopyWithImpl(this._value, this._then);
 
-  final MovieListItem _value;
+  final MovieDetails _value;
   // ignore: unused_field
-  final $Res Function(MovieListItem) _then;
+  final $Res Function(MovieDetails) _then;
 
   @override
   $Res call({
@@ -120,11 +119,11 @@ class _$MovieListItemCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$MovieListItemCopyWith<$Res>
-    implements $MovieListItemCopyWith<$Res> {
-  factory _$MovieListItemCopyWith(
-          _MovieListItem value, $Res Function(_MovieListItem) then) =
-      __$MovieListItemCopyWithImpl<$Res>;
+abstract class _$MoviesDetailsCopyWith<$Res>
+    implements $MovieDetailsCopyWith<$Res> {
+  factory _$MoviesDetailsCopyWith(
+          _MoviesDetails value, $Res Function(_MoviesDetails) then) =
+      __$MoviesDetailsCopyWithImpl<$Res>;
   @override
   $Res call(
       {bool adult,
@@ -135,15 +134,15 @@ abstract class _$MovieListItemCopyWith<$Res>
 }
 
 /// @nodoc
-class __$MovieListItemCopyWithImpl<$Res>
-    extends _$MovieListItemCopyWithImpl<$Res>
-    implements _$MovieListItemCopyWith<$Res> {
-  __$MovieListItemCopyWithImpl(
-      _MovieListItem _value, $Res Function(_MovieListItem) _then)
-      : super(_value, (v) => _then(v as _MovieListItem));
+class __$MoviesDetailsCopyWithImpl<$Res>
+    extends _$MovieDetailsCopyWithImpl<$Res>
+    implements _$MoviesDetailsCopyWith<$Res> {
+  __$MoviesDetailsCopyWithImpl(
+      _MoviesDetails _value, $Res Function(_MoviesDetails) _then)
+      : super(_value, (v) => _then(v as _MoviesDetails));
 
   @override
-  _MovieListItem get _value => super._value as _MovieListItem;
+  _MoviesDetails get _value => super._value as _MoviesDetails;
 
   @override
   $Res call({
@@ -153,7 +152,7 @@ class __$MovieListItemCopyWithImpl<$Res>
     Object? description = freezed,
     Object? releaseDate = freezed,
   }) {
-    return _then(_MovieListItem(
+    return _then(_MoviesDetails(
       adult: adult == freezed
           ? _value.adult
           : adult // ignore: cast_nullable_to_non_nullable
@@ -180,8 +179,8 @@ class __$MovieListItemCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_MovieListItem extends _MovieListItem {
-  const _$_MovieListItem(
+class _$_MoviesDetails extends _MoviesDetails {
+  const _$_MoviesDetails(
       {required this.adult,
       required this.id,
       @JsonKey(name: 'original_title', defaultValue: '')
@@ -192,8 +191,8 @@ class _$_MovieListItem extends _MovieListItem {
           required this.releaseDate})
       : super._();
 
-  factory _$_MovieListItem.fromJson(Map<String, dynamic> json) =>
-      _$$_MovieListItemFromJson(json);
+  factory _$_MoviesDetails.fromJson(Map<String, dynamic> json) =>
+      _$$_MoviesDetailsFromJson(json);
 
   @override
   final bool adult;
@@ -211,14 +210,14 @@ class _$_MovieListItem extends _MovieListItem {
 
   @override
   String toString() {
-    return 'MovieListItem(adult: $adult, id: $id, originalTitle: $originalTitle, description: $description, releaseDate: $releaseDate)';
+    return 'MovieDetails(adult: $adult, id: $id, originalTitle: $originalTitle, description: $description, releaseDate: $releaseDate)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _MovieListItem &&
+            other is _MoviesDetails &&
             (identical(other.adult, adult) || other.adult == adult) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.originalTitle, originalTitle) ||
@@ -235,17 +234,17 @@ class _$_MovieListItem extends _MovieListItem {
 
   @JsonKey(ignore: true)
   @override
-  _$MovieListItemCopyWith<_MovieListItem> get copyWith =>
-      __$MovieListItemCopyWithImpl<_MovieListItem>(this, _$identity);
+  _$MoviesDetailsCopyWith<_MoviesDetails> get copyWith =>
+      __$MoviesDetailsCopyWithImpl<_MoviesDetails>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_MovieListItemToJson(this);
+    return _$$_MoviesDetailsToJson(this);
   }
 }
 
-abstract class _MovieListItem extends MovieListItem {
-  const factory _MovieListItem(
+abstract class _MoviesDetails extends MovieDetails {
+  const factory _MoviesDetails(
       {required bool adult,
       required int id,
       @JsonKey(name: 'original_title', defaultValue: '')
@@ -253,11 +252,11 @@ abstract class _MovieListItem extends MovieListItem {
       @JsonKey(name: 'overview', defaultValue: '')
           required String description,
       @JsonKey(name: 'release_date', defaultValue: '')
-          required String releaseDate}) = _$_MovieListItem;
-  const _MovieListItem._() : super._();
+          required String releaseDate}) = _$_MoviesDetails;
+  const _MoviesDetails._() : super._();
 
-  factory _MovieListItem.fromJson(Map<String, dynamic> json) =
-      _$_MovieListItem.fromJson;
+  factory _MoviesDetails.fromJson(Map<String, dynamic> json) =
+      _$_MoviesDetails.fromJson;
 
   @override
   bool get adult;
@@ -274,6 +273,6 @@ abstract class _MovieListItem extends MovieListItem {
   String get releaseDate;
   @override
   @JsonKey(ignore: true)
-  _$MovieListItemCopyWith<_MovieListItem> get copyWith =>
+  _$MoviesDetailsCopyWith<_MoviesDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }

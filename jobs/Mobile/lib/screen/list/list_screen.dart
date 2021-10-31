@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_search/api/api_manager.dart';
-import 'package:movie_search/screen/bloc/list_cubit.dart';
+import 'package:movie_search/bloc/list/list_cubit.dart';
 import 'package:provider/provider.dart';
 
 import 'list_screen_view.dart';
