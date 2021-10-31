@@ -47,7 +47,6 @@ class ListCubit extends Cubit<ListState> {
     if (_currentInput == input) {
       return;
     }
-    debugPrint('Into Refresh');
     emit(const ListState.loading(items: []));
     _currentInput = input;
     _currentPage = 1;
