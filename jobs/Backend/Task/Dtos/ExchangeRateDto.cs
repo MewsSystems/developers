@@ -1,8 +1,8 @@
 ﻿namespace ExchangeRateUpdater
 {
-    public class ExchangeRate
+    public class ExchangeRateDto
     {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
+        public ExchangeRateDto(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
