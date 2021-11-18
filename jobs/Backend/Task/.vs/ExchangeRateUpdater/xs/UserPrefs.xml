@@ -1,0 +1,28 @@
+﻿<Properties StartupConfiguration="{7B2695D6-D24C-4460-A58E-A10F08550CE0}|Default">
+  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdater PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+    <Files>
+      <File FileName="Program.cs" Line="15" Column="1" />
+      <File FileName="Helpers/ApiHelper.cs" />
+      <File FileName="Helpers/XmlHelper.cs" />
+      <File FileName="Dtos/ExchangeRateDto.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ExchangeRateUpdater" expanded="True">
+            <Node name="ExchangeRateUpdater" expanded="True">
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
