@@ -1,43 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CsvHelper;
+using ExchangeRateUpdater.CsvParser;
+using ExchangeRateUpdater.DAL;
+using ExchangeRateUpdater.Providers;
+using ExchangeRateUpdater.Utils;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        // setup dependency injection
+        var serviceProvider = new ServiceCollection()
+            // configure logging
+            .AddLogging(configure => configure.AddConsole())
+            // configure our services
+            .AddSingleton<IEndpointDal, EndpointDal>()
+            .AddSingleton<IExchangeRateProvider, CnbExchangeRateProvider>()
+            .AddSingleton<App>()
+            .AddSingleton<ICsvFactory, CsvFactory>()
+            .AddTransient<IHttpHandler, HttpHandler>()
+            .AddSingleton<IDateTimeProvider, DateTimeProvider>()
+            .AddSingleton<ICnbCsvReader, CnbCsvReader>()
+            .BuildServiceProvider();
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
-        }
+        var app = serviceProvider.GetService<App>();
+        app.Run();
     }
 }
