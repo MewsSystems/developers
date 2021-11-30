@@ -1,11 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.BusinessLayer;
+using ExchangeRateUpdater.Entities;
+using ExchangeRateUpdater.Interfaces;
+using SimpleInjector;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
+        private static readonly Container container;
+
+        static Program()
+        {
+            container = new Container();
+
+            container.Register<ICnbXmlSource, ExtendedCnbWebXmlRatesSource>();
+            container.Register<ExchangeRateProvider, CnbXlmRatesProvider>();
+
+            container.Verify();
+        }
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -23,7 +38,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = container.GetInstance<ExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
