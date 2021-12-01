@@ -2,6 +2,11 @@
 {
     public class ExchangeRate
     {
+        public ExchangeRate()
+        {
+
+        }
+
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
             SourceCurrency = sourceCurrency;
