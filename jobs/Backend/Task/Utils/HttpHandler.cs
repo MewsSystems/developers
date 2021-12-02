@@ -8,6 +8,6 @@ internal class HttpHandler : IHttpHandler
 
     public HttpResponseMessage Get(string url)
     {
-        return _client.GetAsync(url).GetAwaiter().GetResult();
+        return _client.GetAsync(url).ConfigureAwait(false).GetAwaiter().GetResult();
     }
 }
