@@ -28,8 +28,7 @@ namespace ExchangeRateUpdater
 
             Currency currencyObject = (Currency)obj;
 
-            return (string.Equals(Code, currencyObject.Code, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(Code, currencyObject.Code, StringComparison.OrdinalIgnoreCase));
+            return string.Equals(Code, currencyObject.Code, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
