@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es5", "es6", "es7", "es2017", "dom"],
+    "allowJs": false,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "rootDirs": ["src"],
+    "baseUrl": "src",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": false,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build", "scripts"]
+}
