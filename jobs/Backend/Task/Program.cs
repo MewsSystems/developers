@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Mews.ExchangeRateUpdater.Domain.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,15 +23,18 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                GetServiceProvider(args, out IHost host, out IServiceScope serviceScope, out IServiceProvider serviceProvider);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                var exchangeRateUpdaterService = serviceProvider.GetRequiredService<IExchangeRateUpdaterService>();
+
+                var cnbRates = await exchangeRateUpdaterService.GetExchangeRates(currencies.Select(c => c.Code), DateTime.Now);
+
+                Console.WriteLine($"Successfully retrieved {cnbRates.Count()} exchange rates:");
+                foreach (var rate in cnbRates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
@@ -38,6 +45,13 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static void GetServiceProvider(string[] args, out IHost host, out IServiceScope serviceScope, out IServiceProvider serviceProvider)
+        {
+            host = HostBuilder.CreateHostBuilder(args).Build();
+            serviceScope = host.Services.CreateScope();
+            serviceProvider = serviceScope.ServiceProvider;
         }
     }
 }
