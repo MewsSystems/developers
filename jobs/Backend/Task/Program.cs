@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace ExchangeRateUpdater
 {
@@ -16,20 +17,34 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("XYZ"),
+            new Currency("HUF")
         };
-
+        
         public static void Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                using (var httpClient = new HttpClient())
                 {
-                    Console.WriteLine(rate.ToString());
+                    var provider = new ExchangeRateProvider(c =>
+                    {
+                        var cnbData = CnbFunctions.DownloadCnbCurrencyData(
+                                httpClient,
+                                "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt")
+                            .Result;
+
+                        return CnbFunctions.ConvertCnbData(cnbData, c);
+                    });
+
+                    var rates = provider.GetExchangeRates(currencies);
+
+
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
             }
             catch (Exception e)
