@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
 using LanguageExt;
+using LanguageExt.Common;
 using static ExchangeRateUpdater.Types;
 using static LanguageExt.Prelude;
 
@@ -73,9 +74,11 @@ namespace ExchangeRateUpdater
                 new Currency(Czk),
                 cnbCurrencyData.CalculateRateToOneCzk());
 
-        public static async Task<Seq<CnbCurrencyData>> DownloadCnbCurrencyData(HttpClient httpClient, string url)
+        public static async Task<Seq<CnbCurrencyData>> DownloadCnbCurrencyData(
+            Aff<string> getFileContent,
+            Func<Error, Unit> errorHandler)
         {
-            var computation = from fileContent in LoadCnbFileContent(httpClient, url)
+            var computation = from fileContent in getFileContent
                 from cnbLines in Eff(() => GetCnbFileLines(fileContent))
                 from currencyData in Eff(() => ParseCnbCurrencyItems(cnbLines))
                 select currencyData;
@@ -84,7 +87,11 @@ namespace ExchangeRateUpdater
 
             return result.Match(
                 seq => seq,
-                error => LanguageExt.Seq<CnbCurrencyData>.Empty);
+                error =>
+                {
+                    errorHandler(error);
+                    return LanguageExt.Seq<CnbCurrencyData>.Empty;
+                });
         }
     }
 }

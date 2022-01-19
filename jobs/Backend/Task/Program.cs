@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using LanguageExt;
 
 namespace ExchangeRateUpdater
 {
@@ -25,26 +26,31 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                using (var httpClient = new HttpClient())
+                using var httpClient = new HttpClient();
+                
+                var provider = new ExchangeRateProvider(c =>
                 {
-                    var provider = new ExchangeRateProvider(c =>
-                    {
-                        var cnbData = CnbFunctions.DownloadCnbCurrencyData(
+                    var cnbData = CnbFunctions.DownloadCnbCurrencyData(
+                            CnbFunctions.LoadCnbFileContent(
                                 httpClient,
-                                "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt")
-                            .Result;
+                                "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt"),
+                            error =>
+                            {
+                                Console.WriteLine(error.ToString());
+                                return Unit.Default;
+                            })
+                        .Result;
 
-                        return CnbFunctions.ConvertCnbData(cnbData, c);
-                    });
+                    return CnbFunctions.ConvertCnbData(cnbData, c);
+                });
 
-                    var rates = provider.GetExchangeRates(currencies);
+                var rates = provider.GetExchangeRates(currencies);
 
 
-                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                    foreach (var rate in rates)
-                    {
-                        Console.WriteLine(rate.ToString());
-                    }
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                foreach (var rate in rates)
+                {
+                    Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
