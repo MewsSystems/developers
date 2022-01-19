@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using LanguageExt;
+using LanguageExt.Common;
 
 namespace ExchangeRateUpdater
 {
@@ -26,20 +27,21 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                using var httpClient = new HttpClient();
-                
                 var provider = new ExchangeRateProvider(c =>
                 {
-                    var cnbData = CnbFunctions.DownloadCnbCurrencyData(
-                            CnbFunctions.LoadCnbFileContent(
-                                httpClient,
-                                "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt"),
-                            error =>
-                            {
-                                Console.WriteLine(error.ToString());
-                                return Unit.Default;
-                            })
-                        .Result;
+                    using var httpClient = new HttpClient();
+                    
+                    var loader = CnbFunctions.LoadCnbFileContent(
+                        httpClient,
+                        "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt");
+
+                    Unit ErrorHandler(Error error)
+                    {
+                        Console.WriteLine(error.ToString());
+                        return Unit.Default;
+                    }
+
+                    var cnbData = CnbFunctions.DownloadCnbCurrencyData(loader, ErrorHandler).Result;
 
                     return CnbFunctions.ConvertCnbData(cnbData, c);
                 });

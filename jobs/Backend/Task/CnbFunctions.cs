@@ -18,6 +18,11 @@ namespace ExchangeRateUpdater
         public static Aff<string> LoadCnbFileContent(HttpClient httpClient, string url) =>
             Aff(async () => await httpClient.GetStringAsync(url));
         
+        /// <summary>
+        /// From supplied CNB file returns only lines with currency data - skips header rows.
+        /// </summary>
+        /// <param name="fileContent"></param>
+        /// <returns></returns>
         public static Seq<string> GetCnbFileLines(string fileContent) =>
             (from content in Optional(fileContent)
                 from a in Optional(content.Split("\n").Skip(HeaderRowCount))
@@ -42,13 +47,14 @@ namespace ExchangeRateUpdater
                     .ToEff()
                 from currencyData in Eff(() => new CnbCurrencyData(
                     int.Parse(threeParts[0]),
-                    new Currency(threeParts[1]),
+                    new Currency(threeParts[1].Trim()),
                     decimal.Parse(threeParts[2])))
                 select currencyData)
             .Run()
             .Match(Option<CnbCurrencyData>.Some,
                 error => Option<CnbCurrencyData>.None);
 
+        
         public static IEnumerable<ExchangeRate> ConvertCnbData(
             Seq<CnbCurrencyData> cnbCurrencyData,
             IEnumerable<Currency> requestedCurrencies) =>
@@ -63,16 +69,22 @@ namespace ExchangeRateUpdater
         public static Option<ExchangeRate> TryFindExchangeRate(Seq<CnbCurrencyData> cnbData, Currency targetCurrency) =>
             from cnbItem in 
                 Optional(cnbData.FirstOrDefault(d => AreMatchingCurrencies(d, targetCurrency)))
-            from exchangeRate in Optional(CreateExchangeRate(cnbItem, targetCurrency))
+            from exchangeRate in CreateExchangeRate(cnbItem, targetCurrency)
             select exchangeRate;
 
+        /// <summary>
+        /// Returns true if both parameters describe same currency.
+        /// </summary>
         public static bool AreMatchingCurrencies(CnbCurrencyData cnbCurrencyData, Currency currency) =>
             cnbCurrencyData.Currency.Code == currency.Code;
 
-        public static ExchangeRate CreateExchangeRate(CnbCurrencyData cnbCurrencyData, Currency currency) =>
-            new(currency,
+        public static Option<ExchangeRate> CreateExchangeRate(CnbCurrencyData cnbCurrencyData, Currency currency) =>
+             Eff(() => new ExchangeRate(currency,
                 new Currency(Czk),
-                cnbCurrencyData.CalculateRateToOneCzk());
+                cnbCurrencyData.CalculateRateToOneCzk()))
+                 .Run()
+                 .Match(er => er,
+                     error => Option<ExchangeRate>.None);
 
         public static async Task<Seq<CnbCurrencyData>> DownloadCnbCurrencyData(
             Aff<string> getFileContent,
