@@ -1,9 +1,14 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
         public Currency(string code)
         {
+            if (code == null) throw new ArgumentNullException(nameof(code));
+            if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException(nameof(code));
+
             Code = code;
         }
 

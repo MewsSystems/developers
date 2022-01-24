@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ExchangeRateUpdater.ExchangeRateProviders;
+using ExchangeRateUpdater.ExchangeRateProviders.QuotesParsers;
+using ExchangeRateUpdater.ExchangeRateProviders.QuotesProviders;
 
 namespace ExchangeRateUpdater
 {
@@ -25,7 +27,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbRateProvider();
+                var provider = new CnbExchangeRateProvider(new CnbQuotesHttpProvider(new WebProxyProvider()), new CnbQuotesTextParser());
+
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
