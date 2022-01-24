@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using ExchangeRateUpdater.ExchangeRateProviders;
+
 namespace ExchangeRateUpdater
 {
     public static class Program
@@ -23,7 +25,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new CnbRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
