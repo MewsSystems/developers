@@ -22,6 +22,7 @@ namespace ExchangeRateUpdater.Test.CoreClasses
             Assert.Throws<ArgumentException>(() => new ExchangeRate(cSource, 1, cSource, 1, 1));
         }
 
+        [Test]
         public void ToString_tests()
         {
             var cSoruceCode = "RUB";
