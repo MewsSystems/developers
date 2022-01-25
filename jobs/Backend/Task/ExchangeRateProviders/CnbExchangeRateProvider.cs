@@ -16,13 +16,11 @@ namespace ExchangeRateUpdater.ExchangeRateProviders
     /// </summary>
     public class CnbExchangeRateProvider : ExchangeRateProvider
     {
-        
         private static RegionInfo CzechRepublicRegion = new RegionInfo("cs-CZ");
-        private static Currency BaseCurrency = new Currency(CzechRepublicRegion.ISOCurrencySymbol);
-
-
         private readonly IQuotesProvider _quotesProvider;
         private readonly IQuotesParser _quotesParser;
+
+        public static Currency BaseCurrency = new Currency(CzechRepublicRegion.ISOCurrencySymbol);
 
         public CnbExchangeRateProvider(IQuotesProvider quotesProvider, IQuotesParser quotesParser)
         {
