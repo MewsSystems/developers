@@ -10,13 +10,15 @@ namespace ExchangeRateUpdater.ExchangeRateProviders.QuotesProviders
 {
     public class CnbQuotesHttpProvider : IQuotesProvider
     {
-        private static string ProviderUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
-
+        
         private readonly IWebProxyProvider _webProxyProvider;
         public CnbQuotesHttpProvider(IWebProxyProvider webProxyProvider)
         {
             _webProxyProvider = webProxyProvider;
         }
+
+        public static string ProviderUrl => "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
         public async Task<string> GetQuotesAsync() => await _webProxyProvider.GetUrlAsync(ProviderUrl);
 
     }

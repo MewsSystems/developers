@@ -11,6 +11,18 @@ namespace ExchangeRateUpdater.Test.CoreClasses
     [TestFixture]
     public class Currency_Tests
     {
+        Currency c;
+        Currency cSame;
+        Currency cOther;
+
+        [SetUp]
+        public void Init()
+        {
+            c = new Currency("RUB");
+            cSame = new Currency("RUB");
+            cOther = new Currency("CZK");
+        }
+
         [Test]
         public void Constructor_Exceptions_tests()
         {
@@ -21,10 +33,6 @@ namespace ExchangeRateUpdater.Test.CoreClasses
         [Test]
         public void GetHashCode_tests()
         {
-            Currency c = new Currency("RUB");
-            Currency cSame = new Currency("RUB");
-            Currency cOther = new Currency("CZK");
-
             Assert.AreEqual(c.GetHashCode(), cSame.GetHashCode());
             Assert.AreNotEqual(c.GetHashCode(), cOther.GetHashCode());
         }
@@ -32,10 +40,6 @@ namespace ExchangeRateUpdater.Test.CoreClasses
         [Test]
         public void Equality_tests()
         {
-            Currency c = new Currency("RUB");
-            Currency cSame = new Currency("RUB");
-            Currency cOther = new Currency("CZK");
-
             Assert.AreEqual(c, cSame);
             Assert.AreNotEqual(c, cOther);
         }

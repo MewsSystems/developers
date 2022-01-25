@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.CoreClasses;
+using ExchangeRateUpdater.ExchangeRateProviders.Interfaces;
 using ExchangeRateUpdater.ExchangeRateProviders.QuotesParsers;
 using NUnit.Framework;
 using System;
@@ -13,7 +14,7 @@ namespace ExchangeRateUpdater.Test.ExchangeRateProviders.QuotesParsers
     [TestFixture]
     public class CnbQuotesTextParser_tests
     {
-        CnbQuotesTextParser textParser;
+        IQuotesParser textParser;
         Currency targetCurrency;
 
         [SetUp]
