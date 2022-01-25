@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ExchangeRateUpdater.CoreClasses;
 using ExchangeRateUpdater.ExchangeRateProviders;
-using ExchangeRateUpdater.ExchangeRateProviders.QuotesParsers;
-using ExchangeRateUpdater.ExchangeRateProviders.QuotesProviders;
 
 namespace ExchangeRateUpdater
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         private static IEnumerable<Currency> currencies = new[]
@@ -27,7 +27,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider(new CnbQuotesHttpProvider(new WebProxyProvider()), new CnbQuotesTextParser());
+                var provider = ExchangeProvidersRepo.GetProviderByCurrency(new Currency("CZK"));
 
                 var rates = provider.GetExchangeRates(currencies);
 
