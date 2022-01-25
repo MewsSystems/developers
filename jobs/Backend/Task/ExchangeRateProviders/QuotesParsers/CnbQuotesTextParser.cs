@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.ExchangeRateProviders.Interfaces;
+﻿using ExchangeRateUpdater.CoreClasses;
+using ExchangeRateUpdater.ExchangeRateProviders.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace ExchangeRateUpdater.ExchangeRateProviders.QuotesParsers
     {
         public IDictionary<Currency, ExchangeRate> ParseQuotes(Currency targetCurrency, string quotes)
         {
+            if (targetCurrency == null) throw new ArgumentNullException(nameof(targetCurrency));
+            if (quotes == null) throw new ArgumentNullException(nameof(quotes));
+            if (string.IsNullOrWhiteSpace(quotes)) throw new ArgumentException(nameof(quotes));
+
             /*
                 01 Oct 2021 #190
                 Country|Currency|Amount|Code|Rate
@@ -20,8 +25,8 @@ namespace ExchangeRateUpdater.ExchangeRateProviders.QuotesParsers
              * 
              */
 
-            int dateLen = 11;
-            string headers = "Country|Currency|Amount|Code|Rate";
+            int dateLen = 11; //Should match beginning of line 1 text file structure
+            string headers = "Country|Currency|Amount|Code|Rate"; //Should exactly match line 2 text file structure
 
             var quotesLines = quotes.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 

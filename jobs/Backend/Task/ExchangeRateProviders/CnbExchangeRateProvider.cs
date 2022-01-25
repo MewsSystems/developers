@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.ExchangeRateProviders.Interfaces;
+﻿using ExchangeRateUpdater.CoreClasses;
+using ExchangeRateUpdater.ExchangeRateProviders.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

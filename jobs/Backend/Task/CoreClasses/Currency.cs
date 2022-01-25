@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.CoreClasses
 {
     public class Currency
     {
@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater
         {
             if (curr == null)
                 return false;
-            return this.Code == curr.Code;
+            return Code == curr.Code;
         }
 
         public override bool Equals(object obj)

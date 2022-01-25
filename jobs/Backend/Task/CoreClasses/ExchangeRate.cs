@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.CoreClasses
 {
     public class ExchangeRate
     {

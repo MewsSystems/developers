@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.CoreClasses
 {
     public abstract class ExchangeRateProvider
     {
@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater
             return Enumerable.Empty<ExchangeRate>();
         }
 
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) => 
-            Task.Run(async () => await this.GetExchangeRatesAsync(currencies)).GetAwaiter().GetResult();
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) =>
+            Task.Run(async () => await GetExchangeRatesAsync(currencies)).GetAwaiter().GetResult();
     }
 }
