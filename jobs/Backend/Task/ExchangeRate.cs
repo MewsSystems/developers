@@ -17,7 +17,7 @@
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}={Value:N6}";
         }
     }
 }

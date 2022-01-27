@@ -1,11 +1,18 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.ExchangeRateProviders;
+using ExchangeRateUpdater.RateProviders;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
+        private const string RateProvidersConfigurationKey = "RateProviders";
+
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -19,12 +26,26 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var applicationConfiguration = new ApplicationConfiguration();
+                new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .AddEnvironmentVariables()
+                    .Build()
+                    .Bind(applicationConfiguration);
+                
+                if(!applicationConfiguration.RateProviders.Any())
+                {
+                    throw new Exception($"Missing configuration for '{RateProvidersConfigurationKey}'");
+                }               
+
+                var rateProvider = new CzechNationalBankRateProvider(applicationConfiguration.RateProviders);
+
+                var provider = new ExchangeRateProvider(rateProvider);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
