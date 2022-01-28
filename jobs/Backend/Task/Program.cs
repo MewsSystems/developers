@@ -21,7 +21,6 @@ namespace ExchangeRateUpdater
                     services.AddHostedService<Startup>();
                     services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                             .AddSingleton<IExchangeRateSource, CzechNationalBank>()
-                            .AddSingleton<ICzechNationalBankExchangeRateParser, CzechNationalBankExchangeRateParser>()
                             .AddSingleton<ICzechNationalBankConfig, CzechNationalBankConfig>()
                             .AddSingleton<IHttpClientLineReader, HttpClientLineReader>();
                 });

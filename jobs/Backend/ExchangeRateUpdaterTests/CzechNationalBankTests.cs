@@ -6,22 +6,20 @@ using Xunit;
 
 namespace ExchangeRateUpdaterTests
 {
-    public class CzechNationalBankExchangeRatesTests
+    public class CzechNationalBankTests
     {
         [Fact]
         public void GetAllExchangeRates_DownloadsDataAndParsesIt()
         {
             var config = A.Fake<ICzechNationalBankConfig>();
             var httpClientLineReader = A.Fake<IHttpClientLineReader>();
-            var parser = A.Fake<ICzechNationalBankExchangeRateParser>();
 
-            var sourceExchangeRates = new CzechNationalBank(config, parser, httpClientLineReader);
+            var sourceExchangeRates = new CzechNationalBank(config,  httpClientLineReader);
 
             var exchangeRates = sourceExchangeRates.GetAllExchangeRates();
 
             A.CallTo(() => config.ExchangeRateUrl).MustHaveHappenedOnceExactly();
             A.CallTo(() => httpClientLineReader.ReadLines(A<string>._)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => parser.ConvertToExchangeRates(A<IAsyncEnumerable<string>>._)).MustHaveHappenedOnceExactly();
         }
     }
 }
