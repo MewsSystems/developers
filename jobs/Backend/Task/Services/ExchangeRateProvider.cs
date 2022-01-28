@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater.Services
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             var enumerableExchangeRates = exchangeRateSource.GetAllExchangeRates();
-            var requestedExchangedRates = currencies.ToLookup(x => $"{x.Code}/CZK");
+            var requestedExchangedRates = currencies.Select(x => $"{x.Code}/CZK").ToHashSet();
 
             return enumerableExchangeRates.Where(x => requestedExchangedRates.Contains($"{x.SourceCurrency}/{x.TargetCurrency}"));
         }
