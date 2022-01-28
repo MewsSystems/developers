@@ -13,6 +13,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            // Just to test initial commit
             return Enumerable.Empty<ExchangeRate>();
         }
     }
