@@ -7,18 +7,22 @@ using ExchangeRateUpdater.ExternalServices.CzechNationalBank.Configuration;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Builders;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Parsers;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
 {
     public class CzechNationalBankApiClient : ICzechNationalBankApiClient
     {
+        readonly ILogger<CzechNationalBankApiClient> _logger;
         readonly ICzechNationalBankApiConfigurationProvider _configurationProvider;
         readonly System.Net.Http.HttpClient _httpClient;
         
-        public CzechNationalBankApiClient(ICzechNationalBankApiConfigurationProvider configurationProvider)
+        public CzechNationalBankApiClient(
+            ILogger<CzechNationalBankApiClient> logger,
+            ICzechNationalBankApiConfigurationProvider configurationProvider)
         {
+            _logger = logger;
             _configurationProvider = configurationProvider;
-            // TODO: inject http client
             _httpClient = new System.Net.Http.HttpClient();
         }
         
@@ -56,7 +60,9 @@ namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
             }
             catch (Exception e)
             {
-                throw new ApiClientException("Call to the Czech National Bank API wasn't successful", e);
+                var apiClientErrorMessage = "Call to the Czech National Bank API wasn't successful";
+                _logger.LogWarning(e, apiClientErrorMessage);
+                throw new ApiClientException(apiClientErrorMessage, e);
             }
         }
     }

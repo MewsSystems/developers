@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ExternalServices\CzechNationalBank\HttpClient\Builders" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ExchangeRateUpdater.csproj" />
     </ItemGroup>
 

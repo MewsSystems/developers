@@ -4,7 +4,7 @@ using System.Linq;
 using ExchangeRateUpdater.Dtos;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient;
 
-namespace ExchangeRateUpdater.Providers.ExchangeRateProvider
+namespace ExchangeRateUpdater.Providers
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
@@ -34,7 +34,7 @@ namespace ExchangeRateUpdater.Providers.ExchangeRateProvider
                                           (exchangeRateDto.Rate is not null && exchangeRateDto.Rate > 0) && 
                                           (exchangeRateDto.Amount is not null && exchangeRateDto.Amount > 0) &&
                                           currencyCodes.Contains(exchangeRateDto.Currency.Code))
-                .Select(exchangeRateDto => new ExchangeRate(
+                .Select(exchangeRateDto => new Dtos.ExchangeRate(
                     exchangeRateDto.Currency,
                     targetCurrency,
                     (decimal)exchangeRateDto.Rate / (decimal)exchangeRateDto.Amount));

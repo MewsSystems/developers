@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateUpdater.Dtos;
-using ExchangeRateUpdater.Providers.ExchangeRateProvider;
-using Microsoft.Extensions.Hosting;
+using ExchangeRateUpdater.Providers;
 
-namespace ExchangeRateUpdater.Services.ExchangeRateService
+namespace ExchangeRateUpdater.Services
 {
     public class ExchangeRateService : IExchangeRateService
     {

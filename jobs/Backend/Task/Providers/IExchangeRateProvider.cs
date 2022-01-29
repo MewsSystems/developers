@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ExchangeRateUpdater.Dtos;
 
-namespace ExchangeRateUpdater.Providers.ExchangeRateProvider
+namespace ExchangeRateUpdater.Providers
 {
     public interface IExchangeRateProvider
     {

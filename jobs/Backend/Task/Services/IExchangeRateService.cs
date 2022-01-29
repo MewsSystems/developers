@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.Services.ExchangeRateService
+﻿namespace ExchangeRateUpdater.Services
 {
     public interface IExchangeRateService
     {

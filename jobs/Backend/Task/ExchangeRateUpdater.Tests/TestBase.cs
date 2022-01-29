@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 
@@ -17,6 +18,16 @@ namespace ExchangeRateUpdater.Tests
             var serializedOrderedResultCollection = JsonSerializer.Serialize(resultCollection.OrderBy(i => i, comparer));
 
             return serializedOrderedExpectedCollection.Equals(serializedOrderedResultCollection);
+        }
+        
+        protected static Stream CreateStreamFromString(string str)
+        {
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            streamWriter.Write(str);
+            streamWriter.Flush();
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.Configuration;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient;
-using ExchangeRateUpdater.Providers.ExchangeRateProvider;
-using ExchangeRateUpdater.Services.ExchangeRateService;
-using Microsoft.Extensions.Configuration;
+using ExchangeRateUpdater.Providers;
+using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

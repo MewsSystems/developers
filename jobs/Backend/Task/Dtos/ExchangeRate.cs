@@ -1,6 +1,4 @@
-﻿using ExchangeRateUpdater.Dtos;
-
-namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Dtos
 {
     public class ExchangeRate
     {

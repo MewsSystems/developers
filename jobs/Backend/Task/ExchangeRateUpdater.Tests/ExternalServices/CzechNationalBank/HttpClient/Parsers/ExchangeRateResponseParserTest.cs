@@ -63,16 +63,6 @@ namespace ExchangeRateUpdater.Tests.ExternalServices.HttpClient.Parsers
             ).SetName("Parse_ShouldParseExchangeRates_WhenCorrectStringIsSupplied_NoRates");
             #endregion
         }
-        
-        static Stream CreateStreamFromString(string str)
-        {
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(str);
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-            return memoryStream;
-        }
 
         class ExchangeRateDtoComparer : IComparer<ExchangeRateDto>
         {
