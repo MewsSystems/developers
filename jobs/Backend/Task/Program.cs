@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.Configuration;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient;
-using ExchangeRateUpdater.HostedServices;
 using ExchangeRateUpdater.Providers.ExchangeRateProvider;
+using ExchangeRateUpdater.Services.ExchangeRateService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,12 +13,13 @@ namespace ExchangeRateUpdater
     {
         public static async Task Main(string[] args)
         {
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices(ConfigureServices)
-                .Build();
-
-            await host.StartAsync();
-            await host.WaitForShutdownAsync();
+            var hostBuilder = Host.CreateDefaultBuilder(args)
+                .ConfigureServices(ConfigureServices);
+            
+            using var host = hostBuilder.Build();
+            
+            // Execute service to obtain exchange rates from Czech National Bank
+            ExecuteExchangeRateService(host);
         }
         
         static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
@@ -27,30 +28,21 @@ namespace ExchangeRateUpdater
             var configuration = hostContext.Configuration;
             services.AddSingleton<ICzechNationalBankApiConfigurationProvider>(c =>
                 new CzechNationalBankApiConfigurationProvider(
-                    GetCzechNationalBankConfiguration(configuration)));
+                    CzechNationalBankConfiguration.GetCzechNationalBankConfiguration(configuration)));
             
             // Add DI scopes
             services.AddSingleton<ICzechNationalBankApiClient, CzechNationalBankApiClient>();
             services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
-            
-            // Add hosted services
-            services.AddHostedService<ExchangeRateHostedService>();
+            services.AddSingleton<IExchangeRateService, ExchangeRateService>();
         }
 
-        static CzechNationalBankConfiguration GetCzechNationalBankConfiguration(IConfiguration configuration)
+        static void ExecuteExchangeRateService(IHost host)
         {
-            var czechNationalBankConfigurationName = nameof(CzechNationalBankConfiguration);
-            var czechNationalBankConfiguration = new CzechNationalBankConfiguration
-            {
-                HttpProtocol = configuration.GetSection($"{czechNationalBankConfigurationName}:{nameof(CzechNationalBankConfiguration.HttpProtocol)}").Value,
-                DomainUrl = configuration.GetSection($"{czechNationalBankConfigurationName}:{nameof(CzechNationalBankConfiguration.DomainUrl)}").Value,
-                Endpoints = new CzechNationalBankApiClientEndpoints
-                {
-                    ExchangeRatePath = configuration.GetSection($"{czechNationalBankConfigurationName}:{nameof(CzechNationalBankConfiguration.Endpoints)}:{nameof(CzechNationalBankApiClientEndpoints.ExchangeRatePath)}").Value
-                }
-            };
+            using var serviceScope = host.Services.CreateScope();
+            var serviceProvider = serviceScope.ServiceProvider;
 
-            return czechNationalBankConfiguration;
+            var exchangeRateService = serviceProvider.GetRequiredService<IExchangeRateService>();
+            exchangeRateService.Execute();
         }
     }
 }

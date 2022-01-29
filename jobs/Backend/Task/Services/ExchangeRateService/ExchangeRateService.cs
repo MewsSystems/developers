@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ExchangeRateUpdater.Dtos;
 using ExchangeRateUpdater.Providers.ExchangeRateProvider;
 using Microsoft.Extensions.Hosting;
 
-namespace ExchangeRateUpdater.HostedServices
+namespace ExchangeRateUpdater.Services.ExchangeRateService
 {
-    public class ExchangeRateHostedService : IHostedService
+    public class ExchangeRateService : IExchangeRateService
     {
         static IEnumerable<Currency> currencies = new[]
         {
@@ -25,42 +23,14 @@ namespace ExchangeRateUpdater.HostedServices
         };
         
         readonly IExchangeRateProvider _exchangeRateProvider;
-        readonly IHostApplicationLifetime _applicationLifetime;
 
-        public ExchangeRateHostedService(
-            IExchangeRateProvider exchangeRateProvider,
-            IHostApplicationLifetime applicationLifetime)
+        public ExchangeRateService(
+            IExchangeRateProvider exchangeRateProvider)
         {
             _exchangeRateProvider = exchangeRateProvider;
-            _applicationLifetime = applicationLifetime;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-            }
-            
-            GetExchangeRates();
-            
-            // Don't want to wait till host application life time ends in this case
-            _applicationLifetime.StopApplication();
-            
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-            }
-            
-            return Task.CompletedTask;
-        }
-
-        void GetExchangeRates()
+        public void Execute()
         {
             try
             {

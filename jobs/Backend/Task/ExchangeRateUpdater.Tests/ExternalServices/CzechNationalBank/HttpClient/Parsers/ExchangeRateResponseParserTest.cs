@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ExchangeRateUpdater.Dtos;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Parsers;
@@ -14,19 +15,22 @@ namespace ExchangeRateUpdater.Tests.ExternalServices.HttpClient.Parsers
         [TestCaseSource(nameof(ProvideParseTestCases))]
         public void Parse_ShouldParseExchangeRates_WhenCorrectStringIsSupplied(string inputStr, IEnumerable<ExchangeRateDto> expectedExchangeRates)
         {
-            // Given + When
-            var resultExchangeRates = ExchangeRateResponseParser.Parse(inputStr);
+            // Given
+            var streamToParse = CreateStreamFromString(inputStr);
+            
+            // When
+            var resultExchangeRates = ExchangeRateResponseParser.Parse(streamToParse);
 
             // Then
             CompareTwoCollectionsDeeply<ExchangeRateDto>(
                 expectedExchangeRates,
                 resultExchangeRates, 
-                new ExchangeRateDtoComparer()
-                ).Should().BeTrue();
+                new ExchangeRateDtoComparer()).Should().BeTrue();
         }
 
         static IEnumerable<TestCaseData> ProvideParseTestCases()
         {
+            #region Test cases for parser
             yield return new TestCaseData(
                 "27 Jan 2022 #19\n" +
                 "Country|Currency|Amount|Code|Rate\n" +
@@ -51,11 +55,23 @@ namespace ExchangeRateUpdater.Tests.ExternalServices.HttpClient.Parsers
                         Rate = (decimal)4.061
                     }
                 }).SetName("Parse_ShouldParseExchangeRates_WhenCorrectStringIsSupplied_MultipleRates");
+            
             yield return new TestCaseData(
                 "27 Jan 2022 #19\n" +
                 "Country|Currency|Amount|Code|Rate",
                 new List<ExchangeRateDto> {}
-                ).SetName("Parse_ShouldParseExchangeRates_WhenCorrectStringIsSupplied_NoRates");
+            ).SetName("Parse_ShouldParseExchangeRates_WhenCorrectStringIsSupplied_NoRates");
+            #endregion
+        }
+        
+        static Stream CreateStreamFromString(string str)
+        {
+            var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            streamWriter.Write(str);
+            streamWriter.Flush();
+            memoryStream.Position = 0;
+            return memoryStream;
         }
 
         class ExchangeRateDtoComparer : IComparer<ExchangeRateDto>

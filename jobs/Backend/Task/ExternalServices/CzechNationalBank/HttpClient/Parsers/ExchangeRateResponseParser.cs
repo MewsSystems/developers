@@ -12,13 +12,13 @@ namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Pars
     {
         static int NumberOfHeaderLines = 2;
         
-        public static IEnumerable<ExchangeRateDto> Parse(string str)
+        public static IEnumerable<ExchangeRateDto> Parse(Stream stream)
         {
             var exchangeRates = new List<ExchangeRateDto>();
             
             try
             {
-                using var parser = new TextFieldParser(CreateStreamFromString(str));
+                using var parser = new TextFieldParser(stream);
 
                 parser.TextFieldType = FieldType.Delimited;
                 parser.SetDelimiters("|");
@@ -60,16 +60,6 @@ namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Pars
                     parser.ReadLine();
                 }
             }
-        }
-
-        static Stream CreateStreamFromString(string str)
-        {
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(str);
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-            return memoryStream;
         }
     }
 }

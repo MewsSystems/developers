@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.ExternalServices.CzechNationalBank.Configuration;
@@ -43,14 +44,14 @@ namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
             return ExchangeRateResponseParser.Parse(response);
         }
         
-        async Task<string> CallApiAsync(HttpRequestMessage requestMessage)
+        async Task<Stream> CallApiAsync(HttpRequestMessage requestMessage)
         {
             try
             {
                 var response = await _httpClient.SendAsync(requestMessage);
-                var stringResponse = await response.Content.ReadAsStringAsync();
+                var responseStream = await response.Content.ReadAsStreamAsync();
 
-                return stringResponse;
+                return responseStream;
 
             }
             catch (Exception e)
