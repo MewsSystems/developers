@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient.Dtos;
+using ExchangeRateUpdater.Dtos;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos;
 using Microsoft.VisualBasic.FileIO;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient.Parsers
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Parsers
 {
     public static class ExchangeRateResponseParser
     {

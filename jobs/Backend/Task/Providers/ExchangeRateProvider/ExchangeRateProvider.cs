@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient;
+using ExchangeRateUpdater.Dtos;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Providers.ExchangeRateProvider
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
-        readonly CzechNationalBankApiClient _nationalBankApiClient;
+        readonly ICzechNationalBankApiClient _czechNationalBankApiClient;
 
-        public ExchangeRateProvider()
+        public ExchangeRateProvider(ICzechNationalBankApiClient czechNationalBankApiClient)
         {
-            _nationalBankApiClient = new CzechNationalBankApiClient();
+            _czechNationalBankApiClient = czechNationalBankApiClient;
         }
         
         /// <summary>
@@ -22,7 +23,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var currentExchangeRates = _nationalBankApiClient.GetExchangeRatesAsync(DateTime.UtcNow).Result;
+            var currentExchangeRates = _czechNationalBankApiClient.GetExchangeRatesAsync(DateTime.UtcNow).Result;
 
             var currencyCodes = currencies.Select(c => c.Code);
 
@@ -30,8 +31,8 @@ namespace ExchangeRateUpdater
             
             var filteredExchangeRates = currentExchangeRates
                 .Where(exchangeRateDto => exchangeRateDto.Currency is not null &&
-                                          exchangeRateDto.Rate is not null &&
-                                          exchangeRateDto.Amount is not null &&
+                                          (exchangeRateDto.Rate is not null && exchangeRateDto.Rate > 0) && 
+                                          (exchangeRateDto.Amount is not null && exchangeRateDto.Amount > 0) &&
                                           currencyCodes.Contains(exchangeRateDto.Currency.Code))
                 .Select(exchangeRateDto => new ExchangeRate(
                     exchangeRateDto.Currency,

@@ -2,28 +2,33 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.CzechNationalBank.Configuration;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient.Builders;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient.Dtos;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient.Parsers;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.Configuration;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Builders;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Parsers;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
 {
     public class CzechNationalBankApiClient : ICzechNationalBankApiClient
     {
-        private readonly System.Net.Http.HttpClient _httpClient;
+        readonly ICzechNationalBankApiConfigurationProvider _configurationProvider;
+        readonly System.Net.Http.HttpClient _httpClient;
         
-        public CzechNationalBankApiClient()
+        public CzechNationalBankApiClient(ICzechNationalBankApiConfigurationProvider configurationProvider)
         {
+            _configurationProvider = configurationProvider;
+            // TODO: inject http client
             _httpClient = new System.Net.Http.HttpClient();
         }
         
         public async Task<IEnumerable<ExchangeRateDto>> GetExchangeRatesAsync(DateTime dateTime)
         {
+            var configuration = _configurationProvider.GetConfiguration();
+            
             var uriBuilder = new UriBuilder();
-            uriBuilder.Scheme = ApiClientConfiguration.HttpProtocol;
-            uriBuilder.Host = ApiClientConfiguration.DomainUrl;
-            uriBuilder.Path = ApiClientConfiguration.ExchangeRatePath;
+            uriBuilder.Scheme = configuration.HttpProtocol;
+            uriBuilder.Host = configuration.DomainUrl;
+            uriBuilder.Path = configuration.Endpoints.ExchangeRatePath;
             uriBuilder.Query = $"date={dateTime.Date.ToString("dd.MM.yyyy")}";
 
             var uri = uriBuilder.Uri;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient.Parsers
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Parsers
 {
     public class ParserException : Exception
     {

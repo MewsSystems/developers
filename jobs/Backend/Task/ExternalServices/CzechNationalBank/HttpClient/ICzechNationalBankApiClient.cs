@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.CzechNationalBank.HttpClient.Dtos;
+using ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
 {
     public interface ICzechNationalBankApiClient
     {

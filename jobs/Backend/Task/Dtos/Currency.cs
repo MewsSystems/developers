@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Dtos
 {
     public class Currency
     {

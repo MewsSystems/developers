@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient
 {
     public class ApiClientException : Exception
     {

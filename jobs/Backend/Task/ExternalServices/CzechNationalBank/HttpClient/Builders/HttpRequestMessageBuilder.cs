@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient.Builders
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Builders
 {
     public class HttpRequestMessageBuilder
     {

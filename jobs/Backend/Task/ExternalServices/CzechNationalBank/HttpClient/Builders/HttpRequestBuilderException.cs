@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient.Builders
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Builders
 {
     public class HttpRequestBuilderException : Exception
     {

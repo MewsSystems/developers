@@ -1,5 +1,7 @@
-﻿#nullable enable
-namespace ExchangeRateUpdater.CzechNationalBank.HttpClient.Dtos
+﻿using ExchangeRateUpdater.Dtos;
+
+#nullable enable
+namespace ExchangeRateUpdater.ExternalServices.CzechNationalBank.HttpClient.Dtos
 {
     public class ExchangeRateDto
     {
