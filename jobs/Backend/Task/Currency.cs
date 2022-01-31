@@ -1,5 +1,8 @@
 ﻿namespace ExchangeRateUpdater
 {
+    /// <summary>
+    /// This could all go to EF, currency perhaps could be an owned entity here.
+    /// </summary>
     public class Currency
     {
         public Currency(string code)

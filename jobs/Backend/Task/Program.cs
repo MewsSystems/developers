@@ -1,43 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Threading.Tasks;
+using CliFx;
+using ExchangeRateUpdater.Commands;
+using ExchangeRateUpdater.Sources;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using NLog;
+
 
 namespace ExchangeRateUpdater
 {
+
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static IConfiguration Configuration { get; private set; }
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        public static async Task<int> Main()
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            Logger.Trace(">>>>> You can disable these entries in NLog.config -> minlevel=\"Info\" ");
+            var services = new ServiceCollection();
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory)!.FullName)
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+            services.AddSingleton(Configuration);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+            
+            services.AddScoped<IExchangeRateProvider, ExchangeRateProviderCzechBank>();
+            services.AddScoped<IExchangeRateParser, ExchangeRateParserCzechBank>();
+            services.AddTransient<PrintExchangeRatesCommand>();
 
-            Console.ReadLine();
+            var serviceProvider = services.BuildServiceProvider();
+            Logger.Trace("Finished registering services");
+
+            return await new CliApplicationBuilder()
+                .AddCommandsFromThisAssembly()
+                .UseTypeActivator(serviceProvider.GetService)
+                .Build()
+                .RunAsync();
         }
     }
+
+
 }

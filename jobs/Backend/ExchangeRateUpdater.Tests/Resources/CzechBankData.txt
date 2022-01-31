@@ -1,0 +1,35 @@
+﻿28 Jan 2022 #20
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|15.301
+Brazil|real|1|BRL|4.065
+Bulgaria|lev|1|BGN|12.493
+Canada|dollar|1|CAD|17.164
+China|renminbi|1|CNY|3.451
+Croatia|kuna|1|HRK|3.245
+Denmark|krone|1|DKK|3.283
+EMU|euro|1|EUR|24.435
+Hongkong|dollar|1|HKD|2.815
+Hungary|forint|100|HUF|6.815
+Iceland|krona|100|ISK|16.969
+IMF|SDR|1|XDR|30.542
+India|rupee|100|INR|29.230
+Indonesia|rupiah|1000|IDR|1.525
+Israel|new shekel|1|ILS|6.845
+Japan|yen|100|JPY|18.990
+Malaysia|ringgit|1|MYR|5.236
+Mexico|peso|1|MXN|1.054
+New Zealand|dollar|1|NZD|14.349
+Norway|krone|1|NOK|2.438
+Philippines|peso|100|PHP|42.851
+Poland|zloty|1|PLN|5.341
+Romania|leu|1|RON|4.940
+Russia|rouble|100|RUB|28.213
+Singapore|dollar|1|SGD|16.175
+South Africa|rand|1|ZAR|1.406
+South Korea|won|100|KRW|1.811
+Sweden|krona|1|SEK|2.316
+Switzerland|franc|1|CHF|23.545
+Thailand|baht|100|THB|65.647
+Turkey|lira|1|TRY|1.614
+United Kingdom|pound|1|GBP|29.377
+USA|dollar|1|USD|21.940

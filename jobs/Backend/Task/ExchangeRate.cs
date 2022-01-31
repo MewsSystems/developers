@@ -8,13 +8,9 @@
             TargetCurrency = targetCurrency;
             Value = value;
         }
-
         public Currency SourceCurrency { get; }
-
         public Currency TargetCurrency { get; }
-
         public decimal Value { get; }
-
         public override string ToString()
         {
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
