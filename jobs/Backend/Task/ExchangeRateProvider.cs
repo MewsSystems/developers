@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Xml.Linq;  // Enables parsing of xml data (web page source)
 
 namespace ExchangeRateUpdater
 {
@@ -14,27 +14,30 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            string url = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/index.html?date=15.01.2022";
-            string table = GetHtmlTable(url);
+            string url = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt;jsessionid=0EC0A4838228AF2925056C7F18F47D1D?date=01.02.2022";
+            using var client = new System.Net.WebClient();  // WebClient downloads web pages and files
+            var content = client.DownloadString(url);       // download the web page (via url) to "content"
+            var exRates = new List<ExchangeRate>();         // empty List to hold found exchange rates
 
-            List<ExchangeRate> exRates = new List<ExchangeRate>();  // empty List to hold found exchange rates
-            XDocument xDoc = XDocument.Parse(table);                // XDocument to hold the information from the table
+            // build a DataTable from the source data.
+            // valDate is potentially useful (eg. comparing age of two tables)
+            var dTable = CsvStrToTable(content, out string valDate);
 
-            foreach (XElement xElem in xDoc.Descendants("tr"))
+            foreach (DataRow row in dTable.Rows)
             {
-                IList<XElement> indexedElems = xElem.Elements().ToList();   // convert XElems to List for easy access via index
+                string srcCode = row[3].ToString(); // pull the source currency's ISO-4217 code
+                string trgCode = "CZK";             // could be any code but from this url it makes sense
 
-                //Insert exchange rates to exRates in 1-to-1 format
-                if (currencies.Any(x => x.Code == indexedElems[3].Value))
+                if (currencies.Any(x => x.Code == srcCode))
                 {
-                    Currency srcCurr = new Currency(indexedElems[3].Value); // pull the source currency's ISO-4217 code
-                    Currency trgCurr = new Currency("CZK");                 // could be any code but from this url it makes sense
+                    Currency srcCurr = new Currency(srcCode);
+                    Currency trgCurr = new Currency(trgCode);
 
-                    int srcAmount = int.Parse(indexedElems[2].Value);       // source amount will be whole
-                    decimal trgRate = decimal.Parse(indexedElems[4].Value); // url gives target currency by rate, not amount
+                    int srcAmount = int.Parse(row[2].ToString());       // source amount will be whole
+                    decimal trgRate = decimal.Parse(row[4].ToString()); // web page gives target currency by rate, not amount
 
                     // ensures rate is in 1-to-1 basis, eg. some exchanges are 100-to-1
-                    decimal exRate = srcAmount == 1 ? trgRate : decimal.Divide(trgRate, srcAmount); 
+                    decimal exRate = srcAmount == 1 ? trgRate : decimal.Divide(trgRate, srcAmount);
 
                     exRates.Add(new ExchangeRate(srcCurr, trgCurr, exRate));    // add rates to the list to be returned
                 }
@@ -44,24 +47,45 @@ namespace ExchangeRateUpdater
         }
 
         /// <summary>
-        /// Gets the first HTML table from a web page. 
-        /// Improvements: 
-        ///     - Get a specified table, or simply all tables as List<string> (depending on web page)
+        /// Reads string into table, assumes csv format of string. 
+        /// Outputs a DataTable along with a string for the date of validity of the info.
         /// </summary>
-        private string GetHtmlTable(string url)
+        private DataTable CsvStrToTable(string content, out string date)
         {
-            var webclient = new System.Net.WebClient();     // WebClient downloads web pages and files
-            string content = webclient.DownloadString(url); // download the web page (via url) to "content"
-            
-            string tableStart = "<table";   // HTML table begin-tag (not whole tag)
-            string tableEnd = "</table>";   // HTML table end-tag
+            char[] DELIMS = { ',', '|', ';', '\t' }; // typical CSV delimiters
+            string[] lines = content.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
 
-            int index1 = content.IndexOf(tableStart);                       // index of begin-tag
-            int index2 = content.IndexOf(tableEnd) + tableEnd.Length;       // index of end of end-tag
+            // Search for most common and evenly-distributed separator
+            // Assumes some reliability from data source, but covers simple modifications.
+            //     eg. if data source switches delimiter from '|' to ','
+            var query = DELIMS.Select(x => new
+                { Separator = x, Found = lines.GroupBy(line => line.Count(c => c == x)) })
+                .OrderByDescending(delim => delim.Found.Count(g => g.Key > 0))
+                .ThenBy(delim => delim.Found.Count()).First();
+            char delim = query.Separator;
 
-            string firstTable = content.Substring(index1, index2 - index1); // Just the table from the web page
+            var table = new DataTable();
+            date = lines[0];    // in this case first line is a date, not part of the "table"
 
-            return firstTable;
+            // add columns/headers to the table
+            string[] headers = lines[1].Split(delim);
+            foreach (string header in headers)
+                table.Columns.Add(header);
+
+            // add rows to the table
+            for (int i = 2; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                string[] values = line.Split(delim);
+
+                var dtRow = table.NewRow();
+                for (int j = 0; j < headers.Length; j++)
+                    dtRow[j] = values[j];
+
+                table.Rows.Add(dtRow);
+            }
+
+            return table;
         }
     }
 }
