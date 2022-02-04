@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -26,17 +27,26 @@ namespace ExchangeRateUpdater
 
         /// <summary>
         /// Gets data from CNB web for today
+        /// Exchange rates of commonly traded currencies are declared every working day after 2.30 p.m.
         /// </summary>
         /// <returns>String of downloaded data</returns>
         private string GetTodaysExchangeRatesFromWeb()
         {
             try
             {
+                // create web client
                 using (var client = new WebClient())
                 {
-                    client.BaseAddress = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+                    // add query for todays date in requested format dd.MM.yyyy
+                    var queries = new NameValueCollection();
+                    queries.Add("date", DateTime.Today.ToString("dd.MM.yyyy"));
 
-                    return client.DownloadString(client.BaseAddress + "?date=" + DateTime.Today.ToString("dd.MM.yyyy"));
+                    // set the URI address and query
+                    client.BaseAddress = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+                    client.QueryString = queries;
+
+                    // call the client and download string
+                    return client.DownloadString(client.BaseAddress);
                 }
             }
             catch (Exception)
@@ -53,8 +63,6 @@ namespace ExchangeRateUpdater
         /// <returns>Enumerable of ExchangeRate</returns>
         private IEnumerable<ExchangeRate> ProcessDownloadedFile(string exchangeRateData)
         {
-            var exchangeRateList = new List<ExchangeRate>();
-            
             // split into line on new line (\n) 
             var lines = exchangeRateData.Split("\n");
 
@@ -67,6 +75,9 @@ namespace ExchangeRateUpdater
             // source set to CZE due to data source being Czech National Bank
             var sourceCurrency = new Currency("CZE");
 
+            // create list for exchange rates
+            var exchangeRateList = new List<ExchangeRate>();
+
             // process each data line - after first 2 (date, header)
             foreach (var line in lines.Skip(2))
             {
@@ -77,17 +88,21 @@ namespace ExchangeRateUpdater
                     var columns = line.Split('|');
 
                     // if we have correct column count (5), parse the string and create exchange rate
+                    // column0: Country, column1: currencyName, column2: ammount, column3: currencyCode, column4: exchangeRate
                     if(columns.Length == 5)
                     {
+                        // create currency from Code
                         var targetCurrency = new Currency(columns[3]);
-                        int.TryParse(columns[2], out int amount);
-                        var rate = decimal.Parse(columns[4], CultureInfo.InvariantCulture);
-              
-                        exchangeRateList.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate / amount));
+
+                        // check if amount and rate is parsable
+                        if(decimal.TryParse(columns[4], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out decimal rate) && int.TryParse(columns[2], out int amount))
+                        {
+                            exchangeRateList.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate / amount));
+                        }
                     }
                 }
             }
-
+            
             return exchangeRateList;
         }
     }
