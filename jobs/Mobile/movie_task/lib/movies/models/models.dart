@@ -1,0 +1,1 @@
+export 'movie.dart';
