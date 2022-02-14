@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {MovieSearch} from './features/movieSearch/MovieSearch';
 import {Container} from '@mui/material';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
