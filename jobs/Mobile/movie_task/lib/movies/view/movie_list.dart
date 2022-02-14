@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_task/movies/bloc/post_bloc.dart';
+import 'package:movie_task/movies/bloc/search_bloc/search_bloc.dart';
 import 'package:movie_task/movies/movies.dart';
-import 'package:optimus/optimus.dart';
 
 class MoviesList extends StatefulWidget {
   const MoviesList({Key? key}) : super(key: key);
@@ -21,25 +20,25 @@ class _MoviesListState extends State<MoviesList> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<PostBloc, PostState>(
+  Widget build(BuildContext context) => BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) {
           switch (state.status) {
-            case PostStatus.initial:
+            case SearchStatus.initial:
               return const Center(child: Text('Start typing to search'));
-            case PostStatus.failure:
-              return const Center(child: Text('failed to fetch posts'));
-            case PostStatus.success:
-              if (state.posts.isEmpty) {
-                return const Center(child: Text('no movies'));
+            case SearchStatus.failure:
+              return const Center(child: Text('failed to fetch movies'));
+            case SearchStatus.success:
+              if (state.movies.isEmpty) {
+                return const Center(child: Text('no movies found'));
               }
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) =>
-                    index >= state.posts.length
-                        ? const BottomLoader()
-                        : MovieListItem(movie: state.posts[index]),
+                    index >= state.movies.length
+                        ? const Loading()
+                        : MovieListItem(movie: state.movies[index]),
                 itemCount: state.hasReachedMax
-                    ? state.posts.length
-                    : state.posts.length + 1,
+                    ? state.movies.length
+                    : state.movies.length + 1,
                 controller: _scrollController,
               );
             default:
@@ -59,7 +58,7 @@ class _MoviesListState extends State<MoviesList> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<PostBloc>().add(PostFetched());
+    if (_isBottom) context.read<SearchBloc>().add(SearchFetched());
   }
 
   bool get _isBottom {
