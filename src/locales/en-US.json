@@ -1,0 +1,14 @@
+{
+  "app.name": "Movie search app",
+  "search.title": "Search movie",
+  "search.subtitle": "Search for a movie using input below",
+  "search.input.placeholder": "Search...",
+  "movie.detail.button": "Detail",
+  "movie.detail.genre": "Genre",
+  "movie.detail.companies": "Companies",
+  "movie.detail.countries": "Countries",
+  "movie.detail.overview": "Overview",
+  "movie.detail.not_found": "Movie not found",
+  "error.page_not_found": "404 - Not Found!",
+  "error.go_home": "Go home"
+}

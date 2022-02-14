@@ -1,0 +1,8 @@
+.movieItem {
+  border: 1px solid #eeeeee;
+  height: 100%;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
