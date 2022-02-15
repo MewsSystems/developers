@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using ExchangeRateUpdater.Fluent;
+using ExchangeRateUpdater.Html;
+using ExchangeRateUpdater.Http;
+using ExchangeRateUpdater.Xml;
 
 namespace ExchangeRateUpdater
 {
@@ -11,9 +15,22 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async IAsyncEnumerable<ExchangeRate> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            using var fluentState = new FluentState();
+
+            var exchangeRates = fluentState
+                .ReadStreamFromHttp(new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/" +
+                                    "central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/"))
+                .ReadElementAsString(new ElementDescriptor("table").WithClass("currency-table"))
+                .ToXmlElement()
+                .CreateTable(Constants.ExchangeRateColumnNames)
+                .ComputeExchangeRates(currencies);
+
+            await foreach (var exchangeRate in exchangeRates)
+            {
+                yield return exchangeRate;
+            }
         }
     }
 }
