@@ -1,43 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.ExchangeProviders;
+using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Helpers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        private static IConfiguration _configuration { get; set; }
+        private static ServiceProvider _serviceProvider { get; set; }
 
-        public static void Main(string[] args)
+        public static async Task Main()
         {
-            try
+            Configure();
+
+            var exchangeProvider = _serviceProvider.GetService<IExchangeRateProvider>();
+            var currencies = CurrencyHelper.GetCurrencies(_configuration);
+
+            var rates = await exchangeProvider.GetExchangeRates(currencies, DateTimeOffset.Now.Date);
+
+            if (rates.IsFailed)
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                Console.WriteLine("Wasn't able to retrieve exchange rates. Please try again later.");
+            }
+            else {
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                var introMessage = rates.Value.Date.Date == DateTimeOffset.Now.Date ?
+                    $"Successfully retrieved exchange rates for {rates.Value.Date.Date.ToString("dd.MM.yyyy")}." :
+                    $"Couldn't retrieve todays exchange rates! Instead showing for {rates.Value.Date.Date.ToString("dd.MM.yyyy")}.";
+
+                Console.WriteLine(introMessage);
+                foreach (var rate in rates.Value.Rates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
 
             Console.ReadLine();
+        }
+
+        private static void Configure()
+        {
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+
+            //setup our DI
+            _serviceProvider = new ServiceCollection()
+                .AddLogging(builder =>
+                {
+                    builder
+                        .AddFilter("Microsoft", LogLevel.Warning)
+                        .AddFilter("System", LogLevel.Warning)
+                        .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
+                        .AddConsole();
+                })
+                .AddFileProviders(_configuration)
+                .AddExchangeProviders(_configuration)
+                .BuildServiceProvider();
         }
     }
 }
