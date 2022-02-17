@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import useMovieDetail from "../hooks/useMovieDetail"
+import { MovieObject } from "../components/SearchResults"
 
 const Detail = (props: any) => {
-
-    interface MovieObject {
-        title: string,
-        tagline: string,
-        overview: string,
-    }
 
     const { movieId } = useParams()
     const [movieData, setMovieData] = useState<MovieObject>()
