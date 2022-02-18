@@ -5,6 +5,15 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly IExchangeRateDataSourceProvider _dataSourceProvider;
+        private readonly IExchangeRatesDeserializer _deserializer;
+
+        public ExchangeRateProvider(IExchangeRateDataSourceProvider dataSourceProvider, IExchangeRatesDeserializer deserializer)
+        {
+            _dataSourceProvider = dataSourceProvider;
+            _deserializer = deserializer;
+        }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -13,7 +22,9 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var serialized = _dataSourceProvider.Get();
+            var rates = _deserializer.Deserialize(serialized).Where(r => r != null);
+            return rates.Join(currencies, r => r.SourceCurrency.Code, c => c.Code, (r, _) => r);
         }
     }
 }

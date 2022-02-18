@@ -6,7 +6,7 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> Currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -23,10 +23,10 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = CreateExchangeRateProvider();
+                var rates = provider.GetExchangeRates(Currencies).ToList();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -38,6 +38,15 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static ExchangeRateProvider CreateExchangeRateProvider()
+        {
+            var url = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt";
+            var dataSourceProvider = new RestExchangeRateDataSourceProvider(url);
+            var deserializer = new CzechNationalBankExchangeRatesDeserializer(new CzechNationalBankExchangeRateDeserializer());
+
+            return new ExchangeRateProvider(dataSourceProvider, deserializer);
         }
     }
 }
