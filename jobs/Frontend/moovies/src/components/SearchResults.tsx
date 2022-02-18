@@ -30,6 +30,7 @@ const SearchResults = (props: any) => {
     useEffect(() => {
         setSearchResult(data)
         setIsLoading(data.loading)
+        localStorage.setItem('searchResults', 'Tom');
     })
 
     if (query === "") {

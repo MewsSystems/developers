@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import useMovieDetail from "../hooks/useMovieDetail"
-import { MovieObject, SearchResult } from "../components/SearchResults"
+import { MovieObject } from "../components/SearchResults"
 import Spinner from "../components/Spinner"
 
 type DetailParams = {
@@ -29,17 +29,23 @@ const Detail = (props: any) => {
 
     if (result.error || movieData === undefined) {
         return (
-            <p>Oops. Couldnt find any movie with this ID.</p>
+            <>
+                <Link to={"/"}>Back to search</Link>
+                <p>Oops. Couldnt find any movie with this ID.</p>
+            </>
         )
     }
 
     return (
-        <div>
-            <p>movie detail: {movieId}</p>
-            <p>{movieData.title}</p>
-            <p>{movieData.tagline}</p>
-            <p>{movieData.overview}</p>
-        </div>
+        <>
+            <Link to={"/"}>Back to search</Link>
+            <div>
+                <p>movie detail: {movieId}</p>
+                <p>{movieData.title}</p>
+                <p>{movieData.tagline}</p>
+                <p>{movieData.overview}</p>
+            </div>
+        </>
 
     )
 }
