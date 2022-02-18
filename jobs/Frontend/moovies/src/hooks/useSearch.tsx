@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { SearchResult } from "../components/SearchResults"
 
 const useSearch = (query: string, pageNum: number = 1): SearchResult => {
 
     const [results, setResults] = useState<SearchResult>({ data: [], error: false, loading: true })
+    const timeout: any = useRef()
 
     useEffect(() => {
+
         // reset resultsList if there is no query
         if (query === "") {
             setResults({ data: [], error: false, loading: false })
             return
         }
-
-        setResults({ data: [], error: false, loading: true })
 
         const doApiRequest = async () => {
             try {
@@ -27,6 +27,7 @@ const useSearch = (query: string, pageNum: number = 1): SearchResult => {
 
                 if (response.status === 200) {
                     const data = await response.json()
+                    console.log(data)
                     setResults({ data: data.results, error: false, loading: false, totalPages: data.total_pages })
                 }
 
@@ -45,8 +46,14 @@ const useSearch = (query: string, pageNum: number = 1): SearchResult => {
             }
         }
 
-        setTimeout(() => doApiRequest(), 1000)
-        // doApiRequest()
+        // clear current timeout
+        clearTimeout(timeout.current)
+
+        // show spinner
+        setResults({ data: [], error: false, loading: true })
+
+        // set new timeout for debouncing
+        timeout.current = setTimeout(() => doApiRequest(), 200)
 
     }, [query, pageNum])
 

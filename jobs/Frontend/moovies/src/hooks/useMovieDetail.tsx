@@ -1,31 +1,45 @@
 import { useState, useEffect } from "react"
+import { SearchResult } from "../components/SearchResults"
 
-const useMovieDetail = (movieId: any) => {
+const useMovieDetail = (movieId?: string) => {
 
-    const [movieInfo, setMovieInfo] = useState()
+    const [movieInfo, setMovieInfo] = useState<SearchResult>({ data: [], error: false, loading: true })
 
     useEffect(() => {
-        (async () => {
+
+        const doApiRequest = async () => {
             try {
-                const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=03b8572954325680265531140190fd2a&language=en-US`)
+                const apiKey = '03b8572954325680265531140190fd2a'
+                const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?` +
+                    new URLSearchParams({
+                        api_key: apiKey,
+                        language: "en-US"
+                    }))
                 if (response.status === 200) {
                     const data = await response.json()
-                    setMovieInfo(data)
+                    setMovieInfo({ data: [data], error: false, loading: false })
                     console.log(data)
                 }
 
                 if (response.status === 401) {
+                    setMovieInfo({ data: [], error: true, loading: false })
                     throw new Error("401: invalid api key")
                 }
 
                 if (response.status === 404) {
+                    setMovieInfo({ data: [], error: true, loading: false })
                     throw new Error("404: movie id not found")
                 }
             }
             catch (er) {
                 console.error("failed to fetch movie detail (useMovieDetail): ", er)
             }
-        })()
+        }
+
+        setMovieInfo({ data: [], error: false, loading: true })
+        setTimeout(() => doApiRequest(), 200)
+        // doApiRequest()
+
     }, [movieId])
 
     return movieInfo

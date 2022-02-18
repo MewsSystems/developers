@@ -21,7 +21,7 @@ export interface MovieObject {
 const SearchResults = (props: any) => {
 
     const { query } = props
-    const [searchResult, setSearchResult] = useState<SearchResult>({ data: [], error: false, loading: true })
+    const [searchResult, setSearchResult] = useState<SearchResult>({ data: [], error: false, loading: false })
     const [isLoading, setIsLoading] = useState(false)
     const [currPage, setCurrPage] = useState(1)
 
@@ -31,6 +31,12 @@ const SearchResults = (props: any) => {
         setSearchResult(data)
         setIsLoading(data.loading)
     })
+
+    if (query === "") {
+        return (
+            <div>Start by typing in a movie title</div>
+        )
+    }
 
     if (isLoading) {
         return (
