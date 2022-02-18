@@ -1,15 +1,20 @@
-import { useState } from "react";
 import SearchField from "../components/SearchField";
 import SearchResults from "../components/SearchResults";
 
-const Home = () => {
+const Home = (props: any) => {
 
-    const [query, setQuery] = useState("")
+    const { query, setQuery, searchResult, setSearchResult, isLoading, currPage, setCurrPage } = props
 
     return (
         <>
             <SearchField query={query} setQuery={setQuery} />
-            <SearchResults query={query} />
+            <SearchResults
+                query={query}
+                searchResult={searchResult}
+                setSearchResult={setSearchResult}
+                isLoading={isLoading}
+                currPage={currPage}
+                setCurrPage={setCurrPage} />
         </>
     )
 }

@@ -20,18 +20,7 @@ export interface MovieObject {
 
 const SearchResults = (props: any) => {
 
-    const { query } = props
-    const [searchResult, setSearchResult] = useState<SearchResult>({ data: [], error: false, loading: false })
-    const [isLoading, setIsLoading] = useState(false)
-    const [currPage, setCurrPage] = useState(1)
-
-    let data = useSearch(query, currPage)
-
-    useEffect(() => {
-        setSearchResult(data)
-        setIsLoading(data.loading)
-        localStorage.setItem('searchResults', 'Tom');
-    })
+    const { query, searchResult, currPage, setCurrPage, isLoading } = props
 
     if (query === "") {
         return (
@@ -59,7 +48,7 @@ const SearchResults = (props: any) => {
         )
     }
 
-    const namesList = searchResult.data.map((movie) => (
+    const namesList = searchResult.data.map((movie: MovieObject) => (
         <Link
             to={`/detail/${movie.id}`}
             key={movie.id}
