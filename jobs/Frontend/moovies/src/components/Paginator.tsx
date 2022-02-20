@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react"
-
 const Paginator = (props: any) => {
 
     const { maxPages, currPage, setCurrPage } = props

@@ -8,19 +8,19 @@ const spin = keyframes`
 
 const Spinner = styled.div`
     display: inline-block;
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     
     &:after {
         content: " ";
         display: block;
-        width: 64px;
-        height: 64px;
+        width: 104px;
+        height: 104px;
         margin: 8px;
         border-radius: 50%;
-        border: 6px solid #fff;
-        border-color: #000 transparent #000 transparent;
-        animation: ${spin} 1.2s linear infinite;
+        border: 16px solid #fff;
+        border-color: #427aa1 transparent #427aa1 transparent;
+        animation: ${spin} 2s linear infinite;
     }
 `
 

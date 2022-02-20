@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { SearchResult } from "../components/SearchResults"
+import { SearchResult } from "../components/SearchResultsList"
 
 const useSearch = (query: string, pageNum: number = 1): SearchResult => {
 
@@ -53,7 +53,7 @@ const useSearch = (query: string, pageNum: number = 1): SearchResult => {
         setResults({ data: [], error: false, loading: true })
 
         // set new timeout for debouncing
-        timeout.current = setTimeout(() => doApiRequest(), 200)
+        timeout.current = setTimeout(() => doApiRequest(), 350)
 
     }, [query, pageNum])
 

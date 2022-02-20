@@ -1,21 +1,18 @@
+import HomeLayout from "../components/HomeLayout";
 import SearchField from "../components/SearchField";
-import SearchResults from "../components/SearchResults";
+import SearchResults from "../components/SearchResultsList";
 
 const Home = (props: any) => {
 
-    const { query, setQuery, searchResult, setSearchResult, isLoading, currPage, setCurrPage } = props
+    const { currPage, setCurrPage } = props
 
     return (
-        <>
-            <SearchField query={query} setQuery={setQuery} />
+        <HomeLayout>
+            <SearchField />
             <SearchResults
-                query={query}
-                searchResult={searchResult}
-                setSearchResult={setSearchResult}
-                isLoading={isLoading}
                 currPage={currPage}
                 setCurrPage={setCurrPage} />
-        </>
+        </HomeLayout>
     )
 }
 

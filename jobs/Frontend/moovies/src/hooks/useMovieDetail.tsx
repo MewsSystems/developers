@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { SearchResult } from "../components/SearchResults"
+import { SearchResult } from "../components/SearchResultsList"
 
 const useMovieDetail = (movieId?: string) => {
 

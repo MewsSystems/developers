@@ -1,42 +1,38 @@
-
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import { selectQuery } from "./redux/querySlice";
 import Detail from "./pages/Detail";
 import Home from "./pages/Home";
-import { SearchResult } from "./components/SearchResults";
+import { selectSearchResult, setSearchResult } from "./redux/searchResultSlice";
 import useSearch from "./hooks/useSearch";
 
 function App() {
 
-  const [query, setQuery] = useState("")
-  const [searchResult, setSearchResult] = useState<SearchResult>({ data: [], error: false, loading: false })
   const [currPage, setCurrPage] = useState(1)
 
+  const query = useAppSelector(selectQuery)
   let data = useSearch(query, currPage)
 
+  const dispatch = useAppDispatch()
+
   useEffect(() => {
-    setSearchResult(data)
+    dispatch(setSearchResult(data))
   })
 
 
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Home
-          query={query}
-          setQuery={setQuery}
-          searchResult={searchResult}
-          setSearchResult={setSearchResult}
           currPage={currPage}
           setCurrPage={setCurrPage}
-          isLoading={searchResult.loading} />}
+        />}
         />
         <Route path="detail/:movieId" element={<Detail />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
 
   );
