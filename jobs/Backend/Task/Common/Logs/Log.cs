@@ -34,27 +34,42 @@ namespace Common.Logs
 
 		#endregion
 
-		
 		#region Public methods
 
+		/// <summary>
+		/// Logs with info level.
+		/// </summary>
+		/// <param name="message">Message to be logged.</param>
 		public void Info(string message)
 		{
 			if (_log?.IsInfoEnabled ?? false)
 				_log.Info(message);
 		}
 
+		/// <summary>
+		/// Logs with error level.
+		/// </summary>
+		/// <param name="message">Message to be logged.</param>
 		public void Error(string message)
 		{
 			if (_log?.IsErrorEnabled ?? false)
 				_log.Error(message);
 		}
 
+		/// <summary>
+		/// Logs with warning level.
+		/// </summary>
+		/// <param name="message">Message to be logged.</param>
 		public void Warning(string message)
 		{
 			if (_log?.IsWarnEnabled ?? false)
 				_log.Warn(message);
 		}
 
+		/// <summary>
+		/// Logs with debug level.
+		/// </summary>
+		/// <param name="message">Message to be logged.</param>
 		public void Debug(string message)
 		{
 			if (_log?.IsDebugEnabled ?? false)
@@ -65,6 +80,9 @@ namespace Common.Logs
 
 		#region Private methods
 
+		/// <summary>
+		/// Appenders initialization - TXT file appender.
+		/// </summary>
 		private static void InitAppenders()
 		{
 			PatternLayout patternLayout = new PatternLayout();
@@ -89,6 +107,25 @@ namespace Common.Logs
 			Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
 			hierarchy.Root.AddAppender(_roller);
 			hierarchy.Configured = true;
+		}
+
+		#endregion
+
+		#region Private class.
+
+		/// <summary>
+		/// Setting file for Log4net logs.
+		/// </summary>
+		private class LogSettings
+		{
+			// Log file name.
+			public const string LogFileName = "Log.txt";
+			// Log line entry pattern.
+			public const string ConversionPattern = "%date %level: %message%newline";
+			// Max. number of log files, which are stored on file system.
+			public const int MaxSiteRollBackups = 5;
+			// Max. log file size.
+			public const string MaximumFileSize = "20MB";
 		}
 
 		#endregion
