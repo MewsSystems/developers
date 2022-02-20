@@ -21,6 +21,20 @@ const StyledInfoBox = styled.div`
 const Img = styled.img`
     object-fit: cover;
     height: 150px;
+    width: 100px;
+`
+
+const ImgPlaceholder = styled.div`
+    background-color: #f8f8f8;
+    width: 100px;
+    height: 150px;
+    border: 3px solid #d8d8d8;
+    color: #c8c8c8;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 `
 
 const H3 = styled.h3`
@@ -49,14 +63,19 @@ const ResultItem = ({ data }: any) => {
     return (
         <StyledListItem>
             <StyledLink to={`/detail/${data.id}`}>
-                <Img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} />
+                {data.poster_path ? <Img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} /> : <ImgPlaceholder><span>no image available</span></ImgPlaceholder>}
             </StyledLink>
             <StyledInfoBox>
                 <StyledLink to={`/detail/${data.id}`}>
                     <H3>{data.title}<span>{` (${parseInt(data.release_date, 10)})`}</span></H3>
-
                 </StyledLink>
-                <P>{data.overview.length <= 120 ? data.overview : data.overview.substring(0, 120) + '...'}</P>
+                {data.overview
+                    ?
+                    <P>{data.overview.length <= 125 ? data.overview : data.overview.substring(0, 125) + '...'}</P>
+                    :
+                    <P>no description available</P>
+                }
+
             </StyledInfoBox>
         </StyledListItem>
     )

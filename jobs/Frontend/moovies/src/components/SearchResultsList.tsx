@@ -35,13 +35,19 @@ export interface MovieObject {
     tagline: string
     overview: string
     poster_path: string
+    genres: GenreObject[]
+    release_date: string
+}
+
+interface GenreObject {
+    id: string
+    name: string
 }
 
 const SearchResultsList = (props: any) => {
 
-    const { currPage, setCurrPage } = props
-    const searchResult = useAppSelector(selectSearchResult)
     const query = useAppSelector(selectQuery)
+    const searchResult = useAppSelector(selectSearchResult)
 
     if (query === "") {
         return (
@@ -74,14 +80,12 @@ const SearchResultsList = (props: any) => {
     ))
 
     return (
-        <ResponsiveGrid>
-            {searchResult.loading ? <Spinner /> : namesList}
-            <Paginator
-                currPage={currPage}
-                setCurrPage={setCurrPage}
-                maxPages={searchResult.totalPages}
-            />
-        </ResponsiveGrid>
+        <>
+            <ResponsiveGrid>
+                {searchResult.loading ? <Spinner /> : namesList}
+            </ResponsiveGrid>
+            <Paginator maxPages={searchResult.totalPages} />
+        </>
     )
 }
 

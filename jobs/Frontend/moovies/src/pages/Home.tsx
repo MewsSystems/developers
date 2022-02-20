@@ -9,9 +9,7 @@ const Home = (props: any) => {
     return (
         <HomeLayout>
             <SearchField />
-            <SearchResults
-                currPage={currPage}
-                setCurrPage={setCurrPage} />
+            <SearchResults />
         </HomeLayout>
     )
 }

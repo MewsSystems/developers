@@ -1,17 +1,20 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import { selectQuery } from "./redux/querySlice";
 import Detail from "./pages/Detail";
 import Home from "./pages/Home";
-import { selectSearchResult, setSearchResult } from "./redux/searchResultSlice";
+import { setSearchResult } from "./redux/searchResultSlice";
 import useSearch from "./hooks/useSearch";
+import { selectCurrentPage } from "./redux/currentPageSlice";
 
 function App() {
 
-  const [currPage, setCurrPage] = useState(1)
-
+  // get state from redux store
   const query = useAppSelector(selectQuery)
+  const currPage = useAppSelector(selectCurrentPage)
+
+  // fetch data
   let data = useSearch(query, currPage)
 
   const dispatch = useAppDispatch()
@@ -20,19 +23,13 @@ function App() {
     dispatch(setSearchResult(data))
   })
 
-
   return (
     <BrowserRouter>
-      {/* <Header /> */}
       <Routes>
-        <Route path="/" element={<Home
-          currPage={currPage}
-          setCurrPage={setCurrPage}
-        />}
-        />
+        <Route path="/" element={<Home />} />
         <Route path="detail/:movieId" element={<Detail />} />
+        <Route path="*" element={<Home />} />
       </Routes>
-      {/* <Footer /> */}
     </BrowserRouter>
 
   );
