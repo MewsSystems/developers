@@ -11,12 +11,12 @@ const WrapDiv = styled.div`
     min-width: 130px;
     max-width: 130px;
     padding: 1rem;
-`
 
-const Img = styled.img`
-    height: 180px;
-    max-width: 120px;
-    object-fit: cover;
+    && img {
+        height: 180px;
+        max-width: 120px;
+        object-fit: cover;
+    }
 `
 
 const NameSpan = styled(H3)`
@@ -45,7 +45,13 @@ const CastItem = (props: Props) => {
 
     return (
         <WrapDiv>
-            {profile_path ? <Img src={`https://image.tmdb.org/t/p/w500/${profile_path}`} /> : <ImgPlaceholder width="120px" height="180px"><span>no image available</span></ImgPlaceholder>}
+            {profile_path
+                ?
+                <img src={`https://image.tmdb.org/t/p/w500/${profile_path}`} />
+                :
+                <ImgPlaceholder width="120px" height="180px">
+                    <span>no image available</span>
+                </ImgPlaceholder>}
             <NameSpan>{name}</NameSpan>
             <CharSpan>{character}</CharSpan>
         </WrapDiv>

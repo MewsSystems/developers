@@ -11,8 +11,6 @@ const FlexWrap = styled.div`
 const Wrap = styled.div`
     margin-left: 1.5rem;
 `
-
-
 interface Props {
     cast: CastObject[]
 }
@@ -21,9 +19,7 @@ const CastInfoBox = (props: Props) => {
 
     const { cast } = props
     const shortCast = cast.slice(0, 11)
-
     const castItems = shortCast.map(person => <CastItem data={person} />)
-
 
     return (
         <Wrap>

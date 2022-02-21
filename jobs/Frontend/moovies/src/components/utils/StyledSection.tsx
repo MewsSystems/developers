@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-
 interface SectionProps {
     bgrCol: string
 }
@@ -11,4 +10,3 @@ const StyledSection = styled.section`
 `
 
 export default StyledSection
-

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 interface Props {
     width: string
     height: string

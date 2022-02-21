@@ -58,7 +58,6 @@ const ResultItem = ({ data }: any) => {
                     :
                     <P>no description available</P>
                 }
-
             </StyledInfoBox>
         </StyledListItem>
     )
