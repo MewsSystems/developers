@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { selectQuery, setQuery } from '../redux/querySlice'
+import { setCurrentPage } from '../redux/currentPageSlice'
 import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { useRef } from "react"
 
@@ -17,6 +18,7 @@ const SearchField = (props: any) => {
 
     const handleChange = () => {
         dispatch(setQuery(inputEl?.current?.value ?? ""))
+        dispatch(setCurrentPage(1))
     }
 
     return (

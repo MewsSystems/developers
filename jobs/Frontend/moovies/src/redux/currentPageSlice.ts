@@ -15,6 +15,9 @@ export const currentPageSlice = createSlice({
     name: 'currentPage',
     initialState,
     reducers: {
+        setCurrentPage: (state, action: PayloadAction<number>) => {
+            state.value = action.payload
+        },
         incrementCurrentPage: (state, action: PayloadAction<number>) => {
             state.value += action.payload
         },
@@ -24,7 +27,7 @@ export const currentPageSlice = createSlice({
     }
 })
 
-export const { incrementCurrentPage, decrementCurrentPage } = currentPageSlice.actions
+export const { setCurrentPage, incrementCurrentPage, decrementCurrentPage } = currentPageSlice.actions
 
 export const selectCurrentPage = (state: RootState) => state.currentPage.value
 
