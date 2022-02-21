@@ -13,7 +13,6 @@ const ResponsiveGrid = styled.div`
     grid-template-columns: 1fr;
     gap: 0.25rem 0.25rem;
 
-
     @media only screen and (min-width: 700px) {
         grid-template-columns: 1fr 1fr;
     }
@@ -28,7 +27,6 @@ export interface SearchResult {
     error: boolean
     totalPages?: number
 }
-
 export interface MovieObject {
     id: string
     title: string
@@ -37,6 +35,15 @@ export interface MovieObject {
     poster_path: string
     genres: GenreObject[]
     release_date: string
+    credits: {
+        cast: CastObject[]
+        crew: object[]
+    }
+}
+export interface CastObject {
+    name: string
+    character: string
+    profile_path: string
 }
 
 interface GenreObject {

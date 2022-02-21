@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { H3 } from './utils/Typography'
+import ImgPlaceholder from './utils/ImgPlaceholder'
 
 const StyledListItem = styled.div`
     display: flex;
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
     border-radius: 0.25rem;
     transition: background-color 200ms ease-out;
     &:hover {
@@ -24,26 +26,6 @@ const Img = styled.img`
     width: 100px;
 `
 
-const ImgPlaceholder = styled.div`
-    background-color: #f8f8f8;
-    width: 100px;
-    height: 150px;
-    border: 3px solid #d8d8d8;
-    color: #c8c8c8;
-    font-size: 0.8rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-`
-
-const H3 = styled.h3`
-    font-size: 1rem;
-    font-weight: 400;
-    line-heigth: 1.5;
-    display: inline-block;
-`
-
 const P = styled.p`
     margin-top: 0.25rem;
     font-size: 0.85rem;
@@ -55,6 +37,7 @@ const P = styled.p`
 const StyledLink = styled(Link)`
     text-decoration: none;
     display: block;
+    max-height: 150px;
 `
 
 
@@ -63,7 +46,7 @@ const ResultItem = ({ data }: any) => {
     return (
         <StyledListItem>
             <StyledLink to={`/detail/${data.id}`}>
-                {data.poster_path ? <Img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} /> : <ImgPlaceholder><span>no image available</span></ImgPlaceholder>}
+                {data.poster_path ? <Img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} /> : <ImgPlaceholder width="100px" height="150px"><span>no image available</span></ImgPlaceholder>}
             </StyledLink>
             <StyledInfoBox>
                 <StyledLink to={`/detail/${data.id}`}>

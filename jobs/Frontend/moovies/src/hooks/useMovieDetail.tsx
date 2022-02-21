@@ -13,7 +13,8 @@ const useMovieDetail = (movieId?: string) => {
                 const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?` +
                     new URLSearchParams({
                         api_key: apiKey,
-                        language: "en-US"
+                        language: "en-US",
+                        append_to_response: "credits"
                     }))
                 if (response.status === 200) {
                     const data = await response.json()
