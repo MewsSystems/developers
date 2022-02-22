@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using log4net;
 using log4net.Config;
+using Microsoft.Extensions.Configuration;
+using Unity;
+using Unity.Injection;
 
 namespace ExchangeRateUpdater
 {
@@ -26,11 +29,19 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
-            XmlConfigurator.Configure(new FileInfo("log4net.config"));
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Please specify appSettings.json file as a command line parameter.");
+                return;
+            }
+
+            var container = UnityContainerFactory.Create(args[0]);
+            
+            ConfigureLog4Net(container);
 
             try
             {
-                var provider = CreateExchangeRateProvider();
+                var provider = container.Resolve<IExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(Currencies).ToList();
                 
                 var stringRates = rates.Aggregate(string.Empty, (s, r) => s + Environment.NewLine + r);
@@ -45,13 +56,26 @@ namespace ExchangeRateUpdater
             Console.ReadLine();
         }
 
-        private static ExchangeRateProvider CreateExchangeRateProvider()
+        private static void ConfigureLog4Net(IUnityContainer container)
         {
-            var url = "https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt";
-            var dataSourceProvider = new RestExchangeRateDataSourceProvider(url);
-            var deserializer = new CzechNationalBankExchangeRatesDeserializer(new CzechNationalBankExchangeRateDeserializer());
+            var config = container.Resolve<IConfigurationRoot>();
+            var log4NetConfigFile = config.GetSection(ExchangeRateUpdaterAppSettingsKeys.Log4netConfigFile)?.Value;
 
-            return new ExchangeRateProvider(dataSourceProvider, deserializer);
+            if (string.IsNullOrEmpty(log4NetConfigFile))
+            {
+                Console.WriteLine("Log4net configuration is missing.");
+                return;
+            }
+
+            if (!File.Exists(log4NetConfigFile))
+            {
+                Console.WriteLine($"Log4net configuration {log4NetConfigFile} does not exist.");
+                return;
+            }
+
+            XmlConfigurator.Configure(new FileInfo(log4NetConfigFile));
         }
+
+
     }
 }
