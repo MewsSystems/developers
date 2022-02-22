@@ -1,7 +1,6 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using ExchangeRateUpdater.DTO;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Deserializers
 {
     public interface IExchangeRateDeserializer
     {

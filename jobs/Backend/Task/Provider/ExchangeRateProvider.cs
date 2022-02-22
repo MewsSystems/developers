@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.DataSource;
+using ExchangeRateUpdater.Deserializers;
+using ExchangeRateUpdater.DTO;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Provider
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {

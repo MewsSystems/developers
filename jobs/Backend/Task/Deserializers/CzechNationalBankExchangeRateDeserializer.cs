@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using ExchangeRateUpdater.DTO;
 using log4net;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Deserializers;
 
 public class CzechNationalBankExchangeRateDeserializer : IExchangeRateDeserializer
 {

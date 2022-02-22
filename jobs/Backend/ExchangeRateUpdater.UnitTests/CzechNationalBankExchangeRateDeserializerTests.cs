@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using ExchangeRateUpdater.Deserializers;
+using NUnit.Framework;
 
 namespace ExchangeRateUpdater.UnitTests
 {

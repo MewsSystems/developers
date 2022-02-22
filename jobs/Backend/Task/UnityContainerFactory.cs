@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater.DataSource;
+using ExchangeRateUpdater.Deserializers;
+using ExchangeRateUpdater.Provider;
+using Microsoft.Extensions.Configuration;
 using Unity;
 using Unity.Lifetime;
 

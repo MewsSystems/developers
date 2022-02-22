@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.DTO;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Deserializers;
 
 public class CzechNationalBankExchangeRatesDeserializer : IExchangeRatesDeserializer
 {

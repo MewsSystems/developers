@@ -3,7 +3,7 @@ using System.Net;
 using log4net;
 using RestSharp;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.DataSource;
 
 public class RestExchangeRateDataSourceProvider : IExchangeRateDataSourceProvider
 {

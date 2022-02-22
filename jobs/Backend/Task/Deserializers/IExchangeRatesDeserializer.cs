@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using ExchangeRateUpdater.DTO;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Deserializers;
 
 public interface IExchangeRatesDeserializer
 {

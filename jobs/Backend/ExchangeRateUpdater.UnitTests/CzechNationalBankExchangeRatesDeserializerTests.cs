@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using ExchangeRateUpdater.Deserializers;
+using ExchangeRateUpdater.DTO;
 using NSubstitute;
 using NUnit.Framework;
 
