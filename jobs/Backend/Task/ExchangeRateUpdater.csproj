@@ -3,6 +3,28 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Company />
+    <Product />
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ExchangeRateUpdater.DataAccess\Radek.cs">
+      <Link>ExchangeRateUpdater.DataAccess.Models\Radek.cs</Link>
+    </Compile>
+    <Compile Update="ExchangeRateUpdater.DataAccess\Tabulka.cs">
+      <Link>ExchangeRateUpdater.DataAccess.Models\Tabulka.cs</Link>
+    </Compile>
+    <Compile Update="ExchangeRateUpdater.DataAccess\Kurzy.cs">
+      <Link>ExchangeRateUpdater.DataAccess.Models\Kurzy.cs</Link>
+    </Compile>
+  </ItemGroup>
 
 </Project>
