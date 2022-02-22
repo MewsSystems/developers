@@ -112,7 +112,7 @@ const Detail = (props: any) => {
         )
     }
 
-    const genres = movieData.genres.map((el) => <GenreSpan>{el.name}</GenreSpan>)
+    const genres = movieData.genres.map((el) => <GenreSpan key={el.id}>{el.name}</GenreSpan>)
 
     return (
         <>

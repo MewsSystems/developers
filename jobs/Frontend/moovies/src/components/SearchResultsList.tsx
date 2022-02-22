@@ -41,6 +41,7 @@ export interface MovieObject {
     }
 }
 export interface CastObject {
+    id: number
     name: string
     character: string
     profile_path: string

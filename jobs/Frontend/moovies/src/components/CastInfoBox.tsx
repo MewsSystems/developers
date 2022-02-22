@@ -18,8 +18,9 @@ interface Props {
 const CastInfoBox = (props: Props) => {
 
     const { cast } = props
+    console.log(cast)
     const shortCast = cast.slice(0, 11)
-    const castItems = shortCast.map(person => <CastItem data={person} />)
+    const castItems = shortCast.map(person => <CastItem key={person.id} data={person} />)
 
     return (
         <Wrap>
