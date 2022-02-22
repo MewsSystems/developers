@@ -28,7 +28,9 @@ public class ExchangeRateRepository
                 throw new Exception("Response does not contain table with rates");
             }
 
-            return kurzy.Tabulka.Radek.ToDictionary(x => x.Kod, x => x);
+            kurzy.Tabulka.Radek = null;
+
+            return kurzy.Tabulka.Radek?.ToDictionary(x => x.Kod, x => x) ?? new Dictionary<string, Radek>();
         }
 
         throw new Exception("Problem during getting rates");

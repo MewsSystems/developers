@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ExchangeRateUpdater.DataAccess;
+﻿using ExchangeRateUpdater.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater

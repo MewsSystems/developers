@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using ExchangeRateUpdater.DataAccess;
+﻿using ExchangeRateUpdater.DataAccess;
 
 namespace ExchangeRateUpdater
 {

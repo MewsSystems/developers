@@ -18,7 +18,3 @@ public class Kurzy {
 
 
 
-
-
-
-
