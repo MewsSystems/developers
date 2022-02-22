@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using log4net;
+using log4net.Config;
 
 namespace ExchangeRateUpdater
 {
@@ -19,22 +22,24 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+
         public static void Main(string[] args)
         {
+            XmlConfigurator.Configure(new FileInfo("log4net.config"));
+
             try
             {
                 var provider = CreateExchangeRateProvider();
                 var rates = provider.GetExchangeRates(Currencies).ToList();
+                
+                var stringRates = rates.Aggregate(string.Empty, (s, r) => s + Environment.NewLine + r);
+                Log.Info($"Successfully retrieved {rates.Count} exchange rates: {stringRates}");
 
-                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Log.Error($"Could not retrieve exchange rates: '{e.Message}'.", e);
             }
 
             Console.ReadLine();

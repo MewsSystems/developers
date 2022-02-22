@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly IExchangeRateDataSourceProvider _dataSourceProvider;
         private readonly IExchangeRatesDeserializer _deserializer;
