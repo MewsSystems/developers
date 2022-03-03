@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Util;
 
-namespace ExchangeRateUpdater.CNB.Api
+namespace ExchangeRateUpdater.CNB
 {
     public class CNBExchangeRateClient : IDisposable
     {

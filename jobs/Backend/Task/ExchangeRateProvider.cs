@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
-using ExchangeRateUpdater.CNB.Api;
+using ExchangeRateUpdater.CNB;
 using ExchangeRateUpdater.CNB.Xml;
 using ExchangeRateUpdater.CNB.Xml.Elements;
 using ExchangeRateUpdater.Util;
