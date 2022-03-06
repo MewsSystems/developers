@@ -1,6 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Providers;
+using ExchangeRateUpdater.Providers.CNB;
+using ExchangeRateUpdater.Providers.CNB.Parser.Xml;
+using ExchangeRateUpdater.Util;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater;
 
@@ -20,12 +29,13 @@ public static class Program
         new Currency("XYZ")
     };
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         try
         {
-            var provider = new ExchangeRateProvider();
-            var rates = provider.GetExchangeRates(Currencies).ToList();
+            var exchangeRateProvider = SetUpAndGetExchangeProvider();
+
+            var rates = (await exchangeRateProvider.GetExchangeRatesAsync(Currencies)).ToList();
 
             Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
             foreach (var rate in rates)
@@ -39,5 +49,33 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    private static IExchangeRateProvider SetUpAndGetExchangeProvider()
+    {
+        var host = CreateDefaultBuilder().Build();
+
+        using IServiceScope serviceScope = host.Services.CreateScope();
+        IServiceProvider provider = serviceScope.ServiceProvider;
+        var rateProvider = provider.GetRequiredService<IExchangeRateProvider>();
+        return rateProvider;
+    }
+
+    private static IHostBuilder CreateDefaultBuilder()
+    {
+        return Host.CreateDefaultBuilder()
+            .ConfigureAppConfiguration(app =>
+            {
+                app.AddJsonFile("appsettings.json");
+            })
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddLogging()
+                    .AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>()
+                    .AddTransient<ICNBExchangeRateService, CNBIcnbExchangeRateService>()
+                    .AddTransient<IXmlExchangeRateParser, CNBXmlXmlExchangeRateParser>()
+                    .AddHttpClient(nameof(CNBIcnbExchangeRateService)).AddPolicyHandler(PollyRetryHelper.GetRetryPolicy());
+            });
     }
 }

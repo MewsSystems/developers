@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace ExchangeRateUpdater.CNB.Xml.Elements;
+namespace ExchangeRateUpdater.Providers.CNB.Parser.Xml.Elements;
 
 [XmlRoot(ElementName = "radek")]
 public class Row
