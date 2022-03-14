@@ -29,3 +29,11 @@ contras of your solution :)
 [1]: https://developers.themoviedb.org/3/getting-started/introduction
 [2]: https://pub.dev/packages/flutter_bloc
 [3]: https://developers.mews.com/one-year-in-production-with-flutter/
+
+
+## Addition from Vitalij Vascenko
+
+Before using this project you need to create `env.dart` file in `packages/tmdb_api/lib/auth` with your API key stored as apiKey variable.
+
+`const String apiKey = '<api_key>';
+`

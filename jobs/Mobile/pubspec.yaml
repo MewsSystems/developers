@@ -1,0 +1,45 @@
+name: mews_imdb
+description: IMDb API search for Mews
+
+
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.1 <3.0.0"
+
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  flutter_bloc: ^8.0.1
+  flutter:
+    sdk: flutter
+  intl: ^0.17.0
+  http: ^0.13.4
+  mews_pedantic: ^0.4.1
+  equatable: ^2.0.3
+  cached_network_image: ^3.2.0
+  json_annotation: ^4.4.0
+
+
+
+
+  movie_repository:
+    path: packages/movie_repository
+
+dev_dependencies:
+  bloc_test: ^9.0.3
+  build_runner: ^2.1.7
+  flutter_lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^6.1.5
+  mocktail: ^0.3.0
+  test: ^1.17.0
+
+
+
+flutter:
+
+  uses-material-design: true
+

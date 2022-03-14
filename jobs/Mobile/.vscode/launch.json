@@ -1,0 +1,65 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "mews_imdb",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "mews_imdb (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "mews_imdb (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "movie_repository",
+            "cwd": "packages\\movie_repository",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "movie_repository (profile mode)",
+            "cwd": "packages\\movie_repository",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "movie_repository (release mode)",
+            "cwd": "packages\\movie_repository",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "tmdb_api",
+            "cwd": "packages\\tmdb_api",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "tmdb_api (profile mode)",
+            "cwd": "packages\\tmdb_api",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "tmdb_api (release mode)",
+            "cwd": "packages\\tmdb_api",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
