@@ -19,8 +19,4 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Proxies\" />
-	</ItemGroup>
-
 </Project>
