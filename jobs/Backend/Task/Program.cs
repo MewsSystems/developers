@@ -1,6 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Fetch;
+using ExchangeRateUpdater.Parse;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +30,9 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var services = ConfigureServices();
+                var provider = services.GetRequiredService<ExchangeRateProvider>();
+                
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -38,6 +47,33 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static IServiceProvider ConfigureServices()
+        {
+            return new ServiceCollection()
+                .AddLogging(logging =>
+                {
+                    logging.AddConsole();
+                    logging.SetMinimumLevel(LogLevel.Error);
+                })
+                .AddSingleton<IExchangeRatesParser, ExchangeRatesCnbCzParser>()
+                .AddSingleton<IExchangeRatesTxtFetcher, ExchangeRatesTxtFetcher>()
+                .AddHttpClient()
+                .AddSingleton<IConfiguration>(_ =>
+                {
+                    var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("config.json", optional: false);
+                    return builder.Build();
+                })
+                .AddSingleton<Config>(services =>
+                {
+                    var config = services.GetRequiredService<IConfiguration>();
+                    return config.GetSection("Config").Get<Config>();
+                })
+                .AddSingleton<ExchangeRateProvider>()
+                .BuildServiceProvider();
         }
     }
 }
