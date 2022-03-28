@@ -1,10 +1,17 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
         public Currency(string code)
         {
-            Code = code;
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
+            Code = Normalize(code);
         }
 
         /// <summary>
@@ -15,6 +22,14 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        /// <summary>
+        /// Normalized the given code convertinch it to upper case.
+        /// </summary>
+        private static string Normalize(string code)
+        {
+            return code.ToUpper();
         }
     }
 }
