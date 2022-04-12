@@ -1,0 +1,36 @@
+# 
+Apon reading the task and looking at the log file my first thought was that I needed to isolate each endpoint. 
+I initially decided to go down the PowerShell route but instead decided it would be a good opportunity to look into Python for the first time. 
+This was achieved by the creation and running of SplitFiles.py. 
+
+My next thought was what aspects of that data do I need to work out if regression has occurred.  
+In this case I saw regression as the way of describing how an input variable X (Time) has on another variable Y (Duration). 
+This then provided me the information on what data from the logfiles I could strip out. 
+
+--Endpoint (as already split file on this) 
+
+--StatusCode (All showing as success as my assumption was that this was not looking at error rate) 
+
+My plan (which I did not achieve) was to separate out these two fields into separate csv's per endpoint. 
+Once this was completed I then wanted to plot each endpoint as Time vs Duration. This would then provide a nice visualization of the change. 
+
+Instead I was only able print out these two fields (*endpoint*.py) but continued to have issues whilst attempting to convert to a csv using python. 
+Instead though I inspected the outputs and came to the conclusions below per endpoint: 
+
+reservationsadd    -- Average response time roughly doubled [14:47:00]. There is no obvious increase in call volume or widespread issues at this so my assumption was a change was implemented. 
+
+ratesadd           -- No obvious sign of regression. 
+
+reservationsget    -- No obvious sign of regression. 
+
+reservationsupdate -- No obvious sign of regression. 
+
+ratesupdate        -- Average response time again roughly doubled [13:27:00]. There is no obvious increase in call volume or widespread issues at this so my assumption was a change was implemented. 
+
+reservationscancel -- No obvious sign of regression. 
+
+ratesdelete        -- No obvious sign of regression. 
+
+# 
+
+ 
