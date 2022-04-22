@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Options;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,7 +19,11 @@ namespace ExchangeRateUpdater.Extensions
                     .Get<CzechNationalBankOptions>()
                     .Url);
             });
-            services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
+            services.AddScoped<IExchangeRateProvider, CachedExchangeRateProvider>(
+                serviceProvider => new CachedExchangeRateProvider(
+                    new ExchangeRateProvider(serviceProvider.GetRequiredService<IBankClient>()),
+                    serviceProvider.GetRequiredService<IMemoryCache>()));
+            services.AddMemoryCache();
 
             return services;
         }

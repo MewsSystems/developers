@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace ExchangeRateUpdater.Services
 
         public ExchangeRateProvider(IBankClient bankClient)
         {
-            this.bankClient = bankClient;
+            this.bankClient = bankClient ?? throw new ArgumentNullException(nameof(bankClient));
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
