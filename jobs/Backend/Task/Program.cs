@@ -1,6 +1,13 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +26,14 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var host = ConfigureServices();
+
+                var provider = host.Services.GetService<IExchangeRateProvider>();
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -38,6 +47,18 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static IHost ConfigureServices()
+        {
+            return Host
+                .CreateDefaultBuilder()
+                .ConfigureAppConfiguration(app =>
+                {
+                    app.AddJsonFile("appsettings.json");
+                })
+                .ConfigureServices((hostContext, services) => services.AddExchangeRateProvider(hostContext.Configuration))
+                .Build();
         }
     }
 }
