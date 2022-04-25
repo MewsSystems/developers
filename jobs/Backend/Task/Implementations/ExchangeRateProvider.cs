@@ -53,7 +53,7 @@ namespace ExchangeRateUpdater.Implementations
                         if (source.Code == "CZK")
                         {
                             rateTarget = rates.Courses.CnbTable.List.Where(_ => _.Code == target.Code).First().Course;
-                            results.Add(new ExchangeRate(source, new Currency(target.Code), rateTarget));
+                            results.Add(new ExchangeRate(new Currency(target.Code), source, rateTarget));
                         }
                         else
                         {
@@ -61,7 +61,7 @@ namespace ExchangeRateUpdater.Implementations
                             rateTarget = rates.Courses.CnbTable.List.Where(_ => _.Code == target.Code).First().Course;
                             var targetSum = rates.Courses.CnbTable.List.Where(_ => _.Code == target.Code).First().Sum;
                             var course = ((rateTarget/rateSource) / targetSum);
-                            results.Add(new ExchangeRate(source, new Currency(target.Code), Decimal.Round(course, 2)));
+                            results.Add(new ExchangeRate(new Currency(target.Code),source, Decimal.Round(course, 2)));
                         }
                     }
                 });
