@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{F126EC0B-A797-4935-B276-1291473A570F}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8AB72F10-6B73-4CA8-97E8-1B798CECA71C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterUnitTests", "..\tests\ExchangeRateUpdaterUnitTests\ExchangeRateUpdaterUnitTests.csproj", "{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +25,18 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3394C7E2-BB70-4FBB-AFED-3B16166FB9ED} = {8AB72F10-6B73-4CA8-97E8-1B798CECA71C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5AA60102-1F9B-4222-8186-286DD5D199F4}
 	EndGlobalSection
 EndGlobal

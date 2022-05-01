@@ -1,0 +1,13 @@
+﻿<Project>
+	<ItemGroup>
+		<PackageReference Update="CsvHelper" Version="27.2.1"/>
+		<PackageReference Update="Microsoft.Extensions.Hosting" Version="6.0.1"/>
+		<PackageReference Update="Microsoft.Extensions.Http" Version="6.0.0"/>
+		<PackageReference Update="Microsoft.Extensions.Http.Polly" Version="6.0.4"/>
+		<PackageReference Update="Microsoft.Extensions.Logging" Version="6.0.0"/>
+		<PackageReference Update="Moq" Version="4.17.2"/>
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
+		<PackageReference Update="xunit" Version="2.4.1"/>
+		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3"/>
+	</ItemGroup>
+</Project>
