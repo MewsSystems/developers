@@ -1,6 +1,10 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Application;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Integration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,11 +23,19 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                //TODO: Setup Dependency injection
+                CnbApiClient client = new CnbApiClient(new System.Net.Http.HttpClient());
+                IExchangeRateRepository repository = new CnbExchangeRateRepository(client);
+                IExchangeRateProvider provider = new CnbExchangeRateProvider(repository);
+
+                //Fetch rates data
+                await repository.Initialize();
+
+                //Provider is ready to use
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
