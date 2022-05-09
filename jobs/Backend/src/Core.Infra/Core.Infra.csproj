@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.29.1" />
+    <PackageReference Include="RestEase" Version="1.5.6" />
+    <PackageReference Include="RestEase.HttpClientFactory" Version="1.5.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Extensions\Core.Extensions.csproj" />
+    <ProjectReference Include="..\Core.Application\Core.Application.csproj" />
+  </ItemGroup>
+
+</Project>
