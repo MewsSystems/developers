@@ -1,0 +1,7 @@
+﻿29 Apr 2022 #83
+Country|Currency|Amount|Code|Rate
+EMU|euro|1|EUR|24.605
+Thailand|baht|100|THB|68.273
+Turkey|lira|1|TRY|1.573
+United Kingdom|pound|1|GBP|29.322
+USA|dollar|1|USD|23.344
