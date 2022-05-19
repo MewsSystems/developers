@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExchangeRateUpdater;
+using ExchangeRateUpdater.RatesReader;
+
+using System;
 using System.Linq;
+using System.Net.Http;
 
-namespace ExchangeRateUpdater
+try
 {
-    public static class Program
+    var httpClient = new HttpClient();
+    httpClient.BaseAddress = new Uri(@"https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
+    var currenRatesReaderService = new AllCurrentRatesReaderService(httpClient);
+
+    var rates = currenRatesReaderService.GetAllExchangeRates().Result;
+    if(rates.Succsess)
     {
-        private static IEnumerable<Currency> currencies = new[]
+        Console.WriteLine($"Successfully retrieved {rates.Value.Count()} exchange rates:");
+        foreach (var rate in rates.Value)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
+            Console.WriteLine(rate.ToString());
+        }
+    }
+    else
+    {
+        Console.WriteLine("There have bee some errors when retrieving the rates:");
+        foreach(var reason in rates.FailureResons)
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
+            Console.WriteLine($"Reason: {reason}");
         }
     }
 }
+catch (Exception e)
+{
+    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+}
+
+Console.ReadLine();
