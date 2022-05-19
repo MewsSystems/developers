@@ -14,6 +14,13 @@ namespace ExchangeRateUpdater.API.Controllers
             this.ratesReaderService = ratesReaderService;
         }
 
+        /// <summary>
+        /// Get all exchange rates
+        /// </summary>
+        /// <returns></returns>
+        /// <response code = "200">Exchange rate returned</response>
+        /// <response code = "400">Exchange rate not found</response>
+        /// <response code = "500">Errors when trying to retirev the exchange rates</response>
         [HttpGet]
         public async Task<IActionResult> GetExchangeRate()
         {

@@ -10,7 +10,7 @@
             => rateOrNothing
                 .ToResult("Currency Code is null")
                 // Here we can add other validations like checking if the ammount is power of 10 
-                .Ensure(_ => ammountOrNothing.HasValue && ammountOrNothing.Value > 1m, "Ammount value incorrect")
+                .Ensure(_ => ammountOrNothing.HasValue && ammountOrNothing.Value >= 1m, "Ammount value incorrect")
                 .Ensure(rate => rate > 0, "Rate is negative")
                 .Map(rate => new ExchangeRate(rate/ammountOrNothing!.Value));
 
