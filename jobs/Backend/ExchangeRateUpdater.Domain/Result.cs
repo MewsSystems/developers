@@ -1,5 +1,6 @@
 ﻿namespace ExchangeRateUpdater.Domain
 {
+    //This classes would usually live in a shared Framework library that multiple teams can use 
     public class Result 
     {
         public Result(bool success, IEnumerable<string> failureResons)
@@ -38,6 +39,9 @@
     {
         public static Result<Type> ToResult<Type>(this Type? optionalValue, string failureReason) where Type : class
            => optionalValue is not null ? Result.OK(optionalValue) : Result.Fail<Type>(new List<string>() { failureReason });
+
+        public static Result<Type> ToResult<Type>(this Type? optionalValue, string failureReason) where Type : struct
+           => optionalValue.HasValue ? Result.OK(optionalValue.Value) : Result.Fail<Type>(new List<string>() { failureReason });
 
         public static Result<U> OnSuccess<Type, U>(this Result<Type> result, Func<Type, U> transformationFunc)
             => result.Succsess ? Result.OK(transformationFunc(result.Value)) : Result.Fail<U>(result.FailureResons);
