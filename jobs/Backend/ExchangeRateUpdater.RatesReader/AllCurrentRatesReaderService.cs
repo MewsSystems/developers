@@ -2,12 +2,9 @@
 
 namespace ExchangeRateUpdater.RatesReader
 {
-    internal class AllCurrentRatesReaderService : IAllCurrentRatesReaderService
+    public class AllCurrentRatesReaderService : IAllCurrentRatesReaderService
     {
         private readonly HttpClient _httpClient;
-        //this can be injected from the service that will call htis httpClient factory, and have it store in the appsettings/env variables
-        //this way whenever the link changes there will be a change on env variables in the deployment and not a code change
-        private const string CNBDailyRateExchange = @"https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt"
 
         public AllCurrentRatesReaderService(HttpClient httpClient)
         {
@@ -15,7 +12,8 @@ namespace ExchangeRateUpdater.RatesReader
         }
         public async Task<Result<IEnumerable<CurrencyExchangeRate>>> GetAllExchangeRates()
         {
-            var exchangeRatesReadModel = CurrencyFileParser.ParseFileToExchangeRatesReadModel(await _httpClient.GetStringAsync(CNBDailyRateExchange));
+            //We we are planning to get any historical data here we can parameterize the URI
+            var exchangeRatesReadModel = CurrencyFileParser.ParseFileToExchangeRatesReadModel(await _httpClient.GetStringAsync(_httpClient.BaseAddress));
             var exchangeRateResults = exchangeRatesReadModel.Select(model => ExchangeRateFactory.CreateExchangeRateFromCZK(model));
             var combinedResult = Result.Combine(exchangeRateResults.ToArray());
             
