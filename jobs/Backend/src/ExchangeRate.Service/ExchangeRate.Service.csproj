@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRate.Client.Cnb\ExchangeRate.Client.Cnb.csproj" />
+    <ProjectReference Include="..\ExchangeRate.Domain\ExchangeRate.Domain.csproj" />
+    <ProjectReference Include="..\Framework\Framework.Caching\Framework.Caching.csproj" />
+  </ItemGroup>
+
+</Project>
