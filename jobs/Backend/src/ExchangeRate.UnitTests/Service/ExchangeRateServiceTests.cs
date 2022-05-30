@@ -1,4 +1,5 @@
-﻿using ExchangeRate.Client.Cnb;
+﻿using System.Globalization;
+using ExchangeRate.Client.Cnb;
 using ExchangeRate.Client.Cnb.Abstract;
 using ExchangeRate.Client.Cnb.Models;
 using ExchangeRate.Client.Cnb.Models.Xml;
@@ -39,9 +40,9 @@ namespace ExchangeRate.UnitTests.Service
 		}
 
 		[Theory]
-		[InlineData(CnbConstants.ApiType.CnbXml, "EUR", 24.450, 1, "EUR/CZK=24,45")]
-		[InlineData(CnbConstants.ApiType.CnbXml, "USD", 22.515, 1, "USD/CZK=22,515")]
-		public async Task GetExchangeRates_ReturnFromXmlClient(CnbConstants.ApiType apiType, string sourceCurrencyCode, decimal rate, int amount, string expected)
+		[InlineData(CnbConstants.ApiType.CnbXml, "EUR", 24.450, 1)]
+		[InlineData(CnbConstants.ApiType.CnbXml, "USD", 22.515, 1)]
+		public async Task GetExchangeRates_ReturnFromXmlClient(CnbConstants.ApiType apiType, string sourceCurrencyCode, decimal rate, int amount)
 		{
 			// Arrange
 			var data = CreateXmlExchangeRateTable(sourceCurrencyCode, rate, amount);
@@ -54,7 +55,7 @@ namespace ExchangeRate.UnitTests.Service
 			// Assert
 			Assert.NotNull(result);
 			var item = result!.FirstOrDefault();
-			Assert.Equal(expected, item);
+			Assert.Equal($"{sourceCurrencyCode}/{CnbConstants.BaseCurrency}={rate}", item);
 		}
 
 		[Fact]
@@ -88,7 +89,7 @@ namespace ExchangeRate.UnitTests.Service
 					Type = "XML_TYP_CNB_KURZY_DEVIZOVEHO_TRHU"
 				},
 				Bank = "CNB",
-				Date = Convert.ToDateTime("20.04.2022"),
+				Date = Convert.ToDateTime("20.04.2022", CultureInfo.CreateSpecificCulture("cs-CZ")),
 				OrderNo = 80
 			};
 		}

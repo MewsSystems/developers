@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using ExchangeRate.Client.Cnb.Models.Txt;
 using ExchangeRate.Client.Cnb.Models.Xml;
 
@@ -70,7 +71,7 @@ USA|1|dolar|USD|22,515";
 				Type = "XML_TYP_CNB_KURZY_DEVIZOVEHO_TRHU"
 			},
 			Bank = "CNB",
-			Date = Convert.ToDateTime("20.04.2022"),
+			Date = Convert.ToDateTime("20.04.2022", CultureInfo.CreateSpecificCulture("cs-CZ")),
 			OrderNo = 80
 		};
 
@@ -78,7 +79,7 @@ USA|1|dolar|USD|22,515";
 		{
 			Table = new(),
 			Bank = "CNB",
-			Date = Convert.ToDateTime("20.04.2022"),
+			Date = Convert.ToDateTime("20.04.2022", CultureInfo.CreateSpecificCulture("cs-CZ")),
 			OrderNo = 80
 		};
 	}

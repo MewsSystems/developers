@@ -27,8 +27,8 @@ namespace ExchangeRate.UnitTests.Service
 
 			Assert.NotNull(result);
 			Assert.True(result!.Count == 2);
-			Assert.Equal("EUR/CZK=24,45", result[0]);
-			Assert.Equal("USD/CZK=22,515", result[1]);
+			Assert.Equal($"EUR/CZK={24.45}", result[0]);
+			Assert.Equal($"USD/CZK={22.515}", result[1]);
 		}
 
 		[Fact]
