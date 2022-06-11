@@ -28,7 +28,7 @@ Please write the code like you would if you needed this to run on production env
 ## Acceptance Criteria
 
 ### From readme
-
+2
 - [ ] Solution is buildable and runnable
 - [ ] Test program outputs the obtained exchange rates
 - [ ] Provider is fully functional and sources real world public data from CNB
@@ -47,3 +47,7 @@ Please write the code like you would if you needed this to run on production env
 [overview](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/)
 
 [daily text file](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt)
+
+## Future enhancements
+
+- [Currency](./Mews.BackendDeveloperTask.ExchangeRates/Currency.cs) may benefit from being a ["smart" enum](https://codeblog.jonskeet.uk/2006/01/05/classenum/)

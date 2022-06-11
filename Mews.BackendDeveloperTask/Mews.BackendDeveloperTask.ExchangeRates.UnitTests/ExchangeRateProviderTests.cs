@@ -1,20 +1,35 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 
 namespace Mews.BackendDeveloperTask.ExchangeRates.UnitTests;
 
 public class ExchangeRateProviderTests
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [Test]
-    public void ReturnsExchangeRatesForSpecifiedCurrenciesAsDefinedBySource()
+    public async Task ReturnsExchangeRatesForSpecifiedCurrenciesAsDefinedBySource()
     {
         // Should return exchange rates among the specified currencies that are defined by the source...
-        throw new NotImplementedException();
+        // Arrange
+        var mockDataSource = new Mock<IExchangeRateDataSource>();
+        mockDataSource.Setup(s => s.GetExchangeRatesAsync()).ReturnsAsync(new[] {
+            new ExchangeRate(Currency.USD, Currency.CZK, 23.49f),
+            new ExchangeRate(Currency.EUR, Currency.CZK, 24.71f),
+        });
+        var exchangeRateProvider = new ExchangeRateProvider(mockDataSource.Object);
+
+        // Act
+        var specifiedCurrencies = new[] { Currency.USD, Currency.EUR };
+        var actualExchangeRates = await exchangeRateProvider.GetExchangeRatesAsync(specifiedCurrencies);
+
+        // Assert
+        var expectedExchangeRates = new[] {
+            new ExchangeRate(Currency.EUR, Currency.CZK, 24.71f),
+            new ExchangeRate(Currency.USD, Currency.CZK, 23.49f)
+        };
+        Assert.AreEqual(expectedExchangeRates.OrderBy(o => o.Source), actualExchangeRates.OrderBy(o => o.Source));
     }
 
     [Test]
