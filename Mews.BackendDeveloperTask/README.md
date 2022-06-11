@@ -18,7 +18,7 @@ Please write the code like you would if you needed this to run on production env
 
 - [x] Find data source on their web - part of the task is to find the source of the exchange rate data
 - [x] Choose technology for implementation
-- [ ] Add unit tests for the exchange rate provider
+- [x] Add unit tests for the exchange rate provider
 - [ ] Implement unit tests with mock data provider
 - [ ] Add unit tests for the real world data provider retriever/parser
 - [ ] Implement real world data provider and example CLI
@@ -27,10 +27,18 @@ Please write the code like you would if you needed this to run on production env
 
 ## Acceptance Criteria
 
+### From readme
+
 - [ ] Solution is buildable and runnable
 - [ ] Test program outputs the obtained exchange rates
 - [ ] Provider is fully functional and sources real world public data from CNB
 - [ ] Code is of a long-term maintainable production standard
+
+### From example file
+
+- [ ] Should return exchange rates among the specified currencies that are defined by the source. But only those defined by the source
+- [ ] Do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK" do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". 
+- [ ] If the source does not provide some of the currencies, ignore them.
 
 ## Data Source
 
