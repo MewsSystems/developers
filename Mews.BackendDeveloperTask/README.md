@@ -38,4 +38,4 @@ Please write the code like you would if you needed this to run on production env
 
 [overview](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/)
 
-[daily text file](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-ex change-rate-fixing/central-bank-exchange-rate-fixing/daily.txt)
+[daily text file](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt)
