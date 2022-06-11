@@ -19,7 +19,7 @@ Please write the code like you would if you needed this to run on production env
 - [x] Find data source on their web - part of the task is to find the source of the exchange rate data
 - [x] Choose technology for implementation
 - [x] Add unit tests for the exchange rate provider
-- [ ] Implement unit tests with mock data provider
+- [x] Implement unit tests with mock data provider
 - [ ] Add unit tests for the real world data provider retriever/parser
 - [ ] Implement real world data provider and example CLI
 - [ ] Perform acceptance tests per below listed acceptance criteria
@@ -28,7 +28,7 @@ Please write the code like you would if you needed this to run on production env
 ## Acceptance Criteria
 
 ### From readme
-2
+
 - [ ] Solution is buildable and runnable
 - [ ] Test program outputs the obtained exchange rates
 - [ ] Provider is fully functional and sources real world public data from CNB
