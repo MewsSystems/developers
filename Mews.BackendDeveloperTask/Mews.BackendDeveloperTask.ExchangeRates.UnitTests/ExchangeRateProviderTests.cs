@@ -33,10 +33,21 @@ public class ExchangeRateProviderTests
     }
 
     [Test]
-    public void ReturnsEmptyWhenAllCurrenciesNotDefinedBySource()
+    public async Task ReturnsEmptyWhenAllCurrenciesNotDefinedBySource()
     {
-        // ... But only those defined by the source
-        throw new NotImplementedException();
+        // Should return exchange rates among the specified currencies that are defined by the source...
+        // Arrange
+        var mockDataSource = new Mock<IExchangeRateDataSource>();
+        mockDataSource.Setup(s => s.GetExchangeRatesAsync()).ReturnsAsync(Array.Empty<ExchangeRate>());
+        var exchangeRateProvider = new ExchangeRateProvider(mockDataSource.Object);
+
+        // Act
+        var specifiedCurrencies = new[] { Currency.USD, Currency.EUR };
+        var actualExchangeRates = await exchangeRateProvider.GetExchangeRatesAsync(specifiedCurrencies);
+
+        // Assert
+        var expectedExchangeRates = Array.Empty<ExchangeRate>();
+        Assert.AreEqual(expectedExchangeRates.OrderBy(o => o.Source), actualExchangeRates.OrderBy(o => o.Source));
     }
 
     [Test]
