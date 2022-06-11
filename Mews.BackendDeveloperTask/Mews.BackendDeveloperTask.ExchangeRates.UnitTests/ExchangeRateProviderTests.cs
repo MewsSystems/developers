@@ -73,9 +73,22 @@ public class ExchangeRateProviderTests
     }
 
     [Test]
-    public void ReturnsEmptyWhenCurrencyIsTargetInSourceCurrenciesButNotItselfASource()
+    public async Task ReturnsEmptyWhenCurrencyIsTargetInSourceCurrenciesButNotItselfASource()
     {
         // Do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK" do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD".
-        throw new NotImplementedException();
+        // Arrange
+        var mockDataSource = new Mock<IExchangeRateDataSource>();
+        mockDataSource.Setup(s => s.GetExchangeRatesAsync()).ReturnsAsync(new[] {
+            new ExchangeRate(Currency.CZK, Currency.USD, 1 / 23.49f)
+        });
+        var exchangeRateProvider = new ExchangeRateProvider(mockDataSource.Object);
+
+        // Act
+        var specifiedCurrencies = new[] { Currency.USD, Currency.EUR };
+        var actualExchangeRates = await exchangeRateProvider.GetExchangeRatesAsync(specifiedCurrencies);
+
+        // Assert
+        var expectedExchangeRates = Array.Empty<ExchangeRate>();
+        Assert.AreEqual(expectedExchangeRates.OrderBy(o => o.Source), actualExchangeRates.OrderBy(o => o.Source));
     }
 }
