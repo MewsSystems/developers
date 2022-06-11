@@ -51,3 +51,4 @@ Please write the code like you would if you needed this to run on production env
 ## Future enhancements
 
 - [Currency](./Mews.BackendDeveloperTask.ExchangeRates/Currency.cs) may benefit from being a ["smart" enum](https://codeblog.jonskeet.uk/2006/01/05/classenum/)
+- When CNB or other exchange rate providers provide an API-side filter, we should create new implementations of [IExchangeRateProvider](./Mews.BackendDeveloperTask.ExchangeRates/IExchangeRateProvider.cs) that pass the currencies as part of the request to reduce payload size and execution time to only that which is needed.

@@ -1,6 +1,6 @@
 namespace Mews.BackendDeveloperTask.ExchangeRates;
 
-public class ExchangeRateProvider
+public class ExchangeRateProvider : IExchangeRateProvider
 {
     private readonly IExchangeRateDataSource _dataSource;
 
