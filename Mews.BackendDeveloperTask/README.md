@@ -20,9 +20,9 @@ Please write the code like you would if you needed this to run on production env
 - [x] Choose technology for implementation
 - [x] Add unit tests for the exchange rate provider
 - [x] Implement unit tests with mock data provider
-- [ ] Add unit tests for the real world data provider retriever/parser
-- [ ] Implement real world data provider and example CLI
-- [ ] Perform acceptance tests per below listed acceptance criteria
+- [x] Add unit tests for the real world data provider retriever/parser
+- [x] Implement real world data provider and example CLI
+- [x] Perform acceptance tests per below listed acceptance criteria
 - [ ] Add build, test and usage instructions to readme
 
 ## Acceptance Criteria
@@ -52,3 +52,4 @@ Please write the code like you would if you needed this to run on production env
 
 - [Currency](./Mews.BackendDeveloperTask.ExchangeRates/Currency.cs) may benefit from being a ["smart" enum](https://codeblog.jonskeet.uk/2006/01/05/classenum/)
 - When CNB or other exchange rate providers provide an API-side filter, we should create new implementations of [IExchangeRateProvider](./Mews.BackendDeveloperTask.ExchangeRates/IExchangeRateProvider.cs) that pass the currencies as part of the request to reduce payload size and execution time to only that which is needed.
+- Decide where to put logging.  It may make sense for individual units to catch and log errors, then fail gracefully. Alternatively it may be better to let exceptions escape and be caught by higher up consumers of these classes.
