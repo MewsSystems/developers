@@ -50,6 +50,7 @@ Please write the code like you would if you needed this to run on production env
 
 ## Future enhancements
 
-- [Currency](./Mews.BackendDeveloperTask.ExchangeRates/Currency.cs) may benefit from being a ["smart" enum](https://codeblog.jonskeet.uk/2006/01/05/classenum/)
+- [Currency](./Mews.BackendDeveloperTask.ExchangeRates/Currency.cs) may benefit from being a ["smart" enum](https://codeblog.jonskeet.uk/2006/01/05/classenum/). In the least, if we think it may be serialised to database, then numeric values should be set to avoid drift as currencies are added/removed.
 - When CNB or other exchange rate providers provide an API-side filter, we should create new implementations of [IExchangeRateProvider](./Mews.BackendDeveloperTask.ExchangeRates/IExchangeRateProvider.cs) that pass the currencies as part of the request to reduce payload size and execution time to only that which is needed.
 - Decide where to put logging.  It may make sense for individual units to catch and log errors, then fail gracefully. Alternatively it may be better to let exceptions escape and be caught by higher up consumers of these classes.
+- Decide what to do with XDR, as it's not a currency code but an aggregate [international reserve asset](https://www.imf.org/en/About/Factsheets/Sheets/2016/08/01/14/51/Special-Drawing-Right-SDR). It can be excluded from the results, or `Currency` can be renamed something more appropriate, or the codes can be `string` instead of `enum` if a more open standard is required.
