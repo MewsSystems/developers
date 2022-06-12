@@ -1,5 +1,25 @@
 # Mews Backend Developer Task - Exchange Rates
 
+## Running the Application
+
+Other than executing the assembly directly, `dotnet run` can be used to run the application from the root solution directory. e.g.
+
+```
+dotnet run -p Mews.BackendDeveloperTask.Cli/ USD EUR UNK
+```
+
+Example output:
+
+![example-output](example-output.png)
+
+## Running the tests
+
+`dotnet test` from the root solution directory.
+
+Example output:
+
+![example-test-output](example-test-output.png)
+
 ## Specification
 
 The task is to implement an ExchangeRateProvider for Czech National Bank. Find data source on their web - part of the task is to find the source of the exchange rate data and a way how to extract it from there.
@@ -23,7 +43,7 @@ Please write the code like you would if you needed this to run on production env
 - [x] Add unit tests for the real world data provider retriever/parser
 - [x] Implement real world data provider and example CLI
 - [x] Perform acceptance tests per below listed acceptance criteria
-- [ ] Add build, test and usage instructions to readme
+- [x] Add build, test and usage instructions to readme
 
 ## Acceptance Criteria
 
