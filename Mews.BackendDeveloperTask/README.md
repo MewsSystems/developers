@@ -29,16 +29,16 @@ Please write the code like you would if you needed this to run on production env
 
 ### From readme
 
-- [ ] Solution is buildable and runnable
-- [ ] Test program outputs the obtained exchange rates
-- [ ] Provider is fully functional and sources real world public data from CNB
-- [ ] Code is of a long-term maintainable production standard
+- [x] Solution is buildable and runnable
+- [x] Test program outputs the obtained exchange rates
+- [x] Provider is fully functional and sources real world public data from CNB
+- [x] Code is of a long-term maintainable production standard
 
 ### From example file
 
-- [ ] Should return exchange rates among the specified currencies that are defined by the source. But only those defined by the source
-- [ ] Do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK" do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". 
-- [ ] If the source does not provide some of the currencies, ignore them.
+- [x] Should return exchange rates among the specified currencies that are defined by the source. But only those defined by the source
+- [x] Do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK" do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". 
+- [x] If the source does not provide some of the currencies, ignore them.
 
 ## Data Source
 
