@@ -16,46 +16,54 @@ namespace ExchangeRateUpdater
         public static void Main(string[] args)
         {
 
-
-            using IHost host = CreateHostBuilder(args).Build();
-            IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
-            Settings settings = config.GetRequiredSection("Settings").Get<Settings>();
-            var exchangeRateValidationsHelper = host.Services.GetService<IExchangeRateValidationsHelper>();
-
-            var keepRunning = true;
-            var currencies = new List<CurrencyModel>();
-            int maxInputCount = 0;
-            while (keepRunning)
+            try
             {
-                Console.Write("Please enter a currency of interest or type STOP to finish: ");
-                var userInput = Console.ReadLine().ToUpper();
+                using IHost host = CreateHostBuilder(args).Build();
+                IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
+                Settings settings = config.GetRequiredSection("Settings").Get<Settings>();
+                var exchangeRateValidationsHelper = host.Services.GetService<IExchangeRateValidationsHelper>();
 
-                if (userInput == "STOP" || maxInputCount == 9)
+                var keepRunning = true;
+                var currencies = new List<CurrencyModel>();
+                int maxInputCount = 0;
+                while (keepRunning)
                 {
-                    keepRunning = false;
+                    Console.Write("Please enter a currency of interest or type STOP to finish: ");
+                    var userInput = Console.ReadLine().ToUpper();
+
+                    if (userInput == "STOP" || maxInputCount == 9)
+                    {
+                        keepRunning = false;
+                    }
+                    else
+                    {
+                        exchangeRateValidationsHelper.ValidateCurrency(userInput, settings);
+                        currencies.Add(new CurrencyModel(userInput));
+                        maxInputCount++;
+                    }
+
+                }
+                var rates = host.Services.GetService<IExchangeServiceProviderService>().GetExchangeRates(currencies, settings);
+
+                if (rates.Count() > 0)
+                {
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
                 else
                 {
-                    exchangeRateValidationsHelper.ValidateCurrency(userInput, settings);
-                    currencies.Add(new CurrencyModel(userInput));
-                    maxInputCount++;
+                    Console.WriteLine($"Not valid currencies were input");
+
                 }
-
             }
-            var rates = host.Services.GetService<IExchangeServiceProviderService>().GetExchangeRates(currencies, settings);
-
-            if (rates.Count() > 0)
+            catch (Exception e)
             {
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                Console.WriteLine($"Execution failed with error: {e.Message}");
             }
-            else{
-                Console.WriteLine($"Not valid currencies were input");
 
-            }
 
         }
         private static IHostBuilder CreateHostBuilder(string[] args)

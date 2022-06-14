@@ -66,5 +66,21 @@ namespace Task.UnitTests.Services
             var result = exchangeRateProviderService.GetExchangeRates(currencies, settings);
             Assert.Equal(0, result.Count());
         }
+
+
+        [Theory]
+        [MemberData(nameof(CurrencyModelsCorrect))]
+        public void WrongUrlThrowsInvalidDataException(List<CurrencyModel> currencies)
+        {
+            var exchangeRateProviderService = new ExchangeRateProviderService();
+            var settings = new Settings()
+            {
+                SupportedCurrencies = new List<string>() { "EUR", "USD", "HUF", "CNY", "PLN" },
+                BaseCurrency = "CZK",
+                BankRatesUrl = "https://www.example.com"
+            };
+
+            Assert.Throws<InvalidDataException>(() => exchangeRateProviderService.GetExchangeRates(currencies, settings));
+        }
     }
 }

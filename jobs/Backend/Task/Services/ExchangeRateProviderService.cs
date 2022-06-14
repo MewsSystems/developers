@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Xml;
 using ExchangeRateUpdater.Models;
 using Newtonsoft.Json;
+using System.IO;
 
 public class ExchangeRateProviderService : IExchangeServiceProviderService
 {
@@ -23,35 +24,54 @@ public class ExchangeRateProviderService : IExchangeServiceProviderService
         var url = settings.BankRatesUrl;
         var httpClient = new HttpClient();
         var result = httpClient.GetAsync(url).Result;
-
-        //Serialize rates to c# object
-        var xmlString = result.Content.ReadAsStringAsync().Result;
-        var xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(xmlString);
-        var serializedXml = JsonConvert.SerializeXmlNode(xmlDoc);
-        var json = JsonConvert.DeserializeObject<BankRatesModel>(serializedXml, new JsonSerializerSettings
+        var rateList = new List<Rate>();
+        try
         {
-            // fr culture separator is "," as per xml
-            Culture = new System.Globalization.CultureInfo("fr-FR")
-        });
-
-
-        var RateList = json.Root.RateList.List;
-        var exchangeRates = new List<ExchangeRate>();
-        foreach (var rateCurrency in currencies)
-        {
-            //check if the currency code exist in the serialized data from the bank
-            var rate = RateList.Where(x => x.Code == rateCurrency.Code).FirstOrDefault();
-            if (rate != null)
+            //Serialize rates to c# object
+            var xmlString = result.Content.ReadAsStringAsync().Result;
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlString);
+            var serializedXml = JsonConvert.SerializeXmlNode(xmlDoc);
+            var json = JsonConvert.DeserializeObject<BankRatesModel>(serializedXml, new JsonSerializerSettings
             {
+                // fr culture separator is "," as per xml
+                Culture = new System.Globalization.CultureInfo("fr-FR")
+            });
 
-                var targetCurrency = new CurrencyModel(rate.Code);
-                var sourceCurrency = new CurrencyModel(settings.BaseCurrency);
-                var calculatedValue =  rate.RateValue/rate.Value;
-                exchangeRates.Add(new ExchangeRate(sourceCurrency, targetCurrency, Math.Round(calculatedValue, settings.ExchangePrecision)));
-
-            }
+            rateList = json.Root.RateList.List;
         }
+
+        catch (Exception e)
+        {
+            throw new InvalidDataException($"Serialization failed with error: {e.Message}");
+        }
+
+        var exchangeRates = new List<ExchangeRate>();
+        try
+        {
+            foreach (var rateCurrency in currencies)
+            {
+                //check if the currency code exist in the serialized data from the bank
+                var rate = rateList.Where(x => x.Code == rateCurrency.Code).FirstOrDefault();
+                var doesExchangeRatesExist = exchangeRates.Exists(x => x.TargetCurrency.Code == rateCurrency.Code);
+
+                if (rate != null && !doesExchangeRatesExist)
+                {
+
+                    var targetCurrency = new CurrencyModel(rate.Code);
+                    var sourceCurrency = new CurrencyModel(settings.BaseCurrency);
+                    var calculatedValue = rate.RateValue / rate.Value;
+                    exchangeRates.Add(new ExchangeRate(sourceCurrency, targetCurrency, Math.Round(calculatedValue, settings.ExchangePrecision)));
+
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Failed creating the exchange rates with error: {e.Message}");
+        }
+
 
         return exchangeRates;
     }
