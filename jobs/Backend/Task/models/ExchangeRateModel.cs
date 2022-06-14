@@ -1,17 +1,17 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace models.ExchangeRateUpdater
 {
     public class ExchangeRate
     {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
+        public ExchangeRate(CurrencyModel sourceCurrency, CurrencyModel targetCurrency, decimal value)
         {
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
         }
 
-        public Currency SourceCurrency { get; }
+        public CurrencyModel SourceCurrency { get; }
 
-        public Currency TargetCurrency { get; }
+        public CurrencyModel TargetCurrency { get; }
 
         public decimal Value { get; }
 
