@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater
 {
+    using ExchangeRateUpdater.Code.Application;
+    using ExchangeRateUpdater.DI;
+    using ExchangeRateUpdater.Domain;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.Extensions.DependencyInjection;
+
     public static class Program
     {
         private static IEnumerable<Currency> currencies = new[]
@@ -23,7 +27,10 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = CompositionRoot.ConfigureServices()
+                    .BuildServiceProvider()
+                    .GetService<ExchangeRateProvider>();
+
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
