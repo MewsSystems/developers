@@ -32,11 +32,11 @@ namespace ExchangeRateUpdater.Tests
         [TestMethod]
         public async Task Returns_Ok_When_Response_Ok()
         {
-            var url = _fixture.Create<Uri>().ToString();
-            var httpClient = GenericRequestTestPrepration(url, HttpStatusCode.OK, string.Empty);
+            
+            var httpClient = GenericRequestTestPrepration(CnbExchangeRateProvider.SourceUrl, HttpStatusCode.OK, string.Empty);
             var parser = new CnbCsvParser();
 
-            var service = new CnbExchangeRateProvider(httpClient, url, parser);
+            var service = new CnbExchangeRateProvider(httpClient, parser);
 
             var result = await service.GetExchangeRatesAsync(new List<Currency> { new Currency("USD") });
 
@@ -50,11 +50,9 @@ namespace ExchangeRateUpdater.Tests
         [DataRow(HttpStatusCode.NotFound)]
         public async Task Returns_Failure_When_Response_Failure(HttpStatusCode httpStatusCode)
         {
-            var url = _fixture.Create<Uri>().ToString();
-            var httpClient = GenericRequestTestPrepration(url, httpStatusCode, string.Empty);
+            var httpClient = GenericRequestTestPrepration(CnbExchangeRateProvider.SourceUrl, httpStatusCode, string.Empty);
             var parser = new CnbCsvParser();
-
-            var service = new CnbExchangeRateProvider(httpClient, url, parser);
+            var service = new CnbExchangeRateProvider(httpClient, parser);
 
             var result = await service.GetExchangeRatesAsync(new List<Currency> { new Currency("USD") });
 
@@ -64,12 +62,12 @@ namespace ExchangeRateUpdater.Tests
         [TestMethod]
         public async Task Returns_Ok_And_Currencies_Within_The_List()
         {
-            var url = _fixture.Create<Uri>().ToString();
+            
             var sample = File.OpenText("./Samples/17June.txt").ReadToEnd();
-            var httpClient = GenericRequestTestPrepration(url, HttpStatusCode.OK, sample);
+            var httpClient = GenericRequestTestPrepration(CnbExchangeRateProvider.SourceUrl, HttpStatusCode.OK, sample);
             var parser = new CnbCsvParser();
 
-            var service = new CnbExchangeRateProvider(httpClient, url, parser);
+            var service = new CnbExchangeRateProvider(httpClient, parser);
 
             var currencies = new List<Currency> { new Currency("USD"), new Currency("EUR") };
             var result = await service.GetExchangeRatesAsync(currencies);
@@ -87,12 +85,12 @@ namespace ExchangeRateUpdater.Tests
         [TestMethod]
         public async Task Returns_Ok_And_Ignores_Unpresent_Currencies_Within_Response()
         {
-            var url = _fixture.Create<Uri>().ToString();
+            
             var sample = File.OpenText("./Samples/17June.txt").ReadToEnd();
-            var httpClient = GenericRequestTestPrepration(url, HttpStatusCode.OK, sample);
+            var httpClient = GenericRequestTestPrepration(CnbExchangeRateProvider.SourceUrl, HttpStatusCode.OK, sample);
             var parser = new CnbCsvParser();
 
-            var service = new CnbExchangeRateProvider(httpClient, url, parser);
+            var service = new CnbExchangeRateProvider(httpClient, parser);
 
             var currencies = new List<Currency> { new Currency("USD"), new Currency("EUR") };
             var myCurrency = "KLM";
@@ -107,12 +105,12 @@ namespace ExchangeRateUpdater.Tests
         [TestMethod]
         public async Task Returns_Failure_When_Parsing_Failures()
         {
-            var url = _fixture.Create<Uri>().ToString();
+            
             var sample = File.OpenText("./Samples/InvalidData.txt").ReadToEnd();
-            var httpClient = GenericRequestTestPrepration(url, HttpStatusCode.OK, sample);
+            var httpClient = GenericRequestTestPrepration(CnbExchangeRateProvider.SourceUrl, HttpStatusCode.OK, sample);
             var parser = new CnbCsvParser();
 
-            var service = new CnbExchangeRateProvider(httpClient, url, parser);
+            var service = new CnbExchangeRateProvider(httpClient, parser);
 
             var result = await service.GetExchangeRatesAsync(new List<Currency> { new Currency("USD") });
 
