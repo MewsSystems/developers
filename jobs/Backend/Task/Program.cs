@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -24,7 +25,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider();
+                var url = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=";
+                var provider = new CnbExchangeRateProvider(new HttpClient(), url);
                 var result = await provider.GetExchangeRatesAsync(currencies);
 
                 if(!result.IsSuccess)
