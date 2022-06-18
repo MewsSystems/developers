@@ -1,9 +1,14 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdated.Service.Exceptions;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
         public Currency(string code)
         {
+            ArgumentNullException.ThrowIfNull(code);
+            InvalidCurrencyException.ThrowIfInvalid(code);
+
             Code = code;
         }
 
@@ -19,8 +24,8 @@
 
         public static implicit operator Currency(string s)
         {
-            if (s.Length != 3)
-                throw new ArgumentException("Currency code can't be less than 3 characters");
+            ArgumentNullException.ThrowIfNull(s);
+            InvalidCurrencyException.ThrowIfInvalid(s);
 
             return new Currency(s);
         }
