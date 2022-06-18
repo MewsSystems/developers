@@ -7,6 +7,7 @@ namespace ExchangeRateUpdater
 {
     public class CnbExchangeRateProvider : IExchangeRateProvider 
     {
+        private const string DefaultCurrencyCode = "CZK";
         private readonly HttpClient _httpClient;
         private readonly string _sourceUrl;
         private readonly ICnbCsvParser _cnbCsvParser;
@@ -29,7 +30,9 @@ namespace ExchangeRateUpdater
             return result switch
             {
                 { IsFailed: true } => Result.Fail(result.Errors),
-                { IsSuccess: true } => Result.Ok(result.Value.Select(c => new ExchangeRate("CZK", c.Code, c.Rate)))
+                { IsSuccess: true } => Result.Ok(result.Value
+                    .Where(c => currencies.Any(x => x.Code == c.Code))
+                    .Select(c => new ExchangeRate(c.Code, DefaultCurrencyCode, Math.Round(c.Rate / c.Amount, 8))))
             };
         }
     }
