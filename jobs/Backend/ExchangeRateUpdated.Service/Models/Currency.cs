@@ -29,5 +29,22 @@ namespace ExchangeRateUpdater
 
             return new Currency(s);
         }
+
+        public override bool Equals(object? obj)
+        {
+            var currency = obj as Currency;
+            if (currency != null)
+            {
+                return currency.Code == Code;
+            }
+
+            var currencyCode = obj as string;
+            if (currencyCode != null)
+            {
+                return currencyCode == Code;
+            }
+
+            return false;
+        }
     }
 }

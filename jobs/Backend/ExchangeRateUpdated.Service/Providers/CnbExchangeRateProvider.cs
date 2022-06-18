@@ -1,13 +1,13 @@
 ﻿using ExchangeRateUpdated.Service.Parsers;
 using FluentResults;
-using System.Collections.Generic;
-using System.Linq;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ExchangeRateUpdater.Tests")]
 
 namespace ExchangeRateUpdater
 {
     public class CnbExchangeRateProvider : IExchangeRateProvider 
     {
-        private const string DefaultCurrencyCode = "CZK";
+        internal const string DefaultCurrencyCode = "CZK";
         private readonly HttpClient _httpClient;
         private readonly string _sourceUrl;
         private readonly ICnbCsvParser _cnbCsvParser;
