@@ -1,7 +1,11 @@
 ﻿using ExchangeRateUpdated.Service.Parsers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -26,10 +30,11 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider(new HttpClient(), new CnbCsvParser());
+                var builtHost = CreateHostBuilder(args).Build();
+                var provider = builtHost.Services.GetRequiredService<IExchangeRateProvider>();
                 var result = await provider.GetExchangeRatesAsync(currencies);
 
-                if(!result.IsSuccess)
+                if (!result.IsSuccess)
                 {
                     Console.WriteLine("Couldn't retrive rates");
                 }
@@ -48,5 +53,30 @@ namespace ExchangeRateUpdater
 
             Console.ReadLine();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+
+            })
+            .ConfigureServices((hostcontext, services) =>
+            {
+                services.AddSingleton<ICnbCsvParser, CnbCsvParser>();
+                services.AddHttpClient<IExchangeRateProvider, CnbExchangeRateProvider>()
+                    .ConfigurePrimaryHttpMessageHandler(c =>
+                    {
+                        return new HttpClientHandler()
+                        {
+                            UseCookies = false,
+                            AutomaticDecompression = DecompressionMethods.All
+                        };
+                    });
+            })
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddDebug();
+            });
     }
 }

@@ -11,7 +11,6 @@ namespace ExchangeRateUpdater
         internal const string SourceUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=";
         internal const string DefaultCurrencyCode = "CZK";
         private readonly HttpClient _httpClient;
-        private readonly string _sourceUrl;
         private readonly ICnbCsvParser _cnbCsvParser;
 
         public CnbExchangeRateProvider(HttpClient httpClient, ICnbCsvParser cnbCsvParser)
@@ -24,7 +23,7 @@ namespace ExchangeRateUpdater
         {
             var response = await _httpClient.GetAsync(SourceUrl);
             if (!response.IsSuccessStatusCode)
-                return Result.Fail($"Retreival from {_sourceUrl} failed with status code {response.StatusCode}. Response {await response.Content.ReadAsStringAsync()}");
+                return Result.Fail($"Retreival from {SourceUrl} failed with status code {response.StatusCode}. Response {await response.Content.ReadAsStringAsync()}");
 
             var stream = await response.Content.ReadAsStreamAsync();
 
