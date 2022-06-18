@@ -1,0 +1,15 @@
+name:  Build&Test BE .net project
+on: [create, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build&Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: |
+            6.0.x
+      - run: dotnet build jobs/Backend/Task/ExchangeRateUpdater.sln
+      - run: dotnet test jobs/Backend/Task/ExchangeRateUpdater.sln
