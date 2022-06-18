@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using FluentResults;
 using System.Globalization;
 
 namespace ExchangeRateUpdated.Service.Parsers
@@ -11,7 +12,12 @@ namespace ExchangeRateUpdated.Service.Parsers
             Delimiter = "|"
         };
 
-        public IEnumerable<CnbExchangeRateRecord> ParseExchangeRates(Stream stream)
+        public Result<IEnumerable<CnbExchangeRateRecord>> TryParseExchangeRates(Stream stream)
+        {
+            return Result.Try(() => ParseExchangeRates(stream));
+        }
+
+        private IEnumerable<CnbExchangeRateRecord> ParseExchangeRates(Stream stream)
         {
             using var reader = new StreamReader(stream);
             using var csv = new CsvReader(reader, _csvConfiguration);

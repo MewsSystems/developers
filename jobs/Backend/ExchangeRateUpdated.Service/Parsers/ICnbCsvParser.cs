@@ -1,7 +1,9 @@
-﻿namespace ExchangeRateUpdated.Service.Parsers
+﻿using FluentResults;
+
+namespace ExchangeRateUpdated.Service.Parsers
 {
     public interface ICnbCsvParser
     {
-        IEnumerable<CnbExchangeRateRecord> ParseExchangeRates(Stream stream);
+        Result<IEnumerable<CnbExchangeRateRecord>> TryParseExchangeRates(Stream stream);
     }
 }

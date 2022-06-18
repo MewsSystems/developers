@@ -16,11 +16,10 @@ namespace ExchangeRateUpdater.Tests
 
             var sample = File.Open("./Samples/17June.txt", FileMode.Open);
 
-            var result = cnbCsvParser.ParseExchangeRates(sample);
+            var result = cnbCsvParser.TryParseExchangeRates(sample);
 
-            var resultList = result.ToList();
-
-            result.Count().Should().Be(32);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Count().Should().Be(32);
         }
     }
 }

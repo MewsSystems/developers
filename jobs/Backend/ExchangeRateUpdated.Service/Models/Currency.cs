@@ -16,5 +16,13 @@
         {
             return Code;
         }
+
+        public static implicit operator Currency(string s)
+        {
+            if (s.Length != 3)
+                throw new ArgumentException("Currency code can't be less than 3 characters");
+
+            return new Currency(s);
+        }
     }
 }
