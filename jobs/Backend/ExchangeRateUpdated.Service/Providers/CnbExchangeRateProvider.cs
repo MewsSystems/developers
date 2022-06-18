@@ -22,6 +22,8 @@ namespace ExchangeRateUpdater
         public async Task<Result<IEnumerable<ExchangeRate>>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
             var response = await _httpClient.GetAsync(_sourceUrl);
+            if (!response.IsSuccessStatusCode)
+                return Result.Fail($"Retreival from {_sourceUrl} failed with status code {response.StatusCode}. Response {await response.Content.ReadAsStringAsync()}");
 
             var stream = await response.Content.ReadAsStreamAsync();
 
