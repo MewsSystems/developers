@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Models.Entities;
 
 namespace ExchangeRateUpdater.Console
 {
