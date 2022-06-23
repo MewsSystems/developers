@@ -4,8 +4,8 @@
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
-            SourceCurrency = sourceCurrency;
-            TargetCurrency = targetCurrency;
+            SourceCurrency = sourceCurrency ?? throw new ArgumentNullException(nameof(sourceCurrency), "Source currency should not be null.");
+            TargetCurrency = targetCurrency ?? throw new ArgumentNullException(nameof(targetCurrency), "Target currency should not be null.");
             Value = value;
         }
 
