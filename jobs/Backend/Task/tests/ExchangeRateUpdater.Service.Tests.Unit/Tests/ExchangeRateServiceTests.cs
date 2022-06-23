@@ -23,7 +23,8 @@ public class ExchangeRateServiceTests
         };
 
         var exchangeRateService = new CnbService(TestHelper.HttpClientWithResponse(httpResponse),
-                                                 new ExchangeRateTestSettings());
+                                                 new ExchangeRateTestSettings(),
+                                                 new LoggerNull());
 
         //Act
         var response = (await exchangeRateService.GetExchangeRatesAsync(new DateTime(2022, 06, 01))).ToList()!;
@@ -52,7 +53,8 @@ public class ExchangeRateServiceTests
         };
 
         var exchangeRateService = new CnbService(TestHelper.HttpClientWithResponse(httpResponse),
-                                                 new ExchangeRateTestSettings());
+                                                 new ExchangeRateTestSettings(),
+                                                 new LoggerNull());
 
         //Act
         Func<Task> act = () => exchangeRateService.GetExchangeRatesAsync(new DateTime(2022, 06, 01));

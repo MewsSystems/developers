@@ -20,7 +20,7 @@ public class MapperTests
             "Brazil|real|1|BRL|4.568"
         };
 
-        var mapper = new CnbServiceMapper(DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: true);
+        var mapper = new CnbServiceMapper(new LoggerNull(), DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: true);
 
         List<ExchangeRate> result = mapper.Map(ColumnInfo, correctData);
 
@@ -40,7 +40,7 @@ public class MapperTests
     {
         var incorrectData = new List<string> { "Australia||1||16.415" };
 
-        var mapper = new CnbServiceMapper(DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: true);
+        var mapper = new CnbServiceMapper(new LoggerNull(), DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: true);
 
         Action act = () => mapper.Map(ColumnInfo, incorrectData);
         act.Should().Throw<Exception>("throwExceptionOnError parameter is true");
@@ -55,7 +55,7 @@ public class MapperTests
             "Brazil|real|1|BRL|4.568"
         };
 
-        var mapper = new CnbServiceMapper(DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: false);
+        var mapper = new CnbServiceMapper(new LoggerNull(), DefaultCurrency, MappingDelimiter, MappingDecimalSeparator, throwExceptionOnError: false);
 
         List<ExchangeRate> result = mapper.Map(ColumnInfo, incorrectData);
 

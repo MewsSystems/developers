@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Console.Configuration;
+using ExchangeRateUpdater.Console.Configuration.Logging;
 using ExchangeRateUpdater.Models.Entities;
+using Serilog;
+using Serilog.Events;
 
 namespace ExchangeRateUpdater.Console
 {
@@ -29,10 +32,13 @@ namespace ExchangeRateUpdater.Console
         {
             try
             {
+                var logger        = new SerilogConfiguration().Create(LogEventLevel.Debug, "http://localhost:5341/");
                 var configuration = ApplicationConfiguration.GetConfiguration();
                 _settings = Settings.From(configuration);
 
-                ExchangeRateProvider provider = GetProvider();
+                ExchangeRateProvider provider = GetProvider(logger);
+
+                logger.Information("Calling GetExchangeRatesAsync with ExchangeRateProvider");
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -49,7 +55,7 @@ namespace ExchangeRateUpdater.Console
             System.Console.ReadLine();
         }
 
-        private static ExchangeRateProvider GetProvider()
+        private static ExchangeRateProvider GetProvider(ILogger logger)
         {
             return new ExchangeRateProvider(
                 new ExchangeRateProviderSettings(_settings.ExchangeRateBaseUrl,
@@ -57,7 +63,8 @@ namespace ExchangeRateUpdater.Console
                                                  _settings.ExchangeRateBaseCurrency,
                                                  _settings.MappingSettings.Delimiter,
                                                  _settings.MappingSettings.DecimalSeparator,
-                                                 true)
+                                                 true),
+                logger
             );
         }
     }

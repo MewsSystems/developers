@@ -1,10 +1,12 @@
 using System.Globalization;
 using ExchangeRateUpdater.Models.Entities;
+using Serilog;
 
 namespace ExchangeRateUpdater.Service.Cnb.Mappers;
 
 public class CnbServiceMapper
 {
+    private readonly ILogger _logger;
     private readonly string _defaultCurrency;
     private readonly string _lineDelimiter;
     private readonly NumberFormatInfo _numberFormat;
@@ -14,8 +16,9 @@ public class CnbServiceMapper
     private const string Currency = "Code";
     private const string Rate     = "Rate";
 
-    public CnbServiceMapper(string defaultCurrency, string lineDelimiter, string decimalSeparator, bool throwExceptionOnError)
+    public CnbServiceMapper(ILogger logger, string defaultCurrency, string lineDelimiter, string decimalSeparator, bool throwExceptionOnError)
     {
+        _logger                = logger;
         _defaultCurrency       = defaultCurrency;
         _lineDelimiter         = lineDelimiter;
         _throwExceptionOnError = throwExceptionOnError;
@@ -42,6 +45,8 @@ public class CnbServiceMapper
                 !TryGetElement(values, rateIndex, out var rateValue) ||
                 !TryGetElement(values, amountIndex, out var amountValue))
             {
+                _logger.Information("Invalid row skipped because ThrowExceptionOnMappingErrors configuration is false. " +
+                                    "Line information: {IncorrectLine}", line);
                 continue;
             }
 
@@ -51,6 +56,8 @@ public class CnbServiceMapper
             if (!TryParseToDecimal(rateValue!, out var rate) || 
                 !TryParseToDecimal(amountValue!, out var amount))
             {
+                _logger.Information("Invalid row skipped because ThrowExceptionOnMappingErrors configuration is false. " +
+                                    "Decimal parse error on line: {IncorrectLine}", line);
                 continue;
             }
 

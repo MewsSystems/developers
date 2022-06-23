@@ -4,20 +4,24 @@ using ExchangeRateUpdater.Models.Entities;
 using ExchangeRateUpdater.Service.Cnb;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
         private readonly IExchangeRateUpdaterService _service;
+        private readonly ILogger _logger;
         private readonly string _timezone;
 
-        public ExchangeRateProvider(ExchangeRateProviderSettings settings)
+        public ExchangeRateProvider(ExchangeRateProviderSettings settings, ILogger logger)
         {
             _timezone = settings.TimezoneId;
+            _logger   = logger;
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<IExchangeRateServiceSettings>(settings)
+            serviceCollection.AddSingleton(logger)
+                             .AddSingleton<IExchangeRateServiceSettings>(settings)
                              .AddHttpClient<IExchangeRateUpdaterService, CnbService>(httpClient => httpClient.Timeout = TimeSpan.FromSeconds(10))
                              .AddPolicyHandler(GetAsyncPolicy());
 
@@ -35,13 +39,13 @@ namespace ExchangeRateUpdater
             return filteredRates;
         }
 
-        private static IAsyncPolicy<HttpResponseMessage> GetAsyncPolicy()
+        private IAsyncPolicy<HttpResponseMessage> GetAsyncPolicy()
         {
             return new PolicyCreator(new []
             {
                 TimeSpan.FromSeconds(2),
                 TimeSpan.FromSeconds(3), 
-            }).CreateAsyncRetryPolicy();
+            }, _logger).CreateAsyncRetryPolicy();
         }
     }
 }
