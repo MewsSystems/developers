@@ -1,6 +1,8 @@
+using ExchangeRateUpdater.Contracts;
+
 namespace ExchangeRateUpdater;
 
-public class ExchangeRateProviderSettings
+public class ExchangeRateProviderSettings : IExchangeRateServiceSettings
 {
     public ExchangeRateProviderSettings (string baseUrl,
                                          string timezoneId,

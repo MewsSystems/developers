@@ -1,35 +1,36 @@
+using ExchangeRateUpdater.Contracts;
 using ExchangeRateUpdater.Models.Entities;
 using ExchangeRateUpdater.Service.Cnb.Mappers;
 
 namespace ExchangeRateUpdater.Service.Cnb;
 
-public class CnbService
+public class CnbService : IExchangeRateUpdaterService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _url;
-    private readonly string _targetCurrency;
-    private readonly string _delimiter;
-    private readonly string _decimalSeparator;
-    private readonly bool _throwExceptionOnErrors;
+    private readonly IExchangeRateServiceSettings _settings;
 
-    public CnbService (HttpClient httpClient, string url, string targetCurrency, string delimiter, string decimalSeparator, bool throwExceptionOnMappingErrors)
+    public CnbService (HttpClient httpClient, IExchangeRateServiceSettings settings) 
     {
-        _httpClient             = httpClient;
-        _url                    = url;
-        _targetCurrency         = targetCurrency;
-        _delimiter              = delimiter;
-        _decimalSeparator       = decimalSeparator;
-        _throwExceptionOnErrors = throwExceptionOnMappingErrors;
+        _httpClient = httpClient;
+        _settings   = settings;
     }
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(DateTime date)
     {
-        var response       = await _httpClient.GetAsync($"{_url}?date={date:dd.MM.yyyy}");
-        var streamResponse = await response.Content.ReadAsStreamAsync();
+        try
+        {
+            var response       = await _httpClient.GetAsync($"{_settings.BaseUrl}?date={date:dd.MM.yyyy}");
+            var streamResponse = await response.Content.ReadAsStreamAsync();
 
-        List<ExchangeRate> rates = await ReadStreamAsync(streamResponse);
+            List<ExchangeRate> rates = await ReadStreamAsync(streamResponse);
 
-        return rates;
+            return rates;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private async Task<List<ExchangeRate>> ReadStreamAsync(Stream stream)
@@ -51,10 +52,10 @@ public class CnbService
             if (!string.IsNullOrWhiteSpace(line))
                 lines.Add(line);
 
-        var mapper = new CnbServiceMapper(_targetCurrency,
-                                          _delimiter,
-                                          _decimalSeparator,
-                                          _throwExceptionOnErrors);
+        var mapper = new CnbServiceMapper(_settings.DefaultCurrency,
+                                          _settings.MappingDelimiter,
+                                          _settings.MappingDecimalSeparator,
+                                          _settings.ThrowExceptionOnMappingErrors);
 
         return mapper.Map(columnInfo, lines);
     }

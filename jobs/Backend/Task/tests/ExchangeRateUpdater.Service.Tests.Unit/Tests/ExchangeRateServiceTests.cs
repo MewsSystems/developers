@@ -23,11 +23,7 @@ public class ExchangeRateServiceTests
         };
 
         var exchangeRateService = new CnbService(TestHelper.HttpClientWithResponse(httpResponse),
-                                                 "http://localhost",
-                                                 A.TestTargetCurrency.Code,
-                                                 A.MappingDelimiter,
-                                                 A.MappingDecimalSeparator,
-                                                 throwExceptionOnMappingErrors: true);
+                                                 new ExchangeRateTestSettings());
 
         //Act
         var response = (await exchangeRateService.GetExchangeRatesAsync(new DateTime(2022, 06, 01))).ToList()!;
@@ -56,11 +52,7 @@ public class ExchangeRateServiceTests
         };
 
         var exchangeRateService = new CnbService(TestHelper.HttpClientWithResponse(httpResponse),
-                                                 "http://localhost",
-                                                 A.TestTargetCurrency.Code,
-                                                 A.MappingDelimiter,
-                                                 A.MappingDecimalSeparator,
-                                                 throwExceptionOnMappingErrors: true);
+                                                 new ExchangeRateTestSettings());
 
         //Act
         Func<Task> act = () => exchangeRateService.GetExchangeRatesAsync(new DateTime(2022, 06, 01));

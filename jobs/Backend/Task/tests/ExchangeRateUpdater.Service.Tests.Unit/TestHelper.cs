@@ -13,6 +13,6 @@ public static class TestHelper
                    .ReturnsAsync(response)
                    .Verifiable();
 
-        return new HttpClient(handlerMock.Object);
+        return new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://localhost") };
     }
 }
