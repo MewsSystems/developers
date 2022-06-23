@@ -10,4 +10,6 @@ public class ExchangeRateTestSettings : IExchangeRateServiceSettings
     public string MappingDelimiter { get; } = A.MappingDelimiter;
     public string MappingDecimalSeparator { get; } = A.MappingDecimalSeparator;
     public bool ThrowExceptionOnMappingErrors { get; } = true;
+    public bool UseInMemoryCache { get; } = false;
+    public TimeSpan CacheExpiryTime { get; } = new TimeSpan(00,00,00);
 }

@@ -63,7 +63,9 @@ namespace ExchangeRateUpdater.Console
                                                  _settings.ExchangeRateBaseCurrency,
                                                  _settings.MappingSettings.Delimiter,
                                                  _settings.MappingSettings.DecimalSeparator,
-                                                 true),
+                                                 true,
+                                                 true,
+                                                 new TimeSpan(14,30,00)),
                 logger
             );
         }

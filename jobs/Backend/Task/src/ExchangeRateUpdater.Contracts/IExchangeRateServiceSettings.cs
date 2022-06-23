@@ -8,4 +8,6 @@ public interface IExchangeRateServiceSettings
     string MappingDelimiter { get; }
     string MappingDecimalSeparator { get; }
     bool ThrowExceptionOnMappingErrors { get; }
+    bool UseInMemoryCache { get; }
+    TimeSpan CacheExpiryTime { get; }
 }

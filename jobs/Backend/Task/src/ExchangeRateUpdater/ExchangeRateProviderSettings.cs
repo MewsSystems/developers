@@ -9,7 +9,9 @@ public class ExchangeRateProviderSettings : IExchangeRateServiceSettings
                                          string defaultCurrency,
                                          string mappingDelimiter,
                                          string mappingDecimalSeparator,
-                                         bool throwExceptionOnMappingErrors)
+                                         bool throwExceptionOnMappingErrors,
+                                         bool useInMemoryCache,
+                                         TimeSpan cacheExpiryTime)
     {
         if (string.IsNullOrWhiteSpace(baseUrl))
             throw new ArgumentNullException(nameof(baseUrl), "BaseUrl should not be null, empty or whitespace.");
@@ -28,6 +30,8 @@ public class ExchangeRateProviderSettings : IExchangeRateServiceSettings
         MappingDelimiter              = mappingDelimiter;
         MappingDecimalSeparator       = mappingDecimalSeparator;
         ThrowExceptionOnMappingErrors = throwExceptionOnMappingErrors;
+        UseInMemoryCache              = useInMemoryCache;
+        CacheExpiryTime               = cacheExpiryTime;
     }
     
     public string BaseUrl { get; }
@@ -36,4 +40,6 @@ public class ExchangeRateProviderSettings : IExchangeRateServiceSettings
     public string MappingDelimiter { get; }
     public string MappingDecimalSeparator { get; }
     public bool ThrowExceptionOnMappingErrors { get; }
+    public bool UseInMemoryCache { get; }
+    public TimeSpan CacheExpiryTime { get; }
 }
