@@ -3,8 +3,6 @@ using Domain;
 using Infrastructure.CnbProvider;
 using Moq;
 using Moq.Protected;
-using System.IO;
-using System.Reflection;
 
 namespace Infrastructure.UnitTests.CnbProvider
 {

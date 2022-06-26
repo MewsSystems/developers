@@ -14,11 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="CnbResponseContent.txt" />
-    <EmbeddedResource Include="CnbResult.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
