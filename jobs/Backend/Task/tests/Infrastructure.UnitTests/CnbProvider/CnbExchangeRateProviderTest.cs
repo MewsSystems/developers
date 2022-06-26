@@ -6,7 +6,7 @@ using Moq.Protected;
 using System.IO;
 using System.Reflection;
 
-namespace Infrastructure.UnitTests
+namespace Infrastructure.UnitTests.CnbProvider
 {
     public class CnbExchangeRateProviderTest
     {
@@ -15,8 +15,8 @@ země|měna|množství|kód|kurz
 Indie|rupie|100|INR|30,003
 USA|dolar|1|USD|23,355";
 
-        private readonly ExchangeRate UsdExchangeRate = new ExchangeRate(new Currency("USD"), new Currency("CZK"), new Decimal(23.355));
-        private readonly ExchangeRate InrExchangeRate = new(new Currency("INR"), new Currency("CZK"), new Decimal(0.30003));
+        private readonly ExchangeRate UsdExchangeRate = new ExchangeRate(new Currency("USD"), new Currency("CZK"), new decimal(23.355));
+        private readonly ExchangeRate InrExchangeRate = new(new Currency("INR"), new Currency("CZK"), new decimal(0.30003));
         private readonly Currency CzkCurrency = new("CZK");
 
         [Fact]
