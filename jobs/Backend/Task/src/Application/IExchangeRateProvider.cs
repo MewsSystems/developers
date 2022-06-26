@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domain;
 
-namespace ExchangeRateUpdater
+namespace Application
 {
     public interface IExchangeRateProvider
     {

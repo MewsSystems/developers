@@ -5,8 +5,10 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.IO;
 using System.Globalization;
+using Domain;
+using Application;
 
-namespace ExchangeRateUpdater.CnbProvider
+namespace Infrastructure.CnbProvider
 {
     /// <summary>
     /// Uses the API of Ceska narodni banka (CNB) to obtain the exchange rates 

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Net.Http;
-using ExchangeRateUpdater.CnbProvider;
+using Domain;
+using Infrastructure.CnbProvider;
 
-namespace ExchangeRateUpdater
+namespace Application
 {
     public static class Program
     {

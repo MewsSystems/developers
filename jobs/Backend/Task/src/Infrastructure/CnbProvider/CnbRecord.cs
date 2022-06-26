@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace ExchangeRateUpdater.CnbProvider
+namespace Infrastructure.CnbProvider
 {
     public class CnbRecord
     {
