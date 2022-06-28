@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Xml;
+using static ExchangeRateUpdater.Program;
 
 namespace ExchangeRateUpdater
 {
@@ -10,21 +12,24 @@ namespace ExchangeRateUpdater
     {
         private const string baseCurrencyCode = "CZK";
         private const string baseUrl = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
+
+        
+        
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Tuple<Currency, Currency>> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencies)
         {
             var rates = new List<ExchangeRate>();
-            var codes = currencies.ToList().Select(x => x.Item1.Code).Union(currencies.ToList().Select(x => x.Item2.Code)).Distinct();
+            var codes = currencies.Select(x => x.SourceCurrency.Code).Union(currencies.ToList().Select(x => x.TargetCurrency.Code)).Distinct();
             var exchangeAndRate = new Dictionary<string, decimal>();
 
             using (HttpClient httpClient = new HttpClient())
             {
-                var response = httpClient.GetStringAsync(baseUrl).Result;
+                var response = await httpClient.GetStringAsync(baseUrl);
                 var doc = new XmlDocument();
                 doc.LoadXml(response);
                 XmlNodeList rows = doc.GetElementsByTagName("radek");
@@ -53,12 +58,12 @@ namespace ExchangeRateUpdater
                 // Round values to 2 decimal places and add them to rates list
                 foreach (var currency in currencies)
                 {
-                    var curr1 = currency.Item1.Code;
-                    var curr2 = currency.Item2.Code;
+                    var curr1 = currency.SourceCurrency.Code;
+                    var curr2 = currency.TargetCurrency.Code;
                     if (usedCodesList.Contains(curr1) && usedCodesList.Contains(curr2))
                     {
                         var value = Math.Round(exchangeAndRate[curr1] / exchangeAndRate[curr2], 2);
-                        rates.Add(new ExchangeRate(currency.Item1, currency.Item2, value));
+                        rates.Add(new ExchangeRate(currency.SourceCurrency, currency.TargetCurrency, value));
                     }
                 }
             }
