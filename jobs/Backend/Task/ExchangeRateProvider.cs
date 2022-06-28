@@ -13,8 +13,6 @@ namespace ExchangeRateUpdater
         private const string baseCurrencyCode = "CZK";
         private const string baseUrl = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
 
-        
-        
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -24,7 +22,7 @@ namespace ExchangeRateUpdater
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencies)
         {
             var rates = new List<ExchangeRate>();
-            var codes = currencies.Select(x => x.SourceCurrency.Code).Union(currencies.ToList().Select(x => x.TargetCurrency.Code)).Distinct();
+            var codes = currencies.Select(x => x.SourceCurrency.Code).Union(currencies.Select(x => x.TargetCurrency.Code)).Distinct();
             var exchangeAndRate = new Dictionary<string, decimal>();
 
             using (HttpClient httpClient = new HttpClient())
