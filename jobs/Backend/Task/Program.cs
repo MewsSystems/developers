@@ -8,19 +8,15 @@ namespace ExchangeRateUpdater
     {
         private static IEnumerable<Tuple<Currency, Currency>> currencies = new[]
         {
-            /*
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-            */
-            new Tuple<Currency, Currency>(new Currency("EUR"), new Currency("USD")),
-            new Tuple<Currency, Currency>(new Currency("EUR"), new Currency("JPY"))
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("USD")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("EUR")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("CZK")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("JPY")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("KES")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("RUB")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("THB")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("TRY")),
+            new Tuple<Currency, Currency>(new Currency("CZK"), new Currency("XYZ"))
         };
 
         public static void Main(string[] args)

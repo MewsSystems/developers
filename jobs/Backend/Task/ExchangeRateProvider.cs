@@ -8,6 +8,7 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private const string baseCurrencyCode = "CZK";
         private const string baseUrl = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -34,10 +35,17 @@ namespace ExchangeRateUpdater
                     if (codes.Contains(code))
                     {
                         var quantity = int.Parse(row.Attributes["mnozstvi"].Value);
-                        var rate = decimal.Parse(row.Attributes["kurz"].Value.Replace(",", "."));
+                        var rate = decimal.Parse(row.Attributes["kurz"].Value);
                         decimal value = rate / quantity;
                         exchangeAndRate.Add(code, value);
                     }
+                }
+
+                // Currency rate of base currency should always equals to 1
+                // Add it, if source doesn't provide it
+                if (!exchangeAndRate.ContainsKey(baseCurrencyCode))
+                {
+                    exchangeAndRate.Add(baseCurrencyCode, 1);
                 }
 
                 // Round values to 2 decimal places and add them to rates list
