@@ -19,13 +19,13 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencies)
+        public static async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencies)
         {
             var rates = new List<ExchangeRate>();
             var codes = currencies.Select(x => x.SourceCurrency.Code).Union(currencies.Select(x => x.TargetCurrency.Code)).Distinct();
             var exchangeAndRate = new Dictionary<string, decimal>();
 
-            using (HttpClient httpClient = new HttpClient())
+            using (HttpClient httpClient = new())
             {
                 var response = await httpClient.GetStringAsync(baseUrl);
                 var doc = new XmlDocument();
@@ -51,7 +51,7 @@ namespace ExchangeRateUpdater
                     exchangeAndRate.Add(baseCurrencyCode, 1);
                 }
 
-                List<string> usedCodesList = new List<string>(exchangeAndRate.Keys);
+                List<string> usedCodesList = new(exchangeAndRate.Keys);
 
                 // Round values to 2 decimal places and add them to rates list
                 foreach (var currency in currencies)

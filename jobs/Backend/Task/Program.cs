@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRatesAsync(currencies).Result;
+                var rates = ExchangeRateProvider.GetExchangeRatesAsync(currencies).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
