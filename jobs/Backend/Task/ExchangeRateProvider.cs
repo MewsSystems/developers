@@ -48,11 +48,18 @@ namespace ExchangeRateUpdater
                     exchangeAndRate.Add(baseCurrencyCode, 1);
                 }
 
+                List<string> usedCodesList = new List<string>(exchangeAndRate.Keys);
+
                 // Round values to 2 decimal places and add them to rates list
                 foreach (var currency in currencies)
                 {
-                    var value = Math.Round(exchangeAndRate[currency.Item1.Code] / exchangeAndRate[currency.Item2.Code], 2);
-                    rates.Add(new ExchangeRate(currency.Item1, currency.Item2, value));
+                    var curr1 = currency.Item1.Code;
+                    var curr2 = currency.Item2.Code;
+                    if (usedCodesList.Contains(curr1) && usedCodesList.Contains(curr2))
+                    {
+                        var value = Math.Round(exchangeAndRate[curr1] / exchangeAndRate[curr2], 2);
+                        rates.Add(new ExchangeRate(currency.Item1, currency.Item2, value));
+                    }
                 }
             }
             return rates;
