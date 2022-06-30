@@ -13,59 +13,53 @@ namespace ExchangeRateUpdater
         private const string baseCurrencyCode = "CZK";
         private const string baseUrl = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
 
+        private static async Task<XmlDocument> LoadXmlData()
+        {
+            using HttpClient httpClient = new();
+            var response = await httpClient.GetStringAsync(baseUrl);
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(response);
+            return xmlDocument;
+        }
+
+        private static IEnumerable<(string Code, decimal Rate)> ParseExchangeData(XmlDocument xmlDocument)
+        {
+            var rows = xmlDocument.GetElementsByTagName("radek");
+
+            foreach (XmlNode row in rows)
+            {
+                var code = row.Attributes["kod"].Value;
+                var quantity = int.Parse(row.Attributes["mnozstvi"].Value);
+                var rate = decimal.Parse(row.Attributes["kurz"].Value);
+                decimal value = rate / quantity;
+                yield return (code, value);
+            }
+        }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public static async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencies)
+        public static async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<CurrencyPair> currencyPairs)
         {
-            var rates = new List<ExchangeRate>();
-            var codes = currencies.Select(x => x.SourceCurrency.Code).Union(currencies.Select(x => x.TargetCurrency.Code)).Distinct();
-            var exchangeAndRate = new Dictionary<string, decimal>();
+            var xmlDocumentData = await LoadXmlData();
+            var exchangeData =
+                ParseExchangeData(xmlDocumentData)
+                .Prepend((baseCurrencyCode, 1))
+                .ToDictionary(x => x.Code, x => x.Rate);
 
-            using (HttpClient httpClient = new())
-            {
-                var response = await httpClient.GetStringAsync(baseUrl);
-                var doc = new XmlDocument();
-                doc.LoadXml(response);
-                XmlNodeList rows = doc.GetElementsByTagName("radek");
-
-                foreach (XmlNode row in rows)
+            var result = currencyPairs.Where(pair =>
+                    exchangeData.ContainsKey(pair.SourceCurrency.Code) &&
+                    exchangeData.ContainsKey(pair.TargetCurrency.Code))
+                .Select(pair =>
                 {
-                    var code = row.Attributes["kod"].Value;
-                    if (codes.Contains(code))
-                    {
-                        var quantity = int.Parse(row.Attributes["mnozstvi"].Value);
-                        var rate = decimal.Parse(row.Attributes["kurz"].Value);
-                        decimal value = rate / quantity;
-                        exchangeAndRate.Add(code, value);
-                    }
-                }
-
-                // Currency rate of base currency should always equals to 1
-                // Add it, if source doesn't provide it
-                if (!exchangeAndRate.ContainsKey(baseCurrencyCode))
-                {
-                    exchangeAndRate.Add(baseCurrencyCode, 1);
-                }
-
-                List<string> usedCodesList = new(exchangeAndRate.Keys);
-
-                // Round values to 2 decimal places and add them to rates list
-                foreach (var currency in currencies)
-                {
-                    var curr1 = currency.SourceCurrency.Code;
-                    var curr2 = currency.TargetCurrency.Code;
-                    if (usedCodesList.Contains(curr1) && usedCodesList.Contains(curr2))
-                    {
-                        var value = Math.Round(exchangeAndRate[curr1] / exchangeAndRate[curr2], 2);
-                        rates.Add(new ExchangeRate(currency.SourceCurrency, currency.TargetCurrency, value));
-                    }
-                }
-            }
-            return rates;
+                    var (sourceCurrency, targetCurrency) = pair;
+                    var value = Math.Round(exchangeData[sourceCurrency.Code] / exchangeData[targetCurrency.Code], 2);
+                    return new ExchangeRate(sourceCurrency, targetCurrency, value);
+                });
+            return result;
         }
     }
 }
