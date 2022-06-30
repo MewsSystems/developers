@@ -18,6 +18,7 @@ public class ExchangeRateService : IExchangeRateService
     private readonly IOptions<CnbProviderConfiguration> _configuration;
     private readonly bool _isCacheEnabled;
     private readonly IMemoryCache _memoryCache;
+    private readonly string _timeZoneId;
 
     #endregion
 
@@ -34,6 +35,8 @@ public class ExchangeRateService : IExchangeRateService
         _isCacheEnabled = _configuration.Value.Cache is not null &&
                           _configuration.Value.Cache.IsEnabled.HasValue &&
                           _configuration.Value.Cache.IsEnabled.Value;
+
+        _timeZoneId = _configuration.Value.Cache?.TimeZoneId ?? "Central Europe Standard Time";
     }
 
     #endregion
@@ -41,7 +44,7 @@ public class ExchangeRateService : IExchangeRateService
     #region Properties
 
     private string CurrentCacheKey => CacheKeys.ExchangeRateKey(TimeZoneInfo.ConvertTime(DateTime.UtcNow,
-        TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time")).Date.ToString(CultureInfo.CurrentCulture));
+        TimeZoneInfo.FindSystemTimeZoneById(_timeZoneId)).Date.ToString(CultureInfo.CurrentCulture));
 
     #endregion
 
