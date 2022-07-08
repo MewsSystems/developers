@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\jobs",
+    "\\jobs\\Backend",
+    "\\jobs\\Backend\\Task",
+    "\\jobs\\Frontend"
+  ],
+  "SelectedNode": "\\jobs\\Backend\\Task\\ExchangeRateUpdater.sln",
+  "PreviewInSolutionExplorer": false
+}

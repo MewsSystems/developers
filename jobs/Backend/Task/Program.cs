@@ -1,6 +1,10 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Helpers;
+using ExchangeRateUpdater.Helpers.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +23,22 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
+            var serviceProvider = new ServiceCollection()
+                .AddScoped<IApiService, ApiService>()
+                .AddScoped<IBankCurrencyService, BankCurrencyService>()
+                .AddScoped<IDataModifyingService, DataModifyingService>()
+                .BuildServiceProvider();
+
+            var apiService = serviceProvider.GetService<IApiService>();
+            var bankCurrencyService = serviceProvider.GetService<IBankCurrencyService>();
+            var dataModifyingService = serviceProvider.GetService<IDataModifyingService>();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(apiService, dataModifyingService, bankCurrencyService);
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
