@@ -31,5 +31,8 @@ namespace Tests
 
             Assert.Equal(empty_list, rates);
         }
+
+
+        // MORE TESTS SHOULD BE ADDED HERE TO ENSURE THE FUNCTIONALITY FOR PRODUCTION ENV
     }
 }
