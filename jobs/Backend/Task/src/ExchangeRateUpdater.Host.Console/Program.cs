@@ -30,6 +30,12 @@ namespace ExchangeRateUpdater.Host.Console
             
             var logger = SerilogConfiguration.Create(ApplicationName, settings);
             logger.Information("Logger created.");
+
+            var servicesProviderConfiguration = new ServicesProviderConfiguration();
+            servicesProviderConfiguration.SetupServices(settings, logger);
+
+            var exchangeRatesSearcherService = servicesProviderConfiguration.GetExchangeRatesSearcherService();
+            exchangeRatesSearcherService.GetExchangeRates(currencies);
             
             try
             {
