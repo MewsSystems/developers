@@ -35,7 +35,8 @@ namespace ExchangeRateUpdater.Host.Console
             servicesProviderConfiguration.SetupServices(settings, logger);
 
             var exchangeRatesSearcherService = servicesProviderConfiguration.GetExchangeRatesSearcherService();
-            exchangeRatesSearcherService.GetExchangeRates(currencies);
+            
+            exchangeRatesSearcherService.GetExchangeRates(DateTime.Now);
             
             try
             {

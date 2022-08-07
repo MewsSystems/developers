@@ -15,7 +15,7 @@ public class ExchangeRatesSearcherService : IExchangeRatesSearcher
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
     
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>>  GetExchangeRates(DateTime date)
     {
         throw new NotImplementedException();
     }
