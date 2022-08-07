@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.Host.Console
+﻿namespace Domain.Entities
 {
     public class Currency
     {
