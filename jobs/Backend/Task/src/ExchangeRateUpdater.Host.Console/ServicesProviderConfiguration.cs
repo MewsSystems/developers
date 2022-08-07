@@ -14,10 +14,13 @@ internal class ServicesProviderConfiguration
     {
         var serviceCollection = new ServiceCollection();
 
+        var asyncPolicy = new AsyncPolicyFactory(logger).CreateAsyncRetryPolicy();
+        
         serviceCollection
             .AddSingleton(logger)
             .AddSingleton(settings)
-            .AddHttpClient<IExchangeRatesSearcher, ExchangeRatesSearcherService.ExchangeRatesSearcherService>(httpClient => httpClient.Timeout = TimeSpan.FromSeconds(10));
+            .AddHttpClient<IExchangeRatesSearcher, ExchangeRatesSearcherService.ExchangeRatesSearcherService>(httpClient => httpClient.Timeout = TimeSpan.FromSeconds(10))
+            .AddPolicyHandler(asyncPolicy);
             
         _serviceProvider = serviceCollection.BuildServiceProvider();
     }
