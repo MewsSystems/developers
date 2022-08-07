@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.Entities;
+using ExchangeRateUpdater.Host.Console.Configuration;
 
 namespace ExchangeRateUpdater.Host.Console
 {
@@ -21,6 +22,11 @@ namespace ExchangeRateUpdater.Host.Console
 
         public static void Main(string[] args)
         {
+            const string ApplicationName = "ExchangeRateUpdater";
+      
+            var settingsConfiguration = Settings.GetSettingsConfiguration();
+            var settings = Settings.From(settingsConfiguration, ApplicationName);
+            
             try
             {
                 // TODO [07/08/2022] AR - get the exchange rates given the currencies
