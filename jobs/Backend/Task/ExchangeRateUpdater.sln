@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Host.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{BDC116C0-22EE-43DC-8C5A-1A28DF458465}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Service", "src\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj", "{168282FF-FA81-4C59-83B6-9CE17BCF43B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BDC116C0-22EE-43DC-8C5A-1A28DF458465}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDC116C0-22EE-43DC-8C5A-1A28DF458465}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDC116C0-22EE-43DC-8C5A-1A28DF458465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{168282FF-FA81-4C59-83B6-9CE17BCF43B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168282FF-FA81-4C59-83B6-9CE17BCF43B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168282FF-FA81-4C59-83B6-9CE17BCF43B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168282FF-FA81-4C59-83B6-9CE17BCF43B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
