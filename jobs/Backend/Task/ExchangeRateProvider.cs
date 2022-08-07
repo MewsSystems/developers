@@ -11,11 +11,14 @@ namespace ExchangeRateUpdater
     {
         private readonly IExchangeRateDataSource dataProvider;
         private readonly IExchangeRateParser parser;
+        private readonly Currency baseCurrency;
 
         public ExchangeRateProvider(IExchangeRateDataSource dataProvider, IExchangeRateParser parser)
         {
             this.dataProvider = dataProvider;
             this.parser = parser;
+
+            baseCurrency = new Currency("CZK");
         }
 
         /// <summary>
@@ -29,7 +32,8 @@ namespace ExchangeRateUpdater
             var data = await dataProvider.GetDataAsync(ct);
             var rates = parser.Parce(data);
 
-            return rates.Where(r => currencies.Any(c => c.Code == r.TargetCurrency.Code));
+            var filtered = rates.Where(r => currencies.Any(c => c.Code == r.Code));
+            return filtered.Select(e => new ExchangeRate(new Currency(e.Code), baseCurrency, e.Rate / e.Count));
         }
     }
 }
