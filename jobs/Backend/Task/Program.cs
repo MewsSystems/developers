@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ExchangeRateUpdater.ExchangeRateDataSources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace ExchangeRateUpdater
 {
@@ -21,9 +23,13 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var httpClient = new HttpClient();
+
             try
             {
-                var provider = new ExchangeRateProvider(null, null);
+                var dataSource = new CnbExchangeRateDataSource(httpClient);
+
+                var provider = new ExchangeRateProvider(dataSource, null);
                 var rates = provider.GetExchangeRatesAsync(currencies).GetAwaiter().GetResult();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
