@@ -5,6 +5,6 @@ namespace ExchangeRateUpdater.ExchangeRateParser
 {
     public interface IExchangeRateParser
     {
-        IEnumerable<ExchangeRateParceItem> Parce(Stream data);
+        IEnumerable<ExchangeRateParceItem> Parse(Stream data);
     }
 }

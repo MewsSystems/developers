@@ -30,7 +30,7 @@ namespace ExchangeRateUpdater
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken ct = default)
         {
             var data = await dataProvider.GetDataAsync(ct);
-            var rates = parser.Parce(data);
+            var rates = parser.Parse(data);
 
             var filtered = rates.Where(r => currencies.Any(c => c.Code == r.Code));
             return filtered.Select(e => new ExchangeRate(new Currency(e.Code), baseCurrency, e.Rate / e.Count));
