@@ -1,0 +1,22 @@
+﻿namespace ExchangeRatesSearcherService;
+
+public class CzechNationalBankApiSettings
+{
+    public string ApiBaseUrl { get; }
+    public string Delimiter { get; }
+    public string DecimalSeparator { get; }
+    
+    public CzechNationalBankApiSettings(string apiBaseUrl, string delimiter, string decimalSeparator)
+    {
+        if (string.IsNullOrWhiteSpace(apiBaseUrl))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(apiBaseUrl));
+        if (string.IsNullOrWhiteSpace(delimiter))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(delimiter));
+        if (string.IsNullOrWhiteSpace(decimalSeparator))
+            throw new ArgumentException("Value cannot be null or whitespace.", nameof(decimalSeparator));
+        
+        ApiBaseUrl = apiBaseUrl;
+        Delimiter = delimiter;
+        DecimalSeparator = decimalSeparator;
+    }
+}

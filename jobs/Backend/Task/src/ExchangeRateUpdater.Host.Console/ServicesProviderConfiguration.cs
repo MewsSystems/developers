@@ -15,10 +15,16 @@ internal class ServicesProviderConfiguration
         var serviceCollection = new ServiceCollection();
 
         var asyncPolicy = new AsyncPolicyFactory(logger).CreateAsyncRetryPolicy();
+
+        var czechNationalBankApiSettings = new ExchangeRatesSearcherService.CzechNationalBankApiSettings(
+            settings.CzechNationalBankApiSettings.ApiBaseAddress,
+            settings.CzechNationalBankApiSettings.Delimiter,
+            settings.CzechNationalBankApiSettings.DecimalSeparator);
         
         serviceCollection
             .AddSingleton(logger)
             .AddSingleton(settings)
+            .AddSingleton(czechNationalBankApiSettings)
             .AddHttpClient<IExchangeRatesSearcher, ExchangeRatesSearcherService.ExchangeRatesSearcherService>(httpClient => httpClient.Timeout = TimeSpan.FromSeconds(10))
             .AddPolicyHandler(asyncPolicy);
             
