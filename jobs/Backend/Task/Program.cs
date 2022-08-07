@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -22,9 +24,10 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var httpClient = new HttpClient();
+            var cts = new CancellationTokenSource(3000);
 
             try
             {
@@ -32,7 +35,7 @@ namespace ExchangeRateUpdater
                 var parser = new CnbExchangeRateParser();
 
                 var provider = new ExchangeRateProvider(dataSource, parser);
-                var rates = provider.GetExchangeRatesAsync(currencies).GetAwaiter().GetResult();
+                var rates = await provider.GetExchangeRatesAsync(currencies, cts.Token);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -40,9 +43,18 @@ namespace ExchangeRateUpdater
                     Console.WriteLine(rate.ToString());
                 }
             }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine($"Could not retrieve exchange rates: Timeout.");
+            }
             catch (Exception e)
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            }
+            finally
+            {
+                httpClient.Dispose();
+                cts.Dispose();
             }
 
             Console.ReadLine();
