@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.ExchangeRateDataProviders;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace ExchangeRateUpdater.ExchangeRateDataSources
             this.httpClient = httpClient;
         }
 
-        public async Task<string> GetDataAsync(CancellationToken ct = default)
+        public async Task<Stream> GetDataAsync(CancellationToken ct = default)
         {
             var responce = await httpClient.GetAsync(url, ct);
 
@@ -25,7 +26,7 @@ namespace ExchangeRateUpdater.ExchangeRateDataSources
                 throw new Exception($"Failed to get data from CNB, status code {responce.StatusCode}");
             }
 
-            var stream = await responce.Content.ReadAsStringAsync(ct);
+            var stream = await responce.Content.ReadAsStreamAsync(ct);
 
             return stream;
         }

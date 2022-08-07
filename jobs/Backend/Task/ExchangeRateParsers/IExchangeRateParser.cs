@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace ExchangeRateUpdater.ExchangeRateParser
 {
     public interface IExchangeRateParser
     {
-        IEnumerable<ExchangeRateParceItem> Parce(string data);
+        IEnumerable<ExchangeRateParceItem> Parce(Stream data);
     }
 }

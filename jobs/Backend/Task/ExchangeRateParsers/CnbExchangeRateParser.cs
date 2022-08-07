@@ -18,11 +18,9 @@ namespace ExchangeRateUpdater.ExchangeRateParsers
             csvConfiguration = new CsvConfiguration(new CultureInfo("cz-CZ")) { Delimiter = "|" };
         }
 
-        public IEnumerable<ExchangeRateParceItem> Parce(string data)
+        public IEnumerable<ExchangeRateParceItem> Parce(Stream data)
         {
-            var byteArray = Encoding.UTF8.GetBytes(data);
-            using (var memoryStream = new MemoryStream(byteArray))
-            using (var streamReader = new StreamReader(memoryStream))
+            using (var streamReader = new StreamReader(data))
             using (var csv = new CsvReader(streamReader, csvConfiguration))
             {
                 csv.Read();
