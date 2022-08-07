@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Host.Console", "src\ExchangeRateUpdater.Host.Console\ExchangeRateUpdater.Host.Console.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{BDC116C0-22EE-43DC-8C5A-1A28DF458465}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain", "src\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj", "{BDC116C0-22EE-43DC-8C5A-1A28DF458465}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Service", "src\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj", "{168282FF-FA81-4C59-83B6-9CE17BCF43B4}"
 EndProject

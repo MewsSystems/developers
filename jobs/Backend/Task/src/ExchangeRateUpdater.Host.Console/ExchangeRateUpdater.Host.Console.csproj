@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
