@@ -1,8 +1,8 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateService.Models
 {
     public class ExchangeRate
     {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
+        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, string value)
         {
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
@@ -13,7 +13,7 @@
 
         public Currency TargetCurrency { get; }
 
-        public decimal Value { get; }
+        public string Value { get; }
 
         public override string ToString()
         {
