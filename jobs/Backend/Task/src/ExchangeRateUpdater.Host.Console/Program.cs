@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Domain.Entities;
 using ExchangeRateUpdater.Host.Console.Configuration;
+using ExchangeRateUpdater.Host.Console.Configuration.Logging;
 
 namespace ExchangeRateUpdater.Host.Console
 {
@@ -26,6 +27,9 @@ namespace ExchangeRateUpdater.Host.Console
       
             var settingsConfiguration = Settings.GetSettingsConfiguration();
             var settings = Settings.From(settingsConfiguration, ApplicationName);
+            
+            var logger = SerilogConfiguration.Create(ApplicationName, settings);
+            logger.Information("Logger created.");
             
             try
             {
