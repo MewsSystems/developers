@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.ExchangeRateDataProviders;
 using ExchangeRateUpdater.ExchangeRateParser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,14 +12,14 @@ namespace ExchangeRateUpdater
     {
         private readonly IExchangeRateDataSource dataProvider;
         private readonly IExchangeRateParser parser;
-        private readonly Currency baseCurrency;
+        private readonly string baseCurrencyCode = "CZK";
 
         public ExchangeRateProvider(IExchangeRateDataSource dataProvider, IExchangeRateParser parser)
         {
+            ArgumentNullException.ThrowIfNull(dataProvider, nameof(dataProvider));
+            ArgumentNullException.ThrowIfNull(parser, nameof(parser));
             this.dataProvider = dataProvider;
-            this.parser = parser;
-
-            baseCurrency = new Currency("CZK");
+            this.parser = parser;            
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace ExchangeRateUpdater
             var rates = parser.Parse(data);
 
             var filtered = rates.Where(r => currencies.Any(c => c.Code == r.Code));
-            return filtered.Select(e => new ExchangeRate(new Currency(e.Code), baseCurrency, e.Rate / e.Count));
+            return filtered.Select(e => new ExchangeRate(new Currency(e.Code), new Currency(baseCurrencyCode), e.Rate / e.Count));
         }
     }
 }

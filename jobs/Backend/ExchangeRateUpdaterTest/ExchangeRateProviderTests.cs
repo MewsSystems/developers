@@ -28,16 +28,18 @@ namespace ExchangeRateUpdaterTest
         public void GetExchangeRates_Success()
         {
             var data = new Mock<IExchangeRateDataSource>();
-            var fs = new FileStream("TestData/GoodData.txt", FileMode.Open);
-            data.Setup(x => x.GetDataAsync(default)).ReturnsAsync(fs);
+            using (var fs = new FileStream("TestData/GoodData.txt", FileMode.Open))
+            {
+                data.Setup(x => x.GetDataAsync(default)).ReturnsAsync(fs);
 
-            var parcer = new CnbExchangeRateParser();
+                var parcer = new CnbExchangeRateParser();
 
-            var provider = new ExchangeRateProvider(data.Object, parcer);
-            var result = provider.GetExchangeRatesAsync(currencies).GetAwaiter().GetResult();
+                var provider = new ExchangeRateProvider(data.Object, parcer);
+                var result = provider.GetExchangeRatesAsync(currencies).GetAwaiter().GetResult();
 
-            Assert.NotNull(result);
-            Assert.True(result.Count() == 5);
+                Assert.NotNull(result);
+                Assert.True(result.Count() == 5);
+            }
         }
     }
 }

@@ -8,18 +8,7 @@ using Xunit;
 namespace ExchangeRateUpdaterTest
 {
     public class CnbExchangeRateParserTests
-    {
-        [Fact]
-        public void ParceGoodData_Success()
-        {
-            var parser = new CnbExchangeRateParser();
-            var fs = new FileStream("TestData/GoodData.txt", FileMode.Open);
-            var result = parser.Parse(fs);
-
-            Assert.NotNull(result);
-            Assert.True(result.Count() == 32);
-        }
-
+    {        
         [Fact]
         public void ParceBadData_HeaderValidationException()
         {

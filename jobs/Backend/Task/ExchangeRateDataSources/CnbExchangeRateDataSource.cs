@@ -14,6 +14,7 @@ namespace ExchangeRateUpdater.ExchangeRateDataSources
 
         public CnbExchangeRateDataSource(HttpClient httpClient)
         {
+            ArgumentNullException.ThrowIfNull(httpClient, nameof(httpClient));
             this.httpClient = httpClient;
         }
 
