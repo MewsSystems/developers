@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Domain.Entities;
 
 namespace ExchangeRateUpdater.Host.Console
@@ -24,18 +23,12 @@ namespace ExchangeRateUpdater.Host.Console
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    System.Console.WriteLine(rate.ToString());
-                }
+                // TODO [07/08/2022] AR - get the exchange rates given the currencies
+                // loop over the exchange rates and write them in the console
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                System.Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                System.Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
             }
 
             System.Console.ReadLine();
