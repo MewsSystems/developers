@@ -26,11 +26,12 @@ public class ExchangeRatesSearcherService : IExchangeRatesSearcher
             _logger.Information($"Getting exchange rates for date: {formattedDate}");
 
             var response = await _httpClient.GetAsync($"{_czechNationalBankApiSettings.ApiBaseUrl}?date={formattedDate}");
-            var streamResponse = await response.Content.ReadAsStringAsync();
+           
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var validLines = StringResponseParser.Parse(responseContent);
             
-            _logger.Information(streamResponse);
-
-            return new List<ExchangeRate>();
+            var mapper = new ExchangeRatesMapper(validLines, _logger, _czechNationalBankApiSettings);
+            return mapper.Map();
         }
         catch (Exception ex)
         {
