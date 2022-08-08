@@ -6,9 +6,14 @@ public static class StringResponseParser
 {
     public static IReadOnlyList<string> Parse(string response)
     {
-        var lines = response.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        if (string.IsNullOrWhiteSpace(response))
+        {
+            throw new ArgumentException("Response string cannot be null or whitespace.", nameof(response));
+        }
+        
+        var lines = response.Split("\n");
         var validLines = new List<string>();
-
+        
         ValidateDateLine();
         ValidateColumnNamesLine();
         ValidateExchangeRateLines();
@@ -23,7 +28,7 @@ public static class StringResponseParser
                 throw new Exception("Invalid response message. Date information is missing.");
             }
 
-            var match = Regex.Match(dateLine, "[0-9]{2} .* #[0-9]*");
+            var match = Regex.Match(dateLine, "[0-9]{2} [aA-zZ]{3} [0-9]{4} #[0-9]+");
 
             if (match.Success == false)
             {

@@ -14,5 +14,9 @@
     <ItemGroup>
       <PackageReference Include="Serilog" Version="2.11.0" />
     </ItemGroup>
+	
+	<ItemGroup>
+	  <InternalsVisibleTo Include="ExchangeRateUpdater.Service.Tests.Unit" />
+    </ItemGroup>
 
 </Project>
