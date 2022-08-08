@@ -12,7 +12,7 @@ public class ExchangeRatesSearcherService : IExchangeRatesSearcher
     private readonly HttpClient _httpClient;
     private readonly ILogger _logger;
     private readonly CzechNationalBankApiSettings _czechNationalBankApiSettings;
-
+    
     public ExchangeRatesSearcherService(HttpClient httpClient, ILogger logger, CzechNationalBankApiSettings czechNationalBankApiSettings)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -20,19 +20,18 @@ public class ExchangeRatesSearcherService : IExchangeRatesSearcher
         _czechNationalBankApiSettings = czechNationalBankApiSettings ?? throw new ArgumentNullException(nameof(czechNationalBankApiSettings));
     }
     
-    public async Task<IEnumerable<ExchangeRate>>  GetExchangeRates(DateTime date)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(DateTime date)
     {
         try
         {
             var formattedDate = date.ToString("dd.MM.yyyy");
-            
-            _logger.Information($"Getting exchange rates for date: {formattedDate}");
+            _logger.Information($"Getting exchange rates for date: {formattedDate} from Czech National Bank API");
 
             var response = await _httpClient.GetAsync($"{_czechNationalBankApiSettings.ApiBaseAddress}?date={formattedDate}");
-           
+
             var responseContent = await response.Content.ReadAsStringAsync();
             var validLines = StringResponseParser.Parse(responseContent);
-            
+
             var mapper = new ExchangeRatesMapper(validLines, _logger, _czechNationalBankApiSettings);
             return mapper.Map();
         }

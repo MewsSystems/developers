@@ -1,4 +1,6 @@
-﻿using Domain.UseCases;
+﻿using System;
+using System.Threading;
+using Domain.UseCases;
 using ExchangeRateUpdater.Host.Console.Configuration;
 using ExchangeRateUpdater.Host.Console.Configuration.Logging;
 
@@ -20,9 +22,14 @@ namespace ExchangeRateUpdater.Host.Console
             servicesProviderConfiguration.SetupServices(settings, logger);
 
             var exchangeRatesSearcherService = servicesProviderConfiguration.GetExchangeRatesSearcherService();
-            var useCase = new GetExchangeRatesUseCase(exchangeRatesSearcherService, logger);
+            var cacheHelper = servicesProviderConfiguration.GetCacheHelper();
+            var useCase = new GetExchangeRatesUseCase(exchangeRatesSearcherService, logger, settings.UseInMemoryCache, cacheHelper);
             
             useCase.ExecuteAsync();
+
+            // [08/08/2022] AR - If we want to test the in memory cache mechanism
+            //Thread.Sleep(TimeSpan.FromSeconds(2));
+            //useCase.ExecuteAsync();
 
             System.Console.ReadLine();
         }
