@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
 using Domain.Entities;
+using ExchangeRatesSearcherService.Configuration;
 using Serilog;
 
-namespace ExchangeRatesSearcherService;
+namespace ExchangeRatesSearcherService.Mapper;
 
 internal class ExchangeRatesMapper
 {

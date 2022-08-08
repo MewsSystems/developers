@@ -1,4 +1,4 @@
-﻿namespace ExchangeRatesSearcherService;
+﻿namespace ExchangeRatesSearcherService.Configuration;
 
 public class CzechNationalBankApiSettings
 {

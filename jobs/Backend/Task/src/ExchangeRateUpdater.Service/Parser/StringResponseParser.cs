@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ExchangeRatesSearcherService;
+namespace ExchangeRatesSearcherService.Parser;
 
 public static class StringResponseParser
 {

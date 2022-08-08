@@ -3,6 +3,7 @@ using Domain.Ports;
 using ExchangeRateUpdater.Host.Console.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using CzechNationalBankApiSettings = ExchangeRatesSearcherService.Configuration.CzechNationalBankApiSettings;
 
 namespace ExchangeRateUpdater.Host.Console;
 
@@ -16,7 +17,7 @@ internal class ServicesProviderConfiguration
 
         var asyncPolicy = new AsyncPolicyFactory(logger).CreateAsyncRetryPolicy();
 
-        var czechNationalBankApiSettings = new ExchangeRatesSearcherService.CzechNationalBankApiSettings(
+        var czechNationalBankApiSettings = new CzechNationalBankApiSettings(
             settings.CzechNationalBankApiSettings.ApiBaseAddress,
             settings.CzechNationalBankApiSettings.Delimiter,
             settings.CzechNationalBankApiSettings.DecimalSeparator);

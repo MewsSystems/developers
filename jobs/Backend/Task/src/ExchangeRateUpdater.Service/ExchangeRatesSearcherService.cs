@@ -1,5 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
+using ExchangeRatesSearcherService.Configuration;
+using ExchangeRatesSearcherService.Mapper;
+using ExchangeRatesSearcherService.Parser;
 using Serilog;
 
 namespace ExchangeRatesSearcherService;
