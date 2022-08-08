@@ -11,6 +11,7 @@ internal class Settings : ISettings
 {
     public string HttpLogEndpoint { get; set; }
     public LogEventLevel MinimumLogLevel { get; set; }
+    public bool UseInMemoryCache { get; set; }
     public CzechNationalBankApiSettings CzechNationalBankApiSettings { get; set; }
     
     public static IConfiguration GetSettingsConfiguration()
