@@ -14,9 +14,7 @@ internal class ExchangeRatesMapper
     private const string AmountColumn = "Amount";
     private const string CurrencyColumn = "Code";
     private const string RateColumn = "Rate";
-
-    private const string DefaultCurrency = "CZK";
-
+    
     public ExchangeRatesMapper(IReadOnlyList<string> lines, ILogger logger, IExchangeRateApiSettings settings)
     {
         _lines = lines ?? throw new ArgumentNullException(nameof(lines));
@@ -64,7 +62,7 @@ internal class ExchangeRatesMapper
             }
             
             var sourceCurrency = new Currency(sourceCurrencyCode);
-            var targetCurrency = new Currency(DefaultCurrency);
+            var targetCurrency = new Currency(_settings.DefaultExchangeRateTargetCurrency);
             var exchangeRateValue = Math.Round(rate/amount, 3);
 
             exchangeRates.Add(new ExchangeRate(sourceCurrency, targetCurrency, exchangeRateValue));

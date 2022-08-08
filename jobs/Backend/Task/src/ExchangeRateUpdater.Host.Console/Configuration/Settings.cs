@@ -38,6 +38,7 @@ internal class Settings : ISettings
 internal class CzechNationalBankApiSettings : IExchangeRateApiSettings
 {
     public string ApiBaseAddress { get; set; }
+    public string DefaultExchangeRateTargetCurrency { get; set; }
     public string Delimiter { get; set; }
     public string DecimalSeparator { get; set; }
 }

@@ -19,6 +19,7 @@ internal class ServicesProviderConfiguration
 
         var czechNationalBankApiSettings = new CzechNationalBankApiSettings(
             settings.CzechNationalBankApiSettings.ApiBaseAddress,
+            settings.CzechNationalBankApiSettings.DefaultExchangeRateTargetCurrency,
             settings.CzechNationalBankApiSettings.Delimiter,
             settings.CzechNationalBankApiSettings.DecimalSeparator);
         
