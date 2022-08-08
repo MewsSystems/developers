@@ -28,7 +28,7 @@ public class ExchangeRatesSearcherService : IExchangeRatesSearcher
             
             _logger.Information($"Getting exchange rates for date: {formattedDate}");
 
-            var response = await _httpClient.GetAsync($"{_czechNationalBankApiSettings.ApiBaseUrl}?date={formattedDate}");
+            var response = await _httpClient.GetAsync($"{_czechNationalBankApiSettings.ApiBaseAddress}?date={formattedDate}");
            
             var responseContent = await response.Content.ReadAsStringAsync();
             var validLines = StringResponseParser.Parse(responseContent);

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Domain.Ports;
 using Microsoft.Extensions.Configuration;
 using Serilog.Events;
 
@@ -34,7 +35,7 @@ internal class Settings : ISettings
     }
 }
 
-internal class CzechNationalBankApiSettings
+internal class CzechNationalBankApiSettings : IExchangeRateApiSettings
 {
     public string ApiBaseAddress { get; set; }
     public string Delimiter { get; set; }

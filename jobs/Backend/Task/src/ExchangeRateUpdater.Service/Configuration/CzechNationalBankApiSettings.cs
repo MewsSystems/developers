@@ -1,8 +1,10 @@
-﻿namespace ExchangeRatesSearcherService.Configuration;
+﻿using Domain.Ports;
 
-public class CzechNationalBankApiSettings
+namespace ExchangeRatesSearcherService.Configuration;
+
+public class CzechNationalBankApiSettings : IExchangeRateApiSettings
 {
-    public string ApiBaseUrl { get; }
+    public string ApiBaseAddress { get; }
     public string Delimiter { get; }
     public string DecimalSeparator { get; }
     
@@ -15,7 +17,7 @@ public class CzechNationalBankApiSettings
         if (string.IsNullOrWhiteSpace(decimalSeparator))
             throw new ArgumentException("Value cannot be null or whitespace.", nameof(decimalSeparator));
         
-        ApiBaseUrl = apiBaseUrl;
+        ApiBaseAddress = apiBaseUrl;
         Delimiter = delimiter;
         DecimalSeparator = decimalSeparator;
     }

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Domain.Entities;
-using ExchangeRatesSearcherService.Configuration;
+using Domain.Ports;
 using Serilog;
 
 namespace ExchangeRatesSearcherService.Mapper;
@@ -9,7 +9,7 @@ internal class ExchangeRatesMapper
 {
     private readonly IReadOnlyList<string> _lines;
     private readonly ILogger _logger;
-    private readonly CzechNationalBankApiSettings _settings;
+    private readonly IExchangeRateApiSettings _settings;
     
     private const string AmountColumn = "Amount";
     private const string CurrencyColumn = "Code";
@@ -17,7 +17,7 @@ internal class ExchangeRatesMapper
 
     private const string DefaultCurrency = "CZK";
 
-    public ExchangeRatesMapper(IReadOnlyList<string> lines, ILogger logger, CzechNationalBankApiSettings settings)
+    public ExchangeRatesMapper(IReadOnlyList<string> lines, ILogger logger, IExchangeRateApiSettings settings)
     {
         _lines = lines ?? throw new ArgumentNullException(nameof(lines));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
