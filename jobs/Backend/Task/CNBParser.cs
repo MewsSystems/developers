@@ -53,6 +53,7 @@ namespace ExchangeRateUpdater
                 throw new FormatException("There are issues with the source format from cnb.cz source. Failed to parse lines and rows in the source file.");
             }
 
+            // As observed on the source, CNB source is not being refreshed at midnight. It is possible to capture rates from yesterday.
             string[] dayAndNumber = parsedToLines[0].Split("#");
             if(dayAndNumber.Count() > 1)
             {
