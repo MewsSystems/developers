@@ -9,10 +9,10 @@ namespace ExchangeRateUpdater
         public string ForHost() => "www.cnb.cz";
 
         /// <summary>
-        /// Provided source is first checked for basic correctness (its not empty, it has actually rows). 
+        /// Provided source is first checked for basic correctness (it´s not empty, it has rows). 
         /// Secondary, source from CNB contains metadata on first two rows, date is logged to indicate for which day these rates apply.
         /// Rest of the source are lines containing one rate per row. 
-        /// At the moment, parser is interested in target currency code and also in the value due to how source currency is determined.
+        /// At the moment, parser is only interested in target currency code and also in the value due to how source currency is determined.
         /// </summary>
         public IEnumerable<ExchangeRate> ParseSource(string source)
         {
@@ -53,7 +53,7 @@ namespace ExchangeRateUpdater
                 throw new FormatException("There are issues with the source format from cnb.cz source. Failed to parse lines and rows in the source file.");
             }
 
-            // As observed on the source, CNB source is not being refreshed at midnight. It is possible to capture rates from yesterday.
+            // As observed on the source, CNB source is not being refreshed exactly at midnight. It is possible to capture rates from yesterday.
             string[] dayAndNumber = parsedToLines[0].Split("#");
             if(dayAndNumber.Count() > 1)
             {
@@ -80,7 +80,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         private ExchangeRate CreateNewRateFromParsedLine(string parsedLine, int numberOfFields)
         {
-                string[] parsedRate = parsedLine.Split("|");
+                string[] parsedRate = parsedLine.Split("|", StringSplitOptions.RemoveEmptyEntries);
                 if(parsedRate.Count() != numberOfFields)
                 {
                     Console.WriteLine($"Parsed Exchange Rate row doesn't contain appropriate number of fields: {parsedRate.Count()}. Should have {numberOfFields}. Skipping.");

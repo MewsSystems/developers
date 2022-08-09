@@ -46,9 +46,9 @@ namespace ExchangeRateUpdater
         }
 
         /// <summary>
-        /// Exchange rates are filtered by provided currencies. At the moment, the one available source of exchange rate is CNB.
-        /// As a national bank it provides exchange rate where source currency is CZK. There is reasonable assumption that other sources
-        /// could use the same direction of the rate. National bank for UK will use pound as source.
+        /// Exchange rates are filtered by provided currencies. At the moment, the one available source of exchange rates is CNB.
+        /// As a national bank it provides exchange rate where source currency is always CZK. There is reasonable assumption that other sources
+        /// could use the same direction of the rate. For example, national bank for UK will use pound as source.
         /// </summary>
         private IEnumerable<ExchangeRate> FilterRatesByCurrencies(IEnumerable<ExchangeRate> allRates, IEnumerable<Currency> currencies)
         {
