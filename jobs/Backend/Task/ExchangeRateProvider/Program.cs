@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using ExchangeRateUpdater.Support;
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +25,9 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(new HttpClient() {
+                    BaseAddress = new Uri("https://www.cnb.cz/")
+                }, new ExchangeRateRequestFactory(), new Parser());
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

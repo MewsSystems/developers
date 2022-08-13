@@ -1,0 +1,11 @@
+﻿<kurzy banka="CNB" datum="10.08.2022" poradi="154">
+    <script/>
+    <tabulka typ="XML_TYP_CNB_KURZY_DEVIZOVEHO_TRHU">
+        <radek kod="AUD" mena="dolar" mnozstvi="1" kurz="16,614" zeme="Austrálie"/>
+        <radek kod="BRL" mena="real" mnozstvi="1" kurz="4,644" zeme="Brazílie"/>
+        <radek kod="PHP" mena="peso" mnozstvi="100" kurz="42,755" zeme="Filipíny"/>
+        <radek kod="HKD" mena="dolar" mnozstvi="1" kurz="3,032" zeme="Hongkong"/>
+        <radek kod="USD" mena="dolar" mnozstvi="1" kurz="23,798" zeme="USA"/>
+        <radek kod="GBP" mena="libra" mnozstvi="1" kurz="28,843" zeme="Velká Británie"/>
+    </tabulka>
+</kurzy>
