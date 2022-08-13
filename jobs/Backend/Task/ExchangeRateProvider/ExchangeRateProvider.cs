@@ -40,8 +40,8 @@ namespace ExchangeRateUpdater
 
             var targetCurrency = new Currency("CZK");
             result.AddRange(rates
-                .Where(r => currencies.Select(c => c.Code).Contains(r.currency))
-                .Select(r => new ExchangeRate(r, targetCurrency, r.rate)));
+                .Where(r => currencies.Select(c => c.Code).Contains(r.Currency))
+                .Select(r => new ExchangeRate(r, targetCurrency, r.Rate)));
             
             return result;
         }

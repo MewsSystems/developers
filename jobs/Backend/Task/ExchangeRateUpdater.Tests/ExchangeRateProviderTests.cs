@@ -94,8 +94,7 @@ public class ExchangeRateProviderTests
     // assert
     Assert.Throws<Exception>(() => action());
   }
-  
-  
+
   [Test]
   public void Exception_is_thrown_when_response_cannot_be_parsed()
   {
