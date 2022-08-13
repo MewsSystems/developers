@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider(new HttpClient() {
+                var provider = new ExchangeRateProvider(new Currency("CZK"), new HttpClient() {
                     BaseAddress = new Uri("https://www.cnb.cz/")
                 }, new ExchangeRateRequestFactory(), new Parser());
                 var rates = provider.GetExchangeRates(currencies);

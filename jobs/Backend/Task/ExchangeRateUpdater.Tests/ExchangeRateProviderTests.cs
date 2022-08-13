@@ -22,7 +22,7 @@ public class ExchangeRateProviderTests
   public void BeforeEach()
   {
     _clientHandler = new Mock<HttpClientHandler>();
-    _sut = new ExchangeRateProvider(new HttpClient(_clientHandler.Object) {
+    _sut = new ExchangeRateProvider(new Currency("CZK"), new HttpClient(_clientHandler.Object) {
       BaseAddress = new Uri("Http://example.local")
     }, new ExchangeRateRequestFactory(), new Parser());
   }

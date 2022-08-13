@@ -8,12 +8,14 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly Currency _targetCurrency;
         private readonly HttpClient _client;
         private readonly IRequestFactory _requestFactory;
         private readonly IParser _parser;
 
-        public ExchangeRateProvider(HttpClient client, IRequestFactory requestFactory, IParser parser)
+        public ExchangeRateProvider(Currency targetCurrency, HttpClient client, IRequestFactory requestFactory, IParser parser)
         {
+            _targetCurrency = targetCurrency;
             _client = client;
             _requestFactory = requestFactory;
             _parser = parser;
@@ -38,10 +40,9 @@ namespace ExchangeRateUpdater
             var rates = _parser.Parse(response.Content.ReadAsStream());
             var result = new List<ExchangeRate>();
 
-            var targetCurrency = new Currency("CZK");
             result.AddRange(rates
                 .Where(r => currencies.Select(c => c.Code).Contains(r.Currency))
-                .Select(r => new ExchangeRate(r, targetCurrency, r.Rate)));
+                .Select(r => new ExchangeRate(r, _targetCurrency, r.Rate)));
             
             return result;
         }
