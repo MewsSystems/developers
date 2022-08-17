@@ -4,14 +4,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.Schema;
 
 namespace ExchangeRateUpdater
 {
@@ -27,16 +23,19 @@ namespace ExchangeRateUpdater
         {
             try
             {
+                
                 if (currencies == null || !currencies.Any())
                 {
                     return null;
                 }
+
+                var allCurrencies = currencies.ToArray();
                 var response = await GetXmlSource();
                 var exchangeRates = new List<ExchangeRate>();
                 foreach (var item in response.Descendants())
                 {
                     var currencyCode = GetXmlAttribute("kod", item);
-                    if (!currencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
+                    if (!allCurrencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
                     {
                         continue;
                     }
@@ -47,12 +46,12 @@ namespace ExchangeRateUpdater
                     var canParseQuantity = int.TryParse(quantity, out int parsedQuantity);
                     if (!string.IsNullOrWhiteSpace(currencyCode) & canParseQuantity & canParseRate)
                     {
-                        if (currencies != null && currencies.Any())
+                        if (allCurrencies.Any())
                         {
-                            if (currencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
+                            if (allCurrencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
                             {
-                                var targetCurrency = currencies.First(x => x.Code.ToLower().Equals("czk"));
-                                var sourceCurrency = currencies.First(x => x.Code.ToLower().Equals(currencyCode.ToLower()));
+                                var targetCurrency = allCurrencies.First(x => x.Code.ToLower().Equals("czk"));
+                                var sourceCurrency = allCurrencies.First(x => x.Code.ToLower().Equals(currencyCode.ToLower()));
                                 if(!(parsedQuantity > 0) || !(parsedRate > 0)) continue;
                                 exchangeRates.Add(new ExchangeRate(sourceCurrency,targetCurrency,parsedRate/parsedQuantity));
                             }
@@ -97,7 +96,7 @@ namespace ExchangeRateUpdater
             {
                 if (item.HasAttributes && item.Attribute(elementName) != null)
                 {
-                    var elementValue = item.Attribute(elementName).Value;
+                    var elementValue = item.Attribute(elementName)?.Value;
                     if (elementValue != null)
                     {
                         if(!string.IsNullOrWhiteSpace(elementValue))
