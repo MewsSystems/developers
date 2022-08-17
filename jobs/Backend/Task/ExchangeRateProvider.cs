@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater
                 
                 if (currencies == null || !currencies.Any())
                 {
-                    return null;
+                    return new List<ExchangeRate>();
                 }
 
                 var allCurrencies = currencies.ToArray();
