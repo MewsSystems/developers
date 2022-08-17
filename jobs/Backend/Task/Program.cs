@@ -26,7 +26,6 @@ namespace ExchangeRateUpdater
             {
                 var provider = new ExchangeRateProvider();
                 var rates = await provider.GetExchangeRates(currencies);
-
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
@@ -38,7 +37,7 @@ namespace ExchangeRateUpdater
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
