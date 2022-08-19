@@ -26,5 +26,9 @@ dotnet run --project .\src\ExchangeRateUpdater\ExchangeRateUpdater.csp
 roj
 ```
 
+## CI
+A CI pipeline has been implemented for this task using Github Actions.
+The pipeline builds and tests the application.
+
 ### Author 
 [Daniele De Francesco](https://github.com/danieledefrancesco)

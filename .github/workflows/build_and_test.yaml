@@ -1,0 +1,42 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches: [ "*" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Install coverlet
+        run:  dotnet tool install --global coverlet.console --version 3.0.3
+      - name: Install reportgenerator
+        run:  dotnet tool install --global dotnet-reportgenerator-globaltool
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: jobs/Backend/Task
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: jobs/Backend/Task
+      - name: Test
+        run: dotnet test --settings settings/coverlet-runsettings.xml --logger trx --results-directory "test-results"
+        working-directory: jobs/Backend/Task
+      - name: Generate test reports
+        if: ${{ always() }}
+        run: reportgenerator "-reports:test-results/**/*.opencover.xml" "-targetdir:test-report"
+        working-directory: jobs/Backend/Task
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: ./jobs/Backend/Task/test-report
+        if: ${{ always() }}
+      
