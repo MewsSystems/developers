@@ -13,7 +13,10 @@ namespace ExchangeRateUpdater
 
         public static IServiceProvider BuildServiceProvider()
         {
-            IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("applicationSettings.json").Build();
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("applicationSettings.json")
+                .AddEnvironmentVariables()
+                .Build();
             return new ServiceCollection()
                 .AddInfrastructureLayer(configuration)
                 .AddApplicationLayer()

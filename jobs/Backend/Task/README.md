@@ -9,8 +9,12 @@ dotnet restore
 dotnet build
 ```
 
-### Run the unit tests
-To run the unit tests use the following command:
+### Run the tests
+This solution contains unit and functional tests.
+The unit tests are available in the folder `./test/unit` and have been written using NUnit, NSubstitute and FluentAssertions.
+The functional tests are available in the folder `./test/functional` and have been written using SpecFlow and WireMock-Net.
+
+To run the tests use the following command:
 ```
 dotnet test
 ```

@@ -40,8 +40,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
-            Console.ReadLine();
         }
     }
 }
