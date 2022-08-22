@@ -1,13 +1,18 @@
-# Mews backend developer task
+# Introduction
+ExchangeRateProvider for for Czech National Bank
 
-The task is to implement an [ExchangeRateProvider](Task/ExchangeRateProvider.cs) for Czech National Bank. Find data source on their web - part of the task is to find the source of the exchange rate data and a way how to extract it from there.
+### Build
+To build and run the application you should execute the following commands
+```
+cd ExchangeRateUpdater
+dotnet restore
+dotnet build
+dotnet run
+```
 
-It is up to you to decide which technology (from .NET family) or package to use. Any code design changes/decisions to the provided skeleton are also completely up to you.
-
-The solution has to be buildable, runnable and the test program should output the obtained exchange rates.
-
-Goal is to implement a fully functional provider based on real world public data source of the assigned bank.
-
-To submit your solution, just open a new pull request to this repository.
-
-Please write the code like you would if you needed this to run on production environment and had to take care of it long-term.
+### Run the tests
+To run the tests use the following command:
+```
+cd ExchangeRateUpdater.Tests.Unit
+dotnet test
+```
