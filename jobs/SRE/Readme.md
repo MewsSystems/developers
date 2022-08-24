@@ -22,6 +22,10 @@ Given the explorative nature of this task, I will actually build the code in an 
 
 All my tought process, findings and conclusions can be found in the notebook output.
 
+I have included the notebook output (code, findings, analysis) in the `out/` folder, both in HTML and PDF format. This way you don't have to install anything to read and browse it.
+
+I have also included a minimal script to do this task in `task.py`, but I would invite you to look instead at the analysis I have in the notebook output. The script just solves the task without any explaination.
+
 ### Requirements
 
 To run my code, the following will be necessary on your system:
