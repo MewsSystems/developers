@@ -7,6 +7,7 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
+    //TODO: store in appsettings and convert to Dictionary
     public static IEnumerable<Currency> currencies = new[]
     {
         new Currency("USD"),
