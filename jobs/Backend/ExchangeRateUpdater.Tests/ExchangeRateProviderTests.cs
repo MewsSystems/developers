@@ -9,7 +9,7 @@ public class ExchangeRateProviderTests
         var rates = await provider.GetExchangeRates(Program.currencies);
         Assert.NotNull(rates);
         Assert.True(rates.Count() > 0);
-        //assume always a EUR exchange rate
-        Assert.True(rates.Count(p => p.TargetCurrency.Code == "EUR") > 0);
+        //assume always that a EUR exchange rate exists and is between 1 & 100
+        Assert.True(rates.Count(p => p.TargetCurrency.Code == "EUR" && p.Value > 1 && p.Value < 100) > 0);
     }
 }
