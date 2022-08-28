@@ -1,6 +1,4 @@
-﻿using ExchangeRateUpdater.Models;
-
-namespace ExchangeRateUpdater.Interfaces;
+﻿namespace ExchangeRateUpdater.Interfaces;
 
 public interface IExchangeRateProvider
 {

@@ -13,4 +13,6 @@ public class IExchangeRateProviderTests : TestBase
         //assume always that a EUR exchange rate exists and is between 1 & 100
         Assert.True(rates.Count(p => p.TargetCurrency.Code == "EUR" && p.Value > 1 && p.Value < 100) > 0);
     }
+
+    //do schema check
 }

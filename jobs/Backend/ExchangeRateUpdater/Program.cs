@@ -23,11 +23,9 @@ using IHost host = Host.CreateDefaultBuilder()
         .AddHttpClient())
     .Build();
 
-await RetrieveRates(host.Services);
+await RetrieveExchangeRates(host.Services);
 
-await host.RunAsync();
-
-static async Task RetrieveRates(IServiceProvider services)
+static async Task RetrieveExchangeRates(IServiceProvider services)
 {
     using IServiceScope serviceScope = services.CreateScope();
     var provider = serviceScope.ServiceProvider;
@@ -45,11 +43,9 @@ static async Task RetrieveRates(IServiceProvider services)
     }
     catch (Exception e)
     {
-        var msg = $"Could not retrieve exchange rates: '{e.Message}'.";
-        logger.LogError(msg);
-        //Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+        logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
     }
 
     Console.WriteLine("Hit any key to exit...");
-    Console.ReadLine();
+    Console.ReadKey();
 }
