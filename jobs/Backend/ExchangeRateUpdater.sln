@@ -5,7 +5,15 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{AC6D8D59-DEFC-46C2-AB35-345ACC2E40EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{AC6D8D59-DEFC-46C2-AB35-345ACC2E40EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Lib", "ExchangeRateUpdater.Lib\ExchangeRateUpdater.Lib.csproj", "{8537AD78-1416-4E70-BA26-9CDC3B629460}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06CD2DEE-02FC-4141-B9F3-3DBCF107AF31}"
+	ProjectSection(SolutionItems) = preProject
+		appSettings.Development.json = appSettings.Development.json
+		appSettings.json = appSettings.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,10 @@ Global
 		{AC6D8D59-DEFC-46C2-AB35-345ACC2E40EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC6D8D59-DEFC-46C2-AB35-345ACC2E40EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC6D8D59-DEFC-46C2-AB35-345ACC2E40EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8537AD78-1416-4E70-BA26-9CDC3B629460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8537AD78-1416-4E70-BA26-9CDC3B629460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8537AD78-1416-4E70-BA26-9CDC3B629460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8537AD78-1416-4E70-BA26-9CDC3B629460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,16 +1,16 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Exceptions;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace ExchangeRateUpdater.Models;
+namespace ExchangeRateUpdater.Models.Rates;
 
 // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+[XmlRoot(Namespace = "", IsNullable = false)]
 public partial class kurzy
 {
 
@@ -27,61 +27,61 @@ public partial class kurzy
     {
         get
         {
-            return this.tabulkaField;
+            return tabulkaField;
         }
         set
         {
-            this.tabulkaField = value;
+            tabulkaField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string banka
     {
         get
         {
-            return this.bankaField;
+            return bankaField;
         }
         set
         {
-            this.bankaField = value;
+            bankaField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string datum
     {
         get
         {
-            return this.datumField;
+            return datumField;
         }
         set
         {
-            this.datumField = value;
+            datumField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public byte poradi
     {
         get
         {
-            return this.poradiField;
+            return poradiField;
         }
         set
         {
-            this.poradiField = value;
+            poradiField = value;
         }
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
 public partial class kurzyTabulka
 {
 
@@ -90,38 +90,38 @@ public partial class kurzyTabulka
     private string typField;
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("radek")]
+    [XmlElement("radek")]
     public kurzyTabulkaRadek[] radek
     {
         get
         {
-            return this.radekField;
+            return radekField;
         }
         set
         {
-            this.radekField = value;
+            radekField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string typ
     {
         get
         {
-            return this.typField;
+            return typField;
         }
         set
         {
-            this.typField = value;
+            typField = value;
         }
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
 public partial class kurzyTabulkaRadek
 {
 
@@ -136,44 +136,44 @@ public partial class kurzyTabulkaRadek
     private string zemeField;
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string kod
     {
         get
         {
-            return this.kodField;
+            return kodField;
         }
         set
         {
-            this.kodField = value;
+            kodField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string mena
     {
         get
         {
-            return this.menaField;
+            return menaField;
         }
         set
         {
-            this.menaField = value;
+            menaField = value;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public ushort mnozstvi
     {
         get
         {
-            return this.mnozstviField;
+            return mnozstviField;
         }
         set
         {
-            this.mnozstviField = value;
+            mnozstviField = value;
         }
     }
 
@@ -200,31 +200,29 @@ public partial class kurzyTabulkaRadek
     {
         get
         {
-            return this.kurzField;
-            //return kurz.ToString(CultureInfo.CreateSpecificCulture("cs-CZ"));
+            return kurzField;
         }
         set
         {
-            this.kurzField = value;
-            //TODO: store base culture in appsettings
-            if (!decimal.TryParse(this.kurzField, NumberStyles.Any, CultureInfo.CreateSpecificCulture("cs-CZ"), out var kurz))
-                throw new Exception("unable to parse exchange rate value!");
+            kurzField = value;
+            if (!decimal.TryParse(kurzField, NumberStyles.Any, CultureInfo.CreateSpecificCulture("cs-CZ"), out var kurz))
+                throw new RateParseException($"unable to parse exchange rate value '{kurzField}'");
             else
-                this.kurzUseable = kurz;
+                kurzUseable = kurz;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute()]
     public string zeme
     {
         get
         {
-            return this.zemeField;
+            return zemeField;
         }
         set
         {
-            this.zemeField = value;
+            zemeField = value;
         }
     }
 }
