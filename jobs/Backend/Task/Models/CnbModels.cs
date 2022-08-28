@@ -206,7 +206,6 @@ public partial class kurzyTabulkaRadek
         set
         {
             this.kurzField = value;
-            //TODO: store base culture in appsettings
             if (!decimal.TryParse(this.kurzField, NumberStyles.Any, CultureInfo.CreateSpecificCulture("cs-CZ"), out var kurz))
                 throw new Exception("unable to parse exchange rate value!");
             else

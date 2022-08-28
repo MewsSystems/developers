@@ -39,6 +39,7 @@ public static class Program
             Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
         }
 
+        Console.WriteLine("Hit any key to exit...");
         Console.ReadLine();
     }
 }
