@@ -28,4 +28,13 @@
     <ProjectReference Include="..\ExchangeRateUpdater\ExchangeRateUpdater.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="schemas\denni_kurz.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="schemas\denni_kurz.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

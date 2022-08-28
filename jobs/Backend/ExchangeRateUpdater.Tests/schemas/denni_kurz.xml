@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<kurzy banka="CNB" datum="26.08.2022" poradi="166">
+	<tabulka typ="XML_TYP_CNB_KURZY_DEVIZOVEHO_TRHU">
+		<radek kod="AUD" mena="dolar" mnozstvi="1" kurz="17,189" zeme="Austrálie"/>
+		<radek kod="BRL" mena="real" mnozstvi="1" kurz="4,827" zeme="Brazílie"/>
+		<radek kod="BGN" mena="lev" mnozstvi="1" kurz="12,595" zeme="Bulharsko"/>
+		<radek kod="CNY" mena="žen-min-pi" mnozstvi="1" kurz="3,587" zeme="Čína"/>
+		<radek kod="DKK" mena="koruna" mnozstvi="1" kurz="3,312" zeme="Dánsko"/>
+		<radek kod="EUR" mena="euro" mnozstvi="1" kurz="24,635" zeme="EMU"/>
+		<radek kod="PHP" mena="peso" mnozstvi="100" kurz="43,901" zeme="Filipíny"/>
+		<radek kod="HKD" mena="dolar" mnozstvi="1" kurz="3,137" zeme="Hongkong"/>
+		<radek kod="HRK" mena="kuna" mnozstvi="1" kurz="3,279" zeme="Chorvatsko"/>
+		<radek kod="INR" mena="rupie" mnozstvi="100" kurz="30,835" zeme="Indie"/>
+		<radek kod="IDR" mena="rupie" mnozstvi="1000" kurz="1,661" zeme="Indonesie"/>
+		<radek kod="ISK" mena="koruna" mnozstvi="100" kurz="17,559" zeme="Island"/>
+		<radek kod="ILS" mena="nový šekel" mnozstvi="1" kurz="7,571" zeme="Izrael"/>
+		<radek kod="JPY" mena="jen" mnozstvi="100" kurz="17,977" zeme="Japonsko"/>
+		<radek kod="ZAR" mena="rand" mnozstvi="1" kurz="1,467" zeme="Jižní Afrika"/>
+		<radek kod="CAD" mena="dolar" mnozstvi="1" kurz="19,030" zeme="Kanada"/>
+		<radek kod="KRW" mena="won" mnozstvi="100" kurz="1,847" zeme="Korejská republika"/>
+		<radek kod="HUF" mena="forint" mnozstvi="100" kurz="6,001" zeme="Maďarsko"/>
+		<radek kod="MYR" mena="ringgit" mnozstvi="1" kurz="5,510" zeme="Malajsie"/>
+		<radek kod="MXN" mena="peso" mnozstvi="1" kurz="1,237" zeme="Mexiko"/>
+		<radek kod="XDR" mena="ZPČ" mnozstvi="1" kurz="32,137" zeme="MMF"/>
+		<radek kod="NOK" mena="koruna" mnozstvi="1" kurz="2,548" zeme="Norsko"/>
+		<radek kod="NZD" mena="dolar" mnozstvi="1" kurz="15,289" zeme="Nový Zéland"/>
+		<radek kod="PLN" mena="zlotý" mnozstvi="1" kurz="5,189" zeme="Polsko"/>
+		<radek kod="RON" mena="leu" mnozstvi="1" kurz="5,055" zeme="Rumunsko"/>
+		<radek kod="SGD" mena="dolar" mnozstvi="1" kurz="17,713" zeme="Singapur"/>
+		<radek kod="SEK" mena="koruna" mnozstvi="1" kurz="2,331" zeme="Švédsko"/>
+		<radek kod="CHF" mena="frank" mnozstvi="1" kurz="25,548" zeme="Švýcarsko"/>
+		<radek kod="THB" mena="baht" mnozstvi="100" kurz="68,414" zeme="Thajsko"/>
+		<radek kod="TRY" mena="lira" mnozstvi="1" kurz="1,354" zeme="Turecko"/>
+		<radek kod="USD" mena="dolar" mnozstvi="1" kurz="24,615" zeme="USA"/>
+		<radek kod="GBP" mena="libra" mnozstvi="1" kurz="29,120" zeme="Velká Británie"/>
+	</tabulka>
+</kurzy>

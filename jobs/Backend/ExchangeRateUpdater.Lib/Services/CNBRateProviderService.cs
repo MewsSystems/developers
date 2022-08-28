@@ -30,11 +30,7 @@ public class CNBRateProviderService : IExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
     {
-        //Note: could be IAsyncEnumerable with yield return but no benefit IMO for such a performant function...
-        _logger.LogDebug("Requesting new data from exchange rate source uri '{uri}'", _appConfig.Uri);
-        var xml = await _httpClient.GetStringAsync(_appConfig.Uri);
-        if (string.IsNullOrWhiteSpace(xml))
-            throw new RateRetrievalException("XML rate object returned either null or empty");
+        var xml = await GetExchangeRatesXml();
         _logger.LogDebug("Deserialising exchange rate XML '{xml}'", xml);
         kurzy obj;
         try
@@ -53,8 +49,20 @@ public class CNBRateProviderService : IExchangeRateProvider
         {
             var targetCurrency = new Currency(line.kod);
             if (_validTargetCurrencies.Contains(targetCurrency.Code, StringComparer.OrdinalIgnoreCase))
+            {
+                //Note: could be IAsyncEnumerable with yield return but no benefit IMO for such a performant function...
                 l.Add(new ExchangeRate(new Currency(_appConfig.BaseCurrencyCode), targetCurrency, line.kurzUseable));
+            }
         }
         return l;
+    }
+
+    public async Task<string> GetExchangeRatesXml()
+    {
+        _logger.LogDebug("Requesting new data from exchange rate source uri '{uri}'", _appConfig.Uri);
+        var xml = await _httpClient.GetStringAsync(_appConfig.Uri);
+        if (string.IsNullOrWhiteSpace(xml))
+            throw new RateRetrievalException("XML rate object returned either null or empty");
+        return xml;
     }
 }

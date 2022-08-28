@@ -18,4 +18,9 @@ public class BOERateProviderService : IExchangeRateProvider
         await Task.Delay(0);
         throw new NotImplementedException("Bank Of England exchange rate provider not yet added...");
     }
+
+    public Task<string> GetExchangeRatesXml()
+    {
+        throw new NotImplementedException();
+    }
 }

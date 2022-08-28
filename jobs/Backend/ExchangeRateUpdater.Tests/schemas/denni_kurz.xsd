@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="kurzy">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="tabulka">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element maxOccurs="unbounded" name="radek">
+								<xs:complexType>
+									<xs:attribute name="kod" type="xs:string" use="required" />
+									<xs:attribute name="mena" type="xs:string" use="required" />
+									<xs:attribute name="mnozstvi" type="xs:unsignedShort" use="required" />
+									<xs:attribute name="kurz" type="xs:string" use="required" />
+									<xs:attribute name="zeme" type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="typ" type="xs:string" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="banka" type="xs:string" use="required" />
+			<xs:attribute name="datum" type="xs:string" use="required" />
+			<xs:attribute name="poradi" type="xs:unsignedByte" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
