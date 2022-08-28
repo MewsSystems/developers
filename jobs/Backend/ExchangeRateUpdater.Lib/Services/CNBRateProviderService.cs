@@ -30,6 +30,22 @@ public class CNBRateProviderService : IExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
     {
+        var obj = await GetDeserializedRates();
+        var l = new List<ExchangeRate>(obj.tabulka.radek.Length);
+        foreach (var line in obj.tabulka.radek)
+        {
+            var targetCurrency = new Currency(line.kod);
+            if (_validTargetCurrencies.Contains(targetCurrency.Code, StringComparer.OrdinalIgnoreCase))
+            {
+                //Note: could be IAsyncEnumerable with yield return but no benefit IMO for such a performant function...
+                l.Add(new ExchangeRate(new Currency(_appConfig.BaseCurrencyCode), targetCurrency, line.kurzUseable));
+            }
+        }
+        return l;
+    }
+
+    async Task<kurzy> GetDeserializedRates()
+    {
         var xml = await GetExchangeRatesXml();
         _logger.LogDebug("Deserialising exchange rate XML '{xml}'", xml);
         kurzy obj;
@@ -44,17 +60,7 @@ public class CNBRateProviderService : IExchangeRateProvider
         }
         if (!(obj is object && obj.tabulka is object && obj.tabulka.radek is object && obj.tabulka.radek.Length > 0))
             throw new RateRetrievalException("rate object is not populated as expected");
-        var l = new List<ExchangeRate>(obj.tabulka.radek.Length);
-        foreach (var line in obj.tabulka.radek)
-        {
-            var targetCurrency = new Currency(line.kod);
-            if (_validTargetCurrencies.Contains(targetCurrency.Code, StringComparer.OrdinalIgnoreCase))
-            {
-                //Note: could be IAsyncEnumerable with yield return but no benefit IMO for such a performant function...
-                l.Add(new ExchangeRate(new Currency(_appConfig.BaseCurrencyCode), targetCurrency, line.kurzUseable));
-            }
-        }
-        return l;
+        return obj;
     }
 
     public async Task<string> GetExchangeRatesXml()
