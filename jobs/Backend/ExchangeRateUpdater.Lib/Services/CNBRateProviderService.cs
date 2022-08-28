@@ -33,7 +33,7 @@ public class CNBRateProviderService : IExchangeRateProvider
         {
             var targetCurrency = new Currency(line.kod);
             if (_appConfig.CurrencyCodesFilter is object
-                && _appConfig.CurrencyCodesFilter.Count(p => p == targetCurrency.Code) == 1)//TODO: dictionary lookup is faster
+                && _appConfig.CurrencyCodesFilter.FirstOrDefault(p => p.Equals(targetCurrency.Code, StringComparison.OrdinalIgnoreCase)) is object)//TODO: dictionary lookup is faster
             {
                 var toRate = new ExchangeRate(new Currency(_appConfig.BaseCurrencyCode), targetCurrency, line.kurzUseable);
                 l.Add(toRate);
