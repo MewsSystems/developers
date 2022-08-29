@@ -18,46 +18,35 @@ public class IExchangeRateProviderTests : TestBase
         Assert.True(rates.Count(p => p.TargetCurrency.Code == "EUR" && p.Value > 1 && p.Value < 100) > 0);
     }
 
-    //Note: XSD validation via https://www.c-sharpcorner.com/article/how-to-validate-xml-using-xsd-in-c-sharp/
+    const string schemaUri = "schemas/denni_kurz.xsd";
+    const string inputUri = "schemas/denni_kurz.xml";
+
     [Fact]
     public async Task XmlSchemaTest()
     {
         var xml = await _exchangeRateProvider.GetExchangeRatesXml();
         Assert.NotNull(xml);
-        using (var sr = new StringReader(xml))
-        {
-            var schema = new XmlSchemaSet();
-            schema.Add("", "schemas/denni_kurz.xsd");
-            var doc = XDocument.Load(sr);
-            doc.Validate(schema, ValidationEventHandler);
-        }
-
-        static void ValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            var type = XmlSeverityType.Warning;
-            if (Enum.TryParse("Error", out type))
-                if (type == XmlSeverityType.Error)
-                    Assert.Fail("xsd validation failed");
-        }
+        using var stringReader = new StringReader(xml);
+        var schema = new XmlSchemaSet();
+        schema.Add(string.Empty, schemaUri);
+        var doc = XDocument.Load(stringReader);
+        doc.Validate(schema, ValidationEventHandler);
     }
 
     [Fact]
     public void XmlSchemaTestLocal()
     {
-        using (var sr = XmlReader.Create("schemas/denni_kurz.xml"))
-        {
-            var schema = new XmlSchemaSet();
-            schema.Add("", "schemas/denni_kurz.xsd");
-            var doc = XDocument.Load(sr);
-            doc.Validate(schema, ValidationEventHandler);
-        }
+        using var xmlReader = XmlReader.Create(inputUri);
+        var schema = new XmlSchemaSet();
+        schema.Add(string.Empty, schemaUri);
+        var doc = XDocument.Load(xmlReader);
+        doc.Validate(schema, ValidationEventHandler);
+    }
 
-        static void ValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            var type = XmlSeverityType.Warning;
-            if (Enum.TryParse("Error", out type))
-                if (type == XmlSeverityType.Error)
-                    Assert.Fail("xsd validation failed");
-        }
+    static void ValidationEventHandler(object sender, ValidationEventArgs e)
+    {
+        if (Enum.TryParse("Error", out XmlSeverityType type))
+            if (type == XmlSeverityType.Error)
+                Assert.Fail("XSD validation failed");
     }
 }
