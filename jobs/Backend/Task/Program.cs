@@ -1,43 +1,38 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Clients;
+using ExchangeRateUpdater.Services;
+using ExchangeRateUpdater.Parsers;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static void Main()
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            CreateHostBuilder().Build().Run();
+        }
 
-        public static void Main(string[] args)
+        public static IHostBuilder CreateHostBuilder()
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
+            return Host.CreateDefaultBuilder()
+             .ConfigureServices((hostContext, services) =>
+             {
+                 services.AddHostedService<Startup>();
+                 services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                         .AddSingleton<ICzechNationalBankConfiguration, CzechNationalBankConfiguration>()
+                         .AddSingleton<ICzechNationalBankClient, CzechNationalBankClient>()
+                         .AddSingleton<ICNBExchangeRateParser,CNBExchangeRateParser>()
+                         .AddSingleton<IExchangeRateService, ExchangeRateService>();                 
+              });
         }
     }
 }
+   
