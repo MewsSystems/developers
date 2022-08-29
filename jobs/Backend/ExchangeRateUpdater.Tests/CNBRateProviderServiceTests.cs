@@ -4,7 +4,7 @@ using System.Xml.Schema;
 
 namespace ExchangeRateUpdater.Tests;
 
-public class IExchangeRateProviderTests : TestBase
+public class CNBRateProviderServiceTests : TestBase
 {
     [Fact]
     public async Task BasicTest()
