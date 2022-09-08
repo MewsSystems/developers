@@ -3,6 +3,7 @@ using Domain.Core;
 using Domain.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,22 +37,36 @@ namespace Application.Services.Implementations
 
         public IEnumerable<ExchangeRate> GetExchangeRates()
         {
-            return _exchangeRatesCache.Values.Where(x => x.TargetCurrency == this.currencies);
+            List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+
+            foreach (var currency in currencies)
+            {
+                if (_exchangeRatesCache.ContainsKey(currency.Code))
+                {
+                    exchangeRates.Add(_exchangeRatesCache[currency.Code]);
+                }
+            }
+
+            return exchangeRates;
         }
 
         private static void ParseData(string rawData)
         {
             try
             {
-                string header = "země|měna|množství|kód|kurz";
-                if (rawData.Equals(header))
-                    return;
+                var data = rawData.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                foreach (var line in data)
+                {
+                    string header = "země|měna|množství|kód|kurz";
+                    if (line.Equals(header))
+                        continue;
 
-                var regex = new System.Text.RegularExpressions.Regex(@"^([0-9]{2})[.]([0-9]{2})[.]([0-9]{4})");
-                if (regex.IsMatch(rawData))
-                    return;
+                    var regex = new System.Text.RegularExpressions.Regex(@"^([0-9]{2})[.]([0-9]{2})[.]([0-9]{4})");
+                    if (regex.IsMatch(line))
+                        continue;
 
-                ParseExchangeRate(rawData);
+                    ParseExchangeRate(line);
+                }
             }
             catch (Exception ex)
             {
@@ -69,16 +84,44 @@ namespace Application.Services.Implementations
                 if (parsedDataArray.Length < 0)
                     return;
 
-                Decimal.TryParse(parsedDataArray[4], out var exchangeRate);
+                var cultureInfo = new CultureInfo("de-DE");
+
+                decimal.TryParse(parsedDataArray[4],NumberStyles.Currency,cultureInfo, out var exchangeRate);
                 //will use only currency code
                 _exchangeRatesCache.Add(
                     parsedDataArray[3],
-                    new ExchangeRate(new Currency("CZK"), new Currency(parsedDataArray[3]), exchangeRate));
+                    new ExchangeRate(new Currency(parsedDataArray[3]), new Currency("CZK"), exchangeRate));
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        public ExchangeRate Convert(Currency sourceCurrency, Currency targetCurrency)
+        {
+            if (sourceCurrency.Code.ToLower() == "czk")
+            {
+                return new ExchangeRate(sourceCurrency,targetCurrency, FromCzk(targetCurrency.Code));
+            }
+
+            if (sourceCurrency.Code.ToLower() == "czk")
+            {
+                return new ExchangeRate(sourceCurrency, targetCurrency, ToCzk(sourceCurrency.Code));
+            }
+
+            decimal czkValue = ToCzk(sourceCurrency.Code);
+            var total = czkValue / ToCzk(targetCurrency.Code);
+            return new ExchangeRate(sourceCurrency, targetCurrency, total);
+        }
+
+        public decimal FromCzk(string currencyCode)
+        {
+            return 1 / _exchangeRatesCache[currencyCode].Value;
+        }
+
+        public decimal ToCzk(string currencyCode)
+        {
+            return _exchangeRatesCache[currencyCode].Value;
         }
 
 

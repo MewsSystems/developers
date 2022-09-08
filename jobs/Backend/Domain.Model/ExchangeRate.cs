@@ -26,5 +26,7 @@ namespace Domain.Model
         {
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
         }
+
+       
     }
 }

@@ -13,6 +13,7 @@ namespace Data.CNBGateway
     {
         private readonly ICNBExchageRateUpdater _updaterClient;
 
+
         public CNBGateway(ICNBExchageRateUpdater updaterClient)
         {
             _updaterClient = updaterClient;

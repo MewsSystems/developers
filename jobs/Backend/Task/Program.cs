@@ -36,6 +36,7 @@ namespace ExchangeRateUpdater
                 {
                     Console.WriteLine(rate.ToString());
                 }
+
             }
             catch (Exception e)
             {

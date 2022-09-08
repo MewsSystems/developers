@@ -11,5 +11,6 @@ namespace Application.Services.Interfaces
     {
         void LoadData();
         IEnumerable<ExchangeRate> GetExchangeRates();
+        ExchangeRate Convert(Currency sourceCurrency, Currency targetCurrency);
     }
 }
