@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +23,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
+                ExchangeRateProvider.LoadFromServer();
+
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
