@@ -1,18 +1,14 @@
 ﻿using Application.Services.Interfaces;
+using Application.Services.Extensions;
 using Domain.Core;
 using Domain.Model;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Application.Services.Implementations
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private static Dictionary<string, ExchangeRate> _exchangeRatesCache = new Dictionary<string, ExchangeRate>();
         private readonly ICNBGateway _gateway;
 
         public ExchangeRateProvider(ICNBGateway gateway)
@@ -22,11 +18,20 @@ namespace Application.Services.Implementations
 
         public void LoadData()
         {
-            _exchangeRatesCache.Clear();
-            var data = _gateway.LoadDataFromServer();
-            ParseData(data);
-        } 
+            ExchangeRateCache.Data.Clear();
+            var rawdata = _gateway.LoadDataFromServer();
+            var data = rawdata.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
+            foreach (var line in data)
+            {
+                if (!line.IsToIgnoreLine())
+                {
+                    var rate = line.ParseExchangeRate();
+                    ExchangeRateCache.Data.Add(rate.Key, rate.Value);
+                }
+            }
+        
+        }
 
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -41,67 +46,20 @@ namespace Application.Services.Implementations
 
             foreach (var currency in currencies)
             {
-                if (_exchangeRatesCache.ContainsKey(currency.Code))
+                if (ExchangeRateCache.Data.ContainsKey(currency.Code))
                 {
-                    exchangeRates.Add(_exchangeRatesCache[currency.Code]);
+                    exchangeRates.Add(ExchangeRateCache.Data[currency.Code]);
                 }
             }
 
             return exchangeRates;
         }
 
-        private static void ParseData(string rawData)
-        {
-            try
-            {
-                var data = rawData.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                foreach (var line in data)
-                {
-                    string header = "země|měna|množství|kód|kurz";
-                    if (line.Equals(header))
-                        continue;
-
-                    var regex = new System.Text.RegularExpressions.Regex(@"^([0-9]{2})[.]([0-9]{2})[.]([0-9]{4})");
-                    if (regex.IsMatch(line))
-                        continue;
-
-                    ParseExchangeRate(line);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private static void ParseExchangeRate(string rawData)
-        {
-            try
-            {
-                char separator = '|';
-
-                string[] parsedDataArray = rawData.Split(separator);
-                if (parsedDataArray.Length < 0)
-                    return;
-
-                var cultureInfo = new CultureInfo("de-DE");
-
-                decimal.TryParse(parsedDataArray[4],NumberStyles.Currency,cultureInfo, out var exchangeRate);
-                //will use only currency code
-                _exchangeRatesCache.Add(
-                    parsedDataArray[3],
-                    new ExchangeRate(new Currency(parsedDataArray[3]), new Currency("CZK"), exchangeRate));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public ExchangeRate Convert(Currency sourceCurrency, Currency targetCurrency)
         {
             if (sourceCurrency.Code.ToLower() == "czk")
             {
-                return new ExchangeRate(sourceCurrency,targetCurrency, FromCzk(targetCurrency.Code));
+                return new ExchangeRate(sourceCurrency, targetCurrency, FromCzk(targetCurrency.Code));
             }
 
             if (sourceCurrency.Code.ToLower() == "czk")
@@ -116,14 +74,13 @@ namespace Application.Services.Implementations
 
         public decimal FromCzk(string currencyCode)
         {
-            return 1 / _exchangeRatesCache[currencyCode].Value;
+            return 1 / ExchangeRateCache.Data[currencyCode].Value;
         }
 
         public decimal ToCzk(string currencyCode)
         {
-            return _exchangeRatesCache[currencyCode].Value;
+            return ExchangeRateCache.Data[currencyCode].Value;
         }
-
 
         public IEnumerable<Currency> currencies = new[]
          {

@@ -9,7 +9,9 @@ namespace Domain.Model
 
     public static class ExchangeRateCache
     {
-        private static Dictionary<string, ExchangeRate> data = new Dictionary<string, ExchangeRate>();
+        public static Dictionary<string, ExchangeRate> Data = new Dictionary<string, ExchangeRate>();
+
+
 
     }
 }
