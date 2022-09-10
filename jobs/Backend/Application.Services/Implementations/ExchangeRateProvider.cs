@@ -101,7 +101,7 @@ namespace Application.Services.Implementations
         }
 
         //FROM CZK
-        private decimal FromReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
+        public decimal FromReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
         {
             var exchangeRate = ExchangeRateCache.Data[referenceCurrencyCode].Where(x => x.SourceCurrency.Code == currencyCode).FirstOrDefault();
             if (exchangeRate == null) 
@@ -111,7 +111,7 @@ namespace Application.Services.Implementations
         }
 
         //TO CZK
-        private decimal ToReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
+        public decimal ToReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
         {
             var exchangeRate = ExchangeRateCache.Data[referenceCurrencyCode].Where(x => x.SourceCurrency.Code == currencyCode).FirstOrDefault();
 
