@@ -11,7 +11,7 @@ namespace Application.Services.Extensions
 {
     public static class StringExtensions
     {
-        public static KeyValuePair<string,ExchangeRate> ParseExchangeRate(this string line)
+        public static ExchangeRate? ParseExchangeRate(this string line)
         {
             try
             {
@@ -19,14 +19,12 @@ namespace Application.Services.Extensions
 
                 string[] parsedDataArray = line.Split(separator);
                 if (parsedDataArray.Length < 0)
-                    return new KeyValuePair<string, ExchangeRate>();
+                    return null;
 
                 var cultureInfo = new CultureInfo("de-DE");
 
                 decimal.TryParse(parsedDataArray[4], NumberStyles.Currency, cultureInfo, out var exchangeRate);
-                return new KeyValuePair<string, ExchangeRate>(
-                    parsedDataArray[3],
-                    new ExchangeRate(new Currency(parsedDataArray[3]), new Currency("CZK"), exchangeRate));
+                return new ExchangeRate(new Currency(parsedDataArray[3]), new Currency("CZK"), exchangeRate);
             }
             catch (Exception ex)
             {

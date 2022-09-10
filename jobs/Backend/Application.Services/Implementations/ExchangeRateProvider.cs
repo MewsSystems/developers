@@ -1,9 +1,7 @@
-﻿using Application.Services.Interfaces;
-using Application.Services.Extensions;
+﻿using Application.Services.Extensions;
+using Application.Services.Interfaces;
 using Domain.Core;
 using Domain.Model;
-using System.Globalization;
-
 
 namespace Application.Services.Implementations
 {
@@ -26,11 +24,20 @@ namespace Application.Services.Implementations
             {
                 if (!line.IsToIgnoreLine())
                 {
-                    var rate = line.ParseExchangeRate();
-                    ExchangeRateCache.Data.Add(rate.Key, rate.Value);
+                    var exchangeRate = line.ParseExchangeRate();
+                    if (exchangeRate != null)
+                    {
+                        if (ExchangeRateCache.Data.ContainsKey("CZK"))
+                        {
+                            ExchangeRateCache.Data["CZK"].Add(exchangeRate);
+                        }
+                        else
+                        {
+                            ExchangeRateCache.Data.Add("CZK", new List<ExchangeRate> { exchangeRate });
+                        }
+                    }
                 }
             }
-        
         }
 
         /// <summary>
@@ -40,59 +47,79 @@ namespace Application.Services.Implementations
         /// some of the currencies, ignore them.
         /// </summary>
 
-        public IEnumerable<ExchangeRate> GetExchangeRates()
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
 
-            foreach (var currency in currencies)
+            foreach (var currency in currencies.ToList())
             {
-                if (ExchangeRateCache.Data.ContainsKey(currency.Code))
+                var exchangeRate = ExchangeRateCache.Data["CZK"].Where(x => x.SourceCurrency.Code == currency.Code).FirstOrDefault();
+                if (exchangeRate != null)
                 {
-                    exchangeRates.Add(ExchangeRateCache.Data[currency.Code]);
+                    exchangeRates.Add(exchangeRate);
                 }
             }
 
             return exchangeRates;
         }
 
-        public ExchangeRate Convert(Currency sourceCurrency, Currency targetCurrency)
+        public ExchangeRate? Convert(Currency sourceCurrency, Currency targetCurrency, int amount = 1, string referenceCurrencyCode = "CZK")
         {
-            if (sourceCurrency.Code.ToLower() == "czk")
+            try
             {
-                return new ExchangeRate(sourceCurrency, targetCurrency, FromCzk(targetCurrency.Code));
-            }
+                if (ExchangeRateCache.Data.ContainsKey(sourceCurrency.Code))
+                {
+                    decimal value = FromReferenceCurrencyCode(targetCurrency.Code, sourceCurrency.Code);
+                    return new ExchangeRate(sourceCurrency, targetCurrency, amount * value);
+                }
 
-            if (sourceCurrency.Code.ToLower() == "czk")
+                if (ExchangeRateCache.Data.ContainsKey(targetCurrency.Code))
+                {
+                    decimal value = ToReferenceCurrencyCode(sourceCurrency.Code, targetCurrency.Code);
+                    return new ExchangeRate(sourceCurrency, targetCurrency, amount * value);
+                }
+
+                decimal sourceToReferenceCurrencyValue = ToReferenceCurrencyCode(sourceCurrency.Code, referenceCurrencyCode);
+                decimal targetToReferenceCurrencyValue = ToReferenceCurrencyCode(targetCurrency.Code, referenceCurrencyCode);
+
+                if (sourceToReferenceCurrencyValue == 0 || targetToReferenceCurrencyValue == 0)
+                    return null;
+
+                var total = amount * (sourceToReferenceCurrencyValue / targetToReferenceCurrencyValue);
+                return new ExchangeRate(sourceCurrency, targetCurrency, total);
+            }
+            catch (NullReferenceException ex)
             {
-                return new ExchangeRate(sourceCurrency, targetCurrency, ToCzk(sourceCurrency.Code));
+                Console.WriteLine("One of the currencies that you want to convert is not known");
+                return null;
             }
-
-            decimal czkValue = ToCzk(sourceCurrency.Code);
-            var total = czkValue / ToCzk(targetCurrency.Code);
-            return new ExchangeRate(sourceCurrency, targetCurrency, total);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex}");
+                return null;
+            }
         }
 
-        public decimal FromCzk(string currencyCode)
+        //FROM CZK
+        private decimal FromReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
         {
-            return 1 / ExchangeRateCache.Data[currencyCode].Value;
+            var exchangeRate = ExchangeRateCache.Data[referenceCurrencyCode].Where(x => x.SourceCurrency.Code == currencyCode).FirstOrDefault();
+            if (exchangeRate == null) 
+                return 0;
+            return 1 / exchangeRate.Value;
+           
         }
 
-        public decimal ToCzk(string currencyCode)
+        //TO CZK
+        private decimal ToReferenceCurrencyCode(string currencyCode, string referenceCurrencyCode)
         {
-            return ExchangeRateCache.Data[currencyCode].Value;
+            var exchangeRate = ExchangeRateCache.Data[referenceCurrencyCode].Where(x => x.SourceCurrency.Code == currencyCode).FirstOrDefault();
+
+            if (exchangeRate == null)
+                return 0;
+
+            return exchangeRate.Value;
         }
 
-        public IEnumerable<Currency> currencies = new[]
-         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
     }
 }
