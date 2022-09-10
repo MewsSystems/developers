@@ -4,6 +4,11 @@
     {
         public Currency(string code)
         {
+            if (string.IsNullOrWhiteSpace(code))
+                throw new ArgumentNullException(nameof(code), "Currency code should not be null, empty or whitespace.");
+            if (code.Length != 3)
+                throw new ArgumentException("Currency code should only contain 3 letters.", nameof(code));
+
             Code = code;
         }
 
