@@ -13,7 +13,7 @@ namespace CNBExchangeRateUpdater
             _client = client;
         }
 
-        // empty list for CNB website addresses of the rate sources (all of the sources are formated in the same way so it can be parsed together)
+        // list of CNB website addresses of the rate sources (all of the sources are formated in the same way so it can be parsed together)
         private List<string> _urlSources = new List<string>()
         {
             "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt",
@@ -58,7 +58,7 @@ namespace CNBExchangeRateUpdater
                             // value is divided by the amount so that if the source claims eg. 100 rubles for 46czk, then price for a single ruble (0.46) is output
                             decimal value = rate.Item3 / rate.Item2;
 
-                            // ( code , amount , value )
+                            // formatted as follows: ( code , amount , value )
                             var rateTuple = new ExchangeRate(_sourceCurrency, new Currency(rate.Item1), value);
                             outputListOfExchangeRates.Add(rateTuple);
                             break;
@@ -81,7 +81,6 @@ namespace CNBExchangeRateUpdater
             // each item of the list is line of the web text file
             List<string> rawLines = rawData.Split("\n", StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            // empty list for extracted data that will be saved in the following order:  
             List<(string, int, decimal)> parsedLines = new List<(string, int, decimal)>();
 
 

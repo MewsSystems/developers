@@ -1,6 +1,5 @@
 using CNBExchangeRateUpdater;
 using System.Net.NetworkInformation;
-using System.Text;
 
 namespace Tests
 {
