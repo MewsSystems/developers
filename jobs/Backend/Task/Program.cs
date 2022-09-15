@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace ExchangeRateUpdater
+namespace CNBExchangeRateUpdater
 {
     public static class Program
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace CNBExchangeRateUpdater
 {
     public class CNBExchangeRateProvider
     {

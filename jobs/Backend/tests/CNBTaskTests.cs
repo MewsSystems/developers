@@ -1,4 +1,4 @@
-using ExchangeRateUpdater;
+using CNBExchangeRateUpdater;
 using System.Net.NetworkInformation;
 using System.Text;
 

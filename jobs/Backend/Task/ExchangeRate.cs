@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace CNBExchangeRateUpdater
 {
     public class ExchangeRate
     {
