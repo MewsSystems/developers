@@ -1,0 +1,6 @@
+{
+  "Errors": {
+    "FetchExchangeRatesFromCnbError": "Fetching exchange rates from CNB failed.",
+    "FilterExchangeRatesError": "An error has occurred while filtering the exchange rates."
+  }
+}
