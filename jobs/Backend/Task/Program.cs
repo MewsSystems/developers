@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace ExchangeRateUpdater
 {
@@ -24,8 +26,11 @@ namespace ExchangeRateUpdater
         {
             try
             {
+                var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+                IConfiguration config = builder.Build();
+                string sourceUrl = config.GetSection("CentralBank").GetSection("SourceUrl").Value;
                 var provider = new ExchangeRateProvider();
-                var rates = await provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRates(currencies, sourceUrl);
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {

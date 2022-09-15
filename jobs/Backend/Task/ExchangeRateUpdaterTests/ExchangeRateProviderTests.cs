@@ -7,39 +7,46 @@ using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdaterTests
 {
-    public abstract class Tests
+    public class ExchangeRateProviderTests
     {
-        public abstract ExchangeRateProvider ExchangeRateProvider();
-        public string sourceUrl { get; set; }
-        [SetUp]
-        public void Setup()
+
+        public ExchangeRateProvider ExchangeRateProvider { get; set; }
+        public static string SourceUrl { get; set; }
+
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            GetSourceUrl();
+            ExchangeRateProvider = new ExchangeRateProvider();
+        }
+        public void GetSourceUrl()
         {
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
             IConfiguration config = builder.Build();
-            sourceUrl = config.GetSection("CentralBank").GetSection("SourceUrl").Value;
+            SourceUrl = config.GetSection("CentralBank").GetSection("SourceUrl").Value;
         }
 
         [Test]
         public void GetXmlAttribute_HandlesNullValue()
         {
-            XDocument xDoc = new XDocument();
-            var xmlAttribute = ExchangeRateProvider().GetXmlAttribute("test", xDoc.Descendants("kurz").First());
-            Assert.AreEqual(null, xmlAttribute);
+            XDocument xDoc = new();
+            xDoc.Add(new XElement("Test"));
+            var xmlAttribute = ExchangeRateProvider.GetXmlAttribute("test", xDoc.Descendants().First());
+            Assert.AreEqual(string.Empty, xmlAttribute);
         }
         
         [Test]
-        public void GetXmlSource_ReturnsDoc()
+        public async Task GetXmlSource_ReturnsDocAsync()
         {
-            
-            Object document = ExchangeRateProvider().GetXmlSource(sourceUrl);
-            Assert.AreEqual(document.GetType(), typeof(XDocument));
+            Object document = await ExchangeRateProvider.GetXmlSource(SourceUrl);
+            Assert.AreEqual(typeof(XDocument), document.GetType());
         }
         
         [Test]
-        public void GetExchangeRates_NotReturnsEmptyList()
+        public void GetExchangeRates_ReturnsNotEmptyList()
         {
-            var exchangeRates = ExchangeRateProvider().GetExchangeRates(new List<Currency>(), sourceUrl);
-            Assert.AreNotEqual(exchangeRates, new List<ExchangeRate>());
+            var exchangeRates = ExchangeRateProvider.GetExchangeRates(new List<Currency>(), SourceUrl);
+            Assert.AreNotEqual(typeof(List<ExchangeRate>), exchangeRates.GetType());
         }
     }
 }

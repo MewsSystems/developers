@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -19,28 +19,31 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, string sourceUrl)
         {
             try
             {
                 
                 if (currencies == null || !currencies.Any())
                 {
-                    return new List<ExchangeRate>();
+                    return Enumerable.Empty<ExchangeRate>();
                 }
 
                 var allCurrencies = currencies.ToArray();
-                var response = await GetXmlSource();
+                var response = await GetXmlSource(sourceUrl);
                 var exchangeRates = new List<ExchangeRate>();
                 foreach (var item in response.Descendants())
                 {
-                    var currencyCode = GetXmlAttribute("kod", item);
+                    var currencyCodeAttribute = "kod";
+                    var currencyCode = GetXmlAttribute(currencyCodeAttribute, item);
                     if (!allCurrencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
                     {
                         continue;
                     }
-                    var quantity = GetXmlAttribute("mnozstvi", item);
-                    var rate = GetXmlAttribute("kurz", item);
+                    var quantityAttribute = "mnozstvi";
+                    var rateAttribute = "kurz";
+                    var quantity = GetXmlAttribute(quantityAttribute, item);
+                    var rate = GetXmlAttribute(rateAttribute, item);
                     var culture = CultureInfo.GetCultureInfo("cs-cs");
                     var canParseRate = decimal.TryParse(rate, NumberStyles.Any, culture, out decimal parsedRate);
                     var canParseQuantity = int.TryParse(quantity, out int parsedQuantity);
@@ -50,7 +53,8 @@ namespace ExchangeRateUpdater
                         {
                             if (allCurrencies.Any(x => x.Code.ToLower().Equals(currencyCode.ToLower())))
                             {
-                                var targetCurrency = allCurrencies.First(x => x.Code.ToLower().Equals("czk"));
+                                var targetCurrencyCode = "czk";
+                                var targetCurrency = allCurrencies.First(x => x.Code.ToLower().Equals(targetCurrencyCode));
                                 var sourceCurrency = allCurrencies.First(x => x.Code.ToLower().Equals(currencyCode.ToLower()));
                                 if(!(parsedQuantity > 0) || !(parsedRate > 0)) continue;
                                 exchangeRates.Add(new ExchangeRate(sourceCurrency,targetCurrency,parsedRate/parsedQuantity));
@@ -69,13 +73,12 @@ namespace ExchangeRateUpdater
 
         }
 
-        private static async Task<XDocument> GetXmlSource()
+        public async Task<XDocument> GetXmlSource(string sourceUrl)
         {
             try
             {
-                const string requestUrl = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
                 var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync(requestUrl);
+                var response = await httpClient.GetAsync(sourceUrl);
                 var stream = await response.Content.ReadAsStreamAsync();
                 using var streamReader = new StreamReader(stream, Encoding.UTF8);
                 var result = await streamReader.ReadToEndAsync();
@@ -90,13 +93,13 @@ namespace ExchangeRateUpdater
             
         }
 
-        private static string GetXmlAttribute(string elementName, XElement item)
+        public string GetXmlAttribute(string elementName, XElement item)
         {
             try
             {
                 if (item.HasAttributes && item.Attribute(elementName) != null)
                 {
-                    var elementValue = item.Attribute(elementName)?.Value;
+                    var elementValue = item.Attribute(elementName).Value;
                     if (elementValue != null)
                     {
                         if(!string.IsNullOrWhiteSpace(elementValue))
