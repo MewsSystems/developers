@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateProvider\ExchangeRateProvider.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 
