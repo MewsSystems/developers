@@ -3,9 +3,9 @@ using System.Linq;
 using Model;
 using Model.Entities;
 
-namespace ExchangeRateProvider
+namespace ExchangeRateProvider.Service
 {
-    public class ExchangeRateService
+    public interface IExchangeRateService
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -13,11 +13,6 @@ namespace ExchangeRateProvider
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
-        {
-            return ExchangeRateCache.Index.Where(x => currencies.Contains(x.Key)).Select(x => x.Value).ToList();
-        }
-
-
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
     }
 }

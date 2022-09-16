@@ -3,20 +3,20 @@ using Model;
 using Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRateProvider
+namespace ExchangeRateProvider.Cache
 {
-    public static class ExchangeRateCache
+    public class ExchangeRateCache : ICache<Currency, ExchangeRate>
     {
-
-        private static readonly TimeSpan _validitySpan = new(1,0,0);
+        private static readonly TimeSpan _validitySpan = new(1, 0, 0);
         private static DateTime _expirationDate = DateTime.MinValue;
 
-        private static Dictionary<Currency, ExchangeRate> _index;
-        public static Dictionary<Currency, ExchangeRate> Index
+        private Dictionary<Currency, ExchangeRate> _index;
+        public Dictionary<Currency, ExchangeRate> Index
         {
             get
             {
@@ -34,6 +34,7 @@ namespace ExchangeRateProvider
                 _expirationDate = DateTime.Now.Add(_validitySpan);
             }
         }
+
 
 
         public static IEnumerable<ExchangeRate> LoadExchangeRates()

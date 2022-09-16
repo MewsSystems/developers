@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\..\..\..\.nuget\ninject\3.3.6\lib\netstandard2.0\Ninject.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
