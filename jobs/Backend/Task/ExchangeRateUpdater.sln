@@ -5,9 +5,11 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "..\Model\Model.csproj", "{999A13BA-D3B9-4B2D-A185-1A263E093368}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "..\Model\Model.csproj", "{999A13BA-D3B9-4B2D-A185-1A263E093368}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateProvider", "..\ExchangeRateProvider\ExchangeRateProvider.csproj", "{A811FF92-7E1F-4D1C-8FC6-1CBE88FB4558}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProvider", "..\ExchangeRateProvider\ExchangeRateProvider.csproj", "{A811FF92-7E1F-4D1C-8FC6-1CBE88FB4558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CzechNationalBankAPI", "..\CzechNationalBankGateway\CzechNationalBankAPI.csproj", "{BAA37F64-45E4-4090-8DDC-DBD62FCAB34D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{A811FF92-7E1F-4D1C-8FC6-1CBE88FB4558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A811FF92-7E1F-4D1C-8FC6-1CBE88FB4558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A811FF92-7E1F-4D1C-8FC6-1CBE88FB4558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAA37F64-45E4-4090-8DDC-DBD62FCAB34D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA37F64-45E4-4090-8DDC-DBD62FCAB34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA37F64-45E4-4090-8DDC-DBD62FCAB34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA37F64-45E4-4090-8DDC-DBD62FCAB34D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
