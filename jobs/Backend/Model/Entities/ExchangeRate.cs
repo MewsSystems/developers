@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using Model.Entities;
+
+namespace Model.Entities
 {
     public class ExchangeRate
     {
