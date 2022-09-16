@@ -2,7 +2,7 @@
 using System.Linq;
 using Model;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateProvider
 {
     public class ExchangeRateProvider
     {
