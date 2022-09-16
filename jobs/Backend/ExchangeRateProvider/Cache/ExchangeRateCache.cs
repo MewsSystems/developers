@@ -12,8 +12,14 @@ namespace ExchangeRateProvider.Cache
 {
     public class ExchangeRateCache : ICache<Currency, ExchangeRate>
     {
-        private static readonly TimeSpan _validitySpan = new(1, 0, 0);
-        private static DateTime _expirationDate = DateTime.MinValue;
+        private static TimeSpan _validitySpan = new(1, 0, 0);
+        private DateTime _expirationDate = DateTime.MinValue;
+        private IExchangeRateGatewayCNB _exchangeRateGatewayCNB;
+
+        public ExchangeRateCache(IExchangeRateGatewayCNB exchangeRateGatewayCNB)
+        {
+            _exchangeRateGatewayCNB = exchangeRateGatewayCNB;
+        }
 
         private Dictionary<Currency, ExchangeRate> _index;
         public Dictionary<Currency, ExchangeRate> Index
@@ -23,7 +29,7 @@ namespace ExchangeRateProvider.Cache
                 if (_index == null || _expirationDate < DateTime.Now)
                 {
                     var items = LoadExchangeRates();
-                    Index = items.ToDictionary(i => i.SourceCurrency, i => i);
+                    Index = items.Distinct().ToDictionary(i => i.SourceCurrency, i => i);
                 }
                 return _index;
 
@@ -35,11 +41,14 @@ namespace ExchangeRateProvider.Cache
             }
         }
 
-
-
-        public static IEnumerable<ExchangeRate> LoadExchangeRates()
+        private IEnumerable<ExchangeRate> LoadExchangeRates()
         {
-            return Task.Run(() => ExchangeRateGatewayCNB.GetExchangeRates()).Result;
+            return Task.Run(() => _exchangeRateGatewayCNB.GetExchangeRates()).Result;
+        }
+
+        public void SetValiditySpan(TimeSpan validitySpan)
+        {
+            _validitySpan = validitySpan;
         }
     }
 }

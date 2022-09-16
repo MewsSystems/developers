@@ -17,14 +17,13 @@ namespace ExchangeRateProvider.Test
         public void Initialize()
         {
             _exchangeRateService = new ExchangeRateService(_exchangeRateCache);
+            _exchangeRateCache.Index.Returns(_cachedRates);
         }
 
 
         [TestMethod]
         public void GetExchangeRates_Should_SameCurrencyWhenThereIsMatchBetweenCurrencies()
         {
-            _exchangeRateCache.Index.Returns(_cachedRates);
-
             AddCurrencyToList("EUR");
             AddExchangeRateToCache("EUR", "CZK", 10);
 
@@ -36,8 +35,6 @@ namespace ExchangeRateProvider.Test
         [TestMethod]
         public void GetExchangeRates_Should_ReturnEmptyWhenCacheIsEmptyAndParametersAreEmpty()
         {
-            _exchangeRateCache.Index.Returns(_cachedRates);
-
             var rates = _exchangeRateService.GetExchangeRates(_currencies);
 
             Assert.AreEqual(0, rates.Count());
@@ -46,8 +43,6 @@ namespace ExchangeRateProvider.Test
         [TestMethod]
         public void GetExchangeRates_Should_ReturnEmptyWhenCacheIsEmptyAndParametersAreNotEmpty()
         {
-            _exchangeRateCache.Index.Returns(_cachedRates);
-
             AddCurrencyToList("EUR");
 
             var rates = _exchangeRateService.GetExchangeRates(_currencies);
@@ -58,8 +53,6 @@ namespace ExchangeRateProvider.Test
         [TestMethod]
         public void GetExchangeRates_Should_ReturnEmptyWhenCacheIsNotEmptyAndParametersAreEmpty()
         {
-            _exchangeRateCache.Index.Returns(_cachedRates);
-
             AddExchangeRateToCache("EUR", "CZK", 10);
 
             var rates = _exchangeRateService.GetExchangeRates(_currencies);
@@ -70,8 +63,6 @@ namespace ExchangeRateProvider.Test
         [TestMethod]
         public void GetExchangeRates_Should_ReturnEmptyWhenCacheAndParametersAreDifferent()
         {
-            _exchangeRateCache.Index.Returns(_cachedRates);
-
             AddCurrencyToList("USD");
             AddExchangeRateToCache("EUR", "CZK", 10);
 

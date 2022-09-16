@@ -2,7 +2,7 @@
 
 namespace Model.Entities
 {
-    public class Currency :  IEqualityComparer<Currency>
+    public class Currency : IEqualityComparer<Currency>
     {
         public Currency(string code)
         {

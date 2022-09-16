@@ -7,9 +7,9 @@ using System.Xml.Serialization;
 
 namespace CzechNationalBankGateway
 {
-    public static class ExchangeRateGatewayCNB
+    public class ExchangeRateGatewayCNB : IExchangeRateGatewayCNB
     {
-         const string CNB_EXCHANGE_RATE_URL = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
+        const string CNB_EXCHANGE_RATE_URL = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml";
         const string DEFAULT_CURRENCY = "CZK";
 
         private static async Task<ExchangeRatesCNB?> GetExchangeRatesFromCNBAsync()
@@ -21,7 +21,7 @@ namespace CzechNationalBankGateway
             return (ExchangeRatesCNB?)serializer.Deserialize(responseStream);
         }
 
-        public static async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
         {
             var exchangeRates = await GetExchangeRatesFromCNBAsync();
             if (exchangeRates != null)

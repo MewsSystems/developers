@@ -6,6 +6,7 @@ using ExchangeRateProvider;
 using ExchangeRateProvider.Service;
 using ExchangeRateProvider.Cache;
 using Model.Entities;
+using CzechNationalBankGateway;
 
 namespace ExchangeRateUpdater
 {
@@ -44,6 +45,7 @@ namespace ExchangeRateUpdater
             return services
                 .AddScoped<IExchangeRateService, ExchangeRateService>()
                 .AddScoped<ICache<Currency, ExchangeRate>, ExchangeRateCache>()
+                .AddScoped<IExchangeRateGatewayCNB, ExchangeRateGatewayCNB>()
                 .BuildServiceProvider();
         }
     }
