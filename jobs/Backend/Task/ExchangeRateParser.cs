@@ -13,7 +13,7 @@ internal class ExchangeRateParser : IExchangeRateParser
     public async Task<IEnumerable<ExchangeRate>> ParseAsync(Stream values)
     {
         using var sr = new StreamReader(values, System.Text.Encoding.UTF8);
-        var content = await sr.ReadToEndAsync();
+        var content = await sr.ReadToEndAsync().ConfigureAwait(false);
         if (content.Length < 3)
         {
             return Enumerable.Empty<ExchangeRate>();

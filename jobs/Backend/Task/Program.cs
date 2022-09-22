@@ -26,7 +26,8 @@ namespace ExchangeRateUpdater
             {
                 var loader = new ExchangeRateLoader();
                 var parser = new ExchangeRateParser();
-                var provider = new ExchangeRateProvider(loader, parser);
+                var date = new DateProvider(new DateTimeService());
+                var provider = new ExchangeRateProvider(loader, parser, date);
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

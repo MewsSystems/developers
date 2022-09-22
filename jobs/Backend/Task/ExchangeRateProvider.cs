@@ -18,10 +18,16 @@ public class ExchangeRateProvider
 
     private readonly IExchangeRateParser _parser;
     
-    public ExchangeRateProvider(IExchangeRateLoader loader, IExchangeRateParser parser)
+    private readonly IDateProvider _dateProvider;
+
+    public ExchangeRateProvider(
+        IExchangeRateLoader loader, 
+        IExchangeRateParser parser,
+        IDateProvider dateProvider)
     {
         _loader = loader;
         _parser = parser;
+        _dateProvider = dateProvider;
     }
 
     /// <summary>
@@ -37,12 +43,12 @@ public class ExchangeRateProvider
         {
             return Enumerable.Empty<ExchangeRate>();
         }
-        
-        var today = DateOnly.FromDateTime(DateTime.Today);
+
+        var today = _dateProvider.ForToday();
         if (!CACHE.ContainsKey(today))
         {
-            var stream = await _loader.ReadAsync();
-            var rates = await _parser.ParseAsync(stream);
+            var stream = await _loader.ReadAsync().ConfigureAwait(false);
+            var rates = await _parser.ParseAsync(stream).ConfigureAwait(false);
             
             CACHE.Add(today, rates);
         }

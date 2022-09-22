@@ -8,12 +8,19 @@ public class ExchangeRateProviderTests
 {
     private readonly Mock<IExchangeRateParser> _parserMock;
     
+    private readonly Mock<IDateProvider> _dateProviderMock;
+    
     private readonly ExchangeRateProvider _provider;
 
     public ExchangeRateProviderTests()
     {
         _parserMock = new Mock<IExchangeRateParser>();
-        _provider = new ExchangeRateProvider(new ExchangeRateLoaderMock(), _parserMock.Object);
+        _dateProviderMock = new Mock<IDateProvider>();
+        _dateProviderMock.Setup(a => a.ForToday()).Returns(DateOnly.FromDateTime(DateTime.Now));
+        _provider = new ExchangeRateProvider(
+            new ExchangeRateLoaderMock(), 
+            _parserMock.Object,
+            _dateProviderMock.Object);
     }
 
     [Fact]
