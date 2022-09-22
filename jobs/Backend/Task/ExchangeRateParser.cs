@@ -14,12 +14,19 @@ internal class ExchangeRateParser : IExchangeRateParser
     {
         using var sr = new StreamReader(values, System.Text.Encoding.UTF8);
         var content = await sr.ReadToEndAsync().ConfigureAwait(false);
-        if (content.Length < 3)
+        var cleared = content.Trim();
+        if (string.IsNullOrEmpty(cleared))
+        {
+            return Enumerable.Empty<ExchangeRate>();
+        }
+
+        var rows = cleared.Split("\n");
+        if (rows.Length < 3)
         {
             return Enumerable.Empty<ExchangeRate>();
         }
         
-        var parts = content.Split("\n")[2..];
+        var parts = rows[2..];
         return parts.Select(ParseLine).Where(w => w != null);
     }
 

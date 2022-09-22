@@ -24,6 +24,8 @@ public class ExchangeRateParserTests
         var sw = new StreamWriter(ms);
         await sw.WriteLineAsync("USA|dolar|1|USD|24,870");
         await sw.WriteLineAsync("Velká Británie|libra|1|GBP|28,210");
+        await sw.FlushAsync();
+        ms.Seek(0, SeekOrigin.Begin);
 
         var result = await _parser.ParseAsync(ms);
         
