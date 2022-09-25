@@ -1,14 +1,14 @@
 export type MovieListItem = {
   "adult": Boolean,
-  "backdrop_path": String,
+  "backdrop_path": string,
   "genre_ids": Number[],
   "id": Number,
-  "original_language": String,
-  "original_title": String,
-  "overview": String,
+  "original_language": string,
+  "original_title": string,
+  "overview": string,
   "popularity": Number,
-  "poster_path": String,
-  "release_date": String,
+  "poster_path": string,
+  "release_date": string,
   "title": "Cookies",
   "video": Boolean,
   "vote_averate": Number,
@@ -17,12 +17,18 @@ export type MovieListItem = {
 
 export type MovieList = MovieListItem[]
 
+export type MovieListQueryResult = {
+  "total_pages": Number,
+  "total_results": Number,
+  "results": MovieList
+}
+
 export type MovieListSearchQueryParams = {
-  query: String,
+  query: string,
   page?: Number,
-  language?: String,
+  language?: string,
   "include_adult"?: Boolean,
-  region?: String,
+  region?: string,
   year?: Number,
   "primary_release_year"?: Number
 }
