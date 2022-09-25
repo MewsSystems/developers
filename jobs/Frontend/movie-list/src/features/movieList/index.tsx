@@ -1,5 +1,7 @@
 import { NextPage } from "next";
 
+import { MovieList } from "./components/MovieList";
+
 export const MovieListPage: NextPage = () => {
-  return <div>MovieListPage</div>;
+  return <MovieList />;
 };
