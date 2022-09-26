@@ -4,6 +4,10 @@ import { palette } from "~/features/ui/theme/palette";
 export const MovieCard = styled.article`
   height: fit-content;
   overflow: hidden;
+  transition: 300ms;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 
@@ -12,10 +16,6 @@ export const MovieCardImage = styled.div`
   cursor: pointer;
   transition: 0.3s;
   overflow: hidden;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `
 
 export const MovieCardDetails = styled.div`
