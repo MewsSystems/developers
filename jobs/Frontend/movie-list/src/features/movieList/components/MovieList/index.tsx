@@ -52,11 +52,11 @@ export const MovieList: FC = () => {
       {!!query.length && (
         <List>
           {!!movies.length &&
-            movies.map((movieItem) => {
+            movies.map((movieItem, index) => {
               return (
                 <MovieListItem
                   movie={movieItem}
-                  key={movieItem.id.toString()}
+                  key={movieItem?.id?.toString() || index}
                 />
               );
             })}
@@ -65,7 +65,7 @@ export const MovieList: FC = () => {
       {/* TODO: create not found component */}
       {!movies.length && <h3>No results found for you search.</h3>}
       <ListPagination
-        pageCount={data.total_pages}
+        pageCount={data.total_pages || 0}
         renderOnZeroPageCount={() => null}
         onPageChange={pageChangeHandler}
       />

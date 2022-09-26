@@ -12,7 +12,7 @@ import {
   MovieCardTitle,
 } from "./styled";
 
-import fallBackImg from "./assets/video-movie-placeholder-image-grey.png";
+import fallBackImg from "~/features/ui/assets/video-movie-placeholder-image-grey.png";
 
 type Props = {
   movie: MovieListItemType;

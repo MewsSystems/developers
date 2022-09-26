@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components"
 
 export const GlobalStyle = createGlobalStyle`
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -17,7 +18,7 @@ html {
 }
 
 body {
-  font: 400 1.6rem 'sans-serif';
+  font: 400 1.6rem 'Roboto', 'sans-serif';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

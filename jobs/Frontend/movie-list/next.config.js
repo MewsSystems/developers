@@ -7,6 +7,15 @@ const nextConfig = {
   },
   images: {
     domains:["image.tmdb.org"]
+  },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: "/movies",
+        permanent: true
+      }
+    ]
   }
 }
 
