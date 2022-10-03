@@ -1,4 +1,4 @@
-using ExchangeRateUpdater.SampleApi.Configuration;
+using ExchangeRateUpdater.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDependencies();
+builder.Services.AddExchangeRateProviders();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
