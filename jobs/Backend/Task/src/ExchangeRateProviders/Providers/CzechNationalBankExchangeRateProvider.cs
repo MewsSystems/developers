@@ -1,7 +1,6 @@
 ﻿using ExchangeRateUpdater.Models;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -24,7 +23,7 @@ namespace ExchangeRateUpdater.Providers.Providers
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
         {
             var response = await this.httpClient.GetAsync(BankUrl);
 
@@ -43,6 +42,8 @@ namespace ExchangeRateUpdater.Providers.Providers
             var exchangeRateList = new List<ExchangeRate>();
             string line;
 
+            this.SkipFileHeaders(reader);
+
             while ((line = reader.ReadLine()) != null)
             {
                 string[] items = line.Split('|');
@@ -54,6 +55,12 @@ namespace ExchangeRateUpdater.Providers.Providers
             }
 
             return exchangeRateList;
+        }
+
+        private void SkipFileHeaders(StreamReader reader)
+        {
+            reader.ReadLine();
+            reader.ReadLine();
         }
     }
 }

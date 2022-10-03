@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\ExchangeRate.Models\ExchangeRateUpdater.Models.csproj" />
+    <ProjectReference Include="..\src\ExchangeRateProviders\ExchangeRateUpdater.Providers.csproj" />
+  </ItemGroup>
+
 </Project>
