@@ -28,27 +28,32 @@ namespace ExchangeRateUpdater.Providers.Providers
         {
             var response = await this.httpClient.GetAsync(BankUrl);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var result = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
-
-                var reader = new StreamReader(result, System.Text.Encoding.UTF8);
-
-                var exchangeRateList = new List<ExchangeRate>();
-
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] items = line.Split('|');
-                    decimal value;
-                    decimal.TryParse(items[^1], out value);
-
-                    var exchangeRate = new ExchangeRate(new Currency(items[^2]), new Currency(targetCurrencyCode), value);
-                    exchangeRateList.Add(exchangeRate);
-                }
+                return new List<ExchangeRate>();
             }
 
-            return Enumerable.Empty<ExchangeRate>();
+            var result = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+            var reader = new StreamReader(result, System.Text.Encoding.UTF8);
+            return this.ExchangeRatesBuilder(reader);
+        }
+
+        private IEnumerable<ExchangeRate> ExchangeRatesBuilder(StreamReader reader)
+        {
+            var exchangeRateList = new List<ExchangeRate>();
+            string line;
+
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] items = line.Split('|');
+                decimal value;
+                decimal.TryParse(items[^1], out value);
+
+                var exchangeRate = new ExchangeRate(new Currency(items[^2]), new Currency(targetCurrencyCode), value);
+                exchangeRateList.Add(exchangeRate);
+            }
+
+            return exchangeRateList;
         }
     }
 }
