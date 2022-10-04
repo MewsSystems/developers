@@ -1,7 +1,10 @@
 name: ExchangeRateUpdater Flow
 
-on: [push, pull_request]
-    branches: [ "main", "master" ]
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
     paths:
       - 'ExchangeRateProvider/jobs/Backend/ExchangeRateUpdater/**'
 
