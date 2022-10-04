@@ -9,12 +9,9 @@ namespace ExchangeRateUpdater.Providers
         public static IServiceCollection AddExchangeRateProviders(this IServiceCollection services)
         {
             services
-                .AddHttpClient("httpClient");
-
-            services
-                .AddScoped<IExchangeRateProvider>(c =>
-                new CzechNationalBankExchangeRateProvider(
-                    c.GetRequiredService<IHttpClientFactory>().CreateClient("httpClient")));
+                .AddScoped<IExchangeRateProviderStrategyFactory>(c =>
+                new ExchangeRateProviderStrategyFactory(
+                    c.GetRequiredService<IHttpClientFactory>()));
 
             return services;
         }

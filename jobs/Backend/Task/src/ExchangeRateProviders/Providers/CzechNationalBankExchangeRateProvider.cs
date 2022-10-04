@@ -1,12 +1,13 @@
 ﻿using ExchangeRateUpdater.Models;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Providers.Providers
 {
-    public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
+    internal class CzechNationalBankExchangeRateProvider : IExchangeRateProviderStrategy
     {
         private readonly HttpClient httpClient;
         private const string BankUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
@@ -23,7 +24,7 @@ namespace ExchangeRateUpdater.Providers.Providers
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             var response = await this.httpClient.GetAsync(BankUrl);
 
@@ -34,7 +35,8 @@ namespace ExchangeRateUpdater.Providers.Providers
 
             var result = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
             var reader = new StreamReader(result, System.Text.Encoding.UTF8);
-            return this.ExchangeRatesBuilder(reader);
+
+            return this.ExchangeRatesBuilder(reader).Where(x => currencies.Any(c => c.Code == x.SourceCurrency.Code));
         }
 
         private IEnumerable<ExchangeRate> ExchangeRatesBuilder(StreamReader reader)
