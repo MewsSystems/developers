@@ -56,9 +56,30 @@ There was also a requirement to write the code to run on production environment,
 ### Third party libraries 
 We know that the source data is CSV, so we can make use of the widely adapted [CSV Helper](https://joshclose.github.io/CsvHelper/)
 
-## Testing the application
-
 ## Running the application
+To run the application locally, ensure you are in the directory 'jobs\Backend\ExchangeRateUpdater'
+
+First, restore the dependencies.
+```
+dotnet restore
+```
+
+Second, build the project,
+```
+dotnet build
+```
+
+Finally, run the project.
+```
+dotnet run
+```
+
+For production, use
+```
+dotnet run --launch-profile Production
+```
+
+## Testing the application
 
 ## Author
 [Graham Griffiths](https://github.com/grahamrgriffiths)

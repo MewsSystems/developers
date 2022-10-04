@@ -65,8 +65,13 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Unhandled exception: '{e.Message}'.");
             }
-
-            Console.ReadLine();
+            finally
+            {
+                Console.WriteLine();
+                Console.WriteLine("Press any key to exit.");
+                Console.ReadLine();
+                Console.WriteLine("Goodbye.");
+            }
         }
 
         /// <summary>

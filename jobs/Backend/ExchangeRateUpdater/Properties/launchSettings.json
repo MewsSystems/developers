@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "EnvironmentConfiguration.Cli (dev)": {
+    "Development": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "EnvironmentConfiguration.Cli (prod)": {
+    "Production": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
