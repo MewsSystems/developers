@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -27,22 +28,33 @@ namespace ExchangeRateUpdater
             {
                 // configure service provider
                 var serviceProvider = ConfigureServiceProvider();
+                
+                // setup Logger instance
+                var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-                // obtain instance of ExchangeRateProvider
-                var exchangeRateProvider = serviceProvider.GetService<IExchangeRateProvider>();
-
-                // get the exchange rates for the given currencies
-                var rates = await exchangeRateProvider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                try
                 {
-                    Console.WriteLine(rate.ToString());
+                    // obtain instance of ExchangeRateProvider
+                    var exchangeRateProvider = serviceProvider.GetService<IExchangeRateProvider>();
+
+                    // get the exchange rates for the given currencies
+                    var rates = await exchangeRateProvider.GetExchangeRates(currencies);
+
+                    logger.LogInformation($"Retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        logger.LogInformation(rate.ToString());
+                    }
+                } 
+                catch (Exception ex)
+                {
+                    logger.LogError($"Failed to retrieve exchange rates: {Environment.NewLine}");
+                    logger.LogError(ex, ex.Message);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine($"Unhandled exception: '{e.Message}'.");
             }
 
             Console.ReadLine();
@@ -56,6 +68,10 @@ namespace ExchangeRateUpdater
         {
             return new ServiceCollection()
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                    .AddLogging((loggingBuilder) => loggingBuilder
+                        .SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
+                        .AddConsole()
+                    )
                     .BuildServiceProvider();
         }
     }
