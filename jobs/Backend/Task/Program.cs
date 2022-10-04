@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
+using System.Threading.Tasks;
+using ExchangeRates.Contracts;
+using ExchangeRates.Providers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRates
 {
     public static class Program
     {
@@ -19,14 +24,36 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+        public static async Task Main(string[] args)
+        {             
+            var configuration = new ConfigurationBuilder()
+				.SetBasePath(AppContext.BaseDirectory)
+				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+	            .AddEnvironmentVariables()	            
+	            .Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+			var serviceProvider = new ServiceCollection()
+                .AddCustomizedLogging()
+				.AddCustomizedOptions(configuration)
+				.AddHttpClient()
+                .AddCustomizedClients()
+				.AddCustomizedParsers()
+                .AddCustomizedExchangeRateProviders()
+				.BuildServiceProvider();
+
+			try
+            {
+				Console.WriteLine("Enter the day, you want to aquire the exchange rate for.");
+				Console.WriteLine("Leave empty the most recent date.");
+				var exchangeRateDate = Console.ReadLine();
+				DateOnly? day = string.IsNullOrWhiteSpace(exchangeRateDate) 
+                    ? null 
+                    : DateOnly.Parse(exchangeRateDate);
+
+				var provider = serviceProvider.GetService<ICnbExchangeRateProvider>();
+                var rates =  await provider.GetExchangeRates(currencies, day);
+
+                Console.WriteLine($"Successfully retrieved {rates.Length} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
