@@ -8,12 +8,17 @@ namespace ExchangeRateUpdater;
 
 internal class ExchangeRateLoader : IExchangeRateLoader
 {
-    private static Uri Url => new("https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt");
+    private readonly Uri _url;
     
+    public ExchangeRateLoader(Uri url)
+    {
+        _url = url;
+    }
+
     public async Task<Stream> ReadAsync()
     {
         var client = new HttpClient();
-        var response = await client.GetAsync(Url).ConfigureAwait(false);
+        var response = await client.GetAsync(_url).ConfigureAwait(false);
         
         return await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync().ConfigureAwait(false);
     }

@@ -24,14 +24,16 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var loader = new ExchangeRateLoader();
+                var factory = new ExchangeRateLoaderFactory();
+                var loader = factory.Create();
                 var parser = new ExchangeRateParser();
                 var date = new DateProvider(new DateTimeService());
                 var provider = new ExchangeRateProvider(loader, parser, date);
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                var enumerated = rates.ToList();
+                Console.WriteLine($"Successfully retrieved {enumerated.Count} exchange rates:");
+                foreach (var rate in enumerated)
                 {
                     Console.WriteLine(rate.ToString());
                 }
