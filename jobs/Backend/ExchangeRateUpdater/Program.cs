@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -73,13 +75,31 @@ namespace ExchangeRateUpdater
         /// <returns></returns>
         private static IServiceProvider ConfigureServiceProvider()
         {
+            var configuration = SetupConfiguration();
+
             return new ServiceCollection()
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                    .AddSingleton<IConfiguration>(configuration)
                     .AddLogging((loggingBuilder) => loggingBuilder
                         .SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
                         .AddConsole()
                     )
                     .BuildServiceProvider();
+        }
+
+        /// <summary>
+        /// Helper method to setup configuration
+        /// </summary>
+        /// <returns></returns>
+        private static IConfigurationRoot SetupConfiguration()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            return new ConfigurationBuilder()
+                     .SetBasePath(Directory.GetCurrentDirectory())
+                     .AddJsonFile($"appSettings.{environment}.json")
+                     .AddEnvironmentVariables()
+                     .Build();
         }
     }
 }

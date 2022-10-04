@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,15 @@ namespace ExchangeRateUpdater
     public class ExchangeRateProvider : IExchangeRateProvider
     {
         private ILogger _logger;
+        private IConfiguration _configuration;
+
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
-        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger)
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -72,8 +76,9 @@ namespace ExchangeRateUpdater
 
             using (var httpClient = new HttpClient())
             {
-                // TODO: Verify Source(s) - using daily for initial POC
-                var rateSource = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+                // pull source from config
+                // TODO: Null handling for config value
+                var rateSource = _configuration.GetValue<string>("ExchangeRateProvider:Source");
 
                 HttpResponseMessage responseMessage = await httpClient.GetAsync(rateSource, GetCancellationTokenFromTimeout(timeout)).ConfigureAwait(false);
                 responseMessage.EnsureSuccessStatusCode();
