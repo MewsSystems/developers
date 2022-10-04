@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,13 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                IExchangeRateProvider exchangeRateProvider = new ExchangeRateProvider();
+                // configure service provider
+                var serviceProvider = ConfigureServiceProvider();
+
+                // obtain instance of ExchangeRateProvider
+                var exchangeRateProvider = serviceProvider.GetService<IExchangeRateProvider>();
+
+                // get the exchange rates for the given currencies
                 var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -39,6 +46,17 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Helper method to setup DI
+        /// </summary>
+        /// <returns></returns>
+        private static IServiceProvider ConfigureServiceProvider()
+        {
+            return new ServiceCollection()
+                    .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                    .BuildServiceProvider();
         }
     }
 }
