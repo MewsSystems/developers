@@ -81,5 +81,12 @@ dotnet run --launch-profile Production
 
 ## Testing the application
 
+## CI 
+A CI pipeline has been implemented for this task using Github Actions.
+
+The pipeline has the following workflows:
+* Builds the application.
+
+
 ## Author
 [Graham Griffiths](https://github.com/grahamrgriffiths)
