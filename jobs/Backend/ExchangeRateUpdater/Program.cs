@@ -81,13 +81,17 @@ namespace ExchangeRateUpdater
         private static IServiceProvider ConfigureServiceProvider()
         {
             var configuration = SetupConfiguration();
+            // TODO: Get logging config to be set from appSettings
+            _ = Enum.TryParse(configuration.GetValue<string>("Logging:LogLevel:Default"), out LogLevel logLevelVal);
 
             return new ServiceCollection()
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                     .AddSingleton<IConfiguration>(configuration)
                     .AddLogging((loggingBuilder) => loggingBuilder
-                        .SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
+                        .SetMinimumLevel(logLevelVal)//.SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
                         .AddConsole()
+                        //.ClearProviders()
+                        //.AddConfiguration(configuration.GetSection("Logging"))
                     )
                     .BuildServiceProvider();
         }
