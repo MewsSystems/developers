@@ -1,12 +1,10 @@
-name: Build and Test
+name: Build
 
 on:
-  push:
-    branches: [ "main", "master" ]
-  pull_request:
+  [push, pull_request]
     branches: [ "main", "master" ]
     paths:
-      - 'jobs/Backend/ExchangeRateUpdater/**'
+      - 'ExchangeRateUpdater/**'
 
 jobs:
   build:
