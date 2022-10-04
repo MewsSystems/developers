@@ -1,0 +1,16 @@
+name: ExchangeRateUpdater Flow
+
+on:
+  [push, pull_request]
+    branches: [ "main", "master" ]
+    paths:
+      - 'ExchangeRateProvider/jobs/Backend/ExchangeRateUpdater/**'
+
+jobs:
+  myJob:
+    name: ExchangeRateUpdater CI
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/workflows/ExchangeRateUpdater
