@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -22,11 +24,45 @@ namespace ExchangeRateUpdater
 
         /// <summary>
         /// Helper method to fetch the rates from the source
+        /// TODO: Improve strucutre
         /// </summary>
         /// <returns></returns>
         private async Task<string> GetRates()
         {
-            throw new NotImplementedException();
+            TimeSpan? timeout = null;
+            string responseContent = string.Empty;
+
+            using (var httpClient = new HttpClient())
+            {
+                // TODO: Verify Source(s) - using daily for initial POC
+                var rateSource = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
+                HttpResponseMessage responseMessage = await httpClient.GetAsync(rateSource, GetCancellationTokenFromTimeout(timeout)).ConfigureAwait(false);
+                responseMessage.EnsureSuccessStatusCode();
+
+                responseContent = await responseMessage.Content.ReadAsStringAsync();
+            }
+
+            return responseContent;
+        }
+
+        /// <summary>
+        /// Helper method to setup a CancellationToken (from a custom timeout) for the http request
+        /// </summary>
+        /// <param name="timeout">Optional, custom timeout</param>
+        /// <returns>CancellationToken</returns>
+        private CancellationToken GetCancellationTokenFromTimeout(TimeSpan? timeout)
+        {
+            // set default timeout if not supplied
+            if (timeout.HasValue == false)
+            {
+                timeout = TimeSpan.FromSeconds(30);
+            }
+
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(timeout.Value);
+
+            return cts.Token;
         }
     }
 }
