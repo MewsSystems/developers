@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,9 +14,14 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
+        private ILogger _logger;
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger)
+        {
+            _logger = logger;
+        }
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -30,6 +36,7 @@ namespace ExchangeRateUpdater
             try
             {
                 var rateData = await GetRates();
+                _logger.LogDebug($"Rate data \r\n {rateData}");
 
                 var parsedRates = ParseRates(rateData);
 
@@ -46,7 +53,8 @@ namespace ExchangeRateUpdater
             } 
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                _logger.LogError($"Failed to retrieve and parse exchange rates: {Environment.NewLine}");
+                _logger.LogError(ex, ex.Message);
             }
 
             return rates;

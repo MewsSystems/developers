@@ -40,10 +40,17 @@ namespace ExchangeRateUpdater
                     // get the exchange rates for the given currencies
                     var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
-                    logger.LogInformation($"Retrieved {rates.Count()} exchange rates:");
-                    foreach (var rate in rates)
+                    if (rates.Any())
                     {
-                        logger.LogInformation(rate.ToString());
+                        logger.LogInformation($"Retrieved {rates.Count()} exchange rates:");
+                        foreach (var rate in rates)
+                        {
+                            logger.LogInformation(rate.ToString());
+                        }
+                    } 
+                    else
+                    {
+                        logger.LogInformation($"No rates retrieved for the given currencies.");
                     }
                 } 
                 catch (Exception ex)
