@@ -36,7 +36,7 @@ namespace ExchangeRates.Providers
                 var rates = parser.ParserData(ratesData);
 
                 // Rate data filtering
-                return rates.Where(rate => currencies.Contains(rate.SourceCurrency)).ToArray();
+                return rates.Where(rate => currencies.Contains(rate.TargetCurrency)).ToArray();
             }
 
             return Array.Empty<ExchangeRate>();

@@ -43,6 +43,17 @@ namespace ExchangeRates
 			return services;
 		}
 
+		public static IServiceCollection AddCustomizedCultureProviders(this IServiceCollection services)
+		{
+			services.Scan(scan => scan
+				.FromAssemblies(ExchangeRatesAssembly.Get())
+					.AddClasses(c => c.AssignableTo(typeof(ICultureProvider)))
+					.AsSelfWithInterfaces()
+					.WithSingletonLifetime());
+
+			return services;
+		}
+
 		public static IServiceCollection AddCustomizedLogging(this IServiceCollection services)
 		{
 			services.AddLogging(configure => configure.AddConsole());

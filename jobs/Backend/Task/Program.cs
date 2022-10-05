@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRates.Contracts;
 using ExchangeRates.Providers;
@@ -21,7 +23,8 @@ namespace ExchangeRates
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("XYZ"),
+            new Currency("IDR")
         };
 
         public static async Task Main(string[] args)
@@ -32,23 +35,26 @@ namespace ExchangeRates
 	            .AddEnvironmentVariables()	            
 	            .Build();
 
-			var serviceProvider = new ServiceCollection()
+            var serviceProvider = new ServiceCollection()
                 .AddCustomizedLogging()
-				.AddCustomizedOptions(configuration)
-				.AddHttpClient()
+                .AddCustomizedOptions(configuration)
+                .AddHttpClient()
                 .AddCustomizedClients()
-				.AddCustomizedParsers()
+                .AddCustomizedParsers()
                 .AddCustomizedExchangeRateProviders()
+                .AddCustomizedCultureProviders()
 				.BuildServiceProvider();
 
 			try
             {
-				Console.WriteLine("Enter the day, you want to aquire the exchange rate for.");
-				Console.WriteLine("Leave empty the most recent date.");
+				Console.WriteLine("Enter the day in the format dd.mm.yyyy, you want to aquire the exchange rate for.");
+				Console.WriteLine("Leave empty for the most recent date.");
 				var exchangeRateDate = Console.ReadLine();
-				DateOnly? day = string.IsNullOrWhiteSpace(exchangeRateDate) 
+				DateOnly? day = string.IsNullOrWhiteSpace(exchangeRateDate)
                     ? null 
-                    : DateOnly.Parse(exchangeRateDate);
+                    : DateOnly.Parse(
+                        exchangeRateDate, 
+                        serviceProvider.GetService<ICnbCultureProvider>().GetCultureInfo());
 
 				var provider = serviceProvider.GetService<ICnbExchangeRateProvider>();
                 var rates =  await provider.GetExchangeRates(currencies, day);

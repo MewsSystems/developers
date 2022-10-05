@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExchangeRates.Contracts;
+using ExchangeRates.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRates.Parsers
@@ -13,19 +14,21 @@ namespace ExchangeRates.Parsers
 	{
 		private const string rateRowsDelimiter = "\n";
 		private const string rateColumnsDelimiter = "|";
-		private const string domesticCurrencyCode = "CZK";
+		private const string sourceCurrencyCode = "CZK";
 		private const byte numberOfHeaderRows = 2;
 		private const byte numberOfRowColumns = 5;
-		private const byte currencyCodeIndex = 3;
-		private const byte exchangeRateValueIndex = 4;
-		private readonly CultureInfo culture;
+		private const byte targetCurrencyUnitAmountIndex = 2;
+		private const byte targetCurrencyCodeIndex = 3;
+		private const byte exchangeRateValueIndex = 4;		
 		private readonly ILogger<CnbParser> logger;
+		private readonly ICnbCultureProvider culture;
 
-		public CnbParser(ILogger<CnbParser> logger)
-		{
-			// Create specific culture for exchange rate value conversion.
-			culture = CultureInfo.CreateSpecificCulture("cs-CZ");
+		public CnbParser(
+			ILogger<CnbParser> logger, 
+			ICnbCultureProvider culture)
+		{			
 			this.logger = logger;
+			this.culture = culture;
 		}
 
 		public ExchangeRate[] ParserData(string data)
@@ -47,10 +50,11 @@ namespace ExchangeRates.Parsers
 					if (rateRowColumns.Length == numberOfRowColumns) 
 					{
 						rates.Add(
-							new ExchangeRate(								
-								new Currency(rateRowColumns[currencyCodeIndex]),
-								new Currency(domesticCurrencyCode),
-								Convert.ToDecimal(rateRowColumns[exchangeRateValueIndex], culture)));
+							new ExchangeRate(
+								new Currency(sourceCurrencyCode),
+								new Currency(rateRowColumns[targetCurrencyCodeIndex]),
+								Convert.ToInt16(rateRowColumns[targetCurrencyUnitAmountIndex], culture.GetCultureInfo()),
+								Convert.ToDecimal(rateRowColumns[exchangeRateValueIndex], culture.GetCultureInfo())));
 					}
 					else
 					{
