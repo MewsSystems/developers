@@ -1,10 +1,10 @@
-﻿using Core.Models;
+﻿using Common.Configuration;
+using Core.Models;
 using Core.Models.CzechNationalBank;
 using CsvHelper;
 using CsvHelper.Configuration;
 using ExchangeRateUpdater.Client;
 using ExchangeRateUpdater.Common.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 
@@ -15,15 +15,14 @@ namespace Core.Client.CzechNationalBank
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
-        public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, IConfiguration configuration, IHttpWrapper httpWrapper) : base(logger, configuration, httpWrapper)
+        public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, IConfigurationWrapper configurationWrapper, IHttpWrapper httpWrapper) : base(logger, configurationWrapper, httpWrapper)
         {
 
         }
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
         {
             // pull source from config
-            // TODO: Null handling for config value            
-            var rateSource = _configuration.GetValue<string>("CzechNationalBankClient:Source");
+            var rateSource = _configurationWrapper.GetConfigValueAsString("CzechNationalBankClient:Source");
             var responseContent = await _httpWrapper.HttpGet(rateSource);
 
             return ParseRates(responseContent);

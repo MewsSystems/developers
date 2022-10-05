@@ -1,5 +1,5 @@
-﻿using ExchangeRateUpdater.Common.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Common.Configuration;
+using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Core.Client
@@ -10,13 +10,13 @@ namespace Core.Client
     public abstract class BaseClient
     {
         internal readonly ILogger<BaseClient> _logger;
-        internal readonly IConfiguration _configuration;
+        internal readonly IConfigurationWrapper _configurationWrapper;
         internal readonly IHttpWrapper _httpWrapper;        
 
-        public BaseClient(ILogger<BaseClient> logger, IConfiguration configuration, IHttpWrapper httpWrapper)
+        public BaseClient(ILogger<BaseClient> logger, IConfigurationWrapper configurationWrapper, IHttpWrapper httpWrapper)
         {
             _logger = logger;
-            _configuration = configuration;
+            _configurationWrapper = configurationWrapper;
             _httpWrapper = httpWrapper;            
         }
     }

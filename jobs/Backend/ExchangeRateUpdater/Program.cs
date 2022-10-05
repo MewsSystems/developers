@@ -1,13 +1,14 @@
-﻿using Core.Client.CzechNationalBank;
+﻿using Common.Configuration;
+using Core.Client.CzechNationalBank;
 using Core.Client.Provider;
 using Core.Models;
 using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.Common;
 using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,19 +17,6 @@ namespace ExchangeRateUpdater
 {
     public class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
         public static async Task Main(string[] args)
         {
             try
@@ -43,6 +31,12 @@ namespace ExchangeRateUpdater
                 {
                     // obtain instance of ExchangeRateProvider
                     var exchangeRateProvider = serviceProvider.GetService<IExchangeRateProvider>();
+                    
+                    // get currency list from config
+                    var configurationWrapper = serviceProvider.GetService<IConfigurationWrapper>();
+                    var currencies = 
+                        configurationWrapper.GetConfigValueAsList("Defaults:Currencies", Constants.DEFAULT_CURRENCIES, '|')
+                        .Select(item => new Currency(item)).ToList();
 
                     // get the exchange rates for the given currencies
                     var rates = await exchangeRateProvider.GetExchangeRates(currencies);
@@ -94,6 +88,7 @@ namespace ExchangeRateUpdater
                     .AddSingleton<IHttpWrapper, HttpWrapper>()
                     .AddSingleton<IClient, CzechNationalBankClient>()
                     .AddSingleton<IConfiguration>(configuration)
+                    .AddSingleton<IConfigurationWrapper, ConfigurationWrapper>()
                     .AddLogging((loggingBuilder) => loggingBuilder
                         .SetMinimumLevel(logLevelVal)//.SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
                         .AddConsole()
