@@ -51,10 +51,14 @@ The task contained an initial skeleton for the application. I was allowed to dec
 There was also a requirement to write the code to run on production environment, and had to maintain it long-term.
 
 ### Architecture
+As this is the MVP, no architectural considerations have been taken. 
 
+Components in the solution are not loosely coupled, and the exhange rate provider implementation has low cohesion.
+
+![Architecture Overview](Architecture.png "Architecture Overview")
 
 ### Third party libraries 
-We know that the source data is CSV, so we can make use of the widely adapted [CSV Helper](https://joshclose.github.io/CsvHelper/)
+We know that the source data is CSV, so we've made use of the widely adapted [CSV Helper](https://joshclose.github.io/CsvHelper/)
 
 ## Running the application
 To run the application locally, ensure you are in the directory 'jobs\Backend\ExchangeRateUpdater'
@@ -80,12 +84,15 @@ dotnet run --launch-profile Production
 ```
 
 ## Testing the application
+As this is the MVP, there is currently no test coverage as this is not seen as a crucial parameter. 
 
 ## CI 
 A CI pipeline has been implemented for this task using Github Actions.
 
 The pipeline has the following workflows:
-* Builds the application.
+- ExchangeRateUpdater CI
+    - Builds the application.
+    - Tests the application. (Note, there are no tests to run in the MVP)
 
 
 ## Author
