@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,14 +18,16 @@ namespace ExchangeRateUpdater
     {
         private ILogger _logger;
         private IConfiguration _configuration;
+        private IHttpWrapper _httpWrapper;
 
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
-        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration)
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IHttpWrapper httpWrapper)
         {
             _logger = logger;
             _configuration = configuration;
+            _httpWrapper = httpWrapper;
         }
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -71,20 +74,10 @@ namespace ExchangeRateUpdater
         /// <returns></returns>
         private async Task<string> GetRates()
         {
-            TimeSpan? timeout = null;
-            string responseContent = string.Empty;
-
-            using (var httpClient = new HttpClient())
-            {
-                // pull source from config
-                // TODO: Null handling for config value
-                var rateSource = _configuration.GetValue<string>("ExchangeRateProvider:Source");
-
-                HttpResponseMessage responseMessage = await httpClient.GetAsync(rateSource, GetCancellationTokenFromTimeout(timeout)).ConfigureAwait(false);
-                responseMessage.EnsureSuccessStatusCode();
-
-                responseContent = await responseMessage.Content.ReadAsStringAsync();
-            }
+            // pull source from config
+            // TODO: Null handling for config value
+            var rateSource = _configuration.GetValue<string>("ExchangeRateProvider:Source");
+            var responseContent = await _httpWrapper.HttpGet(rateSource);
 
             return responseContent;
         }
@@ -114,25 +107,6 @@ namespace ExchangeRateUpdater
             // skip the first line because it isn't used
             csv.Read();
             return csv.GetRecords<ExchangeRateItem>().ToList();
-        }
-
-        /// <summary>
-        /// Helper method to setup a CancellationToken (from a custom timeout) for the http request
-        /// </summary>
-        /// <param name="timeout">Optional, custom timeout</param>
-        /// <returns>CancellationToken</returns>
-        private CancellationToken GetCancellationTokenFromTimeout(TimeSpan? timeout)
-        {
-            // set default timeout if not supplied
-            if (timeout.HasValue == false)
-            {
-                timeout = TimeSpan.FromSeconds(30);
-            }
-
-            var cts = new CancellationTokenSource();
-            cts.CancelAfter(timeout.Value);
-
-            return cts.Token;
         }
     }
 }
