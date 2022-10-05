@@ -1,7 +1,10 @@
 ﻿using Common.Configuration;
+using Common.Csv;
 using Core.Client.CzechNationalBank;
 using Core.Client.Provider;
 using Core.Models;
+using Core.Parser;
+using Core.Parser.CzechNationalBank;
 using ExchangeRateUpdater.Client;
 using ExchangeRateUpdater.Common;
 using ExchangeRateUpdater.Common.Http;
@@ -86,12 +89,18 @@ namespace ExchangeRateUpdater
             return new ServiceCollection()
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                     .AddSingleton<IHttpWrapper, HttpWrapper>()
+                    .AddSingleton<ICsvWrapper, CsvWrapper>()
+                    // can be swapped out for ohter implementaions, ideally this would be done in a factory
                     .AddSingleton<IClient, CzechNationalBankClient>()
+                    .AddSingleton<IResponseParser, CzechNationalBankResponseParser>()
+                    // add configuration
                     .AddSingleton<IConfiguration>(configuration)
                     .AddSingleton<IConfigurationWrapper, ConfigurationWrapper>()
+                    // add logging
                     .AddLogging((loggingBuilder) => loggingBuilder
                         .SetMinimumLevel(logLevelVal)//.SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)
                         .AddConsole()
+                        // TODO: Add from config
                         //.ClearProviders()
                         //.AddConfiguration(configuration.GetSection("Logging"))
                     )

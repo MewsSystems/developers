@@ -19,11 +19,10 @@ namespace Core.Client.Provider
         }
 
         /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
+        /// Get rates for the specified currencies
         /// </summary>
+        /// <param name="currencies">Currencies to fetch rates for</param>
+        /// <returns>Matching list of currencies that have rates</returns>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             var rates = Enumerable.Empty<ExchangeRate>();
@@ -31,6 +30,7 @@ namespace Core.Client.Provider
             try
             {
                 var rateData = await _client.GetExchangeRates();
+
                 _logger.LogDebug($"Rate data \r\n");
                 foreach (var data in rateData.ToList())
                 {
