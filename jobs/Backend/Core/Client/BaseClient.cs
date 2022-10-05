@@ -2,6 +2,8 @@
 using Core.Parser;
 using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Logging;
+using System.Text;
+using static Common.Enums;
 
 namespace Core.Client
 {
@@ -20,6 +22,19 @@ namespace Core.Client
             _configurationWrapper = configurationWrapper;
             _httpWrapper = httpWrapper;
             _responseParser = responseParser;
+        }
+
+        public void LogOutGoingCall<K, T>(K request, T response, string command, ResponseStatus status, TimeSpan? executionTime)
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine($"Outgoing call log:");
+            builder.AppendLine($"Command: {command}");
+            builder.AppendLine($"Status: {status}");
+            builder.AppendLine($"Execution time: {executionTime}");
+            builder.AppendLine($"Request:\r\n {request}");
+            builder.AppendLine($"Response:\r\n {response}");
+            builder.AppendLine();
+            _logger.LogInformation(builder.ToString());
         }
     }
 }
