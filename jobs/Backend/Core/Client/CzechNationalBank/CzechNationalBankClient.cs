@@ -9,6 +9,9 @@ using static Common.Enums;
 
 namespace Core.Client.CzechNationalBank
 {
+    /// <summary>
+    /// Client mplementation for CzechNationalBank
+    /// </summary>
     public class CzechNationalBankClient : BaseClient, IClient
     { 
         public CzechNationalBankClient
@@ -19,7 +22,7 @@ namespace Core.Client.CzechNationalBank
         }
 
         /// <summary>
-        /// Custom client implementation for CzechNationalBank
+        /// GetExchange rates implementation for CzechNationalBank
         /// </summary>
         /// <returns>Parsed exchange rates</returns>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
@@ -37,6 +40,7 @@ namespace Core.Client.CzechNationalBank
                 request = _configurationWrapper.GetConfigValueAsString("CzechNationalBankClient:Source");
                 responseContent = await _httpWrapper.HttpGet(request);
                 status = ResponseStatus.SUCCESS;
+                // parse response
                 return _responseParser.ParseResponse(responseContent);
             } 
             catch (Exception ex)
@@ -46,6 +50,7 @@ namespace Core.Client.CzechNationalBank
             finally
             {
                 stopwatch.Stop();
+                // log outgoing call statistics 
                 LogOutGoingCall(request, responseContent, command, status, stopwatch.Elapsed);
             }
 
