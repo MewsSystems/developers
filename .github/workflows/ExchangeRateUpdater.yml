@@ -1,0 +1,43 @@
+name: ExchangeRateUpdater CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - 'jobs/Backend/ExchangeRateUpdater/**'
+
+jobs:
+  build:
+    name: Build
+    defaults:
+      run:
+        working-directory: jobs/Backend/ExchangeRateUpdater
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+      
+  test:
+    needs: build
+    name: Test
+    defaults:
+      run:
+        working-directory: jobs/Backend/ExchangeRateUpdater
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
