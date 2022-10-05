@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Common.Http;
+﻿using Core.Client.CzechNationalBank;
+using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -88,6 +90,7 @@ namespace ExchangeRateUpdater
             return new ServiceCollection()
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                     .AddSingleton<IHttpWrapper, HttpWrapper>()
+                    .AddSingleton<IClient, CzechNationalBankClient>()
                     .AddSingleton<IConfiguration>(configuration)
                     .AddLogging((loggingBuilder) => loggingBuilder
                         .SetMinimumLevel(logLevelVal)//.SetMinimumLevel(LogLevel.Trace)//.SetMinimumLevel(LogLevel.Information)

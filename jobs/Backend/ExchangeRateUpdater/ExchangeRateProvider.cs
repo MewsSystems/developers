@@ -1,15 +1,9 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using ExchangeRateUpdater.Common.Http;
+﻿using ExchangeRateUpdater.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -18,17 +12,18 @@ namespace ExchangeRateUpdater
     {
         private ILogger _logger;
         private IConfiguration _configuration;
-        private IHttpWrapper _httpWrapper;
+        private IClient _client;
 
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
-        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IHttpWrapper httpWrapper)
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IClient client)
         {
             _logger = logger;
             _configuration = configuration;
-            _httpWrapper = httpWrapper;
+            _client = client;
         }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -42,12 +37,17 @@ namespace ExchangeRateUpdater
 
             try
             {
-                var rateData = await GetRates();
-                _logger.LogDebug($"Rate data \r\n {rateData}");
+                var rateData = await _client.GetExchangeRates();
+                _logger.LogDebug($"Rate data \r\n");
+                foreach (var data in rateData.ToList())
+                {
+                    _logger.LogDebug($"Currency: {data.Currency}");
+                    _logger.LogDebug($"Code: {data.Code}");
+                    _logger.LogDebug($"Rate: {data.Rate}");
+                    _logger.LogDebug($"Amount: {data.Amount}");
+                }
 
-                var parsedRates = ParseRates(rateData);
-
-                foreach (ExchangeRateItem cnbData in parsedRates)
+                foreach (ExchangeRateItem cnbData in rateData)
                 {
                     calculatedRates.Add(new ExchangeRate(
                         new Currency(cnbData.Code),
@@ -65,48 +65,6 @@ namespace ExchangeRateUpdater
             }
 
             return rates;
-        }
-
-        /// <summary>
-        /// Helper method to fetch the rates from the source
-        /// TODO: Improve strucutre
-        /// </summary>
-        /// <returns></returns>
-        private async Task<string> GetRates()
-        {
-            // pull source from config
-            // TODO: Null handling for config value
-            var rateSource = _configuration.GetValue<string>("ExchangeRateProvider:Source");
-            var responseContent = await _httpWrapper.HttpGet(rateSource);
-
-            return responseContent;
-        }
-
-        /// <summary>
-        /// Helper method to parse rate data
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        private IEnumerable<ExchangeRateItem> ParseRates(string data)
-        {
-            var _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = "|",
-                HasHeaderRecord = true
-            };
-
-            // ensure input is valid, exception handling should be done by calling code
-            if (data == null || string.IsNullOrWhiteSpace(data) || data.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(data), "String input is required");
-            }
-
-            var textReader = new StringReader(data);
-            using var csv = new CsvReader(textReader, _csvConfiguration);
-            // skip the first line because it isn't used
-            csv.Read();
-            return csv.GetRecords<ExchangeRateItem>().ToList();
         }
     }
 }
