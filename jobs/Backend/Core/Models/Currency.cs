@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Core.Models
 {
     public class Currency
     {

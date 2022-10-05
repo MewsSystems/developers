@@ -1,7 +1,9 @@
-﻿namespace ExchangeRateUpdater.Client
+﻿using Core.Models;
+
+namespace ExchangeRateUpdater.Client
 {
-    public interface IClient<T>
+    public interface IClient
     {
-        Task<IEnumerable<T>> GetExchangeRates();
+        Task<IEnumerable<ExchangeRate>> GetExchangeRates();
     }
 }

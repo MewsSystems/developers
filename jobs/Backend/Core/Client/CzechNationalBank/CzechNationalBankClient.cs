@@ -1,7 +1,7 @@
-﻿using Core.Models.CzechNationalBank;
+﻿using Core.Models;
+using Core.Models.CzechNationalBank;
 using CsvHelper;
 using CsvHelper.Configuration;
-using ExchangeRateUpdater;
 using ExchangeRateUpdater.Client;
 using ExchangeRateUpdater.Common.Http;
 using Microsoft.Extensions.Configuration;
@@ -10,13 +10,16 @@ using System.Globalization;
 
 namespace Core.Client.CzechNationalBank
 {
-    public class CzechNationalBankClient : BaseClient, IClient<CzechNationalBankExchangeRateItem>
+    public class CzechNationalBankClient : BaseClient, IClient
     {
+        private const string CZK_CODE = "CZK";
+        private Currency targetCurrency = new Currency(CZK_CODE);
+
         public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, IConfiguration configuration, IHttpWrapper httpWrapper) : base(logger, configuration, httpWrapper)
         {
 
         }
-        public async Task<IEnumerable<CzechNationalBankExchangeRateItem>> GetExchangeRates()
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
         {
             // pull source from config
             // TODO: Null handling for config value            
@@ -32,7 +35,7 @@ namespace Core.Client.CzechNationalBank
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        private IEnumerable<CzechNationalBankExchangeRateItem> ParseRates(string data)
+        private IEnumerable<ExchangeRate> ParseRates(string data)
         {
             var _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -50,7 +53,19 @@ namespace Core.Client.CzechNationalBank
             using var csv = new CsvReader(textReader, _csvConfiguration);
             // skip the first line because it isn't used
             csv.Read();
-            return csv.GetRecords<CzechNationalBankExchangeRateItem>().ToList();
+            var parsedRates = csv.GetRecords<CzechNationalBankExchangeRateItem>().ToList();
+
+            // map to common object with calculated rate
+            var calculatedRates = new List<ExchangeRate>();
+            foreach (var parsedRateeData in parsedRates)
+            {
+                calculatedRates.Add(new ExchangeRate(
+                    new Currency(parsedRateeData.Code),
+                    targetCurrency,
+                    parsedRateeData.Rate / parsedRateeData.Amount
+                    ));
+            }
+            return calculatedRates;
         }
     }
 }
