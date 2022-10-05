@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Client;
+﻿using Core.Models;
+using Core.Models.CzechNationalBank;
+using ExchangeRateUpdater.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,12 +14,12 @@ namespace ExchangeRateUpdater
     {
         private ILogger _logger;
         private IConfiguration _configuration;
-        private IClient _client;
+        private IClient<CzechNationalBankExchangeRateItem> _client;
 
         private const string CZK_CODE = "CZK";
         private Currency targetCurrency = new Currency(CZK_CODE);
 
-        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IClient client)
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IClient<CzechNationalBankExchangeRateItem> client)
         {
             _logger = logger;
             _configuration = configuration;
@@ -47,7 +49,7 @@ namespace ExchangeRateUpdater
                     _logger.LogDebug($"Amount: {data.Amount}");
                 }
 
-                foreach (ExchangeRateItem cnbData in rateData)
+                foreach (BaseExchangeRateItem cnbData in rateData)
                 {
                     calculatedRates.Add(new ExchangeRate(
                         new Currency(cnbData.Code),

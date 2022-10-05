@@ -1,8 +1,8 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace ExchangeRateUpdater
+namespace Core.Models
 {
-    public class ExchangeRateItem
+    public abstract class BaseExchangeRateItem
     {
         [Name("Country")]
         public string Country { get; set; }

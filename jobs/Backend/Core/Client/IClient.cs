@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace ExchangeRateUpdater.Client
+﻿namespace ExchangeRateUpdater.Client
 {
-    public interface IClient
+    public interface IClient<T>
     {
-        Task<IEnumerable<ExchangeRateItem>> GetExchangeRates();
+        Task<IEnumerable<T>> GetExchangeRates();
     }
 }

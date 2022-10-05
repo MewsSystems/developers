@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using Core.Models.CzechNationalBank;
+using CsvHelper;
 using CsvHelper.Configuration;
 using ExchangeRateUpdater;
 using ExchangeRateUpdater.Client;
@@ -9,13 +10,13 @@ using System.Globalization;
 
 namespace Core.Client.CzechNationalBank
 {
-    public class CzechNationalBankClient : BaseClient, IClient
+    public class CzechNationalBankClient : BaseClient, IClient<CzechNationalBankExchangeRateItem>
     {
         public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, IConfiguration configuration, IHttpWrapper httpWrapper) : base(logger, configuration, httpWrapper)
         {
 
         }
-        public async Task<IEnumerable<ExchangeRateItem>> GetExchangeRates()
+        public async Task<IEnumerable<CzechNationalBankExchangeRateItem>> GetExchangeRates()
         {
             // pull source from config
             // TODO: Null handling for config value            
@@ -31,7 +32,7 @@ namespace Core.Client.CzechNationalBank
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        private IEnumerable<ExchangeRateItem> ParseRates(string data)
+        private IEnumerable<CzechNationalBankExchangeRateItem> ParseRates(string data)
         {
             var _csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -49,7 +50,7 @@ namespace Core.Client.CzechNationalBank
             using var csv = new CsvReader(textReader, _csvConfiguration);
             // skip the first line because it isn't used
             csv.Read();
-            return csv.GetRecords<ExchangeRateItem>().ToList();
+            return csv.GetRecords<CzechNationalBankExchangeRateItem>().ToList();
         }
     }
 }
