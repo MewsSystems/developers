@@ -51,9 +51,15 @@ The task contained an initial skeleton for the application. I was allowed to dec
 There was also a requirement to write the code to run on production environment, and had to maintain it long-term.
 
 ### Architecture
-As this is the MVP, no architectural considerations have been taken. 
+In this version (1.0.0), significant improvements have been made to promote loose coupling, and high cohesion.
 
-Components in the solution are not loosely coupled, and the exhange rate provider implementation has low cohesion.
+The models have been separated from direct implementations, this promotes reusability. The same has been done for constants and enums.
+To further promote reusability, the configuration, HTTP, and CSV functionality has been separated into their own implementaions. 
+
+The client (in this case, CNB) logic has been separated from the provider logic. This allows us to add more clients at a later date.
+
+The client parsing logic has been separated from the main client implementation. 
+This allows us to adjust how the parsing is done (if for example the format changes), without impacting the functionality to fetch the data.
 
 ![Architecture Overview](Architecture.png "Architecture Overview")
 
@@ -61,7 +67,7 @@ Components in the solution are not loosely coupled, and the exhange rate provide
 We know that the source data is CSV, so we've made use of the widely adapted [CSV Helper](https://joshclose.github.io/CsvHelper/)
 
 ## Running the application
-To run the application locally, ensure you are in the directory 'jobs\Backend\ExchangeRateUpdater'
+To run the application locally, ensure you are in the directory 'jobs\Backend\src'
 
 First, restore the dependencies.
 ```
@@ -84,7 +90,18 @@ dotnet run --launch-profile Production
 ```
 
 ## Testing the application
-As this is the MVP, there is currently no test coverage as this is not seen as a crucial parameter. 
+Patial test coverage has been introduced for the Provider, Client, Parsing and CSV functionality.
+To test the application locally, ensure you are in the directory 'jobs\Backend\src'
+
+Run the tests
+```
+dotnet test
+```
+
+Generate a test report (with coverage)
+```
+dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "reports"
+```
 
 ## CI 
 A CI pipeline has been implemented for this task using Github Actions.
@@ -92,7 +109,9 @@ A CI pipeline has been implemented for this task using Github Actions.
 The pipeline has the following workflows:
 - ExchangeRateUpdater CI
     - Builds the application.
-    - Tests the application. (Note, there are no tests to run in the MVP)
+    - Tests the application. 
+        - Generates a report
+    - Runs OWASP dependency check
 
 
 ## Author
