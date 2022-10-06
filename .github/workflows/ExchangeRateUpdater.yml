@@ -94,7 +94,6 @@ jobs:
            path: ${{github.workspace}}/reports
 
   codeql:
-    needs: build
     name: "Code QL Analyze"
 
     defaults:
@@ -111,11 +110,15 @@ jobs:
         matrix:
           language: [ 'csharp' ]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           config-file: ./.github/codeql/codeql-config.yml
           languages: ${{ matrix.language }}
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
