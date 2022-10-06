@@ -38,9 +38,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install coverlet
+        run:  dotnet tool install --global coverlet.console --version 3.1.2
+      - name: Install reportgenerator
+        run:  dotnet tool install --global dotnet-reportgenerator-globaltool
       - uses: actions/checkout@v3
       - name: Test
-        run: dotnet test --settings settings/coverlet-runsettings.xml --logger trx --results-directory "test-results"
+        run: dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "${{github.workspace}}/reports"
       - name: Generate Test Reports
         if: ${{ always() }}
         run: reportgenerator "-reports:test-results/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
