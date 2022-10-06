@@ -40,8 +40,10 @@ jobs:
     steps:
       - name: Install coverlet
         run:  dotnet tool install --global coverlet.console --version 3.1.2
+        working-directory: ${{github.action_path}}
       - name: Install reportgenerator
         run:  dotnet tool install --global dotnet-reportgenerator-globaltool
+        working-directory: ${{github.action_path}}
       - uses: actions/checkout@v3
       - name: Test
         run: dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "${{github.workspace}}/reports"
