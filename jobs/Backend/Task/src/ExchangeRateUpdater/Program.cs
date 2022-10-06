@@ -42,6 +42,7 @@ namespace ExchangeRateUpdater
                     var rates = await strategy.GetExchangeRates(currencies);
 
                     Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+
                     foreach (var rate in rates)
                     {
                         Console.WriteLine(rate.ToString());
@@ -52,7 +53,6 @@ namespace ExchangeRateUpdater
                     Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
                 }
             }
-
 
             Console.ReadLine();
         }
