@@ -110,8 +110,8 @@ The pipeline has the following workflows:
 - ExchangeRateUpdater CI
     - Builds the application.
     - Tests the application. 
-        - Generates a report
-    - Runs OWASP dependency check
+        - Generates a report, with coverage.
+    - Runs OWASP dependency check.
 
 
 ## Author
