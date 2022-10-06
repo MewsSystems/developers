@@ -27,7 +27,12 @@ namespace ExchangeRateUpdater.Providers.Tests.ProviderStrategies
 
             // Act
             var target = this.Build();
-            var act = await target.GetExchangeRates(new List<Currency> { new Currency("EUR"), new Currency("BRL") });
+            var act = await target.GetExchangeRates(
+                new List<Currency>
+                {
+                    new Currency("EUR"),
+                    new Currency("BRL")
+                });
 
             // Assert
             act.Should().NotBeNullOrEmpty()
@@ -53,7 +58,11 @@ namespace ExchangeRateUpdater.Providers.Tests.ProviderStrategies
 
             // Act
             var target = this.Build();
-            var act = await target.GetExchangeRates(new List<Currency> { new Currency("EUR") });
+            var act = await target.GetExchangeRates(
+                new List<Currency>
+                {
+                    new Currency("EUR")
+                });
 
             // Assert
             act.Should().BeEmpty();
@@ -76,7 +85,11 @@ namespace ExchangeRateUpdater.Providers.Tests.ProviderStrategies
 
             // Act
             var target = this.Build();
-            var act = await target.GetExchangeRates(new List<Currency> { new Currency("EUR") });
+            var act = await target.GetExchangeRates(
+                new List<Currency>
+                {
+                    new Currency("EUR")
+                });
 
             // Assert
             act.Should().BeEmpty();
@@ -101,7 +114,11 @@ namespace ExchangeRateUpdater.Providers.Tests.ProviderStrategies
 
             // Act
             var target = this.Build();
-            var act = await target.GetExchangeRates(new List<Currency> { new Currency("EUR") });
+            var act = await target.GetExchangeRates(
+                new List<Currency>
+                {
+                    new Currency("EUR")
+                });
 
             // Assert
             act.Should().BeEmpty();

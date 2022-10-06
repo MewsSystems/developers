@@ -1,5 +1,8 @@
-﻿namespace ExchangeRateUpdater.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ExchangeRateUpdater.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Currency
     {
         public Currency(string code)
