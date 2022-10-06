@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Providers.Providers
+namespace ExchangeRateUpdater.Providers.ProvidersStrategies
 {
     public interface IExchangeRateProviderStrategy
     {

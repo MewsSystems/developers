@@ -1,5 +1,4 @@
-﻿using ExchangeRateUpdater.Providers.Providers;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 
 namespace ExchangeRateUpdater.Providers

@@ -1,5 +1,5 @@
 ﻿using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Providers.Providers;
+using ExchangeRateUpdater.Providers.ProvidersStrategies;
 
 namespace ExchangeRateUpdater.Providers
 {

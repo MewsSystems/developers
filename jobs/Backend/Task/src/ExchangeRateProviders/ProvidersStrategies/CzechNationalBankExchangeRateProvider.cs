@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Providers.Providers
+namespace ExchangeRateUpdater.Providers.ProvidersStrategies
 {
-    internal class CzechNationalBankExchangeRateProvider : IExchangeRateProviderStrategy
+    public class CzechNationalBankExchangeRateProvider : IExchangeRateProviderStrategy
     {
         private readonly HttpClient httpClient;
         private const string BankUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
