@@ -9,7 +9,6 @@ namespace Common.UnitTests.Csv
     public class CsvWrapperTests
     {
         private readonly ICsvWrapper _objectToTest;
-
         private string testCsvData = "04 Oct 2022 #192\n\rCountry|Currency|Amount|Code|Rate\n\rAustralia|dollar|1|AUD|16.027\n\rBrazil|real|1|BRL|4.854";
 
         private class TestCsvModel
