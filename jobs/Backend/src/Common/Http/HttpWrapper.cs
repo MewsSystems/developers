@@ -55,7 +55,7 @@ namespace ExchangeRateUpdater.Common.Http
         /// <returns></returns>
         public async Task<string> HttpPost(string requestUri, IEnumerable<KeyValuePair<string, string>> postParameters, TimeSpan? timeout = null)
         {
-            var content = new FormUrlEncodedContent(postParameters);
+            using var content = new FormUrlEncodedContent(postParameters);
 
             HttpResponseMessage responseMessage = await _httpClient.PostAsync(requestUri, content, GetCancellationTokenFromTimeout(timeout)).ConfigureAwait(false);
             responseMessage.EnsureSuccessStatusCode();
@@ -72,7 +72,7 @@ namespace ExchangeRateUpdater.Common.Http
         private CancellationToken GetCancellationTokenFromTimeout(TimeSpan? timeout)
         {
             // set default timeout if not supplied
-            if (timeout.HasValue == false)
+            if (!timeout.HasValue)
             {
                 timeout = TimeSpan.FromSeconds(Constants.DEFAULT_REQUEST_TIMEOUT_IN_SECONDS);
             }

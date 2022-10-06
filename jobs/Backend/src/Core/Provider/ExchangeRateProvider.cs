@@ -7,9 +7,9 @@ namespace Core.Client.Provider
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private ILogger _logger;
-        private IConfiguration _configuration;
-        private IClient _client;
+        private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
+        private readonly IClient _client;
 
         public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, IClient client)
         {
