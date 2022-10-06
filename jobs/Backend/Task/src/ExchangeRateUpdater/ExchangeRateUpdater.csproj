@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRate.Models\ExchangeRateUpdater.Models.csproj" />
-    <ProjectReference Include="..\ExchangeRateProviders\ExchangeRateUpdater.Providers.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Models\ExchangeRateUpdater.Models.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Providers\ExchangeRateUpdater.Providers.csproj" />
   </ItemGroup>
 
 </Project>

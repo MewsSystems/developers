@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Providers", "src\ExchangeRateProviders\ExchangeRateUpdater.Providers.csproj", "{F7FEF365-7ACF-4F29-B3E9-A241F5BE72F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Providers", "src\ExchangeRateUpdater.Providers\ExchangeRateUpdater.Providers.csproj", "{F7FEF365-7ACF-4F29-B3E9-A241F5BE72F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Models", "src\ExchangeRate.Models\ExchangeRateUpdater.Models.csproj", "{140D36BA-3A0E-43AA-8B43-F8E11D70DA6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Models", "src\ExchangeRateUpdater.Models\ExchangeRateUpdater.Models.csproj", "{140D36BA-3A0E-43AA-8B43-F8E11D70DA6E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "src\ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{065AE084-D584-422F-84AC-57F07727DABF}"
 EndProject
