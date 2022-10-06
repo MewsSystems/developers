@@ -76,7 +76,7 @@ namespace Core.UnitTests.Provider
 
                 // Assert
                 actual.Should().Contain(rate => currencies.Any(currency => currency.Code.Equals(rate.SourceCurrency.Code)));
-                actual.Should().NotContain(rate => rate.SourceCurrency.Equals("USD"));
+                actual.Should().NotContain(rate => rate.SourceCurrency.Code.Equals("USD"));
             }
         }
     }
