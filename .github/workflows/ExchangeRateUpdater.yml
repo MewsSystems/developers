@@ -49,7 +49,7 @@ jobs:
         run: dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "${{github.workspace}}/reports"
       - name: Generate Test Reports
         if: ${{ always() }}
-        run: reportgenerator "-reports:reports/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
+        run: reportgenerator "-reports:${{github.workspace}}/reports/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
       - uses: actions/upload-artifact@v3
         with:
           name: Test Report
@@ -96,6 +96,11 @@ jobs:
 codeql:
   needs: build
   name: "Code QL Analyze"
+
+  defaults:
+      run:
+        working-directory: jobs/Backend/src
+
   runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -106,8 +111,6 @@ codeql:
       matrix:
         language: [ 'csharp' ]
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
