@@ -113,6 +113,8 @@ The pipeline has the following workflows:
         - Generates a report, with coverage.
     - Runs OWASP dependency check.
 
+[![ExchangeRateUpdater CI](https://github.com/grahamrgriffiths/ExchangeRateProvider/actions/workflows/ExchangeRateUpdater.yml/badge.svg)](https://github.com/grahamrgriffiths/ExchangeRateProvider/actions/workflows/ExchangeRateUpdater.yml)
+
 
 ## Author
 [Graham Griffiths](https://github.com/grahamrgriffiths)
