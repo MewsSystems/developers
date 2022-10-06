@@ -31,7 +31,7 @@ namespace Core.UnitTests.Client.CzechNationalBank
 
         public class GetExhcnageRatesTests : CzechNationalBankClientTests
         {
-            private void SetupGetExhcnageRatesTests(string testClientData)
+            private void SetupGetExchangeRatesTests(string testClientData)
             {
                 _mockConfigurationWrapper
                     .Setup(x => x.GetConfigValueAsString(It.IsAny<string>(), false))
@@ -59,7 +59,7 @@ namespace Core.UnitTests.Client.CzechNationalBank
             public async Task Gets_RateData_From_Client_Source(string testClientData)
             {
                 // Arrange
-                SetupGetExhcnageRatesTests(testClientData);
+                SetupGetExchangeRatesTests(testClientData);
 
                 // Act
                 await _objectToTest.GetExchangeRates();
@@ -72,7 +72,7 @@ namespace Core.UnitTests.Client.CzechNationalBank
             public async Task Returns_ParsedRateDate_List_Retrieved_From_Client(string testClientData)
             {
                 // Arrange
-                SetupGetExhcnageRatesTests(testClientData);
+                SetupGetExchangeRatesTests(testClientData);
 
                 // Act
                 var actual = await _objectToTest.GetExchangeRates();
