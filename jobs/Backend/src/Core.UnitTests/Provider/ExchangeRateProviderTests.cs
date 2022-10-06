@@ -1,5 +1,4 @@
-﻿using AutoFixture.Xunit2;
-using Common.Configuration;
+﻿using Common.Configuration;
 using Core.Client.Provider;
 using Core.Models;
 using Core.Parser;
