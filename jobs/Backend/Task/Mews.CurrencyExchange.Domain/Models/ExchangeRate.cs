@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Mews.CurrencyExchange.Domain.Models
 {
     public class ExchangeRate
     {
