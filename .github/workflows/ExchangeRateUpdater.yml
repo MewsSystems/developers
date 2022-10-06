@@ -40,7 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --settings settings/coverlet-runsettings.xml --logger trx --results-directory "test-results"
+      - name: Generate Test Reports
+        if: ${{ always() }}
+        run: reportgenerator "-reports:test-results/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Test Report
+          path: ${{github.workspace}}/reports
+        if: ${{ always() }}
 
   checkdepencies:
     needs: build
