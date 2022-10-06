@@ -13,9 +13,9 @@ namespace ExchangeRateUpdater.Providers.ProvidersStrategies
         private const string BankUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
         private const string targetCurrencyCode = "CZK";
 
-        public CzechNationalBankExchangeRateProvider(HttpClient httpClient)
+        public CzechNationalBankExchangeRateProvider(IHttpClientFactory httpClientFactory)
         {
-            this.httpClient = httpClient;
+            this.httpClient = httpClientFactory.CreateClient("czech_httpClient");
         }
 
         /// <summary>
@@ -33,7 +33,8 @@ namespace ExchangeRateUpdater.Providers.ProvidersStrategies
                 return new List<ExchangeRate>();
             }
 
-            var result = await response.EnsureSuccessStatusCode().Content.ReadAsStreamAsync();
+            var result = await response.Content.ReadAsStreamAsync();
+            // TODO: test for null result
             var reader = new StreamReader(result, System.Text.Encoding.UTF8);
 
             return this.ExchangeRatesBuilder(reader).Where(x => currencies.Any(c => c.Code == x.SourceCurrency.Code));
@@ -41,11 +42,13 @@ namespace ExchangeRateUpdater.Providers.ProvidersStrategies
 
         private IEnumerable<ExchangeRate> ExchangeRatesBuilder(StreamReader reader)
         {
+            // TODO: test for null reader
             var exchangeRateList = new List<ExchangeRate>();
             string line;
 
             this.SkipFileHeaders(reader);
 
+            // TODO: test for when file only has 2 lines (only header)
             while ((line = reader.ReadLine()) != null)
             {
                 string[] items = line.Split('|');

@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Providers
             switch (exchangeRateProviderCountry)
             {
                 default:
-                    return new CzechNationalBankExchangeRateProvider(this.httpClientFactory.CreateClient("czech_httpClient"));
+                    return new CzechNationalBankExchangeRateProvider(this.httpClientFactory);
             }
         }
     }

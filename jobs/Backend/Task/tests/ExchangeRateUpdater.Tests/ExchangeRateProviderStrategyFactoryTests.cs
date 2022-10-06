@@ -4,16 +4,17 @@ using ExchangeRateUpdater.Providers.ProvidersStrategies;
 
 namespace ExchangeRateUpdater.Tests
 {
-    public class ExchangeRateProviderStrategyFactoryTests : MockBase<ExchangeRateProviderStrategyFactory>
+    public class ExchangeRateProviderStrategyFactoryTests : MoqMeUp<ExchangeRateProviderStrategyFactory>
     {
         [Fact]
         public void GetStrategy_DefaultBehaviour_ReturnsCorrectStrategy()
         {
             // Arrange
-            Mocker.MockOf<IHttpClientFactory>();
+            this.Get<IHttpClientFactory>();
 
             // Act
-            var act = this.Subject.GetStrategy(ExchangeRateProviderCountry.CzechRepublic);
+            var target = this.Build();
+            var act = target.GetStrategy(ExchangeRateProviderCountry.CzechRepublic);
 
             // Assert
             act.Should().BeOfType<CzechNationalBankExchangeRateProvider>();
