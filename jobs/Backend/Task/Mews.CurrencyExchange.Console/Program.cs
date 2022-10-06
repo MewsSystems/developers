@@ -19,6 +19,7 @@ namespace Mews.CurrencyExchange.Console
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHttpClient();
+                    services.AddApplicationInsightsTelemetryWorkerService();
                     services.AddLogging();
                     services.AddHostedService<CurrencyExchangeApp>();
                 })
