@@ -49,7 +49,7 @@ jobs:
         run: dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "${{github.workspace}}/reports"
       - name: Generate Test Reports
         if: ${{ always() }}
-        run: reportgenerator "-reports:test-results/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
+        run: reportgenerator "-reports:reports/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
       - uses: actions/upload-artifact@v3
         with:
           name: Test Report
@@ -93,3 +93,26 @@ jobs:
            name: OWASP Dependency report
            path: ${{github.workspace}}/reports
 
+codeql:
+  needs: build
+  name: "Code QL Analyze"
+  runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+  strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
