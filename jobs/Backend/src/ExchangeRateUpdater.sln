@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{53359A5A-3667-4455-8757-68F5077748DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\Common\Common.csproj", "{4D20A1E6-371E-46F6-8934-9720CD405BD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{4D20A1E6-371E-46F6-8934-9720CD405BD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9C6A09C6-E961-4BF1-84DD-23F2FA65319D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\Core\Core.csproj", "{C181295E-706A-4BD2-9C71-D6FBA9713F32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{C181295E-706A-4BD2-9C71-D6FBA9713F32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "..\Common.UnitTests\Common.UnitTests.csproj", "{39DE52E1-6234-4292-B6CD-95B6E13A3660}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "Common.UnitTests\Common.UnitTests.csproj", "{39DE52E1-6234-4292-B6CD-95B6E13A3660}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests", "..\Core.UnitTests\Core.UnitTests.csproj", "{FFA0FC23-EA68-4455-8E10-25DE744B9E71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UnitTests", "Core.UnitTests\Core.UnitTests.csproj", "{FFA0FC23-EA68-4455-8E10-25DE744B9E71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExchangeRateUpdater.Console", "ExchangeRateUpdater.Console", "{5497AE71-098F-4F05-9A37-AB62CC29941E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Console", "ExchangeRateUpdater.Console\ExchangeRateUpdater.Console.csproj", "{F0197E62-F8D5-468F-A6CC-AD8882A96420}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D20A1E6-371E-46F6-8934-9720CD405BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D20A1E6-371E-46F6-8934-9720CD405BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D20A1E6-371E-46F6-8934-9720CD405BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,6 +41,10 @@ Global
 		{FFA0FC23-EA68-4455-8E10-25DE744B9E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA0FC23-EA68-4455-8E10-25DE744B9E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA0FC23-EA68-4455-8E10-25DE744B9E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0197E62-F8D5-468F-A6CC-AD8882A96420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0197E62-F8D5-468F-A6CC-AD8882A96420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0197E62-F8D5-468F-A6CC-AD8882A96420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0197E62-F8D5-468F-A6CC-AD8882A96420}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +54,7 @@ Global
 		{C181295E-706A-4BD2-9C71-D6FBA9713F32} = {9C6A09C6-E961-4BF1-84DD-23F2FA65319D}
 		{39DE52E1-6234-4292-B6CD-95B6E13A3660} = {53359A5A-3667-4455-8757-68F5077748DF}
 		{FFA0FC23-EA68-4455-8E10-25DE744B9E71} = {9C6A09C6-E961-4BF1-84DD-23F2FA65319D}
+		{F0197E62-F8D5-468F-A6CC-AD8882A96420} = {5497AE71-098F-4F05-9A37-AB62CC29941E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1489E8ED-120D-4E1E-BB38-4B97887E0532}
