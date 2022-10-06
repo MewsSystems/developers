@@ -6,14 +6,14 @@ on:
   pull_request:
     branches: [ "master" ]
     paths:
-      - 'jobs/Backend/ExchangeRateUpdater/**'
+      - 'jobs/Backend/src/**'
 
 jobs:
   build:
     name: Build
     defaults:
       run:
-        working-directory: jobs/Backend/ExchangeRateUpdater
+        working-directory: jobs/Backend/src
 
     runs-on: ubuntu-latest
 
@@ -33,11 +33,93 @@ jobs:
     name: Test
     defaults:
       run:
-        working-directory: jobs/Backend/ExchangeRateUpdater
+        working-directory: jobs/Backend/src
 
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install coverlet
+        run:  dotnet tool install --global coverlet.console --version 3.1.2
+        working-directory: ${{github.action_path}}
+      - name: Install reportgenerator
+        run:  dotnet tool install --global dotnet-reportgenerator-globaltool
+        working-directory: ${{github.action_path}}
       - uses: actions/checkout@v3
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --settings settings/coverlet-run.xml --logger trx --results-directory "${{github.workspace}}/reports"
+      - name: Generate Test Reports
+        if: ${{ always() }}
+        run: reportgenerator "-reports:${{github.workspace}}/reports/**/*.opencover.xml" "-targetdir:${{github.workspace}}/reports"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Test Report
+          path: ${{github.workspace}}/reports
+        if: ${{ always() }}
+
+  checkdepencies:
+    needs: build
+    name: "Dependency Check"
+    
+    defaults:
+      run:
+        working-directory: jobs/Backend/src
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Scan Dependencies
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        with:
+          project: 'Exchange Rate Updater'
+          path: '.'
+          format: 'HTML'    
+          args: >
+            --failOnCVSS 7
+            --enableRetired
+      - name: Upload Test results
+        uses: actions/upload-artifact@master
+        with:
+           name: OWASP Dependency report
+           path: ${{github.workspace}}/reports
+
+  codeql:
+    name: "Code QL Analyze"
+
+    defaults:
+      run:
+        working-directory: jobs/Backend/src
+
+    runs-on: ubuntu-latest
+    permissions:
+       actions: read
+       contents: read
+       security-events: write
+    strategy:
+        fail-fast: false
+        matrix:
+          language: [ 'csharp' ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          config-file: ./.github/codeql/codeql-config.yml
+          languages: ${{ matrix.language }}
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
