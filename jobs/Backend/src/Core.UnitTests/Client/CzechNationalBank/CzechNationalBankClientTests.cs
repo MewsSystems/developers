@@ -1,4 +1,5 @@
-﻿using Common.Configuration;
+﻿using AutoFixture.Xunit2;
+using Common.Configuration;
 using Core.Client.CzechNationalBank;
 using Core.Models;
 using Core.Parser;
@@ -18,8 +19,6 @@ namespace Core.UnitTests.Client.CzechNationalBank
         private readonly Mock<IResponseParser> _mockResponseParser;
         private readonly CzechNationalBankClient _objectToTest;
 
-        private string testClientData = "04 Oct 2022 #192\n\rCountry|Currency|Amount|Code|Rate\n\rAustralia|dollar|1|AUD|16.027\n\rBrazil|real|1|BRL|4.854";
-
         public CzechNationalBankClientTests()
         {
             _mockLogger = new Mock<ILogger<CzechNationalBankClient>>();
@@ -32,7 +31,7 @@ namespace Core.UnitTests.Client.CzechNationalBank
 
         public class GetExhcnageRatesTests : CzechNationalBankClientTests
         {
-            private void SetupGetExhcnageRatesTests()
+            private void SetupGetExhcnageRatesTests(string testClientData)
             {
                 _mockConfigurationWrapper
                     .Setup(x => x.GetConfigValueAsString(It.IsAny<string>(), false))
@@ -56,11 +55,11 @@ namespace Core.UnitTests.Client.CzechNationalBank
                     );
             }
 
-            [Fact]
-            public async Task Gets_RateData_From_Client_Source()
+            [Theory, AutoData]
+            public async Task Gets_RateData_From_Client_Source(string testClientData)
             {
                 // Arrange
-                SetupGetExhcnageRatesTests();
+                SetupGetExhcnageRatesTests(testClientData);
 
                 // Act
                 await _objectToTest.GetExchangeRates();
@@ -69,11 +68,11 @@ namespace Core.UnitTests.Client.CzechNationalBank
                 _mockHttpWrapper.Verify(x => x.HttpGet(It.IsAny<string>(), null), Times.Once);
             }
 
-            [Fact]
-            public async Task Returns_ParsedRateDate_List_Retrieved_From_Client()
+            [Theory, AutoData]
+            public async Task Returns_ParsedRateDate_List_Retrieved_From_Client(string testClientData)
             {
                 // Arrange
-                SetupGetExhcnageRatesTests();
+                SetupGetExhcnageRatesTests(testClientData);
 
                 // Act
                 var actual = await _objectToTest.GetExchangeRates();
