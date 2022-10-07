@@ -53,8 +53,8 @@ There was also a requirement to write the code to run on production environment 
 ### Architecture
 In this version (1.0.0), significant improvements have been made to promote loose coupling, and high cohesion.
 
-The models have been separated from direct implementations; this promotes reusability. The same has been done for constants and enums.
-To further promote reusability, the configuration, HTTP, and CSV functionality has been separated into their own implementations. 
+The models have been separated from direct implementations; this promotes re-usability. The same has been done for constants and enums.
+To further promote re-usability, the configuration, HTTP, and CSV functionality has been separated into their own implementations. 
 
 The client (in this case, CNB) logic has been separated from the provider logic. This allows us to add more clients at a later date.
 

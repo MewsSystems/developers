@@ -10,7 +10,7 @@ using static Common.Enums;
 namespace Core.Client.CzechNationalBank
 {
     /// <summary>
-    /// Client mplementation for CzechNationalBank
+    /// Client implementation for CzechNationalBank
     /// </summary>
     public class CzechNationalBankClient : BaseClient, IClient
     { 

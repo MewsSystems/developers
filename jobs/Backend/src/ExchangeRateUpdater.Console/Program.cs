@@ -90,7 +90,7 @@ namespace ExchangeRateUpdater
                     .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                     .AddSingleton<IHttpWrapper, HttpWrapper>()
                     .AddSingleton<ICsvWrapper, CsvWrapper>()
-                    // can be swapped out for ohter implementaions, ideally this would be done in a factory
+                    // can be swapped out for other implementations, ideally this would be done in a factory
                     .AddSingleton<IClient, CzechNationalBankClient>()
                     .AddSingleton<IResponseParser, CzechNationalBankResponseParser>()
                     // add configuration

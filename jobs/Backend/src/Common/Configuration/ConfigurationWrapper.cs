@@ -69,7 +69,7 @@ namespace Common.Configuration
         }
 
         /// <summary>
-        /// Helper to return char delimitted config value as list
+        /// Helper to return char delimited config value as list
         /// </summary>
         /// <param name="configKey"></param>
         /// <param name="defaultValue"></param>
