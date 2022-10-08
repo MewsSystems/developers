@@ -38,7 +38,7 @@ namespace ExchangeRates.Clients
 			}
 			catch (OperationCanceledException ex)
 			{
-				logger.LogError(ex, "Exchange rates request has been cancelled.");
+				logger.LogError(ex, "Exchange rate request has been cancelled.");
 				throw;
 			}
 			catch (Exception ex) 
@@ -54,7 +54,7 @@ namespace ExchangeRates.Clients
 			}
 			else
 			{
-				logger.LogWarning("Exchange rates from CNB could not be downloaded.");
+				logger.LogWarning($"Exchange rates from CNB could not be downloaded with the status '{response.StatusCode}' ({response.ReasonPhrase}).");
 				return string.Empty;
 			}
 		}
