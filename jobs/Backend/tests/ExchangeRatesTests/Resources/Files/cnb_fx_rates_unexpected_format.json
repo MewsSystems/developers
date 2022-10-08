@@ -1,0 +1,21 @@
+{
+  "rates": {
+    "datetime": "3.10.2022",
+    "rates": [
+      {
+        "country": "EMU",
+        "currency": "euro",
+        "amount": "1",
+        "code": "EUR",
+        "value": "25"
+      },
+      {
+        "country": "USA",
+        "currency": "dollar",
+        "amount": "1",
+        "code": "USD",
+        "value": "25"
+      }
+    ]
+  }
+}

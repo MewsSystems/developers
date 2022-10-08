@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace ExchangeRates.Contracts
+﻿namespace ExchangeRates.Contracts
 {
     public class ExchangeRate
     {

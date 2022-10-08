@@ -14,7 +14,7 @@ namespace ExchangeRates
 		{
 			services.Scan(scan => scan
 				.FromAssemblies(ExchangeRatesAssembly.Get())
-					.AddClasses(c => c.AssignableTo(typeof(IClient)))
+					.AddClasses(c => c.AssignableTo(typeof(IClient<>)))
 					.AsSelfWithInterfaces()
 					.WithScopedLifetime());
 
@@ -25,7 +25,7 @@ namespace ExchangeRates
 		{
 			services.Scan(scan => scan
 				.FromAssemblies(ExchangeRatesAssembly.Get())
-					.AddClasses(c => c.AssignableTo(typeof(IParser)))
+					.AddClasses(c => c.AssignableTo(typeof(IParser<>)))
 					.AsSelfWithInterfaces()
 					.WithScopedLifetime());
 

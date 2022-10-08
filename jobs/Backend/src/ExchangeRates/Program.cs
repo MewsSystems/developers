@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRates.Contracts;
@@ -45,21 +43,26 @@ namespace ExchangeRates
                 .AddCustomizedCultureProviders()
 				.BuildServiceProvider();
 
-			try
+            try
             {
-				Console.WriteLine("Enter the day in the format dd.mm.yyyy, you want to aquire the exchange rate for.");
-				Console.WriteLine("Leave empty for the most recent date.");
-				var exchangeRateDate = Console.ReadLine();
-				DateOnly? day = string.IsNullOrWhiteSpace(exchangeRateDate)
-                    ? null 
+                Console.WriteLine("Enter the day in the format 'd.m.yyyy', you want to aquire the exchange rate for.");
+                Console.WriteLine("Leave empty for the most recent date.");
+                var exchangeRateDate = Console.ReadLine();
+                DateOnly? day = string.IsNullOrWhiteSpace(exchangeRateDate)
+                    ? null
                     : DateOnly.Parse(
-                        exchangeRateDate, 
+                        exchangeRateDate,
                         serviceProvider.GetService<ICnbCultureProvider>().GetCultureInfo());
 
-				var provider = serviceProvider.GetService<ICnbExchangeRateProvider>();
-                var rates =  await provider.GetExchangeRates(currencies, day);
+                var tokenSource = new CancellationTokenSource();
+                // Uncomment to simulate token cancellation
+				//tokenSource.Cancel();
 
-                Console.WriteLine($"Successfully retrieved {rates.Length} exchange rates:");
+				var provider = serviceProvider.GetService<ICnbExchangeRateProvider>();				
+				var rates = await provider.GetExchangeRatesAsync(currencies, day, tokenSource.Token);
+
+                Console.WriteLine(string.Empty);
+				Console.WriteLine($"Successfully retrieved {rates.Length} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());

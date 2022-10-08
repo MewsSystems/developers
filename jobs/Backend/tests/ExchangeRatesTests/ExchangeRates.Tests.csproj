@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Files\cnb_fx_rates_ok.txt" />
+    <None Remove="Resources\Files\cnb_fx_rates_only_header.txt" />
+    <None Remove="Resources\Files\cnb_fx_rates_unexpected_column_separator.txt" />
+    <None Remove="Resources\Files\cnb_fx_rates_unexpected_format.json" />
+    <None Remove="Resources\Files\cnb_fx_rates_unexpected_line_separator.txt" />
+    <None Remove="Resources\Files\cnb_fx_rates_unexpected_number_of_columns.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_unexpected_format.json" />
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_unexpected_number_of_columns.txt" />
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_unexpected_column_separator.txt" />
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_unexpected_line_separator.txt" />
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_only_header.txt" />
+    <EmbeddedResource Include="Resources\Files\cnb_fx_rates_ok.txt" />
+  </ItemGroup>
+	<ItemGroup>		
+		<PackageReference Include="FluentAssertions" Version="6.7.0" />		
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />		
+		<PackageReference Include="Moq" Version="4.18.2" />
+		<PackageReference Include="Scrutor" Version="4.2.0" />
+		<PackageReference Include="xunit" Version="2.4.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\ExchangeRates\ExchangeRates.csproj" />
+	</ItemGroup>
+
+</Project>

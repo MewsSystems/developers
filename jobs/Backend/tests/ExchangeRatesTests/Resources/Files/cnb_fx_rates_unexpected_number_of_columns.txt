@@ -1,0 +1,4 @@
+03.10.2022 #191
+země|množství|kód|kurz
+EMU|1|EUR|25
+USA|1|USD|25

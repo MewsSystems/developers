@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRates.Contracts;
 
@@ -13,6 +14,6 @@ namespace ExchangeRates.Providers
 		/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
 		/// some of the currencies, ignore them.
 		/// </summary>
-		Task<ExchangeRate[]> GetExchangeRates(IEnumerable<Currency> currencies, DateOnly? day = null);
+		Task<ExchangeRate[]> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateOnly? day = default, CancellationToken token = default);
 	}
 }
