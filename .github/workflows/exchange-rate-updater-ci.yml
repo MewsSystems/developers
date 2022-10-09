@@ -38,6 +38,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         name: Upload test results
+        if: always()
         with:
           name: test-results
           path: jobs/Backend/Task/ExchangeRateUpdater.Tests/TestResults
