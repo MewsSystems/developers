@@ -30,42 +30,42 @@ namespace ExchangeRates.Parsers
 
 		public ExchangeRate[] ParserData(string data)
 		{			
-			var rates = new List<ExchangeRate>();
-
-			// Rate rows are delimited by rateRowsDelimiter, so it can be split. Empty entries are removed, since they have no meaning.
-			var rateRows = data.Split(rateRowsDelimiter, StringSplitOptions.RemoveEmptyEntries);
+			var rates = new List<ExchangeRate>();			
+			var rateRows = data
+				// Rate rows are delimited by rateRowsDelimiter, so it can be split. Empty entries are removed, since they have no meaning.
+				.Split(rateRowsDelimiter, StringSplitOptions.RemoveEmptyEntries)
+				// Rate columns are delimited by rateColumnsDelimiter, so it can be split.
+				.Select(rateRow => rateRow.Split(rateColumnsDelimiter))
+				.ToArray();
 			
 			// Skip the rate data processing if they are none or only header.
 			if (rateRows.Length > numberOfHeaderRows) 
 			{
-				foreach (var rateRow in rateRows.Skip(numberOfHeaderRows)) 
+				// Check the number of columns in data rows. Header rows are skipped.
+				if (!rateRows.Skip(numberOfHeaderRows).Any(rateRow => rateRow.Length != numberOfRowColumns))
 				{
-					// Rate columns are delimited by rateColumnsDelimiter, so it can be split.
-					var rateRowColumns = rateRow.Split(rateColumnsDelimiter);
-
-					// Check the expected number of columns.
-					if (rateRowColumns.Length == numberOfRowColumns) 
+					foreach (var rateRow in rateRows.Skip(numberOfHeaderRows))
 					{
 						rates.Add(
 							new ExchangeRate(
 								new Currency(sourceCurrencyCode),
-								new Currency(rateRowColumns[targetCurrencyCodeIndex]),
-								Convert.ToInt16(rateRowColumns[targetCurrencyUnitAmountIndex], culture.GetCultureInfo()),
-								Convert.ToDecimal(rateRowColumns[exchangeRateValueIndex], culture.GetCultureInfo())));
-					}
-					else
-					{
-						logger.LogWarning("Number of columns in the exchange rate data set from CNB is not to the expected value, so it cannot be parsed.");
-						return Array.Empty<ExchangeRate>();
-					}
-				};
+								new Currency(rateRow[targetCurrencyCodeIndex]),
+								Convert.ToInt16(rateRow[targetCurrencyUnitAmountIndex], culture.GetCultureInfo()),
+								Convert.ToDecimal(rateRow[exchangeRateValueIndex], culture.GetCultureInfo())));						
+					};
+				}
+				else
+				{
+					logger.LogWarning($"[{nameof(CnbParser)}] Number of columns in the exchange rate data set from CNB is not equal to the expected value, so it cannot be parsed.");
+					return Array.Empty<ExchangeRate>();
+				}
 
-				logger.LogInformation("Exchange rate data from CNB has been successfully parsed.");
+				logger.LogInformation($"[{nameof(CnbParser)}] Exchange rate data from CNB has been successfully parsed.");
 				return rates.ToArray();
 			}
 			else 
 			{
-				logger.LogWarning("Number of rows in the exchange rate data set from CNB is not equal to the expected value, so it cannot be parsed.");
+				logger.LogWarning($"[{nameof(CnbParser)}] Number of rows in the exchange rate data set from CNB is not equal to the expected value, so it cannot be parsed.");
 			}
 
 			return Array.Empty<ExchangeRate>();
