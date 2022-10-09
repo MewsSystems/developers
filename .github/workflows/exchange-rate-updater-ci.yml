@@ -1,0 +1,43 @@
+name: Exchange rate updater CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+    name: .NET build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Restore NuGet packages
+        run: dotnet restore
+        working-directory: jobs/Backend/Task
+
+      - name: Build solution
+        run: >-
+          dotnet build
+          --configuration Release
+          --no-restore
+        working-directory: jobs/Backend/Task
+
+      - name: Run tests
+        run: >-
+          dotnet test
+          --configuration Release
+          --logger trx
+          --no-build
+        working-directory: jobs/Backend/Task
+
+      - uses: actions/upload-artifact@v3
+        name: Upload test results
+        with:
+          name: test-results
+          path: jobs/Backend/Task/ExchangeRateUpdater.Tests/TestResults
