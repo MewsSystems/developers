@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
 
 namespace ExchangeRateUpdater;
 
@@ -29,19 +30,7 @@ public static class Program
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
-        var services = new ServiceCollection()
-            .AddLogging(builder => builder.AddSimpleConsole())
-            .Configure<CzechNationalBankExchangeRateProviderOptions>(configuration.GetSection(nameof(CzechNationalBankExchangeRateProviderOptions)));
-
-        services
-            .AddHttpClient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>("czech-national-bank", (provider, client) =>
-            {
-                var options = provider.GetRequiredService<IOptions<CzechNationalBankExchangeRateProviderOptions>>().Value;
-
-                client.BaseAddress = options.BaseAddress;
-            });
-
-        await using var provider = services.BuildServiceProvider();
+        await using var provider = GetServiceCollection(configuration).BuildServiceProvider();
 
         var logger = provider.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
 
@@ -62,5 +51,28 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    public static IServiceCollection GetServiceCollection(IConfiguration configuration)
+    {
+        var services = new ServiceCollection()
+            .AddLogging(builder => builder.AddSimpleConsole())
+            .Configure<CzechNationalBankExchangeRateProviderOptions>(configuration.GetSection(nameof(CzechNationalBankExchangeRateProviderOptions)));
+
+        services
+            .AddHttpClient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>(HttpClientsNames.CzechNationalBank, (provider, client) =>
+            {
+                var options = provider.GetRequiredService<IOptions<CzechNationalBankExchangeRateProviderOptions>>().Value;
+
+                client.BaseAddress = options.BaseAddress;
+            })
+            .AddTransientHttpErrorPolicy(builder =>
+            {
+                return builder.WaitAndRetryAsync(
+                    retryCount: 3,
+                    sleepDurationProvider: retryNumber => TimeSpan.FromMilliseconds(retryNumber * 100));
+            });
+
+        return services;
     }
 }

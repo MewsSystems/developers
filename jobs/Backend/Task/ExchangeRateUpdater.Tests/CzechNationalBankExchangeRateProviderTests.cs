@@ -1,36 +1,27 @@
-using Microsoft.Extensions.Options;
+using System.Net;
+using System.Security.Cryptography;
 using RichardSzalay.MockHttp;
 
 namespace ExchangeRateUpdater.Tests;
 
-public class CzechNationalBankExchangeRateProviderTests
+public class CzechNationalBankExchangeRateProviderTests : IClassFixture<Fixture>
 {
-    private static readonly string _baseAddress = "https://localhost:12345";
-    private static readonly string _exchangeRatesEndpoint = "/rates";
-
-    private readonly MockHttpMessageHandler _mockHttp;
+    private readonly Fixture _fixture;
     private readonly CzechNationalBankExchangeRateProvider _sut;
 
-    public CzechNationalBankExchangeRateProviderTests()
+    public CzechNationalBankExchangeRateProviderTests(Fixture fixture)
     {
-        _mockHttp = new MockHttpMessageHandler();
-        _sut = new CzechNationalBankExchangeRateProvider(
-            new HttpClient(_mockHttp)
-            {
-                BaseAddress = new(_baseAddress, UriKind.Absolute)
-            },
-            Options.Create(new CzechNationalBankExchangeRateProviderOptions
-            {
-                BaseAddress = new(_baseAddress, UriKind.Absolute),
-                ExchangeRatesEndpoint = new(_exchangeRatesEndpoint, UriKind.Relative)
-            }));
+        _fixture = fixture;
+        _sut = _fixture.Sut;
+
+        _fixture.MockHttp.ResetExpectations();
     }
 
     [Fact]
     public async Task GivenHttpRequestDoesntReturnData_WhenGettingExchangeRates_ThenNoRatesAreReturned()
     {
         // Arrange
-        GetMockedRequest()
+        SetUpMockedRequest()
             .Respond("text/plain", string.Empty);
 
         // Act
@@ -44,7 +35,7 @@ public class CzechNationalBankExchangeRateProviderTests
     public async Task GivenHttpRequestReturnsData_WhenNoMatchingCurrencies_ThenNoRatesAreReturned()
     {
         // Arrange
-        GetMockedRequest()
+        SetUpMockedRequest()
             .Respond("text/plain", @"07 Oct 2022 #195
 Country|Currency|Amount|Code|Rate
 Australia|dollar|1|AUD|16.063
@@ -61,7 +52,7 @@ Hungary|forint|100|HUF|5.785");
     public async Task GivenHttpRequestReturnsData_WhenMatchingCurrencies_ThenRatesAreReturned()
     {
         // Arrange
-        GetMockedRequest()
+        SetUpMockedRequest()
             .Respond("text/plain", @"07 Oct 2022 #195
 Country|Currency|Amount|Code|Rate
 Europe|euro|1|EUR|20.076
@@ -81,7 +72,7 @@ Hungary|forint|100|HUF|5.785");
     public async Task GivenHttpRequestReturnsData_WhenMatchingCurrencyWithNonOneAmount_ThenRateIsCorrect()
     {
         // Arrange
-        GetMockedRequest()
+        SetUpMockedRequest()
             .Respond("text/plain", @"07 Oct 2022 #195
 Country|Currency|Amount|Code|Rate
 Europe|euro|1|EUR|20.076
@@ -99,7 +90,7 @@ Hungary|forint|100|HUF|5.785");
     public async Task GivenHttpRequestReturnsInvalidData_WhenGettingExchangeRates_ThenExceptionIsThrown()
     {
         // Arrange
-        GetMockedRequest()
+        SetUpMockedRequest()
             .Respond("text/plain", @"Some random data that is not pipe-delimited
 Some random data that is not pipe-delimited
 Some random data that is not pipe-delimited
@@ -109,10 +100,89 @@ Some random data that is not pipe-delimited");
         await Assert.ThrowsAnyAsync<Exception>(async () => await _sut.GetExchangeRates(new Currency[] { new("HUF") }));
     }
 
-    private MockedRequest GetMockedRequest() => _mockHttp.When(
-        HttpMethod.Get,
-        new UriBuilder(_baseAddress)
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task GivenHttpRequestFailsLessThanThreeTimesWithTransientError_WhenGettingExchangeRates_ThenOperationSucceeds(int numberOfFailures)
+    {
+        // Arrange
+        foreach (var _ in Enumerable.Range(1, numberOfFailures))
         {
-            Path = _exchangeRatesEndpoint
-        }.ToString());
+            SetUpTransientErrorMockedRequest();
+        }
+
+        SetUpMockedRequest()
+            .Respond("text/plain", @"07 Oct 2022 #195
+Country|Currency|Amount|Code|Rate
+Europe|euro|1|EUR|20.076
+Hungary|forint|100|HUF|5.785");
+
+        // Act
+        var rates = await _sut.GetExchangeRates(new Currency[] { new("HUF") });
+
+        // Assert
+        Assert.NotEmpty(rates);
+    }
+
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    public async Task GivenHttpRequestFailsAtLeastThreeTimesWithTransientError_WhenGettingExchangeRates_ThenExceptionIsThrown(int numberOfFailures)
+    {
+        // Arrange
+        foreach (var _ in Enumerable.Range(1, numberOfFailures))
+        {
+            SetUpTransientErrorMockedRequest();
+        }
+
+        // Act & Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await _sut.GetExchangeRates(new Currency[] { new("HUF") }));
+    }
+
+    public static TheoryData<Action<MockedRequest>> NonTransientErrors => new()
+    {
+        { request => request.Respond(HttpStatusCode.NotFound) },
+        { request => request.Respond(HttpStatusCode.Unauthorized) },
+        { request => request.Respond(HttpStatusCode.Forbidden) },
+        { request => request.Respond(HttpStatusCode.MethodNotAllowed) }
+    };
+
+    [Theory]
+    [MemberData(nameof(NonTransientErrors))]
+    public async Task GivenHttpRequestFailsWithNonTransientError_WhenGettingExchangeRates_ThenExceptionIsThrown(Action<MockedRequest> nonTransientError)
+    {
+        // Arrange
+        var mockedRequest = SetUpMockedRequest();
+        nonTransientError(mockedRequest);
+
+        // Act & Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await _sut.GetExchangeRates(new Currency[] { new("HUF") }));
+    }
+
+    private MockedRequest SetUpMockedRequest() => _fixture.MockHttp.Expect(
+        HttpMethod.Get,
+        _fixture.ExchangeRatesEndpointAbsoluteUrl);
+
+    private MockedRequest SetUpTransientErrorMockedRequest()
+    {
+        var transientErrors = new Action<MockedRequest>[]
+        {
+            // Exception
+            request => request.Throw(new HttpRequestException("Transient error!")),
+
+            // 408
+            request => request.Respond(HttpStatusCode.RequestTimeout),
+
+            // 50x
+            request => request.Respond(HttpStatusCode.InternalServerError),
+            request => request.Respond(HttpStatusCode.BadGateway),
+            request => request.Respond(HttpStatusCode.ServiceUnavailable),
+        };
+
+        var mockedRequest = SetUpMockedRequest();
+        var randomTransientError = transientErrors[RandomNumberGenerator.GetInt32(0, transientErrors.Length)];
+        randomTransientError(mockedRequest);
+
+        return mockedRequest;
+    }
 }
