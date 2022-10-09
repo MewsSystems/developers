@@ -33,7 +33,8 @@ namespace ExchangeRates.Clients
 			HttpResponseMessage response;
 			try 
 			{
-				var request = BuildRequest(date);
+				ValidateInputs();
+				var request = BuildRequest(options.Urls.CnbUrl, date);
 				var client = BuildClient();				
 				response = await client.SendAsync(request, token);
 			}
@@ -60,22 +61,15 @@ namespace ExchangeRates.Clients
 			}
 		}
 
-		private HttpRequestMessage BuildRequest(DateOnly? date) 
+		private HttpRequestMessage BuildRequest(string url, DateOnly? date) 
 		{
 			var queryParameters = new Dictionary<string, string>();
 			if (date.HasValue)
 			{
 				queryParameters.Add("date", date.Value.ToString("dd.MM.yyyy"));
-			}
+			}			
 
-			if (!Uri.TryCreate(options.Urls.CnbUrl, UriKind.Absolute, out Uri cnbUrl)) 
-			{
-				var message = $"[{nameof(CnbClient)}] Provided URL is not in correct format.";
-				logger.LogError(message);
-				throw new ArgumentException(message);
-			}
-
-			var uri = QueryHelpers.AddQueryString(cnbUrl.OriginalString, queryParameters);
+			var uri = QueryHelpers.AddQueryString(url, queryParameters);
 			return new HttpRequestMessage(
 				HttpMethod.Get,
 				uri);
@@ -90,6 +84,17 @@ namespace ExchangeRates.Clients
 			client.DefaultRequestHeaders.Accept.Add(new("text/plain"));			
 
 			return client;
+		}
+
+		private void ValidateInputs() 
+		{
+			// Configured URL check
+			if (!Uri.TryCreate(options.Urls.CnbUrl, UriKind.Absolute, out Uri cnbUrl))
+			{
+				var message = $"[{nameof(CnbClient)}] Provided URL is not in correct format.";
+				logger.LogError(message);
+				throw new ArgumentException(message);
+			}
 		}
 	}
 }
