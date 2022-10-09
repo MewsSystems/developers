@@ -1,6 +1,6 @@
 namespace ExchangeRateUpdater;
 
-public class ExchangeRate
+public record ExchangeRate
 {
     public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
     {
