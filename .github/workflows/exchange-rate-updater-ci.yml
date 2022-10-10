@@ -5,6 +5,7 @@ on:
   pull_request:
 
 permissions:
+  checks: write
   contents: read
 
 jobs:
@@ -39,9 +40,10 @@ jobs:
           --no-build
         working-directory: jobs/Backend/Task
 
-      - uses: actions/upload-artifact@v3
-        name: Upload test results
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
         if: always()
         with:
-          name: test-results
-          path: jobs/Backend/Task/ExchangeRateUpdater.Tests/TestResults
+          name: .NET tests
+          path: jobs/Backend/Task/ExchangeRateUpdater.Tests/TestResults/*.trx
+          reporter: dotnet-trx
