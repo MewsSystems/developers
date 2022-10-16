@@ -40,6 +40,18 @@ public class CnbClient : ICnbClient
 
         using var streamReader = new StreamReader(streamResponse);
 
+        var info = await streamReader.ReadLineAsync();
+        if (string.IsNullOrWhiteSpace(info))
+        {
+            throw new Exception("Information is missing.");
+        }
+
+        var column = await streamReader.ReadLineAsync();
+        if (string.IsNullOrWhiteSpace(column))
+        {
+            throw new Exception("Column is missing.");
+        }
+
         while (await streamReader.ReadLineAsync() is { } line)
         {
             if (string.IsNullOrWhiteSpace(line)) continue;

@@ -15,6 +15,6 @@ public class ExchangeRateMappingProfile : Profile
     /// </summary>
     public ExchangeRateMappingProfile()
     {
-        CreateMap<ExchangeRatesResponse, IEnumerable<ExchangeRate>>().ConvertUsing<ExchangeRateTypeConverter>();
+        CreateMap<ExchangeRatesResponse, IEnumerable<ExchangeRate>>().ConvertUsing<ExchangeRateValueResolver>();
     }
 }

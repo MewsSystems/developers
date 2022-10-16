@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Clients.Cnb", "src\ExchangeRateUpdater.Clients.Cnb\ExchangeRateUpdater.Clients.Cnb.csproj", "{232306E4-614C-4309-8474-B69B29288C09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.Tests", "test\ExchangeRateUpdater.Domain.Tests\ExchangeRateUpdater.Domain.Tests.csproj", "{FB989F92-0714-436E-B5F0-C299036E145A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests.Shared", "test\ExchangeRateUpdater.Tests.Shared\ExchangeRateUpdater.Tests.Shared.csproj", "{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,14 @@ Global
 		{232306E4-614C-4309-8474-B69B29288C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{232306E4-614C-4309-8474-B69B29288C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{232306E4-614C-4309-8474-B69B29288C09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB989F92-0714-436E-B5F0-C299036E145A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB989F92-0714-436E-B5F0-C299036E145A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB989F92-0714-436E-B5F0-C299036E145A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB989F92-0714-436E-B5F0-C299036E145A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +51,7 @@ Global
 		{953C7BF8-46B4-4244-B41B-788C1DF1DA3C} = {E450BD40-04D4-4C8B-B3E9-9DC8F53720F8}
 		{D38AD944-FF7A-47D1-B63E-C10370A68082} = {E450BD40-04D4-4C8B-B3E9-9DC8F53720F8}
 		{232306E4-614C-4309-8474-B69B29288C09} = {E450BD40-04D4-4C8B-B3E9-9DC8F53720F8}
+		{FB989F92-0714-436E-B5F0-C299036E145A} = {DA81A429-8149-41E2-BE76-9ADA5252E614}
+		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE} = {DA81A429-8149-41E2-BE76-9ADA5252E614}
 	EndGlobalSection
 EndGlobal

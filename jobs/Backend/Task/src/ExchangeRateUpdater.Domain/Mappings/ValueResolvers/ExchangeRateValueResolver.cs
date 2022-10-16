@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
 
-public class ExchangeRateTypeConverter : ITypeConverter<ExchangeRatesResponse, IEnumerable<ExchangeRate>>
+public class ExchangeRateValueResolver : ITypeConverter<ExchangeRatesResponse, IEnumerable<ExchangeRate>>
 {
     private readonly string _exchangeRateCurrency;
 
-    public ExchangeRateTypeConverter(IConfiguration configuration)
+    public ExchangeRateValueResolver(IConfiguration configuration)
     {
         _exchangeRateCurrency = configuration["ExchangeRateCurrency"] ?? throw new ArgumentNullException(nameof(configuration));
     }
