@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Clients.Cnb.Options;
+using ExchangeRateUpdater.Clients.Cnb.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -33,6 +34,8 @@ public static class ServiceCollectionExtensions
             .AddOptions<CnbClientOptions>()
             .Configure(options)
             .Validate(opts => opts.BaseUrl != null, "Base URL missing.");
+
+        services.AddTransient<CnbClientResponseParser>();
 
         return services
             .AddHttpClient<ICnbClient, CnbClient>()
