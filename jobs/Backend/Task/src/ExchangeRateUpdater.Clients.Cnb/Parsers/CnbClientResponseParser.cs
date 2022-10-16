@@ -11,7 +11,7 @@ public class CnbClientResponseParser
 {
     private const char LineDelimiter = '|';
     private const string CurrencyDecimalSeparator = ".";
-    private const int LineLength = 5;
+    private const int LineColumnsLength = 5;
 
     private readonly ILogger<CnbClientResponseParser> _logger;
 
@@ -33,19 +33,19 @@ public class CnbClientResponseParser
     {
         ExchangeRateDto? exchangeRate = null;
 
-        var splintedLine = line.Split(LineDelimiter);
+        var lineColumns = line.Split(LineDelimiter);
 
-        if (splintedLine.Length != LineLength) return exchangeRate;
+        if (lineColumns.Length != LineColumnsLength) return exchangeRate;
 
         try
         {
             exchangeRate = new ExchangeRateDto
             {
-                Country = splintedLine[0],
-                Currency = splintedLine[1],
-                Amount = Convert.ToInt32(splintedLine[2]),
-                Code = splintedLine[3],
-                Rate = Convert.ToDecimal(splintedLine[4], new NumberFormatInfo { CurrencyDecimalSeparator = CurrencyDecimalSeparator })
+                Country = lineColumns[0],
+                Currency = lineColumns[1],
+                Amount = Convert.ToInt32(lineColumns[2]),
+                Code = lineColumns[3],
+                Rate = Convert.ToDecimal(lineColumns[4], new NumberFormatInfo { CurrencyDecimalSeparator = CurrencyDecimalSeparator })
             };
         }
         catch (Exception ex)

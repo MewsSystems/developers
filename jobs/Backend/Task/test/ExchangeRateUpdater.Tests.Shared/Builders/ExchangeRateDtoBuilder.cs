@@ -10,7 +10,7 @@ public class ExchangeRateDtoBuilder
     private string _code = "USD";
     private decimal _rate = (decimal)25.298;
 
-    public ExchangeRateDto Build()
+    public ExchangeRateDto? Build()
     {
         return new ExchangeRateDto
         {

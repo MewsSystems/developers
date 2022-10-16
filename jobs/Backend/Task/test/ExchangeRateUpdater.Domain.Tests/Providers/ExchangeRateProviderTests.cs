@@ -20,8 +20,7 @@ public class ExchangeRateProviderTests
     [Theory]
     [MemberData(nameof(MappingTestCases))]
     public async Task Given_currencies_when_retrieving_exchange_rates_then_return_ok_with_appropriate_content(
-        List<ExchangeRate> exchangeRates, List<Currency> currencies, List<ExchangeRate> expectedResult
-    )
+        List<ExchangeRate> exchangeRates, List<Currency> currencies, List<ExchangeRate> expectedResult)
     {
         //Arrange
         _client.Setup(client => client.GetExchangeRatesAsync()).ReturnsAsync(exchangeRates);
