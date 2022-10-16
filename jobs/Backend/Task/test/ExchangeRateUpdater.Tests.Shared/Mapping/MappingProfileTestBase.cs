@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ExchangeRateUpdater.Clients.Cnb.Mappings;
+using ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -26,15 +28,19 @@ public abstract class MappingProfileTestBase
     /// Gets the subject profile under test.
     /// </summary>
     /// <returns></returns>
-    protected abstract void ConfigureMapper(IMapperConfigurationExpression configure);
-
-    [Fact]
-    public void Mapper_configuration_should_be_valid()
+    protected virtual void ConfigureMapper(IMapperConfigurationExpression configure)
     {
-        // Act
-        Action act = () => _mapperConfiguration.AssertConfigurationIsValid();
+        configure.AddProfile<ExchangeRateMappingProfile>();
+        configure.ConstructServicesUsing(GetCustomServicesResolver);
+    }
 
-        // Assert
-        act.Should().NotThrow();
+    private object GetCustomServicesResolver(Type type)
+    {
+        if (type == typeof(ExchangeRateValueResolver))
+        {
+            return new ExchangeRateValueResolver(ConfigurationMock.Object);
+        }
+
+        return Activator.CreateInstance(type);
     }
 }

@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using ExchangeRateUpdater.Clients.Cnb.Mappings;
-using ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
-using ExchangeRateUpdater.Clients.Cnb.Responses;
+﻿using ExchangeRateUpdater.Clients.Cnb.Responses;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Tests.Shared.Builders;
 using ExchangeRateUpdater.Tests.Shared.Mapping;
@@ -11,25 +8,9 @@ namespace ExchangeRateUpdater.Clients.Cnb.Tests.Mappings
 {
     public class ExchangeRateMappingProfileTests : MappingProfileTestBase
     {
-        protected override void ConfigureMapper(IMapperConfigurationExpression configure)
-        {
-            configure.AddProfile<ExchangeRateMappingProfile>();
-            configure.ConstructServicesUsing(GetCustomServicesResolver);
-        }
-
-        private object GetCustomServicesResolver(Type type)
-        {
-            if (type == typeof(ExchangeRateValueResolver))
-            {
-                return new ExchangeRateValueResolver(ConfigurationMock.Object);
-            }
-
-            return Activator.CreateInstance(type);
-        }
-
         [Theory]
         [MemberData(nameof(MappingTestCases))]
-        public void When_mapping_source_to_destination_it_should_map_as_expected(object src, object expectedDest)
+        public void Given_source_when_mapping_source_to_destination_then_it_should_map_as_expected(object src, object expectedDest)
         {
             // Arrange
             var srcType = src.GetType();

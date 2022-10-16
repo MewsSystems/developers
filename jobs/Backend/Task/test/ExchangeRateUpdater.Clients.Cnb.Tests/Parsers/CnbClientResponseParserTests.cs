@@ -18,7 +18,7 @@ public class CnbClientResponseParserTests
 
     [Theory]
     [MemberData(nameof(MappingTestCases))]
-    public void When_parsing_line_to_exchange_rate_it_should_map_as_expected(string line, ExchangeRateDto expectedResult)
+    public void Given_line_when_parsing_line_to_exchange_rate_then_it_should_map_as_expected(string line, ExchangeRateDto expectedResult)
     {
         //Arrange - Act
         var result = _parser.ExtractExchangeRate(line);
