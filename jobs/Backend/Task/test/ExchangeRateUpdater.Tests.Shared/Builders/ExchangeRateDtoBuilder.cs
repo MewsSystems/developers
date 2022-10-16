@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.Clients.Cnb.Models;
+﻿using ExchangeRateUpdater.Clients.Cnb.Responses;
 
 namespace ExchangeRateUpdater.Tests.Shared.Builders;
 

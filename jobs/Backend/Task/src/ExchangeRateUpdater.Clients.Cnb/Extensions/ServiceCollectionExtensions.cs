@@ -1,5 +1,6 @@
 using ExchangeRateUpdater.Clients.Cnb.Options;
 using ExchangeRateUpdater.Clients.Cnb.Parsers;
+using ExchangeRateUpdater.Domain.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -13,7 +14,7 @@ namespace ExchangeRateUpdater.Clients.Cnb.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds Cnb client(see <see cref="ICnbClient" />)
+    /// Adds Cnb client.
     /// </summary>
     /// <param name="services">The service container.</param>
     /// <param name="options">The options delegate to configure Cnb client.</param>
@@ -37,7 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<CnbClientResponseParser>();
 
         return services
-            .AddHttpClient<ICnbClient, CnbClient>()
+            .AddHttpClient<IExchangeRateProviderClient, CnbClient>()
             .ConfigureHttpClient((s, c) =>
             {
                 c.BaseAddress = s.GetRequiredService<IOptions<CnbClientOptions>>().Value.BaseUrl;
@@ -53,7 +54,7 @@ public static class ServiceCollectionExtensions
     private static IAsyncPolicy<HttpResponseMessage> GetAsyncPolicy(RetryOptions retryOptions)
     {
         var delay = Backoff.DecorrelatedJitterBackoffV2(
-            medianFirstRetryDelay: TimeSpan.FromSeconds(retryOptions.DelayInSeconds), 
+            medianFirstRetryDelay: TimeSpan.FromSeconds(retryOptions.DelayInSeconds),
             retryCount: retryOptions.Count);
 
         return Policy<HttpResponseMessage>

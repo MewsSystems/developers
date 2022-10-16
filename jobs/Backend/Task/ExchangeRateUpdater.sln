@@ -13,9 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Clients.Cnb", "src\ExchangeRateUpdater.Clients.Cnb\ExchangeRateUpdater.Clients.Cnb.csproj", "{232306E4-614C-4309-8474-B69B29288C09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.Tests", "test\ExchangeRateUpdater.Domain.Tests\ExchangeRateUpdater.Domain.Tests.csproj", "{FB989F92-0714-436E-B5F0-C299036E145A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Clients.Cnb.Tests", "test\ExchangeRateUpdater.Clients.Cnb.Tests\ExchangeRateUpdater.Clients.Cnb.Tests.csproj", "{FB989F92-0714-436E-B5F0-C299036E145A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests.Shared", "test\ExchangeRateUpdater.Tests.Shared\ExchangeRateUpdater.Tests.Shared.csproj", "{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.Tests", "test\ExchangeRateUpdater.Domain.Tests\ExchangeRateUpdater.Domain.Tests.csproj", "{BCF25158-323B-4691-A3A0-019E4099B93A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF25158-323B-4691-A3A0-019E4099B93A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF25158-323B-4691-A3A0-019E4099B93A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF25158-323B-4691-A3A0-019E4099B93A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF25158-323B-4691-A3A0-019E4099B93A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{232306E4-614C-4309-8474-B69B29288C09} = {E450BD40-04D4-4C8B-B3E9-9DC8F53720F8}
 		{FB989F92-0714-436E-B5F0-C299036E145A} = {DA81A429-8149-41E2-BE76-9ADA5252E614}
 		{410F4CB3-35BF-4C57-9531-60FAF2BDC6EE} = {DA81A429-8149-41E2-BE76-9ADA5252E614}
+		{BCF25158-323B-4691-A3A0-019E4099B93A} = {DA81A429-8149-41E2-BE76-9ADA5252E614}
 	EndGlobalSection
 EndGlobal

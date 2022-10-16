@@ -1,9 +1,9 @@
 using AutoMapper;
+using ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
 using ExchangeRateUpdater.Clients.Cnb.Responses;
-using ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
 using ExchangeRateUpdater.Domain.Models;
 
-namespace ExchangeRateUpdater.Domain.Mappings;
+namespace ExchangeRateUpdater.Clients.Cnb.Mappings;
 
 /// <summary>
 /// Mapping profile for exchange rate

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
+using ExchangeRateUpdater.Clients.Cnb.Mappings;
+using ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
 using ExchangeRateUpdater.Clients.Cnb.Responses;
-using ExchangeRateUpdater.Domain.Mappings;
-using ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Tests.Shared.Builders;
 using ExchangeRateUpdater.Tests.Shared.Mapping;
 using FluentAssertions;
 
-namespace ExchangeRateUpdater.Domain.Tests.Mapping
+namespace ExchangeRateUpdater.Clients.Cnb.Tests.Mappings
 {
     public class ExchangeRateMappingProfileTests : MappingProfileTestBase
     {
@@ -31,6 +31,7 @@ namespace ExchangeRateUpdater.Domain.Tests.Mapping
         [MemberData(nameof(MappingTestCases))]
         public void When_mapping_source_to_destination_it_should_map_as_expected(object src, object expectedDest)
         {
+            // Arrange
             var srcType = src.GetType();
             var destType = expectedDest.GetType();
 

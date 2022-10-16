@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Clients.Cnb.Extensions;
+using ExchangeRateUpdater.Clients.Cnb.Mappings;
 using ExchangeRateUpdater.Console.Configuration;
-using ExchangeRateUpdater.Domain.Mappings;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Providers;
 using Microsoft.Extensions.Configuration;

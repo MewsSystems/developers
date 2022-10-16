@@ -3,7 +3,7 @@ using ExchangeRateUpdater.Clients.Cnb.Responses;
 using ExchangeRateUpdater.Domain.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
+namespace ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
 
 public class ExchangeRateValueResolver : ITypeConverter<ExchangeRatesResponse, IEnumerable<ExchangeRate>>
 {

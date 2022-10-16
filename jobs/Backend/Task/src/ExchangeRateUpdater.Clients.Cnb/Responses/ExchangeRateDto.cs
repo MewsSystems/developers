@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater.Clients.Cnb.Models;
+namespace ExchangeRateUpdater.Clients.Cnb.Responses;
 
 /// <summary>
 /// The Dto of Exchange rate response

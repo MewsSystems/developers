@@ -1,5 +1,3 @@
-using ExchangeRateUpdater.Clients.Cnb.Models;
-
 namespace ExchangeRateUpdater.Clients.Cnb.Responses;
 
 /// <summary>

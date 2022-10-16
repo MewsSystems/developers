@@ -1,5 +1,5 @@
 using System.Globalization;
-using ExchangeRateUpdater.Clients.Cnb.Models;
+using ExchangeRateUpdater.Clients.Cnb.Responses;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Clients.Cnb.Parsers;

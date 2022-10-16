@@ -1,18 +1,14 @@
-﻿using AutoMapper;
-using ExchangeRateUpdater.Clients.Cnb;
-using ExchangeRateUpdater.Domain.Models;
+﻿using ExchangeRateUpdater.Domain.Models;
 
 namespace ExchangeRateUpdater.Domain.Providers;
 
 public class ExchangeRateProvider
 {
-    private readonly ICnbClient _cnbClient;
-    private readonly IMapper _mapper;
+    private readonly IExchangeRateProviderClient _client;
 
-    public ExchangeRateProvider(ICnbClient cnbClient, IMapper mapper)
+    public ExchangeRateProvider(IExchangeRateProviderClient client)
     {
-        _cnbClient = cnbClient ?? throw new ArgumentNullException(nameof(cnbClient));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
     /// <summary>
@@ -23,8 +19,7 @@ public class ExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var response = await _cnbClient.GetExchangeRatesAsync();
-        var exchangeRates = _mapper.Map<IEnumerable<ExchangeRate>>(response);
-        return exchangeRates.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
+        var response = await _client.GetExchangeRatesAsync();
+        return response.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
     }
 }
