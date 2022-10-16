@@ -8,8 +8,8 @@ public sealed class CnbClientOptions
     /// <summary>
     /// The base URL for the Cnb API.
     /// </summary>
-    public Uri BaseUrl { get; set; } = default!;
-    
+    public Uri? BaseUrl { get; set; }
+
     /// <summary>
     /// Gets or sets the retry options.
     /// </summary>

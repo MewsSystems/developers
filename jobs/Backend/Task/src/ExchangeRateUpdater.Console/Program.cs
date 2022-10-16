@@ -1,10 +1,11 @@
 ﻿using ExchangeRateUpdater.Clients.Cnb.Extensions;
-using ExchangeRateUpdater.Clients.Cnb.Parsers;
 using ExchangeRateUpdater.Console.Configuration;
+using ExchangeRateUpdater.Domain.Mappings;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Console;
 
@@ -54,6 +55,10 @@ public static class Program
         services.AddTransient<ExchangeRateProvider>();
         services.AddSingleton(configuration);
         services.AddCnbClient(configuration.GetSection("Clients:Cnb").Bind);
+        services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
+
+        services.AddAutoMapper(typeof(Program), typeof(RegisterDomainMappingProfiles));
+
         return services.BuildServiceProvider();
     }
 }

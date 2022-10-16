@@ -17,7 +17,6 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The service container.</param>
     /// <param name="options">The options delegate to configure Cnb client.</param>
-    /// <returns>The service container to continue chaining.</returns>
     public static IHttpClientBuilder AddCnbClient(this IServiceCollection services, Action<CnbClientOptions> options)
     {
         if (services is null)
@@ -47,10 +46,15 @@ public static class ServiceCollectionExtensions
                 GetAsyncPolicy(s.GetRequiredService<IOptions<CnbClientOptions>>().Value.RetryOptions));
     }
 
+    /// <summary>
+    /// Gets retry policy for cbn client, works with jitter strategy
+    /// </summary>
+    /// <param name="retryOptions">The options delegate to configure retry.</param>
     private static IAsyncPolicy<HttpResponseMessage> GetAsyncPolicy(RetryOptions retryOptions)
     {
         var delay = Backoff.DecorrelatedJitterBackoffV2(
-            medianFirstRetryDelay: TimeSpan.FromSeconds(retryOptions.DelayInSeconds), retryCount: retryOptions.Count);
+            medianFirstRetryDelay: TimeSpan.FromSeconds(retryOptions.DelayInSeconds), 
+            retryCount: retryOptions.Count);
 
         return Policy<HttpResponseMessage>
             .Handle<HttpRequestException>()

@@ -2,7 +2,13 @@ using ExchangeRateUpdater.Clients.Cnb.Models;
 
 namespace ExchangeRateUpdater.Clients.Cnb.Responses;
 
+/// <summary>
+/// The response of the cnb client.
+/// </summary>
 public class ExchangeRatesResponse
 {
-    public List<ExchangeRate> ExchangeRates { get; set; } = new();
+    /// <summary>
+    /// The exchange rates.
+    /// </summary>
+    public List<ExchangeRateDto> ExchangeRates { get; } = new();
 }

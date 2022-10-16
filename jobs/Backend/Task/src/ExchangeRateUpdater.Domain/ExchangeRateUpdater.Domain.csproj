@@ -10,4 +10,9 @@
       <ProjectReference Include="..\ExchangeRateUpdater.Clients.Cnb\ExchangeRateUpdater.Clients.Cnb.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    </ItemGroup>
+
 </Project>
