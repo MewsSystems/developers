@@ -3,12 +3,12 @@ namespace ExchangeRateUpdater.Clients.Cnb.Responses;
 /// <summary>
 /// The response of the cnb client.
 /// </summary>
-public class ExchangeRatesResponse
+public class ExchangeRateResponse
 {
     /// <summary>
     /// The exchange rates.
     /// </summary>
-    public List<ExchangeRateDto> ExchangeRates { get; } = new();
+    public List<ExchangeRateDto?> ExchangeRates { get; init; } = new();
     
     /// <summary>
     /// The current date

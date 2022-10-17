@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
 
-public class ExchangeRateValueResolver : ITypeConverter<ExchangeRatesResponse, IEnumerable<ExchangeRate>>
+public class ExchangeRateValueResolver : ITypeConverter<ExchangeRateResponse, IEnumerable<ExchangeRate>>
 {
     private readonly ApplicationOptions _applicationOptions;
 
@@ -15,7 +15,7 @@ public class ExchangeRateValueResolver : ITypeConverter<ExchangeRatesResponse, I
         _applicationOptions = applicationOptions.Value ?? throw new ArgumentNullException(nameof(applicationOptions));
     }
 
-    public IEnumerable<ExchangeRate> Convert(ExchangeRatesResponse source, IEnumerable<ExchangeRate> destMember, ResolutionContext? context)
+    public IEnumerable<ExchangeRate> Convert(ExchangeRateResponse source, IEnumerable<ExchangeRate> destMember, ResolutionContext? context)
     {
         return source.ExchangeRates.Select(exchangeRateResponse =>
         {

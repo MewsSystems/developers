@@ -12,7 +12,7 @@ public interface IExchangeRateCache
     /// </summary>
     /// <param name="dateTime">The date.</param>
     /// <param name="exchangeRates">The exchange rates.</param>
-    void Set(DateTime dateTime, IEnumerable<ExchangeRate>? exchangeRates);
+    void Set(DateTime dateTime, IEnumerable<ExchangeRate> exchangeRates);
     
     /// <summary>
     /// Gets latest exchanges rates.

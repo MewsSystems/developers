@@ -1,12 +1,12 @@
 ﻿using ExchangeRateUpdater.Clients.Cnb.Responses;
 using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Tests.Shared;
 using ExchangeRateUpdater.Tests.Shared.Builders;
-using ExchangeRateUpdater.Tests.Shared.Mapping;
 using FluentAssertions;
 
 namespace ExchangeRateUpdater.Domain.Tests.Mappings
 {
-    public class ExchangeRateMappingProfileTests : MappingProfileTestBase
+    public class ExchangeRateMappingProfileTests : TestBase
     {
         [Theory]
         [MemberData(nameof(MappingTestCases))]
@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.Domain.Tests.Mappings
         {
             yield return new object[]
             {
-                new ExchangeRatesResponse
+                new ExchangeRateResponse
                 {
                     ExchangeRates = { new ExchangeRateDtoBuilder().WithAmount(1).WithCode("TRY").WithCountry("Turkey").WithCurrency("lira").WithRate(5).Build() }
                 },

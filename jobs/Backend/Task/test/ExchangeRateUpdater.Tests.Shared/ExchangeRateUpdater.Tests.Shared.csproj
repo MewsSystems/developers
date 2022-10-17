@@ -30,4 +30,8 @@
       <ProjectReference Include="..\..\src\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Mapping" />
+    </ItemGroup>
+
 </Project>

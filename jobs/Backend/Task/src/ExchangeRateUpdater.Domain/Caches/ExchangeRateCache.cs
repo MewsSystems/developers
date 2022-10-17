@@ -25,7 +25,7 @@ public class ExchangeRateCache : IExchangeRateCache
     /// </summary>
     /// <param name="dateTime">The date.</param>
     /// <param name="exchangeRates">The exchange rates.</param>
-    public void Set(DateTime dateTime, IEnumerable<ExchangeRate>? exchangeRates)
+    public void Set(DateTime dateTime, IEnumerable<ExchangeRate> exchangeRates)
     {
         _memoryCache.Set(dateTime.ToString("d"), exchangeRates);
     }

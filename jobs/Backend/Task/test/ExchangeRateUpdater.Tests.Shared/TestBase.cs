@@ -2,18 +2,17 @@
 using ExchangeRateUpdater.Domain.Mappings;
 using ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
 using ExchangeRateUpdater.Domain.Options;
-using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace ExchangeRateUpdater.Tests.Shared.Mapping;
+namespace ExchangeRateUpdater.Tests.Shared;
 
-public abstract class MappingProfileTestBase
+public abstract class TestBase
 {
-    protected Mock<IOptions<ApplicationOptions>> ApplicationOptions;
-    
-    protected MappingProfileTestBase()
+    protected Mock<IOptions<ApplicationOptions>> ApplicationOptions { get; set; }
+    protected IMapper Mapper { get; }
+
+    protected TestBase()
     {
         var mapperConfiguration = new MapperConfiguration(cfg => ConfigureMapper(cfg));
 
@@ -29,7 +28,6 @@ public abstract class MappingProfileTestBase
         ApplicationOptions.Setup(ap => ap.Value).Returns(applicationOptions);
     }
 
-    protected IMapper Mapper { get; }
 
     /// <summary>
     /// Gets the subject profile under test.

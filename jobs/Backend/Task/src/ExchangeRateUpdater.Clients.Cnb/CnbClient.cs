@@ -20,7 +20,7 @@ public class CnbClient : ICnbClient
     }
 
     /// <inheritdoc />
-    public async Task<ExchangeRatesResponse> GetExchangeRatesAsync()
+    public async Task<ExchangeRateResponse> GetExchangeRatesAsync()
     {
         var httpResponseMessage = await _httpClient.GetAsync(
             "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
@@ -34,9 +34,9 @@ public class CnbClient : ICnbClient
     /// Reads response from stream
     /// </summary>
     /// <param name="streamResponse">The stream response.</param>
-    private async Task<ExchangeRatesResponse> ReadResponseAsync(Stream streamResponse)
+    private async Task<ExchangeRateResponse> ReadResponseAsync(Stream streamResponse)
     {
-        var response = new ExchangeRatesResponse();
+        var response = new ExchangeRateResponse();
 
         using var streamReader = new StreamReader(streamResponse);
 

@@ -31,7 +31,7 @@ public class ExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        ExchangeRatesResponse? response;
+        ExchangeRateResponse? response;
         IEnumerable<ExchangeRate>? exchangeRates;
 
         if (!_applicationOptions.EnableInMemoryCache)

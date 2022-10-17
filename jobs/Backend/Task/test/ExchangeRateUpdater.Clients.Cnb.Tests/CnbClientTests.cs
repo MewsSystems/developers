@@ -49,7 +49,7 @@ public class CnbClientTests
         _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
-        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+        Func<Task<ExchangeRateResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
         await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Information is missing.");
@@ -87,7 +87,7 @@ public class CnbClientTests
         _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
-        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+        Func<Task<ExchangeRateResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
         await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Invalid date.");
@@ -125,7 +125,7 @@ public class CnbClientTests
         _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
-        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+        Func<Task<ExchangeRateResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
         await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Column is missing.");
