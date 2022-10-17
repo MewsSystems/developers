@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.Clients.Cnb.Mappings;
+﻿namespace ExchangeRateUpdater.Domain.Mappings;
 
 /// <summary>
 /// Marker class to register mapping profiles.

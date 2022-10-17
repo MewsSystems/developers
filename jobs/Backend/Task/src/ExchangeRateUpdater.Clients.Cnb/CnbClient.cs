@@ -1,40 +1,33 @@
-using AutoMapper;
 using ExchangeRateUpdater.Clients.Cnb.Parsers;
 using ExchangeRateUpdater.Clients.Cnb.Responses;
-using ExchangeRateUpdater.Domain.Models;
-using ExchangeRateUpdater.Domain.Providers;
 
 namespace ExchangeRateUpdater.Clients.Cnb;
 
-public class CnbClient : IExchangeRateProviderClient
+public class CnbClient : ICnbClient
 {
     private readonly HttpClient _httpClient;
-    private readonly CnbClientResponseParser _parser;
-    private readonly IMapper _mapper;
+    private readonly ICnbClientResponseParser _parser;
 
     /// <summary>
     /// Constructs a <see cref="CnbClient"/>
     /// </summary>
     /// <param name="httpClient">The http client.</param>
     /// <param name="parser">The parser.</param>
-    /// <param name="mapper">The mapper.</param>
-    public CnbClient(HttpClient httpClient, CnbClientResponseParser parser, IMapper mapper)
+    public CnbClient(HttpClient httpClient, ICnbClientResponseParser parser)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _parser = parser ?? throw new ArgumentNullException(nameof(parser));
-        _mapper = mapper;
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync()
+    public async Task<ExchangeRatesResponse> GetExchangeRatesAsync()
     {
         var httpResponseMessage = await _httpClient.GetAsync(
             "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
         httpResponseMessage.EnsureSuccessStatusCode();
 
         var streamResponse = await httpResponseMessage.Content.ReadAsStreamAsync();
-        var response = await ReadResponseAsync(streamResponse);
-        return _mapper.Map<IEnumerable<ExchangeRate>>(response);
+        return await ReadResponseAsync(streamResponse);
     }
 
     /// <summary>
@@ -53,7 +46,16 @@ public class CnbClient : IExchangeRateProviderClient
             throw new Exception("Information is missing.");
         }
 
+        var currentDate = _parser.ExtractDate(info);
+        if (currentDate == null)
+        {
+            throw new Exception("Invalid date.");
+        }
+
+        response.CurrentDate = currentDate.Value;
+
         var column = await streamReader.ReadLineAsync();
+
         if (string.IsNullOrWhiteSpace(column))
         {
             throw new Exception("Column is missing.");

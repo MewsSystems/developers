@@ -1,7 +1,6 @@
 using System.Net;
 using ExchangeRateUpdater.Clients.Cnb.Parsers;
-using ExchangeRateUpdater.Domain.Models;
-using ExchangeRateUpdater.Tests.Shared.Mapping;
+using ExchangeRateUpdater.Clients.Cnb.Responses;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -9,7 +8,7 @@ using Moq.Protected;
 
 namespace ExchangeRateUpdater.Clients.Cnb.Tests;
 
-public class CnbClientTests : MappingProfileTestBase
+public class CnbClientTests
 {
     private CnbClient _cnbClient;
     private Mock<HttpMessageHandler> _httpMessageHandler;
@@ -47,17 +46,17 @@ public class CnbClientTests : MappingProfileTestBase
         {
             BaseAddress = _url
         };
-        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object), Mapper);
+        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
-        Func<Task<IEnumerable<ExchangeRate>>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
         await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Information is missing.");
     }
 
     [Fact]
-    public async Task Given_request_when_column_info_is_empty_then_it_should_throw_Exception()
+    public async Task Given_request_when_title_is_invalid_then_it_should_throw_Exception()
     {
         //Arrange
         var stream = new MemoryStream();
@@ -85,10 +84,48 @@ public class CnbClientTests : MappingProfileTestBase
         {
             BaseAddress = _url
         };
-        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object), Mapper);
+        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
-        Func<Task<IEnumerable<ExchangeRate>>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
+
+        // Assert
+        await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Invalid date.");
+    }
+    
+    [Fact]
+    public async Task Given_request_when_column_info_is_empty_then_it_should_throw_Exception()
+    {
+        //Arrange
+        var stream = new MemoryStream();
+        var sw = new StreamWriter(stream);
+        await sw.WriteLineAsync("14 Oct 2022 #200");
+        await sw.FlushAsync();
+        stream.Position = 0;
+
+        var httpResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StreamContent(stream)
+        };
+
+        _httpMessageHandler = new Mock<HttpMessageHandler>();
+        _httpMessageHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(httpResponse);
+
+        var client = new HttpClient(_httpMessageHandler.Object)
+        {
+            BaseAddress = _url
+        };
+        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
+
+        //Act
+        Func<Task<ExchangeRatesResponse>> act = async () => await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
         await act.Should().ThrowExactlyAsync<Exception>().WithMessage("Column is missing.");
@@ -100,7 +137,7 @@ public class CnbClientTests : MappingProfileTestBase
         //Arrange
         var stream = new MemoryStream();
         var sw = new StreamWriter(stream);
-        await sw.WriteLineAsync("title");
+        await sw.WriteLineAsync("14 Oct 2022 #200");
         await sw.WriteLineAsync("Country|Currency|Amount|Code|Rate");
         await sw.WriteLineAsync("Australia|dollar|1|AUD|15.867");
 
@@ -127,15 +164,18 @@ public class CnbClientTests : MappingProfileTestBase
             BaseAddress = _url
         };
 
-        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object), Mapper);
+        _cnbClient = new CnbClient(client, new CnbClientResponseParser(_logger.Object));
 
         //Act
         var response = await _cnbClient.GetExchangeRatesAsync();
 
         // Assert
-        response.Count().Should().Be(1);
-        response.First().Value.Should().Be((decimal)15.867);
-        response.First().SourceCurrency.Code.Should().Be("AUD");
-        response.First().TargetCurrency.Code.Should().Be("CZK");
+        response.CurrentDate.Should().Be(new DateTime(2022, 10, 14, 0, 0, 0));
+        response.ExchangeRates.Count().Should().Be(1);
+        response.ExchangeRates.First().Rate.Should().Be((decimal)15.867);
+        response.ExchangeRates.First().Code.Should().Be("AUD");
+        response.ExchangeRates.First().Country.Should().Be("Australia");
+        response.ExchangeRates.First().Currency.Should().Be("dollar");
+        response.ExchangeRates.First().Amount.Should().Be(1);
     }
 }

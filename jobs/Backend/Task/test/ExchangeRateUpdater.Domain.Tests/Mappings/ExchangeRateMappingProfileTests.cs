@@ -4,7 +4,7 @@ using ExchangeRateUpdater.Tests.Shared.Builders;
 using ExchangeRateUpdater.Tests.Shared.Mapping;
 using FluentAssertions;
 
-namespace ExchangeRateUpdater.Clients.Cnb.Tests.Mappings
+namespace ExchangeRateUpdater.Domain.Tests.Mappings
 {
     public class ExchangeRateMappingProfileTests : MappingProfileTestBase
     {

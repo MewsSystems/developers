@@ -1,25 +1,32 @@
 ﻿using AutoMapper;
-using ExchangeRateUpdater.Clients.Cnb.Mappings;
-using ExchangeRateUpdater.Clients.Cnb.Mappings.ValueResolvers;
+using ExchangeRateUpdater.Domain.Mappings;
+using ExchangeRateUpdater.Domain.Mappings.ValueResolvers;
+using ExchangeRateUpdater.Domain.Options;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace ExchangeRateUpdater.Tests.Shared.Mapping;
 
 public abstract class MappingProfileTestBase
 {
-    private readonly MapperConfiguration _mapperConfiguration;
-    protected readonly Mock<IConfiguration> ConfigurationMock;
-
+    protected Mock<IOptions<ApplicationOptions>> ApplicationOptions;
+    
     protected MappingProfileTestBase()
     {
-        _mapperConfiguration = new MapperConfiguration(cfg => ConfigureMapper(cfg));
+        var mapperConfiguration = new MapperConfiguration(cfg => ConfigureMapper(cfg));
 
-        Mapper = _mapperConfiguration.CreateMapper();
+        Mapper = mapperConfiguration.CreateMapper();
         
-        ConfigurationMock = new Mock<IConfiguration>();
-        ConfigurationMock.Setup(configuration => configuration["ExchangeRateCurrency"]).Returns("CZK");
+        var applicationOptions = new ApplicationOptions
+        {
+            ExchangeRateCurrency = "CZK",
+            EnableInMemoryCache = true
+        };
+
+        ApplicationOptions = new Mock<IOptions<ApplicationOptions>>();
+        ApplicationOptions.Setup(ap => ap.Value).Returns(applicationOptions);
     }
 
     protected IMapper Mapper { get; }
@@ -38,7 +45,7 @@ public abstract class MappingProfileTestBase
     {
         if (type == typeof(ExchangeRateValueResolver))
         {
-            return new ExchangeRateValueResolver(ConfigurationMock.Object);
+            return new ExchangeRateValueResolver(ApplicationOptions.Object);
         }
 
         return Activator.CreateInstance(type);

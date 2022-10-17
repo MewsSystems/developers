@@ -12,8 +12,4 @@
       <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
-    </ItemGroup>
-
 </Project>

@@ -1,7 +1,9 @@
 ﻿using ExchangeRateUpdater.Clients.Cnb.Extensions;
-using ExchangeRateUpdater.Clients.Cnb.Mappings;
 using ExchangeRateUpdater.Console.Configuration;
+using ExchangeRateUpdater.Domain.Caches;
+using ExchangeRateUpdater.Domain.Mappings;
 using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Options;
 using ExchangeRateUpdater.Domain.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,7 +58,9 @@ public static class Program
         services.AddSingleton(configuration);
         services.AddCnbClient(configuration.GetSection("Clients:Cnb").Bind);
         services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
-
+        services.AddOptions<ApplicationOptions>().Configure(configuration.GetSection("ApplicationSettings").Bind);
+        services.AddMemoryCache();
+        services.AddSingleton<IExchangeRateCache, ExchangeRateCache>();
         services.AddAutoMapper(typeof(Program), typeof(RegisterDomainMappingProfiles));
 
         return services.BuildServiceProvider();

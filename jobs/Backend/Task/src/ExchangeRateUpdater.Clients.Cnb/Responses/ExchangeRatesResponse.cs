@@ -9,4 +9,9 @@ public class ExchangeRatesResponse
     /// The exchange rates.
     /// </summary>
     public List<ExchangeRateDto> ExchangeRates { get; } = new();
+    
+    /// <summary>
+    /// The current date
+    /// </summary>
+    public DateTime CurrentDate { get; set; }
 }
