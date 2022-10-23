@@ -57,7 +57,7 @@ namespace ExchangeRateUpdater.Cnb
                 );
         }
 
-        public record Options
+        public class Options
         {
             public string Url { get; set; }
         }

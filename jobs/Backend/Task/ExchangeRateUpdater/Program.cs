@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using ExchangeRateUpdater.Model;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater
 {
@@ -26,8 +29,9 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var cnbClient = new CnbClient(new CnbClient.Options { Url = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt" });
-                var provider = new ExchangeRateProvider(cnbClient);
+                var container = SetupContainer();
+                var provider = container.GetRequiredService<IExchangeRateProvider>();
+
                 var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -42,6 +46,28 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static IServiceProvider SetupContainer()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+            var config = builder.AddJsonFile("appsettings.json").Build();
+
+            var services = new ServiceCollection();
+
+            var cnbClientOptions = config.GetSection("CnbClient").Get<CnbClient.Options>();
+            services.AddSingleton(cnbClientOptions);
+
+            var exchangeRateCacheOptions = config.GetSection("ExchangeRateCache").Get<ExchangeRateCache.Options>();
+            services.AddSingleton(exchangeRateCacheOptions);
+
+            services.AddSingleton<ICnbClient, CnbClient>();
+            services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+            services.AddSingleton<IExchangeRateCache, ExchangeRateCache>();
+
+            services.AddMemoryCache();
+
+            return services.BuildServiceProvider();
         }
     }
 }

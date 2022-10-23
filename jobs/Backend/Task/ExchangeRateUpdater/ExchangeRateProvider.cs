@@ -4,17 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using ExchangeRateUpdater.Model;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly ICnbClient _cnbClient;
         private readonly CnbMapper _cnbMapper;
+        private readonly IExchangeRateCache _exchangeRateCache;
 
-        public ExchangeRateProvider(ICnbClient cnbClient)
+        public ExchangeRateProvider(ICnbClient cnbClient, IExchangeRateCache exchangeRateCache)
         {
             _cnbClient = cnbClient;
+            this._exchangeRateCache = exchangeRateCache;
+
             _cnbMapper = new CnbMapper();
         }
 
@@ -26,14 +30,25 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            ExchangeRate[] exchangeRates = null;
+            if (!_exchangeRateCache.TryGetValue(out exchangeRates))
+            {
+                exchangeRates = await FetchExchangeRates();
+                _exchangeRateCache.Set(exchangeRates);
+            }
+
+            return exchangeRates.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
+        }
+
+        private async Task<ExchangeRate[]> FetchExchangeRates()
+        {
             var dailyRates = await _cnbClient.GetLatestExchangeRatesAsync();
 
             CountExchangeRatesAgeMetric(dailyRates.Date);
 
-            var mapped = dailyRates.Rates
+            return dailyRates.Rates
                 .Select(_cnbMapper.MapExchangeRate)
                 .ToArray();
-                return mapped.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
         }
 
         private void CountExchangeRatesAgeMetric(DateOnly exchangeRateDate)
