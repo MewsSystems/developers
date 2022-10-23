@@ -19,7 +19,12 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetRates()
         {
             var rateInfo = await _exchangeRateSource.GetLatestExchangeRatesAsync();
-            Console.WriteLine(rateInfo);
+            Console.WriteLine(rateInfo.Date);
+
+            foreach (var rate in rateInfo.Rates)
+            {
+                Console.WriteLine(rate);
+            }
         }
     }
 }
