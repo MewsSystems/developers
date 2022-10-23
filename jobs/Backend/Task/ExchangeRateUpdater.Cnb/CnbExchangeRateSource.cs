@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public class CnbExchangeRateSource
+    public class CnbClient
     {
         private const string TargetCurrency = "CZK";
 
         private readonly string _url;
 
-        public CnbExchangeRateSource(Options options)
+        public CnbClient(Options options)
         {
             _url = options.Url ?? throw new ArgumentNullException(nameof(Options.Url));
         }
 
-        public async Task<ExchangeRates> GetLatestExchangeRatesAsync()
+        public async Task<DailyExchangeRates> GetLatestExchangeRatesAsync()
         {
             var content = await _url.GetStringAsync();
             return ParseRates(content);
@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater
         /// <summary>
         /// Parses exchange rate according to the specification at https://www.cnb.cz/en/faq/Format-of-the-foreign-exchange-market-rates/
         /// </summary>
-        private ExchangeRates ParseRates(string content)
+        private DailyExchangeRates ParseRates(string content)
         {
             var lines = content.Split("\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
@@ -39,11 +39,7 @@ namespace ExchangeRateUpdater
 
             var rates = lines.Skip(2).Select(ParseRate).ToArray();
 
-            return new ExchangeRates
-            {
-                Date = date,
-                Rates = rates
-            };
+            return new DailyExchangeRates(date, rates);
         }
 
         private ExchangeRate ParseRate(string s)
@@ -55,7 +51,7 @@ namespace ExchangeRateUpdater
                 throw new Exception("Exchange rate format error.");
             }
 
-            return new ExchangeRate(new Currency(parts[3]), new Currency(TargetCurrency), decimal.Parse(parts[4], CultureInfo.InvariantCulture) / int.Parse(parts[2]));
+            return new ExchangeRate(parts[0], parts[1], int.Parse(parts[2]), parts[3], decimal.Parse(parts[4], CultureInfo.InvariantCulture));
         }
 
         public record Options
