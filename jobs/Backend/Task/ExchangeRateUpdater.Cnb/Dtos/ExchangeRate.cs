@@ -1,9 +1,10 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Cnb.Dtos
 {
     public record ExchangeRate(
-        string Country, 
-        string Currency,
+        string Country,
+        string SourceCurrencyName,
         int Amount,
-        string Code,
+        string SourceCurrencyCode,
+        string TargetCurrencyCode,
         decimal Rate);
 }

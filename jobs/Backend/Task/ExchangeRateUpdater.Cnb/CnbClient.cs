@@ -1,14 +1,10 @@
-﻿using Flurl.Http;
-using System;
-using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Cnb.Dtos;
+using Flurl.Http;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Cnb
 {
-    public class CnbClient
+    public class CnbClient : ICnbClient
     {
         private const string TargetCurrency = "CZK";
 
@@ -51,7 +47,14 @@ namespace ExchangeRateUpdater
                 throw new Exception("Exchange rate format error.");
             }
 
-            return new ExchangeRate(parts[0], parts[1], int.Parse(parts[2]), parts[3], decimal.Parse(parts[4], CultureInfo.InvariantCulture));
+            return new ExchangeRate(
+                Country: parts[0],
+                SourceCurrencyName: parts[1],
+                Amount: int.Parse(parts[2]),
+                SourceCurrencyCode: parts[3],
+                TargetCurrencyCode: TargetCurrency,
+                Rate: decimal.Parse(parts[4], CultureInfo.InvariantCulture)
+                );
         }
 
         public record Options

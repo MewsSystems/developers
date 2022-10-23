@@ -1,3 +1,5 @@
+using ExchangeRateUpdater.Cnb;
+
 namespace ExchangeRateUpdater.Tests
 {
     public class CnbExchangeRateSourceTests
