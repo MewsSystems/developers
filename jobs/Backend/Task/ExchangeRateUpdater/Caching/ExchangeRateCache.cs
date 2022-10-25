@@ -34,9 +34,9 @@ namespace ExchangeRateUpdater.Caching
             }
         }
 
-        public bool TryGetValue(out ExchangeRate[] value)
+        public ExchangeRate[]? GetValue()
         {
-            return _memoryCache.TryGetValue(_cacheKey, out value);
+            return _memoryCache.TryGetValue(_cacheKey, out ExchangeRate[] value) ? value : null;
         }
 
         public void Set(ExchangeRate[] exchangeRates)

@@ -33,7 +33,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                if (!_exchangeRateCache.TryGetValue(out ExchangeRate[] exchangeRates))
+                var exchangeRates = _exchangeRateCache.GetValue();
+                if (exchangeRates == null)
                 {
                     // If this ExchangeRateProvider will be used as a library and so 
                     // it is possible that it will work in the presence of a custom task scheduler
