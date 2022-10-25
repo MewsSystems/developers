@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using System;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Caching
 {
     /// <summary>
     /// This is a simplest caching solution - expire cached values after a specified amount of time.
@@ -30,7 +30,7 @@ namespace ExchangeRateUpdater
 
             if (_options.ExpirationPeriod <= TimeSpan.Zero)
             {
-                throw new Exception("Expiration period is not set");
+                throw new Exception("Cache expiration period is not set");
             }
         }
 

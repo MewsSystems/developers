@@ -8,19 +8,34 @@ namespace ExchangeRateUpdater.Cnb
     public class CnbClient : ICnbClient
     {
         private const string TargetCurrency = "CZK";
+        private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+
+        private readonly ILogger<CnbClient> _logger;
 
         private readonly string _url;
-        private readonly ILogger<CnbClient> _logger;
+        private readonly TimeSpan _timeout;
 
         public CnbClient(ILogger<CnbClient> logger, Options options)
         {
-            _url = options.Url ?? throw new ArgumentNullException(nameof(Options.Url));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _url = options.Url ?? throw new ArgumentNullException(nameof(options.Url));
+
+            _timeout = options.Timeout == null || options.Timeout <= TimeSpan.Zero
+                ? DefaultTimeout
+                : options.Timeout.Value;
         }
 
         public async Task<DailyExchangeRates> GetLatestExchangeRatesAsync()
         {
-            var content = await _url.GetStringAsync();
+            // metrics for outer http calls should be collected here
+            // for example, timestamp, duration, response status and size
+
+            // retry mechanism could be implemented here, using e.g. Polly library
+
+            var content = await _url
+                .WithTimeout(_timeout)
+                .GetStringAsync();
+
             return ParseRates(content);
         }
 
@@ -76,6 +91,7 @@ namespace ExchangeRateUpdater.Cnb
         public class Options
         {   
             public string? Url { get; set; }
+            public TimeSpan? Timeout { get; set; }
         }
     }
 }

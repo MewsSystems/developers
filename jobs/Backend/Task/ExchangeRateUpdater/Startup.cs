@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Cnb;
+﻿using ExchangeRateUpdater.Caching;
+using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

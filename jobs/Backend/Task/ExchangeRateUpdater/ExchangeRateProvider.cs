@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Caching;
 using ExchangeRateUpdater.Cnb;
+using ExchangeRateUpdater.Mappings;
 using ExchangeRateUpdater.Model;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace ExchangeRateUpdater
 {
@@ -16,8 +17,8 @@ namespace ExchangeRateUpdater
 
         public ExchangeRateProvider(ICnbClient cnbClient, IExchangeRateCache exchangeRateCache)
         {
-            _cnbClient = cnbClient;
-            this._exchangeRateCache = exchangeRateCache;
+            _cnbClient = cnbClient ?? throw new ArgumentNullException(nameof(cnbClient));
+            _exchangeRateCache = exchangeRateCache ?? throw new ArgumentNullException(nameof(exchangeRateCache));
 
             _cnbMapper = new CnbMapper();
         }
@@ -30,14 +31,25 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            ExchangeRate[] exchangeRates = null;
-            if (!_exchangeRateCache.TryGetValue(out exchangeRates))
+            try
             {
-                exchangeRates = await FetchExchangeRates();
-                _exchangeRateCache.Set(exchangeRates);
-            }
+                if (!_exchangeRateCache.TryGetValue(out ExchangeRate[] exchangeRates))
+                {
+                    // If this ExchangeRateProvider will be used as a library and so 
+                    // it is possible that it will work in the presence of a custom task scheduler
+                    // (like desktop app or old ASP.NET) then '.ConfigureAwait(false)' should be added
+                    // to async method invocations
+                    exchangeRates = await FetchExchangeRates();
 
-            return exchangeRates.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
+                    _exchangeRateCache.Set(exchangeRates);
+                }
+
+                return exchangeRates.Where(r => currencies.Any(c => c.Code == r.SourceCurrency.Code));
+            }
+            catch (Exception e)
+            {
+                throw new ExchangeRateProviderException("An error occurred while getting exchange rates", e);
+            }
         }
 
         private async Task<ExchangeRate[]> FetchExchangeRates()

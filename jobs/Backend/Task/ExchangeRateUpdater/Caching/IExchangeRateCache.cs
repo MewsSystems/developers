@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Model;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Caching
 {
     public interface IExchangeRateCache
     {

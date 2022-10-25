@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Cnb.Dtos;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Mappings
 {
     public class CnbMapper
     {
