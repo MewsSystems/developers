@@ -3,6 +3,8 @@ using ExchangeRateUpdater.Cnb.Dtos;
 using FluentAssertions;
 using Flurl.Http;
 using Flurl.Http.Testing;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace ExchangeRateUpdater.Tests
 {
@@ -20,7 +22,8 @@ New Zealand|dollar|1|NZD|14.119";
         [SetUp]
         public void Setup()
         {
-            _cnbClient = new CnbClient(new CnbClient.Options { Url = "http://test.test" });
+            var logger = new Mock<ILogger<CnbClient>>();
+            _cnbClient = new CnbClient(logger.Object, new CnbClient.Options { Url = "http://test.test" });
         }
 
         [Test]
@@ -34,7 +37,7 @@ New Zealand|dollar|1|NZD|14.119";
             var response = await _cnbClient.GetLatestExchangeRatesAsync();
 
             // Assert
-            var expectedRates = new[]
+            var expectedRates = new List<ExchangeRate>
                 {
                     new ExchangeRate("Australia", "dollar", 1, "AUD", "CZK", 15.751m),
                     new ExchangeRate("Iceland", "krona", 100, "ISK", "CZK", 17.434m),
@@ -46,6 +49,33 @@ New Zealand|dollar|1|NZD|14.119";
             response.Should().BeEquivalentTo(expectedResponse);
         }
 
+        [Test]
+        public async Task WhenGetLatestExchangeRatesHasRateFormatErrorsThenOtherRatesAreParsed()
+        {
+            // Arrange
+            using var httpTest = new HttpTest();
+
+            var SuccessResponse = @"21 Oct 2022 #201
+Country|Currency|Amount|Code|Rate
+Australia|dollar1|AUD|15.751
+Iceland|krona|100|ISK|17.434
+New Zealand|dollar|1|NZD|14.119g";
+
+        httpTest.RespondWith(SuccessResponse);
+
+            // Act
+            var response = await _cnbClient.GetLatestExchangeRatesAsync();
+
+            // Assert
+            var expectedRates = new List<ExchangeRate>
+                {
+                    new ExchangeRate("Iceland", "krona", 100, "ISK", "CZK", 17.434m)
+                };
+
+            var expectedResponse = new DailyExchangeRates(new DateOnly(2022, 10, 21), expectedRates);
+
+            response.Should().BeEquivalentTo(expectedResponse);
+        }
 
         [Test]
         public async Task WhenGetLatestExchangeRatesIsRedirectedThenFollowsRedirect()
@@ -59,7 +89,7 @@ New Zealand|dollar|1|NZD|14.119";
             var response = await _cnbClient.GetLatestExchangeRatesAsync();
 
             // Assert
-            var expectedRates = new[]
+            var expectedRates = new List<ExchangeRate>
                 {
                     new ExchangeRate("Australia", "dollar", 1, "AUD", "CZK", 15.751m),
                     new ExchangeRate("Iceland", "krona", 100, "ISK", "CZK", 17.434m),

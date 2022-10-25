@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Cnb.Dtos;
 using Flurl.Http;
+using Microsoft.Extensions.Logging;
 using System.Globalization;
 
 namespace ExchangeRateUpdater.Cnb
@@ -9,10 +10,12 @@ namespace ExchangeRateUpdater.Cnb
         private const string TargetCurrency = "CZK";
 
         private readonly string _url;
+        private readonly ILogger<CnbClient> _logger;
 
-        public CnbClient(Options options)
+        public CnbClient(ILogger<CnbClient> logger, Options options)
         {
             _url = options.Url ?? throw new ArgumentNullException(nameof(Options.Url));
+            _logger = logger;
         }
 
         public async Task<DailyExchangeRates> GetLatestExchangeRatesAsync()
@@ -33,7 +36,20 @@ namespace ExchangeRateUpdater.Cnb
             var dateString = dateLine.Split("#").First().Trim();
             var date = DateOnly.Parse(dateString, CultureInfo.InvariantCulture);
 
-            var rates = lines.Skip(2).Select(ParseRate).ToArray();
+            var rates = new List<ExchangeRate>();
+
+            foreach (var line in lines.Skip(2))
+            {
+                try
+                {
+                    rates.Add(ParseRate(line));
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Could not parse exchange rate info: {line}", line);
+                    continue;
+                }
+            }
 
             return new DailyExchangeRates(date, rates);
         }
@@ -44,7 +60,7 @@ namespace ExchangeRateUpdater.Cnb
 
             if (parts.Count() < 5)
             {
-                throw new Exception("Exchange rate format error.");
+                throw new Exception("Exchange rate format error");
             }
 
             return new ExchangeRate(
@@ -58,8 +74,8 @@ namespace ExchangeRateUpdater.Cnb
         }
 
         public class Options
-        {
-            public string Url { get; set; }
+        {   
+            public string? Url { get; set; }
         }
     }
 }
