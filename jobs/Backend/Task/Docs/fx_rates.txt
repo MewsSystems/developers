@@ -1,0 +1,34 @@
+﻿07 Oct 2022 #195
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|16.063
+Brazil|real|1|BRL|4.805
+Bulgaria|lev|1|BGN|12.534
+Canada|dollar|1|CAD|18.250
+China|renminbi|1|CNY|3.518
+Croatia|kuna|1|HRK|3.257
+Denmark|krone|1|DKK|3.296
+EMU|euro|1|EUR|24.515
+Hongkong|dollar|1|HKD|3.188
+Hungary|forint|100|HUF|5.785
+Iceland|krona|100|ISK|17.424
+IMF|SDR|1|XDR|32.217
+India|rupee|100|INR|30.443
+Indonesia|rupiah|1000|IDR|1.641
+Israel|new shekel|1|ILS|7.114
+Japan|yen|100|JPY|17.277
+Malaysia|ringgit|1|MYR|5.382
+Mexico|peso|1|MXN|1.249
+New Zealand|dollar|1|NZD|14.148
+Norway|krone|1|NOK|2.347
+Philippines|peso|100|PHP|42.461
+Poland|zloty|1|PLN|5.044
+Romania|leu|1|RON|4.960
+Singapore|dollar|1|SGD|17.521
+South Africa|rand|1|ZAR|1.391
+South Korea|won|100|KRW|1.775
+Sweden|krona|1|SEK|2.258
+Switzerland|franc|1|CHF|25.278
+Thailand|baht|100|THB|66.999
+Turkey|lira|1|TRY|1.347
+United Kingdom|pound|1|GBP|28.051
+USA|dollar|1|USD|25.028
