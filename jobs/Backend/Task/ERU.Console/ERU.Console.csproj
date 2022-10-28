@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
+        <ApplicationIcon>mews.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ERU.Application\ERU.Application.csproj" />
+      <ProjectReference Include="..\ERU.Domain\ERU.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

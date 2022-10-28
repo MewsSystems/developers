@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ERU.Domain
 {
     public class ExchangeRate
     {

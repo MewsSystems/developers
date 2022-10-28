@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using ERU.Domain;
 
-namespace ExchangeRateUpdater
+namespace ERU.Application
 {
     public class ExchangeRateProvider
     {

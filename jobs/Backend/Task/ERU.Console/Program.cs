@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ERU.Application;
+using ERU.Domain;
 
-namespace ExchangeRateUpdater
+namespace ERU.Console
 {
     public static class Program
     {
@@ -26,18 +25,18 @@ namespace ExchangeRateUpdater
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    System.Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                System.Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
-            Console.ReadLine();
+            System.Console.ReadLine();
         }
     }
 }
