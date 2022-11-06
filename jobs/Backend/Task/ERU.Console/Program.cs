@@ -1,42 +1,40 @@
 ﻿using ERU.Application;
-using ERU.Domain;
+using ERU.Application.Interfaces;
+using ERU.Application.Services.ExchangeRate;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace ERU.Console
+namespace ERU.Console;
+
+public static class Program
 {
-    public static class Program
-    {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+	private static async Task Main(string[] args)
+	{
+		var configuration = SetupConfiguration();
+		await Host.CreateDefaultBuilder(args)
+			.ConfigureAppConfiguration((config) =>
+			{
+				config.AddConfiguration(configuration);
+			})
+			.ConfigureServices((hostContext, services) =>
+			{
+				services.AddLogging();
+				services.AddHostedService<CurrencyExchangeApp>();
+				services.Configure<ConnectorSettings>(hostContext.Configuration.GetSection("ConnectorSettings"));
+				services.AddOptions();
+				services.RegisterApplicationLayerServices();
+				services.AddScoped<IExchangeRateProvider, ExchangeRateService>();
+			})
+			
+			.RunConsoleAsync();
+	}
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    System.Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            System.Console.ReadLine();
-        }
-    }
+	private static IConfiguration SetupConfiguration()
+	{
+		return new ConfigurationBuilder()
+			.SetBasePath(Directory.GetCurrentDirectory())
+			.AddJsonFile("appsettings.json", false)
+			.Build();
+	}
 }
