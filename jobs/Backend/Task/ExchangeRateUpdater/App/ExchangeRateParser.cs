@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using ExchangeRateUpdater.Domain;
 
 namespace ExchangeRateUpdater.App;
@@ -16,9 +17,11 @@ public static class ExchangeRateParser
     public static IEnumerable<ExchangeRate> ParseExchangeRates(string data)
     {
         if (string.IsNullOrEmpty(data))
-            yield break;
+            return Enumerable.Empty<ExchangeRate>();
 
         var lines = data.Split('\n');
+
+        var rates = new List<ExchangeRate>();
 
         for (var i = StartRateLineIndex; i < lines.Length; i++)
         {
@@ -26,8 +29,10 @@ public static class ExchangeRateParser
             if (rate is null)
                 continue;
 
-            yield return rate;
+            rates.Add(rate);
         }
+
+        return rates;
     }
 
     private static ExchangeRate? ParseLine(string line)
