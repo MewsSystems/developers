@@ -8,6 +8,7 @@ namespace ExchangeRateUpdater.App;
 
 public static class ExchangeRateParser
 {
+    private const int CountIndex = 2;
     private const int CurrencyCodeIndex = 3;
     private const int ExchangeRateIndex = 4;
     private const int StartRateLineIndex = 2;
@@ -46,10 +47,12 @@ public static class ExchangeRateParser
 
         var currency = new Currency(columns[CurrencyCodeIndex]);
 
-        var result = decimal.TryParse(columns[ExchangeRateIndex], NumberStyles.Any, CzechCultureInfo, out decimal rate);
-        if (!result)
+        if (!int.TryParse(columns[CountIndex], out int count))
+            throw new Exception($"Count value: {columns[CountIndex]} is not integer");
+
+        if (!decimal.TryParse(columns[ExchangeRateIndex], NumberStyles.Any, CzechCultureInfo, out decimal rate))
             throw new Exception($"Rate value: {columns[ExchangeRateIndex]} is not decimal");
 
-        return new ExchangeRate(DefaultCurrency, currency, rate);
+        return new ExchangeRate(DefaultCurrency, currency, count, rate);
     }
 }

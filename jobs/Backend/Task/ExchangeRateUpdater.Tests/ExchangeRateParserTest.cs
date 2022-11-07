@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateUpdater.App;
 using ExchangeRateUpdater.Domain;
@@ -67,16 +66,17 @@ public class ExchangeRateParserTest
     public void ParseData_WhenDataIsValid_ShouldReturnCorrectData()
     {
         var data =
-            "04.11.2022 #214\nzemě|měna|množství|kód|kurz\nAustrálie|dolar|1|AUD|15,950\nBrazílie|real|1|BRL|4,916\n" +
-            "Bulharsko|lev|1|BGN|12,486\nČína|žen-min-pi|1|CNY|3,446\nDánsko|koruna|1|DKK|3,282";
+            "04.11.2022 #214\nzemě|měna|množství|kód|kurz\nDánsko|koruna|1|DKK|3,282\nEMU|euro|1|EUR|24,420\n" +
+            "Filipíny|peso|100|PHP|42,343";
 
-        var bgn = new Currency("BGN");
+        var php = new Currency("PHP");
 
         var result = ExchangeRateParser.ParseExchangeRates(data).ToList();
 
-        Assert.Equal(5, result.Count);
-        Assert.Equal(bgn, result[2].TargetCurrency);
-        Assert.Equal(12.486m, result[2].Value);
-
+        Assert.Equal(3, result.Count);
+        Assert.Equal(php, result[2].TargetCurrency);
+        Assert.Equal(100, result[2].Count);
+        Assert.Equal(42.343m, result[2].Value);
+        Assert.Equal("100 CZK/PHP=42.343", result[2].ToString());
     }
 }

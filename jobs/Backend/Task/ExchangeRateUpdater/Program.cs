@@ -29,7 +29,8 @@ var currencies = new[]
     new Currency("RUB"),
     new Currency("THB"),
     new Currency("TRY"),
-    new Currency("XYZ")
+    new Currency("XYZ"),
+    new Currency("PHP")
 };
 
 try
