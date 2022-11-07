@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.Domain;
 
 namespace ExchangeRateUpdater.App;
@@ -8,7 +9,6 @@ namespace ExchangeRateUpdater.App;
 public class ExchangeRateProvider
 {
     private readonly IExchangeRateClient _client;
-    private readonly string _defaultCurrencyCode = "CZK";
 
     public ExchangeRateProvider(IExchangeRateClient client)
     {
@@ -21,12 +21,14 @@ public class ExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var sourceCurrency = new Currency(_defaultCurrencyCode); 
+        var response = await _client.GetExchangeRateAsync(DateTime.Now);
+        if (string.IsNullOrEmpty(response))
+            throw new Exception("Exchange rate server returned empty response");
 
-        var response = _client.GetExchangeRateAsync(DateTime.Now);
+        var rates = ExchangeRateParser.ParseExchangeRates(response);
 
-        return Enumerable.Empty<ExchangeRate>();
+        return rates.Where(rate => currencies.Contains(rate.TargetCurrency));
     }
 }

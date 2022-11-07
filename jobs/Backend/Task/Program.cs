@@ -19,9 +19,6 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddScoped<ExchangeRateProvider>();
     }).Build();
 
-
-host.RunAsync();
-
 var currencies = new[]
 {
     new Currency("USD"),
@@ -42,7 +39,7 @@ try
 
     var exchangeRateProvider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
 
-    var rates = exchangeRateProvider.GetExchangeRates(currencies).ToList();
+    var rates = (await exchangeRateProvider.GetExchangeRates(currencies)).ToList();
 
     Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
     foreach (var rate in rates)
@@ -56,3 +53,5 @@ catch (Exception e)
 }
 
 Console.ReadLine();
+
+await host.RunAsync();
