@@ -1,6 +1,6 @@
 ﻿namespace ERU.Application.DTOs;
 
-public record CnbExchangeRateResult
+public record CnbExchangeRateResponse
 (
 	string? Country,
 	string? Currency,
@@ -9,7 +9,7 @@ public record CnbExchangeRateResult
 	decimal? Rate
 )
 {
-	public CnbExchangeRateResult(decimal amount, string code, decimal rate ) : this(null, null, amount, code, rate)
+	public CnbExchangeRateResponse(decimal amount, string code, decimal rate ) : this(null, null, amount, code, rate)
 	{
 		Amount = amount;
 		Code = code;

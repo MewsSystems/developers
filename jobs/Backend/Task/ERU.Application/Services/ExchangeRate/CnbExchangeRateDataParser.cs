@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace ERU.Application.Services.ExchangeRate;
 
-public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchangeRateResult>>
+public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchangeRateResponse>>
 {
 	private readonly ConnectorSettings _connectorSettings;
 
@@ -14,7 +14,7 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 		_connectorSettings = connectorSettingsConfiguration.Value;
 	}
 
-	public IEnumerable<CnbExchangeRateResult> Parse(string input)
+	public IEnumerable<CnbExchangeRateResponse> Parse(string input)
 	{
 		string[] lines = input.Split("\n", StringSplitOptions.RemoveEmptyEntries);
 		return lines
@@ -23,7 +23,7 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 			.Where(line => line != null)!;
 	}
 
-	private CnbExchangeRateResult? ParseExchangeRateLine(string line)
+	private CnbExchangeRateResponse? ParseExchangeRateLine(string line)
 	{
 		string[] cells = line.Split('|');
 		string rawSourceAmount = cells[_connectorSettings.AmountIndex];
@@ -33,7 +33,7 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 		if (decimal.TryParse(rawSourceAmount, out var sourceAmount) 
 		    && decimal.TryParse(rawRate, NumberStyles.Currency, CultureInfo.InvariantCulture, out var targetAmount))
 		{
-			return new CnbExchangeRateResult(sourceAmount, rawCurrencyCode, targetAmount);
+			return new CnbExchangeRateResponse(sourceAmount, rawCurrencyCode, targetAmount);
 		}
 
 		return null;

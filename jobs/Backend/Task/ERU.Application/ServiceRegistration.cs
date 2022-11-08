@@ -16,15 +16,16 @@ public static class ServiceRegistration
   public static void RegisterApplicationLayerServices(this IServiceCollection services)
   {
     services.AddMemoryCache();
-    services.AddSingleton<MemoryCacheHelper>(x =>
+    services.AddSingleton(x =>
     {
-      var settings = x.GetRequiredService<IOptions<CacheSettings>>().Value;
+      CacheSettings? settings = x.GetRequiredService<IOptions<CacheSettings>>().Value;
       var cache = x.GetRequiredService<IMemoryCache>();
       return new MemoryCacheHelper(cache, settings.AbsoluteExpirationInMinutes, settings.SlidingExpirationInMinutes);
     });
     services.AddScoped<IHttpClient, PrimitiveHttpClient>();
-    services.AddScoped<IDataStringParser<IEnumerable<CnbExchangeRateResult>>, CnbExchangeRateDataParser>();
-    services.AddScoped<IContractObjectMapper<CnbExchangeRateResult, Domain.ExchangeRate>, CnbExchangeRateMapper>();
+    services.AddScoped<IDataStringParser<IEnumerable<CnbExchangeRateResponse>>, CnbExchangeRateDataParser>();
+    services.AddScoped<IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate>, CnbExchangeRateMapper>();
     services.AddScoped<IExchangeRateProvider, ExchangeRateService>();
+    services.AddScoped<ICnbDataExtractor, CnbDataExtractor>();
   }
 }

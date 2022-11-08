@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace ERU.Application.Services.ExchangeRate;
 
 public class CnbExchangeRateMapper: 
-	IContractObjectMapper<CnbExchangeRateResult, Domain.ExchangeRate>
+	IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate>
 {
 	private readonly ConnectorSettings _connectorSettings;
 
@@ -16,12 +16,17 @@ public class CnbExchangeRateMapper:
 		_connectorSettings = connectorSettingsConfiguration.Value;
 	}
 
-	TResult IContractObjectMapper<CnbExchangeRateResult, Domain.ExchangeRate>.Map<TInput, TResult>(TInput inputObject)
+	TResult IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate>.Map<TInput, TResult>(TInput inputObject)
 	{
 		string? mainCurrency = _connectorSettings.SourceCurrency;
+		if (inputObject.Amount is null or 0)
+		{
+			throw new InvalidMapperUse(nameof(inputObject.Amount));
+		}
+		decimal? outputRate = inputObject.Rate / inputObject.Amount;
 		return (TResult)new Domain.ExchangeRate(
 			new Currency(mainCurrency ?? throw new InvalidConfigurationException(nameof(_connectorSettings.SourceCurrency))),
 			new Currency(inputObject.Code ?? throw new InvalidMapperUse(nameof(inputObject.Code))),
-			inputObject.Rate / inputObject.Amount ?? throw new InvalidMapperUse(nameof(inputObject.Rate))); // TODO: Check if this is correct
+			outputRate ?? throw new InvalidMapperUse(nameof(inputObject.Rate)));
 	}
 }

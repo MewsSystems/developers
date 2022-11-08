@@ -7,16 +7,16 @@ namespace ERU.Application.Services.ExchangeRate;
 
 public interface ICnbDataExtractor
 {
-	Task<IEnumerable<CnbExchangeRateResult>> CnbExchangeRateResults(IEnumerable<string> currencyCodes, string cacheKey, CancellationToken token);
+	Task<IEnumerable<CnbExchangeRateResponse>> CnbExchangeRateResults(IEnumerable<string> currencyCodes, string cacheKey, CancellationToken token);
 }
 
 public class CnbDataExtractor : ICnbDataExtractor
 {
 	private readonly IHttpClient _client;
-	private readonly IDataStringParser<IEnumerable<CnbExchangeRateResult>> _parser;
+	private readonly IDataStringParser<IEnumerable<CnbExchangeRateResponse>> _parser;
 	private readonly ConnectorSettings _connectorSettings;
 	private readonly MemoryCacheHelper _memoryCacheHelper;
-	public CnbDataExtractor(IHttpClient client, IDataStringParser<IEnumerable<CnbExchangeRateResult>> parser, IOptions<ConnectorSettings> connectorSettingsConfiguration, MemoryCacheHelper memoryCacheHelper)
+	public CnbDataExtractor(IHttpClient client, IDataStringParser<IEnumerable<CnbExchangeRateResponse>> parser, IOptions<ConnectorSettings> connectorSettingsConfiguration, MemoryCacheHelper memoryCacheHelper)
 	{
 		_client = client;
 		_parser = parser;
@@ -24,9 +24,9 @@ public class CnbDataExtractor : ICnbDataExtractor
 		_memoryCacheHelper = memoryCacheHelper;
 	}
 
-	public async Task<IEnumerable<CnbExchangeRateResult>> CnbExchangeRateResults(IEnumerable<string> currencyCodes, string cacheKey, CancellationToken token)
+	public async Task<IEnumerable<CnbExchangeRateResponse>> CnbExchangeRateResults(IEnumerable<string> currencyCodes, string cacheKey, CancellationToken token)
 	{
-		var allRates = _memoryCacheHelper.GetFromCache<IEnumerable<CnbExchangeRateResult>>(cacheKey);
+		var allRates = _memoryCacheHelper.GetFromCache<IEnumerable<CnbExchangeRateResponse>>(cacheKey);
 		if (allRates == null)
 		{
 			allRates = await SearchUntilFindAllCodes(_connectorSettings.FileUri.ToList(), currencyCodes, token);
@@ -35,10 +35,10 @@ public class CnbDataExtractor : ICnbDataExtractor
 		return allRates;
 	}
 
-	private async Task<IEnumerable<CnbExchangeRateResult>> SearchUntilFindAllCodes(List<string> urls, IEnumerable<string> currencyCodes, CancellationToken token)
+	private async Task<IEnumerable<CnbExchangeRateResponse>> SearchUntilFindAllCodes(List<string> urls, IEnumerable<string> currencyCodes, CancellationToken token)
 	{
-		var tasks = new HashSet<Task<IEnumerable<CnbExchangeRateResult>>>();
-		var results = new List<CnbExchangeRateResult>();
+		var tasks = new HashSet<Task<IEnumerable<CnbExchangeRateResponse>>>();
+		var results = new List<CnbExchangeRateResponse>();
 		var cts = CancellationTokenSource.CreateLinkedTokenSource(token); 
 		foreach (string url in urls)
 		{
@@ -61,7 +61,7 @@ public class CnbDataExtractor : ICnbDataExtractor
 		return results;
 	}
 
-	private async Task<IEnumerable<CnbExchangeRateResult>> GetDataAndParse(string url, CancellationToken token)
+	private async Task<IEnumerable<CnbExchangeRateResponse>> GetDataAndParse(string url, CancellationToken token)
 	{
 		string rates = await _client.GetStringAsync(url, token);
 		// TODO: dictionary of currencies and their codes? 

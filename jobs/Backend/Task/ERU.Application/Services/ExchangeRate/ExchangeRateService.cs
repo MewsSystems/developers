@@ -8,10 +8,10 @@ namespace ERU.Application.Services.ExchangeRate;
 
 public class ExchangeRateService : IExchangeRateProvider
 {
-	private readonly IContractObjectMapper<CnbExchangeRateResult, Domain.ExchangeRate> _responseMapper;
+	private readonly IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate> _responseMapper;
 	private readonly ICnbDataExtractor _cnbDataExtractor;
 
-	public ExchangeRateService(IContractObjectMapper<CnbExchangeRateResult, Domain.ExchangeRate> responseMapper, ICnbDataExtractor cnbDataExtractor)
+	public ExchangeRateService(IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate> responseMapper, ICnbDataExtractor cnbDataExtractor)
 	{
 		_responseMapper = responseMapper;
 		_cnbDataExtractor = cnbDataExtractor;
@@ -27,8 +27,7 @@ public class ExchangeRateService : IExchangeRateProvider
 		var allRates = await _cnbDataExtractor.CnbExchangeRateResults(currencies.Select(cur=>cur.Code), cacheKey, token);
 		var selectedRates = allRates.Where(a => currencies.Select(cur=>cur.Code).Contains(a.Code)) 
 		                    ?? throw new EmptyExchangeRateResponseException("No exchange rates were found.");
-		var validatedResponse = selectedRates.
+		return selectedRates.
 			Select(a => Contract.Check(a, _responseMapper, "CNB ExchangeRates API response contract failure."));
-		return validatedResponse;
 	}
 }
