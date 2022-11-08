@@ -22,6 +22,6 @@ public class CnbExchangeRateMapper:
 		return (TResult)new Domain.ExchangeRate(
 			new Currency(mainCurrency ?? throw new InvalidConfigurationException(nameof(_connectorSettings.SourceCurrency))),
 			new Currency(inputObject.Code ?? throw new InvalidMapperUse(nameof(inputObject.Code))),
-			inputObject.Rate / inputObject.Amount ?? throw new InvalidMapperUse("Rate")); // TODO: Check if this is correct
+			inputObject.Rate / inputObject.Amount ?? throw new InvalidMapperUse(nameof(inputObject.Rate))); // TODO: Check if this is correct
 	}
 }

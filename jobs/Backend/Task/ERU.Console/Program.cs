@@ -1,5 +1,4 @@
 ﻿using ERU.Application;
-using ERU.Application.Interfaces;
 using ERU.Application.Services.ExchangeRate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,10 +20,11 @@ public static class Program
 			{
 				services.AddLogging();
 				services.AddHostedService<CurrencyExchangeApp>();
-				services.Configure<ConnectorSettings>(hostContext.Configuration.GetSection("ConnectorSettings"));
+				services.Configure<ConnectorSettings>(hostContext.Configuration.GetSection(nameof(ConnectorSettings)));
+				services.Configure<CacheSettings>(hostContext.Configuration.GetSection(nameof(CacheSettings)));
 				services.AddOptions();
 				services.RegisterApplicationLayerServices();
-				services.AddScoped<IExchangeRateProvider, ExchangeRateService>();
+				
 			})
 			
 			.RunConsoleAsync();
