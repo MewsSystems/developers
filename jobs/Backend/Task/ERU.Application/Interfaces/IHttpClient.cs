@@ -2,5 +2,5 @@
 
 public interface IHttpClient
 {
-	public Task<string> GetStringAsync(string uri, CancellationToken token);
+	public Task<string> GetStringAsync(string uri, CancellationToken token = default);
 }

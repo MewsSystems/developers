@@ -1,14 +1,15 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using ERU.Application.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ERU.Application;
 
-public class MemoryCacheHelper
+public class MemoryCache : ICache
 {
   private readonly int _absoluteExpirationInMinutes;
   private readonly int _slidingExpirationInMinutes;
   private readonly IMemoryCache? _memoryCache;
 
-  public MemoryCacheHelper(IMemoryCache memoryCache, int absoluteExpirationInMinutes, int slidingExpirationInMinutes)
+  public MemoryCache(IMemoryCache memoryCache, int absoluteExpirationInMinutes, int slidingExpirationInMinutes)
   {
     _memoryCache = memoryCache;
     _absoluteExpirationInMinutes = absoluteExpirationInMinutes;

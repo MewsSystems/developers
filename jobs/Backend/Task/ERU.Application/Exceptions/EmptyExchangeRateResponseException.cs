@@ -2,7 +2,7 @@
 
 public class EmptyExchangeRateResponseException : Exception
 {
-	public EmptyExchangeRateResponseException(string stockId) : base($"Stock with identifier: {stockId} has no price. Check the data resource.")
+	public EmptyExchangeRateResponseException(string codes) : base($" No exchange rates were found: Currencies {codes} have no rates.")
 	{
 	}
 }

@@ -9,9 +9,9 @@ namespace ERU.Application.Services.ExchangeRate;
 public class ExchangeRateService : IExchangeRateProvider
 {
 	private readonly IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate> _responseMapper;
-	private readonly ICnbDataExtractor _cnbDataExtractor;
+	private readonly IDataExtractor _cnbDataExtractor;
 
-	public ExchangeRateService(IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate> responseMapper, ICnbDataExtractor cnbDataExtractor)
+	public ExchangeRateService(IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate> responseMapper, IDataExtractor cnbDataExtractor)
 	{
 		_responseMapper = responseMapper;
 		_cnbDataExtractor = cnbDataExtractor;
@@ -19,14 +19,15 @@ public class ExchangeRateService : IExchangeRateProvider
 
 	public async Task<IEnumerable<Domain.ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken token)
 	{
-		if (currencies == null || !currencies.Any()) 
+		var currencyList = currencies.ToList();
+		if (currencies == null || !currencyList.Any()) 
 		{
 			throw new ArgumentNullException(nameof(currencies));
 		}
-		string cacheKey = $"{DateTime.UtcNow.Date.ToString(CultureInfo.InvariantCulture)}-{nameof(ExchangeRateService)}-{nameof(GetExchangeRates)}";
-		var allRates = await _cnbDataExtractor.CnbExchangeRateResults(currencies.Select(cur=>cur.Code), cacheKey, token);
-		var selectedRates = allRates.Where(a => currencies.Select(cur=>cur.Code).Contains(a.Code)) 
-		                    ?? throw new EmptyExchangeRateResponseException("No exchange rates were found.");
+		var currencyCodes = currencyList.Select(cur=>cur.Code).ToList();
+		var allRates = await _cnbDataExtractor.ExtractCnbData(currencyCodes, token);
+		var selectedRates = allRates.Where(a => a.Code != null && currencyCodes.Contains(a.Code)) 
+		                    ?? throw new EmptyExchangeRateResponseException(string.Join(",", currencyCodes));
 		return selectedRates.
 			Select(a => Contract.Check(a, _responseMapper, "CNB ExchangeRates API response contract failure."));
 	}

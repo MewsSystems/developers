@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using ERU.Application.DTOs;
+using ERU.Application.Exceptions;
 using ERU.Application.Interfaces;
 using Microsoft.Extensions.Options;
 
@@ -16,11 +17,14 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 
 	public IEnumerable<CnbExchangeRateResponse> Parse(string input)
 	{
-		string[] lines = input.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-		return lines
+		string[] lines = (input ?? throw new ArgumentNullException(nameof(input)))
+			.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+		var foundRates = lines
 			.Skip(_connectorSettings.DataSkipLines)
 			.Select(ParseExchangeRateLine)
-			.Where(line => line != null)!;
+			.Where(line => line != null)
+			.ToList();
+		return (foundRates.Any() ? foundRates : throw new EmptyParseResultException())!;
 	}
 
 	private CnbExchangeRateResponse? ParseExchangeRateLine(string line)
