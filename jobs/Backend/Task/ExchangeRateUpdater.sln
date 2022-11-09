@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERU.Console", "ERU.Console\ERU.Console.csproj", "{05420476-EFD0-4A70-B430-3432E637BCD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERU.Application.Tests", "ERU.Application.Tests\ERU.Application.Tests.csproj", "{70D6710C-62B6-4656-A713-E723779DE894}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{05420476-EFD0-4A70-B430-3432E637BCD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05420476-EFD0-4A70-B430-3432E637BCD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05420476-EFD0-4A70-B430-3432E637BCD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D6710C-62B6-4656-A713-E723779DE894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D6710C-62B6-4656-A713-E723779DE894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D6710C-62B6-4656-A713-E723779DE894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D6710C-62B6-4656-A713-E723779DE894}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,5 +47,6 @@ Global
 		{7A36B985-F10B-4E07-9EFC-25E4841FFC43} = {8A8BB89A-D220-4BE0-AD86-1F85A2CA6F2A}
 		{888CDE87-DDA3-42C8-8EE6-51BD83CD1C01} = {85C690B4-51F2-4777-9FC0-59F3D8230E35}
 		{05420476-EFD0-4A70-B430-3432E637BCD9} = {03F66A30-78F1-4984-99BB-2887ACCD57E9}
+		{70D6710C-62B6-4656-A713-E723779DE894} = {8A8BB89A-D220-4BE0-AD86-1F85A2CA6F2A}
 	EndGlobalSection
 EndGlobal
