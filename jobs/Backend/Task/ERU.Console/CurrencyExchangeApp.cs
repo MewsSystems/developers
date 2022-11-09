@@ -30,7 +30,7 @@ namespace ERU.Console
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Log(LogLevel.Information, "Starting currency exchange app");
+            _logger.Log(LogLevel.Information, "Starting currency exchange app. Ctrl-C to end");
 
             await RetrieveAndOutputExchangeRates(cancellationToken);
         }
@@ -73,7 +73,6 @@ namespace ERU.Console
             {
                 System.Console.WriteLine(e.Message);
             }
-            //TODO: Log error
             return new List<ExchangeRate>();
         }
 
