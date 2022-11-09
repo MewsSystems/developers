@@ -21,7 +21,12 @@ public class CnbDataExtractorTest
     public void SetUp()
     {
 	    _client = new Mock<IHttpClient>();
-	    _client.Setup(x => x.GetStringAsync(It.IsAny<string>(), new CancellationToken())).Returns(Task.FromResult(""));
+	    _client.Setup(x => x.GetStringAsync(It.IsAny<string>(), new CancellationToken()))
+		    .Returns(Task.FromResult(string.Join("\n",
+			    "07 Oct 2022 #195",
+			    "Country|Currency|Amount|Code|Rate",
+			    "United Kingdom|pound|1|GBP|28.051",
+				"USA|dollar|1|USD|25.028")));
 
 	    _parser = new Mock<IDataStringParser<IEnumerable<CnbExchangeRateResponse>>>();
 	    _parser.Setup(x => x.Parse(It.IsAny<string>())).Returns(new List<CnbExchangeRateResponse>());
@@ -34,16 +39,18 @@ public class CnbDataExtractorTest
 	    _memoryCacheHelper.Setup(x => x.GetFromCache<IEnumerable<CnbExchangeRateResponse>>(It.IsAny<string>()))
 		    .Returns((IEnumerable<CnbExchangeRateResponse>?)null);
 	    
-        _cnbDataExtractor = new CnbDataExtractor(_client.Object, _parser.Object, new List<string>(), _memoryCacheHelper.Object);
+        _cnbDataExtractor = new CnbDataExtractor(_client.Object, _parser.Object, new List<string>(){"url1"}, _memoryCacheHelper.Object);
     }
 
     [Test]
-    [TestCase(new string[] { "CZK", "CZK", "EUR", "USD" }, 0)]
-    public async Task ExtractCnbData_WhenCalled_ReturnsExchangeRates(string[] codes, int temp)
+    [TestCase(new string[] { "USD" }, 1)]
+    public async Task ExtractCnbData_WhenCalled_ReturnsExchangeRates(string[] codes, int count)
 	{
 	    var result = await _cnbDataExtractor.ExtractCnbData(codes, new CancellationToken());
 	    result.Should().NotBeNull();
 	    result.Should().BeOfType<List<CnbExchangeRateResponse>>();
+	    result.Count().Should().Be(count);
+	    result.Should().Satisfy(a=>codes.Contains(a.Code));
 	}
 
     [Test]
@@ -51,7 +58,7 @@ public class CnbDataExtractorTest
     {
 	    var cachedData = new List<CnbExchangeRateResponse>
 	    {
-		    new CnbExchangeRateResponse(1m, "CZK", 1m)
+		    new(1m, "CZK", 1m)
 	    };
 	    _memoryCacheHelper.Setup(x => x.GetFromCache<IEnumerable<CnbExchangeRateResponse>>(It.IsAny<string>()))
 			.Returns(cachedData);
@@ -61,5 +68,4 @@ public class CnbDataExtractorTest
 	    result.Should().BeOfType<List<CnbExchangeRateResponse>>();
 	    result.Should().BeEquivalentTo(cachedData);
     }
-
 }
