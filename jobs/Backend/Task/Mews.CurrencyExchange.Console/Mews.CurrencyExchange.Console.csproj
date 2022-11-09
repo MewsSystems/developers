@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.4.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />    
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />    
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />    
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mews.CurrencyExchange.Domain\Mews.CurrencyExchange.Domain.csproj" />
+    <ProjectReference Include="..\Mews.CurrencyExchange.Providers.CzechNationalBank.Connector\Mews.CurrencyExchange.Providers.CzechNationalBank.Connector.csproj" />
+  </ItemGroup>
+
+</Project>
