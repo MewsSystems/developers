@@ -10,12 +10,9 @@ public static class Program
 {
 	private static async Task Main(string[] args)
 	{
-		var configuration = SetupConfiguration();
+		IConfiguration? configuration = SetupConfiguration();
 		await Host.CreateDefaultBuilder(args)
-			.ConfigureAppConfiguration((config) =>
-			{
-				config.AddConfiguration(configuration);
-			})
+			.ConfigureAppConfiguration((config) => { config.AddConfiguration(configuration); })
 			.ConfigureServices((hostContext, services) =>
 			{
 				services.AddLogging();
@@ -24,9 +21,7 @@ public static class Program
 				services.Configure<CacheSettings>(hostContext.Configuration.GetSection(nameof(CacheSettings)));
 				services.AddOptions();
 				services.RegisterApplicationLayerServices();
-				
 			})
-			
 			.RunConsoleAsync();
 	}
 

@@ -9,7 +9,7 @@ public record CnbExchangeRateResponse
 	decimal? Rate
 )
 {
-	public CnbExchangeRateResponse(decimal amount, string code, decimal rate ) : this(null, null, amount, code, rate)
+	public CnbExchangeRateResponse(decimal amount, string code, decimal rate) : this(null, null, amount, code, rate)
 	{
 		Amount = amount;
 		Code = code;

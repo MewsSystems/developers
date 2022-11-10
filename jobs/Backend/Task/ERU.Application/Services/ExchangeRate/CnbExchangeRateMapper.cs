@@ -17,9 +17,7 @@ public class CnbExchangeRateMapper : IContractObjectMapper<CnbExchangeRateRespon
 	TResult IContractObjectMapper<CnbExchangeRateResponse, Domain.ExchangeRate>.Map<TInput, TResult>(TInput inputObject)
 	{
 		if (inputObject.Amount is null or 0)
-		{
 			throw new InvalidMapperUse(nameof(inputObject.Amount));
-		}
 		decimal? outputRate = inputObject.Rate / inputObject.Amount;
 		return (TResult)new Domain.ExchangeRate(
 			new Currency(_sourceCurrencyCode ?? throw new InvalidConfigurationException(nameof(_sourceCurrencyCode))),

@@ -34,8 +34,8 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 		string rawCurrencyCode = cells[_connectorSettings.CodeIndex];
 		string rawRate = cells[_connectorSettings.RateIndex];
 
-		if (decimal.TryParse(rawSourceAmount, out var sourceAmount) 
-		    && decimal.TryParse(rawRate, NumberStyles.Currency, CultureInfo.InvariantCulture, out var targetAmount))
+		if (decimal.TryParse(rawSourceAmount, out decimal sourceAmount)
+		    && decimal.TryParse(rawRate, NumberStyles.Currency, CultureInfo.InvariantCulture, out decimal targetAmount))
 		{
 			return new CnbExchangeRateResponse(sourceAmount, rawCurrencyCode, targetAmount);
 		}
