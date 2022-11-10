@@ -20,6 +20,7 @@ public class CnbExchangeRateDataParserTest
 		_connectorSettingsConfiguration.SetupGet(x => x.Value).Returns(new ConnectorSettings
 		{
 			DataSkipLines = 2,
+			DataDelimiter = '|',
 			AmountIndex = 2,
 			CodeIndex = 3,
 			RateIndex = 4

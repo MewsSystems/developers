@@ -29,7 +29,7 @@ public class CnbExchangeRateDataParser : IDataStringParser<IEnumerable<CnbExchan
 
 	private CnbExchangeRateResponse? ParseExchangeRateLine(string line)
 	{
-		string[] cells = line.Split('|');
+		string[] cells = line.Split(_connectorSettings.DataDelimiter);
 		string rawSourceAmount = cells[_connectorSettings.AmountIndex];
 		string rawCurrencyCode = cells[_connectorSettings.CodeIndex];
 		string rawRate = cells[_connectorSettings.RateIndex];
