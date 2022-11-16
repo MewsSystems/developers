@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace ExchangeRateUpdater
 {
@@ -19,13 +22,15 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
+                var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+                IConfiguration config = builder.Build();
+                string sourceUrl = config.GetSection("CentralBank").GetSection("SourceUrl").Value;
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
+                var rates = await provider.GetExchangeRates(currencies, sourceUrl);
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
@@ -37,7 +42,7 @@ namespace ExchangeRateUpdater
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
