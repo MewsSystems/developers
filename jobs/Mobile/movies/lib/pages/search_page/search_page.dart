@@ -40,71 +40,71 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SafeArea(
-            bottom: false,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: BlocConsumer<SearchBloc, SearchState>(
-                    bloc: _searchBloc,
-                    listener: (context, state) {
-                      if (state is SuccessSearchState) {
-                        (state.page == 1)
-                            ? _movies = state.movies
-                            : _movies.addAll(state.movies);
-                      }
-                    },
-                    builder: (_, state) {
-                      if (state is LoadingSearchState) {
-                        return const Loader();
-                      } else if (state is SuccessSearchState) {
-                        if (_movies.isEmpty) {
-                          return const NoMovies();
-                        }
-
-                        return RefreshIndicator(
-                          color: CustomTheme.blue,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.only(top: 60.0),
-                            itemCount: _movies.length + 1,
-                            itemBuilder: (_, index) {
-                              if (index == _movies.length - 1) {
-                                if (state.hasMorePages) {
-                                  _searchBloc.add(NextSearchEvent());
-                                }
-                              }
-
-                              if (index == _movies.length) {
-                                return state.hasMorePages
-                                    ? const PaginationLoader()
-                                    : const EndOfList();
-                              } else {
-                                return MovieCard(
-                                  index: index,
-                                  movie: _movies[index],
-                                  totalPages: state.total,
-                                );
-                              }
-                            },
-                          ),
-                          onRefresh: () async => _searchBloc.add(
-                            FirstSearchEvent(_textEditingController.text, 1),
-                          ),
-                        );
-                      } else if (state is ErrorSearchState) {
-                        return Center(child: Text(state.message));
+        body: SafeArea(
+          bottom: false,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: BlocConsumer<SearchBloc, SearchState>(
+                  bloc: _searchBloc,
+                  listener: (context, state) {
+                    if (state is SuccessSearchState) {
+                      (state.page == 1)
+                          ? _movies = state.movies
+                          : _movies.addAll(state.movies);
+                    }
+                  },
+                  builder: (_, state) {
+                    if (state is LoadingSearchState) {
+                      return const Loader();
+                    } else if (state is SuccessSearchState) {
+                      if (_movies.isEmpty) {
+                        return const NoMovies();
                       }
 
-                      return const Center(
-                        child: Text('Use serch to find a movie.'),
+                      return RefreshIndicator(
+                        color: CustomTheme.blue,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.only(top: 60.0),
+                          itemCount: _movies.length + 1,
+                          itemBuilder: (_, index) {
+                            if (index == _movies.length - 1) {
+                              if (state.hasMorePages) {
+                                _searchBloc.add(NextSearchEvent());
+                              }
+                            }
+
+                            if (index == _movies.length) {
+                              return state.hasMorePages
+                                  ? const PaginationLoader()
+                                  : const EndOfList();
+                            } else {
+                              return MovieCard(
+                                index: index,
+                                movie: _movies[index],
+                                totalPages: state.total,
+                              );
+                            }
+                          },
+                        ),
+                        onRefresh: () async => _searchBloc.add(
+                          FirstSearchEvent(_textEditingController.text, 1),
+                        ),
                       );
-                    },
-                  ),
+                    } else if (state is ErrorSearchState) {
+                      return Center(child: Text(state.message));
+                    }
+
+                    return const Center(
+                      child: Text('Use serch to find a movie.'),
+                    );
+                  },
                 ),
-                Debouncer(
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Debouncer(
                   timeout: Pagination.timeout,
                   action: () => _searchBloc.add(
                     FirstSearchEvent(_textEditingController.text, 1),
@@ -126,8 +126,8 @@ class _SearchPageState extends State<SearchPage> {
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         // TODO(Viktor): add floatingActionButton
