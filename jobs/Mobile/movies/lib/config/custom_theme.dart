@@ -18,6 +18,18 @@ class CustomTheme {
     ).apply(
       bodyColor: grey,
     ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: black,
+      foregroundColor: grey,
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 32.0,
+      ),
+      iconTheme: IconThemeData(
+        color: grey,
+      ),
+      elevation: .0,
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: blue,
