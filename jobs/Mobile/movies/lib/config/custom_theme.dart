@@ -9,7 +9,6 @@ class CustomTheme {
   static const borderRadius = BorderRadius.all(Radius.circular(12.0));
 
   static final darkTheme = ThemeData(
-    fontFamily: 'EBGaramond',
     scaffoldBackgroundColor: black,
     textTheme: const TextTheme(
       bodyText1: TextStyle(),
@@ -17,6 +16,18 @@ class CustomTheme {
       subtitle1: TextStyle(),
     ).apply(
       bodyColor: grey,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: black,
+      foregroundColor: grey,
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 32.0,
+      ),
+      iconTheme: IconThemeData(
+        color: grey,
+      ),
+      elevation: .0,
     ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,

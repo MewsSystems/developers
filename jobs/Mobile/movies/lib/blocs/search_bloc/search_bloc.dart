@@ -52,7 +52,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> _emitMovie(Emitter<SearchState> emit) async {
-    final searchResponse = await _movieRepository.getMovie(currentPage, query);
+    final searchResponse = await _movieRepository.getMovies(currentPage, query);
     emit(
       SuccessSearchState(
         currentPage,
