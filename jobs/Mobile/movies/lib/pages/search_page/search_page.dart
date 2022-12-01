@@ -92,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                           },
                         ),
                         onRefresh: () async => _searchBloc.add(
-                          FirstSearchEvent(_textEditingController.text, 1),
+                          FirstSearchEvent(_textEditingController.text),
                         ),
                       );
                     } else if (state is ErrorSearchState) {
@@ -110,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Debouncer(
                   timeout: Pagination.timeout,
                   action: () => _searchBloc.add(
-                    FirstSearchEvent(_textEditingController.text, 1),
+                    FirstSearchEvent(_textEditingController.text),
                   ),
                   builder: (newContext, _) => Column(
                     children: [
