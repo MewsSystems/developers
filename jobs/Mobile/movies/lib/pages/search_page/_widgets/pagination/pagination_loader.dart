@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies/pages/search_page/_widgets/loader.dart';
+import 'package:movies/pages/_widgets/loader.dart';
 
 class PaginationLoader extends StatelessWidget {
   const PaginationLoader({super.key});

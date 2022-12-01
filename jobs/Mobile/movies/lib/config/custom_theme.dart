@@ -9,7 +9,6 @@ class CustomTheme {
   static const borderRadius = BorderRadius.all(Radius.circular(12.0));
 
   static final darkTheme = ThemeData(
-    fontFamily: 'EBGaramond',
     scaffoldBackgroundColor: black,
     textTheme: const TextTheme(
       bodyText1: TextStyle(),

@@ -6,10 +6,10 @@ import 'package:movies/config/consts.dart';
 import 'package:movies/config/custom_theme.dart';
 import 'package:movies/data/repository/movie_repository.dart';
 import 'package:movies/models/movie_model.dart';
-import 'package:movies/pages/search_page/_widgets/loader.dart';
+import 'package:movies/pages/_widgets/loader.dart';
 import 'package:movies/pages/search_page/_widgets/movie_card.dart';
+import 'package:movies/pages/search_page/_widgets/no_movies.dart';
 import 'package:movies/pages/search_page/_widgets/pagination/end_of_list.dart';
-import 'package:movies/pages/search_page/_widgets/pagination/no_movies.dart';
 import 'package:movies/pages/search_page/_widgets/pagination/pagination_loader.dart';
 
 class SearchPage extends StatefulWidget {

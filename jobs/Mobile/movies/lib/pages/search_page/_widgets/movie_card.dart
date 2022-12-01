@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:movies/config/consts.dart';
 import 'package:movies/config/custom_theme.dart';
 import 'package:movies/models/movie_model.dart';
+import 'package:movies/pages/_widgets/poster.dart';
+import 'package:movies/pages/_widgets/rating.dart';
+import 'package:movies/pages/_widgets/votes.dart';
 import 'package:movies/pages/movie_page.dart/movie_page.dart';
 import 'package:movies/pages/search_page/_widgets/movie_card_index.dart';
-import 'package:movies/pages/search_page/_widgets/network_image_loader.dart';
 import 'package:movies/pages/search_page/_widgets/no_image.dart';
 
 class MovieCard extends StatelessWidget {
@@ -34,11 +36,10 @@ class MovieCard extends StatelessWidget {
                 Stack(
                   children: [
                     if (movie.posterPath != null)
-                      NetworkImageLoader(
+                      Poster(
                         width: 100.0,
                         height: 150.0,
-                        path:
-                            'https://image.tmdb.org/t/p/w300/${movie.posterPath}',
+                        path: '${Images.w300}${movie.posterPath}',
                       )
                     else
                       const NoImage(height: 150.0, width: 100.0),
@@ -63,25 +64,15 @@ class MovieCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          movie.releaseDate ?? 'no release date',
+                          movie.releaseDate != null
+                              ? 'Relese: ${movie.releaseDate}'
+                              : 'No release date',
                           style: const TextStyle(fontSize: 12.0),
                         ),
                         const Spacer(),
-                        RatingBarIndicator(
-                          rating: movie.voteAverage / 2,
-                          itemBuilder: (context, index) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                          itemCount: 5,
-                          itemSize: 20.0,
-                          direction: Axis.horizontal,
-                        ),
+                        Rating(rating: movie.voteAverage),
                         const SizedBox(height: 4.0),
-                        Text(
-                          'Votes: ${movie.voteCount}',
-                          style: const TextStyle(fontSize: 12.0),
-                        ),
+                        Votes(count: movie.voteCount),
                       ],
                     ),
                   ),
@@ -91,7 +82,7 @@ class MovieCard extends StatelessWidget {
           ),
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => const MoviePage(),
+              builder: (BuildContext context) => MoviePage(movieId: movie.id),
             ),
           ),
         ),
