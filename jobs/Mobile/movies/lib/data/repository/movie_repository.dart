@@ -5,7 +5,7 @@ import 'package:movies/core/errors/exceptions.dart';
 import 'package:movies/models/movie_search_response_model.dart';
 
 abstract class MovieRepository {
-  Future<MovieSearchResponse> getMovie(int page, String query);
+  Future<MovieSearchResponse> getMovies(int page, String query);
 }
 
 class RemoteMovieRepository implements MovieRepository {
@@ -14,7 +14,7 @@ class RemoteMovieRepository implements MovieRepository {
   final http.Client client;
 
   @override
-  Future<MovieSearchResponse> getMovie(int page, String query) async {
+  Future<MovieSearchResponse> getMovies(int page, String query) async {
     final queryParameters = {
       'api_key': Api.key,
       'language': Api.locale,
