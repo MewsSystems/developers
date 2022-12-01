@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
