@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'detailed_movie_model.g.dart';
+
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class DetailedMovie extends Equatable {
   const DetailedMovie({
     required this.id,
@@ -15,30 +19,25 @@ class DetailedMovie extends Equatable {
     required this.voteCount,
   });
 
-  factory DetailedMovie.fromJson(Map<String, dynamic> json) => DetailedMovie(
-        id: json['id'] as int,
-        backdropPath: json['backdrop_path'] as String?,
-        posterPath: json['poster_path'] as String?,
-        originalTitle: json['original_title'] as String,
-        tagline: json['tagline'] as String?,
-        overview: json['overview'] as String?,
-        releaseDate: json['release_date'] as String?,
-        budget: json['budget'] as int,
-        revenue: json['revenue'] as int,
-        voteAverage: double.parse(json['vote_average'].toString()),
-        voteCount: json['vote_count'] as int,
-      );
+  factory DetailedMovie.fromJson(Map<String, dynamic> json) =>
+      _$DetailedMovieFromJson(json);
 
   final int id;
+  @JsonKey(name: 'backdrop_path')
   final String? backdropPath;
+  @JsonKey(name: 'poster_path')
   final String? posterPath;
+  @JsonKey(name: 'original_title')
   final String originalTitle;
   final String? tagline;
   final String? overview;
+  @JsonKey(name: 'release_date')
   final String? releaseDate;
   final int budget;
   final int revenue;
+  @JsonKey(name: 'vote_average')
   final double voteAverage;
+  @JsonKey(name: 'vote_count')
   final int voteCount;
 
   @override

@@ -8,3 +8,7 @@ Resources:
 
 
 
+Models serialization:
+```
+flutter pub run build_runner build
+```
