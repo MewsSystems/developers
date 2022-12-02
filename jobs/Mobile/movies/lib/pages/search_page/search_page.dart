@@ -22,7 +22,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late SearchBloc _searchBloc;
 
-  final TextEditingController _textEditingController = TextEditingController();
+  final _textEditingController = TextEditingController();
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -66,6 +68,7 @@ class _SearchPageState extends State<SearchPage> {
                       return RefreshIndicator(
                         color: CustomTheme.blue,
                         child: ListView.builder(
+                          controller: _scrollController,
                           padding: const EdgeInsets.only(top: 60.0),
                           itemCount: _movies.length + 1,
                           itemBuilder: (_, index) {
@@ -89,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                           },
                         ),
                         onRefresh: () async => _searchBloc.add(
-                          FirstSearchEvent(_textEditingController.text, 1),
+                          FirstSearchEvent(_textEditingController.text),
                         ),
                       );
                     } else if (state is ErrorSearchState) {
@@ -107,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Debouncer(
                   timeout: Pagination.timeout,
                   action: () => _searchBloc.add(
-                    FirstSearchEvent(_textEditingController.text, 1),
+                    FirstSearchEvent(_textEditingController.text),
                   ),
                   builder: (newContext, _) => Column(
                     children: [
@@ -130,11 +133,14 @@ class _SearchPageState extends State<SearchPage> {
             ],
           ),
         ),
-        // TODO(Viktor): add floatingActionButton
-        // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: CustomTheme.grey1.withAlpha(75),
-        //   child: const Icon(Icons.arrow_upward_rounded),
-        //   onPressed: () {},
-        // ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: CustomTheme.grey.withAlpha(75),
+          child: const Icon(Icons.arrow_upward_rounded),
+          onPressed: () => _scrollController.animateTo(
+            0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.fastOutSlowIn,
+          ),
+        ),
       );
 }

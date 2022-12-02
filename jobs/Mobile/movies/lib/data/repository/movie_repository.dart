@@ -11,9 +11,9 @@ abstract class MovieRepository {
 }
 
 class RemoteMovieRepository implements MovieRepository {
-  RemoteMovieRepository(this.client);
+  RemoteMovieRepository({required http.Client client}) : _client = client;
 
-  final http.Client client;
+  final http.Client _client;
 
   @override
   Future<MovieSearchResponse> getMovies(int page, String query) async {
@@ -31,7 +31,7 @@ class RemoteMovieRepository implements MovieRepository {
       queryParameters,
     );
 
-    final response = await client.get(
+    final response = await _client.get(
       uri,
       headers: {'Content-Type': 'application/json'},
     );
@@ -58,7 +58,7 @@ class RemoteMovieRepository implements MovieRepository {
       queryParameters,
     );
 
-    final response = await client.get(
+    final response = await _client.get(
       uri,
       headers: {'Content-Type': 'application/json'},
     );

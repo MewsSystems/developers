@@ -12,7 +12,7 @@ void main() {
 
   runApp(
     MovieApp(
-      movieRepository: RemoteMovieRepository(http.Client()),
+      movieRepository: RemoteMovieRepository(client: http.Client()),
     ),
   );
 }

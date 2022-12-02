@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:movies/models/movie_model.dart';
 
+part 'movie_search_response_model.g.dart';
+
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class MovieSearchResponse extends Equatable {
   const MovieSearchResponse({
     required this.page,
@@ -10,19 +14,13 @@ class MovieSearchResponse extends Equatable {
   });
 
   factory MovieSearchResponse.fromJson(Map<String, dynamic> json) =>
-      MovieSearchResponse(
-        page: json['page'] as int,
-        results: List<Movie>.from(
-          (json['results'] as List<dynamic>)
-              .map((movie) => Movie.fromJson(movie as Map<String, dynamic>)),
-        ),
-        totalPages: json['total_pages'] as int,
-        totalResults: json['total_results'] as int,
-      );
+      _$MovieSearchResponseFromJson(json);
 
   final int page;
   final List<Movie> results;
+  @JsonKey(name: 'total_pages')
   final int totalPages;
+  @JsonKey(name: 'total_results')
   final int totalResults;
 
   @override

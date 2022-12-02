@@ -31,17 +31,26 @@ environment:
 dependencies:
   debouncer_widget: ^1.0.0
   equatable: ^2.0.5
+
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_rating_bar: ^4.0.1
   http: ^0.13.5
-  mews_pedantic: ^0.10.0
+  intl: ^0.17.0
+  json_annotation: ^4.7.0
+  # mews_pedantic: ^0.10.0
+  
 
 dev_dependencies:
+  bloc_test: ^9.1.0
+  build_runner: ^2.1.7
   flutter_lints: ^2.0.0
   flutter_test:
-    sdk: flutter
+    sdk: flutter  
+  json_serializable: ^6.5.4
+  mocktail: ^0.3.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
