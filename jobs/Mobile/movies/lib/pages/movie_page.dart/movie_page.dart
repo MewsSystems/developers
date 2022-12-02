@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:movies/blocs/movie_bloc/movie_bloc.dart';
 import 'package:movies/config/consts.dart';
 import 'package:movies/config/custom_theme.dart';
@@ -12,6 +13,7 @@ import 'package:movies/pages/_widgets/network_image_loader.dart';
 import 'package:movies/pages/_widgets/poster.dart';
 import 'package:movies/pages/_widgets/rating.dart';
 import 'package:movies/pages/_widgets/votes.dart';
+import 'package:movies/pages/movie_page.dart/_widgets/detail_info_cell.dart';
 import 'package:movies/pages/search_page/_widgets/no_image.dart';
 
 class MoviePage extends StatelessWidget {
@@ -140,16 +142,21 @@ class _SliverContent extends StatelessWidget {
                   const SizedBox(height: 4.0),
                   Votes(count: movie.voteCount),
                   const SizedBox(height: 16.0),
-                  Text(
-                    movie.releaseDate != null && movie.releaseDate!.isNotEmpty
-                        ? 'Relese: ${movie.releaseDate}'
+                  DetailInfoCell(
+                    title: 'Relese',
+                    text: movie.releaseDate != null &&
+                            movie.releaseDate!.isNotEmpty
+                        ? '${movie.releaseDate}'
                         : 'No release date',
                   ),
-                  const SizedBox(height: 8.0),
-                  Text('Budget: ${movie.budget.toString()}'),
-                  const SizedBox(height: 8.0),
-                  Text('Revenue: ${movie.revenue.toString()}'),
-                  const SizedBox(height: 8.0),
+                  DetailInfoCell(
+                    title: 'Budget',
+                    text: NumberFormat.simpleCurrency().format(movie.budget),
+                  ),
+                  DetailInfoCell(
+                    title: 'Revenue',
+                    text: NumberFormat.simpleCurrency().format(movie.revenue),
+                  ),
                 ],
               )
             ],
