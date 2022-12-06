@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -36,11 +34,11 @@ void main() {
   }
 
   final tMovieSearchResponse = MovieSearchResponse.fromJson(
-    json.decode(fixture('movies.json')),
+    json.decode(fixture('movies.json')) as Map<String, dynamic>,
   );
 
   final tDetailedMovie = DetailedMovie.fromJson(
-    json.decode(fixture('movie.json')),
+    json.decode(fixture('movie.json')) as Map<String, dynamic>,
   );
 
   group('getMovies', () {
@@ -65,7 +63,7 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200('movies.json');
         // act
-        repository.getMovies(1, 'Doom');
+        await repository.getMovies(1, 'Doom');
         // assert
         verify(
           () => mockHttpClient.get(
@@ -98,7 +96,7 @@ void main() {
         // assert
         expect(
           () => call(1, 'Doom'),
-          throwsA(TypeMatcher<ServerException>()),
+          throwsA(const TypeMatcher<ServerException>()),
         );
       },
     );
@@ -123,7 +121,7 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200('movie.json');
         // act
-        repository.getMovieById(1);
+        await repository.getMovieById(1);
         // assert
         verify(
           () => mockHttpClient.get(

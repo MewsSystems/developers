@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies/blocs/search_bloc/search_bloc.dart';
 
@@ -8,13 +6,13 @@ void main() {
     group('test FirstSearchEvent', () {
       test('should supports value equality', () {
         expect(
-          FirstSearchEvent('123'),
-          equals(FirstSearchEvent('123')),
+          const FirstSearchEvent('123'),
+          equals(const FirstSearchEvent('123')),
         );
       });
 
       test('props are correct', () {
-        expect(FirstSearchEvent('123').props, equals(<Object>['123']));
+        expect(const FirstSearchEvent('123').props, equals(<Object>['123']));
       });
     });
 

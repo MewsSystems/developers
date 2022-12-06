@@ -16,23 +16,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieRepository _movieRepository;
 
-  int currentPage = 1;
-  String query = '';
-
   Future<void> _onFirstSearchEvent(
     FirstSearchEvent event,
     Emitter<SearchState> emit,
   ) async {
     try {
-      if (event.query.trim().isEmpty) {
+      final query = event.query.trim();
+      if (query.isEmpty) {
         emit(
           const ErrorSearchState(message: 'Search request should not be empty'),
         );
       } else {
-        currentPage = 1;
-        query = event.query;
         emit(LoadingSearchState());
-        await _emitMovie(emit);
+        await _emitMovie(emit, 1, query);
       }
     } on Exception catch (_) {
       emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
@@ -44,18 +40,29 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     Emitter<SearchState> emit,
   ) async {
     try {
-      currentPage++;
-      await _emitMovie(emit);
+      if (state is SuccessSearchState) {
+        final currentState = state as SuccessSearchState;
+        final currentPage = currentState.page + 1;
+        final currentQuery = currentState.query;
+        await _emitMovie(emit, currentPage, currentQuery);
+      } else {
+        emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
+      }
     } on Exception catch (_) {
       emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
     }
   }
 
-  Future<void> _emitMovie(Emitter<SearchState> emit) async {
-    final searchResponse = await _movieRepository.getMovies(currentPage, query);
+  Future<void> _emitMovie(
+    Emitter<SearchState> emit,
+    int page,
+    String query,
+  ) async {
+    final searchResponse = await _movieRepository.getMovies(page, query);
     emit(
       SuccessSearchState(
-        currentPage,
+        page,
+        query,
         searchResponse.results,
         searchResponse.totalResults,
         searchResponse.page != searchResponse.totalPages,

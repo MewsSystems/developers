@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies/blocs/movie_bloc/movie_bloc.dart';
 import 'package:movies/models/detailed_movie_model.dart';
@@ -16,7 +14,7 @@ void main() {
 
     test('should supports SuccessMovieState value comparison', () {
       expect(
-        SuccessMovieState(
+        const SuccessMovieState(
           DetailedMovie(
             id: 123,
             backdropPath: '/backdropPath',
@@ -31,7 +29,7 @@ void main() {
             tagline: 'xxx',
           ),
         ),
-        SuccessMovieState(
+        const SuccessMovieState(
           DetailedMovie(
             id: 123,
             backdropPath: '/backdropPath',
@@ -51,8 +49,8 @@ void main() {
 
     test('should supports ErrorMovieState value comparison', () {
       expect(
-        ErrorMovieState(message: 'error'),
-        ErrorMovieState(message: 'error'),
+        const ErrorMovieState(message: 'error'),
+        const ErrorMovieState(message: 'error'),
       );
     });
   });

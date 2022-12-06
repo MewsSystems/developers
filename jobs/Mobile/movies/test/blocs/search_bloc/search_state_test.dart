@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies/blocs/search_bloc/search_bloc.dart';
 
@@ -15,15 +13,15 @@ void main() {
 
     test('should supports SuccessSearchState value comparison', () {
       expect(
-        SuccessSearchState(1, [], 0, false),
-        SuccessSearchState(1, [], 0, false),
+        const SuccessSearchState(1, '123', [], 0, false),
+        const SuccessSearchState(1, '123', [], 0, false),
       );
     });
 
     test('should supports ErrorSearchState value comparison', () {
       expect(
-        ErrorSearchState(message: 'error'),
-        ErrorSearchState(message: 'error'),
+        const ErrorSearchState(message: 'error'),
+        const ErrorSearchState(message: 'error'),
       );
     });
   });

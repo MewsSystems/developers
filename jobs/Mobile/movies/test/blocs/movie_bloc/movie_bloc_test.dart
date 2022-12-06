@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -54,10 +52,10 @@ void main() {
       'should emit [Loading, Error] when api thow an error',
       setUp: setUpMockGetMoviesExeption,
       build: buildBloc,
-      act: (MovieBloc bloc) async => bloc.add(GetMovieEvent(123)),
+      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(123)),
       expect: () => [
         LoadingMovieState(),
-        ErrorMovieState(message: 'Ooops, something went wrong'),
+        const ErrorMovieState(message: 'Ooops, something went wrong'),
       ],
       verify: (_) => verify(
         () => mockMovieRepository.getMovieById(any()),
@@ -68,10 +66,10 @@ void main() {
       'should emit [Loading, Success] when data is gotten successfully',
       setUp: setUpMockGetMoviesSuccess,
       build: buildBloc,
-      act: (MovieBloc bloc) async => bloc.add(GetMovieEvent(123)),
+      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(123)),
       expect: () => [
         LoadingMovieState(),
-        SuccessMovieState(tDetailedMovie),
+        const SuccessMovieState(tDetailedMovie),
       ],
       verify: (_) => verify(
         () => mockMovieRepository.getMovieById(any()),
