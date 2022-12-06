@@ -133,13 +133,18 @@ class _SearchPageState extends State<SearchPage> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: CustomTheme.grey.withAlpha(75),
-          child: const Icon(Icons.arrow_upward_rounded),
-          onPressed: () => _scrollController.animateTo(
-            0,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
+        floatingActionButton: BlocBuilder<SearchBloc, SearchState>(
+          bloc: _searchBloc,
+          builder: (context, state) => FloatingActionButton(
+            backgroundColor: CustomTheme.grey.withAlpha(75),
+            child: const Icon(Icons.arrow_upward_rounded),
+            onPressed: () => (_searchBloc.state is SuccessSearchState)
+                ? _scrollController.animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  )
+                : null,
           ),
         ),
       );
