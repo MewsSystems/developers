@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movies/blocs/search_bloc/search_bloc.dart';
 import 'package:movies/core/errors/exceptions.dart';
-import 'package:movies/data/repository/movie_repository.dart';
 import 'package:movies/models/movie_model.dart';
 import 'package:movies/models/movie_search_response_model.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 
 class MockMovieRepository extends Mock implements MovieRepository {}
 

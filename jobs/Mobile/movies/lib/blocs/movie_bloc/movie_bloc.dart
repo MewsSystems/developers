@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/data/repository/movie_repository.dart';
 import 'package:movies/models/detailed_movie_model.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 
 part 'movie_event.dart';
 part 'movie_state.dart';

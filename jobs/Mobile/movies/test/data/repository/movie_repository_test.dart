@@ -1,74 +1,92 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:movies/config/consts.dart';
 import 'package:movies/core/errors/exceptions.dart';
-import 'package:movies/data/repository/movie_repository.dart';
 import 'package:movies/models/detailed_movie_model.dart';
 import 'package:movies/models/movie_search_response_model.dart';
+import 'package:movies/networking/client/client.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 
 import '../../fixtures/fixture_reader.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+class MockClient extends Mock implements APIClient {}
 
 void main() {
   registerFallbackValue(Uri());
   late RemoteMovieRepository repository;
-  late MockHttpClient mockHttpClient;
+  late MockClient client;
 
   setUp(() {
-    mockHttpClient = MockHttpClient();
-    repository = RemoteMovieRepository(client: mockHttpClient);
+    client = MockClient();
+    repository = RemoteMovieRepository(client: client);
   });
 
-  void setUpMockHttpClientSuccess200(String file) {
-    when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-        .thenAnswer((_) async => http.Response(fixture(file), 200));
-  }
+  const movieId = 545954;
 
-  void setUpMockHttpClientFailure404() {
-    when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-        .thenAnswer((_) async => http.Response('Something went wrong', 404));
-  }
-
-  final tMovieSearchResponse = MovieSearchResponse.fromJson(
+  final movieSearchResponse = MovieSearchResponse.fromJson(
     json.decode(fixture('movies.json')) as Map<String, dynamic>,
   );
 
-  final tDetailedMovie = DetailedMovie.fromJson(
+  final detailedMovie = DetailedMovie.fromJson(
     json.decode(fixture('movie.json')) as Map<String, dynamic>,
   );
 
-  group('getMovies', () {
-    final queryParameters = {
-      'api_key': Api.key,
-      'language': Api.locale,
-      'query': 'Doom',
-      'page': '1',
-      'include_adult': '${Api.includeAdult}',
-    };
+  void setUpMockClient200getMovies(String file) {
+    when(
+      () => client.getMovies(any(), any(), any(), any(), any()),
+    ).thenAnswer((_) async => movieSearchResponse);
+  }
 
-    final uri = Uri.https(
-      Api.baseUrl,
-      Api.searchMoviesPath,
-      queryParameters,
+  void setUpMockClient404getMovies() {
+    when(() => client.getMovies(any(), any(), any(), any(), any())).thenAnswer(
+      (_) => Future.error(
+        Response(
+          data: 'Something went wrong',
+          statusCode: 404,
+          requestOptions: RequestOptions(path: ''),
+        ),
+      ),
     );
+  }
 
+  void setUpMockClient200getMovie(String file) {
+    when(
+      () => client.getMovieById(any(), any(), any()),
+    ).thenAnswer((_) async => detailedMovie);
+  }
+
+  void setUpMockClient404getMovie() {
+    when(() => client.getMovieById(any(), any(), any())).thenAnswer(
+      (_) => Future.error(
+        Response(
+          data: 'Something went wrong',
+          statusCode: 404,
+          requestOptions: RequestOptions(path: ''),
+        ),
+      ),
+    );
+  }
+
+  group('getMovies', () {
     test(
       '''should perform a GET request on a URL with number
        being the endpoint and with application/json header''',
       () async {
         // arrange
-        setUpMockHttpClientSuccess200('movies.json');
+        setUpMockClient200getMovies('movies.json');
         // act
         await repository.getMovies(1, 'Doom');
         // assert
         verify(
-          () => mockHttpClient.get(
-            uri,
-            headers: {'Content-Type': 'application/json'},
+          () => client.getMovies(
+            Api.key,
+            Api.locale,
+            'Doom',
+            1,
+            false,
           ),
         );
       },
@@ -78,11 +96,11 @@ void main() {
       'should return MovieSearchResponse when the response code is 200 (success)',
       () async {
         // arrange
-        setUpMockHttpClientSuccess200('movies.json');
+        setUpMockClient200getMovies('movies.json');
         // act
         final result = await repository.getMovies(1, 'Doom');
         // assert
-        expect(result, equals(tMovieSearchResponse));
+        expect(result, equals(movieSearchResponse));
       },
     );
 
@@ -90,7 +108,7 @@ void main() {
       'should throw a ServerException when the response code is 404 or other',
       () async {
         // arrange
-        setUpMockHttpClientFailure404();
+        setUpMockClient404getMovies();
         // act
         final call = repository.getMovies;
         // assert
@@ -103,30 +121,20 @@ void main() {
   });
 
   group('getMovieById', () {
-    final queryParameters = {
-      'api_key': Api.key,
-      'language': Api.locale,
-    };
-
-    final uri = Uri.https(
-      Api.baseUrl,
-      '${Api.detailedMoviesPath}/1',
-      queryParameters,
-    );
-
     test(
       '''should perform a GET request on a URL with number
        being the endpoint and with application/json header''',
       () async {
         // arrange
-        setUpMockHttpClientSuccess200('movie.json');
+        setUpMockClient200getMovie('movie.json');
         // act
-        await repository.getMovieById(1);
+        await repository.getMovieById(movieId);
         // assert
         verify(
-          () => mockHttpClient.get(
-            uri,
-            headers: {'Content-Type': 'application/json'},
+          () => client.getMovieById(
+            movieId,
+            Api.key,
+            Api.locale,
           ),
         );
       },
@@ -136,11 +144,11 @@ void main() {
       'should return MovieSearchResponse when the response code is 200 (success)',
       () async {
         // arrange
-        setUpMockHttpClientSuccess200('movie.json');
+        setUpMockClient200getMovie('movie.json');
         // act
-        final result = await repository.getMovieById(1);
+        final result = await repository.getMovieById(movieId);
         // assert
-        expect(result, equals(tDetailedMovie));
+        expect(result, equals(detailedMovie));
       },
     );
 
@@ -148,11 +156,14 @@ void main() {
       'should throw a ServerException when the response code is 404 or other',
       () async {
         // arrange
-        setUpMockHttpClientFailure404();
+        setUpMockClient404getMovie();
         // act
         final call = repository.getMovieById;
         // assert
-        expect(() => call(1), throwsA(TypeMatcher<ServerException>()));
+        expect(
+          () => call(1),
+          throwsA(const TypeMatcher<ServerException>()),
+        );
       },
     );
   });
