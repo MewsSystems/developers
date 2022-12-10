@@ -1,13 +1,11 @@
-// ignore_for_file: avoid-non-null-assertion
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:movies/blocs/movie_bloc/movie_bloc.dart';
 import 'package:movies/config/consts.dart';
 import 'package:movies/config/custom_theme.dart';
-import 'package:movies/data/repository/movie_repository.dart';
 import 'package:movies/models/detailed_movie_model.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 import 'package:movies/pages/_widgets/loader.dart';
 import 'package:movies/pages/_widgets/network_image_loader.dart';
 import 'package:movies/pages/_widgets/poster.dart';

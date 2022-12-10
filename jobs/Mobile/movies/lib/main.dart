@@ -1,9 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:movies/blocs/bloc_observer.dart';
 import 'package:movies/config/custom_theme.dart';
-import 'package:movies/data/repository/movie_repository.dart';
+import 'package:movies/networking/client/client.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 import 'package:movies/pages/search_page/search_page.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
 
   runApp(
     MovieApp(
-      movieRepository: RemoteMovieRepository(client: http.Client()),
+      movieRepository: RemoteMovieRepository(client: APIClient(Dio())),
     ),
   );
 }

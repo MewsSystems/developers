@@ -1,8 +1,8 @@
 class Api {
   static const key = '03b8572954325680265531140190fd2a';
-  static const baseUrl = 'api.themoviedb.org';
-  static const searchMoviesPath = '/3/search/movie/';
-  static const detailedMoviesPath = '/3/movie/';
+  static const baseUrl = 'http://api.themoviedb.org/';
+  static const searchMoviesPath = '3/search/movie';
+  static const detailedMoviesPath = '3/movie';
   static const locale = 'en-US';
   static const includeAdult = false;
 }

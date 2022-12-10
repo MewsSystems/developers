@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/data/repository/movie_repository.dart';
+import 'package:movies/core/errors/exceptions.dart';
+import 'package:movies/core/errors/network_exceptions.dart';
 import 'package:movies/models/movie_model.dart';
+import 'package:movies/networking/repository/movie_repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -20,18 +22,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     FirstSearchEvent event,
     Emitter<SearchState> emit,
   ) async {
-    try {
-      final query = event.query.trim();
-      if (query.isEmpty) {
-        emit(
-          const ErrorSearchState(message: 'Search request should not be empty'),
-        );
-      } else {
-        emit(LoadingSearchState());
-        await _emitMovie(emit, 1, query);
-      }
-    } on Exception catch (_) {
-      emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
+    final query = event.query.trim();
+    if (query.isEmpty) {
+      emit(
+        const ErrorSearchState(message: 'Search request should not be empty'),
+      );
+    } else {
+      emit(LoadingSearchState());
+      await _emitMovie(emit, 1, query);
     }
   }
 
@@ -39,16 +37,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     NextSearchEvent _,
     Emitter<SearchState> emit,
   ) async {
-    try {
-      if (state is SuccessSearchState) {
-        final currentState = state as SuccessSearchState;
-        final currentPage = currentState.page + 1;
-        final currentQuery = currentState.query;
-        await _emitMovie(emit, currentPage, currentQuery);
-      } else {
-        emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
-      }
-    } on Exception catch (_) {
+    if (state is SuccessSearchState) {
+      final currentState = state as SuccessSearchState;
+      final currentPage = currentState.page + 1;
+      final currentQuery = currentState.query;
+      await _emitMovie(emit, currentPage, currentQuery);
+    } else {
       emit(const ErrorSearchState(message: 'Ooops, something went wrong'));
     }
   }
@@ -58,15 +52,31 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     int page,
     String query,
   ) async {
-    final searchResponse = await _movieRepository.getMovies(page, query);
-    emit(
-      SuccessSearchState(
-        page,
-        query,
-        searchResponse.results,
-        searchResponse.totalResults,
-        searchResponse.page != searchResponse.totalPages,
+    final failureOrMovie = await _movieRepository.getMovies(page, query);
+    failureOrMovie.fold(
+      (failure) => emit(
+        ErrorSearchState(message: _mapFailureToMessage(failure)),
+      ),
+      (searchResponse) => emit(
+        SuccessSearchState(
+          page,
+          query,
+          searchResponse.results,
+          searchResponse.totalResults,
+          searchResponse.page != searchResponse.totalPages,
+        ),
       ),
     );
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case NetworkFailure:
+        final networkException = (failure as NetworkFailure).exception;
+        final message = NetworkExceptions.getErrorMessage(networkException);
+        return message;
+      default:
+        return 'Unexpected error';
+    }
   }
 }
