@@ -1,8 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movies/blocs/movie_bloc/movie_bloc.dart';
 import 'package:movies/core/errors/exceptions.dart';
+import 'package:movies/core/errors/network_exceptions.dart';
 import 'package:movies/models/detailed_movie_model.dart';
 import 'package:movies/networking/repository/movie_repository.dart';
 
@@ -25,8 +27,10 @@ void main() {
     expect(buildBloc().state, equals(InitialMovieState()));
   });
 
-  const tDetailedMovie = DetailedMovie(
-    id: 123,
+  const movieId = 123;
+
+  const detailedMovie = DetailedMovie(
+    id: movieId,
     backdropPath: '/backdropPath',
     posterPath: '/posterPath',
     originalTitle: 'title',
@@ -39,24 +43,15 @@ void main() {
     tagline: 'xxx',
   );
 
-  void setUpMockGetMoviesExeption() =>
-      when(() => mockMovieRepository.getMovieById(any()))
-          .thenThrow(ServerException());
-
-  void setUpMockGetMoviesSuccess() =>
-      when(() => mockMovieRepository.getMovieById(any()))
-          .thenAnswer((_) async => tDetailedMovie);
-
   group('test GetMovieEvent', () {
     blocTest<MovieBloc, MovieState>(
-      'should emit [Loading, Error] when api thow an error',
-      setUp: setUpMockGetMoviesExeption,
+      'should get data from the concrete use case',
+      setUp: () {
+        when(() => mockMovieRepository.getMovieById(any()))
+            .thenAnswer((_) async => const Right(detailedMovie));
+      },
       build: buildBloc,
-      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(123)),
-      expect: () => [
-        LoadingMovieState(),
-        const ErrorMovieState(message: 'Ooops, something went wrong'),
-      ],
+      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(movieId)),
       verify: (_) => verify(
         () => mockMovieRepository.getMovieById(any()),
       ).called(1),
@@ -64,12 +59,34 @@ void main() {
 
     blocTest<MovieBloc, MovieState>(
       'should emit [Loading, Success] when data is gotten successfully',
-      setUp: setUpMockGetMoviesSuccess,
+      setUp: () {
+        when(() => mockMovieRepository.getMovieById(any()))
+            .thenAnswer((_) async => const Right(detailedMovie));
+      },
       build: buildBloc,
-      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(123)),
+      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(movieId)),
       expect: () => [
         LoadingMovieState(),
-        const SuccessMovieState(tDetailedMovie),
+        const SuccessMovieState(detailedMovie),
+      ],
+      verify: (_) => verify(
+        () => mockMovieRepository.getMovieById(any()),
+      ).called(1),
+    );
+
+    blocTest<MovieBloc, MovieState>(
+      'should emit [Loading, Error] when getting data fails',
+      setUp: () {
+        when(() => mockMovieRepository.getMovieById(any())).thenAnswer(
+          (_) async =>
+              Left(NetworkFailure(const NetworkExceptions.requestCancelled())),
+        );
+      },
+      build: buildBloc,
+      act: (MovieBloc bloc) async => bloc.add(const GetMovieEvent(movieId)),
+      expect: () => [
+        LoadingMovieState(),
+        const ErrorMovieState(message: 'Request Cancelled'),
       ],
       verify: (_) => verify(
         () => mockMovieRepository.getMovieById(any()),

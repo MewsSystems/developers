@@ -57,9 +57,9 @@ class _APIClient implements APIClient {
 
   @override
   Future<DetailedMovie> getMovieById(
-    id,
     apiKey,
     language,
+    id,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{

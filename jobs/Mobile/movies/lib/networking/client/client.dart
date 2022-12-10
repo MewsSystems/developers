@@ -22,8 +22,8 @@ abstract class APIClient {
 
   @GET('${Api.detailedMoviesPath}/{id}')
   Future<DetailedMovie> getMovieById(
-    @Path('id') int id,
     @Query('api_key') String apiKey,
     @Query('language') String language,
+    @Path('id') int id,
   );
 }

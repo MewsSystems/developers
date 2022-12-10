@@ -1,8 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movies/blocs/search_bloc/search_bloc.dart';
 import 'package:movies/core/errors/exceptions.dart';
+import 'package:movies/core/errors/network_exceptions.dart';
 import 'package:movies/models/movie_model.dart';
 import 'package:movies/models/movie_search_response_model.dart';
 import 'package:movies/networking/repository/movie_repository.dart';
@@ -26,9 +28,9 @@ void main() {
     expect(buildBloc().state, equals(InitialSearchState()));
   });
 
-  const tQuery = '123';
+  const query = '123';
 
-  const tMovies = [
+  const movies = [
     Movie(
       id: 123,
       backdropPath: '/backdropPath',
@@ -42,25 +44,27 @@ void main() {
 
   const tMovieSearchResponse = MovieSearchResponse(
     page: 1,
-    results: tMovies,
+    results: movies,
     totalPages: 1,
     totalResults: 1,
   );
 
   void setUpMockGetMoviesExeption() =>
-      when(() => mockMovieRepository.getMovies(any(), any()))
-          .thenThrow(ServerException());
+      when(() => mockMovieRepository.getMovies(any(), any())).thenAnswer(
+        (_) async =>
+            Left(NetworkFailure(const NetworkExceptions.requestCancelled())),
+      );
 
   void setUpMockGetMoviesSuccess() =>
       when(() => mockMovieRepository.getMovies(any(), any()))
-          .thenAnswer((_) async => tMovieSearchResponse);
+          .thenAnswer((_) async => const Right(tMovieSearchResponse));
 
   group('test FirstSearchEvent', () {
     blocTest<SearchBloc, SearchState>(
       'should emit [Loading, Error] when api thow an error',
       setUp: setUpMockGetMoviesExeption,
       build: buildBloc,
-      act: (SearchBloc bloc) async => bloc.add(const FirstSearchEvent('123')),
+      act: (SearchBloc bloc) async => bloc.add(const FirstSearchEvent(query)),
       expect: () => [
         LoadingSearchState(),
         const ErrorSearchState(message: 'Ooops, something went wrong'),
@@ -74,10 +78,10 @@ void main() {
       'should emit [Loading, Success] when data is gotten successfully',
       setUp: setUpMockGetMoviesSuccess,
       build: buildBloc,
-      act: (SearchBloc bloc) async => bloc.add(const FirstSearchEvent('123')),
+      act: (SearchBloc bloc) async => bloc.add(const FirstSearchEvent(query)),
       expect: () => [
         LoadingSearchState(),
-        const SuccessSearchState(1, tQuery, tMovies, 1, false),
+        const SuccessSearchState(1, query, movies, 1, false),
       ],
       verify: (_) => verify(
         () => mockMovieRepository.getMovies(any(), any()),
@@ -90,10 +94,11 @@ void main() {
       'should emit [Error] when api thow an error',
       setUp: setUpMockGetMoviesExeption,
       build: buildBloc,
-      seed: () => const SuccessSearchState(1, tQuery, tMovies, 1, false),
+      seed: () => const SuccessSearchState(1, query, movies, 1, false),
       act: (SearchBloc bloc) async => bloc.add(NextSearchEvent()),
-      expect: () =>
-          [const ErrorSearchState(message: 'Ooops, something went wrong')],
+      expect: () => [
+        const ErrorSearchState(message: 'Ooops, something went wrong'),
+      ],
       verify: (_) => verify(
         () => mockMovieRepository.getMovies(any(), any()),
       ).called(1),
@@ -103,9 +108,9 @@ void main() {
       'should emit [Success] when data is gotten successfully',
       setUp: setUpMockGetMoviesSuccess,
       build: buildBloc,
-      seed: () => const SuccessSearchState(1, tQuery, tMovies, 1, false),
+      seed: () => const SuccessSearchState(1, query, movies, 1, false),
       act: (SearchBloc bloc) async => bloc.add(NextSearchEvent()),
-      expect: () => [const SuccessSearchState(2, tQuery, tMovies, 1, false)],
+      expect: () => [const SuccessSearchState(2, query, movies, 1, false)],
       verify: (_) => verify(
         () => mockMovieRepository.getMovies(any(), any()),
       ).called(1),
