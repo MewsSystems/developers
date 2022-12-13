@@ -12,13 +12,13 @@ WITH CTE AS
 				ELSE 'Female'
 			END AS Gender,
 			CASE
-				WHEN AgeGroup='0' THEN '0-24'
-				WHEN AgeGroup='25' THEN '25-34'
-				WHEN AgeGroup='35' THEN '35-44'
-				WHEN AgeGroup='45' THEN '45-54'
-				WHEN AgeGroup='55' THEN '55-64'
-				WHEN AgeGroup='65' THEN '65-100'
-				ELSE '100+'
+				WHEN AgeGroup='0' THEN 'Unknown'
+				WHEN AgeGroup='25' THEN '25'
+				WHEN AgeGroup='35' THEN '35'
+				WHEN AgeGroup='45' THEN '45'
+				WHEN AgeGroup='55' THEN '55'
+				WHEN AgeGroup='65' THEN '65'
+				ELSE '100'
 			END AS AgeGroup,
 			RateName,
 			COUNT(*) AS "Number of Reservations",
@@ -60,13 +60,13 @@ WITH CTE AS
 				ELSE 'Female'
 			END AS Gender,
 			CASE
-				WHEN AgeGroup='0' THEN '0-24'
-				WHEN AgeGroup='25' THEN '25-34'
-				WHEN AgeGroup='35' THEN '35-44'
-				WHEN AgeGroup='45' THEN '45-54'
-				WHEN AgeGroup='55' THEN '55-64'
-				WHEN AgeGroup='65' THEN '65-100'
-				ELSE '100+'
+				WHEN AgeGroup='0' THEN 'Unknown'
+				WHEN AgeGroup='25' THEN '25'
+				WHEN AgeGroup='35' THEN '35'
+				WHEN AgeGroup='45' THEN '45'
+				WHEN AgeGroup='55' THEN '55'
+				WHEN AgeGroup='65' THEN '65'
+				ELSE '100'
 			END AS AgeGroup,
 			RateName,
 			COUNT(*) AS "Number of Reservations",
@@ -107,22 +107,17 @@ Note: Data quality is better for reservations with online check-in since email,n
 */
 
 --Age Group
+--Unknowns are excluded
 SELECT
-	CASE
-		WHEN AgeGroup='0' THEN '0-24'
-		WHEN AgeGroup='25' THEN '25-34'
-		WHEN AgeGroup='35' THEN '35-44'
-		WHEN AgeGroup='45' THEN '45-54'
-		WHEN AgeGroup='55' THEN '55-64'
-		WHEN AgeGroup='65' THEN '65-100'
-		ELSE '100+'
-	END AS AgeGroup,
+	AgeGroup,
 	COUNT(*) AS "Number of Reservations",
 	CONCAT(CAST(CAST(COUNT(*) AS DECIMAL(5,2))*100/ SUM(COUNT(*)) OVER() AS DECIMAL(5,1)),' %') AS "Percent of Total"
 FROM
 	reservation
 WHERE 
 	IsOnlineCheckin = 1
+	AND
+	AgeGroup<>0
 GROUP BY
 	AgeGroup
 ORDER BY
@@ -131,6 +126,7 @@ ORDER BY
 
 
 --Gender
+--There isn't any unknown gender in online-check in customers already.
 SELECT
 	CASE
 		WHEN Gender='0' THEN 'Unknown'
@@ -147,23 +143,28 @@ GROUP BY
 	Gender
 ORDER BY
 	"Number of Reservations" DESC
---Insights:Majority of online check-in customers are males in both groups
+--Insights:Majority of online check-in customers are males.(Like it's in offline check-in customers)
 
 
 --Nationality
+--Unknowns are excluded
 SELECT
-	ISNULL(NationalityCode,'Unkown') as Nationality,
+	NationalityCode,
 	COUNT(*) AS "Number of Reservations",
 	CONCAT(CAST(CAST(COUNT(*) AS DECIMAL(5,2))*100/ SUM(COUNT(*)) OVER() AS DECIMAL(5,1)),' %') AS "Percent of Total"
 FROM
 	reservation
 WHERE 
 	IsOnlineCheckin = 1
+	AND
+	NationalityCode IS NOT NULL
 GROUP BY
-	ISNULL(NationalityCode,'Unkown')
+	NationalityCode
 ORDER BY
 	"Number of Reservations" DESC
---Insights: Main customers are from US,GB,FR,DE...
+--Insights: Main customers are from US,GB,FR,...
+
+
 
 --Day of week
 SELECT
@@ -188,8 +189,20 @@ ORDER BY
 SELECT
 	TOP 1
 	NationalityCode,
-	AgeGroup,
-	Gender,
+	CASE
+		WHEN AgeGroup='0' THEN 'Unknown'
+		WHEN AgeGroup='25' THEN '25'
+		WHEN AgeGroup='35' THEN '35'
+		WHEN AgeGroup='45' THEN '45'
+		WHEN AgeGroup='55' THEN '55'
+		WHEN AgeGroup='65' THEN '65'
+		ELSE '100'
+	END AS AgeGroup,
+	CASE
+		WHEN Gender='0' THEN 'Unknown'
+		WHEN Gender='1' THEN 'Male'
+		ELSE 'Female'
+	END AS Gender,
 	Count(*) as "Number of Reservations",
 	CAST(SUM(NightCost_Sum)/SUM(OccupiedSpace_Sum) AS DECIMAL(5,1)) as "Avg Revenue per Occ Cap"
 FROM
@@ -203,13 +216,26 @@ GROUP BY
 ORDER BY
 	"Avg Revenue per Occ Cap" DESC
 
+
 --Segments by Nationality & Gender & Age Group (Cancelled reservations and reservations which the customers did not show up are excluded.)
 --The least profitable segment according to the defined metric 
 SELECT
 	TOP 1
 	NationalityCode,
-	AgeGroup,
-	Gender,
+	CASE
+		WHEN AgeGroup='0' THEN 'Unknown'
+		WHEN AgeGroup='25' THEN '25'
+		WHEN AgeGroup='35' THEN '35'
+		WHEN AgeGroup='45' THEN '45'
+		WHEN AgeGroup='55' THEN '55'
+		WHEN AgeGroup='65' THEN '65'
+		ELSE '100'
+	END AS AgeGroup,
+	CASE
+		WHEN Gender='0' THEN 'Unknown'
+		WHEN Gender='1' THEN 'Male'
+		ELSE 'Female'
+	END AS Gender,
 	Count(*) as "Number of Reservations",
 	CAST(SUM(NightCost_Sum)/SUM(OccupiedSpace_Sum) AS DECIMAL(5,1)) as "Avg Revenue per Occ Cap"
 FROM
@@ -223,7 +249,7 @@ GROUP BY
 ORDER BY
 	"Avg Revenue per Occ Cap" ASC
 
-
---Insights: The most profitable nationality is DE, the least is SK.
---Insights: The most profitable Age group is 0, the least is Age group 65
---Insights: The most profitable Gender group is 0, the least is Gender group 2
+--Some other insights according to the defined metric
+--Insights: The most profitable nationality is DE, the least is SK in 5 major nationalities (US,GB,DE,SK,CZ)
+--Insights: The most profitable Age group is 55, the least is Age group 65.
+--Insights: The most profitable Gender group is Females, followed by Males, and Unknowns.
