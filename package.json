@@ -12,7 +12,6 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "axios": "^1.2.1",
-    "gh-pages": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
@@ -51,7 +50,8 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "gh-pages": "^4.0.0"
   },
   "homepage": "https://1gr3.github.io/mews-movies"
 }
