@@ -1,0 +1,62 @@
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.grid {
+  display: grid;
+  grid-auto-flow: dense;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+/* Screen larger than 600px? 2 column */
+@media (min-width: 710px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Screen larger than 900px? 3 columns */
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1340px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 1500px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 1960px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 2380px) {
+  .grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+header {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  color: white;
+  line-height: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 0;
+}
