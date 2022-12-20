@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mews-movies/static/css/main.1e0bb34c.css",
+    "main.js": "/mews-movies/static/js/main.a9e422b3.js",
+    "static/js/787.14e4bc02.chunk.js": "/mews-movies/static/js/787.14e4bc02.chunk.js",
+    "index.html": "/mews-movies/index.html",
+    "main.1e0bb34c.css.map": "/mews-movies/static/css/main.1e0bb34c.css.map",
+    "main.a9e422b3.js.map": "/mews-movies/static/js/main.a9e422b3.js.map",
+    "787.14e4bc02.chunk.js.map": "/mews-movies/static/js/787.14e4bc02.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1e0bb34c.css",
+    "static/js/main.a9e422b3.js"
+  ]
+}
