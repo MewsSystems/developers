@@ -1,5 +1,5 @@
 name: movies
-description: A new Flutter project.
+description: Flutter task for Mews
 
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
@@ -10,16 +10,20 @@ environment:
   sdk: '>=2.18.6 <3.0.0'
 
 dependencies:
+  animations: ^2.0.7
+  entry: ^0.0.8
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.1
   flutter_localizations:
     sdk: flutter
+  json_serializable: ^6.5.4
+  mews_pedantic: ^0.10.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true

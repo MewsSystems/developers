@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// Displays detailed information about a SampleItem.
-class SampleItemDetailsView extends StatelessWidget {
-  const SampleItemDetailsView({super.key});
+/// Displays detailed information about a movie
+class DetailsPage extends StatelessWidget {
+  const DetailsPage({super.key});
 
   static const routeName = '/sample_item';
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Item Details'),
       ),
@@ -16,5 +15,4 @@ class SampleItemDetailsView extends StatelessWidget {
         child: Text('More Information Here'),
       ),
     );
-  }
 }
