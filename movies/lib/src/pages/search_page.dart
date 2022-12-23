@@ -1,12 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:movies/constants.dart';
+import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/pages/details_page.dart';
+import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/pages/details_page.dart';
 
 /// Displays a search bar and the list of results
 class SearchPage extends StatelessWidget {
@@ -35,63 +35,83 @@ class SearchPage extends StatelessWidget {
                       suffixIcon: const Icon(Icons.search),
                       hintText: AppLocalizations.of(context).searchMovie,
                     ),
+                    onChanged: (query) => context
+                        .read<MovieSearchBloc>()
+                        .add(MovieQueryChanged(query)),
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    // Providing a restorationId allows the ListView to restore the
-                    // scroll position when a user leaves and returns to the app after it
-                    // has been killed while running in the background.
-                    restorationId: 'sampleItemListView',
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = items[index];
+                  child: BlocBuilder<MovieSearchBloc, List<Movie>>(
+                      builder: (context, movies) => ListView.builder(
+                            // allows the ListView to restore the scroll position
+                            restorationId: 'sampleItemListView',
+                            itemCount: movies.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final movie = movies[index];
 
-                      return Entry.all(
-                        delay: const Duration(milliseconds: 250),
-                        child: GestureDetector(
-                          onTap: () {
-                            BlocProvider.of<SelectedMovieBloc>(context)
-                                .add(SelectMovie(item));
-                          },
-                          child: Container(
-                            height: 168,
-                            margin: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                if(item.posterPath != null)
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(16)),
-                                  child: Hero(
-                                    tag: item.id,
-                                    child: CachedNetworkImage(
-                                        imageUrl: item.posterPath ?? ''),
+                              return Entry.all(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    BlocProvider.of<SelectedMovieBloc>(context)
+                                        .add(SelectMovie(movie));
+                                  },
+                                  child: Container(
+                                    height: 128,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Poster(
+                                          url: movie.smallPoster,
+                                          heroTag: movie.id,
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  movie.title,
+                                                  overflow: TextOverflow.fade,
+                                                  style: const TextStyle(
+                                                      fontSize: 24),
+                                                ),
+                                              ),
+                                              Wrap(
+                                                spacing: 8,
+                                                children: [
+                                                  Chip(
+                                                    label: Text(
+                                                      movie.releaseDate.year
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                  Chip(
+                                                    avatar: const Icon(
+                                                      Icons.star,
+                                                      size: 16,
+                                                    ),
+                                                    label: Text(
+                                                      movie.voteAverage
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 16),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Hero(
-                                      tag: item.id.toString() + item.title,
-                                      child: Text(
-                                        item.originalTitle,
-                                        style: const TextStyle(fontSize: 24),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(item.releaseDate.year.toString()),
-                                    Text(item.voteAverage.toString())
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                              );
+                            },
+                          )),
                 ),
               ],
             ),

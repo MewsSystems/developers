@@ -3,5 +3,7 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-  "searchMovie": "Search for a movie"
+  "searchMovie": "Search for a movie",
+  "synopsis": "Synopsis",
+  "adult": "Adult"
 }

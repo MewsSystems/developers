@@ -14,7 +14,7 @@ class SelectedMovieBloc extends Bloc<SelectedMovieEvent, Movie?> {
     on<SelectMovie>((event, emit) {
       emit(event.movie);
     });
-    super.on<DeselectMovie>((event, emit) {
+    on<DeselectMovie>((event, emit) {
       emit(null);
     });
   }
