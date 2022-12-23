@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/pages/movie.dart';
+import 'package:movies/src/model/movie.dart';
 
 /// Displays detailed information about a movie
 class DetailsPage extends StatelessWidget {
@@ -30,14 +30,15 @@ class DetailsPage extends StatelessWidget {
               children: [
                 Column(
                   children: [
+                    if(movie.posterPath != null)
                     Hero(
                       tag: movie.id,
-                      child: CachedNetworkImage(imageUrl: movie.posterUrl),
+                      child: CachedNetworkImage(imageUrl: movie.posterPath ?? ''),
                     ),
                     Hero(
-                      tag: movie.id + movie.title,
+                      tag: movie.id.toString() + movie.title,
                       child: Text(
-                        movie.title,
+                        movie.originalTitle,
                         style: const TextStyle(fontSize: 32),
                       ),
                     ),

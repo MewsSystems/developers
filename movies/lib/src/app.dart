@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 
 import 'package:movies/src/pages/details_page.dart';
-import 'package:movies/src/pages/movie.dart';
+import 'package:movies/src/model/movie.dart';
 import 'package:movies/src/pages/search_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 

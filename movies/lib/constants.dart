@@ -1,12 +1,20 @@
-import 'package:movies/src/pages/movie.dart';
+import 'package:movies/src/model/movie.dart';
 
 final List<Movie> items = [
     Movie(
-      id: 'abc123',
+      id: 1234,
       title: 'Avatar 2',
-      posterUrl:
+      originalTitle: 'Avatar 2',
+      originalLanguage: 'French',
+      backdropPath: 'https://fr.web.img4.acsta.net/pictures/22/11/02/14/49/4565071.jpg',
+      posterPath: 
           'https://fr.web.img4.acsta.net/pictures/22/11/02/14/49/4565071.jpg',
       releaseDate: DateTime(2022, 12, 14),
-      vote: 3.8,
+      popularity: 9,
+      voteAverage: 8.3,
+      adult: false,
+      overview: 'Lorem ipsum',
+      genreIds: [1, 2],
+
     ),
   ];

@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies/constants.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/pages/details_page.dart';
-import 'package:movies/src/pages/movie.dart';
+import 'package:movies/src/model/movie.dart';
 
 /// Displays a search bar and the list of results
 class SearchPage extends StatelessWidget {
@@ -59,13 +59,14 @@ class SearchPage extends StatelessWidget {
                             margin: const EdgeInsets.all(16),
                             child: Row(
                               children: [
+                                if(item.posterPath != null)
                                 ClipRRect(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(16)),
                                   child: Hero(
                                     tag: item.id,
                                     child: CachedNetworkImage(
-                                        imageUrl: item.posterUrl),
+                                        imageUrl: item.posterPath ?? ''),
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -73,15 +74,15 @@ class SearchPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Hero(
-                                      tag: item.id + item.title,
+                                      tag: item.id.toString() + item.title,
                                       child: Text(
-                                        item.title,
+                                        item.originalTitle,
                                         style: const TextStyle(fontSize: 24),
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(item.releaseDate.year.toString()),
-                                    Text(item.vote.toString())
+                                    Text(item.voteAverage.toString())
                                   ],
                                 )
                               ],
