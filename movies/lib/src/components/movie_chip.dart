@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movies/constants.dart';
 
 class MovieChip extends StatelessWidget {
-  const MovieChip({Key? key, required this.label, this.icon}) : super(key: key);
+  const MovieChip({Key? key, required this.label, this.icon, this.iconColor})
+      : super(key: key);
 
   final String label;
   final IconData? icon;
+  final Color? iconColor;
   @override
   Widget build(BuildContext context) => Chip(
         backgroundColor: chipColor,
@@ -15,6 +17,7 @@ class MovieChip extends StatelessWidget {
             : Icon(
                 icon,
                 size: 16,
+                color: iconColor,
               ),
         label: Text(
           label,

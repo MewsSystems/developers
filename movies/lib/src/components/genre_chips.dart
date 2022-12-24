@@ -10,14 +10,14 @@ class GenreChips extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<GenresCubit, Map<int, String>>(
         builder: (context, genres) => Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: 4,
+          runSpacing: 4,
           children: [
             for (var genreId in genreIds)
               if (genres[genreId] != null)
                 Container(
                   padding: const EdgeInsets.all(4),
-                  color: Colors.black26,
+                  color: Colors.black54,
                   child: Text(genres[genreId]!, style: TextStyle(fontSize: 12),),
                 )
           ],

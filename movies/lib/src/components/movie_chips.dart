@@ -16,10 +16,12 @@ class MovieChips extends StatelessWidget {
           MovieChip(
             label: movie.voteAverage.toString(),
             icon: Icons.star,
+            iconColor: Theme.of(context).colorScheme.primary,
           ),
           MovieChip(
             label: '${movie.popularity.toStringAsFixed(1)} %',
             icon: Icons.local_fire_department,
+            iconColor: const Color(0xFFEC7505),
           ),
         ],
       );

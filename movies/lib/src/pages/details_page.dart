@@ -55,8 +55,9 @@ class DetailsPage extends StatelessWidget {
                             child: CachedNetworkImage(
                               fit: BoxFit.fitWidth,
                               imageUrl: movie.backdrop,
-                              placeholder: (context, _) =>
-                                  const CircularProgressIndicator(),
+                              placeholder: (context, _) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                           ),
                         ),
@@ -64,13 +65,14 @@ class DetailsPage extends StatelessWidget {
                       SliverPinnedHeader(
                         child: Container(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          height: 216,
                           padding: const EdgeInsets.all(16),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Poster(
                                 url: movie.smallPoster,
                                 heroTag: movie.id,
+                                height: 184,
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -79,10 +81,11 @@ class DetailsPage extends StatelessWidget {
                                   children: [
                                     Text(
                                       movie.title,
-                                      style: const TextStyle(fontSize: 28),
+                                      style: const TextStyle(fontSize: 28,),
+                                      
                                     ),
-                                    if(movie.title != movie.originalTitle)
-                                    Text('(${movie.originalTitle})'),
+                                    if (movie.title != movie.originalTitle)
+                                      Text('(${movie.originalTitle})'),
                                     const SizedBox(height: 4),
                                     GenreChips(genreIds: movie.genreIds),
                                     MovieChips(movie: movie),
@@ -104,7 +107,10 @@ class DetailsPage extends StatelessWidget {
                                 style: const TextStyle(fontSize: 24),
                               ),
                               const SizedBox(height: 8),
-                              Text(movie.overview, style: const TextStyle(fontSize: 16),),
+                              Text(
+                                movie.overview,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                               SizedBox(
                                 height: 3000,
                               )
