@@ -22,6 +22,7 @@ dependencies:
   mews_pedantic: ^0.10.0
   http: ^0.13.5
   json_annotation: ^4.7.0
+  sliver_tools: ^0.2.8
 
 
 dev_dependencies:

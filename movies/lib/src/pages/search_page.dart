@@ -2,19 +2,37 @@ import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movies/constants.dart';
+import 'package:movies/src/blocs/genres_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
+import 'package:movies/src/components/genre_chips.dart';
+import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie.dart';
 import 'package:movies/src/pages/details_page.dart';
 
 /// Displays a search bar and the list of results
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
   const SearchPage({
     super.key,
   });
 
   static const routeName = '/';
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    print('%%%%%% INIT');
+    context.read<GenresCubit>().fetch();
+  }
+
   @override
   Widget build(BuildContext context) => BlocListener<SelectedMovieBloc, Movie?>(
         listener: (context, state) {
@@ -50,13 +68,14 @@ class SearchPage extends StatelessWidget {
                               final movie = movies[index];
 
                               return Entry.all(
+                                delay: const Duration(milliseconds: 50),
                                 child: GestureDetector(
                                   onTap: () {
                                     BlocProvider.of<SelectedMovieBloc>(context)
                                         .add(SelectMovie(movie));
                                   },
                                   child: Container(
-                                    height: 128,
+                                    height: 168,
                                     margin: const EdgeInsets.symmetric(
                                       horizontal: 16,
                                       vertical: 8,
@@ -78,30 +97,14 @@ class SearchPage extends StatelessWidget {
                                                   movie.title,
                                                   overflow: TextOverflow.fade,
                                                   style: const TextStyle(
-                                                      fontSize: 24),
+                                                    fontSize: 22,
+                                                  ),
                                                 ),
                                               ),
-                                              Wrap(
-                                                spacing: 8,
-                                                children: [
-                                                  Chip(
-                                                    label: Text(
-                                                      movie.releaseDate.year
-                                                          .toString(),
-                                                    ),
-                                                  ),
-                                                  Chip(
-                                                    avatar: const Icon(
-                                                      Icons.star,
-                                                      size: 16,
-                                                    ),
-                                                    label: Text(
-                                                      movie.voteAverage
-                                                          .toString(),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
+                                              const SizedBox(height: 8),
+                                              GenreChips(
+                                                  genreIds: movie.genreIds),
+                                              MovieChips(movie: movie),
                                             ],
                                           ),
                                         )

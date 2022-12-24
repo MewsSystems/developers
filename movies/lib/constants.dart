@@ -1,7 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:movies/src/model/movie.dart';
 
 const originalPosterPrefix = 'https://image.tmdb.org/t/p/original';
 const smallPosterPrefix = 'https://image.tmdb.org/t/p/w200';
+
+const chipColor = Color(0xFF2F4858);
+const bgColor = Color(0xFF000D14);
+const accentColor = Color(0xFFffe695);
+
 
 final List<Movie> items = [
   Movie(

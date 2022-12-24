@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:movies/constants.dart';
+import 'package:movies/src/blocs/genres_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-
 import 'package:movies/src/pages/details_page.dart';
-import 'package:movies/src/model/movie.dart';
 import 'package:movies/src/pages/search_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 final themeData = ThemeData(
-  scaffoldBackgroundColor: const Color(0xFF0B032D),
+  scaffoldBackgroundColor: bgColor,
   colorScheme: const ColorScheme.dark(
-    primary: Color(0xFF00A5CF),
-    secondary: Color(0xFF00A5CF),
-    background: Color(0xFF0B032D),
+    primary: accentColor,
+    secondary: accentColor,
+    background: bgColor,
   ),
 );
 
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => SelectedMovieBloc()),
           BlocProvider(create: (context) => MovieSearchBloc()),
+          BlocProvider(create: (context) => GenresCubit()),
         ],
         child: MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the

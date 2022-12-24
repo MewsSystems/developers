@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/src/api/movie_api_client.dart';
+import 'package:movies/src/api/movie_search_api.dart';
 import 'package:movies/src/model/movie.dart';
 
 abstract class MovieSearchEvent {}
@@ -21,5 +21,5 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, List<Movie>> {
       emit([]);
     });
   }
-  final client = MovieApiClient();
+  final client = MovieSearchApi();
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:movies/src/api/client.dart';
 import 'package:movies/src/model/movie.dart';
 
 /// Exception thrown when searchMovies fails.
@@ -9,17 +9,11 @@ class MovieRequestFailure implements Exception {}
 /// Exception thrown when the searched movie is not found.
 class MovieNotFoundFailure implements Exception {}
 
-class MovieApiClient {
-  final client = http.Client();
-  final baseUrl = 'api.themoviedb.org';
-  final apiKey = '03b8572954325680265531140190fd2a';
-
+class MovieSearchApi {
   Future<List<Movie>> searchMovies(String query) async {
-    final uri = Uri.https(
-      baseUrl,
+    final uri = getApiUri(
       '/3/search/movie',
-      {
-        'api_key': apiKey,
+      parameters: {
         'query': query,
       },
     );
@@ -38,6 +32,6 @@ class MovieApiClient {
 
     return [
       for (var result in results) Movie.fromJson(result as Map<String, dynamic>)
-    ];
+    ]..sort((a, b) => b.popularity.compareTo(a.popularity));
   }
 }

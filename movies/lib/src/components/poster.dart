@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Poster extends StatelessWidget {
-  const Poster(
-      {Key? key,
-      required this.url,
-      required this.heroTag,
-      this.width,
-      this.height})
-      : super(key: key);
+  const Poster({
+    Key? key,
+    required this.url,
+    required this.heroTag,
+    this.width,
+    this.height,
+  }) : super(key: key);
 
   final String url;
   final int heroTag;
@@ -27,7 +27,7 @@ class Poster extends StatelessWidget {
       result = ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(16)),
         child: Hero(
-          tag: heroTag,
+          tag: 'test',
           child: CachedNetworkImage(
             imageUrl: url,
           ),
