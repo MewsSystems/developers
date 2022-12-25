@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:movies/constants.dart';
+import 'package:movies/src/api/datetime_converter.dart';
 
 part 'movie.g.dart';
 
@@ -11,9 +12,9 @@ class Movie {
     required this.title,
     required this.originalTitle,
     required this.originalLanguage,
-    required this.posterPath,
-    required this.backdropPath,
-    required this.releaseDate,
+    this.posterPath,
+    this.backdropPath,
+    this.releaseDate,
     required this.voteAverage,
     required this.popularity,
     required this.adult,
@@ -31,7 +32,8 @@ class Movie {
   final String originalLanguage;
   final String? posterPath;
   final String? backdropPath;
-  final DateTime releaseDate;
+  @DateTimeConverter()
+  final DateTime? releaseDate;
   final double voteAverage;
   final double popularity;
   final bool adult;

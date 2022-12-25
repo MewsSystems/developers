@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies/constants.dart';
 import 'package:movies/src/components/movie_chip.dart';
 import 'package:movies/src/model/movie.dart';
 
@@ -12,7 +11,8 @@ class MovieChips extends StatelessWidget {
   Widget build(BuildContext context) => Wrap(
         spacing: 8,
         children: [
-          MovieChip(label: movie.releaseDate.year.toString()),
+          if (movie.releaseDate != null)
+            MovieChip(label: movie.releaseDate!.year.toString()),
           MovieChip(
             label: movie.voteAverage.toString(),
             icon: Icons.star,

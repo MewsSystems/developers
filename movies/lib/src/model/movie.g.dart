@@ -13,7 +13,8 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       originalLanguage: json['original_language'] as String,
       posterPath: json['poster_path'] as String?,
       backdropPath: json['backdrop_path'] as String?,
-      releaseDate: DateTime.parse(json['release_date'] as String),
+      releaseDate: _$JsonConverterFromJson<String, DateTime?>(
+          json['release_date'], const DateTimeConverter().fromJson),
       voteAverage: (json['vote_average'] as num).toDouble(),
       popularity: (json['popularity'] as num).toDouble(),
       adult: json['adult'] as bool,
@@ -29,10 +30,16 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'original_language': instance.originalLanguage,
       'poster_path': instance.posterPath,
       'backdrop_path': instance.backdropPath,
-      'release_date': instance.releaseDate.toIso8601String(),
+      'release_date': const DateTimeConverter().toJson(instance.releaseDate),
       'vote_average': instance.voteAverage,
       'popularity': instance.popularity,
       'adult': instance.adult,
       'overview': instance.overview,
       'genre_ids': instance.genreIds,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
