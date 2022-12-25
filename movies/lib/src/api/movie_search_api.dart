@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:movies/src/api/client.dart';
-import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/model/movie/movie.dart';
 
 /// Superclass for MovieSearchApi exceptions
 abstract class MovieSearchError implements Exception {}
@@ -32,11 +32,11 @@ class MovieSearchApi {
       throw MovieRequestError();
     }
 
-    final locationJson = jsonDecode(response.body) as Map;
+    final responseJson = jsonDecode(response.body) as Map;
 
-    if (!locationJson.containsKey('results')) throw NoMoviesFoundError();
+    if (!responseJson.containsKey('results')) throw NoMoviesFoundError();
 
-    final results = locationJson['results'] as List;
+    final results = responseJson['results'] as List;
 
     if (results.isEmpty) throw NoMoviesFoundError();
 

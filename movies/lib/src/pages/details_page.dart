@@ -2,11 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
 import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
-import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/model/movie/movie.dart';
+import 'package:movies/src/model/movie_details/movie_details.dart';
+import 'package:movies/src/model/movie_details/movie_details_state.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 /// Displays detailed information about a movie
@@ -38,7 +41,8 @@ class DetailsPage extends StatelessWidget {
                     CustomScrollView(
                       slivers: [
                         SliverAppBar(
-                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
                           automaticallyImplyLeading: false,
                           leading: IconButton(
                             onPressed: () {
@@ -116,10 +120,33 @@ class DetailsPage extends StatelessWidget {
                                   movie.overview,
                                   style: const TextStyle(fontSize: 16),
                                 ),
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height,
-                                )
                               ],
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            child: BlocBuilder<MovieDetailsCubit,
+                                MovieDetailsState>(
+                              builder: (context, state) => state.when(
+                                loading: () =>
+                                    const Center(child: CircularProgressIndicator()),
+                                noSelection: () => const Offstage(),
+                                error: (_) => Text(
+                                    AppLocalizations.of(context).errorHappened),
+                                details: (movieDetails) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (movieDetails.tagline != null)
+                                      Text(movieDetails.tagline!),
+                                    Text(movieDetails.homepage),
+                                    Text(movieDetails.status),
+                                    Text('\$${movieDetails.budget}'),
+                                    Text('\$${movieDetails.revenue}'),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         )

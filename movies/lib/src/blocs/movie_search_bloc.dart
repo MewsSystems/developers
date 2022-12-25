@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/api/movie_search_api.dart';
 import 'package:movies/src/blocs/debounce_last.dart';
-import 'package:movies/src/model/movie.dart';
-import 'package:movies/src/model/search_state.dart';
+import 'package:movies/src/model/movie/movie.dart';
+import 'package:movies/src/model/movie_search/movie_search_state.dart';
 
 abstract class MovieSearchEvent {}
 
@@ -19,18 +19,18 @@ class NeedNextMoviePage extends MovieSearchEvent {
 
 class DeleteQuery extends MovieSearchEvent {}
 
-class MovieSearchBloc extends Bloc<MovieSearchEvent, SearchState> {
-  MovieSearchBloc() : super(const SearchState.result([])) {
+class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
+  MovieSearchBloc() : super(const MovieSearchState.result([])) {
     on<MovieQueryChanged>(
       (event, emit) async {
         if (event.query.isEmpty) {
-          emit(const SearchState.result([]));
+          emit(const MovieSearchState.result([]));
         } else {
           try {
             final movies = await api.searchMovies(event.query);
-            emit(SearchState.result(movies));
+            emit(MovieSearchState.result(movies));
           } on MovieSearchError catch (exception) {
-            emit(SearchState.error(exception));
+            emit(MovieSearchState.error(exception));
           }
         }
       },
@@ -41,16 +41,16 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, SearchState> {
         await state.when(
           result: (movies) async {
             if (event.query.isEmpty) {
-              emit(const SearchState.result([]));
+              emit(const MovieSearchState.result([]));
             } else {
               try {
                 final nextMovies = await api.searchMovies(
                   event.query,
                   page: event.page,
                 );
-                emit(SearchState.result([...movies, ...nextMovies]));
+                emit(MovieSearchState.result([...movies, ...nextMovies]));
               } on MovieSearchError catch (exception) {
-                emit(SearchState.error(exception));
+                emit(MovieSearchState.error(exception));
               }
             }
           },
@@ -60,7 +60,7 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, SearchState> {
       //transformer: debounceLast(const Duration(milliseconds: 300)),
     );
     on<DeleteQuery>((event, emit) {
-      emit(const SearchState.result([]));
+      emit(const MovieSearchState.result([]));
     });
   }
 

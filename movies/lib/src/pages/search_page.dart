@@ -11,8 +11,8 @@ import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
 import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
-import 'package:movies/src/model/movie.dart';
-import 'package:movies/src/model/search_state.dart';
+import 'package:movies/src/model/movie/movie.dart';
+import 'package:movies/src/model/movie_search/movie_search_state.dart';
 import 'package:movies/src/pages/details_page.dart';
 
 /// Displays a search bar and the list of results
@@ -77,7 +77,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               Flexible(
-                child: BlocConsumer<MovieSearchBloc, SearchState>(
+                child: BlocConsumer<MovieSearchBloc, MovieSearchState>(
                   listener: (context, state) {
                     state.when(
                       result: (movies) {
@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                       }
                       if (exception is MovieRequestError) {
                         return Center(
-                          child: Text(AppLocalizations.of(context).searchError),
+                          child: Text(AppLocalizations.of(context).errorHappened),
                         );
                       } else {
                         return const Offstage();

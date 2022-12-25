@@ -6,5 +6,5 @@
   "searchMovie": "Search for a movie",
   "synopsis": "Synopsis",
   "noMoviesFound": "No movies found.",
-  "searchError": "An error happened. Check your internet connection."
+  "errorHappened": "An error happened. Check your internet connection."
 }

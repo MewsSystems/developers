@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movies/constants.dart';
 import 'package:movies/src/blocs/genres_cubit.dart';
+import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/pages/details_page.dart';
@@ -31,6 +32,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => SelectedMovieBloc()),
           BlocProvider(create: (context) => MovieSearchBloc()),
           BlocProvider(create: (context) => GenresCubit()),
+          BlocProvider(
+            lazy: false,
+            create: (context) =>
+                MovieDetailsCubit(BlocProvider.of<SelectedMovieBloc>(context)),
+          )
         ],
         child: MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the

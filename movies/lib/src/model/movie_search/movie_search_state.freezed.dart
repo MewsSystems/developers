@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'search_state.dart';
+part of 'movie_search_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$SearchState {
+mixin _$MovieSearchState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(List<Movie> movies) result,
@@ -57,16 +57,16 @@ mixin _$SearchState {
 }
 
 /// @nodoc
-abstract class $SearchStateCopyWith<$Res> {
-  factory $SearchStateCopyWith(
-          SearchState value, $Res Function(SearchState) then) =
-      _$SearchStateCopyWithImpl<$Res, SearchState>;
+abstract class $MovieSearchStateCopyWith<$Res> {
+  factory $MovieSearchStateCopyWith(
+          MovieSearchState value, $Res Function(MovieSearchState) then) =
+      _$MovieSearchStateCopyWithImpl<$Res, MovieSearchState>;
 }
 
 /// @nodoc
-class _$SearchStateCopyWithImpl<$Res, $Val extends SearchState>
-    implements $SearchStateCopyWith<$Res> {
-  _$SearchStateCopyWithImpl(this._value, this._then);
+class _$MovieSearchStateCopyWithImpl<$Res, $Val extends MovieSearchState>
+    implements $MovieSearchStateCopyWith<$Res> {
+  _$MovieSearchStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -84,7 +84,7 @@ abstract class _$$ResultCopyWith<$Res> {
 
 /// @nodoc
 class __$$ResultCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$Result>
+    extends _$MovieSearchStateCopyWithImpl<$Res, _$Result>
     implements _$$ResultCopyWith<$Res> {
   __$$ResultCopyWithImpl(_$Result _value, $Res Function(_$Result) _then)
       : super(_value, _then);
@@ -117,7 +117,7 @@ class _$Result implements Result {
 
   @override
   String toString() {
-    return 'SearchState.result(movies: $movies)';
+    return 'MovieSearchState.result(movies: $movies)';
   }
 
   @override
@@ -201,7 +201,7 @@ class _$Result implements Result {
   }
 }
 
-abstract class Result implements SearchState {
+abstract class Result implements MovieSearchState {
   const factory Result(final List<Movie> movies) = _$Result;
 
   List<Movie> get movies;
@@ -220,7 +220,7 @@ abstract class _$$ErrorCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorCopyWithImpl<$Res>
-    extends _$SearchStateCopyWithImpl<$Res, _$Error>
+    extends _$MovieSearchStateCopyWithImpl<$Res, _$Error>
     implements _$$ErrorCopyWith<$Res> {
   __$$ErrorCopyWithImpl(_$Error _value, $Res Function(_$Error) _then)
       : super(_value, _then);
@@ -249,7 +249,7 @@ class _$Error implements Error {
 
   @override
   String toString() {
-    return 'SearchState.error(error: $error)';
+    return 'MovieSearchState.error(error: $error)';
   }
 
   @override
@@ -332,7 +332,7 @@ class _$Error implements Error {
   }
 }
 
-abstract class Error implements SearchState {
+abstract class Error implements MovieSearchState {
   const factory Error(final MovieSearchError error) = _$Error;
 
   MovieSearchError get error;

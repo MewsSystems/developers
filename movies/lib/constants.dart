@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/model/movie/movie.dart';
 
 const originalPosterPrefix = 'https://image.tmdb.org/t/p/original';
 const smallPosterPrefix = 'https://image.tmdb.org/t/p/w200';

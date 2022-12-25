@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/components/movie_chip.dart';
-import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/model/movie/movie.dart';
 
 class MovieChips extends StatelessWidget {
   const MovieChips({Key? key, required this.movie}) : super(key: key);

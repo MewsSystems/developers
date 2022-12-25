@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/src/model/movie.dart';
+import 'package:movies/src/model/movie/movie.dart';
 
 abstract class SelectedMovieEvent {}
 
