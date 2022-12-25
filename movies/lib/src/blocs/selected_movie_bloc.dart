@@ -18,16 +18,4 @@ class SelectedMovieBloc extends Bloc<SelectedMovieEvent, Movie?> {
       emit(null);
     });
   }
-
-   @override
-  void onChange(Change<Movie?> change) {
-    super.onChange(change);
-    print(change);
-  }
-
-  @override
-  void onTransition(Transition<SelectedMovieEvent, Movie?> transition) {
-    super.onTransition(transition);
-    print(transition);
-  }
 }

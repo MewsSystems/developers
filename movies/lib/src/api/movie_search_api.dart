@@ -32,6 +32,6 @@ class MovieSearchApi {
 
     return [
       for (var result in results) Movie.fromJson(result as Map<String, dynamic>)
-    ]..sort((a, b) => b.popularity.compareTo(a.popularity));
+    ];
   }
 }

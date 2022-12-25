@@ -3,7 +3,6 @@ import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:movies/constants.dart';
 import 'package:movies/src/blocs/genres_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
@@ -29,8 +28,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-
-    print('%%%%%% INIT');
+    // Initialize the categories data
     context.read<GenresCubit>().fetch();
   }
 
@@ -46,13 +44,14 @@ class _SearchPageState extends State<SearchPage> {
         child: Scaffold(
           body: SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: TextField(
                     autofocus: true,
                     decoration: InputDecoration(
-                      suffixIcon: const Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       hintText: AppLocalizations.of(context).searchMovie,
                     ),
                     onChanged: (query) => context
@@ -60,70 +59,93 @@ class _SearchPageState extends State<SearchPage> {
                         .add(MovieQueryChanged(query)),
                   ),
                 ),
-                Expanded(
+                Flexible(
                   child: BlocBuilder<MovieSearchBloc, List<Movie>>(
-                      builder: (context, movies) => ListView.builder(
-                            // allows the ListView to restore the scroll position
-                            restorationId: 'sampleItemListView',
-                            itemCount: movies.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final movie = movies[index];
+                    builder: (context, movies) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeInOut,
+                      height: movies.isEmpty
+                          ? 0
+                          : MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        // allows the ListView to restore the scroll position
+                        restorationId: 'sampleItemListView',
+                        itemCount: movies.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final movie = movies[index];
 
-                              return Entry.all(
-                                delay: const Duration(milliseconds: 50),
-                                child: OpenContainer(
-                                  openBuilder: (context, action) => const DetailsPage(),
-                                  closedColor: Theme.of(context).scaffoldBackgroundColor,
-                                  openColor: Theme.of(context).scaffoldBackgroundColor,
-                                  middleColor: Theme.of(context).scaffoldBackgroundColor,
-                                  closedBuilder: (context, action) => GestureDetector(
-                                      onTap: () {
-                                        BlocProvider.of<SelectedMovieBloc>(context)
-                                            .add(SelectMovie(movie));
-                                        action();
-                                      },
-                                      child: Container(
-                                        height: 168,
-                                        margin: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 8,
-                                        ),
-                                        child: Row(
+                          return Entry.all(
+                            delay: const Duration(milliseconds: 50),
+                            child: OpenContainer(
+                              transitionType:
+                                  ContainerTransitionType.fadeThrough,
+                              openBuilder: (context, action) =>
+                                  const DetailsPage(),
+                              closedColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              openColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              middleColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              closedElevation: 0,
+                              closedBuilder: (context, action) =>
+                                  GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<SelectedMovieBloc>()
+                                      .add(SelectMovie(movie));
+                                  action();
+                                },
+                                child: Container(
+                                  height: 168,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Poster(
+                                        url: movie.smallPoster,
+                                        heroTag: movie.id,
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Poster(
-                                              url: movie.smallPoster,
-                                              heroTag: movie.id,
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Flexible(
-                                                    child: Text(
-                                                      movie.title,
-                                                      overflow: TextOverflow.fade,
-                                                      style: const TextStyle(
-                                                        fontSize: 22,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  GenreChips(
-                                                      genreIds: movie.genreIds),
-                                                  MovieChips(movie: movie),
-                                                ],
+                                            Flexible(
+                                              child: Text(
+                                                movie.title,
+                                                overflow: TextOverflow.fade,
+                                                style: const TextStyle(
+                                                  fontSize: 22,
+                                                ),
                                               ),
-                                            )
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            GenreChips(
+                                              genreIds: movie.genreIds,
+                                            ),
+                                            MovieChips(
+                                              movie: movie,
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    )
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              );
-                            },
-                          )),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:movies/src/api/client.dart';
-import 'package:movies/src/model/movie.dart';
 
 /// Exception thrown when searchMovies fails.
 class GenresRequestFailure implements Exception {}

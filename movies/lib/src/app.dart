@@ -61,7 +61,8 @@ class MyApp extends StatelessWidget {
               AppLocalizations.of(context).appTitle,
           themeMode: ThemeMode.dark,
           darkTheme: themeData.copyWith(
-              textTheme: GoogleFonts.outfitTextTheme(themeData.textTheme)),
+            textTheme: GoogleFonts.outfitTextTheme(themeData.textTheme),
+          ),
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.

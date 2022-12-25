@@ -18,7 +18,7 @@ class GenreChips extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(4),
                   color: Colors.black54,
-                  child: Text(genres[genreId]!, style: TextStyle(fontSize: 12),),
+                  child: Text(genres[genreId]!, style: const TextStyle(fontSize: 12),),
                 )
           ],
         ),
