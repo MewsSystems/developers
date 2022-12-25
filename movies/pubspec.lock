@@ -287,6 +287,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct main"
+    description:
+      name: freezed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
+  freezed_annotation:
+    dependency: "direct main"
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -343,6 +357,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.2"
+  infinite_scroll_pagination:
+    dependency: "direct main"
+    description:
+      name: infinite_scroll_pagination
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   intl:
     dependency: transitive
     description:

@@ -10,11 +10,12 @@ class MovieRequestFailure implements Exception {}
 class MovieNotFoundFailure implements Exception {}
 
 class MovieSearchApi {
-  Future<List<Movie>> searchMovies(String query) async {
+  Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     final uri = getApiUri(
       '/3/search/movie',
       parameters: {
         'query': query,
+        'page': page.toString(),
       },
     );
     final response = await client.get(uri);

@@ -1,47 +1,37 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:movies/constants.dart';
 import 'package:movies/src/api/datetime_converter.dart';
+
+part 'movie.freezed.dart';
 
 part 'movie.g.dart';
 
 /// Represents a movie from the search results
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Movie {
-  const Movie({
-    required this.id,
-    required this.title,
-    required this.originalTitle,
-    required this.originalLanguage,
-    this.posterPath,
-    this.backdropPath,
-    this.releaseDate,
-    required this.voteAverage,
-    required this.popularity,
-    required this.adult,
-    required this.overview,
-    required this.genreIds,
-  });
+@freezed
+class Movie with _$Movie {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Movie({
+    required int id,
+    required String title,
+    required String originalTitle,
+    required String originalLanguage,
+    String? posterPath,
+    String? backdropPath,
+    @DateTimeConverter()
+    DateTime? releaseDate,
+    required double voteAverage,
+    required double popularity,
+    required bool adult,
+    required String overview,
+    required List<int> genreIds,
+  }) = _Movie;
 
   /// Connect the generated [_$MovieFromJson] function to the `fromJson`
   /// factory.
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
-  final int id;
-  final String title;
-  final String originalTitle;
-  final String originalLanguage;
-  final String? posterPath;
-  final String? backdropPath;
-  @DateTimeConverter()
-  final DateTime? releaseDate;
-  final double voteAverage;
-  final double popularity;
-  final bool adult;
-  final String overview;
-  final List<int> genreIds;
-
   /// Connect the generated [_$MovieToJson] function to the `toJson` method.
-  Map<String, dynamic> toJson() => _$MovieToJson(this);
+  //Map<String, dynamic> toJson() => _$MovieToJson(this);
 }
 
 extension ImageUrl on Movie {

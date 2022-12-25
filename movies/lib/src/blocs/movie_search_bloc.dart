@@ -10,6 +10,12 @@ class MovieQueryChanged extends MovieSearchEvent {
   String query;
 }
 
+class NeedNextMoviePage extends MovieSearchEvent {
+  NeedNextMoviePage(this.query, this.page);
+  String query;
+  int page;
+}
+
 class DeleteQuery extends MovieSearchEvent {}
 
 class MovieSearchBloc extends Bloc<MovieSearchEvent, List<Movie>> {
@@ -24,6 +30,19 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, List<Movie>> {
         }
       },
       transformer: debounceLast(const Duration(milliseconds: 300)),
+    );
+    on<NeedNextMoviePage>(
+      (event, emit) async {
+        final movies = await client.searchMovies(
+          event.query,
+          page: event.page,
+        );
+        emit([
+          ...state,
+          ...movies
+        ]);
+      },
+      //transformer: debounceLast(const Duration(milliseconds: 300)),
     );
     on<DeleteQuery>((event, emit) {
       emit([]);

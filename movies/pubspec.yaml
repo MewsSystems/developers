@@ -18,8 +18,11 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_localizations:
     sdk: flutter
+  freezed: ^2.2.0
+  freezed_annotation: ^2.2.0
   google_fonts: ^3.0.1
   http: ^0.13.5
+  infinite_scroll_pagination: ^3.2.0
   json_annotation: ^4.7.0
   mews_pedantic: ^0.10.0
   sliver_tools: ^0.2.8
