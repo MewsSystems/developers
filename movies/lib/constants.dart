@@ -22,7 +22,6 @@ final List<Movie> items = [
     releaseDate: DateTime(2022, 12, 14),
     popularity: 9,
     voteAverage: 8.3,
-    adult: false,
     overview: 'Lorem ipsum',
     genreIds: [1, 2],
   ),

@@ -21,7 +21,6 @@ class Movie with _$Movie {
     DateTime? releaseDate,
     required double voteAverage,
     required double popularity,
-    required bool adult,
     required String overview,
     required List<int> genreIds,
   }) = _Movie;

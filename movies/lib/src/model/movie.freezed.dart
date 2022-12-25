@@ -30,7 +30,6 @@ mixin _$Movie {
   DateTime? get releaseDate => throw _privateConstructorUsedError;
   double get voteAverage => throw _privateConstructorUsedError;
   double get popularity => throw _privateConstructorUsedError;
-  bool get adult => throw _privateConstructorUsedError;
   String get overview => throw _privateConstructorUsedError;
   List<int> get genreIds => throw _privateConstructorUsedError;
 
@@ -54,7 +53,6 @@ abstract class $MovieCopyWith<$Res> {
       @DateTimeConverter() DateTime? releaseDate,
       double voteAverage,
       double popularity,
-      bool adult,
       String overview,
       List<int> genreIds});
 }
@@ -81,7 +79,6 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
     Object? releaseDate = freezed,
     Object? voteAverage = null,
     Object? popularity = null,
-    Object? adult = null,
     Object? overview = null,
     Object? genreIds = null,
   }) {
@@ -122,10 +119,6 @@ class _$MovieCopyWithImpl<$Res, $Val extends Movie>
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
               as double,
-      adult: null == adult
-          ? _value.adult
-          : adult // ignore: cast_nullable_to_non_nullable
-              as bool,
       overview: null == overview
           ? _value.overview
           : overview // ignore: cast_nullable_to_non_nullable
@@ -154,7 +147,6 @@ abstract class _$$_MovieCopyWith<$Res> implements $MovieCopyWith<$Res> {
       @DateTimeConverter() DateTime? releaseDate,
       double voteAverage,
       double popularity,
-      bool adult,
       String overview,
       List<int> genreIds});
 }
@@ -177,7 +169,6 @@ class __$$_MovieCopyWithImpl<$Res> extends _$MovieCopyWithImpl<$Res, _$_Movie>
     Object? releaseDate = freezed,
     Object? voteAverage = null,
     Object? popularity = null,
-    Object? adult = null,
     Object? overview = null,
     Object? genreIds = null,
   }) {
@@ -218,10 +209,6 @@ class __$$_MovieCopyWithImpl<$Res> extends _$MovieCopyWithImpl<$Res, _$_Movie>
           ? _value.popularity
           : popularity // ignore: cast_nullable_to_non_nullable
               as double,
-      adult: null == adult
-          ? _value.adult
-          : adult // ignore: cast_nullable_to_non_nullable
-              as bool,
       overview: null == overview
           ? _value.overview
           : overview // ignore: cast_nullable_to_non_nullable
@@ -248,7 +235,6 @@ class _$_Movie implements _Movie {
       @DateTimeConverter() this.releaseDate,
       required this.voteAverage,
       required this.popularity,
-      required this.adult,
       required this.overview,
       required final List<int> genreIds})
       : _genreIds = genreIds;
@@ -276,8 +262,6 @@ class _$_Movie implements _Movie {
   @override
   final double popularity;
   @override
-  final bool adult;
-  @override
   final String overview;
   final List<int> _genreIds;
   @override
@@ -288,7 +272,7 @@ class _$_Movie implements _Movie {
 
   @override
   String toString() {
-    return 'Movie(id: $id, title: $title, originalTitle: $originalTitle, originalLanguage: $originalLanguage, posterPath: $posterPath, backdropPath: $backdropPath, releaseDate: $releaseDate, voteAverage: $voteAverage, popularity: $popularity, adult: $adult, overview: $overview, genreIds: $genreIds)';
+    return 'Movie(id: $id, title: $title, originalTitle: $originalTitle, originalLanguage: $originalLanguage, posterPath: $posterPath, backdropPath: $backdropPath, releaseDate: $releaseDate, voteAverage: $voteAverage, popularity: $popularity, overview: $overview, genreIds: $genreIds)';
   }
 
   @override
@@ -312,7 +296,6 @@ class _$_Movie implements _Movie {
                 other.voteAverage == voteAverage) &&
             (identical(other.popularity, popularity) ||
                 other.popularity == popularity) &&
-            (identical(other.adult, adult) || other.adult == adult) &&
             (identical(other.overview, overview) ||
                 other.overview == overview) &&
             const DeepCollectionEquality().equals(other._genreIds, _genreIds));
@@ -331,7 +314,6 @@ class _$_Movie implements _Movie {
       releaseDate,
       voteAverage,
       popularity,
-      adult,
       overview,
       const DeepCollectionEquality().hash(_genreIds));
 
@@ -360,7 +342,6 @@ abstract class _Movie implements Movie {
       @DateTimeConverter() final DateTime? releaseDate,
       required final double voteAverage,
       required final double popularity,
-      required final bool adult,
       required final String overview,
       required final List<int> genreIds}) = _$_Movie;
 
@@ -385,8 +366,6 @@ abstract class _Movie implements Movie {
   double get voteAverage;
   @override
   double get popularity;
-  @override
-  bool get adult;
   @override
   String get overview;
   @override

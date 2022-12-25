@@ -17,7 +17,6 @@ _$_Movie _$$_MovieFromJson(Map<String, dynamic> json) => _$_Movie(
           json['release_date'], const DateTimeConverter().fromJson),
       voteAverage: (json['vote_average'] as num).toDouble(),
       popularity: (json['popularity'] as num).toDouble(),
-      adult: json['adult'] as bool,
       overview: json['overview'] as String,
       genreIds:
           (json['genre_ids'] as List<dynamic>).map((e) => e as int).toList(),
@@ -33,7 +32,6 @@ Map<String, dynamic> _$$_MovieToJson(_$_Movie instance) => <String, dynamic>{
       'release_date': const DateTimeConverter().toJson(instance.releaseDate),
       'vote_average': instance.voteAverage,
       'popularity': instance.popularity,
-      'adult': instance.adult,
       'overview': instance.overview,
       'genre_ids': instance.genreIds,
     };
