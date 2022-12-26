@@ -30,11 +30,11 @@ class Movie with _$Movie {
 
 extension ImageUrl on Movie {
   String get originalPoster =>
-      posterPath == null ? '' : originalPosterPrefix + (posterPath ?? '');
+      posterPath == null ? '' : originalImagePrefix + (posterPath ?? '');
 
   String get smallPoster =>
-      posterPath == null ? '' : smallPosterPrefix + (posterPath ?? '');
+      posterPath == null ? '' : smallImagePrefix + (posterPath ?? '');
 
   String get backdrop =>
-      backdropPath == null ? '' : originalPosterPrefix + (backdropPath ?? '');
+      backdropPath == null ? '' : originalImagePrefix + (backdropPath ?? '');
 }

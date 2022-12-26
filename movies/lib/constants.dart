@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/model/movie/movie.dart';
 
-const originalPosterPrefix = 'https://image.tmdb.org/t/p/original';
-const smallPosterPrefix = 'https://image.tmdb.org/t/p/w200';
+const originalImagePrefix = 'https://image.tmdb.org/t/p/original';
+const smallImagePrefix = 'https://image.tmdb.org/t/p/w200';
 
-const chipColor = Color(0xFF0E161A);
+const chipColor = Color(0xFF001B29);
 const bgColor = Color(0xFF000D14);
 const accentColor = Color(0xFFffe695);
 
@@ -26,3 +26,10 @@ final List<Movie> items = [
     genreIds: [1, 2],
   ),
 ];
+
+/// Format minutes to hours:minutes String
+String formatMinutes(int value) {
+  final int hour = value ~/ 60;
+  final int minutes = value % 60;
+  return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
+}

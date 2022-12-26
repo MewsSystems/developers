@@ -6,5 +6,9 @@
   "searchMovie": "Search for a movie",
   "synopsis": "Synopsis",
   "noMoviesFound": "No movies found.",
-  "errorHappened": "An error happened. Check your internet connection."
+  "errorHappened": "An error happened. Check your internet connection.",
+  "visitWebsite": "Visit website",
+  "spokenLanguages": "Spoken languages",
+  "prodCountries": "Production countries",
+  "prodCompanies": "Production companies"
 }
