@@ -1,0 +1,15 @@
+{
+    "appTitle": "Films",
+    "@appTitle": {
+      "description": "Le titre de l'application"
+    },
+    "searchMovie": "Rechercher un film",
+    "synopsis": "Synopsis",
+    "noMoviesFound": "Aucun film trouvé.",
+    "errorHappened": "Une erreur est survenue. Vérifiez votre connexion internet.",
+    "visitWebsite": "Site internet",
+    "spokenLanguages": "Langues parlées",
+    "prodCountries": "Pays de production",
+    "prodCompanies": "Entreprises de production"
+  }
+  
