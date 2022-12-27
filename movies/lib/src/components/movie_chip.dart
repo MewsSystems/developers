@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies/constants.dart';
+import 'package:movies/utils.dart';
+import 'package:movies/theme.dart';
 
 class MovieChip extends StatelessWidget {
   const MovieChip({Key? key, required this.label, this.icon, this.iconColor})

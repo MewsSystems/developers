@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:movies/constants.dart';
+import 'package:movies/utils.dart';
 import 'package:movies/src/api/datetime_converter.dart';
 
 part 'movie.freezed.dart';

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:movies/constants.dart';
+import 'package:movies/utils.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
