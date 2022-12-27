@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/search_field.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -8,9 +10,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movies"),
-        bottom: PreferredSize(
-          child: TextField(),
-          preferredSize: const Size(double.infinity, 80),
+        bottom: const PreferredSize(
+          preferredSize: Size(double.infinity, 40),
+          child: SearchField(),
         ),
       ),
       body: Container(),
