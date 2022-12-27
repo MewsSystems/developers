@@ -27,6 +27,18 @@ class _SearchPageState extends State<SearchPage> {
     // Initialize the categories data
     context.read<GenresCubit>().fetch();
 
+    // Listen to query changes
+    searchQueryController.addListener(() {
+      // Emit the event that the query changed
+      context.read<MovieSearchBloc>().add(MovieQueryChanged(searchQueryController.text));
+      // Scroll the list back up
+      if (resultsScrollController.hasClients) {
+        //_scrollController.jumpTo(0);
+      }
+      // Reset the paging count
+      resultsPagingController.nextPageKey = 1;
+    });
+
     // Load the next results page using the search query
     resultsPagingController.addPageRequestListener((pageKey) async {
       context
@@ -41,10 +53,7 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SearchBar(
-                scrollController: resultsScrollController,
-                pagingController: resultsPagingController,
-              ),
+              const SearchBar(),
               Flexible(
                 child: BlocConsumer<MovieSearchBloc, MovieSearchState>(
                   listener: (context, state) {

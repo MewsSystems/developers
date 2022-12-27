@@ -14,6 +14,7 @@ final resultsPagingController = PagingController<int, Movie>(firstPageKey: 1);
 
 final resultsScrollController = ScrollController();
 
+/// Shows the results of the movie search
 class ResultList extends StatelessWidget {
   const ResultList({
     Key? key,

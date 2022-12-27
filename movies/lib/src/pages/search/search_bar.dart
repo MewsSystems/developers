@@ -4,21 +4,28 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/model/movie/movie.dart';
+import 'package:movies/src/pages/search/clear_query_button.dart';
+import 'package:movies/src/pages/search/result_list.dart';
 
 final searchQueryController = TextEditingController();
 
-class SearchBar extends StatelessWidget {
+/// Used to type the query for the movie search
+class SearchBar extends StatefulWidget {
   const SearchBar({
     Key? key,
-    required ScrollController scrollController,
-    required PagingController<int, Movie> pagingController,
-  })  : _scrollController = scrollController,
-        _pagingController = pagingController,
-        super(key: key);
+  }) : super(key: key);
 
-  final ScrollController _scrollController;
-  final PagingController<int, Movie> _pagingController;
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
 
+class _SearchBarState extends State<SearchBar> {
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+  
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16),
@@ -27,18 +34,9 @@ class SearchBar extends StatelessWidget {
           autofocus: true,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.search),
+            suffixIcon: const ClearQueryButton(),
             hintText: AppLocalizations.of(context).searchMovie,
           ),
-          onChanged: (query) {
-            // Emit the event that the query changed
-            context.read<MovieSearchBloc>().add(MovieQueryChanged(query));
-            // Scroll the list back up
-            if (_scrollController.hasClients) {
-              //_scrollController.jumpTo(0);
-            }
-            // Reset the paging count
-            _pagingController.nextPageKey = 1;
-          },
         ),
       );
 }
