@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/theme.dart';
 
 /// Shows a movie poster using its [url]
 class Poster extends StatelessWidget {
@@ -20,9 +21,16 @@ class Poster extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget result;
     if (url.isEmpty) {
-      result = const AspectRatio(
-        aspectRatio: 4 / 6,
-        child: Placeholder(),
+      result = AspectRatio(
+        aspectRatio: 2 / 3,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          child: Container(
+            color: chipColor,
+            alignment: Alignment.center,
+            child: const Icon(Icons.broken_image),
+          ),
+        ),
       );
     } else {
       result = ClipRRect(
