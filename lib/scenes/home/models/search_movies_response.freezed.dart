@@ -142,13 +142,14 @@ class __$$_SearchMoviesResponseCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SearchMoviesResponse implements _SearchMoviesResponse {
+class _$_SearchMoviesResponse extends _SearchMoviesResponse {
   _$_SearchMoviesResponse(
       {@JsonKey(name: 'page') required this.page,
       @JsonKey(name: 'total_pages') required this.totalPages,
       @JsonKey(name: 'total_results') required this.totalResults,
       @JsonKey(name: 'results') required final List<Movie> movies})
-      : _movies = movies;
+      : _movies = movies,
+        super._();
 
   factory _$_SearchMoviesResponse.fromJson(Map<String, dynamic> json) =>
       _$$_SearchMoviesResponseFromJson(json);
@@ -209,13 +210,14 @@ class _$_SearchMoviesResponse implements _SearchMoviesResponse {
   }
 }
 
-abstract class _SearchMoviesResponse implements SearchMoviesResponse {
+abstract class _SearchMoviesResponse extends SearchMoviesResponse {
   factory _SearchMoviesResponse(
           {@JsonKey(name: 'page') required final int page,
           @JsonKey(name: 'total_pages') required final int totalPages,
           @JsonKey(name: 'total_results') required final int totalResults,
           @JsonKey(name: 'results') required final List<Movie> movies}) =
       _$_SearchMoviesResponse;
+  _SearchMoviesResponse._() : super._();
 
   factory _SearchMoviesResponse.fromJson(Map<String, dynamic> json) =
       _$_SearchMoviesResponse.fromJson;

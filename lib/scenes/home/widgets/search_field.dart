@@ -20,6 +20,7 @@ class SearchField extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               child: TextField(
+                autocorrect: false,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   hintText: "Search for movie...",

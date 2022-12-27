@@ -1,6 +1,30 @@
 part of 'home_bloc.dart';
 
-@immutable
-abstract class HomeState {}
+@freezed
+class HomeState with _$HomeState {
+  const factory HomeState.initial({
+    @Default(false) bool isListenerState,
+  }) = HomeStateInitial;
 
-class HomeInitial extends HomeState {}
+  const factory HomeState.loading({
+    HomeViewModel? viewModel,
+    @Default(false) bool isListenerState,
+  }) = HomeStateLoading;
+
+  const factory HomeState.loadFailure({
+    required Failure failure,
+    @Default(false) bool isListenerState,
+  }) = HomeStateLoadFailure;
+
+  const factory HomeState.loadSuccess({
+    required HomeViewModel viewModel,
+    @Default(false) bool isListenerState,
+  }) = HomeStateLoadSuccess;
+
+  const factory HomeState.displayAlert({
+    required String title,
+    required String message,
+    @Default(false) bool shouldPopOut,
+    @Default(false) bool isListenerState,
+  }) = HomeStateDisplayAlert;
+}
