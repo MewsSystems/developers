@@ -31,18 +31,34 @@ class _SearchPageState extends State<SearchPage> {
 
     // Listen to query changes
     searchQueryController.addListener(() {
-      // Emit the event that the query changed
-      context
-          .read<MovieSearchBloc>()
-          .add(MovieQueryChanged(searchQueryController.text));
-      // Scroll the list back up
-      if (resultsScrollController.hasClients) {
-        //_scrollController.jumpTo(0);
-      }
-      // Reset the paging count
-      resultsPagingController.nextPageKey = 1;
+      // Add QueryChanged event only if error or current query is not equal
+      // This prevents redundant requests and fixes a bug that adds an event when the keyboard is closed
+      context.read<MovieSearchBloc>().state.when(
+        result: (query, movies, isLastPage) {
+          if (query != searchQueryController.text) {
+            // Emit the event that the query changed
+            context
+                .read<MovieSearchBloc>()
+                .add(QueryChanged(searchQueryController.text));
+            // Scroll the list back up
+            if (resultsScrollController.hasClients) {
+              resultsScrollController.jumpTo(0);
+            }
+            // Reset the paging count
+            resultsPagingController.nextPageKey = 1;
+          }
+        },
+        error: (error) {
+          // Emit the event that the query changed
+          context
+              .read<MovieSearchBloc>()
+              .add(QueryChanged(searchQueryController.text));
+        },
+      );
     });
 
+    // Listens to the scroll position to show the TopButton or not
+    // This is defined outside of TopButton to take advantage of the Scaffold's FAB animations when set to null
     resultsScrollController.addListener(() {
       if (resultsScrollController.position.pixels > 0 && !showTopButton) {
         setState(() {
@@ -76,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: BlocConsumer<MovieSearchBloc, MovieSearchState>(
                   listener: (context, state) {
                     state.when(
-                      result: (movies, isLastPage) {
+                      result: (query, movies, isLastPage) {
                         resultsPagingController.itemList = movies;
                         if (isLastPage) {
                           // Tell the paging controller that last page is reached
@@ -109,7 +125,7 @@ class _SearchPageState extends State<SearchPage> {
                         return const Offstage();
                       }
                     },
-                    result: (movies, isLastPage) => ResultList(
+                    result: (query, movies, isLastPage) => ResultList(
                       movies: movies,
                       pagingController: resultsPagingController,
                       scrollController: resultsScrollController,
