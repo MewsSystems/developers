@@ -7,6 +7,7 @@ import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/model/movie_search/movie_search_state.dart';
 import 'package:movies/src/pages/search/result_list.dart';
 import 'package:movies/src/pages/search/search_bar.dart';
+import 'package:movies/src/pages/search/top_button.dart';
 
 /// Displays a search bar and the list of results
 class SearchPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool showTopButton = false;
   @override
   void initState() {
     super.initState();
@@ -30,13 +32,28 @@ class _SearchPageState extends State<SearchPage> {
     // Listen to query changes
     searchQueryController.addListener(() {
       // Emit the event that the query changed
-      context.read<MovieSearchBloc>().add(MovieQueryChanged(searchQueryController.text));
+      context
+          .read<MovieSearchBloc>()
+          .add(MovieQueryChanged(searchQueryController.text));
       // Scroll the list back up
       if (resultsScrollController.hasClients) {
         //_scrollController.jumpTo(0);
       }
       // Reset the paging count
       resultsPagingController.nextPageKey = 1;
+    });
+
+    resultsScrollController.addListener(() {
+      if (resultsScrollController.position.pixels > 0 && !showTopButton) {
+        setState(() {
+          showTopButton = true;
+        });
+      } else if (resultsScrollController.position.pixels == 0 &&
+          showTopButton) {
+        setState(() {
+          showTopButton = false;
+        });
+      }
     });
 
     // Load the next results page using the search query
@@ -49,6 +66,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        floatingActionButton: showTopButton ? const TopButton() : null,
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
