@@ -17,8 +17,7 @@ class Movie with _$Movie {
     required String originalLanguage,
     String? posterPath,
     String? backdropPath,
-    @DateTimeConverter()
-    DateTime? releaseDate,
+    @DateTimeConverter() DateTime? releaseDate,
     required double voteAverage,
     required double popularity,
     required String overview,
@@ -29,12 +28,14 @@ class Movie with _$Movie {
 }
 
 extension ImageUrl on Movie {
-  String get originalPoster =>
-      posterPath == null ? '' : originalImagePrefix + (posterPath ?? '');
+  // Returns the movie poster in its original size
+  String get largePoster =>
+      posterPath == null ? '' : '$apiImagePrefix/w500${posterPath ?? ''}';
 
+  // Return the movie poster in a small size
   String get smallPoster =>
-      posterPath == null ? '' : smallImagePrefix + (posterPath ?? '');
+      posterPath == null ? '' : '$apiImagePrefix/w342${posterPath ?? ''}';
 
   String get backdrop =>
-      backdropPath == null ? '' : originalImagePrefix + (backdropPath ?? '');
+      backdropPath == null ? '' : '$apiImagePrefix/w1280${backdropPath ?? ''}';
 }

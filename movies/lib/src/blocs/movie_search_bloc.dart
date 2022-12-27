@@ -1,27 +1,27 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/api/movie_search_api.dart';
 import 'package:movies/src/blocs/debounce_last.dart';
-import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/model/movie_search/movie_search_state.dart';
 
 abstract class MovieSearchEvent {}
 
+/// Should be emitted when the search query changed
 class QueryChanged extends MovieSearchEvent {
   QueryChanged(this.query);
   String query;
 }
 
+/// Should be emitted when the results list needs the next results page
 class NeedNextMoviePage extends MovieSearchEvent {
   NeedNextMoviePage(this.query, this.page);
   String query;
   int page;
 }
 
+/// Should be used to delete the current query
 class DeleteQuery extends MovieSearchEvent {}
 
+/// Uses the API to search movies for a query and holds the results
 class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
   MovieSearchBloc() : super(MovieSearchState.emptyResult) {
     on<QueryChanged>(
@@ -51,8 +51,13 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
                   event.query,
                   page: event.page,
                 );
-                emit(MovieSearchState.result(
-                    event.query, [...movies, ...nextMovies], false));
+                emit(
+                  MovieSearchState.result(
+                    event.query,
+                    [...movies, ...nextMovies],
+                    false,
+                  ),
+                );
               }
               // Ignore the page error
               on PageError catch (_) {

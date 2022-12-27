@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:movies/src/api/client.dart';
 import 'package:movies/src/model/movie/movie.dart';
@@ -19,6 +20,7 @@ class MovieRequestError extends MovieSearchError {}
 class PageError extends MovieSearchError {}
 
 class MovieSearchApi {
+  /// Searches the API for movies matching a specific [query]. It can get more results by specifying a [page]
   Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     final uri = getApiUri(
       '/3/search/movie',
@@ -28,8 +30,8 @@ class MovieSearchApi {
       },
     );
     final response = await client.get(uri);
-    if (response.statusCode != 200) {
-      if (response.statusCode == 422) {
+    if (response.statusCode != HttpStatus.ok) {
+      if (response.statusCode == HttpStatus.unprocessableEntity) {
         throw NoQueryError();
       }
 
@@ -37,9 +39,7 @@ class MovieSearchApi {
     }
 
     final responseJson = jsonDecode(response.body) as Map;
-
     if (!responseJson.containsKey('results')) throw NoMoviesFoundError();
-
     final results = responseJson['results'] as List;
 
     if (results.isEmpty) {

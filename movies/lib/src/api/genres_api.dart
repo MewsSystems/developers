@@ -8,7 +8,9 @@ class GenresRequestFailure implements Exception {}
 /// Exception thrown when the searched movie is not found.
 class GenresNotFoundFailure implements Exception {}
 
+
 class GenresApi {
+  /// Gets the genre ids and their corresponding names
   Future<Map<int, String>> getGenres() async {
     final uri = getApiUri(
       '/3/genre/movie/list',

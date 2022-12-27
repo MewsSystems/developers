@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+/// Shows a movie poster using its [url]
 class Poster extends StatelessWidget {
   const Poster({
     Key? key,
@@ -27,7 +28,7 @@ class Poster extends StatelessWidget {
       result = ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(16)),
         child: Hero(
-          tag: 'test',
+          tag: heroTag,
           child: CachedNetworkImage(
             imageUrl: url,
           ),

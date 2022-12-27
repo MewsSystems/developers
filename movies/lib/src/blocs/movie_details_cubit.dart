@@ -6,9 +6,11 @@ import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
 
+/// Uses the API to get the details of a specific movie when it's selected
 class MovieDetailsCubit extends Cubit<MovieDetailsState> {
   MovieDetailsCubit(this.selectedMovieBloc)
       : super(const MovieDetailsState.noSelection()) {
+    // Listen to the selected movie and get its details
     selectedMovieSubscription = selectedMovieBloc.stream.listen((state) async {
       if (state == null) {
         emit(const MovieDetailsState.noSelection());

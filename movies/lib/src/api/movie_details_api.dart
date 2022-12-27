@@ -13,6 +13,7 @@ class MovieNotFoundError extends MovieDetailsError {}
 class MovieDetailsRequestError extends MovieDetailsError {}
 
 class MovieDetailsApi {
+  /// Gets the details of a specific movie by its [movieId]
   Future<MovieDetails> getMovieDetails(int movieId) async {
     final uri = getApiUri('/3/movie/$movieId');
     final response = await client.get(uri);

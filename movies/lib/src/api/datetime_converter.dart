@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-/// DateTime converter that supports converting empty strings as null
+/// DateTime json converter that supports empty strings as null
 class DateTimeConverter implements JsonConverter<DateTime?, String> {
   const DateTimeConverter();
 

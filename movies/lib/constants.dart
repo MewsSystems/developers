@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/src/model/movie/movie.dart';
 
-const originalImagePrefix = 'https://image.tmdb.org/t/p/original';
-const smallImagePrefix = 'https://image.tmdb.org/t/p/w200';
+const apiImagePrefix = 'https://image.tmdb.org/t/p';
 
 const chipColor = Color(0xFF001B29);
 const bgColor = Color(0xFF000D14);
