@@ -138,7 +138,7 @@ class DetailsPage extends StatelessWidget {
                                         false) ...[
                                       Center(
                                         child: Text(
-                                          movieDetails.tagline!,
+                                          movieDetails.tagline ?? '',
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 22,
@@ -167,7 +167,8 @@ class DetailsPage extends StatelessWidget {
                                             MovieChip(
                                               icon: Icons.schedule,
                                               label: formatMinutes(
-                                                  movieDetails.runtime!),
+                                                movieDetails.runtime ?? 0,
+                                              ),
                                             ),
                                           MovieChip(label: movieDetails.status),
                                         ],
@@ -258,8 +259,9 @@ class DetailsPage extends StatelessWidget {
                                         )
                                       else
                                         CachedNetworkImage(
-                                          imageUrl:
-                                              getApiImageUrl(company['logo_path'] as String, 300),
+                                          imageUrl: getApiImageUrl(
+                                              company['logo_path'] as String,
+                                              300),
                                         ),
                                     ],
                                     const SizedBox(height: 16),

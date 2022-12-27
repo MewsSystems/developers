@@ -13,7 +13,7 @@ class MovieChips extends StatelessWidget {
         spacing: 8,
         children: [
           if (movie.releaseDate != null)
-            MovieChip(label: movie.releaseDate!.year.toString()),
+            MovieChip(label: (movie.releaseDate?.year).toString()),
           MovieChip(
             label: movie.voteAverage.toString(),
             icon: Icons.star,
