@@ -30,12 +30,12 @@ class Movie with _$Movie {
 extension ImageUrl on Movie {
   // Returns the movie poster in its original size
   String get largePoster =>
-      posterPath == null ? '' : '$apiImagePrefix/w500${posterPath ?? ''}';
+      posterPath == null ? '' : getApiImageUrl(posterPath ?? '', 500);
 
   // Return the movie poster in a small size
   String get smallPoster =>
-      posterPath == null ? '' : '$apiImagePrefix/w342${posterPath ?? ''}';
+      posterPath == null ? '' : getApiImageUrl(posterPath ?? '', 342);
 
   String get backdrop =>
-      backdropPath == null ? '' : '$apiImagePrefix/w1280${backdropPath ?? ''}';
+      backdropPath == null ? '' : getApiImageUrl(backdropPath ?? '', 1280);
 }

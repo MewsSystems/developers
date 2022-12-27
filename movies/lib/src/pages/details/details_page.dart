@@ -259,7 +259,7 @@ class DetailsPage extends StatelessWidget {
                                       else
                                         CachedNetworkImage(
                                           imageUrl:
-                                              '$apiImagePrefix/w300${company['logo_path'] as String}',
+                                              getApiImageUrl(company['logo_path'] as String, 300),
                                         ),
                                     ],
                                     const SizedBox(height: 16),
