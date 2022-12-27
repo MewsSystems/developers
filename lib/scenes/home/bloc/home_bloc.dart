@@ -18,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final PublishSubject<String> _searchMovieController = PublishSubject();
   final HomeRepository repository;
   late final StreamSubscription _subscriptionSearch;
-  HomeViewModel _viewModel = HomeViewModel(movies: []);
+  HomeViewModel _viewModel = const HomeViewModel(movies: []);
 
   SearchMoviesResponse? _response;
 
@@ -26,7 +26,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     _subscriptionSearch = _searchMovieController
         .debounceTime(const Duration(milliseconds: 500))
         .listen((searchText) {
-      add(HomeEvent.searchMovies(searchText));
+      if (searchText.trim().isNotEmpty) {
+        add(HomeEvent.searchMovies(searchText));
+      } else {
+        add(HomeEvent.clearList());
+      }
     });
 
     on<HomeEvent>((event, emit) {
@@ -34,6 +38,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         didChangeSearch: (searchText) =>
             _searchMovieController.sink.add(searchText),
         searchMovies: (searchText) => _mapSearchMoviesEventToState(searchText),
+        clearList: () => _mapClearListEventToState(),
       );
     });
   }
@@ -47,6 +52,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 }
 
 extension MapEventsToStates on HomeBloc {
+  void _mapClearListEventToState() {
+    _viewModel = _viewModel.copyWith(movies: []);
+    _response = null;
+    emit(HomeState.loadSuccess(viewModel: _viewModel));
+  }
+
   void _mapSearchMoviesEventToState(String searchText) async {
     emit(HomeState.loading(viewModel: _viewModel));
 
@@ -65,8 +76,11 @@ extension MapEventsToStates on HomeBloc {
             HomeState.displayAlert(title: "Failure", message: failure.message));
       },
       (searchResponse) {
+        _response = searchResponse;
         _viewModel = _viewModel.copyWith(movies: searchResponse.movies);
       },
     );
+
+    emit(HomeState.loadSuccess(viewModel: _viewModel));
   }
 }

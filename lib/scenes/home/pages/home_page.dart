@@ -6,6 +6,7 @@ import '../../../common/widgets/alert_box.dart';
 import '../../../common/widgets/spinner.dart';
 import '../bloc/home_bloc.dart';
 import '../viewmodel/home_viewmodel.dart';
+import '../widgets/movie_list_item.dart';
 import '../widgets/search_field.dart';
 
 class HomePage extends StatelessWidget {
@@ -91,6 +92,12 @@ extension StateWidgets on HomePage {
 
   Widget _getLoadSuccessState(
       {required BuildContext context, required HomeViewModel viewModel}) {
-    return Container();
+    return ListView.builder(
+        itemCount: viewModel.movies.length,
+        itemBuilder: (context, index) {
+          final movie = viewModel.movies[index];
+
+          return MovieListItem(movie: movie);
+        });
   }
 }

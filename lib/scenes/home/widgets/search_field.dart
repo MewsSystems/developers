@@ -23,7 +23,7 @@ class SearchField extends StatelessWidget {
                 autocorrect: false,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
-                  hintText: "Search for movie...",
+                  hintText: "Search for movies...",
                   filled: true,
                   prefixIcon: const Icon(Icons.search, color: Colors.black),
                   fillColor: Colors.grey,

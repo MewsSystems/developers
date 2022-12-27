@@ -7,4 +7,6 @@ class HomeEvent with _$HomeEvent {
 
   const factory HomeEvent.searchMovies(String searchText) =
       HomeEventSearchMovies;
+
+  const factory HomeEvent.clearList() = HomeEventClearList;
 }

@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           //
           scaffoldBackgroundColor: Colors.black,
           backgroundColor: Colors.black,
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.grey,
         ),
         home: FutureBuilder(
           future: getIt.get<AppCoordinator>().init(),

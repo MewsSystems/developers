@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../common/models/failure.dart';
+import '../../../utils/constants.dart';
 import '../models/search_movies_request.dart';
 import '../models/search_movies_response.dart';
 
@@ -17,16 +18,17 @@ class HomeRepository {
     }
     try {
       final url = Uri.https(
-          'api.themoviedb.org',
-          '/3/search/movie',
-          request
-              .toJson()
-              .map((key, value) => MapEntry(key, value.toString())));
+        BASE_URL,
+        MOVIE_SEARCH_ENDPOINT,
+        request.toJson().map(
+              (key, value) => MapEntry(key, value.toString()),
+            ),
+      );
 
       final response = await http.get(url).timeout(const Duration(seconds: 10),
           onTimeout: () => throw ConnectionFailure());
 
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
       final result = SearchMoviesResponse.fromJson(json);
       _cache[request.searchText.toLowerCase()] = result;
 
