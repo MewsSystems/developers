@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:movies/utils.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
@@ -11,6 +10,7 @@ import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
+import 'package:movies/utils.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +23,10 @@ class DetailsPage extends StatelessWidget {
   static const routeName = '/sample_item';
 
   final headingStyle = const TextStyle(
-      fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 1);
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1,
+  );
 
   @override
   Widget build(BuildContext context) => BlocBuilder<SelectedMovieBloc, Movie?>(
@@ -127,10 +130,12 @@ class DetailsPage extends StatelessWidget {
                                 MovieDetailsState>(
                               builder: (context, state) => state.when(
                                 loading: () => const Center(
-                                    child: CircularProgressIndicator()),
+                                  child: CircularProgressIndicator(),
+                                ),
                                 noSelection: () => const Offstage(),
                                 error: (_) => Text(
-                                    AppLocalizations.of(context).errorHappened),
+                                  AppLocalizations.of(context).errorHappened,
+                                ),
                                 details: (movieDetails) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -260,8 +265,9 @@ class DetailsPage extends StatelessWidget {
                                       else
                                         CachedNetworkImage(
                                           imageUrl: getApiImageUrl(
-                                              company['logo_path'] as String,
-                                              300),
+                                            company['logo_path'] as String,
+                                            300,
+                                          ),
                                         ),
                                     ],
                                     const SizedBox(height: 16),

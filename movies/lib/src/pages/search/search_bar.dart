@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:movies/src/blocs/movie_search_bloc.dart';
-import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/pages/search/clear_query_button.dart';
-import 'package:movies/src/pages/search/result_list.dart';
 
 final searchQueryController = TextEditingController();
 

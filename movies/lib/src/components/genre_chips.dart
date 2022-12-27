@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/blocs/genres_cubit.dart';
 
-/// Wrap that generates [GenreChip]s according to a list of [genreIds]
+/// Wrap that generates [GenreChips] according to a list of [genreIds]
 class GenreChips extends StatelessWidget {
   const GenreChips({Key? key, required this.genreIds}) : super(key: key);
 

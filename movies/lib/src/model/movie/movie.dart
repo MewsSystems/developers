@@ -1,9 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:movies/utils.dart';
 import 'package:movies/src/api/datetime_converter.dart';
+import 'package:movies/utils.dart';
 
 part 'movie.freezed.dart';
-
 part 'movie.g.dart';
 
 /// Represents a movie from the search results
