@@ -15,6 +15,9 @@ class NoQueryError extends MovieSearchError {}
 /// Exception thrown when searchMovies fails
 class MovieRequestError extends MovieSearchError {}
 
+/// Exception thrown when trying to load a non-existing page
+class PageError extends MovieSearchError {}
+
 class MovieSearchApi {
   Future<List<Movie>> searchMovies(String query, {int page = 1}) async {
     final uri = getApiUri(
@@ -26,9 +29,10 @@ class MovieSearchApi {
     );
     final response = await client.get(uri);
     if (response.statusCode != 200) {
-      if(response.statusCode == 422) {
+      if (response.statusCode == 422) {
         throw NoQueryError();
       }
+
       throw MovieRequestError();
     }
 
@@ -38,7 +42,12 @@ class MovieSearchApi {
 
     final results = responseJson['results'] as List;
 
-    if (results.isEmpty) throw NoMoviesFoundError();
+    if (results.isEmpty) {
+      if (page > 1) {
+        throw PageError();
+      }
+      throw NoMoviesFoundError();
+    }
 
     return [
       for (var result in results) Movie.fromJson(result as Map<String, dynamic>)

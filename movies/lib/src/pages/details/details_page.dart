@@ -10,11 +10,9 @@ import 'package:movies/src/components/movie_chip.dart';
 import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
-import 'package:movies/src/model/movie_details/movie_details.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 /// Displays detailed information about a movie
 class DetailsPage extends StatelessWidget {
@@ -31,7 +29,7 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<SelectedMovieBloc, Movie?>(
         builder: (context, movie) {
           if (movie == null) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           final hasBackdrop = movie.backdropPath != null;
 

@@ -8,8 +8,8 @@ import 'package:movies/src/blocs/genres_cubit.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/pages/details_page.dart';
-import 'package:movies/src/pages/search_page.dart';
+import 'package:movies/src/pages/details/details_page.dart';
+import 'package:movies/src/pages/search/search_page.dart';
 
 final themeData = ThemeData(
   scaffoldBackgroundColor: bgColor,

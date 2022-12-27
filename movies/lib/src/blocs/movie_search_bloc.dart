@@ -20,15 +20,15 @@ class NeedNextMoviePage extends MovieSearchEvent {
 class DeleteQuery extends MovieSearchEvent {}
 
 class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
-  MovieSearchBloc() : super(const MovieSearchState.result([])) {
+  MovieSearchBloc() : super(const MovieSearchState.result([], true)) {
     on<MovieQueryChanged>(
       (event, emit) async {
         if (event.query.isEmpty) {
-          emit(const MovieSearchState.result([]));
+          emit(const MovieSearchState.result([], true));
         } else {
           try {
             final movies = await api.searchMovies(event.query);
-            emit(MovieSearchState.result(movies));
+            emit(MovieSearchState.result(movies, false));
           } on MovieSearchError catch (exception) {
             emit(MovieSearchState.error(exception));
           }
@@ -39,17 +39,22 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
     on<NeedNextMoviePage>(
       (event, emit) async {
         await state.when(
-          result: (movies) async {
+          result: (movies, isLastPage) async {
             if (event.query.isEmpty) {
-              emit(const MovieSearchState.result([]));
+              emit(const MovieSearchState.result([], true));
             } else {
               try {
                 final nextMovies = await api.searchMovies(
                   event.query,
                   page: event.page,
                 );
-                emit(MovieSearchState.result([...movies, ...nextMovies]));
-              } on MovieSearchError catch (exception) {
+                emit(MovieSearchState.result([...movies, ...nextMovies], false));
+              } 
+              // Ignore the page error
+              on PageError catch(_) {
+                emit(MovieSearchState.result(movies, true));
+              }
+              on MovieSearchError catch (exception) {
                 emit(MovieSearchState.error(exception));
               }
             }
@@ -60,7 +65,7 @@ class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
       //transformer: debounceLast(const Duration(milliseconds: 300)),
     );
     on<DeleteQuery>((event, emit) {
-      emit(const MovieSearchState.result([]));
+      emit(const MovieSearchState.result([], true));
     });
   }
 

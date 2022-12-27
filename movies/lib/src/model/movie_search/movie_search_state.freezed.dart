@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MovieSearchState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Movie> movies) result,
+    required TResult Function(List<Movie> movies, bool isLastPage) result,
     required TResult Function(MovieSearchError error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Movie> movies)? result,
+    TResult? Function(List<Movie> movies, bool isLastPage)? result,
     TResult? Function(MovieSearchError error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Movie> movies)? result,
+    TResult Function(List<Movie> movies, bool isLastPage)? result,
     TResult Function(MovieSearchError error)? error,
     required TResult orElse(),
   }) =>
@@ -79,7 +79,7 @@ abstract class _$$ResultCopyWith<$Res> {
   factory _$$ResultCopyWith(_$Result value, $Res Function(_$Result) then) =
       __$$ResultCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<Movie> movies});
+  $Res call({List<Movie> movies, bool isLastPage});
 }
 
 /// @nodoc
@@ -93,12 +93,17 @@ class __$$ResultCopyWithImpl<$Res>
   @override
   $Res call({
     Object? movies = null,
+    Object? isLastPage = null,
   }) {
     return _then(_$Result(
       null == movies
           ? _value._movies
           : movies // ignore: cast_nullable_to_non_nullable
               as List<Movie>,
+      null == isLastPage
+          ? _value.isLastPage
+          : isLastPage // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -106,7 +111,7 @@ class __$$ResultCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Result implements Result {
-  const _$Result(final List<Movie> movies) : _movies = movies;
+  const _$Result(final List<Movie> movies, this.isLastPage) : _movies = movies;
 
   final List<Movie> _movies;
   @override
@@ -116,8 +121,11 @@ class _$Result implements Result {
   }
 
   @override
+  final bool isLastPage;
+
+  @override
   String toString() {
-    return 'MovieSearchState.result(movies: $movies)';
+    return 'MovieSearchState.result(movies: $movies, isLastPage: $isLastPage)';
   }
 
   @override
@@ -125,12 +133,14 @@ class _$Result implements Result {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Result &&
-            const DeepCollectionEquality().equals(other._movies, _movies));
+            const DeepCollectionEquality().equals(other._movies, _movies) &&
+            (identical(other.isLastPage, isLastPage) ||
+                other.isLastPage == isLastPage));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_movies));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_movies), isLastPage);
 
   @JsonKey(ignore: true)
   @override
@@ -141,30 +151,30 @@ class _$Result implements Result {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Movie> movies) result,
+    required TResult Function(List<Movie> movies, bool isLastPage) result,
     required TResult Function(MovieSearchError error) error,
   }) {
-    return result(movies);
+    return result(movies, isLastPage);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Movie> movies)? result,
+    TResult? Function(List<Movie> movies, bool isLastPage)? result,
     TResult? Function(MovieSearchError error)? error,
   }) {
-    return result?.call(movies);
+    return result?.call(movies, isLastPage);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Movie> movies)? result,
+    TResult Function(List<Movie> movies, bool isLastPage)? result,
     TResult Function(MovieSearchError error)? error,
     required TResult orElse(),
   }) {
     if (result != null) {
-      return result(movies);
+      return result(movies, isLastPage);
     }
     return orElse();
   }
@@ -202,9 +212,11 @@ class _$Result implements Result {
 }
 
 abstract class Result implements MovieSearchState {
-  const factory Result(final List<Movie> movies) = _$Result;
+  const factory Result(final List<Movie> movies, final bool isLastPage) =
+      _$Result;
 
   List<Movie> get movies;
+  bool get isLastPage;
   @JsonKey(ignore: true)
   _$$ResultCopyWith<_$Result> get copyWith =>
       throw _privateConstructorUsedError;
@@ -272,7 +284,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<Movie> movies) result,
+    required TResult Function(List<Movie> movies, bool isLastPage) result,
     required TResult Function(MovieSearchError error) error,
   }) {
     return error(this.error);
@@ -281,7 +293,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<Movie> movies)? result,
+    TResult? Function(List<Movie> movies, bool isLastPage)? result,
     TResult? Function(MovieSearchError error)? error,
   }) {
     return error?.call(this.error);
@@ -290,7 +302,7 @@ class _$Error implements Error {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<Movie> movies)? result,
+    TResult Function(List<Movie> movies, bool isLastPage)? result,
     TResult Function(MovieSearchError error)? error,
     required TResult orElse(),
   }) {

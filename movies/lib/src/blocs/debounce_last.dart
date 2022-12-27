@@ -45,10 +45,14 @@ class _DebounceLastStreamTransformer<T> extends StreamTransformerBase<T, T> {
               controller.add,
               onError: controller.addError,
               onDone: () {
+                if (latestEvent != null) {
+                  controller.add(latestEvent as T);
+                }
                 // Set mappedSubscription and latestEvent to null
                 // only after the current mapping is complete
                 mappedSubscription = null;
                 latestEvent = null;
+                //controller.close();
               },
             );
           }

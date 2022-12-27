@@ -8,6 +8,6 @@ part 'movie_search_state.freezed.dart';
 
 @freezed
 class MovieSearchState with _$MovieSearchState {
-  const factory MovieSearchState.result(List<Movie> movies) = Result;
+  const factory MovieSearchState.result(List<Movie> movies, bool isLastPage) = Result;
   const factory MovieSearchState.error(MovieSearchError error) = Error;
 }
