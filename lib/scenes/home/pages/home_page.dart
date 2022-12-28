@@ -140,6 +140,16 @@ extension StateWidgets on _HomePageState {
       {required BuildContext context, required HomeViewModel viewModel}) {
     final hasMoreRecords = context.read<HomeBloc>().hasMoreRecords;
 
+    if (viewModel.movies.isEmpty) {
+      return Center(
+        child: Text("No movies found!",
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium
+                ?.copyWith(color: Colors.white)),
+      );
+    }
+
     return ListView.builder(
       controller: _scrollController,
       itemCount: viewModel.movies.length + (hasMoreRecords ? 1 : 0),
