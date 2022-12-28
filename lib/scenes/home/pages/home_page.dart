@@ -67,6 +67,7 @@ extension StateWidgets on HomePage {
   Widget _getLoadingState(
       {required BuildContext context, HomeViewModel? viewModel}) {
     return Spinner(
+      isSpinning: true,
       child: viewModel == null
           ? Container()
           : _getLoadSuccessState(context: context, viewModel: viewModel),

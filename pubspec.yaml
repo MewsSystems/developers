@@ -39,6 +39,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   get_it: ^7.2.0
   http: ^0.13.5
+  intl: ^0.18.0
   json_annotation: ^4.7.0
   rxdart: ^0.27.7
 
