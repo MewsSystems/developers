@@ -95,7 +95,11 @@ class DetailsPage extends StatelessWidget {
                             padding: const EdgeInsets.all(16),
                             child: MovieTile(
                               movie: movie,
-                              posterHeight: 176,
+                              posterHeight:
+                                  MediaQuery.of(context).orientation ==
+                                          Orientation.portrait
+                                      ? 176
+                                      : 96,
                               titleSize: 28,
                             ),
                           ),
