@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_search/managers/get_it.dart';
+import 'package:movie_search/managers/navigation_manager.dart';
 import 'package:movie_search/scenes/home/widgets/loading_more_button.dart';
 
 import '../../../common/models/failure.dart';
@@ -139,35 +141,42 @@ extension StateWidgets on _HomePageState {
     final hasMoreRecords = context.read<HomeBloc>().hasMoreRecords;
 
     return ListView.builder(
-        controller: _scrollController,
-        itemCount: viewModel.movies.length + (hasMoreRecords ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (hasMoreRecords && (index == viewModel.movies.length)) {
-            if (viewModel.didFailToLoadMoreRecords ?? false) {
-              return LoadMoreButton(
-                title: "Show more records",
-                onPressed: () => context
-                    .read<HomeBloc>()
-                    .add(const HomeEvent.requestMoreRecords()),
-              );
-            }
-
-            return SizedBox(
-              height: 80,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    CircularProgressIndicator(
-                      color: Colors.grey,
-                    )
-                  ]),
+      controller: _scrollController,
+      itemCount: viewModel.movies.length + (hasMoreRecords ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (hasMoreRecords && (index == viewModel.movies.length)) {
+          if (viewModel.didFailToLoadMoreRecords ?? false) {
+            return LoadMoreButton(
+              title: "Show more records",
+              onPressed: () => context
+                  .read<HomeBloc>()
+                  .add(const HomeEvent.requestMoreRecords()),
             );
           }
 
-          final movie = viewModel.movies[index];
+          return SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(
+                  color: Colors.grey,
+                )
+              ],
+            ),
+          );
+        }
 
-          return MovieListItem(movie: movie);
-        });
+        final movie = viewModel.movies[index];
+
+        return MovieListItem(
+          movie: movie,
+          onPressed: () => getIt
+              .get<NavigationManager>()
+              .navigateToMovieDetail(context: context, movie: movie),
+        );
+      },
+    );
   }
 }
