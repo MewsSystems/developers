@@ -18,11 +18,16 @@ class MovieListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           SmartImage(
             imageUrl: movie.imageUrl,
-            height: 150,
-          )
+            height: MediaQuery.of(context).size.height / 1.5,
+          ),
+          Text(movie.title, style: Theme.of(context).textTheme.headline6),
+          Text(movie.popularity.toString()),
+          Text(movie.voteAverage.toString()),
+          Text(movie.voteCount.toString()),
         ],
       ),
     );

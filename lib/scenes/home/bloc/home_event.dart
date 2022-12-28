@@ -9,4 +9,6 @@ class HomeEvent with _$HomeEvent {
       HomeEventSearchMovies;
 
   const factory HomeEvent.clearList() = HomeEventClearList;
+
+  const factory HomeEvent.retrySearch(String searchText) = HomeEventRetrySearch;
 }

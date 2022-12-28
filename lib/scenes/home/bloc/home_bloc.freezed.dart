@@ -21,6 +21,7 @@ mixin _$HomeEvent {
     required TResult Function(String value) didChangeSearch,
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +29,7 @@ mixin _$HomeEvent {
     TResult? Function(String value)? didChangeSearch,
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,6 +37,7 @@ mixin _$HomeEvent {
     TResult Function(String value)? didChangeSearch,
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -43,6 +46,7 @@ mixin _$HomeEvent {
     required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +54,7 @@ mixin _$HomeEvent {
     TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -57,6 +62,7 @@ mixin _$HomeEvent {
     TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -148,6 +154,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     required TResult Function(String value) didChangeSearch,
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
   }) {
     return didChangeSearch(value);
   }
@@ -158,6 +165,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult? Function(String value)? didChangeSearch,
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
   }) {
     return didChangeSearch?.call(value);
   }
@@ -168,6 +176,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult Function(String value)? didChangeSearch,
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
     required TResult orElse(),
   }) {
     if (didChangeSearch != null) {
@@ -182,6 +191,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
   }) {
     return didChangeSearch(this);
   }
@@ -192,6 +202,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
   }) {
     return didChangeSearch?.call(this);
   }
@@ -202,6 +213,7 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
     required TResult orElse(),
   }) {
     if (didChangeSearch != null) {
@@ -290,6 +302,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     required TResult Function(String value) didChangeSearch,
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
   }) {
     return searchMovies(searchText);
   }
@@ -300,6 +313,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult? Function(String value)? didChangeSearch,
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
   }) {
     return searchMovies?.call(searchText);
   }
@@ -310,6 +324,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult Function(String value)? didChangeSearch,
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
     required TResult orElse(),
   }) {
     if (searchMovies != null) {
@@ -324,6 +339,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
   }) {
     return searchMovies(this);
   }
@@ -334,6 +350,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
   }) {
     return searchMovies?.call(this);
   }
@@ -344,6 +361,7 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
     required TResult orElse(),
   }) {
     if (searchMovies != null) {
@@ -404,6 +422,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     required TResult Function(String value) didChangeSearch,
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
   }) {
     return clearList();
   }
@@ -414,6 +433,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult? Function(String value)? didChangeSearch,
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
   }) {
     return clearList?.call();
   }
@@ -424,6 +444,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult Function(String value)? didChangeSearch,
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
     required TResult orElse(),
   }) {
     if (clearList != null) {
@@ -438,6 +459,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
   }) {
     return clearList(this);
   }
@@ -448,6 +470,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
   }) {
     return clearList?.call(this);
   }
@@ -458,6 +481,7 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
     required TResult orElse(),
   }) {
     if (clearList != null) {
@@ -469,6 +493,154 @@ class _$HomeEventClearList implements HomeEventClearList {
 
 abstract class HomeEventClearList implements HomeEvent {
   const factory HomeEventClearList() = _$HomeEventClearList;
+}
+
+/// @nodoc
+abstract class _$$HomeEventRetrySearchCopyWith<$Res> {
+  factory _$$HomeEventRetrySearchCopyWith(_$HomeEventRetrySearch value,
+          $Res Function(_$HomeEventRetrySearch) then) =
+      __$$HomeEventRetrySearchCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String searchText});
+}
+
+/// @nodoc
+class __$$HomeEventRetrySearchCopyWithImpl<$Res>
+    extends _$HomeEventCopyWithImpl<$Res, _$HomeEventRetrySearch>
+    implements _$$HomeEventRetrySearchCopyWith<$Res> {
+  __$$HomeEventRetrySearchCopyWithImpl(_$HomeEventRetrySearch _value,
+      $Res Function(_$HomeEventRetrySearch) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? searchText = null,
+  }) {
+    return _then(_$HomeEventRetrySearch(
+      null == searchText
+          ? _value.searchText
+          : searchText // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HomeEventRetrySearch implements HomeEventRetrySearch {
+  const _$HomeEventRetrySearch(this.searchText);
+
+  @override
+  final String searchText;
+
+  @override
+  String toString() {
+    return 'HomeEvent.retrySearch(searchText: $searchText)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HomeEventRetrySearch &&
+            (identical(other.searchText, searchText) ||
+                other.searchText == searchText));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, searchText);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HomeEventRetrySearchCopyWith<_$HomeEventRetrySearch> get copyWith =>
+      __$$HomeEventRetrySearchCopyWithImpl<_$HomeEventRetrySearch>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String value) didChangeSearch,
+    required TResult Function(String searchText) searchMovies,
+    required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
+  }) {
+    return retrySearch(searchText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String value)? didChangeSearch,
+    TResult? Function(String searchText)? searchMovies,
+    TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
+  }) {
+    return retrySearch?.call(searchText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String value)? didChangeSearch,
+    TResult Function(String searchText)? searchMovies,
+    TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
+    required TResult orElse(),
+  }) {
+    if (retrySearch != null) {
+      return retrySearch(searchText);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
+    required TResult Function(HomeEventSearchMovies value) searchMovies,
+    required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
+  }) {
+    return retrySearch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult? Function(HomeEventSearchMovies value)? searchMovies,
+    TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
+  }) {
+    return retrySearch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult Function(HomeEventSearchMovies value)? searchMovies,
+    TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
+    required TResult orElse(),
+  }) {
+    if (retrySearch != null) {
+      return retrySearch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeEventRetrySearch implements HomeEvent {
+  const factory HomeEventRetrySearch(final String searchText) =
+      _$HomeEventRetrySearch;
+
+  String get searchText;
+  @JsonKey(ignore: true)
+  _$$HomeEventRetrySearchCopyWith<_$HomeEventRetrySearch> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1347,7 +1519,7 @@ class _$HomeStateDisplayAlert implements HomeStateDisplayAlert {
       {required this.title,
       required this.message,
       this.shouldPopOut = false,
-      this.isListenerState = false});
+      this.isListenerState = true});
 
   @override
   final String title;

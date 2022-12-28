@@ -25,6 +25,6 @@ class HomeState with _$HomeState {
     required String title,
     required String message,
     @Default(false) bool shouldPopOut,
-    @Default(false) bool isListenerState,
+    @Default(true) bool isListenerState,
   }) = HomeStateDisplayAlert;
 }

@@ -16,6 +16,7 @@ class SmartImage extends StatelessWidget {
     }
     return CachedNetworkImage(
       imageUrl: imageUrl!,
+      fit: BoxFit.fill,
       height: height,
       progressIndicatorBuilder: (context, url, progress) => Center(
         child: CircularProgressIndicator(value: progress.progress),

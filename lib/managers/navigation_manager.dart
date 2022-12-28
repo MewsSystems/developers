@@ -11,7 +11,7 @@ class NavigationManager {}
 extension NavigationManagerPages on NavigationManager {
   Widget get homePage => BlocProvider(
         create: (context) => HomeBloc(repository: getIt.get<HomeRepository>()),
-        child: const HomePage(),
+        child: HomePage(),
       );
 }
 

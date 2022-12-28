@@ -10,7 +10,9 @@ import '../widgets/movie_list_item.dart';
 import '../widgets/search_field.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final TextEditingController textController = TextEditingController();
+
+  HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class HomePage extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: const Size(double.infinity, 40),
           child: SearchField(
+            controller: textController,
             onChange: (value) =>
                 context.read<HomeBloc>().add(HomeEvent.didChangeSearch(value)),
           ),
@@ -83,9 +86,11 @@ extension StateWidgets on HomePage {
           child: Text(failure.message),
         ),
         ElevatedButton(
-          onPressed: () => print('refresh'),
+          onPressed: () => context
+              .read<HomeBloc>()
+              .add(HomeEvent.retrySearch(textController.text)),
           child: const Text("Try again!"),
-        )
+        ),
       ],
     );
   }

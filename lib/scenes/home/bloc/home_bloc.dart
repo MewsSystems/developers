@@ -29,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (searchText.trim().isNotEmpty) {
         add(HomeEvent.searchMovies(searchText));
       } else {
-        add(HomeEvent.clearList());
+        add(const HomeEvent.clearList());
       }
     });
 
@@ -39,6 +39,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             _searchMovieController.sink.add(searchText),
         searchMovies: (searchText) => _mapSearchMoviesEventToState(searchText),
         clearList: () => _mapClearListEventToState(),
+        retrySearch: (searchText) =>
+            _searchMovieController.sink.add(searchText),
       );
     });
   }
