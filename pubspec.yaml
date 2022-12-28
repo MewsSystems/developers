@@ -29,13 +29,22 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.2.3
   cupertino_icons: ^1.0.2
-  flutter_bloc: ^8.1.1
+  dartz: ^0.10.1
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.1
+  freezed_annotation: ^2.2.0
   get_it: ^7.2.0
+  http: ^0.13.5
+  intl: ^0.18.0
+  json_annotation: ^4.7.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
+  build_runner: ^2.3.3
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
@@ -54,6 +63,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/popcorn.png
+    - assets/images/image_not_available.png
+    - assets/images/image_not_loaded.jpeg
     # - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
