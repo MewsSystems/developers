@@ -34,6 +34,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (_response!.totalPages == _response!.page) return false;
 
+    if (_response!.totalPages == 0) return false;
+
     return true;
   }
 
@@ -100,6 +102,8 @@ extension MapEventsToStates on HomeBloc {
             title: "Fetch more records\nfailed",
             message:
                 "We couldn't fetch more records. Please check your internet connection and try again."));
+        _viewModel = _viewModel.copyWith(didFailToLoadMoreRecords: true);
+        emit(HomeState.loadSuccess(viewModel: _viewModel));
       },
       (searchResponse) {
         _response = searchResponse;
@@ -107,9 +111,9 @@ extension MapEventsToStates on HomeBloc {
         updatedMovies.addAll(searchResponse.movies);
 
         _viewModel = _viewModel.copyWith(movies: updatedMovies);
+        emit(HomeState.loadSuccess(viewModel: _viewModel));
       },
     );
-    emit(HomeState.loadSuccess(viewModel: _viewModel));
     _isFetchingRecords = false;
   }
 

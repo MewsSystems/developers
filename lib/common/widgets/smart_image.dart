@@ -18,6 +18,8 @@ class SmartImage extends StatelessWidget {
       imageUrl: imageUrl!,
       fit: BoxFit.fill,
       height: height,
+      errorWidget: (context, url, error) =>
+          Image.asset('assets/images/image_not_loaded.jpeg'),
       progressIndicatorBuilder: (context, url, progress) => Center(
         child: CircularProgressIndicator(
           value: progress.progress,

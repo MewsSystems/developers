@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_search/scenes/home/widgets/loading_more_button.dart';
 
 import '../../../common/models/failure.dart';
 import '../../../common/widgets/alert_box.dart';
@@ -135,10 +136,35 @@ extension StateWidgets on _HomePageState {
 
   Widget _getLoadSuccessState(
       {required BuildContext context, required HomeViewModel viewModel}) {
+    final hasMoreRecords = context.read<HomeBloc>().hasMoreRecords;
+
     return ListView.builder(
         controller: _scrollController,
-        itemCount: viewModel.movies.length,
+        itemCount: viewModel.movies.length + (hasMoreRecords ? 1 : 0),
         itemBuilder: (context, index) {
+          if (hasMoreRecords && (index == viewModel.movies.length)) {
+            if (viewModel.didFailToLoadMoreRecords ?? false) {
+              return LoadMoreButton(
+                title: "Show more records",
+                onPressed: () => context
+                    .read<HomeBloc>()
+                    .add(const HomeEvent.requestMoreRecords()),
+              );
+            }
+
+            return SizedBox(
+              height: 80,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(
+                      color: Colors.grey,
+                    )
+                  ]),
+            );
+          }
+
           final movie = viewModel.movies[index];
 
           return MovieListItem(movie: movie);

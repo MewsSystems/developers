@@ -28,7 +28,7 @@ class HomeRepository {
               (key, value) => MapEntry(key, value.toString()),
             ),
       );
-      final response = await http.get(url).timeout(const Duration(seconds: 10),
+      final response = await http.get(url).timeout(const Duration(seconds: 5),
           onTimeout: () => throw ConnectionFailure());
 
       final json = jsonDecode(utf8.decode(response.bodyBytes));
