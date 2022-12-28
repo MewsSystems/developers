@@ -6,6 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
 import 'package:movies/src/components/movie_chips.dart';
+import 'package:movies/src/components/movie_tile.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/pages/details/details_page.dart';
@@ -65,40 +66,7 @@ class ResultList extends StatelessWidget {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: Row(
-                        children: [
-                          Poster(
-                            url: movie.smallPoster,
-                            heroTag: movie.id,
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    movie.title,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                GenreChips(
-                                  genreIds: movie.genreIds,
-                                ),
-                                MovieChips(
-                                  movie: movie,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                      child: MovieTile(movie: movie, titleSize: 22),
                     ),
                   ),
                 ),

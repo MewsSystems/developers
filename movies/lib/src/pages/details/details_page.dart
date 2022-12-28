@@ -7,9 +7,11 @@ import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/genre_chips.dart';
 import 'package:movies/src/components/movie_chip.dart';
 import 'package:movies/src/components/movie_chips.dart';
+import 'package:movies/src/components/movie_tile.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
+import 'package:movies/theme.dart';
 import 'package:movies/utils.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -91,35 +93,10 @@ class DetailsPage extends StatelessWidget {
                               ],
                             ),
                             padding: const EdgeInsets.all(16),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Poster(
-                                  url: movie.smallPoster,
-                                  heroTag: movie.id,
-                                  height: 176,
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        movie.title,
-                                        style: const TextStyle(
-                                          fontSize: 28,
-                                        ),
-                                      ),
-                                      if (movie.title != movie.originalTitle)
-                                        Text('(${movie.originalTitle})'),
-                                      const SizedBox(height: 4),
-                                      GenreChips(genreIds: movie.genreIds),
-                                      MovieChips(movie: movie),
-                                    ],
-                                  ),
-                                )
-                              ],
+                            child: MovieTile(
+                              movie: movie,
+                              posterHeight: 176,
+                              titleSize: 28,
                             ),
                           ),
                         ),
@@ -151,7 +128,7 @@ class DetailsPage extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 16),
+                                      const SizedBox(height: 24),
                                     ],
                                     Text(
                                       AppLocalizations.of(context).synopsis,
@@ -162,7 +139,7 @@ class DetailsPage extends StatelessWidget {
                                       movie.overview,
                                       style: const TextStyle(fontSize: 16),
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 24),
 
                                     Center(
                                       child: Wrap(
@@ -196,7 +173,7 @@ class DetailsPage extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 8),
                                     Center(
                                       child: ElevatedButton.icon(
                                         onPressed: () => launchUrl(
@@ -209,7 +186,7 @@ class DetailsPage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 24),
                                     // Spoken languages
                                     Text(
                                       AppLocalizations.of(context)
@@ -226,7 +203,7 @@ class DetailsPage extends StatelessWidget {
                                           ),
                                       ],
                                     ),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 24),
 
                                     // Production countries
                                     Text(
@@ -246,7 +223,7 @@ class DetailsPage extends StatelessWidget {
                                       ],
                                     ),
 
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 24),
 
                                     // Production companies
                                     Text(
@@ -254,23 +231,31 @@ class DetailsPage extends StatelessWidget {
                                           .prodCompanies,
                                       style: headingStyle,
                                     ),
-                                    for (var company in movieDetails
-                                        .productionCompanies) ...[
-                                      const SizedBox(height: 8),
-                                      if (company['logo_path'] == null)
-                                        Text(
-                                          company['name'] as String,
-                                          style: const TextStyle(fontSize: 20),
-                                        )
-                                      else
-                                        CachedNetworkImage(
-                                          imageUrl: getApiImageUrl(
-                                            company['logo_path'] as String,
-                                            300,
+                                    Wrap(
+                                      spacing: 8,
+                                      children: [
+                                        for (var company in movieDetails
+                                            .productionCompanies) ...[
+                                          Chip(
+                                            backgroundColor: chipColor,
+                                            label: Text(
+                                              company['name'] as String,
+                                            ),
+                                            avatar: company['logo_path'] == null
+                                                ? null
+                                                : CachedNetworkImage(
+                                                    imageUrl: getApiImageUrl(
+                                                      company['logo_path']
+                                                          as String,
+                                                      300,
+                                                    ),
+                                                  ),
                                           ),
-                                        ),
-                                    ],
-                                    const SizedBox(height: 16),
+                                          const SizedBox(height: 8),
+                                        ],
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
                                   ],
                                 ),
                               ),
