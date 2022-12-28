@@ -13,9 +13,13 @@ class HomeRepository {
 
   Future<Either<Failure, SearchMoviesResponse>> searchMovies(
       {required SearchMoviesRequest request}) async {
-    if (_cache.containsKey(request.searchText.toLowerCase())) {
-      return Right(_cache[request.searchText]!);
-    }
+    // if (_cache.containsKey(request.searchText.toLowerCase())) {
+    //   final savedResponse = _cache[request.searchText.toLowerCase()];
+
+    //   if (savedResponse?.page == request.page) {
+    //     return Right(_cache[request.searchText]!);
+    //   }
+    // }
     try {
       final url = Uri.https(
         BASE_URL,

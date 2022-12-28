@@ -11,4 +11,8 @@ class HomeEvent with _$HomeEvent {
   const factory HomeEvent.clearList() = HomeEventClearList;
 
   const factory HomeEvent.retrySearch(String searchText) = HomeEventRetrySearch;
+
+  const factory HomeEvent.requestMoreRecords() = HomeEventRequestMoreRecords;
+
+  const factory HomeEvent.fetchMoreRecords() = HomeEventFetchMoreRecords;
 }

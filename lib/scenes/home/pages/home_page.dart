@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_function_declarations_over_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,10 +11,40 @@ import '../viewmodel/home_viewmodel.dart';
 import '../widgets/movie_list_item.dart';
 import '../widgets/search_field.dart';
 
-class HomePage extends StatelessWidget {
-  final TextEditingController textController = TextEditingController();
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  HomePage({Key? key}) : super(key: key);
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _textController = TextEditingController();
+  late final _scrollControllerListener = () {
+    final hasMoreRecords = context.read<HomeBloc>().hasMoreRecords;
+    final isFetchingRecords = context.read<HomeBloc>().isFetchingRecords;
+    final didPassAutoFetchZone = _scrollController.offset >
+        (_scrollController.position.maxScrollExtent * 0.95);
+
+    if (didPassAutoFetchZone && hasMoreRecords && !isFetchingRecords) {
+      context.read<HomeBloc>().add(const HomeEvent.requestMoreRecords());
+    }
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollControllerListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollControllerListener);
+    _scrollController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +54,7 @@ class HomePage extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: const Size(double.infinity, 40),
           child: SearchField(
-            controller: textController,
+            controller: _textController,
             onChange: (value) =>
                 context.read<HomeBloc>().add(HomeEvent.didChangeSearch(value)),
           ),
@@ -59,7 +91,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-extension StateWidgets on HomePage {
+extension StateWidgets on _HomePageState {
   Widget _getInitialState(BuildContext context) {
     return Container();
   }
@@ -94,7 +126,7 @@ extension StateWidgets on HomePage {
         ElevatedButton(
           onPressed: () => context
               .read<HomeBloc>()
-              .add(HomeEvent.retrySearch(textController.text)),
+              .add(HomeEvent.retrySearch(_textController.text)),
           child: const Text("Try again!"),
         ),
       ],
@@ -104,6 +136,7 @@ extension StateWidgets on HomePage {
   Widget _getLoadSuccessState(
       {required BuildContext context, required HomeViewModel viewModel}) {
     return ListView.builder(
+        controller: _scrollController,
         itemCount: viewModel.movies.length,
         itemBuilder: (context, index) {
           final movie = viewModel.movies[index];

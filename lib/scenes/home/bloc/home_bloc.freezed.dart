@@ -22,6 +22,8 @@ mixin _$HomeEvent {
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
     required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,6 +32,8 @@ mixin _$HomeEvent {
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
     TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +42,8 @@ mixin _$HomeEvent {
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
     TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,6 +53,9 @@ mixin _$HomeEvent {
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
     required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +64,8 @@ mixin _$HomeEvent {
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
     TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +74,8 @@ mixin _$HomeEvent {
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
     TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -155,6 +168,8 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
     required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
   }) {
     return didChangeSearch(value);
   }
@@ -166,6 +181,8 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
     TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
   }) {
     return didChangeSearch?.call(value);
   }
@@ -177,6 +194,8 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
     TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (didChangeSearch != null) {
@@ -192,6 +211,9 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
     required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
   }) {
     return didChangeSearch(this);
   }
@@ -203,6 +225,8 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
     TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
   }) {
     return didChangeSearch?.call(this);
   }
@@ -214,6 +238,8 @@ class _$HomeEventDidChangeSearch implements HomeEventDidChangeSearch {
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
     TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (didChangeSearch != null) {
@@ -303,6 +329,8 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
     required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
   }) {
     return searchMovies(searchText);
   }
@@ -314,6 +342,8 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
     TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
   }) {
     return searchMovies?.call(searchText);
   }
@@ -325,6 +355,8 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
     TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (searchMovies != null) {
@@ -340,6 +372,9 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
     required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
   }) {
     return searchMovies(this);
   }
@@ -351,6 +386,8 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
     TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
   }) {
     return searchMovies?.call(this);
   }
@@ -362,6 +399,8 @@ class _$HomeEventSearchMovies implements HomeEventSearchMovies {
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
     TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (searchMovies != null) {
@@ -423,6 +462,8 @@ class _$HomeEventClearList implements HomeEventClearList {
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
     required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
   }) {
     return clearList();
   }
@@ -434,6 +475,8 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
     TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
   }) {
     return clearList?.call();
   }
@@ -445,6 +488,8 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
     TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (clearList != null) {
@@ -460,6 +505,9 @@ class _$HomeEventClearList implements HomeEventClearList {
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
     required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
   }) {
     return clearList(this);
   }
@@ -471,6 +519,8 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
     TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
   }) {
     return clearList?.call(this);
   }
@@ -482,6 +532,8 @@ class _$HomeEventClearList implements HomeEventClearList {
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
     TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (clearList != null) {
@@ -565,6 +617,8 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     required TResult Function(String searchText) searchMovies,
     required TResult Function() clearList,
     required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
   }) {
     return retrySearch(searchText);
   }
@@ -576,6 +630,8 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     TResult? Function(String searchText)? searchMovies,
     TResult? Function()? clearList,
     TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
   }) {
     return retrySearch?.call(searchText);
   }
@@ -587,6 +643,8 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     TResult Function(String searchText)? searchMovies,
     TResult Function()? clearList,
     TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (retrySearch != null) {
@@ -602,6 +660,9 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     required TResult Function(HomeEventSearchMovies value) searchMovies,
     required TResult Function(HomeEventClearList value) clearList,
     required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
   }) {
     return retrySearch(this);
   }
@@ -613,6 +674,8 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     TResult? Function(HomeEventSearchMovies value)? searchMovies,
     TResult? Function(HomeEventClearList value)? clearList,
     TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
   }) {
     return retrySearch?.call(this);
   }
@@ -624,6 +687,8 @@ class _$HomeEventRetrySearch implements HomeEventRetrySearch {
     TResult Function(HomeEventSearchMovies value)? searchMovies,
     TResult Function(HomeEventClearList value)? clearList,
     TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
     required TResult orElse(),
   }) {
     if (retrySearch != null) {
@@ -641,6 +706,265 @@ abstract class HomeEventRetrySearch implements HomeEvent {
   @JsonKey(ignore: true)
   _$$HomeEventRetrySearchCopyWith<_$HomeEventRetrySearch> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HomeEventRequestMoreRecordsCopyWith<$Res> {
+  factory _$$HomeEventRequestMoreRecordsCopyWith(
+          _$HomeEventRequestMoreRecords value,
+          $Res Function(_$HomeEventRequestMoreRecords) then) =
+      __$$HomeEventRequestMoreRecordsCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$HomeEventRequestMoreRecordsCopyWithImpl<$Res>
+    extends _$HomeEventCopyWithImpl<$Res, _$HomeEventRequestMoreRecords>
+    implements _$$HomeEventRequestMoreRecordsCopyWith<$Res> {
+  __$$HomeEventRequestMoreRecordsCopyWithImpl(
+      _$HomeEventRequestMoreRecords _value,
+      $Res Function(_$HomeEventRequestMoreRecords) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$HomeEventRequestMoreRecords implements HomeEventRequestMoreRecords {
+  const _$HomeEventRequestMoreRecords();
+
+  @override
+  String toString() {
+    return 'HomeEvent.requestMoreRecords()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HomeEventRequestMoreRecords);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String value) didChangeSearch,
+    required TResult Function(String searchText) searchMovies,
+    required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
+  }) {
+    return requestMoreRecords();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String value)? didChangeSearch,
+    TResult? Function(String searchText)? searchMovies,
+    TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
+  }) {
+    return requestMoreRecords?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String value)? didChangeSearch,
+    TResult Function(String searchText)? searchMovies,
+    TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
+    required TResult orElse(),
+  }) {
+    if (requestMoreRecords != null) {
+      return requestMoreRecords();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
+    required TResult Function(HomeEventSearchMovies value) searchMovies,
+    required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
+  }) {
+    return requestMoreRecords(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult? Function(HomeEventSearchMovies value)? searchMovies,
+    TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
+  }) {
+    return requestMoreRecords?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult Function(HomeEventSearchMovies value)? searchMovies,
+    TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
+    required TResult orElse(),
+  }) {
+    if (requestMoreRecords != null) {
+      return requestMoreRecords(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeEventRequestMoreRecords implements HomeEvent {
+  const factory HomeEventRequestMoreRecords() = _$HomeEventRequestMoreRecords;
+}
+
+/// @nodoc
+abstract class _$$HomeEventFetchMoreRecordsCopyWith<$Res> {
+  factory _$$HomeEventFetchMoreRecordsCopyWith(
+          _$HomeEventFetchMoreRecords value,
+          $Res Function(_$HomeEventFetchMoreRecords) then) =
+      __$$HomeEventFetchMoreRecordsCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$HomeEventFetchMoreRecordsCopyWithImpl<$Res>
+    extends _$HomeEventCopyWithImpl<$Res, _$HomeEventFetchMoreRecords>
+    implements _$$HomeEventFetchMoreRecordsCopyWith<$Res> {
+  __$$HomeEventFetchMoreRecordsCopyWithImpl(_$HomeEventFetchMoreRecords _value,
+      $Res Function(_$HomeEventFetchMoreRecords) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$HomeEventFetchMoreRecords implements HomeEventFetchMoreRecords {
+  const _$HomeEventFetchMoreRecords();
+
+  @override
+  String toString() {
+    return 'HomeEvent.fetchMoreRecords()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HomeEventFetchMoreRecords);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String value) didChangeSearch,
+    required TResult Function(String searchText) searchMovies,
+    required TResult Function() clearList,
+    required TResult Function(String searchText) retrySearch,
+    required TResult Function() requestMoreRecords,
+    required TResult Function() fetchMoreRecords,
+  }) {
+    return fetchMoreRecords();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String value)? didChangeSearch,
+    TResult? Function(String searchText)? searchMovies,
+    TResult? Function()? clearList,
+    TResult? Function(String searchText)? retrySearch,
+    TResult? Function()? requestMoreRecords,
+    TResult? Function()? fetchMoreRecords,
+  }) {
+    return fetchMoreRecords?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String value)? didChangeSearch,
+    TResult Function(String searchText)? searchMovies,
+    TResult Function()? clearList,
+    TResult Function(String searchText)? retrySearch,
+    TResult Function()? requestMoreRecords,
+    TResult Function()? fetchMoreRecords,
+    required TResult orElse(),
+  }) {
+    if (fetchMoreRecords != null) {
+      return fetchMoreRecords();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeEventDidChangeSearch value) didChangeSearch,
+    required TResult Function(HomeEventSearchMovies value) searchMovies,
+    required TResult Function(HomeEventClearList value) clearList,
+    required TResult Function(HomeEventRetrySearch value) retrySearch,
+    required TResult Function(HomeEventRequestMoreRecords value)
+        requestMoreRecords,
+    required TResult Function(HomeEventFetchMoreRecords value) fetchMoreRecords,
+  }) {
+    return fetchMoreRecords(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult? Function(HomeEventSearchMovies value)? searchMovies,
+    TResult? Function(HomeEventClearList value)? clearList,
+    TResult? Function(HomeEventRetrySearch value)? retrySearch,
+    TResult? Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult? Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
+  }) {
+    return fetchMoreRecords?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeEventDidChangeSearch value)? didChangeSearch,
+    TResult Function(HomeEventSearchMovies value)? searchMovies,
+    TResult Function(HomeEventClearList value)? clearList,
+    TResult Function(HomeEventRetrySearch value)? retrySearch,
+    TResult Function(HomeEventRequestMoreRecords value)? requestMoreRecords,
+    TResult Function(HomeEventFetchMoreRecords value)? fetchMoreRecords,
+    required TResult orElse(),
+  }) {
+    if (fetchMoreRecords != null) {
+      return fetchMoreRecords(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeEventFetchMoreRecords implements HomeEvent {
+  const factory HomeEventFetchMoreRecords() = _$HomeEventFetchMoreRecords;
 }
 
 /// @nodoc
