@@ -82,8 +82,13 @@ extension StateWidgets on HomePage {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8.0),
-          child: Text(failure.message),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16.0),
+          child: Text(failure.message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  ?.copyWith(color: Colors.grey)),
         ),
         ElevatedButton(
           onPressed: () => context

@@ -76,13 +76,13 @@ extension MapEventsToStates on HomeBloc {
         }
         emit(
             HomeState.displayAlert(title: "Failure", message: failure.message));
+        emit(HomeState.loadSuccess(viewModel: _viewModel));
       },
       (searchResponse) {
         _response = searchResponse;
         _viewModel = _viewModel.copyWith(movies: searchResponse.movies);
+        emit(HomeState.loadSuccess(viewModel: _viewModel));
       },
     );
-
-    emit(HomeState.loadSuccess(viewModel: _viewModel));
   }
 }

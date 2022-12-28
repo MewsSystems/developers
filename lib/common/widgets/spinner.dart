@@ -18,7 +18,7 @@ class Spinner extends StatelessWidget {
         Container(
           color: Colors.black.withAlpha(80),
           child: const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.grey),
           ),
         ),
     ]);

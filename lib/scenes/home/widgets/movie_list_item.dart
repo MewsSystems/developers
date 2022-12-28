@@ -11,11 +11,15 @@ class MovieListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.fromLTRB(2, 2, 2, 8),
+      decoration: const BoxDecoration(
         color: Colors.grey,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(12),
+          bottomRight: Radius.circular(12),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

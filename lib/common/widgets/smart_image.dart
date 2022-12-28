@@ -11,7 +11,7 @@ class SmartImage extends StatelessWidget {
     if (imageUrl == null) {
       return Image.asset(
         'assets/images/image_not_available.png',
-        height: height,
+        height: 100,
       );
     }
     return CachedNetworkImage(
@@ -19,7 +19,10 @@ class SmartImage extends StatelessWidget {
       fit: BoxFit.fill,
       height: height,
       progressIndicatorBuilder: (context, url, progress) => Center(
-        child: CircularProgressIndicator(value: progress.progress),
+        child: CircularProgressIndicator(
+          value: progress.progress,
+          color: Colors.black,
+        ),
       ),
     );
   }

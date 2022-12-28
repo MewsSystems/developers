@@ -24,27 +24,20 @@ class HomeRepository {
               (key, value) => MapEntry(key, value.toString()),
             ),
       );
-      print('step a');
       final response = await http.get(url).timeout(const Duration(seconds: 10),
           onTimeout: () => throw ConnectionFailure());
-      print('step b');
 
       final json = jsonDecode(utf8.decode(response.bodyBytes));
       final result = SearchMoviesResponse.fromJson(json);
       _cache[request.searchText.toLowerCase()] = result;
 
-      print('step c');
       return Right(result);
     } on ConnectionFailure catch (e) {
-      print('step connection failure');
       return Left(e);
     } catch (e) {
-      print('step e');
       if (e.toString().toLowerCase().contains('failed host lookup')) {
-        print('step f');
         return Left(ConnectionFailure());
       }
-      print('step g');
       return Left(Failure(e.toString()));
     }
   }
