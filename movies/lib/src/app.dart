@@ -11,9 +11,9 @@ import 'package:movies/src/pages/details/details_page.dart';
 import 'package:movies/src/pages/search/search_page.dart';
 import 'package:movies/theme.dart';
 
-/// The Widget that configures your application.
-class MyApp extends StatelessWidget {
-  const MyApp({
+/// Root widget that configures your application.
+class MoviesApp extends StatelessWidget {
+  const MoviesApp({
     super.key,
   });
 
