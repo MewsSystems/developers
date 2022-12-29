@@ -18,9 +18,10 @@ class _DebounceLastStreamTransformer<T> extends StreamTransformerBase<T, T> {
     late StreamSubscription<T> subscription;
     StreamSubscription<T>? mappedSubscription;
     T? latestEvent;
-
+    Timer? debounceTimer;
     final controller = StreamController<T>(
       onCancel: () async {
+        debounceTimer?.cancel();
         await mappedSubscription?.cancel();
 
         return subscription.cancel();
@@ -31,13 +32,17 @@ class _DebounceLastStreamTransformer<T> extends StreamTransformerBase<T, T> {
     subscription = stream.listen(
       (data) {
         latestEvent = data;
+        if (debounceTimer != null) {
+          debounceTimer?.cancel();
+        }
         if (mappedSubscription != null) {
           // Cancel the current mapped subscription
           // if there is a new event while it is still active
           mappedSubscription?.cancel();
         }
 
-        Timer(duration, () {
+        debounceTimer = Timer(duration, () {
+          debounceTimer = null;
           if (latestEvent != null) {
             final Stream<T> mappedStream;
             mappedStream = mapper(latestEvent as T);
@@ -52,7 +57,6 @@ class _DebounceLastStreamTransformer<T> extends StreamTransformerBase<T, T> {
                 // only after the current mapping is complete
                 mappedSubscription = null;
                 latestEvent = null;
-                //controller.close();
               },
             );
           }
