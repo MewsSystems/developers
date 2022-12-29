@@ -61,7 +61,7 @@ class ResultList extends StatelessWidget {
                       action();
                     },
                     child: Container(
-                      height: 152,
+                      height: 160,
                       margin: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,

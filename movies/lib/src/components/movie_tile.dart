@@ -10,40 +10,42 @@ class MovieTile extends StatelessWidget {
     required this.movie,
     required this.titleSize,
     this.posterHeight,
+    this.showOriginalTitle = false,
   }) : super(key: key);
 
   final Movie movie;
   final double titleSize;
   final double? posterHeight;
+  final bool showOriginalTitle;
 
   @override
   Widget build(BuildContext context) => Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Poster(
-        url: movie.smallPoster,
-        heroTag: movie.id,
-        height: posterHeight,
-      ),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              movie.title,
-              style: TextStyle(
-                fontSize: titleSize,
-              ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Poster(
+            url: movie.smallPoster,
+            heroTag: movie.id,
+            height: posterHeight,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
+                  style: TextStyle(
+                    fontSize: titleSize,
+                  ),
+                ),
+                if (showOriginalTitle && movie.title != movie.originalTitle)
+                  Text('(${movie.originalTitle})'),
+                const SizedBox(height: 4),
+                GenreChips(genreIds: movie.genreIds),
+                MovieChips(movie: movie),
+              ],
             ),
-            if (movie.title != movie.originalTitle)
-              Text('(${movie.originalTitle})'),
-            const SizedBox(height: 4),
-            GenreChips(genreIds: movie.genreIds),
-            MovieChips(movie: movie),
-          ],
-        ),
-      )
-    ],
-  );
+          )
+        ],
+      );
 }
