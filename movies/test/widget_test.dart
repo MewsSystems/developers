@@ -1,31 +1,40 @@
-// This is an example Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-//
-// Visit https://flutter.dev/docs/cookbook/testing/widget/introduction for
-// more information about Widget testing.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:movies/src/components/movie_chip.dart';
 
 void main() {
-  group('MyWidget', () {
-    testWidgets('should display a string of text', (WidgetTester tester) async {
-      // Define a Widget
-      const myWidget = MaterialApp(
+  group('MovieChip', () {
+    testWidgets('should display the label', (WidgetTester tester) async {
+      const testString = 'test';
+      const widget = MaterialApp(
         home: Scaffold(
-          body: Text('Hello'),
+          body: MovieChip(label: testString),
         ),
       );
 
-      // Build myWidget and trigger a frame.
-      await tester.pumpWidget(myWidget);
+      // Build the MovieChip and trigger a frame.
+      await tester.pumpWidget(widget);
 
-      // Verify myWidget shows some text
-      expect(find.byType(Text), findsOneWidget);
+      // Verify the MovieChip shows with the text
+      expect(find.text(testString), findsOneWidget);
+    });
+
+    testWidgets('should display the icon', (WidgetTester tester) async {
+      const testIcon = Icons.star;
+      const widget = MaterialApp(
+        home: Scaffold(
+          body: MovieChip(
+            label: '',
+            icon: testIcon,
+          ),
+        ),
+      );
+
+      // Build the MovieChip and trigger a frame.
+      await tester.pumpWidget(widget);
+
+      // Verify the MovieChip shows with the icon
+      expect(find.byIcon(testIcon), findsOneWidget);
     });
   });
 }
