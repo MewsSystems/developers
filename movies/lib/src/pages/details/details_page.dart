@@ -10,6 +10,7 @@ import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/movie_tile.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
+import 'package:movies/src/model/movie_details/movie_details.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
 import 'package:movies/theme.dart';
 import 'package:movies/utils.dart';
@@ -179,87 +180,113 @@ class DetailsPage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 8),
+
                                     Center(
-                                      child: ElevatedButton.icon(
-                                        onPressed: () => launchUrl(
-                                          Uri.parse(movieDetails.homepage),
-                                        ),
-                                        icon: const Icon(Icons.open_in_new),
-                                        label: Text(
-                                          AppLocalizations.of(context)
-                                              .visitWebsite,
-                                        ),
+                                      child: Wrap(
+                                        spacing: 8,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            onPressed: () => launchUrl(
+                                              Uri.parse(movieDetails.homepage),
+                                            ),
+                                            icon: const Icon(Icons.open_in_new),
+                                            label: Text(
+                                              AppLocalizations.of(context)
+                                                  .visitWebsite,
+                                            ),
+                                          ),
+                                          ElevatedButton.icon(
+                                            onPressed: () => launchUrl(
+                                              Uri.parse(movieDetails.imdbUrl),
+                                            ),
+                                            icon: const Icon(Icons.open_in_new),
+                                            label: Text(
+                                              AppLocalizations.of(context)
+                                                  .imdb,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     const SizedBox(height: 24),
+
                                     // Spoken languages
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .spokenLanguages,
-                                      style: headingStyle,
-                                    ),
-                                    Wrap(
-                                      spacing: 8,
-                                      children: [
-                                        for (var language
-                                            in movieDetails.spokenLanguages)
-                                          MovieChip(
-                                            label: language['name'] as String,
-                                          ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 24),
+                                    if (movieDetails
+                                        .spokenLanguages.isNotEmpty) ...[
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .spokenLanguages,
+                                        style: headingStyle,
+                                      ),
+                                      Wrap(
+                                        spacing: 8,
+                                        children: [
+                                          for (var language
+                                              in movieDetails.spokenLanguages)
+                                            MovieChip(
+                                              label: language['name'] as String,
+                                            ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 24),
+                                    ],
 
                                     // Production countries
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .prodCountries,
-                                      style: headingStyle,
-                                    ),
-
-                                    Wrap(
-                                      spacing: 8,
-                                      children: [
-                                        for (var country
-                                            in movieDetails.productionCountries)
-                                          MovieChip(
-                                            label: country['name'] as String,
-                                          ),
-                                      ],
-                                    ),
-
-                                    const SizedBox(height: 24),
+                                    if (movieDetails
+                                        .productionCountries.isNotEmpty) ...[
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .prodCountries,
+                                        style: headingStyle,
+                                      ),
+                                      Wrap(
+                                        spacing: 8,
+                                        children: [
+                                          for (var country in movieDetails
+                                              .productionCountries)
+                                            MovieChip(
+                                              label: country['name'] as String,
+                                            ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 24),
+                                    ],
 
                                     // Production companies
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .prodCompanies,
-                                      style: headingStyle,
-                                    ),
-                                    Wrap(
-                                      spacing: 8,
-                                      children: [
-                                        for (var company in movieDetails
-                                            .productionCompanies) ...[
-                                          Chip(
-                                            backgroundColor: chipColor,
-                                            label: Text(
-                                              company['name'] as String,
-                                            ),
-                                            avatar: company['logo_path'] == null
-                                                ? null
-                                                : CachedNetworkImage(
-                                                    imageUrl: getApiImageUrl(
-                                                      company['logo_path']
-                                                          as String,
-                                                      300,
+                                    if (movieDetails
+                                        .productionCompanies.isNotEmpty) ...[
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .prodCompanies,
+                                        style: headingStyle,
+                                      ),
+                                      Wrap(
+                                        spacing: 8,
+                                        children: [
+                                          for (var company in movieDetails
+                                              .productionCompanies) ...[
+                                            Chip(
+                                              backgroundColor: chipColor,
+                                              label: Text(
+                                                company['name'] as String,
+                                              ),
+                                              avatar: company['logo_path'] ==
+                                                      null
+                                                  ? null
+                                                  : CachedNetworkImage(
+                                                      imageUrl: getApiImageUrl(
+                                                        company['logo_path']
+                                                            as String,
+                                                        300,
+                                                      ),
                                                     ),
-                                                  ),
-                                          ),
-                                          const SizedBox(height: 8),
+                                            ),
+                                            const SizedBox(height: 8),
+                                          ],
                                         ],
-                                      ],
-                                    ),
+                                      ),
+                                    ],
+
                                     const SizedBox(height: 8),
                                   ],
                                 ),
