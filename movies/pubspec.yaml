@@ -29,12 +29,16 @@ dependencies:
   url_launcher: ^6.1.7
 
 dev_dependencies:
+  bloc_test: ^9.1.0
   build_runner: ^2.3.3
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
   json_serializable: ^6.5.4
+
+dependency_overrides:
+  test_api: ^0.4.17
 
 flutter:
   uses-material-design: true

@@ -1,3 +1,5 @@
+import 'package:movies/src/model/movie/movie.dart';
+
 /// Prefix to build an image link from the API
 const _apiImagePrefix = 'https://image.tmdb.org/t/p';
 
@@ -11,3 +13,14 @@ String formatMinutes(int value) {
 
   return '${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
 }
+
+const testMovie = Movie(
+  id: 76600,
+  title: 'title',
+  originalTitle: 'originalTitle',
+  originalLanguage: 'originalLanguage',
+  voteAverage: 1,
+  popularity: 1,
+  overview: 'overview',
+  genreIds: [1],
+);
