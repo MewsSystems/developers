@@ -1,15 +1,24 @@
-// This is an example unit test.
-//
-// A unit test tests a single function, method, or class. To learn more about
-// writing unit tests, visit
-// https://flutter.dev/docs/cookbook/testing/unit/introduction
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:movies/utils.dart';
 
 void main() {
-  group('Plus Operator', () {
-    test('should add two numbers together', () {
-      expect(1 + 1, 2);
+  group('utils', () {
+    test('getApiImageUrl() builds a URL with the prefix, path and size', () {
+      const path = '/path';
+      const size = 500;
+      final url = getApiImageUrl(path, size);
+
+      expect(url.contains(apiImagePrefix), true);
+      expect(url.contains(path), true);
+      expect(url.contains(size.toString()), true);
+    });
+
+    test(
+        'formatMinutes() formats 90 minutes to a String containing the 1 and 30 characters',
+        () {
+      final formattedString = formatMinutes(90);
+      expect(formattedString.contains(1.toString()), true);
+      expect(formattedString.contains(30.toString()), true);
     });
   });
 }
