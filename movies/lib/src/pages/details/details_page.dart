@@ -4,11 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/components/genre_chips.dart';
 import 'package:movies/src/components/movie_chip.dart';
-import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/movie_tile.dart';
-import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/model/movie_details/movie_details.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
@@ -296,21 +293,6 @@ class DetailsPage extends StatelessWidget {
                         )
                       ],
                     ),
-                    /*Positioned(
-                    top: 8,
-                    left: 8,
-                    child: SafeArea(
-                      child: FloatingActionButton.small(
-                        child: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          context
-                              .read<SelectedMovieBloc>()
-                              .add(DeselectMovie());
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  )*/
                   ],
                 ),
               ),

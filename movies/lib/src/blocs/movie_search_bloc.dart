@@ -3,6 +3,7 @@ import 'package:movies/src/api/movie_search_api.dart';
 import 'package:movies/src/blocs/debounce_last.dart';
 import 'package:movies/src/model/movie_search/movie_search_state.dart';
 
+/// Superclass for [MovieSearchBloc] events
 abstract class MovieSearchEvent {}
 
 /// Should be emitted when the search query changed

@@ -4,6 +4,7 @@ import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 
+/// Used to show data about a [Movie] in a rectangular shape that fills the parent width
 class MovieTile extends StatelessWidget {
   const MovieTile({
     Key? key,

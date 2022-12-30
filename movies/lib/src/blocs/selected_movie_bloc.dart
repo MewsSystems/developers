@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/model/movie/movie.dart';
 
+/// Superclass for [SelectedMovieBloc] events
 abstract class SelectedMovieEvent {}
 
 /// Should be emitted when a movie has been selected

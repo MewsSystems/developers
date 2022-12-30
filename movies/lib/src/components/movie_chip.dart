@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/theme.dart';
 
+/// A custom [Chip] used to show some movie data
 class MovieChip extends StatelessWidget {
   const MovieChip({Key? key, required this.label, this.icon, this.iconColor})
       : super(key: key);
