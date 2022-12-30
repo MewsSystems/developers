@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/components/genre_chips.dart';
-import 'package:movies/src/components/movie_chips.dart';
 import 'package:movies/src/components/movie_tile.dart';
-import 'package:movies/src/components/poster.dart';
 import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/pages/details/details_page.dart';
 

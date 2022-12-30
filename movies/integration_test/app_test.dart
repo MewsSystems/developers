@@ -51,7 +51,5 @@ void main() {
     await tester.tap(find.byType(TopButton));
     await tester.pumpAndSettle();
     expect(resultsScrollController.position.pixels, 0);
-
-    // TODO : test pagination
   });
 }

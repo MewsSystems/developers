@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/model/movie_details/movie_details.dart';
 import 'package:movies/src/model/movie_details/movie_details_state.dart';
 import 'package:movies/utils.dart';
 
@@ -24,7 +23,7 @@ void main() {
       await Future.delayed(Duration.zero);
       expect(movieDetailsCubit.state, const MovieDetailsState.loading());
 
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       expect(movieDetailsCubit.state.whenOrNull(details: (d) => d), isNotNull);
 
       selectedMovieBloc.add(DeselectMovie());
