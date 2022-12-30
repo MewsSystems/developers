@@ -6,7 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
 import 'package:movies/src/components/movie_tile.dart';
 import 'package:movies/src/model/movie/movie.dart';
-import 'package:movies/src/pages/details/details_page.dart';
+import 'package:movies/src/pages/details/movie_details_page.dart';
 
 final resultsPagingController = PagingController<int, Movie>(firstPageKey: 1);
 
@@ -47,7 +47,7 @@ class ResultList extends StatelessWidget {
                 xOffset: -MediaQuery.of(context).size.width / 2,
                 child: OpenContainer(
                   transitionType: ContainerTransitionType.fadeThrough,
-                  openBuilder: (context, action) => const DetailsPage(),
+                  openBuilder: (context, action) => const MovieDetailsPage(),
                   closedColor: Theme.of(context).scaffoldBackgroundColor,
                   openColor: Theme.of(context).scaffoldBackgroundColor,
                   middleColor: Theme.of(context).scaffoldBackgroundColor,

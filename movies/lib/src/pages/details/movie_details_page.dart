@@ -7,9 +7,9 @@ import 'package:movies/src/model/movie/movie.dart';
 import 'package:movies/src/pages/details/movie_details_list.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-/// Displays detailed information about a movie
-class DetailsPage extends StatelessWidget {
-  const DetailsPage({
+/// Displays detailed information about the selected movie
+class MovieDetailsPage extends StatelessWidget {
+  const MovieDetailsPage({
     super.key,
   });
 

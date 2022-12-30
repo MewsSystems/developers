@@ -7,7 +7,7 @@ import 'package:movies/src/blocs/genres_cubit.dart';
 import 'package:movies/src/blocs/movie_details_cubit.dart';
 import 'package:movies/src/blocs/movie_search_bloc.dart';
 import 'package:movies/src/blocs/selected_movie_bloc.dart';
-import 'package:movies/src/pages/details/details_page.dart';
+import 'package:movies/src/pages/details/movie_details_page.dart';
 import 'package:movies/src/pages/search/search_page.dart';
 import 'package:movies/theme.dart';
 
@@ -69,8 +69,8 @@ class MoviesApp extends StatelessWidget {
             settings: routeSettings,
             builder: (BuildContext context) {
               switch (routeSettings.name) {
-                case DetailsPage.routeName:
-                  return const DetailsPage();
+                case MovieDetailsPage.routeName:
+                  return const MovieDetailsPage();
                 case SearchPage.routeName:
                 default:
                   return const SearchPage();

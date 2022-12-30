@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:movies/main.dart' as app;
 import 'package:movies/src/components/movie_chip.dart';
-import 'package:movies/src/pages/details/details_page.dart';
+import 'package:movies/src/pages/details/movie_details_page.dart';
 import 'package:movies/src/pages/search/clear_query_button.dart';
 import 'package:movies/src/pages/search/result_list.dart';
 import 'package:movies/src/pages/search/search_bar.dart';
@@ -25,7 +25,7 @@ void main() {
     await tester.tap(find.byType(MovieChip).first);
     await tester.pumpAndSettle();
     // Test the page
-    expect(find.byType(DetailsPage), findsOneWidget);
+    expect(find.byType(MovieDetailsPage), findsOneWidget);
     // Test the Movie data
     expect(find.byType(MovieChip), findsWidgets);
     // Test the MovieDetails data
