@@ -1,0 +1,33 @@
+13 Jan 2023 #10
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|15.408
+Brazil|real|1|BRL|4.326
+Bulgaria|lev|1|BGN|12.278
+Canada|dollar|1|CAD|16.569
+China|renminbi|1|CNY|3.303
+Denmark|krone|1|DKK|3.228
+EMU|euro|1|EUR|24.015
+Hongkong|dollar|1|HKD|2.843
+Hungary|forint|100|HUF|6.052
+Iceland|krona|100|ISK|15.564
+IMF|SDR|1|XDR|29.850
+India|rupee|100|INR|27.256
+Indonesia|rupiah|1000|IDR|1.466
+Israel|new shekel|1|ILS|6.485
+Japan|yen|100|JPY|17.275
+Malaysia|ringgit|1|MYR|5.121
+Mexico|peso|1|MXN|1.175
+New Zealand|dollar|1|NZD|14.117
+Norway|krone|1|NOK|2.245
+Philippines|peso|100|PHP|40.399
+Poland|zloty|1|PLN|5.122
+Romania|leu|1|RON|4.859
+Singapore|dollar|1|SGD|16.782
+South Africa|rand|1|ZAR|1.316
+South Korea|won|100|KRW|1.788
+Sweden|krona|1|SEK|2.134
+Switzerland|franc|1|CHF|23.893
+Thailand|baht|100|THB|67.163
+Turkey|lira|1|TRY|1.182
+United Kingdom|pound|1|GBP|27.043
+USA|dollar|1|USD|22.206

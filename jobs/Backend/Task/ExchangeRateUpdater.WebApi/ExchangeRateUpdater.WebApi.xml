@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExchangeRateUpdater.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:ExchangeRateUpdater.WebApi.Controllers.ExchangeRateProviderController.ExchangeRates(System.Collections.Generic.IEnumerable{ExchangeRateUpdater.WebApi.Models.Currency})">
+            <summary>
+            Returns all available exchange rates for a given list of currencies with source currency: CZK.
+            </summary>
+            <param name="currencies">List of currencies</param>
+            <returns>Available exchange rates with CZK as base currency.</returns>
+            <response code="200">Returns a list with the available exchange rates</response>
+            <response code="500">Bad configuration</response>
+            <response code="503">Exchange rates source is unavailable</response>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebApi.Exceptions.InvalidConfigurationException.#ctor(System.String)">
+            <summary>
+            Exception that will be thrown when the configuration is invalid.
+            </summary>
+            <param name="message">Exception message that will be shown</param>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebApi.Exceptions.ServiceUnavailableException.#ctor(System.String)">
+            <summary>
+            Exception that will be thrown when the exchange rates url is unavailable.
+            </summary>
+            <param name="message">Exception message that will be shown</param>
+        </member>
+        <member name="P:ExchangeRateUpdater.WebApi.Models.Currency.Code">
+            <summary>
+            Three-letter ISO 4217 code of the currency.
+            </summary>
+        </member>
+    </members>
+</doc>
