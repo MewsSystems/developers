@@ -21,3 +21,6 @@
 node_modules
 bower_components
 npm-debug.log
+/.vs/Developers-Mews/v17
+/.vs
+/jobs/Backend/Task/.vs/ExchangeRateUpdater
