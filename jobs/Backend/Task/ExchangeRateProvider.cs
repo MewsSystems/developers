@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         private static readonly Currency CzkCurrency = new Currency("CZK");
-        private readonly CzechNationalBankService _czechNationalBankService;
+        private readonly ICzechNationalBankService _czechNationalBankService;
 
-        protected ExchangeRateProvider(CzechNationalBankService czechNationalBankService)
+        public ExchangeRateProvider(ICzechNationalBankService czechNationalBankService)
             => _czechNationalBankService = czechNationalBankService;
         
         /// <summary>

@@ -26,12 +26,12 @@ namespace ExchangeRateUpdater
             {
                 var serviceCollection = new ServiceCollection()
                     .AddHttpClient()
-                    .AddScoped<CzechNationalBankService>()
-                    .AddScoped<ExchangeRateProvider>();
+                    .AddScoped<ICzechNationalBankService, CzechNationalBankService>()
+                    .AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
                 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                var rates = serviceProvider.GetRequiredService<ExchangeRateProvider>().GetExchangeRates(currencies);
+                var rates = serviceProvider.GetRequiredService<IExchangeRateProvider>().GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
