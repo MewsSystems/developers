@@ -1,8 +1,9 @@
 ﻿using DataAccess.Abstract;
+using ExchangeRateUpdater;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExchangeRateUpdater
+namespace DataAccess.Concrete
 {
     public class ExchangeRateProvider:IExchangeRateProvider
     {
