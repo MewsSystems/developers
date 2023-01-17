@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
     public class ExchangeRate
     {
@@ -17,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}={Math.Round(Value, 2)}";
         }
     }
 }

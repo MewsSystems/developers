@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> Currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -26,14 +26,18 @@ namespace ExchangeRateUpdater
             {
                 var serviceCollection = new ServiceCollection()
                     .AddHttpClient()
-                    .AddScoped<ICzechNationalBankService, CzechNationalBankService>()
+                    .AddSingleton<ICzechNationalBankService, CzechNationalBankService>()
                     .AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
                 
-                var serviceProvider = serviceCollection.BuildServiceProvider();
+                var serviceProvider = serviceCollection
+                    .BuildServiceProvider();
 
-                var rates = serviceProvider.GetRequiredService<IExchangeRateProvider>().GetExchangeRates(currencies);
+                var rates = serviceProvider
+                    .GetRequiredService<IExchangeRateProvider>()
+                    .GetExchangeRates(Currencies)
+                    .ToList();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());

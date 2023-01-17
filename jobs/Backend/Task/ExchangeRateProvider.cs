@@ -18,10 +18,15 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) 
-            => _czechNationalBankService.GetRates()
+            => _czechNationalBankService
+                .GetRates()
+                .Where(r => currencies.Any(c => c.Code == r.Code))
                 .Select(MapCnbExchangeRateIntoExchangeRate);
 
         private static ExchangeRate MapCnbExchangeRateIntoExchangeRate(CzechNationalBankExchangeRate cnbExchangeRate) 
-            => new(new Currency(cnbExchangeRate.Code), CzkCurrency, cnbExchangeRate.Rate);
+            => new(new Currency(cnbExchangeRate.Code), CzkCurrency, CalculateExchangeRateValue(cnbExchangeRate));
+
+        private static decimal CalculateExchangeRateValue(CzechNationalBankExchangeRate cnbExchangeRate) 
+            => cnbExchangeRate.Rate/cnbExchangeRate.Amount;
     }
 }
