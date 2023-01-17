@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.4.0" />
   </ItemGroup>
 
   <ItemGroup>
