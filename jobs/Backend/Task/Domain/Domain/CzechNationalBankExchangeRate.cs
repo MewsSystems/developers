@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Domain
 {
     public class CzechNationalBankExchangeRate
     {

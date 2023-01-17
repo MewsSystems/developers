@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Globalization;
+using Application;
+using Domain;
 
-namespace ExchangeRateUpdater
+namespace Infrastructure
 {
     public class CzechNationalBankService : BankServiceBase, ICzechNationalBankService
     {
@@ -15,9 +14,9 @@ namespace ExchangeRateUpdater
         public CzechNationalBankService(HttpClient client) 
             : base(client) { }
 
-        public IEnumerable<CzechNationalBankExchangeRate> GetRates()
+        public IEnumerable<CzechNationalBankExchangeRate>? GetRates()
             => Get<CzechNationalBankExchangeRateResponse>(CnbApiUrl)
-                .Result
+                .Result?
                 .CzechNationalBankExchangeRateList
                 .Rates
                 .Select(MapCnbExchangeRateResponse);

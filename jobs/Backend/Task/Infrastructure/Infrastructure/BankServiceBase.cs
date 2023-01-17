@@ -1,9 +1,5 @@
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace ExchangeRateUpdater;
 
 public abstract class BankServiceBase
 {
@@ -12,7 +8,7 @@ public abstract class BankServiceBase
     protected BankServiceBase(HttpClient client) 
         => _client = client;
 
-    protected async Task<TResp> Get<TResp>(string urlPath)
+    protected async Task<TResp?> Get<TResp>(string urlPath)
     {
         var response = await _client.GetAsync(urlPath);
         response.EnsureSuccessStatusCode();
@@ -27,6 +23,6 @@ public abstract class BankServiceBase
     {
         using var reader = new StreamReader(data);
         return (T)new XmlSerializer(typeof(T))
-            .Deserialize(reader);
+            .Deserialize(reader)!;
     }
 }

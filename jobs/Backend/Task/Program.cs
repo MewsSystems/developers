@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Application;
+using Domain;
+using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater
@@ -20,7 +23,7 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             try
             {

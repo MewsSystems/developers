@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Domain;
 
-namespace ExchangeRateUpdater
+namespace Application
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
@@ -18,8 +17,8 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) 
-            => _czechNationalBankService
-                .GetRates()
+            => (_czechNationalBankService
+                    .GetRates() ?? Array.Empty<CzechNationalBankExchangeRate>())
                 .Where(r => currencies.Any(c => c.Code == r.Code))
                 .Select(MapCnbExchangeRateIntoExchangeRate);
 

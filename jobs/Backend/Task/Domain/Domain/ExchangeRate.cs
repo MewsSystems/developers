@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ExchangeRateUpdater
+﻿namespace Domain
 {
     public class ExchangeRate
     {
