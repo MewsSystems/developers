@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using DataAccess.Abstract;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider:IExchangeRateProvider
     {
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
