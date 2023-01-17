@@ -13,18 +13,21 @@
     <Compile Remove="Application\**" />
     <Compile Remove="Domain\**" />
     <Compile Remove="Infrastructure\**" />
+    <Compile Remove="Tests\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Application\**" />
     <EmbeddedResource Remove="Domain\**" />
     <EmbeddedResource Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Tests\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Application\**" />
     <None Remove="Domain\**" />
     <None Remove="Infrastructure\**" />
+    <None Remove="Tests\**" />
   </ItemGroup>
 
   <ItemGroup>
