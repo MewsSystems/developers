@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Entities.Dtos
 {
-    public record ConcurrencListRecord
+    public record CurrencyListRecord
     {
         public IEnumerable<Currency> Currencies { get; set; }
-        public ConcurrencListRecord(IEnumerable<Currency> currencies)
+        public CurrencyListRecord(IEnumerable<Currency> currencies)
         {
             Currencies=currencies;
         }

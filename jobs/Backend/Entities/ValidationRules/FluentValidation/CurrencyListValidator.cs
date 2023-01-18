@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.ValidationRules.FluentValidation
+namespace Entities.ValidationRules.FluentValidation
 {
-    public class CurrencyListValidator:AbstractValidator<ConcurrencListRecord>
+    public class CurrencyListValidator:AbstractValidator<CurrencyListRecord>
     {
         public CurrencyListValidator()
         {

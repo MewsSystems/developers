@@ -1,4 +1,4 @@
-﻿using Entities.Records;
+﻿using Entities.Models;
 using ExchangeRateUpdater;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IExchangeRateProvider
+    public interface IExchangeRateAccessor
     {
-        public IEnumerable<ExchangeRate> GetExchangeRates();
+        IEnumerable<ExchangeRate> GetExchangeRates();
     }
 }

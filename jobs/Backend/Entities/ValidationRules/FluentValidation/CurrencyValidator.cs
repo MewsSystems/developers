@@ -14,7 +14,7 @@ namespace Entities.ValidationRules.FluentValidation
         {
             RuleFor(c => c.Code).NotEmpty();
             RuleFor(c => c.Code).NotNull();
-            RuleFor(c => c.Code).Length(3).WithMessage("Currency code must include 3 letters"); ;       
+            RuleFor(c => c.Code).Length(3).WithMessage("Currency code must include 3 letters");   
         }
     }
 }

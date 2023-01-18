@@ -1,27 +1,39 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Business.ValidationRules.FluentValidation;
 using Common.AutofacAspects.Validation;
-using Common.CrossCuttingConcerns.Validation;
 using Common.Results;
+using DataAccess.Abstract;
 using Entities.Dtos;
 using Entities.ValidationRules.FluentValidation;
 using ExchangeRateUpdater;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
     public class ExchangeRateProviderManager : IExchangeRateProviderService
     {
-        [ValidationAspect(typeof(CurrencyListValidator))]
-        public IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(ConcurrencListRecord currencies)
+        private readonly IExchangeRateProvider _exchangeRateProvider;
+        public ExchangeRateProviderManager(IExchangeRateProvider exchangeRateProvider)
         {
-           return new DataResult<IEnumerable<ExchangeRate>>(null,true, Messages.ExchangeRatesObtained);
+            _exchangeRateProvider = exchangeRateProvider;
+        }
+
+        [ValidationAspect(typeof(CurrencyListValidator))]
+        public IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(CurrencyListRecord currencyListRecord)
+        {
+            var exchangeRates = _exchangeRateProvider.GetExchangeRates();
+            
+
+            var returnExchangeRates = exchangeRates
+           .Where(exchangeRate =>
+               currencyListRecord.Currencies.Any(currency => string.Equals(exchangeRate.TargetCurrency.Code, currency.Code,
+                   StringComparison.OrdinalIgnoreCase)))
+           .ToArray();
+            if (returnExchangeRates.Count() < 1)
+            {
+                return new DataResult<IEnumerable<ExchangeRate>>(returnExchangeRates, false, Messages.ExchangeRatesOCanNotBeFound);
+
+            }
+            return new DataResult<IEnumerable<ExchangeRate>>(returnExchangeRates, true, Messages.ExchangeRatesObtained);
         }
     }
 }

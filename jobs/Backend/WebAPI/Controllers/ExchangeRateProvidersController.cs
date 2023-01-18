@@ -20,9 +20,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult ExchangeRates([FromBody] IEnumerable<Currency> currencies)
         {
-            ConcurrencListRecord concurrencListDto = new ConcurrencListRecord(currencies);
+            CurrencyListRecord concurrencListRec = new CurrencyListRecord(currencies);
 
-            var result=_exchangeRateProviderService.GetExchangeRates(concurrencListDto);
+            var result=_exchangeRateProviderService.GetExchangeRates(concurrencListRec);
             if (result.Success)
             {
                 return Ok(result.Data);

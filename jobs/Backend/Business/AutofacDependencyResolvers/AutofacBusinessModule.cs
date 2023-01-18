@@ -20,10 +20,10 @@ namespace Business.AutofacDependencyResolvers
             #region Declaring dependency injections
             builder.RegisterType<ExchangeRateProviderManager>().As<IExchangeRateProviderService>().SingleInstance();
             builder.RegisterType<ExchangeRateProvider>().As<IExchangeRateProvider>().SingleInstance();
+            builder.RegisterType<ExchangeRateAccessor>().As<IExchangeRateAccessor>().SingleInstance();
             #endregion
 
-            #region declaring aspects
-
+            #region Declaring aspects
             var assembly =System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions()
             {

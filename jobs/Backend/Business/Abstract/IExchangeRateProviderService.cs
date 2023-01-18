@@ -11,6 +11,6 @@ namespace Business.Abstract
 {
     public interface IExchangeRateProviderService
     {
-        IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(ConcurrencListRecord currencies);
+        IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(CurrencyListRecord currencyListRecord);
     }
 }
