@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.Dtos;
 using ExchangeRateUpdater;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult ExchangeRates([FromBody] IEnumerable<Currency> currencies)
         {
-            var result=_exchangeRateProviderService.GetExchangeRates(currencies);
+            ConcurrencListRecord concurrencListDto = new ConcurrencListRecord(currencies);
+
+            var result=_exchangeRateProviderService.GetExchangeRates(concurrencListDto);
             if (result.Success)
             {
                 return Ok(result.Data);

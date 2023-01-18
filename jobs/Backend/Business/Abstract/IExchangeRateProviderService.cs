@@ -1,4 +1,5 @@
 ﻿using Common.Results;
+using Entities.Dtos;
 using ExchangeRateUpdater;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Business.Abstract
 {
     public interface IExchangeRateProviderService
     {
-        IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
+        IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(ConcurrencListRecord currencies);
     }
 }

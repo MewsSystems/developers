@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
+using Common.Utils.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using System;
@@ -15,8 +17,19 @@ namespace Business.AutofacDependencyResolvers
     {
         protected override void Load(ContainerBuilder builder)
         {
+            #region Declaring dependency injections
             builder.RegisterType<ExchangeRateProviderManager>().As<IExchangeRateProviderService>().SingleInstance();
             builder.RegisterType<ExchangeRateProvider>().As<IExchangeRateProvider>().SingleInstance();
+            #endregion
+
+            #region declaring aspects
+
+            var assembly =System.Reflection.Assembly.GetExecutingAssembly();
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new Castle.DynamicProxy.ProxyGenerationOptions()
+            {
+                Selector = new AspectInterceptorSelector()
+            }).SingleInstance();
+            #endregion
 
         }
     }
