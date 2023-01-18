@@ -4,7 +4,7 @@ using Domain;
 
 namespace Infrastructure
 {
-    public class CzechNationalBankService : BankServiceBase, ICzechNationalBankService
+    public class CzechNationalBankService : ServiceBase, ICzechNationalBankService
     {
         //https://publicapi.dev/czech-national-bank-api
         //Date parameter can be added in this format
@@ -14,14 +14,14 @@ namespace Infrastructure
         public CzechNationalBankService(HttpClient client) 
             : base(client) { }
 
-        public IEnumerable<CzechNationalBankExchangeRate>? GetRates()
+        public IEnumerable<CzechNationalBankExchangeRate> GetRates()
             => Get<CzechNationalBankExchangeRateResponse>(CnbApiUrl)
-                .Result?
+                .Result
                 .CzechNationalBankExchangeRateList
                 .Rates
-                .Select(MapCnbExchangeRateResponse);
+                .Select(MapToCzechNationalBankExchangeRate);
 
-        private static CzechNationalBankExchangeRate MapCnbExchangeRateResponse(CnbExchangeRate cnbExchangeRate)
+        private static CzechNationalBankExchangeRate MapToCzechNationalBankExchangeRate(CnbExchangeRate cnbExchangeRate)
             => new()
             {
                 Amount = int.Parse(cnbExchangeRate.Amount),

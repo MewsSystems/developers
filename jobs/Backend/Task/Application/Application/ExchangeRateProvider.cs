@@ -4,7 +4,7 @@ namespace Application
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private static readonly Currency CzkCurrency = new Currency("CZK");
+        private static readonly Currency CzkCurrency = new("CZK");
         private readonly ICzechNationalBankService _czechNationalBankService;
 
         public ExchangeRateProvider(ICzechNationalBankService czechNationalBankService)
@@ -17,8 +17,8 @@ namespace Application
         /// some of the currencies, ignore them.
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) 
-            => (_czechNationalBankService
-                    .GetRates() ?? Array.Empty<CzechNationalBankExchangeRate>())
+            => _czechNationalBankService
+                .GetRates()
                 .Where(r => currencies.Any(c => c.Code == r.Code))
                 .Select(MapCnbExchangeRateIntoExchangeRate);
 

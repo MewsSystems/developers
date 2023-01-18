@@ -4,6 +4,6 @@ namespace Application
 {
     public interface ICzechNationalBankService
     {
-        public IEnumerable<CzechNationalBankExchangeRate>? GetRates();
+        public IEnumerable<CzechNationalBankExchangeRate> GetRates();
     }
 }

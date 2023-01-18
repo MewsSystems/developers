@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Application;
 using Domain;
 
@@ -9,7 +7,7 @@ public class ExchangeRateProviderTests
 {
     private readonly List<CzechNationalBankExchangeRate> _getRatesResponse = new()
     {
-        new()
+        new CzechNationalBankExchangeRate
         {
             Currency = "euro",
             Amount = 1,
@@ -18,7 +16,7 @@ public class ExchangeRateProviderTests
             Rate = 24
         },
 
-        new()
+        new CzechNationalBankExchangeRate
         {
             Currency = "dolar",
             Amount = 1,
@@ -28,17 +26,16 @@ public class ExchangeRateProviderTests
         }
     };
     
-    private Mock<ICzechNationalBankService> _czechNationalBankServiceMock;
-    private ExchangeRateProvider _exchangeRateProvider;
+    private readonly ExchangeRateProvider _exchangeRateProvider;
 
     public ExchangeRateProviderTests()
     {
-        _czechNationalBankServiceMock = new Mock<ICzechNationalBankService>();
-        _czechNationalBankServiceMock
+        var czechNationalBankServiceMock = new Mock<ICzechNationalBankService>();
+        czechNationalBankServiceMock
             .Setup(x => x.GetRates())
             .Returns(_getRatesResponse);
         
-        _exchangeRateProvider = new ExchangeRateProvider(_czechNationalBankServiceMock.Object);
+        _exchangeRateProvider = new ExchangeRateProvider(czechNationalBankServiceMock.Object);
     }
     
     [Fact]
@@ -47,6 +44,7 @@ public class ExchangeRateProviderTests
         var result = _exchangeRateProvider
             .GetExchangeRates(new[] { new Currency("USD"), new Currency("EUR") })
             .ToList();
+        
         result.Should().NotBeNull();
         result.Should().HaveCount(2);
     }
@@ -56,6 +54,7 @@ public class ExchangeRateProviderTests
     {
         var result = _exchangeRateProvider
             .GetExchangeRates(new List<Currency>());
+        
         result.Should().BeEmpty();
     }
 }

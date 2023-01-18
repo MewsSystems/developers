@@ -15,9 +15,7 @@
 
         public decimal Value { get; }
 
-        public override string ToString()
-        {
-            return $"{SourceCurrency}/{TargetCurrency}={Math.Round(Value, 2)}";
-        }
+        public override string ToString() 
+            => $"{SourceCurrency}/{TargetCurrency}={Math.Round(Value, 2)}";
     }
 }

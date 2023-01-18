@@ -1,14 +1,15 @@
 using System.Xml.Serialization;
 
+namespace Infrastructure;
 
-public abstract class BankServiceBase
+public abstract class ServiceBase
 {
     private readonly HttpClient _client;
 
-    protected BankServiceBase(HttpClient client) 
+    protected ServiceBase(HttpClient client) 
         => _client = client;
 
-    protected async Task<TResp?> Get<TResp>(string urlPath)
+    protected async Task<TResp> Get<TResp>(string urlPath)
     {
         var response = await _client.GetAsync(urlPath);
         response.EnsureSuccessStatusCode();
