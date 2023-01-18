@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.AutofacDependencyResolvers;
 using Business.Concrete;
+using Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
