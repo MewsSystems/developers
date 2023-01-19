@@ -3,6 +3,7 @@ using Entities.Dtos;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Common.Attributes;
 
 namespace WebAPI.Controllers
 {
@@ -17,6 +18,7 @@ namespace WebAPI.Controllers
             _exchangeRateProviderService= exchangeRateProviderService;
         }
 
+        [ApiKey]
         [HttpPost]
         public IActionResult ExchangeRates([FromBody] IEnumerable<Currency> currencies)
         {
