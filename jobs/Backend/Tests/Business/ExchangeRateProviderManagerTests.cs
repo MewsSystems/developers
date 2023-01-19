@@ -8,7 +8,6 @@ namespace Tests.Business
     public class ExchangeRateProviderManagerTests
     {
         private Mock<IExchangeRateProvider> _exchangeRateProvider= new ();
-        private ExchangeRateProviderManager _exchangeRateProviderServiceManager;
         public ExchangeRateProviderManagerTests()
         {
             _exchangeRateProvider.Setup(x => x.GetExchangeRates(FakeDataHelper.CreateFakeCurrencyListRecord().Currencies)).Returns(() => FakeDataHelper.CreateFakeExchangeRateList());
@@ -18,7 +17,7 @@ namespace Tests.Business
         public async Task GetExchangeRates_Success_WithCurrencies()
         {
             //arrange
-            _exchangeRateProviderServiceManager = new ExchangeRateProviderManager(_exchangeRateProvider.Object);
+            var _exchangeRateProviderServiceManager = new ExchangeRateProviderManager(_exchangeRateProvider.Object);
             //act
             var serviceResponse = 
                 _exchangeRateProviderServiceManager.GetExchangeRates(FakeDataHelper.CreateFakeCurrencyListRecord());

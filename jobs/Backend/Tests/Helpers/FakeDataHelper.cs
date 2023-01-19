@@ -50,5 +50,15 @@ namespace Tests.Helpers
             var currncyListRecord = new CurrencyListRecord(data);
             return currncyListRecord;
         }
+
+        public static string SourceCurrencyKey
+        = "ExchangeRateSourceCurrency";
+        public static string SourceCurrencyValue
+       = "CZK";
+        public static string SourceUrlKey
+       = "ExchangeRateSourceUrl";
+        public static string SourceUrlValue
+       = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
     }
 }

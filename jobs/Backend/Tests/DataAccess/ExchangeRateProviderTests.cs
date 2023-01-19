@@ -9,7 +9,8 @@ namespace Tests.DataAccess
     {
         private Mock<IExchangeRateAccessor> _exchangeRateAccessor=new();
 
-        public ExchangeRateProviderTests()        {
+        public ExchangeRateProviderTests()
+        {
             _exchangeRateAccessor.Setup(x => x.GetExchangeRates()).Returns(() => FakeDataHelper.CreateFakeExchangeRateList());
         }
 
