@@ -5,11 +5,6 @@ using Business.Concrete;
 using Common.Utils.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.AutofacDependencyResolvers
 {

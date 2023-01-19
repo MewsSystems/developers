@@ -5,7 +5,7 @@ using Common.Results;
 using DataAccess.Abstract;
 using Entities.Dtos;
 using Entities.ValidationRules.FluentValidation;
-using ExchangeRateUpdater;
+using Entities.Concrete;
 
 namespace Business.Concrete
 {
@@ -20,20 +20,13 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CurrencyListValidator))]
         public IDataResult<IEnumerable<ExchangeRate>> GetExchangeRates(CurrencyListRecord currencyListRecord)
         {
-            var exchangeRates = _exchangeRateProvider.GetExchangeRates();
+            var exchangeRates = _exchangeRateProvider.GetExchangeRates(currencyListRecord.Currencies);
             
-
-            var returnExchangeRates = exchangeRates
-           .Where(exchangeRate =>
-               currencyListRecord.Currencies.Any(currency => string.Equals(exchangeRate.TargetCurrency.Code, currency.Code,
-                   StringComparison.OrdinalIgnoreCase)))
-           .ToArray();
-            if (returnExchangeRates.Count() < 1)
+            if (exchangeRates.Count() < 1)
             {
-                return new DataResult<IEnumerable<ExchangeRate>>(returnExchangeRates, false, Messages.ExchangeRatesOCanNotBeFound);
-
+                return new DataResult<IEnumerable<ExchangeRate>>(exchangeRates, false, Messages.ExchangeRatesOCanNotBeFound);
             }
-            return new DataResult<IEnumerable<ExchangeRate>>(returnExchangeRates, true, Messages.ExchangeRatesObtained);
+            return new DataResult<IEnumerable<ExchangeRate>>(exchangeRates, true, Messages.ExchangeRatesObtained);
         }
     }
 }

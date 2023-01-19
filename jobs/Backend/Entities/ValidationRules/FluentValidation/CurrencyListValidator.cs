@@ -1,12 +1,5 @@
 ﻿using Entities.Dtos;
-using Entities.ValidationRules.FluentValidation;
-using ExchangeRateUpdater;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entities.ValidationRules.FluentValidation
 {
@@ -14,6 +7,8 @@ namespace Entities.ValidationRules.FluentValidation
     {
         public CurrencyListValidator()
         {
+            RuleFor(x => x.Currencies).NotEmpty();
+            RuleFor(x => x.Currencies).NotNull();
             RuleForEach(x => x.Currencies).SetValidator(new CurrencyValidator());
         }
     }

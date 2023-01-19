@@ -1,13 +1,6 @@
 ﻿using Common.AutofacAspects.Validation;
 using DataAccess.Abstract;
-using Entities.Models;
-using Entities.Records;
-using Entities.ValidationRules.FluentValidation;
-using ExchangeRateUpdater;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Entities.Concrete;
 
 namespace DataAccess.Concrete
 {
@@ -24,11 +17,13 @@ namespace DataAccess.Concrete
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates()
+        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> Currencies)
         {
             var currencyRates = _exchangeRateAccessor.GetExchangeRates();
-              
-            return currencyRates;
+            var returnExchangeRates = currencyRates.
+                Where(exchangeRate =>
+                Currencies.Any(currency => string.Equals(exchangeRate.TargetCurrency.Code, currency.Code,StringComparison.OrdinalIgnoreCase)));
+            return returnExchangeRates;
         }
     }
 }
