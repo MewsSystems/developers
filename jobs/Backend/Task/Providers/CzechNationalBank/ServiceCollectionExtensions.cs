@@ -7,6 +7,7 @@
 			services.Configure(configureOptions);
 			services.AddHttpClient(Options.ConfigKey);
 			services.AddTransient<IExchangeRateProvider, Provider>();
+			services.AddTransient<IDataParser, DataParser>();
 			return services;
 		}
 	}

@@ -1,52 +1,51 @@
 ﻿namespace ExchangeRateUpdater.Providers.CzechNationalBank
 {
-    internal class Provider : IExchangeRateProvider
+	internal class Provider : IExchangeRateProvider
 	{
 		private const string TargetCurrency = "CZK";
 
 		private readonly IOptions<Options> _options;
 		private readonly HttpClient _client;
+		private readonly IDataParser _parser;
 
-		public Provider(IOptions<Options> options, IHttpClientFactory clientFactory)
+		public Provider(IOptions<Options> options, IHttpClientFactory clientFactory, IDataParser parser)
 		{
 			_client = clientFactory.CreateClient(Options.ConfigKey);
-			_options = options;
+			_options = options ?? throw new ArgumentNullException(nameof(options));
+			_parser = parser ?? throw new ArgumentNullException(nameof(parser));
 		}
 
 		public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			var data = await _client.GetStringAsync(_options.Value.Uri, cancellationToken);
+			var mainCurrenciesTask = GetMainCurrenciesAsync(cancellationToken);
+			var otherCurrenciesTask = GetOtherCurrenciesAsync(cancellationToken);
 
-			var lines = data
-				.Split(_options.Value.LineSeparator)
-				.Skip(_options.Value.LinesToSkip)
-				.Where(s => !string.IsNullOrWhiteSpace(s));
+			await Task.WhenAll(new[] { mainCurrenciesTask, otherCurrenciesTask });
 
-			var result = new List<ExchangeRate>();
+			var mainCurrencies = await mainCurrenciesTask;
+			var otherCurrencies = await otherCurrenciesTask;
 
-			foreach (var line in lines)
-			{
-				var parts = line.Split(_options.Value.FieldSeparator);
+			return mainCurrencies
+				.Concat(otherCurrencies)
+				.Where(x => currencies.Any(c => c.Code == x.Code))
+				.Select(x => new ExchangeRate(new Currency(x.Code), new Currency(TargetCurrency), x.Value))
+				.ToList();
+		}
 
-				var code = parts[3];
+		private async Task<IEnumerable<DataRow>> GetMainCurrenciesAsync(CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			var data = await _client.GetStringAsync(_options.Value.MainCurrenciesUri, cancellationToken);
+			return _parser.Parse(data);
+		}
 
-				if (!currencies.Select(c => c.Code).Contains(code))
-					continue;
-
-				var amount = int.Parse(parts[2], CultureInfo.InvariantCulture);
-				var rate = decimal.Parse(parts[4], CultureInfo.InvariantCulture);
-
-				var aux = new ExchangeRate(
-					new Currency(code),
-					new Currency(TargetCurrency),
-					rate / amount);
-
-				result.Add(aux);
-			}
-
-			return result;
+		private async Task<IEnumerable<DataRow>> GetOtherCurrenciesAsync(CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			var data = await _client.GetStringAsync(_options.Value.OtherCurrenciesUri, cancellationToken);
+			return _parser.Parse(data);
 		}
 	}
 }

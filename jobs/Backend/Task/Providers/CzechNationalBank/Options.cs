@@ -5,7 +5,10 @@
 		internal const string ConfigKey = "CzechNationalBank";
 
 		[Required]
-		public Uri Uri { get; set; }
+		public Uri MainCurrenciesUri { get; set; }
+
+		[Required]
+		public Uri OtherCurrenciesUri { get; set; }
 
 		[Required]
 		public string LineSeparator { get; set; }
