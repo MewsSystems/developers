@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "b12c4f29-fc2a-418f-9d91-5f04f4293d6e",
+		"name": "Exchange Rate Updater Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11964991"
+	},
+	"item": [
+		{
+			"name": "ValidCurrencies",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "exchangerates-api-key",
+						"value": "56e7i1qn7pxv4eepz2txlpq4r4tba6",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"code\": \"eur\"\r\n  },\r\n  {\r\n    \"code\": \"usd\"\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5132/api/ExchangeRateProviders/RatesByCurrencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5132",
+					"path": [
+						"api",
+						"ExchangeRateProviders",
+						"RatesByCurrencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidCurrencies Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "exchangerates-api-key",
+						"value": "56e7i1qn7pxv4eepz2txlpq4r4tba6",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"code\": \"eur\"\r\n  },\r\n  {\r\n    \"code\": \"usd\"\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5132/api/ExchangeRateProviders/RatesByCurrencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5132",
+					"path": [
+						"api",
+						"ExchangeRateProviders",
+						"RatesByCurrencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid ApiKey",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "exchangerates-api-key",
+						"value": "56e7i1qn7pxv4eepz2txlpq4r4tba6",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"code\": \"eur\"\r\n  },\r\n  {\r\n    \"code\": \"usd\"\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5132/api/ExchangeRateProviders/RatesByCurrencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5132",
+					"path": [
+						"api",
+						"ExchangeRateProviders",
+						"RatesByCurrencies"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

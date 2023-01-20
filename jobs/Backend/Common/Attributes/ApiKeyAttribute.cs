@@ -14,7 +14,7 @@ namespace Common.Attributes
         {
             if (!context.HttpContext.Request.Headers.TryGetValue(ApiKeyName, out var extractedApiKey))
             {
-                context.Result = new BadRequestObjectResult("Invalid!");
+                context.Result = new BadRequestObjectResult("Invalid api key!");
                 return;
             }
 
@@ -22,10 +22,9 @@ namespace Common.Attributes
                 context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
 
             var apiKey = appSettings.GetSection("ApiKey").Value;
-            var headerApiKeyVal = extractedApiKey.Last();
-            if (apiKey == null || !extractedApiKey.Equals(headerApiKeyVal))
+            if (apiKey == null || !extractedApiKey.Equals(apiKey))
             {
-                context.Result = new BadRequestObjectResult("Invalid!");
+                context.Result = new BadRequestObjectResult("Invalid api key!");
                 return;
             }
             

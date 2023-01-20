@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [ApiKey]
-        [HttpPost]
+        [HttpPost("RatesByCurrencies")]
         public IActionResult ExchangeRates([FromBody] IEnumerable<Currency> currencies)
         {
             CurrencyListRecord concurrencListRec = new CurrencyListRecord(currencies);
