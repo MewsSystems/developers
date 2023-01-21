@@ -7,6 +7,7 @@
 
 		services.AddTransient<App>();
 		services.AddOptions<AppOptions>().Bind(configuration);
+
 		services.UseCzechNationalBankProvider(options => configuration.GetSection(ExchangeRateUpdater.Providers.CzechNationalBank.Options.ConfigKey).Bind(options));
 	})
 	.Build()

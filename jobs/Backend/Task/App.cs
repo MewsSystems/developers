@@ -19,7 +19,7 @@
 		{
 			Console.CancelKeyPress += (sender, eventArgs) =>
 			{
-				_logger.LogWarning("Cancel event triggered");
+				_logger.LogWarning("Cancel event triggered!");
 				cancellationTokenSource.Cancel();
 				eventArgs.Cancel = true;
 			};
@@ -32,9 +32,7 @@
 
 				Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
 				foreach (var rate in rates)
-				{
 					Console.WriteLine(rate.ToString());
-				}
 
 				return 0;
 			}
