@@ -2,13 +2,14 @@
 
 namespace ExchangeRateUpdater.Tests
 {
+
 	public class CzechNationalBankProviderTests
 	{
 		private const string LineSeparator = "\n";
 		private const string FieldSeparator = "|";
 
-		private readonly Uri _mainCurrenciesUri = new Uri("http://maincurrencies.com");
-		private readonly Uri _otherCurrenciesUri = new Uri("http://othercurrencies.com");
+		private readonly Uri _mainCurrenciesUri = new("http://maincurrencies.com");
+		private readonly Uri _otherCurrenciesUri = new("http://othercurrencies.com");
 
 		private const string KnownMainCurrency = "EUR";
 		private const string KnownOtherCurrency = "AWG";
