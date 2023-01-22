@@ -1,9 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{92275EA4-7AE8-4172-B7FB-97E7B8CE3AA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "service", "service", "{99087D4D-A679-4745-8186-AE14CD8038D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1037DA60-2F11-4AA3-B1D3-352D5D19A11D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "host\ExchangeRateUpdater.csproj", "{C13B6348-739B-4E48-85FD-3EC0B9AA0C41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProviderCzechNationalBank", "service\ExchangeRateProvider\ExchangeRateProviderCzechNationalBank.csproj", "{E80481CE-AA8B-477D-AAD9-8537628BFE5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProvider.Contracts", "service\ExchangeRateProvider.Contracts\ExchangeRateProvider.Contracts.csproj", "{9A1ADBF4-0849-49A1-8E98-AA75B4257615}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProviderCzechNationalBank.Tests", "test\ExchangeRateProviderCzechNationalBank.Tests\ExchangeRateProviderCzechNationalBank.Tests.csproj", "{8A24B88B-9927-42DA-BF7C-B5C8542698CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +23,33 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C13B6348-739B-4E48-85FD-3EC0B9AA0C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C13B6348-739B-4E48-85FD-3EC0B9AA0C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C13B6348-739B-4E48-85FD-3EC0B9AA0C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C13B6348-739B-4E48-85FD-3EC0B9AA0C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E80481CE-AA8B-477D-AAD9-8537628BFE5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E80481CE-AA8B-477D-AAD9-8537628BFE5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E80481CE-AA8B-477D-AAD9-8537628BFE5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E80481CE-AA8B-477D-AAD9-8537628BFE5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A1ADBF4-0849-49A1-8E98-AA75B4257615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A1ADBF4-0849-49A1-8E98-AA75B4257615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A1ADBF4-0849-49A1-8E98-AA75B4257615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A1ADBF4-0849-49A1-8E98-AA75B4257615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A24B88B-9927-42DA-BF7C-B5C8542698CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A24B88B-9927-42DA-BF7C-B5C8542698CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A24B88B-9927-42DA-BF7C-B5C8542698CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A24B88B-9927-42DA-BF7C-B5C8542698CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C13B6348-739B-4E48-85FD-3EC0B9AA0C41} = {92275EA4-7AE8-4172-B7FB-97E7B8CE3AA6}
+		{E80481CE-AA8B-477D-AAD9-8537628BFE5F} = {99087D4D-A679-4745-8186-AE14CD8038D4}
+		{9A1ADBF4-0849-49A1-8E98-AA75B4257615} = {99087D4D-A679-4745-8186-AE14CD8038D4}
+		{8A24B88B-9927-42DA-BF7C-B5C8542698CE} = {1037DA60-2F11-4AA3-B1D3-352D5D19A11D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17CB0B3F-8F98-4AA5-9D0D-795CED666FEF}
 	EndGlobalSection
 EndGlobal

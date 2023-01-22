@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateProvider.Contracts
 {
     public class ExchangeRate
     {
