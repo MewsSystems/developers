@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace ExchangeRateUpdater.Providers.CzechNationalBank
+﻿namespace ExchangeRateUpdater.Providers.CzechNationalBank
 {
 	internal class DataParser : IDataParser
 	{
@@ -12,6 +10,6 @@ namespace ExchangeRateUpdater.Providers.CzechNationalBank
 				.Split(_options.Value.LineSeparator)
 				.Skip(_options.Value.LinesToSkip)
 				.Where(s => !string.IsNullOrWhiteSpace(s))
-				.Select(line => DataRow.Parse(line, _options.Value.FieldSeparator));
+				.Select(line => DataRow.Parse(line.Split(_options.Value.FieldSeparator)));
 	}
 }
