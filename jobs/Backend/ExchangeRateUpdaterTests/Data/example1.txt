@@ -1,0 +1,4 @@
+18 Jan 2023 #13
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|15.546
+Brazil|real|1|BRL|4.333

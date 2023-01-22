@@ -1,0 +1,8 @@
+19 Jan 2023 #14
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|15.214
+EMU|euro|1|EUR|23.925
+Japan|yen|100|JPY|17.210
+Thailand|baht|100|THB|66.815
+Turkey|lira|1|TRY|1.177
+USA|dollar|1|USD|22.120

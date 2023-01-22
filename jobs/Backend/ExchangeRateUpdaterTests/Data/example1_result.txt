@@ -1,0 +1,1 @@
+[{"SourceCurrency":{"Code":"CZ"},"TargetCurrency":{"Code":"AUD"},"Value":15.546}, {"SourceCurrency":{"Code":"CZ"},"TargetCurrency":{"Code":"BRL"},"Value":4.333}]
