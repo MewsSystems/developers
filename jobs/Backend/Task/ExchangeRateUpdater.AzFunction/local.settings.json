@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "CNBCZechNationalBankBaseAddress": "https://www.cnb.cz/",
+    "CNBCZechNationalBankApi": "cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml"
+  }
+}

@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "e610862a-d8c6-4c79-a4fb-a5952bc6921f",
+		"name": "Mews - Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21727354"
+	},
+	"item": [
+		{
+			"name": "GetExchangeRateAPI",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "TargetCurrency",
+						"value": "CZK",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"Code\":\"USD\"},{\"Code\":\"EUR\"},{\"Code\":\"CZK\"},{\"Code\":\"JPY\"},{\"Code\":\"KES\"},{\"Code\":\"RUB\"},{\"Code\":\"THB\"},{\"Code\":\"TRY\"},{\"Code\":\"XYZ\"}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7202/api/ExchangeRateUpdaterFunction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7202",
+					"path": [
+						"api",
+						"ExchangeRateUpdaterFunction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetExchangeRateFromCNB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml",
+					"protocol": "https",
+					"host": [
+						"www",
+						"cnb",
+						"cz"
+					],
+					"path": [
+						"cs",
+						"financni_trhy",
+						"devizovy_trh",
+						"kurzy_devizoveho_trhu",
+						"denni_kurz.xml"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
