@@ -1,0 +1,11 @@
+{
+    "@@locale": "es",
+    "movieListAppBarTitle": "Lista de peliculas",
+    "@cryptoListAppBarTitle": {
+        "description": "Texto mostrado en el AppBar de la Home"
+    },
+    "searchButtonText": "Busca tu pelicula",
+    "@retryButton": {
+        "description": "texto para el campo de texto de busqueda"
+    }
+}

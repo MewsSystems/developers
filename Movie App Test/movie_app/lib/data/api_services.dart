@@ -1,0 +1,1 @@
+export 'the_movie_db/the_movie_db_api.dart';

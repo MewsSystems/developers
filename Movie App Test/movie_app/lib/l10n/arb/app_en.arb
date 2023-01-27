@@ -1,0 +1,11 @@
+{
+    "@@locale": "en",
+    "movieListAppBarTitle": "Movie List Test",
+    "@cryptoListAppBarTitle": {
+        "description": "Text shown in the AppBar of the Home Page"
+    },
+    "searchButtonText": "Search a movie",
+    "@retryButton": {
+        "description": "Form field text"
+    }
+}
