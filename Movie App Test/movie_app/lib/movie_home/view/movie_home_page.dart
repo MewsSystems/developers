@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/home/bloc/movies_bloc.dart';
-import 'package:movie_app/home/bloc/movies_event.dart';
-import 'package:movie_app/home/bloc/movies_state.dart';
-import 'package:movie_app/home/widgets/movie_list.dart';
+import 'package:movie_app/movie_home/bloc/movies_bloc.dart';
+import 'package:movie_app/movie_home/bloc/movies_event.dart';
+import 'package:movie_app/movie_home/bloc/movies_state.dart';
+import 'package:movie_app/movie_home/widgets/movie_list.dart';
 import 'package:movie_app/l10n/l10n.dart';
 import 'package:movie_app/repositories/movies_repository.dart';
 

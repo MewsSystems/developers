@@ -9,7 +9,7 @@ class TheMovieDbRepository {
   });
 
   /// Get list of popular movies (paginated set to 1 default)
-  Future<List<Movie>?> getPopularMovies() async {
-    return await theMovieDbService.getListOfPopularMovies();
+  Future<List<Movie>?> getPopularMovies(int page) async {
+    return await theMovieDbService.getListOfPopularMovies(page: page);
   }
 }

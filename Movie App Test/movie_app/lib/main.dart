@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movie_app/data/api_services.dart';
-import 'package:movie_app/home/view/home_screen.dart';
 import 'package:movie_app/repositories/movies_repository.dart';
 import 'package:provider/provider.dart';
 
 import 'l10n/l10n.dart';
+import 'movie_home/movie_home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

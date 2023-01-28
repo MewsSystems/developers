@@ -7,6 +7,18 @@ abstract class MoviesEvent extends Equatable {
 
 class GetPopularMovies extends MoviesEvent {}
 
+class NextPagePopularMovies extends MoviesEvent {
+  final int page;
+
+  NextPagePopularMovies({
+    required this.page,
+  });
+  @override
+  List<Object> get props => [
+        page,
+      ];
+}
+
 class MoviesSearch extends MoviesEvent {
   final String movieName;
 
