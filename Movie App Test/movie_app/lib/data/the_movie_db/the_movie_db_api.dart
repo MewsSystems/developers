@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/models/movie_info.dart';
 import 'package:movie_app/models/popular_movies.dart';
-
 
 //Diferent sizes that we can have from the images url params
 enum PosterSize {
@@ -58,8 +57,51 @@ class TheMovieDbService {
     );
   }
 
+  static Uri searchMovie(String query) {
+    return Uri(
+      scheme: 'https',
+      host: 'api.themoviedb.org',
+      path: '3/search/movie',
+      queryParameters: {
+        'api_key': dotenv.get('TMDB_KEY'),
+        'include_adult': 'false',
+        'query': query,
+      },
+    );
+  }
+
   Future<List<Movie>?> getListOfPopularMovies({int page = 1}) async {
     final url = popularMovies(page).toString();
+
+    final response = await Dio().get(url);
+
+    if (response.statusCode != 200) {
+      throw HttpException(
+        response.data,
+      );
+    }
+    final result = PopularMovies.fromJson(response.data);
+
+    return result.movies;
+  }
+
+  Future<MovieInfo?> getMovieInfo(int movieId) async {
+    final url = movieDetails(movieId).toString();
+
+    final response = await Dio().get(url);
+
+    if (response.statusCode != 200) {
+      throw HttpException(
+        response.data,
+      );
+    }
+    final movieInfo = MovieInfo.fromJson(response.data);
+
+    return movieInfo;
+  }
+
+  Future<List<Movie>?> getSearchMovies(String query) async {
+    final url = searchMovie(query).toString();
 
     final response = await Dio().get(url);
 

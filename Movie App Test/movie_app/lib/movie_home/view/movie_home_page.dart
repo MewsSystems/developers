@@ -5,6 +5,7 @@ import 'package:movie_app/movie_home/bloc/movies_event.dart';
 import 'package:movie_app/movie_home/bloc/movies_state.dart';
 import 'package:movie_app/movie_home/widgets/movie_list.dart';
 import 'package:movie_app/l10n/l10n.dart';
+import 'package:movie_app/movie_home/widgets/movie_search.dart';
 import 'package:movie_app/repositories/movies_repository.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -44,19 +44,7 @@ class _HomePageState extends State<HomePage> {
                       return Expanded(
                         child: Column(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 24),
-                              child: TextFormField(
-                                controller: _textEditingController,
-                                decoration: InputDecoration(
-                                  labelText: l10n.searchButtonText,
-                                ),
-                                onEditingComplete: () {
-                                  //TODO: Add search event an dlogic related to it
-                                },
-                              ),
-                            ),
+                            MovieSearch(),
                             state.movieList.isNotEmpty
                                 ? Flexible(
                                     child: MovieList(
@@ -70,7 +58,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     case MoviesLoadStatus.loading:
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                   }
                 },
               ),

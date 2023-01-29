@@ -29,6 +29,11 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         emit,
         page: event.page,
       );
+    } else if (event is MoviesSearch) {
+      await _getSearchMovies(
+        emit,
+        event.query,
+      );
     }
   }
 
@@ -45,6 +50,42 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     );
     try {
       var movies = await _theMovieDbRepository.getPopularMovies(page);
+      if (page > 1) {
+        movies = state.movieList + movies!;
+      }
+      emit(
+        state.copyWith(
+          moviesLoadStatus: MoviesLoadStatus.succeed,
+          movieList: movies!,
+          page: page,
+        ),
+      );
+    } catch (e) {
+      log(e.toString());
+      emit(
+        state.copyWith(
+          moviesLoadStatus: MoviesLoadStatus.failed,
+          movieList: [],
+          page: page,
+        ),
+      );
+    }
+  }
+
+  Future<void> _getSearchMovies(
+    Emitter<MoviesState> emit,
+    String query, {
+    int page = 1,
+  }) async {
+    emit(
+      state.copyWith(
+        moviesLoadStatus: MoviesLoadStatus.loading,
+        movieList: state.movieList,
+        page: state.page,
+      ),
+    );
+    try {
+      var movies = await _theMovieDbRepository.searchMovie(query);
       if (page > 1) {
         movies = state.movieList + movies!;
       }

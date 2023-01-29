@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/data/api_services.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/movie_detail/view/movie_detail_page.dart';
 import 'package:movie_app/movie_home/movie_home.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -29,7 +30,7 @@ class _MovieListState extends State<MovieList> {
             MoviesLoadStatus.loading) {
           context.read<MoviesBloc>().add(
                 NextPagePopularMovies(
-                  page: context.read<MoviesBloc>().state.page! + 1,
+                  page: context.read<MoviesBloc>().state.page + 1,
                 ),
               );
         }
@@ -45,13 +46,28 @@ class _MovieListState extends State<MovieList> {
       physics: const BouncingScrollPhysics(),
       controller: scrollController,
       itemBuilder: (context, index) {
-        return Card(
-          clipBehavior: Clip.antiAlias,
-          child: FadeInImage.memoryNetwork(
-            image: TheMovieDbService.imageUrl(
-                widget.moviesList[index].posterPath!, PosterSize.w185),
-            placeholder: kTransparentImage,
-            fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieDetailPage(
+                  movieId: widget.moviesList[index].id!,
+                ),
+              ),
+            );
+          },
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            child: Hero(
+              tag: "${widget.moviesList[index].id}",
+              child: FadeInImage.memoryNetwork(
+                image: TheMovieDbService.imageUrl(
+                    widget.moviesList[index].posterPath!, PosterSize.w185),
+                placeholder: kTransparentImage,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         );
       },

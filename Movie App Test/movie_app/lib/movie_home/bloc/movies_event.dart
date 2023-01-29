@@ -20,13 +20,13 @@ class NextPagePopularMovies extends MoviesEvent {
 }
 
 class MoviesSearch extends MoviesEvent {
-  final String movieName;
+  final String query;
 
   MoviesSearch({
-    required this.movieName,
+    required this.query,
   });
   @override
   List<Object> get props => [
-        movieName,
+        query,
       ];
 }

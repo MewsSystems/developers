@@ -44,6 +44,10 @@ class MyApp extends StatelessWidget {
           ],
           theme: ThemeData(
             primarySwatch: Colors.blue,
+            appBarTheme: const AppBarTheme(
+              color: Colors.black,
+            ),
+            fontFamily: 'Axiforma Book',
           ),
           home: const HomePage(),
         ),
