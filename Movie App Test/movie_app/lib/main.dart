@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import 'l10n/l10n.dart';
 import 'movie_home/movie_home.dart';
+import 'theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,26 +31,27 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: _RepositoryInitializer(
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', ''),
-            Locale('es', ''),
-          ],
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            appBarTheme: const AppBarTheme(
-              color: Colors.black,
-            ),
-            fontFamily: 'Axiforma Book',
+        child: Provider(
+          create: (_) => MovieAppThemeData.light(),
+          child: Builder(
+            builder: (context) {
+              return MaterialApp(
+                title: 'MovieDB App',
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('en', ''),
+                  Locale('es', ''),
+                ],
+                theme: Provider.of<MovieAppThemeData>(context).materialThemeData,
+                home: const HomePage(),
+              );
+            }
           ),
-          home: const HomePage(),
         ),
       ),
     );

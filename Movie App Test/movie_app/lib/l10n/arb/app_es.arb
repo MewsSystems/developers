@@ -7,5 +7,9 @@
     "searchButtonText": "Busca tu pelicula",
     "@retryButton": {
         "description": "texto para el campo de texto de busqueda"
+    },
+    "genreText": "Generos",
+    "@genreText": {
+        "description": "Genro text"
     }
 }

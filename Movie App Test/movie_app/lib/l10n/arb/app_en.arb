@@ -7,5 +7,9 @@
     "searchButtonText": "Search a movie",
     "@retryButton": {
         "description": "Form field text"
+    },
+    "genreText": "Genre",
+    "@genreText": {
+        "description": "Genre text"
     }
 }

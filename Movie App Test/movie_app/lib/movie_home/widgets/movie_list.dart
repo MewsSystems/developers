@@ -39,43 +39,69 @@ class _MovieListState extends State<MovieList> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      itemCount: widget.moviesList.length,
+      key: const Key('movieGridScrollView'),
+      itemCount: context.read<MoviesBloc>().state.isFetching
+          ? widget.moviesList.length
+          : widget.moviesList.length + 1,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       controller: scrollController,
       itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MovieDetailPage(
-                  movieId: widget.moviesList[index].id!,
+        return index >= widget.moviesList.length
+            ? const BottomLoader()
+            : GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MovieDetailPage(
+                        movieId: widget.moviesList[index].id!,
+                      ),
+                    ),
+                  );
+                },
+                child: Card(
+                  key: const Key('movieCard'),
+                  clipBehavior: Clip.antiAlias,
+                  child: Hero(
+                    tag: "${widget.moviesList[index].id}",
+                    child: widget.moviesList[index].posterPath != null
+                        ? FadeInImage.memoryNetwork(
+                            image: TheMovieDbService.imageUrl(
+                                widget.moviesList[index].posterPath!,
+                                PosterSize.w185),
+                            placeholder: kTransparentImage,
+                            fit: BoxFit.cover,
+                          )
+                        : const SizedBox.shrink(),
+                  ),
                 ),
-              ),
-            );
-          },
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Hero(
-              tag: "${widget.moviesList[index].id}",
-              child: widget.moviesList[index].posterPath != null
-                  ? FadeInImage.memoryNetwork(
-                      image: TheMovieDbService.imageUrl(
-                          widget.moviesList[index].posterPath!,
-                          PosterSize.w185),
-                      placeholder: kTransparentImage,
-                      fit: BoxFit.cover,
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          ),
-        );
+              );
       },
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         childAspectRatio: 0.7,
         crossAxisCount: 3,
         mainAxisSpacing: 5.0,
+      ),
+    );
+  }
+}
+
+class BottomLoader extends StatelessWidget {
+  const BottomLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: const Center(
+        child: SizedBox(
+          width: 33,
+          height: 33,
+          child: CircularProgressIndicator(
+            strokeWidth: 1.5,
+          ),
+        ),
       ),
     );
   }

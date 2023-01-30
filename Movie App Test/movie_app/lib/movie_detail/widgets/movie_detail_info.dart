@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/l10n/l10n.dart';
 import 'package:movie_app/models/movie_info.dart';
+import 'package:movie_app/theme/theme.dart';
+import 'package:provider/provider.dart';
 
 class MovieDetailInfo extends StatelessWidget {
   final MovieInfo movieInfo;
@@ -10,17 +13,18 @@ class MovieDetailInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Provider.of<MovieAppThemeData>(context);
+    final l10n = context.l10n;
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(movieInfo.title!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                )),
+            Text(
+              movieInfo.title!,
+              style: themeData.movieAppTextTheme.titleLarge,
+            ),
             const SizedBox(height: 8.0),
             Row(
               children: [
@@ -73,7 +77,7 @@ class MovieDetailInfo extends StatelessWidget {
                 Text(
                   _showDuration(movieInfo.runtime!),
                   style: const TextStyle(
-                    color: Colors.white70,
+                    color: Colors.black,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1.2,
@@ -84,21 +88,13 @@ class MovieDetailInfo extends StatelessWidget {
             const SizedBox(height: 16.0),
             Text(
               movieInfo.overview!,
-              style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 1.2,
-              ),
+              style: themeData.movieAppTextTheme.bodyText,
             ),
             const SizedBox(height: 8.0),
             Text(
-              'Genres: ${_showGenres(movieInfo.genres)}',
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 12.0,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1.2,
-              ),
+              '${l10n.genreText}: ${_showGenres(movieInfo.genres)}',
+              style: themeData.movieAppTextTheme.genreText
+                  .copyWith(color: Colors.black),
             ),
           ],
         ),

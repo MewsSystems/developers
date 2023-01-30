@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_info.dart';
 import 'package:movie_app/models/popular_movies.dart';

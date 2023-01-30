@@ -19,7 +19,7 @@ class TheMovieDbRepository {
     return await theMovieDbService.getMovieInfo(movieId);
   }
 
-  /// Get info about the movie by giving id
+  /// Get list of movies by query (name)
   Future<List<Movie>?> searchMovie(String query) async {
     return await theMovieDbService.getSearchMovies(query);
   }

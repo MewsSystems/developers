@@ -10,6 +10,7 @@ import 'package:movie_app/repositories/movies_repository.dart';
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final TheMovieDbRepository _theMovieDbRepository;
   int page = 1;
+  bool maxPage = false;
   MoviesBloc({
     required TheMovieDbRepository theMovieDbRepository,
   })  : _theMovieDbRepository = theMovieDbRepository,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/movie_home/bloc/movies_bloc.dart';
 import 'package:movie_app/movie_home/bloc/movies_event.dart';
 import 'package:movie_app/movie_home/bloc/movies_state.dart';
@@ -44,19 +43,17 @@ class _HomePageState extends State<HomePage> {
                     case MoviesLoadStatus.failed:
                       return const ErrorView();
                     case MoviesLoadStatus.succeed:
+                      if (state.movieList.isEmpty) {
+                        return const Center(
+                          child: Text('No movies found'),
+                        );
+                      }
                       return Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: state.movieList.isNotEmpty
-                              ? Flexible(
-                                  child: MovieList(
-                                    moviesList: state.movieList,
-                                  ),
-                                )
-                              : const Center(
-                                  child: Text('No movies found'),
-                                ),
-                        ),
+                            padding: const EdgeInsets.all(14.0),
+                            child: MovieList(
+                              moviesList: state.movieList,
+                            )),
                       );
                     case MoviesLoadStatus.loading:
                       return const Center(
