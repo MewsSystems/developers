@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/movie_home/bloc/movies_bloc.dart';
 import 'package:movie_app/movie_home/bloc/movies_event.dart';
 import 'package:movie_app/movie_home/bloc/movies_state.dart';
@@ -33,8 +34,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: SafeArea(
+          bottom: false,
           child: Column(
             children: [
+              MovieSearch(),
               BlocBuilder<MoviesBloc, MoviesState>(
                 builder: (context, state) {
                   switch (state.moviesLoadStatus) {
@@ -42,19 +45,17 @@ class _HomePageState extends State<HomePage> {
                       return const ErrorView();
                     case MoviesLoadStatus.succeed:
                       return Expanded(
-                        child: Column(
-                          children: [
-                            MovieSearch(),
-                            state.movieList.isNotEmpty
-                                ? Flexible(
-                                    child: MovieList(
-                                      moviesList: state.movieList,
-                                    ),
-                                  )
-                                : const Center(
-                                    child: Text('No movies found'),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: state.movieList.isNotEmpty
+                              ? Flexible(
+                                  child: MovieList(
+                                    moviesList: state.movieList,
                                   ),
-                          ],
+                                )
+                              : const Center(
+                                  child: Text('No movies found'),
+                                ),
                         ),
                       );
                     case MoviesLoadStatus.loading:

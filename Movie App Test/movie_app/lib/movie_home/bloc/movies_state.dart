@@ -9,28 +9,28 @@ enum MoviesLoadStatus {
 class MoviesState {
   final MoviesLoadStatus moviesLoadStatus;
   final List<Movie> movieList;
-  final int page;
+  final bool isFetching;
 
   MoviesState({
     required this.movieList,
     required this.moviesLoadStatus,
-    required this.page,
+    required this.isFetching,
   });
 
   factory MoviesState.initial() => MoviesState(
         movieList: [],
         moviesLoadStatus: MoviesLoadStatus.loading,
-        page: 1,
+        isFetching: false,
       );
 
   MoviesState copyWith({
     required MoviesLoadStatus moviesLoadStatus,
     required List<Movie> movieList,
-    required int page,
+    required bool isFetching,
   }) =>
       MoviesState(
         movieList: movieList,
         moviesLoadStatus: moviesLoadStatus,
-        page: page,
+        isFetching: isFetching,
       );
 }

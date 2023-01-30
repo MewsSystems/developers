@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "movieListAppBarTitle": "Movie List Test",
+    "movieListAppBarTitle": "MovieDb App",
     "@cryptoListAppBarTitle": {
         "description": "Text shown in the AppBar of the Home Page"
     },

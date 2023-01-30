@@ -9,6 +9,7 @@ import 'package:movie_app/repositories/movies_repository.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final TheMovieDbRepository _theMovieDbRepository;
+  int page = 1;
   MoviesBloc({
     required TheMovieDbRepository theMovieDbRepository,
   })  : _theMovieDbRepository = theMovieDbRepository,
@@ -25,9 +26,8 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     if (event is GetPopularMovies) {
       await _getPopularMovies(emit);
     } else if (event is NextPagePopularMovies) {
-      await _getPopularMovies(
+      await _getNextPage(
         emit,
-        page: event.page,
       );
     } else if (event is MoviesSearch) {
       await _getSearchMovies(
@@ -38,35 +38,70 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   }
 
   Future<void> _getPopularMovies(
-    Emitter<MoviesState> emit, {
-    int page = 1,
-  }) async {
+    Emitter<MoviesState> emit,
+  ) async {
     emit(
       state.copyWith(
         moviesLoadStatus: MoviesLoadStatus.loading,
         movieList: state.movieList,
-        page: page,
+        isFetching: false,
       ),
     );
     try {
       var movies = await _theMovieDbRepository.getPopularMovies(page);
-      if (page > 1) {
+      if (state.movieList.isNotEmpty) {
         movies = state.movieList + movies!;
       }
       emit(
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.succeed,
           movieList: movies!,
-          page: page,
+          isFetching: false,
         ),
       );
+      page++;
     } catch (e) {
       log(e.toString());
       emit(
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.failed,
           movieList: [],
-          page: page,
+          isFetching: false,
+        ),
+      );
+    }
+  }
+
+  Future<void> _getNextPage(
+    Emitter<MoviesState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        moviesLoadStatus: MoviesLoadStatus.succeed,
+        movieList: state.movieList,
+        isFetching: false,
+      ),
+    );
+    try {
+      var movies = await _theMovieDbRepository.getPopularMovies(page);
+      if (state.movieList.isNotEmpty) {
+        movies = state.movieList + movies!;
+      }
+      emit(
+        state.copyWith(
+          moviesLoadStatus: MoviesLoadStatus.succeed,
+          movieList: movies!,
+          isFetching: false,
+        ),
+      );
+      page++;
+    } catch (e) {
+      log(e.toString());
+      emit(
+        state.copyWith(
+          moviesLoadStatus: MoviesLoadStatus.failed,
+          movieList: [],
+          isFetching: false,
         ),
       );
     }
@@ -74,26 +109,22 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
   Future<void> _getSearchMovies(
     Emitter<MoviesState> emit,
-    String query, {
-    int page = 1,
-  }) async {
+    String query,
+  ) async {
     emit(
       state.copyWith(
         moviesLoadStatus: MoviesLoadStatus.loading,
         movieList: state.movieList,
-        page: state.page,
+        isFetching: false,
       ),
     );
     try {
       var movies = await _theMovieDbRepository.searchMovie(query);
-      if (page > 1) {
-        movies = state.movieList + movies!;
-      }
       emit(
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.succeed,
           movieList: movies!,
-          page: page,
+          isFetching: false,
         ),
       );
     } catch (e) {
@@ -102,7 +133,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.failed,
           movieList: [],
-          page: page,
+          isFetching: false,
         ),
       );
     }

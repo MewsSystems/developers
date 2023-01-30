@@ -1,6 +1,6 @@
 {
     "@@locale": "es",
-    "movieListAppBarTitle": "Lista de peliculas",
+    "movieListAppBarTitle": "MovieDB App",
     "@cryptoListAppBarTitle": {
         "description": "Texto mostrado en el AppBar de la Home"
     },

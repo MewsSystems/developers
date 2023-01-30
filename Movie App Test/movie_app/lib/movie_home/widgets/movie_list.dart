@@ -29,9 +29,7 @@ class _MovieListState extends State<MovieList> {
         if (context.read<MoviesBloc>().state.moviesLoadStatus !=
             MoviesLoadStatus.loading) {
           context.read<MoviesBloc>().add(
-                NextPagePopularMovies(
-                  page: context.read<MoviesBloc>().state.page + 1,
-                ),
+                NextPagePopularMovies(),
               );
         }
       }
@@ -61,12 +59,15 @@ class _MovieListState extends State<MovieList> {
             clipBehavior: Clip.antiAlias,
             child: Hero(
               tag: "${widget.moviesList[index].id}",
-              child: FadeInImage.memoryNetwork(
-                image: TheMovieDbService.imageUrl(
-                    widget.moviesList[index].posterPath!, PosterSize.w185),
-                placeholder: kTransparentImage,
-                fit: BoxFit.cover,
-              ),
+              child: widget.moviesList[index].posterPath != null
+                  ? FadeInImage.memoryNetwork(
+                      image: TheMovieDbService.imageUrl(
+                          widget.moviesList[index].posterPath!,
+                          PosterSize.w185),
+                      placeholder: kTransparentImage,
+                      fit: BoxFit.cover,
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
         );
