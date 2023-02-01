@@ -1,16 +1,61 @@
-# movie_app
+# Mews Mobile developer task (Flutter)
 
-A new Flutter project.
+Mobile app that interact with MovieDB API.
 
-## Getting Started
+____
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Concepts used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* Clean Architecture 🏗️
+* Integration tests
+* Modularity
+* .env (environment variables)
+* BloC
+* localizations
+* Custom Theme
+## Working with Translations 🌐
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project relies on [flutter_localizations][flutter_localizations_link] and follows the [official internationalization guide for Flutter][internationalization_link].
+
+### Adding Strings
+
+1. To add a new localizable string, open the `app_en.arb` file at `lib/l10n/arb/app_en.arb`.
+
+```arb
+{
+    "@@locale": "en",
+    "counterAppBarTitle": "Counter",
+    "@counterAppBarTitle": {
+        "description": "Text shown in the AppBar of the Counter Page"
+    }
+}
+```
+
+2. Then add a new key/value and description
+
+```arb
+{
+    "@@locale": "en",
+    "counterAppBarTitle": "Counter",
+    "@counterAppBarTitle": {
+        "description": "Text shown in the AppBar of the Counter Page"
+    },
+    "helloWorld": "Hello World",
+    "@helloWorld": {
+        "description": "Hello World Text"
+    }
+}
+```
+
+3. Use the new string
+
+```dart
+import 'package:coffee_app/l10n/l10n.dart';
+
+@override
+Widget build(BuildContext context) {
+  final l10n = context.l10n;
+  return Text(l10n.helloWorld);
+}
+```
