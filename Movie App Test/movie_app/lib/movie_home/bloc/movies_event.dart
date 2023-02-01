@@ -9,6 +9,10 @@ class GetPopularMovies extends MoviesEvent {}
 
 class NextPagePopularMovies extends MoviesEvent {}
 
+class CleanSearch extends MoviesEvent {}
+
+class NextPageSearch extends MoviesEvent {}
+
 class MoviesSearch extends MoviesEvent {
   final String query;
 

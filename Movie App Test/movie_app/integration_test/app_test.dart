@@ -44,6 +44,9 @@ void main() {
       await movieDetailRobot.scrollPage();
       await movieDetailRobot.goBack();
 
+      await homeRobot.cleanSearch();
+      sleep(const Duration(seconds: 2));
+
       await homeRobot.scrollHomePage();
     });
   });

@@ -28,9 +28,13 @@ class _MovieListState extends State<MovieList> {
           scrollController.position.pixels) {
         if (context.read<MoviesBloc>().state.moviesLoadStatus !=
             MoviesLoadStatus.loading) {
-          context.read<MoviesBloc>().add(
-                NextPagePopularMovies(),
-              );
+          context.read<MoviesBloc>().state.isSearch
+              ? context.read<MoviesBloc>().add(
+                    NextPageSearch(),
+                  )
+              : context.read<MoviesBloc>().add(
+                    NextPagePopularMovies(),
+                  );
         }
       }
     });
@@ -40,9 +44,7 @@ class _MovieListState extends State<MovieList> {
   Widget build(BuildContext context) {
     return GridView.builder(
       key: const Key('movieGridScrollView'),
-      itemCount: context.read<MoviesBloc>().state.isFetching
-          ? widget.moviesList.length
-          : widget.moviesList.length + 1,
+      itemCount: widget.moviesList.length + 1,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       controller: scrollController,
@@ -50,7 +52,7 @@ class _MovieListState extends State<MovieList> {
         return index >= widget.moviesList.length
             ? const BottomLoader()
             : GestureDetector(
-              key: const Key('openMovieDetail'),
+                key: const Key('openMovieDetail'),
                 onTap: () {
                   Navigator.push(
                     context,

@@ -19,6 +19,7 @@ class MovieAppThemeData {
           titleLarge: const TextStyle(
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
+            fontSize: 20,
           ),
           bodyText: const TextStyle(
             fontSize: 14.0,
@@ -26,13 +27,13 @@ class MovieAppThemeData {
             letterSpacing: 1.2,
           ),
           durationText: TextStyle(
-            color: colors.darkBlue,
+            color: colors.black,
             fontSize: 16.0,
             fontWeight: FontWeight.w500,
             letterSpacing: 1.2,
           ),
           genreText: TextStyle(
-            color: colors.darkBlue,
+            color: colors.black,
             fontSize: 12.0,
             fontWeight: FontWeight.w500,
             letterSpacing: 1.2,
@@ -46,6 +47,7 @@ extension MaterialThemeData on MovieAppThemeData {
         primaryTextTheme: ThemeData.light().textTheme,
         appBarTheme: AppBarTheme(
             systemOverlayStyle: SystemUiOverlayStyle.dark,
+            color: colorPalette.black,
             titleTextStyle: movieAppTextTheme.titleLarge),
         fontFamily: 'Axiforma Book',
       );

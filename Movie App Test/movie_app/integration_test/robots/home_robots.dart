@@ -28,6 +28,15 @@ class HomeRobot {
     await tester.pumpAndSettle();
   }
 
+  Future<void> cleanSearch() async {
+    final searchInputTextFinder = find.byKey(const Key('searchClear'));
+
+    await tester.ensureVisible(searchInputTextFinder);
+    await tester.tap(searchInputTextFinder);
+
+    await tester.pumpAndSettle();
+  }
+
   Future<void> scrollHomePage({bool scrollUp = false}) async {
     final scrollViewFinder = find.byKey(const Key('movieGridScrollView'));
 

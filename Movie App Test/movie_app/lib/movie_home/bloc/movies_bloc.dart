@@ -26,14 +26,19 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   ) async {
     if (event is GetPopularMovies) {
       await _getPopularMovies(emit);
+    } else if (event is CleanSearch) {
+      await _getPopularMovies(emit);
     } else if (event is NextPagePopularMovies) {
-      await _getNextPage(
-        emit,
-      );
+      await _getNextPage(emit);
     } else if (event is MoviesSearch) {
       await _getSearchMovies(
         emit,
         event.query,
+      );
+    } else if (event is NextPageSearch) {
+      await _getSearchMovies(
+        emit,
+        state.query!,
       );
     }
   }
@@ -41,11 +46,14 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   Future<void> _getPopularMovies(
     Emitter<MoviesState> emit,
   ) async {
+    if (state.isSearch == true) {
+      page = 1;
+    }
     emit(
       state.copyWith(
         moviesLoadStatus: MoviesLoadStatus.loading,
-        movieList: state.movieList,
-        isFetching: false,
+        movieList: state.isSearch ? [] : state.movieList,
+        isSearch: false,
       ),
     );
     try {
@@ -57,7 +65,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.succeed,
           movieList: movies!,
-          isFetching: false,
+          isSearch: false,
         ),
       );
       page++;
@@ -67,7 +75,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.failed,
           movieList: [],
-          isFetching: false,
+          isSearch: false,
         ),
       );
     }
@@ -80,7 +88,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
       state.copyWith(
         moviesLoadStatus: MoviesLoadStatus.succeed,
         movieList: state.movieList,
-        isFetching: false,
+        isSearch: false,
       ),
     );
     try {
@@ -92,7 +100,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.succeed,
           movieList: movies!,
-          isFetching: false,
+          isSearch: false,
         ),
       );
       page++;
@@ -102,7 +110,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.failed,
           movieList: [],
-          isFetching: false,
+          isSearch: false,
         ),
       );
     }
@@ -112,29 +120,38 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
     Emitter<MoviesState> emit,
     String query,
   ) async {
+    if (state.isSearch == false) {
+      page = 1;
+    }
     emit(
       state.copyWith(
         moviesLoadStatus: MoviesLoadStatus.loading,
-        movieList: state.movieList,
-        isFetching: false,
+        movieList: state.isSearch ? state.movieList : [],
+        isSearch: true,
+        query: query,
       ),
     );
     try {
       var movies = await _theMovieDbRepository.searchMovie(query);
+      if (state.movieList.isNotEmpty) {
+        movies = state.movieList + movies!;
+      }
       emit(
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.succeed,
           movieList: movies!,
-          isFetching: false,
+          isSearch: true,
+          query: query,
         ),
       );
+      page++;
     } catch (e) {
       log(e.toString());
       emit(
         state.copyWith(
           moviesLoadStatus: MoviesLoadStatus.failed,
           movieList: [],
-          isFetching: false,
+          isSearch: true,
         ),
       );
     }
