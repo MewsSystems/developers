@@ -15,6 +15,7 @@ class MovieSearch extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        key: const Key('searchField'),
         controller: _textEditingController,
         decoration: InputDecoration(
           filled: true,

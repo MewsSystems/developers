@@ -28,6 +28,14 @@ class MovieDetailAppBar extends StatelessWidget {
               : const SizedBox.shrink(),
         ),
       ),
+      leading: IconButton(
+        key: const Key('backButton'),
+        icon: const Icon(Icons.keyboard_arrow_left_rounded),
+        iconSize: 30,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 }

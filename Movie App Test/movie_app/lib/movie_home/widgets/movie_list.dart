@@ -50,6 +50,7 @@ class _MovieListState extends State<MovieList> {
         return index >= widget.moviesList.length
             ? const BottomLoader()
             : GestureDetector(
+              key: const Key('openMovieDetail'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -61,7 +62,6 @@ class _MovieListState extends State<MovieList> {
                   );
                 },
                 child: Card(
-                  key: const Key('movieCard'),
                   clipBehavior: Clip.antiAlias,
                   child: Hero(
                     tag: "${widget.moviesList[index].id}",

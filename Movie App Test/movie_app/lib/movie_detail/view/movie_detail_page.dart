@@ -33,6 +33,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             case MovieInfoLoadStatus.succeeded:
               return Scaffold(
                 body: CustomScrollView(
+                  key: const Key('movieDetailScrollView'),
                   slivers: [
                     MovieDetailAppBar(
                       movieInfo: state.movieInfo!,

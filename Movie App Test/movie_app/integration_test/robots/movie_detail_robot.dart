@@ -8,13 +8,17 @@ class MovieDetailRobot {
   MovieDetailRobot(this.tester);
 
   Future<void> goBack() async {
-    await tester.pageBack();
+    final backButton = find.byKey(const Key('backButton'));
+
+    await tester.tap(backButton);
+
+    //await tester.pageBack();
     await tester.pumpAndSettle();
     sleep(const Duration(seconds: 2));
   }
 
   Future<void> scrollPage({bool scrollUp = false}) async {
-    final scrollViewFinder = find.byKey(const Key('movieGridScrollView'));
+    final scrollViewFinder = find.byKey(const Key('movieDetailScrollView'));
 
     if (scrollUp) {
       await tester.fling(scrollViewFinder, const Offset(0, 500), 10000);
