@@ -39,11 +39,11 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         LogResult(source);
     }
 
-    public IEnumerable<ExchangeRate> GetSourceExchangeRates(string currencyCode)
+    public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency)
     {
         lock (_locker)
         {
-            if (ExchangeRateCache.SourceExchangeRates.TryGetValue(currencyCode, out var exchangeRates))
+            if (ExchangeRateCache.SourceExchangeRates.TryGetValue(currency, out var exchangeRates))
             {
                 return exchangeRates;
             };
@@ -51,11 +51,11 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         return Enumerable.Empty<ExchangeRate>();
     }
 
-    public IEnumerable<ExchangeRate> GetTargetExchangeRates(string currencyCode)
+    public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency)
     {
         lock (_locker)
         {
-            if (ExchangeRateCache.TargetExchangeRates.TryGetValue(currencyCode, out var exchangeRates))
+            if (ExchangeRateCache.TargetExchangeRates.TryGetValue(currency, out var exchangeRates))
             {
                 return exchangeRates;
             };

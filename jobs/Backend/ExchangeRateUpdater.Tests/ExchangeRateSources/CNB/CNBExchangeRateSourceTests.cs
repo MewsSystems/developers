@@ -30,7 +30,7 @@ public class CNBExchangeRateSourceTests
     public async void GetSourceExchangeRatesTest()
     {
         await _rateSource.LoadAsync();
-        var sourceRates = _rateSource.GetSourceExchangeRates(CZK.Code);
+        var sourceRates = _rateSource.GetSourceExchangeRates(CZK);
         Assert.Empty(sourceRates);
     }
 
@@ -38,7 +38,7 @@ public class CNBExchangeRateSourceTests
     public async void GetTargetExchangeRatesTest()
     {
         await _rateSource.LoadAsync();
-        var targetRates = _rateSource.GetTargetExchangeRates(CZK.Code);
+        var targetRates = _rateSource.GetTargetExchangeRates(CZK);
         Assert.Equal(RATES_IN_TEST_FILE, targetRates.Count());
     }
 }

@@ -8,8 +8,8 @@ namespace ExchangeRateUpdater.Abstractions
     {
 
         public Task LoadAsync();
-        public IEnumerable<ExchangeRate> GetSourceExchangeRates(string currencyCode);
-        public IEnumerable<ExchangeRate> GetTargetExchangeRates(string currencyCode);
+        public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency);
+        public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency);
 
     }
 }

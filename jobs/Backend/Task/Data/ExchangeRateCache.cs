@@ -5,26 +5,26 @@ namespace ExchangeRateUpdater.Data
 {
     public sealed class ExchangeRateCache
     {
-        public Dictionary<string, List<ExchangeRate>> SourceExchangeRates = new();
-        public Dictionary<string, List<ExchangeRate>> TargetExchangeRates = new();
+        public Dictionary<Currency, List<ExchangeRate>> SourceExchangeRates = new();
+        public Dictionary<Currency, List<ExchangeRate>> TargetExchangeRates = new();
         public int Count { get; set; } = 0;
 
         public void Add(ExchangeRate exchangeRate)
         {
-            AddToDictionary(SourceExchangeRates, exchangeRate.SourceCurrency.Code, exchangeRate);
-            AddToDictionary(TargetExchangeRates, exchangeRate.TargetCurrency.Code, exchangeRate);
+            AddToDictionary(SourceExchangeRates, exchangeRate.SourceCurrency, exchangeRate);
+            AddToDictionary(TargetExchangeRates, exchangeRate.TargetCurrency, exchangeRate);
             Count++;
         }
 
-        private static void AddToDictionary(IDictionary<string, List<ExchangeRate>> dictionary, string code, ExchangeRate exchangeRate)
+        private static void AddToDictionary(IDictionary<Currency, List<ExchangeRate>> dictionary, Currency currency, ExchangeRate exchangeRate)
         {
-            if (dictionary.TryGetValue(code, out List<ExchangeRate> list))
+            if (dictionary.TryGetValue(currency, out List<ExchangeRate> list))
             {
                 list.Add(exchangeRate);
             }
             else
             {
-                dictionary.Add(code, new List<ExchangeRate>() { exchangeRate });
+                dictionary.Add(currency, new List<ExchangeRate>() { exchangeRate });
             }
         }
 

@@ -40,12 +40,12 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void TestExchangeRateProvider()
+        public void TestExchangeRateProvider()
         {
             var currencies = new List<Currency>() { Constants.EUR };
             var rates = _rateProvider.GetExchangeRates(currencies).ToList();
             Assert.Single(rates);
-            Assert.Equal(Constants.EUR.Code, rates.First().SourceCurrency.Code);
+            Assert.Equal(Constants.EUR, rates.First().SourceCurrency);
 
         }
     }
