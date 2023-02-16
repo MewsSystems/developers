@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
         try
         {
             using IHost host = CreateHostBuilder(args).Build();
-            
+
             host.RunAsync();
             PrintCurrencies(host.Services).Wait();
 
@@ -31,12 +31,21 @@ public static class Program
         }
     }
 
-    private static async Task PrintCurrencies(IServiceProvider hostProvider)
+    private static async Task PrintCurrencies(IServiceProvider serviceProvider)
     {
-        var currencyOptions = hostProvider.GetService<IOptions<CurrencyOptions>>().Value;
-        var currencies = currencyOptions.Currencies.Select(c => new Currency(c));
-        var exchangeRatePrinter = hostProvider.GetService<IExchangeRatePrinter>();
-        await exchangeRatePrinter.PrintRates(currencies);
+        try
+        {
+            var currencyOptions = serviceProvider.GetService<IOptions<CurrencyOptions>>().Value;
+            var currencies = currencyOptions.Currencies.Select(c => new Currency(c));
+            var exchangeRatePrinter = serviceProvider.GetService<IExchangeRatePrinter>();
+            await exchangeRatePrinter.PrintRates(currencies);
+        }
+        catch (Exception e)
+        {
+            var logger = serviceProvider.GetService<ILogger<Program>>();
+            logger.LogError("Failed to print exchange rates", e);
+            throw;
+        }
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>

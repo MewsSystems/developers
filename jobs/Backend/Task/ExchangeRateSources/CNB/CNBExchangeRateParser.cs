@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Data;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace ExchangeRateUpdater.CNB;
 
 public static partial class CNBExchangeRateParser
 {
+    private const string CZECH_CURRENCY = "CZK";
+
     public static IEnumerable<ExchangeRate> ParseRates(string input)
     {
         var regex = CNBExchangeRateRegex();
@@ -15,13 +18,29 @@ public static partial class CNBExchangeRateParser
         var matches = regex.Matches(input).Cast<Match>();
         foreach (Match match in matches)
         {
-            var sourceCurrency = new Currency(match.Groups["code"].Value);
-            var targetCurrency = new Currency("CZK");
-            decimal value = decimal.Parse(match.Groups["value"].Value, CultureInfo.GetCultureInfo("cs-CZ"));
-            yield return new ExchangeRate(sourceCurrency, targetCurrency, value);
+            ExchangeRate exchangeRate = ComputeExchangeRate(match);
+            yield return exchangeRate;
         }
     }
 
-    [GeneratedRegex("^.*\\|(?<code>[a-zA-Z]*)\\|(?<value>\\d*,\\d*)$", RegexOptions.Multiline)]
+    private static ExchangeRate ComputeExchangeRate(Match match)
+    {
+        try
+        {
+            var sourceCurrency = new Currency(match.Groups["code"].Value);
+            var targetCurrency = new Currency(CZECH_CURRENCY);
+            decimal amount = decimal.Parse(match.Groups["amount"].Value, CultureInfo.GetCultureInfo("cs-CZ"));
+            decimal value = decimal.Parse(match.Groups["value"].Value, CultureInfo.GetCultureInfo("cs-CZ"));
+            var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, value / amount);
+            return exchangeRate;
+        }
+        catch (Exception e)
+        {
+            //optionally only log and skip the line
+            throw new FormatException($"Failed to parse rates. {match.Value}", e);
+        }
+    }
+
+    [GeneratedRegex("^.*\\|(?<amount>\\d+)\\|(?<code>[a-zA-Z]*)\\|(?<value>\\d*,\\d*)$", RegexOptions.Multiline)]
     private static partial Regex CNBExchangeRateRegex();
 }

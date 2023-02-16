@@ -3,7 +3,6 @@ using ExchangeRateUpdater.CNB;
 using ExchangeRateUpdater.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +31,11 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         {
             ExchangeRates.Add((rate.SourceCurrency.Code, rate.TargetCurrency.Code), rate);
         }
+        LogResult(source);
+    }
+
+    private void LogResult(Sources.ISource source)
+    {
         if (!ExchangeRates.Any())
         {
             _logger.LogWarning("Failed to load any exchange rates from source {source}", source);
@@ -41,5 +45,4 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
             _logger.LogInformation("Loaded {exchangeRateCount} exchange rates", ExchangeRates.Count);
         }
     }
-
 }

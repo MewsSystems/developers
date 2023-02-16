@@ -36,6 +36,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         _exchangeRateSource.LoadAsync().Wait();
         foreach (var item in currencies)
         {
+            //TODO: Move "CZK"
             if (_exchangeRateSource.ExchangeRates.TryGetValue((item.Code, "CZK"), out var exchangeRate))
             {
                 yield return exchangeRate;
