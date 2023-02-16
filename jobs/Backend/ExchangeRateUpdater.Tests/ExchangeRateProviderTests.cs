@@ -14,7 +14,7 @@ namespace ExchangeRateUpdater.Tests;
 
 public class ExchangeRateProviderTests
 {
-    IExchangeRateSource _integrationSource;
+    readonly IExchangeRateSource _integrationSource;
     public ExchangeRateProviderTests()
     {
         var integrationSource = new Mock<IExchangeRateSource>();

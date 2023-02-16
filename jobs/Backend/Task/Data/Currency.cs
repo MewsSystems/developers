@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater.Data;
 
-public sealed class Currency
+public sealed record Currency
 {
     public Currency(string code)
     {

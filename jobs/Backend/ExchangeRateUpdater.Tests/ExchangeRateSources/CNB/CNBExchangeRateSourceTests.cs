@@ -7,6 +7,7 @@ namespace ExchangeRateUpdater.ExchangeRateSources.CNB.Tests;
 
 public class CNBExchangeRateSourceTests
 {
+    private const int RATES_IN_TEST_FILE = 31;
     private readonly CNBExchangeRateSource _rateSource;
 
     public CNBExchangeRateSourceTests()
@@ -38,6 +39,6 @@ public class CNBExchangeRateSourceTests
     {
         await _rateSource.LoadAsync();
         var targetRates = _rateSource.GetTargetExchangeRates(CZK.Code);
-        Assert.Equal(31, targetRates.Count());
+        Assert.Equal(RATES_IN_TEST_FILE, targetRates.Count());
     }
 }

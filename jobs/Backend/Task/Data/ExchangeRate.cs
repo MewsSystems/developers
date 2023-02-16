@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater.Data;
 
-public sealed class ExchangeRate
+public sealed record ExchangeRate
 {
     public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
     {

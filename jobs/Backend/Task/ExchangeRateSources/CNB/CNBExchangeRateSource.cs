@@ -14,7 +14,7 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
     private readonly IOptions<CNBSourceOptions> _options;
     private readonly ILogger<CNBExchangeRateSource> _logger;
 
-    private readonly object _locker = new object();
+    private readonly object _locker = new();
 
     public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
     {
@@ -30,6 +30,7 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         string cnbSource = await source.GetContent();
         lock (_locker)
         {
+            ExchangeRateCache.Clear();
             foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
             {
                 ExchangeRateCache.Add(rate);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater.Data
 {
@@ -25,6 +26,12 @@ namespace ExchangeRateUpdater.Data
             {
                 dictionary.Add(code, new List<ExchangeRate>() { exchangeRate });
             }
+        }
+
+        public void Clear()
+        {
+            SourceExchangeRates.Clear();
+            TargetExchangeRates.Clear();
         }
     }
 }
