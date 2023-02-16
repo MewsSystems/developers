@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
+		<UserSecretsId>2c1e66df-c7f9-4033-9a83-b4108c3b5f74</UserSecretsId>
 	</PropertyGroup>
 		<ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />

@@ -6,8 +6,10 @@ namespace ExchangeRateUpdater.Abstractions
 {
     public interface IExchangeRateSource
     {
-        public IDictionary<(string sourceCode, string targetCode), ExchangeRate> ExchangeRates { get; }
 
         public Task LoadAsync();
+        public IEnumerable<ExchangeRate> GetSourceExchangeRates(string currencyCode);
+        public IEnumerable<ExchangeRate> GetTargetExchangeRates(string currencyCode);
+
     }
 }

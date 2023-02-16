@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.ExchangeRateSources.CNB;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,6 @@ public class Program
         catch (Exception e)
         {
             Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-
         }
     }
 

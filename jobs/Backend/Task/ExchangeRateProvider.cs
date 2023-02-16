@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
 
@@ -18,9 +20,13 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         await _exchangeRateSource.LoadAsync();
         foreach (var item in currencies)
         {
-            if (_exchangeRateSource.ExchangeRates.TryGetValue((item.Code, "CZK"), out var exchangeRate))
+            foreach (var rate in _exchangeRateSource.GetSourceExchangeRates(item.Code))
             {
-                yield return exchangeRate;
+                yield return rate;
+            }
+            foreach (var rate in _exchangeRateSource.GetTargetExchangeRates(item.Code))
+            {
+                yield return rate;
             }
         }
     }
@@ -36,10 +42,13 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         _exchangeRateSource.LoadAsync().Wait();
         foreach (var item in currencies)
         {
-            //TODO: Move "CZK"
-            if (_exchangeRateSource.ExchangeRates.TryGetValue((item.Code, "CZK"), out var exchangeRate))
+            foreach (var rate in _exchangeRateSource.GetSourceExchangeRates(item.Code))
             {
-                yield return exchangeRate;
+                yield return rate;
+            }
+            foreach (var rate in _exchangeRateSource.GetTargetExchangeRates(item.Code))
+            {
+                yield return rate;
             }
         }
     }
