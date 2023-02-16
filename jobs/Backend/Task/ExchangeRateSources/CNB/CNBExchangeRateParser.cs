@@ -21,6 +21,7 @@ public static partial class CNBExchangeRateParser
             ExchangeRate exchangeRate = ComputeExchangeRate(match);
             yield return exchangeRate;
         }
+
     }
 
     private static ExchangeRate ComputeExchangeRate(Match match)
