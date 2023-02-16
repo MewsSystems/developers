@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.CNB;
 
-namespace ExchangeRateUpdater.Tests;
+namespace ExchangeRateUpdater.Tests.ExchangeRateSources.CNB;
 
 public class CNBExchangeRateParserTests
 {
@@ -17,7 +17,9 @@ public class CNBExchangeRateParserTests
     public void ParseRatesInvalidFormatTest()
     {
         var allFileText = "CZK 1,5";
-        var rates = CNBExchangeRateParser.ParseRates(allFileText);
-        Assert.Empty(rates);
+        Assert.Throws<FormatException>(() =>
+        {
+            var rates = CNBExchangeRateParser.ParseRates(allFileText).ToList();
+        });
     }
 }

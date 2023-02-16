@@ -10,12 +10,17 @@ namespace ExchangeRateUpdater.CNB;
 public static partial class CNBExchangeRateParser
 {
     private const string CZECH_CURRENCY = "CZK";
+    private const int ERROR_MESSAGE_INPUT_PREVIEW_LENGTH = 50;
 
     public static IEnumerable<ExchangeRate> ParseRates(string input)
     {
         var regex = CNBExchangeRateRegex();
         //Cast to avoid warning about MatchCollection item casted from object to Match
         var matches = regex.Matches(input).Cast<Match>();
+        if (!matches.Any())
+        {
+            throw new FormatException($"Failed to parse rates. Invalid format: {input.Take(ERROR_MESSAGE_INPUT_PREVIEW_LENGTH)}");
+        }
         foreach (Match match in matches)
         {
             ExchangeRate exchangeRate = ComputeExchangeRate(match);
