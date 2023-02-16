@@ -4,7 +4,6 @@
 		<TargetFramework>net7.0</TargetFramework>
 	</PropertyGroup>
 		<ItemGroup>
-	  <PackageReference Include="CsvHelper" Version="30.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 	</ItemGroup>
 		<ItemGroup>
