@@ -4,7 +4,10 @@ using ExchangeRateUpdater.ExchangeRateSources.CNB;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
 
@@ -15,7 +18,11 @@ public static class Program
         try
         {
             using IHost host = CreateHostBuilder(args).Build();
-            host.Run();
+            
+            host.RunAsync();
+            PrintCurrencies(host.Services).Wait();
+
+            host.StopAsync().Wait();
         }
         catch (Exception e)
         {
@@ -23,6 +30,15 @@ public static class Program
 
         }
     }
+
+    private static async Task PrintCurrencies(IServiceProvider hostProvider)
+    {
+        var currencyOptions = hostProvider.GetService<IOptions<CurrencyOptions>>().Value;
+        var currencies = currencyOptions.Currencies.Select(c => new Currency(c));
+        var exchangeRatePrinter = hostProvider.GetService<IExchangeRatePrinter>();
+        await exchangeRatePrinter.PrintRates(currencies);
+    }
+
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
         .ConfigureServices(ConfigureServices)
@@ -38,7 +54,6 @@ public static class Program
                 .Configure<CNBSourceOptions>(context.Configuration.GetSection("CNBSourceOptions") ?? throw new Exception("Missing CNB source options"))
                 .AddSingleton<IExchangeRateSource, CNBExchangeRateSource>()
                 .AddTransient<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddTransient<IExchangeRatePrinter, ExchangeRatePrinter>()
-                .AddHostedService<ExchangeRateService>();
+                .AddTransient<IExchangeRatePrinter, ExchangeRatePrinter>();
 
 }

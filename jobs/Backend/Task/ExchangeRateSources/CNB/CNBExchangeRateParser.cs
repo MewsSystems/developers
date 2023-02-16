@@ -20,7 +20,6 @@ public static partial class CNBExchangeRateParser
             decimal value = decimal.Parse(match.Groups["value"].Value, CultureInfo.GetCultureInfo("cs-CZ"));
             yield return new ExchangeRate(sourceCurrency, targetCurrency, value);
         }
-
     }
 
     [GeneratedRegex("^.*\\|(?<code>[a-zA-Z]*)\\|(?<value>\\d*,\\d*)$", RegexOptions.Multiline)]
