@@ -3,11 +3,6 @@ using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.ExchangeRateSources.CNB;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Tests
 {
@@ -36,7 +31,7 @@ namespace ExchangeRateUpdater.Tests
             var rates = _rateProvider.GetExchangeRates(currencies).OrderBy(c => c.Value).ToList();
             var orderedRates = ratesAsync.OrderBy(c => c.Value).ToList();
             Assert.Equal(rates, orderedRates);
-            
+
         }
 
         [Fact]

@@ -1,11 +1,9 @@
 ﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExchangeRateUpdater;
 

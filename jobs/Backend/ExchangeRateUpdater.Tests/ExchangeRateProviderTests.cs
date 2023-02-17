@@ -1,13 +1,6 @@
-﻿using Xunit;
-using ExchangeRateUpdater;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using ExchangeRateUpdater.Abstractions;
+﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
+using Moq;
 using static ExchangeRateUpdater.Tests.Constants;
 
 namespace ExchangeRateUpdater.Tests;
@@ -24,7 +17,7 @@ public class ExchangeRateProviderTests
             .Returns(() => new List<ExchangeRate>() { EURCZK });
 
         integrationSource.Setup(i => i.GetSourceExchangeRates(EUR))
-            .Returns(() => new List<ExchangeRate>() { EURCZK, EURJPY});
+            .Returns(() => new List<ExchangeRate>() { EURCZK, EURJPY });
         integrationSource.Setup(i => i.GetTargetExchangeRates(EUR))
             .Returns(() => new List<ExchangeRate>() { USDEUR });
 

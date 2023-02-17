@@ -1,5 +1,4 @@
-﻿using System;
-using ExchangeRateUpdater.Data;
+﻿using ExchangeRateUpdater.Data;
 
 namespace ExchangeRateUpdater.ExchangeRateSources.CNB;
 

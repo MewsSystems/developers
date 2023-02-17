@@ -44,7 +44,7 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
 
     public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency)
     {
-        
+
         lock (_locker)
         {
             if (!loaded)
@@ -61,7 +61,7 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
 
     public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency)
     {
-        
+
         lock (_locker)
         {
             if (!loaded)

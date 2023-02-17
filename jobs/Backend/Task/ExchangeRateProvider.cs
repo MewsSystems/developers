@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using ExchangeRateUpdater.Abstractions;
+﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater;
 
