@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.Tests
                 Location = Data.SourceLocation.File,
                 FileUri = "../../../Data/denni_kurz.txt"
             });
-            _exchangeRateSource = new CNBExchangeRateSimpleSource(_options, NullLogger<CNBExchangeRateSource>.Instance);
+            _exchangeRateSource = new CNBExchangeRateSource(_options, NullLogger<CNBExchangeRateSource>.Instance);
             _rateProvider = new ExchangeRateProvider(_exchangeRateSource);
         }
 

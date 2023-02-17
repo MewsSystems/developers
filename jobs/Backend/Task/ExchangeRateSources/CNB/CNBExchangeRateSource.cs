@@ -7,84 +7,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.ExchangeRateSources.CNB;
-
-public sealed class CNBExchangeRateSource : IExchangeRateSourceOld
+namespace ExchangeRateUpdater.ExchangeRateSources.CNB
 {
-    private readonly IOptions<CNBSourceOptions> _options;
-    private readonly ILogger<CNBExchangeRateSource> _logger;
-    private readonly object _locker = new();
-
-    private bool loaded = false;
-
-    public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
+    public sealed class CNBExchangeRateSource : IExchangeRateSource
     {
-        _options = options;
-        _logger = logger;
-    }
+        private readonly IOptions<CNBSourceOptions> _options;
+        private readonly ILogger<CNBExchangeRateSource> _logger;
+        private readonly object _locker = new();
+        private bool loaded;
 
-    private ExchangeRateCache ExchangeRateCache { get; } = new();
+        private List<ExchangeRate> _exchangeRates = new();
 
-    public async Task LoadAsync()
-    {
-        var source = CNBSourceFactory.CreateSource(_options.Value);
-        string cnbSource = await source.GetContent();
-        lock (_locker)
+        public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
         {
-            loaded = false;
-            ExchangeRateCache.Clear();
-            foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
+            _options = options;
+            _logger = logger;
+        }
+
+        public async Task LoadAsync()
+        {
+            var source = CNBSourceFactory.CreateSource(_options.Value);
+            string cnbSource = await source.GetContent();
+            lock (_locker)
             {
-                ExchangeRateCache.Add(rate);
+                loaded = false;
+                _exchangeRates = new();
+                foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
+                {
+                    _exchangeRates.Add(rate);
+                }
+                loaded = true;
             }
-            loaded = true;
+            LogResult(source);
         }
-        LogResult(source);
-    }
 
-    public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency)
-    {
-
-        lock (_locker)
+        public IEnumerable<ExchangeRate> GetExchangeRates()
         {
-            if (!loaded)
+            lock (_locker)
             {
-                _logger.LogWarning("Requesting SourceExchangeRates but this source was not loaded");
+                if (!loaded)
+                {
+                    _logger.LogWarning("Requesting ExchangeRates but this source was not loaded");
+                }
+                return _exchangeRates.AsReadOnly();
             }
-            if (ExchangeRateCache.SourceExchangeRates.TryGetValue(currency, out var exchangeRates))
-            {
-                return exchangeRates;
-            };
         }
-        return Enumerable.Empty<ExchangeRate>();
-    }
 
-    public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency)
-    {
-
-        lock (_locker)
+        private void LogResult(Sources.ISource source)
         {
-            if (!loaded)
+            if (_exchangeRates.Count == 0)
             {
-                _logger.LogWarning("Requesting TargetExchangeRates but this source was not loaded");
+                _logger.LogWarning("Failed to load any exchange rates from source {source}", source);
             }
-            if (ExchangeRateCache.TargetExchangeRates.TryGetValue(currency, out var exchangeRates))
+            else
             {
-                return exchangeRates;
-            };
-        }
-        return Enumerable.Empty<ExchangeRate>();
-    }
-
-    private void LogResult(Sources.ISource source)
-    {
-        if (ExchangeRateCache.Count == 0)
-        {
-            _logger.LogWarning("Failed to load any exchange rates from source {source}", source);
-        }
-        else
-        {
-            _logger.LogInformation("Loaded {exchangeRateCount} exchange rates", ExchangeRateCache.Count);
+                _logger.LogInformation("Loaded {exchangeRateCount} exchange rates", _exchangeRates.Count);
+            }
         }
     }
 }

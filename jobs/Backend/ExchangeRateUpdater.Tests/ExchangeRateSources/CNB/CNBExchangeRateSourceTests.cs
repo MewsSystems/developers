@@ -26,19 +26,12 @@ public class CNBExchangeRateSourceTests
         await _rateSource.LoadAsync();
     }
 
-    [Fact()]
-    public async void GetSourceExchangeRatesTest()
-    {
-        await _rateSource.LoadAsync();
-        var sourceRates = _rateSource.GetSourceExchangeRates(CZK);
-        Assert.Empty(sourceRates);
-    }
 
     [Fact()]
     public async void GetTargetExchangeRatesTest()
     {
         await _rateSource.LoadAsync();
-        var targetRates = _rateSource.GetTargetExchangeRates(CZK);
+        var targetRates = _rateSource.GetExchangeRates();
         Assert.Equal(RATES_IN_TEST_FILE, targetRates.Count());
     }
 }
