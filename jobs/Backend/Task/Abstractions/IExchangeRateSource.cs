@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater.Abstractions
     public interface IExchangeRateSource
     {
         Task LoadAsync();
-        IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency);
-        IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency);
+
+        IEnumerable<ExchangeRate> GetExchangeRates();
     }
 }

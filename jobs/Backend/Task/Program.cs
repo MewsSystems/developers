@@ -35,7 +35,7 @@ public sealed class Program
             services
                 .Configure<CurrencyOptions>(context.Configuration.GetSection("CurrencyOptions") ?? throw new Exception("Missing currency options"))
                 .Configure<CNBSourceOptions>(context.Configuration.GetSection("CNBSourceOptions") ?? throw new Exception("Missing CNB source options"))
-                .AddSingleton<IExchangeRateSource, CNBExchangeRateSource>()
+                .AddSingleton<IExchangeRateSource, CNBExchangeRateSimpleSource>()
                 .AddTransient<IExchangeRateProvider, ExchangeRateProvider>()
                 .AddTransient<IExchangeRatePrinter, ExchangeRatePrinter>()
                 .AddHostedService<ExchangeRateService>();

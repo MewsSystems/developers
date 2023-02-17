@@ -11,20 +11,9 @@ public class ExchangeRateProviderTests
     public ExchangeRateProviderTests()
     {
         var integrationSource = new Mock<IExchangeRateSource>();
-        integrationSource.Setup(i => i.GetSourceExchangeRates(CZK))
-            .Returns(() => Enumerable.Empty<ExchangeRate>());
-        integrationSource.Setup(i => i.GetTargetExchangeRates(CZK))
-            .Returns(() => new List<ExchangeRate>() { EURCZK });
+        integrationSource.Setup(i => i.GetExchangeRates())
+            .Returns(() => new List<ExchangeRate>() { EURCZK, EURJPY, USDEUR });
 
-        integrationSource.Setup(i => i.GetSourceExchangeRates(EUR))
-            .Returns(() => new List<ExchangeRate>() { EURCZK, EURJPY });
-        integrationSource.Setup(i => i.GetTargetExchangeRates(EUR))
-            .Returns(() => new List<ExchangeRate>() { USDEUR });
-
-        integrationSource.Setup(i => i.GetSourceExchangeRates(USD))
-            .Returns(() => new List<ExchangeRate>() { USDEUR });
-        integrationSource.Setup(i => i.GetTargetExchangeRates(USD))
-            .Returns(() => Enumerable.Empty<ExchangeRate>());
         _integrationSource = integrationSource.Object;
     }
 
@@ -38,7 +27,7 @@ public class ExchangeRateProviderTests
 
 
     [Fact()]
-    public void GetExchangeRatesSourceCurrencyTargetTest()
+    public void GetExchangeRatesSourceAndTargetTest()
     {
         var exchangeRateProvider = new ExchangeRateProvider(_integrationSource);
         var rates = exchangeRateProvider.GetExchangeRates(new List<Currency>() { EUR });

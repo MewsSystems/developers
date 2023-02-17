@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
         await _exchangeRateSource.LoadAsync();
-        return GetExchangeRatesUnion(currencies);
+        return GetExchangeRatesInternal(currencies);
     }
 
     /// <summary>
@@ -30,20 +31,18 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
         _exchangeRateSource.LoadAsync().Wait();
-        return GetExchangeRatesUnion(currencies);
+        return GetExchangeRatesInternal(currencies);
     }
 
-    private IEnumerable<ExchangeRate> GetExchangeRatesUnion(IEnumerable<Currency> currencies)
+    private IEnumerable<ExchangeRate> GetExchangeRatesInternal(IEnumerable<Currency> currencies)
     {
-        IEnumerable<ExchangeRate> result = new List<ExchangeRate>();
-        foreach (var item in currencies)
-        {
-            var sourceRates = _exchangeRateSource.GetSourceExchangeRates(item);
-            var targetRates = _exchangeRateSource.GetTargetExchangeRates(item);
-            var allRates = sourceRates.Union(targetRates);
-            result = result.Union(allRates);
-        }
+        var exchangeRates = _exchangeRateSource.GetExchangeRates();
+        return FilterExchangeRates(exchangeRates, currencies);
+    }
 
-        return result;
+    private IEnumerable<ExchangeRate> FilterExchangeRates(IEnumerable<ExchangeRate> exchangeRates, IEnumerable<Currency> currencies)
+    {
+        var hashSet = new HashSet<Currency>(currencies);
+        return exchangeRates.Where(er => currencies.Contains(er.SourceCurrency) || currencies.Contains(er.TargetCurrency));
     }
 }

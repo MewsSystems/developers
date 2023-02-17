@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.ExchangeRateSources.CNB;
 
-public sealed class CNBExchangeRateSource : IExchangeRateSource
+public sealed class CNBExchangeRateSource : IExchangeRateSourceOld
 {
     private readonly IOptions<CNBSourceOptions> _options;
     private readonly ILogger<CNBExchangeRateSource> _logger;
