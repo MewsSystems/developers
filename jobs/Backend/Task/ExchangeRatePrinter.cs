@@ -2,7 +2,7 @@
 using ExchangeRateUpdater.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
@@ -19,17 +19,11 @@ public sealed class ExchangeRatePrinter : IExchangeRatePrinter
     public async Task PrintRates(IEnumerable<Currency> currencies)
     {
         var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
-        var ratesCount = 0;
-        var ratesStringBuilder = new StringBuilder();
+        Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
         foreach (var rate in rates)
         {
-            ratesStringBuilder.Append(rate);
-            ratesStringBuilder.AppendLine();
-            ratesCount++;
+            Console.WriteLine(rate);
         }
-        Console.WriteLine($"Successfully retrieved {ratesCount} exchange rates:");
-        Console.WriteLine(ratesStringBuilder.ToString());
-
         Console.ReadKey();
     }
 }
