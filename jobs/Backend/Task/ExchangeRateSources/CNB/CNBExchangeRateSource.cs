@@ -76,8 +76,6 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         return Enumerable.Empty<ExchangeRate>();
     }
 
-
-
     private void LogResult(Sources.ISource source)
     {
         if (ExchangeRateCache.Count == 0)
