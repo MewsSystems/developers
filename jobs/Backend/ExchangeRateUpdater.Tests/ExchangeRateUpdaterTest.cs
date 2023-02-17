@@ -27,8 +27,8 @@ namespace ExchangeRateUpdater.Tests
         public async void TestExchangeRateEqualProvider()
         {
             var currencies = new List<Currency>() { Constants.CZK };
-            var ratesAsync = await _rateProvider.GetExchangeRatesAsync(currencies).ToListAsync();
-            var rates = _rateProvider.GetExchangeRates(currencies).OrderBy(c => c.Value).ToList();
+            var ratesAsync = await _rateProvider.GetExchangeRatesAsync(currencies);
+            var rates = _rateProvider.GetExchangeRates(currencies).OrderBy(c => c.Value);
             var orderedRates = ratesAsync.OrderBy(c => c.Value).ToList();
             Assert.Equal(rates, orderedRates);
 

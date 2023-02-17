@@ -18,10 +18,10 @@ public sealed class ExchangeRatePrinter : IExchangeRatePrinter
 
     public async Task PrintRates(IEnumerable<Currency> currencies)
     {
-        var rates = _exchangeRateProvider.GetExchangeRatesAsync(currencies);
+        var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
         var ratesCount = 0;
         var ratesStringBuilder = new StringBuilder();
-        await foreach (var rate in rates)
+        foreach (var rate in rates)
         {
             ratesStringBuilder.Append(rate);
             ratesStringBuilder.AppendLine();

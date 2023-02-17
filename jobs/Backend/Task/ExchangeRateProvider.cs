@@ -1,6 +1,8 @@
 ﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
 
@@ -13,20 +15,10 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         _exchangeRateSource = exchangeRateSource;
     }
 
-    public async IAsyncEnumerable<ExchangeRate> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
         await _exchangeRateSource.LoadAsync();
-        foreach (var item in currencies)
-        {
-            foreach (var rate in _exchangeRateSource.GetSourceExchangeRates(item))
-            {
-                yield return rate;
-            }
-            foreach (var rate in _exchangeRateSource.GetTargetExchangeRates(item))
-            {
-                yield return rate;
-            }
-        }
+        return GetExchangeRatesUnion(currencies);
     }
 
     /// <summary>
@@ -38,16 +30,20 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
         _exchangeRateSource.LoadAsync().Wait();
+        return GetExchangeRatesUnion(currencies);
+    }
+
+    private IEnumerable<ExchangeRate> GetExchangeRatesUnion(IEnumerable<Currency> currencies)
+    {
+        IEnumerable<ExchangeRate> result = new List<ExchangeRate>();
         foreach (var item in currencies)
         {
-            foreach (var rate in _exchangeRateSource.GetSourceExchangeRates(item))
-            {
-                yield return rate;
-            }
-            foreach (var rate in _exchangeRateSource.GetTargetExchangeRates(item))
-            {
-                yield return rate;
-            }
+            var sourceRates = _exchangeRateSource.GetSourceExchangeRates(item);
+            var targetRates = _exchangeRateSource.GetTargetExchangeRates(item);
+            var allRates = sourceRates.Union(targetRates);
+            result = result.Union(allRates);
         }
+
+        return result;
     }
 }

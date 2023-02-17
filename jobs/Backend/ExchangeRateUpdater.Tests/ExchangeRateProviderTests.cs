@@ -52,4 +52,12 @@ public class ExchangeRateProviderTests
         var rates = exchangeRateProvider.GetExchangeRates(new List<Currency>() { USD });
         Assert.Single(rates);
     }
+
+    [Fact()]
+    public void GetExchangeRatesMultipleCurrencyTest()
+    {
+        var exchangeRateProvider = new ExchangeRateProvider(_integrationSource);
+        var rates = exchangeRateProvider.GetExchangeRates(new List<Currency>() { EUR, CZK });
+        Assert.Equal(3, rates.Count());
+    }
 }
