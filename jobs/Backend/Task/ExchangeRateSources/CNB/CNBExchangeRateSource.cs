@@ -13,8 +13,9 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
 {
     private readonly IOptions<CNBSourceOptions> _options;
     private readonly ILogger<CNBExchangeRateSource> _logger;
-
     private readonly object _locker = new();
+
+    private bool loaded = false;
 
     public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
     {
@@ -30,19 +31,26 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
         string cnbSource = await source.GetContent();
         lock (_locker)
         {
+            loaded = false;
             ExchangeRateCache.Clear();
             foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
             {
                 ExchangeRateCache.Add(rate);
             }
+            loaded = true;
         }
         LogResult(source);
     }
 
     public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency)
     {
+        
         lock (_locker)
         {
+            if (!loaded)
+            {
+                _logger.LogWarning("Requesting SourceExchangeRates but this source was not loaded");
+            }
             if (ExchangeRateCache.SourceExchangeRates.TryGetValue(currency, out var exchangeRates))
             {
                 return exchangeRates;
@@ -53,8 +61,13 @@ public sealed class CNBExchangeRateSource : IExchangeRateSource
 
     public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency)
     {
+        
         lock (_locker)
         {
+            if (!loaded)
+            {
+                _logger.LogWarning("Requesting TargetExchangeRates but this source was not loaded");
+            }
             if (ExchangeRateCache.TargetExchangeRates.TryGetValue(currency, out var exchangeRates))
             {
                 return exchangeRates;

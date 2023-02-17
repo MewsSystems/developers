@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ExchangeRateUpdater.Data;
+﻿using ExchangeRateUpdater.Data;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater.Abstractions;
 

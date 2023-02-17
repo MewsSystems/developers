@@ -12,12 +12,10 @@ namespace ExchangeRateUpdater;
 public sealed class ExchangeRatePrinter : IExchangeRatePrinter
 {
     private readonly IExchangeRateProvider _exchangeRateProvider;
-    private readonly ILogger<ExchangeRatePrinter> _logger;
 
-    public ExchangeRatePrinter(IExchangeRateProvider exchangeRateProvider, ILogger<ExchangeRatePrinter> logger)
+    public ExchangeRatePrinter(IExchangeRateProvider exchangeRateProvider)
     {
         _exchangeRateProvider = exchangeRateProvider;
-        _logger = logger;
     }
 
     public async Task PrintRates(IEnumerable<Currency> currencies)

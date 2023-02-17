@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Data;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Data;
 
 namespace ExchangeRateUpdater.Abstractions
 {
     public interface IExchangeRateSource
     {
 
-        public Task LoadAsync();
-        public IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency);
-        public IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency);
+        Task LoadAsync();
+        IEnumerable<ExchangeRate> GetSourceExchangeRates(Currency currency);
+        IEnumerable<ExchangeRate> GetTargetExchangeRates(Currency currency);
 
     }
 }
