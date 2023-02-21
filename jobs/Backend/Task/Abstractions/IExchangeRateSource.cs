@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Abstractions
-{
-    public interface IExchangeRateSource
-    {
-        Task LoadAsync();
+namespace ExchangeRateUpdater.Abstractions;
 
-        IEnumerable<ExchangeRate> GetExchangeRates();
-    }
+public interface IExchangeRateSource
+{
+    Task LoadAsync();
+
+    IEnumerable<ExchangeRate> GetExchangeRates();
 }
