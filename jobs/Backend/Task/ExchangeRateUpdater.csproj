@@ -5,6 +5,7 @@
 		<UserSecretsId>2c1e66df-c7f9-4033-9a83-b4108c3b5f74</UserSecretsId>
 	</PropertyGroup>
 		<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.1.0" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 	</ItemGroup>
 		<ItemGroup>

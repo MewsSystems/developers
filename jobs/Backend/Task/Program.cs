@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.ExchangeRateSources.CNB;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -24,20 +25,24 @@ public sealed class Program
     }
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-        .ConfigureServices(ConfigureServices)
-        .ConfigureLogging(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddConsole();
-        });
+        .ConfigureServices(ConfigureServices);
 
     private static void ConfigureServices(HostBuilderContext context, IServiceCollection services) =>
             services
-                .Configure<CurrencyOptions>(context.Configuration.GetSection("CurrencyOptions") ?? throw new Exception("Missing currency options"))
-                .Configure<CNBSourceOptions>(context.Configuration.GetSection("CNBSourceOptions") ?? throw new Exception("Missing CNB source options"))
+                .Configure<CurrencyOptions>(GetConfig<CurrencyOptions>(context, "CurrencyOptions", "Missing currency options"))
+                .Configure<CNBSourceOptions>(GetConfig<CNBSourceOptions>(context, "CNBSourceOptions", "Missing CNB source options"))
                 .AddSingleton<IExchangeRateSource, CNBExchangeRateSource>()
                 .AddTransient<IExchangeRateProvider, ExchangeRateProvider>()
                 .AddTransient<IExchangeRatePrinter, ExchangeRatePrinter>()
                 .AddHostedService<ExchangeRateService>();
 
+    private static IConfigurationSection GetConfig<T>(HostBuilderContext context, string sectionName, string exceptionMessage)
+    {
+        var config = context.Configuration.GetSection(sectionName);
+        if (config.Get<T>() == null)
+        {
+            throw new Exception(exceptionMessage);
+        }
+        return config;
+    }
 }

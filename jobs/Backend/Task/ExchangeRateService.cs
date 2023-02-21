@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Abstractions;
+﻿using CommunityToolkit.Diagnostics;
+using ExchangeRateUpdater.Abstractions;
 using ExchangeRateUpdater.Data;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,8 @@ public sealed class ExchangeRateService : BackgroundService
 
     public ExchangeRateService(IHostApplicationLifetime hostApplicationLifetime, IExchangeRatePrinter exchangeRatePrinter, ILogger<ExchangeRateService> logger, IOptions<CurrencyOptions> currencyOptions)
     {
+        Guard.IsNotNull(currencyOptions.Value.Currencies);
+
         _exchangeRatePrinter = exchangeRatePrinter;
         _logger = logger;
         _currencyOptions = currencyOptions;
@@ -27,9 +30,9 @@ public sealed class ExchangeRateService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var currencies = _currencyOptions.Value.Currencies.Select(c => new Currency(c));
         try
         {
+            var currencies = _currencyOptions.Value.Currencies.Select(c => new Currency(c));
             await _exchangeRatePrinter.PrintRates(currencies);
         }
         catch (Exception e)
