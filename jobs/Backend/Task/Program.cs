@@ -1,43 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Abstractions;
+using ExchangeRateUpdater.Data;
+using ExchangeRateUpdater.ExchangeRateSources.CNB;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public sealed class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
+        try
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
+            using IHost host = CreateHostBuilder(args).Build();
+            host.Run();
+        }
+        catch (Exception e)
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
+            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
         }
     }
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+        .ConfigureServices(ConfigureServices)
+        .ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        });
+
+    private static void ConfigureServices(HostBuilderContext context, IServiceCollection services) =>
+            services
+                .Configure<CurrencyOptions>(context.Configuration.GetSection("CurrencyOptions") ?? throw new Exception("Missing currency options"))
+                .Configure<CNBSourceOptions>(context.Configuration.GetSection("CNBSourceOptions") ?? throw new Exception("Missing CNB source options"))
+                .AddSingleton<IExchangeRateSource, CNBExchangeRateSource>()
+                .AddTransient<IExchangeRateProvider, ExchangeRateProvider>()
+                .AddTransient<IExchangeRatePrinter, ExchangeRatePrinter>()
+                .AddHostedService<ExchangeRateService>();
+
 }
