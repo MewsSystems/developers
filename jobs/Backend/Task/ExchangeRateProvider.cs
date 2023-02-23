@@ -43,6 +43,6 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     private static IEnumerable<ExchangeRate> FilterExchangeRates(IEnumerable<ExchangeRate> exchangeRates, IEnumerable<Currency> currencies)
     {
         var hashSet = new HashSet<Currency>(currencies);
-        return exchangeRates.Where(er => currencies.Contains(er.SourceCurrency) || currencies.Contains(er.TargetCurrency));
+        return exchangeRates.Where(er => hashSet.Contains(er.SourceCurrency) || hashSet.Contains(er.TargetCurrency));
     }
 }
