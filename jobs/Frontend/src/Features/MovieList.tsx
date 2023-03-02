@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { AppDispatch } from '../Store/store';
@@ -27,6 +27,7 @@ const MovieListPage = () => {
   const loadingStatus = useSelector(selectLoadingStatus);
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTermInput, setSearchTermInput] = useState(searchParams.get('searchTerm') || undefined);
 
   const moviePreviews = movies.length > 0 && movies.map((movie) =>  
     <NeutralLink to={`/movies/${movie.id}`} key={movie.id}>
@@ -35,13 +36,19 @@ const MovieListPage = () => {
         posterUrl={tmdbApi.getImageUrl(movie.poster_path)}
       />
     </NeutralLink>
-  ); 
+  );
 
-  const searchTermChanged = (e: any) => {
-    setSearchParams({
-      searchTerm: e.target.value,
-      page: '1',
-    });
+  const searchTermChangedHandler = (e: any) => {
+    setSearchTermInput(e.target.value)
+  };
+
+  const inputCompleteHandler = (e: any) => {
+    if(e.target.value !== searchParams.get('searchTerm')) {
+      setSearchParams({
+        searchTerm: e.target.value,
+        page: '1',
+      });
+    }
   };
 
   const pageChanged = (page: string) => {
@@ -70,8 +77,9 @@ const MovieListPage = () => {
   return <>
     <Header 
       display="search"
-      searchTerm={searchTerm}
-      onSearchTermChanged={searchTermChanged}
+      searchTerm={searchTermInput}
+      onSearchTermChanged={searchTermChangedHandler}
+      onInputComplete={inputCompleteHandler}
     />
     <Loading status={loadingStatus}>
       {searchTerm !== '' && navigationDetails.totalResults === 0 

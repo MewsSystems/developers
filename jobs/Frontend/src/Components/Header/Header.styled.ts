@@ -7,6 +7,10 @@ export const HeaderBar = styled.div`
   align-items: center;
   position: relative;
   height: 6.5rem;
+
+  & > div {
+    width: 100%;
+  }
 `;
 
 export const HeaderInput = styled.input`
@@ -45,6 +49,12 @@ export const BackButton = styled.button`
     background: #666;
     cursor: pointer;
   }
+
+  @media (max-width: 500px) {
+    width: 20%;
+    overflow: hidden;
+    padding: 1rem 3%;
+  }
 `;
 
 export const TitleWrapper = styled.div`
@@ -53,6 +63,12 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   text-align: center;
   padding: 1rem;
+
+  @media (max-width: 500px) {
+    width: 58%;
+    overflow: hidden;
+    margin: 0 21%;
+  }
 `;
 
 export const Title = styled.h1`
@@ -63,4 +79,10 @@ export const Title = styled.h1`
 export const Subtitle = styled.h2`
   font-size: 1.4rem;
   font-weight: normal;
+
+  @media (max-width: 500px) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 `;

@@ -53,14 +53,19 @@ const moviesSlice = createSlice({
       return { ...state, status: 'pending' }
     });
     builder.addCase(fetchMovies.fulfilled, (state, action: PayloadAction<SearchMovieResult>) => {
-      return { 
-        ...state, 
-        movieListResult: action.payload.results,
-        page: action.payload.page,
-        totalPages: action.payload.total_pages,
-        totalResults: action.payload.total_results, 
-        status: 'fulfilled',
-      };
+      if (action.payload.page <= action.payload.total_pages) {
+        return { 
+          ...state, 
+          movieListResult: action.payload.results,
+          page: action.payload.page,
+          totalPages: action.payload.total_pages,
+          totalResults: action.payload.total_results, 
+          status: 'fulfilled',
+        };
+      }
+      else {
+        return { ...state, status: 'rejected' }
+      }
     });
     builder.addCase(fetchMovies.rejected, (state, action) => {
       return { ...state, status: 'rejected' }

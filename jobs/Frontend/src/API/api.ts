@@ -1,11 +1,8 @@
 import { SearchMovieResult, Movie } from "./interfaces";
 
 export class Api {
-  accessToken: string;
-  basePath: string;
-  
-  constructor(accessToken: string, basePath: string) {
-    this.accessToken = accessToken;
+  constructor(private apiKey: string, private basePath: string) {
+    this.apiKey = apiKey;
     this.basePath = basePath;
   }
 
@@ -14,7 +11,7 @@ export class Api {
       .map(([key, value]) => `${key}=${value}`)
       .join('&')
     
-    const response = await fetch(`${this.basePath}${path}?api_key=${this.accessToken}&${queryParams}`, {
+    const response = await fetch(`${this.basePath}${path}?api_key=${this.apiKey}&${queryParams}`, {
       method: 'GET'
     });
     if (response.status !== 200) {
