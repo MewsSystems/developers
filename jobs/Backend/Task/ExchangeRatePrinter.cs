@@ -9,16 +9,8 @@ namespace ExchangeRateUpdater;
 
 public sealed class ExchangeRatePrinter : IExchangeRatePrinter
 {
-    private readonly IExchangeRateProvider _exchangeRateProvider;
-
-    public ExchangeRatePrinter(IExchangeRateProvider exchangeRateProvider)
+    public void PrintRates(IEnumerable<ExchangeRate> rates)
     {
-        _exchangeRateProvider = exchangeRateProvider;
-    }
-
-    public async Task PrintRates(IEnumerable<Currency> currencies)
-    {
-        var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
         Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
         foreach (var rate in rates)
         {

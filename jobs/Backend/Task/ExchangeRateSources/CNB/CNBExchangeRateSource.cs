@@ -6,62 +6,61 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.ExchangeRateSources.CNB
+namespace ExchangeRateUpdater.ExchangeRateSources.CNB;
+
+public sealed class CNBExchangeRateSource : IExchangeRateSource
 {
-    public sealed class CNBExchangeRateSource : IExchangeRateSource
+    private readonly IOptions<CNBSourceOptions> _options;
+    private readonly ILogger<CNBExchangeRateSource> _logger;
+    private readonly object _locker = new();
+    private bool loaded;
+
+    private List<ExchangeRate> _exchangeRates = new();
+
+    public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
     {
-        private readonly IOptions<CNBSourceOptions> _options;
-        private readonly ILogger<CNBExchangeRateSource> _logger;
-        private readonly object _locker = new();
-        private bool loaded;
+        _options = options;
+        _logger = logger;
+    }
 
-        private List<ExchangeRate> _exchangeRates = new();
-
-        public CNBExchangeRateSource(IOptions<CNBSourceOptions> options, ILogger<CNBExchangeRateSource> logger)
+    public async Task LoadAsync()
+    {
+        var source = CNBSourceFactory.CreateSource(_options.Value);
+        string cnbSource = await source.GetContent();
+        lock (_locker)
         {
-            _options = options;
-            _logger = logger;
+            loaded = false;
+            _exchangeRates = new();
+            foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
+            {
+                _exchangeRates.Add(rate);
+            }
+            loaded = true;
         }
+        LogResult(source);
+    }
 
-        public async Task LoadAsync()
+    public IEnumerable<ExchangeRate> GetExchangeRates()
+    {
+        lock (_locker)
         {
-            var source = CNBSourceFactory.CreateSource(_options.Value);
-            string cnbSource = await source.GetContent();
-            lock (_locker)
+            if (!loaded)
             {
-                loaded = false;
-                _exchangeRates = new();
-                foreach (var rate in CNBExchangeRateParser.ParseRates(cnbSource))
-                {
-                    _exchangeRates.Add(rate);
-                }
-                loaded = true;
+                _logger.LogWarning("Requesting ExchangeRates but this source was not loaded");
             }
-            LogResult(source);
+            return _exchangeRates.AsReadOnly();
         }
+    }
 
-        public IEnumerable<ExchangeRate> GetExchangeRates()
+    private void LogResult(Sources.ISource source)
+    {
+        if (_exchangeRates.Count == 0)
         {
-            lock (_locker)
-            {
-                if (!loaded)
-                {
-                    _logger.LogWarning("Requesting ExchangeRates but this source was not loaded");
-                }
-                return _exchangeRates.AsReadOnly();
-            }
+            _logger.LogWarning("Failed to load any exchange rates from source {source}", source);
         }
-
-        private void LogResult(Sources.ISource source)
+        else
         {
-            if (_exchangeRates.Count == 0)
-            {
-                _logger.LogWarning("Failed to load any exchange rates from source {source}", source);
-            }
-            else
-            {
-                _logger.LogInformation("Loaded {exchangeRateCount} exchange rates", _exchangeRates.Count);
-            }
+            _logger.LogInformation("Loaded {exchangeRateCount} exchange rates", _exchangeRates.Count);
         }
     }
 }

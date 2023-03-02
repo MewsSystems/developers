@@ -6,5 +6,5 @@ namespace ExchangeRateUpdater.Abstractions;
 
 public interface IExchangeRatePrinter
 {
-    Task PrintRates(IEnumerable<Currency> currencies);
+    void PrintRates(IEnumerable<ExchangeRate> rates);
 }

@@ -15,10 +15,15 @@ public sealed class ExchangeRateService : BackgroundService
 {
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
     private readonly IExchangeRatePrinter _exchangeRatePrinter;
+    private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly ILogger<ExchangeRateService> _logger;
     private readonly IOptions<CurrencyOptions> _currencyOptions;
 
-    public ExchangeRateService(IHostApplicationLifetime hostApplicationLifetime, IExchangeRatePrinter exchangeRatePrinter, ILogger<ExchangeRateService> logger, IOptions<CurrencyOptions> currencyOptions)
+    public ExchangeRateService(IHostApplicationLifetime hostApplicationLifetime,
+        IExchangeRatePrinter exchangeRatePrinter,
+        IExchangeRateProvider exchangeRateProvider,
+        ILogger<ExchangeRateService> logger,
+        IOptions<CurrencyOptions> currencyOptions)
     {
         Guard.IsNotNull(currencyOptions.Value.Currencies);
 
@@ -26,6 +31,7 @@ public sealed class ExchangeRateService : BackgroundService
         _logger = logger;
         _currencyOptions = currencyOptions;
         _hostApplicationLifetime = hostApplicationLifetime;
+        _exchangeRateProvider = exchangeRateProvider;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,7 +39,8 @@ public sealed class ExchangeRateService : BackgroundService
         try
         {
             var currencies = _currencyOptions.Value.Currencies.Select(c => new Currency(c));
-            await _exchangeRatePrinter.PrintRates(currencies);
+            var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
+            _exchangeRatePrinter.PrintRates(rates);
         }
         catch (Exception e)
         {
