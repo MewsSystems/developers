@@ -3,7 +3,7 @@ import _ from "lodash";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styled from "styled-components";
-import { API_KEY, BASE_API_URL } from "../../utils/api";
+import { API_KEY, endpoints } from "../../utils/api";
 import { colors } from "../../utils/theme";
 import { shadowInner } from "../General";
 import SearchResults from "./SearchResults";
@@ -47,9 +47,8 @@ const Search = () => {
     queryEvent: React.ChangeEvent<HTMLInputElement>
   ) => {
     const query = queryEvent.target.value;
-    const url = `${BASE_API_URL}/search/movie`;
     try {
-      const queryResults = await axios.get(url, {
+      const queryResults = await axios.get(endpoints.searchMovie, {
         params: {
           api_key: API_KEY,
           query: query,

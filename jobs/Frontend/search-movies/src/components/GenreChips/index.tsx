@@ -16,7 +16,6 @@ interface GenreChipsProps {
 const GenreChips = (props: GenreChipsProps) => {
   const { genreIds } = props;
   const [genreNames, setGenreNames] = useState<string[]>([]);
-  console.log("this i s genre ", genreIds);
 
   useEffect(() => {
     (function () {

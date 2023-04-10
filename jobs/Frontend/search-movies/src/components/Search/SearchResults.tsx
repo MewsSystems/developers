@@ -38,7 +38,6 @@ const SearchResultsLi = styled.div`
 `;
 const SearchResults = (props: SearchResultsProps) => {
   const { searchResults, setSearchResults } = props;
-  console.log(searchResults);
   return (
     <>
       {searchResults.length > 0 && (

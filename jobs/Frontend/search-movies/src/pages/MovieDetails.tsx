@@ -1,12 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { shadowSm } from "../components/General";
 import GenreChips from "../components/GenreChips";
 import MovieRatings from "../components/MovieRatings";
-import { AppDispatch, RootState } from "../store";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchMovies } from "../store/reducers/BrowseMoviesReducer";
 import { API_KEY, BASE_API_URL, BASE_IMG_URL } from "../utils/api";
 import { colors, device } from "../utils/theme";
@@ -65,8 +64,8 @@ const MovieDetailsLoading = styled.div`
 const MovieDetails = () => {
   const { currentPage, movieId } = useParams<MovieDetailsParams>();
   const [movie, setMovie] = useState<Movie>();
-  const browseMovies = useSelector((state: RootState) => state.browseMovies);
-  const dispatch = useDispatch<AppDispatch>();
+  const browseMovies = useAppSelector((state) => state.browseMovies);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async function () {
@@ -90,7 +89,6 @@ const MovieDetails = () => {
               },
             }
           );
-          console.log("these are", movieDetails);
           setMovie(movieDetails.data as unknown as Movie);
         } catch (error) {}
       }
