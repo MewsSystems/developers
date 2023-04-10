@@ -1,3 +1,4 @@
 import { combineReducers } from "redux";
+import browseMoviesReducer from "./BrowseMoviesReducer";
 
-export default combineReducers({});
+export default combineReducers({ browseMovies: browseMoviesReducer });
