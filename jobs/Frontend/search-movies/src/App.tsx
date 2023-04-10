@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import Header from "./components/Header";
 import BrowseMovies from "./pages/BrowseMovies";
+import MovieDetails from "./pages/MovieDetails";
 import NoMatch from "./pages/NoMatch";
 import { colors } from "./utils/theme";
 
@@ -13,7 +14,6 @@ const StyledBody = styled.body`
 
 const BoxedAppContainer = styled.div`
   max-width: 1200px;
-  padding: 10px;
   overflow: hidden;
   margin: auto;
 `;
@@ -30,7 +30,12 @@ function App() {
             <StyledMain>
               <Routes>
                 <Route path="/:pageId" element={<BrowseMovies />} />
-                <Route path="/" element={<Navigate to={"/1"} />} />
+                <Route path="/" element={<Navigate to="/1" />} />
+                <Route
+                  path="/:currentPage/movie/:movieId"
+                  element={<MovieDetails />}
+                />
+                <Route path="/movie/:movieId" element={<MovieDetails />} />
                 <Route path="*" element={<NoMatch />} />
               </Routes>
             </StyledMain>
