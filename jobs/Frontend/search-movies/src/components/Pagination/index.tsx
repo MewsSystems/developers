@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import ResponsivePagination from "react-responsive-pagination";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { AppDispatch, RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { updateCurrentPage } from "../../store/reducers/BrowseMoviesReducer";
 import { colors } from "../../utils/theme";
 
@@ -41,11 +40,11 @@ interface PaginationProps {
 
 export default function Pagination(props: PaginationProps) {
   const { currentPage } = props;
-  const browseMovies = useSelector((state: RootState) => state.browseMovies);
+  const browseMovies = useAppSelector((state) => state.browseMovies);
+  const dispatch = useAppDispatch();
   const [totalPages, setTotalPages] = useState<number>();
 
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
 
   function handlePageChange(newPage: any) {
     dispatch(updateCurrentPage(newPage));

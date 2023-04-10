@@ -1,6 +1,5 @@
-import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { RootState } from "../../store";
+import { useAppSelector } from "../../store/hooks";
 import { colors } from "../../utils/theme";
 
 const LoadingContainer = styled.div`
@@ -15,7 +14,7 @@ interface MovieListLoaderProps {
 }
 const MovieListLoader = (props: MovieListLoaderProps) => {
   const { page } = props;
-  const browseMovies = useSelector((state: RootState) => state.browseMovies);
+  const browseMovies = useAppSelector((state) => state.browseMovies);
 
   return (
     <>

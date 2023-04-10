@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { AppDispatch, RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   fetchMovies,
   updateCurrentPage,
@@ -42,8 +41,8 @@ interface MovieListProps {
 
 const MovieList = (props: MovieListProps) => {
   const { page } = props;
-  const browseMovies = useSelector((state: RootState) => state.browseMovies);
-  const dispatch = useDispatch<AppDispatch>();
+  const browseMovies = useAppSelector((state) => state.browseMovies);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async function () {
