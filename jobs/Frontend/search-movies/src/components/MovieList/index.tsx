@@ -17,9 +17,6 @@ const MovieListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  @media ${device.tablet} {
-    justify-content: left;
-  }
 `;
 
 const MovieContainer = styled.div`

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { API_KEY, BASE_API_URL } from "../../utils/api";
 import { colors } from "../../utils/theme";
 import { shadowInner } from "../General";
+import SearchResults from "./SearchResults";
 
 const StyledInputSearchBox = styled.input`
   border-radius: 26px 26px;
@@ -70,6 +71,10 @@ const Search = () => {
           <FaSearch />
         </StyledIconBox>
         <StyledInputSearchBox placeholder="Search for movies"></StyledInputSearchBox>
+        <SearchResults
+          searchResults={searchResults}
+          setSearchResults={setSearchResults}
+        ></SearchResults>
       </StyledSearchBox>
     </>
   );
