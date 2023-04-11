@@ -19,6 +19,10 @@ const StyledBoldHeading = styled.p`
   color: ${colors.primaryText};
 `;
 
+/**
+ * Main header component of the application
+ * @returns renders the header component
+ */
 const Header = () => {
   return (
     <>

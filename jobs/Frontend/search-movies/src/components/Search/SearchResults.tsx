@@ -4,10 +4,6 @@ import { colors, device } from "../../utils/theme";
 import { Movie } from "../../utils/types";
 import { shadow } from "../General";
 
-interface SearchResultsProps {
-  searchResults: Movie[];
-  setSearchResults: React.Dispatch<any>;
-}
 
 const SearchResultsContainer = styled.div`
   display: static;
@@ -32,10 +28,22 @@ const SearchResultsUl = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 const SearchResultsLi = styled.div`
   border-bottom: 1px solid ${colors.black};
   padding: 10px;
 `;
+
+interface SearchResultsProps {
+  searchResults: Movie[];
+  setSearchResults: React.Dispatch<any>;
+}
+
+/**
+ * Allows searching of movies through name and genre
+ * @param props {searchResults, setSearchResult} Array of movies and setSearchResult hook to update the movie search result
+ * @returns renders list of movies in a popup
+ */
 const SearchResults = (props: SearchResultsProps) => {
   const { searchResults, setSearchResults } = props;
   return (

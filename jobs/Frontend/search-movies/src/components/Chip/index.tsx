@@ -24,6 +24,11 @@ interface ChipProps {
   heading?: string;
 }
 
+/**
+ * Chip with label and heading
+ * @param props {label, heading} label and optional heading for a chip
+ * @returns renders a chip with label and optional heading
+ */
 const Chip = (props: ChipProps) => {
   const { label, heading } = props;
   return (

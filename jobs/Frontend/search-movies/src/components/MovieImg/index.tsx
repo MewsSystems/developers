@@ -23,7 +23,17 @@ const MovieName = styled.div`
   }
 `;
 
-const MovieImg = (props: any) => {
+interface MovieImgProps {
+  banner: string;
+  movieName: string;
+}
+
+/**
+ * Movie banner and name container
+ * @param props {banner, movieName} url of the image and movie name
+ * @returns renders the movie banner with movie name
+ */
+const MovieImg = (props: MovieImgProps) => {
   const { banner, movieName } = props;
   const imageUrl = `${BASE_IMG_URL}${banner}`;
   return (

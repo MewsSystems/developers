@@ -13,6 +13,11 @@ interface GenreChipsProps {
   genreIds: number[];
 }
 
+/**
+ * List of genre chips
+ * @param props {genreIds} array of string or array of object
+ * @returns renders chip component for the id strings
+ */
 const GenreChips = (props: GenreChipsProps) => {
   const { genreIds } = props;
   const [genreNames, setGenreNames] = useState<string[]>([]);

@@ -6,6 +6,10 @@ const NoMatchContainer = styled.div`
   color: ${colors.primaryText};
 `;
 
+/**
+ * Fallback handler for the route
+ * @returns renders if the route is not available
+ */
 const NoMatch = () => {
   return (
     <NoMatchContainer>

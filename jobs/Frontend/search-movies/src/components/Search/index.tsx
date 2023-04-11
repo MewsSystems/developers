@@ -40,6 +40,10 @@ const StyledIconBox = styled.span`
   }
 `;
 
+/**
+ * Search for a movie or genre
+ * @returns renders list of resulting movies for a search
+ */
 const Search = () => {
   const [searchResults, setSearchResults] = useState<any>([]);
 

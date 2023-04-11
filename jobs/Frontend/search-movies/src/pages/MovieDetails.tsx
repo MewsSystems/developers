@@ -11,12 +11,6 @@ import { API_KEY, BASE_API_URL, BASE_IMG_URL } from "../utils/api";
 import { colors, device } from "../utils/theme";
 import { Movie } from "../utils/types";
 
-interface MovieDetailsParams {
-  currentPage: string;
-  movieId: string;
-  [x: string]: string | undefined;
-}
-
 const MovieDetailsContainer = styled.div`
   margin-top: 40px;
   display: flex;
@@ -61,12 +55,19 @@ const MovieDetailsLoading = styled.div`
   justify-content: center;
 `;
 
+interface MovieDetailsParams {
+  currentPage: string;
+  movieId: string;
+  [x: string]: string | undefined;
+}
+
 const MovieDetails = () => {
   const { currentPage, movieId } = useParams<MovieDetailsParams>();
   const [movie, setMovie] = useState<Movie>();
   const browseMovies = useAppSelector((state) => state.browseMovies);
   const dispatch = useAppDispatch();
 
+  // Fetch movie details if not in available redux state
   useEffect(() => {
     (async function () {
       if (currentPage) {
@@ -98,7 +99,7 @@ const MovieDetails = () => {
   return (
     <>
       {movie ? (
-        <MovieDetailsContainer>
+        <MovieDetailsContainer data-testid="movie-details-container">
           <MovieBannerContainer>
             <MovieBannerImg src={`${BASE_IMG_URL}${movie.poster_path}`} />
           </MovieBannerContainer>

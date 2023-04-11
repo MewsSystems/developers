@@ -5,6 +5,11 @@ import MovieListLoader from "../components/MovieListLoader";
 import Pagination from "../components/Pagination";
 
 const BrowseMoviesContainer = styled.div``;
+
+/**
+ * Browse movies and navigate between different pages
+ * @returns renders the list of movies and allows pagination
+ */
 const BrowseMovies = () => {
   const { pageId } = useParams();
   return (

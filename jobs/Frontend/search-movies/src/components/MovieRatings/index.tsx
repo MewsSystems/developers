@@ -24,6 +24,11 @@ interface MovieRatingsProps {
   ratingCount: number;
 }
 
+/**
+ * Rating for a movie
+ * @param props {rating, ratingCount} rating for a movie 
+ * @returns renders rating for a movie
+ */
 const MovieRatings = (props: MovieRatingsProps) => {
   const { rating, ratingCount } = props;
   return (

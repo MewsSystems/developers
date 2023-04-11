@@ -38,7 +38,13 @@ interface PaginationProps {
   currentPage: string;
 }
 
-export default function Pagination(props: PaginationProps) {
+
+/**
+ * Provides movie browsing support for the browse endpoint in a numbered pagination
+ * @param props {currentPage} Current page for the browse endpoint
+ * @returns renders route responsive pagination component
+ */
+const Pagination = (props: PaginationProps) => {
   const { currentPage } = props;
   const browseMovies = useAppSelector((state) => state.browseMovies);
   const dispatch = useAppDispatch();
@@ -59,7 +65,7 @@ export default function Pagination(props: PaginationProps) {
   }, [browseMovies.totalPages]);
 
   return (
-    <PaginationContainer>
+    <PaginationContainer data-testid="pagination">
       <ResponsivePagination
         total={totalPages ?? 0}
         current={Number(currentPage) ?? 1}
@@ -67,4 +73,6 @@ export default function Pagination(props: PaginationProps) {
       />
     </PaginationContainer>
   );
-}
+};
+
+export default Pagination;

@@ -16,6 +16,7 @@ const BoxedAppContainer = styled.div`
   max-width: 1200px;
   overflow: hidden;
   margin: auto;
+  padding: 10px;
 `;
 
 const StyledMain = styled.main``;

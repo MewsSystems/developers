@@ -9,9 +9,16 @@ const LoadingContainer = styled.div`
   height: 78vh;
   margin: auto;
 `;
+
 interface MovieListLoaderProps {
   page: string;
 }
+
+/**
+ * Loader to render while the movie list is loaded from the redux state
+ * @param props {page} page number to access the list of movies on a page
+ * @returns renders loader if the movie list is empty for a page
+ */
 const MovieListLoader = (props: MovieListLoaderProps) => {
   const { page } = props;
   const browseMovies = useAppSelector((state) => state.browseMovies);

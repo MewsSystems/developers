@@ -39,6 +39,11 @@ interface MovieListProps {
   page: string;
 }
 
+/**
+ * Renders the list of movies available on the page 
+ * @param props {page} page no of the movie list
+ * @returns renders the styled array of movies for the page
+ */
 const MovieList = (props: MovieListProps) => {
   const { page } = props;
   const browseMovies = useAppSelector((state) => state.browseMovies);
@@ -55,7 +60,7 @@ const MovieList = (props: MovieListProps) => {
 
   return (
     <>
-      <MovieListContainer>
+      <MovieListContainer data-testid="movie-list-container">
         {Array.isArray(browseMovies.pages[page]) &&
           browseMovies.pages[page].map((movie: Movie) => (
             <MovieContainer>
