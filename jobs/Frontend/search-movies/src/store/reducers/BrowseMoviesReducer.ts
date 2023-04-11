@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { endpoints } from "../../utils/api";
-import { axiosBrowse } from "../../utils/axios";
+import { endpoints } from "../../config/api";
+import { axiosBrowse } from "../../config/axios";
 import { Movie } from "../../utils/types";
 
 interface InitialBrowseMoviesState {

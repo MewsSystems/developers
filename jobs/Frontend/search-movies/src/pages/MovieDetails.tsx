@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { shadowSm } from "../components/General";
 import GenreChips from "../components/GenreChips";
 import MovieRatings from "../components/MovieRatings";
+import { API_KEY, BASE_IMG_URL } from "../config/api";
+import { axiosBrowse } from "../config/axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchMovies } from "../store/reducers/BrowseMoviesReducer";
-import { API_KEY, BASE_IMG_URL } from "../utils/api";
-import { axiosBrowse } from "../utils/axios";
 import { colors, device } from "../utils/theme";
 import { Movie } from "../utils/types";
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BASE_IMG_URL } from "../../utils/api";
+import { BASE_IMG_URL } from "../../config/api";
 import { colors, device } from "../../utils/theme";
 
 const MovieImgContainer = styled.img`
