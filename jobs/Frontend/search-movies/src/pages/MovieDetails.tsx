@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -7,7 +6,8 @@ import GenreChips from "../components/GenreChips";
 import MovieRatings from "../components/MovieRatings";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchMovies } from "../store/reducers/BrowseMoviesReducer";
-import { API_KEY, BASE_API_URL, BASE_IMG_URL } from "../utils/api";
+import { API_KEY, BASE_IMG_URL } from "../utils/api";
+import { axiosBrowse } from "../utils/axios";
 import { colors, device } from "../utils/theme";
 import { Movie } from "../utils/types";
 
@@ -82,14 +82,11 @@ const MovieDetails = () => {
       }
       if (!currentPage) {
         try {
-          const movieDetails = await axios.get(
-            `${BASE_API_URL}/movie/${movieId}`,
-            {
-              params: {
-                api_key: API_KEY,
-              },
-            }
-          );
+          const movieDetails = await axiosBrowse.get(`/movie/${movieId}`, {
+            params: {
+              api_key: API_KEY,
+            },
+          });
           setMovie(movieDetails.data as unknown as Movie);
         } catch (error) {}
       }

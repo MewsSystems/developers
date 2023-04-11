@@ -1,9 +1,9 @@
-import axios from "axios";
 import _ from "lodash";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styled from "styled-components";
 import { API_KEY, endpoints } from "../../utils/api";
+import { axiosBrowse } from "../../utils/axios";
 import { colors } from "../../utils/theme";
 import { shadowInner } from "../General";
 import SearchResults from "./SearchResults";
@@ -52,7 +52,7 @@ const Search = () => {
   ) => {
     const query = queryEvent.target.value;
     try {
-      const queryResults = await axios.get(endpoints.searchMovie, {
+      const queryResults = await axiosBrowse.get(endpoints.searchMovie, {
         params: {
           api_key: API_KEY,
           query: query,

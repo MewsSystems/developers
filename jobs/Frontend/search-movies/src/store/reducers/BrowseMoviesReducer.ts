@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import { endpoints } from "../../utils/api";
+import { axiosBrowse } from "../../utils/axios";
 import { Movie } from "../../utils/types";
 
 interface InitialBrowseMoviesState {
@@ -27,7 +27,7 @@ export const fetchMovies = createAsyncThunk(
   "movies/browse",
   async (pageNo: string) => {
     try {
-      const response = await axios.get(endpoints.discoverMovies, {
+      const response = await axiosBrowse.get(endpoints.discoverMovies, {
         params: {
           api_key: process.env.REACT_APP_DB_API_KEY,
           page: pageNo,

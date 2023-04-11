@@ -3,6 +3,6 @@ export const BASE_IMG_URL = "http://image.tmdb.org/t/p/w1280";
 export const API_KEY = process.env.REACT_APP_DB_API_KEY;
 
 export const endpoints = {
-  searchMovie: `${BASE_API_URL}/search/movie`,
-  discoverMovies: `${BASE_API_URL}/discover/movie`,
+  searchMovie: `/search/movie`,
+  discoverMovies: `/discover/movie`,
 };

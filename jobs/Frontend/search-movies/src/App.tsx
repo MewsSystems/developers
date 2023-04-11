@@ -6,7 +6,7 @@ import MovieDetails from "./pages/MovieDetails";
 import NoMatch from "./pages/NoMatch";
 import { colors } from "./utils/theme";
 
-const StyledBody = styled.body`
+const StyledWrapper = styled.div`
   font-family: "Open Sans";
   background: ${colors.appBackground};
   min-height: 100vh;
@@ -25,7 +25,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <StyledBody>
+        <StyledWrapper>
           <BoxedAppContainer>
             <Header />
             <StyledMain>
@@ -41,7 +41,7 @@ function App() {
               </Routes>
             </StyledMain>
           </BoxedAppContainer>
-        </StyledBody>
+        </StyledWrapper>
       </BrowserRouter>
     </>
   );
