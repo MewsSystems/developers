@@ -1,0 +1,4 @@
+﻿31 Mar 2023 #3
+Country|Currency|Amount|Code|Rate
+Tunisia|dinar|1|TND|7.081
+Qatar|rial|1|QAR|5.934

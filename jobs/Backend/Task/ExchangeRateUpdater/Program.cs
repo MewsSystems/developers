@@ -2,10 +2,12 @@
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
+using ExchangeRateUpdater.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using Microsoft.Extensions.Options;
 
 static void ConfigureServices(IServiceCollection services)
 {
@@ -21,12 +23,13 @@ static void ConfigureServices(IServiceCollection services)
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .Build();
-    services.Configure<CNBSettings>(configuration.GetSection(CNBSettings.SettingsKey));
+    services.Configure<CNBSettings>(configuration.GetSection(CNBSettings.SETTINGS_KEY));
+    services.Configure<CurrenciesSettings>(configuration.GetSection(CurrenciesSettings.SETTINGS_KEY));
 
     // add services:
-    services.AddHttpClient<IExchangeRateFetcher, ExchangeRateFetcher>();
-    services.AddSingleton<IExchangeRateParser, ExchangeRateParser>();
-    services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+    services.AddHttpClient<IExchangeRateFetcher, CzechExchangeRateFetcher>();
+    services.AddSingleton<IExchangeRateParser, CzechExchangeRateParser>();
+    services.AddSingleton<IExchangeRateProvider, CzechExchangeRateProvider>();
     services.AddSingleton<IClock, SystemClock>();
 }
 
@@ -39,19 +42,22 @@ using var serviceProvider = services.BuildServiceProvider();
 
 var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
-var config = serviceProvider.GetRequiredService<IConfiguration>();
-var currencyCodes = config.GetSection("Currencies").Get<List<string>>();
-var currencies = currencyCodes.Select(code => new Currency(code));
+var config = serviceProvider.GetRequiredService<IOptions<CurrenciesSettings>>();
+var currencies = config.Value.Currencies.Select(code => new Currency(code));
 
 try
 {
     var rates = await provider.GetExchangeRates(currencies);
 
-    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+    logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
     foreach (var rate in rates)
     {
         logger.LogInformation(rate.ToString());
     }
+}
+catch (InvalidOperationException e)
+{
+    logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
 }
 catch (Exception e)
 {

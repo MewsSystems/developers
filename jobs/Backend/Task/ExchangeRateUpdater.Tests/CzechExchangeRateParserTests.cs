@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace ExchangeRateUpdater.Tests
 {  
-    public class ExchangeRateParserTests
+    public class CzechExchangeRateParserTests
     {
         [Fact]
         public void ParseExchangeRates_ReturnsCorrectRates()
         {
             // Arrange
-            var exchangeRateData = FileHelper.ReadTextFromFile("TestData.txt");
+            var exchangeRateData = FileHelper.ReadTextFromFile("Files/DailyTestData.txt");
 
             var currencies = new[]
             {
@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.Tests
                 new Currency("EUR")
             };
 
-            var parser = new ExchangeRateParser();
+            var parser = new CzechExchangeRateParser();
 
             // Act
             var rates = parser.ParseExchangeRates(exchangeRateData, new Currency("CZK"), currencies);
@@ -32,6 +32,18 @@ namespace ExchangeRateUpdater.Tests
 
             var eurRate = rates.First(r => r.SourceCurrency.Code == "EUR");
             Assert.Equal(26.000m, eurRate.Value);
+        }
+
+        [Fact]
+        public void ParseExchangeRates_InvalidExchangeRate_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var parser = new CzechExchangeRateParser();
+            var exchangeRateData = FileHelper.ReadTextFromFile("Files/InvalidTestData.txt");
+            var targetCurrency = new Currency("CZK");
+            var currencies = new List<Currency> { new Currency("EUR") };
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => parser.ParseExchangeRates(exchangeRateData, targetCurrency, currencies).ToList());
         }
     }
 }

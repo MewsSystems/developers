@@ -4,6 +4,7 @@ namespace ExchangeRateUpdater.Interfaces
 {
     public interface IExchangeRateFetcher
     {
-        Task<string> FetchExchangeRateData();
+        Task<string> FetchDailyExchangeRateData(DateOnly? date);
+        Task<string> FetchMonthlyExchangeRateData(DateOnly? date);
     }
 }

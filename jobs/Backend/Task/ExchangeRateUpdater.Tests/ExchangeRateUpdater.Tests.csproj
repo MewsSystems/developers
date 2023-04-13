@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestData.txt" />
+    <None Remove="Files\DailyTestData.txt" />
+    <None Remove="Files\InvalidTestData.txt" />
+    <None Remove="Files\MonthlyTestData.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TestData.txt">
+    <Content Include="Files\InvalidTestData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\MonthlyTestData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\DailyTestData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
