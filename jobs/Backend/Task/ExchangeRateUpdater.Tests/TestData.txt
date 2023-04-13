@@ -1,0 +1,4 @@
+﻿12 Apr 2023 #71
+Country|Currency|Amount|Code|Rate
+USA|dollar|1|USD|24.000
+EMU|euro|1|EUR|26.000
