@@ -9,12 +9,12 @@ namespace ExchangeRateUpdater.Services
 {
     public class CzechExchangeRateFetcher : IExchangeRateFetcher
     {
-        private readonly CNBSettings _cnbSettings;
-        private readonly HttpClient _httpClient;
+        private readonly CnbSettings _cnbSettings;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CzechExchangeRateFetcher(HttpClient httpClient, IOptions<CNBSettings> settings)
+        public CzechExchangeRateFetcher(IOptions<CnbSettings> settings, IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClientFactory = clientFactory;
             _cnbSettings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
         }
 
@@ -32,7 +32,8 @@ namespace ExchangeRateUpdater.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync(url);
+                var client = _httpClientFactory.CreateClient(Constants.CnbHttpClientKey);
+                var response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }

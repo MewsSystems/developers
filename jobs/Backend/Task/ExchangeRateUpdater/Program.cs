@@ -23,14 +23,14 @@ static void ConfigureServices(IServiceCollection services)
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .Build();
-    services.Configure<CNBSettings>(configuration.GetSection(CNBSettings.SETTINGS_KEY));
+    services.Configure<CnbSettings>(configuration.GetSection(CnbSettings.SETTINGS_KEY));
     services.Configure<CurrenciesSettings>(configuration.GetSection(CurrenciesSettings.SETTINGS_KEY));
 
     // add services:
-    services.AddHttpClient<IExchangeRateFetcher, CzechExchangeRateFetcher>();
-    services.AddSingleton<IExchangeRateParser, CzechExchangeRateParser>();
-    services.AddSingleton<IExchangeRateProvider, CzechExchangeRateProvider>();
     services.AddSingleton<IClock, SystemClock>();
+    services.AddHttpClient<IExchangeRateFetcher, CzechExchangeRateFetcher>();
+    services.AddTransient<IExchangeRateParser, CzechExchangeRateParser>();
+    services.AddTransient<IExchangeRateProvider, CzechExchangeRateProvider>();
 }
 
 // create service collection

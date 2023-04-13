@@ -10,6 +10,8 @@ namespace ExchangeRateUpdater.Configuration
     {
         public const string DateFormat = "dd.MM.yyyy";
 
+        public const string CnbHttpClientKey = "CzechNationalBank";
+
         #region CzechExchangeRateParser
 
         public const string CNBParserColumnSeparator = "|";
