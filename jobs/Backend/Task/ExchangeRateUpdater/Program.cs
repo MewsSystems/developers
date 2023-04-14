@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using Microsoft.Extensions.Options;
+using ExchangeRateUpdater.Services.Cached;
+using Microsoft.Extensions.Caching.Memory;
 
 static void ConfigureServices(IServiceCollection services)
 {
@@ -25,12 +27,17 @@ static void ConfigureServices(IServiceCollection services)
         .Build();
     services.Configure<CnbSettings>(configuration.GetSection(CnbSettings.SETTINGS_KEY));
     services.Configure<CurrenciesSettings>(configuration.GetSection(CurrenciesSettings.SETTINGS_KEY));
+    services.AddMemoryCache();
 
     // add services:
+    services.AddHttpClient(Constants.CnbHttpClientKey);
     services.AddSingleton<IClock, SystemClock>();
-    services.AddHttpClient<IExchangeRateFetcher, CzechExchangeRateFetcher>();
+    services.AddSingleton<IExchangeRateFetcher, CzechExchangeRateFetcher>();
     services.AddTransient<IExchangeRateParser, CzechExchangeRateParser>();
-    services.AddTransient<IExchangeRateProvider, CzechExchangeRateProvider>();
+    services.AddTransient<CzechExchangeRateProvider>();
+    // add a decoration for the CzechExchangeRateProvider
+    services.AddSingleton<IExchangeRateProvider>(x => new CachedCzechExchangeRateProvider(x.GetRequiredService<CzechExchangeRateProvider>(),
+        x.GetRequiredService<IClock>(), x.GetRequiredService<IMemoryCache>()));
 }
 
 // create service collection
