@@ -12,13 +12,13 @@ using System.Reflection.Metadata;
 
 namespace ExchangeRateUpdater.Tests
 {
-    public class CzechExchangeRateFetcherTests
+    public class CnbExchangeRateFetcherTests
     {
         private readonly Mock<IHttpClientFactory> _httpClientFactory;
         private readonly Mock<IOptions<CnbSettings>> _settingsMock;
         private readonly string _testData;
 
-        public CzechExchangeRateFetcherTests()
+        public CnbExchangeRateFetcherTests()
         {
             _testData = FileHelper.ReadTextFromFile("Files/DailyTestData.txt");
 
@@ -39,7 +39,7 @@ namespace ExchangeRateUpdater.Tests
         {
             // Arrange
             var date = DateOnly.Parse("2023-04-12");
-            var exchangeRateFetcher = new CzechExchangeRateFetcher(_settingsMock.Object, _httpClientFactory.Object);
+            var exchangeRateFetcher = new CnbExchangeRateFetcher(_settingsMock.Object, _httpClientFactory.Object);
 
             // Act
             var result = await exchangeRateFetcher.FetchDailyExchangeRateData(date);
@@ -52,7 +52,7 @@ namespace ExchangeRateUpdater.Tests
         public async Task FetchDailyExchangeRateData_WithoutDate_ReturnsCorrectData()
         {
             // Arrange
-            var exchangeRateFetcher = new CzechExchangeRateFetcher(_settingsMock.Object, _httpClientFactory.Object);
+            var exchangeRateFetcher = new CnbExchangeRateFetcher(_settingsMock.Object, _httpClientFactory.Object);
 
             // Act
             var result = await exchangeRateFetcher.FetchDailyExchangeRateData(null);

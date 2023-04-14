@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ExchangeRateUpdater.Tests
 {  
-    public class CzechExchangeRateParserTests
+    public class CnbExchangeRateParserTests
     {
         [Fact]
         public void ParseExchangeRates_ReturnsCorrectRates()
@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.Tests
                 new Currency("EUR")
             };
 
-            var parser = new CzechExchangeRateParser();
+            var parser = new CnbExchangeRateParser();
 
             // Act
             var rates = parser.ParseExchangeRates(exchangeRateData, new Currency("CZK"), currencies);
@@ -38,7 +38,7 @@ namespace ExchangeRateUpdater.Tests
         public void ParseExchangeRates_InvalidExchangeRate_ThrowsInvalidOperationException()
         {
             // Arrange
-            var parser = new CzechExchangeRateParser();
+            var parser = new CnbExchangeRateParser();
             var exchangeRateData = FileHelper.ReadTextFromFile("Files/InvalidTestData.txt");
             var targetCurrency = new Currency("CZK");
             var currencies = new List<Currency> { new Currency("EUR") };

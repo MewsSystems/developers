@@ -10,6 +10,7 @@ using System.IO;
 using Microsoft.Extensions.Options;
 using ExchangeRateUpdater.Services.Cached;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading;
 
 static void ConfigureServices(IServiceCollection services)
 {
@@ -32,11 +33,11 @@ static void ConfigureServices(IServiceCollection services)
     // add services:
     services.AddHttpClient(Constants.CnbHttpClientKey);
     services.AddSingleton<IClock, SystemClock>();
-    services.AddSingleton<IExchangeRateFetcher, CzechExchangeRateFetcher>();
-    services.AddTransient<IExchangeRateParser, CzechExchangeRateParser>();
-    services.AddTransient<CzechExchangeRateProvider>();
-    // add a decoration for the CzechExchangeRateProvider
-    services.AddSingleton<IExchangeRateProvider>(x => new CachedCzechExchangeRateProvider(x.GetRequiredService<CzechExchangeRateProvider>(),
+    services.AddSingleton<IExchangeRateFetcher, CnbExchangeRateFetcher>();
+    services.AddTransient<IExchangeRateParser, CnbExchangeRateParser>();
+    services.AddTransient<CnbExchangeRateProvider>();
+    // add a decoration for the CnbExchangeRateProvider
+    services.AddSingleton<IExchangeRateProvider>(x => new CachedCnbExchangeRateProvider(x.GetRequiredService<CnbExchangeRateProvider>(),
         x.GetRequiredService<IClock>(), x.GetRequiredService<IMemoryCache>()));
 }
 
@@ -54,7 +55,14 @@ var currencies = config.Value.Currencies.Select(code => new Currency(code));
 
 try
 {
-    var rates = await provider.GetExchangeRates(currencies);
+    using var cts = new CancellationTokenSource();
+    Console.CancelKeyPress += (sender, args) =>
+    {
+        args.Cancel = true;
+        cts.Cancel();
+    };
+
+    var rates = await provider.GetExchangeRates(currencies, cts.Token);
 
     logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
     foreach (var rate in rates)
@@ -65,6 +73,10 @@ try
 catch (InvalidOperationException e)
 {
     logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
+}
+catch (OperationCanceledException)
+{
+    logger.LogInformation("Operation canceled.");
 }
 catch (Exception e)
 {

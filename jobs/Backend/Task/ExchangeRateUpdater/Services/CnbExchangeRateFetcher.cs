@@ -2,40 +2,43 @@
 using ExchangeRateUpdater.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace ExchangeRateUpdater.Services
 {
-    public class CzechExchangeRateFetcher : IExchangeRateFetcher
+    // This class is responsible for fetching exchange rate data
+    // from the Czech National Bank's website.
+    public class CnbExchangeRateFetcher : IExchangeRateFetcher
     {
         private readonly CnbSettings _cnbSettings;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public CzechExchangeRateFetcher(IOptions<CnbSettings> settings, IHttpClientFactory clientFactory)
+        public CnbExchangeRateFetcher(IOptions<CnbSettings> settings, IHttpClientFactory clientFactory)
         {
             _httpClientFactory = clientFactory;
             _cnbSettings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public async Task<string> FetchDailyExchangeRateData(DateOnly? date)
+        public async Task<string> FetchDailyExchangeRateData(DateOnly? date, CancellationToken cancellationToken = default)
         {
-            return await FetchExchangeRateDataAsync(BuildDailyUrl(date));
+            return await FetchExchangeRateDataAsync(BuildDailyUrl(date), cancellationToken);
         }
 
-        public async Task<string> FetchMonthlyExchangeRateData(DateOnly? date)
+        public async Task<string> FetchMonthlyExchangeRateData(DateOnly? date, CancellationToken cancellationToken = default)
         {
-            return await FetchExchangeRateDataAsync(BuildMonthlyUrl(date));
+            return await FetchExchangeRateDataAsync(BuildMonthlyUrl(date), cancellationToken);
         }
 
-        private async Task<string> FetchExchangeRateDataAsync(string url)
+        private async Task<string> FetchExchangeRateDataAsync(string url, CancellationToken cancellationToken)
         {
             try
             {
                 var client = _httpClientFactory.CreateClient(Constants.CnbHttpClientKey);
-                var response = await client.GetAsync(url);
+                var response = await client.GetAsync(url, cancellationToken);
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsStringAsync();
+                return await response.Content.ReadAsStringAsync(cancellationToken);
             }
             catch (HttpRequestException ex)
             {

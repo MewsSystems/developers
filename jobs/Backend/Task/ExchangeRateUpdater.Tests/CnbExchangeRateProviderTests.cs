@@ -8,22 +8,22 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests
 {
-    public class CzechExchangeRateProviderTests
+    public class CnbExchangeRateProviderTests
     {
         private readonly Mock<IExchangeRateFetcher> _fetcherMock;
-        private readonly CzechExchangeRateParser _parser;
+        private readonly CnbExchangeRateParser _parser;
         private readonly MockClock _mockClock;
 
-        public CzechExchangeRateProviderTests()
+        public CnbExchangeRateProviderTests()
         {
             var dailyExchangeRateData = FileHelper.ReadTextFromFile("Files/DailyTestData.txt");
             var monthlyExchangeRateData = FileHelper.ReadTextFromFile("Files/MonthlyTestData.txt");
 
             _fetcherMock = new Mock<IExchangeRateFetcher>();
-            _fetcherMock.Setup(f => f.FetchDailyExchangeRateData(It.IsAny<DateOnly?>())).ReturnsAsync(dailyExchangeRateData);
-            _fetcherMock.Setup(f => f.FetchMonthlyExchangeRateData(It.IsAny<DateOnly?>())).ReturnsAsync(monthlyExchangeRateData);
+            _fetcherMock.Setup(f => f.FetchDailyExchangeRateData(It.IsAny<DateOnly?>(), It.IsAny<CancellationToken>())).ReturnsAsync(dailyExchangeRateData);
+            _fetcherMock.Setup(f => f.FetchMonthlyExchangeRateData(It.IsAny<DateOnly?>(), It.IsAny<CancellationToken>())).ReturnsAsync(monthlyExchangeRateData);
 
-            _parser = new CzechExchangeRateParser();
+            _parser = new CnbExchangeRateParser();
             _mockClock = new MockClock(DateOnly.Parse("2023-04-12"));
         }
 
@@ -37,7 +37,7 @@ namespace ExchangeRateUpdater.Tests
             new Currency("EUR"),
             new Currency("TND")
         };
-            var provider = new CzechExchangeRateProvider(_fetcherMock.Object, _parser, _mockClock);
+            var provider = new CnbExchangeRateProvider(_fetcherMock.Object, _parser, _mockClock);
 
             // Act
             var rates = await provider.GetExchangeRates(currencies);
@@ -59,7 +59,7 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetExchangeRates_InvalidCurrency_ReturnsEmptyList()
         {
             // Arrange
-            var provider = new CzechExchangeRateProvider(_fetcherMock.Object, _parser, _mockClock);
+            var provider = new CnbExchangeRateProvider(_fetcherMock.Object, _parser, _mockClock);
             var currencies = new List<Currency> { new Currency("INVALID") };
 
             // Act

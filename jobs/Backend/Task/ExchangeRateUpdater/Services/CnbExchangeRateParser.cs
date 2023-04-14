@@ -4,7 +4,9 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Services
 {
-    public class CzechExchangeRateParser : IExchangeRateParser
+    // This class is responsible for parsing the exchange rate data
+    // retrieved from the Czech National Bank's website.
+    public class CnbExchangeRateParser : IExchangeRateParser
     {
         public IEnumerable<ExchangeRate> ParseExchangeRates(string cnbText, Currency targetCurrency, IEnumerable<Currency> currencies)
         {

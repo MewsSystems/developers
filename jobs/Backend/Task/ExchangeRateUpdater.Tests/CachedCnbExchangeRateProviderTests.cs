@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Tests
 {
-    public class CachedCzechExchangeRateProviderTests
+    public class CachedCnbExchangeRateProviderTests
     {
         [Fact]
         public async Task GetExchangeRates_ReturnsCorrectRatesAndUsesCache()
@@ -25,13 +25,13 @@ namespace ExchangeRateUpdater.Tests
             };
 
             var providerMock = new Mock<IExchangeRateProvider>();
-            providerMock.Setup(x => x.GetExchangeRates(currencies)).ReturnsAsync(expectedRates);
+            providerMock.Setup(x => x.GetExchangeRates(currencies, It.IsAny<CancellationToken>())).ReturnsAsync(expectedRates);
 
             var clockMock = new Mock<IClock>();
             clockMock.SetupGet(x => x.Today).Returns(DateOnly.Parse("2023-04-12"));
 
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
-            var cachedProvider = new CachedCzechExchangeRateProvider(providerMock.Object, clockMock.Object, memoryCache);
+            var cachedProvider = new CachedCnbExchangeRateProvider(providerMock.Object, clockMock.Object, memoryCache);
 
             // Act
             var rates1 = await cachedProvider.GetExchangeRates(currencies);
@@ -40,7 +40,7 @@ namespace ExchangeRateUpdater.Tests
             // Assert
             Assert.True(expectedRates.SequenceEqual(rates1));
             Assert.True(expectedRates.SequenceEqual(rates2));
-            providerMock.Verify(x => x.GetExchangeRates(currencies), Times.Once); // Ensure caching is used
+            providerMock.Verify(x => x.GetExchangeRates(currencies, It.IsAny<CancellationToken>()), Times.Once); // Ensure caching is used
         }
     }
 }
