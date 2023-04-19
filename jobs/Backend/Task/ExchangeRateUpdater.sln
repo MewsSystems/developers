@@ -3,13 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.WebApi", "..\ExchangeRateUpdater.WebApi\ExchangeRateUpdater.WebApi.csproj", "{0E0DFE07-A8DD-4FF4-976F-3CF4F36577A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.UnitTests", "..\ExchangeRateUpdater.UnitTests\ExchangeRateUpdater.UnitTests.csproj", "{D3BC5AC0-09B1-40C6-883D-CB0CD10BED62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.IntegrationTests", "..\ExchangeRateUpdater.IntegrationTests\ExchangeRateUpdater.IntegrationTests.csproj", "{C2D96F7F-5F64-4F47-A1C6-A2CD5A2E5079}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{2532C93C-80F1-47E2-AE1C-AAFB1D31E476}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E0DFE07-A8DD-4FF4-976F-3CF4F36577A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E0DFE07-A8DD-4FF4-976F-3CF4F36577A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E0DFE07-A8DD-4FF4-976F-3CF4F36577A6}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,6 +1,4 @@
 ﻿using ExchangeRateUpdater.WebApi.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace ExchangeRateUpdater.WebApi.Services
 {
@@ -16,7 +14,7 @@ namespace ExchangeRateUpdater.WebApi.Services
         public async Task<string> GetExchangeRatesRawTextFromURL(string url)
         {
 
-            string exchangesRatesRawText = string.Empty;
+            string exchangesRatesRawText;
 
             try
             {

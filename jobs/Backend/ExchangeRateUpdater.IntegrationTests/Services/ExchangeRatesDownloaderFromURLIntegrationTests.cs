@@ -1,6 +1,5 @@
 using ExchangeRateUpdater.WebApi.Services;
 using Microsoft.AspNetCore.Mvc.Testing;
-using System;
 
 namespace ExchangeRateUpdater.IntegrationTests.Controllers
 {
