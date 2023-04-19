@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "911d9c90-3789-4c14-9c4a-261c8b8e841e",
+		"name": "ExchangeRateUpdater Docker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getExchangeRatesExample - Correct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    { \"code\": \"USD\"},\r\n    { \"code\": \"EUR\"}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ExchangeRateUpdater/GetExchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ExchangeRateUpdater",
+						"GetExchangeRates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRatesExample - Empty",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    { \"code\": \"USD\"},\r\n    { \"code\": \"\"}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ExchangeRateUpdater/GetExchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ExchangeRateUpdater",
+						"GetExchangeRates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRatesExample - Wrong letters",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    { \"code\": \"USD\"},\r\n    { \"code\": \"EU\"}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ExchangeRateUpdater/GetExchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ExchangeRateUpdater",
+						"GetExchangeRates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRatesExample - Lowercase letters",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    { \"code\": \"USD\"},\r\n    { \"code\": \"eur\"}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/ExchangeRateUpdater/GetExchangeRates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"ExchangeRateUpdater",
+						"GetExchangeRates"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
