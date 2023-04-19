@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateProvider.Settings;
+using ExchangeRateUpdater.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
+using System.Reflection;
 
-namespace ExchangeRateUpdater
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    public static class Program
-    {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+            $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+});
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(nameof(CacheSettings)));
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureClients();
+builder.Services.ConfigureServices();
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+var app = builder.Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
-        }
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
