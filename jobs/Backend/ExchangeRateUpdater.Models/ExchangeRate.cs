@@ -1,9 +1,12 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.BusinessLogic.Models
 {
     public class ExchangeRate
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
+            ArgumentNullException.ThrowIfNull(sourceCurrency);
+            ArgumentNullException.ThrowIfNull(targetCurrency);
+
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;

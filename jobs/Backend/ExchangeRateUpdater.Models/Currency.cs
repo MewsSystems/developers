@@ -1,10 +1,11 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.BusinessLogic.Models
 {
     public class Currency
     {
         public Currency(string code)
         {
-            Code = code;
+            if (code.Length != 3) throw new ArgumentException($"{nameof(code)} must be a 3 letters code, and {code} is not.", nameof(code));
+            Code = code.ToUpperInvariant();
         }
 
         /// <summary>

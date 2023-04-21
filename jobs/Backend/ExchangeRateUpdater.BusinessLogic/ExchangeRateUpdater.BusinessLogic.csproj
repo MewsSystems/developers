@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Clients\ExchangeRateUpdater.Clients.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Models\ExchangeRateUpdater.BusinessLogic.Models.csproj" />
+  </ItemGroup>
+
+</Project>
