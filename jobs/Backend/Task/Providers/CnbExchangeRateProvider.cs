@@ -35,18 +35,19 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
     {
         var request = new RestRequest("exrates/daily");
         var response = await _client.ExecuteGetAsync(request);
-        if (!response.IsSuccessful)
+        if (!response.IsSuccessful || response.Content == null)
             throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
 
-        dynamic document = JsonNode.Parse(response.Content);
+        dynamic exchangeRatesParsed = JsonNode.Parse(response.Content) ?? throw new ApplicationException($"Error parsing exchange rates: {response.ErrorMessage}");
         var currenciesList = currencies.ToList();
 
-        foreach (var rate in document["rates"])
+        foreach (var rate in exchangeRatesParsed["rates"])
         {
             if (currenciesList.Any(c => c.Code == rate["currencyCode"].ToString()))
                 yield return new ExchangeRate
                 {
-                    CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>()
+                    CurrencyCode = rate["currencyCode"].ToString(),
+                    CurrencyValue = rate["rate"].GetValue<decimal>()
                 };
         }
     }
