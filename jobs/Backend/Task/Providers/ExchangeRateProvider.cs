@@ -6,8 +6,9 @@ using RestSharp;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using RestSharp.Authenticators;
+using ExchangeRateUpdater.Models;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Providers
 {
     public class ExchangeRateProvider // TODO: Improve with interfaces.
     {
@@ -23,21 +24,21 @@ namespace ExchangeRateUpdater
         {
             _client = new RestClient("https://api.cnb.cz/cnbapi/");
         }
-        
+
         public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Make Async
         {
             var request = new RestRequest("exrates/daily");
             var response = await _client.ExecuteGetAsync(request);
             if (!response.IsSuccessful)
                 throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
-            
+
             dynamic document = JsonNode.Parse(response.Content);
 
             foreach (var rate in document["rates"])
             {
                 yield return new ExchangeRate { CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>() };
             }
-            
+
         }
 
         public async void PrintExchangeRates(IEnumerable<Currency> currencies)
