@@ -1,17 +1,12 @@
-﻿namespace ExchangeRateUpdater
+﻿using System.Text.Json.Serialization;
+
+namespace ExchangeRateUpdater
 {
     public class ExchangeRate
     {
-        public ExchangeRate(Currency currency, decimal value)
-        {
-            CurrencyCode = currency;
-            CurrencyValue = value;
-        }
 
-        public Currency CurrencyCode { get; }
-
-        public decimal CurrencyValue { get; }
-
+        public string CurrencyCode { get; set; }
+        public decimal CurrencyValue { get; set; }
         public override string ToString()
         {
             return $"{CurrencyCode}={CurrencyValue}";
