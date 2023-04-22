@@ -10,7 +10,7 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Providers
 {
-    public class ExchangeRateProvider // TODO: Improve with interfaces.
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
