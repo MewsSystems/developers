@@ -31,7 +31,7 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
         GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
     }
 
-    public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Make Async
+    public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract RestSharp and Data Source
     {
         var request = new RestRequest("exrates/daily");
         var response = await _client.ExecuteGetAsync(request);
