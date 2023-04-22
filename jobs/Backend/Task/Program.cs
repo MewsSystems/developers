@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> Currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -26,11 +26,7 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new CnbExchangeRateProvider();
-                provider.PrintExchangeRates(currencies);
-
-                // Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-
-
+                provider.PrintExchangeRates(Currencies);
             }
             catch (Exception e)
             {

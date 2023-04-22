@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Nodes;
 using ExchangeRateUpdater.Models;
 using RestSharp;
@@ -7,7 +8,7 @@ using RestSharp;
 namespace ExchangeRateUpdater.Providers;
 
 /// <summary>
-/// Exchange Rate Provider for the Czech National Bank.
+///     Exchange Rate Provider for the Czech National Bank.
 /// </summary>
 public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
 {
@@ -24,6 +25,12 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
         _client = new RestClient("https://api.cnb.cz/cnbapi/");
     }
 
+    public void Dispose()
+    {
+        _client?.Dispose();
+        GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
+    }
+
     public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Make Async
     {
         var request = new RestRequest("exrates/daily");
@@ -34,18 +41,15 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
         dynamic document = JsonNode.Parse(response.Content);
 
         foreach (var rate in document["rates"])
-            yield return new ExchangeRate
-                { CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>() };
+            if (currencies.Any(c => c.Code == rate["currencyCode"].ToString()))
+                yield return new ExchangeRate
+                {
+                    CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>()
+                };
     }
 
     public async void PrintExchangeRates(IEnumerable<Currency> currencies)
     {
         await foreach (var exchangeRate in GetExchangeRates(currencies)) Console.WriteLine(exchangeRate.ToString());
-    }
-
-    public void Dispose()
-    {
-        _client?.Dispose();
-        GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
     }
 }
