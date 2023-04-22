@@ -39,13 +39,16 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
             throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
 
         dynamic document = JsonNode.Parse(response.Content);
+        var enumerable = currencies.ToList();
 
         foreach (var rate in document["rates"])
-            if (currencies.Any(c => c.Code == rate["currencyCode"].ToString()))
+        {
+            if (enumerable.Any(c => c.Code == rate["currencyCode"].ToString()))
                 yield return new ExchangeRate
                 {
                     CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>()
                 };
+        }
     }
 
     public async void PrintExchangeRates(IEnumerable<Currency> currencies)
