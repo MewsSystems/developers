@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.Providers;
 /// <summary>
 /// Exchange Rate Provider for the Czech National Bank.
 /// </summary>
-public class CnbExchangeRateProvider : IExchangeRateProvider
+public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
 {
     /// <summary>
     ///     Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -41,5 +41,11 @@ public class CnbExchangeRateProvider : IExchangeRateProvider
     public async void PrintExchangeRates(IEnumerable<Currency> currencies)
     {
         await foreach (var exchangeRate in GetExchangeRates(currencies)) Console.WriteLine(exchangeRate.ToString());
+    }
+
+    public void Dispose()
+    {
+        _client?.Dispose();
+        GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
     }
 }
