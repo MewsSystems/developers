@@ -28,20 +28,16 @@ namespace ExchangeRateUpdater
         {
             var request = new RestRequest("exrates/daily");
             var response = _client.ExecuteGet(request);
-            if (response.IsSuccessful)
-            {
-                dynamic document = JsonNode.Parse(response.Content);
-
-                foreach (var rate in document["rates"])
-                {
-                    yield return new ExchangeRate { CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>() };
-                }
-
-            }
-            else
-            {
+            if (!response.IsSuccessful)
                 throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
+            
+            dynamic document = JsonNode.Parse(response.Content);
+
+            foreach (var rate in document["rates"])
+            {
+                yield return new ExchangeRate { CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>() };
             }
+            
         }
     }
 }
