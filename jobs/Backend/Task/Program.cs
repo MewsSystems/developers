@@ -24,13 +24,11 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                provider.PrintExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                // Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+
+
             }
             catch (Exception e)
             {

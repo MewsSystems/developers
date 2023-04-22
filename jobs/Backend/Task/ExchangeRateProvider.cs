@@ -24,10 +24,10 @@ namespace ExchangeRateUpdater
             _client = new RestClient("https://api.cnb.cz/cnbapi/");
         }
         
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Make Async
+        public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Make Async
         {
             var request = new RestRequest("exrates/daily");
-            var response = _client.ExecuteGet(request);
+            var response = await _client.ExecuteGetAsync(request);
             if (!response.IsSuccessful)
                 throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
             
@@ -38,6 +38,14 @@ namespace ExchangeRateUpdater
                 yield return new ExchangeRate { CurrencyCode = rate["currencyCode"].ToString(), CurrencyValue = rate["rate"].GetValue<decimal>() };
             }
             
+        }
+
+        public async void PrintExchangeRates(IEnumerable<Currency> currencies)
+        {
+            await foreach (var exchangeRate in GetExchangeRates(currencies))
+            {
+                Console.WriteLine(exchangeRate.ToString());
+            }
         }
     }
 }
