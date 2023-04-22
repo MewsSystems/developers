@@ -6,7 +6,10 @@ using RestSharp;
 
 namespace ExchangeRateUpdater.Providers;
 
-public class ExchangeRateProvider : IExchangeRateProvider
+/// <summary>
+/// Exchange Rate Provider for the Czech National Bank.
+/// </summary>
+public class CnbExchangeRateProvider : IExchangeRateProvider
 {
     /// <summary>
     ///     Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -16,7 +19,7 @@ public class ExchangeRateProvider : IExchangeRateProvider
     /// </summary>
     private readonly RestClient _client;
 
-    public ExchangeRateProvider()
+    public CnbExchangeRateProvider()
     {
         _client = new RestClient("https://api.cnb.cz/cnbapi/");
     }
