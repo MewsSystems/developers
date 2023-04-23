@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.ExchangeRateSource;
 using RestSharp;
 
 namespace ExchangeRateUpdater.Client;
@@ -7,10 +8,12 @@ namespace ExchangeRateUpdater.Client;
 internal class ExchangeRateClient : IExchangeRateClient, IDisposable
 {
     private readonly RestClient _client;
+    private readonly IExchangeRateSource _exchangeRateSource;
 
-    public ExchangeRateClient()
+    public ExchangeRateClient(IExchangeRateSource exchangeRateSource)
     {
-        _client = new RestClient("https://api.cnb.cz/cnbapi/");
+        _exchangeRateSource = exchangeRateSource;
+        _client = new RestClient(_exchangeRateSource.BaseRestUrl);
     }
     public void Dispose()
     {
@@ -20,7 +23,7 @@ internal class ExchangeRateClient : IExchangeRateClient, IDisposable
 
     public async Task<string> GetExchangeRateAsync()
     {
-        var request = new RestRequest("exrates/daily");
+        var request = new RestRequest(_exchangeRateSource.EndPoint);
         var response = await _client.ExecuteGetAsync(request);
         if (!response.IsSuccessful || response.Content == null)
             throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");

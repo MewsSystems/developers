@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.ExchangeRateSource;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Providers;
 
@@ -26,7 +27,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var exchangeRateClient = new ExchangeRateClient();
+                var czbExchangeRateSource = new CnbExchangeRateSource();
+                var exchangeRateClient = new ExchangeRateClient(czbExchangeRateSource);
                 var provider = new CnbExchangeRateProvider(exchangeRateClient);
                 provider.PrintExchangeRates(Currencies);
             }
