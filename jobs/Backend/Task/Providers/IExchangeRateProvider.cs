@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ExchangeRateUpdater.Models;
 
-namespace ExchangeRateUpdater.Providers
+namespace ExchangeRateUpdater.Providers;
+
+internal interface IExchangeRateProvider
 {
-    internal interface IExchangeRateProvider
-    {
-        IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
-        void PrintExchangeRates(IEnumerable<Currency> currencies);
-    }
+    IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+    void PrintExchangeRates(IEnumerable<Currency> currencies);
 }
