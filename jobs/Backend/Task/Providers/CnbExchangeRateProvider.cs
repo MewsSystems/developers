@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.ExchangeRateSource;
 using ExchangeRateUpdater.Models;
 using RestSharp;
 
@@ -21,10 +22,12 @@ public class CnbExchangeRateProvider : IExchangeRateProvider
     /// </summary>
 
     private readonly IExchangeRateClient _exchangeRateClient;
+    private readonly IExchangeRateSource _exchangeRateSource;
 
-    public CnbExchangeRateProvider(IExchangeRateClient exchangeRateClient)
+    public CnbExchangeRateProvider(IExchangeRateClient exchangeRateClient, IExchangeRateSource exchangeRateSource)
     {
         _exchangeRateClient = exchangeRateClient;
+        _exchangeRateSource = exchangeRateSource;
     }
 
     public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract Data Source
@@ -38,7 +41,8 @@ public class CnbExchangeRateProvider : IExchangeRateProvider
             if (currenciesList.Any(c => c.Code == rate["currencyCode"].ToString()))
                 yield return new ExchangeRate
                 {
-                    CurrencyCode = rate["currencyCode"].ToString(),
+                    SourceCurrencyCode = rate["currencyCode"].ToString(),
+                    TargetCurrencyCode = _exchangeRateSource.CurrencyCode.Code,
                     CurrencyValue = rate["rate"].GetValue<decimal>()
                 };
         }

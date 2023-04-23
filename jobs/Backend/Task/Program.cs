@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater
             {
                 var czbExchangeRateSource = new CnbExchangeRateSource();
                 var exchangeRateClient = new ExchangeRateClient(czbExchangeRateSource);
-                var provider = new CnbExchangeRateProvider(exchangeRateClient);
+                var provider = new CnbExchangeRateProvider(exchangeRateClient, czbExchangeRateSource);
                 provider.PrintExchangeRates(Currencies);
             }
             catch (Exception e)

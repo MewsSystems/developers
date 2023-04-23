@@ -2,11 +2,12 @@
 
 public class ExchangeRate
 {
-    public string CurrencyCode { get; set; }
+    public string SourceCurrencyCode { get; set; }
+    public string TargetCurrencyCode { get; set; }
     public decimal CurrencyValue { get; set; }
 
     public override string ToString()
     {
-        return $"{CurrencyCode}={CurrencyValue}";
+        return $"{SourceCurrencyCode}/{TargetCurrencyCode}={CurrencyValue}";
     }
 }
