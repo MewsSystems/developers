@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Client;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Providers;
 
@@ -25,7 +26,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider();
+                var exchangeRateClient = new ExchangeRateClient();
+                var provider = new CnbExchangeRateProvider(exchangeRateClient);
                 provider.PrintExchangeRates(Currencies);
             }
             catch (Exception e)

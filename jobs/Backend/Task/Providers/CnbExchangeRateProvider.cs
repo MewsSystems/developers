@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using ExchangeRateUpdater.Client;
 using ExchangeRateUpdater.Models;
 using RestSharp;
 
@@ -20,8 +21,11 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
     /// </summary>
     private readonly RestClient _client;
 
-    public CnbExchangeRateProvider()
+    private readonly IExchangeRateClient _exchangeRateClient;
+
+    public CnbExchangeRateProvider(IExchangeRateClient exchangeRateClient)
     {
+        _exchangeRateClient = exchangeRateClient;
         _client = new RestClient("https://api.cnb.cz/cnbapi/");
     }
 
@@ -31,14 +35,10 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
         GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
     }
 
-    public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract RestSharp and Data Source
+    public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract Data Source
     {
-        var request = new RestRequest("exrates/daily");
-        var response = await _client.ExecuteGetAsync(request);
-        if (!response.IsSuccessful || response.Content == null)
-            throw new ApplicationException($"Error fetching exchange rates: {response.ErrorMessage}");
-
-        dynamic exchangeRatesParsed = JsonNode.Parse(response.Content) ?? throw new ApplicationException($"Error parsing exchange rates: {response.ErrorMessage}");
+        var exchangeRates = await _exchangeRateClient.GetExchangeRateAsync();
+        dynamic exchangeRatesParsed = JsonNode.Parse(exchangeRates) ?? throw new ApplicationException($"Error parsing exchange rates: {exchangeRates}");
         var currenciesList = currencies.ToList();
 
         foreach (var rate in exchangeRatesParsed["rates"])
