@@ -17,10 +17,7 @@ public class ExchangeRateProviderTests
     }
 
     [Test]
-    public async Task CnbExchangeRateProvider_ReturnsOnlyRequiredExchangeRates()
-    {
-        // Arrange
-        string mockExchangeRateClientResult = @"{""rates"":[
+    [TestCase(@"{""rates"":[
                 {
                 ""currencyCode"":""USD"",
                 ""rate"":123.0
@@ -33,7 +30,24 @@ public class ExchangeRateProviderTests
                 ""currencyCode"":""FAKE"",
                 ""rate"":999.0
                 }
-            ]}";
+            ]}")]
+    [TestCase(@"{""rates"":[
+                {
+                ""currencyCode"":""GBP"",
+                ""rate"":123.0
+                },
+                {
+                ""currencyCode"":""AUD"",
+                ""rate"":321.0
+                },
+                {
+                ""currencyCode"":""CZK"",
+                ""rate"":999.0
+                }
+            ]}")]
+    public async Task CnbExchangeRateProvider_ReturnsOnlyRequiredExchangeRates(string mockExchangeRateClientResult)
+    {
+        // Arrange
         _mockExchangeRateClient.Setup(e => e.GetExchangeRateAsync()).ReturnsAsync(mockExchangeRateClientResult);
         _mockExchangeRateSource.SetupGet(e => e.CurrencyCode).Returns(new Currency("TEST"));
         var exchangeRateProvider =
