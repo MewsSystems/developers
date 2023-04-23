@@ -33,10 +33,12 @@ public class CnbExchangeRateProvider : IExchangeRateProvider
     public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract Data Source
     {
         var exchangeRates = await _exchangeRateClient.GetExchangeRateAsync();
-        dynamic exchangeRatesParsed = JsonNode.Parse(exchangeRates) ?? throw new ApplicationException($"Error parsing exchange rates: {exchangeRates}");
+        _ = exchangeRates ?? throw new ApplicationException($"Error parsing exchange rates using {nameof(_exchangeRateClient)}");
+
+        dynamic exchangeRatesParsed = JsonNode.Parse(exchangeRates);
         var currenciesList = currencies.ToList();
 
-        foreach (var rate in exchangeRatesParsed["rates"])
+        foreach (var rate in exchangeRatesParsed!["rates"])
         {
             if (currenciesList.Any(c => c.Code == rate["currencyCode"].ToString()))
                 yield return new ExchangeRate

@@ -59,4 +59,30 @@ public class ExchangeRateProviderTests
         Assert.That(resultsList.All(result => currencies.Any(c => c.Code == result.SourceCurrencyCode)), Is.True); // Checks if any exchange rates that aren't in the provided list are returned
 
     }
+
+    [Test]
+    public void CnbExchangeRateProvider_ThrowsErrorWithInvalidSource()
+    {
+        // Arrange
+        _mockExchangeRateSource.SetupGet(e => e.CurrencyCode).Returns(new Currency("TEST"));
+        _mockExchangeRateClient.Setup(e => e.GetExchangeRateAsync()).ReturnsAsync((string)null!);
+        var exchangeRateProvider =
+            new CnbExchangeRateProvider(_mockExchangeRateClient.Object, _mockExchangeRateSource.Object);
+        IEnumerable<Currency> currencies = new[]
+        {
+            new Currency("USD"),
+            new Currency("CZK"),
+            new Currency("EUR")
+        };
+
+        async Task GetExchangeRates()
+        {
+            await foreach (var _ in exchangeRateProvider!.GetExchangeRates(currencies))
+            {
+            }
+        }
+
+        //Act / Assert
+        Assert.ThrowsAsync<ApplicationException>(GetExchangeRates);
+    }
 }
