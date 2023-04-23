@@ -11,7 +11,7 @@ namespace ExchangeRateUpdater.Providers;
 /// <summary>
 ///     Exchange Rate Provider for the Czech National Bank.
 /// </summary>
-public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
+public class CnbExchangeRateProvider : IExchangeRateProvider
 {
     /// <summary>
     ///     Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -19,20 +19,12 @@ public class CnbExchangeRateProvider : IExchangeRateProvider, IDisposable
     ///     do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     ///     some of the currencies, ignore them.
     /// </summary>
-    private readonly RestClient _client;
 
     private readonly IExchangeRateClient _exchangeRateClient;
 
     public CnbExchangeRateProvider(IExchangeRateClient exchangeRateClient)
     {
         _exchangeRateClient = exchangeRateClient;
-        _client = new RestClient("https://api.cnb.cz/cnbapi/");
-    }
-
-    public void Dispose()
-    {
-        _client?.Dispose();
-        GC.SuppressFinalize(this); // Prevents garbage collector calling object finalizer.
     }
 
     public async IAsyncEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies) //TODO: Abstract Data Source
