@@ -12,8 +12,14 @@
 
   <ItemGroup>
     <None Remove="Controllers\" />
+    <None Remove="Models\" />
+    <None Remove="Services\" />
+    <None Remove="Services\ExchangeRateProviderService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\ExchangeRateProviderService\" />
   </ItemGroup>
 </Project>
