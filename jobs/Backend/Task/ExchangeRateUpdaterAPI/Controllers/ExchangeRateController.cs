@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRateUpdaterAPI.Controllers
 {
+    [Route("[controller]")]
+    [ApiController]
     public class ExchangeRateController : ControllerBase
     {
         private readonly IExchangeRateProvider _exchangeRateProvider;

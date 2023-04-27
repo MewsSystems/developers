@@ -1,4 +1,4 @@
-﻿<Properties StartupConfiguration="{7B2695D6-D24C-4460-A58E-A10F08550CE0}|Default">
+﻿<Properties StartupConfiguration="{A31AF0F2-2835-49FD-A675-20B2109E89E6}|Default">
   <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.Workbench ActiveDocument="ExchangeRateUpdaterAPI/Services/ExchangeRateProviderService/ExchangeRateProvider.cs">
     <Files>
@@ -34,5 +34,5 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdaterAPI FirstBuild="True" />
+  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdaterAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>

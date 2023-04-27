@@ -1,4 +1,8 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using ExchangeRateUpdater;
+using ExchangeRateUpdaterAPI.Services.ExchangeRateFormatterService;
+using ExchangeRateUpdaterAPI.Services.ExchangeRateProviderService;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -6,6 +10,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
+builder.Services.AddScoped<IExchangeRateFormatter, ExchangeRateFormatter>();
+builder.Services.AddHttpClient<ExchangeRateProvider>();
 
 var app = builder.Build();
 
