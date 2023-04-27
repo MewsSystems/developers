@@ -15,11 +15,13 @@
     <None Remove="Models\" />
     <None Remove="Services\" />
     <None Remove="Services\ExchangeRateProviderService\" />
+    <None Remove="Services\ExchangeRateFormatterService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
     <Folder Include="Services\ExchangeRateProviderService\" />
+    <Folder Include="Services\ExchangeRateFormatterService\" />
   </ItemGroup>
 </Project>

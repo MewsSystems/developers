@@ -18,6 +18,7 @@ namespace ExchangeRateUpdaterAPI.Controllers
         {
             IEnumerable<ExchangeRate> exchangeRates = Enumerable.Empty<ExchangeRate>();
 
+            // TODO Add error handling
             exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
 
             return Ok(exchangeRates);

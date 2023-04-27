@@ -2,6 +2,8 @@
 {
     public class Currency
     {
+        public const string CzechRepublicCurrencyCode = "CZK";
+
         public Currency(string code)
         {
             Code = code;
