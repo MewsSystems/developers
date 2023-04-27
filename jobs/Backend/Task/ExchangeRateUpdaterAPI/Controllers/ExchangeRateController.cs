@@ -18,12 +18,23 @@ namespace ExchangeRateUpdaterAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            IEnumerable<ExchangeRate> exchangeRates = Enumerable.Empty<ExchangeRate>();
-
-            // TODO Add error handling
-            exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
-
-            return Ok(exchangeRates);
+            try
+            {
+                IEnumerable<ExchangeRate> exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
+                return Ok(exchangeRates);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (FormatException ex)
+            {
+                return BadRequest("Invalid format of exchange rate data. " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong. " + ex.Message);
+            }
         }
     }
 }

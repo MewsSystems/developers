@@ -18,15 +18,38 @@ namespace ExchangeRateUpdater
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            // TODO check if file is null pr if it exists
             var exchangeRatesDataSource = _configuration.GetSection("ExchangeRateDateSource").Value;
 
-            // TODO Error handling
-            var exchangeRatesDataSourceContent = await _httpClient.GetStringAsync(exchangeRatesDataSource);
+            if (string.IsNullOrEmpty(exchangeRatesDataSource))
+            {
+                throw new ArgumentException("Exchange rate data source is not configured");
+            }
+
+            if (!File.Exists(exchangeRatesDataSource))
+            {
+                throw new FileNotFoundException("Exchange rate data source file does not exist", exchangeRatesDataSource);
+            }
+
+            string exchangeRatesDataSourceContent = "";
+
+            try
+            {
+                exchangeRatesDataSourceContent = await _httpClient.GetStringAsync(exchangeRatesDataSource);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception("An error occurred while fetching exchange rates data source content", ex);
+            }
+
+            if (string.IsNullOrEmpty(exchangeRatesDataSourceContent))
+            {
+                throw new Exception("Exchange rate data source content is null or empty");
+            }
 
             return _exchangeRateFormatter
                 .FormatExchangeRates(exchangeRatesDataSourceContent)
                 .Where(exchangeRate => currencies.Any(currency => currency.Code == exchangeRate.TargetCurrency.Code));
         }
+
     }
 }
