@@ -9,15 +9,31 @@ namespace ExchangeRateUpdaterAPI.Services.ExchangeRateFormatterService
         {
             try
             {
+                if (exchangeRateData == string.Empty)
+                {
+                    throw new FormatException($"File is empty");
+                }
                 return exchangeRateData
                     .Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                     .Skip(2)
                     .Select(line => line.Split('|'))
-                    .Select(columns => new ExchangeRate(
-                        new Currency(Currency.CzechRepublicCurrencyCode),
-                        new Currency(columns[3]),
-                        decimal.Parse(columns[4], CultureInfo.InvariantCulture)
-                    ));
+                    .Select(columns =>
+                    {
+                        if (columns.Length < 5)
+                        {
+                            throw new FormatException($"Missing columns in line: {string.Join("|", columns)}");
+                        }
+                        if (!decimal.TryParse(columns[4], NumberStyles.Float, CultureInfo.InvariantCulture, out decimal exchangeRateValue))
+                        {
+                            throw new FormatException($"Invalid decimal value: {columns[4]}");
+                        }
+
+                        return new ExchangeRate(
+                            new Currency(Currency.CzechRepublicCurrencyCode),
+                            new Currency(columns[3]),
+                            exchangeRateValue
+                        );
+                    });
             }
             catch (Exception ex)
             {
