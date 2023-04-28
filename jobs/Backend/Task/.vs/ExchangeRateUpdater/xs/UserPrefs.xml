@@ -1,39 +1,4 @@
 ﻿<Properties StartupConfiguration="{A31AF0F2-2835-49FD-A675-20B2109E89E6}|Default">
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="ExchangeRateUpdaterAPI/Services/ExchangeRateProviderService/ExchangeRateProvider.cs">
-    <Files>
-      <File FileName="ExchangeRateUpdaterAPI/Models/Currency.cs" Line="20" Column="6" />
-      <File FileName="ExchangeRateUpdaterAPI/Models/ExchangeRate.cs" Line="16" Column="1" />
-      <File FileName="ExchangeRateUpdaterAPI/Controllers/ExchangeRateController.cs" Line="25" Column="34" />
-      <File FileName="ExchangeRateUpdaterAPI/Services/ExchangeRateProviderService/ExchangeRateProvider.cs" Line="21" Column="1" />
-      <File FileName="ExchangeRateUpdaterAPI/Services/ExchangeRateProviderService/IExchangeRateProvider.cs" Line="9" Column="2" />
-    </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="ExchangeRateUpdater" expanded="True">
-            <Node name="ExchangeRateUpdaterAPI" expanded="True">
-              <Node name="Controllers" expanded="True" />
-              <Node name="Services" expanded="True">
-                <Node name="ExchangeRateProviderService" expanded="True">
-                  <Node name="ExchangeRateProvider.cs" selected="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdater PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdaterAPITests FirstBuild="True" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdaterAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>
