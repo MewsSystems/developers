@@ -25,11 +25,6 @@ namespace ExchangeRateUpdater
                 throw new ArgumentException("Exchange rate data source is not configured");
             }
 
-            if (!File.Exists(exchangeRatesDataSource))
-            {
-                throw new FileNotFoundException("Exchange rate data source file does not exist", exchangeRatesDataSource);
-            }
-
             string exchangeRatesDataSourceContent = "";
 
             try
