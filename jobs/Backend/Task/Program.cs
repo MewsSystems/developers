@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,14 +24,14 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                //var provider = new ExchangeRateProvider();
+                //var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                //Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                //foreach (var rate in rates)
+                //{
+                //    Console.WriteLine(rate.ToString());
+                //}
             }
             catch (Exception e)
             {
