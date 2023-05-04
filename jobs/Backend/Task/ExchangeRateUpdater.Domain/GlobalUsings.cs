@@ -1,0 +1,10 @@
+﻿global using ExchangeRateUpdater.Contracts;
+global using ExchangeRateUpdater.Contracts.Extensions;
+global using ExchangeRateUpdater.Contracts.Interfaces;
+global using ExchangeRateUpdater.Contracts.Messages;
+global using ExchangeRateUpdater.Contracts.Requests;
+global using ExchangeRateUpdater.Contracts.Responses;
+global using FluentValidation;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using System.Globalization;

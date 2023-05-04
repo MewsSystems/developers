@@ -1,0 +1,9 @@
+﻿global using ExchangeRateUpdater.Contracts;
+global using ExchangeRateUpdater.Contracts.Interfaces;
+global using ExchangeRateUpdater.Contracts.Requests;
+global using ExchangeRateUpdater.Contracts.Wrappers;
+global using ExchangeRateUpdater.Domain.Parsers;
+global using ExchangeRateUpdater.Domain.Services;
+global using ExchangeRateUpdater.Domain.Validators;
+global using FluentValidation;
+global using Microsoft.AspNetCore.Mvc;

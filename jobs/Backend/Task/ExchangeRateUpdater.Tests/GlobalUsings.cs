@@ -1,0 +1,12 @@
+global using ExchangeRateUpdater.Contracts.Interfaces;
+global using ExchangeRateUpdater.Contracts.Requests;
+global using ExchangeRateUpdater.Contracts;
+global using ExchangeRateUpdater.Domain.Services;
+global using ExchangeRateUpdater.Tests.Constants;
+global using FluentValidation;
+global using FluentValidation.Results;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using System.Net;
+global using Xunit;
