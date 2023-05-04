@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,10 +22,18 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+            var serviceProvider = new ServiceCollection()
+              .AddSingleton<IExchangeRatesListingParser, ExchangeRatesListingParser>()
+              .AddSingleton<ICnbApiClient, CnbApiClient>()
+              .AddSingleton<IExchangeRatesListingsCache, ExchangeRatesListingsCache>()
+              .AddSingleton<IBankDateProvider, BankDateProvider>()
+              .AddSingleton<IDateTimeProvider, DateTimeProvider>()
+              .AddSingleton<ExchangeRateProvider>()
+              .BuildServiceProvider();
+
+            try {
+                var provider = serviceProvider.GetService<ExchangeRateProvider>();
+                var rates = provider.GetExchangeRates(currencies).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

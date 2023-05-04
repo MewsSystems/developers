@@ -1,9 +1,14 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
-    public class Currency
+    public readonly struct Currency
     {
         public Currency(string code)
         {
+            if (code == null || code.Length != 3) {
+                throw new ArgumentException($"Invalid currency code '{code}'. Expected a three-letter code.");
+            }
             Code = code;
         }
 
