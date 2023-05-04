@@ -1,0 +1,9 @@
+﻿03 May 2023 #85
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|14.228
+EMU|euro|1|EUR|23.560
+Hongkong|dollar|1|HKD|2.721
+Hungary|forint|100|HUF|6.273
+Iceland|krona|100|ISK|15.696
+United Kingdom|pound|1|GBP|26.694
+USA|dollar|1|USD|21.360
