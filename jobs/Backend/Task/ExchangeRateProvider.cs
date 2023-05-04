@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -36,13 +35,15 @@ namespace ExchangeRateUpdater
             return response.Content.ReadAsStringAsync().Result;
         }
 
+        //creates the list of exchange rates will be output.
         private IEnumerable<ExchangeRate> ParseExchangeRates(string sourceData, IEnumerable<Currency> currencies)
         {
             var exchangeRates = new List<ExchangeRate>();
             var currencyCodes = currencies.Select(c => c.Code.ToUpperInvariant()).ToList();
             var lines = sourceData.Split('\n');
-            var startIndex = FindStartingIndex(lines);
 
+            //start at the correct index.
+            var startIndex = FindStartingIndex(lines);
             for (int i = startIndex + 1; i < lines.Length; i++)
             {
                 var line = lines[i].Trim();
@@ -60,6 +61,7 @@ namespace ExchangeRateUpdater
             return exchangeRates;
         }
 
+        //Find the starting index, to avoid parsing the wrong data.
         private int FindStartingIndex(string[] lines)
         {
             for (int i = 0; i < lines.Length; i++)
@@ -72,8 +74,10 @@ namespace ExchangeRateUpdater
             throw new Exception("Starting index not found in exchange rate data");
         }
 
+        //passes in individual Line , gets the currency code and value if the format is correct.
         private ExchangeRate ParseExchangeRate(string line, List<string> currencyCodes)
         {
+            //creates an array of "se
             var parts = line.Split('|');
             if (parts.Length != 5)
             {
