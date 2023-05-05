@@ -1,10 +1,9 @@
 ﻿using System.Net;
-using ExchangeRateUpdater;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 
-namespace Exception.Tests.Unit;
+namespace ExchangeRateUpdater.Tests.Unit;
 
 [TestFixture]
 public class ExchangeRateProviderTests
@@ -16,8 +15,7 @@ public class ExchangeRateProviderTests
     [SetUp]
     public void SetUp()
     {
-      
-        
+       
     }
 
     //considerred using TestCase/TestCaseSource here to pass in working variants of sample data but decided against it.
@@ -66,7 +64,7 @@ public class ExchangeRateProviderTests
         _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
 
         // Act and Assert
-        var exception = Assert.ThrowsAsync<System.Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
+        var exception = Assert.ThrowsAsync<Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
         Assert.That(exception.Message, Is.EqualTo("Invalid format on line: Australia|dollar|1|AUD"));
     }
 
@@ -105,7 +103,7 @@ public class ExchangeRateProviderTests
         _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
 
         // Act & Assert
-        var exception = Assert.ThrowsAsync<System.Exception>(
+        var exception = Assert.ThrowsAsync<Exception>(
             async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
         Assert.That(exception.Message, Is.EqualTo("Failed to retrieve exchange rates: NotFound"));
     }
@@ -146,7 +144,7 @@ public class ExchangeRateProviderTests
         _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
 
         // Act and Assert
-        var exception = Assert.ThrowsAsync<System.Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
+        var exception = Assert.ThrowsAsync<Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
         Assert.That(exception.Message, Is.EqualTo("Starting index not found in exchange rate data"));
     }
 
