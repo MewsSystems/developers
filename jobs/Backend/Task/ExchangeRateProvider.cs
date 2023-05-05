@@ -19,12 +19,12 @@ public class ExchangeRateProvider: IExchangeRateProvider
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
-        var sourceData = await FetchExchangeRateDataAsync(DateTime.Today);
-        var exchangeRates = ParseExchangeRates(sourceData, currencies);
+        var sourceData = await GetExchangeRateDataAsync(DateTime.Today);
+        var exchangeRates = ParseExchangeRateData(sourceData, currencies);
         return exchangeRates;
     }
 
-    private async Task<string> FetchExchangeRateDataAsync(DateTime date)
+    private async Task<string> GetExchangeRateDataAsync(DateTime date)
     {
         var url = string.Format(ExchangeRateUrl, date);
         
@@ -37,11 +37,12 @@ public class ExchangeRateProvider: IExchangeRateProvider
     }
 
     //creates the list of exchange rates will be output.
-    private IEnumerable<ExchangeRate> ParseExchangeRates(string sourceData, IEnumerable<Currency> currencies)
+    private IEnumerable<ExchangeRate> ParseExchangeRateData(string sourceData, IEnumerable<Currency> currencies)
     {
         var exchangeRates = new List<ExchangeRate>();
         var currencyCodes = currencies.Select(c => c.Code.ToUpperInvariant()).ToList();
         var lines = sourceData.Split('\n');
+        
 
         //start at the correct index.
         var startIndex = FindStartingIndex(lines);
@@ -67,7 +68,9 @@ public class ExchangeRateProvider: IExchangeRateProvider
     {
         for (int i = 0; i < lines.Length; i++)
         {
-            if (lines[i].StartsWith("Country|Currency|Amount|Code|Rate"))
+            //remove the leading whitespace on each line, it's causing headaches.
+            var trimmedLine = lines[i].Trim();
+            if (trimmedLine.StartsWith("Country|Currency|Amount|Code|Rate"))
             {
                 return i;
             }
@@ -75,7 +78,7 @@ public class ExchangeRateProvider: IExchangeRateProvider
         throw new Exception("Starting index not found in exchange rate data");
     }
 
-    //passes in individual Line , gets the currency code and value if the format is correct.
+    //passes in individual Line , gets the currency code and rate if the format is correct.
     private ExchangeRate ParseExchangeRate(string line, List<string> currencyCodes)
     {
         //creates an array of "se
