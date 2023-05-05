@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -25,9 +26,10 @@ public static class Program
     {
         try
         {
-            var httpClient = new HttpClient();
-            var provider = new ExchangeRateProvider(httpClient);
-            var rates = await provider.GetExchangeRatesAsync(currencies);
+            var serviceProvider = CreateServiceCollection();
+            
+            var exchangeRateProvider = serviceProvider.GetService<IExchangeRateProvider>();
+            var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
@@ -41,6 +43,16 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    public static ServiceProvider CreateServiceCollection()
+    {
+        var services = new ServiceCollection();
+        services.AddTransient<HttpClient>();
+        services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+        var serviceProvider = services.BuildServiceProvider();
+        return serviceProvider;
+
     }
 }
 
