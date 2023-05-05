@@ -12,6 +12,8 @@
         /// </summary>
         public string Code { get; }
 
+        public static Currency CZK { get; } = new Currency("CZK");
+
         public override string ToString()
         {
             return Code;
