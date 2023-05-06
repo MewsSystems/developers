@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
@@ -9,7 +8,6 @@ namespace ExchangeRateUpdater;
 public class ExchangeRateProvider: IExchangeRateProvider
 {
    
-    private readonly HttpClient _httpClient;
     private readonly IExchangeRateDataSource _dataSource;
 
     public ExchangeRateProvider(IExchangeRateDataSource dataSource)
