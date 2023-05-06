@@ -14,6 +14,7 @@
         public Currency TargetCurrency { get; }
 
         public decimal Value { get; }
+        public decimal Rate { get; set; }
 
         public override string ToString()
         {
