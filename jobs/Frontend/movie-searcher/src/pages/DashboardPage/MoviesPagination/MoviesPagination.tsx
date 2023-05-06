@@ -11,21 +11,26 @@ import {
 
 const MoviesPagination = () => {
   const dispatch: ThunkDispatch<unknown, unknown, AnyAction> = useDispatch();
-  const { totalPages, currentPage } = useSelector(selectMoviesListState);
-  const { inputValue } = useSelector(selectMoviesListState);
+  const { totalResults, currentPage, inputValue, visiblePages } =
+    useSelector(selectMoviesListState);
 
   const pageChangeHandler = (page: number) => {
     dispatch(setCurrentPage(page));
   };
 
   useEffect(() => {
-    if (currentPage !== 1) {
+    if (!visiblePages.includes(currentPage)) {
       dispatch(getMoviesList({ value: inputValue || "", page: currentPage }));
     }
   }, [dispatch, currentPage, getMoviesList]);
 
   return (
-    <Pagination total={totalPages as number} current={currentPage} onChange={pageChangeHandler} />
+    <Pagination
+      total={totalResults as number}
+      current={currentPage}
+      onChange={pageChangeHandler}
+      defaultPageSize={20}
+    />
   );
 };
 

@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import { selectMoviesListState } from "../../../store/moviesSearch/movieSearchReducer";
 import { normalizeMoviesList } from "../normalize.util";
 import { TMDB_IMAGES_URL } from "../../../constants";
+import { useMemo } from "react";
 
 const MoviesList = () => {
   const { isLoading, moviesList } = useSelector(selectMoviesListState);
-  const normalizedMoviesList = normalizeMoviesList(moviesList);
+  const normalizedMoviesList = useMemo(() => normalizeMoviesList(moviesList), [moviesList]);
 
   if (isLoading && !normalizedMoviesList.length) {
     return <div>Loading...</div>;

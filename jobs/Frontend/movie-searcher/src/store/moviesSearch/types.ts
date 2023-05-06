@@ -20,4 +20,6 @@ export type MovieSearchStateType = {
   inputValue?: string;
   isLoading?: boolean;
   errorMessage?: null | string;
+  visiblePages: number[];
+  // cachedData: { [key: string]: RawMovieType[] };
 };
