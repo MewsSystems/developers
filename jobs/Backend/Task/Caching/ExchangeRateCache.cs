@@ -51,9 +51,16 @@ public class ExchangeRateCache
         handler.SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
 
         var response = await client.GetAsync($"{ratesUrl}?date={date:dd.MM.yyyy}");
-        response.EnsureSuccessStatusCode();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"Error fetching rates from {ratesUrl}: {(int)response.StatusCode} {response.ReasonPhrase}");
+        }
+
         return await response.Content.ReadAsStringAsync();
     }
+
+
 
 
     private DateTimeOffset GetEndOfWorkingDay()

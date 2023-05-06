@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.Configuration;
+﻿using ExchangeRateUpdater.Interfaces;
 
 namespace ExchangeRateUpdater.DataSources
 {

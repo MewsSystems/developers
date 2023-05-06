@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.Configuration
+﻿namespace ExchangeRateUpdater.Interfaces
 {
     public interface IExchangeRateDataSourceOptions
     {

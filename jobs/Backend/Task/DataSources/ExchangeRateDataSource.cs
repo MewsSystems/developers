@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Configuration;
-using ExchangeRateUpdater.Interfaces;
-using ExchangeRateUpdater.Models;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater.DataSources
 {
@@ -44,10 +41,14 @@ namespace ExchangeRateUpdater.DataSources
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while retrieving the exchange rates: {ex.Message}");
+                return Enumerable.Empty<ExchangeRate>();
             }
+
 
             return rates;
         }
+
+
 
     }
 }

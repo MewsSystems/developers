@@ -1,7 +1,7 @@
 ﻿using ExchangeRateUpdater.DataSources;
 using Microsoft.Extensions.Configuration;
 
-namespace ExchangeRateUpdater.Configuration
+namespace ExchangeRateUpdater.Interfaces
 {
     public interface IExchangeRateDataSourceOptionsBuilder
     {
@@ -22,11 +22,12 @@ namespace ExchangeRateUpdater.Configuration
 
         public IExchangeRateDataSourceOptions Build()
         {
-            return new ExchangeRateDataSourceOptionsWrapper
+            return (IExchangeRateDataSourceOptions)new ExchangeRateDataSourceOptionsWrapper
             {
                 DailyRatesUrl = configuration["ExchangeRateUrls:DailyRates"],
                 MonthlyRatesUrl = configuration["ExchangeRateUrls:MonthlyRates"],
             };
         }
+
     }
 }

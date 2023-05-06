@@ -1,11 +1,9 @@
-﻿using ExchangeRateUpdater.Configuration;
-using ExchangeRateUpdater.DataSources;
+﻿using ExchangeRateUpdater.DataSources;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using System.Net.Http;
