@@ -7,22 +7,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater
 {
-public interface IExchangeRateDataSource
-{
-    Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
-}
-
-
     public class ExchangeRateDataSource : IExchangeRateDataSource
     {
         private readonly HttpClient httpClient;
-        private readonly string dailyRatesUrl;
-        private readonly string monthlyRatesUrl;
+        private readonly IExchangeRateDataSourceOptions options;
 
-        public ExchangeRateDataSource(IConfiguration configuration, HttpClient httpClient)
+        public ExchangeRateDataSource(IExchangeRateDataSourceOptions options, HttpClient httpClient)
         {
-            dailyRatesUrl = configuration["ExchangeRateUrls:DailyRates"];
-            monthlyRatesUrl = configuration["ExchangeRateUrls:MonthlyRates"];
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
@@ -48,13 +40,11 @@ public interface IExchangeRateDataSource
             }
             catch (Exception ex)
             {
-                // Handle or log the exception
                 Console.WriteLine($"An error occurred while retrieving the exchange rates: {ex.Message}");
             }
 
             return rates;
         }
-
 
         private async Task<IEnumerable<ExchangeRate>> GetDailyRatesAsync()
         {
@@ -62,7 +52,7 @@ public interface IExchangeRateDataSource
 
             try
             {
-                var response = await httpClient.GetAsync($"{dailyRatesUrl}?date={DateTime.Today:dd.MM.yyyy}");
+                var response = await httpClient.GetAsync($"{options.DailyRatesUrl}?date={DateTime.Today:dd.MM.yyyy}");
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
                 rates.AddRange(ParseExchangeRates(content, Currency.CZK));
@@ -81,7 +71,7 @@ public interface IExchangeRateDataSource
 
             try
             {
-                var response = await httpClient.GetAsync($"{monthlyRatesUrl}?year={DateTime.Today.Year}&month={DateTime.Today.Month - 1}");
+                var response = await httpClient.GetAsync($"{options.MonthlyRatesUrl}?year={DateTime.Today.Year}&month={DateTime.Today.Month - 1}");
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync();
                 rates.AddRange(ParseExchangeRates(content, Currency.CZK));
@@ -131,3 +121,4 @@ public interface IExchangeRateDataSource
         }
     }
 }
+

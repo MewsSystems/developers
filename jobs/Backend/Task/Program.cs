@@ -19,17 +19,11 @@ namespace ExchangeRateUpdater
                 .AddSingleton(configuration)
                 .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
                 .AddScoped<IExchangeRateDataSource, ExchangeRateDataSource>()
+                .AddSingleton<IExchangeRateDataSourceOptions>(new ExchangeRateDataSourceOptionsBuilder().Build())
                 .AddHttpClient<IExchangeRateDataSource, ExchangeRateDataSource>()
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    return new HttpClientHandler
-                    {
-                    };
-                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler())
                 .Services
                 .BuildServiceProvider();
-
-
 
             try
             {
@@ -38,7 +32,7 @@ namespace ExchangeRateUpdater
 
                 var rates = provider.GetExchangeRates(currencies);
 
-                var count = (await rates).Count(); 
+                var count = (await rates).Count();
 
                 Console.WriteLine($"Successfully retrieved {count} exchange rates:");
                 foreach (var rate in await rates)
