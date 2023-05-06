@@ -8,33 +8,23 @@ namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider: IExchangeRateProvider
 {
-    private const string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date={0:dd.MM.yyyy}";
+   
     private readonly HttpClient _httpClient;
+    private readonly IExchangeRateDataSource _dataSource;
 
-    public ExchangeRateProvider(HttpClient httpClient)
+    public ExchangeRateProvider(IExchangeRateDataSource dataSource)
     {
-        _httpClient = httpClient;
+        _dataSource = dataSource;
     }
 
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
-        var sourceData = await GetExchangeRateDataAsync(DateTime.Today);
+        var sourceData = await _dataSource.GetExchangeRateDataAsync(DateTime.Today);
         var exchangeRates = ParseExchangeRateData(sourceData, currencies);
         return exchangeRates;
     }
 
-    private async Task<string> GetExchangeRateDataAsync(DateTime date)
-    {
-        var url = string.Format(ExchangeRateUrl, date);
-        
-        var response = await _httpClient.GetAsync(url);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Failed to retrieve exchange rates: {response.StatusCode}");
-        }
-        return response.Content.ReadAsStringAsync().Result;
-    }
 
     //creates the list of exchange rates will be output.
     private IEnumerable<ExchangeRate> ParseExchangeRateData(string sourceData, IEnumerable<Currency> currencies)

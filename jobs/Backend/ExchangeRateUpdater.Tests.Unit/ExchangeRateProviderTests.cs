@@ -8,14 +8,15 @@ namespace ExchangeRateUpdater.Tests.Unit;
 [TestFixture]
 public class ExchangeRateProviderTests
 {
-    private HttpClient ?_httpClient;
+    private Mock<IExchangeRateDataSource> _dataSourceMock;
     private ExchangeRateProvider ?_exchangeRateProvider;
     
 
     [SetUp]
     public void SetUp()
     {
-       
+        _dataSourceMock = new Mock<IExchangeRateDataSource>();
+        _exchangeRateProvider = new ExchangeRateProvider(_dataSourceMock.Object);
     }
 
     //considerred using TestCase/TestCaseSource here to pass in working variants of sample data but decided against it.
@@ -30,8 +31,8 @@ public class ExchangeRateProviderTests
                         Japan|yen|100|JPY|15.67
                                                ";
 
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.OK, _sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ReturnsAsync(_sampleData);
+        
 
         var currencies = new List<Currency> { new Currency("AUD"), new Currency("JPY") };
        
@@ -60,8 +61,8 @@ public class ExchangeRateProviderTests
                         Country|Currency|Amount|Code|Rate
                         Australia|dollar|1|AUD
                                                 ";
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.OK, _sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ReturnsAsync(_sampleData);
+   
 
         // Act and Assert
         var exception = Assert.ThrowsAsync<Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
@@ -78,8 +79,8 @@ public class ExchangeRateProviderTests
                         Australia|dollar|1|AUD|12.34
                         Japan|Yen|100||15.67
                                             ";
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.OK, sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ReturnsAsync(sampleData);
+        
 
         // Act
         var exchangeRates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
@@ -98,9 +99,8 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var currencies = new List<Currency> { new Currency("AUD"), new Currency("JPY") };
-        var sampleData = "Not found";
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.NotFound, sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+   
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ThrowsAsync(new Exception($"Failed to retrieve exchange rates: {HttpStatusCode.NotFound}"));
 
         // Act & Assert
         var exception = Assert.ThrowsAsync<Exception>(
@@ -117,8 +117,8 @@ public class ExchangeRateProviderTests
                         Australia|dollar|1|AUD|12.34
                         Japan|yen|100|JPY|15.67
                         ";
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.OK, sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ReturnsAsync(sampleData);
+       
 
         var currencies = new List<Currency>();
 
@@ -140,8 +140,7 @@ public class ExchangeRateProviderTests
                         Australia|dollar|1|AUD|12.34
                         Japan|yen|100|JPY|15.67
                         ";
-        _httpClient = SetupHttpClientResponse(HttpStatusCode.OK, sampleData);
-        _exchangeRateProvider = new ExchangeRateProvider(_httpClient);
+        _dataSourceMock.Setup(ds => ds.GetExchangeRateDataAsync(It.IsAny<DateTime>())).ReturnsAsync(sampleData);
 
         // Act and Assert
         var exception = Assert.ThrowsAsync<Exception>(async () => await _exchangeRateProvider.GetExchangeRatesAsync(currencies));
@@ -149,21 +148,5 @@ public class ExchangeRateProviderTests
     }
 
 
-    private HttpClient SetupHttpClientResponse(HttpStatusCode statusCode, string content)
-    {
-        var httpResponseMessage = new HttpResponseMessage(statusCode)
-        {
-            Content = new StringContent(content)
-        };
-
-        var handlerMock = new Mock<HttpMessageHandler>();
-        handlerMock.Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(httpResponseMessage);
-
-        return new HttpClient(handlerMock.Object);
-    }
+   
 }

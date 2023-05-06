@@ -49,6 +49,7 @@ public static class Program
     {
         var services = new ServiceCollection();
         services.AddTransient<HttpClient>();
+        services.AddSingleton<IExchangeRateDataSource, CnbExchangeRateDataSource>();
         services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;
