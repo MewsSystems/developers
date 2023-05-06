@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -23,7 +24,9 @@ namespace ExchangeRateUpdater
                 .AddHttpClient<IExchangeRateDataSource, ExchangeRateDataSource>()
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler())
                 .Services
+                .AddMemoryCache()
                 .BuildServiceProvider();
+
 
             try
             {
