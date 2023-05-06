@@ -5,11 +5,8 @@ import { normalizeMoviesList } from "../normalize.util";
 import { TMDB_IMAGES_URL } from "../../../constants";
 
 const MoviesList = () => {
-  const { isLoading, moviesFound } = useSelector(selectMoviesListState);
-
-  console.log("moviesFound", moviesFound);
-
-  const normalizedMoviesList = normalizeMoviesList(moviesFound.results);
+  const { isLoading, moviesList } = useSelector(selectMoviesListState);
+  const normalizedMoviesList = normalizeMoviesList(moviesList);
 
   if (isLoading && !normalizedMoviesList.length) {
     return <div>Loading...</div>;

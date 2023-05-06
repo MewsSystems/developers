@@ -6,15 +6,19 @@ import { MoviesList } from "./MoviesList";
 import { MoviesPagination } from "./MoviesPagination";
 
 const DashboardPage = () => {
-  const { moviesFound } = useSelector(selectMoviesListState);
+  const { totalPages } = useSelector(selectMoviesListState);
 
   return (
     <>
       <MovieSearchInput />
       <Divider />
       <MoviesList />
-      <Divider />
-      {Number(moviesFound?.total_pages) > 1 && <MoviesPagination />}
+      {Number(totalPages) > 1 && (
+        <>
+          <Divider />
+          <MoviesPagination />
+        </>
+      )}
     </>
   );
 };

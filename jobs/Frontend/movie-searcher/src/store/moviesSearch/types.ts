@@ -13,8 +13,11 @@ export type MoviesFoundType = {
 };
 
 export type MovieSearchStateType = {
-  moviesFound: MoviesFoundType;
+  moviesList: RawMovieType[];
+  totalPages: number | null;
+  totalResults: number | null;
   currentPage: number;
+  inputValue?: string;
   isLoading?: boolean;
   errorMessage?: null | string;
 };

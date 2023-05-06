@@ -1,33 +1,38 @@
 import debounce from "lodash/debounce";
-import { useCallback, useEffect } from "react";
+import { ChangeEvent, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   getMoviesList,
   selectMoviesListState,
+  setCurrentPage,
+  setInputValue,
 } from "../../../store/moviesSearch/movieSearchReducer";
 import { SEARCH_DEBOUNCE_DELAY } from "../../../constants";
 import { MovieSearchInputView } from "./MovieSearchInputView";
-import { useInputChange } from "../../../helpers/hooks/useInputChange.hook";
 
 const MovieSearchInput = () => {
   const dispatch: ThunkDispatch<unknown, unknown, AnyAction> = useDispatch();
-  const { isLoading, currentPage } = useSelector(selectMoviesListState);
-  const { inputValue, inputValueChangeHandler } = useInputChange();
-  console.log("currentPage", currentPage);
+  const { isLoading } = useSelector(selectMoviesListState);
+  const { inputValue } = useSelector(selectMoviesListState);
+
+  const inputValueChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(setInputValue(e.target.value));
+  };
 
   const onSearchDebounced = useCallback(
     debounce((value) => {
       if (value?.length === 0 || value?.length >= 2) {
-        dispatch(getMoviesList({ value, page: currentPage }));
+        dispatch(setCurrentPage(1));
+        dispatch(getMoviesList({ value }));
       }
     }, SEARCH_DEBOUNCE_DELAY),
-    [dispatch, getMoviesList, currentPage]
+    [dispatch, getMoviesList]
   );
 
   useEffect(() => {
     onSearchDebounced(inputValue);
-  }, [inputValue, onSearchDebounced, currentPage]);
+  }, [inputValue, onSearchDebounced]);
 
   return (
     <MovieSearchInputView

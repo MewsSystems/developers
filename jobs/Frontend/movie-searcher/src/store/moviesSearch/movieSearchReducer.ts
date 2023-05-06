@@ -4,20 +4,18 @@ import type { RootState } from "../types";
 import type { MovieSearchStateType, MoviesFoundType } from "./types";
 
 const initialState: MovieSearchStateType = {
-  moviesFound: {
-    page: null,
-    results: [],
-    total_pages: null,
-    total_results: null,
-  },
+  moviesList: [],
+  totalPages: null,
+  totalResults: null,
   currentPage: 1,
+  inputValue: undefined,
   isLoading: false,
   errorMessage: null,
 };
 
 export const getMoviesList = createAsyncThunk(
   "moviesFound",
-  async ({ value, page }: { value: string; page: number }) => {
+  async ({ value, page = 1 }: { value: string; page?: number }) => {
     const response = await fetch(
       `${TMDB_SEARCH_MOVIES_URL}?${new URLSearchParams({
         api_key: "03b8572954325680265531140190fd2a",
@@ -25,9 +23,6 @@ export const getMoviesList = createAsyncThunk(
         page: page.toString(),
       })}`
     );
-
-    console.log("response", response);
-
     const data = await response.json();
     return data;
   }
@@ -37,6 +32,9 @@ export const moviesFoundSlice = createSlice({
   name: "moviesFound",
   initialState,
   reducers: {
+    setInputValue: (state, action: PayloadAction<string>) => {
+      state.inputValue = action.payload;
+    },
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
@@ -49,7 +47,9 @@ export const moviesFoundSlice = createSlice({
       })
       .addCase(getMoviesList.fulfilled, (state, action: PayloadAction<MoviesFoundType>) => {
         state.isLoading = false;
-        state.moviesFound = action.payload;
+        state.moviesList = action.payload.results;
+        state.totalPages = action.payload.total_pages;
+        state.totalResults = action.payload.total_results;
       })
       .addCase(getMoviesList.rejected, (state, action) => {
         state.isLoading = false;
@@ -58,7 +58,6 @@ export const moviesFoundSlice = createSlice({
   },
 });
 
-export const { setCurrentPage } = moviesFoundSlice.actions;
-
+export const { setCurrentPage, setInputValue } = moviesFoundSlice.actions;
 export const selectMoviesListState = (state: RootState) => state.moviesFound;
 export default moviesFoundSlice.reducer;
