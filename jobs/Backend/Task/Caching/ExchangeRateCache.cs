@@ -9,13 +9,15 @@ using ExchangeRateUpdater.Models;
 public class ExchangeRateCache
 {
     private readonly IMemoryCache cache;
+    private readonly HttpClient httpClient;
 
     private const string DailyRatesCacheKey = "daily_rates";
     private const string MonthlyRatesCacheKey = "monthly_rates";
 
-    public ExchangeRateCache(IMemoryCache cache)
+    public ExchangeRateCache(IMemoryCache cache, HttpClient httpClient = null)
     {
         this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        this.httpClient = httpClient ?? new HttpClient();
     }
 
     public async Task<IEnumerable<ExchangeRate>> GetDailyRatesAsync(string dailyRatesUrl)
