@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Providers
 {
     public interface IExchangeRateProvider
     {

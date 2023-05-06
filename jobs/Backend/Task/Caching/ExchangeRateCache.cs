@@ -1,10 +1,10 @@
-﻿using ExchangeRateUpdater;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
 using System.Security.Authentication;
+using ExchangeRateUpdater.Models;
 
 public class ExchangeRateCache
 {

@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater.DataSources;
+using Microsoft.Extensions.Configuration;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Configuration
 {
     public interface IExchangeRateDataSourceOptionsBuilder
     {

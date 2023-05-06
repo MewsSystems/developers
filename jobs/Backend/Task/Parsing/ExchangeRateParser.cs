@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater;
+﻿using ExchangeRateUpdater.Models;
 using System.Collections.Generic;
 
 public static class ExchangeRateParser

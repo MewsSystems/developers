@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.DataSources;
+using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Providers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;

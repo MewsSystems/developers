@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.DataSources
 {
     public class ExchangeRateDataSource : IExchangeRateDataSource
     {
@@ -17,7 +20,7 @@ namespace ExchangeRateUpdater
         public ExchangeRateDataSource(IExchangeRateDataSourceOptions options, HttpClient httpClient, IMemoryCache cache)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.exchangeRateCache = new ExchangeRateCache(cache);
+            exchangeRateCache = new ExchangeRateCache(cache);
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)

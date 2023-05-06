@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdater.Configuration;
+
+namespace ExchangeRateUpdater.DataSources
 {
     public class ExchangeRateDataSourceOptionsWrapper : IExchangeRateDataSourceOptions
     {
