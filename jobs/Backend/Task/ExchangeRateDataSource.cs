@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater
         public ExchangeRateDataSource(IExchangeRateDataSourceOptions options, HttpClient httpClient, IMemoryCache cache)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.exchangeRateCache = new ExchangeRateCache(httpClient, options, cache);
+            this.exchangeRateCache = new ExchangeRateCache(cache);
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)

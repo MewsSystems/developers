@@ -4,20 +4,17 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using System.Security.Authentication;
 
 public class ExchangeRateCache
 {
-    private readonly HttpClient httpClient;
-    private readonly IExchangeRateDataSourceOptions options;
     private readonly IMemoryCache cache;
 
     private const string DailyRatesCacheKey = "daily_rates";
     private const string MonthlyRatesCacheKey = "monthly_rates";
 
-    public ExchangeRateCache(HttpClient httpClient, IExchangeRateDataSourceOptions options, IMemoryCache cache)
+    public ExchangeRateCache(IMemoryCache cache)
     {
-        this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        this.options = options ?? throw new ArgumentNullException(nameof(options));
         this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
@@ -29,7 +26,7 @@ public class ExchangeRateCache
             return cachedRates;
         }
 
-        var content = await GetRatesAsync(httpClient, dailyRatesUrl, DateTime.Today);
+        var content = await GetRatesAsync(dailyRatesUrl, DateTime.Today);
         var rates = ExchangeRateParser.Parse(content, Currency.CZK);
 
         var endOfWorkingDay = GetEndOfWorkingDay();
@@ -41,12 +38,21 @@ public class ExchangeRateCache
         return rates;
     }
 
-    private async Task<string> GetRatesAsync(HttpClient httpClient, string ratesUrl, DateTime date)
+    private async Task<string> GetRatesAsync(string ratesUrl, DateTime date)
     {
-        var response = await httpClient.GetAsync($"{ratesUrl}?date={date:dd.MM.yyyy}");
+        using var handler = new HttpClientHandler();
+        // Accept all certificates
+        handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+
+        using var client = new HttpClient(handler);
+        // Set TLS version and SSL/TLS protocol version
+        handler.SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
+
+        var response = await client.GetAsync($"{ratesUrl}?date={date:dd.MM.yyyy}");
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync();
     }
+
 
     private DateTimeOffset GetEndOfWorkingDay()
     {
@@ -78,7 +84,7 @@ public class ExchangeRateCache
             return cachedRates;
         }
 
-        var content = await GetRatesAsync(httpClient, monthlyRatesUrl, new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 1));
+        var content = await GetRatesAsync(monthlyRatesUrl, new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 1));
         var rates = ExchangeRateParser.Parse(content, Currency.CZK);
 
         var lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
