@@ -5,7 +5,7 @@ import { normalizeMoviesList } from "../normalize.util";
 import { TMDB_IMAGES_URL } from "../../../constants";
 
 const MoviesList = () => {
-  const { isLoading, moviesFound, errorMessage } = useSelector(selectMoviesListState);
+  const { isLoading, moviesFound } = useSelector(selectMoviesListState);
 
   console.log("moviesFound", moviesFound);
 
@@ -21,7 +21,7 @@ const MoviesList = () => {
 
   return (
     <Wrapper>
-      {normalizedMoviesList.map(({ id, title, imgUrl, overview }) => (
+      {normalizedMoviesList.map(({ id, title, imgUrl }) => (
         <CardStyled key={id} hoverable>
           <ImageStyled alt={title} src={`${TMDB_IMAGES_URL}/${imgUrl}`} />
           <MetaStyled title={title} />

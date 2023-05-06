@@ -12,21 +12,22 @@ import { useInputChange } from "../../../helpers/hooks/useInputChange.hook";
 
 const MovieSearchInput = () => {
   const dispatch: ThunkDispatch<unknown, unknown, AnyAction> = useDispatch();
-  const { isLoading } = useSelector(selectMoviesListState);
+  const { isLoading, currentPage } = useSelector(selectMoviesListState);
   const { inputValue, inputValueChangeHandler } = useInputChange();
+  console.log("currentPage", currentPage);
 
   const onSearchDebounced = useCallback(
     debounce((value) => {
-      if (value?.length === 0 || value?.length >= 3) {
-        dispatch(getMoviesList(value));
+      if (value?.length === 0 || value?.length >= 2) {
+        dispatch(getMoviesList({ value, page: currentPage }));
       }
     }, SEARCH_DEBOUNCE_DELAY),
-    [dispatch, getMoviesList]
+    [dispatch, getMoviesList, currentPage]
   );
 
   useEffect(() => {
     onSearchDebounced(inputValue);
-  }, [inputValue, onSearchDebounced]);
+  }, [inputValue, onSearchDebounced, currentPage]);
 
   return (
     <MovieSearchInputView

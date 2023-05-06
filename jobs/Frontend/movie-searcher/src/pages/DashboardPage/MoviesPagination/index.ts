@@ -1,0 +1,1 @@
+export { MoviesPagination } from "./MoviesPagination";

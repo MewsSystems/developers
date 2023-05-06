@@ -10,28 +10,37 @@ const initialState: MovieSearchStateType = {
     total_pages: null,
     total_results: null,
   },
+  currentPage: 1,
   isLoading: false,
   errorMessage: null,
 };
 
-export const getMoviesList = createAsyncThunk("moviesList", async (search: string) => {
-  const response = await fetch(
-    `${TMDB_SEARCH_MOVIES_URL}?${new URLSearchParams({
-      api_key: "03b8572954325680265531140190fd2a",
-      query: search,
-    })}`
-  );
+export const getMoviesList = createAsyncThunk(
+  "moviesFound",
+  async ({ value, page }: { value: string; page: number }) => {
+    const response = await fetch(
+      `${TMDB_SEARCH_MOVIES_URL}?${new URLSearchParams({
+        api_key: "03b8572954325680265531140190fd2a",
+        query: value,
+        page: page.toString(),
+      })}`
+    );
 
-  console.log("response", response);
+    console.log("response", response);
 
-  const data = await response.json();
-  return data;
-});
+    const data = await response.json();
+    return data;
+  }
+);
 
-export const movieSearchSlice = createSlice({
-  name: "movieSearch",
+export const moviesFoundSlice = createSlice({
+  name: "moviesFound",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getMoviesList.pending, (state) => {
@@ -40,9 +49,6 @@ export const movieSearchSlice = createSlice({
       })
       .addCase(getMoviesList.fulfilled, (state, action: PayloadAction<MoviesFoundType>) => {
         state.isLoading = false;
-
-        console.log("action.payload", action.payload);
-
         state.moviesFound = action.payload;
       })
       .addCase(getMoviesList.rejected, (state, action) => {
@@ -52,5 +58,7 @@ export const movieSearchSlice = createSlice({
   },
 });
 
-export const selectMoviesListState = (state: RootState) => state.moviesList;
-export default movieSearchSlice.reducer;
+export const { setCurrentPage } = moviesFoundSlice.actions;
+
+export const selectMoviesListState = (state: RootState) => state.moviesFound;
+export default moviesFoundSlice.reducer;

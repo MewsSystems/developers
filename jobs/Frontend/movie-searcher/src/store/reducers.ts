@@ -2,5 +2,5 @@ import { combineReducers } from "redux";
 import movieSearchReducer from "./moviesSearch/movieSearchReducer";
 
 export const rootReducer = combineReducers({
-  moviesList: movieSearchReducer,
+  moviesFound: movieSearchReducer,
 });

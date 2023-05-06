@@ -14,6 +14,7 @@ export type MoviesFoundType = {
 
 export type MovieSearchStateType = {
   moviesFound: MoviesFoundType;
+  currentPage: number;
   isLoading?: boolean;
   errorMessage?: null | string;
 };
