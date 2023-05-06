@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
-using Microsoft.Extensions.Configuration;
 
 public class ExchangeRateCache
 {
@@ -30,28 +29,23 @@ public class ExchangeRateCache
             return cachedRates;
         }
 
-        var rates = new List<ExchangeRate>();
+        var content = await GetRatesAsync(httpClient, dailyRatesUrl, DateTime.Today);
+        var rates = ExchangeRateParser.Parse(content, Currency.CZK);
 
-        try
-        {
-            var response = await new HttpClient().GetAsync($"{dailyRatesUrl}?date={DateTime.Today:dd.MM.yyyy}");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            rates.AddRange(ParseExchangeRates(content, Currency.CZK));
+        var endOfWorkingDay = GetEndOfWorkingDay();
+        var cacheEntryOptions = new MemoryCacheEntryOptions()
+            .SetAbsoluteExpiration(endOfWorkingDay.Subtract(DateTimeOffset.Now.LocalDateTime));
 
-            var endOfWorkingDay = GetEndOfWorkingDay();
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(endOfWorkingDay.Subtract(DateTimeOffset.Now.LocalDateTime));
-
-
-            cache.Set(DailyRatesCacheKey, rates, cacheEntryOptions);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred while retrieving the daily exchange rates: {ex.Message}");
-        }
+        cache.Set(DailyRatesCacheKey, rates, cacheEntryOptions);
 
         return rates;
+    }
+
+    private async Task<string> GetRatesAsync(HttpClient httpClient, string ratesUrl, DateTime date)
+    {
+        var response = await httpClient.GetAsync($"{ratesUrl}?date={date:dd.MM.yyyy}");
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
     }
 
     private DateTimeOffset GetEndOfWorkingDay()
@@ -84,57 +78,14 @@ public class ExchangeRateCache
             return cachedRates;
         }
 
-        var rates = new List<ExchangeRate>();
+        var content = await GetRatesAsync(httpClient, monthlyRatesUrl, new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, 1));
+        var rates = ExchangeRateParser.Parse(content, Currency.CZK);
 
-        try
-        {
-            var response = await new HttpClient().GetAsync($"{monthlyRatesUrl}?year={DateTime.Today.Year}&month={DateTime.Today.Month - 1}");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            rates.AddRange(ParseExchangeRates(content, Currency.CZK));
-
-            var lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(lastDayOfMonth.AddDays(1).Subtract(DateTimeOffset.Now.LocalDateTime));
-            cache.Set(MonthlyRatesCacheKey, rates, cacheEntryOptions);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred while retrieving the monthly exchange rates: {ex.Message}");
-        }
+        var lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1).AddDays(-1);
+        var cacheEntryOptions = new MemoryCacheEntryOptions()
+            .SetAbsoluteExpiration(lastDayOfMonth.AddDays(1).Subtract(DateTimeOffset.Now.LocalDateTime));
+        cache.Set(MonthlyRatesCacheKey, rates, cacheEntryOptions);
 
         return rates;
-    }
-
-    private List<ExchangeRate> ParseExchangeRates(string content, Currency targetCurrency)
-    {
-        var exchangeRates = new List<ExchangeRate>();
-
-        var lines = content.Split('\n');
-
-        foreach (var line in lines)
-        {
-            if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
-                continue;
-
-            var parts = line.Split('|');
-
-            if (parts.Length >= 5)
-            {
-                var sourceAmount = parts[2];
-                var sourceCode = parts[3];
-                var sourceRate = parts[4];
-
-                decimal sourceAmountDecimal, sourceRateDecimal;
-                if (decimal.TryParse(sourceAmount, out sourceAmountDecimal) && decimal.TryParse(sourceRate, out sourceRateDecimal))
-                {
-                    var calculatedRate = sourceRateDecimal / sourceAmountDecimal;
-                    var exchangeRate = new ExchangeRate(new Currency(sourceCode), new Currency(targetCurrency.Code), calculatedRate);
-                    exchangeRates.Add(exchangeRate);
-                }
-            }
-        }
-
-        return exchangeRates;
     }
 }

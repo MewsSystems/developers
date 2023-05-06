@@ -11,19 +11,12 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateDataSource : IExchangeRateDataSource
     {
-        private readonly HttpClient httpClient;
         private readonly IExchangeRateDataSourceOptions options;
-        private readonly IMemoryCache cache;
         private readonly ExchangeRateCache exchangeRateCache;
-
-        private const string DailyRatesCacheKey = "daily_rates";
-        private const string MonthlyRatesCacheKey = "monthly_rates";
 
         public ExchangeRateDataSource(IExchangeRateDataSourceOptions options, HttpClient httpClient, IMemoryCache cache)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.exchangeRateCache = new ExchangeRateCache(httpClient, options, cache);
         }
 
