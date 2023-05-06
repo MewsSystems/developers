@@ -13,14 +13,22 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        public static async Task Main(string[] args)
+        private static IConfiguration _configuration;
+        private static IServiceProvider _serviceProvider;
+
+        static Program()
         {
-            IConfiguration configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
+            _serviceProvider = ConfigureServices();
+        }
+
+        private static IServiceProvider ConfigureServices()
+        {
             var serviceProvider = new ServiceCollection()
-                .AddSingleton(configuration)
+                .AddSingleton(_configuration)
                 .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
                 .AddScoped<IExchangeRateDataSource, ExchangeRateDataSource>()
                 .AddSingleton<IExchangeRateDataSourceOptions>(new ExchangeRateDataSourceOptionsBuilder().Build())
@@ -30,10 +38,14 @@ namespace ExchangeRateUpdater
                 .AddMemoryCache()
                 .BuildServiceProvider();
 
+            return serviceProvider;
+        }
 
+        public static async Task Main(string[] args)
+        {
             try
             {
-                var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+                var provider = _serviceProvider.GetRequiredService<IExchangeRateProvider>();
                 var currencies = GetCurrencies();
 
                 var rates = provider.GetExchangeRates(currencies);
