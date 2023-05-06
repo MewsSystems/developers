@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TMDB_SEARCH_MOVIES_URL } from "../../constants";
+import { REACT_APP_TMDB_KEY, TMDB_SEARCH_MOVIES_URL } from "../../constants";
 import type { RootState } from "../types";
 import { cacheData, getCachedData } from "./cacheData.util";
 import type { MovieSearchStateType, MoviesFoundType } from "./types";
@@ -24,7 +24,7 @@ const fetchMoviesListFactory = (name: string) =>
 
     const response = await fetch(
       `${TMDB_SEARCH_MOVIES_URL}?${new URLSearchParams({
-        api_key: "03b8572954325680265531140190fd2a",
+        api_key: REACT_APP_TMDB_KEY,
         query: value,
         page: page.toString(),
         adult: "false",

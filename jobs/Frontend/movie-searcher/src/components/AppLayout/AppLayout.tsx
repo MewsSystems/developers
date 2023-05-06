@@ -1,28 +1,31 @@
 import { Col, Layout, Row } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { ReactNode } from "react";
-import { StyledH1, StyledFooter, StyledLayout, StyledContent } from "./AppLayout.styled";
+import { Link } from "react-router-dom";
+import { Heading, FooterStyled, LayoutStyled, ContentStyled } from "./AppLayout.styled";
 
 type AppLayoutProps = {
   children: ReactNode;
 };
 
 const AppLayout = ({ children }: AppLayoutProps) => (
-  <StyledLayout>
+  <LayoutStyled>
     <Header>
-      <StyledH1>Movie Lookup</StyledH1>
+      <Link to="/">
+        <Heading>Movie Lookup</Heading>
+      </Link>
     </Header>
     <Layout>
-      <StyledContent>
+      <ContentStyled>
         <Row>
           <Col span={18} offset={3}>
             {children}
           </Col>
         </Row>
-      </StyledContent>
+      </ContentStyled>
     </Layout>
-    <StyledFooter>Have a good day! =)</StyledFooter>
-  </StyledLayout>
+    <FooterStyled>Have a good day! =)</FooterStyled>
+  </LayoutStyled>
 );
 
 export { AppLayout };

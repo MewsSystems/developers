@@ -1,9 +1,10 @@
-import { CardStyled, ImageStyled, MetaStyled, Wrapper } from "./MoviesList.styled";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
+import { Card } from "antd";
 import { selectMoviesListState } from "../../../store/moviesSearch/movieSearchReducer";
 import { normalizeMoviesList } from "../normalize.util";
 import { TMDB_IMAGES_URL } from "../../../constants";
-import { useMemo } from "react";
+import { ImageStyled, LinkStyled, MetaStyled, Wrapper } from "./MoviesList.styled";
 
 const MoviesList = () => {
   const { isLoading, moviesList } = useSelector(selectMoviesListState);
@@ -20,10 +21,12 @@ const MoviesList = () => {
   return (
     <Wrapper>
       {normalizedMoviesList.map(({ id, title, imgUrl }) => (
-        <CardStyled key={id} hoverable>
-          <ImageStyled alt={title} src={`${TMDB_IMAGES_URL}/${imgUrl}`} />
-          <MetaStyled title={title} />
-        </CardStyled>
+        <LinkStyled to={`movie-info/${id}`} key={id}>
+          <Card hoverable>
+            <ImageStyled alt={title} src={`${TMDB_IMAGES_URL}/${imgUrl}`} />
+            <MetaStyled title={title} />
+          </Card>
+        </LinkStyled>
       ))}
     </Wrapper>
   );

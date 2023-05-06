@@ -7,7 +7,7 @@ import { store } from "./store";
 
 const router = createBrowserRouter(routes);
 const theme = {
-  ...basicStyle,
+  basicStyle,
   ...customStyle,
 };
 

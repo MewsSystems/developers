@@ -8,7 +8,6 @@ import { MoviesPagination } from "./MoviesPagination";
 
 const DashboardPage = () => {
   const { totalPages, currentPage } = useSelector(selectMoviesListState);
-  console.log("totalPages", totalPages);
 
   return (
     <>
