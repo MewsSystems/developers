@@ -41,7 +41,7 @@ namespace ExchangeRateUpdater
 
         private decimal CalcExchangeRate(string amount, string value)
         {
-            return decimal.Parse(value.Replace(",", ".")) / decimal.Parse(amount);
+            return decimal.Parse(amount) / decimal.Parse(value.Replace(",", "."));
         }
 
         private static XDocument GetApi()
