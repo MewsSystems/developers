@@ -1,5 +1,5 @@
-import { Col, Row } from "antd";
 import React from "react";
+import { Col, Row } from "antd";
 import type { MovieDetailsType } from "../../store/movieDetails/types";
 import { ImageStyled } from "./MovieDetailsPage.styled";
 import { MovieInfo } from "./MovieInfo";

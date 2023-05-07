@@ -13,8 +13,9 @@ import { normalizeMovieDetails } from "./normalize.util";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
+
   const dispatch: ThunkDispatch<unknown, unknown, AnyAction> = useDispatch();
-  const { movie } = useSelector(selectMovieDetailsState);
+  const { movie, isLoading } = useSelector(selectMovieDetailsState);
 
   const normalizedMovieDetails = useMemo(() => normalizeMovieDetails(movie), [movie]);
   const imgUrlPath = `${TMDB_IMAGES_URL}/${normalizedMovieDetails?.imgUrl}`;
@@ -23,7 +24,9 @@ const MovieDetailsPage = () => {
     dispatch(getMovieDetails(movieId || ""));
   }, []);
 
-  return <MovieDetailsPageView {...normalizedMovieDetails} imgUrl={imgUrlPath} />;
+  return (
+    <MovieDetailsPageView {...normalizedMovieDetails} imgUrl={imgUrlPath} isLoading={isLoading} />
+  );
 };
 
 export { MovieDetailsPage };
