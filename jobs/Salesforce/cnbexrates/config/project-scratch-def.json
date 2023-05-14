@@ -1,0 +1,13 @@
+{
+  "orgName": "Sabina @ Mews",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi", "DebugApex"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  }
+}
