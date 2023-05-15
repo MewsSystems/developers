@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Czech National Bank Exchange Rates" icon-name="standard:currency_exchange">
+        <p>Rate Date: {exchangeRateDate}</p>
+        <template if:true={exchangeRates}>
+            <lightning-datatable
+                key-field="code"
+                data={exchangeRates}
+                columns={columns}
+                hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+        <template if:false={exchangeRates}>
+            <p>No exchange rate data available.</p>
+        </template>
+    </lightning-card>
+</template>
