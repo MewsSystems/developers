@@ -1,43 +1,53 @@
 <template>
-
   <lightning-card title="CNB Exchange Rates" icon-name="custom:custom17">
-
-      <div class="slds-p-horizontal_medium">
-
-        <div if:true={exchangeRates.data}>
-
-          <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium">
-            <div class="slds-media__figure">
-              <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
-            </div>
-            <div class="slds-media__body">
-              <p>
-                Exchange rates valid for {validityDate}.
-                The data for the current working day are available after 14:30.
-              </p>
-            </div>
+    <div class="slds-p-horizontal_medium">
+      <div if:true={exchangeRates.data}>
+        <div
+          class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium"
+        >
+          <div class="slds-media__figure">
+            <lightning-icon
+              icon-name="utility:info"
+              size="small"
+            ></lightning-icon>
           </div>
-          
-          <lightning-datatable
-            key-field="currencyCode"
-            data={exchangeRates.data}
-            columns={tableHeaders}
-            hide-checkbox-column>
-          </lightning-datatable>
-
-          <div class="slds-text-body_regular" if:false={exchangeRates.data.length}>
-            No data to display.
+          <div class="slds-media__body">
+            <p>
+              Exchange rates valid for {validityDate}. The data for the current
+              working day are available after 14:30.
+            </p>
           </div>
         </div>
 
-        <div class="slds-notify slds-notify_alert slds-alert_error" if:true={exchangeRates.error}>
-          <div class="slds-media__figure">
-            <lightning-icon icon-name="utility:error" variant="inverse" size="small"></lightning-icon>
-          </div>
-          <h2>{exchangeRates.error.body.message}</h2>
+        <lightning-datatable
+          key-field="currencyCode"
+          data={exchangeRates.data}
+          columns={tableHeaders}
+          hide-checkbox-column
+        >
+        </lightning-datatable>
+
+        <div
+          class="no-data slds-text-body_regular"
+          if:false={exchangeRates.data.length}
+        >
+          No data to display.
         </div>
       </div>
 
+      <div
+        class="slds-notify slds-notify_alert slds-alert_error"
+        if:true={exchangeRates.error}
+      >
+        <div class="slds-media__figure">
+          <lightning-icon
+            icon-name="utility:error"
+            variant="inverse"
+            size="small"
+          ></lightning-icon>
+        </div>
+        <h2>{exchangeRates.error.body.message}</h2>
+      </div>
+    </div>
   </lightning-card>
-
 </template>

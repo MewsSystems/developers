@@ -1,16 +1,19 @@
 @isTest
 public class ExchangeRateProviderTest {
-
-  @isTest 
+  @isTest
   public static void getInstance() {
     Test.startTest();
     ExchangeRateProvider checkClass = ExchangeRateProvider.getInstance();
     Test.stopTest();
 
-    System.assertEquals(null, ExchangeRateProvider.mockProvider, 'The class is set as mock');
+    System.assertEquals(
+      null,
+      ExchangeRateProvider.mockProvider,
+      'The class is set as mock'
+    );
   }
 
-  @isTest 
+  @isTest
   public static void getInstance_Mock() {
     ExchangeRateProvider mockClass = new ExchangeRateProvider();
 
@@ -19,7 +22,11 @@ public class ExchangeRateProviderTest {
     ExchangeRateProvider checkClass = ExchangeRateProvider.getInstance();
     Test.stopTest();
 
-    System.assertNotEquals(null, ExchangeRateProvider.mockProvider, 'The class is not set as mock');
+    System.assertNotEquals(
+      null,
+      ExchangeRateProvider.mockProvider,
+      'The class is not set as mock'
+    );
   }
 
   @isTest
@@ -27,12 +34,21 @@ public class ExchangeRateProviderTest {
     Test.setMock(HttpCalloutMock.class, new TestMocks.MockCallout(200));
 
     Test.startTest();
-    List<ExchangeRate> rates = ExchangeRateProvider.getInstance().getExchangeRates();
+    List<ExchangeRate> rates = ExchangeRateProvider.getInstance()
+      .getExchangeRates();
     Test.stopTest();
 
     System.assertEquals(3, rates.size(), 'There are not 3 returned rates');
-    System.assertEquals('AUD', rates[0].currencyCode, 'The first rate is not for AUD');
-    System.assertEquals(14.489, rates[0].rate, 'The AUD/CZK rate is not 14.489');
+    System.assertEquals(
+      'AUD',
+      rates[0].currencyCode,
+      'The first rate is not for AUD'
+    );
+    System.assertEquals(
+      14.489,
+      rates[0].rate,
+      'The AUD/CZK rate is not 14.489'
+    );
   }
 
   @isTest
@@ -42,9 +58,9 @@ public class ExchangeRateProviderTest {
 
     Test.startTest();
     try {
-      List<ExchangeRate> rates = ExchangeRateProvider.getInstance().getExchangeRates();
-    }
-    catch(Exception ex) {
+      List<ExchangeRate> rates = ExchangeRateProvider.getInstance()
+        .getExchangeRates();
+    } catch (Exception ex) {
       error = ex;
     }
     Test.stopTest();
@@ -68,9 +84,9 @@ public class ExchangeRateProviderTest {
 
     Test.startTest();
     try {
-      List<ExchangeRate> rates = ExchangeRateProvider.getInstance().getExchangeRates();
-    }
-    catch(Exception ex) {
+      List<ExchangeRate> rates = ExchangeRateProvider.getInstance()
+        .getExchangeRates();
+    } catch (Exception ex) {
       error = ex;
     }
     Test.stopTest();
@@ -86,5 +102,4 @@ public class ExchangeRateProviderTest {
       'The exception message is not An unknown API error has occurred.'
     );
   }
-
 }

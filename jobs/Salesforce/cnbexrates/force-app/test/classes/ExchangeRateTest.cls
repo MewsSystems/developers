@@ -1,6 +1,5 @@
 @isTest
 public class ExchangeRateTest {
-
   @isTest
   public static void checkCalculatedRates() {
     ExchangeRate rate = new ExchangeRate();
@@ -45,5 +44,4 @@ public class ExchangeRateTest {
     System.assertEquals(null, exactRate, 'The exact rate is not null');
     System.assertEquals(null, invertedRate, 'The inverted rate is not null');
   }
-
 }

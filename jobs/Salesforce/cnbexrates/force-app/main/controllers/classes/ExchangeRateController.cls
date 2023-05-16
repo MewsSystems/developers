@@ -1,5 +1,4 @@
 public class ExchangeRateController {
-
   @AuraEnabled(cacheable=true)
   public static List<ExchangeRate> getExchangeRates() {
     try {
@@ -8,5 +7,4 @@ public class ExchangeRateController {
       throw new AuraHandledException(e.getMessage());
     }
   }
-
 }
