@@ -24,13 +24,13 @@ public class ExchangeRateProviderTest {
 
   @isTest
   public static void getExchangeRates() {
-    Test.setMock(HttpCalloutMock.class, TestMocks.getApiExchangeRatesMock(200));
+    Test.setMock(HttpCalloutMock.class, new TestMocks.MockCallout(200));
 
     Test.startTest();
     List<ExchangeRate> rates = ExchangeRateProvider.getInstance().getExchangeRates();
     Test.stopTest();
 
-    System.assertEquals(31, rates.size(), 'There are not 31 returned rates');
+    System.assertEquals(3, rates.size(), 'There are not 3 returned rates');
     System.assertEquals('AUD', rates[0].currencyCode, 'The first rate is not for AUD');
     System.assertEquals(14.489, rates[0].rate, 'The AUD/CZK rate is not 14.489');
   }
@@ -38,7 +38,7 @@ public class ExchangeRateProviderTest {
   @isTest
   public static void getExchangeRates_ErrorCode() {
     Exception error;
-    Test.setMock(HttpCalloutMock.class, TestMocks.getApiExchangeRatesMock(400));
+    Test.setMock(HttpCalloutMock.class, new TestMocks.MockCallout(400));
 
     Test.startTest();
     try {
@@ -64,7 +64,7 @@ public class ExchangeRateProviderTest {
   @isTest
   public static void getExchangeRates_EmptyBody() {
     Exception error;
-    Test.setMock(HttpCalloutMock.class, TestMocks.getApiExchangeRatesMock(418));
+    Test.setMock(HttpCalloutMock.class, new TestMocks.MockCallout(418));
 
     Test.startTest();
     try {

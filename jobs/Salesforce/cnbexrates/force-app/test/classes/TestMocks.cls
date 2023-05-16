@@ -32,11 +32,11 @@ public class TestMocks {
     }
   }
 
-  public class CnbExchangeRatesMockEmptyBody implements HttpCalloutMock {
+  public class MockCallout implements HttpCalloutMock {
 
     private Integer statusCode;
 
-    public CnbExchangeRatesMockEmptyBody(Integer statusCode) {
+    public MockCallout(Integer statusCode) {
       this.statusCode = statusCode;
     }
 
@@ -44,23 +44,32 @@ public class TestMocks {
       HttpResponse response = new HttpResponse();
       response.setHeader('Content-Type', 'application/json');
       response.setStatusCode(this.statusCode);
+
+      if(statusCode == 200) {
+        response.setBody(
+          '{"rates":[' +
+            '{"validFor":"2023-05-15","order":92,"country":"Australia","currency":"dollar",' +
+              '"amount":1,"currencyCode":"AUD","rate":14.489},' +
+            '{"validFor":"2023-05-15","order":92,"country":"Hungary","currency":"forint",' +
+              '"amount":100,"currencyCode":"HUF","rate":6.38},' +
+            '{"validFor":"2023-05-15","order":92,"country":"Iceland","currency":"krona",' +
+              '"amount":100,"currencyCode":"ISK","rate":15.616}' +
+          ']}'
+        );
+      }
+
+      else if(statusCode == 400) {
+        response.setBody(
+          '{"description": "ValidationErrorCode: typeMismatch;  Field: lang; Value: i_am_not_valid_lang",' +
+            '"errorCode": "VALIDATION_ERROR",' +
+            '"happenedAt": "2023-05-16 14:09:25",' +
+            '"endPoint": "/cnbapi/exrates/daily?lang=i_am_not_valid_lang",' +
+            '"messageId": "5WWfxPtOYHNA"}'
+        );
+      }
+
       return response;
     }
   }
-
-  public static HttpCalloutMock getApiExchangeRatesMock(Integer statusCode) {
-    if(statusCode == 200 || statusCode == 400) {
-      StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
-      mock.setHeader('Content-Type','application/json');
-      mock.setStatusCode(statusCode);
-      mock.setStaticResource(statusCode == 200 ? 'CnbExchangeRatesResponseMock' : 'CnbExchangeRatesResponseMockError');
-      return mock;
-    }
-
-    else {
-      return new CnbExchangeRatesMockEmptyBody(statusCode);
-    }
-  }
-  
 
 }
