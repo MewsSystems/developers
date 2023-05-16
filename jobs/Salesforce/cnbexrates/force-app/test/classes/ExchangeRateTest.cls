@@ -1,5 +1,7 @@
 @isTest
 public class ExchangeRateTest {
+
+  // checks calculated rates to and from CZK
   @isTest
   public static void checkCalculatedRates() {
     ExchangeRate rate = new ExchangeRate();
@@ -15,6 +17,7 @@ public class ExchangeRateTest {
     System.assertEquals(20, invertedRate, 'The inverted rate is not 20');
   }
 
+  // checks calculated rates are null when amount is null
   @isTest
   public static void checkCalculatedRates_AmountNull() {
     ExchangeRate rate = new ExchangeRate();
@@ -30,6 +33,7 @@ public class ExchangeRateTest {
     System.assertEquals(null, invertedRate, 'The inverted rate is not null');
   }
 
+  // checks calculated rates are null when rate is null
   @isTest
   public static void checkCalculatedRates_RateNull() {
     ExchangeRate rate = new ExchangeRate();

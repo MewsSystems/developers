@@ -1,5 +1,7 @@
 @isTest
 public class ExchangeRateProviderTest {
+
+  // checks a new instance is created
   @isTest
   public static void getInstance() {
     Test.startTest();
@@ -13,6 +15,7 @@ public class ExchangeRateProviderTest {
     );
   }
 
+  // checks the mock instance is set
   @isTest
   public static void getInstance_Mock() {
     ExchangeRateProvider mockClass = new ExchangeRateProvider();
@@ -29,6 +32,7 @@ public class ExchangeRateProviderTest {
     );
   }
 
+  // checks the rates are parsed correctly from the API
   @isTest
   public static void getExchangeRates() {
     Test.setMock(HttpCalloutMock.class, new TestMocks.MockCallout(200));
@@ -51,6 +55,7 @@ public class ExchangeRateProviderTest {
     );
   }
 
+  // checks a 400 error response is throwing an exception
   @isTest
   public static void getExchangeRates_ErrorCode() {
     Exception error;
@@ -77,6 +82,7 @@ public class ExchangeRateProviderTest {
     );
   }
 
+  // checks an empty response is throwing a generic exception
   @isTest
   public static void getExchangeRates_EmptyBody() {
     Exception error;

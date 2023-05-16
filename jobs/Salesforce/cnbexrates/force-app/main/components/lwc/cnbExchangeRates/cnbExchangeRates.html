@@ -1,6 +1,8 @@
 <template>
   <lightning-card title="CNB Exchange Rates" icon-name="custom:custom17">
     <div class="slds-p-horizontal_medium">
+
+      <!-- Info panel with validity date -->
       <div if:true={exchangeRates.data}>
         <div
           class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light slds-m-bottom_medium"
@@ -19,6 +21,7 @@
           </div>
         </div>
 
+        <!-- Exchange rate table -->
         <lightning-datatable
           key-field="currencyCode"
           data={exchangeRates.data}
@@ -27,6 +30,7 @@
         >
         </lightning-datatable>
 
+        <!-- Empty table message -->
         <div
           class="no-data slds-text-body_regular"
           if:false={exchangeRates.data.length}
@@ -35,6 +39,7 @@
         </div>
       </div>
 
+      <!-- Server error message -->
       <div
         class="slds-notify slds-notify_alert slds-alert_error"
         if:true={exchangeRates.error}

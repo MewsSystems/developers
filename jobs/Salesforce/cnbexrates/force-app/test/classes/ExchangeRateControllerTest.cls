@@ -1,5 +1,7 @@
 @isTest
 public class ExchangeRateControllerTest {
+
+  // checks the rates are returned as provided by ExchangeRateProvider
   @isTest
   public static void getExchangeRates() {
     ExchangeRateProvider.setMock(
@@ -22,6 +24,7 @@ public class ExchangeRateControllerTest {
     );
   }
 
+  // checks API errors are caught
   @isTest
   public static void getExchangeRates_Exception() {
     Exception error;

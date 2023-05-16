@@ -1,5 +1,7 @@
 @isTest
 public class TestMocks {
+
+  // mock ExchangeRateProvider class
   public class MockProvider implements System.StubProvider {
     public Object handleMethodCall(
       Object stubbedObject,
@@ -24,6 +26,7 @@ public class TestMocks {
     }
   }
 
+  // mock ExchangeRateProvider class throwing an exception
   public class MockProviderError implements System.StubProvider {
     public Object handleMethodCall(
       Object stubbedObject,
@@ -37,6 +40,7 @@ public class TestMocks {
     }
   }
 
+  // mock API responses
   public class MockCallout implements HttpCalloutMock {
     private Integer statusCode;
 
