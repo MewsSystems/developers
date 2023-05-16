@@ -21,3 +21,6 @@
 node_modules
 bower_components
 npm-debug.log
+
+# Updated by Owen Gannon for technical test
+.vs
