@@ -1,0 +1,188 @@
+[
+  {
+    "currencyCode": "AUD",
+    "exactRate": 14.52,
+    "invertedRate": "0.0688705234159779614325068870523416",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "BRL",
+    "exactRate": 4.438,
+    "invertedRate": "0.225326723749436683190626408292023",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "BGN",
+    "exactRate": 12.105,
+    "invertedRate": "0.0826104915324246179264766625361421",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "CAD",
+    "exactRate": 16.167,
+    "invertedRate": "0.0618543947547473247974268571782025",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "CNY",
+    "exactRate": 3.124,
+    "invertedRate": "0.320102432778489116517285531370038",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "DKK",
+    "exactRate": 3.179,
+    "invertedRate": "0.314564328405158854985844605221768",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "EUR",
+    "exactRate": 23.675,
+    "invertedRate": "0.0422386483632523759239704329461457",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "HKD",
+    "exactRate": 2.776,
+    "invertedRate": "0.360230547550432276657060518731988",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "HUF",
+    "exactRate": 0.06411,
+    "invertedRate": "15.5981906098892528466697863047886",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "ISK",
+    "exactRate": 0.15689,
+    "invertedRate": "6.37389253617184014277519281024922",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "XDR",
+    "exactRate": 29.214,
+    "invertedRate": "0.0342301636201821044704593687957828",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "INR",
+    "exactRate": 0.26463,
+    "invertedRate": "3.77886105127914446585799040169293",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "IDR",
+    "exactRate": 0.001468,
+    "invertedRate": "681.198910081743869209809264305177",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "ILS",
+    "exactRate": 5.941,
+    "invertedRate": "0.168321831341524995791954216461875",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "JPY",
+    "exactRate": 0.16007,
+    "invertedRate": "6.24726682076591491222590116823890",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "MYR",
+    "exactRate": 4.836,
+    "invertedRate": "0.206782464846980976013234077750207",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "MXN",
+    "exactRate": 1.247,
+    "invertedRate": "0.801924619085805934242181234963913",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "NZD",
+    "exactRate": 13.584,
+    "invertedRate": "0.0736160188457008244994110718492344",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "NOK",
+    "exactRate": 2.04,
+    "invertedRate": "0.490196078431372549019607843137255",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "PHP",
+    "exactRate": 0.38802,
+    "invertedRate": "2.57718674295139425802793670429359",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "PLN",
+    "exactRate": 5.277,
+    "invertedRate": "0.189501610763691491377676710252037",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "RON",
+    "exactRate": 4.784,
+    "invertedRate": "0.209030100334448160535117056856187",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "SGD",
+    "exactRate": 16.277,
+    "invertedRate": "0.0614363826257909934263070590403637",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "ZAR",
+    "exactRate": 1.14,
+    "invertedRate": "0.877192982456140350877192982456140",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "KRW",
+    "exactRate": 0.01623,
+    "invertedRate": "61.6142945163277880468268638324091",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "SEK",
+    "exactRate": 2.099,
+    "invertedRate": "0.476417341591233920914721295855169",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "CHF",
+    "exactRate": 24.332,
+    "invertedRate": "0.0410981423639651487752753575538386",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "THB",
+    "exactRate": 0.64045,
+    "invertedRate": "1.56140213912093059567491607463502",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "TRY",
+    "exactRate": 1.104,
+    "invertedRate": "0.905797101449275362318840579710145",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "GBP",
+    "exactRate": 27.23,
+    "invertedRate": "0.0367242012486228424531766434080059",
+    "validFor": "2023-05-16"
+  },
+  {
+    "currencyCode": "USD",
+    "exactRate": 21.758,
+    "invertedRate": "0.0459601066274473756779115727548488",
+    "validFor": "2023-05-16"
+  }
+]
