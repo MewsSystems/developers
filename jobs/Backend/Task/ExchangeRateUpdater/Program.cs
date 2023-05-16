@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.Client.Client;
+using ExchangeRateUpdater.Client.Contracts;
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +27,13 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                // This bit will retrieve the data.
+                // Not exposed to our application normally. Being vendor specific.
+                var client = new ProviderClient(new HttpClient());
+                
+                // The bit we would expose to the rest of our application. Independent from the vendor.
+                var provider = new ExchangeRateProvider(client);
+                
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
