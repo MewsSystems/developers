@@ -41,3 +41,6 @@ $RECYCLE.BIN/
 
 # VSCode config
 .vscode
+
+# Temp metadata used for development
+unpackaged
