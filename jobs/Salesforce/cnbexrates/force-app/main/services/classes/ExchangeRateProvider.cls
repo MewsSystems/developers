@@ -1,7 +1,14 @@
 public class ExchangeRateProvider {
 
+  @TestVisible private static Object mockProvider;
+
+  @TestVisible
+  private static void setMock(Object serviceImpl) {
+    mockProvider = serviceImpl;
+  }
+
   public static ExchangeRateProvider getInstance() {
-    return (ExchangeRateProvider)ServiceLocator.getInstance(ExchangeRateProvider.class);
+      return (ExchangeRateProvider)(mockProvider != null ? mockProvider : ExchangeRateProvider.class.newInstance());
   }
 
   public List<ExchangeRate> getExchangeRates() {

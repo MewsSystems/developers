@@ -1,0 +1,283 @@
+{
+  "rates": [
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Australia",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "AUD",
+      "rate": 14.489
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Brazil",
+      "currency": "real",
+      "amount": 1,
+      "currencyCode": "BRL",
+      "rate": 4.412
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Bulgaria",
+      "currency": "lev",
+      "amount": 1,
+      "currencyCode": "BGN",
+      "rate": 12.048
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Canada",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "CAD",
+      "rate": 16.05
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "China",
+      "currency": "renminbi",
+      "amount": 1,
+      "currencyCode": "CNY",
+      "rate": 3.117
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Denmark",
+      "currency": "krone",
+      "amount": 1,
+      "currencyCode": "DKK",
+      "rate": 3.164
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "EMU",
+      "currency": "euro",
+      "amount": 1,
+      "currencyCode": "EUR",
+      "rate": 23.565
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Hongkong",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "HKD",
+      "rate": 2.765
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Hungary",
+      "currency": "forint",
+      "amount": 100,
+      "currencyCode": "HUF",
+      "rate": 6.38
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Iceland",
+      "currency": "krona",
+      "amount": 100,
+      "currencyCode": "ISK",
+      "rate": 15.616
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "IMF",
+      "currency": "SDR",
+      "amount": 1,
+      "currencyCode": "XDR",
+      "rate": 29.147
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "India",
+      "currency": "rupee",
+      "amount": 100,
+      "currencyCode": "INR",
+      "rate": 26.334
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Indonesia",
+      "currency": "rupiah",
+      "amount": 1000,
+      "currencyCode": "IDR",
+      "rate": 1.464
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Israel",
+      "currency": "new shekel",
+      "amount": 1,
+      "currencyCode": "ILS",
+      "rate": 5.925
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Japan",
+      "currency": "yen",
+      "amount": 100,
+      "currencyCode": "JPY",
+      "rate": 15.909
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Malaysia",
+      "currency": "ringgit",
+      "amount": 1,
+      "currencyCode": "MYR",
+      "rate": 4.818
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Mexico",
+      "currency": "peso",
+      "amount": 1,
+      "currencyCode": "MXN",
+      "rate": 1.234
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "New Zealand",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "NZD",
+      "rate": 13.472
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Norway",
+      "currency": "krone",
+      "amount": 1,
+      "currencyCode": "NOK",
+      "rate": 2.033
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Philippines",
+      "currency": "peso",
+      "amount": 100,
+      "currencyCode": "PHP",
+      "rate": 38.648
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Poland",
+      "currency": "zloty",
+      "amount": 1,
+      "currencyCode": "PLN",
+      "rate": 5.228
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Romania",
+      "currency": "leu",
+      "amount": 1,
+      "currencyCode": "RON",
+      "rate": 4.773
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Singapore",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "SGD",
+      "rate": 16.2
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "South Africa",
+      "currency": "rand",
+      "amount": 1,
+      "currencyCode": "ZAR",
+      "rate": 1.134
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "South Korea",
+      "currency": "won",
+      "amount": 100,
+      "currencyCode": "KRW",
+      "rate": 1.622
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Sweden",
+      "currency": "krona",
+      "amount": 1,
+      "currencyCode": "SEK",
+      "rate": 2.087
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Switzerland",
+      "currency": "franc",
+      "amount": 1,
+      "currencyCode": "CHF",
+      "rate": 24.18
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Thailand",
+      "currency": "baht",
+      "amount": 100,
+      "currencyCode": "THB",
+      "rate": 64.108
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "Turkey",
+      "currency": "lira",
+      "amount": 1,
+      "currencyCode": "TRY",
+      "rate": 1.102
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "United Kingdom",
+      "currency": "pound",
+      "amount": 1,
+      "currencyCode": "GBP",
+      "rate": 27.103
+    },
+    {
+      "validFor": "2023-05-15",
+      "order": 92,
+      "country": "USA",
+      "currency": "dollar",
+      "amount": 1,
+      "currencyCode": "USD",
+      "rate": 21.671
+    }
+  ]
+}
