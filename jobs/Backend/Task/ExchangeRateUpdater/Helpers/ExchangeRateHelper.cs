@@ -13,6 +13,12 @@ namespace ExchangeRateUpdater.Helpers
                 return null;
             }
 
+            if (sourceCurrency == null)
+            {
+                // The source should default to the Czech Republic
+                sourceCurrency = new Currency("CZK");
+            }
+
             var exchangeRates = new List<ExchangeRate>();
 
             foreach(var thirdPartyExchangeRate in thirdPartyExchangeRates)
