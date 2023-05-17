@@ -1,10 +1,11 @@
 ﻿using ExchangeRateUpdater.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Business.Interfaces
 {
     public interface IForeignExchangeService
     {
-        IEnumerable<ExchangeRate> GetLiveRates();
+        Task<List<ThirdPartyExchangeRate>> GetLiveRatesAsync();
     }
 }

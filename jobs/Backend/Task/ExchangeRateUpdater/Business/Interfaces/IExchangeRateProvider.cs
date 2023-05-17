@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Business.Interfaces
 {
@@ -10,6 +11,6 @@ namespace ExchangeRateUpdater.Business.Interfaces
         /// as defined in the app configuration.
         /// </summary>
         /// <returns>A collection of ExchangeRate items.</returns>
-        IEnumerable<ExchangeRate> GetExchangeRates();
+        Task<List<ExchangeRate>> GetExchangeRatesAsync();
     }
 }
