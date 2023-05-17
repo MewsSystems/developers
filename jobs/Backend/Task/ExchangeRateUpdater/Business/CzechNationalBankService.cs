@@ -2,6 +2,7 @@
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
@@ -32,32 +33,40 @@ namespace ExchangeRateUpdater.Business
                 return null;
             }
 
-            // Example request:
-            // https://api.cnb.cz/cnbapi/exrates/daily?date=2023-05-17&lang=EN
-            // The date defaults to today (yyyy-MM-dd) and the lang defaults to CZ
-            var responseMessage = await _httpClient.GetAsync($"{_options.Endpoint}?lang={_options.Language.ToUpper()}");
-            
-            if (!responseMessage.IsSuccessStatusCode)
+            try
             {
-                _logger.LogError("Exiting - Could not request live data");
+                // Example request:
+                // https://api.cnb.cz/cnbapi/exrates/daily?date=2023-05-17&lang=EN
+                // The date defaults to today (yyyy-MM-dd) and the lang defaults to CZ
+                var responseMessage = await _httpClient.GetAsync($"{_options.Endpoint}?lang={_options.Language.ToUpper()}");
+
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"Exiting - Could not request live data. Server response: {responseMessage.StatusCode}");
+                    return null;
+                }
+
+                var content = await responseMessage.Content.ReadAsStringAsync();
+
+                var response = JsonSerializer.Deserialize<CzechNationalBankResponse>(content, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (response?.Rates == null)
+                {
+                    _logger.LogError($"Exiting - cannot deserialize {nameof(CzechNationalBankResponse)}");
+                    return null;
+                }
+
+                _logger.LogDebug($"Returning {response.Rates.Count} third party exchange rates");
+                return response.Rates;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Exiting - exception thrown calling API");
                 return null;
             }
-
-            var content = await responseMessage.Content.ReadAsStringAsync();
-
-            var response = JsonSerializer.Deserialize<CzechNationalBankResponse>(content, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (response?.Rates == null)
-            {
-                _logger.LogError($"Exiting - cannot deserialize {nameof(CzechNationalBankResponse)}");
-                return null;
-            }
-
-            _logger.LogDebug($"Returning {response.Rates.Count} third party exchange rates");
-            return response.Rates;
         }
     }
 }
