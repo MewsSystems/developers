@@ -19,16 +19,25 @@ namespace ExchangeRateUpdater
             {
                 var provider = app.Services.GetRequiredService<IExchangeRateProvider>();
                 var rates = await provider.GetExchangeRatesAsync();
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                
+                if (rates != null)
                 {
-                    var country = rate.TargetCurrency.Country;
-                    var codes = $"{rate.SourceCurrency}/{rate.TargetCurrency}";
-                    var value = rate.Value;
+                    // Successfully retrieved {rates.Count()} exchange rates:
+                    Console.WriteLine($"Úspěšně načteno {rates.Count()} směnných kurzů:");
+
+                    foreach (var rate in rates)
+                    {
+                        var country = rate.TargetCurrency.Country;
+                        var codes = $"{rate.SourceCurrency}/{rate.TargetCurrency}";
+                        var value = rate.Value;
                     
-                    var line = $"{country,-20} -> {codes,7} = {rate.Value}";
-                    Console.WriteLine(line);
+                        var line = $"{country,-20} -> {codes,7} = {rate.Value}";
+                        Console.WriteLine(line);
+                    }
+                } 
+                else
+                {
+                    Console.WriteLine($"Could not retrieve exchange rates");
                 }
             }
             catch (Exception e)
