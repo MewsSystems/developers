@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater.Helpers
 
             foreach(var thirdPartyExchangeRate in thirdPartyExchangeRates)
             {
-                var targetCurrency = new Currency(thirdPartyExchangeRate.Code);
+                var targetCurrency = new Currency(thirdPartyExchangeRate.CurrencyCode, thirdPartyExchangeRate.Country);
                 var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, thirdPartyExchangeRate.Rate);
                 exchangeRates.Add(exchangeRate);
             }

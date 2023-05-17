@@ -1,10 +1,10 @@
 ﻿using ExchangeRateUpdater.Business.Interfaces;
-using ExchangeRateUpdater.Helpers;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Business
@@ -31,20 +31,33 @@ namespace ExchangeRateUpdater.Business
                 _logger.LogError("Exiting - API options are not configured");
                 return null;
             }
+
+            // Example request:
+            // https://api.cnb.cz/cnbapi/exrates/daily?date=2023-05-17&lang=EN
+            // The date defaults to today (yyyy-MM-dd) and the lang defaults to CZ
+            var responseMessage = await _httpClient.GetAsync($"{_options.Endpoint}?lang={_options.Language.ToUpper()}");
             
-            var response = await _httpClient.GetAsync(_options.Endpoint);
-            
-            if (!response.IsSuccessStatusCode)
+            if (!responseMessage.IsSuccessStatusCode)
             {
                 _logger.LogError("Exiting - Could not request live data");
                 return null;
             }
 
-            var data = await response.Content.ReadAsStringAsync();
-            var rates = CzechNationalBankHelper.ConvertToThirdPartyExchangeRates(data);
+            var content = await responseMessage.Content.ReadAsStringAsync();
 
-            _logger.LogDebug($"Returning {rates.Count} third party exchange rates");
-            return rates;
+            var response = JsonSerializer.Deserialize<CzechNationalBankResponse>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (response?.Rates == null)
+            {
+                _logger.LogError($"Exiting - cannot deserialize {nameof(CzechNationalBankResponse)}");
+                return null;
+            }
+
+            _logger.LogDebug($"Returning {response.Rates.Count} third party exchange rates");
+            return response.Rates;
         }
     }
 }

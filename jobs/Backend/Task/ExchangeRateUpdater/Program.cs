@@ -23,7 +23,12 @@ namespace ExchangeRateUpdater
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    var country = rate.TargetCurrency.Country;
+                    var codes = $"{rate.SourceCurrency}/{rate.TargetCurrency}";
+                    var value = rate.Value;
+                    
+                    var line = $"{country,-20} -> {codes,7} = {rate.Value}";
+                    Console.WriteLine(line);
                 }
             }
             catch (Exception e)
