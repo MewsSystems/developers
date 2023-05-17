@@ -32,16 +32,17 @@ namespace ExchangeRateUpdater.Business
             var thirdPartyRates = await _foreignExchangeService.GetLiveRatesAsync();
 
             // Convert response to ExchangeRate
-            if (thirdPartyRates != null)
+            if (thirdPartyRates == null)
             {
-                var sourceCurrency = new Currency("CZK");
-                var exchangeRates = ExchangeRateHelper.ConvertToExchangeRates(thirdPartyRates, sourceCurrency);
-
-                _logger.LogDebug($"Returning {exchangeRates.Count} exchange rates");
-                return exchangeRates;
+                _logger.LogError($"Exiting - {nameof(_foreignExchangeService.GetLiveRatesAsync)} returned null");
+                return null;
             }
 
-            return null;
+            var sourceCurrency = new Currency("CZK");
+            var exchangeRates = ExchangeRateHelper.ConvertToExchangeRates(thirdPartyRates, sourceCurrency);
+
+            _logger.LogDebug($"Returning {exchangeRates.Count} exchange rates");
+            return exchangeRates;
         }
     }
 }
