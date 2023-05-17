@@ -8,10 +8,11 @@ You can install the unlocked package in your org via the UI by clicking on the f
 
 Alternatively, you can install by running the command:
 
-```sf package install --package04t7R000000AhANQA0 --target-org username_or_alias```
+```sf package install --package 04t7R000000AhANQA0 --target-org username_or_alias```
 
 ## Adding the Component to Pages
 Simply drag and drop the **CNB Exchange Rates** component onto any Lightning page -- Home, App, Record, or Community.
 
 Example placement:
+
 ![example placement](capture.PNG)
