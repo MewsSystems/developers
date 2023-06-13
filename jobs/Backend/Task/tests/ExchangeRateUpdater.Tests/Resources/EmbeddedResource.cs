@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using System.Text;
 
 namespace ExchangeRateUpdater.Tests.Resources
 {
@@ -13,6 +12,11 @@ namespace ExchangeRateUpdater.Tests.Resources
 				var assembly = embeddedResourceType.Assembly;
 				var fullName = $"{embeddedResourceType.Namespace}.{pathAndFileName}";
 				using var stream = assembly.GetManifestResourceStream(fullName);
+				if (stream == null)
+				{
+					throw new Exception($"Embedded Resource {pathAndFileName} not found");
+				}
+				
 				using var reader = new StreamReader(stream, Encoding.UTF8);
 				return reader.ReadToEnd();
 			}
