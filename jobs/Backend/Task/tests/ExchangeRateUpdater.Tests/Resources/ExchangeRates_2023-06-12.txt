@@ -1,0 +1,33 @@
+12.06.2023 #112
+země|měna|množství|kód|kurz
+Austrálie|dolar|1|AUD|14,924
+Brazílie|real|1|BRL|4,531
+Bulharsko|lev|1|BGN|12,149
+Čína|žen-min-pi|1|CNY|3,090
+Dánsko|koruna|1|DKK|3,188
+EMU|euro|1|EUR|23,760
+Filipíny|peso|100|PHP|39,380
+Hongkong|dolar|1|HKD|2,817
+Indie|rupie|100|INR|26,765
+Indonesie|rupie|1000|IDR|1,485
+Island|koruna|100|ISK|15,893
+Izrael|nový šekel|1|ILS|6,151
+Japonsko|jen|100|JPY|15,830
+Jižní Afrika|rand|1|ZAR|1,190
+Kanada|dolar|1|CAD|16,551
+Korejská republika|won|100|KRW|1,714
+Maďarsko|forint|100|HUF|6,456
+Malajsie|ringgit|1|MYR|4,776
+Mexiko|peso|1|MXN|1,278
+MMF|ZPČ|1|XDR|29,395
+Norsko|koruna|1|NOK|2,044
+Nový Zéland|dolar|1|NZD|13,544
+Polsko|zlotý|1|PLN|5,355
+Rumunsko|leu|1|RON|4,794
+Singapur|dolar|1|SGD|16,431
+Švédsko|koruna|1|SEK|2,044
+Švýcarsko|frank|1|CHF|24,364
+Thajsko|baht|100|THB|63,776
+Turecko|lira|1|TRY|0,936
+USA|dolar|1|USD|22,066
+Velká Británie|libra|1|GBP|27,726
