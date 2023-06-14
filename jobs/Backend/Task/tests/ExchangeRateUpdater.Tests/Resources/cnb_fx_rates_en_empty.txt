@@ -1,0 +1,2 @@
+12 Jun 2023 #112
+Country|Currency|Amount|Code|Rate
