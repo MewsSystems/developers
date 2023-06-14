@@ -32,9 +32,10 @@ namespace ExchangeRateUpdater.Services
 		public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateOnly? date = null)
 		{
 			string data = await client.GetRatesAsync(date);
-			var currencyHashSet = new HashSet<Currency>(currencies);
 			var parsedData = parser.Parse(data);
-			return parsedData.Where(rate => currencyHashSet.Contains(rate.SourceCurrency));
+			var ratesBySourceCurrency = parsedData.ToDictionary(rate => rate.SourceCurrency);
+			return currencies.Where(currency => ratesBySourceCurrency.ContainsKey(currency))
+				.Select(currency => ratesBySourceCurrency[currency]);
 		}
 	}
 }
