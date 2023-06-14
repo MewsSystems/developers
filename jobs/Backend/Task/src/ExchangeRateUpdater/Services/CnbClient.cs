@@ -6,30 +6,29 @@ namespace ExchangeRateUpdater.Services
 {
 	public class CnbClient : ICnbClient
 	{
-		private readonly HttpClient httpClient;
+		private readonly IHttpClientFactory httpClientFactory;
 		private readonly ILogger<CnbClient> logger;
 		private readonly string url;
 
-		public CnbClient(HttpClient httpClient, ILogger<CnbClient> logger, IOptions<CnbDailyRatesOptions> options)
+		public CnbClient(IHttpClientFactory httpClientFactory, ILogger<CnbClient> logger, IOptions<CnbDailyRatesOptions> options)
 		{
-			this.httpClient = httpClient;
+			this.httpClientFactory = httpClientFactory;
 			this.logger = logger;
 			url = options.Value.Url!;
 		}
 
 		public async Task<string> GetRatesAsync(DateOnly? date = null)
 		{
+			var fullUrl = date.HasValue
+				? $"{url}?date={date.Value:dd.MM.yyyy}"
+				: url;
 			try
 			{
-				var fullUrl = date.HasValue
-					? $"{url}?date={date.Value:dd.MM.yyyy}"
-					: url;
-				return await httpClient.GetStringAsync(fullUrl);
+				return await httpClientFactory.CreateClient().GetStringAsync(fullUrl);
 			}
 			catch (Exception e)
 			{
-				// TODO Handle other exceptions
-				logger.LogError(e, "Could not get exchange rates");
+				logger.LogError(e, "Could not get exchange rates from {Url}", fullUrl);
 				throw;
 			}
 		}

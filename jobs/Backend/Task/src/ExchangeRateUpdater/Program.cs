@@ -29,14 +29,15 @@ namespace ExchangeRateUpdater
 					services.AddOptions<CnbDailyRatesOptions>()
 						.Bind(configuration.GetSection(CnbDailyRatesOptions.SectionName))
 						.ValidateDataAnnotations();
-					services.AddHttpClient<ICnbClient, CnbClient>();
+					services.AddHttpClient();
+					services.AddSingleton<ICnbClient, CnbClient>();
 					services.AddSingleton<ICnbParser, CnbParser>();
 					services.AddSingleton<ICnbFxRateProvider, CnbFxRateProvider>();
 					services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
 				})
 				.Build();
 
-			try
+            try
 			{
 				var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
 				var rates = await provider.GetExchangeRatesAsync(currencies);
