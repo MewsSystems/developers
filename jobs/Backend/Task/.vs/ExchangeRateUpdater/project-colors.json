@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "7b2695d6-d24c-4460-a58e-a10f08550ce0": {
+      "ProjectGuid": "7b2695d6-d24c-4460-a58e-a10f08550ce0",
+      "DisplayName": "ExchangeRateUpdater",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

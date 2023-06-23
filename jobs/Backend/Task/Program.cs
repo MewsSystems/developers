@@ -1,35 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var provider = new ExchangeRateProvider();
+                var rates = await provider.GetExchangeRates();
+
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates of commonly traded currencies:");
+
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    foreach (var value in rate)
+                    {
+                        Console.Write(value.ToString() + " ");
+                    }
+
+                    Console.WriteLine();
                 }
             }
             catch (Exception e)
@@ -39,5 +33,6 @@ namespace ExchangeRateUpdater
 
             Console.ReadLine();
         }
+
     }
 }
