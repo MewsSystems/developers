@@ -10,35 +10,49 @@ namespace ExchangeRateUpdater
     {
         private readonly string URL = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/";
 
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
-        public async Task<List<List<string>>> GetExchangeRates()
+        public async Task<List<Currency>> GetExchangeRates()
         {
-            List<List<string>> exchangeRates = new List<List<string>>();
-            exchangeRates = await GetDataFromScource();
-            return exchangeRates;
+            return await GetDataFromSource();
         }
 
-        private async Task<List<List<string>>> GetDataFromScource()
+        private async Task<List<Currency>> GetDataFromSource()
         {
-
             using (var client = new HttpClient())
             {
                 var html = await client.GetStringAsync(URL);
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
 
-                var table = doc.DocumentNode.SelectSingleNode("//table[@class='currency-table']");
-                List<List<string>> list = table.Descendants("tr").Select(tr => tr.Descendants("td")
+                var currencyData = doc.DocumentNode.SelectSingleNode("//table[@class='currency-table']");
+                List<List<string>> listOfCurrencies = currencyData.Descendants("tr").Select(tr => tr.Descendants("td")
                                         .Select(td => WebUtility.HtmlDecode(td.InnerText)).ToList()).ToList();
 
-                int cap = list.Count();
+                List<Currency> currencyList = new List<Currency>();
 
-                return list;
+                foreach (var item in listOfCurrencies)
+                {
+                    if (string.IsNullOrEmpty(item.FirstOrDefault()))
+                    {
+                        continue;
+                    }
+
+                    else
+                    {
+                        Currency currency = new Currency();
+
+                        foreach (var value in item)
+                        {
+                            currency.Country = item[0];
+                            currency.CurrencyName = item[1];
+                            currency.Amount = item[2];
+                            currency.Code = item[3];
+                            currency.Rate = item[4];
+                        }
+
+                        currencyList.Add(currency);
+                    }
+                }
+                return currencyList;
             }
         }
     }

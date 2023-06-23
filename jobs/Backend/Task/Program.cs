@@ -10,19 +10,14 @@ namespace ExchangeRateUpdater
         {
             try
             {
-
                 var provider = new ExchangeRateProvider();
                 var rates = await provider.GetExchangeRates();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates of commonly traded currencies:");
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates of commonly traded currencies:\n");
 
                 foreach (var rate in rates)
                 {
-                    foreach (var value in rate)
-                    {
-                        Console.Write(value.ToString() + " ");
-                    }
-
+                    Console.Write(rate.Country + " " + rate.CurrencyName + " " + rate.Amount + " " + rate.Code + " " + rate.Rate);
                     Console.WriteLine();
                 }
             }
