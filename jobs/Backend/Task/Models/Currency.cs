@@ -1,5 +1,4 @@
-﻿
-namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Data
 {
     /// <summary>Represents currency detailed info</summary>
     public class Currency
@@ -7,11 +6,11 @@ namespace ExchangeRateUpdater
         /// <summary>
         /// Three-letter ISO 4217 code of the currency.
         /// </summary>
-        public string Code { get;  set; }
+        public string Code { get; set; }
         /// <summary>
         /// County name of the currency
         /// </summary>
-        public string Country { get;  set; }
+        public string Country { get; set; }
         /// <summary>
         /// Name of the currency
         /// </summary>
@@ -19,10 +18,10 @@ namespace ExchangeRateUpdater
         /// <summary>
         /// Exchange rate of the currency in CZK
         /// </summary>
-        public string Rate { get;  set; }
+        public string Rate { get; set; }
         /// <summary>
         /// Amount of money to be exchanged
         /// </summary>
-        public string Amount { get;  set; }
+        public string Amount { get; set; }
     }
 }

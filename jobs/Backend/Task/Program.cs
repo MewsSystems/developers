@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ToolsProvider.Helpers;
 
 namespace ExchangeRateUpdater
 {
@@ -10,7 +12,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                IMapper mapper = MappingProvider.GetMapper();
+                var provider = new ExchangeRateProvider(mapper);
                 var rates = await provider.GetExchangeRates();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates of commonly traded currencies:\n");
@@ -27,7 +30,6 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
-        }
-
+        }    
     }
 }
