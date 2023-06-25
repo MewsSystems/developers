@@ -10,6 +10,7 @@ namespace ExchangeRateProvider.External
 
         public CzechNationalBankExchangeRateClient()
         {
+            // TODO: for aspnet core app consider using IHttpClientFactory and keep client info (ex. url, auth) in appsettings.json
             _httpClient = new HttpClient();
             _baseUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market";
         }
