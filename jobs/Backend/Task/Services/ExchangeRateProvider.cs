@@ -11,19 +11,19 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly string URL = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/";
+        IMapper mapper { get; }
+
         public ExchangeRateProvider(IMapper mapper)
         {
             this.mapper = mapper;
         }
 
-        private readonly string URL = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/";
-
-        public IMapper mapper { get; }
-
         public async Task<List<CurrencyReadDTO>> GetExchangeRates()
         {
-           var listOfCurrencies = await GetDataFromSource();
+            var listOfCurrencies = await GetDataFromSource();
             var retrievedCurrencies = StoringRetrievedData(listOfCurrencies, mapper);
+
             return retrievedCurrencies;
         }
 
@@ -38,8 +38,15 @@ namespace ExchangeRateUpdater
                 var currencyData = doc.DocumentNode.SelectSingleNode("//tbody");
                 var listOfCurrencies = currencyData.Descendants("tr").Select(tr => tr.Descendants("td")
                                         .Select(td => WebUtility.HtmlDecode(td.InnerText)).ToList()).ToList();
-          
-                return listOfCurrencies;
+
+                if(listOfCurrencies != null || listOfCurrencies.Any())
+                {
+                    return listOfCurrencies;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -47,31 +54,38 @@ namespace ExchangeRateUpdater
         {
             List<CurrencyReadDTO> currencyListDTOs = new List<CurrencyReadDTO>();
 
-            foreach (var item in listOfCurrencies)
+            if(listOfCurrencies != null)
             {
-                if (item.Count == 0)
+                foreach (var item in listOfCurrencies)
                 {
-                    continue;
-                }
-
-                else
-                {
-                    Currency currency = new Currency();
-                    foreach (var value in item)
+                    if (item.Count == 0)
                     {
-                        currency.Country = item[0];
-                        currency.CurrencyName = item[1];
-                        currency.Amount = item[2];
-                        currency.Code = item[3];
-                        currency.Rate = item[4];
+                        continue;
                     }
 
-                    var currencyDTO = mapper.Map<CurrencyReadDTO>(currency);
-                    currencyListDTOs.Add(currencyDTO);
-                }
-            }
+                    else
+                    {
+                        Currency currency = new Currency();
+                        foreach (var value in item)
+                        {
+                            currency.Country = item[0];
+                            currency.CurrencyName = item[1];
+                            currency.Amount = item[2];
+                            currency.Code = item[3];
+                            currency.Rate = item[4];
+                        }
 
-            return currencyListDTOs;
+                        var currencyDTO = mapper.Map<CurrencyReadDTO>(currency);
+                        currencyListDTOs.Add(currencyDTO);
+                    }
+                }
+                return currencyListDTOs;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }
