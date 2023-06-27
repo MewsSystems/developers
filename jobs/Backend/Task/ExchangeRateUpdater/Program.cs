@@ -23,10 +23,12 @@ namespace ExchangeRateUpdater
         public static void Main(string[] args)
         {
             var serviceProvider = new ServiceCollection()
-                .AddSingleton<ICzechNationalBankExchangeRateGateway, CzechNationalBankExchangeRateGateway>()
-                .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
+                .AddHttpClient<ICzechNationalBankExchangeRateGateway, CzechNationalBankExchangeRateGateway>(x =>
+                    x.BaseAddress = new Uri("https://api.cnb.cz/"))
+                .Services
                 .BuildServiceProvider();
-            
+
             try
             {
                 var provider = serviceProvider.GetService<IExchangeRateProvider>();
