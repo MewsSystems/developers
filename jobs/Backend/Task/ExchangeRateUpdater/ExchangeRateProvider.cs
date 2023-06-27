@@ -8,6 +8,13 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        private readonly CzechNationalBankExchangeRateGateway _rateGateway;
+
+        public ExchangeRateProvider(CzechNationalBankExchangeRateGateway rateGateway)
+        {
+            _rateGateway = rateGateway;
+        }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -16,13 +23,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            using var httpClient = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get,
-                "https://api.cnb.cz/cnbapi/exrates/daily?date=2023-06-27&lang=EN");
-            using var response = httpClient.Send(request);
-            response.EnsureSuccessStatusCode();
-            var content = response.Content.ReadAsStream();
-            var exchangeRates = JsonSerializer.Deserialize<CnbExchangeRates>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var exchangeRates = _rateGateway.GetCurrentRates();
             var result = new List<ExchangeRate>();
             var sourceCurrency = new Currency("CZK");
             foreach (var rate in exchangeRates.Rates)

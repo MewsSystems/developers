@@ -8,7 +8,7 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_NoCurrencies_ReturnsEmptyList()
     {
         // Arrange
-        var provider = new ExchangeRateProvider();
+        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
 
         // Act
         var result = provider.GetExchangeRates(Enumerable.Empty<Currency>());
@@ -21,7 +21,7 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_ReturnsExpectedExchangeRate()
     {
         // Arrange
-        var provider = new ExchangeRateProvider();
+        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
         var czkCurrency = new Currency("CZK");
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
@@ -38,10 +38,10 @@ public class ExchangeRateProviderTests
     }
     
     [Fact]
-    public void GetExchangeRates_ForSpecificCurrencies_OnlyReturnsCurrencyExchangeRates()
+    public void GetExchangeRates_ForSpecificCurrency_OnlyReturnsCurrencyExchangeRates()
     {
         // Arrange
-        var provider = new ExchangeRateProvider();
+        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
         var czkCurrency = new Currency("CZK");
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
@@ -57,7 +57,7 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_CurrencyMissingInSource_ReturnsNoExchangeRate()
     {
         // Arrange
-        var provider = new ExchangeRateProvider();
+        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
         var madeUpCurrency = new Currency("XXX");
         var currencies = new List<Currency> { madeUpCurrency };
 
