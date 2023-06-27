@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace ExchangeRateUpdater;
 
-public class CzechNationalBankExchangeRateGateway
+public class CzechNationalBankExchangeRateGateway : ICzechNationalBankExchangeRateGateway
 {
     public CnbExchangeRates GetCurrentRates()
     {

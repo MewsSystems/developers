@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Moq;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -8,7 +9,9 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_NoCurrencies_ReturnsEmptyList()
     {
         // Arrange
-        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
+        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
+        var provider = new ExchangeRateProvider(gatewayMock.Object);
+        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(new CnbExchangeRates());
 
         // Act
         var result = provider.GetExchangeRates(Enumerable.Empty<Currency>());
@@ -21,11 +24,24 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_ReturnsExpectedExchangeRate()
     {
         // Arrange
-        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
+        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
+        var provider = new ExchangeRateProvider(gatewayMock.Object);
         var czkCurrency = new Currency("CZK");
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
-        var expectedExchangeRate = new ExchangeRate(czkCurrency, usdCurrency, 21.550m);
+        var expectedExchangeRate = new ExchangeRate(czkCurrency, usdCurrency, 1.550m);
+        var gatewayResponse = new CnbExchangeRates
+        {
+            Rates = new List<CnbExchangeRate>
+            {
+                new()
+                {
+                    Rate = 1.550m,
+                    CurrencyCode = "USD",
+                }
+            }
+        };
+        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
@@ -36,31 +52,66 @@ public class ExchangeRateProviderTests
         exchangeRate.TargetCurrency.Code.Should().Be(expectedExchangeRate.TargetCurrency.Code);
         exchangeRate.Value.Should().Be(expectedExchangeRate.Value);
     }
-    
+
     [Fact]
     public void GetExchangeRates_ForSpecificCurrency_OnlyReturnsCurrencyExchangeRates()
     {
         // Arrange
-        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
-        var czkCurrency = new Currency("CZK");
+        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
+        var provider = new ExchangeRateProvider(gatewayMock.Object);
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
+        var gatewayResponse = new CnbExchangeRates
+        {
+            Rates = new List<CnbExchangeRate>
+            {
+                new()
+                {
+                    Rate = 1.550m,
+                    CurrencyCode = "USD",
+                },
+                new()
+                {
+                    Rate = 1.550m,
+                    CurrencyCode = "NZD",
+                }
+            }
+        };
+        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
 
         // Assert
-        result.Should().OnlyContain(x => x.SourceCurrency.Code == czkCurrency.Code && x.TargetCurrency.Code == usdCurrency.Code);
+        result.Should().OnlyContain(x => x.TargetCurrency.Code == usdCurrency.Code);
     }
-    
+
     [Fact]
     public void GetExchangeRates_CurrencyMissingInSource_ReturnsNoExchangeRate()
     {
         // Arrange
-        var provider = new ExchangeRateProvider(new CzechNationalBankExchangeRateGateway());
+        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
+        var provider = new ExchangeRateProvider(gatewayMock.Object);
         var madeUpCurrency = new Currency("XXX");
         var currencies = new List<Currency> { madeUpCurrency };
-
+        var gatewayResponse = new CnbExchangeRates
+        {
+            Rates = new List<CnbExchangeRate>
+            {
+                new()
+                {
+                    Rate = 1.550m,
+                    CurrencyCode = "USD",
+                },
+                new()
+                {
+                    Rate = 1.550m,
+                    CurrencyCode = "NZD",
+                }
+            }
+        };
+        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
+        
         // Act
         var result = provider.GetExchangeRates(currencies);
 

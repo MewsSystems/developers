@@ -4,5 +4,5 @@ namespace ExchangeRateUpdater;
 
 public class CnbExchangeRates
 {
-    public List<CnbExchangeRate> Rates { get; set; }
+    public List<CnbExchangeRate> Rates { get; set; } = new();
 }

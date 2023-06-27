@@ -8,9 +8,9 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        private readonly CzechNationalBankExchangeRateGateway _rateGateway;
+        private readonly ICzechNationalBankExchangeRateGateway _rateGateway;
 
-        public ExchangeRateProvider(CzechNationalBankExchangeRateGateway rateGateway)
+        public ExchangeRateProvider(ICzechNationalBankExchangeRateGateway rateGateway)
         {
             _rateGateway = rateGateway;
         }
