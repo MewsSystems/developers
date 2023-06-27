@@ -4,5 +4,5 @@ namespace ExchangeRateUpdater;
 
 public interface IExchangeRateProvider
 {
-    IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+    IReadOnlyCollection<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
 }
