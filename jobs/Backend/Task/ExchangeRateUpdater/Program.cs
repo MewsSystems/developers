@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater;
 
-public static class Program
+public class Program
 {
     private static IEnumerable<Currency> _currencies = new[]
     {
@@ -25,10 +26,13 @@ public static class Program
     {
         var serviceProvider = new ServiceCollection()
             .AddScoped<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>()
+            .AddLogging(builder => builder.AddConsole())
             .AddHttpClient<ICzechNationalBankExchangeRateClient, CzechNationalBankExchangeRateClient>(x =>
                 x.BaseAddress = new Uri("https://api.cnb.cz/"))
             .Services
             .BuildServiceProvider();
+        var logger = serviceProvider.GetService<ILoggerFactory>()
+            .CreateLogger<Program>();
 
         try
         {
@@ -43,7 +47,7 @@ public static class Program
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            logger.LogError(e, "Could not retrieve exchange rates: '{message}'.", e.Message);
         }
 
         Console.ReadLine();
