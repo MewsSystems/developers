@@ -31,7 +31,7 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
 
     private static IEnumerable<ExchangeRate> FilterRatesByCurrencies(IEnumerable<Currency> currencies,
         IEnumerable<ExchangeRate> exchangeRates) =>
-        exchangeRates.Where(x => currencies.Contains(x.TargetCurrency)).ToList();
+        exchangeRates.Where(x => currencies.Contains(x.TargetCurrency));
 
     private static IEnumerable<ExchangeRate> MapCnbExchangeRateToExchangeRate(CnbExchangeRates cnbExchangeRates)
     {
