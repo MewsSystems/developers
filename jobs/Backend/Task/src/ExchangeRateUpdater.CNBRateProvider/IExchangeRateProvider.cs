@@ -11,5 +11,5 @@ public interface IExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    Task<Result<IEnumerable<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
+    Task<Result<IReadOnlyCollection<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
 }

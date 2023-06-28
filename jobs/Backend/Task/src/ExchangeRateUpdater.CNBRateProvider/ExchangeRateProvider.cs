@@ -11,14 +11,29 @@ internal class ExchangeRateProvider : IExchangeRateProvider
         _cnbClient = cnbClient;
     }
 
-    public async Task<Result<IEnumerable<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies,
+    public async Task<Result<IReadOnlyCollection<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies,
         CancellationToken cancellationToken)
     {
-        var exchangeRates = await _cnbClient.GetDailyExchangeRate(DateTime.UtcNow, cancellationToken);
+        var exchangeRatesResult = await _cnbClient.GetDailyExchangeRate(DateTime.UtcNow, cancellationToken);
 
-        // TODO: filter out by requested currencies
+        if (exchangeRatesResult.IsFailed)
+        {
+            return Result.Fail(exchangeRatesResult.Errors);
+        }
 
-        return exchangeRates;
+        var exchangeRates = exchangeRatesResult.Value;
+        var filteredRates = new List<ExchangeRate>();
+        foreach (var currency in currencies)
+        {
+            var matchingRates = exchangeRates.Where(rate => rate.SourceCurrency.Equals(currency) || rate.TargetCurrency.Equals(currency));
+            // TODO: avoid duplicates
+            if (matchingRates is not null)
+            {
+                filteredRates.AddRange(matchingRates);
+            }
+        }
+
+        return Result.Ok<IReadOnlyCollection<ExchangeRate>>(filteredRates);
     }
 }
 
