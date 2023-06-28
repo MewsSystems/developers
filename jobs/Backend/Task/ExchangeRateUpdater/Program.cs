@@ -4,49 +4,48 @@ using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public static class Program
 {
-    public static class Program
+    private static IReadOnlyCollection<Currency> _currencies = new[]
     {
-        private static IReadOnlyCollection<Currency> _currencies = new[]
+        new Currency("USD"),
+        new Currency("EUR"),
+        new Currency("CZK"),
+        new Currency("JPY"),
+        new Currency("KES"),
+        new Currency("RUB"),
+        new Currency("THB"),
+        new Currency("TRY"),
+        new Currency("XYZ")
+    };
+
+    public static void Main(string[] args)
+    {
+        var serviceProvider = new ServiceCollection()
+            .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
+            .AddHttpClient<ICzechNationalBankExchangeRateClient, CzechNationalBankExchangeRateClient>(x =>
+                x.BaseAddress = new Uri("https://api.cnb.cz/"))
+            .Services
+            .BuildServiceProvider();
+
+        try
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var provider = serviceProvider.GetService<IExchangeRateProvider>();
+            var rates = provider.GetExchangeRates(_currencies);
 
-        public static void Main(string[] args)
-        {
-            var serviceProvider = new ServiceCollection()
-                .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddHttpClient<ICzechNationalBankExchangeRateClient, CzechNationalBankExchangeRateClient>(x =>
-                    x.BaseAddress = new Uri("https://api.cnb.cz/"))
-                .Services
-                .BuildServiceProvider();
-
-            try
+            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
+            foreach (var rate in rates)
             {
-                var provider = serviceProvider.GetService<IExchangeRateProvider>();
-                var rates = provider.GetExchangeRates(_currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                Console.WriteLine(rate.ToString());
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
         }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+        }
+
+        Console.ReadLine();
     }
 }
