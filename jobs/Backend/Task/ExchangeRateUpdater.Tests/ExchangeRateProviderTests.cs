@@ -1,6 +1,6 @@
 using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Clients.Models;
-using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Models;
 using FluentAssertions;
 using Moq;
 
@@ -14,7 +14,7 @@ public class ExchangeRateProviderTests
         // Arrange
         var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
         var provider = new ExchangeRateProvider(clientMock.Object);
-        clientMock.Setup(x => x.GetCurrentRates()).Returns(new CnbExchangeRates());
+        clientMock.Setup(x => x.GetDailyRates()).Returns(new CnbExchangeRates());
 
         // Act
         var result = provider.GetExchangeRates(Enumerable.Empty<Currency>());
@@ -44,7 +44,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
+        clientMock.Setup(x => x.GetDailyRates()).Returns(cnbResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
@@ -80,7 +80,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
+        clientMock.Setup(x => x.GetDailyRates()).Returns(cnbResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
@@ -113,7 +113,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
+        clientMock.Setup(x => x.GetDailyRates()).Returns(cnbResponse);
         
         // Act
         var result = provider.GetExchangeRates(currencies);

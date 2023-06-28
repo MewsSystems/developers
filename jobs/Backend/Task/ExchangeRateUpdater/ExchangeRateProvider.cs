@@ -2,7 +2,7 @@
 using System.Linq;
 using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Clients.Models;
-using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater;
 
@@ -23,7 +23,7 @@ public class ExchangeRateProvider : IExchangeRateProvider
     /// </summary>
     public IReadOnlyCollection<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var cnbExchangeRates = _cnbExchangeRateClient.GetCurrentRates();
+        var cnbExchangeRates = _cnbExchangeRateClient.GetDailyRates();
         var exchangeRates = MapCnbExchangeRateToExchangeRate(cnbExchangeRates);
         return FilterRatesByCurrencies(currencies, exchangeRates);
     }

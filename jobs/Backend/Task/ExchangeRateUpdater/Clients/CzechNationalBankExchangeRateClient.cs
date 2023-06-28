@@ -13,7 +13,7 @@ public class CzechNationalBankExchangeRateClient : ICzechNationalBankExchangeRat
         _client = client;
     }
 
-    public CnbExchangeRates GetCurrentRates()
+    public CnbExchangeRates GetDailyRates()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "cnbapi/exrates/daily");
         using var response = _client.Send(request);

@@ -4,5 +4,5 @@ namespace ExchangeRateUpdater.Clients;
 
 public interface ICzechNationalBankExchangeRateClient
 {
-    CnbExchangeRates GetCurrentRates();
+    CnbExchangeRates GetDailyRates();
 }
