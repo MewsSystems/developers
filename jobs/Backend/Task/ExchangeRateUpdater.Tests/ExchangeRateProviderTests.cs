@@ -1,5 +1,6 @@
 using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Clients.Models;
+using ExchangeRateUpdater.Domain;
 using FluentAssertions;
 using Moq;
 

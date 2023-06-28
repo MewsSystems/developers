@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExchangeRateUpdater.Clients;
+using ExchangeRateUpdater.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateUpdater.Clients;
+using ExchangeRateUpdater.Domain;
 
 namespace ExchangeRateUpdater
 {

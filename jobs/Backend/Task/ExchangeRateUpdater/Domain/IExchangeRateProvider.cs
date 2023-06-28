@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Domain;
 
 public interface IExchangeRateProvider
 {
