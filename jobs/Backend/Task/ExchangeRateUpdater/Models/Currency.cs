@@ -16,4 +16,14 @@ public class Currency
     {
         return Code;
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is not Currency currency)
+        {
+            return false;
+        }
+
+        return currency.Code == Code;
+    }
 }
