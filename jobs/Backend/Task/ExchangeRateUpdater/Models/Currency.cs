@@ -26,4 +26,9 @@ public class Currency
 
         return currency.Code == Code;
     }
+
+    public override int GetHashCode()
+    {
+        return Code.GetHashCode();
+    }
 }
