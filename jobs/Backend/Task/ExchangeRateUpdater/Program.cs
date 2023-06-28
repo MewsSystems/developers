@@ -24,7 +24,7 @@ public static class Program
     public static void Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
-            .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
+            .AddScoped<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>()
             .AddHttpClient<ICzechNationalBankExchangeRateClient, CzechNationalBankExchangeRateClient>(x =>
                 x.BaseAddress = new Uri("https://api.cnb.cz/"))
             .Services

@@ -6,14 +6,14 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests;
 
-public class ExchangeRateProviderTests
+public class CzechNationalBankExchangeRateProviderTests
 {
     [Fact]
     public void GetExchangeRates_NoCurrencies_ReturnsEmptyList()
     {
         // Arrange
         var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
-        var provider = new ExchangeRateProvider(clientMock.Object);
+        var provider = new CzechNationalBankExchangeRateProvider(clientMock.Object);
         clientMock.Setup(x => x.GetDailyRates()).Returns(new CnbExchangeRates());
 
         // Act
@@ -28,7 +28,7 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
-        var provider = new ExchangeRateProvider(clientMock.Object);
+        var provider = new CzechNationalBankExchangeRateProvider(clientMock.Object);
         var czkCurrency = new Currency("CZK");
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
@@ -61,7 +61,7 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
-        var provider = new ExchangeRateProvider(clientMock.Object);
+        var provider = new CzechNationalBankExchangeRateProvider(clientMock.Object);
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
         var cnbResponse = new CnbExchangeRates
@@ -94,7 +94,7 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
-        var provider = new ExchangeRateProvider(clientMock.Object);
+        var provider = new CzechNationalBankExchangeRateProvider(clientMock.Object);
         var madeUpCurrency = new Currency("XXX");
         var currencies = new List<Currency> { madeUpCurrency };
         var cnbResponse = new CnbExchangeRates

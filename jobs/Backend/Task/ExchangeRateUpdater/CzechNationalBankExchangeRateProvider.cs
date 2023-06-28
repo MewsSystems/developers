@@ -6,11 +6,11 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater;
 
-public class ExchangeRateProvider : IExchangeRateProvider
+public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
 {
     private readonly ICzechNationalBankExchangeRateClient _cnbExchangeRateClient;
 
-    public ExchangeRateProvider(ICzechNationalBankExchangeRateClient cnbExchangeRateClient)
+    public CzechNationalBankExchangeRateProvider(ICzechNationalBankExchangeRateClient cnbExchangeRateClient)
     {
         _cnbExchangeRateClient = cnbExchangeRateClient;
     }
