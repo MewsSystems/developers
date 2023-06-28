@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
-    private static IReadOnlyCollection<Currency> _currencies = new[]
+    private static IEnumerable<Currency> _currencies = new[]
     {
         new Currency("USD"),
         new Currency("EUR"),

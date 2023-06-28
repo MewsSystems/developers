@@ -25,14 +25,15 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
         var cnbExchangeRates = _cnbExchangeRateClient.GetDailyRates();
         var exchangeRates = MapCnbExchangeRateToExchangeRate(cnbExchangeRates);
-        return FilterRatesByCurrencies(currencies, exchangeRates);
+        var filteredExchangeRates = FilterRatesByCurrencies(currencies, exchangeRates);
+        return filteredExchangeRates.ToList();
     }
 
-    private static IReadOnlyCollection<ExchangeRate> FilterRatesByCurrencies(IEnumerable<Currency> currencies,
+    private static IEnumerable<ExchangeRate> FilterRatesByCurrencies(IEnumerable<Currency> currencies,
         IEnumerable<ExchangeRate> exchangeRates) =>
         exchangeRates.Where(x => currencies.Contains(x.TargetCurrency)).ToList();
 
-    private IReadOnlyCollection<ExchangeRate> MapCnbExchangeRateToExchangeRate(CnbExchangeRates cnbExchangeRates)
+    private static IEnumerable<ExchangeRate> MapCnbExchangeRateToExchangeRate(CnbExchangeRates cnbExchangeRates)
     {
         var result = new List<ExchangeRate>();
         var sourceCurrency = new Currency("CZK");
