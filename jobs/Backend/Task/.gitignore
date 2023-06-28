@@ -1,0 +1,14 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# C#
+obj/
+bin/
+app/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
