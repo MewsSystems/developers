@@ -1,20 +1,21 @@
 using System.Net.Http;
 using System.Text.Json;
+using ExchangeRateUpdater.Clients.Models;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Clients;
 
-public class CzechNationalBankExchangeRateGateway : ICzechNationalBankExchangeRateGateway
+public class CzechNationalBankExchangeRateClient : ICzechNationalBankExchangeRateClient
 {
     private readonly HttpClient _client;
 
-    public CzechNationalBankExchangeRateGateway(HttpClient client)
+    public CzechNationalBankExchangeRateClient(HttpClient client)
     {
         _client = client;
     }
 
     public CnbExchangeRates GetCurrentRates()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "cnbapi/exrates/daily?date=2023-06-27&lang=EN");
+        var request = new HttpRequestMessage(HttpMethod.Get, "cnbapi/exrates/daily");
         using var response = _client.Send(request);
         response.EnsureSuccessStatusCode();
         var content = response.Content.ReadAsStream();

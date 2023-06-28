@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using ExchangeRateUpdater.Clients;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater
@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater
         {
             var serviceProvider = new ServiceCollection()
                 .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddHttpClient<ICzechNationalBankExchangeRateGateway, CzechNationalBankExchangeRateGateway>(x =>
+                .AddHttpClient<ICzechNationalBankExchangeRateClient, CzechNationalBankExchangeRateClient>(x =>
                     x.BaseAddress = new Uri("https://api.cnb.cz/"))
                 .Services
                 .BuildServiceProvider();

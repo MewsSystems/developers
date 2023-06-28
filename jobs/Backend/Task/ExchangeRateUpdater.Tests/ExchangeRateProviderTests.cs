@@ -1,3 +1,5 @@
+using ExchangeRateUpdater.Clients;
+using ExchangeRateUpdater.Clients.Models;
 using FluentAssertions;
 using Moq;
 
@@ -9,9 +11,9 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_NoCurrencies_ReturnsEmptyList()
     {
         // Arrange
-        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
-        var provider = new ExchangeRateProvider(gatewayMock.Object);
-        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(new CnbExchangeRates());
+        var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
+        var provider = new ExchangeRateProvider(clientMock.Object);
+        clientMock.Setup(x => x.GetCurrentRates()).Returns(new CnbExchangeRates());
 
         // Act
         var result = provider.GetExchangeRates(Enumerable.Empty<Currency>());
@@ -24,13 +26,13 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_ReturnsExpectedExchangeRate()
     {
         // Arrange
-        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
-        var provider = new ExchangeRateProvider(gatewayMock.Object);
+        var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
+        var provider = new ExchangeRateProvider(clientMock.Object);
         var czkCurrency = new Currency("CZK");
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
         var expectedExchangeRate = new ExchangeRate(czkCurrency, usdCurrency, 1.550m);
-        var gatewayResponse = new CnbExchangeRates
+        var cnbResponse = new CnbExchangeRates
         {
             Rates = new List<CnbExchangeRate>
             {
@@ -41,7 +43,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
+        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
@@ -57,11 +59,11 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_ForSpecificCurrency_OnlyReturnsCurrencyExchangeRates()
     {
         // Arrange
-        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
-        var provider = new ExchangeRateProvider(gatewayMock.Object);
+        var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
+        var provider = new ExchangeRateProvider(clientMock.Object);
         var usdCurrency = new Currency("USD");
         var currencies = new List<Currency> { usdCurrency };
-        var gatewayResponse = new CnbExchangeRates
+        var cnbResponse = new CnbExchangeRates
         {
             Rates = new List<CnbExchangeRate>
             {
@@ -77,7 +79,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
+        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
 
         // Act
         var result = provider.GetExchangeRates(currencies);
@@ -90,11 +92,11 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_CurrencyMissingInSource_ReturnsNoExchangeRate()
     {
         // Arrange
-        var gatewayMock = new Mock<ICzechNationalBankExchangeRateGateway>();
-        var provider = new ExchangeRateProvider(gatewayMock.Object);
+        var clientMock = new Mock<ICzechNationalBankExchangeRateClient>();
+        var provider = new ExchangeRateProvider(clientMock.Object);
         var madeUpCurrency = new Currency("XXX");
         var currencies = new List<Currency> { madeUpCurrency };
-        var gatewayResponse = new CnbExchangeRates
+        var cnbResponse = new CnbExchangeRates
         {
             Rates = new List<CnbExchangeRate>
             {
@@ -110,7 +112,7 @@ public class ExchangeRateProviderTests
                 }
             }
         };
-        gatewayMock.Setup(x => x.GetCurrentRates()).Returns(gatewayResponse);
+        clientMock.Setup(x => x.GetCurrentRates()).Returns(cnbResponse);
         
         // Act
         var result = provider.GetExchangeRates(currencies);

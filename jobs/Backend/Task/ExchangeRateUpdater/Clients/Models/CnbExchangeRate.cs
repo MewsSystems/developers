@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater;
+﻿namespace ExchangeRateUpdater.Clients.Models;
 
 public class CnbExchangeRate
 {

@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Clients;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly ICzechNationalBankExchangeRateGateway _rateGateway;
+        private readonly ICzechNationalBankExchangeRateClient _rateClient;
 
-        public ExchangeRateProvider(ICzechNationalBankExchangeRateGateway rateGateway)
+        public ExchangeRateProvider(ICzechNationalBankExchangeRateClient rateClient)
         {
-            _rateGateway = rateGateway;
+            _rateClient = rateClient;
         }
 
         /// <summary>
@@ -20,7 +21,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IReadOnlyCollection<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var exchangeRates = _rateGateway.GetCurrentRates();
+            var exchangeRates = _rateClient.GetCurrentRates();
             var result = new List<ExchangeRate>();
             var sourceCurrency = new Currency("CZK");
             foreach (var rate in exchangeRates.Rates)
