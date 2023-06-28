@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateUpdater.Clients;
+using ExchangeRateUpdater.Clients.Models;
 using ExchangeRateUpdater.Domain;
 
 namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider : IExchangeRateProvider
 {
-    private readonly ICzechNationalBankExchangeRateClient _rateClient;
+    private readonly ICzechNationalBankExchangeRateClient _cnbExchangeRateClient;
 
-    public ExchangeRateProvider(ICzechNationalBankExchangeRateClient rateClient)
+    public ExchangeRateProvider(ICzechNationalBankExchangeRateClient cnbExchangeRateClient)
     {
-        _rateClient = rateClient;
+        _cnbExchangeRateClient = cnbExchangeRateClient;
     }
 
     /// <summary>
@@ -22,18 +23,24 @@ public class ExchangeRateProvider : IExchangeRateProvider
     /// </summary>
     public IReadOnlyCollection<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var exchangeRates = _rateClient.GetCurrentRates();
+        var cnbExchangeRates = _cnbExchangeRateClient.GetCurrentRates();
+        var exchangeRates = MapCnbExchangeRateToExchangeRate(cnbExchangeRates);
+        return FilterRatesByCurrencies(currencies, exchangeRates);
+    }
+
+    private static IReadOnlyCollection<ExchangeRate> FilterRatesByCurrencies(IEnumerable<Currency> currencies,
+        IEnumerable<ExchangeRate> exchangeRates) =>
+        exchangeRates.Where(x => currencies.Contains(x.TargetCurrency)).ToList();
+
+    private IReadOnlyCollection<ExchangeRate> MapCnbExchangeRateToExchangeRate(CnbExchangeRates cnbExchangeRates)
+    {
         var result = new List<ExchangeRate>();
         var sourceCurrency = new Currency("CZK");
-            
-        foreach (var rate in exchangeRates.Rates)
+        foreach (var cnbExchangeRate in cnbExchangeRates.Rates)
         {
-            if (currencies.Any(x => x.Code == rate.CurrencyCode))
-            {
-                var targetCurrency = new Currency(rate.CurrencyCode);
-                var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, rate.Rate);
-                result.Add(exchangeRate);
-            }
+            var targetCurrency = new Currency(cnbExchangeRate.CurrencyCode);
+            var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, cnbExchangeRate.Rate);
+            result.Add(exchangeRate);
         }
 
         return result;
