@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using ExchangeRateUpdater.CNBRateProvider;
 using ExchangeRateUpdater.Domain.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,10 +27,19 @@ static void Main(IServiceProvider hostProvider)
     using IServiceScope serviceScope = hostProvider.CreateScope();
     IServiceProvider provider = serviceScope.ServiceProvider;
 
+    var cts = new CancellationTokenSource();
+
     try
     {
         var exchangeRateProvider = provider.GetRequiredService<IExchangeRateProvider>();
-        var rates = exchangeRateProvider.GetExchangeRates(currencies);
+        var ratesResult = exchangeRateProvider.GetExchangeRates(currencies, cts.Token).GetAwaiter().GetResult();
+
+        if (ratesResult.IsFailed)
+        {
+            Console.WriteLine($"Could not retrieve exchange rates: '{ratesResult.Errors}'.");
+        }
+
+        var rates = ratesResult.Value;
 
         Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
         foreach (var rate in rates)

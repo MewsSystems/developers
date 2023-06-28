@@ -5,5 +5,5 @@ namespace ExchangeRateUpdater.CNBRateProvider.Client;
 
 internal interface ICnbClient
 {
-    Task<Result<IEnumerable<ExchangeRate>>> GetDailyExchangeRate(DateTime dateTime);
+    Task<Result<IEnumerable<ExchangeRate>>> GetDailyExchangeRate(DateTime dateTime, CancellationToken cancellationToken);
 }

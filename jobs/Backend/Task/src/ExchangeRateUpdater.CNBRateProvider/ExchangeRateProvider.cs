@@ -1,13 +1,24 @@
-﻿using ExchangeRateUpdater.Domain.Models;
+﻿using ExchangeRateUpdater.CNBRateProvider.Client;
+using ExchangeRateUpdater.Domain.Models;
+using FluentResults;
 
 namespace ExchangeRateUpdater.CNBRateProvider;
 
 internal class ExchangeRateProvider : IExchangeRateProvider
 {
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    private readonly ICnbClient _cnbClient;
+    public ExchangeRateProvider(ICnbClient cnbClient) {
+        _cnbClient = cnbClient;
+    }
+
+    public async Task<Result<IEnumerable<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies,
+        CancellationToken cancellationToken)
     {
-        // return new[] { new ExchangeRate(new Currency("USD"), new Currency("CZK"), 2) };
-        return Enumerable.Empty<ExchangeRate>();
+        var exchangeRates = await _cnbClient.GetDailyExchangeRate(DateTime.UtcNow, cancellationToken);
+
+        // TODO: filter out by requested currencies
+
+        return exchangeRates;
     }
 }
 

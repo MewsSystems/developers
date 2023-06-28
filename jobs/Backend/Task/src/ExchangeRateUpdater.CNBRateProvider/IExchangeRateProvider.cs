@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Domain.Models;
+using FluentResults;
 
 namespace ExchangeRateUpdater.CNBRateProvider;
 
@@ -10,5 +11,5 @@ public interface IExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+    Task<Result<IEnumerable<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
 }
