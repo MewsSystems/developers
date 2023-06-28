@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.App;
+namespace ExchangeRateUpdater.Domain.Models;
 
 public class ExchangeRate
 {
@@ -15,9 +15,6 @@ public class ExchangeRate
 
     public decimal Value { get; }
 
-    public override string ToString()
-    {
-        return $"{SourceCurrency}/{TargetCurrency}={Value}";
-    }
+    public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value}";
 }
 
