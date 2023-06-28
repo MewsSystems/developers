@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater.Domain;
+﻿namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRate
 {
