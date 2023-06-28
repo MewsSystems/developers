@@ -9,7 +9,8 @@ internal class CnbClient : ICnbClient
 {
     private readonly HttpClient _httpClient;
 
-    // TODO: change once CBN API starts supporting different source codes
+    // 29/06/2023 CBN API currently supports only exchange rates to CZK,
+    // there is no endpoint to request exchange rate to a different currency
     private readonly Currency _sourceCurrencyCode = new ("CZK");
 
     public CnbClient(HttpClient httpClient)
@@ -17,7 +18,7 @@ internal class CnbClient : ICnbClient
         _httpClient = httpClient;
     }
 
-    public async Task<Result<IEnumerable<ExchangeRate>>> GetDailyExchangeRate(DateTime dateTime, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<ExchangeRate>>> GetDailyExchangeRateToCzk(DateTime dateTime, CancellationToken cancellationToken)
     {
         var dailyExchangeRateUri = new Uri($"cnbapi/exrates/daily?date={dateTime.Date:yyyy-MM-dd}&lang=EN", UriKind.Relative);
 

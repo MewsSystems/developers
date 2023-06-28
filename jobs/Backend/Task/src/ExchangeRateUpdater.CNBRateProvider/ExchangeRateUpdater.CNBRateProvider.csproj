@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+      <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
     </ItemGroup>
 

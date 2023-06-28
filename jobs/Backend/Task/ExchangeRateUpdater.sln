@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.CNBRateProvider", "src\ExchangeRateUpdater.CNBRateProvider\ExchangeRateUpdater.CNBRateProvider.csproj", "{BE7225FB-947D-4E07-B52F-2A746F762E04}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CDC8F9C4-B023-419F-A6FC-E396E2479A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.CNBRateProvider.UnitTests", "tests\ExchangeRateUpdater.CNBRateProvider.UnitTests\ExchangeRateUpdater.CNBRateProvider.UnitTests.csproj", "{48BB0DB5-0C60-4A23-9945-B8FD58B482B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,10 @@ Global
 		{BE7225FB-947D-4E07-B52F-2A746F762E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE7225FB-947D-4E07-B52F-2A746F762E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE7225FB-947D-4E07-B52F-2A746F762E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48BB0DB5-0C60-4A23-9945-B8FD58B482B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BB0DB5-0C60-4A23-9945-B8FD58B482B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BB0DB5-0C60-4A23-9945-B8FD58B482B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BB0DB5-0C60-4A23-9945-B8FD58B482B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +45,6 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0} = {03943CD7-9E1E-4065-991F-498053746C78}
 		{AE44FDB8-8711-47C7-AA55-3DF53BCAA40B} = {03943CD7-9E1E-4065-991F-498053746C78}
 		{BE7225FB-947D-4E07-B52F-2A746F762E04} = {03943CD7-9E1E-4065-991F-498053746C78}
+		{48BB0DB5-0C60-4A23-9945-B8FD58B482B6} = {CDC8F9C4-B023-419F-A6FC-E396E2479A7E}
 	EndGlobalSection
 EndGlobal

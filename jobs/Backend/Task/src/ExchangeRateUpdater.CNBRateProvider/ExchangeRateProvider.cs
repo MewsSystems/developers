@@ -14,7 +14,7 @@ internal class ExchangeRateProvider : IExchangeRateProvider
     public async Task<Result<IReadOnlyCollection<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies,
         CancellationToken cancellationToken)
     {
-        var exchangeRatesResult = await _cnbClient.GetDailyExchangeRate(DateTime.UtcNow, cancellationToken);
+        var exchangeRatesResult = await _cnbClient.GetDailyExchangeRateToCzk(DateTime.UtcNow, cancellationToken);
 
         if (exchangeRatesResult.IsFailed)
         {
