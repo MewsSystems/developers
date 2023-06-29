@@ -4,7 +4,7 @@ public sealed record CurrencyPair(Currency SourceCurrency, Currency TargetCurren
 {
     public override string ToString() => $"{SourceCurrency}/{TargetCurrency}";
 
-    public override int GetHashCode() => SourceCurrency.GetHashCode() ^ TargetCurrency.GetHashCode();
+    public override int GetHashCode() => (SourceCurrency, TargetCurrency).GetHashCode();
 
     public bool Equals(CurrencyPair? other)
     {

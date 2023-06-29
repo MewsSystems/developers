@@ -22,7 +22,7 @@ public sealed record Currency
 
     public override string ToString() => _codeString;
 
-    public override int GetHashCode() => _codeString.GetHashCode();
+    public override int GetHashCode() => _codeString.GetHashCode(StringComparison.Ordinal);
 
     public bool Equals(Currency? other)
     {
