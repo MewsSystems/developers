@@ -9,14 +9,10 @@
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+    </ItemGroup>
+
     <Import Project="../UnitTests.props" />
-
-    <ItemGroup>
-        <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\ExchangeRateUpdater.CNBRateProvider\ExchangeRateUpdater.CNBRateProvider.csproj" />
-    </ItemGroup>
 
 </Project>

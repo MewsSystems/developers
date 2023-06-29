@@ -1,15 +1,28 @@
 namespace ExchangeRateUpdater.Domain.Models;
 
-public sealed record Currency(string Code)
+/// <summary>
+/// Three-letter ISO 4217 code of the currency.
+/// </summary>
+public sealed record Currency
 {
-    /// <summary>
-    /// Three-letter ISO 4217 code of the currency.
-    /// </summary>
-    public string Code { get; } = Code;
+    private readonly string _codeString;
 
-    public override string ToString() => Code;
+    private Currency(string currencyCode)
+    {
+        _codeString = currencyCode.ToUpperInvariant();
+    }
 
-    public override int GetHashCode() => Code.GetHashCode();
+    public static Currency FromString(string value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        // TODO: add validation the currency code exists
+        return new Currency(value);
+    }
+
+    public override string ToString() => _codeString;
+
+    public override int GetHashCode() => _codeString.GetHashCode();
 
     public bool Equals(Currency? other)
     {
@@ -23,7 +36,7 @@ public sealed record Currency(string Code)
             return true;
         }
 
-        return Code == other.Code;
+        return _codeString == other._codeString;
     }
 }
 

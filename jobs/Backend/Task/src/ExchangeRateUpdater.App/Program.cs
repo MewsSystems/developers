@@ -20,8 +20,9 @@ static void Main(IServiceProvider hostProvider)
 {
     var currencies = new[]
     {
-        new Currency("USD"), new Currency("EUR"), new Currency("CZK"), new Currency("JPY"), new Currency("KES"), new Currency("RUB"),
-        new Currency("THB"), new Currency("TRY"), new Currency("XYZ")
+        Currency.FromString("USD"), Currency.FromString("EUR"), Currency.FromString("CZK"), Currency.FromString("JPY"),
+        Currency.FromString("KES"), Currency.FromString("RUB"), Currency.FromString("THB"), Currency.FromString("TRY"),
+        Currency.FromString("XYZ")
     };
 
     using IServiceScope serviceScope = hostProvider.CreateScope();
