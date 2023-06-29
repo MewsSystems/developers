@@ -11,7 +11,7 @@ internal class CnbClient : ICnbClient
 
     // 29/Jun/2023 CBN API currently supports only exchange rates to CZK,
     // there is no endpoint to request exchange rate to a different currency
-    private readonly Currency _sourceCurrencyCode = Currency.FromString("CZK");
+    private readonly Currency _targetCurrencyCode = Currency.FromString("CZK");
 
     public CnbClient(HttpClient httpClient)
     {
@@ -34,7 +34,7 @@ internal class CnbClient : ICnbClient
         {
             var rates = responsePayload.Rates.Select(rate =>
                 new ExchangeRate(
-                    new CurrencyPair(Currency.FromString(rate.CurrencyCode) , _sourceCurrencyCode),
+                    new CurrencyPair(Currency.FromString(rate.CurrencyCode), _targetCurrencyCode),
                     rate.Rate / rate.Amount));
             return Result.Ok(rates);
         }
