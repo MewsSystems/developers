@@ -18,11 +18,16 @@ await host.RunAsync();
 
 static void Main(IServiceProvider hostProvider)
 {
+    var czkCurrency = Currency.FromString("CZK");
     var currencies = new[]
     {
-        Currency.FromString("USD"), Currency.FromString("EUR"), Currency.FromString("CZK"), Currency.FromString("JPY"),
-        Currency.FromString("KES"), Currency.FromString("RUB"), Currency.FromString("THB"), Currency.FromString("TRY"),
-        Currency.FromString("XYZ")
+        new CurrencyPair(Currency.FromString("EUR"), czkCurrency),
+        new CurrencyPair(Currency.FromString("JPY"), czkCurrency),
+        new CurrencyPair(Currency.FromString("KES"), czkCurrency),
+        new CurrencyPair(Currency.FromString("RUB"), czkCurrency),
+        new CurrencyPair(Currency.FromString("THB"), czkCurrency),
+        new CurrencyPair(Currency.FromString("TRY"), czkCurrency),
+        new CurrencyPair(Currency.FromString("XYZ"), czkCurrency),
     };
 
     using IServiceScope serviceScope = hostProvider.CreateScope();

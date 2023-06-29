@@ -1,7 +1,7 @@
 namespace ExchangeRateUpdater.Domain.Models;
 
-public record ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, decimal Value)
+public record ExchangeRate(CurrencyPair CurrencyPair, decimal Value)
 {
-    public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value}";
+    public override string ToString() => $"{CurrencyPair}={Value}";
 }
 
