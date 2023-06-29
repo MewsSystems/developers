@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using ExchangeRateUpdater.CNBRateProvider.Client;
+using ExchangeRateUpdater.Domain.Models;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -25,6 +26,8 @@ public class CnbClientShould : IDisposable
     {
         // arrange
         var todayDate = DateTime.UtcNow.Date;
+        var expectedAudToCzkCurrencyPair = new CurrencyPair(Currency.FromString("AUD"), Currency.FromString("CZK"));
+        var expectedHufToCzkCurrencyPair = new CurrencyPair(Currency.FromString("HUF"), Currency.FromString("CZK"));
         var expectedAudRate = 15.858m;
         var expectedHufRate = 0.06374m;
 
@@ -71,8 +74,59 @@ public class CnbClientShould : IDisposable
 
         var exchangeRates = dailyExchangeRateResult.Value;
         Assert.Equal(2, exchangeRates.Count());
-        Assert.Equal(expectedAudRate, exchangeRates.First().Value);
-        Assert.Equal(expectedHufRate, exchangeRates.Last().Value);
+
+        var audExchangeRate = exchangeRates.First();
+        Assert.Equal(expectedAudRate, audExchangeRate.Value);
+        Assert.Equal(expectedAudToCzkCurrencyPair, audExchangeRate.CurrencyPair);
+
+        var hufExchangeRate = exchangeRates.Last();
+        Assert.Equal(expectedHufRate, hufExchangeRate.Value);
+        Assert.Equal(expectedHufToCzkCurrencyPair, hufExchangeRate.CurrencyPair);
+    }
+
+    [Theory]
+    [MemberData(nameof(GenerateDifferentRates))]
+    public async Task CalculateRateBasedOnAmount(string rate, int amount, decimal expectedRate)
+    {
+        // arrange
+        var todayDate = DateTime.UtcNow.Date;
+
+        _messageHandler
+            .When(HttpMethod.Get, $"{CbnApiBaseAddress}cnbapi/exrates/daily?date={todayDate:yyyy-MM-dd}&lang=EN")
+            .Respond(
+                HttpStatusCode.OK,
+                "application/json",
+                $$"""
+                {
+                    "rates": [
+                    {
+                      "validFor": "2019-05-17",
+                      "order": 94,
+                      "country": "Australia",
+                      "currency": "dollar",
+                      "amount": {{amount}},
+                      "currencyCode": "AUD",
+                      "rate": {{rate}}
+                    }]
+                 }
+                """);
+
+        using var httpClient = new HttpClient(_messageHandler)
+        {
+            BaseAddress = CbnApiBaseAddress
+        };
+
+        var client = new CnbClient(httpClient);
+
+        // act
+        var dailyExchangeRateResult = await client.GetDailyExchangeRateToCzk(todayDate, CancellationToken.None);
+
+        // assert
+        Assert.True(dailyExchangeRateResult.IsSuccess);
+
+        var exchangeRates = dailyExchangeRateResult.Value;
+        Assert.Equal(1, exchangeRates.Count());
+        Assert.Equal(expectedRate, exchangeRates.First().Value);
     }
 
     [Fact]
@@ -130,5 +184,13 @@ public class CnbClientShould : IDisposable
 
         // assert
         Assert.False(dailyExchangeRateResult.IsSuccess);
+    }
+
+    public static IEnumerable<object[]> GenerateDifferentRates()
+    {
+        // different casing
+        yield return new object[] { "15.858", 1, 15.858m };
+        yield return new object[] { "6.374", 100, 0.06374m };
+        yield return new object[] { "0.0", 100, 0.0m };
     }
 }
