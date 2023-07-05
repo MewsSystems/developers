@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "Exch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeEntities", "ExchangeEntities\ExchangeEntities.csproj", "{DE5BBF4C-74F6-400B-9B38-5446BAC6B220}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnbServiceClient", "CnbServiceClient\CnbServiceClient.csproj", "{2AA2E632-3AD3-4BE2-91CB-337B47532A18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnbServiceClientTests", "CnbServiceClientTests\CnbServiceClientTests.csproj", "{0161E4A2-631E-45CB-A274-408E8E71126C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{DE5BBF4C-74F6-400B-9B38-5446BAC6B220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE5BBF4C-74F6-400B-9B38-5446BAC6B220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE5BBF4C-74F6-400B-9B38-5446BAC6B220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA2E632-3AD3-4BE2-91CB-337B47532A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA2E632-3AD3-4BE2-91CB-337B47532A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA2E632-3AD3-4BE2-91CB-337B47532A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA2E632-3AD3-4BE2-91CB-337B47532A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0161E4A2-631E-45CB-A274-408E8E71126C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0161E4A2-631E-45CB-A274-408E8E71126C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0161E4A2-631E-45CB-A274-408E8E71126C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0161E4A2-631E-45CB-A274-408E8E71126C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
