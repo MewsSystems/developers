@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using CnbServiceClient.Models;
+using CnbServiceClient.DTOs;
 using CnbServiceClient.Services;
 using FluentAssertions;
 using Moq;

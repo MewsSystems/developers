@@ -1,4 +1,4 @@
-﻿namespace CnbServiceClient.Models
+﻿namespace CnbServiceClient.DTOs
 {
 	public class Exrate
 	{
@@ -7,7 +7,7 @@
         public string Currency { get; set; }
         public string CurrencyCode { get; set; }
         public int Order { get; set; }
-        public double Rate { get; set; }
+        public decimal Rate { get; set; }
         public string ValidFor { get; set; }
     }
 }

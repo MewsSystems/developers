@@ -1,4 +1,4 @@
-﻿using CnbServiceClient.Models;
+﻿using CnbServiceClient.DTOs;
 
 namespace CnbServiceClient.Interfaces
 {

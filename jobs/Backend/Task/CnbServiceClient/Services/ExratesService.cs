@@ -1,5 +1,5 @@
 ﻿using CnbServiceClient.Interfaces;
-using CnbServiceClient.Models;
+using CnbServiceClient.DTOs;
 
 namespace CnbServiceClient.Services
 {

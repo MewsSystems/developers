@@ -1,4 +1,4 @@
-﻿namespace CnbServiceClient.Models
+﻿namespace CnbServiceClient.DTOs
 {
 	public class Exrates
 	{
