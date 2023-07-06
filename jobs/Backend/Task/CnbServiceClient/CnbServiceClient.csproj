@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExchangeEntities\ExchangeEntities.csproj" />
+    <ProjectReference Include="..\Utils\Utils.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Extensions\" />
