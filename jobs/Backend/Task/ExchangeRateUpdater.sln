@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnbServiceClient", "CnbServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnbServiceClientTests", "CnbServiceClientTests\CnbServiceClientTests.csproj", "{0161E4A2-631E-45CB-A274-408E8E71126C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{84E18CD8-0CB4-4C76-AB99-F21F41B31C86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilsTests", "UtilsTests\UtilsTests.csproj", "{20D45C56-E491-4B76-A462-DF90CF564B58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{0161E4A2-631E-45CB-A274-408E8E71126C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0161E4A2-631E-45CB-A274-408E8E71126C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0161E4A2-631E-45CB-A274-408E8E71126C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E18CD8-0CB4-4C76-AB99-F21F41B31C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E18CD8-0CB4-4C76-AB99-F21F41B31C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E18CD8-0CB4-4C76-AB99-F21F41B31C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E18CD8-0CB4-4C76-AB99-F21F41B31C86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D45C56-E491-4B76-A462-DF90CF564B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D45C56-E491-4B76-A462-DF90CF564B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D45C56-E491-4B76-A462-DF90CF564B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D45C56-E491-4B76-A462-DF90CF564B58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
