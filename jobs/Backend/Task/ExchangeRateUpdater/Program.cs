@@ -1,43 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using ExchangeRateTool.Extensions;
+using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var sp = CreateServiceProvider();
 
-        public static void Main(string[] args)
+            var mainService = sp.GetRequiredService<MainService>();
+
+            await mainService.Run();
+        }
+
+        private static ServiceProvider CreateServiceProvider()
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
+            var serviceCollection = new ServiceCollection()
+                .AddExchangeRateTool(configuration)
+                .AddScoped<ICurrenciesProvider, CurrenciesProvider>()
+                .AddScoped<IExchangeRatePrinter, ExchangeRatePrinter>()
+                .AddScoped<MainService>()
+                .AddSingleton<IConfiguration>(configuration);
+           
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }
