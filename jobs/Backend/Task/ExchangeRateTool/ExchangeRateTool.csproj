@@ -11,12 +11,14 @@
     <None Remove="Services\" />
     <None Remove="Extensions\" />
     <None Remove="Factories\" />
+    <None Remove="Docs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Services\" />
     <Folder Include="Extensions\" />
     <Folder Include="Factories\" />
+    <Folder Include="Docs\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExchangeEntities\ExchangeEntities.csproj" />
