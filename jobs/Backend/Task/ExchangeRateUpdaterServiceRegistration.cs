@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Persistence;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 using Refit;
 using System;
 
@@ -23,6 +24,12 @@ internal static class ExchangeRateUpdaterServiceRegistration
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRefitClient<IExchangeRateApiClient>()
+            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10)
+            }))
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["CzechNationalBankApi:BaseUrl"]));
 
         services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
