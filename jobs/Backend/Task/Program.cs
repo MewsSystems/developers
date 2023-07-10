@@ -1,5 +1,4 @@
 ﻿using ExchangeRateUpdater;
-using ExchangeRateUpdater.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,8 +8,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddScoped<App>();
-        services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
-
+        services.AddExchangeRateUpdaterServices(context.Configuration);
     }).Build();
 
-host.Services.GetRequiredService<App>().Run(args);
+await host.Services.GetRequiredService<App>().Run(args);

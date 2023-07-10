@@ -1,43 +1,66 @@
 ﻿using ExchangeRateUpdater.Models.Behavior;
+using ExchangeRateUpdater.Models.Errors;
+using ExchangeRateUpdater.Models.Types;
 using ExchangeRateUpdater.Persistence;
+using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
 
 internal class App
 {
     private readonly IExchangeRateRepository _exchangeRateRepository;
+    private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly ILogger<App> _logger;
 
-    public App(ILogger<App> logger, IExchangeRateRepository exchangeRateRepository)
+    public App(ILogger<App> logger, 
+        IExchangeRateRepository exchangeRateRepository, 
+        IExchangeRateProvider exchangeRateProvider)
     {
         _exchangeRateRepository = exchangeRateRepository;
+        _exchangeRateProvider = exchangeRateProvider;
         _logger = logger;
     }
 
-    internal void Run(string[] args)
+    internal async Task Run(string[] args)
     {
         try
         {
-            var provider = new ExchangeRateProvider();
             var sourceCurrencies = _exchangeRateRepository.GetSourceCurrencies();
-            var rates = provider.GetExchangeRates(sourceCurrencies);
+            var exchangeRatesResult = await _exchangeRateProvider.GetExchangeRates(sourceCurrencies);
 
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-            foreach (var rate in rates)
+            exchangeRatesResult.Switch(exchangeRates =>
             {
-                Console.WriteLine(rate.ToStringFormat());
-            }
+                PrintExchangeRates(exchangeRates);
+            },
+            error =>
+            {
+                PrintValidationError(error);
+            });
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
             _logger.LogError(ex, "Unhandled exception occured.");
         }
+    }
 
-        Console.ReadLine();
+    private static void PrintExchangeRates(IEnumerable<ExchangeRate> rates)
+    {
+        Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+        foreach (var rate in rates)
+        {
+            Console.WriteLine(rate.ToStringFormat());
+        }
+    }
+
+    private static void PrintValidationError(Error error)
+    {
+        Console.WriteLine(error.ToString());
     }
 }
 
