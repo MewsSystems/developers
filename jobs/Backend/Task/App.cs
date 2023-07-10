@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ExchangeRateUpdater.Models.Behavior;
+using ExchangeRateUpdater.Models.Types;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +18,15 @@ internal class App
 
     private static IEnumerable<Currency> currencies = new[]
     {
-        new Currency("USD"),
-        new Currency("EUR"),
-        new Currency("CZK"),
-        new Currency("JPY"),
-        new Currency("KES"),
-        new Currency("RUB"),
-        new Currency("THB"),
-        new Currency("TRY"),
-        new Currency("XYZ")
+        new Currency(new Code("USD")),
+        new Currency(new Code("EUR")),
+        new Currency(new Code("CZK")),
+        new Currency(new Code("JPY")),
+        new Currency(new Code("KES")),
+        new Currency(new Code("RUB")),
+        new Currency(new Code("THB")),
+        new Currency(new Code("TRY")),
+        new Currency(new Code("XYZ"))
     };
 
     internal void Run(string[] args)
@@ -37,7 +39,7 @@ internal class App
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
             {
-                Console.WriteLine(rate.ToString());
+                Console.WriteLine(rate.ToStringFormat());
             }
         }
         catch (Exception ex)
