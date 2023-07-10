@@ -1,40 +1,29 @@
 ﻿using ExchangeRateUpdater.Models.Behavior;
-using ExchangeRateUpdater.Models.Types;
+using ExchangeRateUpdater.Persistence;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater;
 
 internal class App
 {
+    private readonly IExchangeRateRepository _exchangeRateRepository;
     private readonly ILogger<App> _logger;
 
-    public App(ILogger<App> logger)
+    public App(ILogger<App> logger, IExchangeRateRepository exchangeRateRepository)
     {
+        _exchangeRateRepository = exchangeRateRepository;
         _logger = logger;
     }
-
-    private static IEnumerable<Currency> currencies = new[]
-    {
-        new Currency(new Code("USD")),
-        new Currency(new Code("EUR")),
-        new Currency(new Code("CZK")),
-        new Currency(new Code("JPY")),
-        new Currency(new Code("KES")),
-        new Currency(new Code("RUB")),
-        new Currency(new Code("THB")),
-        new Currency(new Code("TRY")),
-        new Currency(new Code("XYZ"))
-    };
 
     internal void Run(string[] args)
     {
         try
         {
             var provider = new ExchangeRateProvider();
-            var rates = provider.GetExchangeRates(currencies);
+            var sourceCurrencies = _exchangeRateRepository.GetSourceCurrencies();
+            var rates = provider.GetExchangeRates(sourceCurrencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
