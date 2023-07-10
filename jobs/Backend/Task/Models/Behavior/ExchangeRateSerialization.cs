@@ -4,9 +4,10 @@ namespace ExchangeRateUpdater.Models.Behavior;
 internal static class ExchangeRateSerialization
 {
     /// <summary>
-    /// Returns the required string representation of an ExchangeRate item, i.e. "EUR/CZK=23.945"
+    /// Converts an <see cref="ExchangeRate"/> object to its string representation.
     /// </summary>
-    /// <param name="exchangeRate"></param>
+    /// <param name="exchangeRate">The <see cref="ExchangeRate"/> object to convert.</param>
+    /// <returns>A string representing the <see cref="ExchangeRate"/> object.</returns>
     internal static string ToStringFormat(this ExchangeRate exchangeRate) =>
         $"{exchangeRate.SourceCurrency.Code.Value}/{exchangeRate.TargetCurrency.Code.Value}={exchangeRate.Rate.Value}";
 }
