@@ -21,3 +21,7 @@
 node_modules
 bower_components
 npm-debug.log
+/.vs/developers/v17/.wsuo
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/DesignTimeBuild/.dtbcache.v2
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/FileContentIndex/a095c4e5-0888-4e7b-ad86-123ab3b7ef54.vsidx
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/FileContentIndex/read.lock
