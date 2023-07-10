@@ -17,8 +17,8 @@ internal class App
     private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly ILogger<App> _logger;
 
-    public App(ILogger<App> logger, 
-        IExchangeRateRepository exchangeRateRepository, 
+    public App(ILogger<App> logger,
+        IExchangeRateRepository exchangeRateRepository,
         IExchangeRateProvider exchangeRateProvider)
     {
         _exchangeRateRepository = exchangeRateRepository;
@@ -26,13 +26,14 @@ internal class App
         _logger = logger;
     }
 
-    internal async Task Run(string[] args)
+    internal async Task<int> Run(string[] args)
     {
         try
         {
             var sourceCurrencies = _exchangeRateRepository.GetSourceCurrencies();
             var exchangeRatesResult = await _exchangeRateProvider.GetExchangeRates(sourceCurrencies);
 
+            var code = 0;
             exchangeRatesResult.Switch(exchangeRates =>
             {
                 PrintExchangeRates(exchangeRates);
@@ -40,12 +41,16 @@ internal class App
             error =>
             {
                 PrintValidationError(error);
+                code = -1;
             });
+
+            return code;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
             _logger.LogError(ex, "Unhandled exception occured.");
+            return -2;
         }
     }
 
