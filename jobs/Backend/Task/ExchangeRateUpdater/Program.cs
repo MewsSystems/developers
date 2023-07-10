@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Application;
+using ExchangeRateUpdater.CnbProvider;
+using ExchangeRateUpdater.Domain;
 
 namespace ExchangeRateUpdater
 {
@@ -23,8 +26,8 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(new CnbRateProvider(new CnbRateProviderClient())); ;
+                var rates = provider.GetExchangeRatesAsync(currencies, DateTime.UtcNow).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
