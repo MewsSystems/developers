@@ -7,8 +7,8 @@ using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((context, builder) => builder.AddJsonFile("appsettings.json").Build())
     .ConfigureServices((context, services) =>
     {
-        services.AddScoped<App>();
         services.AddExchangeRateUpdaterServices(context.Configuration);
+        services.AddScoped<App>();
     }).Build();
 
 await host.Services.GetRequiredService<App>().Run(args);

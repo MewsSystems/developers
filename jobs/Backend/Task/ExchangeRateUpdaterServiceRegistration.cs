@@ -23,6 +23,10 @@ internal static class ExchangeRateUpdaterServiceRegistration
     public static IServiceCollection AddExchangeRateUpdaterServices(
         this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddMemoryCache();
+        services.AddScoped<ExchangeRateProvider>();
+        services.AddScoped<IExchangeRateProvider, CachedExchangeRateProvider>();
+
         services.AddRefitClient<IExchangeRateApiClient>()
             .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
             {
@@ -32,8 +36,7 @@ internal static class ExchangeRateUpdaterServiceRegistration
             }))
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["CzechNationalBankApi:BaseUrl"]));
 
-        services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
-        services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+        services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
 
         return services;
     }
