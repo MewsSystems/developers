@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "ExchangeRateUpdater.Grpc";
+
+package ExchangeRateUpdaterGrpc;
+
+service ExchangeRatesService {
+  rpc GetExchangeRates (GetExchangeRatesRequest) returns (GetExchangeRatesResponse);
+}
+
+message GetExchangeRatesRequest {
+  repeated Currency currencies = 1;
+}
+
+message GetExchangeRatesResponse {
+  repeated ExchangeRate exchangeRates = 1;
+}
+
+message Currency {
+	string code = 1;
+}
+
+message ExchangeRate {
+	Currency sourceCurrency = 1;
+	Currency targetCurrency = 2;
+	DecimalValue value = 3;
+	string stringValue = 4;
+}
+
+message DecimalValue {
+	int64 units = 1;
+	int32 nanos = 2;
+}

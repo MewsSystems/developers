@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.Domain.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProviderService
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -11,9 +12,9 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        public IEnumerable<ExchangeRateEntity> GetExchangeRates(IEnumerable<CurrencyEntity> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            return Enumerable.Empty<ExchangeRateEntity>();
         }
     }
 }

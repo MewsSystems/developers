@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "ExchangeRateUpdater.Grpc": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5277;https://localhost:7277",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
