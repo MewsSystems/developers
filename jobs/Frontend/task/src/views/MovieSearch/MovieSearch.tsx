@@ -1,29 +1,32 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { HorizontalCentered } from "src/components/HorizontalCentered";
-import { useGetMoviesQuery } from "src/store/slices/moviesSlice";
-import { Movie } from "src/store/types/Movie";
-import { ReduxHookReturn } from "src/store/types/ReduxHookReturn";
+import { useLazyGetMoviesQuery } from "src/store/slices/moviesSlice";
+import { MovieType } from "src/store/types/MovieType";
+import { ReduxLazyHookReturn } from "src/store/types/ReduxLazyHookReturn";
 import { InputSearch } from "src/views/MovieSearch/components/InputSearch/InputSearch";
-import styled from "styled-components";
+import { MovieList } from "src/views/MovieSearch/components/MovieList/MovieList";
 
 export const MovieSearch: FC = () => {
-  const { data, isFetching }: ReduxHookReturn<Movie[]> =
-    useGetMoviesQuery("inter");
+  const [inputValue, setInputValue] = useState("");
+  const [trigger, { isLoading }]: ReduxLazyHookReturn<MovieType[]> =
+    useLazyGetMoviesQuery();
 
-  console.log(data);
-  console.log(isFetching);
+  useEffect(() => {
+    if (inputValue === "") return;
+
+    trigger(inputValue);
+  }, [inputValue]);
 
   return (
-    <>
-      <HorizontalCentered>
-        <InputSearch
-          debounceTime={3000}
-          onDebounce={(value) => console.log(value)}
-          onEnter={(value) => console.log(value + "__enter")}
-          placeholder={"Search movies.."}
-          loading={isFetching}
-        />
-      </HorizontalCentered>
-    </>
+    <HorizontalCentered>
+      <InputSearch
+        debounceTime={3000}
+        onDebounce={(value) => setInputValue(value)}
+        onEnter={(value) => setInputValue(value)}
+        placeholder={"Search movies.."}
+        loading={isLoading}
+      />
+      <MovieList inputValue={inputValue} />
+    </HorizontalCentered>
   );
 };

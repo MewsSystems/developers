@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
-import styled from "styled-components";
+import { tablet } from "src/styles/appSize";
+import styled, { css } from "styled-components";
 
 export const HorizontalCentered: FC<{ children: ReactNode }> = ({
   children,
@@ -9,5 +10,11 @@ export const HorizontalCentered: FC<{ children: ReactNode }> = ({
 
 const SearchWrap = styled.div`
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 10%;
+
+  ${tablet(css`
+    padding: 0 36px;
+  `)};
 `;

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 const Loader: FC<{ loading: boolean }> = (props) => (
-  <StyledLoader viewBox="0 0 50 50" loading={props.loading}>
+  <StyledLoader viewBox="0 0 50 50" loading={props.loading ? 1 : 0}>
     <circle
       className="path"
       cx="25"
@@ -19,7 +19,7 @@ const StyledLoader = styled.svg`
   margin: 0;
   width: 25px;
   height: 25px;
-  opacity: ${(props) => (props.loading ? "1" : "0")};
+  opacity: ${(props) => (props.loading ? 1 : 0)};
 
   & .path {
     stroke: #5652bf;
