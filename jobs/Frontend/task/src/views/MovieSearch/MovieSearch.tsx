@@ -1,32 +1,49 @@
 import { FC, useEffect, useState } from "react";
-import { HorizontalCentered } from "src/components/HorizontalCentered";
+import { HorizontalCentered } from "src/components/HorizontalCentered/HorizontalCentered";
 import { useLazyGetMoviesQuery } from "src/store/slices/moviesSlice";
 import { MovieType } from "src/store/types/MovieType";
 import { ReduxLazyHookReturn } from "src/store/types/ReduxLazyHookReturn";
-import { InputSearch } from "src/views/MovieSearch/components/InputSearch/InputSearch";
+import { InputSearch } from "src/components/InputSearch/InputSearch";
 import { MovieList } from "src/views/MovieSearch/components/MovieList/MovieList";
+import { PaginationControls } from "src/views/MovieSearch/components/PaginationControls/PaginationControls";
 
 export const MovieSearch: FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [trigger, { isLoading }]: ReduxLazyHookReturn<MovieType[]> =
+  const [page, setPage] = useState(1);
+
+  const [fetchMovies, { isLoading, data }]: ReduxLazyHookReturn<MovieType[]> =
     useLazyGetMoviesQuery();
 
   useEffect(() => {
-    if (inputValue === "") return;
+    if (!inputValue || inputValue === "") return;
 
-    trigger(inputValue);
-  }, [inputValue]);
+    fetchMovies({ name: inputValue, page });
+  }, [inputValue, page]);
 
   return (
     <HorizontalCentered>
+      <h2>Mega Movie Searcher</h2>
       <InputSearch
-        debounceTime={3000}
-        onDebounce={(value) => setInputValue(value)}
-        onEnter={(value) => setInputValue(value)}
+        debounceTime={500}
+        onDebounce={(value: string) => {
+          setInputValue(value);
+          setPage(1);
+        }}
+        onEnter={(value: string) => {
+          setInputValue(value);
+          setPage(1);
+        }}
         placeholder={"Search movies.."}
         loading={isLoading}
       />
-      <MovieList inputValue={inputValue} />
+      <MovieList movies={data?.results} />
+      {data?.results.length ? (
+        <PaginationControls
+          page={Number(page)}
+          totalPages={Number(data?.total_pages) || 0}
+          setPage={setPage}
+        />
+      ) : null}
     </HorizontalCentered>
   );
 };

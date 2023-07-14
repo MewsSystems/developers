@@ -1,3 +1,5 @@
+import { MovieType } from "src/store/types/MovieType";
+
 export interface MovieListProps {
-  inputValue: string;
+  movies: MovieType[] | undefined;
 }

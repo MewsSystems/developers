@@ -1,9 +1,8 @@
 import { ChangeEvent, FC, KeyboardEvent, useEffect, useState } from "react";
-import Loader from "src/components/Loader";
+import Loader from "src/components/Loader/Loader";
 import { KeyboardSpecialKey } from "src/enums/KeyboardSpecialKey";
 import useDebounce from "src/helpers/useDebounce";
-import { InputSearchProps } from "src/views/MovieSearch/components/InputSearch/InputSearchProps";
-import { ReactComponent as SearchIcon } from "src/assets/search.svg";
+import { InputSearchProps } from "src/components/InputSearch/InputSearchProps";
 import styled from "styled-components";
 
 /**

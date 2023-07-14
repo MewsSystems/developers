@@ -12,14 +12,19 @@ export const moviesApi = createApi({
   reducerPath: "moviesApi",
   baseQuery,
   endpoints: (builder) => ({
-    getMovies: builder.query<MovieType, string>({
-      query: (name) =>
-        `movie?query=${name}&include_adult=false&language=en-US&page=1&api_key=${
+    getMovies: builder.query<MovieType, MovieQueryParams>({
+      query: ({ name, page = 1 }) =>
+        `movie?query=${name}&include_adult=false&language=en-US&page=${page}&api_key=${
           import.meta.env.VITE_MOVIES_API_KEY
         }`,
     }),
   }),
 });
+
+export interface MovieQueryParams {
+  name: string;
+  page?: number;
+}
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints

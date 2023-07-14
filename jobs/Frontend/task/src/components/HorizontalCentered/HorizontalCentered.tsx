@@ -9,6 +9,8 @@ export const HorizontalCentered: FC<{ children: ReactNode }> = ({
 };
 
 const SearchWrap = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-direction: column;
