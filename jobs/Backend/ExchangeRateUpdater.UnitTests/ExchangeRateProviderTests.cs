@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.ApiClients.CzechNationalBank;
+using ExchangeRateUpdater.Models.Behavior;
 using ExchangeRateUpdater.Models.Errors;
 using ExchangeRateUpdater.Models.Types;
 using ExchangeRateUpdater.Persistence;
@@ -27,12 +28,12 @@ namespace ExchangeRateUpdater.UnitTests
         [Fact]
         public async Task GetExchangeRates_ShouldReturnExchangeRates_WhenSourceCurrenciesAreProvided_AndApiResponsesAreSuccessful()
         {
-            var apiResponseDaily = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "USD", rate: 21.9m);
-            var apiResponseOther = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "KES", rate: 15.54m);
+            var apiResponseDaily = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "USD", amount: 1, rate: 21.9m);
+            var apiResponseOther = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "KES", amount: 100, rate: 15.54m);
             var expectedResult = new List<ExchangeRate>
             {
-                new ExchangeRate(new Currency(new Code("USD")),new Currency(new Code("CZK")), new Rate(21.9m)),
-                new ExchangeRate(new Currency(new Code("KES")),new Currency(new Code("CZK")), new Rate(15.54m)),
+                new ExchangeRate(new Currency(new Code("USD")),new Currency(new Code("CZK")), new Rate(21.9m).GetByAmount(1)),
+                new ExchangeRate(new Currency(new Code("KES")),new Currency(new Code("CZK")), new Rate(15.54m).GetByAmount(100)),
             };
             _exchangeRateApiClientMock.Setup(c => c.GetDaily()).ReturnsAsync(apiResponseDaily);
             _exchangeRateApiClientMock.Setup(c => c.GetOtherByYearMonth(It.IsAny<string>())).ReturnsAsync(apiResponseOther);
@@ -71,7 +72,7 @@ namespace ExchangeRateUpdater.UnitTests
         [Fact]
         public async Task GetExchangeRates_ShouldReturnApiError_WhenApiOtherResponseWasNotSuccessful()
         {
-            var apiResponseDaily = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "USD", rate: 21.9m);
+            var apiResponseDaily = ExchangeRateApiResponses.GetSuccessfulResponse(currencyCode: "USD", amount: 1, rate: 21.9m);
             var apiResponseOther = await ExchangeRateApiResponses.GetUnsuccessfulResponse();
             var expectedResult = new Error(ErrorType.ApiError)
                 .WithMessage(ExchangeRateApiResponses.GetUnsuccessfulResponseMessage());

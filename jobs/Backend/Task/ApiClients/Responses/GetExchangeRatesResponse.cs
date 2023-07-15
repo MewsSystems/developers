@@ -10,4 +10,4 @@ internal record GetExchangeRatesResponse(IEnumerable<ExchangeRateApiItem> Rates)
 /// <summary>
 /// Represents an exchange rate item from the API.
 /// </summary>
-internal record ExchangeRateApiItem(string CurrencyCode, decimal Rate);
+internal record ExchangeRateApiItem(string CurrencyCode, int Amount, decimal Rate);

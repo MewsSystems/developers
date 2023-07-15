@@ -14,11 +14,11 @@ namespace ExchangeRateUpdater.UnitTests.Utilities
              );
         }
 
-        internal static ApiResponse<GetExchangeRatesResponse> GetSuccessfulResponse(string currencyCode, decimal rate)
+        internal static ApiResponse<GetExchangeRatesResponse> GetSuccessfulResponse(string currencyCode, int amount, decimal rate)
         {
             var exchangeRateApiItems = new List<ExchangeRateApiItem>
             {
-                new ExchangeRateApiItem(currencyCode, rate)
+                new ExchangeRateApiItem(currencyCode, amount, rate)
             };
 
             var apiResponseDaily = new ApiResponse<GetExchangeRatesResponse>(

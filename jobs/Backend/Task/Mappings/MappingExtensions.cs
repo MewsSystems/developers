@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.ApiClients.Responses;
+using ExchangeRateUpdater.Models.Behavior;
 using ExchangeRateUpdater.Models.Types;
 
 namespace ExchangeRateUpdater.Mappings;
@@ -15,5 +16,7 @@ internal static class MappingExtensions
     /// <param name="targetCurrency">The code of the target currency.</param>
     /// <returns>An <see cref="ExchangeRate"/> object representing the converted exchange rate.</returns>
     internal static ExchangeRate ToExchangeRateResult(this ExchangeRateApiItem apiItem, string targetCurrency) =>
-            new(SourceCurrency: new Currency(new Code(apiItem.CurrencyCode)), TargetCurrency: new Currency(new Code(targetCurrency)), Rate: new Rate(apiItem.Rate));
+            new(SourceCurrency: new Currency(new Code(apiItem.CurrencyCode)), 
+                TargetCurrency: new Currency(new Code(targetCurrency)), 
+                Rate: new Rate(apiItem.Rate).GetByAmount(apiItem.Amount));
 }
