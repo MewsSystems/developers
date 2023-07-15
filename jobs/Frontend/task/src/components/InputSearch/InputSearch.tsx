@@ -8,7 +8,8 @@ import styled from "styled-components";
 /**
  * Input that changes value after debounce time
  *
- * @onDebounce* - function that returns a value after debounce time
+ * Must pick one handler: onDebounce, onEnter or onChange
+ * @onDebounce - function that returns a value after debounce time
  * @onEnter - function that returns a value after pressing enter
  *          - cancels debounce if used
  */
@@ -28,9 +29,7 @@ export const InputSearch: FC<InputSearchProps> = (props) => {
   const debouncedValue = useDebounce<string>(value, debounceTime || 1000);
 
   useEffect(() => {
-    if (debouncedValue !== undefined && !pressedEnter) {
-      onDebounce(value);
-    }
+    if (!!debouncedValue && !pressedEnter) onDebounce?.(value);
 
     if (pressedEnter) setPressedEnter(false);
   }, [debouncedValue]);
