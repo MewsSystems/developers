@@ -1,11 +1,10 @@
-import { MovieQueryParams } from "src/store/slices/moviesSlice";
-import { QueryData } from "src/store/types/QueryData";
+import { GetMoviesParams } from "src/store/slices/interfaces/GetMoviesParams";
 import { ReduxHookPromiseData } from "src/store/types/ReduxHookPromiseData";
 
 export type ReduxLazyHookReturn<T> = [
-  fetch: (params: MovieQueryParams) => Promise<ReduxHookPromiseData<T>>,
+  fetch: (params: GetMoviesParams) => Promise<ReduxHookPromiseData<T>>,
   {
-    data: QueryData<T>;
+    data: T;
     isLoading: boolean;
     isError: boolean;
     error: Error;

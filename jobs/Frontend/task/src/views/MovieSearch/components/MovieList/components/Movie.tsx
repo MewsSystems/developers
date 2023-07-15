@@ -1,15 +1,28 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
+import { Route } from "src/router/Route";
 import { MovieInfo } from "src/views/MovieSearch/components/MovieList/components/MovieInfo";
 import { MovieProps } from "src/views/MovieSearch/components/MovieList/components/MovieProps";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Movie: FC<MovieProps> = (props) => {
   const movie = props.movie;
   const posterPath = movie.poster_path;
-  const bgLink = `https://image.tmdb.org/t/p/w200${posterPath}`;
+  const bgLink = `https://image.tmdb.org/t/p/w${
+    props.imgSize || "200"
+  }${posterPath}`;
+
+  if (props.disableLink)
+    return (
+      posterPath && (
+        <MovieWrap width={props.imgSize}>
+          <Image src={bgLink} alt="movieBg" />
+        </MovieWrap>
+      )
+    );
 
   return (
-    <MovieWrap>
+    <LinkedMovieWrap to={`${Route.Movie}/${movie.id}`}>
       {posterPath && <Image src={bgLink} alt="movieBg" />}
       {posterPath ? (
         <MovieContentHover>
@@ -20,11 +33,12 @@ export const Movie: FC<MovieProps> = (props) => {
           <MovieInfo title={movie.title} description={movie.overview} />
         </MovieContent>
       )}
-    </MovieWrap>
+    </LinkedMovieWrap>
   );
 };
 
-const MovieWrap = styled.div`
+const MovieWrapStyle = css`
+  width: 210px;
   height: 300px;
   display: inline-flex;
   transition: 0.3s;
@@ -33,6 +47,43 @@ const MovieWrap = styled.div`
 
   &:hover {
     transform: scale(1.035);
+  }
+
+  color: white;
+  text-decoration: none;
+`;
+
+const MovieContentStyle = css`
+  width: 210px;
+  z-index: 10;
+  transition: 0.3s;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 12px;
+  max-height: 290px;
+  overflow-y: scroll;
+  padding-bottom: 16px;
+  border-bottom: 18px solid transparent;
+`;
+
+const LinkedMovieWrap = styled(Link)`
+  ${MovieWrapStyle}
+`;
+
+// Covers wrap when disableLink is true
+const MovieWrap = styled.div`
+  ${MovieWrapStyle}
+  width: ${(props) => (props.width ? props.width : 200)}px;
+  height: initial;
+  cursor: initial;
+
+  &:hover {
+    transform: none;
+  }
+
+  img {
+    width: initial;
+    height: initial;
+    position: initial;
   }
 `;
 
@@ -44,15 +95,7 @@ const Image = styled.img`
 `;
 
 const MovieContent = styled.div`
-  width: 210px;
-  z-index: 10;
-  transition: 0.3s;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 12px;
-  max-height: 290px;
-  overflow-y: scroll;
-  padding-bottom: 16px;
-  border-bottom: 18px solid transparent;
+  ${MovieContentStyle}
 
   h3 {
     margin-top: 0;
@@ -61,16 +104,8 @@ const MovieContent = styled.div`
 `;
 
 const MovieContentHover = styled.div`
-  width: 210px;
-  z-index: 10;
+  ${MovieContentStyle}
   opacity: 0;
-  transition: 0.3s;
-  background: rgba(0, 0, 0, 0.75);
-  padding: 12px;
-  max-height: 290px;
-  overflow-y: scroll;
-  padding-bottom: 16px;
-  border-bottom: 18px solid transparent;
 
   &:hover {
     opacity: 1;
@@ -80,4 +115,3 @@ const MovieContentHover = styled.div`
     margin-top: 0;
   }
 `;
-

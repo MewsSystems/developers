@@ -1,7 +1,7 @@
-import { QueryData } from "src/store/types/QueryData";
+import { PaginationQueryData } from "src/store/types/PaginationQueryData";
 
 export interface ReduxHookPromiseData<T> {
-  data: QueryData<T>;
+  data: PaginationQueryData<T>;
   endpointName: string;
   fulfilledTimeStamp: number;
   isError: boolean;

@@ -1,7 +1,5 @@
-import { QueryData } from "src/store/types/QueryData";
-
 export type ReduxHookReturn<T> = {
-  data: QueryData<T>;
+  data: T;
   isFetching: boolean;
   isError: boolean;
   error: Error;

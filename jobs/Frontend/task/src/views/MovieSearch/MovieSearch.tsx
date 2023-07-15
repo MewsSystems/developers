@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { HorizontalCentered } from "src/components/HorizontalCentered/HorizontalCentered";
 import { useLazyGetMoviesQuery } from "src/store/slices/moviesSlice";
 import { MovieType } from "src/store/types/MovieType";
+import { PaginationQueryData } from "src/store/types/PaginationQueryData";
 import { ReduxLazyHookReturn } from "src/store/types/ReduxLazyHookReturn";
 import { InputSearch } from "src/components/InputSearch/InputSearch";
 import { MovieList } from "src/views/MovieSearch/components/MovieList/MovieList";
@@ -11,8 +12,9 @@ export const MovieSearch: FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [page, setPage] = useState(1);
 
-  const [fetchMovies, { isLoading, data }]: ReduxLazyHookReturn<MovieType[]> =
-    useLazyGetMoviesQuery();
+  const [fetchMovies, { isLoading, data }]: ReduxLazyHookReturn<
+    PaginationQueryData<MovieType[]>
+  > = useLazyGetMoviesQuery();
 
   useEffect(() => {
     if (!inputValue || inputValue === "") return;
