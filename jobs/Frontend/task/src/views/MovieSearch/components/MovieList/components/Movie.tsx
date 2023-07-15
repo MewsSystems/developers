@@ -73,7 +73,7 @@ const LinkedMovieWrap = styled(Link)`
 const MovieWrap = styled.div`
   ${MovieWrapStyle}
   width: ${(props) => (props.width ? props.width : 200)}px;
-  height: initial;
+  height: ${(props) => (props.width ? props.width * 1.5 : 300)}px;
   cursor: initial;
 
   &:hover {
@@ -81,8 +81,8 @@ const MovieWrap = styled.div`
   }
 
   img {
-    width: initial;
-    height: initial;
+    width: ${(props) => (props.width ? props.width : 200)}px;
+    height: ${(props) => (props.width ? props.width * 1.5 : 300)}px;
     position: initial;
   }
 `;

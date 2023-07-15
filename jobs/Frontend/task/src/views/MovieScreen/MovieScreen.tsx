@@ -1,20 +1,22 @@
 import { FC } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { HorizontalCentered } from "src/components/HorizontalCentered/HorizontalCentered";
+import { IconButton } from "src/components/IconButton/IconButton";
+import { ArrowLeft } from "src/components/icons/ArrowLeft";
 import Loader from "src/components/Loader/Loader";
+import { Route } from "src/router/Route";
 import { useGetMovieByIdQuery } from "src/store/slices/moviesSlice";
 import { MovieDetailsType } from "src/store/types/MovieDetailsType";
-import { MovieType } from "src/store/types/MovieType";
 import { ReduxHookReturn } from "src/store/types/ReduxHookReturn";
+import { laptop, mobile, tablet } from "src/styles/appSize";
 import { Movie } from "src/views/MovieSearch/components/MovieList/components/Movie";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const MovieScreen: FC = () => {
   let { movieId } = useParams();
+  const navigate = useNavigate();
   const { data, isFetching }: ReduxHookReturn<MovieDetailsType> =
     useGetMovieByIdQuery(movieId);
-
-  console.log(data);
 
   if (!data && isFetching) return <Loader loading={isFetching} />;
 
@@ -26,6 +28,9 @@ export const MovieScreen: FC = () => {
 
   return (
     <HorizontalCentered>
+      <Header>
+        <IconButton name={<ArrowLeft />} onClick={() => navigate(Route.Home)} />
+      </Header>
       <Wrap>
         <Movie movie={data} imgSize={"300"} disableLink={true} />
         <InfoWrap>
@@ -40,12 +45,29 @@ export const MovieScreen: FC = () => {
           <GenresWrap>
             <i>{renderGenres()}</i>
           </GenresWrap>
-          <p>{data?.overview}</p>
+          <Overview>{data?.overview}</Overview>
         </InfoWrap>
       </Wrap>
     </HorizontalCentered>
   );
 };
+
+const Header = styled.div`
+  width: 84%;
+  margin-top: 12px;
+
+  ${laptop(css`
+    width: 100%;
+  `)};
+
+  ${tablet(css`
+    width: 80%;
+  `)};
+
+  ${mobile(css`
+    width: 100%;
+  `)};
+`;
 
 const Wrap = styled.div`
   width: 80%;
@@ -59,10 +81,32 @@ const Wrap = styled.div`
   h2 {
     margin: 0;
   }
+
+  ${laptop(css`
+    width: 100%;
+  `)};
+
+  ${tablet(css`
+    width: 80%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0;
+  `)};
+
+  ${mobile(css`
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
+  `)};
 `;
 
 const InfoWrap = styled.div`
   width: calc(100% - 300px);
+
+  ${laptop(css`
+    width: 100%;
+  `)};
 `;
 
 const OriginalTitle = styled.a`
@@ -90,4 +134,10 @@ const Genre = styled.span`
 
 const GenresWrap = styled.div`
   margin-top: 20px;
+`;
+
+const Overview = styled.p`
+  ${laptop(css`
+    font-size: 14px;
+  `)};
 `;
