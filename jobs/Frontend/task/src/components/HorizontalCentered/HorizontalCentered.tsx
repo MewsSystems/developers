@@ -5,10 +5,10 @@ import styled, { css } from "styled-components";
 export const HorizontalCentered: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  return <SearchWrap>{children}</SearchWrap>;
+  return <DivWrap>{children}</DivWrap>;
 };
 
-const SearchWrap = styled.div`
+const DivWrap = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;

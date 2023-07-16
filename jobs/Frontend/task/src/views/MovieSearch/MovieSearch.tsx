@@ -22,8 +22,6 @@ export const MovieSearch: FC = () => {
     fetchMovies({ name: inputValue, page });
   }, [inputValue, page]);
 
-  console.log(inputValue);
-
   return (
     <HorizontalCentered>
       <h2>Movie Searcher</h2>
