@@ -8,9 +8,9 @@ import "@testing-library/jest-dom/extend-expect";
  * NOTE: Made a couple of tests here as an example of how would unit/component testing be done
  */
 describe("InputSearch component test", () => {
-  const onDebounceMock = jest.fn();
-  const onChangeMock = jest.fn();
-  const onEnterMock = jest.fn();
+  const onDebounceMock = jest.fn<string, [string]>((value) => value);
+  const onChangeMock = jest.fn<string, [string]>((value) => value);
+  const onEnterMock = jest.fn<string, [string]>((value) => value);
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -33,6 +33,7 @@ describe("InputSearch component test", () => {
     act(() => jest.runAllTimers());
 
     expect(onDebounceMock).toHaveBeenCalledWith("Apple");
+    expect(onDebounceMock.mock.results[0].value).toBe("Apple");
     expect(inputElement).toHaveValue("Apple");
   });
 
@@ -44,6 +45,9 @@ describe("InputSearch component test", () => {
     fireEvent.change(inputElement, { target: { value: "Apple" } });
 
     expect(onChangeMock).toHaveBeenCalledWith("Apple");
+    expect(onChangeMock.mock.results[0].value).toBe("Apple");
+
+    expect(inputElement).toHaveValue("Apple");
   });
 
   it("calls onEnter properly", () => {
@@ -53,5 +57,10 @@ describe("InputSearch component test", () => {
     fireEvent.keyDown(inputElement, { key: "Enter" });
 
     expect(onEnterMock).toHaveBeenCalledWith("");
+    expect(onEnterMock.mock.results[0].value).toBe("");
+
+    fireEvent.change(inputElement, { target: { value: "Apple" } });
+    fireEvent.keyDown(inputElement, { key: "Enter" });
+    expect(onEnterMock.mock.results[1].value).toBe("Apple");
   });
 });
