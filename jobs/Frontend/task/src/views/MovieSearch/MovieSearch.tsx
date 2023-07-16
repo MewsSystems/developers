@@ -22,9 +22,11 @@ export const MovieSearch: FC = () => {
     fetchMovies({ name: inputValue, page });
   }, [inputValue, page]);
 
+  console.log(inputValue);
+
   return (
     <HorizontalCentered>
-      <h2>Mega Movie Searcher</h2>
+      <h2>Movie Searcher</h2>
       <InputSearch
         debounceTime={500}
         onDebounce={(value: string) => {

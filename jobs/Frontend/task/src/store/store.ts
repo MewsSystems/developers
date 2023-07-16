@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSliceReducer from "src/store/slices/authSlice";
 import { moviesApi } from "src/store/slices/moviesSlice";
 
 export const store = configureStore({
   reducer: {
     [moviesApi.reducerPath]: moviesApi.reducer,
-    authState: authSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(moviesApi.middleware),

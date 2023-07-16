@@ -10,7 +10,7 @@ export const MovieList: FC<MovieListProps> = (props) => {
     return <NotFound>Oops! No movies found, search again!</NotFound>;
 
   return (
-    <Wrap>
+    <Wrap data-testid={"movieList"}>
       {props.movies.map((movie) => (
         <Movie key={movie.id} movie={movie} />
       ))}

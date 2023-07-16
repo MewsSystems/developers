@@ -56,7 +56,11 @@ export const InputSearch: FC<InputSearchProps> = (props) => {
         onChange={handleOnChange}
         onKeyDown={handleEnterPress}
       />
-      <Loader loading={!!loading} />
+      {loading && (
+        <div>
+          <Loader />
+        </div>
+      )}
     </Wrap>
   );
 };
@@ -77,4 +81,11 @@ const Wrap = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  div {
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    transform: translateX(75px);
+  }
 `;

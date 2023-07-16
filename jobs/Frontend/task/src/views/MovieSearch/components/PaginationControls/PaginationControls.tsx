@@ -10,7 +10,7 @@ export const PaginationControls: FC<PaginationControlsProps> = (props) => {
   if (!props.page) return null;
 
   return (
-    <PaginationWrap>
+    <PaginationWrap data-testid={"pagination"}>
       <IconButton
         name={<ArrowLeft />}
         onClick={() => props.setPage(props.page - 1)}

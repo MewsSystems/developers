@@ -6,6 +6,9 @@ import "@testing-library/jest-dom/extend-expect";
 /**
  * Tests InputSearch component
  * NOTE: Made a couple of tests here as an example of how would unit/component testing be done
+ *
+ * This is how would unit/component tests be done for each component inside of a project
+ *
  */
 describe("InputSearch component test", () => {
   const onDebounceMock = jest.fn<string, [string]>((value) => value);
