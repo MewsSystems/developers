@@ -5,7 +5,7 @@ namespace ExchangeRateWebApi.Services
 {
     public interface IExchangeRate
     {
-        List<DataNode> GetData(string url);
-        IEnumerable<ExchangeRate> MapDataToExchangeRates();
+        Task<List<DataNode>> GetDataAsync(string url);
+        Task<IEnumerable<ExchangeRate>> MapDataToExchangeRatesAsync();
     }
 }

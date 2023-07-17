@@ -20,16 +20,21 @@ namespace ExchangeRateWebApi.Services
             CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("cs-CZ");
             Thread.CurrentThread.CurrentCulture = cultureInfo;
         }
-        public List<DataNode> GetData(string url)
+        public async Task<List<DataNode>> GetDataAsync(string url)
         {
             try
             {
-                HtmlWeb web = new HtmlWeb();
-                var htmlDoc = web.Load(url);
-                var first = htmlDoc.DocumentNode.SelectNodes("//*[@id=\"apollo-page\"]/section/div[2]/div/div/main/div/div/div[1]/div[3]/table/tbody").First();
+                string content = string.Empty;
+                using (var client = new HttpClient())
+                {
+                    var date = await client.GetAsync(url);
+                    content = await date.Content.ReadAsStringAsync();
+                }
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(content);
+                var first = htmlDoc.DocumentNode.SelectNodes("//div/table/tbody").First();
                 var dataNodes = first.ChildNodes.Where(x => x.Name == "tr").ToList();
                 return dataNodes.Select(x => new DataNode(x)).ToList();
-
             }
             catch (Exception ex)
             {
@@ -39,12 +44,13 @@ namespace ExchangeRateWebApi.Services
             }
         }
 
-        public IEnumerable<ExchangeRate> MapDataToExchangeRates()
+        public async Task<IEnumerable<ExchangeRate>> MapDataToExchangeRatesAsync()
         {
-            var data = GetData(options.Url);
+            var data = await GetDataAsync(options.Url);
             List<ExchangeRate> exchangeRates = data.Select(x => new ExchangeRate(new Currency("CZK"), new Currency(x.IsoCode), x.ExchangeRate)).ToList();
             return exchangeRates;
         }
+
     }
 }
 
