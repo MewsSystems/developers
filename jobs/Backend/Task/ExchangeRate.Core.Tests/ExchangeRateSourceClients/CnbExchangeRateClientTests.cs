@@ -17,11 +17,11 @@ public class CnbExchangeRateClientTests
     }
 
     [Fact]
-    public void GetExchangeRatesAsync_UrlPathIsNull_ThrowsArgumentNullException()
+    public async void GetExchangeRatesAsync_UrlPathIsNull_ThrowsArgumentNullException()
     {
         var cnbExchangeRateClient = new CnbExchangeRateClient(_httpClientFactory.Object);
 
-        Assert.ThrowsAsync<ArgumentNullException>(async () => await cnbExchangeRateClient.GetExchangeRatesAsync(null));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await cnbExchangeRateClient.GetExchangeRatesAsync(null));
     }
 
     [Theory]
@@ -30,7 +30,7 @@ public class CnbExchangeRateClientTests
     [InlineData(HttpStatusCode.Forbidden, "Forbidden to request")]
     [InlineData(HttpStatusCode.NotFound, "Not found resource")]
     [InlineData(HttpStatusCode.InternalServerError, "Internal server error")]
-    public void GetExchangeRatesAsync_ResponseIsNotSuccesfull_ThrowsExchangeSourceException(HttpStatusCode errorCode, string message)
+    public async void GetExchangeRatesAsync_ResponseIsNotSuccesfull_ThrowsExchangeSourceException(HttpStatusCode errorCode, string message)
     {
         var mockMessageHandler = new Mock<HttpMessageHandler>();
         mockMessageHandler
@@ -47,6 +47,8 @@ public class CnbExchangeRateClientTests
 
         var cnbExchangeRateClient = new CnbExchangeRateClient(_httpClientFactory.Object);
 
-        Assert.ThrowsAsync<ExchangeRateSourceException>(async () => await cnbExchangeRateClient.GetExchangeRatesAsync("/test"));
+        var exception = await Assert.ThrowsAsync<ExchangeRateSourceException>(async () => await cnbExchangeRateClient.GetExchangeRatesAsync("/test"));
+
+        Assert.Equal(message, exception.Message);
     }
 }

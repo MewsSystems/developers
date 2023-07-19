@@ -18,15 +18,15 @@ public class CnbExchangeRateProviderTests
     }
 
     [Fact]
-    public void GetExchangeRatesAsync_CurrenciesAreNull_ThrowsArgumentNullException()
+    public async void GetExchangeRatesAsync_CurrenciesAreNull_ThrowsArgumentNullException()
     {
         var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
 
-        Assert.ThrowsAsync<ArgumentNullException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(null));
+        await Assert.ThrowsAsync<ArgumentNullException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(null));
     }
 
     [Fact]
-    public void GetExchangeRatesAsync_ClientReturnsError_ThrowsExchangeSourceException()
+    public async void GetExchangeRatesAsync_ClientReturnsError_ThrowsExchangeSourceException()
     {
         _clientMock
             .Setup(c => c.GetExchangeRatesAsync(It.IsAny<string>()))
@@ -34,7 +34,7 @@ public class CnbExchangeRateProviderTests
 
         var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
 
-        Assert.ThrowsAsync<ExchangeRateSourceException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(Enumerable.Empty<Currency>()));
+        await Assert.ThrowsAsync<ExchangeRateSourceException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(Enumerable.Empty<Currency>()));
     }
 
     [Fact]
