@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ExchangeRate.Contracts.Models;
 using ExchangeRate.Core;
+using ExchangeRate.Core.Models;
 
 namespace ExchangeRateUpdater
 {

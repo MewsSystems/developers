@@ -1,4 +1,4 @@
-﻿namespace ExchangeRate.Contracts.Models;
+﻿namespace ExchangeRate.Core.Models;
 
 public record class ExchangeRate
 {
