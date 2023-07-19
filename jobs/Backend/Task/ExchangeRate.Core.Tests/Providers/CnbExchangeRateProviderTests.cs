@@ -3,6 +3,7 @@ using ExchangeRate.Core.ExchangeRateSourceClients;
 using ExchangeRate.Core.Models;
 using ExchangeRate.Core.Models.ClientResponses;
 using ExchangeRate.Core.Providers;
+using ExchangeRate.Core.Services;
 using Moq;
 using Xunit;
 
@@ -12,15 +13,18 @@ public class CnbExchangeRateProviderTests
 {
     private readonly Mock<IExchangeRateSourceClient<CnbExchangeRateResponse>> _clientMock;
 
+    private readonly Mock<ICacheService> _cacheServiceMock;
+
     public CnbExchangeRateProviderTests()
     {
         _clientMock = new Mock<IExchangeRateSourceClient<CnbExchangeRateResponse>>();
+        _cacheServiceMock = new Mock<ICacheService>();
     }
 
     [Fact]
     public async void GetExchangeRatesAsync_CurrenciesAreNull_ThrowsArgumentNullException()
     {
-        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
+        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object, _cacheServiceMock.Object);
 
         await Assert.ThrowsAsync<ArgumentNullException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(null));
     }
@@ -32,7 +36,7 @@ public class CnbExchangeRateProviderTests
             .Setup(c => c.GetExchangeRatesAsync(It.IsAny<string>()))
             .ThrowsAsync(new ExchangeRateSourceException("Invalid request"));
 
-        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
+        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object, _cacheServiceMock.Object);
 
         await Assert.ThrowsAsync<ExchangeRateSourceException>(async () => await cnbExchangeRateProvider.GetExchangeRatesAsync(Enumerable.Empty<Currency>()));
     }
@@ -51,7 +55,7 @@ public class CnbExchangeRateProviderTests
             .Setup(c => c.GetExchangeRatesAsync(It.IsAny<string>()))
             .ReturnsAsync(GetClientResponse);
 
-        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
+        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object, _cacheServiceMock.Object);
 
         var exchangeRates = await cnbExchangeRateProvider.GetExchangeRatesAsync(inputCurrencies);
 
@@ -79,7 +83,7 @@ public class CnbExchangeRateProviderTests
                 existingRates.Select(r => new Currency(r.Currency)))
             .ToList();
 
-        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object);
+        var cnbExchangeRateProvider = new CnbExchangeRateProvider(_clientMock.Object, _cacheServiceMock.Object);
 
         var exchangeRates = await cnbExchangeRateProvider.GetExchangeRatesAsync(inputCurrencies);
 

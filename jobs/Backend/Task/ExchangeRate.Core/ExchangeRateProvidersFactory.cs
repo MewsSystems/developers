@@ -4,6 +4,7 @@ using ExchangeRate.Core.Models;
 using ExchangeRate.Core.Models.ClientResponses;
 using ExchangeRate.Core.Providers;
 using ExchangeRate.Core.Providers.Interfaces;
+using ExchangeRate.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRate.Core;
@@ -20,13 +21,14 @@ public class ExchangeRateProvidersFactory
     public async Task<IEnumerable<Models.ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, string providerCode)
     {
         IExchangeRateProvider exchangeRateProvider;
+        var cacheService = _serviceProvider.GetRequiredService<ICacheService>();
 
         switch (providerCode)
         {
             case ExchangeRateSourceCodes.CzechNationalBank:
                 {
                     var client = _serviceProvider.GetRequiredService<IExchangeRateSourceClient<CnbExchangeRateResponse>>();
-                    exchangeRateProvider = new CnbExchangeRateProvider(client);
+                    exchangeRateProvider = new CnbExchangeRateProvider(client, cacheService);
                     break;
                 }
             default:
