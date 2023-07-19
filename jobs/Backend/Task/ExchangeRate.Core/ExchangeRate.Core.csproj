@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Extentions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRate.Contracts\ExchangeRate.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

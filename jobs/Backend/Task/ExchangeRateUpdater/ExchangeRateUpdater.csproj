@@ -5,4 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRate.Core\ExchangeRate.Core.csproj" />
+  </ItemGroup>
+
 </Project>

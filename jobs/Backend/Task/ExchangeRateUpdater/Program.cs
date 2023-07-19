@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRate.Contracts.Models;
+using ExchangeRate.Core;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +22,12 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvidersFactory();
+                var rates = await provider.GetExchangeRatesAsync(currencies, "CNB");
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
