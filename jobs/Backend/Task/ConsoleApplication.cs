@@ -3,38 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Application.Configurations;
 using ExchangeRateUpdater.Application.Services;
 using ExchangeRateUpdater.Domain.Types;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater;
 
 public class ConsoleApplication : BackgroundService
 {
     private readonly IExchangeRateProviderService _exchangeRateProviderService;
-    private static IEnumerable<Currency> currencies = new[]
-    {
-        new Currency("USD"),
-        new Currency("EUR"),
-        new Currency("CZK"),
-        new Currency("JPY"),
-        new Currency("KES"),
-        new Currency("RUB"),
-        new Currency("THB"),
-        new Currency("TRY"),
-        new Currency("XYZ")
-    };
+    private readonly IEnumerable<Currency> _currencies;
 
-    public ConsoleApplication(IExchangeRateProviderService exchangeRateProviderService)
+    public ConsoleApplication(IExchangeRateProviderService exchangeRateProviderService, IOptions<AppConfigurations> appConfigurations)
     {
         _exchangeRateProviderService = exchangeRateProviderService;
+        _currencies = appConfigurations.Value.Currencies;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         try
         {
-            var rates = _exchangeRateProviderService.GetExchangeRates(currencies);
+            var rates = _exchangeRateProviderService.GetExchangeRates(_currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
