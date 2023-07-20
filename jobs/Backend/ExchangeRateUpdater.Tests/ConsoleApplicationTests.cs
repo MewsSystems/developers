@@ -52,7 +52,7 @@ public class ConsoleApplicationTests
         // Arrange
         var harness = new InMemoryTestHarness();
         var mockExchangeRateProviderService = new Mock<IExchangeRateProviderService>();
-        mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(It.IsAny<IEnumerable<Currency>>())).Returns(expectedRates);
+        mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(It.IsAny<IEnumerable<Currency>>())).ReturnsAsync(expectedRates);
         Response<GetExchangeRatesResponse>? response;
 
         var serviceProvider = BuildServiceProvider(mockExchangeRateProviderService);
@@ -87,7 +87,4 @@ public class ConsoleApplicationTests
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;
     }
-
-
-
 }

@@ -31,7 +31,7 @@ public class GetExchangeRatesQueryConsumerTests
             new(new Currency("EUR"), new Currency("CZK"), 1m),
         };
 
-        _mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(query.Currencies)).Returns(expectedRates);
+        _mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(query.Currencies)).ReturnsAsync(expectedRates);
         _mockConsumeContext.Setup(x => x.Message).Returns(query);
 
         var consumer = new GetExchangeRatesQueryConsumer(_mockExchangeRateProviderService.Object);
