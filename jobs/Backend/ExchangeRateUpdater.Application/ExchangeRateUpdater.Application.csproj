@@ -11,7 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\Consumers\" />
+    <Folder Include="Components\Queries\" />
     <Folder Include="Configurations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.0.16" />
   </ItemGroup>
 
 </Project>
