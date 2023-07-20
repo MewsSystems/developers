@@ -1,44 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ExchangeRateUpdater.Domain.Types;
+﻿using ExchangeRateUpdater;
+using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace ExchangeRateUpdater
-{
-    public static class Program
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        services.AddScoped<IExchangeRateProviderService, CzechNationalBankExchangeRateProviderService>();
+        services.AddHostedService<ConsoleApplication>();
+        services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
+    })
+    .Build();
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
-        }
-    }
-}
+await host.RunAsync();
