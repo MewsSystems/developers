@@ -5,4 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

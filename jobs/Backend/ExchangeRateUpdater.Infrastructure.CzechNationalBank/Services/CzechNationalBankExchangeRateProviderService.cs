@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Domain.Types;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
 {
-    public class ExchangeRateProvider
+    public class CzechNationalBankExchangeRateProviderService : IExchangeRateProviderService
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
