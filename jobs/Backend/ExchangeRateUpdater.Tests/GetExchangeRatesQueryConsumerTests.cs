@@ -24,14 +24,14 @@ public class GetExchangeRatesQueryConsumerTests
     public async Task Consume_Should_ReturnExchangeRates_When_Successful()
     {
         // Arrange
-        var query = new GetExchangeRatesQuery(_currencies);
+        var query = new GetExchangeRatesQuery(NonEmptyList<Currency>.Create(_currencies));
         var expectedRates = new List<ExchangeRate>
         {
             new(new Currency("USD"), new Currency("CZK"), 0.85m),
             new(new Currency("EUR"), new Currency("CZK"), 1m),
         };
 
-        _mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(query.Currencies)).ReturnsAsync(expectedRates);
+        _mockExchangeRateProviderService.Setup(x => x.GetExchangeRates(query.Currencies.Values)).ReturnsAsync(expectedRates);
         _mockConsumeContext.Setup(x => x.Message).Returns(query);
 
         var consumer = new GetExchangeRatesQueryConsumer(_mockExchangeRateProviderService.Object);

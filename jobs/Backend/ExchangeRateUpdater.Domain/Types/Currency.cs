@@ -4,17 +4,17 @@
     {
         public Currency(string code)
         {
-            Code = code;
+            Code = ValidCode.Create(code);
         }
 
         /// <summary>
         /// Three-letter ISO 4217 code of the currency.
         /// </summary>
-        public string Code { get; }
+        public ValidCode? Code { get; }
 
-        public override string ToString()
+        public override string? ToString()
         {
-            return Code;
+            return Code?.Value;
         }
     }
 }

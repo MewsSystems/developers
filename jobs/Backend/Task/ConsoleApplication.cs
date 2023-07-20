@@ -16,12 +16,12 @@ namespace ExchangeRateUpdater;
 public class ConsoleApplication : BackgroundService
 {
     private readonly IRequestClient<GetExchangeRatesQuery> _getExchangeRatesRequestClient;
-    private readonly IEnumerable<Currency> _currencies;
+    private readonly NonEmptyList<Currency> _currencies;
 
     public ConsoleApplication(IOptions<AppConfigurations> appConfigurations, IRequestClient<GetExchangeRatesQuery> getExchangeRatesRequestClient)
     {
         _getExchangeRatesRequestClient = getExchangeRatesRequestClient;
-        _currencies = appConfigurations.Value.Currencies;
+        _currencies = NonEmptyList<Currency>.Create(appConfigurations.Value.ValidCurrencies);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

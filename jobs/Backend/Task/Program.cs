@@ -17,7 +17,7 @@ var configuration = new ConfigurationBuilder()
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.Configure<AppConfigurations>(configuration.GetSection("AppConfigurations"));
+        services.Configure<AppConfigurations>(configuration.GetSection("AppConfigurations"),options=>options.BindNonPublicProperties = true);
         services.AddScoped<IExchangeRateProviderService, CzechNationalBankExchangeRateProviderService>();
         services.AddHttpClient("CzechNationalBankApi", cfg =>
         {

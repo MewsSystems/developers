@@ -16,7 +16,7 @@ public class GetExchangeRatesQueryConsumer : IConsumer<GetExchangeRatesQuery>
 
     public async Task Consume(ConsumeContext<GetExchangeRatesQuery> context)
     {
-        var exchangeRates = await _exchangeRateProviderService.GetExchangeRates(context.Message.Currencies);
+        var exchangeRates = await _exchangeRateProviderService.GetExchangeRates(context.Message.Currencies.Values);
         await context.RespondAsync(new GetExchangeRatesResponse(exchangeRates));
     }
 }
