@@ -1,6 +1,5 @@
 ﻿using ExchangeRateUpdater.Application.Components.Consumers;
 using ExchangeRateUpdater.Application.Components.Queries;
-using ExchangeRateUpdater.Application.Components.Responses;
 using ExchangeRateUpdater.Application.Services;
 using ExchangeRateUpdater.Domain.Types;
 using MassTransit;
@@ -41,8 +40,8 @@ public class GetExchangeRatesQueryConsumerTests
 
 
         // Assert
-        _mockConsumeContext.Verify(x => x.RespondAsync(It.Is<GetExchangeRatesResponse>(r =>
-                r.ExchangeRates == expectedRates)),
+        _mockConsumeContext.Verify(x => x.RespondAsync(It.Is<NonNullResponse<IEnumerable<ExchangeRate>>>(r =>
+                r.Content == expectedRates)),
             Times.Once);
     }
 
