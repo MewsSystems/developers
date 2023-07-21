@@ -24,7 +24,7 @@ public class GetExchangeRatesQueryConsumer : IConsumer<GetExchangeRatesQuery>
             var providerResponse = await _exchangeRateProviderService.GetExchangeRates();
             if (providerResponse.IsSuccess)
             {
-                var exchangeRates = MatchCurrenciesWithExchanges(providerResponse.Content, context.Message.Currencies.Values);
+                var exchangeRates = MatchCurrenciesWithExchanges(context.Message.Currencies.Values, providerResponse.Content);
                 await context.RespondAsync(NonNullResponse<IEnumerable<ExchangeRate>>.Success(exchangeRates));
             }
             else
@@ -40,7 +40,7 @@ public class GetExchangeRatesQueryConsumer : IConsumer<GetExchangeRatesQuery>
         }
     }
 
-    private static IEnumerable<ExchangeRate> MatchCurrenciesWithExchanges(IReadOnlyDictionary<string, ExchangeRate> exchangeRatesFound, List<Currency> currenciesRequested)
+    private static IEnumerable<ExchangeRate> MatchCurrenciesWithExchanges(IEnumerable<Currency> currenciesRequested, IReadOnlyDictionary<string, ExchangeRate> exchangeRatesFound)
     {
         var exchangeRatesMatched = new List<ExchangeRate>();
         foreach (var currency in currenciesRequested.Where(c=>c.Code!=null))

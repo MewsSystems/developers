@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
         /// </summary>
         public async Task<NonNullResponse<Dictionary<string, ExchangeRate>>> GetExchangeRates()
         {
-            var rates = new Dictionary<string, ExchangeRate>();
+            var exchangeRates = new Dictionary<string, ExchangeRate>();
             try
             {
                 var cnbClient = _httpClientFactory.CreateClient("CzechNationalBankApi");
@@ -36,19 +36,19 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     _logger.Error("The api has responded with {code}: {@response}",response.StatusCode,response);
-                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(rates,"Api response was not successful");
+                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates,$"Api responded with code {response.StatusCode}");
                 }
-                var exchangeRates = JsonSerializer.Deserialize<DailyRatesResponse>(await response.Content.ReadAsStringAsync());
-                if (exchangeRates != null)
+                var deserializedResponse = JsonSerializer.Deserialize<DailyRatesResponse>(await response.Content.ReadAsStringAsync());
+                if (deserializedResponse != null)
                 {
-                    rates = exchangeRates.Rates.ToDictionary(rate => rate.CurrencyCode, rate => new ExchangeRate(new Currency(rate.CurrencyCode),_targetCurrency, rate.Rate));
+                    exchangeRates = deserializedResponse.Rates.ToDictionary(rate => rate.CurrencyCode, rate => new ExchangeRate(new Currency(rate.CurrencyCode),_targetCurrency, rate.Rate));
                 }
-                return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(rates);
+                return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(exchangeRates);
             }
             catch (Exception exception)
             {
                 _logger.Error(exception, "Error while retrieving exchanges");
-                return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(rates, exception.Message);
+                return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates, exception.Message);
             }
         }
     }

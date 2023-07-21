@@ -29,8 +29,7 @@ public class ConsoleApplication : BackgroundService
         {
             var currencies = NonEmptyList<Currency>.CreateUnsafe(_appConfigurations.Value.ValidCurrencies);
             var getExchangeRatesResponse = await _getExchangeRatesRequestClient
-                .GetResponse<NonNullResponse<IEnumerable<ExchangeRate>>>(
-                    new GetExchangeRatesQuery(currencies), stoppingToken);
+                .GetResponse<NonNullResponse<IEnumerable<ExchangeRate>>>(new GetExchangeRatesQuery(currencies), stoppingToken);
             WriteResponseToConsole(getExchangeRatesResponse.Message);
         }
         catch (Exception exception)
