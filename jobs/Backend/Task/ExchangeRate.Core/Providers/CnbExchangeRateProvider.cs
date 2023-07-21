@@ -4,6 +4,8 @@ using ExchangeRate.Core.Models;
 using ExchangeRate.Core.Models.ClientResponses;
 using ExchangeRate.Core.Services;
 using ExchangeRate.Core.Constants;
+using ExchangeRate.Core.Extentions;
+using ExchangeRate.Core.Configuration;
 
 namespace ExchangeRate.Core.Providers;
 
@@ -13,15 +15,18 @@ public class CnbExchangeRateProvider : CachedExchangeRateProviderBase, IExchange
 
     private const string MonthlyCacheKey = "Monthly";
 
-    private const string SourceCurrencyCode = "CZK";
+    private readonly IExchangeRateSourceClient<CnbExchangeRate> _cnbExchangeRateClient;
 
-    private readonly IExchangeRateSourceClient<CnbExchangeRateResponse> _cnbExchangeRateClient;
+    private readonly CnbSettings _cnbSettings;
 
     public CnbExchangeRateProvider(
-        IExchangeRateSourceClient<CnbExchangeRateResponse> cnbExchangeRateClient,
-        ICacheService cacheService) : base(cacheService, $"{ExchangeRateSourceCodes.CzechNationalBank}_Exng_Rate")
+        IExchangeRateSourceClient<CnbExchangeRate> cnbExchangeRateClient,
+        ICacheService cacheService,
+        CnbSettings cnbSettings) 
+            : base(cacheService, $"{ExchangeRateSourceCodes.CzechNationalBank}_Exng_Rate")
     {
         _cnbExchangeRateClient = cnbExchangeRateClient;
+        _cnbSettings = cnbSettings;
     }
 
     /// <summary>
@@ -33,35 +38,31 @@ public class CnbExchangeRateProvider : CachedExchangeRateProviderBase, IExchange
     {
         ArgumentNullException.ThrowIfNull(currencies);
 
-        var dailyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRateResponse>>(DailyCacheKey);
+        var dailyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRate>>(DailyCacheKey);
         if (dailyExchangeRates == null)
         {
-            dailyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync("/exrates/daily");
+            dailyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync(_cnbSettings.DailyExchangeRatesUrl);
             await SetCacheAsync(DailyCacheKey, dailyExchangeRates);
         }
 
         var exchangeRates = dailyExchangeRates
-            .Select(r => new Models.ExchangeRate(new Currency(SourceCurrencyCode), new Currency(r.CurrencyCode), (decimal)r.Rate))
+            .MapToExchangeRates()
             .ToList();
 
-        if (currencies.All(c => exchangeRates.Any(r => string.Equals(r.SourceCurrency.Code, c.Code, StringComparison.InvariantCultureIgnoreCase))))
+        if (exchangeRates.HasAllCurrencies(currencies))
         {
-            return exchangeRates
-                .Where(r => currencies.Any(c => string.Equals(r.SourceCurrency.Code, c.Code, StringComparison.InvariantCultureIgnoreCase)))
-                .ToList();
+            return exchangeRates.FilterByCurrencies(currencies);
         }
 
-        var monthlyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRateResponse>>(MonthlyCacheKey);
+        var monthlyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRate>>(MonthlyCacheKey);
         if (monthlyExchangeRates == null)
         {
-            monthlyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync("/fxrates/daily-month");
+            monthlyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync($"{_cnbSettings.MonthlyExchangeRateUrl}?yearMonth={DateTime.UtcNow.AddMonths(-1):yyyy-MM}");
             await SetCacheAsync(MonthlyCacheKey, monthlyExchangeRates);
         }
 
-        exchangeRates.AddRange(monthlyExchangeRates.Select(r => new Models.ExchangeRate(new Currency(SourceCurrencyCode), new Currency(r.CurrencyCode), (decimal)r.Rate)));
+        exchangeRates.AddRange(monthlyExchangeRates.MapToExchangeRates());
 
-        return exchangeRates
-                .Where(r => currencies.Any(c => string.Equals(r.SourceCurrency.Code, c.Code, StringComparison.InvariantCultureIgnoreCase)))
-                .ToList();
+        return exchangeRates.FilterByCurrencies(currencies);
     }
 }

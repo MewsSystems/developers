@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRate.Core;
+using ExchangeRate.Core.Extentions;
 using ExchangeRate.Core.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater
 {
@@ -26,8 +30,14 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvidersFactory(null);
-                var rates = await provider.GetExchangeRatesAsync(currencies, "CNB");
+                var hostBuilder = CreateHostBuilder(args);
+
+                var providerFactory = hostBuilder
+                    .Build()
+                    .Services
+                    .GetRequiredService<ExchangeRateProvidersFactory>();
+
+                var rates = await providerFactory.GetExchangeRatesAsync(currencies, "CNB");
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -41,6 +51,21 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, configBuilder) =>
+                {
+                    configBuilder.AddJsonFile("appsettings.json");
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    var configuration = hostContext.Configuration;
+                    services.AddExchangeRateProvider(settings => configuration.GetSection("CNBSettings").Bind(settings));
+                })
+                .UseConsoleLifetime();
         }
     }
 }

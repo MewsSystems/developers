@@ -5,7 +5,7 @@ using ExchangeRate.Core.Models.ClientResponses;
 
 namespace ExchangeRate.Core.ExchangeRateSourceClients;
 
-public class CnbExchangeRateClient
+public class CnbExchangeRateClient : IExchangeRateSourceClient<CnbExchangeRate>
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -14,7 +14,14 @@ public class CnbExchangeRateClient
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<IEnumerable<CnbExchangeRateResponse>> GetExchangeRatesAsync(string urlPath)
+    /// <summary>
+    /// Returns collection of the CNB exchange rates by url.
+    /// </summary>
+    /// <param name="urlPath">Relative Url for receiving exchange rates.</param>
+    /// <returns> Returns collection of the CNB exchange rates by url.</returns>
+    /// <exception cref="ArgumentNullException">Throws if urlPath attribute is null or empty.</exception>
+    /// <exception cref="ExchangeRateSourceException">Throws if the response from the CNB source is null or not successful</exception>
+    public async Task<IEnumerable<CnbExchangeRate>> GetExchangeRatesAsync(string urlPath)
     {
         if (string.IsNullOrWhiteSpace(urlPath))
         {
@@ -36,8 +43,8 @@ public class CnbExchangeRateClient
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var cnbResponse = JsonSerializer.Deserialize<IEnumerable<CnbExchangeRateResponse>>(content);
+        var cnbResponse = JsonSerializer.Deserialize<CnbExchangeRateResponse>(content);
 
-        return cnbResponse;
+        return cnbResponse?.Rates ?? Enumerable.Empty<CnbExchangeRate>();
     }
 }
