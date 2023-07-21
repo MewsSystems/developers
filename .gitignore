@@ -21,3 +21,8 @@
 node_modules
 bower_components
 npm-debug.log
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/config/applicationhost.config
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/DesignTimeBuild
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/FileContentIndex
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/v17
+/jobs/Backend/Task/.vs/ProjectEvaluation
