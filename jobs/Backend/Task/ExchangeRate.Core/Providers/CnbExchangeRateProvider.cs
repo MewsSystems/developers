@@ -6,6 +6,7 @@ using ExchangeRate.Core.Services;
 using ExchangeRate.Core.Constants;
 using ExchangeRate.Core.Extentions;
 using ExchangeRate.Core.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRate.Core.Providers;
 
@@ -17,12 +18,12 @@ public class CnbExchangeRateProvider : CachedExchangeRateProviderBase, IExchange
 
     private readonly IExchangeRateSourceClient<CnbExchangeRate> _cnbExchangeRateClient;
 
-    private readonly CnbSettings _cnbSettings;
+    private readonly IOptions<CnbSettings> _cnbSettings;
 
     public CnbExchangeRateProvider(
         IExchangeRateSourceClient<CnbExchangeRate> cnbExchangeRateClient,
         ICacheService cacheService,
-        CnbSettings cnbSettings) 
+        IOptions<CnbSettings> cnbSettings) 
             : base(cacheService, $"{ExchangeRateSourceCodes.CzechNationalBank}_Exng_Rate")
     {
         _cnbExchangeRateClient = cnbExchangeRateClient;
@@ -41,7 +42,7 @@ public class CnbExchangeRateProvider : CachedExchangeRateProviderBase, IExchange
         var dailyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRate>>(DailyCacheKey);
         if (dailyExchangeRates == null)
         {
-            dailyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync(_cnbSettings.DailyExchangeRatesUrl);
+            dailyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync(_cnbSettings.Value.DailyExchangeRatesUrl);
             await SetCacheAsync(DailyCacheKey, dailyExchangeRates);
         }
 
@@ -57,7 +58,7 @@ public class CnbExchangeRateProvider : CachedExchangeRateProviderBase, IExchange
         var monthlyExchangeRates = await GetCacheAsync<IEnumerable<CnbExchangeRate>>(MonthlyCacheKey);
         if (monthlyExchangeRates == null)
         {
-            monthlyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync($"{_cnbSettings.MonthlyExchangeRateUrl}?yearMonth={DateTime.UtcNow.AddMonths(-1):yyyy-MM}");
+            monthlyExchangeRates = await _cnbExchangeRateClient.GetExchangeRatesAsync($"{_cnbSettings.Value.MonthlyExchangeRateUrl}?yearMonth={DateTime.UtcNow.AddMonths(-1):yyyy-MM}");
             await SetCacheAsync(MonthlyCacheKey, monthlyExchangeRates);
         }
 
