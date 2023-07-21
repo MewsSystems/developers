@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRate.Core;
+using ExchangeRate.Core.Exceptions;
 using ExchangeRate.Core.Extentions;
 using ExchangeRate.Core.Models;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,10 @@ namespace ExchangeRateUpdater
                 {
                     Console.WriteLine(rate.ToString());
                 }
+            }
+            catch (ExchangeRateSourceException e)
+            {
+                Console.WriteLine($"ExchangeRate source responded with an error: '{e.Message}'.");
             }
             catch (Exception e)
             {
