@@ -14,13 +14,13 @@ public abstract class CachedExchangeRateProviderBase
         CacheKeyPrefix = cacheKeyPrefix;
     }
 
-    protected async Task<T> GetCacheAsync<T>(string cacheKey)
+    protected async Task<T?> GetCacheAsync<T>(string cacheKey)
     {
         return await CacheService.GetAsync<T>($"{CacheKeyPrefix}_{cacheKey}");
     }
 
     protected async Task<bool> SetCacheAsync<T>(string cacheKey, T value)
     {
-        return await CacheService.SetAsync<T>($"{CacheKeyPrefix}_{cacheKey}", value);
+        return await CacheService.SetAsync($"{CacheKeyPrefix}_{cacheKey}", value);
     }
 }
