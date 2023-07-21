@@ -1,5 +1,4 @@
-﻿using System;
-using ExchangeRateUpdater;
+﻿using ExchangeRateUpdater;
 using ExchangeRateUpdater.Application.Components.Consumers;
 using ExchangeRateUpdater.Application.Configurations;
 using ExchangeRateUpdater.Application.Services;
@@ -8,7 +7,8 @@ using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using System;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)
@@ -18,7 +18,9 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.Configure<AppConfigurations>(configuration.GetSection("AppConfigurations"),options=>options.BindNonPublicProperties = true);
+        services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
         services.AddScoped<IExchangeRateProviderService, CzechNationalBankExchangeRateProviderService>();
+        services.AddHostedService<ConsoleApplication>();
         services.AddHttpClient("CzechNationalBankApi", cfg =>
         {
             cfg.BaseAddress = new Uri(configuration["CzechNationalBankApi:BaseAddress"]);
@@ -27,10 +29,8 @@ var host = Host.CreateDefaultBuilder(args)
         {
             cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesQueryConsumer>();
         });
-        services.AddHostedService<ConsoleApplication>();
-        services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
     })
-    .ConfigureLogging(logging => logging.SetMinimumLevel(LogLevel.Error))
+    .UseSerilog((hostingContext, logging) => { logging.WriteTo.Console().MinimumLevel.Error();})
     .Build();
 
 await host.RunAsync();
