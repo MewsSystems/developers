@@ -57,7 +57,8 @@ namespace ExchangeRateUpdater
             services.AddSingleton<CurrencyValidator>();
             services.AddSingleton<IExchangeRateParser, ExchangeRateParser>();
             services.AddTransient<IExchangeRateService, ExchangeRateService>();
-            services.AddSingleton<IConfiguration>(configuration);
+            services.AddSingleton<IOutputService, ConsoleOutputService>();
+            services.AddSingleton(configuration);
         }
 
 

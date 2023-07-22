@@ -15,13 +15,15 @@ namespace ExchangeRateUpdater.Services
     {
         private readonly IExchangeRateProvider _provider;
         private readonly ICurrencyLoader _currencyLoader;
+        private readonly IOutputService _outputService;
         private readonly ILogger<IExchangeRateService> _logger;
 
-        public ExchangeRateService(IExchangeRateProvider provider, ICurrencyLoader currencyLoader, ILogger<IExchangeRateService> logger)
+        public ExchangeRateService(IExchangeRateProvider provider, ICurrencyLoader currencyLoader, ILogger<IExchangeRateService> logger, IOutputService outputService)
         {
             _provider = provider;
             _currencyLoader = currencyLoader;
             _logger = logger;
+            _outputService = outputService;
         }
 
         public async Task ExecuteAsync()
@@ -53,10 +55,10 @@ namespace ExchangeRateUpdater.Services
         private void PrintRates(IEnumerable<ExchangeRate> rates, string source)
         {
             var message = $"Successfully retrieved {rates.Count()} exchange rates from {source}:";
-            _logger.LogInformation(message);
+            _outputService.WriteMessage(message);
             foreach (var rate in rates)
             {
-                _logger.LogInformation(rate.ToString());
+                _outputService.WriteMessage(rate.ToString());
             }
         }
     }

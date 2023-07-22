@@ -17,6 +17,7 @@ namespace ExchangeRateUpdaterTests
         private Mock<ILogger<IExchangeRateService>> _mockLogger;
         private Mock<IExchangeRateProvider> _mockExchangeRateProvider;
         private Mock<ICurrencyLoader> _mockCurrencyLoader;
+        private Mock<IOutputService> _mockOutputService;
 
         private ExchangeRateService _exchangeRateService;
 
@@ -26,8 +27,9 @@ namespace ExchangeRateUpdaterTests
             _mockLogger = new Mock<ILogger<IExchangeRateService>>();
             _mockExchangeRateProvider = new Mock<IExchangeRateProvider>();
             _mockCurrencyLoader = new Mock<ICurrencyLoader>();
+            _mockOutputService = new Mock<IOutputService>();
 
-            _exchangeRateService = new ExchangeRateService(_mockExchangeRateProvider.Object, _mockCurrencyLoader.Object, _mockLogger.Object);
+            _exchangeRateService = new ExchangeRateService(_mockExchangeRateProvider.Object, _mockCurrencyLoader.Object, _mockLogger.Object, _mockOutputService.Object);
         }
 
         [Test]
