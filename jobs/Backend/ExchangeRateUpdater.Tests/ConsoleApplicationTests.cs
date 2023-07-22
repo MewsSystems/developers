@@ -20,7 +20,7 @@ public class ConsoleApplicationTests
         var serviceProvider = BuildServiceProvider(new Mock<IExchangeRateProviderService>());
         var consumerHarness = harness.Consumer(() =>
         {
-            var consumer = serviceProvider.GetRequiredService<GetExchangeRatesQueryConsumer>();
+            var consumer = serviceProvider.GetRequiredService<GetExchangeRatesForCurrenciesQueryConsumer>();
             return consumer;
         });
 
@@ -28,7 +28,7 @@ public class ConsoleApplicationTests
         try
         {
             await harness.Start();
-            await harness.InputQueueSendEndpoint.Send(new GetExchangeRatesQuery(It.IsAny<NonEmptyList<Currency>>()));
+            await harness.InputQueueSendEndpoint.Send(new GetExchangeRatesForCurrenciesQuery(It.IsAny<NonEmptyList<Currency>>()));
 
         }
         finally
@@ -37,14 +37,14 @@ public class ConsoleApplicationTests
         }
 
         //Assert
-        Assert.True(consumerHarness.Consumed.Select<GetExchangeRatesQuery>().Any());
+        Assert.True(consumerHarness.Consumed.Select<GetExchangeRatesForCurrenciesQuery>().Any());
     }
 
     private static ServiceProvider BuildServiceProvider(IMock<IExchangeRateProviderService> exchangeRatesProviderServiceMock)
     {
         var services = new ServiceCollection();
         services.AddSingleton(exchangeRatesProviderServiceMock.Object);
-        services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesQueryConsumer>(); });
+        services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesForCurrenciesQueryConsumer>(); });
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;
     }

@@ -11,14 +11,14 @@ namespace ExchangeRateUpdater.Tests;
 public class GetExchangeRatesQueryConsumerTests
 {
     private readonly Mock<IExchangeRateProviderService> _mockExchangeRateProviderService;
-    private readonly Mock<ConsumeContext<GetExchangeRatesQuery>> _mockConsumeContext;
+    private readonly Mock<ConsumeContext<GetExchangeRatesForCurrenciesQuery>> _mockConsumeContext;
     private readonly Mock<ILogger> _mockLogger;
     private readonly List<Currency> _currencies = new() { new Currency("USD"), new Currency("EUR") };
 
     public GetExchangeRatesQueryConsumerTests()
     {
         _mockExchangeRateProviderService = new Mock<IExchangeRateProviderService>();
-        _mockConsumeContext = new Mock<ConsumeContext<GetExchangeRatesQuery>>();
+        _mockConsumeContext = new Mock<ConsumeContext<GetExchangeRatesForCurrenciesQuery>>();
         _mockLogger = new Mock<ILogger>();
     }
 
@@ -26,7 +26,7 @@ public class GetExchangeRatesQueryConsumerTests
     public async Task Consume_Should_ReturnExchangeRates_When_Successful()
     {
         // Arrange
-        var query = new GetExchangeRatesQuery(NonEmptyList<Currency>.Create(_currencies));
+        var query = new GetExchangeRatesForCurrenciesQuery(NonEmptyList<Currency>.Create(_currencies));
         var expectedRates = NonNullResponse<Dictionary<string, ExchangeRate>>.Success(new Dictionary<string, ExchangeRate>
         {
             {"USD",new ExchangeRate(new Currency("USD"),new Currency("CZK"),1m)},
@@ -36,7 +36,7 @@ public class GetExchangeRatesQueryConsumerTests
         _mockExchangeRateProviderService.Setup(x => x.GetExchangeRates()).ReturnsAsync(expectedRates);
         _mockConsumeContext.Setup(x => x.Message).Returns(query);
 
-        var consumer = new GetExchangeRatesQueryConsumer(_mockExchangeRateProviderService.Object, _mockLogger.Object);
+        var consumer = new GetExchangeRatesForCurrenciesQueryConsumer(_mockExchangeRateProviderService.Object, _mockLogger.Object);
 
         // Act
         await consumer.Consume(_mockConsumeContext.Object);

@@ -6,18 +6,18 @@ using Serilog;
 
 namespace ExchangeRateUpdater.Application.Components.Consumers;
 
-public class GetExchangeRatesQueryConsumer : IConsumer<GetExchangeRatesQuery>
+public class GetExchangeRatesForCurrenciesQueryConsumer : IConsumer<GetExchangeRatesForCurrenciesQuery>
 {
     private readonly IExchangeRateProviderService _exchangeRateProviderService;
     private readonly ILogger _logger;
 
-    public GetExchangeRatesQueryConsumer(IExchangeRateProviderService exchangeRateProviderService, ILogger logger)
+    public GetExchangeRatesForCurrenciesQueryConsumer(IExchangeRateProviderService exchangeRateProviderService, ILogger logger)
     {
         _exchangeRateProviderService = exchangeRateProviderService;
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<GetExchangeRatesQuery> context)
+    public async Task Consume(ConsumeContext<GetExchangeRatesForCurrenciesQuery> context)
     {
         try
         {

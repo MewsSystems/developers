@@ -14,10 +14,10 @@ namespace ExchangeRateUpdater;
 
 public class ConsoleApplication : BackgroundService
 {
-    private readonly IRequestClient<GetExchangeRatesQuery> _getExchangeRatesRequestClient;
+    private readonly IRequestClient<GetExchangeRatesForCurrenciesQuery> _getExchangeRatesRequestClient;
     private readonly IOptions<AppConfigurations> _appConfigurations;
 
-    public ConsoleApplication(IOptions<AppConfigurations> appConfigurations, IRequestClient<GetExchangeRatesQuery> getExchangeRatesRequestClient)
+    public ConsoleApplication(IOptions<AppConfigurations> appConfigurations, IRequestClient<GetExchangeRatesForCurrenciesQuery> getExchangeRatesRequestClient)
     {
         _appConfigurations = appConfigurations;
         _getExchangeRatesRequestClient = getExchangeRatesRequestClient;
@@ -25,27 +25,31 @@ public class ConsoleApplication : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        try
+        do
         {
-            var currencies = NonEmptyList<Currency>.CreateUnsafe(_appConfigurations.Value.ValidCurrencies);
-            var getExchangeRatesResponse = await _getExchangeRatesRequestClient
-                .GetResponse<NonNullResponse<IEnumerable<ExchangeRate>>>(new GetExchangeRatesQuery(currencies), stoppingToken);
-            WriteResponseToConsole(getExchangeRatesResponse.Message);
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine($"Could not retrieve exchange rates: '{exception.Message}'.");
-            if (exception is ArgumentException)
+            try
             {
-                Console.WriteLine("Please check that your configuration contains ISO-4217 compliant currency codes.");
+                var currencies = NonEmptyList<Currency>.CreateUnsafe(_appConfigurations.Value.ValidCurrencies);
+                var getExchangeRatesResponse = await _getExchangeRatesRequestClient
+                    .GetResponse<NonNullResponse<IEnumerable<ExchangeRate>>>(new GetExchangeRatesForCurrenciesQuery(currencies), stoppingToken);
+                WriteResponseToConsole(getExchangeRatesResponse.Message);
             }
-        }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Could not retrieve exchange rates: '{exception.Message}'.");
+                if (exception is ArgumentException)
+                {
+                    Console.WriteLine("Please check that your configuration contains ISO-4217 compliant currency codes.");
+                }
+            }
+        }while(Console.ReadKey().Key != ConsoleKey.Escape);
 
         await Task.Delay(1000, stoppingToken);
     }
 
     private void WriteResponseToConsole(NonNullResponse<IEnumerable<ExchangeRate>> response)
     {
+        Console.Clear();
         if (response.IsSuccess)
         {
             Console.WriteLine($"Successfully retrieved {response.Content.Count()} exchange rates:\n");
@@ -82,6 +86,6 @@ public class ConsoleApplication : BackgroundService
                 Console.WriteLine(warning);
             }
         }
-
+        Console.WriteLine("\nPress any key to refresh or ESC to exit.");
     }
 }

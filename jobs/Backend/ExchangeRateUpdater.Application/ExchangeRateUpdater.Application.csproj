@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Consumers\" />
-    <Folder Include="Components\Queries\" />
     <Folder Include="Configurations\" />
   </ItemGroup>
 
