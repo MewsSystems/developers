@@ -3,7 +3,11 @@ using ExchangeRateUpdater.Domain.Types;
 using ExchangeRateUpdater.Infrastructure.CzechNationalBank.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
+using System.Net;
 using System.Text.Json;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ExtensionMethods;
+using MassTransit;
+using MassTransit.Futures.Contracts;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
 {
@@ -33,28 +37,35 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
             var exchangeRates = new Dictionary<string, ExchangeRate>();
             try
             {
-                var cnbClient = _httpClientFactory.CreateClient("CzechNationalBankApi");
-                var exchangeRatesDate = DateTime.Now.ToString("yyyy-MM-dd");
+                var exchangeRateDate = DateTime.UtcNow.ToCzechNationalBankExchangeNow();
 
-                if (_cache.TryGetValue(exchangeRatesDate, out Dictionary<string, ExchangeRate> cachedRates))
+                if (_cache.TryGetValue(exchangeRateDate, out Dictionary<string, ExchangeRate> cachedRates))
                 {
                     return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(cachedRates);
                 }
 
-                var response = await cnbClient.GetAsync($"exrates/daily?date={exchangeRatesDate}&lang=EN");
-                if (!response.IsSuccessStatusCode)
+                var cnbClient = _httpClientFactory.CreateClient("CzechNationalBankApi");
+                var centralBankRatesResult = await GetCentralBankRates(cnbClient,exchangeRateDate);
+                var otherCurrencyRatesResult = await GetOtherCurrencyRates(cnbClient);
+
+                if(!centralBankRatesResult.IsSuccess && !otherCurrencyRatesResult.IsSuccess)
                 {
-                    _logger.Error("The api has responded with {code}: {@response}",response.StatusCode,response);
-                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates,$"Api responded with code {response.StatusCode}");
+                    _logger.Error("There is a problem retrieving rates, daily FX result {@centralBankRates}, other FX {@otherCurrencyRates}", centralBankRatesResult, otherCurrencyRatesResult);
+                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates, $"We are having issues retrieving exchange rates");
                 }
-                var deserializedResponse = JsonSerializer.Deserialize<DailyRatesResponse>(await response.Content.ReadAsStringAsync());
-                if (deserializedResponse != null)
+
+                foreach (var centralBankRate in centralBankRatesResult.Content)
                 {
-                    exchangeRates = deserializedResponse.Rates.ToDictionary(rate => rate.CurrencyCode, rate => new ExchangeRate(new Currency(rate.CurrencyCode),_targetCurrency, rate.Rate));
-                    // Cache for 10 minutes
-                    _cache.Set(exchangeRatesDate, exchangeRates, TimeSpan.FromMinutes(10)); 
+                    exchangeRates.Add(centralBankRate.CurrencyCode, new ExchangeRate(new Currency(centralBankRate.CurrencyCode),_targetCurrency,centralBankRate.Rate));
+                }         
+                foreach (var otherCurrencyRate in otherCurrencyRatesResult.Content)
+                {
+                    exchangeRates.Add(otherCurrencyRate.CurrencyCode, new ExchangeRate(new Currency(otherCurrencyRate.CurrencyCode),_targetCurrency, otherCurrencyRate.Rate));
                 }
+                // Cache for 10 minutes
+                _cache.Set(exchangeRateDate, exchangeRates, TimeSpan.FromMinutes(10));
                 return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(exchangeRates);
+
             }
             catch (Exception exception)
             {
@@ -62,5 +73,43 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
                 return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates, exception.Message);
             }
         }
+
+        private async Task<NonNullResponse<List<RateDto>>>GetCentralBankRates(HttpClient client, string fxDate)
+        {
+            return await GeRates(client, $"exrates/daily?date={fxDate}&lang=EN");
+        }        
+        
+        private async Task<NonNullResponse<List<RateDto>>>GetOtherCurrencyRates(HttpClient client)
+        {
+            var exchangeRatesDate = DateTime.UtcNow.ToOtherCurrenciesExchangeNow();
+            return await GeRates(client, $"fxrates/daily-month?lang=EN&yearMonth={exchangeRatesDate}");
+        }
+
+        private async Task<NonNullResponse<List<RateDto>>> GeRates(HttpClient client, string url)
+        {
+            try
+            {
+                var response = await client.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.Error("The api has responded with {code} while retrieving rates: {@response}",
+                        response.StatusCode, response);
+                    return NonNullResponse<List<RateDto>>.Fail(new List<RateDto>(), $"Api responded with code {response.StatusCode}");
+                }
+
+                var deserializedResponse = JsonSerializer.Deserialize<CnbApiRatesResponse>(await response.Content.ReadAsStringAsync());
+                if (deserializedResponse != null)
+                {
+                    return NonNullResponse<List<RateDto>>.Success(deserializedResponse.Rates);
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Error while retrieving central bank rates");
+            }
+
+            return NonNullResponse<List<RateDto>>.Fail(new List<RateDto>(), "Could not retrieve Central Bank Rates");
+        }
+
     }
 }
