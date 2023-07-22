@@ -42,7 +42,7 @@ public class CnbApi : IApiClient
             }
 
             var deserializedResponse = JsonSerializer.Deserialize<CnbApiRatesResponse>(await response.Content.ReadAsStringAsync());
-            if (deserializedResponse != null)
+            if (deserializedResponse?.Rates != null)
             {
                 return NonNullResponse<IEnumerable<RateDto>>.Success(deserializedResponse.Rates);
             }

@@ -21,8 +21,7 @@ public static class ProviderFactory
         return configuredProvider switch
         {
             ("CzechNationalBank") => services.AddCzechNationalBankExchangeRateProvider(configuration),
-            _ => throw new ArgumentException(
-                $"An invalid provider has been configured provider {configuredProvider} is not available")
+            _ => throw new ArgumentException($"An invalid provider has been configured:\nProvider {configuredProvider} is not available")
         };
     }
 

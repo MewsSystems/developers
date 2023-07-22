@@ -28,7 +28,7 @@ public class ConsoleApplicationTests
         try
         {
             await harness.Start();
-            await harness.InputQueueSendEndpoint.Send(new GetExchangeRatesForCurrenciesQuery(It.IsAny<NonEmptyList<Currency>>()));
+            await harness.InputQueueSendEndpoint.Send(new GetExchangeRatesForCurrenciesQuery(It.IsAny<NonEmptyList<ValidCurrency>>()));
 
         }
         finally

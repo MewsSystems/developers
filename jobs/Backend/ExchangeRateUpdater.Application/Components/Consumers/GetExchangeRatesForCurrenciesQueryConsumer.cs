@@ -40,12 +40,12 @@ public class GetExchangeRatesForCurrenciesQueryConsumer : IConsumer<GetExchangeR
         }
     }
 
-    private static IEnumerable<ExchangeRate> MatchCurrenciesWithExchanges(IEnumerable<Currency> currenciesRequested, IReadOnlyDictionary<string, ExchangeRate> exchangeRatesFound)
+    private static IEnumerable<ExchangeRate> MatchCurrenciesWithExchanges(IEnumerable<ValidCurrency> currenciesRequested, IReadOnlyDictionary<string, ExchangeRate> exchangeRatesFound)
     {
         var exchangeRatesMatched = new List<ExchangeRate>();
-        foreach (var currency in currenciesRequested.Where(c=>c.Code!=null))
+        foreach (var currency in currenciesRequested)
         {
-            if (exchangeRatesFound.TryGetValue(currency.ToString(), out var value))
+            if (exchangeRatesFound.TryGetValue(currency.ToString() ?? "", out var value))
             {
                 exchangeRatesMatched.Add(value);
             }

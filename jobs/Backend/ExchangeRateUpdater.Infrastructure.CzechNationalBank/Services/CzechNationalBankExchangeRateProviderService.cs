@@ -32,16 +32,15 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
         {
             try
             {
-                var dateOfReferenceForRates = DateTime.UtcNow.ToCzechNationalBankExchangeNow();
-
-                var cacheResult =  TryGetExchangesFromCache(dateOfReferenceForRates);
+                var cacheKey = DateTime.UtcNow.ToCacheKeyReference();
+                var cacheResult =  TryGetExchangesFromCache(cacheKey);
                 if(cacheResult.IsSuccess)
                     return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(cacheResult.ExchangeRates);
 
-                var apiResult = await TryGetExchangesFromApi(dateOfReferenceForRates);
+                var apiResult = await TryGetExchangesFromApi();
                 if (apiResult.IsSuccess)
                 {
-                    _cache.Set(dateOfReferenceForRates, apiResult.ExchangeRates, TimeSpan.FromMinutes(10));
+                    _cache.Set(cacheKey, apiResult.ExchangeRates, TimeSpan.FromMinutes(10));
                     return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(apiResult.ExchangeRates);
                 }
                 return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(new Dictionary<string, ExchangeRate>(), "We are having issues retrieving exchange rates");
@@ -65,15 +64,24 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
             return (false, new Dictionary<string, ExchangeRate>());
         }
 
-        private async Task<(bool IsSuccess, Dictionary<string,ExchangeRate> ExchangeRates)> TryGetExchangesFromApi(string date)
+        private async Task<(bool IsSuccess, Dictionary<string,ExchangeRate> ExchangeRates)> TryGetExchangesFromApi()
         {
-            var centralBankRatesFromApiResult = await _apiClient.GetCentralBankRates(date);
+            var centralBankRatesFromApiResult = await _apiClient.GetCentralBankRates(DateTime.UtcNow.ToCzechNationalBankExchangeNow());
             var otherCurrenciesRatesFromApiResult = await _apiClient.GetOtherCurrenciesRates(DateTime.UtcNow.ToOtherCurrenciesExchangeNow());
-           
-            if (!centralBankRatesFromApiResult.IsSuccess && !otherCurrenciesRatesFromApiResult.IsSuccess)
+
+            if (!centralBankRatesFromApiResult.IsSuccess || !otherCurrenciesRatesFromApiResult.IsSuccess)
             {
-                _logger.Error("There is a problem retrieving rates, daily FX result {@centralBankRates}, other FX {@otherCurrencyRates}", centralBankRatesFromApiResult, otherCurrenciesRatesFromApiResult);
-                return (false, new Dictionary<string, ExchangeRate>());
+                if (!centralBankRatesFromApiResult.IsSuccess && !otherCurrenciesRatesFromApiResult.IsSuccess)
+                {
+                    _logger.Error(
+                        "There is a problem retrieving rates, daily FX result {@centralBankRates}, other FX {@otherCurrencyRates}",
+                        centralBankRatesFromApiResult, otherCurrenciesRatesFromApiResult);
+                    return (false, new Dictionary<string, ExchangeRate>());
+                }
+                if (!centralBankRatesFromApiResult.IsSuccess)
+                    _logger.Error("There is a problem retrieving rates, daily FX result {@centralBankRates}", centralBankRatesFromApiResult);
+                if (!otherCurrenciesRatesFromApiResult.IsSuccess)
+                    _logger.Error("There is a problem retrieving rates, other FX result {@otherCurrencyRates}", otherCurrenciesRatesFromApiResult);
             }
 
             return (true,MapResultsToDictionary(centralBankRatesFromApiResult.Content,otherCurrenciesRatesFromApiResult.Content));

@@ -1,6 +1,7 @@
-﻿using ExchangeRateUpdater;
+﻿using System.Collections.Generic;
+using ExchangeRateUpdater;
 using ExchangeRateUpdater.Application.Components.Consumers;
-using ExchangeRateUpdater.Application.Configurations;
+using ExchangeRateUpdater.Domain.Types;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,9 @@ var configuration = new ConfigurationBuilder()
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.Configure<AppConfigurations>(configuration.GetSection("AppConfigurations"), options => options.BindNonPublicProperties = true);
+        services.Configure<List<Currency>>(configuration.GetSection("Currencies"));
         services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
+
         services.AddExchangeRatesProvider(configuration);
         services.AddHostedService<ConsoleApplication>();
         services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesForCurrenciesQueryConsumer>(); });

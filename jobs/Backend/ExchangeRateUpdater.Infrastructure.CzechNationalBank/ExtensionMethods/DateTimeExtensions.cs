@@ -11,8 +11,7 @@ public static class DateTimeExtensions
          * Sunday or public holiday (for example, an exchange rate declared on Tuesday 23 December is valid
          * for Tuesday 23 December, the public holidays 24–26 December, and Saturday 27 December and Sunday 28 December).
          */
-        var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-        var pragueLocalTime = TimeZoneInfo.ConvertTime(datetime, timeZoneInfo);
+        var pragueLocalTime = datetime.ToPragueLocalTime();
         var hour = pragueLocalTime.Hour;
         var minute = pragueLocalTime.Minute;
 
@@ -31,8 +30,30 @@ public static class DateTimeExtensions
          * and are valid for the entire following month (for example, an exchange rate declared
          * on Friday 26 February is valid for each day between 1 March and 31 March).
          */
+       
+        return datetime.ToPragueLocalTime().AddMonths(-1).ToString("yyyy-MM");
+    }
+
+    public static string ToCacheKeyReference(this DateTime datetime)
+    {
+        /*
+         * To ensure we do not refer to stale values, cache key is worked out based on the current day and time,
+         * ensuring daily rates do not go stale and and the current month (-1) to cater for other currencies.
+         */
+        var pragueLocalTimeForCache = datetime.ToPragueLocalTime().AddMonths(-1);
+        var hour = pragueLocalTimeForCache.Hour;
+        var minute = pragueLocalTimeForCache.Minute;
+
+        if (hour <= 14 && minute < 30)
+        {
+            return pragueLocalTimeForCache.AddDays(-1).ToString("yyyy-MM-dd");
+        }
+        return pragueLocalTimeForCache.ToString("yyyy-MM-dd");
+    }
+
+    private static DateTime ToPragueLocalTime(this DateTime datetime)
+    {
         var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-        var pragueLocalTime = TimeZoneInfo.ConvertTime(datetime, timeZoneInfo);
-        return pragueLocalTime.AddMonths(-1).ToString("yyyy-MM");
+        return TimeZoneInfo.ConvertTime(datetime, timeZoneInfo);
     }
 }

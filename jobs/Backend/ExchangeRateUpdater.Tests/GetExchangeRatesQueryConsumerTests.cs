@@ -13,7 +13,7 @@ public class GetExchangeRatesQueryConsumerTests
     private readonly Mock<IExchangeRateProviderService> _mockExchangeRateProviderService;
     private readonly Mock<ConsumeContext<GetExchangeRatesForCurrenciesQuery>> _mockConsumeContext;
     private readonly Mock<ILogger> _mockLogger;
-    private readonly List<Currency> _currencies = new() { new Currency("USD"), new Currency("EUR") };
+    private readonly List<ValidCurrency> _currencies = new() { ValidCurrency.CreateUnsafe("USD"), ValidCurrency.CreateUnsafe("EUR") };
 
     public GetExchangeRatesQueryConsumerTests()
     {
@@ -26,7 +26,7 @@ public class GetExchangeRatesQueryConsumerTests
     public async Task Consume_Should_ReturnExchangeRates_When_Successful()
     {
         // Arrange
-        var query = new GetExchangeRatesForCurrenciesQuery(NonEmptyList<Currency>.Create(_currencies));
+        var query = new GetExchangeRatesForCurrenciesQuery(NonEmptyList<ValidCurrency>.CreateUnsafe(_currencies));
         var expectedRates = NonNullResponse<Dictionary<string, ExchangeRate>>.Success(new Dictionary<string, ExchangeRate>
         {
             {"USD",new ExchangeRate(new Currency("USD"),new Currency("CZK"),1m)},

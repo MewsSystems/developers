@@ -2,4 +2,4 @@
 
 namespace ExchangeRateUpdater.Application.Components.Queries;
 
-public record GetExchangeRatesForCurrenciesQuery(NonEmptyList<Currency> Currencies);
+public record GetExchangeRatesForCurrenciesQuery(NonEmptyList<ValidCurrency> Currencies);

@@ -5,5 +5,5 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Models;
 public class CnbApiRatesResponse
 {
     [JsonPropertyName("rates")]
-    public List<RateDto> Rates { get; set; }
+    public List<RateDto>? Rates { get; set; }
 }
