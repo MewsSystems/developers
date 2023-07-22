@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ApiClients;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ApiClients.Implementations;
 
 namespace ExchangeRateUpdater;
 
@@ -26,10 +28,11 @@ public static class ProviderFactory
 
     private static IServiceCollection AddCzechNationalBankExchangeRateProvider(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IApiClient, CnbApi>();
         services.AddHttpClient("CzechNationalBankApi",
                 cfg => { cfg.BaseAddress = new Uri(configuration["Providers:CzechNationalBank:Api:BaseUrl"]); })
             .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(3)));
-        services.AddSingleton<IExchangeRateProviderService, CzechNationalBankExchangeRateProviderService>();
+        services.AddScoped<IExchangeRateProviderService, CzechNationalBankExchangeRateProviderService>();
         services.AddMemoryCache();
         return services;
     }

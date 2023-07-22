@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ApiClients\Implementations\" />
     <Folder Include="ExtensionMethods\" />
   </ItemGroup>
 

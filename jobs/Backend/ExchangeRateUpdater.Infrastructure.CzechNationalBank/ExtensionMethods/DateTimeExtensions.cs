@@ -12,7 +12,7 @@ public static class DateTimeExtensions
          * for Tuesday 23 December, the public holidays 24–26 December, and Saturday 27 December and Sunday 28 December).
          */
         var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-        var pragueLocalTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo);
+        var pragueLocalTime = TimeZoneInfo.ConvertTime(datetime, timeZoneInfo);
         var hour = pragueLocalTime.Hour;
         var minute = pragueLocalTime.Minute;
 
@@ -32,7 +32,7 @@ public static class DateTimeExtensions
          * on Friday 26 February is valid for each day between 1 March and 31 March).
          */
         var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-        var pragueLocalTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZoneInfo);
+        var pragueLocalTime = TimeZoneInfo.ConvertTime(datetime, timeZoneInfo);
         return pragueLocalTime.AddMonths(-1).ToString("yyyy-MM");
     }
 }

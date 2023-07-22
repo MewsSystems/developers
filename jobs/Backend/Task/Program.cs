@@ -20,7 +20,7 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<ConsoleApplication>();
         services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesForCurrenciesQueryConsumer>(); });
     })
-    .UseSerilog((_, logging) => { logging.WriteTo.Console().MinimumLevel.Error(); })
+    .UseSerilog((_, logging) => { logging.WriteTo.File("log.txt").MinimumLevel.Error(); })
     .Build();
 
 await host.RunAsync();

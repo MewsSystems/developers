@@ -1,29 +1,25 @@
 ﻿using ExchangeRateUpdater.Application.Services;
 using ExchangeRateUpdater.Domain.Types;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ApiClients;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ExtensionMethods;
 using ExchangeRateUpdater.Infrastructure.CzechNationalBank.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
-using System.Net;
-using System.Text.Json;
-using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ExtensionMethods;
-using MassTransit;
-using MassTransit.Futures.Contracts;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
 {
     public class CzechNationalBankExchangeRateProviderService : IExchangeRateProviderService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger _logger;
-        private readonly Currency _targetCurrency = new("CZK");
         private readonly IMemoryCache _cache;
+        private readonly IApiClient _apiClient;
+        private static readonly Currency TargetCurrency = new("CZK");
 
-
-        public CzechNationalBankExchangeRateProviderService(IHttpClientFactory httpClientFactory, ILogger logger, IMemoryCache cache)
+        public CzechNationalBankExchangeRateProviderService(ILogger logger, IMemoryCache cache, IApiClient apiClient)
         {
-            _httpClientFactory = httpClientFactory;
             _logger = logger;
             _cache = cache;
+            _apiClient = apiClient;
         }
 
         /// <summary>
@@ -34,82 +30,70 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
         /// </summary>
         public async Task<NonNullResponse<Dictionary<string, ExchangeRate>>> GetExchangeRates()
         {
-            var exchangeRates = new Dictionary<string, ExchangeRate>();
             try
             {
-                var exchangeRateDate = DateTime.UtcNow.ToCzechNationalBankExchangeNow();
+                var dateOfReferenceForRates = DateTime.UtcNow.ToCzechNationalBankExchangeNow();
 
-                if (_cache.TryGetValue(exchangeRateDate, out Dictionary<string, ExchangeRate> cachedRates))
+                var cacheResult =  TryGetExchangesFromCache(dateOfReferenceForRates);
+                if(cacheResult.IsSuccess)
+                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(cacheResult.ExchangeRates);
+
+                var apiResult = await TryGetExchangesFromApi(dateOfReferenceForRates);
+                if (apiResult.IsSuccess)
                 {
-                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(cachedRates);
+                    _cache.Set(dateOfReferenceForRates, apiResult.ExchangeRates, TimeSpan.FromMinutes(10));
+                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(apiResult.ExchangeRates);
                 }
-
-                var cnbClient = _httpClientFactory.CreateClient("CzechNationalBankApi");
-                var centralBankRatesResult = await GetCentralBankRates(cnbClient,exchangeRateDate);
-                var otherCurrencyRatesResult = await GetOtherCurrencyRates(cnbClient);
-
-                if(!centralBankRatesResult.IsSuccess && !otherCurrencyRatesResult.IsSuccess)
-                {
-                    _logger.Error("There is a problem retrieving rates, daily FX result {@centralBankRates}, other FX {@otherCurrencyRates}", centralBankRatesResult, otherCurrencyRatesResult);
-                    return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates, $"We are having issues retrieving exchange rates");
-                }
-
-                foreach (var centralBankRate in centralBankRatesResult.Content)
-                {
-                    exchangeRates.Add(centralBankRate.CurrencyCode, new ExchangeRate(new Currency(centralBankRate.CurrencyCode),_targetCurrency,centralBankRate.Rate));
-                }         
-                foreach (var otherCurrencyRate in otherCurrencyRatesResult.Content)
-                {
-                    exchangeRates.Add(otherCurrencyRate.CurrencyCode, new ExchangeRate(new Currency(otherCurrencyRate.CurrencyCode),_targetCurrency, otherCurrencyRate.Rate));
-                }
-                // Cache for 10 minutes
-                _cache.Set(exchangeRateDate, exchangeRates, TimeSpan.FromMinutes(10));
-                return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(exchangeRates);
-
+                return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(new Dictionary<string, ExchangeRate>(), "We are having issues retrieving exchange rates");
             }
             catch (Exception exception)
             {
                 _logger.Error(exception, "Error while retrieving exchanges");
-                return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(exchangeRates, exception.Message);
+                return NonNullResponse<Dictionary<string, ExchangeRate>>.Fail(new Dictionary<string, ExchangeRate>(), exception.Message);
             }
         }
 
-        private async Task<NonNullResponse<List<RateDto>>>GetCentralBankRates(HttpClient client, string fxDate)
-        {
-            return await GeRates(client, $"exrates/daily?date={fxDate}&lang=EN");
-        }        
-        
-        private async Task<NonNullResponse<List<RateDto>>>GetOtherCurrencyRates(HttpClient client)
-        {
-            var exchangeRatesDate = DateTime.UtcNow.ToOtherCurrenciesExchangeNow();
-            return await GeRates(client, $"fxrates/daily-month?lang=EN&yearMonth={exchangeRatesDate}");
-        }
+        #region Helper Methods
 
-        private async Task<NonNullResponse<List<RateDto>>> GeRates(HttpClient client, string url)
+        private (bool IsSuccess, Dictionary<string, ExchangeRate> ExchangeRates) TryGetExchangesFromCache(string date)
         {
-            try
+            if (_cache.TryGetValue(date, out Dictionary<string, ExchangeRate>? cachedExchangeRates))
             {
-                var response = await client.GetAsync(url);
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.Error("The api has responded with {code} while retrieving rates: {@response}",
-                        response.StatusCode, response);
-                    return NonNullResponse<List<RateDto>>.Fail(new List<RateDto>(), $"Api responded with code {response.StatusCode}");
-                }
-
-                var deserializedResponse = JsonSerializer.Deserialize<CnbApiRatesResponse>(await response.Content.ReadAsStringAsync());
-                if (deserializedResponse != null)
-                {
-                    return NonNullResponse<List<RateDto>>.Success(deserializedResponse.Rates);
-                }
+                if (cachedExchangeRates != null)
+                    return (true, cachedExchangeRates);
             }
-            catch (Exception exception)
-            {
-                _logger.Error(exception, "Error while retrieving central bank rates");
-            }
-
-            return NonNullResponse<List<RateDto>>.Fail(new List<RateDto>(), "Could not retrieve Central Bank Rates");
+            return (false, new Dictionary<string, ExchangeRate>());
         }
 
+        private async Task<(bool IsSuccess, Dictionary<string,ExchangeRate> ExchangeRates)> TryGetExchangesFromApi(string date)
+        {
+            var centralBankRatesFromApiResult = await _apiClient.GetCentralBankRates(date);
+            var otherCurrenciesRatesFromApiResult = await _apiClient.GetOtherCurrenciesRates(DateTime.UtcNow.ToOtherCurrenciesExchangeNow());
+           
+            if (!centralBankRatesFromApiResult.IsSuccess && !otherCurrenciesRatesFromApiResult.IsSuccess)
+            {
+                _logger.Error("There is a problem retrieving rates, daily FX result {@centralBankRates}, other FX {@otherCurrencyRates}", centralBankRatesFromApiResult, otherCurrenciesRatesFromApiResult);
+                return (false, new Dictionary<string, ExchangeRate>());
+            }
+
+            return (true,MapResultsToDictionary(centralBankRatesFromApiResult.Content,otherCurrenciesRatesFromApiResult.Content));
+        }      
+
+        private static Dictionary<string, ExchangeRate> MapResultsToDictionary(IEnumerable<RateDto> centralBankRates, IEnumerable<RateDto> otherCurrenciesRates)
+        {
+            var exchangeRates = new Dictionary<string, ExchangeRate>();
+
+            foreach (var centralBankRate in centralBankRates)
+            {
+                exchangeRates.Add(centralBankRate.CurrencyCode, new ExchangeRate(new Currency(centralBankRate.CurrencyCode), TargetCurrency, centralBankRate.Rate));
+            }
+            foreach (var otherCurrencyRate in otherCurrenciesRates)
+            {
+                exchangeRates.Add(otherCurrencyRate.CurrencyCode, new ExchangeRate(new Currency(otherCurrencyRate.CurrencyCode), TargetCurrency, otherCurrencyRate.Rate));
+            }
+            return exchangeRates;
+        }
+
+        #endregion
     }
 }
