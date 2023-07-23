@@ -6,6 +6,7 @@ using MassTransit;
 using MassTransit.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Serilog;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -40,10 +41,15 @@ public class ConsoleApplicationTests
         Assert.True(consumerHarness.Consumed.Select<GetExchangeRatesForCurrenciesQuery>().Any());
     }
 
-    private static ServiceProvider BuildServiceProvider(IMock<IExchangeRateProviderService> exchangeRatesProviderServiceMock)
+    //Here we could write some more tests using the harness to test the consumer returns the expected response on success/failure
+
+    //We could also test that the application breaks when no currencies are configured or all currencies are invalid
+
+private static ServiceProvider BuildServiceProvider(IMock<IExchangeRateProviderService> exchangeRatesProviderServiceMock)
     {
         var services = new ServiceCollection();
         services.AddSingleton(exchangeRatesProviderServiceMock.Object);
+        services.AddSingleton(new Mock<ILogger>().Object);
         services.AddMediator(cfg => { cfg.AddConsumersFromNamespaceContaining<GetExchangeRatesForCurrenciesQueryConsumer>(); });
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider;
