@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Currency__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Name of the currency in English, for example: Australia - Dollar</description>
+    <externalId>false</externalId>
+    <label>Target Currency</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Australia - Dollar</fullName>
+                <default>false</default>
+                <label>Australia - Dollar</label>
+            </value>
+            <value>
+                <fullName>Brazil - Real</fullName>
+                <default>false</default>
+                <label>Brazil - Real</label>
+            </value>
+            <value>
+                <fullName>British Pound</fullName>
+                <default>false</default>
+                <label>British Pound</label>
+            </value>
+            <value>
+                <fullName>Bulgaria - Lev</fullName>
+                <default>false</default>
+                <label>Bulgaria - Lev</label>
+            </value>
+            <value>
+                <fullName>Canada - Dollar</fullName>
+                <default>false</default>
+                <label>Canada - Dollar</label>
+            </value>
+            <value>
+                <fullName>China - Renminbi</fullName>
+                <default>false</default>
+                <label>China - Renminbi</label>
+            </value>
+            <value>
+                <fullName>Denmark - Krone</fullName>
+                <default>false</default>
+                <label>Denmark - Krone</label>
+            </value>
+            <value>
+                <fullName>EMU - Euro</fullName>
+                <default>false</default>
+                <label>EMU - Euro</label>
+            </value>
+            <value>
+                <fullName>Hongkong - Dollar</fullName>
+                <default>false</default>
+                <label>Hongkong - Dollar</label>
+            </value>
+            <value>
+                <fullName>Hungary - Forint</fullName>
+                <default>false</default>
+                <label>Hungary - Forint</label>
+            </value>
+            <value>
+                <fullName>IMF - SDR</fullName>
+                <default>false</default>
+                <label>IMF - SDR</label>
+            </value>
+            <value>
+                <fullName>Iceland - Krona</fullName>
+                <default>false</default>
+                <label>Iceland - Krona</label>
+            </value>
+            <value>
+                <fullName>India - Rupee</fullName>
+                <default>false</default>
+                <label>India - Rupee</label>
+            </value>
+            <value>
+                <fullName>Indonesia - Rupiah</fullName>
+                <default>false</default>
+                <label>Indonesia - Rupiah</label>
+            </value>
+            <value>
+                <fullName>Israel - New Shekel</fullName>
+                <default>false</default>
+                <label>Israel - New Shekel</label>
+            </value>
+            <value>
+                <fullName>Japan - Yen</fullName>
+                <default>false</default>
+                <label>Japan - Yen</label>
+            </value>
+            <value>
+                <fullName>Malaysia - Ringgit</fullName>
+                <default>false</default>
+                <label>Malaysia - Ringgit</label>
+            </value>
+            <value>
+                <fullName>Mexico - Peso</fullName>
+                <default>false</default>
+                <label>Mexico - Peso</label>
+            </value>
+            <value>
+                <fullName>New Zealand - Dollar</fullName>
+                <default>false</default>
+                <label>New Zealand - Dollar</label>
+            </value>
+            <value>
+                <fullName>Norway - Krone</fullName>
+                <default>false</default>
+                <label>Norway - Krone</label>
+            </value>
+            <value>
+                <fullName>Philippines - Peso</fullName>
+                <default>false</default>
+                <label>Philippines - Peso</label>
+            </value>
+            <value>
+                <fullName>Poland - Zloty</fullName>
+                <default>false</default>
+                <label>Poland - Zloty</label>
+            </value>
+            <value>
+                <fullName>Romania - Leu</fullName>
+                <default>false</default>
+                <label>Romania - Leu</label>
+            </value>
+            <value>
+                <fullName>SDR</fullName>
+                <default>false</default>
+                <label>SDR</label>
+            </value>
+            <value>
+                <fullName>Singapore - Dollar</fullName>
+                <default>false</default>
+                <label>Singapore - Dollar</label>
+            </value>
+            <value>
+                <fullName>South Africa - Rand</fullName>
+                <default>false</default>
+                <label>South Africa - Rand</label>
+            </value>
+            <value>
+                <fullName>South Korea - Won</fullName>
+                <default>false</default>
+                <label>South Korea - Won</label>
+            </value>
+            <value>
+                <fullName>Sweden - Krona</fullName>
+                <default>false</default>
+                <label>Sweden - Krona</label>
+            </value>
+            <value>
+                <fullName>Switzerland - Franc</fullName>
+                <default>false</default>
+                <label>Switzerland - Franc</label>
+            </value>
+            <value>
+                <fullName>Thailand - Baht</fullName>
+                <default>false</default>
+                <label>Thailand - Baht</label>
+            </value>
+            <value>
+                <fullName>Turkey - Lira</fullName>
+                <default>false</default>
+                <label>Turkey - Lira</label>
+            </value>
+            <value>
+                <fullName>USA - Dollar</fullName>
+                <default>false</default>
+                <label>USA - Dollar</label>
+            </value>
+            <value>
+                <fullName>United Kingdom - Pound</fullName>
+                <default>false</default>
+                <label>United Kingdom - Pound</label>
+            </value>
+            <value>
+                <fullName>baht</fullName>
+                <default>false</default>
+                <label>baht</label>
+            </value>
+            <value>
+                <fullName>dollar</fullName>
+                <default>false</default>
+                <label>dollar</label>
+            </value>
+            <value>
+                <fullName>euro</fullName>
+                <default>false</default>
+                <label>euro</label>
+            </value>
+            <value>
+                <fullName>forint</fullName>
+                <default>false</default>
+                <label>forint</label>
+            </value>
+            <value>
+                <fullName>franc</fullName>
+                <default>false</default>
+                <label>franc</label>
+            </value>
+            <value>
+                <fullName>krona</fullName>
+                <default>false</default>
+                <label>krona</label>
+            </value>
+            <value>
+                <fullName>krone</fullName>
+                <default>false</default>
+                <label>krone</label>
+            </value>
+            <value>
+                <fullName>leu</fullName>
+                <default>false</default>
+                <label>leu</label>
+            </value>
+            <value>
+                <fullName>lev</fullName>
+                <default>false</default>
+                <label>lev</label>
+            </value>
+            <value>
+                <fullName>lira</fullName>
+                <default>false</default>
+                <label>lira</label>
+            </value>
+            <value>
+                <fullName>new shekel</fullName>
+                <default>false</default>
+                <label>new shekel</label>
+            </value>
+            <value>
+                <fullName>peso</fullName>
+                <default>false</default>
+                <label>peso</label>
+            </value>
+            <value>
+                <fullName>pound</fullName>
+                <default>false</default>
+                <label>pound</label>
+            </value>
+            <value>
+                <fullName>rand</fullName>
+                <default>false</default>
+                <label>rand</label>
+            </value>
+            <value>
+                <fullName>real</fullName>
+                <default>false</default>
+                <label>real</label>
+            </value>
+            <value>
+                <fullName>renminbi</fullName>
+                <default>false</default>
+                <label>renminbi</label>
+            </value>
+            <value>
+                <fullName>ringgit</fullName>
+                <default>false</default>
+                <label>ringgit</label>
+            </value>
+            <value>
+                <fullName>rupee</fullName>
+                <default>false</default>
+                <label>rupee</label>
+            </value>
+            <value>
+                <fullName>rupiah</fullName>
+                <default>false</default>
+                <label>rupiah</label>
+            </value>
+            <value>
+                <fullName>won</fullName>
+                <default>false</default>
+                <label>won</label>
+            </value>
+            <value>
+                <fullName>yen</fullName>
+                <default>false</default>
+                <label>yen</label>
+            </value>
+            <value>
+                <fullName>zloty</fullName>
+                <default>false</default>
+                <label>zloty</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

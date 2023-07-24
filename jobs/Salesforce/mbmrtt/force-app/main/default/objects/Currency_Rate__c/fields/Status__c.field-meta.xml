@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <formula>/* for a job that runs once a day (every 1440 mins), with an update window of 3 hours (180) */
+IF(
+   (ROUND(((NOW() - LastModifiedDate)*1440),1) &gt; 1440 + 180), /* Over the update window */
+    &apos;Unable to update this rate due to data integrity&apos;, 
+    IF(
+       NOT(ISBLANK(Error_Message__c)),
+       Error_Message__c,
+       &apos;Up to date&apos;
+    )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

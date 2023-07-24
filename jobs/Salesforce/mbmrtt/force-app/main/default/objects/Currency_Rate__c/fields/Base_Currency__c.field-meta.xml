@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Base_Currency__c</fullName>
+    <deprecated>false</deprecated>
+    <description>The base currency to which the exchange rates are referring</description>
+    <externalId>false</externalId>
+    <label>Base Currency</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Czech - Koruna</fullName>
+                <default>true</default>
+                <label>Czech - Koruna</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

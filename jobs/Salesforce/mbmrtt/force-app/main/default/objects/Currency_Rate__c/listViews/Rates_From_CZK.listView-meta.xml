@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rates_From_CZK</fullName>
+    <columns>Base_Currency__c</columns>
+    <columns>Base_Code__c</columns>
+    <columns>Base_Amount__c</columns>
+    <columns>Target_Amount__c</columns>
+    <columns>Target_Code__c</columns>
+    <columns>Target_Currency__c</columns>
+    <columns>Status__c</columns>
+    <columns>LAST_UPDATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>startsWith</operation>
+        <value>CZK</value>
+    </filters>
+    <label>Rates From CZK</label>
+</ListView>
