@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
@@ -20,7 +21,14 @@ namespace ExchangeRateUpdater
       /// </summary>
       public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
       {
-         return _exchangeRateService.Get();
+         var currencyCodes = currencies.Select(currency => currency.Code);
+
+         return
+            _exchangeRateService
+               .Get()
+               .Where(rate =>
+                  currencyCodes.Contains(rate.SourceCurrency.Code) &&
+                  currencyCodes.Contains(rate.TargetCurrency.Code));
       }
    }
 }

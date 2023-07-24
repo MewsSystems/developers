@@ -6,9 +6,10 @@ public class ExchangeRateServiceStub : IExchangeRateService
 {
    private List<ExchangeRate> _rates = new List<ExchangeRate>();
 
-   public void Add(string currencyCode, decimal value)
+   public void Add(string sourceCurrencyCode, string targetCurrencyCode, decimal value)
    {
-      _rates.Add(new ExchangeRate(new Currency(currencyCode), new Currency("CZK"), value));
+      _rates.Add(new ExchangeRate(
+         new Currency(sourceCurrencyCode), new Currency(targetCurrencyCode), value));
    }
 
    public IEnumerable<ExchangeRate> Get()
