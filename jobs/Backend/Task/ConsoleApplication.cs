@@ -49,7 +49,7 @@ public class ConsoleApplication : BackgroundService
             Console.WriteLine("Press any key to refresh or ESC to exit.");
 
         } while (Console.ReadKey().Key != ConsoleKey.Escape);
-
-        await Task.Delay(1000, stoppingToken);
+        
+        Environment.Exit(0);
     }
 }
