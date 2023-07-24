@@ -8,7 +8,7 @@ public class ExchangeRateUpdaterTest
    [Fact]
    public void OneExistingRate()
    {
-      var provider = new ExchangeRateProvider();
+      var provider = new ExchangeRateProvider(new ExchangeRateService());
       var rates = provider.GetExchangeRates(new Currency[] {
          new Currency("EUR")
       });
