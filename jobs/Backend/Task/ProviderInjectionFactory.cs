@@ -9,7 +9,7 @@ using ExchangeRateUpdater.Infrastructure.CzechNationalBank.ApiClients.Implementa
 
 namespace ExchangeRateUpdater;
 
-public static class ProviderFactory
+public static class ProviderInjectionFactory
 {
     public static IServiceCollection AddExchangeRatesProvider(this IServiceCollection services, IConfiguration configuration)
     {

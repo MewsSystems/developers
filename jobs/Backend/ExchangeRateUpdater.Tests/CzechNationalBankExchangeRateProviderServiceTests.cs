@@ -29,15 +29,15 @@ namespace ExchangeRateUpdater.Tests
 
         private void EnsureCacheIsClear()
         {
-            if (_testCache.TryGetValue(DateTime.UtcNow.ToCacheKeyReference(), out _))
-                _testCache.Remove(DateTime.UtcNow.ToCacheKeyReference());
+            if (_testCache.TryGetValue(DateTime.UtcNow.ToCacheKeyReferenceString(), out _))
+                _testCache.Remove(DateTime.UtcNow.ToCacheKeyReferenceString());
         }
 
         [Fact]
         public async Task GetExchangeRates_WhenCached_ReturnsCachedExchangeRates()
         {
             // Arrange
-            var cacheKey = DateTime.UtcNow.ToCacheKeyReference();
+            var cacheKey = DateTime.UtcNow.ToCacheKeyReferenceString();
 
             var expectedExchangeRates = NonNullResponse<Dictionary<string, ExchangeRate>>.Success(new Dictionary<string, ExchangeRate>()
             {

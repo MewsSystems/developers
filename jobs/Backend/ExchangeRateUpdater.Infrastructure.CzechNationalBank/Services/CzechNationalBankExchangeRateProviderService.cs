@@ -32,7 +32,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
         {
             try
             {
-                var cacheKey = DateTime.UtcNow.ToCacheKeyReference();
+                var cacheKey = DateTime.UtcNow.ToCacheKeyReferenceString();
                 var cacheResult =  TryGetExchangesFromCache(cacheKey);
                 if(cacheResult.IsSuccess)
                     return NonNullResponse<Dictionary<string, ExchangeRate>>.Success(cacheResult.ExchangeRates);
@@ -66,8 +66,8 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.Services
 
         private async Task<(bool IsSuccess, Dictionary<string,ExchangeRate> ExchangeRates)> TryGetExchangesFromApi()
         {
-            var centralBankRatesFromApiResult = await _apiClient.GetCentralBankRates(DateTime.UtcNow.ToCzechNationalBankExchangeNow());
-            var otherCurrenciesRatesFromApiResult = await _apiClient.GetOtherCurrenciesRates(DateTime.UtcNow.ToOtherCurrenciesExchangeNow());
+            var centralBankRatesFromApiResult = await _apiClient.GetCentralBankRates(DateTime.UtcNow.ToCzechNationalBankExchangeNowString());
+            var otherCurrenciesRatesFromApiResult = await _apiClient.GetOtherCurrenciesRates(DateTime.UtcNow.ToOtherCurrenciesExchangeNowString());
 
             if (!centralBankRatesFromApiResult.IsSuccess || !otherCurrenciesRatesFromApiResult.IsSuccess)
             {

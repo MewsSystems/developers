@@ -2,7 +2,12 @@
 
 public static class DateTimeExtensions
 {
-    public static string ToCzechNationalBankExchangeNow(this DateTime datetime)
+    /// <summary>
+    /// Returns the date in the format that the Czech National Bank uses to retrieve daily exchange rates
+    /// </summary>
+    /// <param name="datetime"></param>
+    /// <returns></returns>
+    public static string ToCzechNationalBankExchangeNowString(this DateTime datetime)
     {
         /*
          * As Per https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/
@@ -22,7 +27,12 @@ public static class DateTimeExtensions
         return pragueLocalTime.ToString("yyyy-MM-dd");
     }    
     
-    public static string ToOtherCurrenciesExchangeNow(this DateTime datetime)
+    /// <summary>
+    /// Returns the date in the format that the Czech National Bank uses to retrieve monthly exchange rates for other currencies
+    /// </summary>
+    /// <param name="datetime"></param>
+    /// <returns></returns>
+    public static string ToOtherCurrenciesExchangeNowString(this DateTime datetime)
     {
         /*
          * As per https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/
@@ -34,7 +44,12 @@ public static class DateTimeExtensions
         return datetime.ToPragueLocalTime().AddMonths(-1).ToString("yyyy-MM");
     }
 
-    public static string ToCacheKeyReference(this DateTime datetime)
+    /// <summary>
+    /// Returns the date in a format that can be used as a cache key reference to ensure cached values are not stale
+    /// </summary>
+    /// <param name="datetime"></param>
+    /// <returns></returns>
+    public static string ToCacheKeyReferenceString(this DateTime datetime)
     {
         /*
          * To ensure we do not refer to stale values, cache key is worked out based on the current day and time,
