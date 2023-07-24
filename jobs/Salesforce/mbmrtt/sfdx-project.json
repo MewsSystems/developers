@@ -1,0 +1,19 @@
+{
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "mbmrttPack",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "versionDescription": "Mbmrtt - Exchange Rates"
+        }
+    ],
+    "name": "mbmrtt",
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "58.0",
+    "packageAliases": {
+        "mbmrttPack": "0Ho8d000000CaqZCAS"
+    }
+}
