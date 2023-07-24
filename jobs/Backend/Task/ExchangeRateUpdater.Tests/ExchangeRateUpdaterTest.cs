@@ -8,7 +8,10 @@ public class ExchangeRateUpdaterTest
    [Fact]
    public void OneExistingRate()
    {
-      var provider = new ExchangeRateProvider(new ExchangeRateService());
+      var stub = new ExchangeRateServiceStub();
+      stub.Add("EUR", 24);
+
+      var provider = new ExchangeRateProvider(stub);
       var rates = provider.GetExchangeRates(new Currency[] {
          new Currency("EUR")
       });
