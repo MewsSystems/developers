@@ -1,19 +1,25 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Tests;
 
 public class ExchangeRateServiceStub : IExchangeRateService
 {
-   private List<ExchangeRate> _rates = new List<ExchangeRate>();
+   private List<ExchangeRateResponse> _rates = new List<ExchangeRateResponse>();
 
-   public void Add(string sourceCurrencyCode, string targetCurrencyCode, decimal value)
+   public void Add(string currencyCode, decimal rate)
    {
-      _rates.Add(new ExchangeRate(
-         new Currency(sourceCurrencyCode), new Currency(targetCurrencyCode), value));
+      _rates.Add(new ExchangeRateResponse
+      {
+         CurrencyCode = currencyCode,
+         Rate = rate
+      });
    }
-
-   public IEnumerable<ExchangeRate> Get()
+   public Task<ExchangeRateServiceResponse> Get()
    {
-      return _rates;
+      return Task.FromResult(new ExchangeRateServiceResponse()
+      {
+         Rates = _rates.ToArray()
+      });
    }
 }

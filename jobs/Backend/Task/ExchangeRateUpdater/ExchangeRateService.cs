@@ -1,20 +1,33 @@
-using System.Collections.Generic;
+using System;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
    public interface IExchangeRateService
    {
-      IEnumerable<ExchangeRate> Get();
+      Task<ExchangeRateServiceResponse> Get();
    }
 
    public class ExchangeRateService : IExchangeRateService
    {
-      public IEnumerable<ExchangeRate> Get()
+      private readonly HttpClient _httpClient;
+
+      public ExchangeRateService(HttpClient httpClient)
       {
-         return new ExchangeRate[]
-         {
-            new ExchangeRate(new Currency("EUR"), new Currency("CZK"), 24)
-         };
+         _httpClient = httpClient;
+         _httpClient.BaseAddress = new Uri("https://api.cnb.cz/cnbapi");
+      }
+
+      public async Task<ExchangeRateServiceResponse> Get()
+      {
+         var response = await _httpClient.GetAsync("exrates/daily");
+         response.EnsureSuccessStatusCode();
+
+         var content = await response.Content.ReadAsStringAsync();
+
+         return JsonSerializer.Deserialize<ExchangeRateServiceResponse>(content);
       }
    }
 }
