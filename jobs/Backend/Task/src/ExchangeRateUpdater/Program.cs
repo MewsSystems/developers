@@ -36,7 +36,6 @@ namespace ExchangeRateUpdater
 
                 var exchangeRateService = serviceProvider.GetRequiredService<IExchangeRateService>();
                 var rates = await exchangeRateService.GetExchangeRates(currenciesModel);
-                var rates2 = await exchangeRateService.GetExchangeRates(currenciesModel);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
