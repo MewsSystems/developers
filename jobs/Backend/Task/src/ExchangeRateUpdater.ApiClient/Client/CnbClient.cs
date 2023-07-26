@@ -13,6 +13,9 @@ namespace ExchangeRateUpdater.ApiClient.Client
 
         public async Task<ExchangeDailyCommand> GetExchangesDaily(DateTime date, Language language)
         {
+            _logger.LogInformation("Doing request '{request}' with '{date}' and '{language}'",nameof(CnbClient.GetExchangesDaily)
+                ,date,language);
+
             var query = CnbConstants.ExchangeRatesDaily(date, language.ToString());
             var request = new HttpRequestMessage(HttpMethod.Get, query);
             return await Send<ExchangeDailyCommand, ExchangeResponse, ErrorResponse>(request);

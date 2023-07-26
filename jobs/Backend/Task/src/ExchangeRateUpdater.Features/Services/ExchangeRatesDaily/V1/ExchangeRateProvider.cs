@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater.Features.Services.ExchangeRagesDaily.V1
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            _logger.LogInformation("Handling in function '{function}' group by Id '{id}'",
+            _logger.LogInformation("Handling in function '{function}' with currencies with Id '{id}'",
                           nameof(ExchangeRateProvider.GetExchangeRates), currencies.Select(elem => "'" + elem.Code + "'"));
 
             var exchangesResult = await _cache.GetOrAddAsync(GetCacheKey(),

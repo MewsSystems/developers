@@ -22,7 +22,7 @@ namespace ExchangeRateUpdater.Features.Services
             if (currencies == null || !currencies.Any())
                 throw new ExchangeRateUpdaterException("Currency list can not be null or empty");
 
-            _logger.LogInformation("Handling in function '{function}' group by Id '{id}'",
+            _logger.LogInformation("Handling in function '{function}' with currencies with Id '{id}'",
                 nameof(ExchangeRateService.GetExchangeRates), currencies.Select(elem => "'" + elem.Code + "'"));
 
             var exchangeResults = await _exchangeRateProvider.GetExchangeRates(currencies.ToCurrency());
