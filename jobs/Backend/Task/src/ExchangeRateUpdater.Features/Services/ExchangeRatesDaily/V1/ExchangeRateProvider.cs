@@ -1,5 +1,7 @@
 ﻿using ExchangeRateUpdater.ApiClient.Client;
+using ExchangeRateUpdater.ApiClient.Client.ExchangeDaily;
 using ExchangeRateUpdater.ApiClient.Common;
+using ExchangeRateUpdater.ApiClient.Exceptions;
 using ExchangeRateUpdater.Features.Common;
 using ExchangeRateUpdater.Features.Exceptions;
 using ExchangeRateUpdater.Models.Domain;
@@ -33,13 +35,23 @@ namespace ExchangeRateUpdater.Features.Services.ExchangeRagesDaily.V1
                           nameof(ExchangeRateProvider.GetExchangeRates), currencies.Select(elem => "'" + elem.Code + "'"));
 
             var exchangesResult = await _cache.GetOrAddAsync(GetCacheKey(),
-                async () => await _cnbClient.GetExchangesDaily(DateTime.UtcNow, Language.EN));
+                async () => await ApiCall());
 
-            if (!exchangesResult.HasValue || !exchangesResult.Value.IsSuccess)
+            if (!exchangesResult.HasValue)
                 throw new ExchangeRateUpdaterException($"something went wrong in the ExchangesRates");
 
             var listOfExchangeRate = exchangesResult.Value.Payload.Rates.ToExchangeRate(Constants.CZK).ToList();
             return ExchangeRateCurrenciesIntersection(listOfExchangeRate, currencies);
+        }
+
+        private async Task<ExchangeDailyCommand> ApiCall()
+        {
+            var exchangeResult = await _cnbClient.GetExchangesDaily(DateTime.UtcNow, Language.EN);
+            if (!exchangeResult.IsSuccess)
+                throw new ApiCnbException($"something went wrong in the ExchangesRates");
+
+            return exchangeResult;
+
         }
 
         private IEnumerable<ExchangeRate> ExchangeRateCurrenciesIntersection(
