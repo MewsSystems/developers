@@ -13,6 +13,8 @@ namespace ExchangeRateUpdater.Features
     public static class FeatureExtensions
     {
         private static readonly int DEFAULT_WAIT_TIME_RETRY = 2;
+
+        private static readonly string DEFAULT_TIMEOUT = "00:00:20";
         public delegate IAsyncPolicy<HttpResponseMessage> RetryPolicyFactory();
 
         public static void AddExchangeRateUpdaterFeature(
@@ -35,7 +37,8 @@ namespace ExchangeRateUpdater.Features
 
         private static void AddCache(this IServiceCollection services)
         {
-            services.AddCustomCache(Constants.CacheName, opts=> {
+            services.AddCustomCache(Constants.CacheName, opts =>
+            {
                 opts.Name = Constants.CacheName;
                 opts.DefaultAbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
             });
@@ -50,6 +53,7 @@ namespace ExchangeRateUpdater.Features
 
             services.AddHttpClient<ICnbClient, CnbClient>(opts =>
             {
+                opts.Timeout = options.Timeout ?? TimeSpan.Parse(DEFAULT_TIMEOUT);
                 opts.BaseAddress = new Uri(options.BaseUrl);
             }).AddPolicyHandler(policyFactory());
         }
