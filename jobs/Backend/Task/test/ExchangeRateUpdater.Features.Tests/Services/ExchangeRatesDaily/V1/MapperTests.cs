@@ -37,12 +37,17 @@ namespace ExchangeRateUpdater.Features.Tests.Services.ExchangeRatesDaily.V1
                new ExchangeRate( new Currency("CZK"), new Currency("AUS"), 1)
             };
 
-            var actual = exchangeRateList.ToExchangeRateModel();
+            var actual = exchangeRateList.ToExchangeRateModel().ToList();
 
             Assert.Equal(exchangeRateList.Count(), actual.Count());
 
-            var actualToString = exchangeRateList.First(x => x.TargetCurrency.Code == "AUS").ToString();
+            var actualToString = actual.First(x => x.TargetCurrency.Code == "AUS").ToString();
             Assert.Equal(expectedEchangeRate, actualToString);
+
+
+            actualToString = exchangeRateList.First(x => x.TargetCurrency.Code == "AUS").ToString();
+            Assert.Equal(expectedEchangeRate, actualToString);
+
         }
     }
 }
