@@ -56,6 +56,7 @@ namespace ExchangeRateUpdater
         {
             services.AddExchangeRateUpdaterFeature(opts =>
             {
+                opts.Timeout = TimeSpan.Parse(AppSettingsProvider.CnbClientOptions.Timeout);
                 opts.RetryOptions = RetryOptions.Default;
                 opts.BaseUrl = AppSettingsProvider.CnbClientOptions.BaseUrl;
             });
