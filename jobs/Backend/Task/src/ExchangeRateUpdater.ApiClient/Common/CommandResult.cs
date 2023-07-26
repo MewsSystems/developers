@@ -2,7 +2,7 @@
 
 namespace ExchangeRateUpdater.ApiClient.Common
 {
-    public class EmptyCommandResult : IEmptyCommandResult
+    public abstract class EmptyCommandResult : IEmptyCommandResult
     {
         public HttpStatusCode StatusCode { get; set; }
         public string ErrorMessage { get; set; }
@@ -15,7 +15,7 @@ namespace ExchangeRateUpdater.ApiClient.Common
         }
     }
 
-    public class CommandResult<T, TError> : EmptyCommandResult, ICommandResult<T>
+    public abstract class CommandResult<T, TError> : EmptyCommandResult, ICommandResult<T>
     {
         public T Payload { get; set; }
         public TError Error { get; set; }

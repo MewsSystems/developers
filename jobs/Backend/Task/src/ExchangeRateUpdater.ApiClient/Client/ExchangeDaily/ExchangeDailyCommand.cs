@@ -2,7 +2,7 @@
 
 namespace ExchangeRateUpdater.ApiClient.Client.ExchangeDaily
 {
-    public class ExchangeDailyCommand : CommandResult<ExchangeResponse,ErrorResponse>
+    public class ExchangeDailyCommand : CommandResult<ExchangeDailyResponse,ErrorDailyResponse>
     {
     }
 }

@@ -38,7 +38,7 @@ namespace ExchangeRateUpdater.Features.Services.ExchangeRagesDaily.V1
             };
         }
 
-        public static IEnumerable<ExchangeRate> ToExchangeRate(this IEnumerable<ExchangeRateResponse> models, Currency sourceCurrency)
+        public static IEnumerable<ExchangeRate> ToExchangeRate(this IEnumerable<ExchangeRateDailyResponse> models, Currency sourceCurrency)
         {
             foreach (var item in models)
                 yield return new ExchangeRate(sourceCurrency,

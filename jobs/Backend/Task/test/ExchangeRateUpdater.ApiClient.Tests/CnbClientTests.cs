@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Net;
 using FluentAssertions;
 using ExchangeRateUpdater.ApiClient.Exceptions;
+using ExchangeRateUpdater.ApiClient.Common;
 
 namespace ExchangeRateUpdater.ApiClient.Tests
 {
@@ -23,6 +24,7 @@ namespace ExchangeRateUpdater.ApiClient.Tests
             _sut = new CnbClient(_logger.Object, _httpClient.Object);
         }
 
+        [Fact]
         public void Ctor_When_AnyArgumentIsNull_Then_Throws_Exception()
         {
             Assert.Throws<ArgumentNullException>(() => new CnbClient(default, default));
@@ -125,9 +127,9 @@ namespace ExchangeRateUpdater.ApiClient.Tests
             return JsonConvert.SerializeObject(result);
         }
 
-        private ErrorResponse GetErrorRequest()
+        private ErrorDailyResponse GetErrorRequest()
         {
-            return new ErrorResponse()
+            return new ErrorDailyResponse()
             {
                 Description = "Error",
                 EndPoint = "error",
@@ -137,14 +139,14 @@ namespace ExchangeRateUpdater.ApiClient.Tests
             };
         }
 
-        private ExchangeResponse GetExchangeRequest()
+        private ExchangeDailyResponse GetExchangeRequest()
         {
-            return new ExchangeResponse()
+            return new ExchangeDailyResponse()
             {
 
-                Rates = new List<ExchangeRateResponse>()
+                Rates = new List<ExchangeRateDailyResponse>()
                 {
-                    new ExchangeRateResponse()
+                    new ExchangeRateDailyResponse()
                     {
                         Amount = 1,
                         Country = "AUS",

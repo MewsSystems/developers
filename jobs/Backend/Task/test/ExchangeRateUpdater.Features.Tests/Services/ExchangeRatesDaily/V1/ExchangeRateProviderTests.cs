@@ -80,11 +80,11 @@ namespace ExchangeRateUpdater.Features.Tests.Services.ExchangeRatesDaily.V1
 
         public Maybe<ExchangeDailyCommand> GetExchangeDailyCommand(IEnumerable<string> currenciesReturn)
         {
-            List<ExchangeRateResponse> listExchangeRateResponse = new List<ExchangeRateResponse>();
+            List<ExchangeRateDailyResponse> listExchangeRateResponse = new List<ExchangeRateDailyResponse>();
 
             foreach (var item in currenciesReturn)
             {
-                listExchangeRateResponse.Add(new ExchangeRateResponse()
+                listExchangeRateResponse.Add(new ExchangeRateDailyResponse()
                 {
                     CurrencyCode = item
                 });
@@ -92,7 +92,7 @@ namespace ExchangeRateUpdater.Features.Tests.Services.ExchangeRatesDaily.V1
 
             Maybe<ExchangeDailyCommand> result = new ExchangeDailyCommand()
             {
-                Payload = new ExchangeResponse()
+                Payload = new ExchangeDailyResponse()
                 {
                     Rates = listExchangeRateResponse
                 }

@@ -1,11 +1,11 @@
 ﻿namespace ExchangeRateUpdater.ApiClient.Client.ExchangeDaily
 {
-    public class ExchangeResponse
+    public class ExchangeDailyResponse
     {
-        public IEnumerable<ExchangeRateResponse> Rates { get; set; }
+        public IEnumerable<ExchangeRateDailyResponse> Rates { get; set; }
     }
 
-    public class ExchangeRateResponse
+    public class ExchangeRateDailyResponse
     {
         public DateTime ValidFor { get; set; }
         public double Order { get; set; }
@@ -16,7 +16,7 @@
         public decimal Rate { get; set; }
     }
 
-    public class ErrorResponse
+    public class ErrorDailyResponse
     {
         public string Description { get; set; }
         public string EndPoint { get; set; }

@@ -1,13 +1,10 @@
-﻿namespace ExchangeRateUpdater.ApiClient.Client.ExchangeDaily
+﻿using ExchangeRateUpdater.ApiClient.Common;
+
+namespace ExchangeRateUpdater.ApiClient.Client.ExchangeDaily
 {
-    public class ExchangeRequest
+    public class ExchangeDailyRequest
     {
         public DateTime DateTime { get; set; }
         public Language Language { get; set; }
-    }
-
-    public enum Language
-    {
-        CN, EN
     }
 }

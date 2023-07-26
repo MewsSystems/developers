@@ -1,5 +1,5 @@
 ﻿using ExchangeRateUpdater.ApiClient.Client.ExchangeDaily;
-using ExchangeRateUpdater.ApiClient.Infrastructure;
+using ExchangeRateUpdater.ApiClient.Common;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.ApiClient.Client
@@ -18,7 +18,8 @@ namespace ExchangeRateUpdater.ApiClient.Client
 
             var query = CnbConstants.ExchangeRatesDaily(date, language.ToString());
             var request = new HttpRequestMessage(HttpMethod.Get, query);
-            return await Send<ExchangeDailyCommand, ExchangeResponse, ErrorResponse>(request);
+            return await Send<ExchangeDailyCommand, ExchangeDailyResponse, ErrorDailyResponse>(request);
         }
+
     }
 }

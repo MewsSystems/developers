@@ -1,5 +1,5 @@
-﻿using ExchangeRateUpdater.ApiClient.Client.ExchangeDaily;
-using ExchangeRateUpdater.ApiClient.Client;
+﻿using ExchangeRateUpdater.ApiClient.Client;
+using ExchangeRateUpdater.ApiClient.Common;
 using ExchangeRateUpdater.Features.Common;
 using ExchangeRateUpdater.Features.Exceptions;
 using ExchangeRateUpdater.Models.Domain;

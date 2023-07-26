@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net;
 
-namespace ExchangeRateUpdater.ApiClient.Client
+namespace ExchangeRateUpdater.ApiClient
 {
     public abstract class BaseHttpClient
     {

@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.ApiClient.Client.ExchangeDaily;
+using ExchangeRateUpdater.ApiClient.Common;
 
 namespace ExchangeRateUpdater.ApiClient.Client
 {
