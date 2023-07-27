@@ -1,17 +1,19 @@
-import styled from "styled-components";
-const Title = styled.h2`
+import { FC } from "react";
+import Styled from "styled-components";
+const Title = Styled.h2`
 font-size: 1.2em;
 text-align: center;
 color: #ec9a1d;
 `;
 
 // Create a Wrapper component that'll render a <section> tag with some styles
-const MainSection = styled.section`
+const MainSection = Styled.section`
 padding: 2em;
 background: #919c9e;
 `;
 
-function MovieDetail() {
+const MovieDetail: FC<{}> = () => {
+
 
   return (
    <MainSection>

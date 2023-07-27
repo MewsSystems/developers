@@ -1,18 +1,21 @@
-import styled from "styled-components";
+import { FC } from "react";
+import Styled from "styled-components";
 import NavigationBar from "../nav-bar/nav-bar";
-const Title = styled.h1`
+const Title = Styled.h1`
   font-size: 1.5em;
   text-align: center;
-  color: #ec9a1d;
+  color: #ec701d;
+
 `;
 
 // Create a Wrapper component that'll render a <section> tag with some styles
-const Wrapper = styled.section`
+const Wrapper = Styled.section`
   padding: 2em;
-  background: #77d1e0;
+  background-color: #00ffd5;
+
 `;
 
-export default function HeaderComponent() {
+const HeaderComponent: FC<{}> = () => {
   return (
     <Wrapper>
       <Title>Find your movie !</Title>
@@ -20,3 +23,5 @@ export default function HeaderComponent() {
     </Wrapper>
   );
 }
+
+export default HeaderComponent;

@@ -1,39 +1,41 @@
+import { FC } from "react";
 import { Outlet } from "react-router-dom";
-import styled from "styled-components";
+import Styled from "styled-components";
 import HeaderComponent from "../components/header/header";
 
-const HeaderLayout = styled.header`
-  display:block
-  height: 10vh;
+const HeaderLayout = Styled.header`
+  max-height: 200px;
+  position: sticky;
+  top: 0;
+  box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.30);
 `;
 
-const FooterLayout = styled.header`
-  display:block
-  height: 10vh;
+const FooterLayout = Styled.div`
+  max-height: 80px;
 `;
-const ContentLayout = styled.section`
- display:block
-  height: 100vh;
+const ContentLayout = Styled.section``;
+
+const PageLayout = Styled.div`
+  display: flex;
+  flex-flow: column;
 `;
 
-const PageLayout = styled.div`
-  display: block;
-`;
-
-export default function Layout() {
+const Layout: FC<{}> = () => {
   return (
     <PageLayout>
       {/* A "layout route" is a good place to put markup you want to
             share across all the pages on your site, like navigation. */}
-      <HeaderLayout>
+      <HeaderLayout className='header-layout'>
         <HeaderComponent></HeaderComponent>
       </HeaderLayout>
 
-      <ContentLayout>
+      <ContentLayout className='content-layout'>
         <Outlet />
       </ContentLayout>
 
       <FooterLayout>footer</FooterLayout>
     </PageLayout>
   );
-}
+};
+
+export default Layout;

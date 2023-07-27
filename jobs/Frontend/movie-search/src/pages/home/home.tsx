@@ -1,26 +1,26 @@
-import styled from "styled-components";
-const Title = styled.h2`
-font-size: 1.2em;
-text-align: center;
-color: #ec9a1d;
+import { FC } from "react";
+import Styled from "styled-components";
+import CardsList from "../../components/card-list/card-list";
+const Title = Styled.h2`
+  font-size: 1.2em;
+  text-align: center;
+
 `;
 
 // Create a Wrapper component that'll render a <section> tag with some styles
-const MainSection = styled.section`
-padding: 2em;
-background: #919c9e;
-
+const MainSection = Styled.section`
+  padding: 2em 12em;
+  background: #cad2d3;
 `;
 
- function Home() {
+const Home: FC<{}> = () => {
 
   return (
-   <MainSection>
-    <Title>main</Title>
-
-   </MainSection>
+    <MainSection className="home-container">
+      <Title>main</Title>
+      <CardsList numberOfCards={10} ></CardsList>
+    </MainSection>
   );
 }
-
 
 export default Home;

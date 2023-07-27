@@ -1,12 +1,26 @@
+import { FC } from "react";
 import { Link } from "react-router-dom";
+import Styled from "styled-components";
 
-export default function NotFound() {
+const MainSection = Styled.section`
+padding: 2em;
+background: #919c9e;
+`;
+
+const StyledLink = Styled(Link)`
+  color: #3f298d;
+  font-weight: bold;
+`;
+
+const NotFound: FC<{}> = () => {
   return (
-    <div>
-      <h2>It looks like you&posre lost...</h2>
+    <MainSection>
+      <h2>It looks like you&apos;re lost...</h2>
       <p>
-        <Link to='/'>Go to the home page</Link>
+        <StyledLink to='/'>Go to the home page</StyledLink>
       </p>
-    </div>
+    </MainSection>
   );
 }
+
+export default NotFound
