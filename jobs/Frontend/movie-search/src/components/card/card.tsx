@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import Styled from "styled-components";
-import { CardProps } from "./card.types";
+import { MovieItem } from "../../store/movie-slice";
 
 const CardContents = Styled.div`
   max-width:300px;
@@ -57,13 +57,13 @@ text-decoration: none;
 
 `;
 
-const Card: FC<{ movie: CardProps }> = ({ movie }) => {
+const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
   return (
     <CardContents>
       <Title>{movie?.title}</Title>
       <StyledImage
-        src={movie?.posterPath}
-        alt='oppenhimmer poster'
+        src={`https://image.tmdb.org/t/p/w342${movie?.posterPath}`}
+        alt='poster'
       ></StyledImage>
       <StyledDesctiption>
         <div className='description-text'>
