@@ -5,9 +5,9 @@ import { MovieItem } from "../../models/movies.types";
 import { getMovieDetailThunk } from "../../store/movie-thunks";
 import { useAppDispatch } from "../../store/store";
 
-const CardContents = Styled.div`
+const CardContents =  Styled(Link)`
   max-width:300px;
-
+  text-decoration: none;
   background-color: rgb(245, 197, 24);
   padding: 2%;
   flex-grow: 1;
@@ -16,6 +16,10 @@ const CardContents = Styled.div`
   border-radius: 8px;
   display: flex;
   flex-flow: column;
+  cursor:pointer;
+  &:hover {
+    background-color:#f1eb97;
+} 
 
 `;
 const Title = Styled.h3`
@@ -39,25 +43,7 @@ color:  #3f298d;
 }
 `;
 
-const StyledViewDetail = Styled(Link)`
-display: block;
-width: 100px;
-min-height: 28px;
-background-color: #ec701d;
-border: 2px solid  #b94f08;
-border-radius:5px;
-color:  #3f298d;
-margin:auto;
-padding: 4px;
-line-height: 1.7;
-font-weight:700;
-text-decoration: none;
-&:hover {
-    background-color: #f0b085;; // <Thing> when hovered
-}
 
-
-`;
 
 const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
   const dispatch = useAppDispatch();
@@ -85,7 +71,7 @@ const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
     );
   };
   return (
-    <CardContents>
+    <CardContents onClick={handleClickViewDetail} to={`/movies/${movie.id}`}>
       <Title>{movie?.title}</Title>
       {loadPoster()}
       <StyledDesctiption>
@@ -100,9 +86,7 @@ const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
         </div>
 
       </StyledDesctiption>
-      <StyledViewDetail onClick={handleClickViewDetail} to={`/movies/${movie.id}`}>
-        View Detail
-      </StyledViewDetail>
+
     </CardContents>
   );
 };
