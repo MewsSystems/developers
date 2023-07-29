@@ -7,13 +7,13 @@ const HeaderLayout = Styled.header`
   max-height: 200px;
   position: sticky;
   top: 0;
-  box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.30);
+  box-shadow: 0px 20px 10px 0px rgba(0, 0, 0, 0.51);
 `;
 
 const FooterLayout = Styled.div`
   max-height: 80px;
-  background-color: #00ffd5;
-  color:#3f298d;
+  background-color:  rgb(0, 150, 12);;
+  color:#f3f3f3;
 
 `;
 const ContentLayout = Styled.section``;
@@ -36,7 +36,7 @@ const Layout: FC<{}> = () => {
         <Outlet />
       </ContentLayout>
 
-      <FooterLayout>Justin Rios - Task for mews</FooterLayout>
+      <FooterLayout>Justin Rios - Task for Mews</FooterLayout>
     </PageLayout>
   );
 };

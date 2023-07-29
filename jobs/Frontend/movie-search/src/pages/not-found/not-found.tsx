@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import Styled from "styled-components";
 
 const MainSection = Styled.section`
-padding: 2em;
-background: #919c9e;
+  padding: 2em;
+  background-color: #f3f3f3;
+  height: calc(100vh - 285px);
 `;
 
 const StyledLink = Styled(Link)`

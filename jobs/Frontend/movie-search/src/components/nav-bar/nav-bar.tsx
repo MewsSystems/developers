@@ -1,30 +1,67 @@
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { getMovieDetailThunk } from "../../store/movie-thunks";
+import { useAppDispatch } from "../../store/store";
 
 const Wrapper = styled.div`
-
-
-  background-color: #00ffd5;
-  ul,li{
-    
-    display:flex;
-    text-decoration:none;
+  background-color: rgb(245, 197, 24);
+  ul,
+  li {
+    display: flex;
+    text-decoration: none;
     list-style-type: none;
     justify-content: center;
+    padding-left: 0px;
   }
-  
 `;
 
 const StyledLink = styled(Link)`
   color: #3f298d;
   font-weight: bold;
-  text-decoration:none;
-  padding:12px;
+  text-decoration: none;
+  padding: 12px;
+  width: 150px;
+  border-radius: 5px;
+  margin: 0px 8px;
+  border: 2px solid #b94f08;
+  background-color: #ec701d;
+  &:hover {
+    background-color: #f0b085; // <Thing> when hovered
+  }
 `;
-const NavigationBar: FC<{}> = () => {
 
-  
+const Styledanchor = styled.a`
+  color: #3f298d;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 12px;
+  width: 150px;
+  border-radius: 5px;
+  margin: 0px 8px;
+  border: 2px solid #b94f08;
+  background-color: #ec701d;
+  &:hover {
+    background-color: #f0b085; // <Thing> when hovered
+  }
+`;
+
+const NavigationBar: FC<{}> = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  function randomIntFromInterval(min: number, max: number) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  const handleClickViewDetail = () => {
+    const id = randomIntFromInterval(200, 50000);
+    navigate(`/movies/${id}`);
+
+    dispatch(getMovieDetailThunk({ movieId: id }));
+  };
+
   return (
     <Wrapper>
       <nav>
@@ -33,7 +70,9 @@ const NavigationBar: FC<{}> = () => {
             <StyledLink to='/'>Search</StyledLink>
           </li>
           <li>
-            <StyledLink to='/movies/1'>Higlighted movie</StyledLink>
+            <Styledanchor onClick={handleClickViewDetail}>
+              Watch tonight!
+            </Styledanchor>
           </li>
           <li>
             <StyledLink to='/nothing-here'>Nothing Here</StyledLink>
@@ -42,6 +81,6 @@ const NavigationBar: FC<{}> = () => {
       </nav>
     </Wrapper>
   );
-}
+};
 
 export default NavigationBar;

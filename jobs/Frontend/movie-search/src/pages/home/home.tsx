@@ -1,14 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import Styled, { keyframes } from "styled-components";
+import Styled from "styled-components";
 import CardsList from "../../components/card-list/card-list";
-import { searchMoviesThunk, setQuery } from "../../store/movie-slice";
+import Spinner from "../../components/spinner/spinner";
+import { setQuery } from "../../store/movie-slice";
+import { searchMoviesThunk } from "../../store/movie-thunks";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import spinner from "../../assets/512px-Spinner_font_awesome.png";
 
 // Create a Wrapper component that'll render a <section> tag with some styles
 const MainSection = Styled.section`
   padding: 2em 12em;
-  background: #cad2d3;
+  background-color: #f3f3f3;
 `;
 const InputStyled = Styled.input`
   width: 400px;
@@ -24,22 +25,26 @@ const InputStyled = Styled.input`
   box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.05);
   padding:10px;
   margin-bottom:16px;
+  background-color: #f3f3f3;
+
 `;
 const NextPage = Styled.button`
   top:50vh;
   width:60px;
   height:60px;
   color:#3f298d;
-  position:fixed;
-  right:2vw;
-  font-size:1em;
-  border:none;
-  pointer:click;
+  position: fixed;
+  right: 2vw;
+  font-size: 1em;
+  font-weight: 800;
+  border: none;
+  pointer: click;
   border-radius:5px;
-  background-color: #00ffd5;
+  background-color:rgb(245, 197, 24);
+  border: 2px solid#b94f08;
   cursor: pointer; 
   &:hover{
-    background-color: #97f1e2;
+    background-color:#f1eb97;
     color:#8370c9;
   }
   &:before{
@@ -51,24 +56,6 @@ const PreviousPage = Styled(NextPage)`
   &:before{
     content:'<'
   }
-`;
-
-// Create the keyframes
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const Spinner = Styled.div`
-  display: block;
-  animation: ${rotate} 2s linear infinite;
-  padding: 2rem 1rem;
-  font-size: 1.2rem;
 `;
 
 const StyledMessage = Styled.section`
@@ -83,7 +70,9 @@ const INITAL_PAGE = 1;
 
 const Home: FC<{}> = () => {
   const dispatch = useAppDispatch();
-  const [query,setQueryState] = useState(useAppSelector((state) => state.movies.query));
+  const [query, setQueryState] = useState(
+    useAppSelector((state) => state.movies.query)
+  );
   const [page, setPage] = useState(
     useAppSelector((state) =>
       state.movies.foundMoviesPage?.page
@@ -91,27 +80,25 @@ const Home: FC<{}> = () => {
         : INITAL_PAGE
     )
   );
+  const status = useAppSelector((state) => state.movies.statusMoviesPage);
   const totalPages = useAppSelector(
     (state) => state.movies.foundMoviesPage?.totalPages
   );
 
-
   useEffect(() => {
-      if(query!== "" && status==='init'){
+    if (query !== "" && status === "init") {
+      dispatch(searchMoviesThunk({ query: query, page: page }));
+    } else if (status !== "init") {
+      dispatch(searchMoviesThunk({ query: query, page: page }));
+    }
 
-        dispatch(searchMoviesThunk({ query: query, page: page }));
-      }else if (status!=='init'){
-        dispatch(searchMoviesThunk({ query: query, page: page }));
-      }
-    
     dispatch(setQuery({ query: query }));
   }, [query, page]);
 
   const handleChange = (value: { target: { value: string } }) => {
     console.log(value);
 
-  
-    setQueryState(value.target.value)
+    setQueryState(value.target.value);
     setPage(INITAL_PAGE);
   };
 
@@ -130,19 +117,13 @@ const Home: FC<{}> = () => {
     }
   };
 
-  const status = useAppSelector((state) => state.movies.statusMoviesPage);
-
   const loadContent = () => {
     switch (status) {
       case "init":
         return <StyledMessage>Start to find movies! :D</StyledMessage>;
 
       case "loading":
-        return (
-          <Spinner>
-            <img width={32} src={spinner} alt='spinner'></img>
-          </Spinner>
-        );
+        return <Spinner></Spinner>;
       case "empty":
         return <StyledMessage>Nothing found...</StyledMessage>;
 

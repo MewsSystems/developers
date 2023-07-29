@@ -10,8 +10,7 @@ export const routes: RouteObject[] = [
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, 
-        element: <Home /> },
+      { index: true, element: <Home /> },
       {
         path: "movies/:movieId",
         element: <MovieDetail />,
@@ -20,4 +19,5 @@ export const routes: RouteObject[] = [
       { path: "*", element: <NotFound /> },
     ],
   },
+
 ];

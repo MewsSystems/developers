@@ -1,11 +1,11 @@
-import { MovieDetail, MovieItem, MoviesPage } from "../store/movie-slice";
 import wretch from "wretch";
 import {
   GenereResponse,
   MovieDetailResponse,
   MovieItemResponse,
   MoviesPageResponse,
-} from "../api/movies-response";
+} from "./responses/movies-response";
+import { MovieDetail, MovieItem, MoviesPage } from "../models/movies.types";
 
 const API_KEY = "03b8572954325680265531140190fd2a";
 const BASE_API_URL = "https://api.themoviedb.org/3/";

@@ -1,43 +1,7 @@
 // eslint-disable-next-line import/named
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { searchMoviesEndpoint } from "../services/movies-service";
-
-export interface MovieItem {
-  id: number;
-  isAdultFilm: boolean;
-  orginalLanguage: string;
-  originalTitle: string;
-  title: string;
-  posterPath: string;
-  releaseDate: string;
-}
-
-export interface MovieDetail {
-  adult: boolean;
-  budget: number;
-  genres: string;
-  id: number;
-  originalLanguage: string;
-  originalTitle: string;
-  overview: string;
-  popularity: number;
-  posterPath: string;
-  releaseDate: string;
-  revenue: number;
-  runtime: number;
-  status: string;
-  tagline: string;
-  title: string;
-  voteAverage: number;
-  voteCount: number;
-}
-
-export interface MoviesPage {
-  movies: MovieItem[];
-  total: number;
-  page: number;
-  totalPages: number;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { MovieDetail, MoviesPage } from "../models/movies.types";
+import { getMovieDetailThunk, searchMoviesThunk } from "./movie-thunks";
 
 interface MoviesState {
   foundMoviesPage?: MoviesPage;
@@ -53,35 +17,16 @@ const initialState: MoviesState = {
   query: "",
 };
 
-export const searchMoviesThunk = createAsyncThunk<
-  MoviesPage,
-  { query: string; page: number }
->("movies/search", async ({ query, page }) => {
-  const response: MoviesPage = await searchMoviesEndpoint(query, page);
-  return response;
-});
-
 export const MoviesSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {
-    searchMovies: (
+    setQuery: (
       state: MoviesState,
-      action: PayloadAction<{ results: MoviesPage }>
+      action: PayloadAction<{ query: string }>
     ) => {
-      state.foundMoviesPage = action.payload.results;
+      state.query = action.payload.query;
     },
-    getMovieDetail: (
-      state: MoviesState,
-      action: PayloadAction<{ detail: MovieDetail }>
-    ) => {
-      state.selectedDetail = action.payload.detail;
-    },
-    setQuery:( 
-      state: MoviesState,
-      action: PayloadAction<{ query: string }>)=>{
-        state.query=action.payload.query
-      }
   },
   extraReducers: (builder) => {
     builder.addCase(searchMoviesThunk.pending, (state) => {
@@ -97,8 +42,21 @@ export const MoviesSlice = createSlice({
         state.foundMoviesPage = payload;
       }
     });
+
+    builder.addCase(getMovieDetailThunk.pending, (state) => {
+      state.statusMoviesPage = "loading";
+    });
+
+    builder.addCase(getMovieDetailThunk.rejected, (state) => {
+      state.statusMoviesPage = "empty";
+    });
+
+    builder.addCase(getMovieDetailThunk.fulfilled, (state, { payload }) => {
+      state.statusMoviesPage = "idle";
+      state.selectedDetail = payload;
+    });
   },
 });
 
 export default MoviesSlice.reducer;
-export const { searchMovies, getMovieDetail,setQuery } = MoviesSlice.actions;
+export const { setQuery } = MoviesSlice.actions;
