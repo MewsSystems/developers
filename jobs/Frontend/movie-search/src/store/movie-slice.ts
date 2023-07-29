@@ -37,28 +37,29 @@ export interface MoviesPage {
   total: number;
   page: number;
   totalPages: number;
-
 }
 
 interface MoviesState {
   foundMoviesPage?: MoviesPage;
   selectedDetail?: MovieDetail;
-  statusMoviesPage: "loading" | "idle"|"init";
+  statusMoviesPage: "loading" | "idle" | "init" | "empty";
+  query: string;
 }
 
 const initialState: MoviesState = {
   foundMoviesPage: undefined,
   selectedDetail: undefined,
-  statusMoviesPage:'init'
+  statusMoviesPage: "init",
+  query: "",
 };
 
-export const searchMoviesThunk = createAsyncThunk<MoviesPage,string>(
-  "movies/search",
-  async (query: string) => {
-    const response: MoviesPage = await searchMoviesEndpoint(query);
-    return response;
-  }
-);
+export const searchMoviesThunk = createAsyncThunk<
+  MoviesPage,
+  { query: string; page: number }
+>("movies/search", async ({ query, page }) => {
+  const response: MoviesPage = await searchMoviesEndpoint(query, page);
+  return response;
+});
 
 export const MoviesSlice = createSlice({
   name: "movies",
@@ -76,19 +77,28 @@ export const MoviesSlice = createSlice({
     ) => {
       state.selectedDetail = action.payload.detail;
     },
+    setQuery:( 
+      state: MoviesState,
+      action: PayloadAction<{ query: string }>)=>{
+        state.query=action.payload.query
+      }
   },
-  extraReducers:(builder)=>{
-    builder.addCase(searchMoviesThunk.pending,(state)=>{
-        state.statusMoviesPage='loading'
+  extraReducers: (builder) => {
+    builder.addCase(searchMoviesThunk.pending, (state) => {
+      state.statusMoviesPage = "loading";
     });
 
-    builder.addCase(searchMoviesThunk.fulfilled,(state,{payload})=>{
-        state.statusMoviesPage='idle'
-        state.foundMoviesPage=payload
-    })
-  }
-  
+    builder.addCase(searchMoviesThunk.fulfilled, (state, { payload }) => {
+      if (payload.total === 0) {
+        state.statusMoviesPage = "empty";
+        state.foundMoviesPage = payload;
+      } else {
+        state.statusMoviesPage = "idle";
+        state.foundMoviesPage = payload;
+      }
+    });
+  },
 });
 
 export default MoviesSlice.reducer;
-export const { searchMovies, getMovieDetail } = MoviesSlice.actions;
+export const { searchMovies, getMovieDetail,setQuery } = MoviesSlice.actions;

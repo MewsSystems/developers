@@ -14,16 +14,12 @@ gap: 16px 30px;
 `;
 
 const CardsList: FC<CardListProps> = ({ numberOfCards }) => {
- 
   // Get the current `status`:
-  const movies  = useAppSelector((state) => state.movies.foundMoviesPage);
-
-
-  const cardsList = movies?.movies.map((value,index) => {
-
-
-    return(<Card key={index+numberOfCards} movie={value}></Card>)
-});
+  const movies = useAppSelector((state) => state.movies.foundMoviesPage);
+  
+  const cardsList = movies?.movies.map((value, index) => {
+    return <Card key={index + numberOfCards} movie={value}></Card>;
+  });
 
   return <CardsContainer>{cardsList}</CardsContainer>;
 };

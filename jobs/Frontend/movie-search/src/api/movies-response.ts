@@ -22,7 +22,7 @@ export interface MoviesPageResponse {
 export interface MovieDetailResponse {
   adult: boolean;
   budget: number;
-  genres: string;
+  genres: GenereResponse[];
   id: number;
   original_language: string;
   original_title: string;
@@ -37,4 +37,9 @@ export interface MovieDetailResponse {
   title: string;
   vote_average: number;
   vote_count: number;
+}
+
+export interface GenereResponse {
+id:number;
+name:string
 }

@@ -12,6 +12,9 @@ const HeaderLayout = Styled.header`
 
 const FooterLayout = Styled.div`
   max-height: 80px;
+  background-color: #00ffd5;
+  color:#3f298d;
+
 `;
 const ContentLayout = Styled.section``;
 
@@ -33,7 +36,7 @@ const Layout: FC<{}> = () => {
         <Outlet />
       </ContentLayout>
 
-      <FooterLayout>footer</FooterLayout>
+      <FooterLayout>Justin Rios - Task for mews</FooterLayout>
     </PageLayout>
   );
 };

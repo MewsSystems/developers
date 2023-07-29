@@ -4,10 +4,14 @@ import { styled } from "styled-components";
 
 const Wrapper = styled.div`
 
+
   background-color: #00ffd5;
   ul,li{
+    
+    display:flex;
     text-decoration:none;
     list-style-type: none;
+    justify-content: center;
   }
   
 `;
@@ -16,7 +20,7 @@ const StyledLink = styled(Link)`
   color: #3f298d;
   font-weight: bold;
   text-decoration:none;
-  padding:16px;
+  padding:12px;
 `;
 const NavigationBar: FC<{}> = () => {
 

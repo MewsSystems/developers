@@ -58,13 +58,28 @@ text-decoration: none;
 `;
 
 const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
+
+
+  const loadPoster=()=>{
+    //https://placehold.co/342x513?text=movie%20poster
+
+    if(movie?.posterPath!==null){
+    return  <StyledImage
+      src={`https://image.tmdb.org/t/p/w342${movie?.posterPath}`}
+      alt={`${movie} poster`}
+    ></StyledImage>
+    }
+
+    return       <StyledImage
+    src="https://placehold.co/342x513?text=Movie%20Poster"
+    alt={`${movie} poster`}
+  ></StyledImage>
+
+  }
   return (
     <CardContents>
       <Title>{movie?.title}</Title>
-      <StyledImage
-        src={`https://image.tmdb.org/t/p/w342${movie?.posterPath}`}
-        alt='poster'
-      ></StyledImage>
+      {loadPoster()}
       <StyledDesctiption>
         <div className='description-text'>
           Original Language: {movie?.orginalLanguage}
