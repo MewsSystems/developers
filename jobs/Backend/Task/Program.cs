@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ExchangeRateLayer.BLL.Objects;
+using ExchangeRateLayer.BLL.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateLayer.UI
 {
     public static class Program
     {
@@ -23,14 +25,9 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                var provider = new ServiceManager();
+                var rates = provider.ExchangeRateService.GetSelectedExchangeRates(currencies);
+                DisplayExchangeRates(rates);
             }
             catch (Exception e)
             {
@@ -38,6 +35,15 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        public static void DisplayExchangeRates(IEnumerable<ExchangeRate> rates)
+        {
+            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates");
+            foreach (var rate in rates)
+            {
+                Console.WriteLine(rate.ToString());
+            }
         }
     }
 }

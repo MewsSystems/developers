@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateLayer.BLL.Objects
 {
     public class Currency
     {
