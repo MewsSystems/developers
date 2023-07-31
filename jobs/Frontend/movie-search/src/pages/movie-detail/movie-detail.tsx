@@ -42,6 +42,7 @@ const DetailData = styled.section`
 const MovieDetail: FC<{}> = () => {
   const status = useAppSelector((state) => state.movies.statusMoviesPage);
   const movie = useAppSelector((state) => state.movies.selectedDetail);
+  const baseImageUrl = useAppSelector((state) => state.conguration.imagesconfiguration?.secureBaseUrl);
 
   const loadPoster = () => {
     //https://placehold.co/342x513?text=movie%20poster
@@ -49,7 +50,7 @@ const MovieDetail: FC<{}> = () => {
     if (movie?.posterPath !== null) {
       return (
         <StyledImage
-          src={`https://image.tmdb.org/t/p/w780${movie?.posterPath}`}
+          src={`${baseImageUrl}w780${movie?.posterPath}`}
           alt={`${movie} poster`}
         ></StyledImage>
       );

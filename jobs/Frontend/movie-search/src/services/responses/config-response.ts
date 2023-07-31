@@ -1,4 +1,4 @@
-export interface configResponse {
+export interface ConfigResponse {
   images: {
     base_url: string;
     secure_base_url: string;

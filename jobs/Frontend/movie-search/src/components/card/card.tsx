@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Styled from "styled-components";
 import { MovieItem } from "../../models/movies.types";
 import { getMovieDetailThunk } from "../../store/movie-thunks";
-import { useAppDispatch } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 
 const CardContents = Styled(Link)`
   max-width:300px;
@@ -45,6 +45,7 @@ color:  #3f298d;
 
 const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
   const dispatch = useAppDispatch();
+  const baseImageUrl = useAppSelector((state) => state.conguration.imagesconfiguration?.secureBaseUrl);
 
   const handleClickViewDetail = () => {
     dispatch(getMovieDetailThunk({ movieId: movie.id }));
@@ -55,7 +56,7 @@ const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
     if (movie?.posterPath !== null) {
       return (
         <StyledImage
-          src={`https://image.tmdb.org/t/p/w342${movie?.posterPath}`}
+          src={`${baseImageUrl}w342${movie?.posterPath}`}
           alt={`${movie} poster`}
         ></StyledImage>
       );
