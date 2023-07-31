@@ -1,9 +1,11 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateLayer.BLL.Objects
 {
     public class ExchangeRate
     {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
+        public Currency DefaultCurrency { get; set; } = new Currency("CZK");
+        public ExchangeRate(decimal value, Currency sourceCurrency, Currency targetCurrency = null)
         {
+            targetCurrency = targetCurrency ?? DefaultCurrency;
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
