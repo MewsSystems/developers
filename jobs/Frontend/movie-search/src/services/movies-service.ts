@@ -79,7 +79,7 @@ const moviesItemMapper = (movieItem: MovieItemResponse): MovieItem => {
     orginalLanguage: movieItem.original_language,
     originalTitle: movieItem.original_title,
     posterPath: movieItem.poster_path,
-    releaseDate: movieItem.release_date?movieItem.release_date:'TBD',
+    releaseDate: movieItem.release_date ? movieItem.release_date : "TBD",
     title: movieItem.title,
   };
 };

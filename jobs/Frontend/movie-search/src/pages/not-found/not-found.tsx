@@ -22,6 +22,6 @@ const NotFound: FC<{}> = () => {
       </p>
     </MainSection>
   );
-}
+};
 
-export default NotFound
+export default NotFound;

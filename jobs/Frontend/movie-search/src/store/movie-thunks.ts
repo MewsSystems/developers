@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { MovieDetail, MoviesPage } from "../models/movies.types";
-import { getMovieDetailEndpoint, searchMoviesEndpoint } from "../services/movies-service";
-
-
-
+import {
+  getMovieDetailEndpoint,
+  searchMoviesEndpoint,
+} from "../services/movies-service";
 
 export const searchMoviesThunk = createAsyncThunk<
   MoviesPage,
@@ -14,8 +14,8 @@ export const searchMoviesThunk = createAsyncThunk<
 });
 
 export const getMovieDetailThunk = createAsyncThunk<
-MovieDetail,
-  { movieId:number }
+  MovieDetail,
+  { movieId: number }
 >("movies/detail", async ({ movieId }) => {
   const response: MovieDetail = await getMovieDetailEndpoint(movieId);
   return response;

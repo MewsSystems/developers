@@ -38,8 +38,15 @@ const HeaderComponent: FC<{}> = () => {
   const pages = useAppSelector((state) => state.movies.foundMoviesPage?.page);
 
   const getPageCounter = (): string => {
-    console.log(location,location.pathname.includes('/'));
-    if (total !== 0 && status !== "init" && !(location.pathname.includes('movies') || location.pathname.includes('nothing'))) {
+    console.log(location, location.pathname.includes("/"));
+    if (
+      total !== 0 &&
+      status !== "init" &&
+      !(
+        location.pathname.includes("movies") ||
+        location.pathname.includes("nothing")
+      )
+    ) {
       return `Page: ${pages}/${totalPages}`;
     } else {
       return "";

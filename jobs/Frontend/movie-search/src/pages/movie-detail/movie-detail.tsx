@@ -37,7 +37,6 @@ const DetailData = styled.section`
   border-radius: 5px;
   padding: 2em;
   border: 1px solid#b94f08;
-
 `;
 
 const MovieDetail: FC<{}> = () => {

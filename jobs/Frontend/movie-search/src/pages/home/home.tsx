@@ -93,7 +93,7 @@ const Home: FC<{}> = () => {
     }
 
     dispatch(setQuery({ query: query }));
-  }, [query, page]);
+  }, [query, page, dispatch]);
 
   const handleChange = (value: { target: { value: string } }) => {
     console.log(value);
@@ -128,7 +128,7 @@ const Home: FC<{}> = () => {
         return <StyledMessage>Nothing found...</StyledMessage>;
 
       default:
-        return <CardsList numberOfCards={10}></CardsList>;
+        return <CardsList></CardsList>;
     }
   };
   const loadButtons = () => {

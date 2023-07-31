@@ -40,6 +40,6 @@ export interface MovieDetailResponse {
 }
 
 export interface GenereResponse {
-id:number;
-name:string
+  id: number;
+  name: string;
 }

@@ -8,7 +8,7 @@ export interface MovieDetailProps {
   tagline: string;
   posterPath: string;
   budget: number;
-  revenue:number;
+  revenue: number;
   productionCompany: string;
   releaseDate: Date;
 }

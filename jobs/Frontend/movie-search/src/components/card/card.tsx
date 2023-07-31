@@ -5,7 +5,7 @@ import { MovieItem } from "../../models/movies.types";
 import { getMovieDetailThunk } from "../../store/movie-thunks";
 import { useAppDispatch } from "../../store/store";
 
-const CardContents =  Styled(Link)`
+const CardContents = Styled(Link)`
   max-width:300px;
   text-decoration: none;
   background-color: rgb(245, 197, 24);
@@ -43,14 +43,12 @@ color:  #3f298d;
 }
 `;
 
-
-
 const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
   const dispatch = useAppDispatch();
 
-  const handleClickViewDetail = ()=>{
-    dispatch(getMovieDetailThunk({ movieId:movie.id }));
-  }
+  const handleClickViewDetail = () => {
+    dispatch(getMovieDetailThunk({ movieId: movie.id }));
+  };
   const loadPoster = () => {
     //https://placehold.co/342x513?text=movie%20poster
 
@@ -84,9 +82,7 @@ const Card: FC<{ movie: MovieItem }> = ({ movie }) => {
         <div className='description-text'>
           Release Date: {movie?.releaseDate.toLocaleString()}
         </div>
-
       </StyledDesctiption>
-
     </CardContents>
   );
 };
