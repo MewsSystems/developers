@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Services.Providers
 {
-    public class TextExchangeRateProvider : ITextExchangeRateProvider
+    public class TextExchangeRateProvider : IExchangeRateProvider
     {
         private readonly IHttpClientService _httpClientService;
         private readonly IExchangeRateParser _exchangeRateParser;
@@ -30,7 +30,6 @@ namespace ExchangeRateUpdater.Services.Providers
         {
             try
             {
-                // If a date is provided, append it to the URL.
                 var exchangeRateUrl = _configuration["ExchangeRateUrl"];
                 if (date.HasValue)
                 {

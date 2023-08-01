@@ -1,12 +1,14 @@
 ﻿using ExchangeRateUpdater.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Interfaces
 {
-    public interface ITextExchangeRateProvider
+    public interface IExchangeRateProviderFactory
     {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateTime? date);
+        IExchangeRateProvider Create(ProviderType type);
     }
 }

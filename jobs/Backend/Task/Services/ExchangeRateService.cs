@@ -13,17 +13,17 @@ namespace ExchangeRateUpdater.Services
 {
     public class ExchangeRateService : IExchangeRateService
     {
-        private readonly IExchangeRateProvider _provider;
         private readonly ICurrencyLoader _currencyLoader;
         private readonly IOutputService _outputService;
         private readonly ILogger<IExchangeRateService> _logger;
+        private readonly IExchangeRateProviderFactory _factory;
 
-        public ExchangeRateService(IExchangeRateProvider provider, ICurrencyLoader currencyLoader, ILogger<IExchangeRateService> logger, IOutputService outputService)
+        public ExchangeRateService(IExchangeRateProviderFactory factory, ICurrencyLoader currencyLoader, ILogger<IExchangeRateService> logger, IOutputService outputService)
         {
-            _provider = provider;
             _currencyLoader = currencyLoader;
             _logger = logger;
             _outputService = outputService;
+            _factory = factory;
         }
 
         public async Task ExecuteAsync()
@@ -31,8 +31,8 @@ namespace ExchangeRateUpdater.Services
             try
             {
                 var currencies = _currencyLoader.LoadCurrencies();
-                var ratesFromApi = await _provider.GetExchangeRatesAsync(currencies, DateTime.Now);
-                PrintRates(ratesFromApi, "API");
+                var rates = await _factory.Create(ProviderType.fallback).GetExchangeRatesAsync(currencies, DateTime.Now);
+                PrintRates(rates, "API");
             }
             catch (JsonException ex)
             {

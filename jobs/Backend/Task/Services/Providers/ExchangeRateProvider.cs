@@ -16,14 +16,12 @@ namespace ExchangeRateUpdater.Services.Providers
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly IApiExchangeRateProvider _apiExchangeRateProvider;
-        private readonly ITextExchangeRateProvider _textExchangeRateProvider;
+        private readonly IExchangeRateProviderFactory _factory;
         private readonly ILogger _logger;
 
-        public ExchangeRateProvider(IApiExchangeRateProvider apiExchangeRateProvider, ITextExchangeRateProvider textExchangeRateProvider, ILogger<ExchangeRateProvider> logger)
+        public ExchangeRateProvider(IExchangeRateProviderFactory factory, ILogger<ExchangeRateProvider> logger)
         {
-            _apiExchangeRateProvider = apiExchangeRateProvider;
-            _textExchangeRateProvider = textExchangeRateProvider;
+            _factory = factory;
             _logger = logger;
         }
 
@@ -32,11 +30,12 @@ namespace ExchangeRateUpdater.Services.Providers
             CurrencyValidator.ValidateCurrencies(currencies);
             try
             {
-                var rates = await _apiExchangeRateProvider.GetExchangeRatesAsync(currencies, date);
+                var rates = await _factory.Create(ProviderType.api).GetExchangeRatesAsync(currencies, date);
+
                 if (!rates.Any())
                 {
-                    rates = await _textExchangeRateProvider.GetExchangeRatesAsync(currencies, DateTime.Now);
-                }
+                    rates = await _factory.Create(ProviderType.text).GetExchangeRatesAsync(currencies, date);
+                }   
 
                 return rates;
             }

@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Helpers;
+﻿using ExchangeRateUpdater.Factories;
+using ExchangeRateUpdater.Helpers;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Services;
 using ExchangeRateUpdater.Services.Providers;
@@ -51,19 +52,16 @@ namespace ExchangeRateUpdater
             services.AddSingleton<HttpClient>();
             services.AddSingleton<IHttpClientService, HttpClientService>();
             services.AddTransient<ICurrencyLoader, CurrencyLoader>();
-            services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
-            services.AddTransient<IApiExchangeRateProvider, ApiExchangeRateProvider>();
-            services.AddTransient<ITextExchangeRateProvider, TextExchangeRateProvider>();
+            services.AddTransient<ExchangeRateProvider>();
+            services.AddTransient<TextExchangeRateProvider>();
+            services.AddTransient<ApiExchangeRateProvider>();
+            services.AddTransient<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
             services.AddSingleton<CurrencyValidator>();
             services.AddSingleton<IExchangeRateParser, ExchangeRateParser>();
             services.AddTransient<IExchangeRateService, ExchangeRateService>();
             services.AddSingleton<IOutputService, ConsoleOutputService>();
             services.AddSingleton(configuration);
         }
-
-
-
-
 
         private static IConfiguration LoadConfiguration()
         {

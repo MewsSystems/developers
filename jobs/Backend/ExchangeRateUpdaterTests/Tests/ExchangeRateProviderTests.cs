@@ -18,18 +18,16 @@ namespace ExchangeRateUpdaterTests
     public class ExchangeRateProviderTests
     {
         private Mock<ILogger<ExchangeRateProvider>> _mockLogger;
-        private Mock<IApiExchangeRateProvider> _mockApiExchangeRateProvider;
-        private Mock<ITextExchangeRateProvider> _mockTextExchangeRateProvider;
+        private Mock<IExchangeRateProviderFactory> _mockExchangeRateProviderFactory;
         private ExchangeRateProvider _provider;
 
         [SetUp]
         public void SetUp()
         {
             _mockLogger = new Mock<ILogger<ExchangeRateProvider>>();
-            _mockApiExchangeRateProvider = new Mock<IApiExchangeRateProvider>();
-            _mockTextExchangeRateProvider = new Mock<ITextExchangeRateProvider>();
+            _mockExchangeRateProviderFactory = new Mock<IExchangeRateProviderFactory>();
 
-            _provider = new ExchangeRateProvider(_mockApiExchangeRateProvider.Object, _mockTextExchangeRateProvider.Object, _mockLogger.Object);
+            _provider = new ExchangeRateProvider(_mockExchangeRateProviderFactory.Object, _mockLogger.Object);
         }
 
         [Test]
@@ -39,14 +37,14 @@ namespace ExchangeRateUpdaterTests
             var currencies = new List<Currency> { new Currency("USD") };
             var expected = new List<ExchangeRate> { new ExchangeRate(new Currency("CZK"), new Currency("USD"), 0.04m) };
 
-            _mockApiExchangeRateProvider.Setup(x => x.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime?>()))
+            _mockExchangeRateProviderFactory.Setup(x => x.Create(ProviderType.api).GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime?>()))
                                         .ReturnsAsync(expected);
 
           
             var result = await _provider.GetExchangeRatesAsync(currencies, DateTime.Now);
 
-        
-            _mockTextExchangeRateProvider.Verify(x => x.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()), Times.Never);
+
+            _mockExchangeRateProviderFactory.Verify(x => x.Create(ProviderType.text).GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()), Times.Never);
             result.ShouldBe(expected);
         }
 
@@ -57,16 +55,16 @@ namespace ExchangeRateUpdaterTests
             var currencies = new List<Currency> { new Currency("USD") };
             var expected = new List<ExchangeRate> { new ExchangeRate(new Currency("CZK"), new Currency("USD"), 0.04m) };
 
-            _mockApiExchangeRateProvider.Setup(x => x.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime?>()))
+            _mockExchangeRateProviderFactory.Setup(x => x.Create(ProviderType.api).GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime?>()))
                                         .ReturnsAsync(Enumerable.Empty<ExchangeRate>());
 
-            _mockTextExchangeRateProvider.Setup(x => x.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()))
+            _mockExchangeRateProviderFactory.Setup(x => x.Create(ProviderType.text).GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()))
                                          .ReturnsAsync(expected);
 
             var result = await _provider.GetExchangeRatesAsync(currencies, DateTime.Now);
 
-           
-            _mockTextExchangeRateProvider.Verify(x => x.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()), Times.Once);
+
+            _mockExchangeRateProviderFactory.Verify(x => x.Create(ProviderType.text).GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>(), It.IsAny<DateTime>()), Times.Once);
             result.ShouldBe(expected);
         }
 

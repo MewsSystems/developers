@@ -35,14 +35,24 @@ namespace ExchangeRateUpdater.Helpers
                 }
 
                 var currencyCode = columns[3];
+                if (!decimal.TryParse(columns[2], NumberStyles.Any, CultureInfo.InvariantCulture, out var amount))
+                {
+                    continue;
+                }
+
                 if (currencies.Any(c => c.Code == currencyCode))
                 {
-                    var rate = decimal.Parse(columns[4], CultureInfo.InvariantCulture);
+                    if (!decimal.TryParse(columns[4], NumberStyles.Any, CultureInfo.InvariantCulture, out var rate))
+                    {
+                        continue;
+                    }
+                    rate /= amount; 
                     rates.Add(new ExchangeRate(new Currency("CZK"), new Currency(currencyCode), rate));
                 }
             }
 
             return rates;
+
         }
 
         public List<ExchangeRate> GetRatesFromData(IEnumerable<Currency> currencies, ExchangeRatesResponse data)

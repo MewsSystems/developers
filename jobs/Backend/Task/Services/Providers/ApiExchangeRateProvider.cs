@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace ExchangeRateUpdater.Services.Providers
 {
-    public class ApiExchangeRateProvider : IApiExchangeRateProvider
+    public class ApiExchangeRateProvider : IExchangeRateProvider
     {
         private readonly IHttpClientService _httpClientService;
         private readonly IExchangeRateParser _exchangeRateParser;
