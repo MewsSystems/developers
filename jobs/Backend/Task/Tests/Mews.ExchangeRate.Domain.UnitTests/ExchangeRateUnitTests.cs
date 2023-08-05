@@ -11,7 +11,7 @@ public class ExchangeRateUnitTests
     public ExchangeRateUnitTests()
     {
         _fixture = new Fixture();
-        _fixture.CustomizeWithCurrencyEur();
+        _fixture.CustomizeWithEURCurrency();
     }
 
     [Fact]

@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 
 namespace Mews.ExchangeRate.Domain.UnitTests.FixtureCustomizations;
-public class WithCurrencyEur : ICustomization
+public class WithEURCurrency : ICustomization
 {
     public void Customize(IFixture fixture)
     {

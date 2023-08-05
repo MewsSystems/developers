@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mews.ExchangeRate.Domain\Mews.ExchangeRate.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

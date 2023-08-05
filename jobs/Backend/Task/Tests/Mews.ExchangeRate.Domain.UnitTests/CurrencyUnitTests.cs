@@ -11,7 +11,7 @@ public class CurrencyUnitTests
     public CurrencyUnitTests()
     {
         _fixture = new Fixture();
-        _fixture.CustomizeWithCurrencyEur();
+        _fixture.CustomizeWithEURCurrency();
     }
 
     [Fact]
@@ -49,12 +49,11 @@ public class CurrencyUnitTests
     [Fact]
     public void Constructor_AssignsTheCode_WhenItFollowsISO4217Format()
     {
-        var iso4217Code = "EUR";
+        var sut = _fixture.Create<Currency>();
 
-        var sut = new Currency(iso4217Code);
         sut.Code
             .Should()
-            .Be(iso4217Code);
+            .Be("EUR");
     }
 
     [Fact]
