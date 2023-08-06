@@ -1,25 +1,62 @@
-var builder = WebApplication.CreateBuilder(args);
+using Mews.ExchangeRate.API;
+using Mews.ExchangeRate.API.ConfigurationExtensionMethods;
+using Serilog;
+using System.Diagnostics.CodeAnalysis;
 
-// Add services to the container.
+Log.Logger = new LoggerConfiguration().
+    CreateMewsBootstrapLogger(ExchangeRateApiConstants.ServiceName);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("starting {serviceName}",
+        ExchangeRateApiConstants.ServiceName);
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host
+        .AddMewsLoggingConfiguration(ExchangeRateApiConstants.ServiceName);
+
+    builder.Services
+        .AddMewsServices()
+        .AddControllers();
+    
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services
+        .AddEndpointsApiExplorer()
+        .AddSwaggerGen();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger()
+            .UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapHealthChecks($"/{ExchangeRateApiConstants.RoutePrefix}/healthcheck");
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception e)
+{
+    Log.Fatal(e,
+        "An unhandled exception occurred during {serviceName} startup",
+        ExchangeRateApiConstants.ServiceName);
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+namespace Mews.ExchangeRate.API
+{
+    [ExcludeFromCodeCoverage(Justification = "Program.cs cannot be unit tested.")]
+    public partial class Program
+    {
+        protected Program() { }
+    }
+}

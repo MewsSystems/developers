@@ -10,11 +10,11 @@ public sealed class Currency : IEquatable<Currency>
     {
         Guard.Against.NullOrWhiteSpace(code, 
             nameof(code));
-
-        if (code.Length != 3 || !code.All(Char.IsLetter))
+        
+        if (code.Length != 3 || !code.All(char.IsLetter))
         {
-            throw new ArgumentException(nameof(code),
-                $"The parameter {nameof(code)} must have a valid ISO 4217 format");
+            throw new ArgumentException($"The value {code} does not have a valid ISO 4217 format", 
+                nameof(code));
         }
 
         Code = code;

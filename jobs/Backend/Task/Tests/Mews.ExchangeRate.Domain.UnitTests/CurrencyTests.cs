@@ -4,11 +4,11 @@ using FluentAssertions;
 using Mews.ExchangeRate.Domain.UnitTests.FixtureCustomizations;
 
 namespace Mews.ExchangeRate.Domain.UnitTests;
-public class CurrencyUnitTests
+public class CurrencyTests
 {
     private Fixture _fixture;
 
-    public CurrencyUnitTests()
+    public CurrencyTests()
     {
         _fixture = new Fixture();
         _fixture.CustomizeWithEURCurrency();
