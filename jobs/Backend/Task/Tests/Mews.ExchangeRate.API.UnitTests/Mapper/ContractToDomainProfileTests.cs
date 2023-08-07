@@ -1,8 +1,6 @@
 ﻿using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
-using Mews.ExchangeRate.API.Mapper;
-using Mews.ExchangeRate.Provider.CNB.Mapper;
 using System.Reflection;
 
 namespace Mews.ExchangeRate.API.UnitTests.Mapper;
@@ -15,7 +13,7 @@ public class ContractToDomainProfileTests
     {
         _fixture = new Fixture();
 
-        var assemblyName = typeof(DtoToDomainProfile).Assembly.GetName();
+        var assemblyName = typeof(API.Mapper.DtoToDomainProfile).Assembly.GetName();
         var configuration = new MapperConfiguration(cfg => cfg.AddMaps(Assembly.Load(assemblyName)));
         _sut = new AutoMapper.Mapper(configuration);
     }
