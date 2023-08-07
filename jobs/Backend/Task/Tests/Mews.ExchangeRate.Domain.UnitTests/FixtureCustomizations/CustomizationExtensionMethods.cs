@@ -7,4 +7,11 @@ internal static class CustomizationExtensionMethods
     {
         return fixture.Customize(new WithEURCurrency());
     }
+
+    public static IFixture CustomizeWithEURCurrencyAndExchangeRate(this IFixture fixture)
+    {
+        return fixture
+            .Customize(new WithEURCurrency())
+            .Customize(new WithEURExchangeRate());
+    }
 }

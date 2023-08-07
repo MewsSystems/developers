@@ -2,9 +2,9 @@
 
 namespace Mews.ExchangeRate.API.Mapper;
 
-public class ContractToDomainProfile : Profile
+public class DtoToDomainProfile : Profile
 {
-    public ContractToDomainProfile() 
+    public DtoToDomainProfile() 
     {
         CreateMap<Dtos.Currency, Domain.Currency>();
     }
