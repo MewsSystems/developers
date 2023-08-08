@@ -19,9 +19,10 @@ public class ExchangeRateProvider : IProvideExchangeRates
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesForCurrenciesAsync(IEnumerable<Currency> currencies)
     {
-        var exchangeRates = new List<ExchangeRate>();
+        var currencyExchangeRates = new List<ExchangeRate>();
 
-        var allExchangeRatesGroupedByCurrency = await GetAndGroupByCurrencyAllExchangeRatesFromSource();
+        var allExchangeRatesFromSource = await _exchangeRatesRetriever.GetAllExchangeRatesAsync();
+        var allExchangeRatesGroupedByCurrency = GroupExchangeRatesByCurrency(allExchangeRatesFromSource);
 
         foreach (var currency in currencies)
         {
@@ -30,19 +31,18 @@ public class ExchangeRateProvider : IProvideExchangeRates
 
             if (allExchangeRatesGroupedByCurrency.TryGetValue(currency.Code, out var exchangeRatesForCurrency))
             {
-                exchangeRates.AddRange(exchangeRatesForCurrency);
+                currencyExchangeRates.AddRange(exchangeRatesForCurrency);
             }
         }
 
-        return exchangeRates;
+        return currencyExchangeRates;
     }
 
-    private async Task<Dictionary<string, IList<ExchangeRate>>> GetAndGroupByCurrencyAllExchangeRatesFromSource()
+    private Dictionary<string, IList<ExchangeRate>> GroupExchangeRatesByCurrency(IEnumerable<ExchangeRate> exchangeRates)
     {
         var exchangeRatesGroupedByCurrency = new Dictionary<string, IList<ExchangeRate>>();
-        var allExchangeRatesFromSource = await _exchangeRatesRetriever.GetAllExchangeRatesAsync();
 
-        foreach (var exchangeRate in allExchangeRatesFromSource)
+        foreach (var exchangeRate in exchangeRates)
         {
             if (!exchangeRatesGroupedByCurrency.TryGetValue(exchangeRate.TargetCurrency.Code, out var targetExchangeRatesList))
             {
