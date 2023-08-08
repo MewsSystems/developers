@@ -12,6 +12,11 @@ internal class CnbSettingsValidator : IValidateOptions<CnbSettings>
             errors.Add($"{CnbSettings.Property} configuration is missing the property '{nameof(options.ExratesEndpoint)}''");
         }
 
+        if (string.IsNullOrWhiteSpace(options.HealthcheckEndpoint))
+        {
+            errors.Add($"{CnbSettings.Property} configuration is missing the property '{nameof(options.HealthcheckEndpoint)}''");
+        }
+
         return errors.Count> 0 
             ? ValidateOptionsResult.Fail(errors)
             : ValidateOptionsResult.Success;

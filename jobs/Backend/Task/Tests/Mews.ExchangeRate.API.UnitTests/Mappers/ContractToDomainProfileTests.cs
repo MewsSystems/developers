@@ -3,7 +3,7 @@ using AutoMapper;
 using FluentAssertions;
 using System.Reflection;
 
-namespace Mews.ExchangeRate.API.UnitTests.Mapper;
+namespace Mews.ExchangeRate.API.UnitTests.Mappers;
 public class ContractToDomainProfileTests
 {
     private readonly IMapper _sut;
@@ -13,9 +13,9 @@ public class ContractToDomainProfileTests
     {
         _fixture = new Fixture();
 
-        var assemblyName = typeof(API.Mapper.DtoToDomainProfile).Assembly.GetName();
+        var assemblyName = typeof(API.Mappers.DtoToDomainProfile).Assembly.GetName();
         var configuration = new MapperConfiguration(cfg => cfg.AddMaps(Assembly.Load(assemblyName)));
-        _sut = new AutoMapper.Mapper(configuration);
+        _sut = new Mapper(configuration);
     }
 
     [Fact]

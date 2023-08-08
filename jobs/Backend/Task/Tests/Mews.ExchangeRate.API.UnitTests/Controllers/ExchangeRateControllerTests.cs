@@ -1,10 +1,14 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.Idioms;
+using AutoMapper;
+using Castle.Core.Logging;
 using FluentAssertions;
 using Mews.ExchangeRate.API.Controllers;
 using Mews.ExchangeRate.API.Dtos;
+using Mews.ExchangeRate.Domain;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 
 namespace Mews.ExchangeRate.API.UnitTests.Controllers;
 public class ExchangeRateControllerTests
@@ -22,15 +26,5 @@ public class ExchangeRateControllerTests
     {
         var assertion = _fixture.Create<GuardClauseAssertion>();
         assertion.Verify(typeof(ExchangeRateController).GetConstructors());
-    }
-
-    [Fact]
-    public async Task Post_ReturnsHttp400_WhenModelIsNotValid()
-    {
-        var sut = _fixture.Create<ExchangeRateController>();
-        var currencies = _fixture.CreateMany<Currency>();
-
-        var result = await sut.Post(currencies);
-        result.Should().BeOfType<BadRequest>();
     }
 }

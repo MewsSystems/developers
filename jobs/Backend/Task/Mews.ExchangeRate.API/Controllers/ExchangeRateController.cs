@@ -42,11 +42,6 @@ public class ExchangeRateController : ControllerBase
     [HttpPost()]
     public async Task<IActionResult> Post([FromBody] IEnumerable<Dtos.Currency> currencies)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-
         using (_logger.BeginScope(new Dictionary<string, object>()
         {
             ["currencies"] = currencies,
@@ -62,7 +57,7 @@ public class ExchangeRateController : ControllerBase
             catch (ExchangeRateException ex)
             {
                 _logger.LogError(ex,
-                    "An error occurred when getting the exchange rates for the currencies");
+                    "An error occurred when getting the exchange rates");
                 return Problem();
             }
         }

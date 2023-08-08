@@ -6,7 +6,6 @@ using Mews.ExchangeRate.Provider.CNB.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 
 namespace Mews.ExchangeRate.Provider.CNB;
@@ -36,10 +35,23 @@ internal sealed class CnbExchangeRateProvider :
         _settings = options.Value;
     }
 
-    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
         CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(HealthCheckResult.Healthy("OK"));
+        try
+        {
+            using var httpClient = _httpClientFactory.CreateClient(_settings.HealthcheckEndpoint);
+            var result = await httpClient.GetAsync(_settings.HealthcheckEndpoint);
+
+            return result.IsSuccessStatusCode == true
+                ? HealthCheckResult.Healthy()
+                : HealthCheckResult.Unhealthy();
+        }
+        catch
+        {
+            return HealthCheckResult.Unhealthy();
+        }
+        
     }
 
     public async Task<IEnumerable<Domain.ExchangeRate>> GetAllExchangeRatesAsync()

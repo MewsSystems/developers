@@ -17,7 +17,7 @@ try
         .AddMewsLoggingConfiguration(ExchangeRateApiConstants.ServiceName);
 
     builder.Services
-        .AddMewsServices(builder.Configuration)
+        .AddMewsServicesAndSettings(builder.Configuration)
         .AddControllers();
     
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
