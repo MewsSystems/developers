@@ -10,7 +10,7 @@ I usually follow the rule of:
 Although this is an exercise, I have tried to follow this strategy and make very clear the decisions made in this document.
 
 #### Cache
-Taking into account that the small volume of data, that I don't know the number of calls to make, I have not implemented a cache, I have only declared the object. But since the information is updated once a day and only on working days, it should be implemented by scheduling the update accordingly, for example with Quartz.
+Considering the small volume of data and the fact that I don't know the number of calls to make, I have not implemented a cache, I have only declared the object. But since the information is updated once a day and only on working days, it should be implemented by scheduling the update accordingly, for example with Quartz.
 
 #### Test Project
 I have added a test project `ExchangeRateUpdaterTests` with the intention of including tests, although the logic is not very complex, I have implemented different cases.
