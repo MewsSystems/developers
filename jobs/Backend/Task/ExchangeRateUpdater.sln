@@ -5,10 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionLevelFolder", "SolutionLevelFolder", "{1C98270C-01CB-4DEB-BE72-88329CDAC37D}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdaterTests", "..\ExchangeRateUpdaterTests\ExchangeRateUpdaterTests.csproj", "{AC4D1A09-70A6-4A2E-851B-53181E8BAC01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +17,10 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC4D1A09-70A6-4A2E-851B-53181E8BAC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC4D1A09-70A6-4A2E-851B-53181E8BAC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC4D1A09-70A6-4A2E-851B-53181E8BAC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC4D1A09-70A6-4A2E-851B-53181E8BAC01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
