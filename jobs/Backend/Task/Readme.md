@@ -1,5 +1,4 @@
-﻿# Max Aldunate - August 2023
-## Mews backend developer task (.NET)
+﻿# Max Aldunate - August 2023 - Mews backend developer task (.NET)
 
 #### Startegy
 Overkill solutions is often a big problem in software development.
