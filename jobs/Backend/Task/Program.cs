@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ExchangeRateUpdater.APIs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,11 +21,15 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        // Max: Converted to Async for the nature of http calls
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var cnbApi = new CnbApiWrapper();
+                var cache = new ExchangeRateCache(cnbApi);
+                var provider = new ExchangeRateProvider(cache);
+
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -38,6 +44,7 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        
         }
     }
 }
