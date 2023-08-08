@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void GetExchangeRates_NonExistingCurrency_ReturnNoValue()
+        public async void GetExchangeRates_AskForNonExistingCurrency_ReturnEmpty()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -38,7 +38,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void GetExchangeRates_ExistingCurrency_ReturnOneRateForIndia()
+        public async void GetExchangeRates_AskForExistingCurrency_ReturnOneRateForIndia()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -57,7 +57,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void GetExchangeRates_AllExistingCurrency_ReturnAllThree()
+        public async void GetExchangeRates_AskForAllExistingCurrency_ReturnAllThreeRates()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -76,7 +76,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void GetExchangeRates_OneExistingOneNonExistingCurrencies_ReturnExistingOnly()
+        public async void GetExchangeRates_AskForOneExistingAndOneNonExistingCurrencies_ReturnExistingCurrencyOnly()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -96,7 +96,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async void GetExchangeRates_EmptyCurrencyList_ReturnNoValue()
+        public async void GetExchangeRates_EmptyCurrencyList_ReturnEmpty()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
