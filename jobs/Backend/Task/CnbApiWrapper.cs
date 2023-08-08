@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater
 {
     public interface ICnbApiWrapper
     {
-        Task<List<ExchangeRateRecord>> GetExchangeRatesAsync();
+        Task<List<ExchangeRateRecord>> GetExchangeRatesAsync(bool logDataToConsole = false);
     }
 
     public class CnbApiWrapper : ICnbApiWrapper
@@ -29,14 +29,17 @@ namespace ExchangeRateUpdater
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<ExchangeRateRecord>> GetExchangeRatesAsync()
+        public async Task<List<ExchangeRateRecord>> GetExchangeRatesAsync(bool logDataToConsole = false)
         {
             var ratesFromAPI = await _httpClient.GetFromJsonAsync<ExchangeRatesRecord>(_czechNationalBankApi);
-            
-            Console.WriteLine("CNB Rates");
-            Console.WriteLine($"validFor,order,country,currency,amount,currencyCode,rate");
-            foreach (var rate in ratesFromAPI.rates)
-                Console.WriteLine($"{rate.validFor},{rate.order},{rate.country},{rate.currency},{rate.amount},{rate.currencyCode},{rate.rate}");
+
+            if (logDataToConsole)
+            {
+                Console.WriteLine("CNB Rates");
+                Console.WriteLine($"validFor,order,country,currency,amount,currencyCode,rate");
+                foreach (var rate in ratesFromAPI.rates)
+                    Console.WriteLine($"{rate.validFor},{rate.order},{rate.country},{rate.currency},{rate.amount},{rate.currencyCode},{rate.rate}");
+            }
 
             // Max: handle possible exceptions
             return ratesFromAPI.rates.ToList();
