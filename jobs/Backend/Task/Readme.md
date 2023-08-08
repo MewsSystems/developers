@@ -5,7 +5,8 @@ Overkill solutions is often a big problem in software development.
 I usually follow the rule of:
 1. At first implementation make it as simple as possible
 2. Second time think about whether abstraction is necessary
-3. Third time a, abstraction is necessary
+3. Third time an abstraction is mandatory!
+
 Although this is an exercise, I have tried to follow this strategy and make the decisions made clear in this document.
 
 #### Cache
