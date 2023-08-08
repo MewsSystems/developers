@@ -38,11 +38,5 @@ namespace ExchangeRateUpdater
             return exchangeRates;
         }
 
-        //public Task<IEnumerable<int>> GetAsync(IEnumerable<Currency> currencies)
-        //{
-        //    yield return Task.FromResult(1);
-        //    yield return Task.FromResult(2);
-        //}
-
     }
 }

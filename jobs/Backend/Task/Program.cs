@@ -20,7 +20,6 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        // Max: Converted to Async for the nature of http calls
         public static async Task Main(string[] args)
         {
             try

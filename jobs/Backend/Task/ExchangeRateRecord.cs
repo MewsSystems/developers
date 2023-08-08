@@ -2,8 +2,6 @@
 
 namespace ExchangeRateUpdater
 {
-    // Max: Rule: one class one file.  Possible exception
-
     public record ExchangeRatesRecord(
         IEnumerable<ExchangeRateRecord> rates
     );
