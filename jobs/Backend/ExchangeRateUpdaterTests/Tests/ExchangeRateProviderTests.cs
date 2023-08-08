@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater.Tests
         public ExchangeRateProviderTests()
         {
             _cache = new Mock<IExchangeRateCache>();
-            _cache.Setup(x => x.GetCachedValues()).Returns(new List<ExchangeRateRecord> {
+            _cache.Setup(x => x.GetCachedValuesAsync()).ReturnsAsync(new List<ExchangeRateRecord> {
                 new ExchangeRateRecord("2023-08-07", 150, "India", "rupee", 1, "IDR", 1.454M),
                 new ExchangeRateRecord("2023-08-07", 150, "USA", "dollar", 1, "USD", 22.074M),
                 new ExchangeRateRecord("2023-08-07", 150, "United Kingdom", "pound", 1, "GBP", 28.141M)
@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public void GetExchangeRates_NonExistingCurrency_ReturnNoValue()
+        public async void GetExchangeRates_NonExistingCurrency_ReturnNoValue()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -31,14 +31,14 @@ namespace ExchangeRateUpdater.Tests
             };
 
             // Act
-            var rates = sut.GetExchangeRates(currencies);
+            var rates = await sut.GetExchangeRatesAsync(currencies);
 
             // Assert
             rates.Should().BeEmpty();
         }
 
         [Fact]
-        public void GetExchangeRates_ExistingCurrency_ReturnOneRateForIndia()
+        public async void GetExchangeRates_ExistingCurrency_ReturnOneRateForIndia()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -48,16 +48,16 @@ namespace ExchangeRateUpdater.Tests
             };
 
             // Act
-            var rates = sut.GetExchangeRates(currencies);
+            var rates = await sut.GetExchangeRatesAsync(currencies);
 
             // Assert
             rates.Should().HaveCount(1);
             rates.First().SourceCurrency.Code.Should().Be("IDR");
-            rates.First().Value.Should().Be(_cache.Object.GetCachedValues().First().rate);
+            rates.First().Value.Should().Be((await _cache.Object.GetCachedValuesAsync()).First().rate);
         }
 
         [Fact]
-        public void GetExchangeRates_AllExistingCurrency_ReturnAllThree()
+        public async void GetExchangeRates_AllExistingCurrency_ReturnAllThree()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -69,14 +69,14 @@ namespace ExchangeRateUpdater.Tests
             };
 
             // Act
-            var rates = sut.GetExchangeRates(currencies);
+            var rates = await sut.GetExchangeRatesAsync(currencies);
 
             // Assert
             rates.Should().HaveCount(3);
         }
 
         [Fact]
-        public void GetExchangeRates_OneExistingOneNonExistingCurrencies_ReturnExistingOnly()
+        public async void GetExchangeRates_OneExistingOneNonExistingCurrencies_ReturnExistingOnly()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
@@ -87,23 +87,23 @@ namespace ExchangeRateUpdater.Tests
             };
 
             // Act
-            var rates = sut.GetExchangeRates(currencies);
+            var rates = await sut.GetExchangeRatesAsync(currencies);
 
             // Assert
             rates.Should().HaveCount(1);
             rates.First().SourceCurrency.Code.Should().Be("IDR");
-            rates.First().Value.Should().Be(_cache.Object.GetCachedValues().First().rate);
+            rates.First().Value.Should().Be((await _cache.Object.GetCachedValuesAsync()).First().rate);
         }
 
         [Fact]
-        public void GetExchangeRates_EmptyCurrencyList_ReturnNoValue()
+        public async void GetExchangeRates_EmptyCurrencyList_ReturnNoValue()
         {
             // Arrange
             var sut = new ExchangeRateProvider(_cache.Object);
             var currencies = new List<Currency>();
 
             // Act
-            var rates = sut.GetExchangeRates(currencies);
+            var rates = await sut.GetExchangeRatesAsync(currencies);
 
             // Assert
             rates.Should().BeEmpty();

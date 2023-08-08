@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public interface ICnbApiWrapper
     {
-        List<ExchangeRateRecord> GetExchangeRates();
+        Task<List<ExchangeRateRecord>> GetExchangeRatesAsync();
     }
 
     public class CnbApiWrapper : ICnbApiWrapper
@@ -28,11 +29,10 @@ namespace ExchangeRateUpdater
             _httpClient = new HttpClient();
         }
 
-        public List<ExchangeRateRecord> GetExchangeRates()
+        public async Task<List<ExchangeRateRecord>> GetExchangeRatesAsync()
         {
-
-            var ratesFromAPI = _httpClient.GetFromJsonAsync<ExchangeRatesRecord>(_czechNationalBankApi).GetAwaiter().GetResult();
-
+            var ratesFromAPI = await _httpClient.GetFromJsonAsync<ExchangeRatesRecord>(_czechNationalBankApi);
+            
             Console.WriteLine("CNB Rates");
             Console.WriteLine($"validFor,order,country,currency,amount,currencyCode,rate");
             foreach (var rate in ratesFromAPI.rates)

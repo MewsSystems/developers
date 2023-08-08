@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public interface IExchangeRateCache
     {
-        List<ExchangeRateRecord> GetCachedValues();
+        Task<List<ExchangeRateRecord>> GetCachedValuesAsync();
     }
 
     public class ExchangeRateCache : IExchangeRateCache
@@ -18,9 +17,9 @@ namespace ExchangeRateUpdater
             _cnbApi = cnbApi;
         }
 
-        public List<ExchangeRateRecord> GetCachedValues()
+        public async Task<List<ExchangeRateRecord>> GetCachedValuesAsync()
         {
-            return _cnbApi.GetExchangeRates();
+            return await _cnbApi.GetExchangeRatesAsync();
         }
 
     }

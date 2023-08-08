@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater
                 var cache = new ExchangeRateCache(cnbApi);
                 var provider = new ExchangeRateProvider(cache);
 
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
