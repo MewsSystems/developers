@@ -21,6 +21,7 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+
             try
             {
                 var provider = new ExchangeRateProvider();
