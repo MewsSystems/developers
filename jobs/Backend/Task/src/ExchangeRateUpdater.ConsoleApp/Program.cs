@@ -31,7 +31,7 @@ namespace ExchangeRateUpdater.ConsoleApp
             {
                 var host = CreateHostBuilder(args).Build();
                 using var serviceScope = host.Services.CreateScope();
-                var services = serviceScope.ServiceProvider;               
+                var services = serviceScope.ServiceProvider;
                 //
             }
             catch (Exception e)
