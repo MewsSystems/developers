@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+.synclog
+.syncerr
+*.suo
+*.user
+*.orig
+*.ide
+*.csproj.user
+**/.idea/
