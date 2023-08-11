@@ -28,7 +28,7 @@ namespace ExchangeRateProvider
 
             DateTime nowCEST = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cestZone);
 
-            SqlParameter dateParameter = new SqlParameter("@dateNow",  nowCEST.ToString("YYYY-MM-DD hh:mm:ss"));
+            SqlParameter dateParameter = new SqlParameter("@dateNow",  nowCEST.ToString("yyyy-MM-dd HH:mm:ss:fff"));
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
