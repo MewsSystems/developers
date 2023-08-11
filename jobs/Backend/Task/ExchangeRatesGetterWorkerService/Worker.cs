@@ -27,36 +27,36 @@ namespace ExchangeRatesGetterWorkerService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            int runIndex = 0;
             using var scope = _serviceScopeFactory.CreateScope();
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            DbHelper.ClearTable(dbContext);
+
+  
+            GetAndWriteMainRates(dbContext, true);
+            GetAndWriteOtherRates(dbContext, true);
+
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 DateTime now = DateTime.UtcNow;
-                if (runIndex == 0)
-                {
-                    GetAndWriteMainRates(dbContext, false);
-                    GetAndWriteOtherRates(dbContext, false);
-                    runIndex++;
-                }
+
 
 
                 var nextDayUtc = _cronDaily.GetNextOccurrence(now, cestZone);
                 var nextMonthUtc = _cronMonthly.GetNextOccurrence(now, cestZone);
 
-                Task dailyTask = Task.Run(() =>
+                Task dailyTask = Task.Run(async () =>
                 {
-                    Task.Delay(nextDayUtc.Value - now, stoppingToken);
-                    GetAndWriteMainRates(dbContext, true);
+                    await Task.Delay(nextDayUtc.Value - now, stoppingToken);
+                    GetAndWriteMainRates(dbContext, false);
 
                 }, stoppingToken);
 
-                Task monthlyTask = Task.Run(() => 
+                Task monthlyTask = Task.Run(async () => 
                 {                    
-                    Task.Delay(nextMonthUtc.Value - now, stoppingToken);
-                    GetAndWriteOtherRates(dbContext, true);
+                    await Task.Delay(nextMonthUtc.Value - now, stoppingToken);
+                    GetAndWriteOtherRates(dbContext, false);
                 }, stoppingToken);
 
 
@@ -73,6 +73,7 @@ namespace ExchangeRatesGetterWorkerService
             while(
                 rates == null ||
                 rates.Length == 0 ||
+                // This check on scheduled run (not first run) is perfomed to make sure that CNB has published desired rates, if not, than wait one second
                 (!isFirstRun && DateTime.ParseExact(rates[0].validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture).Day != DateTime.Now.Day)
                 )
             {
@@ -82,7 +83,7 @@ namespace ExchangeRatesGetterWorkerService
 
             foreach (var rate in rates)
             {
-                if (rate.rate != 0)
+                if (rate.rate != 0 && rate.amount == 1)
                 {
                     exchangeRatesMain.Add(ExchangeRateData.CreateFromMainCurrencyCnbRate(rate));
                 }
@@ -98,6 +99,7 @@ namespace ExchangeRatesGetterWorkerService
             while (
                 rates == null ||
                 rates.Length == 0 ||
+                // This check on scheduled run (not first run) is perfomed to make sure that CNB has published desired rates, if not, than wait one second
                 (!isFirstRun && DateTime.ParseExact(rates[0].validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture).Month != (DateTime.Now.Month-1))
                 )
             {
@@ -107,7 +109,7 @@ namespace ExchangeRatesGetterWorkerService
 
             foreach (var otherRate in rates)
             {
-                if (otherRate.rate != 0)
+                if (otherRate.rate != 0 && otherRate.amount == 1)
                 {
                     exchangeRatesOther.Add(ExchangeRateData.CreateFromOtherCurrencyCnbRate(otherRate));
                 }

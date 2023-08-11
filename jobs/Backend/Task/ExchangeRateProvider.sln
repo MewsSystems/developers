@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRatesGetterWorkerService", "ExchangeRatesGetterWorkerService\ExchangeRatesGetterWorkerService.csproj", "{C57BDA0C-40DB-467D-B99C-8C3F934C2CC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesGetterWorkerService", "ExchangeRatesGetterWorkerService\ExchangeRatesGetterWorkerService.csproj", "{C57BDA0C-40DB-467D-B99C-8C3F934C2CC4}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FD950434-C1A4-42EC-8F93-4E95A5C6AB40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProvider", "ExchangeRateProvider\ExchangeRateProvider.csproj", "{E3F836DE-72BA-413B-9AFB-6A000AD1F7DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateProviderDemoConsole", "..\ExchangeRateProviderDemoConsole\ExchangeRateProviderDemoConsole.csproj", "{A3445FCA-E07C-4031-8CA6-41116EE0076B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C57BDA0C-40DB-467D-B99C-8C3F934C2CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C57BDA0C-40DB-467D-B99C-8C3F934C2CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C57BDA0C-40DB-467D-B99C-8C3F934C2CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +25,14 @@ Global
 		{FD950434-C1A4-42EC-8F93-4E95A5C6AB40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD950434-C1A4-42EC-8F93-4E95A5C6AB40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD950434-C1A4-42EC-8F93-4E95A5C6AB40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3F836DE-72BA-413B-9AFB-6A000AD1F7DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3F836DE-72BA-413B-9AFB-6A000AD1F7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3F836DE-72BA-413B-9AFB-6A000AD1F7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3F836DE-72BA-413B-9AFB-6A000AD1F7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3445FCA-E07C-4031-8CA6-41116EE0076B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3445FCA-E07C-4031-8CA6-41116EE0076B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3445FCA-E07C-4031-8CA6-41116EE0076B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3445FCA-E07C-4031-8CA6-41116EE0076B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

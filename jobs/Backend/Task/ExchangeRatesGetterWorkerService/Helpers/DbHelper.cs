@@ -1,6 +1,6 @@
 ﻿using ExchangeRatesGetterWorkerService.Context;
 using ExchangeRatesGetterWorkerService.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeRatesGetterWorkerService.Helpers
 {
@@ -18,6 +18,12 @@ namespace ExchangeRatesGetterWorkerService.Helpers
         public static List<ExchangeRateData> ReadAllRates(AppDbContext context)
         {
             return context.Rates.ToList();
+        }
+
+        public static void ClearTable(AppDbContext context)
+        {
+            context.Database.EnsureCreated();
+            context.Database.ExecuteSqlRaw($"TRUNCATE TABLE [{AppDbContext.TABLE_NAME}]");
         }
     }
 }

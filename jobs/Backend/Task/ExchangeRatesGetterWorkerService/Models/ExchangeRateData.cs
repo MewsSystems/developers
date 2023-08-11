@@ -10,7 +10,7 @@ namespace ExchangeRatesGetterWorkerService.Models
             ExchangeRateData rateData = new ExchangeRateData();
             rateData.TargetCurrency = "CZK";
             rateData.SourceCurrency = rate.currencyCode;
-            rateData.Value = Convert.ToDecimal(rate.rate) / rate.amount;
+            rateData.Value = Convert.ToDecimal(rate.rate);
             rateData.ValidFrom = DateTime.ParseExact(rate.validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddHours(14.5);
 
             DateTime validTill = rateData.ValidFrom.AddDays(1);
@@ -29,7 +29,7 @@ namespace ExchangeRatesGetterWorkerService.Models
             ExchangeRateData rateData = new ExchangeRateData();
             rateData.TargetCurrency = "CZK";
             rateData.SourceCurrency = rate.currencyCode;
-            rateData.Value = Convert.ToDecimal(rate.rate) / rate.amount;
+            rateData.Value = Convert.ToDecimal(rate.rate);
 
             DateTime validFor = DateTime.ParseExact(rate.validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             DateTime temp = validFor.AddMonths(1);
