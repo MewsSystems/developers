@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Task\ExchangeRateProvider\ExchangeRateProvider.csproj" />
+    <ProjectReference Include="..\ExchangeRateProviderLib\ExchangeRateProvider.csproj" />
   </ItemGroup>
 
 </Project>
