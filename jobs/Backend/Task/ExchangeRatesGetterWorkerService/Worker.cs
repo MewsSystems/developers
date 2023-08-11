@@ -21,24 +21,26 @@ namespace ExchangeRatesGetterWorkerService
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
             _cnbHelper = new CnbHelper(_logger);
-
+            DbHelper.Init(_logger);
 
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("Worker started at: {time}", DateTimeOffset.Now);
             using var scope = _serviceScopeFactory.CreateScope();
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            
             DbHelper.ClearTable(dbContext);
 
-  
-            GetAndWriteMainRates(dbContext, true);
-            GetAndWriteOtherRates(dbContext, true);
+            ActualizeMainRates(dbContext, true);
+            ActualizeOtherRates(dbContext, true);
 
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 DateTime now = DateTime.UtcNow;
 
 
@@ -49,14 +51,14 @@ namespace ExchangeRatesGetterWorkerService
                 Task dailyTask = Task.Run(async () =>
                 {
                     await Task.Delay(nextDayUtc.Value - now, stoppingToken);
-                    GetAndWriteMainRates(dbContext, false);
+                    ActualizeMainRates(dbContext, false);
 
                 }, stoppingToken);
 
                 Task monthlyTask = Task.Run(async () => 
                 {                    
                     await Task.Delay(nextMonthUtc.Value - now, stoppingToken);
-                    GetAndWriteOtherRates(dbContext, false);
+                    ActualizeOtherRates(dbContext, false);
                 }, stoppingToken);
 
 
@@ -65,7 +67,7 @@ namespace ExchangeRatesGetterWorkerService
             }
         }
 
-        private void GetAndWriteMainRates(AppDbContext dbContext, bool isFirstRun)
+        private void ActualizeMainRates(AppDbContext dbContext, bool isFirstRun)
         {
             Rate[] rates = _cnbHelper.GetMainCurrenciesValidRates().Result;
             List<ExchangeRateData> exchangeRatesMain = new List<ExchangeRateData>();
@@ -89,9 +91,15 @@ namespace ExchangeRatesGetterWorkerService
                 }
 
             }
+
+            if(!isFirstRun)
+            {
+                DbHelper.CleanupRates(dbContext, true);
+            }
+            
             DbHelper.WriteRates(dbContext, exchangeRatesMain.ToArray());
         }
-        private void GetAndWriteOtherRates(AppDbContext dbContext, bool isFirstRun)
+        private void ActualizeOtherRates(AppDbContext dbContext, bool isFirstRun)
         {
             Rate[] rates = _cnbHelper.GetOtherCurrenciesValidRates().Result;
             List<ExchangeRateData> exchangeRatesOther = new List<ExchangeRateData>();
@@ -113,10 +121,13 @@ namespace ExchangeRatesGetterWorkerService
                 {
                     exchangeRatesOther.Add(ExchangeRateData.CreateFromOtherCurrencyCnbRate(otherRate));
                 }
+            }            
+
+            if(!isFirstRun)
+            {
+                DbHelper.CleanupRates(dbContext, false);
             }
-
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
+            
             DbHelper.WriteRates(dbContext, exchangeRatesOther.ToArray());
         }
         

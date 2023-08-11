@@ -12,6 +12,7 @@ namespace ExchangeRatesGetterWorkerService.Models
             rateData.SourceCurrency = rate.currencyCode;
             rateData.Value = Convert.ToDecimal(rate.rate);
             rateData.ValidFrom = DateTime.ParseExact(rate.validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddHours(14.5);
+            rateData.IsMain = true;
 
             DateTime validTill = rateData.ValidFrom.AddDays(1);
             while(!DateTimeHelper.IsWorkingDay(validTill))
@@ -30,11 +31,12 @@ namespace ExchangeRatesGetterWorkerService.Models
             rateData.TargetCurrency = "CZK";
             rateData.SourceCurrency = rate.currencyCode;
             rateData.Value = Convert.ToDecimal(rate.rate);
-
+            rateData.IsMain = false;
             DateTime validFor = DateTime.ParseExact(rate.validFor, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             DateTime temp = validFor.AddMonths(1);
             DateTime validFrom = new DateTime(temp.Year, temp.Month, 1);
             DateTime validTo = validFrom.AddMonths(1).AddMinutes(-1);
+
 
             rateData.ValidFrom = validFrom;
             rateData.ValidTill = validTo;
@@ -47,6 +49,7 @@ namespace ExchangeRatesGetterWorkerService.Models
         public decimal Value { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTill { get; set; }
+        public bool IsMain { get; set; }
 
 
     }

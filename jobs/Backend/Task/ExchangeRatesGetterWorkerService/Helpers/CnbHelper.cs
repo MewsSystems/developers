@@ -35,6 +35,7 @@ namespace ExchangeRatesGetterWorkerService.Helpers
         {
             try
             {
+                _logger.LogInformation("Request Main rates from CNB at: {time}", DateTimeOffset.Now);
                 DateTime date = DateTimeHelper.GetMainCurrenciesLastPublicationDate();
 
                 using HttpResponseMessage response = await client.GetAsync($"https://api.cnb.cz/cnbapi/exrates/daily?date={date.Year}-{date.Month.ToString("00")}-{date.Day.ToString("00")}&lang=EN");
@@ -44,6 +45,7 @@ namespace ExchangeRatesGetterWorkerService.Helpers
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
+                _logger.LogInformation("Request Main rates from CNB: Success.");
 
                 return JsonConvert.DeserializeObject<Rootobject>(responseBody).rates;
             }
@@ -62,6 +64,7 @@ namespace ExchangeRatesGetterWorkerService.Helpers
 
             try
             {
+                _logger.LogInformation("Request Other rates from CNB at: {time}", DateTimeOffset.Now);
                 DateTime date = DateTimeHelper.GetCestTimeFromUtcTime(DateTime.UtcNow).AddMonths(-1);
 
                 using HttpResponseMessage response = 
@@ -72,6 +75,7 @@ namespace ExchangeRatesGetterWorkerService.Helpers
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
 
+                _logger.LogInformation("Request Other rates from CNB: Success.");
 
                 return JsonConvert.DeserializeObject<Rootobject>(responseBody).rates;
             }

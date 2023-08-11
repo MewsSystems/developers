@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Linq;
 
 namespace ExchangeRateProvider
@@ -8,6 +9,8 @@ namespace ExchangeRateProvider
     public class ExchangeRateProvider
     {
         private const string connectionStringFile = @"./ConnectionString.txt";
+        private static TimeZoneInfo cestZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -21,18 +24,23 @@ namespace ExchangeRateProvider
 
             builder.ConnectionString = GetConnectionString();
 
-            SqlParameter[] sqlParameters = currencies.Select(currency => new SqlParameter($"@{currency.Code.ToLower().Trim()}", currency.Code.ToUpper().Trim())).ToArray() ;
+            SqlParameter[] sqlParameters = currencies.Select(currency => new SqlParameter($"@{currency.Code.ToLower().Trim()}", currency.Code.ToUpper().Trim())).ToArray();
+
+            DateTime nowCEST = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cestZone);
+
+            SqlParameter dateParameter = new SqlParameter("@dateNow",  nowCEST.ToString("YYYY-MM-DD hh:mm:ss"));
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 connection.Open();
-
-                string sql = @$"SELECT SourceCurrency ,Value FROM master.dbo.ExchangeRateData WHERE SourceCurrency in ({string.Join(", ", currencies.Select(curr => $"@{curr.Code.ToLower().Trim()}").ToArray())})";
+                string sql = @$"SELECT SourceCurrency ,Value FROM master.dbo.ExchangeRateData WHERE SourceCurrency in ({string.Join(", ", currencies.Select(curr => $"@{curr.Code.ToLower().Trim()}").ToArray())}) AND ValidFrom <= @dateNow AND ValidTill > @dateNow";
                 
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddRange(sqlParameters);
+                    command.Parameters.Add(dateParameter);
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -48,7 +56,6 @@ namespace ExchangeRateProvider
         private string GetConnectionString()
         {
             return File.ReadAllLines(connectionStringFile)[0];
-
         }
     }
 }
