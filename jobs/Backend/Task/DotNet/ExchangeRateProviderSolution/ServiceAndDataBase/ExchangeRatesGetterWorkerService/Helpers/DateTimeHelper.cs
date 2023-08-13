@@ -1,17 +1,31 @@
-﻿namespace ExchangeRatesGetterWorkerService.Helpers
+﻿
+namespace ExchangeRatesGetterWorkerService.Helpers
 {
+    /// <summary>   A date time helper. </summary>
+    ///
+    /// <remarks>   , 13.08.2023. </remarks>
+
     public class DateTimeHelper
     {
-        // there is potential problems with timezones in containers when time is switched winter/summer
-
         private static TimeSpan publishingMainRatesCetTime = TimeSpan.FromHours(14.5);
+        /// <summary>   The cest zone. </summary>
         private static TimeZoneInfo cestZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
+        /// <summary>   Gets cest time from UTC time. </summary>
+        ///
+        ///
+        /// <param name="utcTime">  The UTC time. </param>
+        ///
+        /// <returns>   The cest time from UTC time. </returns>
         public static DateTime GetCestTimeFromUtcTime(DateTime utcTime)
         {
             return TimeZoneInfo.ConvertTimeFromUtc(utcTime, cestZone);
         }
 
+        /// <summary>   Gets main currencies last publication date. </summary>
+        ///
+        ///
+        /// <returns>   The main currencies last publication date. </returns>
         public static DateTime GetMainCurrenciesLastPublicationDate()
         {
             DateTime currentDate = GetCestTimeFromUtcTime(DateTime.UtcNow);
@@ -36,6 +50,13 @@
             return currentDate;
 
         }
+
+        /// <summary>   Query if 'date' is working day. </summary>
+        ///
+        ///
+        /// <param name="date"> The date Date/Time. </param>
+        ///
+        /// <returns>   True if working day, false if not. </returns>
         public static bool IsWorkingDay(DateTime date)
         {
             bool isWeekend = date.DayOfWeek == DayOfWeek.Sunday || date.DayOfWeek == DayOfWeek.Saturday;
@@ -51,6 +72,10 @@
             return true;
         }
 
+        /// <summary>   Gets public holidays current year. </summary>
+        ///
+        ///
+        /// <returns>   An array of date time. </returns>
         public static DateTime[] GetPublicHolidaysCurrentYear()
         {
 

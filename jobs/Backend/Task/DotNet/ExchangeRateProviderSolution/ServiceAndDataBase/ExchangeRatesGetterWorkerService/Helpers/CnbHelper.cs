@@ -1,36 +1,83 @@
-﻿using Newtonsoft.Json;
+﻿
+using Newtonsoft.Json;
 
 namespace ExchangeRatesGetterWorkerService.Helpers
 {
+    /// <summary>   A rootobject. </summary>
+    ///
     public class Rootobject
     {
+        /// <summary>   Gets or sets the rates. </summary>
+        ///
+        /// <value> The rates. </value>
         public Rate[] rates { get; set; }
     }
 
+    /// <summary>   A rate. </summary>
+    ///
+    /// <remarks>   , 13.08.2023. </remarks>
+
     public class Rate
     {
+        /// <summary>   Gets or sets the valid for. </summary>
+        ///
+        /// <value> The valid for. </value>
         public string validFor { get; set; }
+
+        /// <summary>   Gets or sets the order. </summary>
+        ///
+        /// <value> The order. </value>
         public int order { get; set; }
+
+        /// <summary>   Gets or sets the country. </summary>
+        ///
+        /// <value> The country. </value>
         public string country { get; set; }
+
+        /// <summary>   Gets or sets the currency. </summary>
+        ///
+        /// <value> The currency. </value>
         public string currency { get; set; }
+
+        /// <summary>   Gets or sets the amount. </summary>
+        ///
+        /// <value> The amount. </value>
         public int amount { get; set; }
+
+        /// <summary>   Gets or sets the currency code. </summary>
+        ///
+        /// <value> The currency code. </value>
         public string currencyCode { get; set; }
+
+        /// <summary>   Gets or sets the rate. </summary>
+        ///
+        /// <value> The rate. </value>
         public float rate { get; set; }
     }
 
+    /// <summary>   A cnb helper. </summary>
+    ///
     public class CnbHelper
     {
+        /// <summary>   (Immutable) the client. </summary>
         private static readonly HttpClient client = new HttpClient();
 
+        /// <summary>   The logger. </summary>
         private ILogger _logger;
 
-
+        /// <summary>   Constructor. </summary>
+        ///
+        ///
+        /// <param name="logger">   The logger. </param>
         public CnbHelper(ILogger logger)
         {
             _logger = logger;
         }
 
- 
+        /// <summary>   Gets main currencies valid rates. </summary>
+        ///
+        ///
+        /// <returns>   The main currencies valid rates. </returns>
         public async Task<Rate[]> GetMainCurrenciesValidRates()
         {
             try
@@ -59,6 +106,10 @@ namespace ExchangeRatesGetterWorkerService.Helpers
 
         }
 
+        /// <summary>   Gets other currencies valid rates. </summary>
+        ///
+        ///
+        /// <returns>   The other currencies valid rates. </returns>
         public async Task<Rate[]> GetOtherCurrenciesValidRates()
         {
 

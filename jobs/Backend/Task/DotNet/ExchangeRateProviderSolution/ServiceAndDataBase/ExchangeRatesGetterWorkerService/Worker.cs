@@ -1,3 +1,4 @@
+
 using ExchangeRatesGetterWorkerService.Context;
 using ExchangeRatesGetterWorkerService.Models;
 using ExchangeRatesGetterWorkerService.Helpers;
@@ -6,15 +7,31 @@ using System.Globalization;
 
 namespace ExchangeRatesGetterWorkerService
 {
+    /// <summary>   A worker. </summary>
+    ///
+    /// <remarks>   , 13.08.2023. </remarks>
+
     public class Worker : BackgroundService
     {
+        /// <summary>   (Immutable) the logger. </summary>
         private readonly ILogger<Worker> _logger;
+        /// <summary>   (Immutable) the service scope factory. </summary>
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        /// <summary>   (Immutable) the cnb helper. </summary>
         private readonly CnbHelper _cnbHelper;
+        /// <summary>   The cest zone. </summary>
         private static TimeZoneInfo cestZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+        /// <summary>   (Immutable) the cron daily. </summary>
         private static readonly CronExpression _cronDaily = CronExpression.Parse("30 14 * * MON-FRI");
+        /// <summary>   (Immutable) the cron monthly. </summary>
         private static readonly CronExpression _cronMonthly = CronExpression.Parse("0 0 1 * *");
 
+        /// <summary>   Constructor. </summary>
+        ///
+        /// <remarks>   , 13.08.2023. </remarks>
+        ///
+        /// <param name="logger">               The logger. </param>
+        /// <param name="serviceScopeFactory">  The service scope factory. </param>
 
         public Worker(ILogger<Worker> logger, IServiceScopeFactory serviceScopeFactory)
         {
@@ -24,6 +41,21 @@ namespace ExchangeRatesGetterWorkerService
             DbHelper.Init(_logger);
 
         }
+
+        /// <summary>
+        /// This method is called when the <see cref="T:Microsoft.Extensions.Hosting.IHostedService" />
+        /// starts. The implementation should return a task that represents the lifetime of the long
+        /// running operation(s) being performed.
+        /// </summary>
+        ///
+        /// <remarks>   , 13.08.2023. </remarks>
+        ///
+        /// <param name="stoppingToken">    Triggered when <see cref="M:Microsoft.Extensions.Hosting.IHostedService.StopAsync(System.Threading.CancellationToken)" />
+        ///                                 is called. </param>
+        ///
+        /// <returns>
+        /// A <see cref="T:System.Threading.Tasks.Task" /> that represents the long running operations.
+        /// </returns>
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -67,6 +99,13 @@ namespace ExchangeRatesGetterWorkerService
             }
         }
 
+        /// <summary>   Actualize main rates. </summary>
+        ///
+        /// <remarks>   , 13.08.2023. </remarks>
+        ///
+        /// <param name="dbContext">    Context for the database. </param>
+        /// <param name="isFirstRun">   True if is first run, false if not. </param>
+
         private void ActualizeMainRates(AppDbContext dbContext, bool isFirstRun)
         {
             Rate[] rates = _cnbHelper.GetMainCurrenciesValidRates().Result;
@@ -99,6 +138,14 @@ namespace ExchangeRatesGetterWorkerService
             
             DbHelper.WriteRates(dbContext, exchangeRatesMain.ToArray());
         }
+
+        /// <summary>   Actualize other rates. </summary>
+        ///
+        /// <remarks>   , 13.08.2023. </remarks>
+        ///
+        /// <param name="dbContext">    Context for the database. </param>
+        /// <param name="isFirstRun">   True if is first run, false if not. </param>
+
         private void ActualizeOtherRates(AppDbContext dbContext, bool isFirstRun)
         {
             Rate[] rates = _cnbHelper.GetOtherCurrenciesValidRates().Result;
