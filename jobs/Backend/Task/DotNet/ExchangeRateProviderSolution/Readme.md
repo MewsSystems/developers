@@ -42,7 +42,7 @@ We wont depend on CNB systems availability too much and number of calls to CNB s
 how many clients we have and howe many times they make requests for exchange rates. Performance of the application can be achieved
 by adding more sql server database instances.
 
-#What I would improve as a next steps:
+### What I would improve as a next steps:
 1) I would add interface to provide next years public holidays (In the solution information about public holidays is used to calculate validity of
 the exchange rates)
 2) I would double check and make sure that api.cnb.cz is really published by CNB and which limitations it has.
