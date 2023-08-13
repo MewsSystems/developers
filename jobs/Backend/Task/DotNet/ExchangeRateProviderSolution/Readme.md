@@ -9,11 +9,11 @@ Goal is to implement a fully functional provider based on real world public data
 To submit your solution, just open a new pull request to this repository.
 Please write the code like you would if you needed this to run on production environment and had to take care of it long-term.
 
- Also following comment from "GetExchangeRates" method was taken into account as part of task description:
-/// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-/// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-/// some of the currencies, ignore them.
+#### Also following comment from "GetExchangeRates" method was taken into account as part of task description:
+Should return exchange rates among the specified currencies that are defined by the source. But only those defined
+by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
+do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
+some of the currencies, ignore them.
 
 ### About exchange rates from CNB:
     
