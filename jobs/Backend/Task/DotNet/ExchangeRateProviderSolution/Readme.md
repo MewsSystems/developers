@@ -47,5 +47,6 @@ the exchange rates)
 2) I would double check and make sure that api.cnb.cz is really published by CNB and which limitations it has.
 3) I would add .Net Web Api project to provider exchange rates to clients via rest api instead of direct data base access.
 4) I would rewrite service worker using Domain Driven Develpment methodology.
+5) I would Add integration and unit tests
 
 
