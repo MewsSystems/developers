@@ -5,6 +5,11 @@ using System.Reflection;
 
 namespace ExchangeRateUpdater.Infrastructure
 {
+    /// <summary>
+    /// In a real world scenario available currencies should be stored in a DB
+    /// so that there is no need to commit any code change to modify them.
+    /// Also, they will be accessed through EF so that CreateCurrency method won't be required
+    /// </summary>
     public class InMemoryReadOnlyCurrenciesRepository : IReadOnlyRepository<Currency>
     {
         public IEnumerable<Currency> GetAll()
