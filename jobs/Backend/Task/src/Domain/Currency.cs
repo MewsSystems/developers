@@ -2,7 +2,7 @@
 {
     public class Currency
     {
-        public Currency(string code)
+        private Currency(string code)
         {
             Code = code;
         }
