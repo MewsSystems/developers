@@ -47,6 +47,15 @@ namespace ExchangeRateUpdater.Infrastructure
 
             var response = await _restClient.ExecuteAsync(request);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response.Content);
+                throw new ApplicationException($"Request: {request.Method} {response.ResponseUri} failed with status code: {response.StatusCode} message: {errorResponse.Description}");
+            }
+
+            if (string.IsNullOrWhiteSpace(response.Content))
+                return new ExchangeRate[0];
+
             var responseExchangeRates = JsonConvert.DeserializeObject<OkResponse>(response.Content).Rates;
 
             currencies = currencies.Where(c => c != null && !string.IsNullOrWhiteSpace(c.Code));

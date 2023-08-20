@@ -2,6 +2,8 @@
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.UnitTests.Helpers;
 using FluentAssertions;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,6 +32,21 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
                 .Contain(exchangeRate => exchangeRate.SourceCurrency.Code == CurrenciesHelper.EUR.Code
                                          && exchangeRate.TargetCurrency.Code == Currency.DEFAULT_CURRENCY.Code
                                          && exchangeRate.Value == CzechNationalBankServiceHelper.EUR_RATE);
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.BadRequest)]
+        [InlineData(HttpStatusCode.InternalServerError)]
+        public async Task GetExchangeRatesAsync_ErroringCzechNationalBankMockedResource_ThrowsApplicationException(HttpStatusCode httpStatusCode)
+        {
+            // Arrange
+            var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(CzechNationalBankServiceHelper.CreateErroringMockedCzechNationalBankService(httpStatusCode));
+            var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
+
+            var action = async () => await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+            // Act + Assert
+            await action.Should().ThrowAsync<ApplicationException>();
         }
     }
 }

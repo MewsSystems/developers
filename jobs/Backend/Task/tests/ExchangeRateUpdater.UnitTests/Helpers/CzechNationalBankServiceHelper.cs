@@ -26,6 +26,21 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
             return mockedService.Object;
         }
 
+        public static IRestClient CreateErroringMockedCzechNationalBankService(HttpStatusCode httpStatusCode)
+        {
+            var mockedService = new Mock<IRestClient>();
+
+            var response = new RestResponse();
+            response.Content = ERROR_CNB_RESPONSE;
+            response.IsSuccessStatusCode = false;
+            response.StatusCode = httpStatusCode;
+
+            mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
+                .Returns(Task.FromResult(response));
+
+            return mockedService.Object;
+        }
+
         // Required to avoid system culture issues
         // eg. Spanish machine uses ',' as decimal separator
         private static string DecimalToString(decimal d) => d.ToString(new CultureInfo("en-US"));
@@ -52,6 +67,15 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
 			            'rate': " + DecimalToString(USD_RATE) + @"
                     }
                 ]
+            }";
+
+        private static string ERROR_CNB_RESPONSE =>
+            @"{
+                  'description': 'Something went wrong',
+                  'endPoint': 'endpoint',
+                  'errorCode': 'CNB_ERROR_CODE',
+                  'happenedAt': '2023-08-20T06:57:29.098Z',
+                  'messageId': 'cnb-id'
             }";
     }
 }
