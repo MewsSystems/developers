@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -68,6 +69,31 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
         }
+
+        [Theory, MemberData(nameof(EmptyCurrenciesLists))]
+        public async Task GetExchangeRatesAsync_WithEmptyOrNullCurrencies_EarlyReturnsEmptyArrayOfExchangeRates(IEnumerable<Currency> currencies)
+        {
+            // Arrange
+            var responsiveCnbMockedService = CzechNationalBankServiceHelper.CreateResponsiveMockedCzechNationalBankService();
+            var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
+                restClient: responsiveCnbMockedService.Object,
+                retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
+                logger: mockedLogger.Object);
+
+            // Act
+            var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+            // Assert
+            rates.Should().HaveCount(0);
+            responsiveCnbMockedService.Verify(s => s.ExecuteAsync(It.IsAny<RestRequest>(), default), Times.Never);
+        }
+
+        public static IEnumerable<object[]> EmptyCurrenciesLists =>
+            new List<object[]>
+            {
+                new object[] { null },
+                new object[] { new Currency[0] }
+            };
 
         [Fact]
         public async Task GetExchangeRatesAsync_TransientErrorsInCzechNationalBankMockedResource_ReturnsUsdAndEurExchangeRatesAfter3Retries()

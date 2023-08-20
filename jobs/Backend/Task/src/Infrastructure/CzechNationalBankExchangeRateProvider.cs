@@ -48,6 +48,9 @@ namespace ExchangeRateUpdater.Infrastructure
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
+            if (currencies == null || !currencies.Any())
+                return new ExchangeRate[0];
+
             var request = CreateCnbGetExchangeRatesRequest();
 
             _logger.LogInformation($"Fetching exchange rates from Czech National Bank API: {request.Method} {request.Resource}...");
