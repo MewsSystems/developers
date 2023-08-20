@@ -5,4 +5,9 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+  </ItemGroup>
+
 </Project>

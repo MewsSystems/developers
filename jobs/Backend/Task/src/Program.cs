@@ -1,21 +1,23 @@
 ﻿using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Infrastructure;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IExchangeRateProvider provider;
+        private static IExchangeRateProvider provider = new CzechNationalBankExchangeRateProvider(new RestClient());
         private static IEnumerable<Currency> currencies => new InMemoryReadOnlyCurrenciesRepository().GetAll();
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

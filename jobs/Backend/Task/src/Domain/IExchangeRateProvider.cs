@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Domain
 {
@@ -10,6 +11,6 @@ namespace ExchangeRateUpdater.Domain
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+        public Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies);
     }
 }
