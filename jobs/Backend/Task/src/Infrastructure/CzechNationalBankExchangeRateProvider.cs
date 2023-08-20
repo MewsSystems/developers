@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -34,10 +35,12 @@ namespace ExchangeRateUpdater.Infrastructure
         private Dictionary<string, string> Params = new Dictionary<string, string> { { "lang", "EN" } };
 
         private readonly IRestClient _restClient;
+        private readonly ILogger _logger;
 
-        public CzechNationalBankExchangeRateProvider(IRestClient restClient)
+        public CzechNationalBankExchangeRateProvider(IRestClient restClient, ILogger<CzechNationalBankExchangeRateProvider> logger)
         {
             _restClient ??= restClient ?? throw new ArgumentNullException(nameof(restClient));
+            _logger ??= logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
@@ -45,13 +48,20 @@ namespace ExchangeRateUpdater.Infrastructure
             var request = new RestRequest(EXCHANGE_RATES_DAILY_URL);
             Params.ToList().ForEach(p => request.AddParameter(p.Key, p.Value));
 
+            _logger.LogInformation($"Fetching exchange rates from Czech National Bank API: {request.Method} {request.Resource}...");
+
             var response = await _restClient.ExecuteAsync(request);
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response.Content);
-                throw new ApplicationException($"Request: {request.Method} {response.ResponseUri} failed with status code: {response.StatusCode} message: {errorResponse.Description}");
+                var errorMessage = $"Request: {request.Method} {response.ResponseUri} failed with status code: {response.StatusCode} message: {errorResponse.Description}";
+                
+                _logger.LogError(errorMessage);
+                throw new ApplicationException(errorMessage);
             }
+
+            _logger.LogInformation($"Czech National Bank API successful response: {JsonConvert.DeserializeObject<object>(response.Content)}");
 
             if (string.IsNullOrWhiteSpace(response.Content))
                 return new ExchangeRate[0];
