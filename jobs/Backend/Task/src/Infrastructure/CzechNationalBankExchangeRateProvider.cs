@@ -45,34 +45,50 @@ namespace ExchangeRateUpdater.Infrastructure
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var request = new RestRequest(EXCHANGE_RATES_DAILY_URL);
-            Params.ToList().ForEach(p => request.AddParameter(p.Key, p.Value));
+            var request = CreateCnbGetExchangeRatesRequest();
 
             _logger.LogInformation($"Fetching exchange rates from Czech National Bank API: {request.Method} {request.Resource}...");
 
             var response = await _restClient.ExecuteAsync(request);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response.Content);
-                var errorMessage = $"Request: {request.Method} {response.ResponseUri} failed with status code: {response.StatusCode} message: {errorResponse.Description}";
-                
-                _logger.LogError(errorMessage);
-                throw new ApplicationException(errorMessage);
-            }
+            ValidateResponse(response);
 
-            _logger.LogInformation($"Czech National Bank API successful response: {JsonConvert.DeserializeObject<object>(response.Content)}");
+            _logger.LogInformation($"Czech National Bank API successful response: {JsonConvert.DeserializeObject<object>(response.Content ?? string.Empty)}");
 
             if (string.IsNullOrWhiteSpace(response.Content))
                 return new ExchangeRate[0];
 
+            return MapExchangeRates(currencies, response);
+        }
+
+        private RestRequest CreateCnbGetExchangeRatesRequest()
+        {
+            var request = new RestRequest(EXCHANGE_RATES_DAILY_URL);
+            Params.ToList().ForEach(p => request.AddParameter(p.Key, p.Value));
+            return request;
+        }
+
+        private void ValidateResponse(RestResponse response)
+        {
+            if (response.IsSuccessStatusCode)
+                return;
+             
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(response.Content);
+            var errorMessage = $"Request: {response.ResponseUri} failed with status code: {response.StatusCode} message: {errorResponse.Description}";
+
+            _logger.LogError(errorMessage);
+            throw new ApplicationException(errorMessage);
+        }
+
+        private static IEnumerable<ExchangeRate> MapExchangeRates(IEnumerable<Currency> currencies, RestResponse response)
+        {
             var responseExchangeRates = JsonConvert.DeserializeObject<OkResponse>(response.Content).Rates;
 
             currencies = currencies.Where(c => c != null && !string.IsNullOrWhiteSpace(c.Code));
             responseExchangeRates = responseExchangeRates.Where(r => currencies.Any(c => c.Code == r.CurrencyCode));
 
             var exchangeRates = new List<ExchangeRate>();
-            
+
             foreach (var currency in currencies)
             {
                 var responseExchangeRate = responseExchangeRates.FirstOrDefault(r => r.CurrencyCode == currency.Code);
