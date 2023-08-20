@@ -4,6 +4,7 @@ using ExchangeRateUpdater.UnitTests.Helpers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using RestSharp;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
             // Arrange
             var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
                 restClient: CzechNationalBankServiceHelper.CreateResponsiveMockedCzechNationalBankService(),
+                retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
                 logger: mockedLogger.Object);
 
             var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
@@ -49,6 +51,7 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
             // Arrange
             var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
                 restClient: CzechNationalBankServiceHelper.CreateErroringMockedCzechNationalBankService(httpStatusCode),
+                retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
                 logger: mockedLogger.Object);
             var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
 
@@ -64,6 +67,37 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
+        }
+
+        [Fact]
+        public async Task GetExchangeRatesAsync_TransientErrorsInCzechNationalBankMockedResource_ReturnsUsdAndEurExchangeRatesAfter3Retries()
+        {
+            // Arrange
+            var transientErrorCnbServiceMock = CzechNationalBankServiceHelper.CreateTransientErrorMockedCzechNationalBankService();
+
+            var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
+                restClient: transientErrorCnbServiceMock.Object,
+                retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
+                logger: mockedLogger.Object);
+
+            var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
+
+            // Act
+            var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+            // Assert
+            transientErrorCnbServiceMock.Verify(s => s.ExecuteAsync(It.IsAny<RestRequest>(), default), Times.Exactly(4));
+
+            rates.Should().HaveCount(2);
+
+            rates.Should()
+                .Contain(exchangeRate => exchangeRate.SourceCurrency.Code == CurrenciesHelper.USD.Code
+                                         && exchangeRate.TargetCurrency.Code == Currency.DEFAULT_CURRENCY.Code
+                                         && exchangeRate.Value == CzechNationalBankServiceHelper.USD_RATE);
+            rates.Should()
+                .Contain(exchangeRate => exchangeRate.SourceCurrency.Code == CurrenciesHelper.EUR.Code
+                                         && exchangeRate.TargetCurrency.Code == Currency.DEFAULT_CURRENCY.Code
+                                         && exchangeRate.Value == CzechNationalBankServiceHelper.EUR_RATE);
         }
     }
 }

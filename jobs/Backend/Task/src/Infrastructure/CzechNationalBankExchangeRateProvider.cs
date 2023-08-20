@@ -1,6 +1,8 @@
 ﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Helpers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -33,12 +35,13 @@ namespace ExchangeRateUpdater.Infrastructure
         // into this class constructor to get the configure value
         private const string EXCHANGE_RATES_DAILY_URL = "https://api.cnb.cz/cnbapi/exrates/daily";
         private Dictionary<string, string> Params = new Dictionary<string, string> { { "lang", "EN" } };
-
+        private IAsyncPolicy<RestResponse> _exponentialBackoffPolicy;
         private readonly IRestClient _restClient;
         private readonly ILogger _logger;
 
-        public CzechNationalBankExchangeRateProvider(IRestClient restClient, ILogger<CzechNationalBankExchangeRateProvider> logger)
+        public CzechNationalBankExchangeRateProvider(IRestClient restClient, IRetryPoliciesBuilder retryPoliciesBuilder, ILogger<CzechNationalBankExchangeRateProvider> logger)
         {
+            _exponentialBackoffPolicy = (retryPoliciesBuilder ?? throw new ArgumentNullException(nameof(retryPoliciesBuilder))).BuildExponentialBackoff();
             _restClient ??= restClient ?? throw new ArgumentNullException(nameof(restClient));
             _logger ??= logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -49,7 +52,7 @@ namespace ExchangeRateUpdater.Infrastructure
 
             _logger.LogInformation($"Fetching exchange rates from Czech National Bank API: {request.Method} {request.Resource}...");
 
-            var response = await _restClient.ExecuteAsync(request);
+            var response = await _exponentialBackoffPolicy.ExecuteAsync(async () => await _restClient.ExecuteAsync(request));
 
             ValidateResponse(response);
 

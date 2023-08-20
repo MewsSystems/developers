@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Helpers;
 using ExchangeRateUpdater.Infrastructure;
 using Microsoft.Extensions.Logging;
 using RestSharp;
@@ -13,6 +14,7 @@ namespace ExchangeRateUpdater
     {
         private static IExchangeRateProvider provider;
         private static IEnumerable<Currency> currencies => new InMemoryReadOnlyCurrenciesRepository().GetAll();
+        private static IRetryPoliciesBuilder retryPoliciesBuilder => new RetryPoliciesBuilder();
 
         public static async Task Main(string[] args)
         {
@@ -24,7 +26,7 @@ namespace ExchangeRateUpdater
                 });
                 var logger = loggerFactory.CreateLogger<CzechNationalBankExchangeRateProvider>();
 
-                provider = new CzechNationalBankExchangeRateProvider(new RestClient(), logger);
+                provider = new CzechNationalBankExchangeRateProvider(new RestClient(), retryPoliciesBuilder, logger);
 
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using RestSharp;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,13 +16,8 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
         {
             var mockedService = new Mock<IRestClient>();
 
-            var response = new RestResponse();
-            response.Content = OK_CNB_RESPONSE;
-            response.IsSuccessStatusCode = true;
-            response.StatusCode = HttpStatusCode.OK;
-
             mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
-                .Returns(Task.FromResult(response));
+                .Returns(Task.FromResult(GetSuccessResponse()));
 
             return mockedService.Object;
         }
@@ -30,15 +26,48 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
         {
             var mockedService = new Mock<IRestClient>();
 
+            mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
+                .Returns(Task.FromResult(GetErrorResponse(httpStatusCode)));
+
+            return mockedService.Object;
+        }
+
+        public static Mock<IRestClient> CreateTransientErrorMockedCzechNationalBankService()
+        {
+            var mockedService = new Mock<IRestClient>();
+
+            var responses = new Queue<RestResponse>();
+            responses.Enqueue(GetErrorResponse(HttpStatusCode.InternalServerError));
+            responses.Enqueue(GetErrorResponse(HttpStatusCode.InternalServerError));
+            responses.Enqueue(GetErrorResponse(HttpStatusCode.InternalServerError));
+            responses.Enqueue(GetSuccessResponse());
+
+            mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
+                .Returns(() => Task.FromResult(responses.Dequeue()));
+
+            return mockedService;
+        }
+
+        private static RestResponse GetSuccessResponse()
+        {
             var response = new RestResponse();
+
+            response.Content = OK_CNB_RESPONSE;
+            response.IsSuccessStatusCode = true;
+            response.StatusCode = HttpStatusCode.OK;
+
+            return response;
+        }
+
+        private static RestResponse GetErrorResponse(HttpStatusCode httpStatusCode)
+        {
+            var response = new RestResponse();
+
             response.Content = ERROR_CNB_RESPONSE;
             response.IsSuccessStatusCode = false;
             response.StatusCode = httpStatusCode;
 
-            mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
-                .Returns(Task.FromResult(response));
-
-            return mockedService.Object;
+            return response;
         }
 
         // Required to avoid system culture issues
