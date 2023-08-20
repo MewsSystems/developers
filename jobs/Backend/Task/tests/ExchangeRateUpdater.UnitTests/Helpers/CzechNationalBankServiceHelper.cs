@@ -11,7 +11,7 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
         public const decimal EUR_RATE = 24.03m;
         public const decimal USD_RATE = 22.12m;
 
-        public static IRestClient GetAvailableCzechNationalBankMockedService()
+        public static IRestClient CreateResponsiveMockedCzechNationalBankService()
         {
             var mockedService = new Mock<IRestClient>();
 

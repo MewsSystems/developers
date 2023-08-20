@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
         public async Task GetExchangeRatesAsync_AvailableCzechNationalBankMockedResource_ReturnsUsdAndEurExchangeRates()
         {
             // Arrange
-            var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(CzechNationalBankServiceHelper.GetAvailableCzechNationalBankMockedService());
+            var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(CzechNationalBankServiceHelper.CreateResponsiveMockedCzechNationalBankService());
             var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
 
             // Act
