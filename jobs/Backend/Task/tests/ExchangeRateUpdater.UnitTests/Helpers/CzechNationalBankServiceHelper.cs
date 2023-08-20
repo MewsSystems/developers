@@ -12,24 +12,24 @@ namespace ExchangeRateUpdater.UnitTests.Helpers
         public const decimal EUR_RATE = 24.03m;
         public const decimal USD_RATE = 22.12m;
 
-        public static IRestClient CreateResponsiveMockedCzechNationalBankService()
+        public static Mock<IRestClient> CreateResponsiveMockedCzechNationalBankService()
         {
             var mockedService = new Mock<IRestClient>();
 
             mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
                 .Returns(Task.FromResult(GetSuccessResponse()));
 
-            return mockedService.Object;
+            return mockedService;
         }
 
-        public static IRestClient CreateErroringMockedCzechNationalBankService(HttpStatusCode httpStatusCode)
+        public static Mock<IRestClient> CreateErroringMockedCzechNationalBankService(HttpStatusCode httpStatusCode)
         {
             var mockedService = new Mock<IRestClient>();
 
             mockedService.Setup(c => c.ExecuteAsync(It.IsAny<RestRequest>(), default))
                 .Returns(Task.FromResult(GetErrorResponse(httpStatusCode)));
 
-            return mockedService.Object;
+            return mockedService;
         }
 
         public static Mock<IRestClient> CreateTransientErrorMockedCzechNationalBankService()

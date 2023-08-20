@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
         {
             // Arrange
             var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
-                restClient: CzechNationalBankServiceHelper.CreateResponsiveMockedCzechNationalBankService(),
+                restClient: CzechNationalBankServiceHelper.CreateResponsiveMockedCzechNationalBankService().Object,
                 retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
                 logger: mockedLogger.Object);
 
@@ -50,7 +50,7 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure
         {
             // Arrange
             var exchangeRateProvider = new CzechNationalBankExchangeRateProvider(
-                restClient: CzechNationalBankServiceHelper.CreateErroringMockedCzechNationalBankService(httpStatusCode),
+                restClient: CzechNationalBankServiceHelper.CreateErroringMockedCzechNationalBankService(httpStatusCode).Object,
                 retryPoliciesBuilder: new FakeRetryPoliciesBuilder(),
                 logger: mockedLogger.Object);
             var currencies = new[] { CurrenciesHelper.USD, CurrenciesHelper.EUR };
