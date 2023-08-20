@@ -8,13 +8,13 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
+        private static IExchangeRateProvider provider;
         private static IEnumerable<Currency> currencies => new InMemoryReadOnlyCurrenciesRepository().GetAll();
 
         public static void Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
