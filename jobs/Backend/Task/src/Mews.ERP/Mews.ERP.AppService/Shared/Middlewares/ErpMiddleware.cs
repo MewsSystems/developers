@@ -7,13 +7,13 @@ namespace Mews.ERP.AppService.Shared.Middlewares;
 [ExcludeFromCodeCoverage]
 public class ErpMiddleware
 {
-    private readonly RequestDelegate _next;
+    private readonly RequestDelegate next;
 
     private readonly ILogger<ErpMiddleware> logger;
 
     public ErpMiddleware(RequestDelegate next, ILogger<ErpMiddleware> logger)
     {
-        _next = next;
+        this.next = next;
         this.logger = logger;
     }
 
@@ -22,7 +22,7 @@ public class ErpMiddleware
         try
         {
             // Call the next delegate/middleware in the pipeline.
-            await _next(context);
+            await next(context);
         }
         catch (Exception e)
         {
