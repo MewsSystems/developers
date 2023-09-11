@@ -7,11 +7,6 @@ public class Constants
         public const int RestMaxRetryCount = 3;
     }
     
-    public struct Database
-    {
-        public const string DatabaseSchema = "currencies";
-    }
-    
     public struct CzechNationalBank
     {
         public const string CzechCurrencyCode = "CZK";

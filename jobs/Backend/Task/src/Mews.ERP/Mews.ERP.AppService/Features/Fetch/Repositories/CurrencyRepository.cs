@@ -1,6 +1,5 @@
 using Mews.ERP.AppService.Data.Models;
 using Mews.ERP.AppService.Data.Repositories;
-using Mews.ERP.AppService.Features.Fetch.Models;
 using Mews.ERP.AppService.Features.Fetch.Repositories.Interfaces;
 
 namespace Mews.ERP.AppService.Features.Fetch.Repositories;
@@ -22,7 +21,6 @@ public class CurrenciesRepository : ReadOnlyRepository<Currency>, ICurrenciesRep
     
     public override Task<IQueryable<Currency>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-
         return Task.FromResult(internalCurrencies.AsQueryable());
     }
 }

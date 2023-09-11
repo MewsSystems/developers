@@ -19,7 +19,7 @@ public abstract class ExchangeRateProvider
         Logger = logger;
     }
 
-    protected async Task<IEnumerable<ExchangeRateResponse>> GetRates(RestRequest request)
+    protected async Task<IEnumerable<ExchangeRateResponse>?> GetRates(RestRequest request)
     {
         Logger.LogInformation($"Calling external provider: {request.Resource}");
             

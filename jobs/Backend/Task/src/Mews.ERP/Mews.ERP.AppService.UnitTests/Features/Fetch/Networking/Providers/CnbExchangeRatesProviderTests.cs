@@ -4,9 +4,9 @@ using AutoFixture;
 using FluentAssertions;
 using Mews.ERP.AppService.Data.Models;
 using Mews.ERP.AppService.Features.Fetch.Builders.Interfaces;
-using Mews.ERP.AppService.Features.Fetch.Models;
 using Mews.ERP.AppService.Features.Fetch.Networking.Providers;
 using Mews.ERP.AppService.Features.Fetch.Networking.Providers.Interfaces;
+using Mews.ERP.AppService.Features.Fetch.Networking.Responses;
 using Moq;
 using Moq.AutoMock;
 using RestSharp;
@@ -41,7 +41,8 @@ public class CnbExchangeRatesProviderTests
         };
         
         var mockedResponse = await File.ReadAllTextAsync($"{TestDataFileLocation}/mockedResponse.json");
-
+        var cachedValue = Enumerable.Empty<ExchangeRateResponse>();
+        
         autoMocker
             .GetMock<IRestRequestBuilder>()
             .Setup(b => b.Build(It.IsAny<string>(), It.IsAny<NameValueCollection>()))

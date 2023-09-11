@@ -108,7 +108,10 @@ I defined a very simple Dockerfile so that this API can be deployed quickly and 
 
 ### Continuous Integration & Delivery
 
-For timing purposes I couldn't create a
+For timing purposes I couldn't create a release pipeline but still managed to create a basic github workflow which would build and run unit tests every time a commit is pushed.
+
+See: 
+[Build and Test Workflow](.github/on-push-build-and-test.yml)
 
 ## How to run the api:
 
@@ -145,4 +148,9 @@ With docker:
 
 ## Next steps or missing features due to not enough time (out of MVP):
 
-## Scalability upgrades
+- At the moment, all currencies are stored in memory from an internal list...Since the test was for a "Program", it wasn't specified that the currencies should have been received from the user itself.
+  - An improvement would be to either store currencies in a database or receive them from the request body.
+  - Another option would be to create a "Feed" feature where the scope would be to fetch currencies from an external source and store them in the database.
+
+## Performance / Scalability comments and notes
+- 
