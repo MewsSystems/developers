@@ -6,7 +6,7 @@ This exercise's goal is to provide a quick, easy and 'production like' way to in
 
 ## Solution Overview
 
-![](docs/mews_erp_map.jpeg)
+![](docs/mews_erp_components.jpeg)
 
 ## Technical Documentation
 ### Architecture Decisions
@@ -72,6 +72,11 @@ Moreover, when defining variables I usually try to be very pragmatic and descrip
 - Dependency Injection Principle
   - Separate the concerns of constructing objects and using them. What this means is that the class should not be responsible of instantiating the dependencies they need to use.
   - In my opinion the most important principle, because it helps decoupling high-level and low-level modules, making it easier to change the low-level ones without affecting the others.
+
+### Caching
+
+For caching I used IMemoryCache (Microsoft.Extensions.Caching.Memory) and implemented an ICachingWrapper for unit testing/mocking purposes.
+I implemented this in order to increase performance and since the exchange rates provided by the bank are daily, I set the expiration date to 1 day after the cacheKey is created in memory.
 
 ### Logging
 
@@ -151,6 +156,3 @@ With docker:
 - At the moment, all currencies are stored in memory from an internal list...Since the test was for a "Program", it wasn't specified that the currencies should have been received from the user itself.
   - An improvement would be to either store currencies in a database or receive them from the request body.
   - Another option would be to create a "Feed" feature where the scope would be to fetch currencies from an external source and store them in the database.
-
-## Performance / Scalability comments and notes
-- 
