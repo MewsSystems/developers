@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater.Infrastructure.Services
 
             return new ExchangeRatesResponseDto
             {
-                ExchangeRates = exchangeRates.Select(x => x.ToDto())
+                ExchangeRates = exchangeRates
             };
         }
     }

@@ -2,6 +2,6 @@
 {
     public class ExchangeRatesResponseDto
     {
-        public IEnumerable<ExchangeRateDto> ExchangeRates { get; set; }
+        public IEnumerable<ExchangeRate> ExchangeRates { get; set; }
     }
 }
