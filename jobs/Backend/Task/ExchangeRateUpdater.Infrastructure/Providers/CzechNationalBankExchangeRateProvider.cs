@@ -4,9 +4,7 @@ using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Infrastructure.Clients;
 using ExchangeRateUpdater.Infrastructure.Models.CzechNationalBank;
 using ExchangeRateUpdater.Infrastructure.Services;
-using ExchangeRateUpdater.Infrastructure.Settings;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers
 {
@@ -16,14 +14,12 @@ namespace ExchangeRateUpdater.Infrastructure.Providers
 
         private readonly ICzechNationalBankApiClient _apiClient;
         private readonly ICache _cache;
-        private readonly IOptions<CzechNationalBankApiSettings> _options;
         private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
 
-        public CzechNationalBankExchangeRateProvider(ICzechNationalBankApiClient apiClient, ICache cache, IOptions<CzechNationalBankApiSettings> options, ILogger<CzechNationalBankExchangeRateProvider> logger)
+        public CzechNationalBankExchangeRateProvider(ICzechNationalBankApiClient apiClient, ICache cache, ILogger<CzechNationalBankExchangeRateProvider> logger)
         {
             _apiClient = apiClient;
             _cache = cache;
-            _options = options;
             _logger = logger;
         }
 
@@ -40,7 +36,6 @@ namespace ExchangeRateUpdater.Infrastructure.Providers
                     .Rates
                     .Where(r => currencyCodes.Contains(r.CurrencyCode))
                     .Select(r => MapExchangeRate(r, targetCurrency));
-
         }
 
         private async Task<CzechNationalBankExchangeRatesResponse> GetExchangeRatesResponseAsync()
@@ -73,7 +68,7 @@ namespace ExchangeRateUpdater.Infrastructure.Providers
             }
         }
 
-        private static ExchangeRate MapExchangeRate(CzechNationalBankExchangeRate bankExchangeRate, CurrencyCode targetCurrency)
+        private ExchangeRate MapExchangeRate(CzechNationalBankExchangeRate bankExchangeRate, CurrencyCode targetCurrency)
         {
             return new ExchangeRate(
                         new Currency(bankExchangeRate.CurrencyCode),

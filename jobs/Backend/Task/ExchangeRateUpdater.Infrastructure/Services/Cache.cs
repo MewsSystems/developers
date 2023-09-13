@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ExchangeRateUpdater.Infrastructure.Services
 {
+    [ExcludeFromCodeCoverage]
     internal class Cache : ICache
     {
         private readonly IMemoryCache _memoryCache;

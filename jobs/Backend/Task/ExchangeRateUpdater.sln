@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Infrastructure", "ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj", "{83CA5FC3-1175-4F69-8834-CF7D7C469A5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.UnitTests", "ExchangeRateUpdater.Domain.UnitTests\ExchangeRateUpdater.Domain.UnitTests.csproj", "{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.UnitTests", "Tests\ExchangeRateUpdater.Domain.UnitTests\ExchangeRateUpdater.Domain.UnitTests.csproj", "{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{71A18735-00CF-4C5A-BCE8-7A1951E8EE2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Infrastructure.UnitTests", "Tests\ExchangeRateUpdater.Infrastructure.UnitTests\ExchangeRateUpdater.Infrastructure.UnitTests.csproj", "{B137EC47-B9F3-48C7-BBC5-E0536573FE9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +37,17 @@ Global
 		{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B137EC47-B9F3-48C7-BBC5-E0536573FE9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B137EC47-B9F3-48C7-BBC5-E0536573FE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B137EC47-B9F3-48C7-BBC5-E0536573FE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B137EC47-B9F3-48C7-BBC5-E0536573FE9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D68F0CAD-4EAB-4629-9C0A-1295F4D193DA} = {71A18735-00CF-4C5A-BCE8-7A1951E8EE2E}
+		{B137EC47-B9F3-48C7-BBC5-E0536573FE9B} = {71A18735-00CF-4C5A-BCE8-7A1951E8EE2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {30E3606A-E9A1-4F52-8A7B-34C050DB1611}

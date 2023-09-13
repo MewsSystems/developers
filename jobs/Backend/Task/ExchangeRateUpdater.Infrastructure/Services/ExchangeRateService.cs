@@ -3,7 +3,6 @@ using ExchangeRateUpdater.Domain.Models.Dto;
 using ExchangeRateUpdater.Domain.Models.Enums;
 using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Services;
-using ExchangeRateUpdater.Infrastructure.Extensions;
 
 namespace ExchangeRateUpdater.Infrastructure.Services
 {

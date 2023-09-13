@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace ExchangeRateUpdater.Infrastructure.Models.CzechNationalBank
 {
+    [ExcludeFromCodeCoverage]
     public record CzechNationalBankExchangeRate
     {
         [JsonProperty("validFor")]

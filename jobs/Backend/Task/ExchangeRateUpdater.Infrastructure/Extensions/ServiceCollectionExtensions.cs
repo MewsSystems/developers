@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Domain.Providers;
+﻿using System.Diagnostics.CodeAnalysis;
+using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Services;
 using ExchangeRateUpdater.Infrastructure.Clients;
 using ExchangeRateUpdater.Infrastructure.Providers;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddClients(this IServiceCollection services)

@@ -1,7 +1,9 @@
-﻿using ExchangeRateUpdater.Domain.Models.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using ExchangeRateUpdater.Domain.Models.Enums;
 
 namespace ExchangeRateUpdater.Domain.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Currency
     {
         public Currency(CurrencyCode code)

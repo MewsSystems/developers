@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater.Domain.Models
+﻿using System.Globalization;
+
+namespace ExchangeRateUpdater.Domain.Models
 {
     public class ExchangeRate
     {

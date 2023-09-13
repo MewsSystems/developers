@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers
 {
     internal class MonitorProvider : IMonitorProvider
     {
         private readonly ILogger<MonitorProvider> _logger;
-        readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly Stopwatch _stopwatch = new Stopwatch();
 
         public MonitorProvider(ILogger<MonitorProvider> logger)
         {
@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Infrastructure.Providers
             _stopwatch.Start();
             var result = await method();
 
-            _logger.LogInformation("{metricName}: {className}.{methodName} was executing (ms): {_stopwatch.ElapsedMilliseconds}",metricName, className, methodName, _stopwatch.ElapsedMilliseconds);
+            _logger.LogInformation("{metricName}: {className}.{methodName} was executing (ms): {_stopwatch.ElapsedMilliseconds}", metricName, className, methodName, _stopwatch.ElapsedMilliseconds);
 
             return result;
         }

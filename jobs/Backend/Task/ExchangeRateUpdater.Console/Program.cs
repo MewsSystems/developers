@@ -14,7 +14,7 @@ namespace ExchangeRateUpdater.Console
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> _currencies = new[]
         {
             new Currency(CurrencyCode.USD),
             new Currency(CurrencyCode.EUR),
@@ -37,7 +37,7 @@ namespace ExchangeRateUpdater.Console
             {
                 var service = serviceProvider.GetRequiredService<IExchangeRateService>();
 
-                var responseDto = await service.GetExchangeRatesAsync(currencies, CurrencyCode.CZK);
+                var responseDto = await service.GetExchangeRatesAsync(_currencies, CurrencyCode.CZK);
 
                 System.Console.WriteLine($"Successfully retrieved {responseDto.ExchangeRates.Count()} exchange rates:");
                 foreach (var rate in responseDto.ExchangeRates)
