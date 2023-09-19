@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Model;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -21,26 +22,46 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
 
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly IMemoryCache _cache;
     private readonly ILogger<CNBExchangeRateProvider> _logger;
 
-    public CNBExchangeRateProvider(HttpClient httpClient, IConfiguration configuration, ILogger<CNBExchangeRateProvider> logger)
+    public CNBExchangeRateProvider(
+        HttpClient httpClient,
+        IConfiguration configuration,
+        IMemoryCache cache,
+        ILogger<CNBExchangeRateProvider> logger)
     {
         _httpClient = httpClient;
         _configuration = configuration;
+        _cache = cache;
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(string date) 
+    public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(DateTime? date = null) 
     {
         // TODO: verify input date format
         // TODO: throw on invalid dates? rates update around 14:30 daily, how to treat same day request
-        // TODO: cache
+
+        if (!date.HasValue)
+        {
+            date = DateTime.Today;
+        }
+
+        string dateFormant = _configuration["CNBApi:DateFormat"];
+        string cacheKey = $"ExchangeRates_{date?.ToString(dateFormant)}";
+
+        if (_cache.TryGetValue(cacheKey, out IEnumerable<ExchangeRate> cachedRates))
+        {
+            return cachedRates;
+        }
+
         string baseUrl = _configuration["CNBApi:BaseUrl"] + _configuration["CNBApi:ExchangeRateEndpoint"];
         string defaultCurrency = _configuration["CNBApi:DefaultCurrency"];
+        
 
         try
         {
-            string apiUrl = $"{baseUrl}daily?date={date}&lang=EN"; // TODO: might move later
+            string apiUrl = $"{baseUrl}daily?date={date?.ToString(dateFormant)}&lang=EN"; // TODO: might move later
 
             HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
@@ -53,10 +74,19 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
                 var exchangeRateItems = apiData.Rates.Select(rateItem => new ExchangeRate(
                     new Currency(rateItem.CurrencyCode),
                     new Currency(defaultCurrency),
+                    rateItem.ValidFor,
                     rateItem.Rate
                 ));
 
                 _logger.LogInformation("Fetched exchange rate succesfully");
+
+                string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
+                DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
+
+                if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
+                {
+                    UpdateCache(newCacheKey, exchangeRateItems);
+                }
 
                 return exchangeRateItems;
             }
@@ -71,6 +101,17 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
             _logger.LogError($"An error occurred while fetching exchange rate {ex.Message}");
             throw;
         }
+    }
+
+    private void UpdateCache(string cacheKey, IEnumerable<ExchangeRate> data)
+    {
+        var cacheEntryOptions = new MemoryCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTime.Today.AddDays(2)
+        };
+        _cache.Set(cacheKey, data, cacheEntryOptions);
+
+        _logger.LogInformation($"Cache entry for {cacheKey} updated");
     }
 }
 

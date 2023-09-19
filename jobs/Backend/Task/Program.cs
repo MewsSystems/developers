@@ -41,13 +41,14 @@ public static class Program
             .AddSingleton<HttpClient>()
             .AddSingleton<IConfiguration>(configuration)
             .AddLogging()
+            .AddMemoryCache()
             .BuildServiceProvider();
 
         try
         {
             var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 
-            var rates = await provider.GetDailyExchangeRateAsync(DateTime.UtcNow.ToString("yyyy-MM-dd"));
+            var rates = await provider.GetDailyExchangeRateAsync(DateTime.Today);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)

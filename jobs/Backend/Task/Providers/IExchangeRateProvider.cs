@@ -9,5 +9,5 @@ namespace ExchangeRateUpdater.Providers;
 
 internal interface IExchangeRateProvider
 {
-    Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(string date);
+    Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(DateTime? date = null);
 }
