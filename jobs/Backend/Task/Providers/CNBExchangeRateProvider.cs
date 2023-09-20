@@ -37,31 +37,23 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(DateTime? date = null) 
+    public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRateAsync(IEnumerable<Currency> currencies, DateTime? date = null) 
     {
-        // TODO: verify input date format
-        // TODO: throw on invalid dates? rates update around 14:30 daily, how to treat same day request
-
-        if (!date.HasValue)
-        {
-            date = DateTime.Today;
-        }
+        if (!date.HasValue) date = DateTime.Today;
 
         string dateFormant = _configuration["CNBApi:DateFormat"];
         string cacheKey = $"ExchangeRates_{date?.ToString(dateFormant)}";
 
         if (_cache.TryGetValue(cacheKey, out IEnumerable<ExchangeRate> cachedRates))
         {
-            return cachedRates;
+            return cachedRates.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
         }
-
-        string baseUrl = _configuration["CNBApi:BaseUrl"] + _configuration["CNBApi:ExchangeRateEndpoint"];
-        string defaultCurrency = _configuration["CNBApi:DefaultCurrency"];
         
-
         try
         {
-            string apiUrl = $"{baseUrl}daily?date={date?.ToString(dateFormant)}&lang=EN"; // TODO: might move later
+            string baseUrl = _configuration["CNBApi:BaseUrl"] + _configuration["CNBApi:ExchangeRateEndpoint"];
+            string apiUrl = $"{baseUrl}daily?date={date?.ToString(dateFormant)}&lang=EN";
+            string defaultCurrency = _configuration["CNBApi:DefaultCurrency"];
 
             HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
@@ -71,29 +63,30 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
 
                 var apiData = JsonConvert.DeserializeObject<ExchangeRateApiData>(responseContent);
 
-                var exchangeRateItems = apiData.Rates.Select(rateItem => new ExchangeRate(
-                    new Currency(rateItem.CurrencyCode),
-                    new Currency(defaultCurrency),
-                    rateItem.ValidFor,
-                    rateItem.Rate
+                var exchangeRateItems = apiData.Rates
+                    .Select(rateItem => new ExchangeRate(
+                        new Currency(rateItem.CurrencyCode),
+                        new Currency(defaultCurrency),
+                        rateItem.ValidFor,
+                        rateItem.Rate
                 ));
 
                 _logger.LogInformation("Fetched exchange rate succesfully");
 
-                string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
                 DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
 
                 if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
                 {
+                    string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
                     UpdateCache(newCacheKey, exchangeRateItems);
                 }
 
-                return exchangeRateItems;
+                return exchangeRateItems.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
             }
             else
             {
                 _logger.LogError($"Failed to fetch exchange. Status code: {response.StatusCode}");
-                throw new Exception("Fetch failed"); // TODO: improve later
+                throw new Exception("Failed to fetch exchange");
             }
         }
         catch (Exception ex)

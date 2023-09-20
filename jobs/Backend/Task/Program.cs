@@ -48,7 +48,7 @@ public static class Program
         {
             var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 
-            var rates = await provider.GetDailyExchangeRateAsync(DateTime.Today);
+            var rates = await provider.GetDailyExchangeRateAsync(currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
