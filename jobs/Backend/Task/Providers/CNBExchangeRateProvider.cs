@@ -44,6 +44,7 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         string dateFormant = _configuration["CNBApi:DateFormat"];
         string cacheKey = $"ExchangeRates_{date?.ToString(dateFormant)}";
 
+        // retrieve cached data, if available
         if (_cache.TryGetValue(cacheKey, out IEnumerable<ExchangeRate> cachedRates))
         {
             return cachedRates.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
@@ -75,6 +76,7 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
 
                 DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
 
+                // cache response if it is recent enough
                 if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
                 {
                     string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
@@ -106,20 +108,4 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
 
         _logger.LogInformation($"Cache entry for {cacheKey} updated");
     }
-}
-
-public record ExchangeRateApiData
-{
-    public IEnumerable<ExchangeRateItem> Rates { get; set; }
-}
-
-public record ExchangeRateItem
-{
-    public string ValidFor { get; set; }
-    public int Order { get; set; }
-    public string Country { get; set; }
-    public string Currency { get; set; }
-    public int Amount { get; set; }
-    public string CurrencyCode { get; set; }
-    public decimal Rate { get; set; }
 }
