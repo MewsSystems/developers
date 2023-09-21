@@ -52,46 +52,14 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         
         try
         {
-            string apiUrl = _configuration["CNBApi:ExchangeRateEndpoint"] + $"daily?date={date?.ToString(dateFormant)}&lang=EN";
+            string apiUrl = _configuration["CNBApi:ExchangeRateEndpoint"] + $"daily?date={date.Value.ToString(dateFormant)}&lang=EN";
             string defaultCurrency = _configuration["CNBApi:DefaultCurrency"];
 
-            using (var httpClient = _httpClientFactory.CreateClient("CNBApiClient"))
-            {
-                HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
+            var exchangeRateItems = await FetchExchangeRates(apiUrl, defaultCurrency);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+            CacheExchangeRates(exchangeRateItems, date.Value, 2);
 
-                    var apiData = JsonConvert.DeserializeObject<ExchangeRateApiData>(responseContent);
-
-                    var exchangeRateItems = apiData.Rates
-                        .Select(rateItem => new ExchangeRate(
-                            new Currency(rateItem.CurrencyCode),
-                            new Currency(defaultCurrency),
-                            rateItem.ValidFor,
-                            rateItem.Rate
-                    ));
-
-                    _logger.LogInformation("Fetched exchange rate succesfully");
-
-                    DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
-
-                    // cache response if it is recent enough
-                    if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
-                    {
-                        string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
-                        UpdateCache(newCacheKey, exchangeRateItems);
-                    }
-
-                    return exchangeRateItems.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch exchange. Status code: {response.StatusCode}");
-                    throw new Exception("Failed to fetch exchange");
-                }
-            }
+            return exchangeRateItems.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
         }
         catch (Exception ex)
         {
@@ -100,14 +68,50 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         }
     }
 
-    private void UpdateCache(string cacheKey, IEnumerable<ExchangeRate> data)
+    private async Task<IEnumerable<ExchangeRate>> FetchExchangeRates(string apiUrl, string defaultCurrency)
     {
-        var cacheEntryOptions = new MemoryCacheEntryOptions
+        using (var httpClient = _httpClientFactory.CreateClient("CNBApiClient"))
         {
-            AbsoluteExpiration = DateTime.Today.AddDays(2)
-        };
-        _cache.Set(cacheKey, data, cacheEntryOptions);
+            var response = await httpClient.GetAsync(apiUrl);
 
-        _logger.LogInformation($"Cache entry for {cacheKey} updated");
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var apiData = JsonConvert.DeserializeObject<ExchangeRateApiData>(responseContent);
+
+                var exchangeRateItems = apiData.Rates
+                    .Select(rateItem => new ExchangeRate(
+                        new Currency(rateItem.CurrencyCode),
+                        new Currency(defaultCurrency),
+                        rateItem.ValidFor,
+                        rateItem.Rate
+                    ));
+
+                _logger.LogInformation("Fetched exchange rate successfully");
+                return exchangeRateItems;
+            }
+            else
+            {
+                _logger.LogError($"Failed to fetch exchange. Status code: {response.StatusCode}");
+                throw new Exception("Failed to fetch exchange");
+            }
+        }
+    }
+
+    private void CacheExchangeRates(IEnumerable<ExchangeRate> exchangeRateItems, DateTime date, int maxDaysBackToCache)
+    {
+        DateTime earilerDayToCache = DateTime.Today.AddDays(-maxDaysBackToCache).Date;
+        if (exchangeRateItems.Any() && date.Date >= earilerDayToCache)
+        {
+            string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.Today.AddDays(2)
+            };
+            _cache.Set(newCacheKey, exchangeRateItems, cacheEntryOptions);
+
+            _logger.LogInformation($"Cache entry for {newCacheKey} updated");
+        }
     }
 }
