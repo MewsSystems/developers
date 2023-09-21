@@ -20,19 +20,19 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
     /// some of the currencies, ignore them.
     /// </summary>
 
-    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IMemoryCache _cache;
     private readonly ILogger<CNBExchangeRateProvider> _logger;
 
     public CNBExchangeRateProvider(
-        HttpClient httpClient,
         IConfiguration configuration,
+        IHttpClientFactory httpClientFactory,
         IMemoryCache cache,
         ILogger<CNBExchangeRateProvider> logger)
     {
-        _httpClient = httpClient;
         _configuration = configuration;
+        _httpClientFactory = httpClientFactory;
         _cache = cache;
         _logger = logger;
     }
@@ -52,43 +52,45 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         
         try
         {
-            string baseUrl = _configuration["CNBApi:BaseUrl"] + _configuration["CNBApi:ExchangeRateEndpoint"];
-            string apiUrl = $"{baseUrl}daily?date={date?.ToString(dateFormant)}&lang=EN";
+            string apiUrl = _configuration["CNBApi:ExchangeRateEndpoint"] + $"daily?date={date?.ToString(dateFormant)}&lang=EN";
             string defaultCurrency = _configuration["CNBApi:DefaultCurrency"];
 
-            HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            using (var httpClient = _httpClientFactory.CreateClient("CNBApiClient"))
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
 
-                var apiData = JsonConvert.DeserializeObject<ExchangeRateApiData>(responseContent);
-
-                var exchangeRateItems = apiData.Rates
-                    .Select(rateItem => new ExchangeRate(
-                        new Currency(rateItem.CurrencyCode),
-                        new Currency(defaultCurrency),
-                        rateItem.ValidFor,
-                        rateItem.Rate
-                ));
-
-                _logger.LogInformation("Fetched exchange rate succesfully");
-
-                DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
-
-                // cache response if it is recent enough
-                if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
+                if (response.IsSuccessStatusCode)
                 {
-                    string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
-                    UpdateCache(newCacheKey, exchangeRateItems);
-                }
+                    var responseContent = await response.Content.ReadAsStringAsync();
 
-                return exchangeRateItems.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
-            }
-            else
-            {
-                _logger.LogError($"Failed to fetch exchange. Status code: {response.StatusCode}");
-                throw new Exception("Failed to fetch exchange");
+                    var apiData = JsonConvert.DeserializeObject<ExchangeRateApiData>(responseContent);
+
+                    var exchangeRateItems = apiData.Rates
+                        .Select(rateItem => new ExchangeRate(
+                            new Currency(rateItem.CurrencyCode),
+                            new Currency(defaultCurrency),
+                            rateItem.ValidFor,
+                            rateItem.Rate
+                    ));
+
+                    _logger.LogInformation("Fetched exchange rate succesfully");
+
+                    DateTime twoDaysAgo = DateTime.Today.AddDays(-2).Date;
+
+                    // cache response if it is recent enough
+                    if (apiData.Rates.Any() && date?.Date >= twoDaysAgo)
+                    {
+                        string newCacheKey = $"ExchangeRates_{exchangeRateItems.FirstOrDefault().ValidFor}";
+                        UpdateCache(newCacheKey, exchangeRateItems);
+                    }
+
+                    return exchangeRateItems.Where(rateItem => currencies.Any(c => c.Code.Equals(rateItem.SourceCurrency.Code)));
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch exchange. Status code: {response.StatusCode}");
+                    throw new Exception("Failed to fetch exchange");
+                }
             }
         }
         catch (Exception ex)

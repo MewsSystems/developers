@@ -5,10 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ExchangeRateUpdater;
 
@@ -29,20 +26,29 @@ public static class Program
 
     public static async Task Main(string[] args)
     {
-        var currentPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName; // TODO: make nicer
+        var currentPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+
         // Build configuration
         IConfiguration configuration = new ConfigurationBuilder()
             .SetBasePath(currentPath)
             .AddJsonFile("appsettings.json")
             .Build();
 
-        var serviceProvider = new ServiceCollection()
-            .AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>()
-            .AddSingleton<HttpClient>()
-            .AddSingleton<IConfiguration>(configuration)
-            .AddLogging()
-            .AddMemoryCache()
-            .BuildServiceProvider();
+        var services = new ServiceCollection();
+
+        services.AddHttpClient("CNBApiClient", client =>
+        {
+            var baseUrl = configuration["CNBApi:BaseUrl"];
+            client.BaseAddress = new Uri(baseUrl);
+        });
+
+        services.AddLogging();
+        services.AddMemoryCache();
+        services.AddSingleton<IConfiguration>(configuration);
+        services.AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>();
+
+        var serviceProvider = services.BuildServiceProvider();
+        var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 
         try
         {
