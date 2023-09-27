@@ -1,19 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { Button, Card, Rate, Space, Tag } from "antd"
+import { Card, Rate, Space, Spin, Tag } from "antd"
 import { LeftOutlined } from "@ant-design/icons"
 
 import { useGetMovieDetailsQuery } from "../../api/movie"
+import { IMAGE_URL_PREFIX } from "../../const"
+import { useFailedRequest } from "../../hooks"
 import {
   AdditionalInfo,
   AdditionalInfoItem,
+  BackButton,
   Header,
+  HeaderContent,
   Label,
   MovieTitle,
   OriginalMovieTitle,
+  SpinWrapper,
   StyledImage,
 } from "./styles"
-import { IMAGE_URL_PREFIX } from "../../const"
-import { useFailedRequest } from "../../hooks"
 
 export const MovieDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -28,7 +31,11 @@ export const MovieDetail = () => {
   useFailedRequest(isError)
 
   if (isFetching) {
-    return <div>Loading...</div>
+    return (
+      <SpinWrapper>
+        <Spin size="large" />
+      </SpinWrapper>
+    )
   }
 
   if (!movie) {
@@ -49,16 +56,16 @@ export const MovieDetail = () => {
 
   return (
     <>
-      <Button
+      <BackButton
         data-testid="backLink"
         icon={<LeftOutlined />}
         type="link"
         onClick={() => navigate(-1)}
       >
         Back
-      </Button>
-      <Card>
-        <Header>
+      </BackButton>
+      <Header>
+        <HeaderContent>
           <StyledImage src={`${IMAGE_URL_PREFIX}${posterPath}`} />
           <div>
             <MovieTitle>{title}</MovieTitle>
@@ -88,8 +95,8 @@ export const MovieDetail = () => {
               </AdditionalInfoItem>
             </AdditionalInfo>
           </div>
-        </Header>
-      </Card>
+        </HeaderContent>
+      </Header>
       <Card>{overview}</Card>
     </>
   )

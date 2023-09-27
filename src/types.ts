@@ -18,8 +18,8 @@ export interface MovieListItem {
 export interface MovieListQueryResponse {
   page: number
   results: MovieListItem[]
-  totalPages: number
-  totalResults: number
+  total_pages: number
+  total_results: number
 }
 
 interface Genre {

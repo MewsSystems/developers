@@ -41,6 +41,7 @@ export const MovieList = () => {
     { searchValue, page },
     { skip: searchValue.trim().length === 0 },
   )
+
   useFailedRequest(isError, MOVIE_FETCH_FAILED_MESSAGE)
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,13 +79,13 @@ export const MovieList = () => {
       dataIndex: "title",
       key: "title",
       render: (_, { id, title }) => (
-        <Button
+        <MovieName
           data-testid="detailLink"
           type="link"
           onClick={() => navigate(`/movie/${id}`)}
         >
           {title}
-        </Button>
+        </MovieName>
       ),
     },
     {
@@ -158,6 +159,12 @@ const Title = styled.h1`
 const StyledTable = styled(Table)`
   margin-top: 2em;
   overflow: auto;
+`
+
+const MovieName = styled(Button)`
+  width: 300px;
+  text-align: left;
+  white-space: pre-wrap;
 `
 
 const StyledRate = styled(Rate)`

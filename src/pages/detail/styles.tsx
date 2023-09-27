@@ -1,21 +1,35 @@
-import { Image } from "antd"
+import { Button, Card, Image } from "antd"
 import styled from "styled-components"
 
-export const Header = styled.div`
+export const SpinWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`
+
+export const BackButton = styled(Button)`
+  margin-bottom: 1em;
+`
+
+export const Header = styled(Card)`
+  margin-bottom: 2em;
+`
+
+export const HeaderContent = styled.div`
   display: grid;
   grid-template-columns: 200px auto;
   grid-gap: 2em;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 200px 1fr;
+  }
 `
 
 export const StyledImage = styled(Image)`
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
-`
-
-export const MobileCoverImage = styled(Image)`
-  width: 100%;
-  height: 100px;
 `
 
 export const MovieTitle = styled.h1`

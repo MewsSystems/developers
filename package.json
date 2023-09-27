@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "lint": "eslint .",
+    "test:e2e": "playwright test",
     "type-check": "tsc"
   },
   "dependencies": {
