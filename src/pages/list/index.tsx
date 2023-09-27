@@ -43,9 +43,9 @@ export const MovieList = () => {
   )
   useFailedRequest(isError, MOVIE_FETCH_FAILED_MESSAGE)
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams({ searchValue: e.target.value, page: "1" })
-    setValue("searchValue", e.target.value)
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({ searchValue: event.target.value, page: "1" })
+    setValue("searchValue", event.target.value)
   }
 
   const handlePageChange = (page: number) => {
@@ -60,7 +60,7 @@ export const MovieList = () => {
   const columns: ColumnsType<MovieListItem> = [
     {
       title: "Poster",
-      dataIndex: "poster_path",
+      dataIndex: "posterPath",
       key: "posterPath",
       render: (posterPath) => (
         <Image
@@ -105,8 +105,8 @@ export const MovieList = () => {
     },
     {
       title: "Release date",
-      dataIndex: "release_date",
-      key: "release_date",
+      dataIndex: "releaseDate",
+      key: "releaseDate",
       responsive: ["lg"],
       render: (releaseDate) => new Date(releaseDate).toLocaleDateString(),
     },
@@ -157,6 +157,7 @@ const Title = styled.h1`
 
 const StyledTable = styled(Table)`
   margin-top: 2em;
+  overflow: auto;
 `
 
 const StyledRate = styled(Rate)`

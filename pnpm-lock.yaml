@@ -11,6 +11,12 @@ dependencies:
   '@reduxjs/toolkit':
     specifier: ^1.8.1
     version: 1.9.6(react-redux@8.1.2)(react@18.2.0)
+  '@types/humps':
+    specifier: ^2.0.4
+    version: 2.0.4
+  humps:
+    specifier: ^2.0.1
+    version: 2.0.1
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -2137,6 +2143,10 @@ packages:
       hoist-non-react-statics: 3.3.2
     dev: false
 
+  /@types/humps@2.0.4:
+    resolution: {integrity: sha512-1Wg0lY4d5cgP5IjTA8jZr94Epxc/abmLO9/LgxPRkoVNRg+eSR6JROXTlfplQOl7jzPM+VpYHmBguN1jdj0Bag==}
+    dev: false
+
   /@types/json-schema@7.0.13:
     resolution: {integrity: sha512-RbSSoHliUbnXj3ny0CNFOoxrIDV6SUGyStHsvDqosw6CkdPV8TtWGlfecuK4ToyMEAql6pzNxgCFKanovUzlgQ==}
     dev: true
@@ -3793,6 +3803,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /humps@2.0.1:
+    resolution: {integrity: sha512-E0eIbrFWUhwfXJmsbdjRQFQPrl5pTEoKlz163j1mTqqUnU9PgR4AgB8AIITzuB3vLBdxZXyZ9TDIrwB2OASz4g==}
+    dev: false
 
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}

@@ -38,13 +38,13 @@ export const MovieDetail = () => {
   const {
     budget,
     genres,
-    original_language,
-    original_title,
+    originalLanguage,
+    originalTitle,
     overview,
     popularity,
-    poster_path,
+    posterPath,
     title,
-    vote_count,
+    voteCount,
   } = movie
 
   return (
@@ -57,15 +57,13 @@ export const MovieDetail = () => {
       >
         Back
       </Button>
-      <Card
-      // cover={<MobileCoverImage src={`${IMAGE_URL_PREFIX}${poster_path}`} />}
-      >
+      <Card>
         <Header>
-          <StyledImage src={`${IMAGE_URL_PREFIX}${poster_path}`} />
+          <StyledImage src={`${IMAGE_URL_PREFIX}${posterPath}`} />
           <div>
             <MovieTitle>{title}</MovieTitle>
             <OriginalMovieTitle>
-              {original_title} ({original_language})
+              {originalTitle} ({originalLanguage})
             </OriginalMovieTitle>
             <AdditionalInfo>
               <AdditionalInfoItem>
@@ -74,7 +72,7 @@ export const MovieDetail = () => {
               </AdditionalInfoItem>
               <AdditionalInfoItem>
                 <Label>Votes</Label>
-                {vote_count}
+                {voteCount}
               </AdditionalInfoItem>
               <AdditionalInfoItem>
                 <Label>Budget</Label>
