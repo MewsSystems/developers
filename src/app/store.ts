@@ -1,4 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
+
 import { movieApi } from "../api/movie"
 
 export const store = configureStore({

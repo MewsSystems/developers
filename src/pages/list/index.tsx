@@ -1,12 +1,13 @@
 import { Button, Image, Input, Rate, Table } from "antd"
 import { SearchOutlined } from "@ant-design/icons"
+import styled from "styled-components"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useForm, Controller } from "react-hook-form"
-import { useGetMoviesQuery } from "../../api/movie"
 import { useState } from "react"
+
+import { useGetMoviesQuery } from "../../api/movie"
 import type { ColumnsType } from "antd/es/table"
 import { MovieListItem } from "../../types"
-import styled from "styled-components"
 import {
   FALLBACK_IMAGE,
   IMAGE_URL_PREFIX,

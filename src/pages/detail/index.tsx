@@ -1,14 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useGetMovieDetailsQuery } from "../../api/movie"
 import { Button, Card, Rate, Space, Tag } from "antd"
 import { LeftOutlined } from "@ant-design/icons"
+
+import { useGetMovieDetailsQuery } from "../../api/movie"
 import {
   AdditionalInfo,
   AdditionalInfoItem,
-  Description,
   Header,
   Label,
-  MobileCoverImage,
   MovieTitle,
   OriginalMovieTitle,
   StyledImage,
