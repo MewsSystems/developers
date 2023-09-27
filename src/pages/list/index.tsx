@@ -25,7 +25,7 @@ export const MovieList = () => {
     searchValue: "",
     page: "1",
   })
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1)
   const searchValue = searchParams.get("searchValue") || ""
   const { control, setValue } = useForm<SearchForm>({
     defaultValues: {
@@ -78,7 +78,11 @@ export const MovieList = () => {
       dataIndex: "title",
       key: "title",
       render: (_, { id, title }) => (
-        <Button type="link" onClick={() => navigate(`/movie/${id}`)}>
+        <Button
+          data-testid="detailLink"
+          type="link"
+          onClick={() => navigate(`/movie/${id}`)}
+        >
           {title}
         </Button>
       ),
@@ -117,6 +121,7 @@ export const MovieList = () => {
         render={({ field }) => (
           <Input
             {...field}
+            data-testid="searchInput"
             onChange={handleSearchChange}
             size="large"
             placeholder="Search by movie name"
@@ -135,6 +140,7 @@ export const MovieList = () => {
             position: ["bottomCenter"],
             pageSize: 20,
             showSizeChanger: false,
+            current: page,
           }}
         />
       )}

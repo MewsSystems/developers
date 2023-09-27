@@ -49,7 +49,12 @@ export const MovieDetail = () => {
 
   return (
     <>
-      <Button icon={<LeftOutlined />} type="link" onClick={() => navigate(-1)}>
+      <Button
+        data-testid="backLink"
+        icon={<LeftOutlined />}
+        type="link"
+        onClick={() => navigate(-1)}
+      >
         Back
       </Button>
       <Card
