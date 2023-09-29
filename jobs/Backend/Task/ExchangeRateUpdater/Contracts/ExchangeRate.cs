@@ -5,5 +5,5 @@
 /// </summary>
 /// <param name="SourceCurrency">Source currency.</param>
 /// <param name="TargetCurrency">Target currency.</param>
-/// <param name="Value">Exchange rate, i.e. how many units of &lt;see cref="TargetCurrency"/&gt; is single unit of &lt;see cref="SourceCurrency"/&gt; worth.</param>
+/// <param name="Value">Exchange rate, i.e. how many units of <see cref="TargetCurrency"/> is single unit of <see cref="SourceCurrency"/> worth.</param>
 public record struct ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, decimal Value);

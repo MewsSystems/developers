@@ -14,7 +14,10 @@ public class ExchangeRateService : IHostedService
     private readonly IExchangeRateProvider exchangeRateProvider;
     private readonly ExchangeRateOptions exchangeRateOptions;
 
-    public ExchangeRateService(IHostApplicationLifetime hostApplicationLifetime, IExchangeRateProvider exchangeRateProvider, IOptions<ExchangeRateOptions> inputOptions)
+    public ExchangeRateService(
+        IHostApplicationLifetime hostApplicationLifetime,
+        IExchangeRateProvider exchangeRateProvider,
+        IOptions<ExchangeRateOptions> inputOptions)
     {
         this.hostApplicationLifetime = hostApplicationLifetime;
         this.exchangeRateProvider = exchangeRateProvider;
