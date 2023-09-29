@@ -3,32 +3,7 @@
 /// <summary>
 /// Exchange rate between two currencies.
 /// </summary>
-public class ExchangeRate
-{
-    public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
-    {
-        SourceCurrency = sourceCurrency;
-        TargetCurrency = targetCurrency;
-        Value = value;
-    }
-
-    /// <summary>
-    /// Source currency.
-    /// </summary>
-    public Currency SourceCurrency { get; }
-
-    /// <summary>
-    /// Target currency.
-    /// </summary>
-    public Currency TargetCurrency { get; }
-
-    /// <summary>
-    /// Exchange rate, i.e. how many units of <see cref="TargetCurrency"/> is single unit of <see cref="SourceCurrency"/> worth.
-    /// </summary>
-    public decimal Value { get; }
-
-    public override string ToString()
-    {
-        return $"{SourceCurrency.Code},{TargetCurrency.Code},{Value}";
-    }
-}
+/// <param name="SourceCurrency">Source currency.</param>
+/// <param name="TargetCurrency">Target currency.</param>
+/// <param name="Value">Exchange rate, i.e. how many units of &lt;see cref="TargetCurrency"/&gt; is single unit of &lt;see cref="SourceCurrency"/&gt; worth.</param>
+public record struct ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, decimal Value);

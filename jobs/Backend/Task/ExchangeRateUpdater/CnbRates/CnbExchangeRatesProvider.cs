@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,10 +24,12 @@ public class CnbExchangeRatesProvider : IExchangeRateProvider
         IReadOnlyCollection<Currency> currencies,
         CancellationToken cancellationToken)
     {
+        var currencyCodes = currencies.Select(c => c.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
         var result = await cnbClient.RetrieveExchangeRatesAsync(cancellationToken);
 
         return result.Rates
-            .Where(r => r.Amount != 0)
+            .Where(r => currencyCodes.Contains(r.CurrencyCode) && r.Amount != 0)
             .Select(r => new ExchangeRate(new Currency(r.CurrencyCode), Currency.Czk, r.Rate / r.Amount)).ToArray();
     }
 }
