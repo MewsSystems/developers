@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <StartupObject>ExchangeRateUpdater.Program</StartupObject>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRatesExporting\ExchangeRatesExporting.csproj" />
+    <ProjectReference Include="..\ExchangeRatesFetching\ExchangeRatesFetching.csproj" />
+    <ProjectReference Include="..\ExchangeRatesUpdater.Common\ExchangeRatesUpdater.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,9 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesFetching", "src\ExchangeRatesFetching\ExchangeRatesFetching.csproj", "{27C176FF-2D3C-4FB3-B8FB-953ADE052805}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesUpdater", "src\ExchangeRatesUpdater\ExchangeRatesUpdater.csproj", "{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesUpdater.Common", "src\ExchangeRatesUpdater.Common\ExchangeRatesUpdater.Common.csproj", "{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesExporting", "src\ExchangeRatesExporting\ExchangeRatesExporting.csproj", "{851E8E39-2872-4DD0-880A-FB48D03670C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CFFFEBBF-4ECA-4683-85EF-2D30E11B4960}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8495FA78-52F9-40A5-8D6C-79F63118071B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesFetching.Tests", "Tests\ExchangeRatesFetchingTests\ExchangeRatesFetching.Tests.csproj", "{5CF997F3-5D6C-42D7-A16D-F46378DBE51F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +23,38 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C176FF-2D3C-4FB3-B8FB-953ADE052805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C176FF-2D3C-4FB3-B8FB-953ADE052805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C176FF-2D3C-4FB3-B8FB-953ADE052805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C176FF-2D3C-4FB3-B8FB-953ADE052805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{851E8E39-2872-4DD0-880A-FB48D03670C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{851E8E39-2872-4DD0-880A-FB48D03670C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{851E8E39-2872-4DD0-880A-FB48D03670C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{851E8E39-2872-4DD0-880A-FB48D03670C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF997F3-5D6C-42D7-A16D-F46378DBE51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF997F3-5D6C-42D7-A16D-F46378DBE51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF997F3-5D6C-42D7-A16D-F46378DBE51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF997F3-5D6C-42D7-A16D-F46378DBE51F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27C176FF-2D3C-4FB3-B8FB-953ADE052805} = {8495FA78-52F9-40A5-8D6C-79F63118071B}
+		{CA6DC8A4-A6BC-46FF-82FF-28558C51D62E} = {8495FA78-52F9-40A5-8D6C-79F63118071B}
+		{ECCB4A9F-DED9-47D6-ACE3-71AB874F1F4D} = {8495FA78-52F9-40A5-8D6C-79F63118071B}
+		{851E8E39-2872-4DD0-880A-FB48D03670C3} = {8495FA78-52F9-40A5-8D6C-79F63118071B}
+		{5CF997F3-5D6C-42D7-A16D-F46378DBE51F} = {CFFFEBBF-4ECA-4683-85EF-2D30E11B4960}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D789DE0-5714-4253-95E3-6EDAB6097DE9}
 	EndGlobalSection
 EndGlobal
