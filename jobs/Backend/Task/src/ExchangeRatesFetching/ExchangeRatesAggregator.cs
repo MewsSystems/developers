@@ -33,7 +33,14 @@ public class ExchangeRatesAggregator : IExchangeRatesAggregator
                 continue;
             }
 
-            IEnumerable<ExchangeRate> rates = await provider.GetRatesForCurrenciesAsync(keyValuePair.Value);
+            IEnumerable<ExchangeRate> rates;
+            try {
+                rates = await provider.GetRatesForCurrenciesAsync(keyValuePair.Value);
+            } catch (Exception ex) {
+                logger.LogError(ex, "Error while fetching exchange rates from {bankName}", provider.BankName);
+                continue;
+            }
+
             exchangeRates.AddRange(rates);
         }
 
