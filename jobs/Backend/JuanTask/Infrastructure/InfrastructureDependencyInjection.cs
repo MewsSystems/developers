@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Infrastructure.Clients.Cnb;
+using Infrastructure.Clients.CnbApi;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +42,13 @@ namespace Infrastructure
                 client.Timeout = TimeSpan.FromMilliseconds(cnbzConfiguration.TimeoutMilliseconds);
             });
 
+            serviceCollection.AddHttpClient<ICnbApiClient, CnbApiClient>(client =>
+            {
+                CnbzApiConfiguration cnbzConfiguration = configuration.GetSection("Clients:CnbzApi").Get<CnbzApiConfiguration>();
+                client.BaseAddress = new Uri(cnbzConfiguration.Uri);
+                client.Timeout = TimeSpan.FromMilliseconds(cnbzConfiguration.TimeoutMilliseconds);
+            });
+
             return serviceCollection;
 
         }
@@ -48,7 +56,7 @@ namespace Infrastructure
         private static IServiceCollection AddRepositories(this IServiceCollection serviceCollection)
         {
 
-            serviceCollection.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
+            serviceCollection.AddTransient<IExchangeRateRepository, ExchangeRateFromApiRepository>();
 
             return serviceCollection;
 
