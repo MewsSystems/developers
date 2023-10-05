@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Http.Abstractions\src\Mews.ExchangeRate.Http.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
