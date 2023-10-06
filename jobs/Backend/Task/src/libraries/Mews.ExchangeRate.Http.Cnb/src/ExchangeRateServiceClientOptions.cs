@@ -9,13 +9,15 @@ namespace Mews.ExchangeRate.Http.Cnb
     /// </summary>
     public class ExchangeRateServiceClientOptions
     {
+        public const string ConfigurationSectionName = nameof(ExchangeRateServiceClientOptions);
+
         /// <summary>
         /// Gets or sets the API base URL.
         /// </summary>
         /// <value>
         /// The API base URL.
         /// </value>
-        public string ApiBaseUrl { get; set; } = "https://api.cnb.cz";
+        public string ApiBaseUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the currency exchange rates endpoint.
@@ -23,7 +25,7 @@ namespace Mews.ExchangeRate.Http.Cnb
         /// <value>
         /// The currency exchange rates endpoint.
         /// </value>
-        public string CurrencyExchangeRatesEndpoint { get; set; } = "/cnbapi/exrates/daily";
+        public string CurrencyExchangeRatesEndpoint { get; set; }
 
         /// <summary>
         /// Gets or sets the foreign exchange rates endpoint.
@@ -31,7 +33,7 @@ namespace Mews.ExchangeRate.Http.Cnb
         /// <value>
         /// The foreign exchange rates endpoint.
         /// </value>
-        public string ForeignExchangeRatesEndpoint { get; set; } = "/cnbapi/fxrates/daily-month";
+        public string ForeignExchangeRatesEndpoint { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
@@ -39,6 +41,6 @@ namespace Mews.ExchangeRate.Http.Cnb
         /// <value>
         /// The language.
         /// </value>
-        public string Language { get; set; } = "en";
+        public string Language { get; set; }
     }
 }

@@ -3,8 +3,9 @@
 namespace Mews.ExchangeRate.Domain.Models
 {
     public class Currency
-    {
-        public static readonly Currency Default = new Currency("CZK");
+    {        
+        public static readonly Currency CZK = new Currency("CZK");
+        public static readonly Currency Default = CZK;
 
         public Currency(string code)
         {

@@ -1,8 +1,9 @@
 ﻿using Mews.ExchangeRate.Http.Abstractions;
 using Mews.ExchangeRate.Http.Abstractions.Dtos;
-using Mews.ExchangeRate.Http.Cnb.Exceptions;
+using Mews.ExchangeRate.Http.Abstractions.Exceptions;
 using Mews.ExchangeRate.Http.Cnb.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,12 +26,12 @@ namespace Mews.ExchangeRate.Http.Cnb
         public ExchangeRateServiceClient(
             ILogger<ExchangeRateServiceClient> logger,
             IHttpClient httpClient,
-            ExchangeRateServiceClientOptions clientOptions
+            IOptionsSnapshot<ExchangeRateServiceClientOptions> clientOptions
             )
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _clientOptions = clientOptions ?? throw new ArgumentNullException(nameof(clientOptions));
+            _clientOptions = clientOptions?.Value ?? throw new ArgumentNullException(nameof(clientOptions));
         }
 
         /// <summary>

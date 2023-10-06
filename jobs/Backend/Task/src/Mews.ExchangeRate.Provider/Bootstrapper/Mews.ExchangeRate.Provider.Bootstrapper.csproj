@@ -2,22 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Domain\src\Mews.ExchangeRate.Domain.csproj" />
     <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Http.Abstractions\src\Mews.ExchangeRate.Http.Abstractions.csproj" />
     <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Http.Cnb\src\Mews.ExchangeRate.Http.Cnb.csproj" />
     <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Storage.Abstractions\src\Mews.ExchangeRate.Storage.Abstractions.csproj" />
     <ProjectReference Include="..\..\libraries\Mews.ExchangeRate.Storage.DistributedCache\src\Mews.ExchangeRate.Storage.DistributedCache.csproj" />
-    <ProjectReference Include="..\Services.Abstractions\Mews.ExchangeRate.Updater.Services.Abstractions.csproj" />
-    <ProjectReference Include="..\Services\Mews.ExchangeRate.Updater.Services.csproj" />
-    <ProjectReference Include="..\Worker\Mews.ExchangeRate.Updater.Services.Worker.csproj" />	  
+    <ProjectReference Include="..\..\Mews.ExchangeRate.Updater\Services.Abstractions\Mews.ExchangeRate.Updater.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Mews.ExchangeRate.Updater\Services\Mews.ExchangeRate.Updater.Services.csproj" />
+    <ProjectReference Include="..\..\Mews.ExchangeRate.Updater\Worker\Mews.ExchangeRate.Updater.Services.Worker.csproj" />
+    <ProjectReference Include="..\Services.Abstractions\Mews.ExchangeRate.Provider.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\Services\Mews.ExchangeRate.Provider.Services.csproj" />
   </ItemGroup>
 
 </Project>

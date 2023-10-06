@@ -1,7 +1,8 @@
 ﻿using Mews.ExchangeRate.Http.Abstractions;
-using Mews.ExchangeRate.Http.Cnb.Exceptions;
+using Mews.ExchangeRate.Http.Abstractions.Exceptions;
 using Mews.ExchangeRate.Http.Cnb.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using System.Text.Json;
 using Xunit.Abstractions;
@@ -20,6 +21,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetCurrencyExchangeRatesAsync_WithNotValidDateOrLanguage_ThrowExchangeRateServiceResponseException()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         httpClientMock
             .Setup(x => x.GetAsync(It.IsAny<string>()))
@@ -38,7 +48,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         await Assert.ThrowsAsync<ExchangeRateServiceResponseException>(
@@ -49,6 +59,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetCurrencyExchangeRatesAsync_WithValidDateAndLanguage_ReturnExchangeRates()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         var value = new ExchangeRateResponse()
         {
@@ -77,7 +96,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         var exchangeRates = await serviceClient.GetCurrencyExchangeRatesAsync(DateTime.Now);
@@ -90,6 +109,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetCurrencyExchangeRatesAsync_WithValidDateAndLanguageReturningEmptyRates_ReturnEmptyRates()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         var value = new ExchangeRateResponse()
         {
@@ -108,7 +136,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         var exchangeRates = await serviceClient.GetCurrencyExchangeRatesAsync(DateTime.Now);
@@ -120,6 +148,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetForeignCurrencyExchangeRatesAsync_WithNotValidDateOrLanguage_ThrowExchangeRateServiceResponseException()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         httpClientMock
             .Setup(x => x.GetAsync(It.IsAny<string>()))
@@ -138,7 +175,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         await Assert.ThrowsAsync<ExchangeRateServiceResponseException>(
@@ -149,6 +186,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetForeignCurrencyExchangeRatesAsync_WithValidDateAndLanguage_ReturnExchangeRates()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         var value = new ExchangeRateResponse()
         {
@@ -177,7 +223,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         var exchangeRates = await serviceClient.GetForeignCurrencyExchangeRatesAsync(DateTime.Now);
@@ -190,6 +236,15 @@ public class ExchangeRateServiceClientShould
     [Fact]
     public async Task GetForeignCurrencyExchangeRatesAsync_WithValidDateAndLanguageReturningEmptyRates_ReturnEmptyRates()
     {
+        var optionsSnapshotMock = new Mock<IOptionsSnapshot<ExchangeRateServiceClientOptions>>();
+        optionsSnapshotMock.Setup(o => o.Value).Returns(new ExchangeRateServiceClientOptions()
+        {
+            ApiBaseUrl = "https://api.cnb.cz",
+            CurrencyExchangeRatesEndpoint = "/cnbapi/exrates/daily",
+            ForeignExchangeRatesEndpoint = "/cnbapi/fxrates/daily-month",
+            Language = "EN"
+        });
+
         var httpClientMock = new Mock<IHttpClient>();
         var value = new ExchangeRateResponse()
         {
@@ -208,7 +263,7 @@ public class ExchangeRateServiceClientShould
         var serviceClient = new ExchangeRateServiceClient(
             Mock.Of<ILogger<ExchangeRateServiceClient>>(),
             httpClientMock.Object,
-            new ExchangeRateServiceClientOptions()
+            optionsSnapshotMock.Object
             );
 
         var exchangeRates = await serviceClient.GetForeignCurrencyExchangeRatesAsync(DateTime.Now);
