@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Application;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,16 @@ namespace ExchangeRateUpdater.Infrastructure
         private static readonly Currency TargetCurrency = new("CZK");
         private readonly ICzechNationalBankClient _source;
         private readonly ILogger<ExchangeRateProvider> _logger;
+        private readonly IValidator<CnbExchangeRate> _validator;
 
-        public ExchangeRateProvider(ICzechNationalBankClient source, ILogger<ExchangeRateProvider> logger)
+        public ExchangeRateProvider(
+            ICzechNationalBankClient source,
+            ILogger<ExchangeRateProvider> logger,
+            IValidator<CnbExchangeRate> validator)
         {
             _source = source;
             _logger = logger;
+            _validator = validator;
         }
 
         /// <summary>
@@ -43,18 +49,11 @@ namespace ExchangeRateUpdater.Infrastructure
                     continue;
                 }
 
-                if (sourceExchangeRate.Amount <= 0m)
+                var validationResult = _validator.Validate(sourceExchangeRate);
+                if (!validationResult.IsValid)
                 {
-                    _logger.LogWarning("Skipping exchange rate for {currency} with amount equal to or less than 0",
-                        sourceExchangeRate.CurrencyCode);
-
-                    continue;
-                }
-
-                if (sourceExchangeRate.Rate <= 0m)
-                {
-                    _logger.LogWarning("Skipping exchange rate for {currency} with rate equal to or less than 0",
-                        sourceExchangeRate.CurrencyCode);
+                    _logger.LogWarning("Skipping currency {currency} due to validation errors: {errors}",
+                        code, validationResult.ToString());
 
                     continue;
                 }

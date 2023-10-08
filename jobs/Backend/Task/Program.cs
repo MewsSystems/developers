@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using FluentValidation;
 
 namespace ExchangeRateUpdater
 {
@@ -57,6 +58,7 @@ namespace ExchangeRateUpdater
                         .AddPolicyHandler(GetRetryPolicy());
 
                     services.AddTransient<ExchangeRateProvider>();
+                    services.AddValidatorsFromAssemblyContaining<CnbExchangeRateValidator>();
                 })
                 .Build();
         }
