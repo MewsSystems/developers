@@ -45,7 +45,7 @@ namespace ExchangeRateUpdater.Infrastructure
 
                 if (sourceExchangeRate.Amount <= 0m)
                 {
-                    _logger.LogWarning("Skipping exchange rate for {currency} with amount equal to less than 0",
+                    _logger.LogWarning("Skipping exchange rate for {currency} with amount equal to or less than 0",
                         sourceExchangeRate.CurrencyCode);
 
                     continue;
@@ -53,7 +53,7 @@ namespace ExchangeRateUpdater.Infrastructure
 
                 if (sourceExchangeRate.Rate <= 0m)
                 {
-                    _logger.LogWarning("Skipping exchange rate for {currency} with rate equal to less than 0",
+                    _logger.LogWarning("Skipping exchange rate for {currency} with rate equal to or less than 0",
                         sourceExchangeRate.CurrencyCode);
 
                     continue;
