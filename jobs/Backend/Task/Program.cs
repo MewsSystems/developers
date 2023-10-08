@@ -20,12 +20,12 @@ namespace ExchangeRateUpdater
     {
         public static async Task<int> Main(string[] args)
         {
-            using var hostBuilder = BuildHost(args);
+            using var host = BuildHost(args);
 
-            var currencies = ReadCurrenciesFromConfiguration(hostBuilder);
-            var provider = hostBuilder.Services.GetRequiredService<ExchangeRateProvider>();
+            var currencies = ReadCurrenciesFromConfiguration(host);
+            var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
 
-            using var loggerFactory = hostBuilder.Services.GetRequiredService<ILoggerFactory>();
+            using var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger(nameof(Program));
 
             try
