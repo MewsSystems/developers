@@ -115,7 +115,7 @@ export const MovieList = () => {
 
   return (
     <>
-      <Title>Mews Movie Search</Title>
+      <Title>Movie Search</Title>
       <Controller
         name="searchValue"
         control={control}
