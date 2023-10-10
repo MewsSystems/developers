@@ -1,0 +1,71 @@
+.movieListItem {
+  border-radius: 10px;
+  margin: 0 10px 20px 10px;
+  cursor: pointer;
+  border: 1px solid black;
+  color: white;
+  width: 20%;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.movieListItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transition: background-color 0.3s;
+}
+
+.movieListItem:hover::before {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.movieListItem h6 {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  transition: color 0.3s;
+}
+
+.movieListItem:hover h6 {
+  color: yellow;
+}
+
+.movieListItem:hover {
+  transform: scale(1.05);
+}
+
+.voteAverage {
+  z-index: 2;
+  background-color: black;
+  width: 40px; /* or whatever size you prefer */
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.voteAverage p {
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  .movieListItem {
+    width: 30%;
+  }
+}
+
+@media (max-width: 600px) {
+  .movieListItem {
+    width: 40%;
+  }
+}
