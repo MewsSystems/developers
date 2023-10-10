@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +20,19 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+
+                // The first implementation was for all currencies and the data is fetched from not Czech National Bank API
+                // https://github.com/fawazahmed0/currency-api#readme
+                // var rates = await provider.GetExchangeRatesAsync(currencies, DateTime.Now.Date);
+
+                // The second implementation fetches data from Czech National Bank API
+                // https://api.cnb.cz/cnbapi/swagger-ui.html#/
+                var rates = await provider.GetCzechExchangeRateAsync(currencies, DateTime.Now.Date);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
