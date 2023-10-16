@@ -1,6 +1,6 @@
 namespace Mews.ExchangeRateProvider;
 
-public sealed class CzechNationalBankExchangeRateProvider:IExchangeRateProvider
+public sealed class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
 {
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {

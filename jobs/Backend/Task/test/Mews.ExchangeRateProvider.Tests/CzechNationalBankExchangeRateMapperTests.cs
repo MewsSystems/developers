@@ -26,7 +26,7 @@ public sealed class CzechNationalBankExchangeRateMapperTests
         var results = _sut.Read(TestData);
 
         Assert.That(results.Count(), Is.EqualTo(31));
-        Assert.That(results.Single(er => er.SourceCurrency == new Currency(sourceCurrency)).TargetCurrency, Is.EqualTo(new Currency("CZK")));
-        Assert.That(results.Single(er => er.SourceCurrency == new Currency(sourceCurrency)).Value, Is.EqualTo(rate));
+        Assert.That(results.Single(er => er.SourceCurrency.Code.Equals(sourceCurrency, StringComparison.Ordinal)).TargetCurrency, Is.EqualTo(new Currency("CZK")));
+        Assert.That(results.Single(er => er.SourceCurrency.Code.Equals(sourceCurrency, StringComparison.Ordinal)).Value, Is.EqualTo(rate));
     }
 }
