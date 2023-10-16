@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
+    <Compile Remove="ExchangeRateProvider\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
+    <EmbeddedResource Remove="ExchangeRateProvider\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
+    <None Remove="ExchangeRateProvider\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Mews.ExchangeRateProvider\Mews.ExchangeRateProvider.csproj" />
+  </ItemGroup>
+
+</Project>
