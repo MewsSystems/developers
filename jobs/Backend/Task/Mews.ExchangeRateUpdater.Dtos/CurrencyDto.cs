@@ -1,8 +1,8 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Mews.ExchangeRateUpdater.Dtos
 {
-    public class Currency
+    public class CurrencyDto
     {
-        public Currency(string code)
+        public CurrencyDto(string code)
         {
             Code = code;
         }
