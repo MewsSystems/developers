@@ -2,13 +2,13 @@ using FileHelpers;
 
 namespace Mews.ExchangeRateProvider.Mappers;
 
-public sealed class CzechNationalBankExchangeRateMapper
+internal sealed class CzechNationalBankExchangeRateMapper
 {
     private const string CzechKorunaCurrencyCode = "CZK";
 
     private static readonly Currency DefaultCurrency = new(CzechKorunaCurrencyCode);
 
-    public IEnumerable<ExchangeRate> Read(string exchangeRateData)
+    internal IEnumerable<ExchangeRate> Read(string exchangeRateData)
     {
         var engine = new FileHelperEngine<CzechNationalBankExchangeRateRecord>();
 

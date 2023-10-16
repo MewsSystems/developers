@@ -4,7 +4,7 @@ namespace Mews.ExchangeRateProvider.Mappers;
 
 [DelimitedRecord("|")]
 [IgnoreFirst(2)]
-public sealed class CzechNationalBankExchangeRateRecord
+internal sealed class CzechNationalBankExchangeRateRecord
 {
     public string? Country;
 

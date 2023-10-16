@@ -10,4 +10,8 @@
       <PackageReference Include="FileHelpers" Version="3.5.2" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Mews.ExchangeRateProvider.Tests" />
+    </ItemGroup>
+    
 </Project>
