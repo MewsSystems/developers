@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
-    <Compile Remove="ExchangeRateProvider\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="appsettings.local.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
-    <EmbeddedResource Remove="ExchangeRateProvider\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Mews.ExchangeRateProvider\Mews.ExchangeRateProvider.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="ExchangeRateProvider\ExchangeRateProvider\**" />
-    <None Remove="ExchangeRateProvider\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Mews.ExchangeRateProvider\Mews.ExchangeRateProvider.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1"/>
+    </ItemGroup>
 
 </Project>
