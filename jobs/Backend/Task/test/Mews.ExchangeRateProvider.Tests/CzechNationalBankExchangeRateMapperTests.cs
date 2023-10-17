@@ -13,7 +13,7 @@ public sealed class CzechNationalBankExchangeRateMapperTests
     [OneTimeSetUp]
     public void Init()
     {
-        var testDataFilePath = Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath), "TestData", "ExampleData.txt");
+        var testDataFilePath = Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath)!, "TestData", "ExampleData.txt");
         TestData = File.ReadAllText(testDataFilePath);
     }
 
