@@ -2,7 +2,7 @@ using FileHelpers;
 
 namespace Mews.ExchangeRateProvider.Mappers;
 
-internal sealed class CzechNationalBankExchangeRateMapper
+public sealed class CzechNationalBankExchangeRateMapper
 {
     private const string CzechKorunaCurrencyCode = "CZK";
 
