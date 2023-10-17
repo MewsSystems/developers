@@ -6,9 +6,13 @@ namespace Mews.ExchangeRateProvider.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddExchangeRateProvider(this IServiceCollection services, IConfiguration configurationSection) =>
+    public static IServiceCollection AddExchangeRateProvider(this IServiceCollection services, IConfiguration configurationSection)
+    {
         services
             .Configure<ExchangeRateProviderOptions>(configurationSection)
             .AddSingleton<CzechNationalBankExchangeRateMapper>()
             .AddHttpClient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
+
+        return services;
+    }
 }
