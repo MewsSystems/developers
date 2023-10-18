@@ -7,23 +7,22 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\net6.0\Mews.ExchangeRateProvider.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\net6.0\Mews.ExchangeRateProvider.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net6.0\Mews.ExchangeRateProvider.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\net6.0\Mews.ExchangeRateProvider.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FileHelpers" Version="3.5.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+        <PackageReference Include="FileHelpers" Version="3.5.2"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Mews.ExchangeRateProvider.Tests" />
+        <InternalsVisibleTo Include="Mews.ExchangeRateProvider.Tests"/>
     </ItemGroup>
 
 </Project>
