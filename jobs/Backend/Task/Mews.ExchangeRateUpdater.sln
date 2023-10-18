@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ExchangeRateProviderEx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ExchangeRateProvider.Tests", "test\Mews.ExchangeRateProvider.Tests\Mews.ExchangeRateProvider.Tests.csproj", "{94B44849-DBA9-4F99-AD7E-39A3E498FDF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{265E4144-0E9B-4E70-B362-F9236E9D04D9}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
