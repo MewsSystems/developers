@@ -2,6 +2,9 @@ using FileHelpers;
 
 namespace Mews.ExchangeRateProvider.Mappers;
 
+/// <summary>
+/// Maps pipe symbol delimited raw text data from the exchange rate website onto an ExchangeRate model
+/// </summary>
 public sealed class CzechNationalBankExchangeRateMapper
 {
     private const string CzechKorunaCurrencyCode = "CZK";
@@ -16,7 +19,7 @@ public sealed class CzechNationalBankExchangeRateMapper
 
         foreach (var value in textFileValues)
         {
-            yield return new ExchangeRate(new(value.Code), DefaultCurrency, value.Rate / value.Amount);
+            yield return new ExchangeRate(new(value.Code!), DefaultCurrency, value.Rate / value.Amount);
         }
     }
 }

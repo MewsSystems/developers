@@ -1,0 +1,13 @@
+{
+{
+  "CzechNationalBankExchangeRateProviderConfiguration": {
+    "ExchangeRateProviders": [
+      {
+        "Uri": "https://test.com/a.txt"
+      },
+      {
+        "Uri": "https://test.com/b.txt"
+      }
+    ]
+  }
+}
