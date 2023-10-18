@@ -1,7 +1,9 @@
+using Mews.ExchangeRateProvider.Exceptions;
 using Mews.ExchangeRateProvider.Extensions;
 using Mews.ExchangeRateProvider.Mappers;
 using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
+using System.Net;
 using System.Net.Mime;
 using System.Reflection;
 
@@ -21,6 +23,16 @@ public sealed class CzechNationalBankExchangeRateProviderTests
 
         var testDataFilePath2 = Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath)!, "TestData", "ExampleData2.txt");
         TestData2 = File.ReadAllText(testDataFilePath2);
+    }
+
+    [Test]
+    public async Task CzechNationalBankExchangeRateProvider_returns_empty_if_currency_not_known()
+    {
+        var sut = new CzechNationalBankExchangeRateProvider(CreateStubbedHttpClient(), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        var results = (await sut.GetExchangeRatesAsync(new List<Currency> { new("000") }, CancellationToken.None)).ToList();
+
+        Assert.That(results.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -49,12 +61,100 @@ public sealed class CzechNationalBankExchangeRateProviderTests
         Assert.That(results.Single(r => r.SourceCurrency.Code.Equals("CUP")).TargetCurrency.Code, Is.EqualTo("CZK"));
         Assert.That(results.Single(r => r.SourceCurrency.Code.Equals("CUP")).Value, Is.EqualTo(0.957m));
     }
+
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_argument_null_exception_if_currency_null()
+    {
+        var sut = new CzechNationalBankExchangeRateProvider(CreateStubbedHttpClient(), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.GetExchangeRatesAsync(null, CancellationToken.None));
+    }
+
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_argument_exception_if_currency_list_empty()
+    {
+        var sut = new CzechNationalBankExchangeRateProvider(CreateStubbedHttpClient(), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        Assert.ThrowsAsync<ArgumentException>(async () => await sut.GetExchangeRatesAsync(Enumerable.Empty<Currency>(), CancellationToken.None));
+    }
+
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_invalid_operation_exception_if_options_null()
+    {
+        var sut = new CzechNationalBankExchangeRateProvider(CreateStubbedHttpClient(), new CzechNationalBankExchangeRateMapper(), new NullOptions());
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetExchangeRatesAsync(new List<Currency> { new("AUD") }, CancellationToken.None));
+    }
+
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_invalid_operation_exception_if_options_uri_null()
+    {
+        var options = Options.Create(new CzechNationalBankExchangeRateProviderOptions
+        {
+            ExchangeRateProviders = new List<CzechNationalBankExchangeRateProviderConfiguration>
+            {
+                new() { Uri = null }
+            }
+        });
+
+        var sut = new CzechNationalBankExchangeRateProvider(CreateStubbedHttpClient(), new CzechNationalBankExchangeRateMapper(), options);
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.GetExchangeRatesAsync(new List<Currency> { new("AUD") }, CancellationToken.None));
+    }
     
-    //TODO:
-    //Mock exception on calling one or both of the http get requests
-    //Mock one or both unsuccessful status code replies on http get
-    //Mock exception thrown by mapper
-    //Empty reply generated for non-existent currency
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_obtain_exchange_rate_exception_if_response_malformed()
+    {
+        var mockHttp = new MockHttpMessageHandler();
+
+        mockHttp
+            .When("http://test.com/a.txt")
+            .Respond(MediaTypeNames.Text.Plain, "\n\n\n\ndasfasu32222222||||ASADF|ADSF||||||||||||asjdfkadjklfkljdjlfjklajklfdjklasdjklfjkladsjklafjdfjkfkjljklajklfajk\nadsfjdklfjkl}}}");
+
+        mockHttp
+            .When("http://test.com/b.txt")
+            .Respond(MediaTypeNames.Text.Plain, TestData2);
+       
+        var sut = new CzechNationalBankExchangeRateProvider(new HttpClient(mockHttp), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        Assert.ThrowsAsync<ObtainExchangeRateException>(async () => await sut.GetExchangeRatesAsync(new List<Currency> { new("AUD") }, CancellationToken.None));
+    }
+    
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_obtain_exchange_rate_exception_if_remote_status_code_unsuccessful()
+    {
+        var mockHttp = new MockHttpMessageHandler();
+
+        mockHttp
+            .When("http://test.com/a.txt")
+            .Respond(HttpStatusCode.InternalServerError);
+
+        mockHttp
+            .When("http://test.com/b.txt")
+            .Respond(MediaTypeNames.Text.Plain, TestData2);
+       
+        var sut = new CzechNationalBankExchangeRateProvider(new HttpClient(mockHttp), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        Assert.ThrowsAsync<ObtainExchangeRateException>(async () => await sut.GetExchangeRatesAsync(new List<Currency> { new("AUD") }, CancellationToken.None));
+    }
+    
+    [Test]
+    public void CzechNationalBankExchangeRateProvider_throws_obtain_exchange_rate_exception_if_http_exception_thrown()
+    {
+        var mockHttp = new MockHttpMessageHandler();
+
+        mockHttp
+            .When("http://test.com/a.txt")
+            .Throw(new HttpRequestException("Error"));
+
+        mockHttp
+            .When("http://test.com/b.txt")
+            .Respond(MediaTypeNames.Text.Plain, TestData2);
+       
+        var sut = new CzechNationalBankExchangeRateProvider(new HttpClient(mockHttp), new CzechNationalBankExchangeRateMapper(), CreateOptions());
+
+        Assert.ThrowsAsync<ObtainExchangeRateException>(async () => await sut.GetExchangeRatesAsync(new List<Currency> { new("AUD") }, CancellationToken.None));
+    }
 
     private static IOptions<CzechNationalBankExchangeRateProviderOptions> CreateOptions() =>
         Options.Create(new CzechNationalBankExchangeRateProviderOptions
@@ -79,5 +179,10 @@ public sealed class CzechNationalBankExchangeRateProviderTests
             .Respond(MediaTypeNames.Text.Plain, TestData2);
 
         return new HttpClient(mockHttp);
+    }
+
+    private class NullOptions : IOptions<CzechNationalBankExchangeRateProviderOptions>
+    {
+        public CzechNationalBankExchangeRateProviderOptions Value => null;
     }
 }

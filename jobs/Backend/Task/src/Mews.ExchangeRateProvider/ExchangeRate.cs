@@ -1,7 +1,6 @@
 namespace Mews.ExchangeRateProvider;
 
 /// <summary>
-/// <summary>
 /// Represents an exchange rate
 /// </summary>
 /// <param name="SourceCurrency">The source currency</param>

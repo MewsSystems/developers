@@ -12,7 +12,7 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpMessageInvoker _httpMessageInvoker;
     private readonly CzechNationalBankExchangeRateMapper _mapper;
-    private readonly CzechNationalBankExchangeRateProviderOptions _options;
+    private readonly CzechNationalBankExchangeRateProviderOptions? _options;
 
     /// <summary>
     /// Constructs a new instance of <see cref="CzechNationalBankExchangeRateProvider"/>
@@ -24,7 +24,7 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
         _httpMessageInvoker = httpMessageInvoker;
         _mapper = mapper;
-        _options = options.Value;
+        _options = options?.Value;
     }
 
     /// <summary>
@@ -32,10 +32,17 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     /// </summary>
     /// <param name="currencies">A list of currency pairs to obtain exchange rate data for</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>A Task that will return a collection of <see cref="ExchangeRate"/> objects</returns>
+    /// <returns>A Task that will return a collection of <see cref="ExchangeRate"/> objects for each supplied currency, if known to the remote provider</returns>
+    /// <exception cref="ArgumentNullException">Thrown if input parameters are null</exception>
+    /// <exception cref="ArgumentException">Thrown if list of currencies is empty</exception>
+    /// <exception cref="InvalidOperationException">Thrown if no endpoint URIs are defined in the _options field</exception>
     /// <exception cref="ObtainExchangeRateException">Thrown if there is a issue obtaining exchange rate data</exception>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
     {
+        if (currencies == null) throw new ArgumentNullException(nameof(currencies), "You must supply a list of currencies you wish to see exchange rate data for");
+        if (!currencies.Any()) throw new ArgumentException("The supplied list of currencies was empty", nameof(currencies));
+        if (_options?.ExchangeRateProviders?.Any(erp => erp.Uri != null) != true) throw new InvalidOperationException("There are no exchange rate provider URIs defined in _options");
+
         List<Task<HttpResponseMessage>> replies = new();
         List<ExchangeRate> result = new();
         try
