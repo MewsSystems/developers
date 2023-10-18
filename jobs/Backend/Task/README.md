@@ -6,7 +6,7 @@ This library allows clients to obtain exchange rate data from the Czech National
 
 #### Registration
 
-We expose 1 `ServiceCollection` extension method, `AddExchangeRateProvider`.
+We expose one `ServiceCollection` extension method, `AddExchangeRateProvider`.
 
 ##### AddExchangeRateProvider
 
