@@ -2,6 +2,9 @@
 using Mews.ExchangeRateProvider.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Formatting.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +33,14 @@ public static class Program
     {
         try
         {
-            var serviceProvider = BuildServiceProvider(InitialiseConfiguration());
+            var configuration = InitialiseConfiguration();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .WriteTo.File(new JsonFormatter(), $"Mews.{nameof(ExchangeRateProviderExample)}.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            var serviceProvider = BuildServiceProvider(configuration);
 
             using var scope = serviceProvider.CreateScope();
             var rateProvider = scope.ServiceProvider.GetRequiredService<IExchangeRateProvider>();
@@ -46,17 +56,20 @@ public static class Program
         Console.ReadLine();
     }
 
+    private static IServiceProvider BuildServiceProvider(IConfigurationRoot configuration) =>
+        Host.CreateDefaultBuilder()
+            .ConfigureServices((_, services) =>
+                services.AddExchangeRateProvider(configuration.GetRequiredSection(CzechNationalBankExchangeRateProviderOptions.Section)))
+            .UseSerilog()
+            .Build()
+            .Services;
+
     private static IConfigurationRoot InitialiseConfiguration() =>
         new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ENVIRONMENT_NAME") ?? "local"}.json", optional: true)
             .Build();
-
-    private static ServiceProvider BuildServiceProvider(IConfigurationRoot configuration) =>
-        new ServiceCollection()
-            .AddExchangeRateProvider(configuration.GetRequiredSection(ExchangeRateProviderOptions.Section))
-            .BuildServiceProvider();
 
     private static void WriteExchangeRatesToConsole(IEnumerable<ExchangeRate> rates)
     {
