@@ -1,6 +1,8 @@
 using Mews.ExchangeRateProvider.Mappers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Retry;
 
 namespace Mews.ExchangeRateProvider.Extensions;
 
@@ -23,8 +25,21 @@ public static class ServiceCollectionExtensions
         services
             .Configure<CzechNationalBankExchangeRateProviderOptions>(configurationSection)
             .AddSingleton<CzechNationalBankExchangeRateMapper>()
+            .AddResiliencePipeline(ExchangeRateProviderPolicyDecorator.PollyPolicyName, builder =>
+            {
+                builder
+                    .AddRetry(new RetryStrategyOptions
+                    {
+                        BackoffType = DelayBackoffType.Exponential,
+                        UseJitter = true,
+                        MaxRetryAttempts = 3,
+                        Delay = TimeSpan.FromSeconds(1)
+                    })
+                    .AddTimeout(TimeSpan.FromSeconds(30));
+            })
             .AddHttpClient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
 
-        return services;
+        return services
+            .Decorate<IExchangeRateProvider, ExchangeRateProviderPolicyDecorator>();
     }
 }
