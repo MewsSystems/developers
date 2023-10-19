@@ -1,6 +1,7 @@
 using Mews.ExchangeRateProvider.Exceptions;
 using Mews.ExchangeRateProvider.Extensions;
 using Mews.ExchangeRateProvider.Mappers;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Mews.ExchangeRateProvider;
@@ -13,6 +14,7 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     private readonly HttpMessageInvoker _httpMessageInvoker;
     private readonly CzechNationalBankExchangeRateMapper _mapper;
     private readonly CzechNationalBankExchangeRateProviderOptions? _options;
+    private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
 
     /// <summary>
     /// Constructs a new instance of <see cref="CzechNationalBankExchangeRateProvider"/>
@@ -20,11 +22,16 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     /// <param name="httpMessageInvoker">A HTTP Client or message invoker that will be used to fetch the remote exchange rate data</param>
     /// <param name="mapper">A class that maps the remote exchange rate content into the Exchange Rate models</param>
     /// <param name="options">Configuration options that includes the remote URIs to obtain the data from</param>
-    public CzechNationalBankExchangeRateProvider(HttpMessageInvoker httpMessageInvoker, CzechNationalBankExchangeRateMapper mapper, IOptions<CzechNationalBankExchangeRateProviderOptions> options)
+    /// <param name="logger">An implementation of <see cref="ILogger{CzechNationalBankExchangeRateProvider}"/></param>
+    public CzechNationalBankExchangeRateProvider(HttpMessageInvoker httpMessageInvoker,
+        CzechNationalBankExchangeRateMapper mapper,
+        IOptions<CzechNationalBankExchangeRateProviderOptions> options,
+        ILogger<CzechNationalBankExchangeRateProvider> logger)
     {
         _httpMessageInvoker = httpMessageInvoker;
         _mapper = mapper;
         _options = options?.Value;
+        _logger = logger;
     }
 
     /// <summary>
@@ -47,23 +54,39 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
         List<ExchangeRate> result = new();
         try
         {
-            replies.AddRange(_options.ExchangeRateProviders!.Select(uri => _httpMessageInvoker.SendAsync(new HttpRequestMessage
+            replies.AddRange(_options.ExchangeRateProviders!.Select(uri =>
             {
-                Method = HttpMethod.Get,
-                RequestUri = uri.Uri
-            }, cancellationToken)));
+                _logger.LogInformation("Making call to obtain exchange rate data from Czech National Bank to {Uri}", uri.Uri!.AbsoluteUri);
+
+                return _httpMessageInvoker.SendAsync(new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = uri.Uri
+                }, cancellationToken);
+            }));
 
             await Task.WhenAll(replies);
+
+            _logger.LogInformation("All calls to Czech National Bank completed");
         }
         catch (Exception e)
         {
-            throw new ObtainExchangeRateException("Exception obtaining remote data, see inner exception for further details", e);
+            var wrappedException = new ObtainExchangeRateException("Exception obtaining remote data, see inner exception for further details", e);
+            _logger.LogError(wrappedException, "Exception thrown making call to obtain remote data");
+
+            throw wrappedException;
         }
 
         foreach (var reply in replies)
         {
             var unwrappedReply = await reply;
-            if (!unwrappedReply.IsSuccessStatusCode) throw new ObtainExchangeRateException($"Exception obtaining remote data, remote server replied with HTTP status code: {unwrappedReply.StatusCode}");
+            if (!unwrappedReply.IsSuccessStatusCode)
+            {
+                var wrappedException = new ObtainExchangeRateException($"Exception obtaining remote data, remote server replied with HTTP status code: {unwrappedReply.StatusCode}");
+                _logger.LogError(wrappedException, "Exception thrown as remote source did not reply with successful HTTP status");
+
+                throw wrappedException;
+            }
 
             try
             {
@@ -71,10 +94,17 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
             }
             catch (Exception e)
             {
-                throw new ObtainExchangeRateException("Exception reading/mapping remote data, see inner exception for further details", e);
+                var wrappedException = new ObtainExchangeRateException("Exception reading/mapping remote data, see inner exception for further details", e);
+                _logger.LogError(wrappedException, "Exception thrown whilst reading from or mapping remote data");
+
+                throw wrappedException;
             }
         }
 
-        return result.Where(er => currencies.Select(c => c.Code).Contains(er.SourceCurrency.Code));
+        var returnValue = result.Where(er => currencies.Select(c => c.Code).Contains(er.SourceCurrency.Code));
+
+        _logger.LogInformation("Obtained total of {TotalCount} exchange rate values and selected {SelectedCount} from these", result.Count, returnValue.Count());
+
+        return returnValue;
     }
 }
