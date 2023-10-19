@@ -11,6 +11,6 @@ public record ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, dec
     /// <summary>
     /// The string representation of this object
     /// </summary>
-    /// <returns>Source currency followed by Target Currency and the exchange rate value to 9 decimal places</returns>
-    public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value:F9}";
+    /// <returns>Source currency followed by Target Currency and the exchange rate value to 5 decimal places</returns>
+    public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value:F5}";
 }
