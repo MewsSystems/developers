@@ -58,9 +58,15 @@ namespace ExchangeRateUpdater
 
 			var configuration = builder.Build();
 			Console.WriteLine(Directory.GetCurrentDirectory());
+
 			var services = new ServiceCollection();
 
 			services.AddSingleton<IConfiguration>(configuration);
+
+			services.AddHttpClient();
+
+			services.AddHttpClient<ICzechNationalBankRepository, CzechNationalBankRepository>();
+
 			services.AddTransient<ICzechNationalBankRepository, CzechNationalBankRepository>();
 			services.AddTransient<IExchangeRateService, ExchangeRateService>();
 

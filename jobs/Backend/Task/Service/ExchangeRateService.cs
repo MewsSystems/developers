@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Repository.Abstract;
 using ExchangeRateUpdater.Service.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,11 +24,20 @@ namespace ExchangeRateUpdater.Service
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+			List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+			IEnumerable<ExternalCurrencyRate> externalRates;
 
-            var externalRates = await _czechNationalBankRepository.FetchCurrencyRates();
+			try
+			{
+				externalRates = await _czechNationalBankRepository.FetchCurrencyRates();
+			}
+			catch (Exception ex)
+			{
+				// Should also log the exception
+				throw new Exception("An error occurred while fetching currency rates.", ex);
+			}
 
-            foreach (var currency in currencies)
+			foreach (var currency in currencies)
             {
                 var externalRate = externalRates.FirstOrDefault(x => x.CurrencyCode == currency.Code);
                 if (externalRate == null) continue;
