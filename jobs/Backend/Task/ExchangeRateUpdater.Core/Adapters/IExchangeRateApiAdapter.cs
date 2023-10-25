@@ -5,7 +5,7 @@ using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Core.Adapters;
 
-internal interface IExchangeRateApiAdapter
+public interface IExchangeRateApiAdapter
 {
 	Task<IEnumerable<ExchangeRate>> GetExchangesRateAsync(CancellationToken cancellationToken);
 }

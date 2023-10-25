@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,9 +20,15 @@ internal class ExchangeRateProvider : IExchangeRateProvider
 	public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies,
 		CancellationToken cancellationToken)
 	{
-		var exchangeRates = await _exchangeRateApi.GetExchangesRateAsync(cancellationToken);
 		var currenciesArray = currencies as Currency[] ?? currencies.ToArray();
-		return exchangeRates.Where(x => currenciesArray.Contains(x.SourceCurrency) || currenciesArray.Contains(x.TargetCurrency));
+		if (!currenciesArray.Any())
+		{
+			throw new ArgumentException($"{nameof(currencies)} can not be empty");
+		}
+
+		var exchangeRates = await _exchangeRateApi.GetExchangesRateAsync(cancellationToken);
+		currenciesArray = currencies as Currency[] ?? currenciesArray.ToArray();
+		return exchangeRates.Where(x => currenciesArray.Contains(x.SourceCurrency, new CurrencyComparer()) || currenciesArray.Contains(x.TargetCurrency, new CurrencyComparer()));
 	}
 		
 }

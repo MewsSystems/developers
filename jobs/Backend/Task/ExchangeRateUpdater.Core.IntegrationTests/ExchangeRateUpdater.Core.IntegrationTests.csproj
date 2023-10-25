@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Core.TestingSupport\ExchangeRateUpdater.Core.TestingSupport.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Testing\ExchangeRateUpdater.Testing.csproj" />
   </ItemGroup>
