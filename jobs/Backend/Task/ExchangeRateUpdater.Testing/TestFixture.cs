@@ -1,7 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using ExchangeRateUpdate.Testing;
 using NUnit.Framework;
 
-namespace ExchangeRateUpdate.Testing;
+namespace ExchangeRateUpdater.Testing;
 
 [Parallelizable(ParallelScope.All)]
 [Timeout(20 * 100)]

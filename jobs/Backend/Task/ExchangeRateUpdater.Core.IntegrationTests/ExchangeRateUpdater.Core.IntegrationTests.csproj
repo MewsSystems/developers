@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -17,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRateUpdater.Testing\ExchangeRateUpdater.Testing.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Testing\ExchangeRateUpdater.Testing.csproj" />
   </ItemGroup>
 
 </Project>

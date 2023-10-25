@@ -68,7 +68,6 @@ internal partial class CzechNationalBankApiAdapterTests
 				Assert.That(exchangeRates[0].SourceCurrency.Code, Is.EqualTo("AUD"));
 				Assert.That(exchangeRates[0].TargetCurrency.Code, Is.EqualTo("CZK"));
 			}
-			
 		}
 	}
 }

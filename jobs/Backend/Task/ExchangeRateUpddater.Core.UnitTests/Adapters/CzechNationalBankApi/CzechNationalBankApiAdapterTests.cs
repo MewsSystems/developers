@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using ExchangeRateUpdate.Testing;
 using ExchangeRateUpdater.Core.Adapters.CzechNationalBankApi;
 using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Testing;
 using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Core.UnitTests.Adapters.CzechNationalBankApi;
@@ -14,7 +14,6 @@ internal partial class
 	CzechNationalBankApiAdapterTests : TestFixture<CzechNationalBankApiAdapterTests.TestContext,
 		CzechNationalBankApiAdapter>
 {
-	
 	//I could generate a test case with all success httpStatus code
 	[TestCase(200, true)]
 	[TestCase(200, false)]
@@ -36,6 +35,5 @@ internal partial class
 		using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
 		Assert.ThrowsAsync<TaskCanceledException>(() =>
 			Context.WithHttpResponse(HttpStatusCode.OK).Sut.GetExchangesRateAsync(cts.Token));
-
 	}
 }

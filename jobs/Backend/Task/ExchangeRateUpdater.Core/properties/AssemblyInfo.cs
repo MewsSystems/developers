@@ -2,3 +2,4 @@
 
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("ExchangeRateUpdater.Core.UnitTests")]
+[assembly: InternalsVisibleTo("ExchangeRateUpdater.Core.IntegrationTests")]
