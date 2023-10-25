@@ -1,4 +1,7 @@
-﻿using ExchangeRateUpdater.Core.Models;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Core.Providers;
 
@@ -10,5 +13,5 @@ public interface IExchangeRateProvider
 	/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
 	/// some of the currencies, ignore them.
 	/// </summary>
-	IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+	Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
 }
