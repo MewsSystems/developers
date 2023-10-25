@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Core.Adapters;
 using ExchangeRateUpdater.Core.Adapters.CzechNationalBankApi;
-using ExchangeRateUpdater.Core.Configurations;
+using ExchangeRateUpdater.Core.Adapters.CzechNationalBankApi.Configurations;
 using ExchangeRateUpdater.Core.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
