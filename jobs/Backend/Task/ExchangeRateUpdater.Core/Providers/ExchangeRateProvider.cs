@@ -28,7 +28,7 @@ internal class ExchangeRateProvider : IExchangeRateProvider
 
 		var exchangeRates = await _exchangeRateApi.GetExchangesRateAsync(cancellationToken);
 
-		return exchangeRates.Where(x => currenciesArray.Contains(x.SourceCurrency, new CurrencyComparer()) || currenciesArray.Contains(x.TargetCurrency, new CurrencyComparer()));
+		return exchangeRates.Where(x => currenciesArray.Contains(x.SourceCurrency, new CurrencyComparer()) && currenciesArray.Contains(x.TargetCurrency, new CurrencyComparer()));
 	}
 		
 }

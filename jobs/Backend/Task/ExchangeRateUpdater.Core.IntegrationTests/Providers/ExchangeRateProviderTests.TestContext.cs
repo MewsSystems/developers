@@ -15,7 +15,7 @@ internal partial class ExchangeRateProviderTests
 		{
 			new Currency("AUD"),
 			new Currency("BRL"),
-			new Currency("CAD")
+			new Currency("CZK")
 		};
 
 		protected override ExchangeRateProvider BuildSut(AutoMocker autoMocker) =>
