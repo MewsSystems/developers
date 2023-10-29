@@ -5,11 +5,18 @@ import {
   PREV_PAGE,
   SPECIFIC_PAGE,
   SET_QUERY_PARAMS,
+  TRIGGER_SEARCH_ON_CHANGE,
 } from '../../reducers/searchReducer';
 
 export const triggerSearch = createAction(TRIGGER_SEARCH, (query) => {
   return {
     payload: { query },
+  };
+});
+
+export const triggerSearchOnChange = createAction(TRIGGER_SEARCH_ON_CHANGE, (option) => {
+  return {
+    payload: { option },
   };
 });
 

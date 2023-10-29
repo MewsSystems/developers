@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FC } from 'react';
+import { OptionLabel } from './styles';
 
 export const Checkbox: FC<{
   label: string;
@@ -7,9 +8,9 @@ export const Checkbox: FC<{
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }> = ({ label, value, isChecked, onChange }) => {
   return (
-    <label>
+    <OptionLabel>
       <input type="checkbox" value={value} checked={isChecked} onChange={onChange} />
       {label}
-    </label>
+    </OptionLabel>
   );
 };

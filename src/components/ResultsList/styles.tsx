@@ -60,6 +60,7 @@ export const DetailsLink = styled.div`
   text-transform: uppercase;
   flex: 1;
   text-decoration: none;
+  padding: ${theme.spacing.md}px 0;
   > * {
     color: ${theme.colors.red[300]};
   }
@@ -83,11 +84,13 @@ export const Title = styled.div`
 
 export const Overview = styled.div`
   overflow: scroll;
-  padding: ${theme.spacing.md}px 0;
+  padding: ${theme.spacing.md}px;
   flex: 3;
+  border-radius: 4px;
 `;
 
 export const Stats = styled.div`
+  padding: ${theme.spacing.md}px;
   display: flex;
   justify-content: space-between;
   flex: 1;
@@ -96,4 +99,25 @@ export const Stats = styled.div`
 export const StatItem = styled.span`
   font-size: 10px;
   opacity: 0.5;
+`;
+
+export const List = styled.ul`
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: ${theme.spacing.md}px;
+  margin: 0;
+`;
+
+export const ListItem = styled.li`
+  flex: 1;
+  margin: ${theme.spacing.sm}px; /* Add some spacing between list items */
+  font-size: 16px;
+  color: ${theme.colors.black[300]};
+  list-style-type: disc; /* You can change this to other list styles like 'circle' or 'square' */
+  padding-left: ${theme.spacing.md}px;
+`;
+
+export const NoImage = styled.span`
+  font-size: 16rem;
 `;

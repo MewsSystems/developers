@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect, FC } from 'react';
 import { debounce } from 'lodash';
 import { TextInput } from './styles';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 
 const useDebounce = (callback?: () => void) => {
   const ref = useRef<() => void | undefined>();
@@ -26,11 +27,10 @@ export const DebouncedInput: FC<{
   placeholder?: string;
   defaultValue?: string;
 }> = ({ handleOnChange, placeholder, defaultValue }) => {
-  const dispatch = useDispatch<any>();
   const [value, setValue] = useState(defaultValue || '');
 
   const onChange = () => {
-    dispatch(handleOnChange(value));
+    handleOnChange(value);
   };
 
   const debouncedOnChange = useDebounce(onChange);

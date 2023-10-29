@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 
 export const useWindowWidth = () => {
@@ -7,9 +6,9 @@ export const useWindowWidth = () => {
   function getDeviceType() {
     const windowWidth = window.innerWidth;
 
-    if (windowWidth <= 768) {
+    if (windowWidth < 768) {
       return 'mobile';
-    } else if (windowWidth <= 1024) {
+    } else if (windowWidth < 1024) {
       return 'tablet';
     } else {
       return 'desktop';

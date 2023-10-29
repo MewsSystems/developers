@@ -1,49 +1,19 @@
 import React, { FC, SyntheticEvent } from 'react';
-import {
-  Card,
-  Poster,
-  Info,
-  Title,
-  Overview,
-  StatItem,
-  Stats,
-  PosterWrapper,
-  DetailsLink,
-} from './styles';
-import { Link } from 'react-router-dom';
-import { Movie } from '../../types';
 
-export const Item: FC<{
-  result: Movie;
+import { Movie, Person } from '../../types';
+import { SearchOptionType } from '../../reducers/searchReducer';
+import { MovieItem } from './Movie';
+import { PersonItem } from './Person';
+
+export type ItemType = FC<{
+  result: Movie & Person;
   onNavigation?: (result: Movie) => void;
   toggleInfo?: (id?: number) => void;
   isSelected?: boolean;
-}> = ({ result, onNavigation, isSelected, toggleInfo }) => {
-  const { id, vote_average, release_date, overview, title, poster_path } = result;
+  itemType?: SearchOptionType;
+}>;
 
-  const handleToggleInfo = (e: SyntheticEvent) => {
-    e.preventDefault();
-    toggleInfo(isSelected ? undefined : id);
-  };
-
-  return (
-    <Card key={id}>
-      <PosterWrapper>
-        <Poster src={`https://image.tmdb.org/t/p/w500/${poster_path}`} alt={title} />
-      </PosterWrapper>
-      <Info isSelected={isSelected} {...(toggleInfo && { onClick: handleToggleInfo })}>
-        <Title>{title}</Title>
-        <Overview>{overview}</Overview>
-        <DetailsLink>
-          <Link to={`/${id}`} onClick={() => onNavigation(result)}>
-            See More Details
-          </Link>
-        </DetailsLink>
-        <Stats>
-          <StatItem>Release Date: {release_date}</StatItem>
-          <StatItem>Rating: {vote_average}</StatItem>
-        </Stats>
-      </Info>
-    </Card>
-  );
+export const Item: ItemType = (props) => {
+  if (props.itemType === 'person') return <PersonItem {...props} />;
+  return <MovieItem {...props} />;
 };

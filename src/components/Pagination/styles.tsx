@@ -3,13 +3,12 @@ import { theme } from '../../styles/theme';
 
 export const PaginationWrapper = styled.div`
   padding: ${theme.spacing.md}px;
-  width: 50%;
-  margin: auto;
   display: flex;
   justify-content: space-around;
 `;
 
 export const PageButton = styled.button`
+  flex: 1;
   outline: none;
   border: 1px solid black;
   display: flex;

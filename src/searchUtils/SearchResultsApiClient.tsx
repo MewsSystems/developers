@@ -1,3 +1,4 @@
+import { SearchOptionType } from '../reducers/searchReducer';
 import { search } from './search';
 
 const DEFAULT_SEARCH_TYPE = 'multi';
@@ -8,26 +9,23 @@ const COMMON_PARAMS = {
 
 export class SearchResultsApiClient {
   private baseUrl: string = 'https://api.themoviedb.org/3/search/';
-  private searchType: string = '';
-  private fullUrl: string;
 
-  constructor(searchType = DEFAULT_SEARCH_TYPE) {
-    this.searchType = searchType;
-    this.fullUrl = this.baseUrl + this.searchType;
-  }
-
-  public fetchMovies = (onDataReceived: any, queryParams?: any) => {
+  public fetchMovies = (onDataReceived: any, queryParams?: any, searchType?: SearchOptionType) => {
     const apiParams = {
       ...COMMON_PARAMS,
       ...queryParams,
     };
 
-    return this.initiateSearch(apiParams, onDataReceived);
+    return this.initiateSearch(apiParams, searchType, onDataReceived);
   };
 
-  private initiateSearch = (apiParams: any, onDataReceived: any) => {
+  private initiateSearch = (
+    apiParams: any,
+    searchType: SearchOptionType = DEFAULT_SEARCH_TYPE,
+    onDataReceived: any,
+  ) => {
     const abortController = new AbortController();
-    search(apiParams, onDataReceived, abortController, this.fullUrl);
+    search(apiParams, onDataReceived, abortController, this.baseUrl + searchType);
     return abortController;
   };
 }

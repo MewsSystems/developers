@@ -1,12 +1,19 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Body, DetailWrapper, Details, Info, InfoItem, Overview, Poster } from './styles';
+import { BackLink, Body, DetailWrapper, Details, Info, InfoItem, Overview, Poster } from './styles';
 import { Movie } from '../../types';
-import { styled } from 'styled-components';
 
-const MovieDetailPage: FC<{ detail?: Movie; dispatch?: Dispatch }> = ({ detail, dispatch }) => {
-  console.log(detail);
+import { Link } from 'react-router-dom';
+
+const MovieDetailPage: FC<{ detail?: Movie; dispatch?: Dispatch }> = ({ detail }) => {
+  if (!Object.keys(detail).length)
+    return (
+      <BackLink>
+        <Link to="/">Back</Link>
+      </BackLink>
+    );
+
   return (
     <DetailWrapper backdrop={`https://image.tmdb.org/t/p/w500/${detail.backdrop_path}`}>
       <h1>{detail.title}</h1>
@@ -29,6 +36,9 @@ const MovieDetailPage: FC<{ detail?: Movie; dispatch?: Dispatch }> = ({ detail, 
           </Info>
         </Details>
       </Body>
+      <BackLink>
+        <Link to="/">Back</Link>
+      </BackLink>
     </DetailWrapper>
   );
 };

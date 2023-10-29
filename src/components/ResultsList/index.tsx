@@ -7,13 +7,14 @@ import { Item } from './Item';
 import { Pagination } from '../Pagination';
 import { useWindowWidth } from '../../hooks/useWindowWidth';
 import { setSelectedResult } from '../../actions/detail';
-import { SearchResponse, Movie } from '../../types';
+import { SearchResponse, Movie, Person } from '../../types';
+import { NoResults } from '../NoResults';
 
 const ResultsList: FC<{
+  search?: any;
   results?: SearchResponse;
-  detail?: Movie;
-  dispatch?: Dispatch;
-}> = ({ results, detail, dispatch }) => {
+  dispatch: Dispatch;
+}> = ({ results, search, dispatch }) => {
   const [selectedCard, setSelectedCard] = useState<number | undefined>();
   const { isMobile } = useWindowWidth();
 
@@ -25,14 +26,19 @@ const ResultsList: FC<{
   }, [page]);
 
   const handleResultSelection = (result: Movie) => {
-    dispatch(setSelectedResult(result));
+    dispatch?.(setSelectedResult(result));
   };
+
+  if (!searchResults?.length) {
+    return <NoResults>🔍 Sorry, No results for that search, please try again 🔍</NoResults>;
+  }
 
   return (
     <>
       <ListContainer>
-        {searchResults?.map((result: Movie) => {
+        {searchResults?.map((result: Movie & Person) => {
           const isSelected = selectedCard === result.id;
+
           return (
             <Item
               key={result.id}
@@ -40,12 +46,13 @@ const ResultsList: FC<{
               isSelected={isMobile && isSelected}
               toggleInfo={(id) => setSelectedCard(id)}
               onNavigation={handleResultSelection}
+              itemType={search.searchType}
             />
           );
         })}
       </ListContainer>
 
-      {searchResults?.length && (
+      {searchResults?.length && total_pages > 1 && (
         <Pagination
           onNextClick={() => dispatch(fetchNextPage())}
           onPrevClick={() => dispatch(fetchPrevPage())}

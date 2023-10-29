@@ -27,7 +27,7 @@ export const useSearchService = ({
     setInitialized(false);
     setResults(undefined);
     searchServiceRef.current?.abort;
-    searchServiceRef.current = new SearchService(searchType);
+    searchServiceRef.current = new SearchService();
     searchServiceRef.current.onResultsUpdate(handleUpdate);
     setInitialized(true);
   }, []);
@@ -35,13 +35,16 @@ export const useSearchService = ({
   useEffect(() => {
     if (!initialized || !query?.length) return;
     navigate('/');
-    searchServiceRef.current.fetchMoviesByQuery({
-      query,
-      page,
-      language: 'en-US',
-      ...queryParams,
-    });
-  }, [query, page]);
+    searchServiceRef.current.fetchMoviesByQuery(
+      {
+        query,
+        page,
+        language: 'en-US',
+        ...queryParams,
+      },
+      searchType,
+    );
+  }, [query, page, searchType]);
 
   return { results };
 };

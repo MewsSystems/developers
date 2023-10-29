@@ -1,3 +1,4 @@
+import { SearchOptionType } from '../reducers/searchReducer';
 import { SearchResultsApiClient } from './SearchResultsApiClient';
 
 export class SearchService {
@@ -5,8 +6,8 @@ export class SearchService {
   private resultsUpdatedCallback: any = () => {};
   private abortController = new AbortController();
 
-  constructor(searchType?: string) {
-    this.searchResultsApiClient = new SearchResultsApiClient(searchType);
+  constructor() {
+    this.searchResultsApiClient = new SearchResultsApiClient();
   }
 
   private updateResults = (results?: any) => {
@@ -17,14 +18,18 @@ export class SearchService {
     this.resultsUpdatedCallback(results);
   };
 
-  public onResultsUpdate = (callback) => {
+  public onResultsUpdate = (callback: () => void) => {
     this.resultsUpdatedCallback = callback;
     return this;
   };
 
-  public fetchMoviesByQuery = (queryParams?: any) => {
+  public fetchMoviesByQuery = (queryParams?: any, searchType?: SearchOptionType) => {
     this.abortController.abort();
-    this.abortController = this.searchResultsApiClient.fetchMovies(this.updateResults, queryParams);
+    this.abortController = this.searchResultsApiClient.fetchMovies(
+      this.updateResults,
+      queryParams,
+      searchType,
+    );
     return this;
   };
 

@@ -11,11 +11,11 @@ export const Pagination: FC<{
 }> = ({ onPageClick, onPrevClick, onNextClick, totalPages, currentPage }) => {
   return (
     <PaginationWrapper>
-      {currentPage !== 1 ? <PageButton onClick={() => onPageClick(1)}>{1}</PageButton> : <span />}
-      <PageButton onClick={onPrevClick}>-</PageButton>
+      <PageButton onClick={() => onPageClick(1)}>{`First Page`}</PageButton>
+      {currentPage !== 1 && <PageButton onClick={onPrevClick}>-</PageButton>}
       <PageButton onClick={noop}>{currentPage}</PageButton>
-      <PageButton onClick={onNextClick}>+</PageButton>
-      <PageButton onClick={() => onPageClick(totalPages)}>{totalPages}</PageButton>
+      {currentPage !== totalPages && <PageButton onClick={onNextClick}>+</PageButton>}
+      <PageButton onClick={() => onPageClick(totalPages)}>{`Last Page (${totalPages})`}</PageButton>
     </PaginationWrapper>
   );
 };

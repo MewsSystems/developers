@@ -14,7 +14,7 @@ const ApiConnector: FC<{
   const { results } = useSearchService({ query, page, searchType, queryParams });
 
   useEffect(() => {
-    if (results?.results?.length) {
+    if (results?.results) {
       dispatch(updateResults(results));
     }
   }, [results]);

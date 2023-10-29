@@ -11,7 +11,7 @@ export const NavBar = () => {
         </NavItem>
 
         <NavItem>
-          <StyledNavLink to="/movies">Movies</StyledNavLink>{' '}
+          <StyledNavLink to="/id">Details</StyledNavLink>
         </NavItem>
       </NavList>
     </Nav>

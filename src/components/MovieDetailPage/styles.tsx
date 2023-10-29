@@ -66,7 +66,22 @@ export const InfoItem = styled.span`
   flex: 1 1 100px;
   line-height: 1.5;
 `;
+
 export const Info = styled.div`
   display: flex;
   flex-wrap: wrap;
+`;
+
+export const BackLink = styled.div`
+  background-color: ${theme.colors.black[300]};
+  padding: ${theme.spacing.md}px;
+  margin-top: ${theme.spacing.md}px;
+  border: 2px solid ${theme.colors.white[300]};
+  overflow: hidden;
+  border-radius: 4px;
+
+  > * {
+    color: ${theme.colors.white[300]};
+    text-decoration: none;
+  }
 `;
