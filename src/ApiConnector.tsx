@@ -3,12 +3,20 @@ import { useSearchService } from './hooks/useSearchService';
 import { FC, useEffect } from 'react';
 import { updateResults } from './actions/results';
 import { Dispatch } from 'redux';
+import { InitialSearchState } from './reducers/searchReducer';
+import { Movie, Person } from './types';
+
+type State = {
+  search: InitialSearchState;
+  results: { results?: Movie[] & Person[] };
+  detail: Movie & Person;
+};
 
 const ApiConnector: FC<{
   query?: string;
   page?: number;
   searchType?: string;
-  queryParams?: any;
+  queryParams?: Record<string, string>;
   dispatch?: Dispatch;
 }> = ({ query, page, searchType, queryParams, dispatch }): null => {
   const { results } = useSearchService({ query, page, searchType, queryParams });
@@ -21,7 +29,7 @@ const ApiConnector: FC<{
   return null;
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: State) => {
   return state.search;
 };
 

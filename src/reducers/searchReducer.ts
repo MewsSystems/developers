@@ -6,7 +6,8 @@ export const SET_QUERY_PARAMS = 'SET_QUERY_PARAMS';
 export const TRIGGER_SEARCH_ON_CHANGE = 'TRIGGER_SEARCH_ON_CHANGE';
 
 export type SearchOptionType = 'multi' | 'movie' | 'tv' | 'person' | 'company';
-type InitialState = {
+
+export type InitialSearchState = {
   query?: string;
   page?: number;
   searchType?: SearchOptionType;
@@ -21,7 +22,7 @@ const initialState = {
 };
 
 const searchReducer = (
-  state: InitialState = initialState,
+  state: InitialSearchState = initialState,
   action: {
     type: string;
     payload: { query?: string; page?: number; queryParams?: any; option?: SearchOptionType };
