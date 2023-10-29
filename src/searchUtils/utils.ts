@@ -11,7 +11,7 @@ export const getUrlSearchParams = (params: any) => {
 };
 
 export const fetchResults = async (
-  queryParams: any,
+  queryParams: Record<string, string>,
   abortController: AbortController,
   baseApiUrl: string,
   headers: any,

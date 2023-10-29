@@ -5,6 +5,7 @@ import { BackLink, Body, DetailWrapper, Details, Info, InfoItem, Overview, Poste
 import { Movie } from '../../types';
 
 import { Link } from 'react-router-dom';
+import { State } from '../../ApiConnector';
 
 const MovieDetailPage: FC<{ detail?: Movie; dispatch?: Dispatch }> = ({ detail }) => {
   if (!Object.keys(detail).length)
@@ -43,7 +44,7 @@ const MovieDetailPage: FC<{ detail?: Movie; dispatch?: Dispatch }> = ({ detail }
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: State) => {
   return state;
 };
 

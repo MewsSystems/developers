@@ -19,7 +19,7 @@ const searchOptions = [
 
 const SearchComponent: FC<{
   query?: string;
-  queryParams?: any;
+  queryParams?: Record<string, string>;
   searchType: SearchOptionType;
   dispatch: Dispatch;
 }> = ({ query, queryParams, searchType, dispatch }) => {

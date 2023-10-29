@@ -1,9 +1,10 @@
+import { SearchResponse } from '../types';
 import { fetchResults } from './utils';
 
 export const search = async (
-  params: any,
-  onDataRecieved: any,
-  abortController: any,
+  params: Record<string, string>,
+  onDataRecieved: (data: SearchResponse) => void,
+  abortController: AbortController,
   baseApiUrl: string,
 ) => {
   const headers = new Headers();

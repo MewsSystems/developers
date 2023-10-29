@@ -1,4 +1,5 @@
 import { SearchOptionType } from '../reducers/searchReducer';
+import { SearchResponse } from '../types';
 import { SearchResultsApiClient } from './SearchResultsApiClient';
 
 export class SearchService {
@@ -10,7 +11,7 @@ export class SearchService {
     this.searchResultsApiClient = new SearchResultsApiClient();
   }
 
-  private updateResults = (results?: any) => {
+  private updateResults = (results?: SearchResponse) => {
     if (results === undefined) {
       return;
     }
@@ -23,7 +24,10 @@ export class SearchService {
     return this;
   };
 
-  public fetchMoviesByQuery = (queryParams?: any, searchType?: SearchOptionType) => {
+  public fetchMoviesByQuery = (
+    queryParams?: Record<string, string>,
+    searchType?: SearchOptionType,
+  ) => {
     this.abortController.abort();
     this.abortController = this.searchResultsApiClient.fetchMovies(
       this.updateResults,

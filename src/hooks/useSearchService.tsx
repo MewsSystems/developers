@@ -12,7 +12,7 @@ export const useSearchService = ({
   query?: string;
   page?: number;
   searchType?: string;
-  queryParams?: any;
+  queryParams?: Record<string, string>;
 }) => {
   const [initialized, setInitialized] = useState(false);
   const [results, setResults] = useState<SearchResponse | undefined>();

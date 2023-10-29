@@ -3,11 +3,11 @@ import { useSearchService } from './hooks/useSearchService';
 import { FC, useEffect } from 'react';
 import { updateResults } from './actions/results';
 import { Dispatch } from 'redux';
-import { InitialSearchState } from './reducers/searchReducer';
+import { SearchState } from './reducers/searchReducer';
 import { Movie, Person } from './types';
 
-type State = {
-  search: InitialSearchState;
+export type State = {
+  search: SearchState;
   results: { results?: Movie[] & Person[] };
   detail: Movie & Person;
 };

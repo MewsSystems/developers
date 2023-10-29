@@ -9,9 +9,10 @@ import { useWindowWidth } from '../../hooks/useWindowWidth';
 import { setSelectedResult } from '../../actions/detail';
 import { SearchResponse, Movie, Person } from '../../types';
 import { NoResults } from '../NoResults';
+import { State } from '../../ApiConnector';
 
 const ResultsList: FC<{
-  search?: any;
+  search?: SearchState;
   results?: SearchResponse;
   dispatch: Dispatch;
 }> = ({ results, search, dispatch }) => {
@@ -65,7 +66,7 @@ const ResultsList: FC<{
   );
 };
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: State) => {
   return state;
 };
 

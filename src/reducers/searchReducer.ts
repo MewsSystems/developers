@@ -7,7 +7,7 @@ export const TRIGGER_SEARCH_ON_CHANGE = 'TRIGGER_SEARCH_ON_CHANGE';
 
 export type SearchOptionType = 'multi' | 'movie' | 'tv' | 'person' | 'company';
 
-export type InitialSearchState = {
+export type SearchState = {
   query?: string;
   page?: number;
   searchType?: SearchOptionType;
@@ -22,10 +22,15 @@ const initialState = {
 };
 
 const searchReducer = (
-  state: InitialSearchState = initialState,
+  state: SearchState = initialState,
   action: {
     type: string;
-    payload: { query?: string; page?: number; queryParams?: any; option?: SearchOptionType };
+    payload: {
+      query?: string;
+      page?: number;
+      queryParams?: Record<string, string>;
+      option?: SearchOptionType;
+    };
   },
 ) => {
   switch (action.type) {
