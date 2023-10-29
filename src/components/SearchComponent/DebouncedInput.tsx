@@ -24,9 +24,10 @@ const useDebounce = (callback?: () => void) => {
 export const DebouncedInput: FC<{
   handleOnChange: (query: string) => void;
   placeholder?: string;
-}> = ({ handleOnChange, placeholder }) => {
+  defaultValue?: string;
+}> = ({ handleOnChange, placeholder, defaultValue }) => {
   const dispatch = useDispatch<any>();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(defaultValue || '');
 
   const onChange = () => {
     dispatch(handleOnChange(value));
@@ -41,7 +42,7 @@ export const DebouncedInput: FC<{
         setValue(e.target.value);
       }}
       placeholder={placeholder ?? 'Search...'}
-      value={value}
+      defaultValue={defaultValue}
     />
   );
 };

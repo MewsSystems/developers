@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Open Sans';
-  src: url('https://fonts.googleapis.com/css2?family=GT+Walsheim:wght@300;400;600;700&display=swap');
+  src: url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 }
 
 html,
@@ -8,6 +8,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   padding: 0;
   margin: 0;
+  background-color: #00090cff;
 }
 
 body *,

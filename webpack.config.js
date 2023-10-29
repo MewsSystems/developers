@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+require('dotenv').config();
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -19,12 +21,15 @@ module.exports = {
       },
     ],
   },
+  plugins: [new webpack.EnvironmentPlugin(['NODE_ENV', 'MOVIE_SEARCH_API_KEY'])],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
   devServer: {
+    historyApiFallback: true,
     static: { directory: path.join(__dirname, 'public') },
     port: 3000,
     hot: true,
+    historyApiFallback: true,
   },
 };

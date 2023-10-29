@@ -1,6 +1,10 @@
 import React from 'react';
-import { SearchBar } from '../components/SearchBar';
+import ResultsList from '../components/ResultsList';
 
 export const Home = () => {
-  return <div>Home</div>;
+  return (
+    <>
+      <ResultsList />
+    </>
+  );
 };
