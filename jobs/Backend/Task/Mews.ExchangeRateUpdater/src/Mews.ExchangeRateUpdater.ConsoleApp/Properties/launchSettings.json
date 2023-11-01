@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Mews.ExchangeRateUpdater.ConsoleApp": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    }
+  }
+}
