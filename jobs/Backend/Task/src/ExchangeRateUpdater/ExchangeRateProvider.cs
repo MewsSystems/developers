@@ -33,7 +33,7 @@ public class ExchangeRateProvider
                 r => new ExchangeRate(
                     sourceCurrency: new Currency(r.CurrencyCode),
                     targetCurrency: new Currency("CZK"),
-                    value: r.ExchangeRate));
+                    value: r.ExchangeRate / r.Amount));
     }
 }
 
