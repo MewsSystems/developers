@@ -17,9 +17,7 @@ public class ExchangeRateProvider
     /// </summary>
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var now = DateTime.UtcNow;
-
-        using var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.cnb.cz/cnbapi/exrates/daily?date={now:yyyy-MM-dd}&lang=EN");
+        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.cnb.cz/cnbapi/exrates/daily&lang=EN");
         request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
         using var httpClient = new HttpClient();
