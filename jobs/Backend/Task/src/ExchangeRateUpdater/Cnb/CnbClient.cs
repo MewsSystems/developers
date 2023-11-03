@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using W4k.Either;
@@ -72,51 +71,4 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
         // we don't really care about the results, we just want to know if the payload is valid overall
         return Validator.TryValidateObject(payload, validationContext, validationResults, validateAllProperties: true);
     }
-}
-
-// 💡 this is a bit of stretch, but it may positively affect performance (avoid boxing);
-//    good for generic libraries, but probably not worth in regular application
-internal static partial class CnbClientLogging
-{
-    [LoggerMessage(EventId = 9001, Level = LogLevel.Error, Message = "Received unexpected status code from CNB API: {StatusCode} {Payload}")]
-    public static partial void UnexpectedStatusCode(this ILogger<CnbClient> logger, HttpStatusCode statusCode, string payload);
-    
-    [LoggerMessage(EventId = 9002, Level = LogLevel.Error, Message = "Received invalid payload from CNB API: {Payload}")]
-    public static partial void InvalidPayload(this ILogger<CnbClient> logger, string payload);
-}
-
-public class CnbError;
-
-public class CnbExchangeRatesDto
-{
-    [JsonPropertyName("rates")]
-    [Required]
-    public required IReadOnlyCollection<CurrencyRate> Rates { get; init; } = null!;
-}
-
-public class CurrencyRate
-{
-    [JsonPropertyName("validFor")]
-    [Required]
-    public required DateTime ValidFor { get; init; }
-
-    [JsonPropertyName("country")]
-    [Required]
-    public required string CountryName { get; init; } = null!;
-
-    [JsonPropertyName("currency")]
-    [Required]
-    public required string CurrencyName { get; init; } = null!;
-    
-    [JsonPropertyName("amount")]
-    [Required]
-    public required int Amount { get; init; }
-
-    [JsonPropertyName("currencyCode")]
-    [Required]
-    public required string CurrencyCode { get; init; } = null!;
-    
-    [JsonPropertyName("rate")]
-    [Required]
-    public required decimal ExchangeRate { get; init; }
 }
