@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+  </PropertyGroup>
+  
   <ItemGroup>
     <InternalsVisibleTo Include="ExchangeRateUpdater.Tests" />
   </ItemGroup>

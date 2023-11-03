@@ -12,10 +12,12 @@ public class ExchangeRateProvider
 
     public ExchangeRateProvider(ICnbClient cnbClient)
     {
+        // 💡 this check is bit silly since we control the creation of provider, let's pretend it's publicly shipped app
+        //    (also let's make analyzer happy - public types should check their arguments after all)
         ArgumentNullException.ThrowIfNull(cnbClient);
         _cnbClient = cnbClient;
     }
-    
+
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
     /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",

@@ -35,8 +35,8 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
             var rawPayload = await response.Content
                 .ReadAsStringAsync()
                 .ConfigureAwait(false);
-
-            logger.LogError("Received unexpected status code from CNB API: {StatusCode} {Payload}", response.StatusCode, rawPayload);
+            
+            logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
 
             // TODO: return failed result instead of throwing
             throw new InvalidOperationException();
@@ -53,12 +53,12 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                 .ReadAsStringAsync()
                 .ConfigureAwait(false);
 
-            logger.LogError("Received invalid payload from CNB API: {Payload}", rawPayload);
+            logger.InvalidPayload(rawPayload);
 
             // TODO: return failed result instead of throwing
             throw new InvalidOperationException();
         }
-        
+
         return payload;
     }
 
@@ -75,6 +75,17 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
         // we don't really care about the results, we just want to know if the payload is valid overall
         return Validator.TryValidateObject(payload, validationContext, validationResults, validateAllProperties: true);
     }
+}
+
+// 💡 this is a bit of stretch, but it may positively affect performance (avoid boxing);
+//    good for generic libraries, but probably not worth in regular application
+internal static partial class CnbClientLogging
+{
+    [LoggerMessage(EventId = 9001, Level = LogLevel.Error, Message = "Received unexpected status code from CNB API: {StatusCode} {Payload}")]
+    public static partial void UnexpectedStatusCode(this ILogger<CnbClient> logger, HttpStatusCode statusCode, string payload);
+    
+    [LoggerMessage(EventId = 9002, Level = LogLevel.Error, Message = "Received invalid payload from CNB API: {Payload}")]
+    public static partial void InvalidPayload(this ILogger<CnbClient> logger, string payload);
 }
 
 public class CnbExchangeRatesDto
