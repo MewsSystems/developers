@@ -1,13 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using ExchangeRateUpdater.Cnb;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider
 {
+    private readonly ICnbClient _cnbClient;
+
+    public ExchangeRateProvider(ICnbClient cnbClient)
+    {
+        ArgumentNullException.ThrowIfNull(cnbClient);
+        _cnbClient = cnbClient;
+    }
+    
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
     /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -16,10 +23,7 @@ public class ExchangeRateProvider
     /// </summary>
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        using var httpClient = new HttpClient();
-        var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
-
-        var ratesPayload = cnbClient.GetCurrentExchangeRates().GetAwaiter().GetResult();
+        var ratesPayload = _cnbClient.GetCurrentExchangeRates().GetAwaiter().GetResult();
 
         return ratesPayload.Rates
             .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))

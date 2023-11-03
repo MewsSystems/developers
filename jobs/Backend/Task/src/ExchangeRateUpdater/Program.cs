@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using ExchangeRateUpdater.Cnb;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ExchangeRateUpdater
 {
@@ -21,9 +24,12 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            using var httpClient = new HttpClient();
+            var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
+
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(cnbClient);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

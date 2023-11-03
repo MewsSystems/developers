@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Cnb;
 
-internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger)
+internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICnbClient
 {
     private static readonly MediaTypeWithQualityHeaderValue JsonMediaType = new("application/json");
     
@@ -77,14 +77,14 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger)
     }
 }
 
-internal class CnbExchangeRatesDto
+public class CnbExchangeRatesDto
 {
     [JsonPropertyName("rates")]
     [Required]
     public required IReadOnlyCollection<CurrencyRate> Rates { get; init; } = null!;
 }
 
-internal class CurrencyRate
+public class CurrencyRate
 {
     [JsonPropertyName("validFor")]
     [Required]
