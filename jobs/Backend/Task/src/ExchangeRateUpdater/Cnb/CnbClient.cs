@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using W4k.Either;
 
 namespace ExchangeRateUpdater.Cnb;
 
@@ -20,7 +21,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
     //    however since this is completely 3rd party API, I don't expect it to change (and if it does, more things will break anyway)
     private static readonly Uri DailyExchangeRatesUri = new("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
 
-    public async Task<CnbExchangeRatesDto> GetCurrentExchangeRates()
+    public async Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates()
     {
         // 💡 since we do HTTP GET, we could omit disposing of the request message since there's no payload, but let's keep analyzer happy
         using var request = new HttpRequestMessage(HttpMethod.Get, DailyExchangeRatesUri);
@@ -37,9 +38,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                 .ConfigureAwait(false);
             
             logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
-
-            // TODO: return failed result instead of throwing
-            throw new InvalidOperationException();
+            return new CnbError();
         }
 
         var payload = await response.Content
@@ -54,9 +53,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                 .ConfigureAwait(false);
 
             logger.InvalidPayload(rawPayload);
-
-            // TODO: return failed result instead of throwing
-            throw new InvalidOperationException();
+            return new CnbError();
         }
 
         return payload;
@@ -87,6 +84,8 @@ internal static partial class CnbClientLogging
     [LoggerMessage(EventId = 9002, Level = LogLevel.Error, Message = "Received invalid payload from CNB API: {Payload}")]
     public static partial void InvalidPayload(this ILogger<CnbClient> logger, string payload);
 }
+
+public class CnbError;
 
 public class CnbExchangeRatesDto
 {

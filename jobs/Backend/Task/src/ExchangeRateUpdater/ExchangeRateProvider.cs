@@ -26,16 +26,23 @@ public class ExchangeRateProvider
     /// </summary>
     public async Task<IReadOnlyCollection<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var ratesPayload = await _cnbClient.GetCurrentExchangeRates();
+        var exchangeRatesResult = await _cnbClient.GetCurrentExchangeRates();
 
-        return ratesPayload.Rates
-            .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))
-            .Select(
-                r => new ExchangeRate(
-                    sourceCurrency: new Currency(r.CurrencyCode),
-                    targetCurrency: new Currency("CZK"),
-                    value: r.ExchangeRate / r.Amount))
-            .ToList();
+        // TODO: Improve error case handling
+        return exchangeRatesResult.Match(
+            currencies,
+            (wantedCurrencies, exchangeRatesPayload) =>
+            {
+                return exchangeRatesPayload.Rates
+                    .Where(r => wantedCurrencies.Any(c => c.Code == r.CurrencyCode))
+                    .Select(
+                        r => new ExchangeRate(
+                            sourceCurrency: new Currency(r.CurrencyCode),
+                            targetCurrency: new Currency("CZK"),
+                            value: r.ExchangeRate / r.Amount))
+                    .ToList();
+            },
+            (_, _) => new List<ExchangeRate>());
     }
 }
 
