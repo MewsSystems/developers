@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
+using ExchangeRateUpdater.Cnb;
 
 namespace ExchangeRateUpdater;
 
@@ -17,13 +15,10 @@ public class ExchangeRateProvider
     /// </summary>
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.cnb.cz/cnbapi/exrates/daily&lang=EN");
-        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
         using var httpClient = new HttpClient();
-        var response = httpClient.Send(request);
+        var cnbClient = new CnbClient(httpClient);
 
-        var ratesPayload = response.Content.ReadFromJsonAsync<RatesResponsePayload>().GetAwaiter().GetResult();
+        var ratesPayload = cnbClient.GetCurrentExchangeRates().GetAwaiter().GetResult();
 
         return ratesPayload.Rates
             .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))
@@ -35,29 +30,4 @@ public class ExchangeRateProvider
     }
 }
 
-public class RatesResponsePayload
-{
-    [JsonPropertyName("rates")]
-    public IReadOnlyCollection<Rate> Rates { get; init; }
-}
 
-public class Rate
-{
-    [JsonPropertyName("validFor")]
-    public DateTime ValidFor { get; init; }
-    
-    [JsonPropertyName("country")]
-    public string CountryName { get; init; }
-    
-    [JsonPropertyName("currency")]
-    public string CurrencyName { get; init; }
-    
-    [JsonPropertyName("amount")]
-    public int Amount { get; init; }
-    
-    [JsonPropertyName("currencyCode")]
-    public string CurrencyCode { get; init; }
-    
-    [JsonPropertyName("rate")]
-    public decimal ExchangeRate { get; init; }
-}
