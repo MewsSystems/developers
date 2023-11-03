@@ -45,5 +45,3 @@ public class ExchangeRateProvider
             (_, _) => new List<ExchangeRate>());
     }
 }
-
-

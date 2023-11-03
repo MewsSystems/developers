@@ -25,7 +25,7 @@ public class CurrencyRate
     [JsonPropertyName("currency")]
     [Required]
     public required string CurrencyName { get; init; } = null!;
-    
+
     [JsonPropertyName("amount")]
     [Required]
     public required int Amount { get; init; }
@@ -33,7 +33,7 @@ public class CurrencyRate
     [JsonPropertyName("currencyCode")]
     [Required]
     public required string CurrencyCode { get; init; } = null!;
-    
+
     [JsonPropertyName("rate")]
     [Required]
     public required decimal ExchangeRate { get; init; }

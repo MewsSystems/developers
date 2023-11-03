@@ -9,7 +9,7 @@ internal static partial class CnbClientLogging
 {
     [LoggerMessage(EventId = 9001, Level = LogLevel.Error, Message = "Received unexpected status code from CNB API: {StatusCode} {Payload}")]
     public static partial void UnexpectedStatusCode(this ILogger<CnbClient> logger, HttpStatusCode statusCode, string payload);
-    
+
     [LoggerMessage(EventId = 9002, Level = LogLevel.Error, Message = "Received invalid payload from CNB API: {Payload}")]
     public static partial void InvalidPayload(this ILogger<CnbClient> logger, string payload);
 }

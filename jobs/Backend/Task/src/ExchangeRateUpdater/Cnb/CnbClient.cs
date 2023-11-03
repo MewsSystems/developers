@@ -15,7 +15,7 @@ namespace ExchangeRateUpdater.Cnb;
 internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICnbClient
 {
     private static readonly MediaTypeWithQualityHeaderValue JsonMediaType = new("application/json");
-    
+
     // 💡 if this was _our_ API, I would made this configurable via `HttpClient.BaseUrl` to switch between test and production endpoints,
     //    however since this is completely 3rd party API, I don't expect it to change (and if it does, more things will break anyway)
     private static readonly Uri DailyExchangeRatesUri = new("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
@@ -35,7 +35,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
             var rawPayload = await response.Content
                 .ReadAsStringAsync()
                 .ConfigureAwait(false);
-            
+
             logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
             return new CnbError();
         }

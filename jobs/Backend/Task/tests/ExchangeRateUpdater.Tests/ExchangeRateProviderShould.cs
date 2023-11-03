@@ -13,7 +13,7 @@ public class ExchangeRateProviderShould : IDisposable
         _httpClient = new HttpClient();
         _cnbClient = new CnbClient(_httpClient, NullLogger<CnbClient>.Instance);
     }
-    
+
     [Fact]
     public async Task ReturnExchangeRates()
     {
@@ -25,11 +25,11 @@ public class ExchangeRateProviderShould : IDisposable
         var rate = Assert.Single(rates);
         Assert.Equal("EUR", rate.SourceCurrency.Code);
         Assert.Equal("CZK", rate.TargetCurrency.Code);
-        
+
         // let's expect that the exchange rate is positive (⊙_⊙;)
         Assert.True(rate.Value > 0);
     }
-    
+
     [Fact]
     public async Task NotReturnUnknownCurrency()
     {
