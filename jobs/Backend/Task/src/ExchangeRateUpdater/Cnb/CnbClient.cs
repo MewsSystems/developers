@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Cnb;
 
-internal class CnbClient(HttpClient httpClient)
+internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger)
 {
     private static readonly MediaTypeWithQualityHeaderValue JsonMediaType = new("application/json");
     
@@ -28,6 +30,18 @@ internal class CnbClient(HttpClient httpClient)
             .SendAsync(request)
             .ConfigureAwait(false);
 
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            var rawPayload = await response.Content
+                .ReadAsStringAsync()
+                .ConfigureAwait(false);
+
+            logger.LogError("Received unexpected status code from CNB API: {StatusCode} {Payload}", response.StatusCode, rawPayload);
+
+            // TODO: return failed result instead of throwing
+            throw new InvalidOperationException();
+        }
+
         var payload = await response.Content
             .ReadFromJsonAsync<CnbExchangeRatesDto>()
             .ConfigureAwait(false);
@@ -35,6 +49,12 @@ internal class CnbClient(HttpClient httpClient)
         // 💡 if this was _our_ API, I would trust contract and avoid validation
         if (!IsValid(payload))
         {
+            var rawPayload = await response.Content
+                .ReadAsStringAsync()
+                .ConfigureAwait(false);
+
+            logger.LogError("Received invalid payload from CNB API: {Payload}", rawPayload);
+
             // TODO: return failed result instead of throwing
             throw new InvalidOperationException();
         }

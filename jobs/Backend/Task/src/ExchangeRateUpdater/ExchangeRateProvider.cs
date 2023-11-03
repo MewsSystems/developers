@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using ExchangeRateUpdater.Cnb;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ExchangeRateUpdater;
 
@@ -16,7 +17,7 @@ public class ExchangeRateProvider
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
         using var httpClient = new HttpClient();
-        var cnbClient = new CnbClient(httpClient);
+        var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
 
         var ratesPayload = cnbClient.GetCurrentExchangeRates().GetAwaiter().GetResult();
 
