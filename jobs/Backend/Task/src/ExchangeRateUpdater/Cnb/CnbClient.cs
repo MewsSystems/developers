@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
@@ -9,6 +7,7 @@ using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MiniValidation;
 using W4k.Either;
 
 namespace ExchangeRateUpdater.Cnb;
@@ -65,11 +64,9 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
         {
             return false;
         }
-
-        var validationContext = new ValidationContext(payload);
-        var validationResults = new List<ValidationResult>();
-
+        
         // we don't really care about the results, we just want to know if the payload is valid overall
-        return Validator.TryValidateObject(payload, validationContext, validationResults, validateAllProperties: true);
+        // NB! `System.ComponentModel.DataAnnotations.Validator` does not support recursive validation 
+        return MiniValidator.TryValidate(payload, out _);
     }
 }

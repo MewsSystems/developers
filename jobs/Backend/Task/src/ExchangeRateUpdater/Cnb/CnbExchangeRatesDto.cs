@@ -16,25 +16,25 @@ public class CnbExchangeRate
 {
     [JsonPropertyName("validFor")]
     [Required]
-    public required DateTime ValidFor { get; init; }
+    public DateTime ValidFor { get; init; }
 
     [JsonPropertyName("country")]
     [Required]
-    public required string CountryName { get; init; } = null!;
+    public string CountryName { get; init; } = null!;
 
     [JsonPropertyName("currency")]
     [Required]
-    public required string CurrencyName { get; init; } = null!;
+    public string CurrencyName { get; init; } = null!;
 
     [JsonPropertyName("amount")]
     [Required]
-    public required int Amount { get; init; }
+    public int Amount { get; init; }
 
     [JsonPropertyName("currencyCode")]
     [Required]
-    public required string CurrencyCode { get; init; } = null!;
+    public string CurrencyCode { get; init; } = null!;
 
     [JsonPropertyName("rate")]
     [Required]
-    public required decimal ExchangeRate { get; init; }
+    public decimal ExchangeRate { get; init; }
 }
