@@ -1,25 +1,33 @@
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests;
 
 public class ExchangeRateProviderShould : IDisposable
 {
-    private readonly CnbClient _cnbClient;
     private readonly HttpClient _httpClient;
+    private readonly ExchangeRateProvider _sut;
 
     public ExchangeRateProviderShould()
     {
+        var options = Options.Create(
+            new ExchangeRateProviderOptions
+            {
+                CacheTtl = TimeSpan.FromMinutes(8)
+            });
+        
         _httpClient = new HttpClient();
-        _cnbClient = new CnbClient(_httpClient, NullLogger<CnbClient>.Instance);
+        CnbClient cnbClient = new(_httpClient, NullLogger<CnbClient>.Instance);
+
+        _sut = new ExchangeRateProvider(options, cnbClient);
     }
 
     [Fact]
     public async Task ReturnExchangeRates()
     {
         // act
-        var provider = new ExchangeRateProvider(_cnbClient);
-        var rates = await provider.GetExchangeRates(new[] { new Currency("EUR") }, CancellationToken.None);
+        var rates = await _sut.GetExchangeRates(new[] { new Currency("EUR") }, CancellationToken.None);
 
         // assert
         var rate = Assert.Single(rates);
@@ -34,8 +42,7 @@ public class ExchangeRateProviderShould : IDisposable
     public async Task NotReturnUnknownCurrency()
     {
         // act
-        var provider = new ExchangeRateProvider(_cnbClient);
-        var rates = await provider.GetExchangeRates(new[] { new Currency("SPL") }, CancellationToken.None);
+        var rates = await _sut.GetExchangeRates(new[] { new Currency("SPL") }, CancellationToken.None);
 
         // assert
         // SPL – Seborga Luigino (Principality of Seborga) is not expected to be supported by the CNB
@@ -45,5 +52,6 @@ public class ExchangeRateProviderShould : IDisposable
     public void Dispose()
     {
         _httpClient.Dispose();
+        _sut.Dispose();
     }
 }

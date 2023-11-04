@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater;
 
@@ -11,13 +12,13 @@ public sealed class ExchangeRateProvider : IDisposable
 {
     private readonly CnbClientCacheProxy _cnbClientCache;
 
-    public ExchangeRateProvider(ICnbClient cnbClient)
+    public ExchangeRateProvider(IOptions<ExchangeRateProviderOptions> options, ICnbClient cnbClient)
     {
         // 💡 this check is bit silly since we control the creation of provider, let's pretend it's publicly shipped app
         //    (also let's make analyzer happy - public types should check their arguments after all)
         ArgumentNullException.ThrowIfNull(cnbClient);
 
-        _cnbClientCache = new CnbClientCacheProxy(cnbClient, TimeSpan.FromMinutes(5));
+        _cnbClientCache = new CnbClientCacheProxy(cnbClient, options.Value.CacheTtl);
     }
 
     /// <summary>

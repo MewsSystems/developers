@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater;
 
@@ -28,13 +29,19 @@ public static class Program
     public static async Task Main(string[] args)
     {
         Console.CancelKeyPress += (_, _) => Cts.Cancel();
+
+        var options = Options.Create(
+            new ExchangeRateProviderOptions
+            {
+                CacheTtl = TimeSpan.FromMinutes(8)
+            });
         
         using var httpClient = new HttpClient();
         var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
 
         try
         {
-            var provider = new ExchangeRateProvider(cnbClient);
+            var provider = new ExchangeRateProvider(options, cnbClient);
             var rates = await provider.GetExchangeRates(Currencies, Cts.Token);
 
             Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
