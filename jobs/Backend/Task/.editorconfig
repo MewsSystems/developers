@@ -366,3 +366,6 @@ dotnet_naming_style.s_camelcase.required_suffix =
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
 
+# Suppression
+
+dotnet_diagnostic.CA1848.severity = none # CA1848:Use the LoggerMessage delegates
