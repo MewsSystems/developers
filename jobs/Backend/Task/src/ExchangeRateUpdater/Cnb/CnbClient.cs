@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using W4k.Either;
@@ -20,20 +21,20 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
     //    however since this is completely 3rd party API, I don't expect it to change (and if it does, more things will break anyway)
     private static readonly Uri DailyExchangeRatesUri = new("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
 
-    public async Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates()
+    public async Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates(CancellationToken cancellationToken)
     {
         // 💡 since we do HTTP GET, we could omit disposing of the request message since there's no payload, but let's keep analyzer happy
         using var request = new HttpRequestMessage(HttpMethod.Get, DailyExchangeRatesUri);
         request.Headers.Accept.Add(JsonMediaType);
 
         var response = await httpClient
-            .SendAsync(request)
+            .SendAsync(request, cancellationToken)
             .ConfigureAwait(false);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
             var rawPayload = await response.Content
-                .ReadAsStringAsync()
+                .ReadAsStringAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
@@ -41,14 +42,14 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
         }
 
         var payload = await response.Content
-            .ReadFromJsonAsync<CnbExchangeRatesDto>()
+            .ReadFromJsonAsync<CnbExchangeRatesDto>(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         // 💡 if this was _our_ API, I would trust contract and avoid validation
         if (!IsValid(payload))
         {
             var rawPayload = await response.Content
-                .ReadAsStringAsync()
+                .ReadAsStringAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             logger.InvalidPayload(rawPayload);

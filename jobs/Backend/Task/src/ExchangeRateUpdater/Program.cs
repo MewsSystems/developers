@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -9,6 +10,8 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
+    private static readonly CancellationTokenSource Cts = new();
+
     private static readonly IEnumerable<Currency> Currencies = new[]
     {
         new Currency("USD"),
@@ -24,13 +27,15 @@ public static class Program
 
     public static async Task Main(string[] args)
     {
+        Console.CancelKeyPress += (_, _) => Cts.Cancel();
+        
         using var httpClient = new HttpClient();
         var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
 
         try
         {
             var provider = new ExchangeRateProvider(cnbClient);
-            var rates = await provider.GetExchangeRates(Currencies);
+            var rates = await provider.GetExchangeRates(Currencies, Cts.Token);
 
             Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
             foreach (var rate in rates)

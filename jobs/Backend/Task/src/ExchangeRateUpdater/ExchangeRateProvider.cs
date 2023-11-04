@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 
@@ -24,9 +25,11 @@ public class ExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<IReadOnlyCollection<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IReadOnlyCollection<ExchangeRate>> GetExchangeRates(
+        IEnumerable<Currency> currencies,
+        CancellationToken cancellationToken)
     {
-        var exchangeRatesResult = await _cnbClient.GetCurrentExchangeRates();
+        var exchangeRatesResult = await _cnbClient.GetCurrentExchangeRates(cancellationToken);
 
         // TODO: Improve error case handling
         return exchangeRatesResult.Match(

@@ -19,7 +19,7 @@ public class ExchangeRateProviderShould : IDisposable
     {
         // act
         var provider = new ExchangeRateProvider(_cnbClient);
-        var rates = await provider.GetExchangeRates(new[] { new Currency("EUR") });
+        var rates = await provider.GetExchangeRates(new[] { new Currency("EUR") }, CancellationToken.None);
 
         // assert
         var rate = Assert.Single(rates);
@@ -35,7 +35,7 @@ public class ExchangeRateProviderShould : IDisposable
     {
         // act
         var provider = new ExchangeRateProvider(_cnbClient);
-        var rates = await provider.GetExchangeRates(new[] { new Currency("SPL") });
+        var rates = await provider.GetExchangeRates(new[] { new Currency("SPL") }, CancellationToken.None);
 
         // assert
         // SPL – Seborga Luigino (Principality of Seborga) is not expected to be supported by the CNB
