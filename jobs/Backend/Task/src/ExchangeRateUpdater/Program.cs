@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +12,7 @@ public static class Program
 {
     private static readonly CancellationTokenSource Cts = new();
 
-    private static readonly IEnumerable<Currency> Currencies = new[]
-    {
+    private static readonly Currency[] Currencies = new[] {
         new Currency("USD"),
         new Currency("EUR"),
         new Currency("CZK"),

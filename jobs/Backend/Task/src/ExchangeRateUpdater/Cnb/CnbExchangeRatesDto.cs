@@ -9,10 +9,10 @@ public class CnbExchangeRatesDto
 {
     [JsonPropertyName("rates")]
     [Required]
-    public required IReadOnlyCollection<CurrencyRate> Rates { get; init; } = null!;
+    public required IReadOnlyCollection<CnbExchangeRate> Rates { get; init; } = null!;
 }
 
-public class CurrencyRate
+public class CnbExchangeRate
 {
     [JsonPropertyName("validFor")]
     [Required]

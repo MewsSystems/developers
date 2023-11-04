@@ -11,6 +11,8 @@ namespace ExchangeRateUpdater;
 
 public sealed class ExchangeRateProvider : IDisposable
 {
+    private static readonly Currency DefaultTargetCurrency = new("CZK");
+    
     private readonly CnbClientCacheProxy _cnbClientCache;
 
     public ExchangeRateProvider(IOptions<ExchangeRateProviderOptions> options, ICnbClient cnbClient)
@@ -29,26 +31,42 @@ public sealed class ExchangeRateProvider : IDisposable
     /// some of the currencies, ignore them.
     /// </summary>
     public async Task<Either<IReadOnlyCollection<ExchangeRate>, Error>> GetExchangeRates(
-        IEnumerable<Currency> currencies,
+        IReadOnlyCollection<Currency> currencies,
         CancellationToken cancellationToken)
     {
         var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
 
-        return exchangeRatesResult.Match<IEnumerable<Currency>, Either<IReadOnlyCollection<ExchangeRate>, Error>>(
+        return exchangeRatesResult.Match<IReadOnlyCollection<Currency>, Either<IReadOnlyCollection<ExchangeRate>, Error>>(
             currencies,
-            (wantedCurrencies, exchangeRatesPayload) =>
-            {
-                return exchangeRatesPayload.Rates
-                    .Where(r => wantedCurrencies.Any(c => c.Code == r.CurrencyCode))
-                    .Select(
-                        r => new ExchangeRate(
-                            sourceCurrency: new Currency(r.CurrencyCode),
-                            targetCurrency: new Currency("CZK"),
-                            value: r.ExchangeRate / r.Amount))
-                    .ToList();
-            },
+            (c, r) => PickRequestedExchangeRates(c, r),
             (_, _) => new Error { Message = "Failed to fetch exchange rates" });
     }
+
+    private static List<ExchangeRate> PickRequestedExchangeRates(
+        IReadOnlyCollection<Currency> currencies,
+        CnbExchangeRatesDto exchangeRates)
+    {
+        var rates = new List<ExchangeRate>(currencies.Count);
+        foreach (var rate in exchangeRates.Rates)
+        {
+            // intentionally iterating over `currencies` over and over - iterating trough short collection is faster than hash lookup
+            // -> observe use, optimize accordingly
+            if (currencies.Any(c => c.Code == rate.CurrencyCode))
+            {
+                rates.Add(MapToDomain(rate));
+            }
+        }
+
+        return rates;
+    }
+    
+    // 💡 mapping could be moved to separate (static) class, for simplicity I kept it here as this is only use so far
+    //   (definitely no space for AutoMapper *wink*)
+    private static ExchangeRate MapToDomain(CnbExchangeRate rate) =>
+        new(
+            sourceCurrency: new Currency(rate.CurrencyCode),
+            targetCurrency: DefaultTargetCurrency,
+            value: rate.ExchangeRate / rate.Amount);
 
     public void Dispose()
     {
