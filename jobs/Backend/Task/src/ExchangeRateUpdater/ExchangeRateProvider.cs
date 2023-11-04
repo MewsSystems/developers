@@ -30,16 +30,16 @@ public sealed class ExchangeRateProvider : IDisposable
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<Either<IReadOnlyCollection<ExchangeRate>, Error>> GetExchangeRates(
+    public async Task<Either<IReadOnlyCollection<ExchangeRate>, AppError>> GetExchangeRates(
         IReadOnlyCollection<Currency> currencies,
         CancellationToken cancellationToken)
     {
         var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
 
-        return exchangeRatesResult.Match<IReadOnlyCollection<Currency>, Either<IReadOnlyCollection<ExchangeRate>, Error>>(
+        return exchangeRatesResult.Match<IReadOnlyCollection<Currency>, Either<IReadOnlyCollection<ExchangeRate>, AppError>>(
             currencies,
             (c, r) => PickRequestedExchangeRates(c, r),
-            (_, _) => new Error { Message = "Failed to fetch exchange rates" });
+            (_, _) => new AppError { Message = "Failed to fetch exchange rates" });
     }
 
     private static List<ExchangeRate> PickRequestedExchangeRates(

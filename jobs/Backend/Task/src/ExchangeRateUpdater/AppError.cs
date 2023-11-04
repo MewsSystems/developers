@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater;
 
-public class Error
+public class AppError
 {
     public required string Message { get; init; } = null!;
 }
