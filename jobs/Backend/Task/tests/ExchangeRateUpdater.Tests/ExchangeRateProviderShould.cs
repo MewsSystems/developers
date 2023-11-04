@@ -27,9 +27,11 @@ public class ExchangeRateProviderShould : IDisposable
     public async Task ReturnExchangeRates()
     {
         // act
-        var rates = await _sut.GetExchangeRates(new[] { new Currency("EUR") }, CancellationToken.None);
+        var ratesResult = await _sut.GetExchangeRates(new[] { new Currency("EUR") }, CancellationToken.None);
 
         // assert
+        Assert.True(ratesResult.TryPick(out IReadOnlyCollection<ExchangeRate>? rates));
+
         var rate = Assert.Single(rates);
         Assert.Equal("EUR", rate.SourceCurrency.Code);
         Assert.Equal("CZK", rate.TargetCurrency.Code);
@@ -42,9 +44,11 @@ public class ExchangeRateProviderShould : IDisposable
     public async Task NotReturnUnknownCurrency()
     {
         // act
-        var rates = await _sut.GetExchangeRates(new[] { new Currency("SPL") }, CancellationToken.None);
+        var ratesResult = await _sut.GetExchangeRates(new[] { new Currency("SPL") }, CancellationToken.None);
 
         // assert
+        Assert.True(ratesResult.TryPick(out IReadOnlyCollection<ExchangeRate>? rates));
+        
         // SPL – Seborga Luigino (Principality of Seborga) is not expected to be supported by the CNB
         Assert.Empty(rates);
     }

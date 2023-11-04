@@ -42,13 +42,17 @@ public static class Program
         try
         {
             var provider = new ExchangeRateProvider(options, cnbClient);
-            var rates = await provider.GetExchangeRates(Currencies, Cts.Token);
-
-            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-            foreach (var rate in rates)
-            {
-                Console.WriteLine(rate.ToString());
-            }
+            var ratesResult = await provider.GetExchangeRates(Currencies, Cts.Token);
+            ratesResult.Switch(
+                rates =>
+                {
+                    Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
+                },
+                error => Console.WriteLine(error.Message));
         }
         catch (Exception e)
         {

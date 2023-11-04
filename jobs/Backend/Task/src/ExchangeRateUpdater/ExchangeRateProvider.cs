@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Options;
+using W4k.Either;
 
 namespace ExchangeRateUpdater;
 
@@ -27,14 +28,13 @@ public sealed class ExchangeRateProvider : IDisposable
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<IReadOnlyCollection<ExchangeRate>> GetExchangeRates(
+    public async Task<Either<IReadOnlyCollection<ExchangeRate>, Error>> GetExchangeRates(
         IEnumerable<Currency> currencies,
         CancellationToken cancellationToken)
     {
         var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
 
-        // TODO: Improve error case handling
-        return exchangeRatesResult.Match(
+        return exchangeRatesResult.Match<IEnumerable<Currency>, Either<IReadOnlyCollection<ExchangeRate>, Error>>(
             currencies,
             (wantedCurrencies, exchangeRatesPayload) =>
             {
@@ -47,7 +47,7 @@ public sealed class ExchangeRateProvider : IDisposable
                             value: r.ExchangeRate / r.Amount))
                     .ToList();
             },
-            (_, _) => new List<ExchangeRate>());
+            (_, _) => new Error { Message = "Failed to fetch exchange rates" });
     }
 
     public void Dispose()
