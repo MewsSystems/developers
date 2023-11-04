@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Http;
-using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
@@ -32,6 +32,13 @@ public static class Program
     {
         Console.CancelKeyPress += (_, _) => Cts.Cancel();
 
+        var loggerFactory = LoggerFactory.Create(
+            builder => builder
+                .SetMinimumLevel(LogLevel.Debug)
+                .AddFilter("Microsoft", LogLevel.Warning)
+                .AddFilter("System", LogLevel.Warning)
+                .AddConsole());
+
         var options = Options.Create(
             new ExchangeRateProviderOptions
             {
@@ -39,11 +46,11 @@ public static class Program
             });
 
         using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
-        var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
+        var cnbClient = new CnbClient(httpClient, loggerFactory.CreateLogger<CnbClient>());
 
         try
         {
-            var provider = new ExchangeRateProvider(options, cnbClient);
+            var provider = new ExchangeRateProvider(options, cnbClient, loggerFactory.CreateLogger<ExchangeRateProvider>());
             var ratesResult = await provider.GetExchangeRates(Currencies, Cts.Token);
             ratesResult.Switch(
                 rates =>

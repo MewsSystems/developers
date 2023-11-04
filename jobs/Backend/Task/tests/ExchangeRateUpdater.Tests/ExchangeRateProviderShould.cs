@@ -20,7 +20,7 @@ public class ExchangeRateProviderShould : IDisposable
         _httpClient = new HttpClient();
         CnbClient cnbClient = new(_httpClient, NullLogger<CnbClient>.Instance);
 
-        _sut = new ExchangeRateProvider(options, cnbClient);
+        _sut = new ExchangeRateProvider(options, cnbClient, NullLogger<ExchangeRateProvider>.Instance);
     }
 
     [Fact]
