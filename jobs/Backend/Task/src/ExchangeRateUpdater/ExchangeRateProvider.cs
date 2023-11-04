@@ -7,16 +7,17 @@ using ExchangeRateUpdater.Cnb;
 
 namespace ExchangeRateUpdater;
 
-public class ExchangeRateProvider
+public sealed class ExchangeRateProvider : IDisposable
 {
-    private readonly ICnbClient _cnbClient;
+    private readonly CnbClientCacheProxy _cnbClientCache;
 
     public ExchangeRateProvider(ICnbClient cnbClient)
     {
         // 💡 this check is bit silly since we control the creation of provider, let's pretend it's publicly shipped app
         //    (also let's make analyzer happy - public types should check their arguments after all)
         ArgumentNullException.ThrowIfNull(cnbClient);
-        _cnbClient = cnbClient;
+
+        _cnbClientCache = new CnbClientCacheProxy(cnbClient, TimeSpan.FromMinutes(5));
     }
 
     /// <summary>
@@ -29,7 +30,7 @@ public class ExchangeRateProvider
         IEnumerable<Currency> currencies,
         CancellationToken cancellationToken)
     {
-        var exchangeRatesResult = await _cnbClient.GetCurrentExchangeRates(cancellationToken);
+        var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
 
         // TODO: Improve error case handling
         return exchangeRatesResult.Match(
@@ -46,5 +47,10 @@ public class ExchangeRateProvider
                     .ToList();
             },
             (_, _) => new List<ExchangeRate>());
+    }
+
+    public void Dispose()
+    {
+        _cnbClientCache.Dispose();
     }
 }
