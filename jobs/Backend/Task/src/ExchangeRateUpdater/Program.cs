@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
+using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Retry;
 
 namespace ExchangeRateUpdater;
 
@@ -33,8 +37,8 @@ public static class Program
             {
                 CacheTtl = TimeSpan.FromMinutes(8)
             });
-        
-        using var httpClient = new HttpClient();
+
+        using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
         var cnbClient = new CnbClient(httpClient, NullLogger<CnbClient>.Instance);
 
         try
@@ -58,5 +62,36 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    private static HttpClient BuildHttpClient(TimeSpan requestTimeout)
+    {
+        var resiliencePipeline = new ResiliencePipelineBuilder<HttpResponseMessage>()
+            .AddRetry(
+                new RetryStrategyOptions<HttpResponseMessage>
+                {
+                    BackoffType = DelayBackoffType.Exponential,
+                    MaxRetryAttempts = 3,
+                    Delay = TimeSpan.FromSeconds(2),
+                    UseJitter = true,
+                    ShouldHandle = new PredicateBuilder<HttpResponseMessage>()
+                        .HandleResult(
+                            response =>
+                                response.StatusCode == HttpStatusCode.RequestTimeout
+                                || response.StatusCode == HttpStatusCode.TooManyRequests
+                                || response.StatusCode >= HttpStatusCode.InternalServerError),
+                })
+            .AddConcurrencyLimiter(32)
+            .Build();
+
+        var policyHttpMessageHandler = new PolicyHttpMessageHandler(resiliencePipeline.AsAsyncPolicy())
+        {
+            InnerHandler = new HttpClientHandler() 
+        };
+
+        return new HttpClient(policyHttpMessageHandler)
+        {
+            Timeout = requestTimeout
+        };
     }
 }
