@@ -7,6 +7,8 @@ using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 using Polly;
 using Polly.Retry;
 
@@ -32,25 +34,13 @@ public static class Program
     {
         Console.CancelKeyPress += (_, _) => Cts.Cancel();
 
-        var loggerFactory = LoggerFactory.Create(
-            builder => builder
-                .SetMinimumLevel(LogLevel.Debug)
-                .AddFilter("Microsoft", LogLevel.Warning)
-                .AddFilter("System", LogLevel.Warning)
-                .AddConsole());
-
-        var options = Options.Create(
-            new ExchangeRateProviderOptions
-            {
-                CacheTtl = TimeSpan.FromMinutes(8)
-            });
-
-        using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
-        var cnbClient = new CnbClient(httpClient, loggerFactory.CreateLogger<CnbClient>());
+        using var openTelemetry = BuildOTel();
+        var loggerFactory = BuildLoggerFactory();
 
         try
         {
-            var provider = new ExchangeRateProvider(options, cnbClient, loggerFactory.CreateLogger<ExchangeRateProvider>());
+            using var provider = BuildExchangeRateProvider(loggerFactory);
+
             var ratesResult = await provider.GetExchangeRates(Currencies, Cts.Token);
             ratesResult.Switch(
                 rates =>
@@ -70,6 +60,21 @@ public static class Program
 
         Console.ReadLine();
     }
+
+    private static TracerProvider BuildOTel() =>
+        Sdk.CreateTracerProviderBuilder()
+            .AddHttpClientInstrumentation()
+            .SetSampler(new AlwaysOnSampler())
+            .AddConsoleExporter()
+            .Build();
+
+    private static ILoggerFactory BuildLoggerFactory() =>
+        LoggerFactory.Create(
+            builder => builder
+                .SetMinimumLevel(LogLevel.Debug)
+                .AddFilter("Microsoft", LogLevel.Warning)
+                .AddFilter("System", LogLevel.Warning)
+                .AddConsole());
 
     private static HttpClient BuildHttpClient(TimeSpan requestTimeout)
     {
@@ -100,5 +105,20 @@ public static class Program
         {
             Timeout = requestTimeout
         };
+    }
+
+    private static ExchangeRateProvider BuildExchangeRateProvider(ILoggerFactory loggerFactory)
+    {
+        // 💡 in application using host builder, all this would be configured and resolved by framework
+        var options = Options.Create(
+            new ExchangeRateProviderOptions
+            {
+                CacheTtl = TimeSpan.FromMinutes(8)
+            });
+
+        using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
+        var cnbClient = new CnbClient(httpClient, loggerFactory.CreateLogger<CnbClient>());
+        
+        return new ExchangeRateProvider(options, cnbClient, loggerFactory.CreateLogger<ExchangeRateProvider>());
     }
 }
