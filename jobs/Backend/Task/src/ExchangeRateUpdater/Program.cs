@@ -39,7 +39,8 @@ public static class Program
 
         try
         {
-            using var provider = BuildExchangeRateProvider(loggerFactory);
+            using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
+            using var provider = BuildExchangeRateProvider(httpClient, loggerFactory);
 
             var ratesResult = await provider.GetExchangeRates(Currencies, Cts.Token);
             ratesResult.Switch(
@@ -107,7 +108,7 @@ public static class Program
         };
     }
 
-    private static ExchangeRateProvider BuildExchangeRateProvider(ILoggerFactory loggerFactory)
+    private static ExchangeRateProvider BuildExchangeRateProvider(HttpClient httpClient, ILoggerFactory loggerFactory)
     {
         // 💡 in application using host builder, all this would be configured and resolved by framework
         var options = Options.Create(
@@ -116,7 +117,6 @@ public static class Program
                 CacheTtl = TimeSpan.FromMinutes(8)
             });
 
-        using var httpClient = BuildHttpClient(TimeSpan.FromSeconds(8));
         var cnbClient = new CnbClient(httpClient, loggerFactory.CreateLogger<CnbClient>());
         
         return new ExchangeRateProvider(options, cnbClient, loggerFactory.CreateLogger<ExchangeRateProvider>());
