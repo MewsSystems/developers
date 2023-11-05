@@ -6,7 +6,7 @@ namespace ExchangeRateUpdater.Tests;
 [Trait("Category", "Unit")]
 public class ExchangeRateTransformerShould
 {
-    private static readonly CnbExchangeRate[] ExchangeRates = new[]
+    private static readonly List<CnbExchangeRate> ExchangeRates = new()
     {
         new CnbExchangeRate
         {
@@ -45,7 +45,7 @@ public class ExchangeRateTransformerShould
             ExchangeRate = 6.43m
         },
     };
-    
+
     [Theory]
     [MemberData(nameof(GenerateX))]
     public void ReturnOnlySelectedCurrencies(string[] currencyCodes, int expectedCount)
@@ -56,16 +56,16 @@ public class ExchangeRateTransformerShould
         {
             Rates = ExchangeRates
         };
-        
+
         var transformer = new ExchangeRateTransformer(NullLogger.Instance);
-        
+
         // act
         var exchangeRates = transformer.GetExchangeRatesForCurrencies(currencies, exchangeRatesDto);
-        
+
         // assert
         Assert.Equal(expectedCount, exchangeRates.Count);
         Assert.All(
-            exchangeRates, 
+            exchangeRates,
             actual => Assert.Contains(actual.SourceCurrency.Code, currencyCodes));
     }
 
@@ -80,14 +80,14 @@ public class ExchangeRateTransformerShould
         };
 
         var transformer = new ExchangeRateTransformer(NullLogger.Instance);
-        
+
         // act
         var exchangeRates = transformer.GetExchangeRatesForCurrencies(currencies, exchangeRatesDto);
-        
+
         // assert
         var eur = exchangeRates.First(r => r.SourceCurrency.Code == "EUR");
         Assert.Equal(24.41m, eur.Value);
-        
+
         var huf = exchangeRates.First(r => r.SourceCurrency.Code == "HUF");
         Assert.Equal(0.0643m, huf.Value);
     }
@@ -103,13 +103,13 @@ public class ExchangeRateTransformerShould
         };
 
         var transformer = new ExchangeRateTransformer(NullLogger.Instance);
-        
+
         // act
         var exchangeRates = transformer.GetExchangeRatesForCurrencies(currencies, exchangeRatesDto);
-        
+
         // assert
         Assert.All(
-            exchangeRates, 
+            exchangeRates,
             actual => Assert.Equal("CZK", actual.TargetCurrency.Code));
     }
 

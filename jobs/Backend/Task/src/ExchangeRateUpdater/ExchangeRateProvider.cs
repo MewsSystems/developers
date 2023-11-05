@@ -59,6 +59,8 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
 {
     private static readonly Currency DefaultTargetCurrency = new("CZK");
 
+    // 💡 once this gets to hot-path and/or we would want to squeeze every bit of performance, there are few other things we could do...
+    //    see benchmarks for more details ( •_•)>⌐■-■ (though, other approaches are rather memory-focused)
     public List<ExchangeRate> GetExchangeRatesForCurrencies(IReadOnlyCollection<Currency> currencies, CnbExchangeRatesDto exchangeRates)
     {
         var ratesByCurrency = exchangeRates.Rates.ToDictionary(r => r.CurrencyCode, StringComparer.Ordinal);
@@ -78,12 +80,12 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
 
         return rates;
     }
-    
+
     // 💡 mapping could be moved to separate (static) class, for simplicity I kept it here as this is only use so far
     //   (definitely no space for AutoMapper *wink*)
     private static ExchangeRate MapToDomain(CnbExchangeRate rate) =>
         new(
             sourceCurrency: new Currency(rate.CurrencyCode),
             targetCurrency: DefaultTargetCurrency,
-            value: rate.ExchangeRate / rate.Amount);    
+            value: rate.ExchangeRate / rate.Amount);
 }
