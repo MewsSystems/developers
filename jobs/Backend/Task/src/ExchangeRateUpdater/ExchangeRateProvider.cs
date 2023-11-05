@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
@@ -11,8 +12,6 @@ namespace ExchangeRateUpdater;
 
 public sealed class ExchangeRateProvider : IDisposable
 {
-    private static readonly Currency DefaultTargetCurrency = new("CZK");
-
     private readonly CnbClientCacheProxy _cnbClientCache;
     private readonly ILogger<ExchangeRateProvider> _logger;
 
@@ -41,49 +40,49 @@ public sealed class ExchangeRateProvider : IDisposable
         return exchangeRatesResult.Match<IReadOnlyCollection<Currency>, Either<IReadOnlyCollection<ExchangeRate>, AppError>>(
             currencies,
             (c, r) => PickRequestedExchangeRates(c, r),
-            (_, _) => new AppError { Message = "Failed to fetch exchange rates" });
+            (_, _) => new AppError("Failed to fetch exchange rates"));
     }
 
+    private List<ExchangeRate> PickRequestedExchangeRates(
+        IReadOnlyCollection<Currency> expectedCurrencies,
+        CnbExchangeRatesDto exchangeRates) =>
+        new ExchangeRateTransformer(_logger).GetExchangeRatesForCurrencies(expectedCurrencies, exchangeRates);
+
+    public void Dispose()
+    {
+        _cnbClientCache.Dispose();
+    }
+}
+
+internal readonly ref struct ExchangeRateTransformer(ILogger logger)
+{
+    private static readonly Currency DefaultTargetCurrency = new("CZK");
+
+    public List<ExchangeRate> GetExchangeRatesForCurrencies(IReadOnlyCollection<Currency> currencies, CnbExchangeRatesDto exchangeRates)
+    {
+        var ratesByCurrency = exchangeRates.Rates.ToDictionary(r => r.CurrencyCode, StringComparer.Ordinal);
+
+        var rates = new List<ExchangeRate>(currencies.Count);
+        foreach (var expectedCurrency in currencies)
+        {
+            if (ratesByCurrency.TryGetValue(expectedCurrency.Code, out var exchangeRate))
+            {
+                rates.Add(MapToDomain(exchangeRate));
+            }
+            else
+            {
+                logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", expectedCurrency.Code);
+            }
+        }
+
+        return rates;
+    }
+    
     // 💡 mapping could be moved to separate (static) class, for simplicity I kept it here as this is only use so far
     //   (definitely no space for AutoMapper *wink*)
     private static ExchangeRate MapToDomain(CnbExchangeRate rate) =>
         new(
             sourceCurrency: new Currency(rate.CurrencyCode),
             targetCurrency: DefaultTargetCurrency,
-            value: rate.ExchangeRate / rate.Amount);
-
-    private List<ExchangeRate> PickRequestedExchangeRates(
-        IReadOnlyCollection<Currency> expectedCurrencies,
-        CnbExchangeRatesDto exchangeRates)
-    {
-        var rates = new List<ExchangeRate>(expectedCurrencies.Count);
-
-        foreach (var currency in expectedCurrencies)
-        {
-            var currencyFound = false;
-            
-            // intentionally iterating over exchange rates over and over - iterating trough short collection is faster than hash lookup
-            // -> observe use, optimize accordingly
-            foreach (var exchangeRate in exchangeRates.Rates)
-            {
-                if (exchangeRate.CurrencyCode == currency.Code)
-                {
-                    currencyFound = true;
-                    rates.Add(MapToDomain(exchangeRate));
-                }
-            }
-            
-            if (!currencyFound)
-            {
-                _logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", currency.Code);
-            }
-        }
-        
-        return rates;
-    }
-
-    public void Dispose()
-    {
-        _cnbClientCache.Dispose();
-    }
+            value: rate.ExchangeRate / rate.Amount);    
 }
