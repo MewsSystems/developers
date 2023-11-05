@@ -25,6 +25,11 @@ public sealed class ExchangeRateProvider : IDisposable
         _logger = logger;
     }
 
+    public void Dispose()
+    {
+        _cnbClientCache.Dispose();
+    }
+
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
     /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -37,21 +42,17 @@ public sealed class ExchangeRateProvider : IDisposable
     {
         var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
 
-        return exchangeRatesResult.Match<IReadOnlyCollection<Currency>, Either<IReadOnlyCollection<ExchangeRate>, AppError>>(
-            currencies,
-            (c, r) => PickRequestedExchangeRates(c, r),
-            (_, _) => new AppError("Failed to fetch exchange rates"));
+        return exchangeRatesResult.Match(
+            (Currencies: currencies, Logger: _logger),
+            static (state, rates) => PickExchangeRates(rates, state.Currencies, state.Logger),
+            static (_, _) => new AppError("Failed to fetch exchange rates"));
     }
 
-    private List<ExchangeRate> PickRequestedExchangeRates(
+    private static Either<IReadOnlyCollection<ExchangeRate>, AppError> PickExchangeRates(
+        CnbExchangeRatesDto exchangeRates,
         IReadOnlyCollection<Currency> expectedCurrencies,
-        CnbExchangeRatesDto exchangeRates) =>
-        new ExchangeRateTransformer(_logger).GetExchangeRatesForCurrencies(expectedCurrencies, exchangeRates);
-
-    public void Dispose()
-    {
-        _cnbClientCache.Dispose();
-    }
+        ILogger logger) =>
+        new ExchangeRateTransformer(logger).GetExchangeRatesForCurrencies(expectedCurrencies, exchangeRates);
 }
 
 internal readonly ref struct ExchangeRateTransformer(ILogger logger)

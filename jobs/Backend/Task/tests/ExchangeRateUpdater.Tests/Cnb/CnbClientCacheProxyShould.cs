@@ -90,8 +90,8 @@ public class CnbClientCacheProxyShould
 
         public Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates(CancellationToken cancellationToken)
         {
-            ++_callCount;
-            var result = getCallback(_callCount);
+            var callCount = Interlocked.Increment(ref _callCount);
+            var result = getCallback(callCount);
 
             return Task.FromResult(result);
         }

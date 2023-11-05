@@ -6,7 +6,7 @@ using W4k.Either;
 
 namespace ExchangeRateUpdater.Cnb;
 
-// 💡 intentionally not using built-in `MemoryCache` or any other caching library, this is good enough without external dependencies
+// 💡 intentionally not using built-in `MemoryCache` or any other caching library, this should be good enough & w/o external dependencies
 internal sealed class CnbClientCacheProxy(ICnbClient cnbClient, TimeSpan ttl) : IDisposable
 {
     private readonly SemaphoreSlim _lock = new(1, 1);
