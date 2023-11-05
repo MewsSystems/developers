@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests;
 
+[Trait("Category", "Integration")]
 public class ExchangeRateProviderShould : IDisposable
 {
     private readonly HttpClient _httpClient;
@@ -24,7 +25,6 @@ public class ExchangeRateProviderShould : IDisposable
     }
 
     [Fact]
-    [Trait("Category", "Integration")]
     public async Task ReturnExchangeRates()
     {
         // act
@@ -42,7 +42,6 @@ public class ExchangeRateProviderShould : IDisposable
     }
 
     [Fact]
-    [Trait("Category", "Integration")]
     public async Task NotReturnUnknownCurrency()
     {
         // act
