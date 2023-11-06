@@ -3,6 +3,7 @@ root = true
 # All files
 [*]
 indent_style = space
+trim_trailing_whitespace = true
 
 # Xml files
 [*.xml]
@@ -24,9 +25,6 @@ tab_width = 4
 # New line preferences
 end_of_line = crlf
 insert_final_newline = false
-
-# Trim trailing whitespace
-trim_trailing_whitespace = true
 
 #### .NET Coding Conventions ####
 [*.{cs,vb}]

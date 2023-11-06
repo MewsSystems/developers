@@ -9,7 +9,7 @@ public class CnbExchangeRatesDto
 {
     [JsonPropertyName("rates")]
     [Required]
-    public IReadOnlyCollection<CnbExchangeRate> Rates { get; init; } = null!;
+    public IReadOnlyList<CnbExchangeRate> Rates { get; init; } = null!;
 }
 
 public class CnbExchangeRate

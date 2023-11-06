@@ -17,9 +17,9 @@ public sealed class ExchangeRateProvider : IDisposable
 
     public ExchangeRateProvider(IOptions<ExchangeRateProviderOptions> options, ICnbClient cnbClient, ILogger<ExchangeRateProvider> logger)
     {
-        // 💡 this check is bit silly since we control the creation of provider, let's pretend it's publicly shipped app
-        //    (also let's make analyzer happy - public types should check their arguments after all)
+        // 💡 this check is bit silly since we control the creation of provider, but public type is public type ¯\_(ツ)_/¯
         ArgumentNullException.ThrowIfNull(cnbClient);
+        ArgumentNullException.ThrowIfNull(logger);
 
         _cnbClientCache = new CnbClientCacheProxy(cnbClient, options.Value.CacheTtl);
         _logger = logger;

@@ -10,9 +10,14 @@ namespace ExchangeRateUpdater.Cnb;
 internal sealed class CnbClientCacheProxy(ICnbClient cnbClient, TimeSpan ttl) : IDisposable
 {
     private readonly SemaphoreSlim _lock = new(1, 1);
-    
+
     private CnbExchangeRatesDto? _cachedExchangeRates;
     private DateTime _cachedExchangeRatesTimestamp = DateTime.MinValue;
+
+    public void Dispose()
+    {
+        _lock.Dispose();
+    }
 
     public async ValueTask<Either<CnbExchangeRatesDto, CnbError>> GetExchangeRates(CancellationToken cancellationToken)
     {
@@ -28,9 +33,9 @@ internal sealed class CnbClientCacheProxy(ICnbClient cnbClient, TimeSpan ttl) : 
             {
                 return cachedExchangeRates;
             }
-            
+
             var result = await cnbClient.GetCurrentExchangeRates(cancellationToken).ConfigureAwait(false);
-            
+
             return result.Match<Either<CnbExchangeRatesDto, CnbError>>(
                 exchangeRates =>
                 {
@@ -44,17 +49,12 @@ internal sealed class CnbClientCacheProxy(ICnbClient cnbClient, TimeSpan ttl) : 
         {
             _lock.Release();
         }
-        
+
         bool IsCacheHit([NotNullWhen(true)] out CnbExchangeRatesDto? exchangeRates)
         {
             exchangeRates = _cachedExchangeRates;
             return exchangeRates is not null
                 && _cachedExchangeRatesTimestamp.Add(ttl) >= DateTime.UtcNow;
         }
-    }
-
-    public void Dispose()
-    {
-        _lock.Dispose();
     }
 }

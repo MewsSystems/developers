@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,18 +13,13 @@ namespace ExchangeRateUpdater.Cnb;
 
 internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICnbClient
 {
-    private static readonly MediaTypeWithQualityHeaderValue JsonMediaType = new("application/json");
-
     // 💡 if this was _our_ API, I would made this configurable via `HttpClient.BaseUrl` to switch between test and production endpoints,
-    //    however since this is completely 3rd party API, I don't expect it to change (and if it does, more things will break anyway)
+    //    however since this is completely out of our hands, I hardcoded it (change will require recompilation/redeploy anyway)
     private static readonly Uri DailyExchangeRatesUri = new("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
 
     public async Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates(CancellationToken cancellationToken)
     {
-        // 💡 since we do HTTP GET, we could omit disposing of the request message since there's no payload, but let's keep analyzer happy
         using var request = new HttpRequestMessage(HttpMethod.Get, DailyExchangeRatesUri);
-        request.Headers.Accept.Add(JsonMediaType);
-
         var response = await httpClient
             .SendAsync(request, cancellationToken)
             .ConfigureAwait(false);
@@ -64,9 +58,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
         {
             return false;
         }
-        
-        // we don't really care about the results, we just want to know if the payload is valid overall
-        // NB! `System.ComponentModel.DataAnnotations.Validator` does not support recursive validation 
+
         return MiniValidator.TryValidate(payload, out _);
     }
 }
