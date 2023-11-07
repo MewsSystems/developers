@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using W4k.Either;
+﻿using W4k.Either;
 
 namespace ExchangeRateUpdater.Cnb;
 

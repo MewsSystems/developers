@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
@@ -99,7 +95,7 @@ public static class Program
 
         var policyHttpMessageHandler = new PolicyHttpMessageHandler(resiliencePipeline.AsAsyncPolicy())
         {
-            InnerHandler = new HttpClientHandler() 
+            InnerHandler = new HttpClientHandler()
         };
 
         return new HttpClient(policyHttpMessageHandler)
@@ -118,7 +114,7 @@ public static class Program
             });
 
         var cnbClient = new CnbClient(httpClient, loggerFactory.CreateLogger<CnbClient>());
-        
+
         return new ExchangeRateProvider(options, cnbClient, loggerFactory.CreateLogger<ExchangeRateProvider>());
     }
 }
