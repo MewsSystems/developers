@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace ExchangeRateUpdater.Tests;
 
 [Trait("Category", "Integration")]
-public class ExchangeRateProviderShould : IDisposable
+public sealed class ExchangeRateProviderShould : IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly ExchangeRateProvider _sut;
@@ -17,7 +17,7 @@ public class ExchangeRateProviderShould : IDisposable
             {
                 CacheTtl = TimeSpan.FromMinutes(8)
             });
-        
+
         _httpClient = new HttpClient();
         CnbClient cnbClient = new(_httpClient, NullLogger<CnbClient>.Instance);
 
@@ -49,7 +49,7 @@ public class ExchangeRateProviderShould : IDisposable
 
         // assert
         Assert.True(ratesResult.TryPick(out IReadOnlyCollection<ExchangeRate>? rates));
-        
+
         // SPL – Seborga Luigino (Principality of Seborga) is not expected to be supported by the CNB
         Assert.Empty(rates);
     }

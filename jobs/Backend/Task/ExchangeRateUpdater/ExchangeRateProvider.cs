@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using ExchangeRateUpdater.Cnb;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -117,13 +112,13 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
             targetCurrency: DefaultTargetCurrency,
             value: rate.ExchangeRate / rate.Amount);
 
-    private class CurrencyComparer : IComparer<Currency>
+    private sealed class CurrencyComparer : IComparer<Currency>
     {
         public static readonly CurrencyComparer Instance = new();
         public int Compare(Currency? x, Currency? y) => string.CompareOrdinal(x!.Code, y!.Code);
     }
 
-    private class ExchangeRateCurrencyComparer : IComparer<CnbExchangeRate>
+    private sealed class ExchangeRateCurrencyComparer : IComparer<CnbExchangeRate>
     {
         public static readonly ExchangeRateCurrencyComparer Instance = new();
         public int Compare(CnbExchangeRate? x, CnbExchangeRate? y) => string.CompareOrdinal(x!.CurrencyCode, y!.CurrencyCode);

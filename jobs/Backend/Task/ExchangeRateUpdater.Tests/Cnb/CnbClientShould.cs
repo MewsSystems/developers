@@ -30,14 +30,14 @@ public class CnbClientShould
 
         // act
         var result = await client.GetCurrentExchangeRates(CancellationToken.None);
-        
+
         // assert
         Assert.True(result.TryPick(out CnbError? _));
     }
-    
-    private class TestHttpMessageHandler(HttpResponseMessage response) : HttpMessageHandler 
+
+    private sealed class TestHttpMessageHandler(HttpResponseMessage response) : HttpMessageHandler
     {
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) => 
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
             Task.FromResult(response);
     }
 }

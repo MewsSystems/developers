@@ -23,7 +23,7 @@ public class CnbClientCacheProxyShould
             ExchangeRateEur
         }
     };
-    
+
     [Fact]
     public async Task NotCallClientTwice()
     {
@@ -36,7 +36,7 @@ public class CnbClientCacheProxyShould
             });
 
         var proxy = new CnbClientCacheProxy(client, TimeSpan.FromMinutes(5));
-        
+
         // act & assert
         _ = await proxy.GetExchangeRates(CancellationToken.None);
         _ = await proxy.GetExchangeRates(CancellationToken.None);
@@ -48,11 +48,11 @@ public class CnbClientCacheProxyShould
         // arrange
         var client = new TestCnbClient(_ => ExchangeRatesPayload);
         var proxy = new CnbClientCacheProxy(client, TimeSpan.FromMinutes(5));
-        
+
         // act
         _ = await proxy.GetExchangeRates(CancellationToken.None);
         var secondCallResult = await proxy.GetExchangeRates(CancellationToken.None);
-        
+
         // assert
         Assert.True(secondCallResult.TryPick(out CnbExchangeRatesDto? exchangeRates));
         Assert.Equal(ExchangeRatesPayload, exchangeRates);
@@ -76,15 +76,15 @@ public class CnbClientCacheProxyShould
             });
 
         var proxy = new CnbClientCacheProxy(client, TimeSpan.FromMinutes(5));
-        
+
         // act & assert
         _ = await proxy.GetExchangeRates(CancellationToken.None);
         _ = await proxy.GetExchangeRates(CancellationToken.None);
         _ = await proxy.GetExchangeRates(CancellationToken.None);
     }
 
-    // 💡 instead of using Moq, NSubstitute or what not, this simple test double will do just fine ¯\_(ツ)_/¯ 
-    private class TestCnbClient(Func<int, Either<CnbExchangeRatesDto, CnbError>> getCallback) : ICnbClient
+    // 💡 instead of using Moq, NSubstitute or what not, this simple test double will do just fine ¯\_(ツ)_/¯
+    private sealed class TestCnbClient(Func<int, Either<CnbExchangeRatesDto, CnbError>> getCallback) : ICnbClient
     {
         private int _callCount;
 
