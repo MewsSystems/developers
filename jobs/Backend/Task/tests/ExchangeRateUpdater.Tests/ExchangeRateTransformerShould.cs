@@ -47,14 +47,14 @@ public class ExchangeRateTransformerShould
     };
 
     [Theory]
-    [MemberData(nameof(GenerateX))]
-    public void ReturnOnlySelectedCurrencies(string[] currencyCodes, int expectedCount)
+    [MemberData(nameof(GenerateTestData))]
+    public void ReturnOnlySelectedCurrencies(string[] currencyCodes, IReadOnlyList<CnbExchangeRate> cnbRates, int expectedCount)
     {
         // arrange
         var currencies = currencyCodes.Select(cc => new Currency(cc)).ToList();
         var exchangeRatesDto = new CnbExchangeRatesDto
         {
-            Rates = ExchangeRates
+            Rates = cnbRates
         };
 
         var transformer = new ExchangeRateTransformer(NullLogger.Instance);
@@ -113,10 +113,12 @@ public class ExchangeRateTransformerShould
             actual => Assert.Equal("CZK", actual.TargetCurrency.Code));
     }
 
-    public static TheoryData<string[], int> GenerateX() => new()
+    public static TheoryData<string[], IReadOnlyList<CnbExchangeRate>, int> GenerateTestData() => new()
     {
-        { new[] { "USD", "EUR" }, 2 },
-        { new[] { "AAA", "XYZ" }, 0 },
-        { new[] { "CZK", "EUR", "GBP", "HUF", "TOP", "USD" }, 6 },
+        { Array.Empty<string>(), ExchangeRates, 0 },
+        { new[] { "USD", "EUR" }, new List<CnbExchangeRate>(), 0 },
+        { new[] { "AAA", "XYZ" }, ExchangeRates, 0 },
+        { new[] { "USD", "EUR" }, ExchangeRates, 2 },
+        { new[] { "CZK", "EUR", "GBP", "HUF", "TOP", "USD" }, ExchangeRates, 6 },
     };
 }
