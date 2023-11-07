@@ -1,9 +1,16 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+using System.Diagnostics;
+
+namespace ExchangeRateUpdater
 {
+    [DebuggerDisplay("{SourceCurrency}/{TargetCurrency}={Value}")]
     public class ExchangeRate
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
+            ArgumentNullException.ThrowIfNull(sourceCurrency);
+            ArgumentNullException.ThrowIfNull(targetCurrency);
+
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
