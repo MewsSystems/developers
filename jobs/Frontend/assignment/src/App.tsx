@@ -1,5 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Search, Details } from "./pages";
+import { ThemeProvider } from "styled-components";
+import { materialDarkTheme, materialLightTheme } from "./theme/themes";
+import { usePrefersColorTheme } from "./hooks";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +16,13 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  const isDarkMode = usePrefersColorTheme() === "dark";
+
+  return (
+    <ThemeProvider theme={isDarkMode ? materialDarkTheme : materialLightTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 }
 
 export default App;
