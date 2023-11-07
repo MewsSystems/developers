@@ -4,6 +4,9 @@ Program to fetch exchange rates from Czech National Bank (CNB) and lists only _s
 
 All listed exchange rates are in relation to the Czech crown (CZK).
 
+**<abbr title="Nota bene">NB!</abbr>** There are few comments in code which start with light bulb emoji (💡). These comments are not meant
+to be part of the code, but rather to explain some of the decisions made during the development.
+
 ## Prerequisites
 
 - [net8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
@@ -24,7 +27,11 @@ It is possible to run unit tests and/or integration tests separately or all toge
 
 ```bash
 dotnet test --filter Category=Unit
+```
+```bash
 dotnet test --filter Category=Integration
+````
+```bash
 dotnet test
 ```
 
