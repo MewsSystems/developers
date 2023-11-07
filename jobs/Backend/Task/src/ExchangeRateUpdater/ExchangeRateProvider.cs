@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
@@ -59,22 +60,49 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
 {
     private static readonly Currency DefaultTargetCurrency = new("CZK");
 
-    // 💡 once this gets to hot-path and/or we would want to squeeze every bit of performance, there are few other things we could do...
-    //    see benchmarks for more details ( •_•)>⌐■-■ (though, other approaches are rather memory-focused)
+    // 💡 there are other algorithms to solve this, though it looks like there's no universal one (covering various lengths of input)
+    //    see benchmarks for other (more readable) algorithms ( •_•)>⌐■-■
     public List<ExchangeRate> GetExchangeRatesForCurrencies(IReadOnlyCollection<Currency> currencies, CnbExchangeRatesDto exchangeRates)
     {
-        var ratesByCurrency = exchangeRates.Rates.ToDictionary(r => r.CurrencyCode, StringComparer.Ordinal);
-
-        var rates = new List<ExchangeRate>(currencies.Count);
-        foreach (var expectedCurrency in currencies)
+        var currenciesSpan = currencies switch
         {
-            if (ratesByCurrency.TryGetValue(expectedCurrency.Code, out var exchangeRate))
+            Currency[] a => a.AsSpan(),
+            List<Currency> l => CollectionsMarshal.AsSpan(l),
+            _ => CollectionsMarshal.AsSpan(currencies.ToList()),
+        };
+
+        var exchangeRatesSpan = exchangeRates.Rates switch
+        {
+            List<CnbExchangeRate> l => CollectionsMarshal.AsSpan(l),
+            _ => CollectionsMarshal.AsSpan(exchangeRates.Rates.ToList()),
+        };
+
+        currenciesSpan.Sort(CurrencyComparer.Instance);
+        exchangeRatesSpan.Sort(ExchangeRateCurrencyComparer.Instance);
+
+        var exchangeRatesLength = exchangeRatesSpan.Length;
+        var rates = new List<ExchangeRate>(currenciesSpan.Length);
+
+        int rateIdx = 0;
+        for (int currencyIdx = 0; currencyIdx < currenciesSpan.Length; currencyIdx++)
+        {
+            while (rateIdx < exchangeRatesLength
+                   && string.CompareOrdinal(exchangeRatesSpan[rateIdx].CurrencyCode, currenciesSpan[currencyIdx].Code) < 0)
             {
-                rates.Add(MapToDomain(exchangeRate));
+                ++rateIdx;
             }
-            else
+
+            if (rateIdx < exchangeRatesLength)
             {
-                logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", expectedCurrency.Code);
+                var rate = exchangeRatesSpan[rateIdx];
+                if (rate.CurrencyCode == currenciesSpan[currencyIdx].Code)
+                {
+                    rates.Add(MapToDomain(rate));
+                }
+                else
+                {
+                    logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", rate.CurrencyCode);
+                }
             }
         }
 
@@ -88,4 +116,16 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
             sourceCurrency: new Currency(rate.CurrencyCode),
             targetCurrency: DefaultTargetCurrency,
             value: rate.ExchangeRate / rate.Amount);
+
+    private class CurrencyComparer : IComparer<Currency>
+    {
+        public static readonly CurrencyComparer Instance = new();
+        public int Compare(Currency? x, Currency? y) => string.CompareOrdinal(x!.Code, y!.Code);
+    }
+
+    private class ExchangeRateCurrencyComparer : IComparer<CnbExchangeRate>
+    {
+        public static readonly ExchangeRateCurrencyComparer Instance = new();
+        public int Compare(CnbExchangeRate? x, CnbExchangeRate? y) => string.CompareOrdinal(x!.CurrencyCode, y!.CurrencyCode);
+    }
 }

@@ -20,6 +20,9 @@ public class CurrencyLookupBenchmarks
     private IReadOnlyCollection<Currency> _currencies = null!;
     private IReadOnlyCollection<ExchangeRate> _exchangeRates = null!;
 
+    private IReadOnlyCollection<Currency> _unsortedCurrencies = null!;
+    private IReadOnlyCollection<ExchangeRate> _unsortedExchangeRates = null!;
+
     [Params(10, 31)]
     public int NumOfLookUpCurrencies { get; set; }
 
@@ -36,8 +39,15 @@ public class CurrencyLookupBenchmarks
         _exchangeRates = GenerateExchangeRates(faker);
     }
 
+    [IterationSetup(Target = nameof(LoopSlide))]
+    public void IterationSetup()
+    {
+        _unsortedCurrencies = new List<Currency>(_currencies);
+        _unsortedExchangeRates = new List<ExchangeRate>(_exchangeRates);
+    }
+
     [Benchmark(Baseline = true)]
-    public IReadOnlyCollection<ExchangeRate> LookupLoopCurrenciesThenRates()
+    public IReadOnlyCollection<ExchangeRate> LoopCurrenciesThenRates()
     {
         var expectedCurrencies = _currencies;
         var exchangeRates = _exchangeRates;
@@ -59,7 +69,7 @@ public class CurrencyLookupBenchmarks
     }
 
     [Benchmark]
-    public IReadOnlyCollection<ExchangeRate> LookupLoopCurrenciesThenRatesWithListSpan()
+    public IReadOnlyCollection<ExchangeRate> LoopCurrenciesThenRatesWithListSpan()
     {
         var expectedCurrencies = _currencies;
         var exchangeRates = (List<ExchangeRate>)_exchangeRates;
@@ -79,6 +89,20 @@ public class CurrencyLookupBenchmarks
         }
 
         return rates;
+    }
+
+    [Benchmark]
+    public IReadOnlyCollection<ExchangeRate> LinqIntersectBy()
+    {
+        var expectedCurrencies = _currencies;
+        var exchangeRates = _exchangeRates;
+
+        return exchangeRates
+            .IntersectBy(
+                expectedCurrencies.Select(c => c.Code),
+                r => r.SourceCurrency.Code,
+                StringComparer.Ordinal)
+            .ToList();
     }
 
     [Benchmark]
@@ -108,6 +132,30 @@ public class CurrencyLookupBenchmarks
         var exchangeRates = _exchangeRates;
 
         var ratesByCurrency = exchangeRates.ToDictionary(r => r.SourceCurrency.Code);
+
+        var rates = new List<ExchangeRate>(expectedCurrencies.Count);
+        foreach (var currency in expectedCurrencies)
+        {
+            if (ratesByCurrency.TryGetValue(currency.Code, out var rate))
+            {
+                rates.Add(rate);
+            }
+        }
+
+        return rates;
+    }
+
+    [Benchmark]
+    public IReadOnlyCollection<ExchangeRate> LookupWithDictionaryWithoutLinq()
+    {
+        var expectedCurrencies = _currencies;
+        var exchangeRates = _exchangeRates;
+
+        var ratesByCurrency = new Dictionary<string, ExchangeRate>(expectedCurrencies.Count, StringComparer.Ordinal);
+        foreach (var exchangeRate in exchangeRates)
+        {
+            ratesByCurrency.TryAdd(exchangeRate.SourceCurrency.Code, exchangeRate);
+        }
 
         var rates = new List<ExchangeRate>(expectedCurrencies.Count);
         foreach (var currency in expectedCurrencies)
@@ -202,6 +250,40 @@ public class CurrencyLookupBenchmarks
         return rates;
     }
 
+    [Benchmark]
+    [InvocationCount(131_072, 16)]
+    public IReadOnlyCollection<ExchangeRate> LoopSlide()
+    {
+        var expectedCurrencies = (List<Currency>)_unsortedCurrencies;
+        var exchangeRates = (List<ExchangeRate>)_unsortedExchangeRates;
+
+        expectedCurrencies.Sort(CurrencyComparer.Instance);
+        exchangeRates.Sort(ExchangeRateCurrencyComparer.Instance);
+
+        var rates = new List<ExchangeRate>(expectedCurrencies.Count);
+
+        int rateIdx = 0;
+        for (int currencyIdx = 0; currencyIdx < expectedCurrencies.Count; currencyIdx++)
+        {
+            while (rateIdx < exchangeRates.Count
+                   && string.Compare(
+                       exchangeRates[rateIdx].SourceCurrency.Code,
+                       expectedCurrencies[currencyIdx].Code,
+                       StringComparison.Ordinal)
+                   < 0)
+            {
+                ++rateIdx;
+            }
+
+            if (rateIdx < exchangeRates.Count && exchangeRates[rateIdx].SourceCurrency.Code == expectedCurrencies[currencyIdx].Code)
+            {
+                rates.Add(exchangeRates[rateIdx]);
+            }
+        }
+
+        return rates;
+    }
+
     private List<Currency> GenerateLookupCurrencies(Faker faker)
     {
         var lookupCurrencies = new HashSet<string>(AlwaysPresentCurrencyCodes.Concat(InvalidCurrencyCodes));
@@ -258,5 +340,21 @@ public class CurrencyLookupBenchmarks
             public int Compare(CurrencyPosition a, CurrencyPosition b) =>
                 a._encoded.CompareTo(b._encoded);
         }
+    }
+
+    private class CurrencyComparer : IComparer<Currency>
+    {
+        public static readonly CurrencyComparer Instance = new();
+
+        public int Compare(Currency? x, Currency? y) =>
+            string.Compare(x!.Code, y!.Code, StringComparison.Ordinal);
+    }
+
+    private class ExchangeRateCurrencyComparer : IComparer<ExchangeRate>
+    {
+        public static readonly ExchangeRateCurrencyComparer Instance = new();
+
+        public int Compare(ExchangeRate? x, ExchangeRate? y) =>
+            string.Compare(x!.SourceCurrency.Code, y!.SourceCurrency.Code, StringComparison.Ordinal);
     }
 }
