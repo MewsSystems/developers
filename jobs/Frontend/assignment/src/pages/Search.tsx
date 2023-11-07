@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Rating } from "../components";
+import { Button, Rating, Typography } from "../components";
 
 const StyledWrapper = styled.div`
   width: 100vw;
@@ -11,6 +11,8 @@ export function Search() {
     <StyledWrapper>
       <Button>I'm a button</Button>
       <Rating value={4.5} />
+      <Typography variant="bodyLarge">Hello</Typography>
+      <Typography variant="headlineLarge">Hey yo</Typography>
     </StyledWrapper>
   );
 }
