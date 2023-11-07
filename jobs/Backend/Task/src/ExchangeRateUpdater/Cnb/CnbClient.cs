@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -19,38 +20,67 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
 
     public async Task<Either<CnbExchangeRatesDto, CnbError>> GetCurrentExchangeRates(CancellationToken cancellationToken)
     {
-        using var request = new HttpRequestMessage(HttpMethod.Get, DailyExchangeRatesUri);
-        var response = await httpClient
-            .SendAsync(request, cancellationToken)
-            .ConfigureAwait(false);
+        var request = new HttpRequestMessage(HttpMethod.Get, DailyExchangeRatesUri);
+        HttpResponseMessage response = null!;
 
-        if (response.StatusCode != HttpStatusCode.OK)
+        try
         {
-            var rawPayload = await response.Content
-                .ReadAsStringAsync(cancellationToken)
+            response = await httpClient
+                .SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
 
-            logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
-            return new CnbError();
-        }
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var rawPayload = await GetRawPayload(response, cancellationToken)
+                    .ConfigureAwait(false);
 
-        var payload = await response.Content
-            .ReadFromJsonAsync<CnbExchangeRatesDto>(cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+                logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
+                return new CnbError();
+            }
 
-        // 💡 if this was _our_ API, I would trust contract and avoid validation
-        if (!IsValid(payload))
-        {
-            var rawPayload = await response.Content
-                .ReadAsStringAsync(cancellationToken)
+            var payload = await response.Content
+                .ReadFromJsonAsync<CnbExchangeRatesDto>(cancellationToken)
                 .ConfigureAwait(false);
 
-            logger.InvalidPayload(rawPayload);
+            // 💡 if this was _our_ API, I would trust contract and avoid validation
+            if (!IsValid(payload))
+            {
+                var rawPayload = await GetRawPayload(response, cancellationToken)
+                    .ConfigureAwait(false);
+
+                logger.InvalidPayload(rawPayload);
+                return new CnbError();
+            }
+
+            return payload;
+        }
+        catch (TaskCanceledException ex)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+
+            logger.RequestTimedOut(ex);
             return new CnbError();
         }
+        catch (JsonException ex)
+        {
+            var rawPayload = await GetRawPayload(response, cancellationToken)
+                .ConfigureAwait(false);
 
-        return payload;
+            logger.FailedToDeserializePayload(ex, rawPayload);
+            return new CnbError();
+        }
+        finally
+        {
+            request.Dispose();
+            response.Dispose();
+        }
     }
+
+    private static Task<string> GetRawPayload(HttpResponseMessage response, CancellationToken cancellationToken) =>
+        response.Content.ReadAsStringAsync(cancellationToken);
 
     private static bool IsValid([NotNullWhen(true)] CnbExchangeRatesDto? payload)
     {
