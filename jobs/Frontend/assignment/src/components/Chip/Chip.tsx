@@ -9,12 +9,15 @@ const StyledChipWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 10px;
+
+  padding: 3px 10px;
+
   border-radius: 8px;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.outline.variant};
 `;
 
 const StyledChipLabel = styled.span`
+  color: ${({ theme }) => theme.colors.surface.onVariant};
   font-size: ${({ theme }) => theme.fonts.labelLarge.fontSize};
   font-weight: ${({ theme }) => theme.fonts.labelLarge.fontWeight};
 `;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import EmptyStar from "@/assets/icons/empty-star.svg";
-import FilledStar from "@/assets/icons/filled-star.svg";
-import HalfFilledStar from "@/assets/icons/half-filled-star.svg";
+import StarFilledIcon from "@material-ui/icons/Star";
+import StarHalfFilledIcon from "@material-ui/icons/StarHalf";
+import StarEmptyIcon from "@material-ui/icons/StarOutline";
 
 export interface RatingProps {
   value: number;
@@ -9,24 +9,15 @@ export interface RatingProps {
 
 const StyledWrapper = styled.div`
   display: flex;
-  gap: 3px;
+  gap: 1px;
 `;
 
-const StyledStar = styled.div<{ $img: string }>`
-  width: 15px;
-  height: 15px;
+const StyledStar = styled.div<{ $secondary: boolean }>`
+  width: 20px;
+  height: 20px;
 
-  background-image: url(${props => props.$img});
-  background-size: contain;
+  color: ${({ theme, $secondary }) => ($secondary ? theme.colors.outline.variant : "#ffb400")};
 `;
-
-export const getStarIcon = (value: number, index: number) => {
-  if (value >= index) return FilledStar;
-
-  if (value >= index - 0.5) return HalfFilledStar;
-
-  return EmptyStar;
-};
 
 export function Rating({ value }: RatingProps) {
   const roundedValue = Math.round(value * 2) / 2;
@@ -34,7 +25,11 @@ export function Rating({ value }: RatingProps) {
   return (
     <StyledWrapper>
       {[1, 2, 3, 4, 5].map(index => (
-        <StyledStar key={index} data-testid="star-icon" $img={getStarIcon(roundedValue, index)} />
+        <StyledStar key={index} data-testid="star-icon" $secondary={roundedValue < index}>
+          {(roundedValue >= index && <StarFilledIcon fontSize="small" />) ||
+            (roundedValue >= index - 0.5 && <StarHalfFilledIcon fontSize="small" />) ||
+            (roundedValue < index && <StarEmptyIcon fontSize="small" />)}
+        </StyledStar>
       ))}
     </StyledWrapper>
   );

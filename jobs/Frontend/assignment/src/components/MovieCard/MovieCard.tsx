@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Button, Chip, Rating, Typography } from "..";
-import BrokenImageIcon from "@material-ui/icons/BrokenImage";
 import { useNavigate } from "react-router-dom";
+import fallbackImg from "@/assets/mocks/fallback.jpg";
 
 export interface MovieCardProps {
   id: number;
@@ -22,19 +22,7 @@ const CardWrapper = styled.div`
 
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid lightgrey;
-`;
-
-const CardImageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-
-  height: 310px;
-
-  color: ${({ theme }) => theme.colors.primary.main};
+  border: 1px solid ${({ theme }) => theme.colors.outline.variant};
 `;
 
 const CardImage = styled.img`
@@ -96,19 +84,14 @@ export function MovieCard({
 
   return (
     <CardWrapper>
-      {imgPath ? (
-        <CardImage src={imgPath} alt="Movie poster" />
-      ) : (
-        <CardImageWrapper>
-          <BrokenImageIcon fontSize="large" />
-          <Typography variant="titleSmall">Image loading failed</Typography>
-        </CardImageWrapper>
-      )}
+      <CardImage src={imgPath || fallbackImg} alt="Movie poster" />
       <CardContent>
         <TextWrapper>
           <div>
             <Typography variant="titleSmall">{title}</Typography>
-            <Typography variant="bodySmall">Release date: {releaseDate}</Typography>
+            <Typography variant="bodySmall" color="secondary">
+              Release date: {releaseDate || "Unknown"}
+            </Typography>
           </div>
           <StyledDescription variant="bodySmall">{description}</StyledDescription>
           <ChipsWrapper>

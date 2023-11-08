@@ -16,11 +16,12 @@ const InputWrapper = styled.div`
   width: 100%;
   min-height: 56px;
 
-  padding: 16px 8px;
+  padding: 16px 14px;
 
   border-radius: 4px;
-  border: 2px solid ${({ theme }) => theme.colors.primary.main};
+  border: 2px solid ${({ theme }) => theme.colors.outline.main};
 
+  color: ${({ theme }) => theme.colors.surface.onVariant};
   transition: border-color 0.2s ease-in-out;
 `;
 
@@ -38,9 +39,11 @@ const InputLabel = styled.label<{ focused: boolean }>`
 
   font-size: ${({ focused, theme }) =>
     focused ? theme.fonts.labelMedium.fontSize : theme.fonts.labelLarge.fontSize};
+  background-color: ${({ theme }) => theme.colors.surface.main};
+  padding: 0 2px;
 
   transform: ${({ focused }) => (focused ? "translateY(0)" : "translateY(-50%)")};
-  transition: all 0.2s ease-in-out;
+  transition: all 0.175s ease-in-out;
 
   pointer-events: none;
 `;
@@ -52,7 +55,9 @@ const InputField = styled.input`
   border: none;
   outline: none;
 
-  font-size: ${({ theme }) => theme.fonts.bodyLarge};
+  font-size: ${({ theme }) => theme.fonts.bodyLarge.fontSize};
+  color: ${({ theme }) => theme.colors.surface.onVariant};
+  background: transparent;
 `;
 
 const IconContainer = styled.div`
@@ -74,6 +79,7 @@ const ClearButton = styled.button`
   border: none;
   outline: none;
 
+  color: ${({ theme }) => theme.colors.surface.onVariant};
   background-color: transparent;
   border-radius: 50%;
 

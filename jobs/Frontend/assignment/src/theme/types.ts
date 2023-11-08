@@ -14,8 +14,25 @@ type ColorBrightness =
   | "99"
   | "100";
 
+type ExtendedColorBrightness =
+  | "4"
+  | "6"
+  | "12"
+  | "17"
+  | "22"
+  | "24"
+  | "87"
+  | "92"
+  | "94"
+  | "96"
+  | "98";
+
 type Color = {
   [key in ColorBrightness]: string;
+};
+
+type ExtendedColor = Color & {
+  [key in ExtendedColorBrightness]: string;
 };
 
 type ThemeColorVariants =
@@ -24,9 +41,9 @@ type ThemeColorVariants =
   | "container"
   | "onContainer"
   | "fixed"
+  | "fixedDim"
   | "onFixed"
-  | "surface"
-  | "onSurface";
+  | "onFixedVariant";
 
 type ThemeColor = {
   [key in ThemeColorVariants]: string;
@@ -37,7 +54,8 @@ export interface ColorPalette {
   secondary: Color;
   tertiary: Color;
   error: Color;
-  neutral: Color;
+  neutral: ExtendedColor;
+  neutralVariant: Color;
 }
 
 // Font types
@@ -74,9 +92,22 @@ export interface GlobalTheme {
     primary: ThemeColor;
     secondary: ThemeColor;
     tertiary: ThemeColor;
-    error: {
-      [key in ThemeColorVariants]?: string;
+    error: Pick<ThemeColor, "main" | "on" | "container" | "onContainer">;
+    surface: Pick<ThemeColor, "main" | "on"> & {
+      variant: string;
+      onVariant: string;
+      inverse: string;
+      inverseOn: string;
+      tint: string;
+      containerHighest: string;
+      containerHigh: string;
+      container: string;
+      containerLow: string;
+      containerLowest: string;
+      bright: string;
+      dim: string;
     };
+    outline: Pick<ThemeColor, "main"> & { variant: string };
   };
   fonts: {
     [key in TypographyVariant]: Font;
