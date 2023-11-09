@@ -8,10 +8,17 @@ namespace ExchangeRateUpdater.Data.Models
 {
     public class RetryConfiguration
     {
-        public int Retries { get; set; }
+        public RetryConfiguration(int retries, int waitSeconds, int timeOutSeconds)
+        {
+            Retries = retries;
+            WaitSeconds = TimeSpan.FromSeconds(waitSeconds);
+            TimeoutSeconds = TimeSpan.FromSeconds(timeOutSeconds);
+        }
 
-        public TimeSpan WaitSeconds { get; set;  }
+        public int Retries { get; }
 
-        public TimeSpan TimeoutSeconds { get; set; }
+        public TimeSpan WaitSeconds { get; }
+
+        public TimeSpan TimeoutSeconds { get; }
     }
 }

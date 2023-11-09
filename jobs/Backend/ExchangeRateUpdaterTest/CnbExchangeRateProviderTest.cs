@@ -1,7 +1,9 @@
+using Castle.Components.DictionaryAdapter.Xml;
 using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Data.Models;
 using ExchangeRateUpdater.Domain;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -14,14 +16,16 @@ namespace ExchangeRateUpdaterTest
     {
         private readonly Mock<ILogger<CnbExchangeRateProvider>> _loggerMock;
         private readonly Mock<IHttpClientFactory> _httpClientFactoryMock;
+        private readonly IConfiguration _config;
         private readonly Mock<HttpMessageHandler> _handlerMock;
-        private CnbExchangeRateProvider? _cnbExchangeRateProvider;
+        private CnbExchangeRateProvider? _cnbExchangeRateProvider => new CnbExchangeRateProvider(_httpClientFactoryMock.Object, _loggerMock.Object, _config);
 
         public CnbExchangeRateProviderTest()
         {
             _loggerMock = new Mock<ILogger<CnbExchangeRateProvider>>();
             _httpClientFactoryMock = new Mock<IHttpClientFactory>();
             _handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            _config = SetupInMemoryConfig();
         }
 
         [Fact]
@@ -42,7 +46,6 @@ namespace ExchangeRateUpdaterTest
                 .ReturnsAsync(responseMessage)
                 .Verifiable();
             _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(_handlerMock.Object));
-            _cnbExchangeRateProvider = new CnbExchangeRateProvider(_httpClientFactoryMock.Object, _loggerMock.Object);
 
             //Act
             var exchangeRates = await _cnbExchangeRateProvider.GetExchangeRatesAsync(currencies);
@@ -70,7 +73,6 @@ namespace ExchangeRateUpdaterTest
             .ReturnsAsync(responseMessage)
             .Verifiable();
             _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(_handlerMock.Object));
-            _cnbExchangeRateProvider = new CnbExchangeRateProvider(_httpClientFactoryMock.Object, _loggerMock.Object);
 
             //Act
             var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _cnbExchangeRateProvider.GetExchangeRatesAsync(null));
@@ -107,7 +109,6 @@ namespace ExchangeRateUpdaterTest
                 .ReturnsAsync(CreateErrorClientResponse(errorMessage))
                 .ReturnsAsync(responseMessage);
             _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(_handlerMock.Object));
-            _cnbExchangeRateProvider = new CnbExchangeRateProvider(_httpClientFactoryMock.Object, _loggerMock.Object);
 
             //Act
             var exchangeRates = await _cnbExchangeRateProvider.GetExchangeRatesAsync(currencies);
@@ -130,6 +131,23 @@ namespace ExchangeRateUpdaterTest
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Exactly(1));
+        }
+
+        private IConfiguration SetupInMemoryConfig()
+        {
+            Dictionary<string, string> inMemorySettings =
+                new Dictionary<string, string> {
+                    {"CnbConfiguration:BaseAddress", "https://api.cnb.cz"},
+                    {"CnbConfiguration:DailyRatesEndpoint", "cnbapi/exrates/daily"},
+                    {"CnbConfiguration:DefaultCurrency", "CZK"},
+                    {"CnbConfiguration:RetryConfig:Retries", "3"},
+                    {"CnbConfiguration:RetryConfig:WaitSeconds", "1"},
+                    {"CnbConfiguration:RetryConfig:TimeoutSeconds", "1"},
+                };
+
+            return new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings)
+            .Build();
         }
 
         private CnbDailyRatesResponse CreateValidCnbResponse()

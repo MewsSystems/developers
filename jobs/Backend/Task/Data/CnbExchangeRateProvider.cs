@@ -32,11 +32,10 @@ namespace ExchangeRateUpdater.Data
             _logger = logger;
             _config = config;
             cnbClient = httpClientFactory.CreateClient(nameof(CnbExchangeRateProvider));
-            var cnbConfig = config.GetSection("CnbConfiguration");
-            sourceCurrency = new Currency(cnbConfig.GetValue<string>("DefaultCurrency"));
-            baseAddress = cnbConfig.GetValue<string>("BaseAddress");
-            endpoint = cnbConfig.GetValue<string>("DailyRatesEndpoint");
-            retryConfiguration = cnbConfig.GetSection("RetryConfig").Get<RetryConfiguration>();
+            sourceCurrency = new Currency(config.GetValue<string>("CnbConfiguration:DefaultCurrency"));
+            baseAddress = config.GetValue<string>("CnbConfiguration:BaseAddress");
+            endpoint = config.GetValue<string>("CnbConfiguration:DailyRatesEndpoint");
+            retryConfiguration = config.GetSection("CnbConfiguration:RetryConfig").Get<RetryConfiguration>();
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
