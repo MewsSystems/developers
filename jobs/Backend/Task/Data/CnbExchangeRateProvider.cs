@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater.Data
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _config;
-        private readonly Currency czkCurrency = new Currency("CZK");
+        private readonly Currency sourceCurrency;
         private readonly string baseAddress;
         private readonly string endpoint;
         private readonly RetryConfiguration retryConfiguration;
@@ -33,9 +33,10 @@ namespace ExchangeRateUpdater.Data
             _config = config;
             cnbClient = httpClientFactory.CreateClient(nameof(CnbExchangeRateProvider));
             var cnbConfig = config.GetSection("CnbConfiguration");
+            sourceCurrency = new Currency(cnbConfig.GetValue<string>("DefaultCurrency"));
             baseAddress = cnbConfig.GetValue<string>("BaseAddress");
             endpoint = cnbConfig.GetValue<string>("DailyRatesEndpoint");
-            cnbConfig.GetSection("RetryConfig").Bind(retryConfiguration);
+            retryConfiguration = cnbConfig.GetSection("RetryConfig").Get<RetryConfiguration>();
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
@@ -63,7 +64,7 @@ namespace ExchangeRateUpdater.Data
         {
             return cnbResponse.Rates
                 .Where(rate => currencies.Any(curr => curr.Code == rate.CurrencyCode))
-                .Select(rate => new ExchangeRate(czkCurrency, new Currency(rate.CurrencyCode), Math.Round(rate.Rate, 2)));
+                .Select(rate => new ExchangeRate(sourceCurrency, new Currency(rate.CurrencyCode), Math.Round(rate.Rate, 2)));
         }
 
         private void OnTryFailure(DelegateResult<HttpResponseMessage> response, TimeSpan timeToNext, int retryCount, Context context)

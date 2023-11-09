@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,17 +30,7 @@ namespace ExchangeRateUpdater
         public static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            services.AddLogging(builder => builder.AddConsole(options =>
-            {
-                options.TimestampFormat = "yyyy-MM-dd HH:mm:ss ";
-            }));
-            services.AddTransient<CnbExchangeRateProvider>();
-            services.AddHttpClient(nameof(CnbExchangeRateProvider));
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            IConfiguration config = builder.Build();
-            services.AddSingleton(config);
+            services.ConfigureExchangeRateServices();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             try
