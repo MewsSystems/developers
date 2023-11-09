@@ -2,7 +2,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Search, Details } from "./pages";
 import { ThemeProvider } from "styled-components";
 import { materialDarkTheme, materialLightTheme } from "./theme/themes";
-import { usePrefersColorTheme } from "./hooks";
+import { DarkModeProvider } from "./theme/DarkModeProvider";
+import { useDarkMode } from "./hooks";
 
 const router = createBrowserRouter([
   {
@@ -16,13 +17,21 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const isDarkMode = usePrefersColorTheme() === "dark";
+  const { darkMode } = useDarkMode();
 
   return (
-    <ThemeProvider theme={isDarkMode ? materialDarkTheme : materialLightTheme}>
+    <ThemeProvider theme={darkMode ? materialDarkTheme : materialLightTheme}>
       <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
 
-export default App;
+function WithDarkModeProvider() {
+  return (
+    <DarkModeProvider>
+      <App />
+    </DarkModeProvider>
+  );
+}
+
+export default WithDarkModeProvider;

@@ -2,8 +2,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
 :root {
   font-family: "Roboto", sans-serif;
+}
+
+body.theme-switch,
+body.theme-switch *,
+body.theme-switch *:before,
+body.theme-switch *:after {
+  transition: all 500ms !important;
+  transition-delay: 0 !important;
 }
