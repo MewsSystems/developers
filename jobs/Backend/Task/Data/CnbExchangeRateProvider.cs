@@ -7,12 +7,9 @@ using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace ExchangeRateUpdater.Data
 {
@@ -42,12 +39,13 @@ namespace ExchangeRateUpdater.Data
         {
             var clientAddress = $"{baseAddress}/{endpoint}?lang=EN";
             _logger.LogInformation($"{nameof(CnbExchangeRateProvider)}: Sending request to {clientAddress}");
+
             var response = await ExecuteCallWithRetryAsync(clientAddress);
             response.EnsureSuccessStatusCode();
+
             var responseContent = await response.Content.ReadAsStringAsync();
-            var cnbResponse = JsonSerializer.Deserialize<CnbDailyRatesResponse>(responseContent) ?? new CnbDailyRatesResponse();
-            _logger.LogInformation($"{nameof(CnbExchangeRateProvider)}: Response received from {clientAddress}, message: {cnbResponse}");
-            return TranslateCnbResposne(cnbResponse, currencies);
+            _logger.LogInformation($"{nameof(CnbExchangeRateProvider)}: Response received from {clientAddress}, message: {responseContent}");
+            return TranslateCnbResposne(responseContent, currencies);
         }
 
         private async Task<HttpResponseMessage> ExecuteCallWithRetryAsync(string clientAddress)
@@ -59,8 +57,9 @@ namespace ExchangeRateUpdater.Data
                 .ExecuteAsync(() => cnbClient.GetAsync($"{clientAddress}"));
         }
 
-        private IEnumerable<ExchangeRate> TranslateCnbResposne(CnbDailyRatesResponse cnbResponse, IEnumerable<Currency> currencies)
+        private IEnumerable<ExchangeRate> TranslateCnbResposne(string responseContent, IEnumerable<Currency> currencies)
         {
+            var cnbResponse = JsonSerializer.Deserialize<CnbDailyRatesResponse>(responseContent) ?? new CnbDailyRatesResponse();
             return cnbResponse.Rates
                 .Where(rate => currencies.Any(curr => curr.Code == rate.CurrencyCode))
                 .Select(rate => new ExchangeRate(sourceCurrency, new Currency(rate.CurrencyCode), Math.Round(rate.Rate, 2)));

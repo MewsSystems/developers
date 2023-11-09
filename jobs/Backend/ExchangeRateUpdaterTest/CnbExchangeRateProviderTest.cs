@@ -1,4 +1,3 @@
-using Castle.Components.DictionaryAdapter.Xml;
 using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Data.Models;
 using ExchangeRateUpdater.Domain;

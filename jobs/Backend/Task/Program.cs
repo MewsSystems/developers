@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ExchangeRateUpdater.Data;
+﻿using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Extensions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Polly.Extensions.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExchangeRateUpdater
 {
