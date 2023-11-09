@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, PropsWithChildren } from "react";
 import styled from "styled-components";
 
-export interface ButtonProps {}
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const StyledButton = styled.button`
   border: none;
@@ -23,9 +23,6 @@ const StyledButton = styled.button`
   }
 `;
 
-export function Button({
-  children,
-  ...props
-}: PropsWithChildren<ButtonHTMLAttributes<ButtonProps>>) {
+export function Button({ children, ...props }: PropsWithChildren<ButtonProps>) {
   return <StyledButton {...props}>{children}</StyledButton>;
 }

@@ -36,7 +36,9 @@ const CardContent = styled.div`
   justify-content: space-between;
   gap: 16px;
 
-  flex-grow: 1;
+  flex: 1;
+  max-height: 100%;
+  overflow: hidden;
 
   padding: 16px;
 `;
@@ -44,20 +46,29 @@ const CardContent = styled.div`
 const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 8px;
+
+  flex: 1;
+  max-height: 75%;
+  overflow: hidden;
 
   height: 100%;
 `;
 
-const StyledDescription = styled(Typography)`
+const DescriptionWrapper = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  max-height: 35%;
   overflow: hidden;
 `;
 
 const ChipsWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 
@@ -87,13 +98,13 @@ export function MovieCard({
       <CardImage src={imgPath || fallbackImg} alt="Movie poster" />
       <CardContent>
         <TextWrapper>
-          <div>
-            <Typography variant="titleSmall">{title}</Typography>
-            <Typography variant="bodySmall" color="secondary">
-              Release date: {releaseDate || "Unknown"}
-            </Typography>
-          </div>
-          <StyledDescription variant="bodySmall">{description}</StyledDescription>
+          <Typography variant="titleSmall">{title}</Typography>
+          <Typography variant="bodySmall" color="secondary">
+            Release date: {releaseDate || "Unknown"}
+          </Typography>
+          <DescriptionWrapper>
+            <Typography variant="bodySmall">{description}</Typography>
+          </DescriptionWrapper>
           <ChipsWrapper>
             {genres.map(genre => (
               <Chip key={genre} label={genre} />

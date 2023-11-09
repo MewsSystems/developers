@@ -35,9 +35,9 @@ describe("MovieCard", () => {
   });
 
   it("displays a fallback image when the movie poster fails to load", () => {
-    const { getByText } = renderMovieCard({ imgPath: null });
+    const { getByRole } = renderMovieCard({ imgPath: null });
 
-    expect(getByText("Image loading failed")).toBeInTheDocument();
+    expect(getByRole("img")).toHaveAttribute("src", "/src/assets/mocks/fallback.jpg");
   });
 
   it("navigates to the correct movie details page when the 'See more' button is clicked", () => {

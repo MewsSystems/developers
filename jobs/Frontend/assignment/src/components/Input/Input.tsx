@@ -32,17 +32,17 @@ const FieldWrapper = styled.div`
   position: relative;
 `;
 
-const InputLabel = styled.label<{ focused: boolean }>`
+const InputLabel = styled.label<{ $focused: boolean }>`
   position: absolute;
-  top: ${({ focused }) => (focused ? "-100%" : "50%")};
-  left: ${({ focused }) => (focused ? "-30px" : "0")};
+  top: ${({ $focused }) => ($focused ? "-100%" : "50%")};
+  left: ${({ $focused }) => ($focused ? "-30px" : "0")};
 
-  font-size: ${({ focused, theme }) =>
-    focused ? theme.fonts.labelMedium.fontSize : theme.fonts.labelLarge.fontSize};
+  font-size: ${({ $focused, theme }) =>
+    $focused ? theme.fonts.labelMedium.fontSize : theme.fonts.labelLarge.fontSize};
   background-color: ${({ theme }) => theme.colors.surface.main};
   padding: 0 2px;
 
-  transform: ${({ focused }) => (focused ? "translateY(0)" : "translateY(-50%)")};
+  transform: ${({ $focused }) => ($focused ? "translateY(0)" : "translateY(-50%)")};
   transition: all 0.175s ease-in-out;
 
   pointer-events: none;
@@ -86,7 +86,7 @@ const ClearButton = styled.button`
   transition: all 0.2s ease-in-out;
   &:hover,
   &:focus {
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 `;
 
@@ -107,7 +107,7 @@ export function Input({ label, value, onChange }: InputProps) {
         <SearchIcon />
       </IconContainer>
       <FieldWrapper>
-        <InputLabel focused={focused || !!value} htmlFor="input-field">
+        <InputLabel $focused={focused || !!value} htmlFor="input-field">
           {label}
         </InputLabel>
         <InputField
