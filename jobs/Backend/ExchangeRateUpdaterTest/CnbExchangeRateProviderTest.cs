@@ -30,7 +30,7 @@ namespace ExchangeRateUpdaterTest
         [Fact]
         public async void GetExchangeRatesAsync_AllOk()
         {
-            //Arrenge
+            //Arrange
             List<Currency> currencies = new List<Currency>
             {
                 new Currency("USD"),
@@ -63,7 +63,7 @@ namespace ExchangeRateUpdaterTest
         [Fact]
         public async void GetExchangeRatesAsync_OnError_RetryAndLog()
         {
-            //Arrenge
+            //Arrange
             var errorMessage = "Test error message";
             var responseMessage = CreateErrorClientResponse(errorMessage);
 
@@ -92,7 +92,7 @@ namespace ExchangeRateUpdaterTest
         [Fact]
         public async void GetExchangeRatesAsync_SuccedsAfterRetry()
         {
-            //Arrenge
+            //Arrange
             List<Currency> currencies = new List<Currency>
             {
                 new Currency("USD"),
