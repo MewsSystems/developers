@@ -10,7 +10,7 @@ export interface MovieCardProps {
   releaseDate: string;
   genres: string[];
   rating: number;
-  imgPath: string | null;
+  imgPath: string | null; // TODO: replace with one prop movie
 }
 
 const CardWrapper = styled.div`
@@ -18,6 +18,7 @@ const CardWrapper = styled.div`
   flex-direction: column;
 
   max-height: 540px;
+  min-width: 260px;
   width: 100%;
 
   border-radius: 16px;

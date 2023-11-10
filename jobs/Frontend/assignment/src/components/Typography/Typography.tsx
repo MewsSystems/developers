@@ -21,7 +21,7 @@ const getColorByVariant = (theme: DefaultTheme, color?: TypographyColor) => {
 const StyledTypography = styled.p<TypographyProps>`
   font-size: ${({ theme, variant }) => theme.fonts[variant || "bodyMedium"].fontSize};
   font-weight: ${({ theme, variant, bold }) =>
-    bold ? "bold" : theme.fonts[variant || "bodyMedium"].fontWeight};
+    bold ? "500" : theme.fonts[variant || "bodyMedium"].fontWeight};
   color: ${({ theme, color }) => getColorByVariant(theme, color)};
 `;
 
@@ -29,10 +29,11 @@ export function Typography({
   element,
   variant = "bodyMedium",
   color = "primary",
+  bold,
   children,
 }: PropsWithChildren<TypographyProps>) {
   return (
-    <StyledTypography as={element} variant={variant} color={color}>
+    <StyledTypography as={element} bold={bold} variant={variant} color={color}>
       {children}
     </StyledTypography>
   );

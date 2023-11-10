@@ -7,8 +7,8 @@ import { TMDB, Search, Movie } from "tmdb-ts";
 import { useDebounce } from "use-debounce";
 import { useDarkMode } from "@/hooks";
 
-const IMG_BASE_PATH = "https://image.tmdb.org/t/p/w300";
-const tmdbClient = new TMDB(process.env.TMDB_ACCESS_TOKEN as string);
+export const IMG_BASE_PATH = "https://image.tmdb.org/t/p/w300";
+export const tmdbClient = new TMDB(process.env.TMDB_ACCESS_TOKEN as string);
 
 const StyledWrapper = styled.div`
   max-width: 100vw;
