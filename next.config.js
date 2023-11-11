@@ -31,6 +31,9 @@ const nextConfig = {
     hideSourceMaps: true,
     widenClientFileUpload: true,
   },
+  compiler: {
+    styledComponents: true,
+  },
   webpack(config) {
     if (!isDevelopment) {
       const registerJs = path.join(

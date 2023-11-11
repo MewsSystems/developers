@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { getCurrentTimezone } from "@/util/date";
+import StyledComponentsRegistry from "@/lib/registry";
 
 type Props = {
   locale: string;
@@ -16,7 +17,7 @@ export const Providers: FC<Props> = ({ locale, children }) => {
       messages={messages}
       timeZone={getCurrentTimezone()}
     >
-      {children}
+      <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
     </NextIntlClientProvider>
   );
 };

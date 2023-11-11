@@ -1,7 +1,8 @@
 import { useTranslations } from "next-intl";
+import { Text } from "@/styles/components/text";
 
 export default function Home() {
   const t = useTranslations();
 
-  return <h1>{t("appName")}</h1>;
+  return <Text>Ja sam Luka</Text>;
 }
