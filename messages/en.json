@@ -1,3 +1,8 @@
 {
-  "appName": "iLookUp Movies & TV Shows"
+  "appName": "iLookUp Movies & TV Shows",
+  "metadata": {
+    "title": "iLookUp Movies & TV Shows",
+    "template": "%s | iLookUp",
+    "description": "Your go-to movie app for endless entertainment! Explore classics, discover new releases, and create personalized watchlists. Download now and experience the world of cinema in the palm of your hand!"
+  }
 }
