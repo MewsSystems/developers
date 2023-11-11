@@ -4,5 +4,5 @@ import { Text } from "@/styles/components/text";
 export default function Home() {
   const t = useTranslations();
 
-  return <Text>Ja sam Luka</Text>;
+  return <>text</>;
 }
