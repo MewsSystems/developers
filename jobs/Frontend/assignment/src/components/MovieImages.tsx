@@ -5,7 +5,7 @@ import { Typography, WithMovieIdProps } from ".";
 import { tmdbClient } from "@/tmdbClient";
 import { MEDIA_500_BASE_URL } from "@/tmdbClient";
 
-const MediaContainer = styled.div`
+const ImagesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
@@ -14,7 +14,7 @@ const MediaContainer = styled.div`
   overflow-y: auto;
 `;
 
-const MediaImage = styled.img`
+const Image = styled.img`
   border-radius: 28px;
   min-width: 545px;
 `;
@@ -27,16 +27,16 @@ export function MovieImages({ movieId }: WithMovieIdProps) {
   }, [movieId]);
 
   return (
-    <MediaContainer>
+    <ImagesContainer>
       {data?.backdrops.length ? (
         data?.backdrops.map(({ file_path }) => (
-          <MediaImage key={file_path} src={MEDIA_500_BASE_URL + file_path} />
+          <Image key={file_path} src={MEDIA_500_BASE_URL + file_path} />
         ))
       ) : (
         <Typography variant="titleMedium" color="secondary">
           No images found
         </Typography>
       )}
-    </MediaContainer>
+    </ImagesContainer>
   );
 }

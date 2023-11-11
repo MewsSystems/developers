@@ -13,7 +13,7 @@ export const DarkModeContext = createContext<DarkModeContextType>({
   toggleDarkMode: () => {},
 });
 
-export function DarkModeProvider({ children }: PropsWithChildren<{}>) {
+export function DarkModeProvider({ children }: PropsWithChildren) {
   const userPrefersDark = usePrefersColorTheme() === "dark";
   const [darkMode, setDarkMode] = useState(userPrefersDark);
 
@@ -33,4 +33,14 @@ export function DarkModeProvider({ children }: PropsWithChildren<{}>) {
       {children}
     </DarkModeContext.Provider>
   );
+}
+
+export function withDarkMode(Component: React.FC) {
+  return function WithDarkModeProvider() {
+    return (
+      <DarkModeProvider>
+        <Component />
+      </DarkModeProvider>
+    );
+  };
 }

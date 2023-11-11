@@ -22,12 +22,8 @@ const StyledWrapper = styled.div`
 `;
 
 const CardsWrapper = styled.div`
-  position: relative;
-  max-width: 1130px;
-
-  width: 95%;
+  width: 100%;
   display: grid;
-  justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
   gap: 16px;
 `;
@@ -43,7 +39,7 @@ const EmptyPageWrapper = styled.div`
   color: ${({ theme }) => theme.colors.surface.onVariant};
 `;
 
-export function Search() {
+export function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchResults, setSearchResults] = useState<Search<Movie> | null>(null);
@@ -63,17 +59,19 @@ export function Search() {
   }, []);
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
     if (!debouncedSearchQuery) {
       setSearchResults(null);
       setCurrentPage(1);
       return;
     }
 
-    tmdbClient.search
-      .movies({ query: debouncedSearchQuery, page: currentPage })
-      .then(res => setSearchResults(res));
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    tmdbClient.search.movies({ query: debouncedSearchQuery, page: currentPage }).then(res => {
+      setSearchResults(res);
+    });
   }, [debouncedSearchQuery, currentPage]);
 
   return (

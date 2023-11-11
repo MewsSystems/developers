@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/tests";
+import { render } from "@/tests";
 import { MovieCard, MovieCardProps } from "./MovieCard";
 import { Movie } from "tmdb-ts";
 import { MEDIA_300_BASE_URL } from "@/tmdbClient";

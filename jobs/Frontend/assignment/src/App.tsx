@@ -1,18 +1,18 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Search, Details } from "./pages";
+import { SearchPage, DetailsPage } from "./pages";
 import { ThemeProvider } from "styled-components";
 import { materialDarkTheme, materialLightTheme } from "./theme/themes";
-import { DarkModeProvider } from "./theme/DarkModeProvider";
+import { withDarkMode } from "./theme/DarkModeProvider";
 import { useDarkMode } from "./hooks";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Search />,
+    element: <SearchPage />,
   },
   {
     path: "/movie/:id",
-    element: <Details />,
+    element: <DetailsPage />,
   },
 ]);
 
@@ -26,12 +26,4 @@ function App() {
   );
 }
 
-function WithDarkModeProvider() {
-  return (
-    <DarkModeProvider>
-      <App />
-    </DarkModeProvider>
-  );
-}
-
-export default WithDarkModeProvider;
+export default withDarkMode(App);

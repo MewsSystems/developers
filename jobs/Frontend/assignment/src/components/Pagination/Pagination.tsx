@@ -11,7 +11,7 @@ export interface PaginationProps {
   onChange: (page: number) => void;
 }
 
-const StyledWrapper = styled.div`
+const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,7 @@ export function Pagination({ currentPage, totalPages, onChange }: PaginationProp
   };
 
   return (
-    <StyledWrapper>
+    <PaginationWrapper>
       <ButtonsWrapper>
         <IconButton
           size="small"
@@ -84,6 +84,6 @@ export function Pagination({ currentPage, totalPages, onChange }: PaginationProp
         </IconButton>
       </ButtonsWrapper>
       <Chip label={currentPage + " of " + totalPages} />
-    </StyledWrapper>
+    </PaginationWrapper>
   );
 }

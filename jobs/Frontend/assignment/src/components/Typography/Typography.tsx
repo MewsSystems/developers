@@ -19,11 +19,15 @@ const getColorByVariant = (theme: DefaultTheme, color?: TypographyColor) => {
   return theme.colors.surface.on;
 };
 
-const StyledTypography = styled.p<TypographyProps>`
-  font-size: ${({ theme, variant }) => theme.fonts[variant || "bodyMedium"].fontSize};
-  font-weight: ${({ theme, variant, bold }) =>
-    bold ? "500" : theme.fonts[variant || "bodyMedium"].fontWeight};
-  color: ${({ theme, color }) => getColorByVariant(theme, color)};
+const StyledTypography = styled.p<{
+  $bold?: boolean;
+  $variant: TypographyVariant;
+  $color: TypographyColor;
+}>`
+  font-size: ${({ theme, $variant }) => theme.fonts[$variant || "bodyMedium"].fontSize};
+  font-weight: ${({ theme, $variant, $bold }) =>
+    $bold ? "500" : theme.fonts[$variant || "bodyMedium"].fontWeight};
+  color: ${({ theme, $color }) => getColorByVariant(theme, $color)};
 `;
 
 export function Typography({
@@ -34,7 +38,7 @@ export function Typography({
   children,
 }: PropsWithChildren<TypographyProps>) {
   return (
-    <StyledTypography as={element} bold={bold} variant={variant} color={color}>
+    <StyledTypography as={element} $bold={bold} $variant={variant} $color={color}>
       {children}
     </StyledTypography>
   );

@@ -7,7 +7,7 @@ export interface ChipProps {
   TypographyProps?: TypographyProps;
 }
 
-const StyledChipWrapper = styled.div`
+const ChipWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -18,7 +18,7 @@ const StyledChipWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.outline.variant};
 `;
 
-const StyledChipImage = styled.span<{ $img: string }>`
+const ChipImage = styled.span<{ $img: string }>`
   width: 18px;
   height: 18px;
   border-radius: 100px;
@@ -29,11 +29,11 @@ const StyledChipImage = styled.span<{ $img: string }>`
 
 export function Chip({ label, imagePath, TypographyProps }: ChipProps) {
   return (
-    <StyledChipWrapper>
-      {imagePath && <StyledChipImage data-testid="chip-image" $img={imagePath} />}
+    <ChipWrapper>
+      {imagePath && <ChipImage data-testid="chip-image" $img={imagePath} />}
       <Typography variant="labelLarge" color="secondary" {...TypographyProps}>
         {label}
       </Typography>
-    </StyledChipWrapper>
+    </ChipWrapper>
   );
 }

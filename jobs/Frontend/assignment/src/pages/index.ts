@@ -1,2 +1,2 @@
-export { Search } from "./Search";
-export { Details } from "./Details";
+export { SearchPage } from "./SearchPage";
+export { DetailsPage } from "./DetailsPage";

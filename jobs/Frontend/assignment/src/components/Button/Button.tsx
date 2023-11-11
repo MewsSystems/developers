@@ -2,7 +2,7 @@ import { AnchorHTMLAttributes, ButtonHTMLAttributes, PropsWithChildren } from "r
 import styled, { css } from "styled-components";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
+export interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {}
 
 const styles = css`
   border: none;
@@ -37,6 +37,6 @@ export function Button({ ...props }: PropsWithChildren<ButtonProps>) {
   return <StyledButton {...props} />;
 }
 
-export function LinkButton({ ...props }: PropsWithChildren<LinkProps>) {
+export function LinkButton({ ...props }: PropsWithChildren<LinkButtonProps>) {
   return <StyledLink {...props} />;
 }

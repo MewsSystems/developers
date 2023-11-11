@@ -17,7 +17,7 @@ const DetailsWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.surface.main};
 `;
 
-export function Details() {
+export function DetailsPage() {
   const { id } = useParams();
   const parsedId = Number(id);
 
