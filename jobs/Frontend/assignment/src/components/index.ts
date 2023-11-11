@@ -13,3 +13,4 @@ export * from "./StreamingProviders";
 export * from "./MovieImages";
 export * from "./SimilarMovies";
 export * from "./Credits";
+export * from "./types";

@@ -2,11 +2,8 @@ import { tmdbClient } from "@/tmdbClient";
 import { useEffect, useState } from "react";
 import { Flatrate, WatchLocale } from "tmdb-ts";
 import styled from "styled-components";
-import { Chip } from ".";
+import { Chip, WithMovieIdProps } from ".";
 import { MEDIA_ORIGINAL_BASE_URL } from "@/tmdbClient";
-
-// TODO: move this to sharing types
-export type WithMovieIdProps<T = unknown> = T & { movieId: number };
 
 type LocalesWithoutStreaming = "AT" | "DE";
 type WatchLocalesWithFlatrate = Omit<WatchLocale, LocalesWithoutStreaming>;
