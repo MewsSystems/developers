@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Movie } from "tmdb-ts";
 import styled from "styled-components";
 import { MovieCard, Typography, WithMovieIdProps } from ".";
-import { IMG_BASE_PATH, tmdbClient } from "@/pages/Search";
+import { MEDIA_300_BASE_URL, tmdbClient } from "@/tmdbClient";
 
 const CardsWrapper = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ export function SimilarMovies({ movieId }: WithMovieIdProps) {
       {data?.length ? (
         data.map(movie => (
           <MovieCard
-            imgPath={movie.poster_path ? IMG_BASE_PATH + movie.poster_path : null}
+            imgPath={movie.poster_path ? MEDIA_300_BASE_URL + movie.poster_path : null}
             key={movie.id}
             id={movie.id}
             title={movie.title}

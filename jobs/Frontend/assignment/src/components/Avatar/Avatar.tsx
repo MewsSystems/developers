@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import fallbackAvatar from "@/assets/mocks/avatar-fallback.png";
-import { IMG_BASE_PATH } from "@/pages/Search";
+import { MOVIE_POSTER_SMALL_BASE_PATH } from "@/pages/Search";
 import { Typography } from "..";
 
 export interface AvatarProps {
@@ -27,7 +27,7 @@ export function Avatar({ imgPath, name, description }: AvatarProps) {
   return (
     <AvatarWrapper>
       {/* TODO: replace with avatar own const path */}
-      <AvatarImage src={imgPath ? IMG_BASE_PATH + imgPath : fallbackAvatar} />
+      <AvatarImage src={imgPath ? MOVIE_POSTER_SMALL_BASE_PATH + imgPath : fallbackAvatar} />
       {name && <Typography>{name}</Typography>}
       {description && <Typography variant="labelMedium">{description}</Typography>}
     </AvatarWrapper>

@@ -2,12 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { BottomBar, Input, MovieCard, Pagination, Typography } from "../components";
 import SearchIcon from "@material-ui/icons/Search";
-import { TMDB, Search, Movie } from "tmdb-ts";
+import { Search, Movie } from "tmdb-ts";
 import { useDebounce } from "use-debounce";
 import { useScrollToTop } from "@/hooks";
-
-export const IMG_BASE_PATH = "https://image.tmdb.org/t/p/w300";
-export const tmdbClient = new TMDB(process.env.TMDB_ACCESS_TOKEN as string);
+import { MEDIA_300_BASE_URL, tmdbClient } from "@/tmdbClient";
 
 const StyledWrapper = styled.div`
   max-width: 100vw;
@@ -85,7 +83,7 @@ export function Search() {
         <CardsWrapper>
           {searchResults?.results.map(movie => (
             <MovieCard
-              imgPath={movie.poster_path ? IMG_BASE_PATH + movie.poster_path : null}
+              imgPath={movie.poster_path ? MEDIA_300_BASE_URL + movie.poster_path : null}
               key={movie.id}
               id={movie.id}
               title={movie.title}

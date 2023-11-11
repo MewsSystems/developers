@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Avatar, Typography, WithMovieIdProps } from ".";
-import { tmdbClient } from "@/pages/Search";
+import { tmdbClient } from "@/tmdbClient";
 import { Credits } from "tmdb-ts";
 
 const CreditsWrapper = styled.div`

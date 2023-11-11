@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { Images } from "tmdb-ts";
 import styled from "styled-components";
 import { Typography, WithMovieIdProps } from ".";
-import { tmdbClient } from "@/pages/Search";
-
-// TODO: move to consts file
-const MOVIE_POSTER_SMALL_BASE_URL = "https://image.tmdb.org/t/p/w500";
+import { tmdbClient } from "@/tmdbClient";
+import { MEDIA_500_BASE_URL } from "@/tmdbClient";
 
 const MediaContainer = styled.div`
   display: flex;
@@ -32,7 +30,7 @@ export function MovieImages({ movieId }: WithMovieIdProps) {
     <MediaContainer>
       {data?.backdrops.length ? (
         data?.backdrops.map(({ file_path }) => (
-          <MediaImage key={file_path} src={MOVIE_POSTER_SMALL_BASE_URL + file_path} />
+          <MediaImage key={file_path} src={MEDIA_500_BASE_URL + file_path} />
         ))
       ) : (
         <Typography variant="titleMedium" color="secondary">

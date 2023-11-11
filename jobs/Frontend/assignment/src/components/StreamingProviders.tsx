@@ -1,8 +1,9 @@
-import { tmdbClient } from "@/pages/Search";
+import { tmdbClient } from "@/tmdbClient";
 import { useEffect, useState } from "react";
 import { Flatrate, WatchLocale } from "tmdb-ts";
 import styled from "styled-components";
 import { Chip } from ".";
+import { MEDIA_ORIGINAL_BASE_URL } from "@/tmdbClient";
 
 // TODO: move this to sharing types
 export type WithMovieIdProps<T = unknown> = T & { movieId: number };
@@ -37,7 +38,7 @@ export function StreamingProviders({ movieId }: WithMovieIdProps) {
         <Chip
           key={provider_id}
           label={provider_name}
-          imagePath={"https://image.tmdb.org/t/p/original" + logo_path}
+          imagePath={MEDIA_ORIGINAL_BASE_URL + logo_path}
           TypographyProps={{ color: "white" }}
         />
       ))}

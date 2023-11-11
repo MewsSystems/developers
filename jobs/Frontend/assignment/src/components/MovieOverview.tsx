@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Chip, Rating, StreamingProviders, Typography, WithMovieIdProps } from ".";
-import { IMG_BASE_PATH, tmdbClient } from "@/pages/Search";
+import { tmdbClient } from "@/tmdbClient";
 import { MovieDetails } from "tmdb-ts";
 import { MaxWidthWrapper } from "@/pages/Details"; /* TODO: replace import */
 import posterFallback from "@/assets/mocks/poster-fallback.jpg";
-
-const BIG_POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
+import { MEDIA_ORIGINAL_BASE_URL, MEDIA_300_BASE_URL } from "@/tmdbClient";
 
 const OverviewContainer = styled.div<{ $bgPath?: string }>`
   display: grid;
@@ -22,7 +21,8 @@ const OverviewContainer = styled.div<{ $bgPath?: string }>`
     height: 100%;
 
     filter: brightness(50%);
-    background: ${({ $bgPath }) => ($bgPath ? `url(${BIG_POSTER_BASE_URL + $bgPath})` : "grey")};
+    background: ${({ $bgPath }) =>
+      $bgPath ? `url(${MEDIA_ORIGINAL_BASE_URL + $bgPath})` : "grey"};
     background-size: cover;
   }
 
@@ -89,7 +89,9 @@ export function MovieOverview({ movieId }: WithMovieIdProps) {
     <OverviewContainer $bgPath={data?.backdrop_path}>
       <MaxWidthWrapper>
         <ContentContainer>
-          <Poster src={data?.poster_path ? IMG_BASE_PATH + data?.poster_path : posterFallback} />
+          <Poster
+            src={data?.poster_path ? MEDIA_300_BASE_URL + data?.poster_path : posterFallback}
+          />
           <TextContent>
             <Typography variant="displayMedium" color="white" bold>
               {data?.title}
