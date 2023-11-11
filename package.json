@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^7.80.0",
     "dayjs": "^1.11.10",
     "next": "14.0.2",
     "next-compose-plugins": "^2.2.1",
