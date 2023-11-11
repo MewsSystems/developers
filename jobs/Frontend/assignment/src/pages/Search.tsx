@@ -5,7 +5,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Search, Movie } from "tmdb-ts";
 import { useDebounce } from "use-debounce";
 import { useScrollToTop } from "@/hooks";
-import { MEDIA_300_BASE_URL, tmdbClient } from "@/tmdbClient";
+import { tmdbClient } from "@/tmdbClient";
 
 const StyledWrapper = styled.div`
   max-width: 100vw;
@@ -32,7 +32,7 @@ const CardsWrapper = styled.div`
   gap: 16px;
 `;
 
-const Test = styled.div`
+const EmptyPageWrapper = styled.div`
   max-width: 400px;
 
   position: absolute;
@@ -83,23 +83,18 @@ export function Search() {
         <CardsWrapper>
           {searchResults?.results.map(movie => (
             <MovieCard
-              imgPath={movie.poster_path ? MEDIA_300_BASE_URL + movie.poster_path : null}
               key={movie.id}
-              id={movie.id}
-              title={movie.title}
-              description={movie.overview}
-              releaseDate={movie.release_date}
-              rating={movie.vote_average / 2}
+              movie={movie}
               genres={movie.genre_ids.map(genreId => genresMap.get(genreId) || "Unknown")}
             />
           ))}
         </CardsWrapper>
       )}
       {!searchQuery && (
-        <Test>
+        <EmptyPageWrapper>
           <SearchIcon style={{ width: 200, height: 200 }} />
           <Typography variant="displaySmall">Type a keyword to start searching</Typography>
-        </Test>
+        </EmptyPageWrapper>
       )}
       <BottomBar
         leftChildren={

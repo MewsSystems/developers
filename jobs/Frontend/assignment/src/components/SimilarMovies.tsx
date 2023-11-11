@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Movie } from "tmdb-ts";
 import styled from "styled-components";
 import { MovieCard, Typography, WithMovieIdProps } from ".";
-import { MEDIA_300_BASE_URL, tmdbClient } from "@/tmdbClient";
+import { tmdbClient } from "@/tmdbClient";
 
 const CardsWrapper = styled.div`
   display: flex;
@@ -19,21 +19,11 @@ export function SimilarMovies({ movieId }: WithMovieIdProps) {
     tmdbClient.movies.similar(movieId).then(res => setData(res.results));
   }, [movieId]);
 
-  // TODO: refactor MovieCard to accept only movie, add genre
   return (
     <CardsWrapper>
       {data?.length ? (
         data.map(movie => (
-          <MovieCard
-            imgPath={movie.poster_path ? MEDIA_300_BASE_URL + movie.poster_path : null}
-            key={movie.id}
-            id={movie.id}
-            title={movie.title}
-            description={movie.overview}
-            releaseDate={movie.release_date}
-            rating={movie.vote_average / 2}
-            genres={movie.genre_ids.map(() => "Unknown")}
-          />
+          <MovieCard key={movie.id} movie={movie} genres={movie.genre_ids.map(() => "Unknown")} />
         ))
       ) : (
         <Typography variant="titleMedium" color="secondary">

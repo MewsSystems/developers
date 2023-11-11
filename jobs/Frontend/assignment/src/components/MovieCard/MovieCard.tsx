@@ -2,15 +2,12 @@ import styled from "styled-components";
 import { Button, Chip, Rating, Typography } from "..";
 import { useNavigate } from "react-router-dom";
 import fallbackImg from "@/assets/mocks/fallback.jpg";
+import { Movie } from "tmdb-ts";
+import { MEDIA_300_BASE_URL } from "@/tmdbClient";
 
 export interface MovieCardProps {
-  id: number;
-  title: string;
-  description: string;
-  releaseDate: string;
-  genres: string[];
-  rating: number;
-  imgPath: string | null; // TODO: replace with one prop movie
+  movie: Movie;
+  genres?: string[];
 }
 
 const CardWrapper = styled.div`
@@ -80,15 +77,16 @@ const ActionsWrapper = styled.div`
   align-items: center;
 `;
 
-export function MovieCard({
-  id,
-  title,
-  description,
-  releaseDate,
-  genres,
-  rating,
-  imgPath,
-}: MovieCardProps) {
+export function MovieCard({ movie, genres }: MovieCardProps) {
+  const {
+    id,
+    title,
+    overview,
+    release_date: releaseDate,
+    vote_average,
+    poster_path: posterPath,
+  } = movie;
+
   const navigate = useNavigate();
   const navigateToDetails = () => {
     navigate(`/movie/${id}`);
@@ -96,7 +94,10 @@ export function MovieCard({
 
   return (
     <CardWrapper>
-      <CardImage src={imgPath || fallbackImg} alt="Movie poster" />
+      <CardImage
+        src={posterPath ? MEDIA_300_BASE_URL + posterPath : fallbackImg}
+        alt="Movie poster"
+      />
       <CardContent>
         <TextWrapper>
           <Typography variant="titleSmall">{title}</Typography>
@@ -104,16 +105,14 @@ export function MovieCard({
             Release date: {releaseDate || "Unknown"}
           </Typography>
           <DescriptionWrapper>
-            <Typography variant="bodySmall">{description}</Typography>
+            <Typography variant="bodySmall">{overview}</Typography>
           </DescriptionWrapper>
           <ChipsWrapper>
-            {genres.map((genre, index) => (
-              <Chip key={genre + index} label={genre} />
-            ))}
+            {genres?.map((genre, index) => <Chip key={genre + index} label={genre} />)}
           </ChipsWrapper>
         </TextWrapper>
         <ActionsWrapper>
-          <Rating value={rating} />
+          <Rating value={vote_average / 2} />
           <Button onClick={navigateToDetails}>See more</Button>
         </ActionsWrapper>
       </CardContent>
