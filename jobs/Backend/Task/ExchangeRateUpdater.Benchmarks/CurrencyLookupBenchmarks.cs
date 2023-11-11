@@ -105,18 +105,18 @@ public class CurrencyLookupBenchmarks
     [InvocationCount(131_072, 16)]
     public IReadOnlyCollection<ExchangeRate> LoopSlide()
     {
-        var expectedCurrencies = (List<Currency>)_unsortedCurrencies;
-        var exchangeRates = (List<ExchangeRate>)_unsortedExchangeRates;
+        var expectedCurrencies = CollectionsMarshal.AsSpan((List<Currency>)_unsortedCurrencies);
+        var exchangeRates = CollectionsMarshal.AsSpan((List<ExchangeRate>)_unsortedExchangeRates);
 
         expectedCurrencies.Sort(CurrencyComparer.Instance);
         exchangeRates.Sort(ExchangeRateCurrencyComparer.Instance);
 
-        var rates = new List<ExchangeRate>(expectedCurrencies.Count);
+        var rates = new List<ExchangeRate>(expectedCurrencies.Length);
 
         int rateIdx = 0;
-        for (int currencyIdx = 0; currencyIdx < expectedCurrencies.Count; currencyIdx++)
+        for (int currencyIdx = 0; currencyIdx < expectedCurrencies.Length; currencyIdx++)
         {
-            while (rateIdx < exchangeRates.Count
+            while (rateIdx < exchangeRates.Length
                    && string.Compare(
                        exchangeRates[rateIdx].SourceCurrency.Code,
                        expectedCurrencies[currencyIdx].Code,
@@ -126,7 +126,12 @@ public class CurrencyLookupBenchmarks
                 ++rateIdx;
             }
 
-            if (rateIdx < exchangeRates.Count && exchangeRates[rateIdx].SourceCurrency.Code == expectedCurrencies[currencyIdx].Code)
+            if (rateIdx >= exchangeRates.Length)
+            {
+                break;
+            }
+
+            if (exchangeRates[rateIdx].SourceCurrency.Code == expectedCurrencies[currencyIdx].Code)
             {
                 rates.Add(exchangeRates[rateIdx]);
             }

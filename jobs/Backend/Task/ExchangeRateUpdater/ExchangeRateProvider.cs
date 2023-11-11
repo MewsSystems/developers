@@ -72,6 +72,30 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
             _ => CollectionsMarshal.AsSpan(exchangeRates.Rates.ToList()),
         };
 
+        // Following algorithm iterates trough requested currencies, moves pointer within existing exchange rates,
+        // and once pointers meet on same value, exchange rate is added to result list.
+        //
+        // Algorithm requires both collections to be sorted first.
+        //
+        // Complexity:
+        // - sorting: O(m lon m + n log n)
+        // - iteration trough currencies: O(m)
+        // - iteration trough exchange rates: O(n)
+        // -> total complexity: O(m log m + n log n)
+        //
+        // currencies:
+        // [ EUR, GBP, USD ]
+        //    ^- `currencyIdx`
+        //
+        // exchange rates:
+        // [ CZK, EUR, GBP, HUF, TOP, USD ]
+        //    ^- smaller than EUR, move pointer
+        //         ^- `rateIdx`
+        //
+        // explanation:
+        // 1. move `rateIdx` while it's smaller than `currencyIdx` (meaning pointing value)
+        // 2. if we haven't reached end of `exchangeRates` yet...
+        // 3. ... and `rateIdx` points to same currency as under `currencyIdx`, add to result
         currenciesSpan.Sort(CurrencyComparer.Instance);
         exchangeRatesSpan.Sort(ExchangeRateCurrencyComparer.Instance);
 
@@ -81,23 +105,30 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
         int rateIdx = 0;
         for (int currencyIdx = 0; currencyIdx < currenciesSpan.Length; currencyIdx++)
         {
+            // move `rateIdx` pointer until pointing value (rate) is same or greater than `currencyIdx` (currency)
             while (rateIdx < exchangeRatesLength
                    && string.CompareOrdinal(exchangeRatesSpan[rateIdx].CurrencyCode, currenciesSpan[currencyIdx].Code) < 0)
             {
                 ++rateIdx;
             }
 
-            if (rateIdx < exchangeRatesLength)
+            // we have reached end of `exchangeRates`, no need to continue
+            if (rateIdx >= exchangeRatesLength)
             {
-                var rate = exchangeRatesSpan[rateIdx];
-                if (rate.CurrencyCode == currenciesSpan[currencyIdx].Code)
-                {
-                    rates.Add(MapToDomain(rate));
-                }
-                else
-                {
-                    logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", rate.CurrencyCode);
-                }
+                break;
+            }
+
+            // compare pointed values, if they are same, add to result
+            var currency = currenciesSpan[currencyIdx];
+            var rate = exchangeRatesSpan[rateIdx];
+
+            if (currency.Code == rate.CurrencyCode)
+            {
+                rates.Add(MapToDomain(rate));
+            }
+            else
+            {
+                logger.LogWarning("Currency '{CurrencyCode}' not found in exchange rates", currency);
             }
         }
 
