@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button, Chip, Rating, StreamingProviders, Typography, WithMovieIdProps } from ".";
+import {
+  Chip,
+  ChipsContainer,
+  LinkButton,
+  MaxWidthWrapper,
+  Rating,
+  StreamingProviders,
+  Typography,
+  WithMovieIdProps,
+} from ".";
 import { tmdbClient } from "@/tmdbClient";
 import { MovieDetails } from "tmdb-ts";
-import { MaxWidthWrapper } from "@/pages/Details"; /* TODO: replace import */
 import posterFallback from "@/assets/mocks/poster-fallback.jpg";
 import { MEDIA_ORIGINAL_BASE_URL, MEDIA_300_BASE_URL } from "@/tmdbClient";
 
@@ -56,13 +64,6 @@ const TextContent = styled.div`
   gap: 8px;
 `;
 
-// TODO: make it reusable
-const ChipsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
-
 const BottomContent = styled.div`
   display: flex;
   align-items: center;
@@ -112,8 +113,11 @@ export function MovieOverview({ movieId }: WithMovieIdProps) {
               <Rating value={data ? data.vote_average / 2 : 0} />
               <BottomRightWrapper>
                 <StreamingProviders movieId={movieId} />
-                {data?.homepage && <Button>Go to movie's homepage</Button>}
-                {/* TODO: fix button's text color, do as link */}
+                {data?.homepage && (
+                  <LinkButton href={data.homepage} target="_blank">
+                    Go to movie's homepage
+                  </LinkButton>
+                )}
               </BottomRightWrapper>
             </BottomContent>
           </TextContent>

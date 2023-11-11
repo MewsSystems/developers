@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Button, Chip, Rating, Typography } from "..";
-import { useNavigate } from "react-router-dom";
+import { Chip, LinkButton, Rating, Typography } from "..";
 import fallbackImg from "@/assets/mocks/fallback.jpg";
 import { Movie } from "tmdb-ts";
 import { MEDIA_300_BASE_URL } from "@/tmdbClient";
@@ -87,11 +86,6 @@ export function MovieCard({ movie, genres }: MovieCardProps) {
     poster_path: posterPath,
   } = movie;
 
-  const navigate = useNavigate();
-  const navigateToDetails = () => {
-    navigate(`/movie/${id}`);
-  };
-
   return (
     <CardWrapper>
       <CardImage
@@ -113,7 +107,7 @@ export function MovieCard({ movie, genres }: MovieCardProps) {
         </TextWrapper>
         <ActionsWrapper>
           <Rating value={vote_average / 2} />
-          <Button onClick={navigateToDetails}>See more</Button>
+          <LinkButton href={`/movie/${id}`}>See more</LinkButton>
         </ActionsWrapper>
       </CardContent>
     </CardWrapper>
