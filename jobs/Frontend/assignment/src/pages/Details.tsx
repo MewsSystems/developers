@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
-import { MovieDetails } from "tmdb-ts";
-import { tmdbClient } from "./Search";
 import { useParams } from "react-router-dom";
-import { Credits, MovieImages, MovieOverview, SimilarMovies, Typography } from "@/components";
+import {
+  BottomBar,
+  Credits,
+  MovieImages,
+  MovieOverview,
+  SimilarMovies,
+  Typography,
+} from "@/components";
 import styled from "styled-components";
+import { useScrollToTop } from "@/hooks";
 
 // TODO: move this  to shared components file
 export const SectionWrapper = styled.div`
@@ -27,48 +32,36 @@ const DetailsWrapper = styled.div`
 
 export function Details() {
   const { id } = useParams();
-
-  const [details, setDetails] = useState<MovieDetails>();
-
   const parsedId = Number(id);
 
-  useEffect(() => {
-    if (id) {
-      tmdbClient.movies.details(parsedId).then(res => setDetails(res));
-    }
-  }, []);
-
-  console.log(details?.budget, details?.revenue);
+  useScrollToTop(id);
 
   return (
-    <div key={details?.id}>
-      {details && (
-        <>
-          <MovieOverview movieId={parsedId} />
-          <DetailsWrapper>
-            <MaxWidthWrapper>
-              <SectionWrapper>
-                <Typography variant="headlineLarge" bold>
-                  Media:
-                </Typography>
-                <MovieImages movieId={parsedId} />
-              </SectionWrapper>
-              <SectionWrapper>
-                <Typography variant="headlineLarge" bold>
-                  Similar movies:
-                </Typography>
-                <SimilarMovies movieId={parsedId} />
-              </SectionWrapper>
-              <SectionWrapper>
-                <Typography variant="headlineLarge" bold>
-                  Cast & Crew:
-                </Typography>
-                <Credits movieId={parsedId} />
-              </SectionWrapper>
-            </MaxWidthWrapper>
-          </DetailsWrapper>
-        </>
-      )}
+    <div>
+      <MovieOverview movieId={parsedId} />
+      <DetailsWrapper>
+        <MaxWidthWrapper>
+          <SectionWrapper>
+            <Typography variant="headlineLarge" bold>
+              Media:
+            </Typography>
+            <MovieImages movieId={parsedId} />
+          </SectionWrapper>
+          <SectionWrapper>
+            <Typography variant="headlineLarge" bold>
+              Similar movies:
+            </Typography>
+            <SimilarMovies movieId={parsedId} />
+          </SectionWrapper>
+          <SectionWrapper>
+            <Typography variant="headlineLarge" bold>
+              Cast & Crew:
+            </Typography>
+            <Credits movieId={parsedId} />
+          </SectionWrapper>
+        </MaxWidthWrapper>
+      </DetailsWrapper>
+      <BottomBar />
     </div>
   );
 }

@@ -7,6 +7,7 @@ export * from "./Input/Input";
 export * from "./MovieCard/MovieCard";
 export * from "./Avatar/Avatar";
 export * from "./Pagination/Pagination";
+export * from "./BottomBar";
 export * from "./MovieOverview";
 export * from "./StreamingProviders";
 export * from "./MovieImages";
