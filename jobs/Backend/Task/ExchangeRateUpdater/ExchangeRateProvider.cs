@@ -6,6 +6,7 @@ using W4k.Either;
 
 namespace ExchangeRateUpdater;
 
+// 💡 considering `ExchangeRateProvider` as "CNB" specific component and main unit - that's also reason for coupling with other components
 public sealed class ExchangeRateProvider : IDisposable
 {
     private readonly CnbClientCacheProxy _cnbClientCache;
@@ -36,7 +37,7 @@ public sealed class ExchangeRateProvider : IDisposable
         IReadOnlyCollection<Currency> currencies,
         CancellationToken cancellationToken)
     {
-        var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken);
+        var exchangeRatesResult = await _cnbClientCache.GetExchangeRates(cancellationToken).ConfigureAwait(false);
 
         return exchangeRatesResult.Match(
             (Currencies: currencies, Logger: _logger),
