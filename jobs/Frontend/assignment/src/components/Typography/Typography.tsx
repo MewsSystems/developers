@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 import { TypographyVariant } from "@/theme/types";
 import styled, { DefaultTheme } from "styled-components";
 
-export type TypographyColor = "surface" | "primary" | "secondary";
+export type TypographyColor = "surface" | "primary" | "secondary" | "white";
 
 export interface TypographyProps {
   variant?: TypographyVariant;
@@ -14,6 +14,7 @@ export interface TypographyProps {
 const getColorByVariant = (theme: DefaultTheme, color?: TypographyColor) => {
   if (color === "surface") return theme.colors.surface.main;
   if (color === "secondary") return theme.colors.surface.onVariant;
+  if (color === "white") return "white";
 
   return theme.colors.surface.on;
 };

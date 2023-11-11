@@ -4,6 +4,7 @@ import { Button, Chip, Rating, StreamingProviders, Typography, WithMovieIdProps 
 import { IMG_BASE_PATH, tmdbClient } from "@/pages/Search";
 import { MovieDetails } from "tmdb-ts";
 import { MaxWidthWrapper } from "@/pages/Details"; /* TODO: replace import */
+import posterFallback from "@/assets/mocks/poster-fallback.jpg";
 
 const BIG_POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -82,23 +83,29 @@ export function MovieOverview({ movieId }: WithMovieIdProps) {
 
   useEffect(() => {
     tmdbClient.movies.details(movieId).then(res => setData(res));
-  }, []);
+  }, [movieId]);
 
   return (
     <OverviewContainer $bgPath={data?.backdrop_path}>
       <MaxWidthWrapper>
         <ContentContainer>
-          <Poster src={IMG_BASE_PATH + data?.poster_path} />
+          <Poster src={data?.poster_path ? IMG_BASE_PATH + data?.poster_path : posterFallback} />
           <TextContent>
-            <Typography variant="displayMedium" bold>
+            <Typography variant="displayMedium" color="white" bold>
               {data?.title}
             </Typography>
             <ChipsContainer>
-              {data?.genres.map(genre => <Chip label={genre.name} />)}
+              {data?.genres.map(genre => (
+                <Chip key={genre.id} label={genre.name} TypographyProps={{ color: "white" }} />
+              ))}
             </ChipsContainer>
-            <Typography>Release date: {data?.release_date}</Typography>
-            <Typography variant="titleLarge">Overview:</Typography>
-            <Typography variant="bodyLarge">{data?.overview}</Typography>
+            <Typography color="white">Release date: {data?.release_date}</Typography>
+            <Typography variant="titleLarge" color="white">
+              Overview:
+            </Typography>
+            <Typography variant="bodyLarge" color="white">
+              {data?.overview}
+            </Typography>
             <BottomContent>
               <Rating value={data ? data.vote_average / 2 : 0} />
               <BottomRightWrapper>
