@@ -31,7 +31,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                     .ConfigureAwait(false);
 
                 logger.UnexpectedStatusCode(response.StatusCode, rawPayload);
-                return new CnbError();
+                return new CnbUnexpectedStatusError(response.StatusCode);
             }
 
             var payload = await response.Content
@@ -45,7 +45,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                     .ConfigureAwait(false);
 
                 logger.InvalidPayload(rawPayload);
-                return new CnbError();
+                return new CnbInvalidPayloadError(rawPayload);
             }
 
             return payload;
@@ -58,7 +58,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
             }
 
             logger.RequestTimedOut(ex);
-            return new CnbError();
+            return new CnbTimeoutError();
         }
         catch (JsonException ex)
         {
@@ -66,7 +66,7 @@ internal class CnbClient(HttpClient httpClient, ILogger<CnbClient> logger) : ICn
                 .ConfigureAwait(false);
 
             logger.FailedToDeserializePayload(ex, rawPayload);
-            return new CnbError();
+            return new CnbInvalidPayloadError(ex, rawPayload);
         }
         finally
         {
