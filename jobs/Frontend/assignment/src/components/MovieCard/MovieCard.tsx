@@ -107,8 +107,8 @@ export function MovieCard({
             <Typography variant="bodySmall">{description}</Typography>
           </DescriptionWrapper>
           <ChipsWrapper>
-            {genres.map(genre => (
-              <Chip key={genre} label={genre} />
+            {genres.map((genre, index) => (
+              <Chip key={genre + index} label={genre} />
             ))}
           </ChipsWrapper>
         </TextWrapper>

@@ -33,8 +33,13 @@ export function StreamingProviders({ movieId }: WithMovieIdProps) {
 
   return (
     <ChipsContainer>
-      {streamingsForLocale?.map(({ provider_name, logo_path }) => (
-        <Chip label={provider_name} imagePath={"https://image.tmdb.org/t/p/original" + logo_path} />
+      {streamingsForLocale?.map(({ provider_name, logo_path, provider_id }) => (
+        <Chip
+          key={provider_id}
+          label={provider_name}
+          imagePath={"https://image.tmdb.org/t/p/original" + logo_path}
+          TypographyProps={{ color: "white" }}
+        />
       ))}
     </ChipsContainer>
   );

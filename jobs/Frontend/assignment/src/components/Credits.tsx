@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Avatar, WithMovieIdProps } from ".";
+import { Avatar, Typography, WithMovieIdProps } from ".";
 import { tmdbClient } from "@/pages/Search";
 import { Credits } from "tmdb-ts";
 
@@ -17,16 +17,24 @@ export function Credits({ movieId }: WithMovieIdProps) {
 
   useEffect(() => {
     tmdbClient.movies.credits(movieId).then(res => setData(res));
-  }, []);
+  }, [movieId]);
 
   return (
     <CreditsWrapper>
-      {data?.cast.map(({ name, profile_path, character }) => (
-        <Avatar imgPath={profile_path} name={name} description={character} />
-      ))}
-      {data?.crew.map(({ name, profile_path, job }) => (
-        <Avatar imgPath={profile_path} name={name} description={job} />
-      ))}
+      {data?.cast.length || data?.crew.length ? (
+        <>
+          {data?.cast.map(({ name, profile_path, character, credit_id }) => (
+            <Avatar key={credit_id} imgPath={profile_path} name={name} description={character} />
+          ))}
+          {data?.crew.map(({ name, profile_path, job, credit_id }) => (
+            <Avatar key={credit_id} imgPath={profile_path} name={name} description={job} />
+          ))}
+        </>
+      ) : (
+        <Typography variant="titleMedium" color="secondary">
+          No credits found
+        </Typography>
+      )}
     </CreditsWrapper>
   );
 }

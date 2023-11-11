@@ -1,8 +1,10 @@
 import styled from "styled-components";
+import { Typography, TypographyProps } from "..";
 
 export interface ChipProps {
   label: string;
   imagePath?: string;
+  TypographyProps?: TypographyProps;
 }
 
 const StyledChipWrapper = styled.div`
@@ -16,12 +18,6 @@ const StyledChipWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.outline.variant};
 `;
 
-const StyledChipLabel = styled.span`
-  color: ${({ theme }) => theme.colors.surface.onVariant};
-  font-size: ${({ theme }) => theme.fonts.labelLarge.fontSize};
-  font-weight: ${({ theme }) => theme.fonts.labelLarge.fontWeight};
-`;
-
 const StyledChipImage = styled.span<{ $img: string }>`
   width: 18px;
   height: 18px;
@@ -31,11 +27,13 @@ const StyledChipImage = styled.span<{ $img: string }>`
   background-size: cover;
 `;
 
-export function Chip({ label, imagePath }: ChipProps) {
+export function Chip({ label, imagePath, TypographyProps }: ChipProps) {
   return (
     <StyledChipWrapper>
       {imagePath && <StyledChipImage data-testid="chip-image" $img={imagePath} />}
-      <StyledChipLabel>{label}</StyledChipLabel>
+      <Typography variant="labelLarge" color="secondary" {...TypographyProps}>
+        {label}
+      </Typography>
     </StyledChipWrapper>
   );
 }

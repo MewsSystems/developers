@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Images } from "tmdb-ts";
 import styled from "styled-components";
-import { WithMovieIdProps } from ".";
+import { Typography, WithMovieIdProps } from ".";
 import { tmdbClient } from "@/pages/Search";
 
 // TODO: move to consts file
@@ -26,13 +26,19 @@ export function MovieImages({ movieId }: WithMovieIdProps) {
 
   useEffect(() => {
     tmdbClient.movies.images(movieId).then(res => setData(res));
-  }, []);
+  }, [movieId]);
 
   return (
     <MediaContainer>
-      {data?.backdrops.map(({ file_path }) => (
-        <MediaImage src={MOVIE_POSTER_SMALL_BASE_URL + file_path} />
-      ))}
+      {data?.backdrops.length ? (
+        data?.backdrops.map(({ file_path }) => (
+          <MediaImage key={file_path} src={MOVIE_POSTER_SMALL_BASE_URL + file_path} />
+        ))
+      ) : (
+        <Typography variant="titleMedium" color="secondary">
+          No images found
+        </Typography>
+      )}
     </MediaContainer>
   );
 }
