@@ -1,6 +1,7 @@
 const path = require("path");
 const withPlugins = require("next-compose-plugins");
 const withPWAInit = require("next-pwa");
+const withNextIntl = require("next-intl/plugin")();
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -51,5 +52,5 @@ const nextConfig = {
   },
 };
 
-const plugins = [withPWA];
+const plugins = [withPWA, withNextIntl];
 module.exports = withPlugins(plugins, nextConfig);

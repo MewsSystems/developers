@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dayjs": "^1.11.10",
     "next": "14.0.2",
     "next-compose-plugins": "^2.2.1",
+    "next-intl": "^3.0.0-rc.10",
     "next-pwa": "^5.6.0",
     "react": "^18",
     "react-dom": "^18"
