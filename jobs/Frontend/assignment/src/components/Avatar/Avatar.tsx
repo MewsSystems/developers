@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import fallbackAvatar from "@/assets/mocks/avatar-fallback.png";
-import { MOVIE_POSTER_SMALL_BASE_PATH } from "@/pages/Search";
 import { Typography } from "..";
+import { MEDIA_185_BASE_URL } from "@/tmdbClient";
 
 export interface AvatarProps {
   imgPath?: string;
@@ -26,8 +26,7 @@ const AvatarImage = styled.img`
 export function Avatar({ imgPath, name, description }: AvatarProps) {
   return (
     <AvatarWrapper>
-      {/* TODO: replace with avatar own const path */}
-      <AvatarImage src={imgPath ? MOVIE_POSTER_SMALL_BASE_PATH + imgPath : fallbackAvatar} />
+      <AvatarImage src={imgPath ? MEDIA_185_BASE_URL + imgPath : fallbackAvatar} />
       {name && <Typography>{name}</Typography>}
       {description && <Typography variant="labelMedium">{description}</Typography>}
     </AvatarWrapper>
