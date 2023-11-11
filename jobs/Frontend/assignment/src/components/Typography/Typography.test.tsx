@@ -43,6 +43,6 @@ describe("Typography", () => {
 
     const typographyElem = getByText("Hello");
 
-    expect(typographyElem).toHaveStyle(`font-weight: 400`);
+    expect(typographyElem).toHaveStyle(`font-weight: 500`);
   });
 });
