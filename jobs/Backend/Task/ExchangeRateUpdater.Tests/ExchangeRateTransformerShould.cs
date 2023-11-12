@@ -107,7 +107,7 @@ public class ExchangeRateTransformerShould
 
     [Theory]
     [MemberData(nameof(GenerateLoggingTestData))]
-    public void Log(string[] currencyCodes, string[] expectedLoggedCurrencies)
+    public void LogMissingCurrencies(string[] currencyCodes, string[] expectedLoggedCurrencies)
     {
         // arrange
         var currencies = currencyCodes.Select(cc => new Currency(cc)).ToList();
@@ -120,6 +120,8 @@ public class ExchangeRateTransformerShould
         transformer.GetExchangeRatesForCurrencies(currencies, exchangeRatesDto);
 
         // assert
+        // NB! Implementation detail - currently used transformer relies on data being sorted,
+        //     if we change algorithm, this assertion needs to change as well
         Assert.Equal(expectedLoggedCurrencies.Length, logger.Messages.Count);
         for (var i = 0; i < expectedLoggedCurrencies.Length; i++)
         {
@@ -129,92 +131,53 @@ public class ExchangeRateTransformerShould
 
     public static TheoryData<string[], IReadOnlyList<CnbExchangeRate>, int> GenerateTestData() => new()
     {
+        // no input currencies -> no output (we filter all)
         { Array.Empty<string>(), ExchangeRates, 0 },
+
+        // USD, EUR but no exchange rates -> no output (we have no data to pick from)
         { new[] { "USD", "EUR" }, new List<CnbExchangeRate>(), 0 },
+
+        // AAA, XYZ not in exchange rates -> no output (we have no data to pick from)
         { new[] { "AAA", "XYZ" }, ExchangeRates, 0 },
+
+        // USD, EUR in exchange rates -> expect both rates in output
         { new[] { "USD", "EUR" }, ExchangeRates, 2 },
-        {
-            new[]
-            {
-                "CZK",
-                "EUR",
-                "GBP",
-                "HUF",
-                "TOP",
-                "USD",
-            },
-            ExchangeRates, 6
-        },
+
+        // all currencies in exchange rates -> expect all rates in output
+        { new[] { "CZK", "EUR", "GBP", "HUF", "TOP", "USD" }, ExchangeRates, 6 },
+
+        // pick first currency (sorted alphabetically) -> expect only first rate in output
         { new[] { "CZK" }, ExchangeRates, 1 },
+
+        // pick last currency (sorted alphabetically) -> expect only last rate in output
         { new[] { "USD" }, ExchangeRates, 1 },
     };
 
     public static TheoryData<string[], string[]> GenerateLoggingTestData() => new()
     {
+        // first currency (alphabetically sorted) -> no missing currency is logged
         { new[] { "CZK" }, Array.Empty<string>() },
+
+        // more currencies before first one (alphabetically sorted) -> missing currencies should be logged
+        { new[] { "BAD", "BOP", "CZK" }, new[] { "BAD", "BOP" } },
+
+        // last currency (alphabetically sorted) -> no missing currency is logged
         { new[] { "USD" }, Array.Empty<string>() },
-        {
-            new[]
-            {
-                "CZK",
-                "EUR",
-                "GBP",
-                "HUF",
-                "TOP",
-                "USD",
-            },
-            Array.Empty<string>()
-        },
+
+        // more currencies after last one (alphabetically sorted) -> missing currencies should be logged
+        { new[] { "USD", "UYU", "VND" }, new[] { "UYU", "VND" } },
+
+        // additional currencies before/after one present in rates (EUR, alphabetically sorted -> missing currencies should be logged
+        { new[] { "ERN", "ETB", "EUR", "FJD", "FKP" }, new[] { "ERN", "ETB", "FJD", "FKP" } },
+
+        // all currencies in exchange rates -> no missing currency is logged
+        { new[] { "CZK", "EUR", "GBP", "HUF", "TOP", "USD" }, Array.Empty<string>() },
+
+        // single currency not in rates -> currency is logged as missing
         { new[] { "RON" }, new[] { "RON" } },
-        {
-            new[]
-            {
-                "RON", // 3
-                "GBP", // 2: present in exchange rates
-                "CHF", // 1
-                "USD", // 4: present in exchange rates
-                "ALL", // 0
-            },
-            new[]
-            {
-                "ALL",
-                "CHF",
-                "RON",
-            }
-        },
-        {
-            new[]
-            {
-                "RON", // 4
-                "HUF", // 3: present in exchange rates
-                "CHF", // 1
-                "EUR", // 2: present in exchange rates
-                "ALL", // 0
-            },
-            new[]
-            {
-                "ALL",
-                "CHF",
-                "RON",
-            }
-        },
-        {
-            new[]
-            {
-                "ERN",
-                "ETB",
-                "EUR", // 2: present in exchange rates
-                "FJD",
-                "FKP",
-            },
-            new[]
-            {
-                "ERN",
-                "ETB",
-                "FJD",
-                "FKP"
-            }
-        },
+
+        // multiple currencies not in rates -> currencies are logged if missing
+        { new[] { "RON", "HUF", "CHF", "EUR", "ALL" }, new[] { "ALL", "CHF", "RON" } },
     };
 
     private class TestLogger : ILogger

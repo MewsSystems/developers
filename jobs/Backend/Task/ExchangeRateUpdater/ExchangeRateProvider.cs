@@ -79,7 +79,7 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
         // Algorithm requires both collections to be sorted first.
         //
         // Complexity:
-        // - sorting: O(m lon m + n log n)
+        // - sorting: O(m log m + n log n)
         // - iteration trough currencies: O(m)
         // - iteration trough exchange rates: O(n)
         // -> total complexity: O(m log m + n log n)
@@ -106,26 +106,21 @@ internal readonly ref struct ExchangeRateTransformer(ILogger logger)
         int rateIdx = 0;
         for (int currencyIdx = 0; currencyIdx < currenciesSpan.Length; currencyIdx++)
         {
-            // move `rateIdx` pointer until pointing value (rate) is same or greater than `currencyIdx` (currency)
+            var currency = currenciesSpan[currencyIdx];
+
+            // move `rateIdx` pointer while pointing value (exchange rate code) is smaller than currency code,
+            // e.g. `CZK` < `EUR` --> move pointer
             while (rateIdx < exchangeRatesLength
-                   && string.CompareOrdinal(exchangeRatesSpan[rateIdx].CurrencyCode, currenciesSpan[currencyIdx].Code) < 0)
+                   && string.CompareOrdinal(exchangeRatesSpan[rateIdx].CurrencyCode, currency.Code) < 0)
             {
                 ++rateIdx;
             }
 
-            // we have reached end of `exchangeRates`, no need to continue
-            if (rateIdx >= exchangeRatesLength)
-            {
-                break;
-            }
-
             // compare pointed values, if they are same, add to result
-            var currency = currenciesSpan[currencyIdx];
-            var rate = exchangeRatesSpan[rateIdx];
-
-            if (currency.Code == rate.CurrencyCode)
+            if (rateIdx < exchangeRatesLength
+                && currency.Code == exchangeRatesSpan[rateIdx].CurrencyCode)
             {
-                rates.Add(MapToDomain(rate));
+                rates.Add(MapToDomain(exchangeRatesSpan[rateIdx]));
             }
             else
             {
