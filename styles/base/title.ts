@@ -12,6 +12,7 @@ interface Props {
   readonly $c?: keyof Colors;
   readonly $ff?: keyof Typography["fontFamily"];
   readonly $fw?: number;
+  readonly $ta?: "left" | "center" | "right";
 }
 
 export const Title = styled(Base).attrs<Props>(({ $variant }) => ({
@@ -26,4 +27,5 @@ export const Title = styled(Base).attrs<Props>(({ $variant }) => ({
     theme.typography.fontFamily[$ff ?? "primary"]};
   font-weight: ${({ $fw, theme }) =>
     $fw ?? theme.typography.headings.fontWeight};
+  text-align: ${({ $ta }) => $ta ?? "left"};
 `;

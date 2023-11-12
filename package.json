@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@sentry/nextjs": "^7.80.0",
+    "@tabler/icons-react": "^2.40.0",
     "dayjs": "^1.11.10",
     "next": "14.0.2",
     "next-compose-plugins": "^2.2.1",

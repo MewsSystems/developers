@@ -20,7 +20,7 @@ export const theme: DefaultTheme = {
     tertiary: "#E9E9E9",
     background: "#010102",
     textPrimary: "#F7F7F7",
-    textSecondary: "#EDEDED",
+    textSecondary: "#D4D4D4",
     white: "#FFFFFF",
     black: "#000000",
   },

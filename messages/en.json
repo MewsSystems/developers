@@ -4,5 +4,15 @@
     "title": "iLookUp Movies & TV Shows",
     "template": "%s | iLookUp",
     "description": "Your go-to movie app for endless entertainment! Explore classics, discover new releases, and create personalized watchlists. Download now and experience the world of cinema in the palm of your hand!"
+  },
+  "home": {
+    "title": "MOVIES <br></br>CHANGE <br></br>THE WORLD",
+    "stats": {
+      "moviesCount": "375+",
+      "moviesCountLabel": "Movies to choose",
+      "topAndPopularLabel": "Top & Popular",
+      "showsCount": "230+",
+      "showsCountLabel": "TV Shows to choose"
+    }
   }
 }

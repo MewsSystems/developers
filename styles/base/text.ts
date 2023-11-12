@@ -12,6 +12,7 @@ interface Props {
   readonly $lh?: keyof Sizes | number;
   readonly $ff?: keyof Typography["fontFamily"];
   readonly $fw?: number;
+  readonly $ta?: "left" | "center" | "right";
 }
 
 export const Text = styled(Base).attrs({ as: "p" })<Props>`
@@ -22,4 +23,5 @@ export const Text = styled(Base).attrs({ as: "p" })<Props>`
   font-family: ${({ $ff, theme }) =>
     theme.typography.fontFamily[$ff ?? "primary"]};
   font-weight: ${({ $fw }) => $fw ?? 400};
+  text-align: ${({ $ta }) => $ta ?? "left"};
 `;

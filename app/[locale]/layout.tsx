@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { LOCALES } from "@/util/constants";
+import { CONTENT_MAX_WIDTH, LOCALES } from "@/util/constants";
 import { Providers } from "../_components/providers";
 
 type Params = { locale: string };
@@ -46,7 +46,11 @@ export default function RootLayout({ children, params: { locale } }: Props) {
   return (
     <html lang={locale}>
       <body>
-        <Providers locale={locale}>{children}</Providers>
+        <Providers locale={locale}>
+          <main style={{ maxWidth: CONTENT_MAX_WIDTH, marginInline: "auto" }}>
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );
