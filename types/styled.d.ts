@@ -1,6 +1,14 @@
 import "styled-components";
 
-interface Colors {
+export interface Sizes {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+}
+
+export interface Colors {
   primary: string;
   primaryLight: string;
   secondary: string;
@@ -12,25 +20,13 @@ interface Colors {
   black: string;
 }
 
-interface Typography {
+export interface Typography {
   fontFamily: {
     primary: string;
     secondary: string;
   };
-  fontSizes: {
-    xs: string;
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  lineHeights: {
-    xs: string;
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
+  fontSizes: Sizes;
+  lineHeights: Sizes;
   headings: {
     fontFamily: string;
     fontWeight: number;
@@ -63,21 +59,9 @@ interface Typography {
   };
 }
 
-interface Spacing {
-  xs: string;
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-}
+interface Spacing extends Sizes {}
 
-interface Breakpoint {
-  xs: string;
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-}
+interface Breakpoint extends Sizes {}
 
 declare module "styled-components" {
   export interface DefaultTheme {
