@@ -11,7 +11,7 @@ export const generateSpacing = (
     ? typeof prop === "number"
       ? rem(prop)
       : theme.spacing[(prop as keyof Sizes) ?? "md"]
-    : "auto";
+    : "initial";
 
 export const generateTextSize = (
   size: keyof Sizes | undefined,

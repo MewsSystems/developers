@@ -8,12 +8,12 @@ export default function HomePage() {
   const { t } = useHomePage();
 
   return (
-    <LandingHeroSection>
+    <LandingHeroSection $align="center" $justify="space-around">
       <HeroTitle $variant="h1" $fs={128} $lh={140}>
         {t.rich("title", { br: () => <br /> })}
       </HeroTitle>
       <Stack $gap="xl">
-        <Stack $gap="xs">
+        <Stack $align="center" $gap="xs">
           <Text $size="xl" $fw={700}>
             {t("stats.moviesCount")}
           </Text>
@@ -21,13 +21,13 @@ export default function HomePage() {
             {t("stats.moviesCountLabel")}
           </Text>
         </Stack>
-        <Stack $align="center">
+        <Stack $align="center" $gap="xs">
           <IconVideo size={36} />
           <Text $c="textSecondary" $ta="center">
             {t("stats.topAndPopularLabel")}
           </Text>
         </Stack>
-        <Stack $gap="xs">
+        <Stack $align="center" $gap="xs">
           <Text $size="xl" $fw={700}>
             {t("stats.showsCount")}
           </Text>

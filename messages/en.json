@@ -5,6 +5,14 @@
     "template": "%s | iLookUp",
     "description": "Your go-to movie app for endless entertainment! Explore classics, discover new releases, and create personalized watchlists. Download now and experience the world of cinema in the palm of your hand!"
   },
+  "navbar": {
+    "logoAlt": "iLookUp logo",
+    "link": {
+      "discovery": "Discovery",
+      "movies": "Movies",
+      "tvShows": "TV Shows"
+    }
+  },
   "home": {
     "title": "MOVIES <br></br>CHANGE <br></br>THE WORLD",
     "stats": {

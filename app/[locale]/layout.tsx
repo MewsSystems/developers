@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { CONTENT_MAX_WIDTH, LOCALES } from "@/util/constants";
 import { Providers } from "../_components/providers";
+import { Navbar } from "../_components/navbar";
 
 type Params = { locale: string };
 type Props = { children: ReactNode; params: Params };
@@ -48,6 +49,7 @@ export default function RootLayout({ children, params: { locale } }: Props) {
       <body>
         <Providers locale={locale}>
           <main style={{ maxWidth: CONTENT_MAX_WIDTH, marginInline: "auto" }}>
+            <Navbar />
             {children}
           </main>
         </Providers>
