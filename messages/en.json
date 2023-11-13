@@ -13,6 +13,9 @@
       "tvShows": "TV Shows"
     }
   },
+  "shared": {
+    "loading": "Loading..."
+  },
   "home": {
     "title": "MOVIES <br></br>CHANGE <br></br>THE WORLD",
     "stats": {
