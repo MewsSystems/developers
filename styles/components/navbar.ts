@@ -12,4 +12,10 @@ export const Navbar = styled(Group).attrs({ as: "nav" })`
   display: flex;
   justify-content: space-between;
   padding-inline: ${({ theme }) => theme.spacing.xl};
+  background: linear-gradient(
+    to right,
+    ${({ theme }) => theme.colors.background} 10%,
+    transparent 70%
+  );
+  backdrop-filter: blur(3px);
 `;

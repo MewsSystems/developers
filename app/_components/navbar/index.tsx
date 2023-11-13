@@ -13,13 +13,7 @@ export const Navbar: FC = () => {
   return (
     <StyledNavbar>
       <Link href={paths.home()}>
-        <Image
-          src={logo}
-          width={100}
-          height={100}
-          alt={t("logoAlt")}
-          priority
-        />
+        <Image src={logo} width={75} height={75} alt={t("logoAlt")} priority />
       </Link>
       <Group $gap="md">
         <Link href={paths.discovery()}>{t("link.discovery")}</Link>
