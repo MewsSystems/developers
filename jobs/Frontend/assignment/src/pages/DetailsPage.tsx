@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@/components";
 import styled from "styled-components";
-import { useScrollToTop } from "@/hooks";
+import { useGenres, useScrollToTop } from "@/hooks";
 
 const DetailsWrapper = styled.div`
   padding: 40px 23px 100px 23px;
@@ -20,6 +20,8 @@ const DetailsWrapper = styled.div`
 export function DetailsPage() {
   const { id } = useParams();
   const parsedId = Number(id);
+
+  const { getGenreNameById } = useGenres();
 
   useScrollToTop(id);
 
@@ -38,7 +40,7 @@ export function DetailsPage() {
             <Typography variant="headlineLarge" bold>
               Similar movies:
             </Typography>
-            <SimilarMovies movieId={parsedId} />
+            <SimilarMovies movieId={parsedId} getGenreNameById={getGenreNameById} />
           </SectionWrapper>
           <SectionWrapper>
             <Typography variant="headlineLarge" bold>

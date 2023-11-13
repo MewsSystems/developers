@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BottomBar, Input, MovieCard, Pagination, Typography } from "../components";
 import SearchIcon from "@material-ui/icons/Search";
 import { Search, Movie } from "tmdb-ts";
 import { useDebounce } from "use-debounce";
-import { useScrollToTop } from "@/hooks";
+import { useGenres, useScrollToTop } from "@/hooks";
 import { tmdbClient } from "@/tmdbClient";
 
 const StyledWrapper = styled.div`
@@ -44,19 +44,10 @@ export function SearchPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchResults, setSearchResults] = useState<Search<Movie> | null>(null);
 
+  const { getGenreNameById } = useGenres();
   useScrollToTop(currentPage);
 
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-
-  const genresMap = useMemo(() => {
-    const genresMap = new Map<number, string>();
-
-    tmdbClient.genres
-      .movies()
-      .then(res => res.genres.forEach(genre => genresMap.set(genre.id, genre.name)));
-
-    return genresMap;
-  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -83,7 +74,7 @@ export function SearchPage() {
             <MovieCard
               key={movie.id}
               movie={movie}
-              genres={movie.genre_ids.map(genreId => genresMap.get(genreId) || "Unknown")}
+              genres={movie.genre_ids.map(id => getGenreNameById(id))}
             />
           ))}
         </CardsWrapper>

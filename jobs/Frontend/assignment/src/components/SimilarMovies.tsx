@@ -4,6 +4,10 @@ import styled from "styled-components";
 import { MovieCard, Typography, WithMovieIdProps } from ".";
 import { tmdbClient } from "@/tmdbClient";
 
+interface SimilarMoviesProps {
+  getGenreNameById(id: number): string;
+}
+
 const CardsWrapper = styled.div`
   display: flex;
   gap: 24px;
@@ -12,7 +16,7 @@ const CardsWrapper = styled.div`
   overflow-x: auto;
 `;
 
-export function SimilarMovies({ movieId }: WithMovieIdProps) {
+export function SimilarMovies({ movieId, getGenreNameById }: WithMovieIdProps<SimilarMoviesProps>) {
   const [data, setData] = useState<Movie[]>();
 
   useEffect(() => {
@@ -23,7 +27,11 @@ export function SimilarMovies({ movieId }: WithMovieIdProps) {
     <CardsWrapper>
       {data?.length ? (
         data.map(movie => (
-          <MovieCard key={movie.id} movie={movie} genres={movie.genre_ids.map(() => "Unknown")} />
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            genres={movie.genre_ids.map(id => getGenreNameById(id))}
+          />
         ))
       ) : (
         <Typography variant="titleMedium" color="secondary">
