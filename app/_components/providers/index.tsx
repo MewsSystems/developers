@@ -1,7 +1,10 @@
 import { FC, ReactNode } from "react";
+import "swiper/css";
+import "swiper/css/autoplay";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { ThemeProvider } from "./theme";
 import { getCurrentTimezone } from "@/util/date";
+import { QueryClientProvider } from "./query-client";
 
 type Props = {
   locale: string;
@@ -17,7 +20,9 @@ export const Providers: FC<Props> = ({ locale, children }) => {
       messages={messages}
       timeZone={getCurrentTimezone()}
     >
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <QueryClientProvider>{children}</QueryClientProvider>
+      </ThemeProvider>
     </NextIntlClientProvider>
   );
 };

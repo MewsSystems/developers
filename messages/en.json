@@ -22,5 +22,12 @@
       "showsCount": "230+",
       "showsCountLabel": "TV Shows to choose"
     }
+  },
+  "discovery": {
+    "watchNowAction": "Watch Now",
+    "upcomingMovies": "Upcoming Movies",
+    "trendingMovies": "Trending Movies",
+    "topRatedTv": "Top Rated TV Shows",
+    "trendingTv": "Trending TV Shows"
   }
 }

@@ -26,13 +26,17 @@ interface Props {
   readonly $pl?: keyof Sizes | number;
   readonly $pr?: keyof Sizes | number;
   readonly $bg?: keyof Colors;
+  readonly $fullWidth?: boolean;
+  readonly $fullHeight?: boolean;
 }
 
 export const Base = styled.div<Props>`
-  width: ${({ $w }) => ($w ? rem($w) : "unset")};
+  width: ${({ $w, $fullWidth }) =>
+    $fullWidth ? "100%" : $w ? rem($w) : "unset"};
   min-width: ${({ $miw }) => ($miw ? rem($miw) : "unset")};
   max-width: ${({ $maw }) => ($maw ? rem($maw) : "unset")};
-  height: ${({ $h }) => ($h ? rem($h) : "unset")};
+  height: ${({ $h, $fullHeight }) =>
+    $fullHeight ? "100%" : $h ? rem($h) : "unset"};
   min-height: ${({ $mih }) => ($mih ? rem($mih) : "unset")};
   max-height: ${({ $mah }) => ($mah ? rem($mah) : "unset")};
   margin: ${({ $m, theme }) => generateSpacing($m, theme)};

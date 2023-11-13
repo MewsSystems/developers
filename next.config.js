@@ -27,6 +27,9 @@ const withPWA = withPWAInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [{ hostname: "image.tmdb.org" }],
+  },
   sentry: {
     hideSourceMaps: true,
     widenClientFileUpload: true,
