@@ -52,5 +52,11 @@
   "tvShows": {
     "emptyPlaceholder": "No TV shows matched the search. Try adjusting filters.",
     "loadMoreAction": "Load More"
+  },
+  "movie": {
+    "loading": "Loading...",
+    "similar": "You might be interested",
+    "actors": "Actors",
+    "posters": "Posters"
   }
 }

@@ -5,7 +5,7 @@ import { Text } from "../base/text";
 
 export const InfoModal = styled.div`
   position: fixed;
-  z-index: 1;
+  z-index: 999;
   left: 0;
   bottom: 0;
   width: 100%;
