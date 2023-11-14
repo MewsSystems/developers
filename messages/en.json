@@ -1,0 +1,66 @@
+{
+  "appName": "iLookUp Movies & TV Shows",
+  "metadata": {
+    "title": "iLookUp Movies & TV Shows",
+    "template": "%s | iLookUp",
+    "description": "Your go-to movie app for endless entertainment! Explore classics, discover new releases, and create personalized watchlists. Download now and experience the world of cinema in the palm of your hand!"
+  },
+  "navbar": {
+    "logoAlt": "iLookUp logo",
+    "link": {
+      "discovery": "Discovery",
+      "movies": "Movies",
+      "tvShows": "TV Shows"
+    }
+  },
+  "shared": {
+    "loading": "Loading...",
+    "filters": {
+      "title": "Filter by:",
+      "topRatedAction": "Top Rated",
+      "popularAction": "Popular",
+      "upcomingAction": "Upcoming",
+      "searchPlaceholder": "Search...",
+      "selectPlaceholder": "--- Select ---",
+      "searchAction": "Search"
+    },
+    "infoModal": {
+      "watchAction": "Watch Now"
+    }
+  },
+  "home": {
+    "title": "MOVIES <br></br>CHANGE <br></br>THE WORLD",
+    "stats": {
+      "moviesCount": "375+",
+      "moviesCountLabel": "Movies to choose",
+      "topAndPopularLabel": "Top & Popular",
+      "showsCount": "230+",
+      "showsCountLabel": "TV Shows to choose"
+    }
+  },
+  "discovery": {
+    "watchNowAction": "Watch Now",
+    "upcomingMovies": "Upcoming Movies",
+    "trendingMovies": "Trending Movies",
+    "topRatedTv": "Top Rated TV Shows",
+    "trendingTv": "Trending TV Shows"
+  },
+  "movies": {
+    "emptyPlaceholder": "No movies matched the search. Try adjusting filters.",
+    "loadMoreAction": "Load More"
+  },
+  "tvShows": {
+    "emptyPlaceholder": "No TV shows matched the search. Try adjusting filters.",
+    "loadMoreAction": "Load More"
+  },
+  "movie": {
+    "loading": "Loading...",
+    "similar": "You might be interested",
+    "actors": "Actors",
+    "posters": "Posters"
+  },
+  "tv": {
+    "loading": "Loading...",
+    "similar": "You might be interested"
+  }
+}
