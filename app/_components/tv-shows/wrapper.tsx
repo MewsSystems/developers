@@ -1,14 +1,11 @@
 "use client";
 
 import { FC, useState } from "react";
-import { MovieType } from "@/domain/types/type";
+import { MovieType, TvType } from "@/domain/types/type";
 import { Stack } from "@/styles/base/stack";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { GridList } from "@/styles/components/grid-list";
-import { Movie } from "@/types/movie";
 import { ListItem } from "../discovery/list-item";
-import { Filters } from "../filters";
-import { paginatedMoviesQuery } from "@/domain/queries/paginated-movies-query";
 import { Button } from "@/styles/base/button";
 import { Data } from "@/domain/remote/response/data";
 import { flatMap } from "lodash";
@@ -16,25 +13,28 @@ import { useSearchParams } from "next/navigation";
 import { Text } from "@/styles/base/text";
 import { usePathname, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { TvShow } from "@/types/tv-show";
+import { paginatedTvShowsQuery } from "@/domain/queries/paginated-tv-shows-query";
+import { Filters } from "../filters";
 
-export const MoviesWrapper: FC = () => {
-  const { t, movies, isLoading, hasNextPage, handleLoadMore, handleMovieType } =
-    useMoviesWrapper();
+export const TvShowsWrapper: FC = () => {
+  const { t, tvShows, isLoading, hasNextPage, handleLoadMore, handleTvType } =
+    useTvShowsWrapper();
 
-  const renderMovie = (movie: Movie) => (
-    <ListItem key={movie.id} item={movie} />
+  const renderTv = (tvShow: TvShow) => (
+    <ListItem key={tvShow.id} item={tvShow} />
   );
 
   return (
     <Stack $align="center" $gap="xl" $mt={90} $mb="xl">
-      <Filters onCategoryClick={handleMovieType} />
-      {!movies.length && !isLoading ? (
+      <Filters onCategoryClick={handleTvType} />
+      {!tvShows.length && !isLoading ? (
         <Text $fw={600} $mt="lg">
           {t("emptyPlaceholder")}
         </Text>
       ) : (
         <>
-          <GridList>{movies?.map(renderMovie)}</GridList>
+          <GridList>{tvShows?.map(renderTv)}</GridList>
           {hasNextPage && (
             <Button onClick={handleLoadMore}>{t("loadMoreAction")}</Button>
           )}
@@ -44,23 +44,23 @@ export const MoviesWrapper: FC = () => {
   );
 };
 
-function useMoviesWrapper() {
-  const t = useTranslations("movies");
-  const [type, setType] = useState<MovieType>(MovieType.TopRated);
+function useTvShowsWrapper() {
+  const t = useTranslations("tvShows");
+  const [type, setType] = useState<TvType>(TvType.Popular);
   const searchParams = useSearchParams();
   const { search, year } = Object.fromEntries(searchParams.entries());
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery<
-    Data<Movie>
+    Data<TvShow>
   >({
-    queryKey: paginatedMoviesQuery.key(type, {
+    queryKey: paginatedTvShowsQuery.key(type, {
       primary_release_year: Number(year),
       query: search,
     }),
     queryFn: ({ pageParam = 1 }) =>
-      paginatedMoviesQuery.fnc(type, {
+      paginatedTvShowsQuery.fnc(type, {
         page: pageParam as number,
         query: search,
         primary_release_year: year ? Number(year) : undefined,
@@ -77,17 +77,18 @@ function useMoviesWrapper() {
     await fetchNextPage();
   };
 
-  const handleMovieType = (type: MovieType) => {
+  // TODO: fix types
+  const handleTvType = (type: MovieType) => {
     replace(pathname);
-    setType(type);
+    setType(type as any);
   };
 
   return {
     t,
-    movies: flatMap(data?.pages, "results") ?? [],
+    tvShows: flatMap(data?.pages, "results") ?? [],
     isLoading,
     hasNextPage,
     handleLoadMore,
-    handleMovieType,
+    handleTvType,
   };
 }

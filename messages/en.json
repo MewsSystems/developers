@@ -14,7 +14,16 @@
     }
   },
   "shared": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "filters": {
+      "title": "Filter by:",
+      "topRatedAction": "Top Rated",
+      "popularAction": "Popular",
+      "upcomingAction": "Upcoming",
+      "searchPlaceholder": "Search...",
+      "selectPlaceholder": "--- Select ---",
+      "searchAction": "Search"
+    }
   },
   "home": {
     "title": "MOVIES <br></br>CHANGE <br></br>THE WORLD",
@@ -35,15 +44,10 @@
   },
   "movies": {
     "emptyPlaceholder": "No movies matched the search. Try adjusting filters.",
-    "loadMoreAction": "Load More",
-    "filters": {
-      "title": "Filter by:",
-      "topRatedAction": "Top Rated",
-      "popularAction": "Popular",
-      "upcomingAction": "Upcoming",
-      "searchPlaceholder": "Search a movie...",
-      "selectPlaceholder": "--- Select ---",
-      "searchAction": "Search"
-    }
+    "loadMoreAction": "Load More"
+  },
+  "tvShows": {
+    "emptyPlaceholder": "No TV shows matched the search. Try adjusting filters.",
+    "loadMoreAction": "Load More"
   }
 }

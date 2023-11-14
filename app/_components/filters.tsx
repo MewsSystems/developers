@@ -8,7 +8,7 @@ import { Input, Select } from "@/styles/components/filters";
 import { generateLast100Years } from "@/util/date";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { MovieType } from "@/domain/types/type";
+import { MovieType, TvType } from "@/domain/types/type";
 
 export const SEARCH_KEY = "search";
 export const YEAR_KEY = "year";
@@ -65,7 +65,7 @@ export const Filters: FC<Props> = (props) => {
 };
 
 function useFilters({ onCategoryClick }: Props) {
-  const t = useTranslations("movies.filters");
+  const t = useTranslations("shared.filters");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
