@@ -58,5 +58,9 @@
     "similar": "You might be interested",
     "actors": "Actors",
     "posters": "Posters"
+  },
+  "tv": {
+    "loading": "Loading...",
+    "similar": "You might be interested"
   }
 }

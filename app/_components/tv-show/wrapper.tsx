@@ -1,6 +1,5 @@
 "use client";
 
-import { movieQuery } from "@/domain/queries/movie-query";
 import { useQueries } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { FC } from "react";
@@ -10,17 +9,18 @@ import { ItemInfoModal } from "../store/item-info-modal";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { Box } from "@/styles/base/box";
-import { Details } from "../details/details";
 import { LoadingContainer } from "@/styles/components/loading-container";
 import { Text } from "@/styles/base/text";
 import { actorsQuery } from "@/domain/queries/actors-query";
 import { imagesQuery } from "@/domain/queries/images-query";
 import { similarQuery } from "@/domain/queries/similar-query";
-import { Movie } from "@/types/movie";
+import { tvShowQuery } from "@/domain/queries/tv-show-query";
+import { Details } from "../details/details";
+import { TvShow } from "@/types/tv-show";
 
-export const MovieWrapper: FC = () => {
-  const { t, movie, actors, images, similar, isModalOpen, isLoading } =
-    useMovieWrapper();
+export const TvShowWrapper: FC = () => {
+  const { t, tv, actors, images, similar, isModalOpen, isLoading } =
+    useTvShowWrapper();
 
   if (isLoading) {
     return (
@@ -33,57 +33,57 @@ export const MovieWrapper: FC = () => {
   return (
     <Box $my="xl">
       <Details
-        item={movie as Movie}
+        item={tv as TvShow}
         actors={actors ?? []}
         images={images ?? []}
       />
-      <ListContainer title={t("similar")} items={(similar as Movie[]) ?? []} />
+      <ListContainer title={t("similar")} items={(similar as TvShow[]) ?? []} />
       {isModalOpen && <ItemInfoModal />}
     </Box>
   );
 };
 
-function useMovieWrapper() {
-  const t = useTranslations("movie");
+function useTvShowWrapper() {
+  const t = useTranslations("tv");
   const { id } = useParams();
   const { isOpen: isModalOpen } = useSelector(
     (state: RootState) => state.modal
   );
 
   const [
-    { data: movie, isLoading: isMovieLoading },
+    { data: tv, isLoading: isTvLoading },
     { data: actors, isLoading: isActorsLoading },
     { data: images, isLoading: isImagesLoading },
     { data: similar, isLoading: isSimilarLoading },
   ] = useQueries({
     queries: [
       {
-        queryKey: movieQuery.key(id as string),
-        queryFn: () => movieQuery.fnc(id as string),
+        queryKey: tvShowQuery.key(id as string),
+        queryFn: () => tvShowQuery.fnc(id as string),
       },
       {
-        queryKey: actorsQuery.key(id as string, "movie"),
-        queryFn: () => actorsQuery.fnc(id as string, "movie"),
+        queryKey: actorsQuery.key(id as string, "tv"),
+        queryFn: () => actorsQuery.fnc(id as string, "tv"),
       },
       {
-        queryKey: imagesQuery.key(id as string, "movie"),
-        queryFn: () => imagesQuery.fnc(id as string, "movie"),
+        queryKey: imagesQuery.key(id as string, "tv"),
+        queryFn: () => imagesQuery.fnc(id as string, "tv"),
       },
       {
-        queryKey: similarQuery.key(id as string, "movie"),
-        queryFn: () => similarQuery.fnc(id as string, "movie"),
+        queryKey: similarQuery.key(id as string, "tv"),
+        queryFn: () => similarQuery.fnc(id as string, "tv"),
       },
     ],
   });
 
   return {
     t,
-    movie,
+    tv,
     actors,
     images,
     similar,
     isModalOpen,
     isLoading:
-      isMovieLoading || isActorsLoading || isImagesLoading || isSimilarLoading,
+      isTvLoading || isActorsLoading || isImagesLoading || isSimilarLoading,
   };
 }

@@ -1,6 +1,6 @@
 import { Movie } from "@/types/movie";
 import { api } from "../remote";
-import { getAxiosData, getRemoteResults } from "../remote/response/data";
+import { getAxiosData } from "../remote/response/data";
 import { CategoryType } from "../types/type";
 
 export const movieQuery = {

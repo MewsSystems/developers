@@ -9,28 +9,29 @@ import { ActorsList } from "./actors-list";
 import { Title } from "@/styles/base/title";
 import { Stack } from "@/styles/base/stack";
 import { PostersList } from "./posters-list";
+import { TvShow } from "@/types/tv-show";
 
 type Props = {
-  movie: Movie;
+  item: Movie | TvShow | (Movie & TvShow);
   actors: Actor[];
   images: Image[];
 };
 
 export const Details: FC<Props> = (props: Props) => {
-  const { movie, actors, images, coverImage } = useDetails(props);
+  const { item, title, actors, images, coverImage } = useDetails(props);
 
   return (
     <DetailsWrapper $bgImage={coverImage}>
       <DetailsContainer>
         <Stack $gap="xl">
           <Title $fs={48} $lh={48}>
-            {movie.title}
+            {title}
           </Title>
           <Text $size="lg">
-            ⭐️ {movie?.vote_average} | {movie?.vote_count}
+            ⭐️ {item?.vote_average} | {item?.vote_count}
           </Text>
           <Text $size="lg" $lh="xl">
-            {movie?.overview}
+            {item?.overview}
           </Text>
         </Stack>
         <Stack>
@@ -42,10 +43,12 @@ export const Details: FC<Props> = (props: Props) => {
   );
 };
 
-function useDetails({ movie, actors, images }: Props) {
+function useDetails({ item, actors, images }: Props) {
   const coverImage = apiConfig.coverImage(
-    movie?.backdrop_path || movie?.poster_path
+    item?.backdrop_path || item?.poster_path
   );
 
-  return { movie, actors, images, coverImage };
+  const title = (item as Movie).title ?? (item as TvShow).name ?? "";
+
+  return { item, title, actors, images, coverImage };
 }
