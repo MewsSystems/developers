@@ -15,4 +15,9 @@ export const ActorItem = styled.div<{ readonly $bgImage: string }>`
 
   border-radius: 100%;
   border: ${({ theme }) => `2px solid ${theme.colors.background}`};
+
+  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
+    width: 3rem;
+    height: 3rem;
+  }
 `;

@@ -7,6 +7,7 @@ import bgHeroCover from "@/public/images/home-hero-bg.jpg";
 import { rem } from "@/util/styles";
 
 export const LandingHeroSection = styled(Group)`
+  position: relative;
   width: 100%;
   height: 100vh;
   background-image: url(${bgHeroCover.src});
@@ -32,6 +33,7 @@ export const LandingHeroSection = styled(Group)`
   @media (max-width: ${({ theme }) => theme.breakpoint.sm}) {
     flex-direction: column;
     gap: ${({ theme }) => theme.spacing.xl};
+    margin-top: 5rem;
   }
 `;
 

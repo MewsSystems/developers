@@ -26,18 +26,25 @@ export const DetailsWrapper = styled.div<{ readonly $bgImage: string }>`
     height: 100%;
     background: linear-gradient(to bottom, transparent, black);
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoint.md}) {
+    height: auto;
+    padding-top: 5rem;
+  }
 `;
 
 export const DetailsContainer = styled.div`
   width: 90%;
   position: relative;
   z-index: 2;
+  margin-top: ${rem(64)};
   padding-bottom: ${rem(125)};
 
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  gap: 6rem;
+  gap: 4rem;
+  flex-wrap: wrap;
 
   & > * {
     flex: 1;

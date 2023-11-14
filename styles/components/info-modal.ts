@@ -55,6 +55,10 @@ export const InfoModalImage = styled.div<{ readonly $bgImage: string }>`
   background-repeat: no-repeat;
   background-position: center;
   opacity: 0.5;
+
+  @media (max-width: ${({ theme }) => theme.breakpoint.sm}) {
+    display: none;
+  }
 `;
 
 export const InfoModalCloseBlock = styled.div`

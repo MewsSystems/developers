@@ -48,4 +48,8 @@ export const HeroSlideItem = styled(Box)<Props>`
 export const HeroSlideItemImage = styled(Image)`
   border-radius: 1rem;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoint.sm}) {
+    display: none;
+  }
 `;
