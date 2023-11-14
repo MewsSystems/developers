@@ -21,9 +21,6 @@ export const paginatedMoviesQuery = {
         ? `${params.query ? "search" : "discover"}/${CategoryType.Movie}`
         : `${CategoryType.Movie}/${type}`;
 
-    console.log(path);
-    console.log(params);
-
     return api
       .get(`${path}?${queryString.stringify(params)}`)
       .then(getAxiosData<Data<Movie>>);
