@@ -6,13 +6,22 @@ import { MovieType, TvType } from "@/domain/types/type";
 import { useQueries } from "@tanstack/react-query";
 import { tvShowsQuery } from "@/domain/queries/tv-shows-query";
 import { HeroSlider } from "./hero-slider";
-import { ListContainer } from "./list-container";
+import { ListContainer } from "../list/list-container";
 import { Box } from "@/styles/base/box";
 import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { ItemInfoModal } from "../store/item-info-modal";
 
 export const DiscoveryWrapper: FC = () => {
-  const { t, popularMovies, upcomingMovies, popularTvShows, topRatedTvShows } =
-    useDiscoveryWrapper();
+  const {
+    t,
+    isModalOpen,
+    popularMovies,
+    upcomingMovies,
+    popularTvShows,
+    topRatedTvShows,
+  } = useDiscoveryWrapper();
 
   return (
     <Box $mb="xl">
@@ -21,12 +30,16 @@ export const DiscoveryWrapper: FC = () => {
       <ListContainer title={t("trendingTv")} items={popularTvShows ?? []} />
       <ListContainer title={t("topRatedTv")} items={topRatedTvShows ?? []} />
       <ListContainer title={t("upcomingMovies")} items={upcomingMovies ?? []} />
+      {isModalOpen && <ItemInfoModal />}
     </Box>
   );
 };
 
 function useDiscoveryWrapper() {
   const t = useTranslations("discovery");
+  const { isOpen: isModalOpen } = useSelector(
+    (state: RootState) => state.modal
+  );
 
   const [
     { data: popularMovies },
@@ -54,5 +67,12 @@ function useDiscoveryWrapper() {
     ],
   });
 
-  return { t, popularMovies, upcomingMovies, popularTvShows, topRatedTvShows };
+  return {
+    t,
+    isModalOpen,
+    popularMovies,
+    upcomingMovies,
+    popularTvShows,
+    topRatedTvShows,
+  };
 }

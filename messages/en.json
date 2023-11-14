@@ -23,6 +23,9 @@
       "searchPlaceholder": "Search...",
       "selectPlaceholder": "--- Select ---",
       "searchAction": "Search"
+    },
+    "infoModal": {
+      "watchAction": "Watch Now"
     }
   },
   "home": {

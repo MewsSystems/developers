@@ -5,7 +5,7 @@ import { MovieType, TvType } from "@/domain/types/type";
 import { Stack } from "@/styles/base/stack";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { GridList } from "@/styles/components/grid-list";
-import { ListItem } from "../discovery/list-item";
+import { ListItem } from "../list/list-item";
 import { Button } from "@/styles/base/button";
 import { Data } from "@/domain/remote/response/data";
 import { flatMap } from "lodash";
@@ -16,10 +16,20 @@ import { useTranslations } from "next-intl";
 import { TvShow } from "@/types/tv-show";
 import { paginatedTvShowsQuery } from "@/domain/queries/paginated-tv-shows-query";
 import { Filters } from "../filters";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { ItemInfoModal } from "../store/item-info-modal";
 
 export const TvShowsWrapper: FC = () => {
-  const { t, tvShows, isLoading, hasNextPage, handleLoadMore, handleTvType } =
-    useTvShowsWrapper();
+  const {
+    t,
+    isModalOpen,
+    tvShows,
+    isLoading,
+    hasNextPage,
+    handleLoadMore,
+    handleTvType,
+  } = useTvShowsWrapper();
 
   const renderTv = (tvShow: TvShow) => (
     <ListItem key={tvShow.id} item={tvShow} />
@@ -40,6 +50,7 @@ export const TvShowsWrapper: FC = () => {
           )}
         </>
       )}
+      {isModalOpen && <ItemInfoModal />}
     </Stack>
   );
 };
@@ -51,6 +62,9 @@ function useTvShowsWrapper() {
   const { search, year } = Object.fromEntries(searchParams.entries());
   const pathname = usePathname();
   const { replace } = useRouter();
+  const { isOpen: isModalOpen } = useSelector(
+    (state: RootState) => state.modal
+  );
 
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery<
     Data<TvShow>
@@ -85,6 +99,7 @@ function useTvShowsWrapper() {
 
   return {
     t,
+    isModalOpen,
     tvShows: flatMap(data?.pages, "results") ?? [],
     isLoading,
     hasNextPage,

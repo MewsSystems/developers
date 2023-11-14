@@ -6,16 +6,25 @@ import {
 import { Movie } from "@/types/movie";
 import { TvShow } from "@/types/tv-show";
 import { apiConfig } from "@/domain/remote/config";
+import { useDispatch } from "react-redux";
+import { openModal } from "@/store/slices/item-modal";
 
 type Props = {
   item: Movie | TvShow;
 };
 
 export const ListItem: FC<Props> = (props) => {
-  const { title, image } = useListItem(props);
+  const { item, title, image } = useListItem(props);
+
+  const dispatch = useDispatch();
 
   return (
-    <StyledListItem $bgImage={image}>
+    <StyledListItem
+      $bgImage={image}
+      onClick={() => {
+        dispatch(openModal(item as Movie & TvShow));
+      }}
+    >
       <ListItemTitle $variant="h3">{title}</ListItemTitle>
     </StyledListItem>
   );
@@ -30,5 +39,5 @@ function useListItem({ item }: Props) {
     item.poster_path || item.backdrop_path
   );
 
-  return { title, image: coverImage || posterImage };
+  return { item, title, image: coverImage || posterImage };
 }

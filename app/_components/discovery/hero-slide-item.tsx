@@ -11,6 +11,8 @@ import { Title } from "@/styles/base/title";
 import { Text } from "@/styles/base/text";
 import { PrimaryButton } from "@/styles/base/button";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/navigation";
+import { paths } from "@/navigation/paths";
 
 type Props = {
   movie: Movie;
@@ -18,7 +20,7 @@ type Props = {
 };
 
 export const HeroSlideItem: FC<Props> = (props) => {
-  const { t, movie, isActive, coverImage, posterImage } =
+  const { t, movie, isActive, coverImage, posterImage, handleNavigation } =
     useHeroSlideItem(props);
 
   return (
@@ -37,7 +39,7 @@ export const HeroSlideItem: FC<Props> = (props) => {
           <Text $size="md" $lh="lg" $ta="center">
             {movie.overview}
           </Text>
-          <PrimaryButton onClick={() => console.log("clicked")}>
+          <PrimaryButton onClick={handleNavigation}>
             {t("watchNowAction")}
           </PrimaryButton>
         </Stack>
@@ -48,6 +50,7 @@ export const HeroSlideItem: FC<Props> = (props) => {
 
 function useHeroSlideItem({ movie, isActive }: Props) {
   const t = useTranslations("discovery");
+  const { push } = useRouter();
 
   const coverImage = apiConfig.coverImage(
     movie.backdrop_path || movie.poster_path
@@ -56,5 +59,7 @@ function useHeroSlideItem({ movie, isActive }: Props) {
     movie.poster_path || movie.backdrop_path
   );
 
-  return { t, movie, isActive, coverImage, posterImage };
+  const handleNavigation = () => push(paths.movie(movie.id));
+
+  return { t, movie, isActive, coverImage, posterImage, handleNavigation };
 }

@@ -6,7 +6,7 @@ import { Stack } from "@/styles/base/stack";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { GridList } from "@/styles/components/grid-list";
 import { Movie } from "@/types/movie";
-import { ListItem } from "../discovery/list-item";
+import { ListItem } from "../list/list-item";
 import { Filters } from "../filters";
 import { paginatedMoviesQuery } from "@/domain/queries/paginated-movies-query";
 import { Button } from "@/styles/base/button";
@@ -16,10 +16,20 @@ import { useSearchParams } from "next/navigation";
 import { Text } from "@/styles/base/text";
 import { usePathname, useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { ItemInfoModal } from "../store/item-info-modal";
 
 export const MoviesWrapper: FC = () => {
-  const { t, movies, isLoading, hasNextPage, handleLoadMore, handleMovieType } =
-    useMoviesWrapper();
+  const {
+    t,
+    isModalOpen,
+    movies,
+    isLoading,
+    hasNextPage,
+    handleLoadMore,
+    handleMovieType,
+  } = useMoviesWrapper();
 
   const renderMovie = (movie: Movie) => (
     <ListItem key={movie.id} item={movie} />
@@ -40,6 +50,7 @@ export const MoviesWrapper: FC = () => {
           )}
         </>
       )}
+      {isModalOpen && <ItemInfoModal />}
     </Stack>
   );
 };
@@ -51,6 +62,9 @@ function useMoviesWrapper() {
   const { search, year } = Object.fromEntries(searchParams.entries());
   const pathname = usePathname();
   const { replace } = useRouter();
+  const { isOpen: isModalOpen } = useSelector(
+    (state: RootState) => state.modal
+  );
 
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery<
     Data<Movie>
@@ -84,6 +98,7 @@ function useMoviesWrapper() {
 
   return {
     t,
+    isModalOpen,
     movies: flatMap(data?.pages, "results") ?? [],
     isLoading,
     hasNextPage,
