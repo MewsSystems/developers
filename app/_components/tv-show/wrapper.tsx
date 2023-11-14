@@ -17,6 +17,7 @@ import { similarQuery } from "@/domain/queries/similar-query";
 import { tvShowQuery } from "@/domain/queries/tv-show-query";
 import { Details } from "../details/details";
 import { TvShow } from "@/types/tv-show";
+import { Title } from "@/styles/base/title";
 
 export const TvShowWrapper: FC = () => {
   const { t, tv, actors, images, similar, isModalOpen, isLoading } =
@@ -25,7 +26,7 @@ export const TvShowWrapper: FC = () => {
   if (isLoading) {
     return (
       <LoadingContainer $justify="center" $align="center">
-        <Text>{t("loading")}</Text>
+        <Title>{t("loading")}</Title>
       </LoadingContainer>
     );
   }

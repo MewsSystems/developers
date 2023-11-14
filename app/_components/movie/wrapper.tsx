@@ -17,6 +17,7 @@ import { actorsQuery } from "@/domain/queries/actors-query";
 import { imagesQuery } from "@/domain/queries/images-query";
 import { similarQuery } from "@/domain/queries/similar-query";
 import { Movie } from "@/types/movie";
+import { Title } from "@/styles/base/title";
 
 export const MovieWrapper: FC = () => {
   const { t, movie, actors, images, similar, isModalOpen, isLoading } =
@@ -25,7 +26,7 @@ export const MovieWrapper: FC = () => {
   if (isLoading) {
     return (
       <LoadingContainer $justify="center" $align="center">
-        <Text>{t("loading")}</Text>
+        <Title>{t("loading")}</Title>
       </LoadingContainer>
     );
   }
