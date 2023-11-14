@@ -46,7 +46,7 @@ export const TvShowsWrapper: FC = () => {
 
 function useTvShowsWrapper() {
   const t = useTranslations("tvShows");
-  const [type, setType] = useState<TvType>(TvType.Popular);
+  const [type, setType] = useState<TvType>(TvType.TopRated);
   const searchParams = useSearchParams();
   const { search, year } = Object.fromEntries(searchParams.entries());
   const pathname = usePathname();

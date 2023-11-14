@@ -17,8 +17,8 @@ export default async function TvShowsPage() {
 async function useTvShowsPage() {
   const queryClient = await getQueryClient();
   queryClient.prefetchQuery({
-    queryKey: tvShowsQuery.key(TvType.Popular),
-    queryFn: () => tvShowsQuery.fnc(TvType.Popular),
+    queryKey: tvShowsQuery.key(TvType.TopRated),
+    queryFn: () => tvShowsQuery.fnc(TvType.TopRated),
   });
   const dehydratedState = dehydrate(queryClient);
 
