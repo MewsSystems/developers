@@ -1,5 +1,3 @@
-import { Box } from "@/styles/base/box";
-import { Stack } from "@/styles/base/stack";
 import { Title } from "@/styles/base/title";
 import { LoadingContainer } from "@/styles/components/loading-container";
 import { getTranslations } from "next-intl/server";

@@ -32,5 +32,18 @@
     "trendingMovies": "Trending Movies",
     "topRatedTv": "Top Rated TV Shows",
     "trendingTv": "Trending TV Shows"
+  },
+  "movies": {
+    "emptyPlaceholder": "No movies matched the search. Try adjusting filters.",
+    "loadMoreAction": "Load More",
+    "filters": {
+      "title": "Filter by:",
+      "topRatedAction": "Top Rated",
+      "popularAction": "Popular",
+      "upcomingAction": "Upcoming",
+      "searchPlaceholder": "Search a movie...",
+      "selectPlaceholder": "--- Select ---",
+      "searchAction": "Search"
+    }
   }
 }

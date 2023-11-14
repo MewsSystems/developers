@@ -12,3 +12,8 @@ export const formatDate = (
 
 export const getCurrentTimezone = () =>
   Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export const generateLast100Years = () => {
+  const currentYear = new Date().getFullYear();
+  return Array.from(new Array(100), (_, index) => currentYear - index);
+};
