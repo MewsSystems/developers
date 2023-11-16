@@ -1,10 +1,11 @@
 import { Movie } from "../../../types/movies";
 import { PaginatedResponse } from "../../../types/requests";
-import { VStack, HStack } from "../../Stacks";
+import { VStack, HStack } from "../../shared/Stacks";
 import {
   PaginationNumbering,
   Table,
   TableButton,
+  Td,
   THead,
   Tr,
 } from "../../shared/Table";
@@ -20,14 +21,14 @@ export function MovieList(props: IMovieList) {
   return (
     <VStack>
       <VStack>
-        <Table>
+        <Table data-testid="movie-list">
           <THead>
             <Tr>
-              <td>ID</td>
-              <td>Title</td>
-              <td>Release Date</td>
-              <td>Rating</td>
-              <td>Actions</td>
+              <Td $width="10%">ID</Td>
+              <Td>Title</Td>
+              <Td $width="15%">Release Date</Td>
+              <Td $width="15%">Rating</Td>
+              <Td $width="10%">Actions</Td>
             </Tr>
           </THead>
           <tbody>
