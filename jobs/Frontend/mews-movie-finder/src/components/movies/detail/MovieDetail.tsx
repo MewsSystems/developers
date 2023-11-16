@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { ShadowBox } from "../../shared/Boxes";
 import { ErrorNotification } from "../../shared/ErrorNotification";
-import { getMovieDetails } from "../../../queries";
-import { HStack, VStack } from "../../Stacks";
+import { getMovieDetails } from "../../../queries/movieQueries";
+import { HStack, VStack } from "../../shared/Stacks";
 import { H1, H3, H4, Section } from "../../shared/Headings";
 import { Img } from "../../shared/Image";
 

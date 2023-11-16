@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { VStack } from "./Stacks";
+import { VStack } from "./shared/Stacks";
 import logo from "../assets/tsc.png";
 
 const HeaderWrapper = styled.div`

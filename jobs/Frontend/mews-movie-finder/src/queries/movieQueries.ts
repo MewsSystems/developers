@@ -1,5 +1,5 @@
-import { Movie, MovieDetail } from "./types/movies";
-import { PaginatedResponse } from "./types/requests";
+import { Movie, MovieDetail } from "../types/movies";
+import { PaginatedResponse } from "../types/requests";
 
 export const getMovies = (
   search: string,

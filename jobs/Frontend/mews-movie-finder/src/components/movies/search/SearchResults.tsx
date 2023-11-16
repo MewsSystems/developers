@@ -1,16 +1,11 @@
-import styled from "styled-components";
 import { Movie } from "../../../types/movies";
-import { HStack, VStack } from "../../Stacks";
+import { HStack, VStack } from "../../shared/Stacks";
 import { PaginatedResponse } from "../../../types/requests";
 import { MovieDetail } from "../detail/MovieDetail";
 import { ShadowBox } from "../../shared/Boxes";
 import { MovieList } from "./MovieList";
 import { useState } from "react";
-
-const SearchInfo = styled.h3`
-  font-family: Exo;
-  font-size: 24px;
-`;
+import { H3 } from "../../shared/Headings";
 
 interface ISearchResults {
   page: PaginatedResponse<Movie> | undefined;
@@ -45,7 +40,7 @@ export function SearchResults(props: ISearchResults) {
     <HStack>
       <ShadowBox $width="50%" $marginRight="24px">
         <VStack $width="100%">
-          <SearchInfo>{getSearchInfo()}</SearchInfo>
+          <H3 $fontFamily="Exo" $fontSize="24px" data-testid="search-info">{getSearchInfo()}</H3>
           {props.page != undefined && (
             <MovieList page={props.page} setPage={props.setPage} setSelected={setSelected}/>
           )}

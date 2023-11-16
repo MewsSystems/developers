@@ -19,7 +19,7 @@ interface IErrorNotification {
 export function ErrorNotification(props:IErrorNotification) {
   return (
     <ErrorBox>
-      <ErrorMessage>{props.message != undefined ? props.message : "Something went wrong, please try again later"}</ErrorMessage>
+      <ErrorMessage data-testid="error-message">{props.message != undefined ? props.message : "Something went wrong, please try again later"}</ErrorMessage>
     </ErrorBox>
   );
 }

@@ -43,10 +43,11 @@ export const Table = styled.table`
   border-collapse: collapse;
 `;
 
-export const Td = styled.td<{ $textAlign?: string;}>`
+export const Td = styled.td<{ $textAlign?: string; $width?: string}>`
   padding-bottom: 8px;
   padding-top: 8px;
   text-align: ${props => props.$textAlign};
-  whitespace: nowrap;
+  width: ${props => props.$width};
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { PageHeader } from "../components/PageHeader";
-import { VStack } from "../components/Stacks";
+import { VStack } from "../components/shared/Stacks";
 import { SearchInput } from "../components/movies/search/SearchInput";
 import { SearchResults } from "../components/movies/search/SearchResults";
 import { useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getMovies } from "../queries";
+import { getMovies } from "../queries/movieQueries";
 import { ErrorNotification } from "../components/shared/ErrorNotification";
 
 const ContentWrapper = styled.div`
