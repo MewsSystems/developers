@@ -7,11 +7,11 @@ namespace ExchangeRateUpdater.Api.Validators
     {
         public DailyExchangeRatesRequestValidator()
         {
-            RuleFor(r => r.Currencies)
+            RuleFor(r => r.CurrencyCodes)
                 .NotNull()
                 .NotEmpty();
 
-            RuleForEach(r => r.Currencies)
+            RuleForEach(r => r.CurrencyCodes)
                 .NotNull()
                 .NotEmpty()
                 .Length(3);

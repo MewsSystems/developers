@@ -1,7 +1,13 @@
-﻿namespace ExchangeRateUpdater.Api.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ExchangeRateUpdater.Api.Models
 {
     public class Currency
     {
+        public Currency()
+        {
+        }
+
         public Currency(string code)
         {
             if (string.IsNullOrEmpty(code))
@@ -15,7 +21,8 @@
         /// <summary>
         /// Three-letter ISO 4217 code of the currency.
         /// </summary>
-        public string Code { get; }
+        [JsonPropertyName("code")]
+        public string? Code { get; set; }
 
         public override string ToString()
         {

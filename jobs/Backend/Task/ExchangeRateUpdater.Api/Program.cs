@@ -63,3 +63,5 @@ app.UseExceptionHandler(exceptionHandlerApp =>
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { } // making Program class visible to Tests projects

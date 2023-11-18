@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater.Api.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
-    [Route("api/v{version:apiVersion}/rates")]
+    [Route("api/v{version:apiVersion}/exchange_rates")]
     public class ExchangeRatesController : ControllerBase
     {
         private readonly IExchangeRateProvider _cnbExchangeRateProvider;
@@ -17,10 +17,11 @@ namespace ExchangeRateUpdater.Api.Controllers
         }
 
         [HttpPost("daily/cnb")]
+        [ProducesResponseType(typeof(List<ExchangeRate>), 200)]
         public async Task<IActionResult> GetCnbExchangeRate(DailyExchangeRatesRequest request, CancellationToken cancellationToken)
         {
-            var currencies = request.Currencies.Select(curr => new Currency(curr));
-            var rates = await _cnbExchangeRateProvider.GetExchangeRatesAsync(currencies, cancellationToken);
+            var currencies = request.CurrencyCodes.Select(curr => new Currency(curr));
+            IEnumerable<ExchangeRate> rates = await _cnbExchangeRateProvider.GetExchangeRatesAsync(currencies, cancellationToken);
             return Ok(rates);
         }
     }

@@ -1,7 +1,13 @@
-﻿namespace ExchangeRateUpdater.Api.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ExchangeRateUpdater.Api.Models
 {
     public class ExchangeRate
     {
+        public ExchangeRate()
+        {
+        }
+
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
             SourceCurrency = sourceCurrency;
@@ -9,11 +15,14 @@
             Value = value;
         }
 
-        public Currency SourceCurrency { get; }
+        [JsonPropertyName("source_currency")]
+        public Currency? SourceCurrency { get; set; }
 
-        public Currency TargetCurrency { get; }
+        [JsonPropertyName("target_currency")]
+        public Currency? TargetCurrency { get; set; }
 
-        public decimal Value { get; }
+        [JsonPropertyName("value")]
+        public decimal Value { get; set; }
 
         public override string ToString()
         {
