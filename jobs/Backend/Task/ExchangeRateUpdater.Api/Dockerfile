@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api/"]
-RUN dotnet restore "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
+COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater.Api/"]
+RUN dotnet restore "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
 COPY . .
-WORKDIR "/src/ExchangeRateUpdater.Api/ExchangeRateUpdater.Api"
+WORKDIR "/src/ExchangeRateUpdater.Api"
 RUN dotnet build "ExchangeRateUpdater.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
