@@ -1,9 +1,14 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Api.Models
 {
     public class Currency
     {
         public Currency(string code)
         {
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+
             Code = code;
         }
 
