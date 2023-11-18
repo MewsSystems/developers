@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Api.Models;
+﻿using ExchangeRateUpdater.Api.Configuration;
+using ExchangeRateUpdater.Api.Models;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace ExchangeRateUpdater.Api.Clients
@@ -10,17 +12,19 @@ namespace ExchangeRateUpdater.Api.Clients
 
     public class CnbClient : ICnbClient
     {
-
         private readonly HttpClient _httpClient;
+        private readonly string _endpoint;
 
-        public CnbClient(HttpClient httpClient)
+        public CnbClient(HttpClient httpClient, IOptions<SourceConfiguration> sourceConfiguration)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _endpoint = sourceConfiguration?.Value?.DailyExchangeRatesEndpoint ?? throw new ArgumentNullException(nameof(sourceConfiguration));
         }
 
         public async Task<CnbDailyExchangeRatesResponse> GetExchangeRatesAsync(CancellationToken cancellationToken)
         {
-            var response = await _httpClient.GetAsync(_httpClient.BaseAddress, cancellationToken);
+            var requestUri = $"{_httpClient.BaseAddress}/{_endpoint}";
+            var response = await _httpClient.GetAsync(requestUri, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();

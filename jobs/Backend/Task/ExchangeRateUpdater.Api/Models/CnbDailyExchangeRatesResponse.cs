@@ -6,11 +6,6 @@ namespace ExchangeRateUpdater.Api.Models
     {
         [JsonPropertyName("rates")]
         public List<CnbDailyExchangeRate> Rates { get; init; } = new List<CnbDailyExchangeRate>();
-
-        internal void EnsureSuccessStatusCode()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class CnbDailyExchangeRate

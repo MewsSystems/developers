@@ -1,5 +1,8 @@
 ﻿using ExchangeRateUpdater.Api.Clients;
 using ExchangeRateUpdater.Api.Configuration;
+using ExchangeRateUpdater.Api.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -7,29 +10,38 @@ namespace ExchangeRateUpdater.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCustomOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
+        public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            serviceCollection.AddOptions();
+            services.AddOptions();
 
-            serviceCollection.Configure<SourceConfiguration>(configuration.GetSection(nameof(SourceConfiguration)));
-            serviceCollection.Configure<RetryConfiguration>(configuration.GetSection(nameof(RetryConfiguration)));
+            services.Configure<SourceConfiguration>(configuration.GetSection(nameof(SourceConfiguration)));
+            services.Configure<RetryConfiguration>(configuration.GetSection(nameof(RetryConfiguration)));
 
-            return serviceCollection;
+            return services;
         }
 
-        public static IServiceCollection AddCnbHttpClient(this IServiceCollection serviceCollection, IConfiguration configuration)
+        public static IServiceCollection AddCustomValidators(this IServiceCollection services)
+        {
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+
+            services.AddValidatorsFromAssemblyContaining<DailyExchangeRatesRequestValidator>();
+            return services;
+        }
+
+        public static IServiceCollection AddCnbHttpClient(this IServiceCollection services, IConfiguration configuration)
         {
             var sourceConfig = configuration.GetSection(nameof(SourceConfiguration)).Get<SourceConfiguration>();
             var retryConfig = configuration.GetSection(nameof(RetryConfiguration)).Get<RetryConfiguration>();
 
-            serviceCollection
+            services
                 .AddHttpClient<ICnbClient, CnbClient>(client =>
                     {
-                        client.BaseAddress = new Uri($"{sourceConfig.BaseAddress}/{sourceConfig.DailyExchangeRatesEndpoint}");
+                        client.BaseAddress = new Uri(sourceConfig.BaseAddress);
                     })
                 .AddPolicyHandler(GetRetryPolicy(retryConfig));
 
-            return serviceCollection;
+            return services;
         }
 
         private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(RetryConfiguration retryConfig)
@@ -38,7 +50,5 @@ namespace ExchangeRateUpdater.Api.Extensions
                 .HandleTransientHttpError()
                 .WaitAndRetryAsync(retryConfig.RetriesCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
-
-       
     }
 }
