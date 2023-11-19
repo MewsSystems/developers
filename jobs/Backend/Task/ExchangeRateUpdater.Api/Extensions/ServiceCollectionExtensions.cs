@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Api.Clients;
 using ExchangeRateUpdater.Api.Configuration;
+using ExchangeRateUpdater.Api.Services;
 using ExchangeRateUpdater.Api.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -10,6 +11,18 @@ namespace ExchangeRateUpdater.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddCustomCache(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = $"{configuration.GetValue<string>("RedisConfiguration:Host")}:{configuration.GetValue<int>("RedisConfiguration:Port")}";
+            });
+
+            services.AddSingleton<ICacheService, CacheService>();
+
+            return services;
+        }
+
         public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions();

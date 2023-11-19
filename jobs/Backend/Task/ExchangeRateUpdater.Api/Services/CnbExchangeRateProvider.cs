@@ -12,14 +12,17 @@ namespace ExchangeRateUpdater.Api.Services
 
     public class CnbExchangeRateProvider : IExchangeRateProvider
     {
+        private readonly ICacheService _cacheService;
         private readonly ICnbClient _cnbClient;
 
         private readonly Currency _sourceCurrency;
 
         public CnbExchangeRateProvider(
+            ICacheService cacheService,
             ICnbClient cnbClient,
             IOptions<SourceConfiguration> sourceConfiguration)
         {
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
             _cnbClient = cnbClient ?? throw new ArgumentNullException(nameof(cnbClient));
 
             _sourceCurrency = new Currency(sourceConfiguration.Value?.DefaultCurrency);
@@ -33,11 +36,25 @@ namespace ExchangeRateUpdater.Api.Services
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
         {
-            var response = await _cnbClient.GetExchangeRatesAsync(cancellationToken);
+            var dailyExchangeRates = await _cacheService.GetDailyExchangeRatesAsync(cancellationToken);
+            if (dailyExchangeRates != null)
+            {
+                return GetExchageRatesForCurrencies(dailyExchangeRates.Rates, currencies);
+            }
 
-            return response.Rates
-               .Where(rate => currencies.Any(curr => curr.Code == rate.CurrencyCode))
-               .Select(rate => new ExchangeRate(_sourceCurrency, new Currency(rate.CurrencyCode), Math.Round(rate.Rate, 2)));
+            dailyExchangeRates = await _cnbClient.GetExchangeRatesAsync(cancellationToken);
+            await _cacheService.AddDailyExchangeRatesAsync(dailyExchangeRates, cancellationToken);
+
+            return GetExchageRatesForCurrencies(dailyExchangeRates.Rates, currencies);
+        }
+
+        private IEnumerable<ExchangeRate> GetExchageRatesForCurrencies(
+            IEnumerable<CnbDailyExchangeRate> exchangeRates,
+            IEnumerable<Currency> currencies)
+        {
+            return exchangeRates
+              .Where(rate => currencies.Any(curr => curr.Code == rate.CurrencyCode))
+              .Select(rate => new ExchangeRate(_sourceCurrency, new Currency(rate.CurrencyCode), Math.Round(rate.Rate, 2)));
         }
     }
 }

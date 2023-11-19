@@ -32,6 +32,8 @@ builder.Services.AddCustomValidators();
 builder.Services.AddCnbHttpClient(builder.Configuration);
 builder.Services.AddTransient<IExchangeRateProvider, CnbExchangeRateProvider>();
 
+builder.Services.AddCustomCache(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
