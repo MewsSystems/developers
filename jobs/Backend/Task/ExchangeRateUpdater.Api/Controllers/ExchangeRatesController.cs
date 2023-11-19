@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater.Api.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
-    [Route("api/v{version:apiVersion}/exchange_rates")]
+    [Route("api/v{version:apiVersion}/rates")]
     public class ExchangeRatesController : ControllerBase
     {
         private readonly IExchangeRateProvider _cnbExchangeRateProvider;
