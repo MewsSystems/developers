@@ -37,12 +37,15 @@ namespace Mews.ExchangeRateProvider.Api.Controllers
         /// </remarks>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetExchangeRatesDaily([FromQuery] string? date, [FromQuery] string? lang, [FromQuery] bool? getAllRates)
+        public async Task<ActionResult> GetExchangeRatesDaily(
+            [FromQuery] string? date = null,
+            [FromQuery] string? lang = null,
+            [FromQuery] bool? getAllRates = null)
         {
             // if client don't provide values for date or lang, we default them via helpers
             var validDate = DateTimeHelper.ParseDateFormat(date);
-            var chosenLanguage = LanguageHelper.ParseLang(lang);    
-            var fetchAllRates = getAllRates.HasValue ? getAllRates.Value : false;
+            var chosenLanguage = LanguageHelper.ParseLang(lang);
+            var fetchAllRates = getAllRates ?? false;
             var dailyRates = await _rateRepository.GetDailyRatesAsync(validDate, chosenLanguage, fetchAllRates);
             return Ok(dailyRates);
         }

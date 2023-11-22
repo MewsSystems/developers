@@ -24,16 +24,18 @@ namespace Mews.ExchangeRateProvider.Application.Test.Repos
             var lang = "en";
             var getAllRates = true;
 
-            var cachedRates = new List<ExchangeRate> { new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m) };
+            var cachedRates = new List<ExchangeRate> { new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.4m) };
 
-            cacheProviderMock.Setup(c => c.GetFromCache(It.IsAny<string>())).Returns(cachedRates);
+            cacheProviderMock
+               .Setup(c => c.GetFromCache<IEnumerable<ExchangeRate>>(It.IsAny<string>()))
+               .Returns(cachedRates);
 
             // Act
             var result = await repository.GetDailyRatesAsync(date, lang, getAllRates);
 
             // Assert
             Assert.Equal(cachedRates, result);
-            cacheProviderMock.Verify(c => c.GetFromCache(It.IsAny<string>()), Times.Once);
+            cacheProviderMock.Verify(c => c.GetFromCache<IEnumerable<ExchangeRate>>(It.IsAny<string>()), Times.Once);
             cnbClientMock.Verify(c => c.GetDailyRatesCNBAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             cacheProviderMock.Verify(c => c.SetCache(It.IsAny<string>(), It.IsAny<IEnumerable<ExchangeRate>>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Never);
         }
@@ -52,11 +54,13 @@ namespace Mews.ExchangeRateProvider.Application.Test.Repos
             var lang = "en";
             var getAllRates = true;
 
-            cacheProviderMock.Setup(c => c.GetFromCache(It.IsAny<string>())).Returns((IEnumerable<ExchangeRate>)null);
+            cacheProviderMock
+              .Setup(c => c.GetFromCache<IEnumerable<ExchangeRate>>(It.IsAny<string>()))
+              .Returns(Enumerable.Empty<ExchangeRate>());
 
             var cnbResponse = new List<ResponseExchangeRate>
                     {
-                        new ResponseExchangeRate { CurrencyCode = "USD", Rate = 25.0m, Amount = 1 }
+                        new ResponseExchangeRate { CurrencyCode = "USD", Rate = 22.4m, Amount = 1 }
                     };
 
             cnbClientMock.Setup(c => c.GetDailyRatesCNBAsync(date, lang)).ReturnsAsync(cnbResponse);
@@ -65,14 +69,14 @@ namespace Mews.ExchangeRateProvider.Application.Test.Repos
             var result = await repository.GetDailyRatesAsync(date, lang, getAllRates);
 
             // Assert
-            var expectedExchangeRate = new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m / 1);
+            var expectedExchangeRate = new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.4m / 1);
 
             Assert.Single(result);
             Assert.Equal(expectedExchangeRate.SourceCurrency.Code, result.First().SourceCurrency.Code);
             Assert.Equal(expectedExchangeRate.TargetCurrency.Code, result.First().TargetCurrency.Code);
             Assert.Equal(expectedExchangeRate.Value, result.First().Value);
 
-            cacheProviderMock.Verify(c => c.GetFromCache(It.IsAny<string>()), Times.Once);
+            cacheProviderMock.Verify(c => c.GetFromCache<IEnumerable<ExchangeRate>>(It.IsAny<string>()), Times.Once);
             cnbClientMock.Verify(c => c.GetDailyRatesCNBAsync(date, lang), Times.Once);
             cacheProviderMock.Verify(c => c.SetCache(It.IsAny<string>(), It.IsAny<IEnumerable<ExchangeRate>>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
         }
@@ -104,7 +108,7 @@ namespace Mews.ExchangeRateProvider.Application.Test.Repos
             });
 
             cnbClientMock.Verify(client => client.GetDailyRatesCNBAsync(date, lang), Times.Once);
-            cacheProviderMock.Verify(cache => cache.GetFromCache(It.IsAny<string>()), Times.Once);
+            cacheProviderMock.Verify(c => c.GetFromCache<IEnumerable<ExchangeRate>>(It.IsAny<string>()), Times.Once);
             cacheProviderMock.Verify(cache => cache.SetCache(It.IsAny<string>(), It.IsAny<IEnumerable<ExchangeRate>>(), It.IsAny<MemoryCacheEntryOptions>()), Times.Once);
         }     
     }

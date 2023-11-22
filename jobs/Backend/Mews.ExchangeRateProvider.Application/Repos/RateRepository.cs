@@ -5,6 +5,7 @@ using Mews.ExchangeRateProvider.Infrastructure.Abstractions;
 using Mews.ExchangeRateProvider.Infrastructure.Utils;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using System.Collections.Immutable;
 
 namespace Mews.ExchangeRateProvider.Application.Repos
 {
@@ -23,7 +24,7 @@ namespace Mews.ExchangeRateProvider.Application.Repos
             _cnbClient = cNBClient;
         }
         /// <summary>
-        /// check for cached items, return from cache if it is populated, otherwise call CNB API
+        /// check for cached items, return from cache if it is populated, otherwise call CNB APIand and create ExchangeRate from result
         /// </summary>
         /// <param name="date"></param>
         /// <param name="lang"></param>
@@ -40,7 +41,6 @@ namespace Mews.ExchangeRateProvider.Application.Repos
             {
                 return cachedRates;
             }
-
             var cnbDailyRates = await _cnbClient.GetDailyRatesCNBAsync(date, lang);
             if (cnbDailyRates is not null)
             {
@@ -65,22 +65,26 @@ namespace Mews.ExchangeRateProvider.Application.Repos
                             new Currency(_defaultCNBCurrency),
                             exchangeRate.Amount != 0 ? decimal.Divide(exchangeRate.Rate, exchangeRate.Amount) : 0));
                 }
-
                 _cacheProvider.SetCache(cacheKey, mappedRates, cacheOptions);
                 return mappedRates;
             }
-
             return Enumerable.Empty<ExchangeRate>();
         }
         private MemoryCacheEntryOptions GetCacheOptions()
         {
+            // this should be moved to CacheOptions options class in Utils
             return new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(4))
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
         }
         private IEnumerable<ExchangeRate> GetRatesFromCache(string cacheKey)
         {
-            return _cacheProvider.GetFromCache(cacheKey) ?? Enumerable.Empty<ExchangeRate>();
+            var returnedCache = _cacheProvider.GetFromCache<IEnumerable<ExchangeRate>>(cacheKey);
+            if (returnedCache is not null && returnedCache.Any())
+            {
+                return returnedCache;
+            }
+            return Enumerable.Empty<ExchangeRate>();
         }
     }
 }

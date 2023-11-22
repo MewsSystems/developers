@@ -13,7 +13,7 @@ Inside the src folder, we have the following .NET projects:
 - **Mews.ExchangeRateProvider.Api:** This is a WEB API project providing an endpoint for clients to call. When fetching rates, we enable optional parameters for date, language, and the option to get all rates or just the ones of interest.
 - **Mews.ExchangeRateProvider.Application:** This is a class library providing an interface for the API project to call.
 - **Mews.ExchangeRateProvider.Infrastructure:** This is a class library providing interfaces for the Application project to call. It contains the CNB client implementation, caching, etc.
-- **Mews.ExchangeRateProvider.Domain:** This is a class library containing data objects used by all other projects.
+- **Mews.ExchangeRateProvider.Domain:** This is a class library containing data objects (entities, DTOs) used by all other projects.
 
 Inside the test folder, we have the following test projects:
 

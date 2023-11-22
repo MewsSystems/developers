@@ -7,13 +7,13 @@
     {
         public const string DefaultLang = "CZ";
 
-        public static string ParseLang(string? lang) {
+        public static string ParseLang(string? lang)
+        {
             if (string.IsNullOrWhiteSpace(lang))
             {
                 return DefaultLang;
             }
-            if (lang.ToUpper().Contains("EN")) return "EN";
-            return DefaultLang;
+            return lang.ToUpper().Contains("EN") ? "EN" : DefaultLang;
         }
     }
 }

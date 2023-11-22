@@ -11,12 +11,7 @@ namespace Mews.ExchangeRateProvider.Api.Utils
 
         public static string ParseDateFormat(string? inputDate)
         {
-            if (string.IsNullOrWhiteSpace(inputDate))
-            {
-                return DateTime.Today.ToString(ValidStringFormat);
-            }
-            DateTime result = new DateTime();
-            if (DateTime.TryParseExact(inputDate, ValidStringFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+            if (DateTime.TryParseExact(inputDate, ValidStringFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
             {
                 return result.ToString(ValidStringFormat);
             }
