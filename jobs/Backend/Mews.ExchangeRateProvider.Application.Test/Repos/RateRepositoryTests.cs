@@ -92,7 +92,8 @@ namespace Mews.ExchangeRateProvider.Application.Test.Repos
 
             var rateRepository = new RateRepository(cacheProviderMock.Object, loggerMock.Object, cnbClientMock.Object);
 
-            cnbClientMock.Setup(client => client.GetDailyRatesCNBAsync(date, lang)).ReturnsAsync(ValidCurrenciesList.currencies.Select(currency => new ResponseExchangeRate { CurrencyCode = currency.Code, Rate = 1.0m, Amount = 1 }));
+            cnbClientMock.Setup(client => client.GetDailyRatesCNBAsync(date, lang))
+                .ReturnsAsync(ValidCurrenciesList.currencies.Select(currency => new ResponseExchangeRate { CurrencyCode = currency.Code, Rate = 1.0m, Amount = 1 }));
 
             // Act
             var result = await rateRepository.GetDailyRatesAsync(date, lang, getAllRates);

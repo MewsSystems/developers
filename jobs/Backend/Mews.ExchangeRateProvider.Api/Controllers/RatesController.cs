@@ -25,7 +25,7 @@ namespace Mews.ExchangeRateProvider.Api.Controllers
         /// <summary>
         /// Get rates from CNB API with optional parameters.
         /// </summary>
-        /// <param name="date" example="2023-11-15"></param>
+        /// <param name="date" example="2023-11-23"></param>
         /// <param name="lang" example="CZ"></param>
         /// <param name="getAllRates" example="true"></param>
         /// <returns></returns>
