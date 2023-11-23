@@ -46,7 +46,7 @@ namespace Mews.ExchangeRateProvider.Infrastructure.Test.CNBClient
             var cnbClient = new Clients.CNBClient(Mock.Of<IOptions<CNBClientOptions>>(x => x.Value == options), httpClientFactoryMock.Object, loggerMock.Object);
 
             // Act and Assert
-            await Assert.ThrowsAsync<ApplicationException>(async () => await cnbClient.GetDailyRatesCNBAsync(date, lang));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await cnbClient.GetDailyRatesCNBAsync(date, lang));
         }
 
         private Mock<IHttpClientFactory> GetHttpClientFactoryMock(HttpStatusCode statusCode, string responseContent = null)

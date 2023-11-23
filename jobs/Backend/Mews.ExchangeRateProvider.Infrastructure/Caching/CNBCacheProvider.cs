@@ -13,15 +13,6 @@ namespace Mews.ExchangeRateProvider.Infrastructure.Caching
             _cache = cache;
         }
 
-        //public IEnumerable<ExchangeRate>? GetFromCache(string key)
-        //{
-        //    var cachedResponse = _cache.TryGetValue(key, out IEnumerable<ExchangeRate>? cachedValues);
-        //    if (cachedResponse)
-        //    {
-        //        return cachedValues;
-        //    }
-        //    return null;
-        //}
         public T? GetFromCache<T>(string key) where T : class
         {
             var cachedResponse = _cache.TryGetValue(key, out T? cachedValues);

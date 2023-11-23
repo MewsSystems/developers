@@ -27,7 +27,7 @@ Inside the test folder, we have the following test projects:
 
 - **Swagger:** Allowing human-readable API documentation.
 
-- **HttpClientFactory:** HttpClientFactory provides several benefits over HttpClient, including automatic handling of lifetime management, pooling, and configuration.
+- **HttpClientFactory:** HttpClientFactory provides several benefits over HttpClient, including automatic handling of lifetime management, pooling, using Polly handlers is easy.
 
 - **Polly for Retry Policy:** Implements retry policies using the Polly library to handle transient errors, improving the application's resilience by allowing it to recover from temporary failures when calling external systems.
 

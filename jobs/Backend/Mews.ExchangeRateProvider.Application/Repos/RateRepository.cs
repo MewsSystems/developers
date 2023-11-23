@@ -72,7 +72,6 @@ namespace Mews.ExchangeRateProvider.Application.Repos
         }
         private MemoryCacheEntryOptions GetCacheOptions()
         {
-            // this should be moved to CacheOptions options class in Utils
             return new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(4))
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));

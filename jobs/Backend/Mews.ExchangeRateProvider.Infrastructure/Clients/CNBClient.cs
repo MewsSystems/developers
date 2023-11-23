@@ -34,7 +34,7 @@ namespace Mews.ExchangeRateProvider.Infrastructure.Clients
             {
                 var errorMessage = $"Request to CNB API failed. Status code: {response.StatusCode}";
                 _logger.LogError(errorMessage);
-                throw new ApplicationException(errorMessage);
+                throw new HttpRequestException(errorMessage);
             }
             var content = await response.Content.ReadAsStringAsync();
             // json deserialization should be handled in try-catch block
