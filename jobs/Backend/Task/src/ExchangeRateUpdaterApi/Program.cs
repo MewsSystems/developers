@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog.Core;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 
 namespace ExchangeRateUpdaterApi
 {
@@ -16,7 +18,9 @@ namespace ExchangeRateUpdaterApi
 
         public static void Main(string[] args)
         {
-            var logger = SerilogConfiguration.Create(ApplicationName);
+            Logger logger = SerilogConfiguration.Create(ApplicationName);
+            logger.Information("Logger created;");
+            
             var container = new Container();
 
             var hostBuilder = Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(builder =>
@@ -24,7 +28,12 @@ namespace ExchangeRateUpdaterApi
                     {
                         services.AddControllers();
                         
-                        services.AddSimpleInjector(container);
+                        services.AddSimpleInjector(container, options =>
+                        {
+                            options
+                                .AddAspNetCore()
+                                .AddControllerActivation();
+                        });
                         
                         services.AddSwaggerGen(options =>
                         {
@@ -41,6 +50,15 @@ namespace ExchangeRateUpdaterApi
                         {
                             options.SwaggerEndpoint("/swagger/v1/swagger.json", ApplicationName);
                         });
+
+                        application.UseRouting();
+
+                        application.UseAuthorization();
+
+                        application.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                        });
                     })
                 );
 
@@ -51,17 +69,17 @@ namespace ExchangeRateUpdaterApi
             _host.Run();
 
             /*private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };*/
+            {
+                new Currency("USD"),
+                new Currency("EUR"),
+                new Currency("CZK"),
+                new Currency("JPY"),
+                new Currency("KES"),
+                new Currency("RUB"),
+                new Currency("THB"),
+                new Currency("TRY"),
+                new Currency("XYZ")
+            };*/
 
             /*try
             {
