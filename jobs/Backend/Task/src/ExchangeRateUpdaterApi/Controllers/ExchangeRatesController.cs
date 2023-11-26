@@ -36,7 +36,7 @@ public class ExchangeRatesController : ControllerBase
         
         var result = await _getExchangeRatesUseCase
             .ExecuteAsync(exchangeRatesRequest.ExchangeRatesDetails.Select(request => request.ToExchangeRateRequest()), 
-                exchangeRatesRequest.DateToRequest,
+                date,
                 cancellationToken);
         
         return Ok(result.Select(exchangeRate => exchangeRate.ToExchangeRateResponseDto()).ToList()) ?? Ok(new List<ExchangeRateResultDto>());

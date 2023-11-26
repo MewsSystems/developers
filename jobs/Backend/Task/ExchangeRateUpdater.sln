@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DCD38A71
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterApi.Tests.Unit", "Tests\ExchangeRateUpdaterApi.Tests.Unit\ExchangeRateUpdaterApi.Tests.Unit.csproj", "{1540F3D8-4814-4D51-A852-CF4FDA25142D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.InMemory", "Adapter.InMemory\Adapter.InMemory.csproj", "{26A2C888-E2CB-460A-9396-12CEA7A2F051}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.InMemory", "src\Adapter.InMemory\Adapter.InMemory.csproj", "{26A2C888-E2CB-460A-9396-12CEA7A2F051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

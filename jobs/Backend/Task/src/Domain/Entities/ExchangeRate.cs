@@ -19,7 +19,7 @@ namespace Domain.Entities
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}";
         }
     }
 }

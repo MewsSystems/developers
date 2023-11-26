@@ -1,3 +1,5 @@
+using System;
+using Domain.Ports;
 using ExchangeRateUpdaterApi.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,62 +16,79 @@ public class ApplicationHostBuilder
     private readonly string[] _args;
     private readonly string _applicationName;
 
+    protected Container Container;
+
     public ApplicationHostBuilder(string[] args, string applicationName)
     {
         _args = args;
         _applicationName = applicationName;
     }
-
+    
     public IHost BuildHost()
+    {
+        return BuildHost(config => { });
+    }
+
+    public IHost BuildHost(Action<IWebHostBuilder> config)
     {
         Logger logger = SerilogConfiguration.Create(_applicationName);
         logger.Information("Logger created;");
             
-        var container = new Container();
+        Container = new Container();
+        Container.Options.ResolveUnregisteredConcreteTypes = true;
 
         var hostBuilder = Host.CreateDefaultBuilder(_args).ConfigureWebHostDefaults(builder =>
-            builder.ConfigureServices(services =>
             {
-                services.AddControllers();
-                        
-                services.AddSimpleInjector(container, options =>
+                builder.ConfigureServices(services =>
                 {
-                    options
-                        .AddAspNetCore()
-                        .AddControllerActivation();
-                });
-                        
-                services.AddSwaggerGen(options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo
+                    services.AddControllers();
+
+                    services.AddSimpleInjector(Container, options =>
                     {
-                        Title = _applicationName,
-                        Version = "v1"
+                        options
+                            .AddAspNetCore()
+                            .AddControllerActivation();
+                    });
+
+                    services.AddSwaggerGen(options =>
+                    {
+                        options.SwaggerDoc("v1", new OpenApiInfo
+                        {
+                            Title = _applicationName,
+                            Version = "v1"
+                        });
+                    });
+                }).Configure(application =>
+                {
+                    application.UseSwagger();
+                    application.UseSwaggerUI(options =>
+                    {
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", _applicationName);
+                    });
+
+                    application.UseRouting();
+
+                    application.UseAuthorization();
+
+                    application.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapControllers();
                     });
                 });
-            }).Configure(application =>
-            {
-                application.UseSwagger();
-                application.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", _applicationName);
-                });
-
-                application.UseRouting();
-
-                application.UseAuthorization();
-
-                application.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-            })
+                
+                config(builder);
+            }
         );
 
-        var host = hostBuilder.Build().UseSimpleInjector(container);
+        var host = hostBuilder.Build().UseSimpleInjector(Container);
 
-        container.RegisterInstance(logger);
+        Container.RegisterInstance(logger);
 
         return host;
+    }
+
+    public virtual void RegisterDependencies(IExchangeRatesRepository exchangeRatesRepository)
+    {
+        
     }
 }
