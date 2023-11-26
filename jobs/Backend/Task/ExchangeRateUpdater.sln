@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.InMemory", "src\Ada
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.Http.CNB", "src\Adapter.Http.CNB\Adapter.Http.CNB.csproj", "{0D74A7AC-5353-4765-A748-B544DA2714CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.Http.CNB.Tests.Integration", "Tests\Adapter.Http.CNB.Tests.Integration\Adapter.Http.CNB.Tests.Integration.csproj", "{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,11 +43,16 @@ Global
 		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D74A7AC-5353-4765-A748-B544DA2714CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1540F3D8-4814-4D51-A852-CF4FDA25142D} = {DCD38A71-2A03-464B-8A5E-8EF3DE63352B}
+		{92E1FA4B-16CE-42F9-AA83-C788AECED2C1} = {DCD38A71-2A03-464B-8A5E-8EF3DE63352B}
 	EndGlobalSection
 EndGlobal
