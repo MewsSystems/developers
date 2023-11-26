@@ -101,7 +101,7 @@ public class ApplicationHostBuilder
         return host;
     }
 
-    public virtual void RegisterDependencies(IExchangeRatesRepository exchangeRatesRepository)
+    public void RegisterDependencies(IExchangeRatesRepository exchangeRatesRepository)
     {
         Container.RegisterInstance<IExchangeRatesRepository>(exchangeRatesRepository);
     }

@@ -10,9 +10,13 @@ public class TestApplicationHostBuilder : ApplicationHostBuilder
     public TestApplicationHostBuilder(string[] args, string applicationName, ISettings settings) : base(args, applicationName, settings)
     {
     }
-
-    public override void RegisterDependencies(IExchangeRatesRepository exchangeRatesRepository)
+    
+    public void ReplaceRegistrations(IExchangeRatesRepository exchangeRatesRepository)
     {
+        Container.Options.AllowOverridingRegistrations = true;
+        
         Container.RegisterInstance<IExchangeRatesRepository>(exchangeRatesRepository);
+        
+        Container.Options.AllowOverridingRegistrations = false;
     }
 }

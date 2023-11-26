@@ -23,7 +23,7 @@ public class TestBase : IDisposable
 
         ExchangeRatesRepositoryInMemory = new ExchangeRatesRepositoryInMemory();
 
-        testApplicationHostBuilder.RegisterDependencies(ExchangeRatesRepositoryInMemory);
+        testApplicationHostBuilder.ReplaceRegistrations(ExchangeRatesRepositoryInMemory);
 
         await _host.StartAsync();
         HttpClient = _host.GetTestClient();
