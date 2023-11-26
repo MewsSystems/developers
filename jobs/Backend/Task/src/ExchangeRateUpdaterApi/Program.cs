@@ -18,56 +18,11 @@ namespace ExchangeRateUpdaterApi
 
         public static void Main(string[] args)
         {
-            Logger logger = SerilogConfiguration.Create(ApplicationName);
-            logger.Information("Logger created;");
+            using (_host = new ApplicationHostBuilder(args, ApplicationName).BuildHost())
+            {
+                _host.Run();
+            }
             
-            var container = new Container();
-
-            var hostBuilder = Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(builder =>
-                    builder.ConfigureServices(services =>
-                    {
-                        services.AddControllers();
-                        
-                        services.AddSimpleInjector(container, options =>
-                        {
-                            options
-                                .AddAspNetCore()
-                                .AddControllerActivation();
-                        });
-                        
-                        services.AddSwaggerGen(options =>
-                        {
-                            options.SwaggerDoc("v1", new OpenApiInfo
-                            {
-                                Title = ApplicationName,
-                                Version = "v1"
-                            });
-                        });
-                    }).Configure(application =>
-                    {
-                        application.UseSwagger();
-                        application.UseSwaggerUI(options =>
-                        {
-                            options.SwaggerEndpoint("/swagger/v1/swagger.json", ApplicationName);
-                        });
-
-                        application.UseRouting();
-
-                        application.UseAuthorization();
-
-                        application.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                        });
-                    })
-                );
-
-            _host = hostBuilder.Build().UseSimpleInjector(container);
-
-            container.RegisterInstance(logger);
-
-            _host.Run();
-
             /*private static IEnumerable<Currency> currencies = new[]
             {
                 new Currency("USD"),
