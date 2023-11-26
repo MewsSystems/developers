@@ -6,7 +6,7 @@ namespace ExchangeRateUpdaterApi
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        /*private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -17,11 +17,11 @@ namespace ExchangeRateUpdaterApi
             new Currency("THB"),
             new Currency("TRY"),
             new Currency("XYZ")
-        };
+        };*/
 
         public static void Main(string[] args)
         {
-            try
+            /*try
             {
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
@@ -37,7 +37,7 @@ namespace ExchangeRateUpdaterApi
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
-            Console.ReadLine();
+            Console.ReadLine();*/
         }
     }
 }

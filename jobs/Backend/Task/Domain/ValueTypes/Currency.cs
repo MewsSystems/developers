@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdaterApi
+﻿namespace Domain.ValueTypes
 {
     public class Currency
     {

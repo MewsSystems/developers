@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdaterApi
+﻿using Domain.ValueTypes;
+
+namespace Domain.Entities
 {
     public class ExchangeRate
     {
