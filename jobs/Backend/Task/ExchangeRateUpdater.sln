@@ -5,7 +5,11 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterApi", "src\ExchangeRateUpdaterApi\ExchangeRateUpdaterApi.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DCD38A71-2A03-464B-8A5E-8EF3DE63352B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterApi.Tests.Unit", "Tests\ExchangeRateUpdaterApi.Tests.Unit\ExchangeRateUpdaterApi.Tests.Unit.csproj", "{1540F3D8-4814-4D51-A852-CF4FDA25142D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +25,15 @@ Global
 		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFDA9B6E-11DE-4FBB-ADE7-E895EEF08892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1540F3D8-4814-4D51-A852-CF4FDA25142D} = {DCD38A71-2A03-464B-8A5E-8EF3DE63352B}
 	EndGlobalSection
 EndGlobal
