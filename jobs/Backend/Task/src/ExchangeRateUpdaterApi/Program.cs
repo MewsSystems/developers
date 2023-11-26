@@ -18,7 +18,9 @@ namespace ExchangeRateUpdaterApi
 
         public static void Main(string[] args)
         {
-            using (_host = new ApplicationHostBuilder(args, ApplicationName).BuildHost())
+            ISettings settings = ExchangeRateUpdaterApiConfiguration.GetExchangeRateUpdaterApiSettings();
+            
+            using (_host = new ApplicationHostBuilder(args, ApplicationName, settings).BuildHost())
             {
                 _host.Run();
             }

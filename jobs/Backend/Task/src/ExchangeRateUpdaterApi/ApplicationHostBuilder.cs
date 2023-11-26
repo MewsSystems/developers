@@ -1,4 +1,6 @@
 using System;
+using Adapter.Http.CNB;
+using Adapter.Http.CNB.Repositories;
 using Domain.Ports;
 using ExchangeRateUpdaterApi.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -15,13 +17,15 @@ public class ApplicationHostBuilder
 {
     private readonly string[] _args;
     private readonly string _applicationName;
+    private readonly ISettings _settings;
 
     protected Container Container;
 
-    public ApplicationHostBuilder(string[] args, string applicationName)
+    public ApplicationHostBuilder(string[] args, string applicationName, ISettings settings)
     {
         _args = args;
         _applicationName = applicationName;
+        _settings = settings;
     }
     
     public IHost BuildHost()
@@ -83,12 +87,22 @@ public class ApplicationHostBuilder
         var host = hostBuilder.Build().UseSimpleInjector(Container);
 
         Container.RegisterInstance(logger);
+        
+        // Register dependencies
+        var cnbSettings = new CNBSettings
+        {
+            BaseAddress = _settings.ExchangeRatesBaseAddress
+        };
+        
+        IExchangeRatesRepository exchangeRatesRepository = new ExchangeRatesRepository(cnbSettings, logger);
+        
+        RegisterDependencies(exchangeRatesRepository);
 
         return host;
     }
 
     public virtual void RegisterDependencies(IExchangeRatesRepository exchangeRatesRepository)
     {
-        
+        Container.RegisterInstance<IExchangeRatesRepository>(exchangeRatesRepository);
     }
 }

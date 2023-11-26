@@ -1,4 +1,5 @@
 using Adapter.InMemory.Repositories;
+using ExchangeRateUpdaterApi.Configuration;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
@@ -14,7 +15,9 @@ public class TestBase : IDisposable
     [SetUp]
     public async Task StartHost()
     {
-        var testApplicationHostBuilder = new TestApplicationHostBuilder(null, "TestApplication");
+        ISettings settings = new Settings();
+        
+        var testApplicationHostBuilder = new TestApplicationHostBuilder(null, "TestApplication", settings);
 
         _host = testApplicationHostBuilder.BuildHost(c => c.UseTestServer());
 
