@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdaterApi
 {
     public class ExchangeRateProvider
     {

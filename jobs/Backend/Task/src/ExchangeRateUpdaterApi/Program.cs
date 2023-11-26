@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExchangeRateUpdaterApi;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdaterApi
 {
     public static class Program
     {
