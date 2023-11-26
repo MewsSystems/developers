@@ -1,12 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdaterApi.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using SimpleInjector;
 
 namespace ExchangeRateUpdaterApi
 {
     public static class Program
     {
-        /*private static IEnumerable<Currency> currencies = new[]
+        public const string ApplicationName = "MewsChallenge - ExchangeRateUpdaterApi";
+
+        private static IHost _host;
+
+        public static void Main(string[] args)
+        {
+            var logger = SerilogConfiguration.Create(ApplicationName);
+            var container = new Container();
+
+            var hostBuilder = Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(builder =>
+                    builder.ConfigureServices(services =>
+                    {
+                        services.AddControllers();
+                        
+                        services.AddSimpleInjector(container);
+                        
+                        services.AddSwaggerGen(options =>
+                        {
+                            options.SwaggerDoc("v1", new OpenApiInfo
+                            {
+                                Title = ApplicationName,
+                                Version = "v1"
+                            });
+                        });
+                    }).Configure(application =>
+                    {
+                        application.UseSwagger();
+                        application.UseSwaggerUI(options =>
+                        {
+                            options.SwaggerEndpoint("/swagger/v1/swagger.json", ApplicationName);
+                        });
+                    })
+                );
+
+            _host = hostBuilder.Build().UseSimpleInjector(container);
+
+            container.RegisterInstance(logger);
+
+            _host.Run();
+
+            /*private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,8 +63,6 @@ namespace ExchangeRateUpdaterApi
             new Currency("XYZ")
         };*/
 
-        public static void Main(string[] args)
-        {
             /*try
             {
                 var provider = new ExchangeRateProvider();
