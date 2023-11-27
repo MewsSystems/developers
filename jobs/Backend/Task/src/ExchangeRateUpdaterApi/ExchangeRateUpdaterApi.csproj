@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Adapter.Http.CNB\Adapter.Http.CNB.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
