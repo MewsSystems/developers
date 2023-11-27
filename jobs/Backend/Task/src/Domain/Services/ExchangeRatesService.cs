@@ -1,16 +1,19 @@
 using Domain.Entities;
 using Domain.Ports;
 using Domain.ValueTypes;
+using Serilog.Core;
 
 namespace Domain.Services;
 
 public class ExchangeRatesService
 {
     private IExchangeRatesRepository _exchangeRatesRepository;
-    
-    public ExchangeRatesService(IExchangeRatesRepository exchangeRatesRepository)
+    private readonly Logger _logger;
+
+    public ExchangeRatesService(IExchangeRatesRepository exchangeRatesRepository, Logger logger)
     {
         _exchangeRatesRepository = exchangeRatesRepository ?? throw new ArgumentNullException(nameof(exchangeRatesRepository));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<List<ExchangeRate>> GetDailyExchangeRates(IEnumerable<ExchangeRateRequest> exchangeRateRequests, DateTime dateToRequest, CancellationToken cancellationToken)
@@ -31,7 +34,12 @@ public class ExchangeRatesService
 
         foreach (var exchangeRate in exchangeRateRequests)
         {
-            if (dailyExchangeRatesDictionary.TryGetValue(exchangeRate.ToString(), out var value))
+            if (!exchangeRate.SourceCurrency.IsValidCurrencyCode() || !exchangeRate.TargetCurrency.IsValidCurrencyCode())
+            {
+                _logger.Warning("ExchangeRate {ExchangeRate} is not valid.", exchangeRate.ToString());
+            }
+            
+            else if (dailyExchangeRatesDictionary.TryGetValue(exchangeRate.ToString(), out var value))
             {
                 dailyExchangeRatesByCurrency.Add(value);
             }

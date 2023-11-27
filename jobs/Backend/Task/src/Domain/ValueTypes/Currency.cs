@@ -1,4 +1,6 @@
-﻿namespace Domain.ValueTypes
+﻿using System.Globalization;
+
+namespace Domain.ValueTypes
 {
     public class Currency
     {
@@ -15,6 +17,17 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public bool IsValidCurrencyCode()
+        {
+            // Check for ISO 4217
+            if (Code.Length == 3)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
