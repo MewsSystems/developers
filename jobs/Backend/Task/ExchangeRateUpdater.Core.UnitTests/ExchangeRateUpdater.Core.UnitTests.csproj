@@ -7,11 +7,13 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>ExchangeRateUpdadte.Core.UnitTests</RootNamespace>
+        <RootNamespace>ExchangeRateUpdater.Core.UnitTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
+        <PackageReference Include="Moq" Version="4.20.69" />
         <PackageReference Include="NUnit" Version="3.13.3"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
         <PackageReference Include="NUnit.Analyzers" Version="3.3.0"/>
