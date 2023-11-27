@@ -32,10 +32,10 @@ public static class Program
             services.AddExchangeRateUpdaterServices();
             var serviceProvider = services.BuildServiceProvider();
 
-            var provider = serviceProvider.GetService<IExchangeRateProvider>();
-            var rates = provider.GetExchangeRates(Currencies);
+            var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+            var rates = provider.GetExchangeRates(Currencies).ToList();
 
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());

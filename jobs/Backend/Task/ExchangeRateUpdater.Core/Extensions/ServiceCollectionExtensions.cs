@@ -15,12 +15,16 @@ public static class ServiceCollectionExtensions
             .AddJsonFile("appsettings.json")
             .Build();
 
-        services.AddSingleton(configuration.GetSection("ApiConfiguration").Get<ExchangeRateApiConfiguration>());
+        var apiConfiguration = new ExchangeRateApiConfiguration();
+        configuration.GetSection("ApiConfiguration").Bind(apiConfiguration);
+
+        services.AddSingleton<IApiConfiguration>(apiConfiguration);
     }
 
     public static void AddExchangeRateUpdaterServices(this IServiceCollection services)
     {
         services.AddHttpClient();
         services.AddSingleton<IExchangeRateHttpClient, ExchangeRateHttpClient>();
+        services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
     }
 }
