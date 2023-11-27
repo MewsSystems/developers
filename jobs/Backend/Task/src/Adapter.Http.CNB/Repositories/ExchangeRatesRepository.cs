@@ -1,5 +1,6 @@
 using Adapter.Http.CNB.Dtos.Response;
 using Adapter.Http.CNB.Mappers;
+using Adapter.Http.CNB.Resiliency;
 using Domain.Entities;
 using Domain.Ports;
 using Flurl;
@@ -40,7 +41,10 @@ public class ExchangeRatesRepository : IExchangeRatesRepository
                 RequestUri = url.ToUri()
             };
 
-            var response = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
+            var response = await httpClient.SendWithRetryAsync(async () =>
+            {
+                return await httpClient.SendAsync(httpRequestMessage, cancellationToken);
+            });
 
             if (response.IsSuccessStatusCode)
             {
