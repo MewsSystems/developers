@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExchangeRateUpdater.Core.Configuration;
+using ExchangeRateUpdater.Core.Extensions;
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater;
@@ -28,7 +27,10 @@ public static class Program
     {
         try
         {
-            var serviceProvider = DependencyResolver.Initialize();
+            var services = new ServiceCollection();
+            services.AddConfiguration();
+            services.AddExchangeRateUpdaterServices();
+            var serviceProvider = services.BuildServiceProvider();
 
             var provider = serviceProvider.GetService<IExchangeRateProvider>();
             var rates = provider.GetExchangeRates(Currencies);

@@ -1,24 +1,14 @@
+using ExchangeRateUpdater.Core.Configuration;
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExchangeRateUpdater.Core.Configuration;
+namespace ExchangeRateUpdater.Core.Extensions;
 
-public static class DependencyResolver
+public static class ServiceCollectionExtensions
 {
-    public static IServiceProvider Initialize()
-    {
-        var services = new ServiceCollection();
-
-        ConfigureServices(services);
-
-        services.AddSingleton<IExchangeRateHttpClient, ExchangeRateHttpClient>();
-        
-        return services.BuildServiceProvider();
-    }
-
-    private static void ConfigureServices(IServiceCollection services)
+    public static void AddConfiguration(this IServiceCollection services)
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -26,6 +16,11 @@ public static class DependencyResolver
             .Build();
 
         services.AddSingleton(configuration.GetSection("ApiConfiguration").Get<ExchangeRateApiConfiguration>());
+    }
+
+    public static void AddExchangeRateUpdaterServices(this IServiceCollection services)
+    {
         services.AddHttpClient();
+        services.AddSingleton<IExchangeRateHttpClient, ExchangeRateHttpClient>();
     }
 }
