@@ -31,6 +31,8 @@ public class ExchangeRateHttpClientTests
         result.Should()
             .NotBeNull()
             .And
-            .NotBeEmpty();
+            .NotBeEmpty()
+            .And
+            .HaveCount(31);
     }
 }

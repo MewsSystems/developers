@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ExchangeRateUpdater.Core.DTOs;
 using ExchangeRateUpdater.Core.Exceptions;
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Models;
@@ -20,12 +21,18 @@ public class ExchangeRateHttpClient : IExchangeRateHttpClient
 
         try
         {
-            var exchangeRates = await httpClient.GetFromJsonAsync<IEnumerable<ExchangeRate>>(_apiConfiguration.ApiUrl);
-            return exchangeRates;
+            var apiResponse = await httpClient.GetFromJsonAsync<ApiResponseDto>(_apiConfiguration.ApiUrl)
+                ?? throw new ExchangeRateException($"Null response from API {_apiConfiguration.ApiUrl}");
+            return MapFromResponse(apiResponse);
         }
         catch (Exception e)
         {
             throw new ExchangeRateException(e.Message, e);
         }
+    }
+
+    private IEnumerable<ExchangeRate> MapFromResponse(ApiResponseDto apiResponse)
+    {
+        return apiResponse.Rates.Select(r=> new ExchangeRate(new Currency("CZK"), new Currency(r.CurrencyCode), r.Rate));
     }
 }
