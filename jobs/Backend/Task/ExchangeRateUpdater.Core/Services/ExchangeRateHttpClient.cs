@@ -33,6 +33,11 @@ public class ExchangeRateHttpClient : IExchangeRateHttpClient
 
     private IEnumerable<ExchangeRate> MapFromResponse(ApiResponseDto apiResponse)
     {
-        return apiResponse.Rates.Select(r=> new ExchangeRate(new Currency("CZK"), new Currency(r.CurrencyCode), r.Rate));
+        return apiResponse.Rates.Select(MapFromRateInfoDto);
+    }
+
+    private ExchangeRate MapFromRateInfoDto(RateInfoDto rate)
+    {
+        return new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), rate.Rate);
     }
 }
