@@ -4,6 +4,8 @@ The task is to implement an [ExchangeRateProvider](Task/ExchangeRateProvider.cs)
 
 It is up to you to decide which Ruby gems to use. Any code design changes/decisions to the provided skeleton are also completely up to you.
 
+The application should expose a simple REST API (ideally JSON). Adding some UI (e.g. via server-rendered pages or a SPA) is a benefit for full-stack applications.
+
 The solution has to be buildable, runnable and the test program should output the obtained exchange rates.
 
 Goal is to implement a fully functional provider based on real world public data source of the assigned bank.
