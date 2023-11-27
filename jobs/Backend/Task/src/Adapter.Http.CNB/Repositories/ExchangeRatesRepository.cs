@@ -56,6 +56,7 @@ public class ExchangeRatesRepository : IExchangeRatesRepository
             }
             else
             {
+                _logger.Error("Failed to request ExchangeRates. Got {StatusCode} back.", response.StatusCode);
                 throw new HttpRequestException($"Failed to request ExchangeRates. Got {response.StatusCode} back.");
             }
         }
