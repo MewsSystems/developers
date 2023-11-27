@@ -14,6 +14,7 @@ public class ExchangeRateHttpClientTests
     public void Setup()
     {
         _apiConfigurationMock = new Mock<IApiConfiguration>();
+        
         _sut = new ExchangeRateHttpClient(_apiConfigurationMock.Object);
     }
 
@@ -33,6 +34,15 @@ public class ExchangeRateHttpClientTests
             .And
             .NotBeEmpty()
             .And
-            .HaveCount(31);
+            .HaveCount(31)
+            .And
+            .AllSatisfy(r =>
+            {
+                r.SourceCurrency.Should().NotBeNull();
+                r.SourceCurrency.Code.Should().NotBeNullOrEmpty();
+                r.TargetCurrency.Should().NotBeNull();
+                r.TargetCurrency.Code.Should().NotBeNullOrEmpty();
+                r.Value.Should().NotBe(0);
+            });
     }
 }
