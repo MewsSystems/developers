@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.Core.Extensions;
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Models;
@@ -23,20 +24,16 @@ public static class Program
         new Currency("XYZ")
     };
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         try
         {
-            var services = new ServiceCollection();
-            services.AddConfiguration();
-            services.AddExchangeRateUpdaterServices();
-            var serviceProvider = services.BuildServiceProvider();
+            var provider = BuildExchangeRateProvider();
+            var rates = await provider.GetExchangeRates(Currencies);
 
-            var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
-            var rates = provider.GetExchangeRates(Currencies).ToList();
-
-            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-            foreach (var rate in rates)
+            var exchangeRateList = rates.ToList();
+            Console.WriteLine($"Successfully retrieved {exchangeRateList.Count} exchange rates:");
+            foreach (var rate in exchangeRateList)
             {
                 Console.WriteLine(rate.ToString());
             }
@@ -47,5 +44,15 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    private static IExchangeRateProvider BuildExchangeRateProvider()
+    {
+        var services = new ServiceCollection();
+        services.AddConfiguration();
+        services.AddExchangeRateUpdaterServices();
+        
+        var serviceProvider = services.BuildServiceProvider();
+        return serviceProvider.GetRequiredService<IExchangeRateProvider>();
     }
 }

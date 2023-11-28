@@ -18,8 +18,9 @@ public class ExchangeRateProvider : IExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        return Enumerable.Empty<ExchangeRate>();
+        var exchangeRates = await _exchangeRateHttpClient.GetExchangeRates();
+        return exchangeRates.Where(rate => currencies.Any(c => c.Code == rate.TargetCurrency.Code));
     }
 }
