@@ -38,6 +38,6 @@ public class ExchangeRateHttpClient : IExchangeRateHttpClient
 
     private ExchangeRate MapFromRateInfoDto(RateInfoDto rate)
     {
-        return new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), rate.Rate);
+        return new ExchangeRate("CZK", rate.CurrencyCode, rate.Amount);
     }
 }

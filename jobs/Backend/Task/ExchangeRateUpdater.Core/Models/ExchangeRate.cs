@@ -8,6 +8,13 @@ public class ExchangeRate
         TargetCurrency = targetCurrency;
         Value = value;
     }
+    
+    public ExchangeRate(string sourceCurrency, string targetCurrency, decimal value)
+    {
+        SourceCurrency = new Currency(sourceCurrency);
+        TargetCurrency = new Currency(targetCurrency);
+        Value = value;
+    }
 
     public Currency SourceCurrency { get; }
 

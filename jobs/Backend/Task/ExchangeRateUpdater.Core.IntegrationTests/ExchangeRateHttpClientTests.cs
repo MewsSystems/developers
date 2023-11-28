@@ -1,7 +1,5 @@
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Services;
-using FluentAssertions;
-using Moq;
 
 namespace ExchangeRateUpdater.Core.IntegrationTests;
 

@@ -1,8 +1,6 @@
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Models;
 using ExchangeRateUpdater.Core.Services;
-using FluentAssertions;
-using Moq;
 
 namespace ExchangeRateUpdater.Core.UnitTests;
 
@@ -19,7 +17,7 @@ public class ExchangeRateProviderTests
     }
 
     [Test]
-    public void Given_Currencies_When_GetExchangeRates_Then_Expected_ExchangeRates()
+    public async Task Given_Currencies_When_GetExchangeRates_Then_Expected_ExchangeRates()
     {
         // given
         var currencies = new[]
@@ -28,11 +26,17 @@ public class ExchangeRateProviderTests
             new Currency("GBP"),
             new Currency("USD")
         };
-        
-        
+
+        _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
+            .ReturnsAsync(new ExchangeRate[]
+            {
+                new("CZK", "EUR", 1),
+                new("CZK", "GBP", 2),
+                new("CZK", "USD", 3),
+            });
         
         // when
-        var result = _sut.GetExchangeRates(currencies);
+        var result = await _sut.GetExchangeRates(currencies);
 
         // then
         result.Should()
