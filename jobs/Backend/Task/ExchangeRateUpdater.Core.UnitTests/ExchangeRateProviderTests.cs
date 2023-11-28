@@ -8,6 +8,12 @@ public class ExchangeRateProviderTests
 {
     private IExchangeRateProvider _sut = null!;
     private Mock<IExchangeRateHttpClient> _exchangeRateHttpClientMock = null!;
+
+    private readonly ExchangeRate[] _mockedExchangeRates = {
+        new("CZK", "EUR", 1),
+        new("CZK", "GBP", 2),
+        new("CZK", "USD", 3),
+    };
     
     [SetUp]
     public void Setup()
@@ -20,26 +26,37 @@ public class ExchangeRateProviderTests
     public async Task Given_Currencies_When_GetExchangeRates_Then_Expected_ExchangeRates()
     {
         // given
-        var currencies = new[]
-        {
-            new Currency("EUR"),
-            new Currency("GBP"),
-            new Currency("USD")
-        };
+        var currencies = new Currency[] { new("EUR"), new("GBP"), new("USD") };
 
         _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
-            .ReturnsAsync(new ExchangeRate[]
-            {
-                new("CZK", "EUR", 1),
-                new("CZK", "GBP", 2),
-                new("CZK", "USD", 3),
-            });
+            .ReturnsAsync(_mockedExchangeRates);
         
         // when
         var result = await _sut.GetExchangeRates(currencies);
 
         // then
         result.Should()
-            .NotBeNullOrEmpty();
+            .NotBeNullOrEmpty()
+            .And
+            .HaveCount(_mockedExchangeRates.Length);
+    }
+    
+    [Test]
+    public async Task Given_NoCurrencies_When_GetExchangeRates_Then_NoExchangeRates()
+    {
+        // given
+        var currencies = Array.Empty<Currency>();
+
+        _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
+            .ReturnsAsync(_mockedExchangeRates);
+        
+        // when
+        var result = await _sut.GetExchangeRates(currencies);
+
+        // then
+        result.Should()
+            .NotBeNull()
+            .And
+            .BeEmpty();
     }
 }
