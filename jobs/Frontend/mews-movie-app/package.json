@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pretty:check": "prettier src/**/*.{ts,tsx,js} --check",
+    "pretty": "prettier src/**/*.{ts,tsx,js} --write"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
@@ -23,6 +25,11 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "prettier": "^3.1.0",
     "typescript": "^5"
+  },
+  "prettier": {
+    "tabWidth": 4
   }
+
 }
