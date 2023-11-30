@@ -31,6 +31,7 @@ const StyledLink = styled(Link)<{ $active?: boolean }>`
     color: #999;
     background-color: #fff;
     font-size: 0.8rem;
+    box-shadow: 0 0 2px var(--gray-200);
 
     &:focus-visible {
         outline: 3px solid var(--focus-color);

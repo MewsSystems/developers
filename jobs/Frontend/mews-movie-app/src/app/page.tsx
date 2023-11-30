@@ -15,10 +15,9 @@ const Container = styled.div`
     align-items: center;
     gap: 2rem;
     padding: 1rem;
-    margin-top: 5rem;
+    padding-top: 5rem;
     max-width: 45rem;
-
-    margin: 5rem auto;
+    margin: 0 auto;
 `;
 
 const ContentBox = styled.div`
@@ -26,6 +25,7 @@ const ContentBox = styled.div`
     padding: 2rem;
     width: 100%;
     border-radius: 1rem;
+    box-shadow: var(--box-shadow);
 `;
 
 export default function Home() {

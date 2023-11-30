@@ -5,6 +5,21 @@ import { FiSearch, FiX } from "react-icons/fi";
 
 const bounceLimit = 500;
 
+const Label = styled.label`
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    border-radius: 999rem;
+    background-color: #fff;
+    box-shadow: var(--box-shadow);
+
+    &:focus-within {
+        outline: 3px solid var(--focus-color);
+    }
+`;
+
 const Input = styled.input`
     width: 100%;
     max-width: 500px;
@@ -14,20 +29,6 @@ const Input = styled.input`
 
     &:focus {
         outline: none;
-    }
-`;
-
-const Label = styled.label`
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5rem;
-    gap: 0.5rem;
-    border-radius: 999rem;
-    background-color: #fff;
-
-    &:focus-within {
-        outline: 3px solid var(--focus-color);
     }
 `;
 

@@ -7,19 +7,34 @@
     --violet-500: #8b5cf6;
     --violet-600: #7c3aed;
 
+    --gray-50: #f7fafc;
+    --gray-100: #edf2f7;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e0;
+    --gray-400: #a0aec0;
+    --gray-500: #718096;
+    --gray-600: #4a5568;
+
     --orange-500: #f97316;
     --yellow-500: #ecc94b;
     --green-500: #48bb78;
     --red-500: #f56565;
 
     --focus-color: var(--violet-500);
+    --box-shadow: 0 3px 0 var(--gray-300);
 }
 
 body {
     padding: 0;
     margin: 0;
-    background-color: #eee;
+    min-height: 100dvh;
+    background-image: linear-gradient(
+        to bottom right,
+        var(--gray-50),
+        var(--gray-300)
+    );
 }
+
 * {
     box-sizing: border-box;
 }
