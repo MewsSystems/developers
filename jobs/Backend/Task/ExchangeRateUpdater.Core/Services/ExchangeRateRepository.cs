@@ -22,12 +22,12 @@ public class ExchangeRateHttpClient : IExchangeRateRepository
         try
         {
             var apiResponse = await httpClient.GetFromJsonAsync<ApiResponseDto>(_apiConfiguration.ApiUrl)
-                ?? throw new ExchangeRateException($"Null response from API {_apiConfiguration.ApiUrl}");
+                ?? throw new ExchangeRateUpdaterException($"Null response from API {_apiConfiguration.ApiUrl}");
             return MapFromResponse(apiResponse);
         }
         catch (Exception e)
         {
-            throw new ExchangeRateException(e.Message, e);
+            throw new ExchangeRateUpdaterException(e.Message, e);
         }
     }
 
