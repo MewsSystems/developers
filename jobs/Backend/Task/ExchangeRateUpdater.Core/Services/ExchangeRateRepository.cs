@@ -9,6 +9,7 @@ namespace ExchangeRateUpdater.Core.Services;
 public class ExchangeRateHttpClient : IExchangeRateRepository
 {
     private readonly IApiConfiguration _apiConfiguration;
+    private const string CzechRepublicCurrency = "CZK";
 
     public ExchangeRateHttpClient(IApiConfiguration apiConfiguration)
     {
@@ -38,6 +39,6 @@ public class ExchangeRateHttpClient : IExchangeRateRepository
 
     private ExchangeRate MapFromRateInfoDto(RateInfoDto rate)
     {
-        return new ExchangeRate(rate.CurrencyCode, "CZK", rate.Rate / rate.Amount);
+        return new ExchangeRate(rate.CurrencyCode, CzechRepublicCurrency, rate.Rate / rate.Amount);
     }
 }
