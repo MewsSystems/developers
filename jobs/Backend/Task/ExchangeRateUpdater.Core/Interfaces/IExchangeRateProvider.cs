@@ -4,5 +4,5 @@ namespace ExchangeRateUpdater.Core.Interfaces;
 
 public interface IExchangeRateProvider
 {
-    Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
+    public Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
 }
