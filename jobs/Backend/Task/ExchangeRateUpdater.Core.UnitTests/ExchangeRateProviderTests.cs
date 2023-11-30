@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater.Core.UnitTests;
 public class ExchangeRateProviderTests
 {
     private IExchangeRateProvider _sut = null!;
-    private Mock<IExchangeRateHttpClient> _exchangeRateHttpClientMock = null!;
+    private Mock<IExchangeRateRepository> _exchangeRateRepositoryMock = null!;
 
     private readonly ExchangeRate[] _mockedExchangeRates = {
         new("EUR", "CZK", 1),
@@ -18,8 +18,8 @@ public class ExchangeRateProviderTests
     [SetUp]
     public void Setup()
     {
-        _exchangeRateHttpClientMock = new Mock<IExchangeRateHttpClient>();
-        _sut = new ExchangeRateProvider(_exchangeRateHttpClientMock.Object);
+        _exchangeRateRepositoryMock = new Mock<IExchangeRateRepository>();
+        _sut = new ExchangeRateProvider(_exchangeRateRepositoryMock.Object);
     }
 
     [TestCase(1, "EUR")]
@@ -32,7 +32,7 @@ public class ExchangeRateProviderTests
         // given
         var currencies = currencyCodes.Select(c => new Currency(c));
 
-        _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
+        _exchangeRateRepositoryMock.Setup(e => e.GetExchangeRates())
             .ReturnsAsync(_mockedExchangeRates);
         
         // when
@@ -51,7 +51,7 @@ public class ExchangeRateProviderTests
         // given
         var currencies = Array.Empty<Currency>();
 
-        _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
+        _exchangeRateRepositoryMock.Setup(e => e.GetExchangeRates())
             .ReturnsAsync(_mockedExchangeRates);
         
         // when

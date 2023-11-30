@@ -6,7 +6,7 @@ using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Core.Services;
 
-public class ExchangeRateHttpClient : IExchangeRateHttpClient
+public class ExchangeRateHttpClient : IExchangeRateRepository
 {
     private readonly IApiConfiguration _apiConfiguration;
 

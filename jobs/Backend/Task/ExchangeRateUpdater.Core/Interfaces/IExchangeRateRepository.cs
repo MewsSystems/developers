@@ -2,7 +2,7 @@ using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Core.Interfaces;
 
-public interface IExchangeRateHttpClient
+public interface IExchangeRateRepository
 {
     public Task<IEnumerable<ExchangeRate>> GetExchangeRates();
 }

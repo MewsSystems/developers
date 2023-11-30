@@ -5,7 +5,7 @@ namespace ExchangeRateUpdater.Core.IntegrationTests;
 
 public class ExchangeRateHttpClientTests
 {
-    private IExchangeRateHttpClient _sut = null!;
+    private IExchangeRateRepository _sut = null!;
     private Mock<IApiConfiguration> _apiConfigurationMock = null!;
     
     [SetUp]

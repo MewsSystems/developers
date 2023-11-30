@@ -5,11 +5,11 @@ namespace ExchangeRateUpdater.Core.Services;
 
 public class ExchangeRateProvider : IExchangeRateProvider
 {
-    private IExchangeRateHttpClient _exchangeRateHttpClient;
+    private readonly IExchangeRateRepository _exchangeRateRepository;
 
-    public ExchangeRateProvider(IExchangeRateHttpClient exchangeRateHttpClient)
+    public ExchangeRateProvider(IExchangeRateRepository exchangeRateRepository)
     {
-        _exchangeRateHttpClient = exchangeRateHttpClient;
+        _exchangeRateRepository = exchangeRateRepository;
     }
     
     /// <summary>
@@ -20,7 +20,7 @@ public class ExchangeRateProvider : IExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var exchangeRates = await _exchangeRateHttpClient.GetExchangeRates();
+        var exchangeRates = await _exchangeRateRepository.GetExchangeRates();
         return exchangeRates.Where(rate => currencies.Any(c => c.Code == rate.SourceCurrency.Code));
     }
 }

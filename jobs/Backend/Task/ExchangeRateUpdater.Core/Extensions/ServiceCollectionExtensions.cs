@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
     public static void AddExchangeRateUpdaterServices(this IServiceCollection services)
     {
         services.AddHttpClient();
-        services.AddSingleton<IExchangeRateHttpClient, ExchangeRateHttpClient>();
+        services.AddSingleton<IExchangeRateRepository, ExchangeRateHttpClient>();
         services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
     }
 }
