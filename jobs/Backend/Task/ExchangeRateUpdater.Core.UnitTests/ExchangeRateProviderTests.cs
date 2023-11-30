@@ -22,11 +22,15 @@ public class ExchangeRateProviderTests
         _sut = new ExchangeRateProvider(_exchangeRateHttpClientMock.Object);
     }
 
-    [Test]
-    public async Task Given_Currencies_When_GetExchangeRates_Then_Expected_ExchangeRates()
+    [TestCase(1, "EUR")]
+    [TestCase(2, "EUR", "USD")]
+    [TestCase(3, "EUR", "GBP", "USD")]
+    [TestCase(3, "AUD", "EUR", "GBP", "USD")]
+    [TestCase(1, "AUD", "EUR", "MXN", "PLN", "CHF")]
+    public async Task Given_Currencies_When_GetExchangeRates_Then_Expected_ExchangeRates(int expectedExchangeRateNumber, params string[] currencyCodes)
     {
         // given
-        var currencies = new Currency[] { new("EUR"), new("GBP"), new("USD") };
+        var currencies = currencyCodes.Select(c => new Currency(c));
 
         _exchangeRateHttpClientMock.Setup(e => e.GetExchangeRates())
             .ReturnsAsync(_mockedExchangeRates);
@@ -38,7 +42,7 @@ public class ExchangeRateProviderTests
         result.Should()
             .NotBeNullOrEmpty()
             .And
-            .HaveCount(_mockedExchangeRates.Length);
+            .HaveCount(expectedExchangeRateNumber);
     }
     
     [Test]
