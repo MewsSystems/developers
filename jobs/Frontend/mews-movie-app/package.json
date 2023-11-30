@@ -9,7 +9,7 @@
         "lint": "next lint",
         "pretty:check": "prettier src/**/*.{ts,tsx,js} --check",
         "pretty": "prettier src/**/*.{ts,tsx,js} --write",
-        "generate:types:movies": "openapi-typescript https://developer.themoviedb.org/openapi/64542913e1f86100738e227f -o ./src/store/movies/generated/types.d.ts"
+        "generate:types:movies": "openapi-typescript https://developer.themoviedb.org/openapi/64542913e1f86100738e227f -o ./src/features/movies/api/generated/types.d.ts"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.9.7",

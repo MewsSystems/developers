@@ -1,7 +1,8 @@
+import { ElementOf } from "@/utilities/types";
 import { operations } from "./generated/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-type SearchMovieResult =
+type SearchMovieResults =
     operations["search-movie"]["responses"]["200"]["content"]["application/json"];
 
 type MovieDetailResult =
@@ -10,13 +11,17 @@ type MovieDetailResult =
 export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3/" }),
     endpoints: (builder) => ({
-        getMovies: builder.query<SearchMovieResult, string>({
-            query: (query: string) => {
+        getMovies: builder.query<
+            SearchMovieResults,
+            { query: string; page: number }
+        >({
+            query: ({ query, page }) => {
                 return {
                     url: `search/movie`,
                     params: {
                         api_key: process.env.NEXT_PUBLIC_MOVIE_DB_API_KEY,
                         query,
+                        page,
                     },
                 };
             },
@@ -33,5 +38,7 @@ export const api = createApi({
         }),
     }),
 });
+
+export type SearchMovie = ElementOf<SearchMovieResults["results"]>;
 
 export const { useGetMoviesQuery, useGetMovieDetailQuery } = api;
