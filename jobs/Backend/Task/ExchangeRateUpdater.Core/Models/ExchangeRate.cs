@@ -11,6 +11,12 @@ public class ExchangeRate
     
     public ExchangeRate(string sourceCurrency, string targetCurrency, decimal value)
     {
+        if (string.IsNullOrEmpty(sourceCurrency))
+            throw new ArgumentException("Source currency cannot be empty or null.");
+        
+        if (string.IsNullOrEmpty(targetCurrency))
+            throw new ArgumentException("Target currency cannot be empty or null.");
+        
         SourceCurrency = new Currency(sourceCurrency);
         TargetCurrency = new Currency(targetCurrency);
         Value = value;
