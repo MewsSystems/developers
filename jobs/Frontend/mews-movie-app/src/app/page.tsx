@@ -7,6 +7,26 @@ import SearchMovieResult from "@/features/movies/components/SearchMovieResult";
 import { useSearchParamsReplace } from "@/hooks/useSearchParamReplace";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+    margin-top: 5rem;
+    max-width: 45rem;
+
+    margin: 5rem auto;
+`;
+
+const ContentBox = styled.div`
+    background-color: #fff;
+    padding: 2rem;
+    width: 100%;
+    border-radius: 1rem;
+`;
 
 export default function Home() {
     const urlParams = useSearchParams();
@@ -44,27 +64,27 @@ export default function Home() {
     const { results = [], total_pages: totalPages = 1, page = 1 } = data;
 
     return (
-        <main>
-            <div>
-                <SearchInput
-                    placeholder="Search movies"
-                    initialValue={searchQuery}
-                    onChange={(value) => setSearchQuery(value)}
-                    aria-label="Search movies"
-                />
-            </div>
+        <Container>
+            <SearchInput
+                placeholder="Search for movies"
+                initialValue={searchQuery}
+                onChange={(value) => setSearchQuery(value)}
+                aria-label="Search for movies"
+            />
             {results.length > 0 && (
-                <div>
+                <>
                     <Paging current={page} total={totalPages} />
-                    {results.map((result) => (
-                        <SearchMovieResult
-                            key={result.id}
-                            searchMovie={result}
-                        />
-                    ))}
+                    <ContentBox>
+                        {results.map((result) => (
+                            <SearchMovieResult
+                                key={result.id}
+                                searchMovie={result}
+                            />
+                        ))}
+                    </ContentBox>
                     <Paging current={page} total={totalPages} />
-                </div>
+                </>
             )}
-        </main>
+        </Container>
     );
 }

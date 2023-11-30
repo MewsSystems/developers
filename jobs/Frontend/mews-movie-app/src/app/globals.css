@@ -1,0 +1,25 @@
+:root {
+    --violet-50: #f5f3ff;
+    --violet-100: #ede9fe;
+    --violet-200: #ddd6fe;
+    --violet-300: #c4b5fd;
+    --violet-400: #a78bfa;
+    --violet-500: #8b5cf6;
+    --violet-600: #7c3aed;
+
+    --orange-500: #f97316;
+    --yellow-500: #ecc94b;
+    --green-500: #48bb78;
+    --red-500: #f56565;
+
+    --focus-color: var(--violet-500);
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #eee;
+}
+* {
+    box-sizing: border-box;
+}

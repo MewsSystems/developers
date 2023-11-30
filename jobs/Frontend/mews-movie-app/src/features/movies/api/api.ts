@@ -25,7 +25,7 @@ export const api = createApi({
             }),
         }),
         getMovieDetail: builder.query<MovieDetailResult, MovieDetailArgs>({
-            query: (id: number) => `movie/${id}?api_key=${api_key}`,
+            query: (id) => `movie/${id}?api_key=${api_key}`,
         }),
     }),
 });

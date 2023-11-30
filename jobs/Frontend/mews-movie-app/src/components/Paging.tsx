@@ -2,38 +2,55 @@ import { removeConsecutiveDuplicates } from "@/utilities/arrays";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import styled, { css } from "styled-components";
+import { FiMoreHorizontal } from "react-icons/fi";
 
 const showPageLink = (page: number, current: number, total: number): number => {
-    if (total <= 5) {
+    if (total <= 7) {
         return page;
     }
-    
+
     if (page === 1 || page === total) {
         return page;
     }
 
-    if (page === current - 1 || page === current || page === current + 1) {
+    if (Math.abs(page - current) <= 1) {
         return page;
     }
 
     return 0;
 };
 
-const Button = styled.button<{ $active?: boolean }>`
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+const StyledLink = styled(Link)<{ $active?: boolean }>`
+    border-radius: 50%;
+    width: 2.3rem;
+    height: 2.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #999;
+    background-color: #fff;
+    font-size: 0.8rem;
 
-    &.active {
-        background-color: #ccc;
+    &:focus-visible {
+        outline: 3px solid var(--focus-color);
     }
 
     ${(props) =>
         props.$active &&
         css`
-            background: blue;
+            background: var(--focus-color);
             color: white;
         `}
+`;
+
+const Filler = styled.div`
+    width: 2.3rem;
+    height: 2.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
 `;
 
 const Container = styled.div`
@@ -74,19 +91,22 @@ const Paging = ({ current, total }: Props) => {
         <Container>
             {pagesAndFillers.map((item, index) =>
                 item ? (
-                    <Link
+                    <StyledLink
                         key={index}
+                        $active={item === current}
                         href={`?${getSearchParamsForPage(
                             urlSearchParams,
                             item,
                         )}`}
                     >
-                        <Button key={item} $active={item === current}>
-                            {item}
-                        </Button>
-                    </Link>
+                        {/* <Button key={item} $active={item === current}> */}
+                        {item}
+                        {/* </Button> */}
+                    </StyledLink>
                 ) : (
-                    <div key={index}>...</div>
+                    <Filler key={index}>
+                        <FiMoreHorizontal />
+                    </Filler>
                 ),
             )}
         </Container>
