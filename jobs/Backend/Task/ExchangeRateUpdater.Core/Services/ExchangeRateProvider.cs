@@ -21,6 +21,6 @@ public class ExchangeRateProvider : IExchangeRateProvider
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
         var exchangeRates = await _exchangeRateHttpClient.GetExchangeRates();
-        return exchangeRates.Where(rate => currencies.Any(c => c.Code == rate.TargetCurrency.Code));
+        return exchangeRates.Where(rate => currencies.Any(c => c.Code == rate.SourceCurrency.Code));
     }
 }

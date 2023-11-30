@@ -10,9 +10,9 @@ public class ExchangeRateProviderTests
     private Mock<IExchangeRateHttpClient> _exchangeRateHttpClientMock = null!;
 
     private readonly ExchangeRate[] _mockedExchangeRates = {
-        new("CZK", "EUR", 1),
-        new("CZK", "GBP", 2),
-        new("CZK", "USD", 3),
+        new("EUR", "CZK", 1),
+        new("GBP", "CZK", 2),
+        new("USD", "CZK", 3),
     };
     
     [SetUp]
