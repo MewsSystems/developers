@@ -4,22 +4,6 @@ import { useSearchParams } from "next/navigation";
 import styled, { css } from "styled-components";
 import { FiMoreHorizontal } from "react-icons/fi";
 
-const showPageLink = (page: number, current: number, total: number): number => {
-    if (total <= 7) {
-        return page;
-    }
-
-    if (page === 1 || page === total) {
-        return page;
-    }
-
-    if (Math.abs(page - current) <= 1) {
-        return page;
-    }
-
-    return 0;
-};
-
 const StyledLink = styled(Link)<{ $active?: boolean }>`
     border-radius: 50%;
     width: 2.3rem;
@@ -65,6 +49,22 @@ const Container = styled.div`
     gap: 0.5rem;
 `;
 
+const showPageLink = (page: number, current: number, total: number): number => {
+    if (total <= 7) {
+        return page;
+    }
+
+    if (page === 1 || page === total) {
+        return page;
+    }
+
+    if (Math.abs(page - current) <= 1) {
+        return page;
+    }
+
+    return 0;
+};
+
 type Props = {
     current: number;
     total: number;
@@ -74,7 +74,7 @@ const Paging = ({ current, total }: Props) => {
     const searchParams = useSearchParams();
 
     const urlSearchParams = new URLSearchParams(
-        Array.from(searchParams.entries()),
+        Array.from(searchParams?.entries() || []),
     );
 
     const allPages = Array.from({ length: total }, (_, i) => i + 1);
@@ -96,6 +96,7 @@ const Paging = ({ current, total }: Props) => {
                 item ? (
                     <StyledLink
                         key={index}
+                        aria-label={item === current ? "Selected page" : "Page"}
                         $active={item === current}
                         href={`?${getSearchParamsForPage(item)}`}
                     >
