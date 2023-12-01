@@ -14,13 +14,16 @@
     --gray-400: #a0aec0;
     --gray-500: #718096;
     --gray-600: #4a5568;
+    --gray-700: #2d3748;
+    --gray-800: #1a202c;
+    --gray-900: #171923;
 
     --orange-500: #f97316;
     --yellow-500: #ecc94b;
     --green-500: #48bb78;
     --red-500: #f56565;
 
-    --focus-color: var(--violet-500);
+    --focus-color: var(--violet-300);
     --box-shadow: 0 3px 0 var(--gray-300);
 }
 

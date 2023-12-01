@@ -28,7 +28,8 @@ const StyledLink = styled(Link)<{ $active?: boolean }>`
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #999;
+    font-weight: 500;
+    color: var(--gray-500);
     background-color: #fff;
     font-size: 0.8rem;
     box-shadow: 0 0 2px var(--gray-200);
@@ -37,11 +38,16 @@ const StyledLink = styled(Link)<{ $active?: boolean }>`
         outline: 3px solid var(--focus-color);
     }
 
+    &:hover {
+        background: var(--violet-200);
+        color: var(--violet-600);
+    }
+
     ${(props) =>
         props.$active &&
         css`
-            background: var(--focus-color);
-            color: white;
+            background: var(--violet-200);
+            color: var(--violet-600);
         `}
 `;
 
@@ -64,15 +70,6 @@ type Props = {
     total: number;
 };
 
-const getSearchParamsForPage = (
-    urlSearchParams: URLSearchParams,
-    page: number,
-) => {
-    urlSearchParams.set("page", String(page));
-
-    return urlSearchParams.toString();
-};
-
 const Paging = ({ current, total }: Props) => {
     const searchParams = useSearchParams();
 
@@ -88,6 +85,11 @@ const Paging = ({ current, total }: Props) => {
 
     const pagesAndFillers = removeConsecutiveDuplicates(visiblePages);
 
+    const getSearchParamsForPage = (page: number) => {
+        urlSearchParams.set("page", String(page));
+        return urlSearchParams.toString();
+    };
+
     return (
         <Container>
             {pagesAndFillers.map((item, index) =>
@@ -95,14 +97,9 @@ const Paging = ({ current, total }: Props) => {
                     <StyledLink
                         key={index}
                         $active={item === current}
-                        href={`?${getSearchParamsForPage(
-                            urlSearchParams,
-                            item,
-                        )}`}
+                        href={`?${getSearchParamsForPage(item)}`}
                     >
-                        {/* <Button key={item} $active={item === current}> */}
                         {item}
-                        {/* </Button> */}
                     </StyledLink>
                 ) : (
                     <Filler key={index}>

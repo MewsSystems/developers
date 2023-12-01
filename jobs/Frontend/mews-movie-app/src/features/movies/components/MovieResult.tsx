@@ -10,22 +10,25 @@ const StyledLink = styled(Link)`
     gap: 1rem;
     border-radius: 0.5rem;
     text-decoration: none;
-    color: #3d3d3d;
+    color: var(--gray-700);
 
     &:hover {
-        background-color: var(--violet-50);
-        color: var(--violet-600);
+        background-color: var(--gray-100);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--focus-color);
     }
 `;
 
 const Overview = styled.p`
-    color: #999;
+    color: var(--gray-400);
     font-size: 0.8rem;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    margin-bottom: 0;
+    margin: 0;
 `;
 
 const ImageWrapper = styled.div`
@@ -45,14 +48,14 @@ const Title = styled.h3`
     font-weight: 500;
     font-size: 1.2rem;
     margin: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
 `;
 
 type Props = {
     searchMovie: SearchMovie;
 };
 
-const SearchMovieResult = ({ searchMovie }: Props) => {
+const MovieResult = ({ searchMovie }: Props) => {
     const { id, title, vote_average, overview, backdrop_path } = searchMovie;
 
     return (
@@ -77,4 +80,4 @@ const SearchMovieResult = ({ searchMovie }: Props) => {
     );
 };
 
-export default SearchMovieResult;
+export default MovieResult;

@@ -1,9 +1,10 @@
 "use client";
 
-import Paging from "@/components/Paging";
+import Message from "@/components/Message";
 import SearchInput from "@/components/SearchInput";
+import Spinner from "@/components/Spinner";
 import { useGetMoviesQuery } from "@/features/movies/api/api";
-import SearchMovieResult from "@/features/movies/components/SearchMovieResult";
+import SearchResults from "@/features/movies/components/SearchResults";
 import { useSearchParamsReplace } from "@/hooks/useSearchParamReplace";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,8 +15,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 2rem;
-    padding: 1rem;
-    padding-top: 5rem;
+    padding: 5rem 1rem;
     max-width: 45rem;
     margin: 0 auto;
 `;
@@ -26,6 +26,10 @@ const ContentBox = styled.div`
     width: 100%;
     border-radius: 1rem;
     box-shadow: var(--box-shadow);
+`;
+
+const StyledSpinner = styled(Spinner)`
+    margin: 3rem auto;
 `;
 
 export default function Home() {
@@ -53,16 +57,6 @@ export default function Home() {
         replace(params);
     }, [searchQuery, replace, searchUrlParam]);
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error || data === undefined) {
-        return <div>Error</div>;
-    }
-
-    const { results = [], total_pages: totalPages = 1, page = 1 } = data;
-
     return (
         <Container>
             <SearchInput
@@ -71,19 +65,22 @@ export default function Home() {
                 onChange={(value) => setSearchQuery(value)}
                 aria-label="Search for movies"
             />
-            {results.length > 0 && (
-                <>
-                    <Paging current={page} total={totalPages} />
-                    <ContentBox>
-                        {results.map((result) => (
-                            <SearchMovieResult
-                                key={result.id}
-                                searchMovie={result}
-                            />
-                        ))}
-                    </ContentBox>
-                    <Paging current={page} total={totalPages} />
-                </>
+
+            {isLoading && <StyledSpinner />}
+
+            {error && data === undefined && (
+                <Message title="Oh no! Something went wrong.">
+                    Please try again later.
+                </Message>
+            )}
+
+            {data && data.results && (
+                <SearchResults
+                    searchQuery={searchQuery}
+                    page={data.page || 1}
+                    totalPages={data.total_pages || 1}
+                    results={data.results || []}
+                />
             )}
         </Container>
     );
