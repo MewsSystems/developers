@@ -38,7 +38,7 @@ export default function Home() {
 
     const [searchQuery, setSearchQuery] = useState<string>(searchUrlParam);
 
-    const { data, error, isLoading } = useGetMoviesQuery({
+    const { data, error, isLoading, isFetching } = useGetMoviesQuery({
         query: searchQuery,
         page: Number(pageUrlParam),
     });
@@ -72,6 +72,7 @@ export default function Home() {
 
             {data && data.results && (
                 <SearchResults
+                    isFetching={isFetching}
                     searchQuery={searchQuery}
                     page={data.page || 1}
                     totalPages={data.total_pages || 1}

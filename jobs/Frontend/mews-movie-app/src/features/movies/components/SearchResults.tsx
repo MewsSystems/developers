@@ -3,6 +3,7 @@ import { SearchMovie } from "../api/api";
 import MovieResult from "./MovieResult";
 import styled from "styled-components";
 import Message from "@/components/ui/Message";
+import Spinner from "@/components/ui/Spinner";
 
 const ContentBox = styled.div`
     background-color: #fff;
@@ -18,18 +19,24 @@ const ContentBox = styled.div`
 `;
 
 type Props = {
-    searchQuery?: string;
     page: number;
     totalPages: number;
     results: SearchMovie[];
+    isFetching?: boolean;
+    searchQuery?: string;
 };
 
 const SearchResults = ({
-    searchQuery = "",
     page,
     totalPages,
     results,
+    isFetching = false,
+    searchQuery = "",
 }: Props) => {
+    if (results.length === 0 && isFetching) {
+        return <Spinner />;
+    }
+
     if (results.length === 0 && searchQuery.length > 0) {
         return (
             <Message title="No movies found">
