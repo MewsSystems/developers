@@ -47,7 +47,7 @@ export default function Detail({ params }: { params: { id: number } }) {
                 <>
                     <Controls>
                         <BackButton onClick={() => router.back()}>
-                            Go back to search
+                            Back to search
                         </BackButton>
                     </Controls>
 

@@ -17,7 +17,7 @@ const Button = styled.button`
     &:focus {
         outline: none;
         text-decoration: underline;
-        text-underline-offset: 4px;
+        text-underline-offset: 0.25rem;
     }
 `;
 
