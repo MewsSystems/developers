@@ -1,8 +1,8 @@
-import Paging from "@/components/Paging";
+import Paging from "@/components/ui/Paging";
 import { SearchMovie } from "../api/api";
 import MovieResult from "./MovieResult";
 import styled from "styled-components";
-import Message from "@/components/Message";
+import Message from "@/components/ui/Message";
 
 const ContentBox = styled.div`
     background-color: #fff;

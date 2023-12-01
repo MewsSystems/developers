@@ -1,8 +1,8 @@
 "use client";
 
-import Message from "@/components/Message";
-import SearchInput from "@/components/SearchInput";
-import Spinner from "@/components/Spinner";
+import Message from "@/components/ui/Message";
+import SearchInput from "@/components/ui/SearchInput";
+import Spinner from "@/components/ui/Spinner";
 import { useGetMoviesQuery } from "@/features/movies/api/api";
 import SearchResults from "@/features/movies/components/SearchResults";
 import { useSearchParamsReplace } from "@/hooks/useSearchParamReplace";

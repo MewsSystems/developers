@@ -1,8 +1,8 @@
 "use client";
 
-import BackButton from "@/components/BackButton";
-import Message from "@/components/Message";
-import Spinner from "@/components/Spinner";
+import BackButton from "@/components/ui/BackButton";
+import Message from "@/components/ui/Message";
+import Spinner from "@/components/ui/Spinner";
 import { useGetMovieDetailQuery } from "@/features/movies/api/api";
 import MovieDetail from "@/features/movies/components/MovieDetail";
 import { useRouter } from "next/navigation";
