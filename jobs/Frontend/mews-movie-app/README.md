@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Getting started
 
-## Getting Started
+First, rename `.env.example` to `.env` and fill in your TMDB API key.
 
-First, run the development server:
+Then, install dependencies and run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## My solution
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+I chose Next.js with Typescript as a framework for React, RTK Query for data fetching, and Styled Components for styling. For testing, I used a combination of Jest and React Testing Library.
 
-## Learn More
+### Redux
 
-To learn more about Next.js, take a look at the following resources:
+I didn't use Redux directly, but I believe that RTK Query I used, is in this scenario sufficient. For data fetching and also as a state manager. Also it uses Redux store under the hood.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For better type safety, I generated types for TMDB API using `openapi-typescript`, but I'm not completely satisfied with this solution, as using these types is not very convenient. RTK Query has also a [tool for code generation](https://redux-toolkit.js.org/rtk-query/usage/code-generation#openapi), but I haven't managed to get satisfying results in a reasonable time. However, for a real project it would be better alternative. Another option is to use a library like `zod`, but it requires defining schemas for all endpoints manually."
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Styled components
 
-## Deploy on Vercel
+As this was my first experience with `styled-components`, I'm not sure if I followed all the best practices.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For better consistency, in a real project it would be better to use some theme or design system, with a set of predefined tokens. However, for the sake of simplicity, I decided only to use some custom css properties defined globally in the `:root`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Tests and linting
+
+I only wrote few unit tests, to illustrate how I would write them. I picked the React Testing Library for rendering React and Jest as a test runner.
+
+There is also `eslint` set up for linting and `prettier` to maintain code formatting.
+
+## Conclusion
+
+I believe, this application is in the state, we can discuss it and I would be more than happy to do so. I hope it is enough to illustrate my experience and thoughts about frontend development. However, there still might be some edge cases not covered, or perhaps some best practices not in use, as few libraries were new to me. 
+
+If something is missing or should be done differently, please let me know, and I would be more than happy to address it.
