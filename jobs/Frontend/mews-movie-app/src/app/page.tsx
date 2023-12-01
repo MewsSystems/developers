@@ -15,17 +15,13 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 2rem;
-    padding: 5rem 1rem;
+    padding: 2rem 1rem;
     max-width: 45rem;
     margin: 0 auto;
-`;
 
-const ContentBox = styled.div`
-    background-color: #fff;
-    padding: 2rem;
-    width: 100%;
-    border-radius: 1rem;
-    box-shadow: var(--box-shadow);
+    @media (min-width: 768px) {
+        padding: 5rem 1rem;
+    }
 `;
 
 const StyledSpinner = styled(Spinner)`

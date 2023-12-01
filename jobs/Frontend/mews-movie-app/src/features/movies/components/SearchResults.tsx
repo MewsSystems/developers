@@ -6,10 +6,15 @@ import Message from "@/components/Message";
 
 const ContentBox = styled.div`
     background-color: #fff;
-    padding: 2rem;
+    padding: rem;
     width: 100%;
     border-radius: 1rem;
     box-shadow: var(--box-shadow);
+    overflow: hidden;
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
 `;
 
 type Props = {

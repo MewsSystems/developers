@@ -8,7 +8,6 @@ const StyledLink = styled(Link)`
     padding: 1rem;
     display: flex;
     gap: 1rem;
-    border-radius: 0.5rem;
     text-decoration: none;
     color: var(--gray-700);
 
@@ -18,6 +17,10 @@ const StyledLink = styled(Link)`
 
     &:focus-visible {
         outline: 3px solid var(--focus-color);
+    }
+
+    @media (min-width: 768px) {
+        border-radius: 0.5rem;
     }
 `;
 
@@ -35,7 +38,7 @@ const ImageWrapper = styled.div`
     border-radius: 0.5rem;
     width: 100px;
     height: 66px;
-    background-color: #eee;
+    background-color: var(--gray-300);
     flex-shrink: 0;
     overflow: hidden;
 `;
@@ -46,9 +49,13 @@ const Content = styled.div`
 
 const Title = styled.h3`
     font-weight: 500;
-    font-size: 1.2rem;
     margin: 0;
+    font-size: 1rem;
     margin-bottom: 0.4rem;
+
+    @media (min-width: 768px) {
+        font-size: 1.2rem;
+    }
 `;
 
 type Props = {

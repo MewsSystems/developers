@@ -1,18 +1,14 @@
-"use client";
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { api } from "@/features/movies/api/api";
-import StyledComponentsRegistry from "@/lib/registry";
+import RootProviders from "@/components/RootProviders";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata: Metadata = {
-//     title: "Mews movie app",
-//     description: "Task for Mews frontend job application",
-// };
+export const metadata: Metadata = {
+    title: "Movie app",
+    description: "Frontend job task for Mews",
+};
 
 export default function RootLayout({
     children,
@@ -22,11 +18,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <ApiProvider api={api}>
-                    <StyledComponentsRegistry>
-                        {children}
-                    </StyledComponentsRegistry>
-                </ApiProvider>
+                <RootProviders>{children}</RootProviders>
             </body>
         </html>
     );

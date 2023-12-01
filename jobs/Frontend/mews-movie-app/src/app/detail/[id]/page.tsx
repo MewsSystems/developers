@@ -1,11 +1,10 @@
 "use client";
 
+import BackButton from "@/components/BackButton";
 import Message from "@/components/Message";
 import Spinner from "@/components/Spinner";
 import { useGetMovieDetailQuery } from "@/features/movies/api/api";
 import MovieDetail from "@/features/movies/components/MovieDetail";
-import MovieRating from "@/features/movies/components/MovieRating";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
@@ -13,28 +12,21 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
-    padding: 5rem 1rem;
+    gap: 1rem;
+    padding: 2rem 1rem;
     width: 100%;
     max-width: 55rem;
     margin: 0 auto;
+
+    @media (min-width: 768px) {
+        padding: 5rem 1rem;
+    }
 `;
 
-const BackButton = styled.button`
-    border: none;
-    background: none;
-    color: var(--violet-600);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-
-    &:hover {
-        text-decoration: underline;
-    }
-
-    &:focus-visible {
-        outline: 3px solid var(--focus-color);
-    }
+const Controls = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
 `;
 
 export default function Detail({ params }: { params: { id: number } }) {
@@ -53,11 +45,11 @@ export default function Detail({ params }: { params: { id: number } }) {
 
             {data && (
                 <>
-                    <div>
+                    <Controls>
                         <BackButton onClick={() => router.back()}>
                             Go back to search
                         </BackButton>
-                    </div>
+                    </Controls>
 
                     <MovieDetail
                         title={data.title}

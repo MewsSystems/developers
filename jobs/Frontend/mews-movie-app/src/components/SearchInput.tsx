@@ -44,7 +44,8 @@ const ResetButton = styled.button<{ $visible?: boolean }>`
     flex-shrink: 0;
     padding: 0.7rem;
     border: none;
-    background: #eee;
+    color: var(--gray-600);
+    background: var(--gray-100);
     border-radius: 50%;
     cursor: pointer;
     visibility: ${(props) => (props.$visible ? "visible" : "hidden")};
@@ -54,7 +55,8 @@ const ResetButton = styled.button<{ $visible?: boolean }>`
     }
 
     &:hover {
-        background-color: #ddd;
+        background: var(--violet-200);
+        color: var(--violet-600);
     }
 `;
 
