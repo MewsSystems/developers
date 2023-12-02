@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace ExchangeRateUpdater.Domain.Tests.Unit.ValueObjectTests;
 
 [TestFixture]
-internal class CurrencyRateTests
+internal class PositiveRealNumberTests
 {
     [TestCase(-100)]
     [TestCase(-25.5)]
