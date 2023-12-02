@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit
 
         
 
-        protected override void ConfigureDependencies(IServiceCollection services)
+        protected override void RegisterAdapters(IServiceCollection services)
         {
             services.AddSingleton<IExchangeRateProviderRepository>(ExchangeRateProviderRepositoryInMemory);
         }

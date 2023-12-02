@@ -1,5 +1,6 @@
 ﻿using Adapter.ExchangeRateProvider.InMemory;
 using ExchangeRateUpdater.Domain.Ports;
+using ExchangeRateUpdater.Domain.UseCases;
 using Serilog;
 using System.Reflection.PortableExecutable;
 
@@ -23,7 +24,8 @@ namespace ExchangeRateUpdater.Host.WebApi
             webBuilder
                 .ConfigureServices(services =>
                 {
-                    ConfigureDependencies(services);
+                    RegisterUseCases(services);
+                    RegisterAdapters(services);
                     services.AddControllers();
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();
@@ -47,9 +49,16 @@ namespace ExchangeRateUpdater.Host.WebApi
             });
         }
 
-        protected virtual void ConfigureDependencies(IServiceCollection services)
+        protected virtual void RegisterAdapters(IServiceCollection services)
         {
             services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateProviderRepositoryInMemory());
         }
+
+        private void RegisterUseCases(IServiceCollection services)
+        {
+            services.AddSingleton<BuyOrderUseCase>();
+        }
+
+
     }
 }

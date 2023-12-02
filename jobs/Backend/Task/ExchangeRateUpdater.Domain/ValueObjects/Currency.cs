@@ -33,6 +33,9 @@ public class Currency
 
     private static bool IsCurrencyCodeInactive(string currencyCode) => IsCurrencyCodeActive(currencyCode) == false;
 
+    public static bool operator ==(Currency left, Currency right) => left.Equals(right);
+    public static bool operator !=(Currency left, Currency right) => !(left == right);
+
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {

@@ -17,17 +17,19 @@ public class OrdersController : ControllerBase
     }
 
 
-    [HttpPost("/buy")]
+    [HttpPost("buy")]
     public async Task<IActionResult> BuyAsync([FromBody] BuyOrderDto orderBuyDto)
     {
         if (string.IsNullOrWhiteSpace(orderBuyDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
         if (string.IsNullOrWhiteSpace(orderBuyDto.TargetCurrency)) return BadRequest("Target Currency has to be specified.");
-        if (orderBuyDto.SumToExchange.HasValue) return BadRequest("SumToExchange has to be specified.");
+        if (orderBuyDto.SumToExchange.HasValue == false) return BadRequest("SumToExchange has to be specified.");
 
         var orderBuy = orderBuyDto.ToOrderBuy();
 
         var buyResult = await _orderBuyUseCase.ExecuteAsync(orderBuy);
 
-        return Ok(buyResult?.ToBuyResultDto());
+        if (buyResult == null) return NotFound("We do not support exchange rates for the mentioned source/target currencies.");
+
+        return Ok(buyResult.ToBuyResultDto());
     }
 }

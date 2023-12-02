@@ -1,10 +1,7 @@
-﻿using Adapter.ExchangeRateProvider.InMemory;
-using ExchangeRateUpdater.Domain.Entities;
+﻿using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using FluentAssertions;
 using Flurl;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Net;
@@ -12,20 +9,16 @@ using System.Net;
 namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests;
 
 [TestFixture]
-internal class GetDefaultUnitRatesTests
+internal class GetDefaultUnitRatesTests : ControllerTestBase
 {
-    private IHost? _host;
-    private TestServer _server;
-    private HttpClient _client;
-    private const string ApiBaseAddress = "http://exchange-rate-update.com";
-    private ExchangeRateProviderRepositoryInMemory ExchangeRateProviderRepository;
+    
 
     [Test]
     public async Task GivenNoDefaultUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnEmptyList()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
-        var response = await _client.GetAsync(relativeUrl);
+        var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -42,7 +35,7 @@ internal class GetDefaultUnitRatesTests
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
-        var response = await _client.GetAsync(relativeUrl);
+        var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -53,26 +46,4 @@ internal class GetDefaultUnitRatesTests
             new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
         });
     }
-
-    [SetUp]
-    public async Task SetUp()
-    {
-        ExchangeRateProviderRepository = new ExchangeRateProviderRepositoryInMemory();
-        var hostBuilder = new TestApplicationHostBuilder(ExchangeRateProviderRepository);
-        _host = hostBuilder.Configure().Build();
-        await _host.StartAsync();
-        _server = _host.GetTestServer();
-        _server.BaseAddress = new Uri(ApiBaseAddress);
-        _client = _server.CreateClient();
-    }
-
-    [TearDown]
-    public async Task TearDown()
-    {
-        _client?.Dispose();
-        _server?.Dispose();
-        await _host!.StopAsync();
-        _host?.Dispose();
-    }
-
 }
