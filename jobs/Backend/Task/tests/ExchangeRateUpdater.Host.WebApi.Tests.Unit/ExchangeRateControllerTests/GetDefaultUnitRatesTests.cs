@@ -38,7 +38,7 @@ internal class GetDefaultUnitRatesTests
     public async Task GivenSeveralUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldTheExchangeRates()
     {
         // arrange
-        ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new CurrencyRate(17.78m)));
+        ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)));
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
@@ -50,7 +50,7 @@ internal class GetDefaultUnitRatesTests
         var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRate>>(await response.Content.ReadAsStringAsync());
         defaultExhangeRates.Should().BeEquivalentTo(new List<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new CurrencyRate(17.78m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
         });
     }
 

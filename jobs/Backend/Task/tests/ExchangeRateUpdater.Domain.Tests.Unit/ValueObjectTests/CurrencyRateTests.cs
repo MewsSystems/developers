@@ -30,8 +30,8 @@ internal class CurrencyRateTests
         sut.Value.Should().Be(currencyRate);
     }
 
-    private CurrencyRate CreateSut(decimal currencyRate)
+    private PositiveRealNumber CreateSut(decimal currencyRate)
     {
-        return new CurrencyRate(currencyRate);
+        return new PositiveRealNumber(currencyRate);
     }
 }

@@ -24,16 +24,6 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
             return Ok(await _exchangeRateUpdaterRepository.GetDefaultUnitRates());
         }
 
-        [HttpPost("orders/buy")]
-        public async Task<IActionResult> BuyAsync([FromBody] OrderBuyDto orderBuyDto)
-        {
-            if (string.IsNullOrWhiteSpace(orderBuyDto.SourceCurrency)) return BadRequest("Source Currency has to be specified");
-            if (string.IsNullOrWhiteSpace(orderBuyDto.TargetCurrency)) return BadRequest("Target Currency has to be specified");
-            if (orderBuyDto.SumToExchange <= 0.0m) return BadRequest("SumToExchange has to be a positive value.");
-
-
-
-            return Ok();
-        }
+        
     }
 }

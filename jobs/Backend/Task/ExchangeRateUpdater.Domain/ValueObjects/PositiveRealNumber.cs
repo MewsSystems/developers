@@ -3,7 +3,7 @@
 /// <summary>
 /// This class represents currency rates.
 /// </summary>
-public class CurrencyRate
+public class PositiveRealNumber
 {
     /// <summary>
     /// Decimal representation of a currency rate.
@@ -15,7 +15,7 @@ public class CurrencyRate
     /// </summary>
     /// <param name="value">A positive decimal value.</param>
     /// <exception cref="ArgumentOutOfRangeException">if value(currencyRate) is <= 0 will throw ArgumentOutOfRangeException</exception>
-    public CurrencyRate(decimal value)
+    public PositiveRealNumber(decimal value)
     {
         /// [2023-12-02] Victor - There is no point to have a negative rate I think. And about 0 my logic was
         ///                       what is the point of exchanging if the currency has no value?
@@ -24,10 +24,12 @@ public class CurrencyRate
         Value = value;
     }
 
+    public static implicit operator decimal(PositiveRealNumber number) => number.Value;
+
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return obj is CurrencyRate currencyRate && currencyRate.Value == this.Value;
+        return obj is PositiveRealNumber currencyRate && currencyRate.Value == this.Value;
     }
 
     /// <inheritdoc />

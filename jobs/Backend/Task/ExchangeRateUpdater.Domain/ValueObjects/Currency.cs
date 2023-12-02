@@ -27,6 +27,8 @@ public class Currency
         CurrencyCode = currencyCode;
     }
 
+    public static implicit operator string(Currency currency) => currency.CurrencyCode;
+
     private static bool IsCurrencyCodeActive(string currencyCode) => AcceptedCurrencyCodes.Contains(currencyCode);
 
     private static bool IsCurrencyCodeInactive(string currencyCode) => IsCurrencyCodeActive(currencyCode) == false;
