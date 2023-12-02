@@ -1,10 +1,19 @@
 ﻿namespace ExchangeRateUpdater.Domain.ValueObjects;
 
+/// <summary>
+/// Currency class that validates and stores currency code.
+/// </summary>
 public class Currency
 {
     public string CurrencyCode { get; }
 
-
+    /// <summary>
+    /// Main constructor for Currency that assigns a currency code to a currency. 
+    /// Note: Currencies with the same codes are considered the same currency.
+    /// </summary>
+    /// <param name="currencyCode">Currency Code according to ISO 4217</param>
+    /// <exception cref="ArgumentNullException">In case currencyCode is empty, whitespace, or null will throw ArgumentNullException</exception>
+    /// <exception cref="FormatException">In case currencyCode is not ISO 4217 will throw FormatException</exception>
     public Currency(string? currencyCode)
     {
         if (string.IsNullOrWhiteSpace(currencyCode))
@@ -12,8 +21,9 @@ public class Currency
             throw new ArgumentNullException("currencyCode cannot be empty, null or whitespaces");
         }
 
-        if (currencyCode.Length != 3 && IsCurrencyCodeInactive(currencyCode)) throw new ArgumentException("currencyCode has to be of ISO 4217 format and considered active according to https://en.wikipedia.org/wiki/ISO_4217");
-        
+        if (currencyCode.Length != 3 || IsCurrencyCodeInactive(currencyCode)) throw new FormatException("currencyCode has to be of ISO 4217 format and considered active according to https://en.wikipedia.org/wiki/ISO_4217");
+
+
         CurrencyCode = currencyCode;
     }
 
@@ -21,12 +31,13 @@ public class Currency
 
     private static bool IsCurrencyCodeInactive(string currencyCode) => IsCurrencyCodeActive(currencyCode) == false;
 
-
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return obj is Currency currency && currency.CurrencyCode.Equals(this.CurrencyCode);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return CurrencyCode.GetHashCode();
