@@ -1,7 +1,5 @@
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using ExchangeRateUpdater.Domain.Ports;
 using Adapter.ExchangeRateProvider.InMemory;
-using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using ExchangeRateUpdater.Host.WebApi.Configuration;
 
@@ -27,6 +25,7 @@ public class Program
         app.MapControllers();
 
         app.Run();
+        app.WaitForShutdown();
     }
 
     public static WebApplicationBuilder Configure()
@@ -43,7 +42,7 @@ public class Program
         Log.Logger = SerilogConfiguration.SetupLogger();
         builder.Host.UseSerilog();
         
-        Log.Logger.Information("Logger is configured, using Serilog");
+        Log.Logger.Information("Logger is configured, using Serilog.");
         return builder;
     }
 }
