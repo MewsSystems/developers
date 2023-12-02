@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         [HttpGet("defaultRates")]
         public async Task<IActionResult> GetDefaultUnitRates()
         {
-            return Ok();
+            return Ok(await _exchangeRateUpdaterRepository.GetDefaultUnitRates());
         }
     }
 }
