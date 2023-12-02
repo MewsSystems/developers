@@ -1,6 +1,8 @@
-﻿namespace ExchangeRateUpdater.Domain.Ports;
+﻿using ExchangeRateUpdater.Domain.Entities;
+
+namespace ExchangeRateUpdater.Domain.Ports;
 
 public interface IExchangeRateProviderRepository
 {
-    Task GetDefaultUnitRates();
+    Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates();
 }

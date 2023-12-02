@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Flurl" Version="3.0.7" />
+    <PackageReference Include="Flurl.Http" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExchangeRateUpdater.Host.WebApi\ExchangeRateUpdater.Host.WebApi.csproj" />
+  </ItemGroup>
+
+</Project>
