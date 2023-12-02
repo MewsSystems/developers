@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Host.WebApi.Tests.Unit", "tests\ExchangeRateUpdater.Host.WebApi.Tests.Unit\ExchangeRateUpdater.Host.WebApi.Tests.Unit.csproj", "{2D4795E4-E3AC-4EF9-A188-FD886252E681}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank", "Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj", "{DE68E689-00F1-4648-8FAA-F5DE3399DF53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

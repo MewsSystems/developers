@@ -2,12 +2,17 @@
 using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.UseCases;
 using Serilog;
+using Microsoft.Extensions.Http;
 using System.Reflection.PortableExecutable;
+using System.Diagnostics;
+using Adapter.ExchangeRateProvider.CzechNationalBank;
 
 namespace ExchangeRateUpdater.Host.WebApi
 {
     public class ApplicationHostBuilder
     {
+
+        private const string ApplicationName = "ExchangeRateUpdater";
         public IHostBuilder Configure()
         {
             var applicationBuilder = new HostBuilder().ConfigureWebHost(webBuilder =>
@@ -27,9 +32,15 @@ namespace ExchangeRateUpdater.Host.WebApi
                     RegisterUseCases(services);
                     RegisterAdapters(services);
                     services.AddControllers();
+                    services.AddHttpClient($"{ApplicationName}-http-client",
+                    client =>
+                    {
+                        // Set the base address of the named client.
+                        client.BaseAddress = new Uri("https://www.cnb.cz/en/");
+                    });
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();
-                    services.AddLogging();
+                    services.AddSerilog(Log.Logger);
                     services.AddMvcCore();
                 });
             webBuilder.UseKestrel();
@@ -51,7 +62,7 @@ namespace ExchangeRateUpdater.Host.WebApi
 
         protected virtual void RegisterAdapters(IServiceCollection services)
         {
-            services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateProviderRepositoryInMemory());
+            services.AddSingleton<IExchangeRateProviderRepository, CzechNationalBankRepository>();
         }
 
         private void RegisterUseCases(IServiceCollection services)
