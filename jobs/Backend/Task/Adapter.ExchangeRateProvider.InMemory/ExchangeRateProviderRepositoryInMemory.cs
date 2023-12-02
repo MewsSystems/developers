@@ -5,20 +5,28 @@ namespace Adapter.ExchangeRateProvider.InMemory;
 
 public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepository
 {
-    private HashSet<ExchangeRate> _currencyRates;
+    private Dictionary<ExchangeCurrencies, ExchangeRate> _currencyRates;
 
     public ExchangeRateProviderRepositoryInMemory()
     {
-        _currencyRates = new HashSet<ExchangeRate>();
+        _currencyRates = new Dictionary<ExchangeCurrencies, ExchangeRate>();
     }
 
-    public void AddExchangeRate(ExchangeRate exchangeRate)
+    public void UpsertExchangeRate(ExchangeRate exchangeRate)
     {
-        _currencyRates.Add(exchangeRate);
+        var key = new ExchangeCurrencies(exchangeRate.SourceCurrency, exchangeRate.TargetCurrency);
+
+        if (_currencyRates.ContainsKey(key))
+        {
+            _currencyRates[key] = exchangeRate;
+            return;   
+        }
+
+        _currencyRates.Add(key, exchangeRate);
     }
 
     public Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates()
     {
-        return Task.FromResult(_currencyRates.AsEnumerable<ExchangeRate>());
+        return Task.FromResult(_currencyRates.Values.AsEnumerable<ExchangeRate>());
     }
 }

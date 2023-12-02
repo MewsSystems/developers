@@ -38,7 +38,7 @@ internal class GetDefaultUnitRatesTests
     public async Task GivenSeveralUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldTheExchangeRates()
     {
         // arrange
-        ExchangeRateProviderRepository.AddExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new CurrencyRate(17.78m)));
+        ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new CurrencyRate(17.78m)));
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
