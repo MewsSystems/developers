@@ -3,7 +3,7 @@
 /// <summary>
 /// This class represents currency rates.
 /// </summary>
-internal class CurrencyRate
+public class CurrencyRate
 {
     /// <summary>
     /// Decimal representation of a currency rate.
