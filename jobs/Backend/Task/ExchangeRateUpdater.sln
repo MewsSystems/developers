@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvide
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration", "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration.csproj", "{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit", "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit.csproj", "{B333DAFD-088E-4C41-9A72-263A15027224}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B333DAFD-088E-4C41-9A72-263A15027224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B333DAFD-088E-4C41-9A72-263A15027224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B333DAFD-088E-4C41-9A72-263A15027224}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B333DAFD-088E-4C41-9A72-263A15027224}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{7A719D99-E9D1-4519-B9DF-1D9B84C58C38} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
+		{B333DAFD-088E-4C41-9A72-263A15027224} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D24099C9-7C03-417C-BF3B-A4EAA6DFDF25}

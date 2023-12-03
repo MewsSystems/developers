@@ -4,6 +4,8 @@ using ExchangeRateUpdater.Domain.ValueObjects;
 using Flurl;
 using Serilog;
 using Polly;
+using System.Reflection;
+using System;
 
 namespace Adapter.ExchangeRateProvider.CzechNationalBank;
 
@@ -72,12 +74,10 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         });
     }
 
-    private async Task<T> CallCzerchNationalBankApi<T>(Func<Task<T>> action)
+    // Internal just for tests
+    internal async Task<T> CallCzerchNationalBankApi<T>(Func<Task<T>> action)
     {
-        return await GetRetryPolicy().ExecuteAsync(Task<T> () =>
-        {
-            return action.Invoke();
-        });
+        return await GetRetryPolicy().ExecuteAsync(action.Invoke);
     }
 
     
@@ -95,7 +95,17 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
 
     private AsyncPolicy GetRetryPolicy()
     {
-        return Policy.Handle<HttpRequestException>().Or<FormatException>().WaitAndRetryAsync(GetRetrySleepTimes());
+        return Policy.Handle<HttpRequestException>()
+                     .Or<FormatException>()
+                     .WaitAndRetryAsync(GetRetrySleepTimes(), (exception, _, context) =>
+                     {
+                         OnRetry(exception, context);
+                     });
+    }
+
+    protected virtual void OnRetry(Exception exception, Context context)
+    {
+        _logger.Warning(exception, "Retry number {RetryCounter}: {Operation}", context.Count, context.OperationKey);
     }
 
     private HttpClient CreateClient()

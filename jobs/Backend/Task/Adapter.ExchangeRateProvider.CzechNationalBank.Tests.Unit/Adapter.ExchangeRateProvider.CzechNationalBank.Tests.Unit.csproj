@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Serilog.Sinks.InMemory" Version="0.11.0" />
+    <PackageReference Include="WireMock.Net" Version="1.5.40" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj" />
+  </ItemGroup>
+	
+</Project>
