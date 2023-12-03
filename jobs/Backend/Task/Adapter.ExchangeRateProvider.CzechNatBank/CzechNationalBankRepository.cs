@@ -112,7 +112,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         return _httpClientFactory.CreateClient("ExchangeRateUpdater-http-client");
     }
 
-    private Url GetAllExchangeRatesAsTextUrl(DateTime date)
+    protected virtual Url GetAllExchangeRatesAsTextUrl(DateTime date)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date.ToString("dd.MM.yyyy"));
     }

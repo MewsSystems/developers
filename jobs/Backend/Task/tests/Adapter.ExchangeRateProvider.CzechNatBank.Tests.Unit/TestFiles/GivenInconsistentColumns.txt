@@ -1,0 +1,3 @@
+﻿Skip Line
+Amount|Code|Rate
+1|USD

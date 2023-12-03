@@ -1,2 +1,2 @@
 ﻿Skip Line
-Code|Rate
+Amount|Rate

@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Flurl;
+using Polly;
 using Serilog;
 
 namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit;
@@ -23,5 +24,11 @@ internal class CzechNationalBankRepositoryTestDouble : CzechNationalBankReposito
             TimeSpan.FromMicroseconds(1),
             TimeSpan.FromMicroseconds(1)
         };
+    }
+
+    // Looks Wiremock for some reason couldn't handle the original Url.
+    protected override Url GetAllExchangeRatesAsTextUrl(DateTime date)
+    {
+        return Url.Parse("Test");
     }
 }

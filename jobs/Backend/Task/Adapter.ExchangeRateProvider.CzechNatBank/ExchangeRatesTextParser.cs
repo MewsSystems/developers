@@ -23,7 +23,7 @@ internal class ExchangeRatesTextParser : IDisposable
 
 
         // Skip date line
-        var value = await _reader.ReadLineAsync();
+        _ = await _reader.ReadLineAsync();
 
         var header = await _reader.ReadLineAsync();
 
@@ -70,7 +70,7 @@ internal class ExchangeRatesTextParser : IDisposable
             if (!lineColumns.Any() || lineColumns.Count <= Math.Max(indexOfRate, Math.Max(indexOfCode, indexOfAmount)))
             {
                 // Log only 10 first characters from line since the line might get too long.
-                _logger.Warning("Could not parse line {LineNumber}. The line start with: {LineText}", lineCounter, line?.Substring(0, 10) ?? "No content");
+                _logger.Warning("Could not parse line {LineNumber}. The line start with: {LineText}", lineCounter, line?.Substring(0, Math.Min(10, line.Length)) ?? "No content");
                 continue;
             }
 

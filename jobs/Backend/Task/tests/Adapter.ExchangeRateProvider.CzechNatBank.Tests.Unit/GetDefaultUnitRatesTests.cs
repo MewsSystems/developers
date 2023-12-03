@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Serilog;
 using Serilog.Core;
 using Serilog.Sinks.InMemory;
+using Serilog.Sinks.InMemory.Assertions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -17,7 +18,6 @@ internal class GetDefaultUnitRatesTests
     private Logger? _logger;
     private const int Port = 8080;
     private WireMockServer? _server;
-    private string RelativePath = $"/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=01.01.0001";
 
     [Test]
     public void GivenNoHeaderData_ShouldThrowFormatException()
@@ -25,33 +25,82 @@ internal class GetDefaultUnitRatesTests
         // arrange
         var expected = "Couldn't retrieve header data from Czech National Bank.";
         _server!.Given(
-            Request.Create().UsingGet().WithPath(RelativePath))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoHeaderData_ShouldThrowFormatException.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoHeaderData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
         var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetDefaultUnitRates(new DateTime()));
         exception!.Message.Should().Be(expected);
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
     }
 
     [Test]
-    public void GivenNoAmountHeaderData_ShouldThrowFormatException()
+    public void GivenNoAmountHeader_ShouldThrowFormatException()
     {
         // arrange
         var expected = "Couldn't retrieve Amount from document.";
 
-        //_server!.Given(
-        //    Request.Create().UsingGet().WithPath("/test"))
-        //    .RespondWith(Response.Create().WithBody("Test").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
-
-        //_server!.Given(
-        //    Request.Create().UsingGet().WithPath(RelativePath))
-        //    .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+        _server!.Given(
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
         var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetDefaultUnitRates(new DateTime()));
         exception!.Message.Should().Be(expected);
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
+    }
+
+    [Test]
+    public void GivenNoCodeHeader_ShouldThrowFormatException()
+    {
+        // arrange
+        var expected = "Couldn't retrieve Code from document.";
+
+        _server!.Given(
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoCodeHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+
+        // act & assert
+        var sut = CreateSut();
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetDefaultUnitRates(new DateTime()));
+        exception!.Message.Should().Be(expected);
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
+    }
+
+    [Test]
+    public void GivenNoRateHeader_ShouldThrowFormatException()
+    {
+        // arrange
+        var expected = "Couldn't retrieve Rate from document.";
+
+        _server!.Given(
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+
+        // act & assert
+        var sut = CreateSut();
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetDefaultUnitRates(new DateTime()));
+        exception!.Message.Should().Be(expected);
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
+    }
+
+    [Test]
+    public async Task GivenInconsistentColumns_ShouldThrowFormatException()
+    {
+        // arrange
+        _server!.Given(
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+
+        // act
+        var sut = CreateSut();
+        var result = await sut.GetDefaultUnitRates(new DateTime());
+        
+        // assert
+        result.Should().BeEmpty();
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be("Could not parse line {LineNumber}. The line start with: {LineText}");
     }
 
     private IExchangeRateProviderRepository CreateSut()
