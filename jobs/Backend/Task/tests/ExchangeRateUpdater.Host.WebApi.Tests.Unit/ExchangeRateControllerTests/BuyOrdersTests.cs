@@ -16,7 +16,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNoSourceCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "",
@@ -36,7 +36,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNoTargetCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -56,7 +56,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNullSumToExchange_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -76,7 +76,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenMissingExchangePair_WhenMakingABuyOrder_ShouldReturnNotFound()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -102,7 +102,7 @@ internal class BuyOrdersTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(exchangeRate);
 
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = sourceCurrency,
@@ -133,7 +133,7 @@ internal class BuyOrdersTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(correctExchangePair);
 
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",

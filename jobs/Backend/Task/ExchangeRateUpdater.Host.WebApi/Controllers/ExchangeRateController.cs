@@ -30,7 +30,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
             return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }
 
-        [HttpPost("exchange/buy")]
+        [HttpPost("exchange")]
         public async Task<IActionResult> BuyAsync([FromBody] BuyOrderDto orderBuyDto)
         {
             if (string.IsNullOrWhiteSpace(orderBuyDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
