@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Flurl;
 using Serilog;
+using Polly;
 
 namespace Adapter.ExchangeRateProvider.CzechNationalBank;
 
@@ -19,23 +20,26 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
 
     public async Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates()
     {
-        var httpClient = CreateClient();
+        return await CallCzerchNationalBankApi( async () =>
+        {
+            var httpClient = CreateClient();
 
-        var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(DateTime.Now));
+            var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(DateTime.Now));
 
-        using var contentStream = await response.Content.ReadAsStreamAsync();
+            using var contentStream = await response.Content.ReadAsStreamAsync();
 
-        using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
+            using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
 
 
-        var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesAsync();
+            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesAsync();
 
-        return rawData.Select(dto => {
-            var targetCurrency = new Currency("CZK");
-            var sourceCurrency = new Currency(dto.CurrencyCode);
-            // In case amount is 100 or something else.
-            var rate = new PositiveRealNumber(dto.Rate / dto.Amount);
-            return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+            return rawData.Select(dto => {
+                var targetCurrency = new Currency("CZK");
+                var sourceCurrency = new Currency(dto.CurrencyCode);
+                // In case amount is 100 or something else.
+                var rate = new PositiveRealNumber(dto.Rate / dto.Amount);
+                return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+            });
         });
     }
 
@@ -43,29 +47,56 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
     {
         if (targetCurrency != "CZK") throw new NotSupportedException("Target currencies besides CZK are not yet supported.");
 
-        var httpClient = CreateClient();
 
-        var response = await httpClient.GetAsync(GetExchangeRateAsTextUrl(from, to, sourceCurrency));
-
-        using var contentStream = await response.Content.ReadAsStreamAsync();
-
-        using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
-
-        var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesForCurrencyAsync(sourceCurrency);
-
-        
-        return rawData.OrderBy(data => data.DateTime).Select(dto =>
+        return await CallCzerchNationalBankApi(async () =>
         {
-            var targetCurrency = new Currency("CZK");
-            var sourceCurrency = new Currency(dto.CurrencyCode);
-            // In case amount is 100 or something else.
-            var rate =  new PositiveRealNumber(dto.Rate / dto.Amount);
-            return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+            var httpClient = CreateClient();
+
+            var response = await httpClient.GetAsync(GetExchangeRateAsTextUrl(from, to, sourceCurrency));
+
+            using var contentStream = await response.Content.ReadAsStreamAsync();
+
+            using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
+
+            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesForCurrencyAsync(sourceCurrency);
+
+
+            return rawData.OrderBy(data => data.DateTime).Select(dto =>
+            {
+                var targetCurrency = new Currency("CZK");
+                var sourceCurrency = new Currency(dto.CurrencyCode);
+                // In case amount is 100 or something else.
+                var rate = new PositiveRealNumber(dto.Rate / dto.Amount);
+                return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+            });
+        });
+    }
+
+    private async Task<T> CallCzerchNationalBankApi<T>(Func<Task<T>> action)
+    {
+        return await GetRetryPolicy().ExecuteAsync(Task<T> () =>
+        {
+            return action.Invoke();
         });
     }
 
     
 
+    // To be overriden in tests.
+    protected virtual TimeSpan[] GetRetrySleepTimes()
+    {
+        return new TimeSpan[]
+        {
+            TimeSpan.FromSeconds(30),
+            TimeSpan.FromSeconds(60)
+        };
+    }
+
+
+    private AsyncPolicy GetRetryPolicy()
+    {
+        return Policy.Handle<HttpRequestException>().Or<FormatException>().WaitAndRetryAsync(GetRetrySleepTimes());
+    }
 
     private HttpClient CreateClient()
     {
