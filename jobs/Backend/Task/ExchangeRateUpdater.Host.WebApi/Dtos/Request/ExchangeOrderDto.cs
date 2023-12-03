@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater.Host.WebApi.Dtos.Request
 {
-    public class BuyOrderDto
+    public class ExchangeOrderDto
     {
         public string? SourceCurrency { get; set; }
         public string? TargetCurrency { get; set; }

@@ -1,16 +1,14 @@
-﻿
-
-using ExchangeRateUpdater.Domain.ValueObjects;
+﻿using ExchangeRateUpdater.Domain.ValueObjects;
 
 namespace ExchangeRateUpdater.Domain.Entities;
 
-public class BuyResult
+public class ExchangeResult
 {
     public Currency SourceCurrency { get; }
     public Currency TargetCurrency { get; }
     public PositiveRealNumber ConvertedSum { get; }
 
-    public BuyResult(Currency? sourceCurrency, Currency? targetCurrency, PositiveRealNumber? convertedSum)
+    public ExchangeResult(Currency? sourceCurrency, Currency? targetCurrency, PositiveRealNumber? convertedSum)
     {
         SourceCurrency = sourceCurrency ?? throw new ArgumentNullException(nameof(sourceCurrency));
         TargetCurrency = targetCurrency ?? throw new ArgumentNullException(nameof(targetCurrency));

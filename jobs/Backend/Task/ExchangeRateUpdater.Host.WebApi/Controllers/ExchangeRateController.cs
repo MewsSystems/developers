@@ -12,12 +12,12 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
     public class ExchangeRateController : ControllerBase
     {
         private readonly IExchangeRateProviderRepository _exchangeRateUpdaterRepository;
-        private readonly BuyOrderUseCase _buyOrderUseCase;
+        private readonly ExchangeUseCase _exchangeUseCase;
 
-        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, BuyOrderUseCase buyOrderUseCase)
+        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, ExchangeUseCase exchangeUseCase)
         {
             _exchangeRateUpdaterRepository = exchangeRateUpdaterRepository ?? throw new ArgumentNullException(nameof(exchangeRateUpdaterRepository));
-            _buyOrderUseCase = buyOrderUseCase ?? throw new ArgumentNullException(nameof(buyOrderUseCase));
+            _exchangeUseCase = exchangeUseCase ?? throw new ArgumentNullException(nameof(exchangeUseCase));
         }
 
        
@@ -31,19 +31,19 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         }
 
         [HttpPost("exchange")]
-        public async Task<IActionResult> BuyAsync([FromBody] BuyOrderDto orderBuyDto)
+        public async Task<IActionResult> BuyAsync([FromBody] ExchangeOrderDto exchangeOrderDto)
         {
-            if (string.IsNullOrWhiteSpace(orderBuyDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
-            if (string.IsNullOrWhiteSpace(orderBuyDto.TargetCurrency)) return BadRequest("Target Currency has to be specified.");
-            if (orderBuyDto.SumToExchange.HasValue == false) return BadRequest("SumToExchange has to be specified.");
+            if (string.IsNullOrWhiteSpace(exchangeOrderDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
+            if (string.IsNullOrWhiteSpace(exchangeOrderDto.TargetCurrency)) return BadRequest("Target Currency has to be specified.");
+            if (exchangeOrderDto.SumToExchange.HasValue == false) return BadRequest("SumToExchange has to be specified.");
 
-            var orderBuy = orderBuyDto.ToOrderBuy();
+            var exchangeOrder = exchangeOrderDto.ToOrderBuy();
 
-            var buyResult = await _buyOrderUseCase.ExecuteAsync(orderBuy);
+            var exchangeResult = await _exchangeUseCase.ExecuteAsync(exchangeOrder);
 
-            if (buyResult == null) return NotFound("We do not support exchange rates for the mentioned source/target currencies.");
+            if (exchangeResult == null) return NotFound("We do not support exchange rates for the mentioned source/target currencies.");
 
-            return Ok(buyResult.ToBuyResultDto());
+            return Ok(exchangeResult.ToBuyResultDto());
         }
 
 

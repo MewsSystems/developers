@@ -6,11 +6,11 @@ namespace ExchangeRateUpdater.Host.WebApi.Mappers;
 
 internal static class OrdersMapper
 {
-    internal static BuyOrder ToOrderBuy(this BuyOrderDto orderBuyDto)
+    internal static ExchangeOrder ToOrderBuy(this ExchangeOrderDto exchangeOrderDto)
     {
-        return new BuyOrder(
-            new Currency(orderBuyDto.SourceCurrency),
-            new Currency(orderBuyDto.TargetCurrency),
-            new PositiveRealNumber(orderBuyDto.SumToExchange!.Value));
+        return new ExchangeOrder(
+            new Currency(exchangeOrderDto.SourceCurrency),
+            new Currency(exchangeOrderDto.TargetCurrency),
+            new PositiveRealNumber(exchangeOrderDto.SumToExchange!.Value));
     }
 }

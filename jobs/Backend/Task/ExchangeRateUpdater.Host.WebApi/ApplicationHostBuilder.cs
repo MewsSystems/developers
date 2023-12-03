@@ -63,7 +63,7 @@ namespace ExchangeRateUpdater.Host.WebApi
 
         private void RegisterUseCases(IServiceCollection services)
         {
-            services.AddSingleton<BuyOrderUseCase>();
+            services.AddSingleton<ExchangeUseCase>();
         }
 
 

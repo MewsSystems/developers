@@ -5,9 +5,9 @@ namespace ExchangeRateUpdater.Host.WebApi.Mappers;
 
 internal static class OrderResultMapper
 {
-    internal static BuyResultDto ToBuyResultDto(this BuyResult buyResult)
+    internal static ExchangeResultDto ToBuyResultDto(this ExchangeResult buyResult)
     {
-        return new BuyResultDto
+        return new ExchangeResultDto
         {
             SourceCurrency = buyResult.SourceCurrency,
             TargetCurrency = buyResult.TargetCurrency,

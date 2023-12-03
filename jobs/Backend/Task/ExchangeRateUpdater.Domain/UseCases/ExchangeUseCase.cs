@@ -4,17 +4,17 @@ using ExchangeRateUpdater.Domain.ValueObjects;
 
 namespace ExchangeRateUpdater.Domain.UseCases;
 
-public class BuyOrderUseCase
+public class ExchangeUseCase
 {
     private IExchangeRateProviderRepository _exchangeRateProviderRepository;
 
-    public BuyOrderUseCase(IExchangeRateProviderRepository exchangeRateProviderRepository)
+    public ExchangeUseCase(IExchangeRateProviderRepository exchangeRateProviderRepository)
     {
         _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
     }
 
 
-    public async Task<BuyResult?> ExecuteAsync(BuyOrder buyOrder)
+    public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder buyOrder)
     {
         if (buyOrder == null) throw new ArgumentNullException(nameof(buyOrder));
 
@@ -25,6 +25,6 @@ public class BuyOrderUseCase
         var latestExchange = exchangeRates.First();
         var convertedSum = new PositiveRealNumber(buyOrder.SumToExchange * latestExchange.CurrencyRate);
 
-        return new BuyResult(buyOrder.SourceCurrency, buyOrder.TargetCurrency, convertedSum);
+        return new ExchangeResult(buyOrder.SourceCurrency, buyOrder.TargetCurrency, convertedSum);
     }
 }
