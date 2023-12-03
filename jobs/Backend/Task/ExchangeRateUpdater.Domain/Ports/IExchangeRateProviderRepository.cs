@@ -6,5 +6,5 @@ namespace ExchangeRateUpdater.Domain.Ports;
 public interface IExchangeRateProviderRepository
 {
     Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates();
-    Task<ExchangeRate?> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency);
+    Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime From, DateTime To);
 }

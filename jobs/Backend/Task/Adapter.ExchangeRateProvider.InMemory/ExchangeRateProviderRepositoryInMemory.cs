@@ -31,15 +31,15 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         return Task.FromResult(_currencyRates.Values.AsEnumerable<ExchangeRate>());
     }
 
-    public Task<ExchangeRate?> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency)
+    public Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime From, DateTime To)
     {
         var key = new ExchangeCurrencies(sourceCurrency, targetCurrency);
 
         if (_currencyRates.ContainsKey(key))
         {
-            return Task.FromResult<ExchangeRate?>(_currencyRates[key]);
+            return Task.FromResult<IEnumerable<ExchangeRate>>(new List<ExchangeRate> { _currencyRates[key] });
         }
 
-        return Task.FromResult<ExchangeRate?>(null);
+        return Task.FromResult<IEnumerable<ExchangeRate>>(new List<ExchangeRate>());
     }
 }

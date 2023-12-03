@@ -18,11 +18,12 @@ public class BuyOrderUseCase
     {
         if (buyOrder == null) throw new ArgumentNullException(nameof(buyOrder));
 
-        var exchangeRate = await _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(buyOrder.SourceCurrency, buyOrder.TargetCurrency);
+        var exchangeRates = await _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(buyOrder.SourceCurrency, buyOrder.TargetCurrency, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), DateTime.Now);
 
-        if (exchangeRate == null) return null;
+        if (!exchangeRates.Any()) return null;
 
-        var convertedSum = new PositiveRealNumber(buyOrder.SumToExchange * exchangeRate.CurrencyRate);
+        var latestExchange = exchangeRates.First();
+        var convertedSum = new PositiveRealNumber(buyOrder.SumToExchange * latestExchange.CurrencyRate);
 
         return new BuyResult(buyOrder.SourceCurrency, buyOrder.TargetCurrency, convertedSum);
     }

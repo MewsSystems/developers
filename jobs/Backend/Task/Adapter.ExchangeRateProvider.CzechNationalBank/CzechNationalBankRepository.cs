@@ -3,8 +3,6 @@ using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Flurl;
 using Serilog;
-using System;
-using System.Linq;
 
 namespace Adapter.ExchangeRateProvider.CzechNationalBank;
 
@@ -23,7 +21,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
     {
         var httpClient = CreateClient();
 
-        var response = await httpClient.GetAsync(GetExchangeAsTextUrl(DateTime.Now));
+        var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(DateTime.Now));
 
         using var contentStream = await response.Content.ReadAsStreamAsync();
 
@@ -41,9 +39,29 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         });
     }
 
-    public Task<ExchangeRate?> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime from, DateTime to)
     {
-        throw new NotImplementedException();
+        if (targetCurrency != "CZK") throw new NotSupportedException("Target currencies besides CZK are not yet supported.");
+
+        var httpClient = CreateClient();
+
+        var response = await httpClient.GetAsync(GetExchangeRateAsTextUrl(from, to, sourceCurrency));
+
+        using var contentStream = await response.Content.ReadAsStreamAsync();
+
+        using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
+
+        var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesForCurrencyAsync(sourceCurrency);
+
+        
+        return rawData.OrderBy(data => data.DateTime).Select(dto =>
+        {
+            var targetCurrency = new Currency("CZK");
+            var sourceCurrency = new Currency(dto.CurrencyCode);
+            // In case amount is 100 or something else.
+            var rate =  new PositiveRealNumber(dto.Rate / dto.Amount);
+            return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+        });
     }
 
     
@@ -54,8 +72,22 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         return _httpClientFactory.CreateClient("ExchangeRateUpdater-http-client");
     }
 
-    private Url GetExchangeAsTextUrl(DateTime date)
+    private Url GetAllExchangeRatesAsTextUrl(DateTime date)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date);
+    }
+
+    private Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
+    {
+        return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/selected.txt"
+            .SetQueryParams(
+                new 
+                { 
+                    from = from.Date.ToString("dd.MM.yyyy"),  
+                    to=to.Date.ToString("dd.MM.yyyy"), 
+                    currency=currency.CurrencyCode, 
+                    format="txt"
+                }
+             );
     }
 }
