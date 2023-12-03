@@ -20,6 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<InternalsVisibleTo Include="Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit"/>
+	<InternalsVisibleTo Include="Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit"/>
   </ItemGroup>
 </Project>

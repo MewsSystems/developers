@@ -12,11 +12,20 @@
     <PackageReference Include="NUnit" Version="4.0.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Serilog.Sinks.InMemory" Version="0.11.0" />
+    <PackageReference Include="WireMock.Net" Version="1.5.40" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj" />
-    <ProjectReference Include="..\..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+    <ProjectReference Include="..\..\Adapter.ExchangeRateProvider.CzechNatBank\Adapter.ExchangeRateProvider.CzechNatBank.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestFiles\GivenNoAmountHeader.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GivenNoHeaderData_ShouldThrowFormatException.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
 </Project>

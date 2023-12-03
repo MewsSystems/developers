@@ -1,4 +1,4 @@
-﻿namespace Adapter.ExchangeRateProvider.CzechNationalBank.Dtos;
+﻿namespace Adapter.ExchangeRateProvider.CzechNatBank.Dtos;
 
 internal class ExchangeRateDataRawDto
 {

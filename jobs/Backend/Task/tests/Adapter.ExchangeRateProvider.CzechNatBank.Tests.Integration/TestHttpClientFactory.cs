@@ -1,4 +1,4 @@
-﻿namespace Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration;
+﻿namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration;
 
 internal class TestHttpClientFactory : IHttpClientFactory, IDisposable
 {

@@ -4,10 +4,8 @@ using ExchangeRateUpdater.Domain.ValueObjects;
 using Flurl;
 using Serilog;
 using Polly;
-using System.Reflection;
-using System;
 
-namespace Adapter.ExchangeRateProvider.CzechNationalBank;
+namespace Adapter.ExchangeRateProvider.CzechNatBank;
 
 public class CzechNationalBankRepository : IExchangeRateProviderRepository
 {
@@ -20,13 +18,13 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates()
+    public async Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates(DateTime exhangerRateDate)
     {
-        return await CallCzerchNationalBankApi( async () =>
+        return await CallCzerchNationalBankApi(async () =>
         {
             var httpClient = CreateClient();
 
-            var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(DateTime.Now));
+            var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(exhangerRateDate));
 
             using var contentStream = await response.Content.ReadAsStreamAsync();
 
@@ -35,7 +33,8 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
 
             var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesAsync();
 
-            return rawData.Select(dto => {
+            return rawData.Select(dto =>
+            {
                 var targetCurrency = new Currency("CZK");
                 var sourceCurrency = new Currency(dto.CurrencyCode);
                 // In case amount is 100 or something else.
@@ -80,7 +79,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         return await GetRetryPolicy().ExecuteAsync(action.Invoke);
     }
 
-    
+
 
     // To be overriden in tests.
     protected virtual TimeSpan[] GetRetrySleepTimes()
@@ -115,19 +114,19 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
 
     private Url GetAllExchangeRatesAsTextUrl(DateTime date)
     {
-        return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date);
+        return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date.ToString("dd.MM.yyyy"));
     }
 
     private Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/selected.txt"
             .SetQueryParams(
-                new 
-                { 
-                    from = from.Date.ToString("dd.MM.yyyy"),  
-                    to=to.Date.ToString("dd.MM.yyyy"), 
-                    currency=currency.CurrencyCode, 
-                    format="txt"
+                new
+                {
+                    from = from.Date.ToString("dd.MM.yyyy"),
+                    to = to.Date.ToString("dd.MM.yyyy"),
+                    currency = currency.CurrencyCode,
+                    format = "txt"
                 }
              );
     }

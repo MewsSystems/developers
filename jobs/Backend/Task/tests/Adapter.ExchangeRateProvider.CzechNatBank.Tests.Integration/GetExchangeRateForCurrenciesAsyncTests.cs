@@ -1,11 +1,12 @@
-﻿using ExchangeRateUpdater.Domain.Ports;
+﻿using Adapter.ExchangeRateProvider.CzechNatBank;
+using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using FluentAssertions;
 using NUnit.Framework;
 using Serilog;
 using Serilog.Sinks.InMemory;
 
-namespace Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration;
+namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration;
 
 [TestFixture]
 internal class GetExchangeRateForCurrenciesAsyncTests

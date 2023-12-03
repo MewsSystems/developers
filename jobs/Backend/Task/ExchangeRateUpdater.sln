@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Host.WebApi.Tests.Unit", "tests\ExchangeRateUpdater.Host.WebApi.Tests.Unit\ExchangeRateUpdater.Host.WebApi.Tests.Unit.csproj", "{2D4795E4-E3AC-4EF9-A188-FD886252E681}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNationalBank", "Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj", "{DE68E689-00F1-4648-8FAA-F5DE3399DF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNatBank", "Adapter.ExchangeRateProvider.CzechNatBank\Adapter.ExchangeRateProvider.CzechNatBank.csproj", "{DE68E689-00F1-4648-8FAA-F5DE3399DF53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration", "tests\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration.csproj", "{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration", "tests\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration.csproj", "{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit", "tests\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit.csproj", "{B333DAFD-088E-4C41-9A72-263A15027224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit", "tests\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit.csproj", "{B333DAFD-088E-4C41-9A72-263A15027224}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

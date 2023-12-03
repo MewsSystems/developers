@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         [HttpGet("defaultRates")]
         public async Task<IActionResult> GetDefaultUnitRatesAsync()
         {
-            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates();
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates(DateTime.Now);
 
             return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }

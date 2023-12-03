@@ -1,7 +1,7 @@
 ﻿using Polly;
 using Serilog;
 
-namespace Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit;
+namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit;
 
 internal class CzechNationalBankRepositoryTestDouble : CzechNationalBankRepository
 {
@@ -18,10 +18,10 @@ internal class CzechNationalBankRepositoryTestDouble : CzechNationalBankReposito
 
     protected override TimeSpan[] GetRetrySleepTimes()
     {
-        return new TimeSpan[] 
-        { 
-            TimeSpan.FromMicroseconds(1), 
-            TimeSpan.FromMicroseconds(1) 
+        return new TimeSpan[]
+        {
+            TimeSpan.FromMicroseconds(1),
+            TimeSpan.FromMicroseconds(1)
         };
     }
 }

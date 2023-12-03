@@ -1,8 +1,8 @@
-﻿using Adapter.ExchangeRateProvider.CzechNationalBank.Dtos;
+﻿using Adapter.ExchangeRateProvider.CzechNatBank.Dtos;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Serilog;
 
-namespace Adapter.ExchangeRateProvider.CzechNationalBank;
+namespace Adapter.ExchangeRateProvider.CzechNatBank;
 
 internal class ExchangeRatesTextParser : IDisposable
 {
@@ -23,7 +23,7 @@ internal class ExchangeRatesTextParser : IDisposable
 
 
         // Skip date line
-        await _reader.ReadLineAsync();
+        var value = await _reader.ReadLineAsync();
 
         var header = await _reader.ReadLineAsync();
 
@@ -38,7 +38,7 @@ internal class ExchangeRatesTextParser : IDisposable
         foreach (var _ in columns) _.Trim();
 
         var indexOfAmount = columns.IndexOf("Amount");
-        if (indexOfAmount == -1) 
+        if (indexOfAmount == -1)
         {
             _logger.Error("Couldn't retrieve Amount from document.");
             throw new FormatException("Couldn't retrieve Amount from document.");
@@ -76,9 +76,9 @@ internal class ExchangeRatesTextParser : IDisposable
 
             rawExchangeData.Add(new ExchangeRateDataRawDto
             {
-                Amount       = Convert.ToInt32(lineColumns[indexOfAmount]),
+                Amount = Convert.ToInt32(lineColumns[indexOfAmount]),
                 CurrencyCode = lineColumns[indexOfCode],
-                Rate         = Convert.ToDecimal(lineColumns[indexOfRate]) 
+                Rate = Convert.ToDecimal(lineColumns[indexOfRate])
             });
 
             ++lineCounter;
@@ -103,7 +103,7 @@ internal class ExchangeRatesTextParser : IDisposable
         }
 
         var currencyPart = currencyLineColumns[0].Split(':');
-        var amountPart   = currencyLineColumns[1].Split(':');
+        var amountPart = currencyLineColumns[1].Split(':');
 
         if (currencyPart.Count() < 2 || currencyPart[0].Trim() != "Currency" || amountPart.Count() < 2 || amountPart[0].Trim() != "Amount")
         {
@@ -119,8 +119,8 @@ internal class ExchangeRatesTextParser : IDisposable
             throw new FormatException("The requested currency is different than the one parsed. Requested: {RequestedCurrency}. Retrieved: {RetrievedCurrency}");
         }
 
-        int amount = 0; 
-        if (!Int32.TryParse(amountPart[1], out amount))
+        int amount = 0;
+        if (!int.TryParse(amountPart[1], out amount))
         {
             _logger.Error("Couldn't not convert amount in a number. Line: {Line}", currencyLine?.Substring(0, 10));
             throw new FormatException("Couldn't not convert amount in a number.");

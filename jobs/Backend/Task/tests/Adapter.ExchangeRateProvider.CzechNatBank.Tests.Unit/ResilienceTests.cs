@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Serilog;
 using Serilog.Sinks.InMemory;
 
-namespace Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Unit;
+namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit;
 
 [TestFixture]
 internal class ResilienceTests

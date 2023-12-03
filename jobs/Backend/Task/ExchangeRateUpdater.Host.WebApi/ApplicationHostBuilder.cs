@@ -1,7 +1,7 @@
 ﻿using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.UseCases;
 using Serilog;
-using Adapter.ExchangeRateProvider.CzechNationalBank;
+using Adapter.ExchangeRateProvider.CzechNatBank;
 
 namespace ExchangeRateUpdater.Host.WebApi
 {
