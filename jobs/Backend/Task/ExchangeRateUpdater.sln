@@ -11,11 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvide
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{82A128FB-B70B-455D-8855-3404ABF4E7DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.Tests.Unit", "tests\ExchangeRateUpdater.Domain.Tests.Unit\ExchangeRateUpdater.Domain.Tests.Unit.csproj", "{7A719D99-E9D1-4519-B9DF-1D9B84C58C38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.Tests.Unit", "tests\ExchangeRateUpdater.Domain.Tests.Unit\ExchangeRateUpdater.Domain.Tests.Unit.csproj", "{7A719D99-E9D1-4519-B9DF-1D9B84C58C38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Host.WebApi.Tests.Unit", "tests\ExchangeRateUpdater.Host.WebApi.Tests.Unit\ExchangeRateUpdater.Host.WebApi.Tests.Unit.csproj", "{2D4795E4-E3AC-4EF9-A188-FD886252E681}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Host.WebApi.Tests.Unit", "tests\ExchangeRateUpdater.Host.WebApi.Tests.Unit\ExchangeRateUpdater.Host.WebApi.Tests.Unit.csproj", "{2D4795E4-E3AC-4EF9-A188-FD886252E681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank", "Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj", "{DE68E689-00F1-4648-8FAA-F5DE3399DF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNationalBank", "Adapter.ExchangeRateProvider.CzechNationalBank\Adapter.ExchangeRateProvider.CzechNationalBank.csproj", "{DE68E689-00F1-4648-8FAA-F5DE3399DF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration", "Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration\Adapter.ExchangeRateProvider.CzechNationalBank.Tests.Integration.csproj", "{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE68E689-00F1-4648-8FAA-F5DE3399DF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7A719D99-E9D1-4519-B9DF-1D9B84C58C38} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
+		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D24099C9-7C03-417C-BF3B-A4EAA6DFDF25}
