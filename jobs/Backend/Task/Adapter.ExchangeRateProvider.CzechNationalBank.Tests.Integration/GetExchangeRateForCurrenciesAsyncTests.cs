@@ -24,6 +24,18 @@ internal class GetExchangeRateForCurrenciesAsyncTests
         result.ToList().Count.Should().BeGreaterThan(0);
     }
 
+
+    [Test]
+    public void GivenInvalidTargetCurrency_WhenCallingCzechNationalBankToGetExchange_ShouldThrow()
+    {
+        // act
+        var sut = CreateSut();
+
+        // assert
+        var exception = Assert.ThrowsAsync<NotSupportedException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("CZK"), new Currency("USD"), new DateTime(2023, 1, 1), new DateTime(2023, 1, 2)));
+        exception!.Message.Should().Be("Target currencies besides CZK are not yet supported.");
+    }
+
     private IExchangeRateProviderRepository CreateSut()
     {
         return new CzechNationalBankRepository(_httpClientFactory, _logger);
