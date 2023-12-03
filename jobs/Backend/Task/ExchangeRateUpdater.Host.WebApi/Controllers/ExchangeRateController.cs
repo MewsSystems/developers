@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Host.WebApi.Dtos;
+using ExchangeRateUpdater.Host.WebApi.Mappers;
 
 namespace ExchangeRateUpdater.Host.WebApi.Controllers
 {
     [ApiController]
-    [Route("/api/exchangeRate")]
+    [Route("/api/exchangeRates")]
     public class ExchangeRateController : ControllerBase
     {
         private IExchangeRateProviderRepository _exchangeRateUpdaterRepository;
@@ -18,10 +19,12 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
 
        
 
-        [HttpGet("defaultRates")]
+        [HttpGet("default")]
         public async Task<IActionResult> GetDefaultUnitRatesAsync()
         {
-            return Ok(await _exchangeRateUpdaterRepository.GetDefaultUnitRates());
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates();
+
+            return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }
 
         

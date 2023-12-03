@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.ValueObjects;
+using ExchangeRateUpdater.Host.WebApi.Tests.Unit.Dtos;
 using FluentAssertions;
 using Flurl;
 using Newtonsoft.Json;
@@ -17,13 +18,13 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
     public async Task GivenNoDefaultUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnEmptyList()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("default");
         var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         
-        var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRate>>(await response.Content.ReadAsStringAsync());
+        var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRateDto>>(await response.Content.ReadAsStringAsync());
         defaultExhangeRates.Should().BeEmpty();
     }
 
@@ -34,16 +35,21 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)));
 
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRate").AppendPathSegment("defaultRates");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("default");
         var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRate>>(await response.Content.ReadAsStringAsync());
-        defaultExhangeRates.Should().BeEquivalentTo(new List<ExchangeRate>
+        var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRateDto>>(await response.Content.ReadAsStringAsync());
+        defaultExhangeRates.Should().BeEquivalentTo(new List<ExchangeRateDto>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
+            new ExchangeRateDto
+            {
+                From = "MDL",
+                To   = "USD",
+                ExchangeRate = 17.78m
+            }
         });
     }
 }
