@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Net;
 
-namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.OrdersControllerTests;
+namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests;
 
 [TestFixture]
 internal class BuyOrdersTests : ControllerTestBase
@@ -16,12 +16,12 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNoSourceCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "",
             TargetCurrency = "USD",
-            SumToExchange  = 10
+            SumToExchange = 10
         };
         var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
@@ -36,7 +36,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNoTargetCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -56,7 +56,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenNullSumToExchange_WhenMakingABuyOrder_ShouldReturnBadResult()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -76,7 +76,7 @@ internal class BuyOrdersTests : ControllerTestBase
     public async Task GivenMissingExchangePair_WhenMakingABuyOrder_ShouldReturnNotFound()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",
@@ -102,7 +102,7 @@ internal class BuyOrdersTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(exchangeRate);
 
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = sourceCurrency,
@@ -119,7 +119,7 @@ internal class BuyOrdersTests : ControllerTestBase
         {
             SourceCurrency = sourceCurrency,
             TargetCurrency = targetCurrency,
-            ConvertedSum   = sum * rate
+            ConvertedSum = sum * rate
         });
     }
 
@@ -133,7 +133,7 @@ internal class BuyOrdersTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(correctExchangePair);
 
         // act
-        var relativeUrl = "api".AppendPathSegment("orders").AppendPathSegment("buy");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").AppendPathSegment("buy");
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",

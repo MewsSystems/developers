@@ -18,7 +18,7 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
     public async Task GivenNoDefaultUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnEmptyList()
     {
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("default");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
         var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
@@ -35,7 +35,7 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
         ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)));
 
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("default");
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
         var response = await HttpClient.GetAsync(relativeUrl);
 
         // assert
