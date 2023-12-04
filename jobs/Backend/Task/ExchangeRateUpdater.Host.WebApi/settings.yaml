@@ -1,0 +1,3 @@
+EnableSwagger:				  true
+MinimumLogLevel :			  "Information"
+CzechNationalBankBaseAddress: "https://www.cnb.cz/en/"

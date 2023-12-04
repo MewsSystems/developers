@@ -11,12 +11,19 @@
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="YamlDotNet" Version="13.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Adapter.ExchangeRateProvider.CzechNatBank\Adapter.ExchangeRateProvider.CzechNatBank.csproj" />
     <ProjectReference Include="..\Adapter.ExchangeRateProvider.InMemory\Adapter.ExchangeRateProvider.InMemory.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="settings.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

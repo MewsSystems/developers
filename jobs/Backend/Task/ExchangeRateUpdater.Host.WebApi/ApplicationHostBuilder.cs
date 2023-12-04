@@ -2,6 +2,7 @@
 using ExchangeRateUpdater.Domain.UseCases;
 using Serilog;
 using Adapter.ExchangeRateProvider.CzechNatBank;
+using ExchangeRateUpdater.Host.WebApi.Configuration;
 
 namespace ExchangeRateUpdater.Host.WebApi
 {
@@ -9,6 +10,15 @@ namespace ExchangeRateUpdater.Host.WebApi
     {
 
         private const string ApplicationName = "ExchangeRateUpdater";
+        private readonly ISettings _settings;
+        private readonly Serilog.ILogger _logger;
+
+        public ApplicationHostBuilder(ISettings? settings, Serilog.ILogger? logger)
+        {
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public IHostBuilder Configure()
         {
             var applicationBuilder = new HostBuilder().ConfigureWebHost(webBuilder =>
@@ -28,27 +38,29 @@ namespace ExchangeRateUpdater.Host.WebApi
                     RegisterUseCases(services);
                     RegisterAdapters(services);
                     services.AddControllers();
-                    services.AddHttpClient($"{ApplicationName}-http-client",
-                    client =>
-                    {
-                        // Set the base address of the named client.
-                        client.BaseAddress = new Uri("https://www.cnb.cz/en/");
-                    });
                     services.AddEndpointsApiExplorer();
                     services.AddSwaggerGen();
-                    services.AddSerilog(Log.Logger);
+                    services.AddSerilog(_logger);
                     services.AddMvcCore();
                 });
             webBuilder.UseKestrel();
-
             webBuilder.Configure(applicationBuilder =>
             {
-                // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-                applicationBuilder.UseSwagger();
-                applicationBuilder.UseSwaggerUI();
+                if (_settings.EnableSwagger)
+                {
+                    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+                    applicationBuilder.UseSwagger();
+                    applicationBuilder.UseSwaggerUI(_ =>
+                    {
+                        _.SwaggerEndpoint("/swagger/v1/swagger.json", "Exchange Rate Update API");
+                        _.RoutePrefix = string.Empty;
+                    });
+                }
+                
                 applicationBuilder.UseRouting();
                 applicationBuilder.UseHttpsRedirection();
                 applicationBuilder.UseAuthorization();
+                
                 applicationBuilder.UseEndpoints(configuration =>
                 {
                     configuration.MapControllers();
@@ -58,6 +70,12 @@ namespace ExchangeRateUpdater.Host.WebApi
 
         protected virtual void RegisterAdapters(IServiceCollection services)
         {
+            services.AddHttpClient($"{ApplicationName}-http-client",
+            client =>
+            {
+                // Set the base address of the named client.
+                client.BaseAddress = new Uri(_settings.CzechNationalBankBaseAddress);
+            });
             services.AddSingleton<IExchangeRateProviderRepository, CzechNationalBankRepository>();
         }
 

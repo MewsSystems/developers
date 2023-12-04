@@ -1,9 +1,13 @@
 ﻿using Adapter.ExchangeRateProvider.InMemory;
 using ExchangeRateUpdater.Domain.Ports;
+using ExchangeRateUpdater.Host.WebApi.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Serilog;
+using Serilog.Core;
+using Serilog.Sinks.InMemory;
 
 namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit
 {
@@ -11,7 +15,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit
     {
         protected ExchangeRateProviderRepositoryInMemory ExchangeRateProviderRepositoryInMemory { get; }
 
-        public TestApplicationHostBuilder(ExchangeRateProviderRepositoryInMemory exchangeRateProviderRepositoryInMemory)
+        public TestApplicationHostBuilder(ExchangeRateProviderRepositoryInMemory exchangeRateProviderRepositoryInMemory) : base(new Settings(), new LoggerConfiguration().WriteTo.InMemory().CreateLogger())
         {
             ExchangeRateProviderRepositoryInMemory = exchangeRateProviderRepositoryInMemory;
         }

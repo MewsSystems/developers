@@ -12,11 +12,18 @@
     <PackageReference Include="NUnit" Version="4.0.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Serilog.Sinks.InMemory" Version="0.11.0" />
+    <PackageReference Include="YamlDotNet" Version="13.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Adapter.ExchangeRateProvider.CzechNatBank\Adapter.ExchangeRateProvider.CzechNatBank.csproj" />
     <ProjectReference Include="..\..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="settings.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
