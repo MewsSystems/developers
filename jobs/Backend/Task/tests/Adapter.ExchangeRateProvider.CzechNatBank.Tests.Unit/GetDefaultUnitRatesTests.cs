@@ -26,7 +26,7 @@ internal class GetDefaultUnitRatesTests
         var expected = "Couldn't retrieve header data from Czech National Bank.";
         _server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoHeaderData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoHeaderData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -43,7 +43,7 @@ internal class GetDefaultUnitRatesTests
 
         _server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -60,7 +60,7 @@ internal class GetDefaultUnitRatesTests
 
         _server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoCodeHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoCodeHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -77,7 +77,7 @@ internal class GetDefaultUnitRatesTests
 
         _server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -92,7 +92,7 @@ internal class GetDefaultUnitRatesTests
         // arrange
         _server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act
         var sut = CreateSut();

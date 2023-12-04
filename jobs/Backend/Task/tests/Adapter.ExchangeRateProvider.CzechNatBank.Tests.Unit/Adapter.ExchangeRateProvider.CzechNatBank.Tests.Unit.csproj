@@ -21,21 +21,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestFiles\GivenInconsistentColumns.txt">
+    <None Update="TestFiles\GetDefaultRates\GivenInconsistentColumns.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GivenNoAmountHeader.txt">
+    <None Update="TestFiles\GetDefaultRates\GivenNoAmountHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GivenNoCodeHeader.txt">
+    <None Update="TestFiles\GetDefaultRates\GivenNoCodeHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GivenNoRateHeader.txt">
+    <None Update="TestFiles\GetDefaultRates\GivenNoRateHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GivenNoHeaderData.txt">
+    <None Update="TestFiles\GetDefaultRates\GivenNoHeaderData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestFiles\GetExchangeRateForCurrenciesAsync\" />
   </ItemGroup>
 	
 </Project>
