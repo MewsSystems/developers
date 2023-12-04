@@ -12,21 +12,19 @@ using WireMock.Server;
 namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit;
 
 [TestFixture]
-internal class GetDefaultUnitRatesTests
+internal class GetDefaultUnitRatesTests : TestBase
 {
-    private TestHttpClientFactory? _httpClientFactory;
-    private Logger? _logger;
-    private const int Port = 8080;
-    private WireMockServer? _server;
+
+    private const string TestFilesPath = "TestFiles/GetDefaultUnitRates";
 
     [Test]
     public void GivenNoHeaderData_ShouldThrowFormatException()
     {
         // arrange
         var expected = "Couldn't retrieve header data from Czech National Bank.";
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoHeaderData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoHeaderData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -41,9 +39,9 @@ internal class GetDefaultUnitRatesTests
         // arrange
         var expected = "Couldn't retrieve Amount from document.";
 
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoAmountHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -58,9 +56,9 @@ internal class GetDefaultUnitRatesTests
         // arrange
         var expected = "Couldn't retrieve Code from document.";
 
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoCodeHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoCodeHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -75,9 +73,9 @@ internal class GetDefaultUnitRatesTests
         // arrange
         var expected = "Couldn't retrieve Rate from document.";
 
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act & assert
         var sut = CreateSut();
@@ -90,9 +88,9 @@ internal class GetDefaultUnitRatesTests
     public async Task GivenInconsistentColumns_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
-            .RespondWith(Response.Create().WithBodyFromFile("TestFiles/GetDefaultRates/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
         // act
         var sut = CreateSut();
@@ -101,27 +99,5 @@ internal class GetDefaultUnitRatesTests
         // assert
         result.Should().BeEmpty();
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be("Could not parse line {LineNumber}. The line start with: {LineText}");
-    }
-
-    private IExchangeRateProviderRepository CreateSut()
-    {
-        return new CzechNationalBankRepositoryTestDouble(_httpClientFactory, _logger);
-    }
-
-    [SetUp]
-    public void SetUp()
-    {
-        _logger = new LoggerConfiguration().WriteTo.InMemory().CreateLogger();
-        _httpClientFactory = new TestHttpClientFactory("http://localhost:8080/");
-        _server = WireMockServer.Start(Port);
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        _httpClientFactory?.Dispose();
-        _logger?.Dispose();
-        _server?.Stop();
-        _server?.Dispose();
     }
 }

@@ -12,19 +12,15 @@ using WireMock.Server;
 namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit;
 
 [TestFixture]
-internal class GetExchangeRateForCurrenciesAsyncTests
+internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 {
-    private TestHttpClientFactory? _httpClientFactory;
-    private Logger? _logger;
-    private const int Port = 8080;
-    private WireMockServer? _server;
     private const string TestFilesPath = "TestFiles/GetExchangeRateForCurrenciesAsync";
 
     [Test]
     public void GivenNoCurrencyInfoLine_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoCurrencyLine.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -41,7 +37,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenInvalidCurrencyInfoLine_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenInvalidCurrencyLine.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -58,7 +54,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenInvalidCurrencyFirstPart_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/BadCurrencyFirstPart.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -75,7 +71,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenInvalidCurrencySecondPart_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/BadCurrencySecondPart.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -92,7 +88,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenInvalidCurrencyCode_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenInvalidCurrencyCode.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -109,7 +105,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenInvalidAmount_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenInvalidAmount.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -126,7 +122,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenNoDateHeader_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoDateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -143,7 +139,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenNoRateHeader_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoRateHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -160,7 +156,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public void GivenNoHeader_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoHeader.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -177,7 +173,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests
     public async Task GivenInconsistentColumns_ShouldThrowFormatException()
     {
         // arrange
-        _server!.Given(
+        Server!.Given(
             Request.Create().UsingGet().WithPath("/Test"))
             .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenInconsistentColumns.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
 
@@ -188,28 +184,5 @@ internal class GetExchangeRateForCurrenciesAsyncTests
         // assert
         result.Should().BeEmpty();
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be("Could not parse line {LineNumber}. The line start with: {LineText}");
-    }
-
-    private IExchangeRateProviderRepository CreateSut()
-    {
-        return new CzechNationalBankRepositoryTestDouble(_httpClientFactory, _logger);
-    }
-
-
-    [SetUp]
-    public void OneTimeSetUp()
-    {
-        _logger = new LoggerConfiguration().WriteTo.InMemory().CreateLogger();
-        _httpClientFactory = new TestHttpClientFactory("http://localhost:8080/");
-        _server = WireMockServer.Start(Port);
-    }
-
-    [TearDown]
-    public void OneTimeTearDown()
-    {
-        _httpClientFactory?.Dispose();
-        _logger?.Dispose();
-        _server?.Stop();
-        _server?.Dispose();
     }
 }

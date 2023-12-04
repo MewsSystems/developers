@@ -21,19 +21,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestFiles\GetDefaultRates\GivenInconsistentColumns.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenInconsistentColumns.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GetDefaultRates\GivenNoAmountHeader.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoAmountHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GetDefaultRates\GivenNoCodeHeader.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoCodeHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GetDefaultRates\GivenNoRateHeader.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoRateHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GetDefaultRates\GivenNoHeaderData.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoHeaderData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\BadCurrencySecondPart.txt">
