@@ -1,18 +1,13 @@
-﻿using Adapter.ExchangeRateProvider.CzechNatBank;
-using ExchangeRateUpdater.Domain.Ports;
-using ExchangeRateUpdater.Domain.ValueObjects;
+﻿using ExchangeRateUpdater.Domain.ValueObjects;
 using FluentAssertions;
 using NUnit.Framework;
-using Serilog;
-using Serilog.Sinks.InMemory;
 
 namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration;
 
 [TestFixture]
-internal class GetExchangeRateForCurrenciesAsyncTests
+internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 {
-    private TestHttpClientFactory? _httpClientFactory;
-    private ILogger? _logger;
+    
 
     [Test]
     public async Task GivenValidExchangeOrder_WhenCallingCzechNationalBankToGetExchange_ShouldReturnAListOfUnitExchangeRatesSortedByDate()
@@ -37,21 +32,5 @@ internal class GetExchangeRateForCurrenciesAsyncTests
         exception!.Message.Should().Be("Target currencies besides CZK are not yet supported.");
     }
 
-    private IExchangeRateProviderRepository CreateSut()
-    {
-        return new CzechNationalBankRepository(_httpClientFactory, _logger);
-    }
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        _logger = new LoggerConfiguration().WriteTo.InMemory().CreateLogger();
-        _httpClientFactory = new TestHttpClientFactory("https://www.cnb.cz/en/");
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        _httpClientFactory?.Dispose();
-    }
+    
 }

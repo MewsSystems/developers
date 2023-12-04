@@ -7,7 +7,7 @@ namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration;
 [SetUpFixture]
 internal class Global
 {
-    internal Settings? Settings { get; set; }
+    internal static Settings? Settings { get; set; }
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
