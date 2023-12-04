@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit", "tests\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit.csproj", "{B333DAFD-088E-4C41-9A72-263A15027224}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Acceptance.Tests", "tests\ExchangeRateUpdater.Acceptance.Tests\ExchangeRateUpdater.Acceptance.Tests.csproj", "{E2FEDC05-8916-4186-B23B-6795ADF82868}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{B333DAFD-088E-4C41-9A72-263A15027224}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B333DAFD-088E-4C41-9A72-263A15027224}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B333DAFD-088E-4C41-9A72-263A15027224}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2FEDC05-8916-4186-B23B-6795ADF82868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2FEDC05-8916-4186-B23B-6795ADF82868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2FEDC05-8916-4186-B23B-6795ADF82868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2FEDC05-8916-4186-B23B-6795ADF82868}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{2D4795E4-E3AC-4EF9-A188-FD886252E681} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 		{5DB5CDE9-DBAB-43E7-B299-E0BD3199C6AA} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 		{B333DAFD-088E-4C41-9A72-263A15027224} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
+		{E2FEDC05-8916-4186-B23B-6795ADF82868} = {82A128FB-B70B-455D-8855-3404ABF4E7DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D24099C9-7C03-417C-BF3B-A4EAA6DFDF25}
