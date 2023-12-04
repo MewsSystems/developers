@@ -36,10 +36,36 @@
     <None Update="TestFiles\GetDefaultRates\GivenNoHeaderData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestFiles\GetExchangeRateForCurrenciesAsync\" />
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\BadCurrencySecondPart.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenInconsistentColumns.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenInvalidAmount.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenInvalidCurrencyLine.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\BadCurrencyFirstPart.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenInvalidCurrencyCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenNoCurrencyLine.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenNoHeader.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenNoRateHeader.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\GivenNoDateHeader.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 	
 </Project>

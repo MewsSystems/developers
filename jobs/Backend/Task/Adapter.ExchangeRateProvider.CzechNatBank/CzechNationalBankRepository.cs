@@ -117,7 +117,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date.ToString("dd.MM.yyyy"));
     }
 
-    private Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
+    protected virtual Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/selected.txt"
             .SetQueryParams(

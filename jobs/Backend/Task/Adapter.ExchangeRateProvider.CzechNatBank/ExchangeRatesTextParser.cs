@@ -65,7 +65,7 @@ internal class ExchangeRatesTextParser : IDisposable
         {
             var line = await _reader.ReadLineAsync();
 
-            var lineColumns = line?.Split('|').ToList() ?? new List<string>();
+            var lineColumns = line?.Split('|').Where(col => !string.IsNullOrWhiteSpace(col)).ToList() ?? new List<string>();
             foreach (var _ in lineColumns) _.Trim();
             if (!lineColumns.Any() || lineColumns.Count <= Math.Max(indexOfRate, Math.Max(indexOfCode, indexOfAmount)))
             {
@@ -91,7 +91,7 @@ internal class ExchangeRatesTextParser : IDisposable
     {
         var rawExchangeData = new List<ExchangeDateRateDataRawDto>();
 
-        if (!_reader.BaseStream.CanRead) return rawExchangeData;
+        if (!_reader.BaseStream.CanRead || _reader.EndOfStream) return rawExchangeData;
 
         var currencyLine = await _reader.ReadLineAsync();
         var currencyLineColumns = currencyLine?.Split('|').ToList() ?? new List<string>();
@@ -116,7 +116,7 @@ internal class ExchangeRatesTextParser : IDisposable
         if (currencyCode != requestedCurrency.CurrencyCode)
         {
             _logger.Error("The requested currency is different than the one parsed. Requested: {RequestedCurrency}. Retrieved: {RetrievedCurrency}", requestedCurrency, currencyCode);
-            throw new FormatException("The requested currency is different than the one parsed. Requested: {RequestedCurrency}. Retrieved: {RetrievedCurrency}");
+            throw new FormatException($"The requested currency is different than the one parsed. Requested: {requestedCurrency.CurrencyCode}. Retrieved: {currencyCode}");
         }
 
         int amount = 0;
@@ -158,7 +158,7 @@ internal class ExchangeRatesTextParser : IDisposable
         {
             var line = await _reader.ReadLineAsync();
 
-            var lineColumns = line?.Split('|').ToList() ?? new List<string>();
+            var lineColumns = line?.Split('|').Where(col => !string.IsNullOrWhiteSpace(col)).ToList() ?? new List<string>();
 
             foreach (var _ in lineColumns) _.Trim();
 

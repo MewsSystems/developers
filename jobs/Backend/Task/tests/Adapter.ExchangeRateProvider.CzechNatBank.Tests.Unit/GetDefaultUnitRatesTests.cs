@@ -109,7 +109,7 @@ internal class GetDefaultUnitRatesTests
     }
 
     [SetUp]
-    public void OneTimeSetUp()
+    public void SetUp()
     {
         _logger = new LoggerConfiguration().WriteTo.InMemory().CreateLogger();
         _httpClientFactory = new TestHttpClientFactory("http://localhost:8080/");
@@ -117,7 +117,7 @@ internal class GetDefaultUnitRatesTests
     }
 
     [TearDown]
-    public void OneTimeTearDown()
+    public void TearDown()
     {
         _httpClientFactory?.Dispose();
         _logger?.Dispose();

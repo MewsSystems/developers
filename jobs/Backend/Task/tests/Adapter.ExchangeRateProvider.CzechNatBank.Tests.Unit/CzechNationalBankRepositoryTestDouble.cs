@@ -1,4 +1,5 @@
-﻿using Flurl;
+﻿using ExchangeRateUpdater.Domain.ValueObjects;
+using Flurl;
 using Polly;
 using Serilog;
 
@@ -28,6 +29,11 @@ internal class CzechNationalBankRepositoryTestDouble : CzechNationalBankReposito
 
     // Looks Wiremock for some reason couldn't handle the original Url.
     protected override Url GetAllExchangeRatesAsTextUrl(DateTime date)
+    {
+        return Url.Parse("Test");
+    }
+
+    protected override Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
     {
         return Url.Parse("Test");
     }
