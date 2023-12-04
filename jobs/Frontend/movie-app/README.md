@@ -13,12 +13,17 @@ npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
 - Optimized performance compared to Create React App
 - Customizable without ejecting
 
+## Setup
+
+- Have node installed. In Mac run `brew install node`
+- Install project dependencies: `npm i`
+
 ## Scripts
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+- `npm run dev`/`npm run start` - start dev server and open browser
+- `npm run build` - build for production
+- `npm run preview` - locally preview production build
+- `npm run test` - launch test runner
 
 ## Inspiration
 
