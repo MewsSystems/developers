@@ -94,6 +94,7 @@ internal class ExchangeRatesTextParser : IDisposable
         if (!_reader.BaseStream.CanRead || _reader.EndOfStream) return rawExchangeData;
 
         var currencyLine = await _reader.ReadLineAsync();
+        if (currencyLine == "Database does not contain any data for specified period.") return rawExchangeData;
         var currencyLineColumns = currencyLine?.Split('|').ToList() ?? new List<string>();
 
         if (!currencyLineColumns.Any() || currencyLineColumns.Count < 2)

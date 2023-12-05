@@ -25,7 +25,7 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         _currencyRates.Add(key, exchangeRates); 
     }
 
-    public Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates(DateTime exchangeRateDate)
+    public Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate)
     {
         var key = exchangeRateDate.Date;
         if (_currencyRates.ContainsKey(key))

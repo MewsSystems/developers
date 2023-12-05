@@ -13,7 +13,7 @@ internal class GetDefaultUnitRates : TestBase
         var sut = CreateSut();
 
         // assert
-        var result = await sut.GetDefaultUnitRates(DateTime.Now);
+        var result = await sut.GetAllFxRates(DateTime.Now);
         result.ToList().Count.Should().BeGreaterThan(0);
     }
 }

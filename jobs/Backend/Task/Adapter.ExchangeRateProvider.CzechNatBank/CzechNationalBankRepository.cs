@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.Domain.Entities;
+﻿ using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Flurl;
@@ -18,7 +18,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates(DateTime exhangerRateDate)
+    public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exhangerRateDate)
     {
         return await CallCzerchNationalBankApi(async () =>
         {

@@ -44,7 +44,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         [HttpGet("defaultRates")]
         public async Task<IActionResult> GetAllFxRates([FromQuery] DateTime? requestDate)
         {
-            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates(requestDate ?? DateTime.Now.Date);
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetAllFxRates(requestDate ?? DateTime.Now.Date);
 
             return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }

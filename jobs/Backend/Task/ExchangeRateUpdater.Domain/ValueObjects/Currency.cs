@@ -5,6 +5,9 @@
 /// </summary>
 public class Currency
 {
+    /// <summary>
+    /// ISO  4217 currency code.
+    /// </summary>
     public string CurrencyCode { get; }
 
     /// <summary>
