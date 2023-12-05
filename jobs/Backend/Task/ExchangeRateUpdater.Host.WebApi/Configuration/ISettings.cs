@@ -12,6 +12,14 @@ namespace ExchangeRateUpdater.Host.WebApi.Configuration
         /// </summary>
         public bool EnableSwagger { get; }
         /// <summary>
+        /// Enables in-memory cache.
+        /// </summary>
+        public bool CacheEnabled { get; }
+        /// <summary>
+        /// Sets the Cache Size until cache eviction is performed.
+        /// </summary>
+        public int CacheSize { get; }
+        /// <summary>
         /// Sets MinimumLogLevel.
         /// </summary>
         public LogEventLevel MinimumLogLevel { get; }

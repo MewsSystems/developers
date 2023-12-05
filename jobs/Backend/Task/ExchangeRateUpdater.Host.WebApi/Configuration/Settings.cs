@@ -11,5 +11,9 @@ namespace ExchangeRateUpdater.Host.WebApi.Configuration
         public string CzechNationalBankBaseAddress { get; set; } = string.Empty;
         /// <inheritdoc/>
         public bool EnableSwagger { get; set; } = true;
+        /// <inheritdoc/>
+        public bool CacheEnabled { get; set; } = false;
+        /// <inheritdoc/>
+        public int CacheSize { get; set; } = 0;
     }
 }

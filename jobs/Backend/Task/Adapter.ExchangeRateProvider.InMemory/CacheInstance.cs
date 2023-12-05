@@ -10,17 +10,15 @@ internal class CacheInstance
         get
         {
             AccessedTime = DateTime.Now;
-            return Value;
-        }
-        private set
-        {
-            Value = value;
+            return _value;
         }
     }
 
+    private IEnumerable<ExchangeRate> _value;
+
     public CacheInstance(IEnumerable<ExchangeRate> cachedRates)
     {
-        Value = cachedRates;
+        _value = cachedRates;
         AccessedTime = DateTime.Now;
     }
 }

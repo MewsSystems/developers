@@ -1,3 +1,5 @@
 EnableSwagger:				  true
+CacheEnabled:                 true
+CacheSize:					  10
 MinimumLogLevel :			  "Information"
 CzechNationalBankBaseAddress: "https://www.cnb.cz/en/"

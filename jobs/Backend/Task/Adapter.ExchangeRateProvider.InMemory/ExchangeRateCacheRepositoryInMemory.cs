@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Domain.Entities;
+﻿using Adapter.ExchangeRateProvider.CzechNatBank;
+using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.Ports;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Serilog;
@@ -16,7 +17,7 @@ namespace Adapter.ExchangeRateProvider.InMemory
         private readonly int _cacheSize;
 
 
-        public ExchangeRateCacheRepositoryInMemory(IExchangeRateProviderRepository exchangeRateProviderRepository, ILogger logger, int cacheSize, bool enabled)
+        public ExchangeRateCacheRepositoryInMemory(CzechNationalBankRepository exchangeRateProviderRepository, ILogger logger, int cacheSize, bool enabled)
         {
             _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
             _fxRates = new ConcurrentDictionary<string, CacheInstance>();
@@ -42,7 +43,6 @@ namespace Adapter.ExchangeRateProvider.InMemory
 
         private async Task<IEnumerable<ExchangeRate>> GetValueFromCacheAndStoreAsync(Func<Task<IEnumerable<ExchangeRate>>> func, string cacheKey)
         {
-           
             if (_enabled)
             {
                 if (_fxRates.ContainsKey(cacheKey))

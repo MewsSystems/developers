@@ -5,6 +5,7 @@ using Adapter.ExchangeRateProvider.CzechNatBank;
 using ExchangeRateUpdater.Host.WebApi.Configuration;
 using ExchangeRateUpdater.Host.WebApi.Middleware;
 using System.Reflection;
+using Adapter.ExchangeRateProvider.InMemory;
 
 namespace ExchangeRateUpdater.Host.WebApi;
 
@@ -116,7 +117,15 @@ public class ApplicationHostBuilder
             // Set the base address of the named client.
             client.BaseAddress = new Uri(_settings.CzechNationalBankBaseAddress);
         });
-        services.AddSingleton<IExchangeRateProviderRepository, CzechNationalBankRepository>();
+
+        if (_settings.CacheEnabled && _settings.CacheSize <= 0)
+        {
+            throw new ArgumentOutOfRangeException("If cache is enabled, cache size cannot be 0");
+        }
+
+        var serviceProvider = services.BuildServiceProvider();
+        var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+        services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateCacheRepositoryInMemory(new CzechNationalBankRepository(httpClientFactory, _logger), _logger, _settings.CacheSize, _settings.CacheEnabled));
     }
 
     /// <summary>
