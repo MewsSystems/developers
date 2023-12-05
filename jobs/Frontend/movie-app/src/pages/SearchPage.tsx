@@ -1,5 +1,5 @@
-function App() {
+function SearchPage() {
   return <div>Search Page</div>
 }
 
-export default App
+export default SearchPage
