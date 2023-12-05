@@ -1,18 +1,24 @@
+import { useState } from "react"
 import { useGetMoviesQuery } from "@/features/api/apiSlice"
 import MovieCard, { MovieInterface } from "@/components/MovieCard"
 
 function SearchPage() {
+  const [searchTerm, setSearchTerm] = useState("")
   const {
     data: movies,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetMoviesQuery({ term: "harry", page: 1 })
+  } = useGetMoviesQuery({ term: searchTerm, page: 1 })
 
   return (
     <div>
-      <input placeholder="Search a movie..." />
+      <input
+        placeholder="Search a movie..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
       <section>
         {isLoading && <p>Loading...</p>}
         {isSuccess && (
