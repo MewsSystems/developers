@@ -17,6 +17,7 @@ npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
 
 - Have node installed. In Mac run `brew install node`
 - Install project dependencies: `npm i`
+- Copy contents of `.env.example` to a `.env` file and add `TMDB_ACCESS_TOKEN` value
 
 ## Scripts
 
