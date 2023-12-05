@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 const Title = styled.h1`
   padding: 0em;
@@ -10,4 +11,14 @@ const Title = styled.h1`
   font-family: ${(props) => props.theme.font.main};
 `
 
-export { Title }
+const StyledLink = styled(Link)`
+  padding: 0em;
+  margin: 0em;
+  text-decoration: none;
+  color: ${(props) => props.theme.main};
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+export { Title, StyledLink as Link }
