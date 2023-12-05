@@ -1,11 +1,13 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { ThemeProvider } from "styled-components"
 import { Provider } from "react-redux"
 import { store } from "@/app/store"
 import Root from "@/layout/Root"
 import SearchPage from "@/pages/SearchPage"
 import MovieDetail from "@/pages/MovieDetail"
+import theme from "./theme"
 import "./index.css"
 
 const router = createBrowserRouter([
@@ -28,7 +30,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
 )

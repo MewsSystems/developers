@@ -1,11 +1,18 @@
 import { Outlet } from "react-router-dom"
+import Header from "@/components/Header"
+import Site from "@/components/Site"
+import { Title } from "@/components/typography"
 
 function Root() {
   return (
-    <div>
-      <nav>Movies app</nav>
-      <Outlet />
-    </div>
+    <>
+      <Header>
+        <Title>Movies app</Title>
+      </Header>
+      <Site>
+        <Outlet />
+      </Site>
+    </>
   )
 }
 
