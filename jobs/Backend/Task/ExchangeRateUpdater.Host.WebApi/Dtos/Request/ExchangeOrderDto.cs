@@ -1,10 +1,18 @@
 ﻿namespace ExchangeRateUpdater.Host.WebApi.Dtos.Request
 {
+    /// <summary>
+    /// The Dto representing exchange order.
+    /// </summary>
     public class ExchangeOrderDto
     {
+        /// <summary>
+        /// The code of the currency which has to be exchanged.
+        /// </summary>
         public string? SourceCurrency { get; set; }
+        /// <summary>
+        /// The code of the currency which the exchange will happen to.
+        /// </summary>
         public string? TargetCurrency { get; set; }
-
         /// <summary>
         /// The money that need to be exchanged.
         /// </summary>

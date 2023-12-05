@@ -5,6 +5,9 @@ using Serilog;
 
 namespace ExchangeRateUpdater.Host.WebApi.Middleware
 {
+    /// <summary>
+    /// This middleware adds Requst Path and Query String to logging context.
+    /// </summary>
     public class RequestMiddleWare : IMiddleware
     {
         private Serilog.ILogger _logger;
@@ -12,8 +15,6 @@ namespace ExchangeRateUpdater.Host.WebApi.Middleware
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
-        
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {

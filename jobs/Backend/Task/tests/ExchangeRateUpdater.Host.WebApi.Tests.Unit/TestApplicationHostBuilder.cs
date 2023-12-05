@@ -4,9 +4,7 @@ using ExchangeRateUpdater.Host.WebApi.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
-using Serilog.Core;
 using Serilog.Sinks.InMemory;
 
 namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit

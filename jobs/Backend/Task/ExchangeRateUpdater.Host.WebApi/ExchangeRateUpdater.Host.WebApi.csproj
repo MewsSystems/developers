@@ -13,6 +13,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="YamlDotNet" Version="13.7.1" />
   </ItemGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Adapter.ExchangeRateProvider.CzechNatBank\Adapter.ExchangeRateProvider.CzechNatBank.csproj" />
