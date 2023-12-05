@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Domain.UseCases;
 using Serilog;
 using Adapter.ExchangeRateProvider.CzechNatBank;
 using ExchangeRateUpdater.Host.WebApi.Configuration;
+using ExchangeRateUpdater.Host.WebApi.Middleware;
 
 namespace ExchangeRateUpdater.Host.WebApi
 {
@@ -35,6 +36,8 @@ namespace ExchangeRateUpdater.Host.WebApi
             webBuilder
                 .ConfigureServices(services =>
                 {
+                    services.AddTransient<CorrelationMiddleware>();
+                    services.AddTransient<RequestMiddleWare>();
                     RegisterUseCases(services);
                     RegisterAdapters(services);
                     services.AddControllers();
@@ -46,6 +49,7 @@ namespace ExchangeRateUpdater.Host.WebApi
             webBuilder.UseKestrel();
             webBuilder.Configure(applicationBuilder =>
             {
+                applicationBuilder.UseMiddleware<CorrelationMiddleware>();
                 if (_settings.EnableSwagger)
                 {
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -56,7 +60,8 @@ namespace ExchangeRateUpdater.Host.WebApi
                         _.RoutePrefix = string.Empty;
                     });
                 }
-                
+                applicationBuilder.UseExceptionHandler("/Error");
+                applicationBuilder.UseMiddleware<RequestMiddleWare>();
                 applicationBuilder.UseRouting();
                 applicationBuilder.UseHttpsRedirection();
                 applicationBuilder.UseAuthorization();
