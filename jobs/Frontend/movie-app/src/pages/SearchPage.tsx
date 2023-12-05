@@ -1,6 +1,13 @@
 import { useState } from "react"
+import styled from "styled-components"
 import { useGetMoviesQuery } from "@/features/api/apiSlice"
 import MovieCard, { MovieInterface } from "@/components/MovieCard"
+import Input from "@/components/Input"
+
+const SearchPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -13,8 +20,8 @@ function SearchPage() {
   } = useGetMoviesQuery({ term: searchTerm, page: 1 })
 
   return (
-    <div>
-      <input
+    <SearchPageContainer>
+      <Input
         placeholder="Search a movie..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
@@ -34,7 +41,7 @@ function SearchPage() {
         )}
         {isError && <p>An error ocurred: {error.toString()}</p>}
       </section>
-    </div>
+    </SearchPageContainer>
   )
 }
 
