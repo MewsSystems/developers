@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import MovieCard from "@/components/MovieCard"
+import MovieCard, { MovieInterface } from "@/components/MovieCard"
 
 function SearchPage() {
   const movies = useSelector((state) => state.movies)
@@ -8,7 +8,7 @@ function SearchPage() {
       <input placeholder="Search a movie..." />
       <section>
         <p>Total results: {movies.total_results}</p>
-        {movies.results.map((movie) => (
+        {movies.results.map((movie: MovieInterface) => (
           <MovieCard movie={movie} />
         ))}
       </section>

@@ -1,6 +1,12 @@
 import styled from "styled-components"
 import { Link } from "./typography"
 
+export interface MovieInterface {
+  id: number
+  title: string
+  poster_path: string
+}
+
 const CardContainer = styled.article`
   padding-top: 1em;
   background-color: ${(props) => props.theme.white};
@@ -13,7 +19,7 @@ const Poster = styled.img`
   margin-right: 1em;
 `
 
-function MovieCard({ movie }) {
+function MovieCard({ movie }: { movie: MovieInterface }) {
   const imageUrl = `https://image.tmdb.org/t/p/w440_and_h660_face/${movie.poster_path}`
   const detailUrl = `/movies/${movie.id}`
   return (
