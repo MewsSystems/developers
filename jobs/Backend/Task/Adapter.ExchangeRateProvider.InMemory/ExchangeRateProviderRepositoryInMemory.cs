@@ -6,40 +6,51 @@ namespace Adapter.ExchangeRateProvider.InMemory;
 
 public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepository
 {
-    private Dictionary<ExchangeCurrencies, ExchangeRate> _currencyRates;
+    private Dictionary<DateTime, ISet<ExchangeRate>> _currencyRates;
 
     public ExchangeRateProviderRepositoryInMemory()
     {
-        _currencyRates = new Dictionary<ExchangeCurrencies, ExchangeRate>();
+        _currencyRates = new Dictionary<DateTime, ISet<ExchangeRate>>();
     }
 
-    public void UpsertExchangeRate(ExchangeRate exchangeRate)
+    public void UpsertExchangeRate(DateTime exchangeDate, ISet<ExchangeRate> exchangeRates)
     {
-        var key = new ExchangeCurrencies(exchangeRate.SourceCurrency, exchangeRate.TargetCurrency);
-
+        var key = exchangeDate.Date;
         if (_currencyRates.ContainsKey(key))
         {
-            _currencyRates[key] = exchangeRate;
+            _currencyRates[key] = exchangeRates;
             return;   
         }
 
-        _currencyRates.Add(key, exchangeRate);
+        _currencyRates.Add(key, exchangeRates); 
     }
 
-    public Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates(DateTime exhangerRateDate)
+    public Task<IEnumerable<ExchangeRate>> GetDefaultUnitRates(DateTime exchangeRateDate)
     {
-        return Task.FromResult(_currencyRates.Values.AsEnumerable<ExchangeRate>());
+        var key = exchangeRateDate.Date;
+        if (_currencyRates.ContainsKey(key))
+        {
+            return Task.FromResult(_currencyRates[key].AsEnumerable<ExchangeRate>());
+        }
+
+        var latestKey = _currencyRates.Keys.Where(date => date <= key).OrderByDescending(date => date).FirstOrDefault();
+
+        return Task.FromResult<IEnumerable<ExchangeRate>>(latestKey == new DateTime() ? new List<ExchangeRate>() : _currencyRates[latestKey]);
     }
 
     public Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime From, DateTime To)
     {
-        var key = new ExchangeCurrencies(sourceCurrency, targetCurrency);
-
-        if (_currencyRates.ContainsKey(key))
+        var result = new List<ExchangeRate>();
+        for (var date = From.Date; date <= To.Date; date = date.AddDays(1))
         {
-            return Task.FromResult<IEnumerable<ExchangeRate>>(new List<ExchangeRate> { _currencyRates[key] });
+            var key = date;
+
+            if (_currencyRates.ContainsKey(key))
+            {
+                result.Add(_currencyRates[key].First(rate => rate.SourceCurrency == sourceCurrency && rate.TargetCurrency == targetCurrency));
+            }
         }
 
-        return Task.FromResult<IEnumerable<ExchangeRate>>(new List<ExchangeRate>());
+        return Task.FromResult<IEnumerable<ExchangeRate>>(result);
     }
 }

@@ -19,7 +19,9 @@
     <ProjectReference Include="..\Adapter.ExchangeRateProvider.InMemory\Adapter.ExchangeRateProvider.InMemory.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+	<InternalsVisibleTo Include="ExchangeRateUpdater.Host.WebApi.Tests.Unit"/>
+  </ItemGroup>
   <ItemGroup>
     <None Update="settings.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -14,11 +14,11 @@ public class ExchangeUseCase
     }
 
 
-    public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder buyOrder)
+    public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder buyOrder, DateTime requestDate)
     {
         if (buyOrder == null) throw new ArgumentNullException(nameof(buyOrder));
 
-        var exchangeRates = await _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(buyOrder.SourceCurrency, buyOrder.TargetCurrency, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), DateTime.Now);
+        var exchangeRates = await _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(buyOrder.SourceCurrency, buyOrder.TargetCurrency, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), requestDate.Date);
 
         if (!exchangeRates.Any()) return null;
 

@@ -10,7 +10,7 @@ using System.Net;
 namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests;
 
 [TestFixture]
-internal class BuyOrdersTests : ControllerTestBase
+internal class ExchangeOrdersTests : ControllerTestBase
 {
     [Test]
     public async Task GivenNoSourceCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
@@ -99,7 +99,9 @@ internal class BuyOrdersTests : ControllerTestBase
     {
         // arrange
         var exchangeRate = new ExchangeRate(new Currency(sourceCurrency), new Currency(targetCurrency), new PositiveRealNumber(rate));
-        ExchangeRateProviderRepository.UpsertExchangeRate(exchangeRate);
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>(){
+            exchangeRate
+        });
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
@@ -129,11 +131,51 @@ internal class BuyOrdersTests : ControllerTestBase
         // arrange
         var correctExchangePair = new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m));
         var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
-        ExchangeRateProviderRepository.UpsertExchangeRate(wrongExchangePair);
-        ExchangeRateProviderRepository.UpsertExchangeRate(correctExchangePair);
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
+            wrongExchangePair,
+            correctExchangePair
+        });
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
+        var buyOrderDto = new BuyOrderDto
+        {
+            SourceCurrency = "CZK",
+            TargetCurrency = "USD",
+            SumToExchange = 100
+        };
+        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var response = await HttpClient.PostAsync(relativeUrl, content);
+
+        // assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseContent = JsonConvert.DeserializeObject<BuyResultDto>(await response.Content.ReadAsStringAsync());
+        responseContent.Should().BeEquivalentTo(new BuyResultDto
+        {
+            SourceCurrency = "CZK",
+            TargetCurrency = "USD",
+            ConvertedSum = 100 * 0.045m
+        });
+    }
+
+
+    [Test]
+    public async Task GivenExchangePairWithDifferenDates_WhenMakingABuyOrder_ShouldReturnConvertedResultWithCorrectPairBeforeOrEqualToRequestedDate()
+    {
+        // arrange
+        var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>{
+            wrongExchangePair,
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m))
+        });
+
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
+            wrongExchangePair,
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.048m))
+        });
+
+        // act
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
         var buyOrderDto = new BuyOrderDto
         {
             SourceCurrency = "CZK",

@@ -29,10 +29,14 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenSeveralUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldTheExchangeRates()
+    public async Task GivenSeveralUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnTheExchangeRates()
     {
         // arrange
-        ExchangeRateProviderRepository.UpsertExchangeRate(new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)));
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        {
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)),
+            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
+        }) ;
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
@@ -49,6 +53,45 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
                 From = "MDL",
                 To   = "USD",
                 ExchangeRate = 17.78m
+            },
+            new ExchangeRateDto
+            {
+                From = "EUR",
+                To   = "USD",
+                ExchangeRate = 0.92m
+            }
+        });
+    }
+
+    [Test]
+    public async Task GivenSeveralUnitRatesForDifferentDatesStored_WhenQueryingGetDefaultUnitRatesWithDate_ShouldReturnTheExchangeRateBeforeOrEqualToRequestedDate()
+    {
+        // arrange
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        {
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
+        });
+        // arrange
+        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>
+        {
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(16.78m))
+        });
+
+        // act
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
+        var response = await HttpClient.GetAsync(relativeUrl);
+
+        // assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var defaultExhangeRates = JsonConvert.DeserializeObject<IEnumerable<ExchangeRateDto>>(await response.Content.ReadAsStringAsync());
+        defaultExhangeRates.Should().BeEquivalentTo(new List<ExchangeRateDto>
+        {
+            new ExchangeRateDto
+            {
+                From = "MDL",
+                To   = "USD",
+                ExchangeRate = 16.78m
             }
         });
     }

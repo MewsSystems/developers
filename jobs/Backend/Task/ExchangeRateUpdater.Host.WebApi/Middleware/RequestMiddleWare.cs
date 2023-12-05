@@ -22,7 +22,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Middleware
 
             using (LogContext.Push(new PropertyEnricher[] { path, query }))
             {
-                _logger.Information("Request made to {RequestPath}?{QueryString}", context.Request.Path, context.Request.QueryString)
+                _logger.Information("Request made to {RequestPath}?{QueryString}", context.Request.Path, context.Request.QueryString);
                 await next.Invoke(context);
             }
         }

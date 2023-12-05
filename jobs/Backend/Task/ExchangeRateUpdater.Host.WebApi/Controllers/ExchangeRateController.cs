@@ -23,15 +23,15 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
        
 
         [HttpGet("defaultRates")]
-        public async Task<IActionResult> GetDefaultUnitRatesAsync()
+        public async Task<IActionResult> GetDefaultUnitRatesAsync([FromQuery] DateTime? requestDate)
         {
-            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates(DateTime.Now);
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetDefaultUnitRates(requestDate ?? DateTime.Now.Date);
 
             return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }
 
         [HttpPost("exchange")]
-        public async Task<IActionResult> BuyAsync([FromBody] ExchangeOrderDto exchangeOrderDto)
+        public async Task<IActionResult> BuyAsync([FromBody] ExchangeOrderDto exchangeOrderDto, [FromQuery] DateTime? requestDate)
         {
             if (string.IsNullOrWhiteSpace(exchangeOrderDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
             if (string.IsNullOrWhiteSpace(exchangeOrderDto.TargetCurrency)) return BadRequest("Target Currency has to be specified.");
@@ -39,13 +39,11 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
 
             var exchangeOrder = exchangeOrderDto.ToOrderBuy();
 
-            var exchangeResult = await _exchangeUseCase.ExecuteAsync(exchangeOrder);
+            var exchangeResult = await _exchangeUseCase.ExecuteAsync(exchangeOrder, requestDate ?? DateTime.Now);
 
             if (exchangeResult == null) return NotFound("We do not support exchange rates for the mentioned source/target currencies.");
 
             return Ok(exchangeResult.ToBuyResultDto());
         }
-
-
     }
 }
