@@ -4,6 +4,7 @@ import { useGetMovieQuery } from "@/features/api/apiSlice"
 import ErrorCard from "@/components/ErrorCard"
 import { Badge, BadgeContainer } from "@/components/badges"
 import Poster from "@/components/Poster"
+import BackNavigationButton from "@/components/BackNavigationButton"
 
 interface MovieDetailInterface {
   title: string
@@ -25,6 +26,10 @@ interface MovieDetailInterface {
 
 const OverviewContainer = styled.div`
   margin: 1rem 0;
+`
+
+const MovieDetailHeader = styled.div`
+  margin-bottom: 1rem;
 `
 
 const MovieDetailContainer = styled.div`
@@ -166,6 +171,9 @@ function MovieDetailPage() {
 
   return (
     <div>
+      <MovieDetailHeader>
+        <BackNavigationButton />
+      </MovieDetailHeader>
       {isLoading && <p>Loading...</p>}
       {isSuccess && movie && <MovieDetail movie={movie} />}
       {isSuccess && !movie && <p>There are no results</p>}
