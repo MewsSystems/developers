@@ -10,7 +10,7 @@ const SiteWrapper = styled.div`
 const SiteContainer = styled.div`
   padding: 1.5em;
   color: ${(props) => props.theme.main};
-  font-family: ${(props) => props.theme.font.main};
+  font-family: ${(props) => props.theme.fontMain};
   font-size: 1em;
   width: 1024px;
 `
