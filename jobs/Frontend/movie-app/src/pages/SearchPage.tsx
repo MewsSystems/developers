@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination"
 import ErrorCard from "@/components/ErrorCard"
 
 interface MoviesListInterface {
+  page: number
   total_results: number
   total_pages: number
   results: MovieInterface[]
@@ -31,13 +32,24 @@ const SearchDetailsContainer = styled.div`
 `
 
 function MoviesList({ movies }: { movies: MoviesListInterface }) {
+  const {
+    page,
+    results: moviesList,
+    total_results: totalEntries,
+    total_pages: totalPages,
+  } = movies
+
+  const firstEntry = (page - 1) * 20 + 1
+  const lastEntry = firstEntry + moviesList.length - 1
   return (
     <>
       <SearchDetailsContainer>
-        <p>Total results: {movies.total_results}</p>
-        <Pagination totalPages={movies.total_pages} />
+        <p>
+          Showing {firstEntry} to {lastEntry} of {totalEntries} entries
+        </p>
+        <Pagination totalPages={totalPages} />
       </SearchDetailsContainer>
-      {movies.results.map((movie) => (
+      {moviesList.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
       ))}
     </>
