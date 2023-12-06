@@ -7,6 +7,12 @@ import Input from "@/components/Input"
 import Pagination from "@/components/Pagination"
 import ErrorCard from "@/components/ErrorCard"
 
+interface MoviesListInterface {
+  total_results: number
+  total_pages: number
+  results: MovieInterface[]
+}
+
 const SearchPageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,6 +29,20 @@ const SearchDetailsContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
+
+function MoviesList({ movies }: { movies: MoviesListInterface }) {
+  return (
+    <>
+      <SearchDetailsContainer>
+        <p>Total results: {movies.total_results}</p>
+        <Pagination totalPages={movies.total_pages} />
+      </SearchDetailsContainer>
+      {movies.results.map((movie) => (
+        <MovieCard key={movie.id} movie={movie} />
+      ))}
+    </>
+  )
+}
 
 function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -66,15 +86,7 @@ function SearchPage() {
             <p>Loading...</p>
           )}
           {isSuccess && movies?.results.length > 0 && (
-            <>
-              <SearchDetailsContainer>
-                <p>Total results: {movies.total_results}</p>
-                <Pagination totalPages={movies.total_pages} />
-              </SearchDetailsContainer>
-              {movies.results.map((movie: MovieInterface) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </>
+            <MoviesList movies={movies} />
           )}
           {isSuccess && !isFetching && movies?.total_results === 0 && (
             <p>There are no results</p>
