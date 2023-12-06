@@ -13,6 +13,7 @@ const PlaceholderPoster = styled.div<{ $width: string; $height: string }>`
   justify-content: center;
   border: 1px solid ${(props) => props.theme.light_gray};
   color: ${(props) => props.theme.light_gray};
+  font-size: 2em;
 `
 
 function Poster({
@@ -35,11 +36,9 @@ function Poster({
       $width={width}
     />
   ) : (
-    <PlaceholderPoster
-      title="Poster not found"
-      $height={height}
-      $width={width}
-    />
+    <PlaceholderPoster title="Poster not found" $height={height} $width={width}>
+      ?
+    </PlaceholderPoster>
   )
 }
 

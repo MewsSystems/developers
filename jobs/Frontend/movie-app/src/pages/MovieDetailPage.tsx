@@ -48,8 +48,17 @@ const MovieDetailContainer = styled.div`
   justify-content: space-between;
 `
 
+const MovieDetailTitle = styled.h2`
+  text-align: center;
+  @media (min-width: 768px) {
+    text-align: left;
+  }
+`
+
 const PosterContainer = styled.div`
-  margin-left: 1rem;
+  @media (min-width: 768px) {
+    margin-left: 1rem;
+  }
   margin-bottom: 1rem;
 `
 
@@ -130,7 +139,7 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
 function MovieDetail({ movie }: { movie: MovieDetailInterface }) {
   return (
     <>
-      <h2>{movie.title}</h2>
+      <MovieDetailTitle>{movie.title}</MovieDetailTitle>
       <MovieDetailContainer>
         <div>
           {movie.genres.length > 0 && (
