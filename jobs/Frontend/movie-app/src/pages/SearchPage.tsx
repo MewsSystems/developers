@@ -46,11 +46,7 @@ function SearchPage() {
   }, [movies, page, setSearchParams])
 
   const updateSearchTerm = (searchTerm: string) => {
-    if (searchTerm === "") {
-      setSearchParams({})
-    } else {
-      setSearchParams({ q: searchTerm })
-    }
+    setSearchParams(searchTerm === "" ? {} : { q: searchTerm })
   }
 
   return (
@@ -65,8 +61,9 @@ function SearchPage() {
       />
       {searchTerm !== "" && (
         <SearchResultsContainer>
-          {isLoading ||
-            (isFetching && movies?.total_results === 0 && <p>Loading...</p>)}
+          {(isLoading || (isFetching && movies?.total_results === 0)) && (
+            <p>Loading...</p>
+          )}
           {isSuccess && movies?.results.length > 0 && (
             <>
               <SearchDetailsContainer>
