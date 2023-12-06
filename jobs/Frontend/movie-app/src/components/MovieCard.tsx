@@ -8,10 +8,14 @@ export interface MovieInterface {
 }
 
 const CardContainer = styled.article`
-  padding-top: 1em;
+  margin-bottom: 1em;
   background-color: ${(props) => props.theme.white};
   display: flex;
   align-items: center;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
 `
 
 const Poster = styled.img`
