@@ -5,6 +5,7 @@ import { useGetMoviesQuery } from "@/features/api/apiSlice"
 import MovieCard, { MovieInterface } from "@/components/MovieCard"
 import Input from "@/components/Input"
 import Pagination from "@/components/Pagination"
+import ErrorCard from "@/components/ErrorCard"
 
 const SearchPageContainer = styled.div`
   display: flex;
@@ -78,7 +79,7 @@ function SearchPage() {
           {isSuccess && !isFetching && movies?.total_results === 0 && (
             <p>There are no results</p>
           )}
-          {isError && <p>An error ocurred: {error.toString()}</p>}
+          {isError && <ErrorCard error={error} />}
         </SearchResultsContainer>
       )}
     </SearchPageContainer>
