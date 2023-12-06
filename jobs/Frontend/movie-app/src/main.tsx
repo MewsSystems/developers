@@ -7,7 +7,7 @@ import { store } from "@/app/store"
 import Root from "@/layout/Root"
 import ErrorPage from "@/pages/ErrorPage"
 import SearchPage from "@/pages/SearchPage"
-import MovieDetail from "@/pages/MovieDetail"
+import MovieDetailPage from "@/pages/MovieDetailPage"
 import theme from "./theme"
 import "./index.css"
 
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "movies/:movieId",
-        element: <MovieDetail />,
+        element: <MovieDetailPage />,
       },
     ],
   },
