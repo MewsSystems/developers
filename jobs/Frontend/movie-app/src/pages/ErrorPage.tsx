@@ -7,6 +7,14 @@ const ErrorPageContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  & > h1,
+  p {
+    text-align: center;
+    margin: 1rem 0;
+    i {
+      color: ${(props) => props.theme.gray};
+    }
+  }
 `
 
 export default function ErrorPage() {
