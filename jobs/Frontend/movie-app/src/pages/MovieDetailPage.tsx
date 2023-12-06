@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useGetMovieQuery } from "@/features/api/apiSlice"
 import ErrorCard from "@/components/ErrorCard"
 import { Badge, BadgeContainer } from "@/components/badges"
+import Poster from "@/components/Poster"
 
 const OverviewContainer = styled.div`
   margin: 1rem 0;
@@ -12,38 +13,108 @@ const MovieTitle = styled.h2`
   margin-bottom: 1rem;
 `
 
-const Poster = styled.img`
-  height: 350px;
-  margin-left: 1rem;
-`
-
 const MovieDetailContainer = styled.div`
   display: flex;
   flex-direction: row;
+  line-height: 1.5;
+  justify-content: space-between;
 `
 
+const PosterContainer = styled.div`
+  margin-left: 1rem;
+`
+
+function ExtraInformation({ movie }) {
+  return (
+    <div>
+      <h3>Information</h3>
+      <ul>
+        <li>
+          <b>Homepage:</b>{" "}
+          <a href={movie.homepage} target="_blank">
+            External link
+          </a>
+        </li>
+        <li>
+          <b>Score:</b> {movie.vote_average || "?"} / 10
+          {movie.vote_count > 0 && (
+            <span> (from {movie.vote_count} votes)</span>
+          )}
+        </li>
+        <li>
+          <b>Popularity:</b> {movie.popularity}
+        </li>
+        <li>
+          <b>Release date:</b> {movie.release_date || "Unknown"}
+        </li>
+        <li>
+          <b>Status:</b> {movie.status}
+        </li>
+        <li>
+          <b>Collection:</b>{" "}
+          {movie.belongs_to_collection?.name ||
+            "Doesn't belong to a collection"}
+        </li>
+        <li>
+          <b>Budget:</b> {movie.budget || "Unknown"}
+        </li>
+        <li>
+          <b>Revenue:</b> {movie.revenue || "Unknown"}
+        </li>
+        <li>
+          <b>Production companies:</b>{" "}
+          {movie.production_companies.length > 0
+            ? movie.production_companies.map((company, i) => (
+                <span key={company.id}>
+                  {i > 0 && ", "}
+                  {company.name}
+                </span>
+              ))
+            : "Unknown"}
+        </li>
+        <li>
+          <b>Production countries:</b>{" "}
+          {movie.production_countries > 0
+            ? movie.production_countries.map((country, i) => (
+                <span key={country.iso_3166_1}>
+                  {i > 0 && ", "}
+                  {country.name}
+                </span>
+              ))
+            : "Unknown"}
+        </li>
+      </ul>
+    </div>
+  )
+}
+
 function MovieDetail({ movie }) {
-  const imageUrl = `https://image.tmdb.org/t/p/w440_and_h660_face/${movie.poster_path}`
   console.log(movie)
   return (
     <MovieDetailContainer>
       <div>
         <MovieTitle>{movie.title}</MovieTitle>
-        <BadgeContainer>
-          {movie.genres.map((genre) => (
-            <Badge key={genre.id}>{genre.name}</Badge>
-          ))}
-        </BadgeContainer>
+        {movie.genres.length > 0 && (
+          <BadgeContainer>
+            {movie.genres.map((genre) => (
+              <Badge key={genre.id}>{genre.name}</Badge>
+            ))}
+          </BadgeContainer>
+        )}
         <OverviewContainer>
-          <p>{movie.overview}</p>
+          <h3>Overview</h3>
+          <p>{movie.overview || "There isn't an available overview."}</p>
         </OverviewContainer>
-        <p>Popularity: {movie.popularity}</p>
-        <p>Release date: {movie.release_date}</p>
-        <p>Status: {movie.status}</p>
+        <ExtraInformation movie={movie} />
       </div>
-      <div>
-        <Poster src={imageUrl} alt={`${movie.title} poster`} />
-      </div>
+      <PosterContainer>
+        <Poster
+          url={movie.poster_path}
+          title={movie.title}
+          height="450px"
+          width="300px"
+        />
+      </PosterContainer>
     </MovieDetailContainer>
   )
 }

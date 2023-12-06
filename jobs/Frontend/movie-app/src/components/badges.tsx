@@ -2,6 +2,9 @@ import styled from "styled-components"
 
 const BadgeContainer = styled.div`
   display: flex;
+  flex-flow: wrap;
+  row-gap: 10px;
+  column-gap: 10px;
 `
 
 const Badge = styled.div`
@@ -11,7 +14,6 @@ const Badge = styled.div`
   font-size: 0.8em;
   border-radius: 1rem;
   width: max-content;
-  margin-right: 10px;
 `
 
 export { Badge, BadgeContainer }
