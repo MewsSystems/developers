@@ -9,10 +9,10 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit
     internal abstract class ControllerTestBase
     {
         protected IHost? Host;
-        protected TestServer Server;
-        protected HttpClient HttpClient;
+        protected TestServer? Server;
+        protected HttpClient? HttpClient;
         protected const string ApiBaseAddress = "http://exchange-rate-update.com";
-        protected ExchangeRateProviderRepositoryInMemory ExchangeRateProviderRepository;
+        protected ExchangeRateProviderRepositoryInMemory? ExchangeRateProviderRepository;
 
         [SetUp]
         public async Task SetUp()

@@ -25,7 +25,7 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         _currencyRates.Add(key, exchangeRates); 
     }
 
-    public Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate)
+    public Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken)
     {
         var key = exchangeRateDate.Date;
         if (_currencyRates.ContainsKey(key))
@@ -38,7 +38,8 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         return Task.FromResult<IEnumerable<ExchangeRate>>(latestKey == new DateTime() ? new List<ExchangeRate>() : _currencyRates[latestKey]);
     }
 
-    public Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime From, DateTime To)
+    public Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency,
+                                                                             DateTime From, DateTime To, CancellationToken cancellationToken)
     {
         var result = new List<ExchangeRate>();
         for (var date = From.Date; date <= To.Date; date = date.AddDays(1))

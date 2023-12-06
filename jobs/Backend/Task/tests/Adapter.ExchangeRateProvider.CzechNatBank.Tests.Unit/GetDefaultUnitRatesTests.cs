@@ -28,7 +28,7 @@ internal class GetDefaultUnitRatesTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime(), CancellationToken.None));
         exception!.Message.Should().Be(expected);
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
     }
@@ -45,7 +45,7 @@ internal class GetDefaultUnitRatesTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime(), CancellationToken.None));
         exception!.Message.Should().Be(expected);
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
     }
@@ -62,7 +62,7 @@ internal class GetDefaultUnitRatesTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime(), CancellationToken.None));
         exception!.Message.Should().Be(expected);
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
     }
@@ -79,7 +79,7 @@ internal class GetDefaultUnitRatesTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime(), CancellationToken.None));
         exception!.Message.Should().Be(expected);
         InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
     }
@@ -94,7 +94,7 @@ internal class GetDefaultUnitRatesTests : TestBase
 
         // act
         var sut = CreateSut();
-        var result = await sut.GetAllFxRates(new DateTime());
+        var result = await sut.GetAllFxRates(new DateTime(), CancellationToken.None);
         
         // assert
         result.Should().BeEmpty();

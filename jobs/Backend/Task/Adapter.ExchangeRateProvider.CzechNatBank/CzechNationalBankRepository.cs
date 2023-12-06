@@ -18,20 +18,20 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exhangerRateDate)
+    public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exhangerRateDate, CancellationToken cancellationToken)
     {
         return await CallCzerchNationalBankApi(async () =>
         {
             var httpClient = CreateClient();
 
-            var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(exhangerRateDate));
+            var response = await httpClient.GetAsync(GetAllExchangeRatesAsTextUrl(exhangerRateDate), cancellationToken);
 
-            using var contentStream = await response.Content.ReadAsStreamAsync();
+            using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
             using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
 
 
-            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesAsync();
+            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesAsync(cancellationToken);
 
             return rawData.Select(dto =>
             {
@@ -44,7 +44,8 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         });
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime from, DateTime to)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, 
+                                                                                   DateTime from, DateTime to, CancellationToken cancellationToken)
     {
         if (targetCurrency != "CZK") throw new NotSupportedException("Target currencies besides CZK are not yet supported.");
 
@@ -53,13 +54,13 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         {
             var httpClient = CreateClient();
 
-            var response = await httpClient.GetAsync(GetExchangeRateAsTextUrl(from, to, sourceCurrency));
+            var response = await httpClient.GetAsync(GetExchangeRateAsTextUrl(from, to, sourceCurrency), cancellationToken);
 
-            using var contentStream = await response.Content.ReadAsStreamAsync();
+            using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
             using var exchangeRatesTextParser = new ExchangeRatesTextParser(new StreamReader(contentStream), _logger);
 
-            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesForCurrencyAsync(sourceCurrency);
+            var rawData = await exchangeRatesTextParser.GetDefaultFormattedExchangeRatesForCurrencyAsync(sourceCurrency, cancellationToken);
 
 
             return rawData.OrderBy(data => data.DateTime).Select(dto =>
@@ -102,6 +103,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
                      });
     }
 
+    // To be overriden in tests.
     protected virtual void OnRetry(Exception exception, Context context)
     {
         _logger.Warning(exception, "Retry number {RetryCounter}: {Operation}", context.Count, context.OperationKey);
@@ -112,11 +114,13 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         return _httpClientFactory.CreateClient("ExchangeRateUpdater-http-client");
     }
 
+    // To be overriden in tests.
     protected virtual Url GetAllExchangeRatesAsTextUrl(DateTime date)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt".SetQueryParam("date", date.Date.ToString("dd.MM.yyyy"));
     }
 
+    // To be overriden in tests.
     protected virtual Url GetExchangeRateAsTextUrl(DateTime from, DateTime to, Currency currency)
     {
         return "financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/selected.txt"

@@ -16,7 +16,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
         var sut = CreateSut();
 
         // assert
-        var result = await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(2023, 1, 1), new DateTime(2023, 1, 2));
+        var result = await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), 
+                                                                new DateTime(2023, 1, 1), new DateTime(2023, 1, 2), CancellationToken.None);
         result.ToList().Count.Should().BeGreaterThan(0);
     }
 
@@ -28,7 +29,9 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
         var sut = CreateSut();
 
         // assert
-        var exception = Assert.ThrowsAsync<NotSupportedException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("CZK"), new Currency("USD"), new DateTime(2023, 1, 1), new DateTime(2023, 1, 2)));
+        var exception = Assert.ThrowsAsync<NotSupportedException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("CZK"), new Currency("USD"), 
+                                                    new DateTime(2023, 1, 1), new DateTime(2023, 1, 2), CancellationToken.None));
         exception!.Message.Should().Be("Target currencies besides CZK are not yet supported.");
     }
 

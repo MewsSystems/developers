@@ -26,7 +26,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't not retrieve currency info line.");
@@ -43,7 +44,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+            await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't not retrieve currency info line.");
@@ -60,7 +62,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+            await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't not retrieve currency code and/or amount.");
@@ -77,7 +80,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't not retrieve currency code and/or amount.");
@@ -94,7 +98,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("The requested currency is different than the one parsed. Requested: USD. Retrieved: ");
@@ -111,7 +116,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't not convert amount in a number.");
@@ -128,7 +134,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't retrieve Date from document.");
@@ -145,7 +152,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't retrieve Rate from document.");
@@ -162,7 +170,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime()));
+        var exception = Assert.ThrowsAsync<FormatException>(async () => 
+        await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime(), CancellationToken.None));
 
         // assert
         exception!.Message.Should().Be("Couldn't retrieve header data from Czech National Bank.");
@@ -179,7 +188,8 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
         // act & assert
         var sut = CreateSut();
-        var result = await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), new DateTime(), new DateTime());
+        var result = await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"), 
+                                                                 new DateTime(), new DateTime(), CancellationToken.None);
 
         // assert
         result.Should().BeEmpty();

@@ -21,13 +21,14 @@ public class ExchangeUseCase
     /// </summary>
     /// <param name="exchangeOrder">The order on which to make the exchange.</param>
     /// <param name="requestDate">The specified date valid for the exchange.</param>
+    /// <param name="cancellationToken">CancellationToken instance.</param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder exchangeOrder, DateTime requestDate)
+    public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder exchangeOrder, DateTime requestDate, CancellationToken cancellationToken)
     {
         if (exchangeOrder == null) throw new ArgumentNullException(nameof(exchangeOrder));
 
-        var latestExchange = await GetLatestChangeRateAsync(exchangeOrder, requestDate);
+        var latestExchange = await GetLatestChangeRateAsync(exchangeOrder, requestDate, cancellationToken);
         if (latestExchange == null)
         {
             _logger.Warning("Could not retrieve latest exchange rate for currencies {SourceCurrency}/{TargetCurrency}", exchangeOrder.SourceCurrency, exchangeOrder.TargetCurrency);
@@ -56,12 +57,16 @@ public class ExchangeUseCase
     }
 
 
-    private async Task<ExchangeRate?> GetLatestChangeRateAsync(ExchangeOrder exchangeOrder, DateTime requestDate)
+    private async Task<ExchangeRate?> GetLatestChangeRateAsync(ExchangeOrder exchangeOrder, DateTime requestDate, CancellationToken cancellationToken)
     {
         foreach (var beginDate in GetRetryableStartOfIntervals(requestDate))
         {
             var exchangeRates = await _exchangeRateProviderRepository
-                       .GetExchangeRateForCurrenciesAsync(exchangeOrder.SourceCurrency, exchangeOrder.TargetCurrency, beginDate.Date, requestDate.Date);
+                       .GetExchangeRateForCurrenciesAsync(exchangeOrder.SourceCurrency, 
+                                                          exchangeOrder.TargetCurrency, 
+                                                          beginDate.Date, 
+                                                          requestDate.Date,
+                                                          cancellationToken);
 
             if (exchangeRates.Any()) return exchangeRates.First();
         }

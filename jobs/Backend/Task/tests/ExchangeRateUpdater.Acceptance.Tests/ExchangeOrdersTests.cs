@@ -7,10 +7,10 @@ using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Acceptance.Tests;
 
-[TestFixture]
+[TestFixture, Explicit("Run these tests separately from others")]
 internal class ExchangeOrdersTests
 {
-    [Test, Explicit("Run these tests separately from others")]
+    [Test]
     public async Task WhenCallingCzechNationalToExchange_ShouldReturnAExchangeResult()
     {
         // arrange
@@ -30,7 +30,7 @@ internal class ExchangeOrdersTests
         var content = JsonConvert.DeserializeObject<ExchangeResultDto>(await response.Content.ReadAsStringAsync());
 
         // assert
-        content.SourceCurrency.Should().Be("USD");
+        content!.SourceCurrency.Should().Be("USD");
         content.TargetCurrency.Should().Be("CZK");
         content.ConvertedSum.Should().BeGreaterThan(0);
 

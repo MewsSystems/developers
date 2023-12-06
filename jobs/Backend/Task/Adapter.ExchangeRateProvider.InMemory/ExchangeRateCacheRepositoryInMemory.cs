@@ -22,23 +22,27 @@ namespace Adapter.ExchangeRateProvider.InMemory
             _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
             _fxRates = new ConcurrentDictionary<string, CacheInstance>();
             _enabled = enabled;
+            _cacheSize = cacheSize;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate)
+        public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken)
         {
             var cacheKey = $"All.{exchangeRateDate}";
 
-            return await GetValueFromCacheAndStoreAsync(() => _exchangeRateProviderRepository.GetAllFxRates(exchangeRateDate), cacheKey);
+            return await GetValueFromCacheAndStoreAsync(() => _exchangeRateProviderRepository
+                                                            .GetAllFxRates(exchangeRateDate, cancellationToken), cacheKey);
         }
 
        
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, DateTime from, DateTime to)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, 
+                                                                                       DateTime from, DateTime to, CancellationToken cancellationToken)
         {
             var cacheKey = $"Selected.{from}.{to}";
 
-            return await GetValueFromCacheAndStoreAsync(() => _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(sourceCurrency, targetCurrency, from, to), cacheKey);
+            return await GetValueFromCacheAndStoreAsync(() => 
+            _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(sourceCurrency, targetCurrency, from, to, cancellationToken), cacheKey);
         }
 
         private async Task<IEnumerable<ExchangeRate>> GetValueFromCacheAndStoreAsync(Func<Task<IEnumerable<ExchangeRate>>> func, string cacheKey)

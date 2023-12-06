@@ -15,7 +15,7 @@ internal class ExchangeRatesTextParser : IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    internal async Task<IEnumerable<ExchangeRateDataRawDto>> GetDefaultFormattedExchangeRatesAsync()
+    internal async Task<IEnumerable<ExchangeRateDataRawDto>> GetDefaultFormattedExchangeRatesAsync(CancellationToken cancellationToken)
     {
         var rawExchangeData = new List<ExchangeRateDataRawDto>();
 
@@ -32,6 +32,8 @@ internal class ExchangeRatesTextParser : IDisposable
             _logger.Error("Couldn't retrieve header data from Czech National Bank.");
             throw new FormatException("Couldn't retrieve header data from Czech National Bank.");
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         var columns = header.Split('|').ToList();
 
@@ -60,9 +62,12 @@ internal class ExchangeRatesTextParser : IDisposable
             throw new FormatException("Couldn't retrieve Rate from document.");
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         int lineCounter = 3; // First 2 lines were already parsed.
         while (_reader.EndOfStream == false)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var line = await _reader.ReadLineAsync();
 
             var lineColumns = line?.Split('|').Where(col => !string.IsNullOrWhiteSpace(col)).ToList() ?? new List<string>();
@@ -87,7 +92,7 @@ internal class ExchangeRatesTextParser : IDisposable
         return rawExchangeData;
     }
 
-    internal async Task<IEnumerable<ExchangeDateRateDataRawDto>> GetDefaultFormattedExchangeRatesForCurrencyAsync(Currency requestedCurrency)
+    internal async Task<IEnumerable<ExchangeDateRateDataRawDto>> GetDefaultFormattedExchangeRatesForCurrencyAsync(Currency requestedCurrency, CancellationToken cancellationToken)
     {
         var rawExchangeData = new List<ExchangeDateRateDataRawDto>();
 
@@ -127,6 +132,8 @@ internal class ExchangeRatesTextParser : IDisposable
             throw new FormatException("Couldn't not convert amount in a number.");
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         var header = await _reader.ReadLineAsync();
 
         if (string.IsNullOrWhiteSpace(header))
@@ -153,10 +160,12 @@ internal class ExchangeRatesTextParser : IDisposable
             _logger.Error("Couldn't retrieve Rate from document.");
             throw new FormatException("Couldn't retrieve Rate from document.");
         }
+        cancellationToken.ThrowIfCancellationRequested();
 
         int lineCounter = 3; // First 2 lines were already parsed.
         while (_reader.EndOfStream == false)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var line = await _reader.ReadLineAsync();
 
             var lineColumns = line?.Split('|').Where(col => !string.IsNullOrWhiteSpace(col)).ToList() ?? new List<string>();
