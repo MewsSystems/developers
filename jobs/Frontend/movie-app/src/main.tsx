@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components"
 import { Provider } from "react-redux"
 import { store } from "@/app/store"
 import Root from "@/layout/Root"
+import ErrorPage from "@/pages/ErrorPage"
 import SearchPage from "@/pages/SearchPage"
 import MovieDetail from "@/pages/MovieDetail"
 import theme from "./theme"
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
