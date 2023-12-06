@@ -28,18 +28,24 @@ const OverviewContainer = styled.div`
 `
 
 const MovieDetailContainer = styled.div`
-  & h2,
-  h3 {
+  & h3 {
     margin-bottom: 1rem;
   }
+  margin-top: 1rem;
   display: flex;
-  flex-direction: row;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  align-items: center;
+  flex-direction: column-reverse;
   line-height: 1.5;
   justify-content: space-between;
 `
 
 const PosterContainer = styled.div`
   margin-left: 1rem;
+  margin-bottom: 1rem;
 `
 
 function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
@@ -118,31 +124,33 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
 
 function MovieDetail({ movie }: { movie: MovieDetailInterface }) {
   return (
-    <MovieDetailContainer>
-      <div>
-        <h2>{movie.title}</h2>
-        {movie.genres.length > 0 && (
-          <BadgeContainer>
-            {movie.genres.map((genre) => (
-              <Badge key={genre.id}>{genre.name}</Badge>
-            ))}
-          </BadgeContainer>
-        )}
-        <OverviewContainer>
-          <h3>Overview</h3>
-          <p>{movie.overview || "There isn't an available overview."}</p>
-        </OverviewContainer>
-        <ExtraInformation movie={movie} />
-      </div>
-      <PosterContainer>
-        <Poster
-          url={movie.poster_path}
-          title={movie.title}
-          height="450px"
-          width="300px"
-        />
-      </PosterContainer>
-    </MovieDetailContainer>
+    <>
+      <h2>{movie.title}</h2>
+      <MovieDetailContainer>
+        <div>
+          {movie.genres.length > 0 && (
+            <BadgeContainer>
+              {movie.genres.map((genre) => (
+                <Badge key={genre.id}>{genre.name}</Badge>
+              ))}
+            </BadgeContainer>
+          )}
+          <OverviewContainer>
+            <h3>Overview</h3>
+            <p>{movie.overview || "There isn't an available overview."}</p>
+          </OverviewContainer>
+          <ExtraInformation movie={movie} />
+        </div>
+        <PosterContainer>
+          <Poster
+            url={movie.poster_path}
+            title={movie.title}
+            height="450px"
+            width="300px"
+          />
+        </PosterContainer>
+      </MovieDetailContainer>
+    </>
   )
 }
 
