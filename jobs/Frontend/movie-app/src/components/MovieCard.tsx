@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { Link } from "./typography"
+import Poster from "./Poster"
 
 export interface MovieInterface {
   id: number
@@ -18,36 +19,17 @@ const CardContainer = styled.article`
 }
 `
 
-const Poster = styled.img`
-  height: 70px;
+const PosterContainer = styled.div`
   margin-right: 1em;
 `
-
-const PlaceholderPosterContainer = styled.div`
-  height: 70px;
-  width: 46.66px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid ${(props) => props.theme.light_gray};
-  color: ${(props) => props.theme.light_gray};
-  margin-right: 1em;
-`
-
-const PlaceholderPoster = () => {
-  return <PlaceholderPosterContainer>?</PlaceholderPosterContainer>
-}
 
 function MovieCard({ movie }: { movie: MovieInterface }) {
-  const imageUrl = `https://image.tmdb.org/t/p/w440_and_h660_face/${movie.poster_path}`
   const detailUrl = `/movies/${movie.id}`
   return (
     <CardContainer>
-      {movie.poster_path ? (
-        <Poster src={imageUrl} alt={`${movie.title} poster`} />
-      ) : (
-        <PlaceholderPoster />
-      )}
+      <PosterContainer>
+        <Poster url={movie.poster_path} title={movie.title} />
+      </PosterContainer>
       <Link to={detailUrl}>{movie.title}</Link>
     </CardContainer>
   )
