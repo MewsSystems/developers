@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { useSearchParams } from "react-router-dom"
 import { useGetMoviesQuery } from "@/features/api/apiSlice"
@@ -23,29 +23,10 @@ const SearchDetailsContainer = styled.div`
   align-items: center;
 `
 
-function SearchResultDetails({
-  page,
-  setPage,
-  totalPages,
-  totalMovies,
-}: {
-  page: number
-  setPage: (_: number) => void
-  totalPages: number
-  totalMovies: number
-}) {
-  return (
-    <SearchDetailsContainer>
-      <p>Total results: {totalMovies}</p>
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </SearchDetailsContainer>
-  )
-}
-
 function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get("q") || ""
-  const [page, setPage] = useState(1)
+  const page = searchParams.get("p") ? Number(searchParams.get("p")) : 1
   const {
     data: movies,
     isLoading,
@@ -55,12 +36,18 @@ function SearchPage() {
     error,
   } = useGetMoviesQuery({ term: searchTerm, page: page })
 
+  useEffect(() => {
+    if (page < 1 || page > movies?.total_pages) {
+      setSearchParams((searchParams) => {
+        searchParams.set("p", "1")
+        return searchParams
+      })
+    }
+  }, [movies, page, setSearchParams])
+
   const updateSearchTerm = (searchTerm: string) => {
     if (searchTerm === "") {
-      setSearchParams((params) => {
-        params.delete("q")
-        return params
-      })
+      setSearchParams({})
     } else {
       setSearchParams({ q: searchTerm })
     }
@@ -70,6 +57,7 @@ function SearchPage() {
     <SearchPageContainer>
       <Input
         type="search"
+        name="q"
         placeholder="Search a movie..."
         value={searchTerm}
         onChange={(e) => updateSearchTerm(e.target.value)}
@@ -81,12 +69,10 @@ function SearchPage() {
             (isFetching && movies?.total_results === 0 && <p>Loading...</p>)}
           {isSuccess && movies?.results.length > 0 && (
             <>
-              <SearchResultDetails
-                page={page}
-                setPage={setPage}
-                totalPages={movies.total_pages}
-                totalMovies={movies.total_results}
-              />
+              <SearchDetailsContainer>
+                <p>Total results: {movies.total_results}</p>
+                <Pagination totalPages={movies.total_pages} />
+              </SearchDetailsContainer>
               {movies.results.map((movie: MovieInterface) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}

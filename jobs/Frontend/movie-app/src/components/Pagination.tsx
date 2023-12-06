@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { useSearchParams } from "react-router-dom"
 
 const PaginationContainer = styled.div`
   display: flex;
@@ -31,21 +32,21 @@ const Button = styled.button`
   }
 `
 
-function Pagination({
-  page,
-  setPage,
-  totalPages,
-}: {
-  page: number
-  setPage: (_: number) => void
-  totalPages: number
-}) {
+function Pagination({ totalPages }: { totalPages: number }) {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = searchParams.get("p") ? Number(searchParams.get("p")) : 1
+
   return (
     <PaginationContainer>
       <Button
         type="button"
         disabled={page === 1}
-        onClick={() => setPage(page - 1)}
+        onClick={() =>
+          setSearchParams((searchParams) => {
+            searchParams.set("p", String(page - 1))
+            return searchParams
+          })
+        }
       >
         {"<"}
       </Button>
@@ -55,7 +56,12 @@ function Pagination({
       <Button
         type="button"
         disabled={page === totalPages}
-        onClick={() => setPage(page + 1)}
+        onClick={() =>
+          setSearchParams((searchParams) => {
+            searchParams.set("p", String(page + 1))
+            return searchParams
+          })
+        }
       >
         {">"}
       </Button>
