@@ -10,13 +10,36 @@ const SearchPageContainer = styled.div`
   flex-direction: column;
 `
 
-const SearchResultHeader = styled.div`
-  margin: 1em 0em;
+const SearchResultsContainer = styled.section`
+  margin-top: 1em;
+`
+
+const SearchDetailsContainer = styled.div`
+  margin-bottom: 1em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `
+
+function SearchResultDetails({
+  page,
+  setPage,
+  totalPages,
+  totalMovies,
+}: {
+  page: number
+  setPage: (_: number) => void
+  totalPages: number
+  totalMovies: number
+}) {
+  return (
+    <SearchDetailsContainer>
+      <p>Total results: {totalMovies}</p>
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+    </SearchDetailsContainer>
+  )
+}
 
 function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -25,6 +48,7 @@ function SearchPage() {
     data: movies,
     isLoading,
     isSuccess,
+    isFetching,
     isError,
     error,
   } = useGetMoviesQuery({ term: searchTerm, page: page })
@@ -36,25 +60,29 @@ function SearchPage() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <section>
-        {isLoading && <p>Loading...</p>}
-        {isSuccess && (
-          <>
-            <SearchResultHeader>
-              <p>Total results: {movies.total_results}</p>
-              <Pagination
+      {searchTerm !== "" && (
+        <SearchResultsContainer>
+          {isLoading ||
+            (isFetching && movies?.total_results === 0 && <p>Loading...</p>)}
+          {isSuccess && movies?.results.length > 0 && (
+            <>
+              <SearchResultDetails
                 page={page}
                 setPage={setPage}
                 totalPages={movies.total_pages}
+                totalMovies={movies.total_results}
               />
-            </SearchResultHeader>
-            {movies.results.map((movie: MovieInterface) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </>
-        )}
-        {isError && <p>An error ocurred: {error.toString()}</p>}
-      </section>
+              {movies.results.map((movie: MovieInterface) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </>
+          )}
+          {isSuccess && !isFetching && movies?.total_results === 0 && (
+            <p>There are no results</p>
+          )}
+          {isError && <p>An error ocurred: {error.toString()}</p>}
+        </SearchResultsContainer>
+      )}
     </SearchPageContainer>
   )
 }
