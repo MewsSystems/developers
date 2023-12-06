@@ -1,5 +1,6 @@
 import { useState } from "react"
 import styled from "styled-components"
+import { useSearchParams } from "react-router-dom"
 import { useGetMoviesQuery } from "@/features/api/apiSlice"
 import MovieCard, { MovieInterface } from "@/components/MovieCard"
 import Input from "@/components/Input"
@@ -42,7 +43,8 @@ function SearchResultDetails({
 }
 
 function SearchPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchTerm = searchParams.get("q") || ""
   const [page, setPage] = useState(1)
   const {
     data: movies,
@@ -53,12 +55,25 @@ function SearchPage() {
     error,
   } = useGetMoviesQuery({ term: searchTerm, page: page })
 
+  const updateSearchTerm = (searchTerm: string) => {
+    if (searchTerm === "") {
+      setSearchParams((params) => {
+        params.delete("q")
+        return params
+      })
+    } else {
+      setSearchParams({ q: searchTerm })
+    }
+  }
+
   return (
     <SearchPageContainer>
       <Input
+        type="search"
         placeholder="Search a movie..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => updateSearchTerm(e.target.value)}
+        aria-label="Search movies"
       />
       {searchTerm !== "" && (
         <SearchResultsContainer>
