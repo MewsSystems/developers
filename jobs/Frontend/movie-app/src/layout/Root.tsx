@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, Link } from "react-router-dom"
 import Header from "@/components/Header"
 import Site from "@/components/Site"
 import { Title } from "@/components/typography"
@@ -7,7 +7,9 @@ function Root() {
   return (
     <>
       <Header>
-        <Title>Movies app</Title>
+        <Link to="/">
+          <Title>Movies app</Title>
+        </Link>
       </Header>
       <Site>
         <Outlet />
