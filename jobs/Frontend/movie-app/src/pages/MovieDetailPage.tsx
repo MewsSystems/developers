@@ -5,6 +5,24 @@ import ErrorCard from "@/components/ErrorCard"
 import { Badge, BadgeContainer } from "@/components/badges"
 import Poster from "@/components/Poster"
 
+interface MovieDetailInterface {
+  title: string
+  overview: string
+  homepage: string
+  poster_path: string
+  genres: { id: number; name: string }[]
+  vote_average: number
+  vote_count: number
+  popularity: number
+  release_date: string
+  status: string
+  budget: number
+  revenue: number
+  belongs_to_collection: { name: string }
+  production_companies: { id: number; name: string }[]
+  production_countries: { iso_3166_1: string; name: string }[]
+}
+
 const OverviewContainer = styled.div`
   margin: 1rem 0;
 `
@@ -24,47 +42,57 @@ const PosterContainer = styled.div`
   margin-left: 1rem;
 `
 
-function ExtraInformation({ movie }) {
+function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
+  const {
+    homepage,
+    vote_average: voteAvg,
+    vote_count: voteCount,
+    popularity,
+    release_date: releaseDate,
+    status,
+    belongs_to_collection: collection,
+    budget,
+    revenue,
+    production_companies: prodCompanies,
+    production_countries: prodCountries,
+  } = movie
   return (
     <div>
       <h3>Information</h3>
       <ul>
         <li>
           <b>Homepage:</b>{" "}
-          <a href={movie.homepage} target="_blank">
+          <a href={homepage} target="_blank">
             External link
           </a>
         </li>
         <li>
-          <b>Score:</b> {movie.vote_average || "Unknown"} out of 10
-          {movie.vote_count > 0 && (
-            <span> (from {movie.vote_count} votes)</span>
-          )}
+          <b>Score:</b> {voteAvg || "Unknown"} out of 10
+          {voteCount > 0 && <span> (from {voteCount} votes)</span>}
         </li>
         <li>
-          <b>Popularity:</b> {movie.popularity}
+          <b>Popularity:</b> {popularity}
         </li>
         <li>
-          <b>Release date:</b> {movie.release_date || "Unknown"}
+          <b>Release date:</b> {releaseDate || "Unknown"}
         </li>
         <li>
-          <b>Status:</b> {movie.status}
+          <b>Status:</b> {status}
         </li>
         <li>
           <b>Collection:</b>{" "}
-          {movie.belongs_to_collection?.name ||
-            "Doesn't belong to a collection"}
+          {collection?.name || "Doesn't belong to a collection"}
         </li>
         <li>
-          <b>Budget:</b> {movie.budget || "Unknown"}
+          <b>Budget:</b> {budget || "Unknown"}
         </li>
         <li>
-          <b>Revenue:</b> {movie.revenue || "Unknown"}
+          <b>Revenue:</b> {revenue || "Unknown"}
         </li>
         <li>
           <b>Production companies:</b>{" "}
-          {movie.production_companies.length > 0
-            ? movie.production_companies.map((company, i) => (
+          {prodCompanies.length > 0
+            ? prodCompanies.map((company, i: number) => (
                 <span key={company.id}>
                   {i > 0 && ", "}
                   {company.name}
@@ -74,8 +102,8 @@ function ExtraInformation({ movie }) {
         </li>
         <li>
           <b>Production countries:</b>{" "}
-          {movie.production_countries > 0
-            ? movie.production_countries.map((country, i) => (
+          {prodCountries.length > 0
+            ? prodCountries.map((country, i: number) => (
                 <span key={country.iso_3166_1}>
                   {i > 0 && ", "}
                   {country.name}
@@ -88,7 +116,7 @@ function ExtraInformation({ movie }) {
   )
 }
 
-function MovieDetail({ movie }) {
+function MovieDetail({ movie }: { movie: MovieDetailInterface }) {
   return (
     <MovieDetailContainer>
       <div>
