@@ -88,7 +88,9 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
         </li>
         <li>
           <b>Score:</b> {voteAvg || "Unknown"} out of 10
-          {voteCount > 0 && <span> (from {voteCount} votes)</span>}
+          {voteCount > 0 && (
+            <span> (from {voteCount.toLocaleString()} votes)</span>
+          )}
         </li>
         <li>
           <b>Popularity:</b> {popularity}
@@ -104,10 +106,10 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
           {collection?.name || "Doesn't belong to a collection"}
         </li>
         <li>
-          <b>Budget:</b> {budget || "Unknown"}
+          <b>Budget:</b> {budget ? budget.toLocaleString() : "Unknown"}
         </li>
         <li>
-          <b>Revenue:</b> {revenue || "Unknown"}
+          <b>Revenue:</b> {revenue ? revenue.toLocaleString() : "Unknown"}
         </li>
         <li>
           <b>Production companies:</b>{" "}
