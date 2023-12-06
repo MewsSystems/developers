@@ -86,32 +86,32 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
             External link
           </a>
         </li>
-        <li>
+        <li data-testid="movieScore">
           <b>Score:</b> {voteAvg || "Unknown"} out of 10
           {voteCount > 0 && (
             <span> (from {voteCount.toLocaleString()} votes)</span>
           )}
         </li>
-        <li>
-          <b>Popularity:</b> {popularity}
+        <li data-testid="moviePopularity">
+          <b>Popularity:</b> {popularity || "Unknown"}
         </li>
-        <li>
+        <li data-testid="movieReleaseDate">
           <b>Release date:</b> {releaseDate || "Unknown"}
         </li>
-        <li>
+        <li data-testid="movieStatus">
           <b>Status:</b> {status}
         </li>
-        <li>
+        <li data-testid="movieCollection">
           <b>Collection:</b>{" "}
           {collection?.name || "Doesn't belong to a collection"}
         </li>
-        <li>
+        <li data-testid="movieBudget">
           <b>Budget:</b> {budget ? budget.toLocaleString() : "Unknown"}
         </li>
-        <li>
+        <li data-testid="movieRevenue">
           <b>Revenue:</b> {revenue ? revenue.toLocaleString() : "Unknown"}
         </li>
-        <li>
+        <li data-testid="movieProductionCompanies">
           <b>Production companies:</b>{" "}
           {prodCompanies.length > 0
             ? prodCompanies.map((company, i: number) => (
@@ -122,7 +122,7 @@ function ExtraInformation({ movie }: { movie: MovieDetailInterface }) {
               ))
             : "Unknown"}
         </li>
-        <li>
+        <li data-testid="movieProductionCountries">
           <b>Production countries:</b>{" "}
           {prodCountries.length > 0
             ? prodCountries.map((country, i: number) => (
@@ -187,7 +187,7 @@ function MovieDetailPage() {
       </MovieDetailHeader>
       {isLoading && <p>Loading...</p>}
       {isSuccess && movie && <MovieDetail movie={movie} />}
-      {isSuccess && !movie && <p>There are no results</p>}
+      {isSuccess && !movie && <p>Movie wasn't found</p>}
       {isError && <ErrorCard error={error} />}
     </div>
   )
