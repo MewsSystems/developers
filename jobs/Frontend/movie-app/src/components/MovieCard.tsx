@@ -23,12 +23,31 @@ const Poster = styled.img`
   margin-right: 1em;
 `
 
+const PlaceholderPosterContainer = styled.div`
+  height: 70px;
+  width: 46.66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme.light_gray};
+  color: ${(props) => props.theme.light_gray};
+  margin-right: 1em;
+`
+
+const PlaceholderPoster = () => {
+  return <PlaceholderPosterContainer>?</PlaceholderPosterContainer>
+}
+
 function MovieCard({ movie }: { movie: MovieInterface }) {
   const imageUrl = `https://image.tmdb.org/t/p/w440_and_h660_face/${movie.poster_path}`
   const detailUrl = `/movies/${movie.id}`
   return (
     <CardContainer>
-      <Poster src={imageUrl} alt={`${movie.title} poster`} />
+      {movie.poster_path ? (
+        <Poster src={imageUrl} alt={`${movie.title} poster`} />
+      ) : (
+        <PlaceholderPoster />
+      )}
       <Link to={detailUrl}>{movie.title}</Link>
     </CardContainer>
   )
