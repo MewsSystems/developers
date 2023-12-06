@@ -9,11 +9,11 @@ const OverviewContainer = styled.div`
   margin: 1rem 0;
 `
 
-const MovieTitle = styled.h2`
-  margin-bottom: 1rem;
-`
-
 const MovieDetailContainer = styled.div`
+  & h2,
+  h3 {
+    margin-bottom: 1rem;
+  }
   display: flex;
   flex-direction: row;
   line-height: 1.5;
@@ -36,7 +36,7 @@ function ExtraInformation({ movie }) {
           </a>
         </li>
         <li>
-          <b>Score:</b> {movie.vote_average || "?"} / 10
+          <b>Score:</b> {movie.vote_average || "Unknown"} out of 10
           {movie.vote_count > 0 && (
             <span> (from {movie.vote_count} votes)</span>
           )}
@@ -89,11 +89,10 @@ function ExtraInformation({ movie }) {
 }
 
 function MovieDetail({ movie }) {
-  console.log(movie)
   return (
     <MovieDetailContainer>
       <div>
-        <MovieTitle>{movie.title}</MovieTitle>
+        <h2>{movie.title}</h2>
         {movie.genres.length > 0 && (
           <BadgeContainer>
             {movie.genres.map((genre) => (
