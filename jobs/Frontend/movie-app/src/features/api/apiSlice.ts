@@ -14,7 +14,17 @@ export const apiSlice = createApi({
         return { url: url, method: "GET", headers: headers }
       },
     }),
+    getMovie: builder.query({
+      query: (params) => {
+        const url = `/movie/${params.id}`
+        const headers = {
+          accept: "application/json",
+          Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+        }
+        return { url: url, method: "GET", headers: headers }
+      },
+    }),
   }),
 })
 
-export const { useGetMoviesQuery } = apiSlice
+export const { useGetMoviesQuery, useGetMovieQuery } = apiSlice
