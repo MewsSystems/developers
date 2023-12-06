@@ -6,7 +6,6 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.light_gray};
   border-radius: 0.5rem;
   width: 100%;
-  max-width: 500px;
   font-size: 1em;
   &:focus {
     outline: 0;
