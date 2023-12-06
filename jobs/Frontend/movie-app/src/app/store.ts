@@ -1,10 +1,8 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import moviesReducer from "@/features/movies/moviesSlice"
 import { apiSlice } from "../features/api/apiSlice"
 
 export const store = configureStore({
   reducer: {
-    movies: moviesReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
