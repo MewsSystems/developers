@@ -42,13 +42,21 @@ function Pagination({
 }) {
   return (
     <PaginationContainer>
-      <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <Button
+        type="button"
+        disabled={page === 1}
+        onClick={() => setPage(page - 1)}
+      >
         {"<"}
       </Button>
       <PageDetail>
         Page {page} of {totalPages}
       </PageDetail>
-      <Button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+      <Button
+        type="button"
+        disabled={page === totalPages}
+        onClick={() => setPage(page + 1)}
+      >
         {">"}
       </Button>
     </PaginationContainer>
