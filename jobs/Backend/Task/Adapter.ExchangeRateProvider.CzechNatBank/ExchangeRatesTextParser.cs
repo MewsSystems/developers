@@ -206,7 +206,7 @@ internal class ExchangeRatesTextParser : IDisposable
                 Amount = amount,
                 CurrencyCode = currencyCode,
                 Rate = Convert.ToDecimal(lineColumns[indexOfRate]),
-                DateTime = Convert.ToDateTime(lineColumns[indexOfDate]),
+                DateTime = DateTime.ParseExact(lineColumns[indexOfDate], "dd.MM.yyyy", null),
             });
 
             ++lineCounter;
