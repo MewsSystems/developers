@@ -91,7 +91,11 @@ public class ApplicationHostBuilder
                     _.RoutePrefix = string.Empty;
                 });
             }
-            applicationBuilder.UseExceptionHandler("/Error");
+            applicationBuilder.UseExceptionHandler(new ExceptionHandlerOptions()
+            {
+                AllowStatusCode404Response = true,
+                ExceptionHandlingPath = "/Error",
+            });
             applicationBuilder.UseMiddleware<RequestMiddleWare>();
             applicationBuilder.UseRouting();
             applicationBuilder.UseHttpsRedirection();
