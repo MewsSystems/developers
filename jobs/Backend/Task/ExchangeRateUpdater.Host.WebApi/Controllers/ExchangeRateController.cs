@@ -58,6 +58,21 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         }
 
         /// <summary>
+        /// Endpoint that gets all fx rates for asked currencies.
+        /// </summary>
+        /// <param name="requestDate">Optional query parameter that will be used to query FX rates for a certain date.If not specified current date will be used.</param>
+        /// <param name="filterOnCurrencies">the list of currency codes to filter on.</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The endpoint will return fx rates for the specified currencies.</returns>
+        [HttpPost("getRatesForCurrencies")]
+        public async Task<IActionResult> GetRatesForCurrenciesAsync([FromQuery] DateTime? requestDate, ISet<string> filterOnCurrencies, CancellationToken cancellationToken)
+        {
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetAllFxRates(requestDate ?? _referenceTime.GetTime().Date, cancellationToken);
+
+            return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto).Where(rate => rate.From != null && filterOnCurrencies.Contains(rate.From)));
+        }
+
+        /// <summary>
         /// Endpoint that performs an exchange order with the specified, currencies, sum, and date.
         /// </summary>
         /// <param name="exchangeOrderDto">Exchange Order Dto containing all relevant information to perform the exchange like currencies and sum to exchange.</param>

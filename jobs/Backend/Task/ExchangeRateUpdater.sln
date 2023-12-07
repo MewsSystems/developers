@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit", "tests\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit\Adapter.ExchangeRateProvider.CzechNatBank.Tests.Unit.csproj", "{B333DAFD-088E-4C41-9A72-263A15027224}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Acceptance.Tests", "tests\ExchangeRateUpdater.Acceptance.Tests\ExchangeRateUpdater.Acceptance.Tests.csproj", "{E2FEDC05-8916-4186-B23B-6795ADF82868}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Acceptance.Tests", "tests\ExchangeRateUpdater.Acceptance.Tests\ExchangeRateUpdater.Acceptance.Tests.csproj", "{E2FEDC05-8916-4186-B23B-6795ADF82868}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
