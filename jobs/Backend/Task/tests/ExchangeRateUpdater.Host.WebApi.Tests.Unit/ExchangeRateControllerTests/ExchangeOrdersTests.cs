@@ -13,17 +13,17 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests
 internal class ExchangeOrdersTests : ControllerTestBase
 {
     [Test]
-    public async Task GivenNoSourceCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
+    public async Task GivenNoSourceCurrency_WhenMakingAExchangeOrder_ShouldReturnBadResult()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "",
             TargetCurrency = "USD",
             SumToExchange = 10
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -33,17 +33,17 @@ internal class ExchangeOrdersTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenNoTargetCurrency_WhenMakingABuyOrder_ShouldReturnBadResult()
+    public async Task GivenNoTargetCurrency_WhenMakingAExchangeOrder_ShouldReturnBadResult()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "",
             SumToExchange = 10
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -53,17 +53,17 @@ internal class ExchangeOrdersTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenNullSumToExchange_WhenMakingABuyOrder_ShouldReturnBadResult()
+    public async Task GivenNullSumToExchange_WhenMakingAExchangeOrder_ShouldReturnBadResult()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
             SumToExchange = null
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -73,17 +73,17 @@ internal class ExchangeOrdersTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenMissingExchangePair_WhenMakingABuyOrder_ShouldReturnNotFound()
+    public async Task GivenMissingExchangePair_WhenMakingExchangeOrder_ShouldReturnNotFound()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
             SumToExchange = 100
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -95,7 +95,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     [TestCase("CZK", "USD", 0.045, 1)]
     [TestCase("MDL", "USD", 0.056, 10)]
     [TestCase("EUR", "USD", 1.09, 2)]
-    public async Task GivenValidExchangePair_WhenMakingABuyOrder_ShouldReturnConvertedResult(string sourceCurrency, string targetCurrency, decimal rate, decimal sum)
+    public async Task GivenValidExchangePair_WhenMakingExchangeOrder_ShouldReturnConvertedResult(string sourceCurrency, string targetCurrency, decimal rate, decimal sum)
     {
         // arrange
         var exchangeRate = new ExchangeRate(new Currency(sourceCurrency), new Currency(targetCurrency), new PositiveRealNumber(rate));
@@ -105,13 +105,13 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = sourceCurrency,
             TargetCurrency = targetCurrency,
             SumToExchange = sum
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -126,7 +126,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenMultipleExchangePair_WhenMakingABuyOrder_ShouldReturnConvertedResultWithCorrectPair()
+    public async Task GivenMultipleExchangePair_WhenMakingAExchangeOrder_ShouldReturnConvertedResultWithCorrectPair()
     {
         // arrange
         var correctExchangePair = new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m));
@@ -138,13 +138,13 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
             SumToExchange = 100
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
@@ -160,7 +160,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
 
     [Test]
-    public async Task GivenExchangePairWithDifferenDates_WhenMakingABuyOrder_ShouldReturnConvertedResultWithCorrectPairBeforeOrEqualToRequestedDate()
+    public async Task GivenExchangePairWithDifferenDates_WhenMakingAExchangeOrder_ShouldReturnConvertedResultWithCorrectPairBeforeOrEqualToRequestedDate()
     {
         // arrange
         var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
@@ -176,13 +176,13 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
-        var buyOrderDto = new ExchangeOrderDto
+        var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
             SumToExchange = 100
         };
-        var content = new StringContent(JsonConvert.SerializeObject(buyOrderDto), System.Text.Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
         var response = await HttpClient.PostAsync(relativeUrl, content);
 
         // assert
