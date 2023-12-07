@@ -1,6 +1,7 @@
 ﻿using Adapter.ExchangeRateProvider.CzechNatBank.Dtos;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using Serilog;
+using System.Globalization;
 
 namespace Adapter.ExchangeRateProvider.CzechNatBank;
 
@@ -38,7 +39,15 @@ internal class ExchangeRatesTextParser : IDisposable
 
 
         // Skip date line
-        _ = DateTime.TryParse(await _reader.ReadLineAsync(), out var date);
+        var dateLine = await _reader.ReadLineAsync(cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(dateLine))
+        {
+            _logger.Error("Couldn't retrieve date data from Czech National Bank.");
+            throw new FormatException("Couldn't retrieve date data from Czech National Bank.");
+        }
+
+        var date = DateTime.ParseExact(dateLine?.Substring(0, "dd MMM yyyy".Length) ?? string.Empty, "dd MMM yyyy", CultureInfo.InvariantCulture);
 
         var header = await _reader.ReadLineAsync();
 

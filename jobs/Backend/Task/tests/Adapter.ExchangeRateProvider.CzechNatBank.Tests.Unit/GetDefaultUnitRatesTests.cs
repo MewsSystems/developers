@@ -17,6 +17,23 @@ internal class GetDefaultUnitRatesTests : TestBase
 
     private const string TestFilesPath = "TestFiles/GetDefaultUnitRates";
 
+
+    [Test]
+    public void GivenNoDateData_ShouldThrowFormatException()
+    {
+        // arrange
+        var expected = "Couldn't retrieve date data from Czech National Bank.";
+        Server!.Given(
+            Request.Create().UsingGet().WithPath("/Test"))
+            .RespondWith(Response.Create().WithBodyFromFile($"{TestFilesPath}/GivenNoDateData.txt").WithHeader("Content-Type", "text/plain").WithStatusCode(200));
+
+        // act & assert
+        var sut = CreateSut();
+        var exception = Assert.ThrowsAsync<FormatException>(async () => await sut.GetAllFxRates(new DateTime(), CancellationToken.None));
+        exception!.Message.Should().Be(expected);
+        InMemorySink.Instance.LogEvents.First().MessageTemplate.Text.Should().Be(expected);
+    }
+
     [Test]
     public void GivenNoHeaderData_ShouldThrowFormatException()
     {

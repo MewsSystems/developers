@@ -18,4 +18,9 @@ internal class ExchangeRateDto
     /// Exchange rate specfied for a 1:1 ratio.
     /// </summary>
     public decimal ExchangeRate { get; set; }
+
+    /// <summary>
+    /// The time of the exchange rate.
+    /// </summary>
+    public DateTime ExchangeRateTime { get; set; }
 }

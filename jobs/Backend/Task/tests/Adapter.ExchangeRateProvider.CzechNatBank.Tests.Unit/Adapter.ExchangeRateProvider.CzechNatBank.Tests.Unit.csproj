@@ -30,10 +30,13 @@
     <None Update="TestFiles\GetDefaultUnitRates\GivenNoCodeHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoHeaderData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestFiles\GetDefaultUnitRates\GivenNoRateHeader.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\GetDefaultUnitRates\GivenNoHeaderData.txt">
+    <None Update="TestFiles\GetDefaultUnitRates\GivenNoDateData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestFiles\GetExchangeRateForCurrenciesAsync\BadCurrencySecondPart.txt">

@@ -19,7 +19,8 @@ internal static class ExchangeRateMapper
         {
             From         = exchangeRate.SourceCurrency,
             To           = exchangeRate.TargetCurrency,
-            ExchangeRate = exchangeRate.CurrencyRate 
+            ExchangeRate = exchangeRate.CurrencyRate,
+            ExchangeRateTime = exchangeRate.RateDate
         };
     }
 }
