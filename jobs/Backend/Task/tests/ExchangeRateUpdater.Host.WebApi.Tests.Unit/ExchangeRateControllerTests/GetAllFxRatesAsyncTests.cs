@@ -30,10 +30,11 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
     public async Task GivenSeveralRatesStored_WhenQueryingGetRates_ShouldReturnTheExchangeRates()
     {
         // arrange
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        var referenceTime = DateTime.Now;
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime, new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)),
-            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m), referenceTime),
+            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m), referenceTime)
         }) ;
 
         // act
@@ -65,14 +66,15 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
     public async Task GivenSeveralRatesForDifferentDatesStored_WhenQueryingGetRatesWithDate_ShouldReturnTheExchangeRateBeforeOrEqualToRequestedDate()
     {
         // arrange
+        var referenceTime = DateTime.Now;
         ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m), referenceTime)
         });
         // arrange
         ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(16.78m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(16.78m), referenceTime)
         });
 
         // act

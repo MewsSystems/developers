@@ -16,12 +16,13 @@ internal class GetExchangeRateForCurrenciesAsyncTests : ControllerCacheTestBase
     public async Task WhenFirstTimeGetExchangeRateForCurrenciesAsync_ShouldStoreValueInCache()
     {
         // arrange
+        var referenceTime = ReferenceTime.GetTime();
         var expected = new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("USD"), new Currency("CZK"), new PositiveRealNumber(22.55m))
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), new PositiveRealNumber(22.55m), referenceTime)
         };
 
-        ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime(), expected);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime, expected);
 
         // act
         var exchangeOrderDto = new ExchangeOrderDto

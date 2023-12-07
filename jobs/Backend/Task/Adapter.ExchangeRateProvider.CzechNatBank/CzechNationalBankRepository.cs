@@ -54,7 +54,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
                 var sourceCurrency = new Currency(dto.CurrencyCode);
                 // In case amount is 100 or something else.
                 var rate = new PositiveRealNumber(dto.Rate / dto.Amount);
-                return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+                return new ExchangeRate(sourceCurrency, targetCurrency, rate, dto.DateTime);
             });
         });
     }
@@ -94,7 +94,7 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
                 var sourceCurrency = new Currency(dto.CurrencyCode);
                 // In case amount is 100 or something else.
                 var rate = new PositiveRealNumber(dto.Rate / dto.Amount);
-                return new ExchangeRate(sourceCurrency, targetCurrency, rate);
+                return new ExchangeRate(sourceCurrency, targetCurrency, rate, dto.DateTime);
             });
         });
     }

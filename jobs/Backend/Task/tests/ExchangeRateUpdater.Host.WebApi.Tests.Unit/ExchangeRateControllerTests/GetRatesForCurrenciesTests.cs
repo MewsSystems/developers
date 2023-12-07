@@ -33,10 +33,11 @@ internal class GetRatesForCurrenciesTests : ControllerTestBase
     public async Task GivenMultipleFXRatesStored_WhenQueryingGetRatesForCurrencies_ShouldReturnEmptyList()
     {
         // arrange
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        var referenceTime = DateTime.Now;
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime, new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("USD"), new Currency("CZK"), new PositiveRealNumber(22.55m)),
-            new ExchangeRate(new Currency("EUR"), new Currency("CZK"), new PositiveRealNumber(24.29m))
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), new PositiveRealNumber(22.55m), referenceTime),
+            new ExchangeRate(new Currency("EUR"), new Currency("CZK"), new PositiveRealNumber(24.29m), referenceTime)
         });
 
         // act

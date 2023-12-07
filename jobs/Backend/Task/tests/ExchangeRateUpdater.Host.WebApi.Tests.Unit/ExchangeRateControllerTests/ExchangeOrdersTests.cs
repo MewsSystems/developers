@@ -98,8 +98,9 @@ internal class ExchangeOrdersTests : ControllerTestBase
     public async Task GivenValidExchangePair_WhenMakingExchangeOrder_ShouldReturnConvertedResult(string sourceCurrency, string targetCurrency, decimal rate, decimal sum)
     {
         // arrange
-        var exchangeRate = new ExchangeRate(new Currency(sourceCurrency), new Currency(targetCurrency), new PositiveRealNumber(rate));
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>(){
+        var referenceTime = DateTime.Now;
+        var exchangeRate = new ExchangeRate(new Currency(sourceCurrency), new Currency(targetCurrency), new PositiveRealNumber(rate), referenceTime);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime, new HashSet<ExchangeRate>(){
             exchangeRate
         });
 
@@ -129,9 +130,10 @@ internal class ExchangeOrdersTests : ControllerTestBase
     public async Task GivenMultipleExchangePair_WhenMakingAExchangeOrder_ShouldReturnConvertedResultWithCorrectPair()
     {
         // arrange
-        var correctExchangePair = new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m));
-        var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
+        var referenceTime = DateTime.Now;
+        var correctExchangePair = new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m), referenceTime);
+        var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m), referenceTime);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime, new HashSet<ExchangeRate>{
             wrongExchangePair,
             correctExchangePair
         });
@@ -163,19 +165,20 @@ internal class ExchangeOrdersTests : ControllerTestBase
     public async Task GivenExchangePairWithDifferenDates_WhenMakingAExchangeOrder_ShouldReturnConvertedResultWithCorrectPairBeforeOrEqualToRequestedDate()
     {
         // arrange
-        var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>{
+        var referenceTime = DateTime.Now;
+        var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m), referenceTime);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceTime.AddDays(-2), new HashSet<ExchangeRate>{
             wrongExchangePair,
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m))
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m), referenceTime.AddDays(-2))
         });
 
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
+        ExchangeRateProviderRepository.UpsertExchangeRate(referenceTime, new HashSet<ExchangeRate>{
             wrongExchangePair,
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.048m))
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.048m), referenceTime)
         });
 
         // act
-        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
+        var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").SetQueryParam("requestDate", referenceTime.AddDays(-1));
         var exchangeOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",

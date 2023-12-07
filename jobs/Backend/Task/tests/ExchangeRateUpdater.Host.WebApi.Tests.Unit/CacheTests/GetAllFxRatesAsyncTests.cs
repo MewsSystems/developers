@@ -18,10 +18,11 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
     public async Task WhenFirstTimeGetAllFxRatesAsync_ShouldStoreValueInCache()
     {
         // arrange
-        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        var referenceDate = DateTime.Now.Date;
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceDate, new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)),
-            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m), referenceDate),
+            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m), referenceDate)
         });
 
         // act
@@ -57,13 +58,15 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             (
              new Currency("MDL"),
              new Currency("USD"),
-             new PositiveRealNumber(17.78m)
+             new PositiveRealNumber(17.78m),
+             referenceDate
             ),
             new ExchangeRate
             (
              new Currency("EUR"),
              new Currency("USD"),
-             new PositiveRealNumber(0.92m)
+             new PositiveRealNumber(0.92m),
+             referenceDate
             )
         });
     }
@@ -72,10 +75,11 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
     public async Task WhenMultipleTimesGetAllFxRatesAsync_ShouldReturnedCachedValue()
     {
         // arrange
+        var referenceDate = DateTime.Now.Date;
         ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)),
-            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m), referenceDate),
+            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m), referenceDate)
         });
         var creationTime = DateTime.Now.AddSeconds(-3);
 
@@ -113,13 +117,15 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             (
              new Currency("MDL"),
              new Currency("USD"),
-             new PositiveRealNumber(17.78m)
+             new PositiveRealNumber(17.78m),
+             referenceDate
             ),
             new ExchangeRate
             (
              new Currency("EUR"),
              new Currency("USD"),
-             new PositiveRealNumber(0.92m)
+             new PositiveRealNumber(0.92m),
+             referenceDate
             )
         });
 
@@ -135,9 +141,10 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
     public async Task GivenAnAlreadyExpiredCachedKey_ShouldDeleteCacheValueAndMakeCallToProvider(int seconds)
     {
         // arrange
+        var referenceDate = DateTime.Now.Date;
         ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime(), new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
+            new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m), referenceDate)
         });
         var creationTime = DateTime.Now.AddSeconds(-seconds);
         ReferenceTime.SetTime(creationTime);
@@ -174,35 +181,35 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
     public async Task WhenCacheSizeIsMax_ShouldEvictUsingLRU()
     {
         // arrange
-
+        var referenceDate = ReferenceTime.GetTime();
         var notExpected = new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(12.78m))
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(12.78m), referenceDate.AddDays(-2))
         };
-        ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime().AddDays(-2), notExpected);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceDate.AddDays(-2), notExpected);
         var expected1 = new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(16.78m))
+            new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(16.78m), referenceDate.AddDays(-2))
         };
-        ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime().AddDays(-1), expected1);
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceDate.AddDays(-1), expected1);
 
         var expected2 = new HashSet<ExchangeRate>
         {
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(16.78m))
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(16.78m), referenceDate)
         };
         ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime(), expected2);
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
 
-        _ = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", ReferenceTime.GetTime().AddDays(-2)));
+        _ = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", referenceDate.AddDays(-2)));
         ReferenceTime.SetTime(ReferenceTime.GetTime().AddMinutes(1));
-        _ = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", ReferenceTime.GetTime().AddDays(-1)));
+        _ = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", referenceDate.AddDays(-1)));
         ReferenceTime.SetTime(ReferenceTime.GetTime().AddMinutes(2));
         var cachedData = ExchangeRateCacheRepository!.GetCachedData();
         cachedData.Count.Should().Be(2);
 
         // act
         ReferenceTime.SetTime(ReferenceTime.GetTime().AddMinutes(3));
-        var response = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", ReferenceTime.GetTime()));
+        var response = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("requestDate", referenceDate));
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
