@@ -24,7 +24,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = 10
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -44,7 +44,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = 10
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -64,7 +64,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = null
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -84,7 +84,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = 100
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -99,7 +99,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // arrange
         var exchangeRate = new ExchangeRate(new Currency(sourceCurrency), new Currency(targetCurrency), new PositiveRealNumber(rate));
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>(){
+        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>(){
             exchangeRate
         });
 
@@ -112,7 +112,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = sum
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -131,7 +131,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
         // arrange
         var correctExchangePair = new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m));
         var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
+        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>{
             wrongExchangePair,
             correctExchangePair
         });
@@ -145,7 +145,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = 100
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -164,7 +164,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // arrange
         var wrongExchangePair = new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(0.056m));
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>{
+        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now.AddDays(-2), new HashSet<ExchangeRate>{
             wrongExchangePair,
             new ExchangeRate(new Currency("CZK"), new Currency("USD"), new PositiveRealNumber(0.045m))
         });
@@ -183,7 +183,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
             SumToExchange = 100
         };
         var content = new StringContent(JsonConvert.SerializeObject(exchangeOrderDto), System.Text.Encoding.UTF8, "application/json");
-        var response = await HttpClient.PostAsync(relativeUrl, content);
+        var response = await HttpClient!.PostAsync(relativeUrl, content);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);

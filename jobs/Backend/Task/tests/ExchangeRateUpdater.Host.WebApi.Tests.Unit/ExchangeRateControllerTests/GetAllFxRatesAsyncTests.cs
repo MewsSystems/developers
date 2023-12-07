@@ -17,7 +17,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
-        var response = await HttpClient.GetAsync(relativeUrl);
+        var response = await HttpClient!.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -30,7 +30,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
     public async Task GivenSeveralRatesStored_WhenQueryingGetRates_ShouldReturnTheExchangeRates()
     {
         // arrange
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
         {
             new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m)),
             new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m))
@@ -38,7 +38,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
-        var response = await HttpClient.GetAsync(relativeUrl);
+        var response = await HttpClient!.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -65,7 +65,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
     public async Task GivenSeveralRatesForDifferentDatesStored_WhenQueryingGetRatesWithDate_ShouldReturnTheExchangeRateBeforeOrEqualToRequestedDate()
     {
         // arrange
-        ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
+        ExchangeRateProviderRepository!.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
         {
             new ExchangeRate(new Currency("MDL"), new Currency("USD"), new PositiveRealNumber(17.78m))
         });
@@ -77,7 +77,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
-        var response = await HttpClient.GetAsync(relativeUrl);
+        var response = await HttpClient!.GetAsync(relativeUrl);
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);

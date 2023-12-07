@@ -34,8 +34,9 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// </summary>
         /// <param name="exchangeRateUpdaterRepository">The port for the exchange rate provider.</param>
         /// <param name="exchangeUseCase">The usecase to handle Exchange Orders.</param>
+        /// <param name="referenceTime">The reference time for the project.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, ExchangeUseCase exchangeUseCase, ReferenceTime referenceTime)
+        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, ExchangeUseCase exchangeUseCase, ReferenceTime? referenceTime)
         {
             _exchangeRateUpdaterRepository = exchangeRateUpdaterRepository ?? throw new ArgumentNullException(nameof(exchangeRateUpdaterRepository));
             _exchangeUseCase = exchangeUseCase ?? throw new ArgumentNullException(nameof(exchangeUseCase));
