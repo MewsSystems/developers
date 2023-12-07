@@ -50,7 +50,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// <param name="cancellationToken">CancellationToken instance</param>
         /// <returns>The endpoint will return either fx rates for the specified/current date or if not present for the closest date earlier the specified one.</returns>
         [HttpGet("defaultRates")]
-        public async Task<IActionResult> GetAllFxRates([FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllFxRatesAsync([FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
         {
             var defaultCZKRates = await _exchangeRateUpdaterRepository.GetAllFxRates(requestDate ?? _referenceTime.GetTime().Date, cancellationToken);
 
@@ -65,7 +65,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// <param name="cancellationToken">CancellationToken instance.</param>
         /// <returns>The exchange order result for either the specified date or if not existent the exchange result for an earlier date.</returns>
         [HttpPost("exchange")]
-        public async Task<IActionResult> BuyAsync([FromBody] ExchangeOrderDto exchangeOrderDto, [FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
+        public async Task<IActionResult> ExchangeAsync([FromBody] ExchangeOrderDto exchangeOrderDto, [FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(exchangeOrderDto.SourceCurrency)) return BadRequest("Source Currency has to be specified.");
             if (string.IsNullOrWhiteSpace(exchangeOrderDto.TargetCurrency)) return BadRequest("Target Currency has to be specified.");
