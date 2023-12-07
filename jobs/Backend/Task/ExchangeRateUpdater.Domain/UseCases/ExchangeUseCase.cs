@@ -45,7 +45,7 @@ public class ExchangeUseCase
         }
         var convertedSum = new PositiveRealNumber(exchangeOrder.SumToExchange * latestExchange.CurrencyRate);
 
-        return new ExchangeResult(exchangeOrder.SourceCurrency, exchangeOrder.TargetCurrency, convertedSum);
+        return new ExchangeResult(exchangeOrder.SourceCurrency, exchangeOrder.TargetCurrency, convertedSum, latestExchange.RateDate);
     }
 
     /// <summary>

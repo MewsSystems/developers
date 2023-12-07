@@ -122,7 +122,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
         {
             SourceCurrency = sourceCurrency,
             TargetCurrency = targetCurrency,
-            ConvertedSum = sum * rate
+            ConvertedSum = sum * rate,
+            ExchangeRateDate = referenceTime
         });
     }
 
@@ -156,7 +157,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
-            ConvertedSum = 100 * 0.045m
+            ConvertedSum = 100 * 0.045m,
+            ExchangeRateDate = referenceTime
         });
     }
 
@@ -195,7 +197,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
-            ConvertedSum = 100 * 0.045m
+            ConvertedSum = 100 * 0.045m,
+            ExchangeRateDate = referenceTime.AddDays(-2)
         });
     }
 }

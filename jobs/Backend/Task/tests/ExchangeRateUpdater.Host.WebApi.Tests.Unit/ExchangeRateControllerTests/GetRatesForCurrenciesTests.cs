@@ -58,7 +58,7 @@ internal class GetRatesForCurrenciesTests : ControllerTestBase
                 From = "EUR",
                 To = "CZK",
                 ExchangeRate = 24.29m,
-                ExchangeRateTime = referenceTime
+                ExchangeRateDate = referenceTime
             }
         });
     }

@@ -35,7 +35,8 @@ internal static class OrdersMapper
         {
             SourceCurrency = exchangeResult.SourceCurrency,
             TargetCurrency = exchangeResult.TargetCurrency,
-            ConvertedSum = exchangeResult.ConvertedSum
+            ConvertedSum = exchangeResult.ConvertedSum,
+            ExchangeRateDate = exchangeResult.RateDate
         };
     }
 }

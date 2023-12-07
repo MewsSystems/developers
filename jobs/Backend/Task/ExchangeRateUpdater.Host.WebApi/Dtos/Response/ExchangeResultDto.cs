@@ -17,5 +17,9 @@
         /// The money sum after the exchange happen in target currency.
         /// </summary>
         public decimal ConvertedSum { get; set; }
+        /// <summary>
+        /// The date of the exchange rate.
+        /// </summary>
+        public DateTime ExchangeRateDate { get; set; }
     }
 }

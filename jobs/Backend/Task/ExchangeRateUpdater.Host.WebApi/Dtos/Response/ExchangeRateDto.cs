@@ -22,5 +22,5 @@ internal class ExchangeRateDto
     /// <summary>
     /// The time of the exchange rate.
     /// </summary>
-    public DateTime ExchangeRateTime { get; set; }
+    public DateTime ExchangeRateDate { get; set; }
 }

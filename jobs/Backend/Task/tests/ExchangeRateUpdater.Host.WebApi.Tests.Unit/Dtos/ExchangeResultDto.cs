@@ -6,4 +6,6 @@ internal class ExchangeResultDto
     public string? TargetCurrency { get; set; }
 
     public decimal ConvertedSum { get; set; }
+    public DateTime ExchangeRateDate { get; set; }
+
 }

@@ -52,14 +52,14 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
                 From = "MDL",
                 To   = "USD",
                 ExchangeRate = 17.78m,
-                ExchangeRateTime = referenceTime,
+                ExchangeRateDate = referenceTime,
             },
             new ExchangeRateDto
             {
                 From = "EUR",
                 To   = "USD",
                 ExchangeRate = 0.92m,
-                ExchangeRateTime = referenceTime,
+                ExchangeRateDate = referenceTime,
             }
         });
     }
@@ -94,7 +94,7 @@ internal class GetAllFxRatesAsyncTests : ControllerTestBase
                 From = "MDL",
                 To   = "USD",
                 ExchangeRate = 16.78m,
-                ExchangeRateTime = referenceTime
+                ExchangeRateDate = referenceTime
             }
         });
     }

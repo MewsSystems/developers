@@ -39,13 +39,15 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             {
                 From = "MDL",
                 To   = "USD",
-                ExchangeRate = 17.78m
+                ExchangeRate = 17.78m,
+                ExchangeRateDate = referenceDate
             },
             new ExchangeRateDto
             {
                 From = "EUR",
                 To   = "USD",
-                ExchangeRate = 0.92m
+                ExchangeRate = 0.92m,
+                ExchangeRateDate = referenceDate
             }
         });
         var cachedData = ExchangeRateCacheRepository!.GetCachedData();
@@ -98,13 +100,15 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             {
                 From = "MDL",
                 To   = "USD",
-                ExchangeRate = 17.78m
+                ExchangeRate = 17.78m,
+                ExchangeRateDate = referenceDate
             },
             new ExchangeRateDto
             {
                 From = "EUR",
                 To   = "USD",
-                ExchangeRate = 0.92m
+                ExchangeRate = 0.92m,
+                ExchangeRateDate = referenceDate
             }
         });
         var cachedData = ExchangeRateCacheRepository!.GetCachedData();
@@ -141,8 +145,8 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
     public async Task GivenAnAlreadyExpiredCachedKey_ShouldDeleteCacheValueAndMakeCallToProvider(int seconds)
     {
         // arrange
-        var referenceDate = DateTime.Now.Date;
-        ExchangeRateProviderRepository!.UpsertExchangeRate(ReferenceTime.GetTime(), new HashSet<ExchangeRate>
+        var referenceDate = ReferenceTime.GetTime().Date;
+        ExchangeRateProviderRepository!.UpsertExchangeRate(referenceDate, new HashSet<ExchangeRate>
         {
             new ExchangeRate(new Currency("EUR"), new Currency("USD"), new PositiveRealNumber(0.92m), referenceDate)
         });
@@ -154,7 +158,7 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
         _ = await HttpClient!.GetAsync(relativeUrl);
         var cachedData = ExchangeRateCacheRepository!.GetCachedData();
         ReferenceTime.SetTime(DateTime.Now);
-        var response = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("date", DateTime.Now));
+        var response = await HttpClient!.GetAsync(relativeUrl.SetQueryParam("date", referenceDate));
 
         
         // assert
@@ -167,7 +171,8 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             {
                 From = "EUR",
                 To   = "USD",
-                ExchangeRate = 0.92m
+                ExchangeRate = 0.92m,
+                ExchangeRateDate = referenceDate,
             }
         });
         cachedData = ExchangeRateCacheRepository!.GetCachedData();
@@ -221,7 +226,8 @@ internal class GetAllFxRatesAsyncTests : ControllerCacheTestBase
             {
                 From = "CZK",
                 To   = "USD",
-                ExchangeRate = 16.78m
+                ExchangeRate = 16.78m,
+                ExchangeRateDate = referenceDate
             }
         });
         cachedData = ExchangeRateCacheRepository!.GetCachedData();

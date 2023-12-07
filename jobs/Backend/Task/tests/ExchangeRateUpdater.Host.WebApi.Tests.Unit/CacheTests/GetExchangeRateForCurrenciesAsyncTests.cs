@@ -43,11 +43,12 @@ internal class GetExchangeRateForCurrenciesAsyncTests : ControllerCacheTestBase
         {
             SourceCurrency = "USD",
             TargetCurrency = "CZK",
-            ConvertedSum = 10 * 22.55m
+            ConvertedSum = 10 * 22.55m,
+            ExchangeRateDate = referenceTime
         });
         var cachedData = ExchangeRateCacheRepository!.GetCachedData();
         cachedData.Should().NotBeNull();
-        var cacheKey = new CacheKey(ReferenceTime.GetTime().Date, ReferenceTime.GetTime().Date, CacheType.Selected, ReferenceTime.GetTime(), TodayTtl);
+        var cacheKey = new CacheKey(referenceTime.Date, referenceTime.Date, CacheType.Selected, referenceTime, TodayTtl);
 
         cachedData[cacheKey].Value.Should().BeEquivalentTo(expected);
     }
