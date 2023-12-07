@@ -47,6 +47,7 @@ function Pagination({ totalPages }: { totalPages: number }) {
             return searchParams
           })
         }
+        data-testid="paginationPrevious"
       >
         {"<"}
       </Button>
@@ -62,6 +63,7 @@ function Pagination({ totalPages }: { totalPages: number }) {
             return searchParams
           })
         }
+        data-testid="paginationNext"
       >
         {">"}
       </Button>

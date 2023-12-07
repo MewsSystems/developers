@@ -91,13 +91,14 @@ function SearchPage() {
         value={searchTerm}
         onChange={(e) => updateSearchTerm(e.target.value)}
         aria-label="Search movies"
+        data-testid="searchInput"
       />
       {searchTerm !== "" && (
         <SearchResultsContainer>
           {(isLoading || (isFetching && movies?.total_results === 0)) && (
             <p>Loading...</p>
           )}
-          {isSuccess && movies?.results.length > 0 && (
+          {isSuccess && movies?.total_results > 0 && (
             <MoviesList movies={movies} />
           )}
           {isSuccess && !isFetching && movies?.total_results === 0 && (
