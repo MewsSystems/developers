@@ -8,10 +8,10 @@ namespace ExchangeRateUpdater.Host.WebApi.Middleware
     /// <summary>
     /// This middleware adds Requst Path and Query String to logging context.
     /// </summary>
-    public class RequestMiddleWare : IMiddleware
+    public class RequestMiddleware : IMiddleware
     {
         private Serilog.ILogger _logger;
-        public RequestMiddleWare(Serilog.ILogger? logger)
+        public RequestMiddleware(Serilog.ILogger? logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

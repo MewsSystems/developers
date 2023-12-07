@@ -64,7 +64,7 @@ public class ApplicationHostBuilder
             .ConfigureServices(services =>
             {
                 services.AddTransient<CorrelationMiddleware>();
-                services.AddTransient<RequestMiddleWare>();
+                services.AddTransient<RequestMiddleware>();
                 RegisterDomainDependencies(services);
                 RegisterAdapters(services);
                 services.AddControllers();
@@ -97,7 +97,7 @@ public class ApplicationHostBuilder
                 AllowStatusCode404Response = true,
                 ExceptionHandlingPath = "/Error",
             });
-            applicationBuilder.UseMiddleware<RequestMiddleWare>();
+            applicationBuilder.UseMiddleware<RequestMiddleware>();
             applicationBuilder.UseRouting();
             applicationBuilder.UseHttpsRedirection();
             applicationBuilder.UseAuthorization();
