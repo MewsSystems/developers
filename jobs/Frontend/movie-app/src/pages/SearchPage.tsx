@@ -26,7 +26,16 @@ const SearchResultsContainer = styled.section`
 const SearchDetailsContainer = styled.div`
   margin-bottom: 1em;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+  p {
+    margin-bottom: 1em;
+    @media (min-width: 768px) {
+      margin-bottom: 0;
+    }
+  }
   justify-content: space-between;
   align-items: center;
 `
