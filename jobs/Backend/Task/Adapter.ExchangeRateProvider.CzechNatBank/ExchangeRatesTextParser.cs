@@ -38,7 +38,7 @@ internal class ExchangeRatesTextParser : IDisposable
 
 
         // Skip date line
-        _ = await _reader.ReadLineAsync();
+        _ = DateTime.TryParse(await _reader.ReadLineAsync(), out var date);
 
         var header = await _reader.ReadLineAsync();
 
@@ -98,7 +98,8 @@ internal class ExchangeRatesTextParser : IDisposable
             {
                 Amount = Convert.ToInt32(lineColumns[indexOfAmount]),
                 CurrencyCode = lineColumns[indexOfCode],
-                Rate = Convert.ToDecimal(lineColumns[indexOfRate])
+                Rate = Convert.ToDecimal(lineColumns[indexOfRate]),
+                DateTime = date
             });
 
             ++lineCounter;
@@ -112,11 +113,11 @@ internal class ExchangeRatesTextParser : IDisposable
     /// </summary>
     /// <param name="requestedCurrency">The source currency for which the fx rates need to be parsed.</param>
     /// <param name="cancellationToken"><see cref="CancellationToken "/> instance</param>
-    /// <returns>Returns raw data of source currency exchange rates <see cref="ExchangeDateRateDataRawDto"/></returns>
+    /// <returns>Returns raw data of source currency exchange rates <see cref="ExchangeRateDataRawDto"/></returns>
     /// <exception cref="FormatException"></exception>
-    internal async Task<IEnumerable<ExchangeDateRateDataRawDto>> GetDefaultFormattedExchangeRatesForCurrencyAsync(Currency requestedCurrency, CancellationToken cancellationToken)
+    internal async Task<IEnumerable<ExchangeRateDataRawDto>> GetDefaultFormattedExchangeRatesForCurrencyAsync(Currency requestedCurrency, CancellationToken cancellationToken)
     {
-        var rawExchangeData = new List<ExchangeDateRateDataRawDto>();
+        var rawExchangeData = new List<ExchangeRateDataRawDto>();
 
         if (!_reader.BaseStream.CanRead || _reader.EndOfStream) return rawExchangeData;
 
@@ -201,7 +202,7 @@ internal class ExchangeRatesTextParser : IDisposable
                 continue;
             }
 
-            rawExchangeData.Add(new ExchangeDateRateDataRawDto
+            rawExchangeData.Add(new ExchangeRateDataRawDto
             {
                 Amount = amount,
                 CurrencyCode = currencyCode,
