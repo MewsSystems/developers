@@ -23,7 +23,7 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
 
 
     [Test]
-    public void GivenInvalidTargetCurrency_WhenCallingCzechNationalBankToGetExchange_ShouldThrow()
+    public void GivenInvalidTargetCurrency_WhenCallingCzechNationalBankToGetExchange_ShouldThrowNotSupportedException()
     {
         // act
         var sut = CreateSut();
@@ -35,5 +35,18 @@ internal class GetExchangeRateForCurrenciesAsyncTests : TestBase
         exception!.Message.Should().Be("Target currencies besides CZK are not yet supported.");
     }
 
-    
+    [Test]
+    public async Task GivenAHolidayInterval_WhenCallingCzechNationalBankToGetExchange_ShouldReturnEmptyList()
+    {
+        // act
+        var sut = CreateSut();
+
+
+        var result = await sut.GetExchangeRateForCurrenciesAsync(new Currency("USD"), new Currency("CZK"),
+                                                    // These are holiday days
+                                                    new DateTime(2023, 12, 2), new DateTime(2023, 12, 3), CancellationToken.None);
+
+        // assert
+        result.Should().BeEmpty();
+    }
 }

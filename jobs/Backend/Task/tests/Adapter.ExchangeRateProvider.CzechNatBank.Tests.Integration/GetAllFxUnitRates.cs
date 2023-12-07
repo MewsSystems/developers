@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Adapter.ExchangeRateProvider.CzechNatBank.Tests.Integration;
 
 [TestFixture]
-internal class GetDefaultUnitRates : TestBase
+internal class GetAllFxUnitRates : TestBase
 {
     [Test]
     public async Task WhenCallingCzechNationalToGetDefaultUnitRates_ShouldReturnAListOfUnitExchangeRates()
