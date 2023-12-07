@@ -27,5 +27,13 @@ namespace ExchangeRateUpdater.Host.WebApi.Configuration
         /// Provides the base address for the CzechNationalBank.
         /// </summary>
         public string CzechNationalBankBaseAddress { get; }
+        /// <summary>
+        /// TTL for today's data.
+        /// </summary>
+        public TimeSpan TodayDataCacheTtl { get; }
+        /// <summary>
+        /// TTL for other dates data except today.
+        /// </summary>
+        public TimeSpan OtherDatesCacheTtl { get; }
     }
 }

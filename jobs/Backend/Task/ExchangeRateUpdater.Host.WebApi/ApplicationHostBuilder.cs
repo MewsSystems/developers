@@ -125,7 +125,8 @@ public class ApplicationHostBuilder
 
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
-        services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateCacheRepositoryInMemory(new CzechNationalBankRepository(httpClientFactory, _logger), _logger, _settings.CacheSize, _settings.CacheEnabled));
+        services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateCacheRepositoryInMemory(
+            new CzechNationalBankRepository(httpClientFactory, _logger), _logger, _settings.CacheSize, _settings.CacheEnabled, _settings.TodayDataCacheTtl, _settings.OtherDatesCacheTtl));
     }
 
     /// <summary>

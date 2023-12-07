@@ -15,5 +15,9 @@ namespace ExchangeRateUpdater.Host.WebApi.Configuration
         public bool CacheEnabled { get; set; } = false;
         /// <inheritdoc/>
         public int CacheSize { get; set; } = 0;
+        /// <inheritdoc/>
+        public TimeSpan TodayDataCacheTtl { get; set; } = TimeSpan.Zero;
+        /// <inheritdoc/>
+        public TimeSpan OtherDatesCacheTtl { get; set; } = TimeSpan.Zero;
     }
 }
