@@ -17,7 +17,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "",
             TargetCurrency = "USD",
@@ -37,7 +37,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "",
@@ -57,7 +57,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
@@ -77,7 +77,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
@@ -105,7 +105,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = sourceCurrency,
             TargetCurrency = targetCurrency,
@@ -116,8 +116,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var responseContent = JsonConvert.DeserializeObject<BuyResultDto>(await response.Content.ReadAsStringAsync());
-        responseContent.Should().BeEquivalentTo(new BuyResultDto
+        var responseContent = JsonConvert.DeserializeObject<ExchangeResultDto>(await response.Content.ReadAsStringAsync());
+        responseContent.Should().BeEquivalentTo(new ExchangeResultDto
         {
             SourceCurrency = sourceCurrency,
             TargetCurrency = targetCurrency,
@@ -138,7 +138,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange");
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
@@ -149,8 +149,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var responseContent = JsonConvert.DeserializeObject<BuyResultDto>(await response.Content.ReadAsStringAsync());
-        responseContent.Should().BeEquivalentTo(new BuyResultDto
+        var responseContent = JsonConvert.DeserializeObject<ExchangeResultDto>(await response.Content.ReadAsStringAsync());
+        responseContent.Should().BeEquivalentTo(new ExchangeResultDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
@@ -176,7 +176,7 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("exchange").SetQueryParam("requestDate", DateTime.Now.AddDays(-1));
-        var buyOrderDto = new BuyOrderDto
+        var buyOrderDto = new ExchangeOrderDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",
@@ -187,8 +187,8 @@ internal class ExchangeOrdersTests : ControllerTestBase
 
         // assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var responseContent = JsonConvert.DeserializeObject<BuyResultDto>(await response.Content.ReadAsStringAsync());
-        responseContent.Should().BeEquivalentTo(new BuyResultDto
+        var responseContent = JsonConvert.DeserializeObject<ExchangeResultDto>(await response.Content.ReadAsStringAsync());
+        responseContent.Should().BeEquivalentTo(new ExchangeResultDto
         {
             SourceCurrency = "CZK",
             TargetCurrency = "USD",

@@ -157,5 +157,9 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
         _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>(validKeyValues);
     }
 
+    /// <summary>
+    /// Get a copy of CachedData.
+    /// </summary>
+    /// <returns>Returns a copy of cached data.</returns>
     internal IDictionary<CacheKey, CacheValue> GetCachedData() => new Dictionary<CacheKey, CacheValue>(_fxRates);
 }

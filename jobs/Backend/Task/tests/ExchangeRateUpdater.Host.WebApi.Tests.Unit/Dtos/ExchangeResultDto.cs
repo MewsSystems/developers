@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.Dtos;
 
-internal class BuyResultDto
+internal class ExchangeResultDto
 {
     public string? SourceCurrency { get; set; }
     public string? TargetCurrency { get; set; }
