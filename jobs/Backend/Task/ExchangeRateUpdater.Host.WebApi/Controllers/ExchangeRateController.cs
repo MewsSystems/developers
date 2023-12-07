@@ -48,7 +48,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// Endpoint that gets all fx rates of a certain date.
         /// </summary>
         /// <param name="requestDate">Optional query parameter that will be used to query FX rates for a certain date.If not specified current date will be used.</param>
-        /// <param name="cancellationToken">CancellationToken instance</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> instance</param>
         /// <returns>The endpoint will return either fx rates for the specified/current date or if not present for the closest date earlier the specified one.</returns>
         [HttpGet("defaultRates")]
         public async Task<IActionResult> GetAllFxRatesAsync([FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// </summary>
         /// <param name="requestDate">Optional query parameter that will be used to query FX rates for a certain date.If not specified current date will be used.</param>
         /// <param name="filterOnCurrencies">the list of currency codes to filter on.</param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">Instance of <see cref="CancellationToken"/></param>
         /// <returns>The endpoint will return fx rates for the specified currencies.</returns>
         [HttpPost("getRatesForCurrencies")]
         public async Task<IActionResult> GetRatesForCurrenciesAsync([FromQuery] DateTime? requestDate, ISet<string> filterOnCurrencies, CancellationToken cancellationToken)
@@ -78,7 +78,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         /// </summary>
         /// <param name="exchangeOrderDto">Exchange Order Dto containing all relevant information to perform the exchange like currencies and sum to exchange.</param>
         /// <param name="requestDate">Optional query parameter that will be used to query FX rates for a certain date.If not specified current date will be used.</param>
-        /// <param name="cancellationToken">CancellationToken instance.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> instance.</param>
         /// <returns>The exchange order result for either the specified date or if not existent the exchange result for an earlier date.</returns>
         [HttpPost("exchange")]
         public async Task<IActionResult> ExchangeAsync([FromBody] ExchangeOrderDto exchangeOrderDto, [FromQuery] DateTime? requestDate, CancellationToken cancellationToken)

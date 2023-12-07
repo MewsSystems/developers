@@ -12,7 +12,7 @@ public interface IExchangeRateProviderRepository
     /// Gets all the fx rates for the specified date or earlier.
     /// </summary>
     /// <param name="exchangeRateDate">Date time in format dd.MM.yyyy</param>
-    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> instance.</param>
     /// <returns>Returns the list of all fx rate</returns>
     Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken);
 
@@ -23,7 +23,7 @@ public interface IExchangeRateProviderRepository
     /// <param name="targetCurrency">The currency to convert to.</param>
     /// <param name="from">The beginning of the rates time interval</param>
     /// <param name="to">The end of the rates time interval</param>
-    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> instance.</param>
     /// <returns>Returns the list of fx exchange rates found during the specified interval.</returns>
     /// <remarks>We consider the interval to be [From, To]</remarks>
     /// /// <summary>

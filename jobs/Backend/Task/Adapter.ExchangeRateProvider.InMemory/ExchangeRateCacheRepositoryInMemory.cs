@@ -45,12 +45,12 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
         _cacheSize = cacheSize;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-    
+
     /// <summary>
     /// Method that tries to get the cache value, if not present it will call the IExchangeRateProviderRepository and store the value in cache.
     /// </summary>
     /// <param name="exchangeRateDate">The date the exchange fx rates are requested for.</param>
-    /// <param name="cancellationToken">CancellationToken Instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> Instance.</param>
     /// <returns>List of ExchangeRates for an earlier or the specified date.</returns>
     public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken)
     {
@@ -69,7 +69,7 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// <param name="targetCurrency">The target currency that will be exchanged to.</param>
     /// <param name="from">The start date of the interval to search the rate from.</param>
     /// <param name="to">The end date of the interval to search the rate.</param>
-    /// <param name="cancellationToken">CancellationToken Instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> Instance.</param>
     /// <returns>The list of ExchangeRates for the specified source/target currencies for an earlier or the specified date.</returns>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, 
                                                                                    DateTime from, DateTime to, CancellationToken cancellationToken)

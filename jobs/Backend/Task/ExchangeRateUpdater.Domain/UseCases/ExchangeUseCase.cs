@@ -30,7 +30,7 @@ public class ExchangeUseCase
     /// </summary>
     /// <param name="exchangeOrder">The order on which to make the exchange.</param>
     /// <param name="requestDate">The specified date valid for the exchange.</param>
-    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> instance.</param>
     /// <returns>Result of the exchange operation.</returns>
     /// <exception cref="ArgumentNullException"></exception>
     public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder exchangeOrder, DateTime requestDate, CancellationToken cancellationToken)

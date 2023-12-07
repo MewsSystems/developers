@@ -32,7 +32,7 @@ public class ApplicationHostBuilder
     /// Constructor for ApplicationHostBuilder.
     /// </summary>
     /// <param name="settings"></param>
-    /// <param name="logger">Instance of Serilog.ILogger</param>
+    /// <param name="logger">Instance of <see cref="Serilog.ILogger"/></param>
     /// <exception cref="ArgumentNullException">throws in case either settings or logger is null.</exception>
     public ApplicationHostBuilder(ISettings? settings, Serilog.ILogger? logger)
     {
@@ -57,7 +57,7 @@ public class ApplicationHostBuilder
     /// This method configures the services of host.
     /// </summary>
     /// <remarks>Made it protected and virtual since it will be overriden in unit tests.</remarks>
-    /// <param name="webBuilder">Instance of IHostBuilder</param>
+    /// <param name="webBuilder">Instance of <see cref="IWebHostBuilder"/></param>
     protected virtual void ConfigureServices(IWebHostBuilder webBuilder)
     {
         webBuilder
@@ -113,7 +113,7 @@ public class ApplicationHostBuilder
     /// This method registers adapters for ports.
     /// </summary>
     /// <remarks>Made it protected and virtual since it will be overriden in unit tests.</remarks>
-    /// <param name="services">Instance of IServiceCollection</param>
+    /// <param name="services">Instance of <see cref="IServiceCollection"/></param>
     protected virtual void RegisterAdapters(IServiceCollection services)
     {
         services.AddHttpClient($"{ApplicationName}-http-client",
@@ -140,7 +140,7 @@ public class ApplicationHostBuilder
     /// <summary>
     /// This method registers dependencies for Domain.
     /// </summary>
-    /// <param name="services">Instance of IServiceCollection</param>
+    /// <param name="services">Instance of <see cref="IServiceCollection"/></param>
     protected virtual void RegisterDomainDependencies(IServiceCollection services)
     {
         services.AddSingleton<ExchangeUseCase>();

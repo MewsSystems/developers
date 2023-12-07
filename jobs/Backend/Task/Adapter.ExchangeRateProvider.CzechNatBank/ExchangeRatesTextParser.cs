@@ -16,7 +16,7 @@ internal class ExchangeRatesTextParser : IDisposable
     /// Constructor to initialize the parser.
     /// </summary>
     /// <param name="reader">Stream reader that encapsulates the stream retrieved.</param>
-    /// <param name="logger">Instance of Serilog.ILogger</param>
+    /// <param name="logger">Instance of <see cref="Serilog.ILogger"/></param>
     /// <exception cref="ArgumentNullException"></exception>
     public ExchangeRatesTextParser(StreamReader? reader, ILogger? logger)
     {
@@ -27,7 +27,7 @@ internal class ExchangeRatesTextParser : IDisposable
     /// <summary>
     /// Method to parse the txt data for all fx rates for a certain date.
     /// </summary>
-    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> instance.</param>
     /// <returns>Raw exchange rates <see cref="ExchangeRateDataRawDto"></returns>
     /// <exception cref="FormatException">throws in case parser did expect a certain file format and the format was wrong.</exception>
     internal async Task<IEnumerable<ExchangeRateDataRawDto>> GetDefaultFormattedExchangeRatesAsync(CancellationToken cancellationToken)
