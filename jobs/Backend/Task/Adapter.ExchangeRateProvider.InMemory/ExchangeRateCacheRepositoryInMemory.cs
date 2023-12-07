@@ -19,6 +19,7 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     private readonly bool _enabled;
     private readonly TimeSpan _todayDataTtl;
     private readonly TimeSpan _otherDatesTtl;
+    private readonly ReferenceTime _referenceTime;
     private readonly int _cacheSize;
 
     /// <summary>
@@ -30,15 +31,17 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// <param name="enabled">Determines if the cache is enabled.</param>
     /// <param name="todayDataTtl">Timespan use for calculating expiry date for current date time.</param>
     /// <param name="otherDatesTtl">Timespan use for calculating expiry date for other dates except today.</param>
+    /// <param name="referenceTime">Reference Time used throughout the project.</param>
     /// <exception cref="ArgumentNullException"></exception>
     public ExchangeRateCacheRepositoryInMemory(IExchangeRateProviderRepository exchangeRateProviderRepository, ILogger logger, int cacheSize, bool enabled, 
-                                               TimeSpan todayDataTtl, TimeSpan otherDatesTtl)
+                                               TimeSpan todayDataTtl, TimeSpan otherDatesTtl, ReferenceTime referenceTime)
     {
         _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
         _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>();
         _enabled = enabled;
         _todayDataTtl = todayDataTtl;
         _otherDatesTtl = otherDatesTtl;
+        _referenceTime = referenceTime ?? throw new ArgumentNullException(nameof(referenceTime));
         _cacheSize = cacheSize;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -51,8 +54,8 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// <returns>List of ExchangeRates for an earlier or the specified date.</returns>
     public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken)
     {
-        var ttl = exchangeRateDate.Date < DateTime.Now.Date ? _otherDatesTtl : _todayDataTtl;
-        var cacheKey = new CacheKey(exchangeRateDate, exchangeRateDate, CacheType.All, DateTime.Now, ttl);
+        var ttl = exchangeRateDate.Date < _referenceTime.GetTime().Date ? _otherDatesTtl : _todayDataTtl;
+        var cacheKey = new CacheKey(exchangeRateDate, exchangeRateDate, CacheType.All, _referenceTime.GetTime(), ttl);
 
         return await GetValueFromCacheAndStoreAsync(() => _exchangeRateProviderRepository
                                                         .GetAllFxRates(exchangeRateDate, cancellationToken), cacheKey);
@@ -71,8 +74,8 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, 
                                                                                    DateTime from, DateTime to, CancellationToken cancellationToken)
     {
-        var ttl = from.Date < DateTime.Now.Date && to.Date < DateTime.Now.Date ? _otherDatesTtl : _todayDataTtl;
-        var cacheKey = new CacheKey(from, to, CacheType.Selected, DateTime.Now, ttl);
+        var ttl = from.Date < _referenceTime.GetTime().Date && to.Date < _referenceTime.GetTime().Date ? _otherDatesTtl : _todayDataTtl;
+        var cacheKey = new CacheKey(from, to, CacheType.Selected, _referenceTime.GetTime(), ttl);
 
         return await GetValueFromCacheAndStoreAsync(() => 
         _exchangeRateProviderRepository.GetExchangeRateForCurrenciesAsync(sourceCurrency, targetCurrency, from, to, cancellationToken), cacheKey);
@@ -92,6 +95,7 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
             if (_fxRates.ContainsKey(cacheKey))
             {
                 _logger.Information("Retrieved cache value for {Key}", cacheKey);
+                _fxRates[cacheKey].UpdateTime();
                 return _fxRates[cacheKey].Value;
             }
         }
@@ -117,11 +121,11 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
 
         if (_fxRates.Count >= _cacheSize)
         {
-            var toEvict = _fxRates.Count - _cacheSize;
+            var toEvict = _fxRates.Count - _cacheSize + 1;
             LRUEvict(toEvict);
         }
 
-        var cacheInstance = new CacheValue(exchangeRates);
+        var cacheInstance = new CacheValue(exchangeRates, _referenceTime);
         var isStored = _fxRates.TryAdd(key, cacheInstance);
         if (isStored)
         {
@@ -138,9 +142,9 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// <param name="toEvict">the number of instances need to be evicted.</param>
     private void LRUEvict(int toEvict)
     {
-        var validKeyValues = _fxRates.OrderBy(keyValue => keyValue.Key.LastAccessedTime).Take(_cacheSize - toEvict);
+        var validKeys = _fxRates.OrderByDescending(keyValue => keyValue.Value.LastAccessedTime).Take(_cacheSize - toEvict).ToList();
 
-        _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>(validKeyValues);
+        _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>(validKeys);
     }
 
     /// <summary>
@@ -148,7 +152,7 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// </summary>
     private void EvictBasedOnTtl()
     {
-        var validKeyValues = _fxRates.Where(keyValue => keyValue.Key.ExpiryDate > DateTime.Now);
+        var validKeyValues = _fxRates.Where(keyValue => keyValue.Key.ExpiryDate > _referenceTime.GetTime());
 
         _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>(validKeyValues);
     }

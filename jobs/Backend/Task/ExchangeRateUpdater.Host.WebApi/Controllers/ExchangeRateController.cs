@@ -4,6 +4,7 @@ using ExchangeRateUpdater.Host.WebApi.Dtos;
 using ExchangeRateUpdater.Host.WebApi.Mappers;
 using ExchangeRateUpdater.Host.WebApi.Dtos.Request;
 using ExchangeRateUpdater.Domain.UseCases;
+using ExchangeRateUpdater.Domain.Entities;
 
 namespace ExchangeRateUpdater.Host.WebApi.Controllers
 {
@@ -24,15 +25,21 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         private readonly ExchangeUseCase _exchangeUseCase;
 
         /// <summary>
+        /// Time reference used throughout the solution.
+        /// </summary>
+        private readonly ReferenceTime _referenceTime;
+
+        /// <summary>
         /// Constructor to setup the ExchangeRateController.
         /// </summary>
         /// <param name="exchangeRateUpdaterRepository">The port for the exchange rate provider.</param>
         /// <param name="exchangeUseCase">The usecase to handle Exchange Orders.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, ExchangeUseCase exchangeUseCase)
+        public ExchangeRateController(IExchangeRateProviderRepository exchangeRateUpdaterRepository, ExchangeUseCase exchangeUseCase, ReferenceTime referenceTime)
         {
             _exchangeRateUpdaterRepository = exchangeRateUpdaterRepository ?? throw new ArgumentNullException(nameof(exchangeRateUpdaterRepository));
             _exchangeUseCase = exchangeUseCase ?? throw new ArgumentNullException(nameof(exchangeUseCase));
+            _referenceTime = referenceTime ?? throw new ArgumentNullException(nameof(referenceTime));
         }
 
 
@@ -45,7 +52,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
         [HttpGet("defaultRates")]
         public async Task<IActionResult> GetAllFxRates([FromQuery] DateTime? requestDate, CancellationToken cancellationToken)
         {
-            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetAllFxRates(requestDate ?? DateTime.Now.Date, cancellationToken);
+            var defaultCZKRates = await _exchangeRateUpdaterRepository.GetAllFxRates(requestDate ?? _referenceTime.GetTime().Date, cancellationToken);
 
             return Ok(defaultCZKRates.Select(ExchangeRateMapper.ToDto));
         }
@@ -66,7 +73,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Controllers
 
             var exchangeOrder = exchangeOrderDto.ToExchange();
 
-            var exchangeResult = await _exchangeUseCase.ExecuteAsync(exchangeOrder, requestDate ?? DateTime.Now.Date, cancellationToken);
+            var exchangeResult = await _exchangeUseCase.ExecuteAsync(exchangeOrder, requestDate ?? _referenceTime.GetTime().Date, cancellationToken);
 
             if (exchangeResult == null) return NotFound("We do not support exchange rates for the mentioned source/target currencies.");
 

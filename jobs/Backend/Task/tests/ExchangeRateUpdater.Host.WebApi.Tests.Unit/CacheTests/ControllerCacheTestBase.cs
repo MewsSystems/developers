@@ -1,4 +1,5 @@
 ﻿using Adapter.ExchangeRateProvider.InMemory;
+using ExchangeRateUpdater.Host.WebApi.Tests.Unit.CacheTests;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
@@ -18,7 +19,8 @@ internal abstract class ControllerCacheTestBase
     protected ExchangeRateCacheRepositoryInMemory? ExchangeRateCacheRepository;
     protected Serilog.Core.Logger? Logger;
     protected TimeSpan TodayTtl = TimeSpan.FromSeconds(10);
-    protected TimeSpan OtherDatesTtl = TimeSpan.FromSeconds(60);
+    protected TimeSpan OtherDatesTtl = TimeSpan.FromDays(10);
+    protected ReferenceTimeTestDouble ReferenceTime = new ReferenceTimeTestDouble();
 
     [SetUp]
     public async Task SetUp()
@@ -33,9 +35,9 @@ internal abstract class ControllerCacheTestBase
             OtherDatesCacheTtl = OtherDatesTtl,
         };
         ExchangeRateCacheRepository = new ExchangeRateCacheRepositoryInMemory(ExchangeRateProviderRepository, Logger, settings.CacheSize, 
-                                                            settings.CacheEnabled, settings.TodayDataCacheTtl, settings.OtherDatesCacheTtl);
+                                                            settings.CacheEnabled, settings.TodayDataCacheTtl, settings.OtherDatesCacheTtl, ReferenceTime);
         var hostBuilder = new TestApplicationHostBuilder(ExchangeRateProviderRepository,
-                                                         settings, Logger, ExchangeRateCacheRepository);
+                                                         settings, Logger, ReferenceTime, ExchangeRateCacheRepository);
         Host = hostBuilder.Configure().Build();
         await Host.StartAsync();
         Server = Host.GetTestServer();

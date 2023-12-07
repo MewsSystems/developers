@@ -6,6 +6,7 @@ using ExchangeRateUpdater.Host.WebApi.Configuration;
 using ExchangeRateUpdater.Host.WebApi.Middleware;
 using System.Reflection;
 using Adapter.ExchangeRateProvider.InMemory;
+using ExchangeRateUpdater.Domain.Entities;
 
 namespace ExchangeRateUpdater.Host.WebApi;
 
@@ -64,7 +65,7 @@ public class ApplicationHostBuilder
             {
                 services.AddTransient<CorrelationMiddleware>();
                 services.AddTransient<RequestMiddleWare>();
-                RegisterUseCases(services);
+                RegisterDomainDependencies(services);
                 RegisterAdapters(services);
                 services.AddControllers();
                 services.AddEndpointsApiExplorer();
@@ -129,17 +130,21 @@ public class ApplicationHostBuilder
 
         var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+        var referenceTime = serviceProvider.GetService<ReferenceTime>();
         services.AddSingleton<IExchangeRateProviderRepository>(new ExchangeRateCacheRepositoryInMemory(
-            new CzechNationalBankRepository(httpClientFactory, _logger), _logger, _settings.CacheSize, _settings.CacheEnabled, _settings.TodayDataCacheTtl, _settings.OtherDatesCacheTtl));
+            new CzechNationalBankRepository(httpClientFactory, _logger), _logger, _settings.CacheSize, 
+            _settings.CacheEnabled, _settings.TodayDataCacheTtl, _settings.OtherDatesCacheTtl, referenceTime!
+            ));
     }
 
     /// <summary>
-    /// This method registers use cases for Domain.
+    /// This method registers dependencies for Domain.
     /// </summary>
     /// <param name="services">Instance of IServiceCollection</param>
-    private void RegisterUseCases(IServiceCollection services)
+    protected virtual void RegisterDomainDependencies(IServiceCollection services)
     {
         services.AddSingleton<ExchangeUseCase>();
+        services.AddSingleton<ReferenceTime>();
     }
 
 

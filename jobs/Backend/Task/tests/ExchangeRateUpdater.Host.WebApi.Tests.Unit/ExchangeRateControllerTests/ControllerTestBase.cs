@@ -1,4 +1,5 @@
 ﻿using Adapter.ExchangeRateProvider.InMemory;
+using ExchangeRateUpdater.Domain.Entities;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
@@ -25,7 +26,7 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests
             ExchangeRateProviderRepository = new ExchangeRateProviderRepositoryInMemory();
             var hostBuilder = new TestApplicationHostBuilder(ExchangeRateProviderRepository,
                                                              new Configuration.Settings(),
-                                                             Logger);
+                                                             Logger, new ReferenceTime());
             Host = hostBuilder.Configure().Build();
             await Host.StartAsync();
             Server = Host.GetTestServer();

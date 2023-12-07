@@ -1,4 +1,6 @@
-﻿namespace Adapter.ExchangeRateProvider.InMemory;
+﻿using ExchangeRateUpdater.Domain.Entities;
+
+namespace Adapter.ExchangeRateProvider.InMemory;
 
 /// <summary>
 /// Class representing a cache key.
@@ -8,12 +10,7 @@ internal class CacheKey
     /// <summary>
     /// Cache Key.
     /// </summary>
-    public string Key { get
-        {
-            LastAccessedTime = DateTime.Now;
-            return _key;
-        }
-    }
+    public string Key { get; }
 
     /// <summary>
     /// Last time the values was accessed. Used by the simple LRU use case.
@@ -25,8 +22,6 @@ internal class CacheKey
     /// </summary>
     public DateTime ExpiryDate { get; }
 
-    private string _key;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -37,7 +32,7 @@ internal class CacheKey
     /// <param name="ttl">Time to live of a cache key and by reference a cache instance.</param>
     public CacheKey(DateTime from, DateTime to, CacheType type, DateTime creationTime, TimeSpan ttl)
     {
-        _key = $"{type}.{from}.{to}";
+        Key = $"{type}.{from}.{to}";
         LastAccessedTime = creationTime;
         ExpiryDate = creationTime.Add(ttl);
     }
@@ -57,6 +52,8 @@ internal class CacheKey
     /// <inheritdoc/>
     public override string ToString() 
     {
-        return _key;
+        return Key;
     }
+
+   
 }

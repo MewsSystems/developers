@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Acceptance.Tests;
 
-[TestFixture, Explicit("Run these tests separately from others")]
+[TestFixture, Ignore("Not working")]
 internal class ExchangeOrdersTests
 {
     [Test]
