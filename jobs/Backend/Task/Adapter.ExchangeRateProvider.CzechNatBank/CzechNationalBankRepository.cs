@@ -7,17 +7,32 @@ using Polly;
 
 namespace Adapter.ExchangeRateProvider.CzechNatBank;
 
+/// <summary>
+/// Repository responsible to extract exchange rates data from CzechNationalBank.
+/// </summary>
 public class CzechNationalBankRepository : IExchangeRateProviderRepository
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger _logger;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="httpClientFactory">Instance of <see cref="IHttpClientFactory"/></param>
+    /// <param name="logger">Instance of <see cref="ILogger"/></param>
+    /// <exception cref="ArgumentNullException">throws when logger or httpClientFactory is null.</exception>
     public CzechNationalBankRepository(IHttpClientFactory? httpClientFactory, ILogger? logger)
     {
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <summary>
+    /// Get All Fx rates from Czech National Bank.
+    /// </summary>
+    /// <param name="exhangerRateDate">The date to request fx rates.</param>
+    /// <param name="cancellationToken">Instance of <see cref="CancellationToken"/></param>
+    /// <returns>Get all fx rates for either the specified or an earlier date.</returns>
     public async Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exhangerRateDate, CancellationToken cancellationToken)
     {
         return await CallCzerchNationalBankApi(async () =>
@@ -44,6 +59,16 @@ public class CzechNationalBankRepository : IExchangeRateProviderRepository
         });
     }
 
+    /// <summary>
+    /// Get Exchange Rates for Source/Target Currency and specified date interval.
+    /// </summary>
+    /// <param name="sourceCurrency">The source currency of fx rates.</param>
+    /// <param name="targetCurrency">The target currency of fx rates.</param>
+    /// <param name="from">The beginning of search date interval.</param>
+    /// <param name="to">The end of search date interval.</param>
+    /// <param name="cancellationToken">Instance of <see cref="CancellationToken"/></param>
+    /// <returns>Returns the exchange rates for the specified currencies and date interval <see cref="ExchangeRate"/></returns>
+    /// <exception cref="NotSupportedException"></exception>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency, 
                                                                                    DateTime from, DateTime to, CancellationToken cancellationToken)
     {

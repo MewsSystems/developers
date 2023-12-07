@@ -6,7 +6,7 @@
     public class ExchangeOrderDto
     {
         /// <summary>
-        /// The code of the currency which has to be exchanged.
+        /// The code of the currency c
         /// </summary>
         public string? SourceCurrency { get; set; }
         /// <summary>

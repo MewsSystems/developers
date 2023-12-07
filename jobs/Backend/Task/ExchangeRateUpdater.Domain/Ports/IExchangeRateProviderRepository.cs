@@ -3,6 +3,9 @@ using ExchangeRateUpdater.Domain.ValueObjects;
 
 namespace ExchangeRateUpdater.Domain.Ports;
 
+/// <summary>
+/// Port that has to be implemented by adapters providing exchange rates.
+/// </summary>
 public interface IExchangeRateProviderRepository
 {
     /// <summary>

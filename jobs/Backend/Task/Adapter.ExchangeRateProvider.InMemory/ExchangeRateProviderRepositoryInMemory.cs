@@ -4,15 +4,26 @@ using ExchangeRateUpdater.Domain.ValueObjects;
 
 namespace Adapter.ExchangeRateProvider.InMemory;
 
+/// <summary>
+/// In-Memory representation of the IExchangeRateProviderRepository port.
+/// </summary>
 public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepository
 {
     private Dictionary<DateTime, ISet<ExchangeRate>> _currencyRates;
 
+    /// <summary>
+    /// Default constructor that just initializes the in-memory storage.
+    /// </summary>
     public ExchangeRateProviderRepositoryInMemory()
     {
         _currencyRates = new Dictionary<DateTime, ISet<ExchangeRate>>();
     }
 
+    /// <summary>
+    /// Upserts excchange rates for an exchange date.
+    /// </summary>
+    /// <param name="exchangeDate">The exchange date the exchange rates are from.</param>
+    /// <param name="exchangeRates">The exchange rates to be stored.</param>
     public void UpsertExchangeRate(DateTime exchangeDate, ISet<ExchangeRate> exchangeRates)
     {
         var key = exchangeDate.Date;
@@ -25,6 +36,7 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         _currencyRates.Add(key, exchangeRates); 
     }
 
+    /// <inheritdoc />
     public Task<IEnumerable<ExchangeRate>> GetAllFxRates(DateTime exchangeRateDate, CancellationToken cancellationToken)
     {
         var key = exchangeRateDate.Date;
@@ -38,6 +50,7 @@ public class ExchangeRateProviderRepositoryInMemory : IExchangeRateProviderRepos
         return Task.FromResult<IEnumerable<ExchangeRate>>(latestKey == new DateTime() ? new List<ExchangeRate>() : _currencyRates[latestKey]);
     }
 
+    /// <inheritdoc />
     public Task<IEnumerable<ExchangeRate>> GetExchangeRateForCurrenciesAsync(Currency sourceCurrency, Currency targetCurrency,
                                                                              DateTime From, DateTime To, CancellationToken cancellationToken)
     {

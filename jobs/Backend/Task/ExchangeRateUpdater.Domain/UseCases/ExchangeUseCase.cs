@@ -5,11 +5,20 @@ using Serilog;
 
 namespace ExchangeRateUpdater.Domain.UseCases;
 
+/// <summary>
+/// The use ase that performs the exchange/
+/// </summary>
 public class ExchangeUseCase
 {
     private ILogger _logger;
     private IExchangeRateProviderRepository _exchangeRateProviderRepository;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="exchangeRateProviderRepository">Adapter used to get the exchange rates.</param>
+    /// <param name="logger">Serilog Logger instance</param>
+    /// <exception cref="ArgumentNullException">both exchangeRateProviderRepository and logger can't be null.</exception>
     public ExchangeUseCase(IExchangeRateProviderRepository exchangeRateProviderRepository, ILogger logger)
     {
         _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
@@ -22,7 +31,7 @@ public class ExchangeUseCase
     /// <param name="exchangeOrder">The order on which to make the exchange.</param>
     /// <param name="requestDate">The specified date valid for the exchange.</param>
     /// <param name="cancellationToken">CancellationToken instance.</param>
-    /// <returns></returns>
+    /// <returns>Result of the exchange operation.</returns>
     /// <exception cref="ArgumentNullException"></exception>
     public async Task<ExchangeResult?> ExecuteAsync(ExchangeOrder exchangeOrder, DateTime requestDate, CancellationToken cancellationToken)
     {
@@ -44,7 +53,7 @@ public class ExchangeUseCase
     /// to try to expand it a bit and try to get the latest available exchange rate.
     /// </summary>
     /// <param name="requestDate">The request date.</param>
-    /// <returns></returns>
+    /// <returns>The array of retryable time intervals.</returns>
     private DateTime[] GetRetryableStartOfIntervals(DateTime requestDate)
     {
         return new[]
@@ -57,6 +66,13 @@ public class ExchangeUseCase
     }
 
 
+    /// <summary>
+    /// Get the latest exchange rate.
+    /// </summary>
+    /// <param name="exchangeOrder">Order to be exchanged.</param>
+    /// <param name="requestDate">Date the exchange has to happen on.</param>
+    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <returns></returns>
     private async Task<ExchangeRate?> GetLatestChangeRateAsync(ExchangeOrder exchangeOrder, DateTime requestDate, CancellationToken cancellationToken)
     {
         foreach (var beginDate in GetRetryableStartOfIntervals(requestDate))

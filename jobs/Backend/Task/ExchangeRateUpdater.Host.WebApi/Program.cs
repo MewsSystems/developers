@@ -4,8 +4,15 @@ using YamlDotNet.Serialization;
 
 namespace ExchangeRateUpdater.Host.WebApi;
 
+/// <summary>
+/// The starting class of this solution
+/// </summary>
 public class Program
 {
+    /// <summary>
+    /// Starting method of this solution.
+    /// </summary>
+    /// <returns></returns>
     public static async Task Main()
     {
         string yamlContent = File.ReadAllText("settings.yaml");

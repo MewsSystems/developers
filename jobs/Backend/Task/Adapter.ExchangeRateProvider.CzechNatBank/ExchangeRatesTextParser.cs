@@ -4,17 +4,32 @@ using Serilog;
 
 namespace Adapter.ExchangeRateProvider.CzechNatBank;
 
+/// <summary>
+/// The class responsible for parsing txt data retrieved from Czech National Bank.
+/// </summary>
 internal class ExchangeRatesTextParser : IDisposable
 {
     private readonly StreamReader _reader;
     private readonly ILogger _logger;
 
+    /// <summary>
+    /// Constructor to initialize the parser.
+    /// </summary>
+    /// <param name="reader">Stream reader that encapsulates the stream retrieved.</param>
+    /// <param name="logger">Instance of Serilog.ILogger</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public ExchangeRatesTextParser(StreamReader? reader, ILogger? logger)
     {
         _reader = reader ?? throw new ArgumentNullException(nameof(reader));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <summary>
+    /// Method to parse the txt data for all fx rates for a certain date.
+    /// </summary>
+    /// <param name="cancellationToken">CancellationToken instance.</param>
+    /// <returns>Raw exchange rates <see cref="ExchangeRateDataRawDto"></returns>
+    /// <exception cref="FormatException">throws in case parser did expect a certain file format and the format was wrong.</exception>
     internal async Task<IEnumerable<ExchangeRateDataRawDto>> GetDefaultFormattedExchangeRatesAsync(CancellationToken cancellationToken)
     {
         var rawExchangeData = new List<ExchangeRateDataRawDto>();
@@ -92,6 +107,13 @@ internal class ExchangeRatesTextParser : IDisposable
         return rawExchangeData;
     }
 
+    /// <summary>
+    /// Get formatted data for the exchange rates.
+    /// </summary>
+    /// <param name="requestedCurrency">The source currency for which the fx rates need to be parsed.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken "/> instance</param>
+    /// <returns>Returns raw data of source currency exchange rates <see cref="ExchangeDateRateDataRawDto"/></returns>
+    /// <exception cref="FormatException"></exception>
     internal async Task<IEnumerable<ExchangeDateRateDataRawDto>> GetDefaultFormattedExchangeRatesForCurrencyAsync(Currency requestedCurrency, CancellationToken cancellationToken)
     {
         var rawExchangeData = new List<ExchangeDateRateDataRawDto>();
