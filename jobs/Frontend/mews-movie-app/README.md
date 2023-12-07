@@ -1,6 +1,6 @@
 ## Getting started
 
-First, rename `.env.example` to `.env` and fill in your TMDB API key.
+First, rename `.env.example` to `.env.local` and fill in your TMDB API key.
 
 Then, install dependencies and run the development server:
 
