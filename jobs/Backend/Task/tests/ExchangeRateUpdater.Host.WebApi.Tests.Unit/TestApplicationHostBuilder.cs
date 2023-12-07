@@ -11,18 +11,25 @@ namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit
 {
     internal class TestApplicationHostBuilder : ApplicationHostBuilder
     {
-        protected ExchangeRateProviderRepositoryInMemory ExchangeRateProviderRepositoryInMemory { get; }
+        private ExchangeRateProviderRepositoryInMemory ExchangeRateProviderRepositoryInMemory { get; }
+        private ExchangeRateCacheRepositoryInMemory? ExchangeRateCacheRepositoryInMemory { get; }
+        
 
-        public TestApplicationHostBuilder(ExchangeRateProviderRepositoryInMemory exchangeRateProviderRepositoryInMemory) : base(new Settings(), new LoggerConfiguration().WriteTo.InMemory().CreateLogger())
+        public TestApplicationHostBuilder(ExchangeRateProviderRepositoryInMemory exchangeRateProviderRepositoryInMemory, Settings settings, ILogger logger,
+            ExchangeRateCacheRepositoryInMemory? exchangeRateCacheRepositoryInMemory = null) 
+            : base(settings, logger)
         {
             ExchangeRateProviderRepositoryInMemory = exchangeRateProviderRepositoryInMemory;
+            ExchangeRateCacheRepositoryInMemory = exchangeRateCacheRepositoryInMemory;
         }
 
-        
+
 
         protected override void RegisterAdapters(IServiceCollection services)
         {
-            services.AddSingleton<IExchangeRateProviderRepository>(ExchangeRateProviderRepositoryInMemory);
+            services.AddSingleton<IExchangeRateProviderRepository>(ExchangeRateCacheRepositoryInMemory == null 
+                                                                        ? ExchangeRateProviderRepositoryInMemory 
+                                                                        : ExchangeRateCacheRepositoryInMemory);   
         }
 
         protected override void ConfigureServices(IWebHostBuilder webBuilder)

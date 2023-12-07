@@ -31,7 +31,7 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
     /// <param name="todayDataTtl">Timespan use for calculating expiry date for current date time.</param>
     /// <param name="otherDatesTtl">Timespan use for calculating expiry date for other dates except today.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ExchangeRateCacheRepositoryInMemory(CzechNationalBankRepository exchangeRateProviderRepository, ILogger logger, int cacheSize, bool enabled, 
+    public ExchangeRateCacheRepositoryInMemory(IExchangeRateProviderRepository exchangeRateProviderRepository, ILogger logger, int cacheSize, bool enabled, 
                                                TimeSpan todayDataTtl, TimeSpan otherDatesTtl)
     {
         _exchangeRateProviderRepository = exchangeRateProviderRepository ?? throw new ArgumentNullException(nameof(exchangeRateProviderRepository));
@@ -152,4 +152,6 @@ public class ExchangeRateCacheRepositoryInMemory : IExchangeRateProviderReposito
 
         _fxRates = new ConcurrentDictionary<CacheKey, CacheValue>(validKeyValues);
     }
+
+    internal IDictionary<CacheKey, CacheValue> GetCachedData() => new Dictionary<CacheKey, CacheValue>(_fxRates);
 }

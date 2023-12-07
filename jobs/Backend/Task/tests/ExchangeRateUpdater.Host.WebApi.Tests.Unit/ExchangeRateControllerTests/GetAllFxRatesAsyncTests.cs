@@ -10,12 +10,10 @@ using System.Net;
 namespace ExchangeRateUpdater.Host.WebApi.Tests.Unit.ExchangeRateControllerTests;
 
 [TestFixture]
-internal class GetDefaultUnitRatesTests : ControllerTestBase
+internal class GetAllFxRatesAsyncTests : ControllerTestBase
 {
-    
-
     [Test]
-    public async Task GivenNoDefaultUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnEmptyList()
+    public async Task GivenNoFXRatesStored_WhenQueryingGetFxRates_ShouldReturnEmptyList()
     {
         // act
         var relativeUrl = "api".AppendPathSegment("exchangeRates").AppendPathSegment("defaultRates");
@@ -29,7 +27,7 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenSeveralUnitRatesStored_WhenQueryingGetDefaultUnitRates_ShouldReturnTheExchangeRates()
+    public async Task GivenSeveralRatesStored_WhenQueryingGetRates_ShouldReturnTheExchangeRates()
     {
         // arrange
         ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
@@ -64,7 +62,7 @@ internal class GetDefaultUnitRatesTests : ControllerTestBase
     }
 
     [Test]
-    public async Task GivenSeveralUnitRatesForDifferentDatesStored_WhenQueryingGetDefaultUnitRatesWithDate_ShouldReturnTheExchangeRateBeforeOrEqualToRequestedDate()
+    public async Task GivenSeveralRatesForDifferentDatesStored_WhenQueryingGetRatesWithDate_ShouldReturnTheExchangeRateBeforeOrEqualToRequestedDate()
     {
         // arrange
         ExchangeRateProviderRepository.UpsertExchangeRate(DateTime.Now, new HashSet<ExchangeRate>
