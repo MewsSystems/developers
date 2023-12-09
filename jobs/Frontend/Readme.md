@@ -12,3 +12,6 @@ To retrieve information about movies, use [TheMovieDb API](https://developers.th
 ## Required technologies
 
 To test your proficiency with technologies we use the most, we require the solution to be written with use of TypeScript, React, Redux and styled-components. Use of any additional libraries is allowed and it's up to you.
+
+## Solution
+[Hosted here](http://mews.danielenicassio.eu)
