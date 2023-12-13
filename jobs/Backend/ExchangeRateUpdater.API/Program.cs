@@ -1,25 +1,32 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace ExchangeRateUpdater.API
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public partial class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = 100_000_000;
+                    });
+
+                    webBuilder.UseStartup<Startup>();
+
+                    webBuilder.ConfigureLogging((hostingContext, builder) =>
+                    {
+                        builder
+                        .AddApplicationInsights()
+                        .AddFilter<ApplicationInsightsLoggerProvider>("SimpleLogger", LogLevel.Debug)
+                        .SetMinimumLevel(LogLevel.Warning);
+                    });
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
