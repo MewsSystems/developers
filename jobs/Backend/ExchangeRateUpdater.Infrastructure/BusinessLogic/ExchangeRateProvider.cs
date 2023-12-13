@@ -31,7 +31,7 @@ namespace ExchangeRateUpdater.Infrastructure.BusinessLogic
 
         public async Task<ExchangeRateResponseDto> GetExchangeRatesAsync(ExchangeRateRequestDto request)
         {
-            if (request == null || request.Currencies.IsNullOrEmpty())
+            if (request == null || !request.Currencies.Any())
                 return new ExchangeRateResponseDto
                 {
                     ErrorMessage = "Request can not be null or empty."

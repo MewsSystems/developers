@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Model.Configuration
 {
-    public class CnbConfig
+    public class CnbConfig : ICnbConfig
     {
         public string BaseAddress { get; set; }
         public string ApiEndpoint { get; set; }

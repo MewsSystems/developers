@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.API
                     Description = "An ASP.NET Core Web Api for getting the daily exchange rates for currencies."
                 });
             });
-            services.AddTransient<ExchangeRateProvider, ExchangeRateProvider>();
+            services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
             services.AddTransient((s) => _cnbConfig);
             services.AddHttpClient();
         }
