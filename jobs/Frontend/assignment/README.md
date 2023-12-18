@@ -12,8 +12,8 @@ This project uses a `pnpm` package manager. Please make sure that you have it in
 
 1. Pull changes and go to the project's root - `jobs/Frontend/assignment`.
 2. Install dependencies: `pnpm install`.
-3. Run the project.
-   3.1. In development mode: `pnpm dev`.
+3. Run the project. <br>
+   3.1. In development mode: `pnpm dev`.<br>
    3.2. In production mode: `pnpm build && pnpm serve`.
 
 # UI Design:
