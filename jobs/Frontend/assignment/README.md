@@ -14,7 +14,7 @@ This project uses a `pnpm` package manager. Please make sure that you have it in
 2. Install dependencies: `pnpm install`.
 3. Run the project. <br>
    3.1. In development mode: `pnpm dev`.<br>
-   3.2. In production mode: `pnpm build && pnpm serve`.
+   3.2. In production mode: `pnpm build && pnpm preview`.
 
 # UI Design:
 
