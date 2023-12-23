@@ -1,14 +1,57 @@
-# Mews frontend developer task
+## Getting Started
 
-You should start with creating a fork of the repository. When you're finished with the task, you should create a pull request.
+Before you run the app locally, please create the .env.local file in the root folder, and add `NEXT_PUBLIC_TMDB_API_KEY` into it. API key can be found [`HERE`](https://github.com/MewsSystems/developers/tree/master/jobs/Frontend).
 
-Your task will be to create a simple movie search application. The application will have 2 views - search and movie detail. The search view is the default view, and should contain search input and display paginated list of found movies with a way to load additional batch. Search should start automatically after typing into the input is finished - there is no need for a search button. Clicking on a movie gets you to the movie detail view where detailed information about the movie should be listed. 
+Run the development server with:
 
-To retrieve information about movies, use [TheMovieDb API](https://developers.themoviedb.org/3/getting-started/introduction). You can use our api key to authorize requests:
+```bash
+pnpm install
+pnpm dev
 ```
-03b8572954325680265531140190fd2a
+
+(or your favorite package manager. 😊)
+
+## Techstack
+
+- React, Redux Toolkit, RTK Query, Typescript, Next.js
+- Styled Components, Tailwind
+- Prettier, EsLint
+- Playwright, Jest
+- Pnpm
+
+## Highlights
+
+- Built on top of the Next.js 14 and the app router.
+- Shared components reside in `src/components`, while app-specific components are collocated within the app folder.
+- Utilizes RTK Query for asynchronous state management. (and Redux for local state management).
+- Features a unique background created with React Three Fiber.
+- GitHub Actions have been set up.
+- The design is responsive + isMobile hook.
+
+## To run tests
+
+### Playwright
+
+(just once)
+
+```bash
+pnpm exec playwright install
 ```
 
-## Required technologies
+and run with
 
-To test your proficiency with technologies we use the most, we require the solution to be written with use of TypeScript, React, Redux and styled-components. Use of any additional libraries is allowed and it's up to you.
+```bash
+pnpm test:e2e
+```
+
+### Unit tests
+
+```bash
+pnpm test
+```
+
+## To improve
+
+- Currently, the URL only reflects the search query; it would be beneficial to also reflect pagination.
+- Both Unit and End-to-End tests are set up, but the app has undergone only brief testing.
+- Since the tech stack is predominantly client-side, the app could benefit from the use of loaders or skeletons to enhance the user experience.
