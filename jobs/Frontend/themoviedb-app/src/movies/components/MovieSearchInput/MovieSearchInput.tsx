@@ -1,4 +1,8 @@
 import { FC } from 'react';
+import Input from '../../../shared/components/Input/Input';
+import StyledMovieSearchInput, {
+    StyledSearchIcon,
+} from './MovieSearchInput.styles';
 
 interface Props {
     value: string;
@@ -7,16 +11,16 @@ interface Props {
 
 const MovieSearchInput: FC<Props> = ({ value, onChange }) => {
     return (
-        <div>
-            <input
+        <StyledMovieSearchInput>
+            <Input
                 value={value}
+                placeholder="Search movies here"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     onChange(e.target.value)
                 }
             />
-            <br />
-            <h3>line loader</h3>
-        </div>
+            <StyledSearchIcon />
+        </StyledMovieSearchInput>
     );
 };
 

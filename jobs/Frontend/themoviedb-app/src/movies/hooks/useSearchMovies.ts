@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import useLocalStorage from '../../shared/hooks/useLocalStorage';
 import LocalStoreUtil from '../../shared/utils/LocalStorageUtil';
 import { useLazyGetMoviesBySearchQuery } from '../api/moviesApiSlice';
-import { MovieSearchResponse } from '../models/MovieSearchModels';
+import { MovieSearchResponse } from '../types/MovieSearchTypes';
 
 interface ReturnData {
     searchQuery: string;
     pageNumber: number;
+    totalPages: number;
     moviesData: MovieSearchResponse | undefined;
     isLoading: boolean;
+    showSearchMovieResults: boolean;
+    showPagination: boolean;
     handleSearchQueryChange: (value: string) => void;
     handlePageNumberChange: (value: number) => void;
 }
@@ -21,13 +24,13 @@ const useSearchMovies = (): ReturnData => {
     const { fromMovieDetailsPage, localSearchQuery, localPageNumber } =
         useLocalStorage();
 
-    const [trigger, result] = useLazyGetMoviesBySearchQuery({});
+    const [findMovie, result] = useLazyGetMoviesBySearchQuery();
     const { data } = result;
 
     useEffect(() => {
         // If we came back from movie details page use saved params to show previous data
         if (fromMovieDetailsPage && localSearchQuery && localPageNumber) {
-            trigger(
+            findMovie(
                 { searchQuery: localSearchQuery, pageNumber: localPageNumber },
                 true
             );
@@ -50,7 +53,7 @@ const useSearchMovies = (): ReturnData => {
 
         const debouncer = setTimeout(() => {
             if (searchQuery) {
-                trigger({ searchQuery, pageNumber: 1 }, true);
+                findMovie({ searchQuery, pageNumber: 1 }, true);
                 setPageNumber(1);
                 LocalStoreUtil.set('searchQuery', searchQuery);
                 LocalStoreUtil.set('pageNumber', 1);
@@ -65,7 +68,7 @@ const useSearchMovies = (): ReturnData => {
 
     useEffect(() => {
         if (searchQuery) {
-            trigger({ searchQuery, pageNumber }, true);
+            findMovie({ searchQuery, pageNumber }, true);
             LocalStoreUtil.set('searchQuery', searchQuery);
             LocalStoreUtil.set('pageNumber', pageNumber);
         }
@@ -84,11 +87,21 @@ const useSearchMovies = (): ReturnData => {
         setPageNumber(value);
     };
 
+    const showSearchMovieResults = !!(
+        searchQuery &&
+        data &&
+        data.results.length > 0
+    );
+    const showPagination = showSearchMovieResults && data.total_pages > 1;
+
     return {
         searchQuery,
         pageNumber,
         moviesData: data,
+        totalPages: data?.total_pages ?? 0,
         isLoading,
+        showSearchMovieResults,
+        showPagination,
         handleSearchQueryChange,
         handlePageNumberChange,
     };

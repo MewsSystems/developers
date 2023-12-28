@@ -1,35 +1,41 @@
-import MovieSearchInput from './components/MovieSearchInput';
-import MoviesList from './components/MoviesList';
-import Pagination from './components/Pagination';
+import MovieSearchHeader from './components/MovieSearchHeader/MovieSearchHeader';
+import MoviesList from './components/MoviesList/MoviesList';
+import useDiscoverMovies from './hooks/useDiscoverMovies';
 import useSearchMovies from './hooks/useSearchMovies';
 
 const Movies = () => {
+    const { discoverMovies } = useDiscoverMovies();
+
     const {
         moviesData,
         searchQuery,
         pageNumber,
+        totalPages,
         isLoading,
+        showSearchMovieResults,
+        showPagination,
         handleSearchQueryChange,
         handlePageNumberChange,
     } = useSearchMovies();
 
     return (
         <div>
-            <MovieSearchInput
-                value={searchQuery}
-                onChange={handleSearchQueryChange}
+            <MovieSearchHeader
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchQueryChange}
+                currentPageNumber={pageNumber}
+                totalPages={totalPages}
+                showPagination={showPagination}
+                onPageChange={handlePageNumberChange}
+                isLoading={isLoading}
             />
-            {isLoading ? 'Loading...' : 'Not loading'}
-            {moviesData && moviesData.total_pages > 1 && (
-                <Pagination
-                    page={pageNumber}
-                    totalPages={moviesData && moviesData.total_pages}
-                    onChange={handlePageNumberChange}
-                />
+            {!showSearchMovieResults && !discoverMovies && (
+                <div>No results found.</div>
             )}
-            {!moviesData ||
-                (moviesData.results.length === 0 && <div>No results.</div>)}
-            {searchQuery && moviesData && (
+            {!showSearchMovieResults && discoverMovies && (
+                <MoviesList movies={discoverMovies.results ?? []} />
+            )}
+            {showSearchMovieResults && (
                 <MoviesList movies={moviesData?.results ?? []} />
             )}
         </div>

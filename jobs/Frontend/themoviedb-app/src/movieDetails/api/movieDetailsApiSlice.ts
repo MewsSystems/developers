@@ -2,7 +2,7 @@ import { api } from '../../core/api/apiSlice';
 import {
     MovieDetailsFormValues,
     MovieDetailsResponse,
-} from '../models/MovieDetailsModels';
+} from '../types/MovieDetailsTypes';
 
 export const movieDetailsApiSlice = api.injectEndpoints({
     endpoints: (builder) => ({
