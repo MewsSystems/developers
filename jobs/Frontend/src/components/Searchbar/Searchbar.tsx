@@ -22,19 +22,27 @@ type Props = {
  */
 export const Searchbar = ({ placeholder, onChange, onLoad }: Props) => {
   const { isMobile } = useIsMobile()
+
   const searchParams = useSearchParams()
   const { push } = useRouter()
   const pathname = usePathname()
 
+  const [didMount, setDidMount] = useState(false);
   const [inputValue, setInputValue] = useState('')
 
-  // load query from url
   useEffect(() => {
-    const query = searchParams.get('query') ?? ''
-    setInputValue(query)
+    setDidMount(true);
+  }, []);
 
-    onLoad(query)
-  }, [onLoad, searchParams])
+  // on mount load query from url
+  useEffect(() => {
+    if (!didMount) {
+      const query = searchParams.get('query') ?? ''
+      setInputValue(query)
+
+      onLoad(query)
+    }
+  }, [didMount, onLoad, searchParams])
 
   const handleSearch = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
