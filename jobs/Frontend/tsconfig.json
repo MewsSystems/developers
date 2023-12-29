@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    /* Type Checking */
+    "strict": true,
+    /* 
+      The strict flag enables the following compiler options
+      --alwaysStrict
+      --strictNullChecks
+      --strictBindCallApply
+      --strictFunctionTypes
+      --strictPropertyInitialization
+      --noImplicitAny
+      --noImplicitThis
+      --useUnknownInCatchVariables
+    */
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    /* Modules */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    /* Emit */
+    "allowJs": true,
+    "noEmit": true,
+    "removeComments": true,
+    /* Editor Support */
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    /* Interop Constraints */
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    /* Language and Environment */
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    /* Projects */
+    "incremental": true,
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

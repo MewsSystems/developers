@@ -1,0 +1,47 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    // Turn off rules that conflict with Prettier
+    "prettier"
+  ],
+  "plugins": ["unused-imports"],
+  "rules": {
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "react-redux",
+            "importNames": ["useDispatch", "useSelector", "useStore"],
+            "message": "Please use typed useDispatch/useSelector/useStore from '@/lib/hooks' instead."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    // Configuration for units tests
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "plugins": ["jest", "jest-dom", "jest-formatting", "testing-library"],
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest-dom/recommended",
+        "plugin:jest-formatting/recommended",
+        "plugin:testing-library/react"
+      ]
+    },
+    // Configuration for e2e tests (Playwright)
+    {
+      "files": ["**/*.spec.ts"],
+      "extends": ["plugin:playwright/recommended"]
+    }
+  ]
+}
