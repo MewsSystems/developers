@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <StyledHeader>
             <h2>The MovieDB app</h2>
-            <UserCircle size={36} />
+            <UserCircle data-testid="user" size={36} />
         </StyledHeader>
     );
 };

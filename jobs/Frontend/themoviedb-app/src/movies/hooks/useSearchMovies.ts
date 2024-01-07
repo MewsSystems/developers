@@ -4,7 +4,7 @@ import LocalStoreUtil from '../../shared/utils/LocalStorageUtil';
 import { useLazyGetMoviesBySearchQuery } from '../api/moviesApiSlice';
 import { MovieSearchResponse } from '../types/MovieSearchTypes';
 
-interface ReturnData {
+export interface SearchMoviesReturnData {
     searchQuery: string;
     pageNumber: number;
     totalPages: number;
@@ -16,7 +16,7 @@ interface ReturnData {
     handlePageNumberChange: (value: number) => void;
 }
 
-const useSearchMovies = (): ReturnData => {
+const useSearchMovies = (): SearchMoviesReturnData => {
     const [searchQuery, setSearchQuery] = useState('');
     const [pageNumber, setPageNumber] = useState(1);
     const [isLoading, setIsLoading] = useState(false);

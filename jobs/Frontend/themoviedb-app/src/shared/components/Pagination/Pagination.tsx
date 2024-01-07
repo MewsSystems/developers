@@ -18,6 +18,7 @@ const Pagination: FC<Props> = ({ page, totalPages, onChange }) => {
         <StyledPagination>
             <Button
                 variant="icon"
+                data-testid="prev-page"
                 disabled={page === 1}
                 onClick={() => onChange(page - 1)}>
                 <ChevronLeft />
@@ -27,6 +28,7 @@ const Pagination: FC<Props> = ({ page, totalPages, onChange }) => {
             </p>
             <Button
                 variant="icon"
+                data-testid="next-page"
                 disabled={page === totalPages}
                 onClick={() => onChange(page + 1)}>
                 <ChevronRight />
