@@ -2,10 +2,11 @@
 using ExchangeRateProvider;
 using ExchangeRateProvider.Models;
 using ExchangeRateProvider.Config;
+using ExchangeRateProvider.Exceptions;
 
 public static class Program
 {
-    private static IEnumerable<Currency> currencies = new[]
+    private static ICollection<Currency> currencies = new[]
     {
             new Currency("USD"),
             new Currency("EUR"),
@@ -18,7 +19,7 @@ public static class Program
             new Currency("XYZ")
         };
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
 
         var serviceProvider = new ServiceCollection()
@@ -28,13 +29,19 @@ public static class Program
         try
         {
             var provider = serviceProvider.GetRequiredKeyedService<IExchangeRateProvider>(Source.CzechNationalBank);
-            var rates = provider.GetExchangeRates(currencies);
+
+            var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
+            var rates = await provider.GetExchangeRates(currencies, date);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());
             }
+        }
+        catch (UnexpectedException e)
+        {
+            Console.WriteLine($"Could not retrieve exchange rates. UnexpectedException: {e.Message} / CustomData: {e.DataToString()}");
         }
         catch (Exception e)
         {

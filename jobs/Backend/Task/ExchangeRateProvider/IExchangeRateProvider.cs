@@ -13,4 +13,4 @@ public interface IExchangeRateProvider
     GetExchangeRates GetExchangeRates { get; }
 }
 
-public delegate IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+public delegate Task<ICollection<ExchangeRate>> GetExchangeRates(ICollection<Currency> currencies, DateTimeOffset date);
