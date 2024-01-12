@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using ExchangeRateProvider.Exceptions;
 using ExchangeRateProvider.Implementations.CzechNationalBank.Models;
 
@@ -8,6 +9,10 @@ namespace ExchangeRateProvider.Implementations.CzechNationalBank;
 internal class CzechNationalBankApi : ICzechNationalBankApi
 {
     private readonly IHttpClient _httpClient;
+    private readonly JsonSerializerOptions _jsonSerializerOpts = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    };
 
     public CzechNationalBankApi(IHttpClient httpClient)
     {
@@ -28,7 +33,7 @@ internal class CzechNationalBankApi : ICzechNationalBankApi
         return await ProcessHttpResponse<ExRateDailyResponse>(httpResponse);
     }
 
-    private async Task<T> ProcessHttpResponse<T>(HttpResponseMessage httpResponse)
+    internal async Task<T> ProcessHttpResponse<T>(HttpResponseMessage httpResponse)
     {
         var httpBodyResponseStr = await httpResponse.Content.ReadAsStringAsync();
         if (!httpResponse.IsSuccessStatusCode)
@@ -46,7 +51,7 @@ internal class CzechNationalBankApi : ICzechNationalBankApi
         T deserializedResponse;
         try
         {
-            deserializedResponse = JsonSerializer.Deserialize<T>(httpBodyResponseStr)!;
+            deserializedResponse = JsonSerializer.Deserialize<T>(httpBodyResponseStr, _jsonSerializerOpts)!;
         }
         catch (Exception)
         {
