@@ -10,7 +10,5 @@ public interface IExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    GetExchangeRates GetExchangeRates { get; }
+    Task<ICollection<ExchangeRate>> GetExchangeRates(ICollection<Currency> currencies, DateTimeOffset date);
 }
-
-public delegate Task<ICollection<ExchangeRate>> GetExchangeRates(ICollection<Currency> currencies, DateTimeOffset date);

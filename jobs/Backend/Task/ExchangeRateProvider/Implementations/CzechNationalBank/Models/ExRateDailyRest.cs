@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace ExchangeRateProvider.Implementations.CzechNationalBank.Models;
 
-public class ExRateDailyRest
+internal class ExRateDailyRest
 {
     [JsonPropertyName("amount")]
     public long Amount { get; set; }
