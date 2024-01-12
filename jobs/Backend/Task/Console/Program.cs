@@ -6,18 +6,18 @@ using ExchangeRateProvider.Exceptions;
 
 public static class Program
 {
-    private static ICollection<Currency> currencies = new[]
-    {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+    private static readonly ICollection<Currency> currencies =
+    [
+        new("USD"),
+        new("EUR"),
+        new("CZK"),
+        new("JPY"),
+        new("KES"),
+        new("RUB"),
+        new("THB"),
+        new("TRY"),
+        new("XYZ")
+    ];
 
     public static async Task Main(string[] args)
     {
@@ -33,7 +33,7 @@ public static class Program
             var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
             var rates = await provider.GetExchangeRates(currencies, date);
 
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());

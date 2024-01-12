@@ -3,14 +3,9 @@ using ExchangeRateProvider.Exceptions;
 
 namespace ExchangeRateProvider.Implementations;
 
-class CHttpClient : IHttpClient
+class CHttpClient(HttpClient httpClient) : IHttpClient
 {
-    private readonly HttpClient _httpClient;
-
-    public CHttpClient(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
+    private readonly HttpClient _httpClient = httpClient;
 
     public Uri BaseAddress
     {

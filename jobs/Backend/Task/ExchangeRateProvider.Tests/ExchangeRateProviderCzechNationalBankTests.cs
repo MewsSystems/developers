@@ -15,8 +15,8 @@ public class ExchangeRateProviderCzechNationalBankTests
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
-            Rates = new ExRateDailyRest[]{
-                new ExRateDailyRest() {
+            Rates = [
+                new() {
                     Amount = 1,
                     Country = "Australia",
                     Currency = "dollar",
@@ -25,11 +25,11 @@ public class ExchangeRateProviderCzechNationalBankTests
                     Rate = 15.858m,
                     ValidFor = "2019-05-17"
                 }
-            }
+            ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
         var targetCurrencies = new Currency[] {
-            new (targetCurrency),
+            new(targetCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 
@@ -49,7 +49,7 @@ public class ExchangeRateProviderCzechNationalBankTests
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
-            Rates = new ExRateDailyRest[]{
+            Rates = [
                 new() {
                     Amount = 1,
                     Country = "Australia",
@@ -59,12 +59,12 @@ public class ExchangeRateProviderCzechNationalBankTests
                     Rate = 15.858m,
                     ValidFor = "2019-05-17"
                 }
-            }
+            ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
         var targetCurrencies = new Currency[] {
-            new ("AUD"),
-            new (targetCurrency),
+            new("AUD"),
+            new(targetCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 
@@ -85,7 +85,7 @@ public class ExchangeRateProviderCzechNationalBankTests
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
-            Rates = new ExRateDailyRest[]{
+            Rates = [
                 new() {
                     Amount = 1,
                     Country = "Australia",
@@ -95,11 +95,11 @@ public class ExchangeRateProviderCzechNationalBankTests
                     Rate = rate,
                     ValidFor = "2019-05-17"
                 }
-            }
+            ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
         var targetCurrencies = new Currency[] {
-            new (targetCurrency),
+            new(targetCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 

@@ -2,14 +2,9 @@ using ExchangeRateProvider.Models;
 
 namespace ExchangeRateProvider.Implementations.CzechNationalBank;
 
-internal class ExchangeRateProviderCzechNationalBank : IExchangeRateProvider
+internal class ExchangeRateProviderCzechNationalBank(ICzechNationalBankApi czechNationalBankApi) : IExchangeRateProvider
 {
-    private readonly ICzechNationalBankApi _czechNationalBankApi;
-
-    public ExchangeRateProviderCzechNationalBank(ICzechNationalBankApi czechNationalBankApi)
-    {
-        _czechNationalBankApi = czechNationalBankApi;
-    }
+    private readonly ICzechNationalBankApi _czechNationalBankApi = czechNationalBankApi;
 
     public string SourceCurrency => "CZK";
 
