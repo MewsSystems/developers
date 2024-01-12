@@ -11,4 +11,5 @@ public interface IExchangeRateProvider
     /// some of the currencies, ignore them.
     /// </summary>
     Task<ICollection<ExchangeRate>> GetExchangeRates(ICollection<Currency> currencies, DateTimeOffset date);
+    string SourceCurrency { get; }
 }

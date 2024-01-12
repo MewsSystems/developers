@@ -23,5 +23,5 @@ internal class ExRateDailyRest
     public decimal Rate { get; set; }
 
     [JsonPropertyName("validFor")]
-    public DateTimeOffset ValidFor { get; set; }
+    public string ValidFor { get; set; } = null!;
 }
