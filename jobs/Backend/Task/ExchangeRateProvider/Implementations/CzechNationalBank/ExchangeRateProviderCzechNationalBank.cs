@@ -8,12 +8,15 @@ namespace ExchangeRateProvider.Implementations.CzechNationalBank;
 
 class ExchangeRateProviderCzechNationalBank : IExchangeRateProvider, IDisposable
 {
+    private const int MAX_RETRIES = 3;
     private readonly HttpClient _httpClient;
+
     public ExchangeRateProviderCzechNationalBank()
     {
         _httpClient = new HttpClient()
         {
-            BaseAddress = new Uri("https://api.cnb.cz")
+            BaseAddress = new Uri("https://api.cnb.cz"),
+            Timeout = TimeSpan.FromSeconds(8)
         };
     }
 
@@ -29,8 +32,7 @@ class ExchangeRateProviderCzechNationalBank : IExchangeRateProvider, IDisposable
         var dateParam = date.UtcDateTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         var queryParams = $"date={dateParam}&lang=EN";
 
-        var httpResponse = await _httpClient.GetAsync($"cnbapi/exrates/daily?{queryParams}")
-            ?? throw new UnexpectedException("http response is null");
+        var httpResponse = await HandleHttpRetries(() => _httpClient.GetAsync($"cnbapi/exrates/daily?{queryParams}"));
 
         var deserializedResponse = await ProcessHttpResponse<ExRateDailyResponse>(httpResponse);
 
@@ -44,6 +46,23 @@ class ExchangeRateProviderCzechNationalBank : IExchangeRateProvider, IDisposable
                     res.Rate
                 )
             ).ToArray();
+    }
+
+    private async Task<HttpResponseMessage> HandleHttpRetries(Func<Task<HttpResponseMessage>> httpClientFn)
+    {
+        for (int i = 0; i < MAX_RETRIES; i++)
+        {
+            try
+            {
+                return await httpClientFn() ?? throw new UnexpectedException("http response is null");
+            }
+            catch (Exception)
+            {
+                if (i == MAX_RETRIES - 1)
+                    throw;
+            }
+        }
+        throw new Exception();
     }
 
     private async Task<T> ProcessHttpResponse<T>(HttpResponseMessage httpResponse)
