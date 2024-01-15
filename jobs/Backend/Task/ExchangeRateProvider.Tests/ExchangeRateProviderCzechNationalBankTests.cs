@@ -8,10 +8,10 @@ namespace ExchangeRateProvider.Tests;
 public class ExchangeRateProviderCzechNationalBankTests
 {
     [Fact]
-    public async Task GetExchangeRates_WhenTargetCurrencyExists_ThenReturnExchangeRate()
+    public async Task GetExchangeRates_WhenSourceCurrencyExists_ThenReturnExchangeRate()
     {
         // arrange
-        var targetCurrency = "AUD";
+        var sourceCurrency = "AUD";
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
@@ -20,7 +20,7 @@ public class ExchangeRateProviderCzechNationalBankTests
                     Amount = 1,
                     Country = "Australia",
                     Currency = "dollar",
-                    CurrencyCode = targetCurrency,
+                    CurrencyCode = sourceCurrency,
                     Order = 94,
                     Rate = 15.858m,
                     ValidFor = "2019-05-17"
@@ -28,24 +28,24 @@ public class ExchangeRateProviderCzechNationalBankTests
             ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
-        var targetCurrencies = new Currency[] {
-            new(targetCurrency),
+        var sourceCurrencies = new Currency[] {
+            new(sourceCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 
         // act
-        var exchangeRates = await provider.GetExchangeRates(targetCurrencies, date);
-        var exchangeRate = exchangeRates.FirstOrDefault(x => x.TargetCurrency.Code == targetCurrency);
+        var exchangeRates = await provider.GetExchangeRates(sourceCurrencies, date);
+        var exchangeRate = exchangeRates.FirstOrDefault(x => x.SourceCurrency.Code == sourceCurrency);
 
         // assert
-        Assert.True(exchangeRate != null, $"{targetCurrency} exchange rate should exist");
+        Assert.True(exchangeRate != null, $"{sourceCurrency} exchange rate should exist");
     }
 
     [Fact]
-    public async Task GetExchangeRates_WhenTargetCurrencyDoesNotExist_ThenOmitExchangeRate()
+    public async Task GetExchangeRates_WhenSourceCurrencyDoesNotExist_ThenOmitExchangeRate()
     {
         // arrange
-        var targetCurrency = "USD";
+        var sourceCurrency = "USD";
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
@@ -62,18 +62,18 @@ public class ExchangeRateProviderCzechNationalBankTests
             ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
-        var targetCurrencies = new Currency[] {
+        var sourceCurrencies = new Currency[] {
             new("AUD"),
-            new(targetCurrency),
+            new(sourceCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 
         // act
-        var exchangeRates = await provider.GetExchangeRates(targetCurrencies, date);
-        var exchangeRate = exchangeRates.FirstOrDefault(x => x.TargetCurrency.Code == targetCurrency);
+        var exchangeRates = await provider.GetExchangeRates(sourceCurrencies, date);
+        var exchangeRate = exchangeRates.FirstOrDefault(x => x.SourceCurrency.Code == sourceCurrency);
 
         // assert
-        Assert.True(exchangeRate == null, $"{targetCurrency} exchange rate should be omitted");
+        Assert.True(exchangeRate == null, $"{sourceCurrency} exchange rate should be omitted");
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class ExchangeRateProviderCzechNationalBankTests
     {
         // arrange
         var rate = 15.858m;
-        var targetCurrency = "AUD";
+        var sourceCurrency = "AUD";
         var bankApiMock = Substitute.For<ICzechNationalBankApi>();
         bankApiMock.GetExratesDaily(Arg.Any<DateTimeOffset>()).Returns(new ExRateDailyResponse
         {
@@ -90,7 +90,7 @@ public class ExchangeRateProviderCzechNationalBankTests
                     Amount = 1,
                     Country = "Australia",
                     Currency = "dollar",
-                    CurrencyCode = targetCurrency,
+                    CurrencyCode = sourceCurrency,
                     Order = 94,
                     Rate = rate,
                     ValidFor = "2019-05-17"
@@ -98,18 +98,18 @@ public class ExchangeRateProviderCzechNationalBankTests
             ]
         });
         var provider = new ExchangeRateProviderCzechNationalBank(bankApiMock);
-        var targetCurrencies = new Currency[] {
-            new(targetCurrency),
+        var sourceCurrencies = new Currency[] {
+            new(sourceCurrency),
         };
         var date = new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero);
 
         // act
-        var exchangeRates = await provider.GetExchangeRates(targetCurrencies, date);
-        var exchangeRate = exchangeRates.FirstOrDefault(x => x.TargetCurrency.Code == targetCurrency)!;
+        var exchangeRates = await provider.GetExchangeRates(sourceCurrencies, date);
+        var exchangeRate = exchangeRates.FirstOrDefault(x => x.SourceCurrency.Code == sourceCurrency)!;
 
         // assert
-        Assert.True(exchangeRate.SourceCurrency.Code == provider.SourceCurrency, $"SourceCurrency should be {provider.SourceCurrency}");
-        Assert.True(exchangeRate.TargetCurrency.Code == targetCurrency, $"TargetCurrency should be {targetCurrency}");
+        Assert.True(exchangeRate.TargetCurrency.Code == provider.TargetCurrency, $"TargetCurrency should be {provider.TargetCurrency}");
+        Assert.True(exchangeRate.SourceCurrency.Code == sourceCurrency, $"SourceCurrency should be {sourceCurrency}");
         Assert.True(exchangeRate.Value == rate, $"Value should be {rate}");
     }
 }

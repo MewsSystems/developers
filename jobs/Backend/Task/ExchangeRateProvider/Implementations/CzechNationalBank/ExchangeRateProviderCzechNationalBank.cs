@@ -6,7 +6,7 @@ internal class ExchangeRateProviderCzechNationalBank(ICzechNationalBankApi czech
 {
     private readonly ICzechNationalBankApi _czechNationalBankApi = czechNationalBankApi;
 
-    public string SourceCurrency => "CZK";
+    public string TargetCurrency => "CZK";
 
     public async Task<ICollection<ExchangeRate>> GetExchangeRates(ICollection<Currency> currencies, DateTimeOffset date)
     {
@@ -16,8 +16,8 @@ internal class ExchangeRateProviderCzechNationalBank(ICzechNationalBankApi czech
             .Where(res => currencies.Any(curr => curr.Code.Equals(res.CurrencyCode, StringComparison.OrdinalIgnoreCase)))
             .Select(res =>
                 new ExchangeRate(
-                    new Currency(SourceCurrency),
                     new Currency(res.CurrencyCode.ToUpperInvariant()),
+                    new Currency(TargetCurrency.ToUpperInvariant()),
                     res.Rate
                 )
             ).ToArray();
