@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Mappers;
+using ExchangeRateUpdater.Services;
+using System;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
 {
@@ -13,7 +15,30 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var currentDate = DateTime.UtcNow;
+            var exchangeRateList = new List<ExchangeRate>();
+
+            try
+            {
+                var rawDataCurrency = HttpClientService.GetDataFromCzBankFrequentCurrency(currentDate);
+                if (!string.IsNullOrEmpty(rawDataCurrency))
+                {
+                    exchangeRateList.AddRange(ExchangeRateMapper.MapExchangeRateListFromString(currencies, rawDataCurrency));
+                }
+
+                var rawDataOtherCurrency = HttpClientService.GetDataFromCzBankOtherCurrency(currentDate);
+                if (!string.IsNullOrEmpty(rawDataOtherCurrency))
+                {
+                    exchangeRateList.AddRange(ExchangeRateMapper.MapExchangeRateListFromString(currencies, rawDataOtherCurrency));
+                }
+
+                return exchangeRateList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in ExchangeRateUpdater.GetExchangeRates\n" + ex.Message);
+                return exchangeRateList;
+            }
         }
     }
 }
