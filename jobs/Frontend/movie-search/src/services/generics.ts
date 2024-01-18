@@ -11,4 +11,11 @@ export abstract class GenericService<T> {
     const data = response.data;
     return data;
   }
+
+  public async getOne(id: number): Promise<T> {
+    const urlWithQuery = `${this.url}/${id}`;
+    const response: AxiosResponse = await axios.get(urlWithQuery);
+    const data = response.data;
+    return data;
+  }
 }

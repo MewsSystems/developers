@@ -5,3 +5,8 @@ export interface AllMovies {
   vote_average: number;
   id: number;
 }
+
+export interface MoviesDetailsFull extends AllMovies {
+  genre_ids: number;
+  overview: string;
+}

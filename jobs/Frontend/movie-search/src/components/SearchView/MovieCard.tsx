@@ -2,15 +2,23 @@ import { useGetMoviesSearched } from "@/hooks/useMovies";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { useState } from "react";
 import { useAppSelector } from "@/hooks/store";
+import { useModalState, useMovieId } from "@/hooks/useMoviesActions";
 
 export default function MovieCard() {
   const [page, setPage] = useState<number>(1);
   const moviesSearch = useAppSelector((state) => state.moviesSearch.userSearch);
   const { data, isPlaceholderData } = useGetMoviesSearched(moviesSearch, page);
+  const { setModalState } = useModalState();
+  const { setMovieId } = useMovieId();
 
   if (!data || data.length < 1) {
-    return <h1>Nothing</h1>;
+    return <h1></h1>;
   }
+
+  const handleMovieClick = (movieId: number) => {
+    setMovieId(movieId);
+    setModalState(true);
+  };
 
   return (
     <>
@@ -22,6 +30,7 @@ export default function MovieCard() {
             height={225}
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             width={150}
+            onClick={() => handleMovieClick(movie.id)}
           />
           <CardContent>
             <CardTitle className="text-lg font-bold">
