@@ -22,13 +22,16 @@ export default function MoviesDetails({
       <div className="grid gap-4 md:gap-10 items-start">
         <div className="hidden md:flex items-start">
           <div className="grid gap-4">
-            <h1 className="font-bold text-3xl lg:text-4xl">
+            <h1
+              className="font-bold text-3xl lg:text-4xl"
+              id="movie_title"
+              aria-placeholder=""
+            >
               {movieDetails?.original_title}
             </h1>
             <div>
               <p>Rating: {movieDetails?.vote_average.toFixed(1)}</p>
               <p>Release Date: {movieDetails?.release_date}</p>
-              <p>Genre: Drama, Thriller</p>
             </div>
           </div>
         </div>

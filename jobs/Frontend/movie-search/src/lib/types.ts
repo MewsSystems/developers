@@ -7,6 +7,5 @@ export interface AllMovies {
 }
 
 export interface MoviesDetailsFull extends AllMovies {
-  genre_ids: number;
   overview: string;
 }
