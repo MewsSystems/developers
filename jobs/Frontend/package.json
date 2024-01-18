@@ -1,0 +1,43 @@
+{
+  "name": "mews-fe-task",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --watch",
+    "test:ci": "jest --ci"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
+    "@rtk-query/codegen-openapi": "^1.2.0",
+    "@tradersclub/styled-system": "^6.2.4",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-redux": "^9.1.0",
+    "styled-components": "^6.1.8",
+    "ts-node": "^10.9.2",
+    "usehooks-ts": "^2.9.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/react": "^14.1.2",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/redux-logger": "^3.0.12",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "isomorphic-fetch": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "msw": "^2.1.2",
+    "redux-logger": "^3.0.6",
+    "typescript": "^5",
+    "undici": "^6.3.0"
+  }
+}
