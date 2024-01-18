@@ -13,7 +13,7 @@ export default function SearchView() {
           <header className="flex items-center h-16 px-4  mb-6">
             <Search />
           </header>
-          <main className="grid gap-6 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
+          <main>
             <MovieCard />
           </main>
         </div>

@@ -8,15 +8,12 @@ export class Movies extends GenericService<AllMovies> {
     this.url = url;
   }
 
-  public override async getSearch(
-    movieName: string,
-    page: number
-  ): Promise<AllMovies[]> {
+  public override async getSearch(movieName: string, page: number) {
     const urlWithQuery = `${this.url}search/movie?query=${encodeURIComponent(
       movieName
     )}&page=${page}&api_key=03b8572954325680265531140190fd2a`;
     const response: AxiosResponse = await axios.get(urlWithQuery);
-    const data = response.data.results;
+    const data = response.data;
     return data;
   }
 
