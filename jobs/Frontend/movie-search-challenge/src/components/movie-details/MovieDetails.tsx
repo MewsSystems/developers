@@ -29,7 +29,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
             </div>
             <div>
               <span>Length:</span>
-              <span>{movieDetails.length}</span>
+              <span>{movieDetails.length} mins</span>
             </div>
             <div>
               <span>Rate:</span>
@@ -37,7 +37,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
             </div>
             <div>
               <span>Budget:</span>
-              <span>{movieDetails.budget}</span>
+              <span>$ {movieDetails.budget}</span>
             </div>
             <div>
               <span>Release Date:</span>

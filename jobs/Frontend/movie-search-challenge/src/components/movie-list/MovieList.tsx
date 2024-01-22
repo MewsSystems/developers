@@ -1,4 +1,7 @@
 import type { SimpleMovie } from "../../app/slices/movieList/interfaces/simple-movie"
+import { StyledButton } from "../button/Button.styled"
+import EmptyList from "../empty-list/EmptyList"
+import { StyledFlex } from "../flex/Flex.styled"
 import MovieCard from "../movie-card/MovieCard"
 import { StyledMovieList } from "./MovieList.styled"
 interface Props {
@@ -6,12 +9,19 @@ interface Props {
 }
 
 const MovieList = ({ movies }: Props) => {
-  return (
-    <StyledMovieList>
-      {movies.map(movie => (
-        <MovieCard key={movie.id} {...movie} />
-      ))}
-    </StyledMovieList>
+  return movies.length === 0 ? (
+    <EmptyList />
+  ) : (
+    <>
+      <StyledMovieList>
+        {movies.map(movie => (
+          <MovieCard key={movie.id} {...movie} />
+        ))}
+      </StyledMovieList>
+      <StyledFlex>
+        <StyledButton>Load More</StyledButton>
+      </StyledFlex>
+    </>
   )
 }
 export default MovieList

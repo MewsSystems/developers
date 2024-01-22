@@ -6,12 +6,16 @@ export interface MovieListState {
   page: number
   movies: SimpleMovie[]
   isLoading: boolean
+  moreResults: boolean
+  searchQuery: string
 }
 
 const initialState: MovieListState = {
-  page: 0,
+  page: 1,
   movies: [],
   isLoading: false,
+  moreResults: false,
+  searchQuery: "",
 }
 
 export const movieListSlice = createSlice({
@@ -29,7 +33,11 @@ export const movieListSlice = createSlice({
       state.page = action.payload.page
       state.movies = action.payload.movies
     },
+    setSearchQuery: (state, action: PayloadAction<{ searchQuery: string }>) => {
+      state.searchQuery = action.payload.searchQuery
+    },
   },
 })
 
-export const { startLoadingMovies, setMovies } = movieListSlice.actions
+export const { startLoadingMovies, setMovies, setSearchQuery } =
+  movieListSlice.actions

@@ -3,10 +3,11 @@ import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { getMovies } from "../app/slices/movieList/thunks"
 import Loader from "../components/loader/Loader"
 import MovieList from "../components/movie-list/MovieList"
+import Header from "../components/header/Header"
 
 const MovieSearch = () => {
   const dispatch = useAppDispatch()
-  const { isLoading, movies, page } = useAppSelector(state => state.movieList)
+  const { isLoading, movies } = useAppSelector(state => state.movieList)
 
   useEffect(() => {
     dispatch(getMovies())
@@ -14,20 +15,8 @@ const MovieSearch = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <MovieList movies={movies} />
-
-          {/* <button
-            disabled={isLoading}
-            onClick={() => dispatch(getMovies(page))}
-          >
-            Next
-          </button> */}
-        </>
-      )}
+      <Header />
+      {isLoading ? <Loader /> : <MovieList movies={movies} />}
     </>
   )
 }
