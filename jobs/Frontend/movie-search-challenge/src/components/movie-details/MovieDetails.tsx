@@ -1,5 +1,6 @@
 import type { Genre } from "../../app/slices/movieDetails/interfaces/movie-details-response"
 import type { SimpleMovieDetails } from "../../app/slices/movieDetails/interfaces/simple-movie-details"
+import { StyledFlex } from "../flex/Flex.styled"
 import { StyledMovieDetails } from "./MovieDetails.styled"
 import { StyledMovieNumbers } from "./MovieNumbers.styled"
 
@@ -13,45 +14,47 @@ const getGenres = (genres: Genre[]) => {
 
 const MovieDetails = ({ movieDetails }: Props) => {
   return (
-    <StyledMovieDetails>
-      <div>
-        <img src={movieDetails.image} alt="Movie poster" />
-      </div>
-      <div>
-        <h1>{movieDetails.title}</h1>
-        <h3>{movieDetails.tagline}</h3>
-        <StyledMovieNumbers>
-          <div>
-            <span>Language:</span>
-            <span>{movieDetails.language}</span>
-          </div>
-          <div>
-            <span>Length:</span>
-            <span>{movieDetails.length}</span>
-          </div>
-          <div>
-            <span>Rate:</span>
-            <span>{movieDetails.rate}</span>
-          </div>
-          <div>
-            <span>Budget:</span>
-            <span>{movieDetails.budget}</span>
-          </div>
-          <div>
-            <span>Release Date:</span>
-            <span>{movieDetails.release_date}</span>
-          </div>
-        </StyledMovieNumbers>
+    <StyledFlex>
+      <StyledMovieDetails>
         <div>
-          <h2>Genres</h2>
-          {getGenres(movieDetails.genres)}
+          <img src={movieDetails.image} alt="Movie poster" />
         </div>
         <div>
-          <h2>Overview</h2>
-          <p>{movieDetails.overview}</p>
+          <h1>{movieDetails.title}</h1>
+          <h3>{movieDetails.tagline}</h3>
+          <StyledMovieNumbers>
+            <div>
+              <span>Language:</span>
+              <span>{movieDetails.language}</span>
+            </div>
+            <div>
+              <span>Length:</span>
+              <span>{movieDetails.length}</span>
+            </div>
+            <div>
+              <span>Rate:</span>
+              <span>{movieDetails.rate}</span>
+            </div>
+            <div>
+              <span>Budget:</span>
+              <span>{movieDetails.budget}</span>
+            </div>
+            <div>
+              <span>Release Date:</span>
+              <span>{movieDetails.release_date}</span>
+            </div>
+          </StyledMovieNumbers>
+          <div>
+            <h2>Genres</h2>
+            {getGenres(movieDetails.genres)}
+          </div>
+          <div>
+            <h2>Overview</h2>
+            <p>{movieDetails.overview}</p>
+          </div>
         </div>
-      </div>
-    </StyledMovieDetails>
+      </StyledMovieDetails>
+    </StyledFlex>
   )
 }
 export default MovieDetails

@@ -35,14 +35,12 @@ export const StyledLoader = styled.span`
     box-sizing: border-box;
     animation: tape 4s linear infinite;
   }
-
   &:before {
     right: 0;
     box-shadow:
       0 0 0 4px #fff,
       0 0 0 34px #000;
   }
-
   &:after {
     left: 0;
     box-shadow:

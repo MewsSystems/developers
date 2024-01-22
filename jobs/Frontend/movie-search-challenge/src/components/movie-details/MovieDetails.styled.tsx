@@ -6,9 +6,14 @@ export const StyledMovieDetails = styled.div`
   color: white;
   max-width: 800px;
   background-color: ${({ theme }) => theme.colors.secondary};
+  margin-top: 40px;
 
   > div:first-child {
+    display: flex;
+    align-items: center;
+
     img {
+      margin: 20px;
       width: 300px;
       height: 400px;
       border-radius: 5px;
@@ -28,5 +33,6 @@ export const StyledMovieDetails = styled.div`
   @media (max-width: ${({ theme }) => theme.mobile}) {
     flex-direction: column;
     align-items: center;
+    margin-top: 0;
   }
 `
