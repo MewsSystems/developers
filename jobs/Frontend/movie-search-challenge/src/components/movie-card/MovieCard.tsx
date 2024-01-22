@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { StyledCard } from "./Card.styled"
 import { StyledImage } from "./Image.styled"
 import { StyledMovieTitle } from "./MovieTitle.styled"
@@ -10,12 +11,14 @@ interface Props {
 
 const MovieCard = ({ id, image, title }: Props) => {
   return (
-    <StyledCard onClick={() => console.log(id)}>
-      <StyledImage src={image}></StyledImage>
-      <StyledMovieTitle>
-        <h3>{title}</h3>
-      </StyledMovieTitle>
-    </StyledCard>
+    <Link to={`/${id}`}>
+      <StyledCard>
+        <StyledImage src={image}></StyledImage>
+        <StyledMovieTitle>
+          <h3>{title}</h3>
+        </StyledMovieTitle>
+      </StyledCard>
+    </Link>
   )
 }
 export default MovieCard

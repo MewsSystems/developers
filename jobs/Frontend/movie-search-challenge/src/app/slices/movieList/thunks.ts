@@ -1,19 +1,14 @@
-import type { AppThunk } from "../../../app/store"
+import type { AppThunk } from "../../store"
 import type { SearchResponse } from "./interfaces/search-response"
 import type { SimpleMovie } from "./interfaces/simple-movie"
-import { IMAGE_BASE_URL, moviesApi } from "../../../api/movies"
-import { setMovies, startLoadingMovies } from "./moviesSlice"
+import { IMAGE_BASE_URL, getMovieSearch } from "../../../api/movies"
+import { setMovies, startLoadingMovies } from "./movieListSlice"
 
 export const getMovies = (page = 0, limit = 10): AppThunk => {
   return async dispatch => {
     dispatch(startLoadingMovies())
 
-    const { data }: { data: SearchResponse } = await moviesApi.get(
-      `/search/movie`,
-      {
-        params: { limit, offset: page * 10, query: "star wars" },
-      },
-    )
+    const { data }: { data: SearchResponse } = await getMovieSearch("star wars")
 
     console.log(data)
 

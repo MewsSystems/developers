@@ -14,8 +14,8 @@ const initialState: MovieListState = {
   isLoading: false,
 }
 
-export const moviesSlice = createSlice({
-  name: "movies",
+export const movieListSlice = createSlice({
+  name: "movieList",
   initialState,
   reducers: {
     startLoadingMovies: state => {
@@ -32,4 +32,4 @@ export const moviesSlice = createSlice({
   },
 })
 
-export const { startLoadingMovies, setMovies } = moviesSlice.actions
+export const { startLoadingMovies, setMovies } = movieListSlice.actions
