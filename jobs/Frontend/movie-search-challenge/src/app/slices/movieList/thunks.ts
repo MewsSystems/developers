@@ -1,12 +1,12 @@
 import type { AppThunk } from "../../store"
 import type { SearchResponse } from "./interfaces/search-response"
 import type { SimpleMovie } from "./interfaces/simple-movie"
+import { getDicoverMovies, getMovieSearch } from "../../../api/movies"
+import { setMovies, startLoadingMovies } from "./movieListSlice"
 import {
   IMAGE_BASE_URL,
-  getDicoverMovies,
-  getMovieSearch,
-} from "../../../api/movies"
-import { setMovies, startLoadingMovies } from "./movieListSlice"
+  PLACEHOLDER_NO_IMG,
+} from "../../../constants/constants"
 
 export const getMovies = (): AppThunk => {
   return async (dispatch, getState) => {
@@ -21,7 +21,9 @@ export const getMovies = (): AppThunk => {
     const simpleMovies: SimpleMovie[] = data.results.map(movie => ({
       id: movie.id,
       title: movie.original_title,
-      image: IMAGE_BASE_URL + movie.poster_path,
+      image: movie.poster_path
+        ? IMAGE_BASE_URL + movie.poster_path
+        : PLACEHOLDER_NO_IMG,
     }))
 
     dispatch(setMovies({ movies: simpleMovies, page }))

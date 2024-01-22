@@ -2,7 +2,11 @@ import type { AppThunk } from "../../store"
 import type { SimpleMovieDetails } from "./interfaces/simple-movie-details"
 import type { MovieDetailsResponse } from "./interfaces/movie-details-response"
 import { setDetails, startLoadingDetails } from "./movieDetailsSlice"
-import { IMAGE_BASE_URL, getMovieDetails } from "../../../api/movies"
+import { getMovieDetails } from "../../../api/movies"
+import {
+  IMAGE_BASE_URL,
+  PLACEHOLDER_NO_IMG,
+} from "../../../constants/constants"
 
 export const getDetails = (id: number | string): AppThunk => {
   return async dispatch => {
@@ -11,7 +15,9 @@ export const getDetails = (id: number | string): AppThunk => {
     const { data }: { data: MovieDetailsResponse } = await getMovieDetails(id)
 
     const simpleMovieDetails: SimpleMovieDetails = {
-      image: IMAGE_BASE_URL + data.poster_path,
+      image: data.poster_path
+        ? IMAGE_BASE_URL + data.poster_path
+        : PLACEHOLDER_NO_IMG,
       title: data.title,
       tagline: data.tagline,
       language: data.original_language,
