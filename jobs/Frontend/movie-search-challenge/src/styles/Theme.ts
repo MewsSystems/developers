@@ -1,8 +1,8 @@
 export const theme = {
   colors: {
-    primary: "#22254b",
-    secondary: "#373b69",
-    tertiary: "#7378c5",
+    primary: "#000000c9",
+    secondary: "#1a00ff82",
+    tertiary: "#a7a7a7",
   },
   mobile: "768px",
 }
