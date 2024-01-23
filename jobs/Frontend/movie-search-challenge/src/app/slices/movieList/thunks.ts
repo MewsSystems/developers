@@ -1,31 +1,51 @@
 import type { AppThunk } from "../../store"
 import type { SearchResponse } from "./interfaces/search-response"
-import type { SimpleMovie } from "./interfaces/simple-movie"
 import { getDicoverMovies, getMovieSearch } from "../../../api/movies"
-import { setMovies, startLoadingMovies } from "./movieListSlice"
 import {
-  IMAGE_BASE_URL,
-  PLACEHOLDER_NO_IMG,
-} from "../../../constants/constants"
+  setMovies,
+  startAddingResults,
+  startLoadingMovies,
+} from "./movieListSlice"
+import { transformToSimpleMovies } from "./helpers"
 
 export const getMovies = (): AppThunk => {
   return async (dispatch, getState) => {
     dispatch(startLoadingMovies())
-    const { searchQuery: query, page } = getState().movieList
+    const { searchQuery: query } = getState().movieList
 
     const { data }: { data: SearchResponse } =
       query.length === 0
         ? await getDicoverMovies()
         : await getMovieSearch(query)
 
-    const simpleMovies: SimpleMovie[] = data.results.map(movie => ({
-      id: movie.id,
-      title: movie.original_title,
-      image: movie.poster_path
-        ? IMAGE_BASE_URL + movie.poster_path
-        : PLACEHOLDER_NO_IMG,
-    }))
+    dispatch(
+      setMovies({
+        movies: transformToSimpleMovies(data.results),
+        page: data.page,
+        totalPages: data.total_pages,
+      }),
+    )
+  }
+}
 
-    dispatch(setMovies({ movies: simpleMovies, page }))
+export const addResults = (): AppThunk => {
+  return async (dispatch, getState) => {
+    dispatch(startAddingResults())
+    const { movies, page, searchQuery: query } = getState().movieList
+
+    const { data }: { data: SearchResponse } = await getMovieSearch(
+      query,
+      page + 1,
+    )
+
+    const newMovies = transformToSimpleMovies(data.results)
+
+    dispatch(
+      setMovies({
+        movies: movies.concat(newMovies),
+        page: data.page,
+        totalPages: data.total_pages,
+      }),
+    )
   }
 }
