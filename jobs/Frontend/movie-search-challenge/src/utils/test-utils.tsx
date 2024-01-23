@@ -5,6 +5,8 @@ import type { PropsWithChildren, ReactElement } from "react"
 import { Provider } from "react-redux"
 import type { AppStore, RootState } from "../app/store"
 import { makeStore } from "../app/store"
+import { ThemeProvider } from "styled-components"
+import { theme } from "../styles/Theme"
 
 /**
  * This type extends the default options for
@@ -53,7 +55,9 @@ export const renderWithProviders = (
   } = extendedRenderOptions
 
   const Wrapper = ({ children }: PropsWithChildren) => (
-    <Provider store={store}>{children}</Provider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </Provider>
   )
 
   // Return an object with the store and all of RTL's query functions
