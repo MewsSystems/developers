@@ -7,8 +7,24 @@ export interface MovieDetailsState {
   isLoading: boolean
 }
 
-const initialState: MovieDetailsState = {
-  details: {} as SimpleMovieDetails,
+export const initialState: MovieDetailsState = {
+  details: {
+    image: "",
+    title: "",
+    tagline: "",
+    language: "",
+    length: 0,
+    rate: 0,
+    budget: 0,
+    release_date: "",
+    genres: [
+      {
+        id: 0,
+        name: "",
+      },
+    ],
+    overview: "",
+  },
   isLoading: false,
 }
 
