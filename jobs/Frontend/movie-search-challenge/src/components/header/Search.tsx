@@ -7,10 +7,11 @@ const Search = () => {
   return (
     <form id="form">
       <StyledSearch
+        name="search"
+        onChange={event => setSearchValue(event.target.value)}
+        placeholder="Search"
         type="text"
         value={searchValue}
-        placeholder="Search"
-        onChange={event => setSearchValue(event.target.value)}
       />
     </form>
   )
