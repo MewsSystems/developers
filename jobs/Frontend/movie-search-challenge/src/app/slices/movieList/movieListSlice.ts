@@ -11,7 +11,7 @@ export interface MovieListState {
   searchQuery: string
 }
 
-const initialState: MovieListState = {
+export const initialState: MovieListState = {
   page: 1,
   movies: [],
   isLoading: false,
