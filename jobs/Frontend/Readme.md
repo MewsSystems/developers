@@ -11,4 +11,6 @@ To retrieve information about movies, use [TheMovieDb API](https://developers.th
 
 ## Required technologies
 
-To test your proficiency with technologies we use the most, we require the solution to be written with use of TypeScript, React, Redux and styled-components. Use of any additional libraries is allowed and it's up to you.
+To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
+We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
+The use of any additional library is allowed and up to you.
