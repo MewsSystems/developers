@@ -9,6 +9,7 @@ using Mews.Integrations.Cnb.Contracts.Models;
 using Mews.Integrations.Cnb.Models;
 using Mews.Integrations.Cnb.Services;
 using Mews.Shared.Temporal;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace ExchangeRateUpdater.Tests.Services.Cnb;
@@ -84,7 +85,7 @@ public class ExchangeRateProviderTests
     private static void AssertExchangeRate(CnbClientExchangeRateResponseItem expected, ExchangeRate result)
     {
         Assert.Equal(expected.CurrencyCode, result.SourceCurrency.Code);
-        Assert.Equal(expected.Rate, result.Value);
+        Assert.Equal(expected.Rate / expected.Amount, result.Value);
         Assert.Equal(expected.ValidFor, result.ValidFor.ToString("yyyy-MM-dd"));
     }
 
@@ -114,6 +115,6 @@ public class ExchangeRateProviderTests
     
     private static ExchangeRateProvider InitializeProvider(CnbClientStub cnbClientStub)
     {
-        return new ExchangeRateProvider(cnbClientStub);
+        return new ExchangeRateProvider(cnbClientStub, NullLogger<ExchangeRateProvider>.Instance);
     }
 }
