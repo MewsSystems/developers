@@ -20,21 +20,14 @@ public class ExchangeRateUpdaterJob(
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var currencies = cnbConfiguration.Value.Currencies.Select(c => new Currency(c)).ToList();
-        try
-        {
-            var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies, clock.Now, cancellationToken);
+        var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies, clock.Now, cancellationToken);
 
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-            foreach (var rate in rates)
-            {
-                Console.WriteLine(rate.ToString());
-            }
-        }
-        catch (Exception e)
+        Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+        foreach (var rate in rates)
         {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            Console.WriteLine(rate.ToString());
         }
-        
+
         Console.ReadLine();
         appLifetime.StopApplication();
     }

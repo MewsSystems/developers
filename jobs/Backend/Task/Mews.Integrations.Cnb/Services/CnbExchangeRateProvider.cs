@@ -11,8 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Mews.Integrations.Cnb.Services;
 
-public class ExchangeRateProvider(ICnbClient cnbClient, ILogger<ExchangeRateProvider> logger) : IExchangeRateProvider
+public class CnbExchangeRateProvider(ICnbClient cnbClient, ILogger<CnbExchangeRateProvider> logger) : IExchangeRateProvider
 {
+    private const string TargetCurrency = "CZK";
+    
     /// <inheritdoc />
     public async Task<IReadOnlyList<ExchangeRate>> GetExchangeRatesAsync(
         IEnumerable<Currency> currencies,
@@ -23,7 +25,7 @@ public class ExchangeRateProvider(ICnbClient cnbClient, ILogger<ExchangeRateProv
         var currencyCodes = currencies.Select(c => c.Code).ToList();
 
         var targetRates = exchangeRateResponse.Rates
-            .Where(r => currencyCodes.Contains(r.CurrencyCode))
+            .Where(r => currencyCodes.Contains(r.CurrencyCode, StringComparer.OrdinalIgnoreCase))
             .ToArray();
         
         LogMissingCurrencies(currencyCodes, targetRates);
@@ -32,7 +34,7 @@ public class ExchangeRateProvider(ICnbClient cnbClient, ILogger<ExchangeRateProv
             .Select(r => new ExchangeRate
             {
                 SourceCurrency = new Currency(r.CurrencyCode),
-                TargetCurrency = new Currency("CZK"),
+                TargetCurrency = new Currency(TargetCurrency),
                 Value = r.Rate / r.Amount,
                 ValidFor = GetValidFor(r.ValidFor),
             })

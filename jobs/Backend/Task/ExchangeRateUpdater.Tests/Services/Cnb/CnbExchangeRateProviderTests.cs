@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ExchangeRateUpdater.Tests.Services.Cnb;
 
-public class ExchangeRateProviderTests
+public class CnbExchangeRateProviderTests
 {
     private static IClock Clock => 
         new StoppedClock { Now = new DateTimeOffset(2024, 1, 27, 8, 0, 0, TimeSpan.Zero) };
@@ -113,8 +113,8 @@ public class ExchangeRateProviderTests
         return currencies.Select(c => new Currency(c)).ToList();
     }
     
-    private static ExchangeRateProvider InitializeProvider(CnbClientStub cnbClientStub)
+    private static CnbExchangeRateProvider InitializeProvider(CnbClientStub cnbClientStub)
     {
-        return new ExchangeRateProvider(cnbClientStub, NullLogger<ExchangeRateProvider>.Instance);
+        return new CnbExchangeRateProvider(cnbClientStub, NullLogger<CnbExchangeRateProvider>.Instance);
     }
 }

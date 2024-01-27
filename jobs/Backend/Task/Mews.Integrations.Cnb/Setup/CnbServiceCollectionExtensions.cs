@@ -21,7 +21,7 @@ public static class CnbServiceCollectionExtensions
             client.BaseAddress = new Uri(config!.BaseUrl);
         });
         services.Configure<CnbConfiguration>(configuration);
-        services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+        services.AddTransient<IExchangeRateProvider, CnbExchangeRateProvider>();
         
         return services;
     }
