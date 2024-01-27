@@ -21,4 +21,13 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Mews.Integrations.Cnb\Mews.Integrations.Cnb.csproj" />
+      <ProjectReference Include="..\Mews.Shared\Mews.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mews.Integrations.Cnb\Mews.Integrations.Cnb.csproj" />
+    </ItemGroup>
+
 </Project>
