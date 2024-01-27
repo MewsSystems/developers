@@ -1,6 +1,6 @@
 namespace Mews.Integrations.Cnb.Models;
 
-public abstract record CnbClientExchangeRateResponseItem
+public record CnbClientExchangeRateResponseItem
 {
     public string ValidFor { get; init; } = null!;
     public int Order { get; init; }

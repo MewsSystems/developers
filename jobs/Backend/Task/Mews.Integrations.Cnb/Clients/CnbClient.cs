@@ -8,11 +8,11 @@ using Mews.Integrations.Cnb.Models;
 
 namespace Mews.Integrations.Cnb.Clients;
 
-public class CnbClient(HttpClient httpClient)
+public class CnbClient(HttpClient httpClient) : ICnbClient
 {
-    public async Task<CnbClientExchangeRateResponse> GetDailyExchangeRates(DateTimeOffset date, CnbSupportedLanguage language, CancellationToken cancellationToken)
+    public async Task<CnbClientExchangeRateResponse> GetDailyExchangeRatesAsync(DateTimeOffset date, CancellationToken cancellationToken)
     {
-        var queryString = BuildQueryString(date, language);
+        var queryString = BuildQueryString(date);
         var response = await SendGetRequestAsync($"cnbapi/exrates/daily?{queryString}", cancellationToken);
 
         response.EnsureSuccessStatusCode();
@@ -28,18 +28,9 @@ public class CnbClient(HttpClient httpClient)
         return await httpClient.SendAsync(request, cancellationToken);
     }
     
-    private static string BuildQueryString(DateTimeOffset? date, CnbSupportedLanguage language)
+    private static string BuildQueryString(DateTimeOffset? date)
     {
         var formattedDate = (date ?? DateTimeOffset.UtcNow).ToString("yyyy-MM-dd");
-        return $"date={Uri.EscapeDataString(formattedDate)}&lang={Uri.EscapeDataString(MapCnbLanguage(language))}";
-    }
-
-    private static string MapCnbLanguage(CnbSupportedLanguage language)
-    {
-        return language switch
-        {
-            CnbSupportedLanguage.En => "EN",
-            _ => "CZ"
-        };
+        return $"date={Uri.EscapeDataString(formattedDate)}";
     }
 }

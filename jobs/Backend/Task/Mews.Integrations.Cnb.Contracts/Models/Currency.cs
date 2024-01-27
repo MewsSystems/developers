@@ -1,20 +1,13 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace Mews.Integrations.Cnb.Contracts.Models;
+
+/// <summary>
+/// Currency model
+/// </summary>
+/// <param name="Code">Three-letter ISO 4217 code of the currency</param>
+public record Currency(string Code)
 {
-    public class Currency
+    public override string ToString()
     {
-        public Currency(string code)
-        {
-            Code = code;
-        }
-
-        /// <summary>
-        /// Three-letter ISO 4217 code of the currency.
-        /// </summary>
-        public string Code { get; }
-
-        public override string ToString()
-        {
-            return Code;
-        }
+        return Code;
     }
 }
