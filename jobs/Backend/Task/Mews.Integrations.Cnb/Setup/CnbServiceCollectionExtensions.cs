@@ -13,7 +13,7 @@ public static class CnbServiceCollectionExtensions
     /// <summary>
     /// Registers Cnb integration related service.
     /// </summary>
-    public static IServiceCollection AddCnbIntegration(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCnbIntegration(this IServiceCollection services, IConfigurationSection configuration)
     {
         services.AddHttpClient<ICnbClient, CnbClient>(client =>
         {

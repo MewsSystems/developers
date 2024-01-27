@@ -16,7 +16,6 @@ public class ExchangeRateProvider(ICnbClient cnbClient) : IExchangeRateProvider
         DateTimeOffset date,
         CancellationToken cancellationToken)
     {
-        // TODO use clock
         var exchangeRateResponse = await cnbClient.GetDailyExchangeRatesAsync(date, cancellationToken);
         
         return new List<ExchangeRate>();

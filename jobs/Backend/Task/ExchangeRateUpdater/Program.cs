@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +33,7 @@ namespace ExchangeRateUpdater
         private static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             services.AddSystemUtcClock();
-            services.AddCnbIntegration(configuration);
+            services.AddCnbIntegration(configuration.GetSection("Cnb"));
             services.AddHostedService<ExchangeRateUpdaterJob>();
         }
     }
