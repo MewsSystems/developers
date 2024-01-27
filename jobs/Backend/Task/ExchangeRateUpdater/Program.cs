@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using ExchangeRateUpdater.Services;
+using Mews.Integrations.Cnb.Setup;
+using Mews.Shared.Setup;
 
 namespace ExchangeRateUpdater
 {
@@ -33,6 +35,8 @@ namespace ExchangeRateUpdater
 
         private static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
+            services.AddSystemUtcClock();
+            services.AddCnbIntegration(configuration);
             services.AddHostedService<ExchangeRateUpdaterJob>();
         }
     }

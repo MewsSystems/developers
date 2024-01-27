@@ -3,38 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Mews.Integrations.Cnb.Contracts.Configuration;
+using Mews.Integrations.Cnb.Contracts.Models;
+using Mews.Integrations.Cnb.Contracts.Services;
+using Mews.Integrations.Cnb.Services;
+using Mews.Shared.Temporal;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Services;
 
-public class ExchangeRateUpdaterJob : BackgroundService
+public class ExchangeRateUpdaterJob(
+    IHostApplicationLifetime appLifetime,
+    IExchangeRateProvider exchangeRateProvider,
+    IClock clock,
+    IOptionsSnapshot<CnbConfiguration> cnbConfiguration) : BackgroundService
 {
-    private readonly IHostApplicationLifetime _appLifetime;
 
-    private static IEnumerable<Currency> currencies = new[]
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        new Currency("USD"),
-        new Currency("EUR"),
-        new Currency("CZK"),
-        new Currency("JPY"),
-        new Currency("KES"),
-        new Currency("RUB"),
-        new Currency("THB"),
-        new Currency("TRY"),
-        new Currency("XYZ")
-    };
-
-    public ExchangeRateUpdaterJob(IHostApplicationLifetime appLifetime)
-    {
-        _appLifetime = appLifetime;
-    }
-
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
+        var currencies = cnbConfiguration.Value.Currencies.Select(c => new Currency(c)).ToList();
         try
         {
-            var provider = new ExchangeRateProvider();
-            var rates = provider.GetExchangeRates(currencies);
+            var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies, clock.Now, cancellationToken);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
@@ -49,8 +40,6 @@ public class ExchangeRateUpdaterJob : BackgroundService
 
         
         Console.ReadLine();
-        _appLifetime.StopApplication();
-        
-        return Task.CompletedTask;
+        appLifetime.StopApplication();
     }
 }
