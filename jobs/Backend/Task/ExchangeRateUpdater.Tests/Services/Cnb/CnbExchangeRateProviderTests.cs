@@ -82,6 +82,25 @@ public class CnbExchangeRateProviderTests
         Assert.Equal($"USD/CZK={expectedUsd.Rate}", exchangeRateResult.ToString());
     }
     
+    [Fact]
+    public async Task ReturnsEmptyArrayWhenNoRatesAreAvailable()
+    {
+        // Given
+        var expectedResponse = new CnbClientExchangeRateResponse
+        {
+            Rates = []
+        };
+        var cnbClientStub = CreateCnbClientStub(expectedResponse);
+        var provider = InitializeProvider(cnbClientStub);
+        var requestedCurrencies = GetRequestedCurrencies("USD", "EUR", "JPY", "RUB");
+        
+        // When
+        var exchangeRatesResult = await provider.GetExchangeRatesAsync(requestedCurrencies, Clock.Now, CancellationToken.None);
+        
+        // Then
+        Assert.Empty(exchangeRatesResult);
+    }
+    
     private static void AssertExchangeRate(CnbClientExchangeRateResponseItem expected, ExchangeRate result)
     {
         Assert.Equal(expected.CurrencyCode, result.SourceCurrency.Code);
