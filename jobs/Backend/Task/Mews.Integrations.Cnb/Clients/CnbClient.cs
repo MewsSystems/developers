@@ -9,6 +9,9 @@ namespace Mews.Integrations.Cnb.Clients;
 
 public class CnbClient(HttpClient httpClient) : ICnbClient
 {
+    private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
+    
+    /// <inheritdoc />
     public async Task<CnbClientExchangeRateResponse> GetDailyExchangeRatesAsync(DateTimeOffset date, CancellationToken cancellationToken)
     {
         var queryString = BuildQueryString(date);
@@ -17,8 +20,7 @@ public class CnbClient(HttpClient httpClient) : ICnbClient
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-        var ignoreCaseSensitivityOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        return JsonSerializer.Deserialize<CnbClientExchangeRateResponse>(responseBody, ignoreCaseSensitivityOptions)!;
+        return JsonSerializer.Deserialize<CnbClientExchangeRateResponse>(responseBody, SerializerOptions)!;
     }
 
     private async Task<HttpResponseMessage> SendGetRequestAsync(string relativeUrl, CancellationToken cancellationToken)
