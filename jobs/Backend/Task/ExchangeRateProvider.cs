@@ -1,19 +1,81 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<ExchangeRateProvider> _logger;
+        private readonly string _baseUrl;
+
+        public ExchangeRateProvider(ILogger<ExchangeRateProvider> logger, IConfiguration configuration, HttpClient httpClient = null)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            _httpClient = httpClient ?? new HttpClient();
+            _logger = logger;
+            _baseUrl = configuration["ExchangeRateApi:BaseUrl"];
         }
+
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        {
+            try
+            {
+                var exchangeRates = new List<ExchangeRate>();
+                var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code));
+                string rawData = await FetchExchangeRateDataAsync();
+
+                var response = JsonSerializer.Deserialize<ExchangeRateResponse>(rawData);
+
+                if (response?.Rates != null)
+                {
+                    foreach (var rate in response.Rates)
+                    {
+                        if (currencyCodes.Contains(rate.CurrencyCode))
+                        {
+                            exchangeRates.Add(new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), rate.RateValue));
+                        }
+                    }
+                }
+
+                return exchangeRates;
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Error fetching data from the API");
+                throw;
+            }
+            catch (JsonException e)
+            {
+                _logger.LogError(e, "Error parsing JSON data");
+                throw;
+            }
+        }
+
+        private async Task<string> FetchExchangeRateDataAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(_baseUrl);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                return responseBody;
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("Error fetching data from Czech National Bank", e);
+            }
+        }
+    }
+
+    public class ExchangeRateResponse
+    {
+        [JsonPropertyName("rates")] public List<Rate> Rates { get; set; }
+    }
+
+    public class Rate
+    {
+        [JsonPropertyName("currencyCode")] public string CurrencyCode { get; set; }
+
+        [JsonPropertyName("rate")] public decimal RateValue { get; set; }
     }
 }
