@@ -3,7 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.Integrations.Cnb", "Mews.Integrations.Cnb\Mews.Integrations.Cnb.csproj", "{59EB1B3B-8088-4101-AC0D-A1F44D446BB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.Integrations.Cnb.Contracts", "Mews.Integrations.Cnb.Contracts\Mews.Integrations.Cnb.Contracts.csproj", "{E85B29EA-077F-430E-965A-9A7451C3E1A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{5EFC7438-E90F-4E32-A4DE-3492825E23EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{C281023B-B293-4ABE-A248-FA75857713A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.Shared", "Mews.Shared\Mews.Shared.csproj", "{0F1E0296-DD80-4198-A336-83EA562F10D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{742DB933-BF44-4239-8978-1DB8D39CB20C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integrations", "{1E0E8DB2-7631-4508-8DD8-81D93D325E4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E9E6299A-56E8-4C2D-842C-1E6129A67BE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +25,34 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EB1B3B-8088-4101-AC0D-A1F44D446BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EB1B3B-8088-4101-AC0D-A1F44D446BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EB1B3B-8088-4101-AC0D-A1F44D446BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EB1B3B-8088-4101-AC0D-A1F44D446BB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85B29EA-077F-430E-965A-9A7451C3E1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85B29EA-077F-430E-965A-9A7451C3E1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85B29EA-077F-430E-965A-9A7451C3E1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85B29EA-077F-430E-965A-9A7451C3E1A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EFC7438-E90F-4E32-A4DE-3492825E23EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFC7438-E90F-4E32-A4DE-3492825E23EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFC7438-E90F-4E32-A4DE-3492825E23EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFC7438-E90F-4E32-A4DE-3492825E23EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C281023B-B293-4ABE-A248-FA75857713A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C281023B-B293-4ABE-A248-FA75857713A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C281023B-B293-4ABE-A248-FA75857713A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C281023B-B293-4ABE-A248-FA75857713A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1E0296-DD80-4198-A336-83EA562F10D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1E0296-DD80-4198-A336-83EA562F10D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1E0296-DD80-4198-A336-83EA562F10D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1E0296-DD80-4198-A336-83EA562F10D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C281023B-B293-4ABE-A248-FA75857713A5} = {E9E6299A-56E8-4C2D-842C-1E6129A67BE4}
+		{59EB1B3B-8088-4101-AC0D-A1F44D446BB0} = {1E0E8DB2-7631-4508-8DD8-81D93D325E4A}
+		{E85B29EA-077F-430E-965A-9A7451C3E1A7} = {1E0E8DB2-7631-4508-8DD8-81D93D325E4A}
+		{0F1E0296-DD80-4198-A336-83EA562F10D7} = {742DB933-BF44-4239-8978-1DB8D39CB20C}
 	EndGlobalSection
 EndGlobal
