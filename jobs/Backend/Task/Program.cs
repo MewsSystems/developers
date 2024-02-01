@@ -1,12 +1,20 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Exchange_Providers.Comparers;
+using ExchangeRateUpdater.Exchange_Providers.Interfaces;
+using ExchangeRateUpdater.Exchange_Providers.Models;
+using ExchangeRateUpdater.Exchange_Providers.Provider.CNB;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,12 +27,20 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var serviceProvider = Configuration();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+                var rates = await provider.GetExchangeRates(currencies);
+
+                var foundCurrencies = rates.Select(r => r.SourceCurrency);
+                
+                // We store the not found in case we had another provider later on which could
+                // supply the rest of the exchange rates we are looking for.
+                var notFound = currencies.Except(foundCurrencies, new CurrencyEqualityComparer());
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -38,6 +54,22 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static IServiceProvider Configuration()
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                                                .SetBasePath(Directory.GetCurrentDirectory())
+                                                .AddJsonFile("appsettings.json")
+                                                .Build();
+
+            ServiceCollection serviceCollection = new();
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
+            serviceCollection.AddScoped<IExchangeRateMapper<CNB_Exchange_Rate>, ExchangeRateMapper_CNB>();
+            serviceCollection.AddScoped<IExchangeRateProvider, ExchangeRateProvider_CNB>();
+            serviceCollection.AddHttpClient();
+
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }
