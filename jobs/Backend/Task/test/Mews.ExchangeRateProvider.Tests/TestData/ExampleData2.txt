@@ -1,0 +1,126 @@
+29 Sep 2023 #9
+Country|Currency|Amount|Code|Rate
+Afghanistan|afghani|100|AFN|29.498
+Albania|lek|100|ALL|22.944
+Algeria|dinar|100|DZD|16.756
+Angola|kwanza|100|AOA|2.767
+Argentina|peso|1|ARS|0.066
+Armenia|dram|100|AMD|5.874
+Aruba|florin|1|AWG|12.903
+Azerbaijan|manat|1|AZN|13.550
+Bahamas|dollar|1|BSD|22.967
+Bahrain|dinar|1|BHD|61.050
+Bangladesh|taka|100|BDT|20.879
+Barbados|dollar|1|BBD|11.494
+BCEAO|franc CFA|100|XOF|3.734
+BEAC|franc CFA|100|XAF|3.711
+Belarus|ruble|1|BYN|6.937
+Belize|dollar|1|BZD|11.494
+Bermuda|dollar|1|BMD|22.967
+Bhutan|ngultrum|100|BTN|27.652
+Bolivia|boliviano|1|BOB|3.348
+Bosnia and Herzegovina|convertible mark|1|BAM|12.445
+Botswana|pula|1|BWP|1.679
+Brunei|dollar|1|BND|16.853
+Burundi|franc|100|BIF|0.815
+Cambodia|riel|1000|KHR|5.583
+Cape Verde|escudo|100|CVE|22.082
+Cayman Islands|dollar|1|KYD|27.839
+Chile|peso|100|CLP|2.553
+Colombia|peso|1000|COP|5.641
+Comoros|franc|100|KMF|4.918
+Congo Dem.|franc |100|CDF|0.927
+Costa Rica|colon|100|CRC|4.344
+Cuba|peso|1|CUP|0.957
+Curacao and St. Marteen|guilder|1|ANG|12.903
+Djibouti|franc|100|DJF|12.936
+Dominican Republic|peso|100|DOP|40.549
+East Caribbean|dollar|1|XCD|8.506
+Egypt|pound|1|EGP|0.744
+El Salvador|colon|1|SVC|2.625
+Eritrea|nakfa|1|ERN|1.531
+Ethiopia|birr|1|ETB|0.416
+Falkland Islands|pound|1|FKP|28.146
+Fiji|dollar|1|FJD|9.814
+French Polynesia|franc CFP|100|XPF|20.461
+Gambia|dalasi|100|GMD|35.443
+Georgia|lari|1|GEL|8.667
+Ghana|Cedi|1|GHS|1.985
+Gibraltar|pound|1|GIP|28.146
+Guatemala|quetzal|1|GTQ|2.926
+Guinea|franc|1000|GNF|2.707
+Guyana|dollar|100|GYD|11.043
+Haiti|gourde|100|HTG|17.137
+Honduras|lempira|1|HNL|0.933
+Iran|rial|10000|IRR|5.468
+Iraq|dinar|1000|IQD|17.551
+Jamaica|dollar|100|JMD|15.011
+Jordan|dinar|1|JOD|32.366
+Kazakhstan|tenge|100|KZT|4.811
+Kenya|shilling|100|KES|15.497
+Korea, north|won|100|KPW|17.667
+Kuwait|dinar|1|KWD|74.341
+Kyrgyzstan|som|100|KGS|25.890
+Lao|kip|1000|LAK|1.130
+Lebanon|pound|1000|LBP|1.531
+Lesotho|loti|1|LSL|1.218
+Liberia|dollar|100|LRD|12.282
+Libya|dinar|1|LYD|4.709
+Macao|pataca|1|MOP|2.847
+Madagascar|ariary|1000|MGA|5.109
+Malawi|kwacha|100|MWK|2.134
+Maldives|rufiyaa|1|MVR|1.489
+Mauritania|ouguiya|100|MRU|60.150
+Mauritius|rupee|100|MUR|51.821
+Moldova|leu|1|MDL|1.265
+Mongolia|tugrik|100|MNT|0.663
+Morocco|dirham|1|MAD|2.237
+Mozambique|metical|1000|MZN|363.115
+Myanmar|kyat|1000|MMK|10.970
+Namibia|dollar|1|NAD|1.218
+Nepal|rupee|100|NPR|17.287
+Nicaragua|cordoba oro|100|NIO|63.480
+Nigeria|naira|100|NGN|2.954
+North Macedonia|denar|100|MKD|39.722
+Oman|rial|1|OMR|59.665
+Pakistan|rupee|100|PKR|7.966
+Panama|balboa|1|PAB|22.967
+Papua|kina|1|PGK|6.098
+Paraguay|guarani|1000|PYG|3.152
+Peru|sol|1|PEN|6.088
+Qatar|rial|1|QAR|6.300
+Russia|rouble|100|RUB|23.677
+Rwanda|franc|100|RWF|1.903
+Saint Helena|pound|1|SHP|28.146
+Samoa|tala|1|WST|8.059
+Sao Tome|dobra|1|STN|0.994
+Saudi Arabia|riyal|1|SAR|6.124
+Serbia|dinar|100|RSD|20.788
+Seychelles|rupee|1|SCR|1.686
+Sierra Leon|leone|1|SLE|1.028
+Solomon Islands|dollar|1|SBD|2.664
+Somalia|shilling|1000|SOS|40.435
+South Sudan|pound|100|SSP|2.297
+Sri Lanka|rupee|100|LKR|7.094
+Sudan|pound|1|SDG|0.038
+Suriname|dollar|1|SRD|0.604
+Swaziland|lilangeni|1|SZL|1.218
+Syria|pound|100|SYP|0.177
+Tadjikistan|somoni|1|TJS|2.094
+Taiwan|new dollar|100|TWD|71.484
+Tanzania|shilling|100|TZS|0.917
+Tonga|pa`anga|1|TOP|9.414
+Trinidad|dollar|1|TTD|3.404
+Tunisia|dinar|1|TND|7.290
+Turkmenistan|new manat|1|TMT|6.581
+Uganda|shilling|100|UGX|0.612
+Ukraine|hryvna|100|UAH|62.805
+United Arab Emirates|dirham|1|AED|6.253
+Uruguay|peso|100|UYU|59.732
+Uzbekistan|sum|1000|UZS|1.886
+Vanuatu|vatu|100|VUV|19.158
+Venezuela|bolivar|1|VEF|0.000
+Vietnam|dong|1000|VND|0.946
+Yemen|rial|100|YER|9.188
+Zambia|kwacha|1|ZMW|1.094
+Zimbabwe|dollar|1000|ZWL|0.000
