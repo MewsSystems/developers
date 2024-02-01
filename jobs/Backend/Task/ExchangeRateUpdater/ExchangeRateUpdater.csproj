@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <NoWarn>EXTEXP0003</NoWarn>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="ExchangeRateUpdater.Tests" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0-rc.2.23510.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0-rc.2.23479.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0-rc.2.23479.6" />
+    <PackageReference Include="MiniValidation" Version="0.9.0" />
+    <PackageReference Include="OpenTelemetry" Version="1.7.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.6.0-beta.2" />
+    <PackageReference Include="W4k.Either" Version="1.1.1" />
+  </ItemGroup>
+
+</Project>
