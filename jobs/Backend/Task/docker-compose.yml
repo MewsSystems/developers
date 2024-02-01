@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  exchangerateupdater.api:
+    image: ${DOCKER_REGISTRY-}exchangerateupdaterapi
+    build:
+      context: .
+      dockerfile: ExchangeRateUpdater.Api/Dockerfile
+
+  cache:
+    image: "redis"
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
