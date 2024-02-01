@@ -1,0 +1,12 @@
+global using ExchangeRateUpdater.Domain.Constants;
+global using ExchangeRateUpdater.Domain.Entities;
+global using ExchangeRateUpdater.Repository;
+global using ExchangeRateUpdater.Repository.Abstract;
+global using ExchangeRateUpdater.Service;
+global using Microsoft.Extensions.Configuration;
+global using Moq;
+global using Moq.Protected;
+global using NUnit.Framework;
+global using System.Net;
+global using System.Text;
+global using System.Text.Json;
