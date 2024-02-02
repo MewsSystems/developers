@@ -4,17 +4,11 @@ import MovieDetail from "./pages/MovieDetail";
 import AppContextProvider from "./contexts/AppContext";
 import "./App.css";
 
+// TODO add error element
 const router = createBrowserRouter([
   {
     path: "/",
     element: <SearchPage />,
-    // TODO why not working?
-    // children: [
-    //   {
-    //     path: "movies/:movieId",
-    //     element: <MovieDetail />,
-    //   },
-    // ],
   },
   {
     path: "/movie/:movieId",
