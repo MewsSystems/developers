@@ -1,35 +1,29 @@
-import { useEffect, useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
 import SearchSVG from "../assets/search.svg";
 
+// for debouncing the input change, if user stops typing, then the search will be triggered
+// only one element on the page is allowed
+let timerIdChange: NodeJS.Timeout;
+
 export default function InputSearch() {
-  const { searchMovieKeyword, changeSearchKeyword, searchMovies } =
-    useContext(AppContext);
+  const { searchMovieKeyword, searchMovies } = useContext(AppContext);
+  // I use internal state for the input value, because I want to control the input value when returning back from the detail page but also have the ability to change the input value when typing - using useRef would not allow me to do that
+  const [inputValue, setInputValue] = useState(searchMovieKeyword);
 
-  const inputRef = useRef();
+  const onInputChangeHandler = (event) => {
+    const inputEventValue = event.target.value;
+    // input is controlled by the state
+    setInputValue(inputEventValue);
 
-  useEffect(() => {
-    // it does not make sense to search for an empty string
-    if (searchMovieKeyword) {
-      searchMovies();
-    }
-  }, [searchMovieKeyword, searchMovies]);
-
-  // for debouncing the input change, if user stops typing, then the search will be triggered
-  let timerIdChange: NodeJS.Timeout;
-
-  const onInputChangeHandler = () => {
     if (timerIdChange) {
       clearTimeout(timerIdChange);
     }
-    // do not update the state if the input is not available
-    // updating status to an empty value would cause re-rendering and it is not necessary
-    if (!inputRef.current) return;
+    // do not search for the movies if the input is empty
+    if (!inputEventValue) return;
 
-    // changing the state will start searching for movies in useEffect
     timerIdChange = setTimeout(() => {
-      const searchInputKeyword = inputRef.current.value;
-      changeSearchKeyword(searchInputKeyword);
+      searchMovies(inputEventValue);
     }, 500);
   };
 
@@ -51,7 +45,7 @@ export default function InputSearch() {
         </div>
         <input
           onChange={onInputChangeHandler}
-          ref={inputRef}
+          value={inputValue}
           type="search"
           id="default-search"
           className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

@@ -1,50 +1,52 @@
-import { createContext, useEffect } from "react";
+import { createContext, useCallback } from "react";
 import { useState } from "react";
 
 export const AppContext = createContext({
   searchMovieKeyword: "",
-  changeSearchKeyword: () => {},
   fetchedMovies: [],
   page: 1,
   maximumPage: null,
-  changePage: () => {},
+  changePage: (page: number) => {},
+  searchMovies: (searchInputKeyword: string, page: number) => {},
 });
 
 export default function AppContextProvider({ children }) {
   const [searchMovieKeyword, setSearchMovieKeyword] = useState("");
   const [page, setPage] = useState(1);
+  const [maximumPage, setMaximumPage] = useState(null);
+  const [fetchedMovies, setFetchedMovies] = useState([] as any);
 
-  async function fetchMovies(searchKeyword: string, page: number) {
+  const searchMovies = async (searchInputKeyword: string, page = 1) => {
     const options = {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     };
-    const searchKeywordURLEncoded = encodeURIComponent(searchKeyword);
+    const searchKeywordURLEncoded = encodeURIComponent(searchInputKeyword);
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=03b8572954325680265531140190fd2a`,
       options
     );
     const data = await response.json();
+    // saving for list view
+    setFetchedMovies(data.results);
+    // saving for going back from detail page
+    setSearchMovieKeyword(searchInputKeyword);
+    // saving for pagination
+    setMaximumPage(data.total_pages);
     console.log(data);
-  }
-
-  function searchMovies() {
-    fetchMovies(searchMovieKeyword, page);
-  }
-
-  const changeSearchKeyword = (newKeyword: string) => {
-    setSearchMovieKeyword(newKeyword);
   };
+
   const changePage = (newPage: number) => {
     setPage(newPage);
   };
 
   const context = {
     searchMovieKeyword: searchMovieKeyword,
-    changeSearchKeyword: changeSearchKeyword,
+    fetchedMovies: fetchedMovies,
     page: page,
+    maximumPage: maximumPage,
     changePage: changePage,
     searchMovies: searchMovies,
   };
