@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { AppContext } from "../contexts/AppContext";
 import PaginationPage from "./PaginationPage";
 import PaginationEllipsis from "./PaginationEllipsis";
@@ -6,6 +7,13 @@ import PaginationChevron from "./PaginationChevron";
 
 export default function Pagination() {
   const { page: appPage, maximumPage, changePage } = useContext(AppContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const changePageHandler = (page: number) => {
+    // TODO wont work for more params - only movie and page HARDCODED - use URLSearchParams.entries() to iterate over all params
+    const params = { movie: searchParams.get("movie"), page: page };
+    setSearchParams(params);
+    changePage(page);
+  };
   // TODO check css classes and optimize
   // TODO improve behavior and user experience
 
@@ -72,7 +80,7 @@ export default function Pagination() {
               direction="previous"
               appPage={appPage}
               maximumPage={maximumPage}
-              changePage={changePage}
+              changePage={changePageHandler}
             />
 
             {itemPages.map((itemPage, index) => {
@@ -85,7 +93,7 @@ export default function Pagination() {
                   key={itemKey}
                   appPageValue={appPage}
                   itemPageValue={itemPage}
-                  changePage={changePage}
+                  changePage={changePageHandler}
                 />
               );
             })}
@@ -94,7 +102,7 @@ export default function Pagination() {
               direction="next"
               appPage={appPage}
               maximumPage={maximumPage}
-              changePage={changePage}
+              changePage={changePageHandler}
             />
           </nav>
         </div>
