@@ -1,12 +1,15 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
+import PaginationPage from "./PaginationPage";
+import PaginationEllipsis from "./PaginationEllipsis";
+import PaginationChevron from "./PaginationChevron";
 
 export default function Pagination() {
-  const { page, maximumPage, changePage } = useContext(AppContext);
+  const { page: appPage, maximumPage, changePage } = useContext(AppContext);
   // TODO check css classes and optimize
   // TODO improve behavior and user experience
-  // TODO implement changePage on onCLick
-  // TODO generate pages with map fn
+
+  if (maximumPage === null) return null;
 
   const generatePages = (page: number, maximumPage: number) => {
     if (page === 1 || page === 2) {
@@ -16,7 +19,7 @@ export default function Pagination() {
       return [1, 2, "..", "..", maximumPage - 2, maximumPage - 1, maximumPage];
     }
     if (page === 3) {
-      return [1, 2, 3, 4, 5, "..", maximumPage];
+      return [1, 2, 3, 4, "..", maximumPage - 1, maximumPage];
     }
     if (page === maximumPage - 2) {
       return [
@@ -30,17 +33,17 @@ export default function Pagination() {
       ];
     }
     if (page >= 4 || page <= maximumPage - 3) {
-      return [1, 2, "..", 4, "..", maximumPage - 1, maximumPage];
+      return [1, 2, "..", appPage, "..", maximumPage - 1, maximumPage];
     }
-
-    const pages = generatePages(page, maximumPage);
   };
+  const itemPages = generatePages(appPage, maximumPage);
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between border-t border-gray-200  px-4 py-3 sm:px-6">
+      {/* TODO implement for mobile devices - not working now */}
       <div className="flex flex-1 justify-between sm:hidden">
         <a
           href="#"
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="w-5 relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
         </a>
@@ -64,68 +67,34 @@ export default function Pagination() {
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
             aria-label="Pagination"
           >
-            <a
-              href="#"
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Previous</span>
-              <p className="h-5 w-5" aria-hidden="true">
-                &#60;
-              </p>
-            </a>
+            <PaginationChevron
+              direction="previous"
+              appPage={appPage}
+              maximumPage={maximumPage}
+              changePage={changePage}
+            />
 
-            <a
-              href="#"
-              aria-current="page"
-              className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              1
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              2
-            </a>
-            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-              ...
-            </span>
-            <a
-              href="#"
-              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-            >
-              3
-            </a>
-            <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-              ...
-            </span>
-            <a
-              href="#"
-              className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-            >
-              8
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              {maximumPage - 1}
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              {maximumPage}
-            </a>
-            <a
-              href="#"
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Next</span>
-              <p className="h-5 w-5" aria-hidden="true">
-                &#62;
-              </p>
-            </a>
+            {itemPages.map((itemPage, index) => {
+              const itemKey = itemPage + "-" + index;
+
+              if (itemPage === "..")
+                return <PaginationEllipsis key={itemKey} />;
+              return (
+                <PaginationPage
+                  key={itemKey}
+                  appPageValue={appPage}
+                  itemPageValue={itemPage}
+                  changePage={changePage}
+                />
+              );
+            })}
+
+            <PaginationChevron
+              direction="next"
+              appPage={appPage}
+              maximumPage={maximumPage}
+              changePage={changePage}
+            />
           </nav>
         </div>
       </div>
