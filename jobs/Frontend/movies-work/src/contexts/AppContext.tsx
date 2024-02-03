@@ -1,13 +1,13 @@
 import { createContext } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const AppContext = createContext({
   searchMovieKeyword: "",
   fetchedMovies: [],
   page: 1,
   maximumPage: null,
+  changeKeyword: (keyword: string) => {},
   changePage: (page: number) => {},
-  searchMovies: (searchInputKeyword: string, page: number) => {},
 });
 
 export default function AppContextProvider({ children }) {
@@ -23,6 +23,7 @@ export default function AppContextProvider({ children }) {
         accept: "application/json",
       },
     };
+    // TODO optimize the URL creation - use new URL(...)
     const searchKeywordURLEncoded = encodeURIComponent(searchInputKeyword);
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=03b8572954325680265531140190fd2a`,
@@ -31,13 +32,21 @@ export default function AppContextProvider({ children }) {
     const data = await response.json();
     // saving for list view
     setFetchedMovies(data.results);
-    // saving for going back from detail page
-    setSearchMovieKeyword(searchInputKeyword);
     // saving for pagination
     setMaximumPage(data.total_pages);
     console.log(data);
   };
 
+  useEffect(() => {
+    if (searchMovieKeyword) {
+      searchMovies(searchMovieKeyword, page);
+    }
+  }, [searchMovieKeyword, page]);
+
+  const changeKeyword = (newKeyword: string) => {
+    setPage(1);
+    setSearchMovieKeyword(newKeyword);
+  };
   const changePage = (newPage: number) => {
     setPage(newPage);
   };
@@ -47,8 +56,8 @@ export default function AppContextProvider({ children }) {
     fetchedMovies: fetchedMovies,
     page: page,
     maximumPage: maximumPage,
+    changeKeyword: changeKeyword,
     changePage: changePage,
-    searchMovies: searchMovies,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;

@@ -9,6 +9,7 @@ export default function Pagination() {
   // TODO check css classes and optimize
   // TODO improve behavior and user experience
 
+  // TODO component should not be rendered elsewhere - on SearchPage probably
   if (maximumPage === null) return null;
 
   const generatePages = (page: number, maximumPage: number) => {

@@ -8,13 +8,15 @@ import SearchSVG from "../assets/search.svg";
 let timerIdChange: NodeJS.Timeout;
 
 export default function InputSearch() {
-  const { searchMovieKeyword, searchMovies } = useContext(AppContext);
+  const { searchMovieKeyword, changeKeyword } = useContext(AppContext);
   const [searchParams, setSearchParams] = useSearchParams();
   // I use internal state for the input value, because I want to control the input value when returning back from the detail page but also have the ability to change the input value when typing - using useRef would not allow me to do that
   const [inputValue, setInputValue] = useState(searchMovieKeyword);
 
   const onInputChangeHandler = (event) => {
     const inputEventValue = event.target.value;
+    // TODO implement search params loading
+    // update URL in order to be able to share the link
     let params = { movie: inputEventValue, page: 1 };
     setSearchParams(params);
     // input is controlled by the state
@@ -27,7 +29,7 @@ export default function InputSearch() {
     if (!inputEventValue) return;
 
     timerIdChange = setTimeout(() => {
-      searchMovies(inputEventValue);
+      changeKeyword(inputEventValue);
     }, 500);
   };
 
