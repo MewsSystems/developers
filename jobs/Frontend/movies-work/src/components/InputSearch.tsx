@@ -1,5 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
+import { useSearchParams } from "react-router-dom";
 import SearchSVG from "../assets/search.svg";
 
 // for debouncing the input change, if user stops typing, then the search will be triggered
@@ -8,11 +9,14 @@ let timerIdChange: NodeJS.Timeout;
 
 export default function InputSearch() {
   const { searchMovieKeyword, searchMovies } = useContext(AppContext);
+  const [searchParams, setSearchParams] = useSearchParams();
   // I use internal state for the input value, because I want to control the input value when returning back from the detail page but also have the ability to change the input value when typing - using useRef would not allow me to do that
   const [inputValue, setInputValue] = useState(searchMovieKeyword);
 
   const onInputChangeHandler = (event) => {
     const inputEventValue = event.target.value;
+    let params = { movie: inputEventValue, page: 1 };
+    setSearchParams(params);
     // input is controlled by the state
     setInputValue(inputEventValue);
 
