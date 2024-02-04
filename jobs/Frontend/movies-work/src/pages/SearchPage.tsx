@@ -39,10 +39,10 @@ export default function SearchPage() {
     }
 
     return (
-      <div className="flex flex-col max-h-screen gap-3">
+      <>
         <InputSearch />
         {content}
-      </div>
+      </>
     );
   }
 }
