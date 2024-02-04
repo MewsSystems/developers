@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { useState, useEffect } from "react";
+import Constants from "../config/constants";
 
 export const AppContext = createContext({
   searchMovieKeyword: "",
@@ -29,7 +30,7 @@ export default function AppContextProvider({ children }) {
     const searchKeywordURLEncoded = encodeURIComponent(searchInputKeyword);
     setIsFetching(true);
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=03b8572954325680265531140190fd2a`,
+      `${Constants.API_URL}/${Constants.API_VERSION}/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=${Constants.API_KEY}`,
       options
     );
     const data = await response.json();
