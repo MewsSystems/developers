@@ -7,6 +7,22 @@
   }
 
   .moviesList::-webkit-scrollbar {
-    display: none;
+    /* display: none; */
+    width: 5px;
+  }
+
+  /* Track */
+  .moviesList::-webkit-scrollbar-track {
+    background: rgb(55 65 81);
+  }
+
+  /* Handle */
+  .moviesList::-webkit-scrollbar-thumb {
+    background: rgb(207, 207, 207);
+  }
+
+  /* Handle on hover */
+  .moviesList::-webkit-scrollbar-thumb:hover {
+    background: white;
   }
 }
