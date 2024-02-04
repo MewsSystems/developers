@@ -5,14 +5,18 @@ import { useLoaderData } from "react-router";
 export default function MovieDetail() {
   //   const [isFetching, setIsFetching] = useState(true);
   const movie = useLoaderData();
+
+  const imageAvailable = movie.backdrop_path !== null;
   const imagePath = Constants.IMAGE_URL + "/" + movie.backdrop_path;
   return (
     <>
-      <img
-        className="h-auto max-w-full"
-        src={imagePath}
-        alt="image description"
-      />
+      {imageAvailable && (
+        <img
+          className="h-auto max-w-full"
+          src={imagePath}
+          alt="image description"
+        />
+      )}
 
       <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
         {movie.title}

@@ -1,8 +1,16 @@
 import MovieDetail from "../components/MovieDetail/MovieDetail";
 import Constants from "../config/constants";
+import BackButton from "../components/BackButton";
 
 export default function MovieDetailPage() {
-  return <MovieDetail />;
+  return (
+    <>
+      <div className="mb-8">
+        <BackButton />
+      </div>
+      <MovieDetail />;
+    </>
+  );
 }
 
 export function movieDetailLoader({ request, params }) {
