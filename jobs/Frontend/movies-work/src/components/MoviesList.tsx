@@ -1,19 +1,25 @@
 import { useContext } from "react";
 import { AppContext } from "../contexts/AppContext";
 import { Link } from "react-router-dom";
+import styles from "./MoviesList.module.css";
 
 export default function MoviesList() {
   const { fetchedMovies } = useContext(AppContext);
 
   return (
-    <ul role="list" className="divide-y divide-gray-100">
+    <ul
+      role="list"
+      className={
+        styles.moviesList + " flex-grow-1 px-4 mt-2 divide-y divide-gray-100"
+      }
+    >
       {fetchedMovies.map((movie) => (
-        <li key={movie.id} className="py-5">
+        <li key={movie.id} className="">
           <Link
             to={`/movie/${movie.id}`}
-            className="flex justify-between gap-x-6"
+            className="flex justify-between py-5 gap-x-6"
           >
-            <div className="flex min-w-0 gap-x-4">
+            <div className="flex items-center min-w-0 gap-x-4">
               {/* TODO loading image */}
               <img
                 className="h-12 w-12 flex-none rounded-full bg-gray-50"
