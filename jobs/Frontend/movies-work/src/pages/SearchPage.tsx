@@ -1,6 +1,6 @@
 import InputSearch from "../components/InputSearch";
-import MoviesList from "../components/MoviesList";
-import Pagination from "../components/Pagination";
+import MoviesList from "../components/MoviesList/MoviesList";
+import Pagination from "../components/Pagination/Pagination";
 
 export default function SearchPage() {
   return (

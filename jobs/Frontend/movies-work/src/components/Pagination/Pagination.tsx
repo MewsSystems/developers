@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { AppContext } from "../contexts/AppContext";
+import { AppContext } from "../../contexts/AppContext";
 import PaginationPage from "./PaginationPage";
 import PaginationEllipsis from "./PaginationEllipsis";
 import PaginationChevron from "./PaginationChevron";
