@@ -1,12 +1,13 @@
 /* TODO this should probably be in the  */
 .moviesList:has(li:hover) li:not(:hover) {
-  opacity: 0.8;
+  opacity: 0.7;
   transition: all 0.3s ease;
 }
 
 @media screen and (min-width: 640px) {
   .moviesList {
     max-height: 70vh;
+    height: 70vh;
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */

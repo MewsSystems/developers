@@ -6,20 +6,21 @@ body {
   background-color: rgb(209 213 219);
 }
 #root {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: 90%;
+  margin: 2rem auto 0;
   text-align: center;
 }
 
 @media screen and (min-width: 768px) {
   #root {
     max-width: 70%;
+    width: 70%;
   }
 }
 
 @media screen and (min-width: 1200px) {
   #root {
     max-width: 50%;
+    width: 50%;
   }
 }

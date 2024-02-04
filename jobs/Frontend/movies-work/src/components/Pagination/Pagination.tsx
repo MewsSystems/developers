@@ -48,7 +48,7 @@ export default function Pagination() {
   };
   const itemPages = generatePages(appPage, maximumPage);
   return (
-    <div className="flex items-center justify-between border-t border-gray-200  px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between">
       {/* TODO implement for mobile devices - not working now */}
       <div className="flex flex-1 justify-between sm:hidden">
         <a
