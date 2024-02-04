@@ -16,6 +16,7 @@ export default function Pagination() {
   };
   // TODO check css classes and optimize
   // TODO improve behavior and user experience
+  // TODO react to shorter lists - with less than 7 pages
 
   // TODO component should not be rendered elsewhere - on SearchPage probably
   if (maximumPage === null) return null;
