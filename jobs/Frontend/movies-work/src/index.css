@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: rgb(209 213 219);
+}
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  #root {
+    max-width: 70%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #root {
+    max-width: 50%;
+  }
+}
