@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SearchPage from "./pages/SearchPage";
-import MovieDetail from "./pages/MovieDetail";
+import MovieDetailPage from "./pages/MovieDetailPage";
 import AppContextProvider from "./contexts/AppContext";
+import { movieDetailLoader } from "./pages/MovieDetailPage";
 import "./App.css";
 
 // TODO add error element
@@ -11,8 +12,9 @@ const router = createBrowserRouter([
     element: <SearchPage />,
   },
   {
-    path: "/movie/:movieId",
-    element: <MovieDetail />,
+    path: "/movie/:movieID",
+    element: <MovieDetailPage />,
+    loader: movieDetailLoader,
   },
 ]);
 
