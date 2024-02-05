@@ -25,7 +25,7 @@ export const AppContext = createContext<IContext>({
   changePage: (page: number) => {},
 });
 
-const AppContextProvider: React.FC = ({ children }: IChildren) => {
+const AppContextProvider = ({ children }: IChildren) => {
   const [searchMovieKeyword, setSearchMovieKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [maximumPage, setMaximumPage] = useState(null);
