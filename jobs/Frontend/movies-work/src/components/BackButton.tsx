@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-export default function BackButton() {
+export default function BackButton({ className: string }) {
   // TODO does not keep the search query
   // INFO useNavigate hook like => navigate(-1) can go back outside of the application
   return (
