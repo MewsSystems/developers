@@ -1,8 +1,21 @@
+import React from "react";
 import { createContext } from "react";
 import { useState, useEffect } from "react";
 import Constants from "../config/constants";
+import { IMovie, IMovieResponse } from "../types/movieTypes";
+import { IChildren } from "../types/appTypes";
 
-export const AppContext = createContext({
+interface IContext {
+  searchMovieKeyword: string;
+  fetchedMovies: Array<IMovie>;
+  isFetching: boolean;
+  page: number;
+  maximumPage: number;
+  changeKeyword: (keyword: string) => void;
+  changePage: (page: number) => void;
+}
+
+export const AppContext = createContext<IContext>({
   searchMovieKeyword: "",
   fetchedMovies: [],
   isFetching: false,
@@ -12,11 +25,11 @@ export const AppContext = createContext({
   changePage: (page: number) => {},
 });
 
-export default function AppContextProvider({ children }) {
+const AppContextProvider: React.FC = ({ children }: IChildren) => {
   const [searchMovieKeyword, setSearchMovieKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [maximumPage, setMaximumPage] = useState(null);
-  const [fetchedMovies, setFetchedMovies] = useState([] as any);
+  const [fetchedMovies, setFetchedMovies] = useState<IMovie[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
   const searchMovies = async (searchInputKeyword: string, page = 1) => {
@@ -33,10 +46,11 @@ export default function AppContextProvider({ children }) {
       `${Constants.API_URL}/${Constants.API_VERSION}/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=${Constants.API_KEY}`,
       options
     );
-    const data = await response.json();
+    const data: IMovieResponse = await response.json();
     setIsFetching(false);
     // saving for list view
-    setFetchedMovies(data.results);
+    const movies: IMovie[] = data.results;
+    setFetchedMovies(movies);
     // saving for pagination
     setMaximumPage(data.total_pages);
     console.log(data);
@@ -67,4 +81,6 @@ export default function AppContextProvider({ children }) {
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
-}
+};
+
+export default AppContextProvider;
