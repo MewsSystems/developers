@@ -3,12 +3,14 @@ import Constants from "../../config/constants";
 import { useLoaderData } from "react-router";
 
 export default function MovieDetail() {
+  // QA: What is Partial for?
   const movie: Partial<IMovie> = useLoaderData();
 
   const imageAvailable = movie.backdrop_path !== null;
   const imagePath = Constants.IMAGE_URL + "/" + movie.backdrop_path;
   return (
     <>
+      {/* TODO skeleton image in the same size */}
       {imageAvailable && (
         <img
           className="h-auto max-w-full"
