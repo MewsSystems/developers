@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
-import { useSearchParams } from "react-router-dom";
+import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import SearchSVG from "../assets/search.svg";
 
 // for debouncing the input change, if user stops typing, then the search will be triggered
 // only one element on the page is allowed
-let timerIdChange: NodeJS.Timeout;
+let timerIdChange;
 
 export default function InputSearch() {
   const { searchMovieKeyword, changeKeyword } = useContext(AppContext);
@@ -17,7 +17,7 @@ export default function InputSearch() {
     const inputEventValue = event.target.value;
     // TODO implement search params loading
     // update URL in order to be able to share the link
-    let params = { movie: inputEventValue, page: 1 };
+    const params: URLSearchParamsInit = { movie: inputEventValue };
     setSearchParams(params);
     // input is controlled by the state
     setInputValue(inputEventValue);

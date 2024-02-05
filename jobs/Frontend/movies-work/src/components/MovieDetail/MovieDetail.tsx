@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { IMovie } from "../../types/movieTypes";
 import Constants from "../../config/constants";
 import { useLoaderData } from "react-router";
 
 export default function MovieDetail() {
-  //   const [isFetching, setIsFetching] = useState(true);
-  const movie = useLoaderData();
+  const movie: IMovie = useLoaderData();
 
   const imageAvailable = movie.backdrop_path !== null;
   const imagePath = Constants.IMAGE_URL + "/" + movie.backdrop_path;
