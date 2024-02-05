@@ -16,7 +16,7 @@ export default function MovieDetailPage() {
 export function movieDetailLoader({ request, params }) {
   console.log(request, params);
 
-  var requestOptions = {
+  const requestOptions: RequestInit = {
     method: "GET",
     redirect: "follow",
   };

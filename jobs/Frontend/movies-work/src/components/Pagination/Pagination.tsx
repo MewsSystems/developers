@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useContext } from "react";
+import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import { AppContext } from "../../contexts/AppContext";
 import PaginationPage from "./PaginationPage";
 import PaginationEllipsis from "./PaginationEllipsis";
@@ -10,8 +10,13 @@ export default function Pagination() {
   const [searchParams, setSearchParams] = useSearchParams();
   const changePageHandler = (page: number) => {
     // TODO wont work for more params - only movie and page HARDCODED - use URLSearchParams.entries() to iterate over all params
-    const params = { movie: searchParams.get("movie"), page: page };
-    setSearchParams(params);
+    const movieParam: string = searchParams.get("movie");
+    const urlSearchParams = new URLSearchParams([
+      ["movie", movieParam],
+      ["page", page.toString()],
+    ]);
+
+    setSearchParams(urlSearchParams);
     changePage(page);
   };
   // TODO check css classes and optimize
