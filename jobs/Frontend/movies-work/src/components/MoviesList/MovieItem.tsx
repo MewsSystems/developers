@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom";
+import Constants from "../../config/constants";
 
 export default function MovieItem({ movie }) {
+  const isPosterAvailable = movie.poster_path !== null;
+  const imagePath = `${Constants.IMAGE_URL}/w200${movie.poster_path}`;
   return (
     <Link
       to={`/movie/${movie.id}`}
       className="flex justify-between py-5 gap-x-6"
     >
       <div className="flex items-center min-w-0 gap-x-4">
-        {/* TODO loading image */}
         <img
           className="h-12 w-12 flex-none rounded-full bg-gray-50"
-          src={movie.imageUrl}
+          src={isPosterAvailable ? imagePath : null}
           alt=""
         />
+
         <div className="min-w-0 flex-auto text-left">
           <p className="text-sm font-semibold leading-6 text-gray-300">
             {movie.title}

@@ -7,7 +7,7 @@ export default function MovieDetail() {
   const movie: Partial<IMovie> = useLoaderData();
 
   const imageAvailable = movie.backdrop_path !== null;
-  const imagePath = Constants.IMAGE_URL + "/" + movie.backdrop_path;
+  const imagePath = `${Constants.IMAGE_URL}/w500/${movie.backdrop_path}`;
   return (
     <>
       {/* TODO skeleton image in the same size */}
