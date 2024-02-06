@@ -5,6 +5,7 @@ import AppContextProvider from "./contexts/AppContext";
 import { movieDetailLoader } from "./pages/MovieDetailPage";
 import "./App.css";
 import RootPage from "./pages/RootPage";
+import Error from "./pages/Error";
 
 // TODO add error element
 // TODO typescript config file - strict mode not true
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
         path: "/movie/:movieID",
         element: <MovieDetailPage />,
         loader: movieDetailLoader,
+        errorElement: <Error />,
       },
     ],
   },
