@@ -66,26 +66,37 @@ const AppContextProvider = ({ children }: IChildren) => {
 
     setSearchMovieKeyword(realKeyword);
 
-    // can happen when accesing page directly for the first time in URL
-    // www.mysite.com/?movie=batman&page=notanumber
-    const pageParamNumber = parseInt(
-      page || currentURLSearchParams.get("page") || 1
-    );
-    if (!isNaN(pageParamNumber)) {
-      setPage(pageParamNumber);
-    }
+    // TODO - not pure function
+    const realPage = getPageParam(page);
+    setPage(realPage);
 
     // TODO BUG - setting the url like this wont let you go back in browser when switching between pagination pages
-    const newUrl = new URL(location);
+    const newUrl = new URL(location.href);
     newUrl.searchParams.set("movie", realKeyword);
-    newUrl.searchParams.set("page", pageParamNumber.toString());
+    newUrl.searchParams.set("page", realPage.toString());
     history.pushState({}, "", newUrl);
   };
 
+  // TODO check query params on first load - there must be bettew way to do this
   useEffect(() => {
     setAppSearchParams();
   }, []);
 
+  function getPageParam(page: number) {
+    if (page) {
+      return page;
+    }
+
+    const pageToParse = currentURLSearchParams.get("page");
+    // can happen when accesing page directly for the first time in URL
+    // www.mysite.com/?movie=batman&page=notanumber
+    const pageParamNumber: number = parseInt(pageToParse);
+
+    if (isNaN(pageParamNumber)) {
+      return 1;
+    }
+    return pageParamNumber;
+  }
   const context = {
     searchMovieKeyword: searchMovieKeyword,
     fetchedMovies: fetchedMovies,
