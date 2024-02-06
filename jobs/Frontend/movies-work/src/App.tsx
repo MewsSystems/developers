@@ -7,6 +7,7 @@ import "./App.css";
 import RootPage from "./pages/RootPage";
 
 // TODO add error element
+// TODO typescript config file - strict mode not true
 const router = createBrowserRouter([
   {
     path: "/",
