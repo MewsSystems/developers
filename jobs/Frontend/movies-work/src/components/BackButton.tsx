@@ -3,7 +3,7 @@ export default function BackButton({ className: string }) {
   // TODO does not keep the search query
   // INFO useNavigate hook like => navigate(-1) can go back outside of the application
   const location = useLocation();
-  const { query } = location.state;
+  const query = location?.state?.query;
   return (
     <Link
       to={`../${query}`}
