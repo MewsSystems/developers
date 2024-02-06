@@ -1,20 +1,21 @@
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { AppContext } from "../contexts/AppContext";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import SearchSVG from "../assets/search.svg";
 
 // for debouncing the input change, if user stops typing, then the search will be triggered
 // only one element on the page is allowed
-let timerIdChange;
+let timerId;
 
 export default function InputSearch() {
   const { searchMovieKeyword, changeKeyword } = useContext(AppContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  // I use internal state for the input value, because I want to control the input value when returning back from the detail page but also have the ability to change the input value when typing - using useRef would not allow me to do that
+  // I use internal state for the input value, because I want to control the input value when returning back from the detail page but also have the ability to change the input value when typing - using useRef would not allow me to do that - would not keep the keyword when returning back from the detail page
   const [inputValue, setInputValue] = useState(searchMovieKeyword);
 
   const onInputChangeHandler = (event) => {
     const inputEventValue = event.target.value;
+
     // TODO implement search params loading
     // update URL in order to be able to share the link
     const params: URLSearchParamsInit = { movie: inputEventValue };
@@ -22,13 +23,13 @@ export default function InputSearch() {
     // input is controlled by the state
     setInputValue(inputEventValue);
 
-    if (timerIdChange) {
-      clearTimeout(timerIdChange);
+    if (timerId) {
+      clearTimeout(timerId);
     }
     // do not search for the movies if the input is empty
     if (!inputEventValue) return;
 
-    timerIdChange = setTimeout(() => {
+    timerId = setTimeout(() => {
       changeKeyword(inputEventValue);
     }, 500);
   };
