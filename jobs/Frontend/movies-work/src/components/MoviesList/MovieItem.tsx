@@ -7,6 +7,8 @@ export default function MovieItem({ movie }) {
   return (
     <Link
       to={`/movie/${movie.id}`}
+      // to preserve search query params
+      state={{ query: location.search }}
       className="flex justify-between py-5 gap-x-6"
     >
       <div className="flex items-center min-w-0 gap-x-4">
