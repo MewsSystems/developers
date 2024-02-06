@@ -11,15 +11,27 @@ export default function MovieDetailPage() {
   );
 }
 
-export function movieDetailLoader({ params }) {
+export async function movieDetailLoader({ params }) {
   const requestOptions: RequestInit = {
     method: "GET",
     redirect: "follow",
   };
 
   // INFO: Error handling will be done in errorElement of the router
-  return fetch(
-    `${Constants.API_URL}/${Constants.API_VERSION}/movie/${params.movieID}?api_key=${Constants.API_KEY}`,
-    requestOptions
-  );
+  try {
+    const response = await fetch(
+      `${Constants.API_URL}/${Constants.API_VERSION}/movie/${params.movieID}?api_key=${Constants.API_KEY}`,
+      requestOptions
+    );
+
+    if (!response.ok) {
+      throw new Error("Movie not found");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching movie detail", error);
+    throw new Error(error);
+  }
 }

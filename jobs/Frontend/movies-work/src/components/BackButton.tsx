@@ -4,11 +4,10 @@ export default function BackButton({ className: string }) {
   // INFO useNavigate hook like => navigate(-1) can go back outside of the application
   const location = useLocation();
   const query = location?.state?.query;
+
+  const url = query ? `../${query}` : "..";
   return (
-    <Link
-      to={`../${query}`}
-      className="text-lg font-normal text-gray-300 lg:text-xl"
-    >
+    <Link to={url} className="text-lg font-normal text-gray-300 lg:text-xl">
       <span>&#60;</span> Back to movies list
     </Link>
   );
