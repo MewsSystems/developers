@@ -1,18 +1,15 @@
-import React from "react";
 import { createContext } from "react";
 import { useState, useEffect } from "react";
 import Constants from "../config/constants";
 import { IMovie, IMovieResponse } from "../types/movieTypes";
 import { IChildren } from "../types/appTypes";
-
 interface IContext {
   searchMovieKeyword: string;
   fetchedMovies: Array<IMovie>;
   isFetching: boolean;
   page: number;
   maximumPage: number;
-  changeKeyword: (keyword: string) => void;
-  changePage: (page: number) => void;
+  setAppSearchParams: (keyword?: string, page?: number) => void;
 }
 
 export const AppContext = createContext<IContext>({
@@ -21,8 +18,7 @@ export const AppContext = createContext<IContext>({
   isFetching: false,
   page: 1,
   maximumPage: null,
-  changeKeyword: (keyword: string) => {},
-  changePage: (page: number) => {},
+  setAppSearchParams: (keyword?: string, page?: number) => {},
 });
 
 const AppContextProvider = ({ children }: IChildren) => {
@@ -31,8 +27,7 @@ const AppContextProvider = ({ children }: IChildren) => {
   const [maximumPage, setMaximumPage] = useState(null);
   const [fetchedMovies, setFetchedMovies] = useState<IMovie[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-
-  const searchMovies = async (searchInputKeyword: string, page = 1) => {
+  const searchMovies = async (searchInputKeyword: string, page: number = 1) => {
     const options = {
       method: "GET",
       headers: {
@@ -53,8 +48,8 @@ const AppContextProvider = ({ children }: IChildren) => {
     setFetchedMovies(movies);
     // saving for pagination
     setMaximumPage(data.total_pages);
-    console.log(data);
   };
+  const currentURLSearchParams = new URLSearchParams(window.location.search);
 
   useEffect(() => {
     if (searchMovieKeyword) {
@@ -62,13 +57,34 @@ const AppContextProvider = ({ children }: IChildren) => {
     }
   }, [searchMovieKeyword, page]);
 
-  const changeKeyword = (newKeyword: string) => {
-    setPage(1);
-    setSearchMovieKeyword(newKeyword);
+  const setAppSearchParams = (keyword?: string, page?: number) => {
+    const realKeyword =
+      keyword || searchMovieKeyword || currentURLSearchParams.get("movie");
+    if (!realKeyword) {
+      return;
+    }
+
+    setSearchMovieKeyword(realKeyword);
+
+    // can happen when accesing page directly for the first time in URL
+    // www.mysite.com/?movie=batman&page=notanumber
+    const pageParamNumber = parseInt(
+      page || currentURLSearchParams.get("page") || 1
+    );
+    if (!isNaN(pageParamNumber)) {
+      setPage(pageParamNumber);
+    }
+
+    // TODO BUG - setting the url like this wont let you go back in browser when switching between pagination pages
+    const newUrl = new URL(location);
+    newUrl.searchParams.set("movie", realKeyword);
+    newUrl.searchParams.set("page", pageParamNumber.toString());
+    history.pushState({}, "", newUrl);
   };
-  const changePage = (newPage: number) => {
-    setPage(newPage);
-  };
+
+  useEffect(() => {
+    setAppSearchParams();
+  }, []);
 
   const context = {
     searchMovieKeyword: searchMovieKeyword,
@@ -76,8 +92,7 @@ const AppContextProvider = ({ children }: IChildren) => {
     isFetching: isFetching,
     page: page,
     maximumPage: maximumPage,
-    changeKeyword: changeKeyword,
-    changePage: changePage,
+    setAppSearchParams: setAppSearchParams,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
