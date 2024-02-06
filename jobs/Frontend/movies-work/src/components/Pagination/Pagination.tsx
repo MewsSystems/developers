@@ -15,11 +15,8 @@ export default function Pagination() {
     // TODO wont work for more params - only movie and page HARDCODED - use URLSearchParams.entries() to iterate over all params
     setAppSearchParams(null, page);
   };
-  // TODO check css classes and optimize
-  // TODO improve behavior and user experience
   // TODO react to shorter lists - with less than 7 pages
 
-  // TODO component should not be rendered elsewhere - on SearchPage probably
   if (maximumPage === null) return null;
 
   const generatePages = (page: number, maximumPage: number) => {
@@ -66,13 +63,6 @@ export default function Pagination() {
         </a>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
-        {/* <div>
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to{" "}
-            <span className="font-medium">10</span> of{" "}
-            <span className="font-medium">97</span> results
-          </p>
-        </div> */}
         <div>
           <nav
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
