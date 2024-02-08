@@ -1,14 +1,9 @@
-﻿using ExchangeRateUpdater.Config;
+﻿using CnbApi;
 using ExchangeRateUpdater.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Extensions.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -30,20 +25,15 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-            .AddJsonFile("appSettings.json")
-            .Build();
 
-            var services = new ServiceCollection()
-                .AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddPolicyHandler(GetRetryPolicy())
-                .Services;
-
-            // Make config injectable
-            services.Configure<ApiSettings>(config.GetSection("apiSettings"));
+            var services = new ServiceCollection();
+            var cnbServiceReg = new CnbServiceRegistration();
+            
+            cnbServiceReg.RegisterServices(services);
+            services
+                .AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
 
             var serviceProvider = services.BuildServiceProvider();
-
             var provider = serviceProvider.GetService<IExchangeRateProvider>();
 
             try
@@ -62,16 +52,6 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
-        }
-
-        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-        {
-            // Could add a timeout policy here too, or a circuit breaker or any other useful policy,
-            // but for now we'll just retry a few times in case of transient errors.
-            return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .OrResult(res => res.StatusCode == HttpStatusCode.NotFound)
-                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
     }
 }

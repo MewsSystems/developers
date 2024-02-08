@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Config;
+﻿using CnbApi.Client;
+using ExchangeRateUpdater.Config;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
@@ -15,6 +16,7 @@ public class ExchangeRateData : IDisposable
     public DateTime MockDate { get; } = new DateTime(2024, 01, 18);
 
     public HttpClient MockHttpClient => _mockHttp.ToHttpClient();
+    public CnbClient MockCnbClient;
 
     public IOptions<ApiSettings> MockSettings => Options.Create(
         new ApiSettings()
@@ -44,6 +46,7 @@ public class ExchangeRateData : IDisposable
     {
         _apiJsonResponse = File.ReadAllText("Fixtures/DailyRateResponse.json");
         _mockHttp.When(MockBaseUrl).Respond("application/json", _apiJsonResponse);
+        MockCnbClient = new CnbClient(MockHttpClient, MockSettings);
     }
 
 

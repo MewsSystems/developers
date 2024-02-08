@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ExchangeRateUpdater.Models;
+﻿namespace CnbApi.Models;
 //This data should be readonly as its the response from the API
-public record DailyRatesDtoContainer(IReadOnlyList<DailyRateDto> Rates);
-public record DailyRateDto(
+public record CnbDailyRatesContainerDto(IReadOnlyList<CnbDailyRateDto> Rates);
+public record CnbDailyRateDto(
         DateTime ValidFor,
         int Order,
         string Country,

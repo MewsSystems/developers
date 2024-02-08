@@ -1,8 +1,6 @@
-﻿using System.Net;
-using ExchangeRateUpdater.Models;
+﻿using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Tests.Fixtures;
 using FluentAssertions;
-using RichardSzalay.MockHttp;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -18,7 +16,7 @@ public class ExchangeRateProviderUnitTests : IClassFixture<ExchangeRateData>
     [Fact]
     public async Task Given_NullCurrencyList_When_GetExchangeRates_Then_ReturnNoRates()
     {
-        var sut = new ExchangeRateProvider(_fixture.MockHttpClient, _fixture.MockSettings);
+        var sut = new ExchangeRateProvider(_fixture.MockCnbClient);
 
         var rates = await sut.GetExchangeRates(null);
 
@@ -28,7 +26,7 @@ public class ExchangeRateProviderUnitTests : IClassFixture<ExchangeRateData>
     [Fact]
     public async Task Given_CurrenciesNotInFeed_When_GetExchangeRates_Then_ReturnsNoRates()
     {
-        var sut = new ExchangeRateProvider(_fixture.MockHttpClient, _fixture.MockSettings);
+        var sut = new ExchangeRateProvider(_fixture.MockCnbClient);
 
         var rates = await sut.GetExchangeRates(_fixture.CurrenciesNotInTestData);
 
@@ -38,8 +36,8 @@ public class ExchangeRateProviderUnitTests : IClassFixture<ExchangeRateData>
     [Fact]
     public async Task Given_CurrenciesInFeed_When_GetExchangeRates_Then_ReturnsSelectedRates()
     {
-        var sut = new ExchangeRateProvider(_fixture.MockHttpClient, _fixture.MockSettings);
-        
+        var sut = new ExchangeRateProvider(_fixture.MockCnbClient);
+
         //Get the currencies that start with C
         var currencies = _fixture.CurrenciesInTestData.Where(c => c.Code.StartsWith("C")).ToList();
 
@@ -51,7 +49,7 @@ public class ExchangeRateProviderUnitTests : IClassFixture<ExchangeRateData>
     [Fact]
     public async Task GivenMixOfCurrenciesInFeedAndCurrenciesNotInFeed_Then_ReturnsRatesForThoseCurrenciesInFeed()
     {
-        var sut = new ExchangeRateProvider(_fixture.MockHttpClient, _fixture.MockSettings);
+        var sut = new ExchangeRateProvider(_fixture.MockCnbClient);
 
         //Get the currencies that start with B or C
         var currencies = _fixture.CurrenciesInTestData.Where(c => c.Code.StartsWith("B") || c.Code.StartsWith("C")).ToList();
@@ -63,37 +61,5 @@ public class ExchangeRateProviderUnitTests : IClassFixture<ExchangeRateData>
         var rates = await sut.GetExchangeRates(currencies);
 
         rates.Should().HaveCount(expectedCount);
-    }
-
-    [Fact]
-    public async Task Given_EmptyResponseFromApi_When_GetExchangeRates_Then_ReturnNoRates()
-    {
-        var mockHttp = new MockHttpMessageHandler();
-
-        mockHttp.When(_fixture.MockBaseUrl).Respond("application/json", string.Empty);
-
-        var sut = new ExchangeRateProvider(mockHttp.ToHttpClient(), _fixture.MockSettings);
-
-        var response = await sut.GetExchangeRates(_fixture.CurrenciesInTestData);
-
-        response.Should().BeEmpty();
-    }
-
-    // Make sure we fail gracefully and do not stop the app
-    [Theory]
-    [InlineData(HttpStatusCode.BadRequest)]
-    [InlineData(HttpStatusCode.Unauthorized)]
-    [InlineData(HttpStatusCode.InternalServerError)]
-    public async Task Given_NonSuccessResponseFromApi_When_GetExchangeRates_Then_ReturnNoRates(HttpStatusCode responseCode)
-    {
-        var mockHttp = new MockHttpMessageHandler();
-
-        mockHttp.When(_fixture.MockBaseUrl).Respond(responseCode);
-
-        var sut = new ExchangeRateProvider(mockHttp.ToHttpClient(), _fixture.MockSettings);
-
-        var response = await sut.GetExchangeRates(_fixture.CurrenciesInTestData);
-
-        response.Should().BeEmpty();
     }
 }

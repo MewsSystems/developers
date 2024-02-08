@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater", "src\ExchangeRateUpdater.csproj", "{9E8B0FB7-0541-4B2F-B20B-C3A7E16B3A67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterTests", "tests\ExchangeRateUpdaterTests\ExchangeRateUpdaterTests.csproj", "{A4EF30BA-9989-4C3C-8FEC-CAADCA53E62D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdaterTests", "tests\ExchangeRateUpdaterTests\ExchangeRateUpdaterTests.csproj", "{A4EF30BA-9989-4C3C-8FEC-CAADCA53E62D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CnbApi", "CnbApi\CnbApi.csproj", "{68C9E4EE-CAFC-425E-90B6-768AE3EEB502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A4EF30BA-9989-4C3C-8FEC-CAADCA53E62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4EF30BA-9989-4C3C-8FEC-CAADCA53E62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4EF30BA-9989-4C3C-8FEC-CAADCA53E62D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68C9E4EE-CAFC-425E-90B6-768AE3EEB502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68C9E4EE-CAFC-425E-90B6-768AE3EEB502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68C9E4EE-CAFC-425E-90B6-768AE3EEB502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68C9E4EE-CAFC-425E-90B6-768AE3EEB502}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
