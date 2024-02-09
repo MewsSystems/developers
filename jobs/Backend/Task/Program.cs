@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -24,13 +26,21 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = provider.GetExchangeRates(currencies).GetAwaiter().GetResult();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"Network error while retrieving exchange rates: {e.Message}");
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"Data format error: {e.Message}");
             }
             catch (Exception e)
             {
