@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -27,6 +26,8 @@ namespace ExchangeRateUpdater
             {
                 var client = new HttpClient();
                 var provider = new ExchangeRateProvider(client);
+                // Starting from C# 7, the Main method can be async and return a Task
+                // Awaiting the task here as we are working with a lower version
                 var rates = provider.GetExchangeRates(currencies).GetAwaiter().GetResult();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -37,6 +38,9 @@ namespace ExchangeRateUpdater
             }
             catch (HttpRequestException e)
             {
+                // In case of a API failure, an alternative data source may be used from:
+                // https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=07.02.2024
+                // That would require custom parsin logic
                 Console.WriteLine($"Network error while retrieving exchange rates: {e.Message}");
             }
             catch (FormatException e)
