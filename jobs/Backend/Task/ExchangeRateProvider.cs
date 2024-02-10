@@ -61,6 +61,8 @@ namespace ExchangeRateUpdater
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            // This corresponds to a local time, which may not be wanted in other than local use
+            // Possible improvement: to get the desirable date as a command line argument 
             string date = DateTime.Now.ToString("yyyy-MM-dd");
             string url = $"{BaseUrl}?date={date}";
 
