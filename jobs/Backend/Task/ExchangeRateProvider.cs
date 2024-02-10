@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using NLog;
 
 namespace ExchangeRateUpdater
 {
@@ -27,7 +28,6 @@ namespace ExchangeRateUpdater
     ///     ]
     /// }
     /// </summary>
-
     public class ApiResponse
     {
         public List<ApiExchangeRate> Rates { get; set; }
@@ -35,6 +35,8 @@ namespace ExchangeRateUpdater
 
     public class ApiExchangeRate
     {
+        // Parsing all fields from the API
+        // The types are derived from CNB API docs - https://api.cnb.cz/cnbapi/swagger-ui.html#/%2Fexrates/dailyUsingGET_1
         public string ValidFor { get; set; }
         public int Order { get; set; }
         public string Country { get; set; }
@@ -47,23 +49,29 @@ namespace ExchangeRateUpdater
     public class ExchangeRateProvider
     {
         private readonly HttpClient _client;
+        private readonly Logger _logger;
+        private const string BaseUrl = "https://api.cnb.cz/cnbapi/exrates/daily";
 
         // Injecting client here for testing (mocking) purposes
-        public ExchangeRateProvider(HttpClient client)
+        public ExchangeRateProvider(HttpClient client, Logger logger)
         {
             _client = client;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var baseUrl = "https://api.cnb.cz/cnbapi/exrates/daily";
             string date = DateTime.Now.ToString("yyyy-MM-dd");
-            string url = $"{baseUrl}?date={date}";
-            Console.WriteLine(url);
+            string url = $"{BaseUrl}?date={date}";
+
+            _logger.Info($"Getting the source data from {url}.");
 
             var parsed = await _client.GetFromJsonAsync<ApiResponse>(url);
+            var rates = new List<ExchangeRate>();
 
-            List<ExchangeRate> rates = new List<ExchangeRate>();
+            // Safer to convert to a list first to avoid possible multiple iterations over unknown IEnumerable 
+            // Possible drawback for a very large currency lists
+            var currencyList = currencies.ToList();
 
             foreach (ApiExchangeRate item in parsed.Rates)
             {
@@ -71,13 +79,13 @@ namespace ExchangeRateUpdater
                 var targetCurrency = new Currency("CZK");
                 var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, item.Rate, item.Amount);
 
-                if (currencies.Where((currency) => currency.Code == sourceCurrency.Code).Any())
+                if (currencyList.Any(currency => currency.Code == sourceCurrency.Code))
                 {
                     rates.Add(exchangeRate);
                 }
                 else
                 {
-                    //Console.WriteLine($"Skipping the exchange rate for {sourceCurrency}.");
+                    _logger.Info($"Skipping the exchange rate for {sourceCurrency}.");
                 }
             }
 
