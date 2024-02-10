@@ -106,3 +106,4 @@ $RECYCLE.BIN/
 
 # Visual Studio temp something
 .vs/
+.vsidx
