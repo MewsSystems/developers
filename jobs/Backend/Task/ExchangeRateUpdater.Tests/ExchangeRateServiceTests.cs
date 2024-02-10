@@ -9,34 +9,36 @@ namespace ExchangeRateUpdater.Tests
     [TestFixture]
     public class ExchangeRateServiceTests
     {
-        private Mock<ICzechNationalBankClient> _apiClientMock;
+        private Mock<IExchangeRateProxy> _proxyMock;
 
         [SetUp]
         public void Setup()
         {
-            _apiClientMock = new Mock<ICzechNationalBankClient>();
-            _apiClientMock.Setup(x => x.CnbapiExratesDailyAsync(It.IsAny<DateTimeOffset>(), It.IsAny<Lang>()))
-            .ReturnsAsync(new ExRateDailyResponse
-            {
-                Rates = new List<ExRateDailyRest> { new ExRateDailyRest { CurrencyCode = "USD", Rate = 1.2 }, new ExRateDailyRest { CurrencyCode = "CAD", Rate = 1.6 } }
-            });
+            _proxyMock = new Mock<IExchangeRateProxy>();
+                
+            _proxyMock.Setup(x => x.GetCurrencyRatesAsync(It.IsAny<DateTimeOffset>()))
+                .ReturnsAsync(new List<CurrencyRate>
+                {
+                    new CurrencyRate { CurrencyCode = "USD", Rate = 1.2m },
+                    new CurrencyRate { CurrencyCode = "CAD", Rate = 1.6m }
+                });
         }
 
         [Test]
         public async Task GetExchangeRatesAsync_ValidInput_ReturnsExchangeRatesforProvidedCurrencies()
         {
             // Arrange
-            IExchangeRateService exchangeRateService = new ExchangeRateService(_apiClientMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(_proxyMock.Object);
 
             // Act
-            IEnumerable<IExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<ICurrency> { new Currency("USD"), new Currency("CAD") });
+            IEnumerable<ExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<string> { "USD", "CAD" });
 
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Count(), Is.EqualTo(2));
 
-            IExchangeRate usdRate = result.First();
-            IExchangeRate cadRate = result.Last();
+            ExchangeRate usdRate = result.First();
+            ExchangeRate cadRate = result.Last();
 
             Assert.Multiple(() =>
             {
@@ -54,10 +56,10 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetExchangeRatesAsync_SourceCurrencyCodeInCurrencies_DoesNotReturnSourceExchangeRate()
         {
             // Arrange
-            IExchangeRateService exchangeRateService = new ExchangeRateService(_apiClientMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(_proxyMock.Object);
 
             // Act
-            IEnumerable<IExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<ICurrency> { new Currency("CZK") });
+            IEnumerable<ExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<string> { "CZK" });
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -68,17 +70,15 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetExchangeRatesAsync_ApiReturnsEmpty_ReturnsEmptyList()
         {
             // Arrange
-            Mock<ICzechNationalBankClient> apiClientMock = new Mock<ICzechNationalBankClient>();
-            apiClientMock.Setup(x => x.CnbapiExratesDailyAsync(It.IsAny<DateTimeOffset>(), It.IsAny<Lang>()))
-                .ReturnsAsync(new ExRateDailyResponse
-                {
-                    Rates = new List<ExRateDailyRest>()
-                });
+            Mock<IExchangeRateProxy> proxyMock = new Mock<IExchangeRateProxy>();
 
-            IExchangeRateService exchangeRateService = new ExchangeRateService(apiClientMock.Object);
+            proxyMock.Setup(x => x.GetCurrencyRatesAsync(It.IsAny<DateTimeOffset>()))
+                .ReturnsAsync(new List<CurrencyRate>());
+
+            IExchangeRateService exchangeRateService = new ExchangeRateService(proxyMock.Object);
 
             // Act
-            IEnumerable<IExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<ICurrency> { new Currency("EUR") });
+            IEnumerable<ExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<string> { "EUR" });
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -90,7 +90,7 @@ namespace ExchangeRateUpdater.Tests
         public void GetExchangeRatesAsync_NullCurrencies_ThrowsArgumentNullException()
         {
             // Arrange
-            IExchangeRateService exchangeRateService = new ExchangeRateService(_apiClientMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(_proxyMock.Object);
 
             // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
@@ -103,10 +103,10 @@ namespace ExchangeRateUpdater.Tests
         public async Task GetExchangeRatesAsync_EmptyCurrencies_ReturnsEmptyList()
         {
             // Arrange
-            IExchangeRateService exchangeRateService = new ExchangeRateService(_apiClientMock.Object);
+            IExchangeRateService exchangeRateService = new ExchangeRateService(_proxyMock.Object);
 
             //Act
-            IEnumerable<IExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<ICurrency>());
+            IEnumerable<ExchangeRate> result = await exchangeRateService.GetExchangeRatesAsync("CZK", new List<string>());
 
             // Assert
             Assert.That(result, Is.Not.Null);
@@ -117,16 +117,18 @@ namespace ExchangeRateUpdater.Tests
         public void GetExchangeRatesAsync_ApiException_ThrowsApiException()
         {
             // Arrange
-            Mock<ICzechNationalBankClient> apiClientMock = new Mock<ICzechNationalBankClient>();
-            apiClientMock.Setup(x => x.CnbapiExratesDailyAsync(It.IsAny<DateTimeOffset>(), It.IsAny<Lang>()))
+            Mock<IExchangeRateProxy> proxyMock = new Mock<IExchangeRateProxy>();
+
+            proxyMock.Setup(x => x.GetCurrencyRatesAsync(It.IsAny<DateTimeOffset>()))
                 .ThrowsAsync(new ApiException("Api Exception", 500, "", null, null));
 
-            IExchangeRateService exchangeRateService = new ExchangeRateService(apiClientMock.Object);
+
+            IExchangeRateService exchangeRateService = new ExchangeRateService(proxyMock.Object);
 
             // Act & Assert
             Assert.ThrowsAsync<ApiException>(async () =>
             {
-                await exchangeRateService.GetExchangeRatesAsync("CZK", new List<ICurrency> { new Currency("USD") });
+                await exchangeRateService.GetExchangeRatesAsync("CZK", new List<string> { "USD" });
             });
         }
     }

@@ -18,6 +18,9 @@
 
 namespace ExchangeRateUpdater.Clients
 {
+    using ExchangeRateUpdater.Interfaces;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]

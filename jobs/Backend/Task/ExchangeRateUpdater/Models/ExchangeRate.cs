@@ -2,18 +2,18 @@
 
 namespace ExchangeRateUpdater.Models
 {
-    public class ExchangeRate : IExchangeRate
+    public class ExchangeRate
     {
-        public ExchangeRate(ICurrency sourceCurrency, ICurrency targetCurrency, decimal value)
+        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
         }
 
-        public ICurrency SourceCurrency { get; }
+        public Currency SourceCurrency { get; }
 
-        public ICurrency TargetCurrency { get; }
+        public Currency TargetCurrency { get; }
 
         public decimal Value { get; }
 

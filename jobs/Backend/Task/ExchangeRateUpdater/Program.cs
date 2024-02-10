@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Proxies;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,17 +15,17 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static readonly IEnumerable<ICurrency> currencies = new[]
+        private static readonly IEnumerable<string> currencies = new[]
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
+            "USD",
+            "EUR",
+            "CZK",
+            "JPY",
+            "KES",
+            "RUB",
+            "THB",
+            "TRY",
+            "XYZ"
         };
 
         public static async Task Main(string[] args)
@@ -38,6 +39,7 @@ namespace ExchangeRateUpdater
                 {
                     ExchangeRateConfiguration config = hostContext.Configuration.Get<ExchangeRateConfiguration>();
                     services.AddHttpClient<ICzechNationalBankClient, CzechNationalBankClient>(a => a.BaseAddress = config.BaseUrl);
+                    services.AddScoped<IExchangeRateProxy, CzechNationalBankProxy>();
                     services.AddScoped<IExchangeRateService, ExchangeRateService>();
                 })
                 .UseConsoleLifetime();
@@ -51,7 +53,7 @@ namespace ExchangeRateUpdater
                 try
                 {
                     IExchangeRateService service = services.GetRequiredService<IExchangeRateService>();
-                    IEnumerable<IExchangeRate> rates = await service.GetExchangeRatesAsync("CZK", currencies);
+                    IEnumerable<ExchangeRate> rates = await service.GetExchangeRatesAsync("CZK", currencies);
 
                     Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)

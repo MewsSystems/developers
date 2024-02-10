@@ -8,20 +8,18 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Services
 {
-    public class ExchangeRateService(ICzechNationalBankClient apiClient) : IExchangeRateService
+    public class ExchangeRateService(IExchangeRateProxy exchangeRateProxy) : IExchangeRateService
     {
-        private readonly ICzechNationalBankClient _apiClient = apiClient;
-
-        public async Task<IEnumerable<IExchangeRate>> GetExchangeRatesAsync(string sourceCurrencyCode, IEnumerable<ICurrency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string sourceCurrencyCode, IEnumerable<string> currencyCodes)
         {
-            ArgumentNullException.ThrowIfNull(currencies);
+            ArgumentNullException.ThrowIfNull(currencyCodes);
 
             try
             {
-                ExRateDailyResponse result = await _apiClient.CnbapiExratesDailyAsync(DateTimeOffset.Now, Lang.EN);
-                return result.Rates?
-                    .Where(x => currencies.Any(c => c.Code == x.CurrencyCode) && x.CurrencyCode != sourceCurrencyCode)
-                    .Select(x => new ExchangeRate(new Currency(sourceCurrencyCode), new Currency(x.CurrencyCode), GetExchangeRate(1, (decimal)x.Rate)))
+                IEnumerable<CurrencyRate> rates = await exchangeRateProxy.GetCurrencyRatesAsync(DateTimeOffset.Now);
+                return rates?
+                    .Where(x => currencyCodes.Any(c => c == x.CurrencyCode) && x.CurrencyCode != sourceCurrencyCode)
+                    .Select(x => new ExchangeRate(new Currency(sourceCurrencyCode), new Currency(x.CurrencyCode), GetExchangeRate(1, x.Rate)))
                     .ToList();
             }
             catch (ApiException ex)

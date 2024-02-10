@@ -1,15 +1,12 @@
-﻿using ExchangeRateUpdater.Interfaces;
-
-namespace ExchangeRateUpdater.Models
+﻿namespace ExchangeRateUpdater.Models
 {
-    public class Currency : ICurrency
+    public class Currency(string code)
     {
-        public Currency(string code)
-        {
-            Code = code;
-        }
 
-        public string Code { get; }
+        /// <summary>
+        /// Three-letter ISO 4217 code of the currency.
+        /// </summary>
+        public string Code { get; } = code;
 
         public override string ToString() => Code;
     }
