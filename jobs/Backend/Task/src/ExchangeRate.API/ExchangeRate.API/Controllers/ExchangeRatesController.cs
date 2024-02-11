@@ -42,13 +42,13 @@ public class ExchangeRatesController(IExchangeRateProvider exchangeRateProvider)
         if (string.IsNullOrEmpty(currencyCodes))
             return BadRequest("At least one currency code must be specified.");
         
-        var codes = currencyCodes.Split(',');
+        var codes = currencyCodes.Split(',').Where(x => !string.IsNullOrEmpty(x)).Select(x => x.Trim().ToUpper()).ToList();
         var invalidCodes = codes.Where(x =>! IsValidCurrencyCode(x)).ToList();
         if (invalidCodes.Any())
             return BadRequest($"The following currency codes are invalid: {string.Join(", ", invalidCodes)}.");
 
         var currencies = codes.Select(x => new Domain.Currency(x));
-        var exchangeRates = _exchangeRateProvider.GetExchangeRates(currencies);
+        var exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
 
         return Ok(exchangeRates);
     }
