@@ -47,21 +47,22 @@ export default function Pagination() {
   const itemPages = generatePages(appPage, maximumPage);
   return (
     <div className="flex items-center justify-between">
-      {/* TODO implement for mobile devices - not working now */}
+      {/* For small screens - only previous and next page button */}
       <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
-          className="w-5 relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Previous
-        </a>
-        <a
-          href="#"
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Next
-        </a>
+        <PaginationChevron
+          direction="previous"
+          appPage={appPage}
+          maximumPage={maximumPage}
+          changePage={changePageHandler}
+        />
+        <PaginationChevron
+          direction="next"
+          appPage={appPage}
+          maximumPage={maximumPage}
+          changePage={changePageHandler}
+        />
       </div>
+      {/*  For bigger screens - shows the whole pagination with page numbers */}
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
         <div>
           <nav
@@ -75,6 +76,7 @@ export default function Pagination() {
               changePage={changePageHandler}
             />
 
+            {/* Generate page numbers between previous and next button */}
             {itemPages.map((itemPage, index) => {
               const itemKey = itemPage + "-" + index;
 
