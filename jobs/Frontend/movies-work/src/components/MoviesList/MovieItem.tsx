@@ -4,6 +4,10 @@ import Constants from "../../config/constants";
 export default function MovieItem({ movie }) {
   const isPosterAvailable = movie.poster_path !== null;
   const imagePath = `${Constants.IMAGE_URL}/w200${movie.poster_path}`;
+
+  const time = <time dateTime={movie.release_date}>{movie.release_date}</time>;
+  const isReleased: boolean = movie.release_date ? true : false;
+
   return (
     <Link
       to={`/movie/${movie.id}`}
@@ -30,10 +34,10 @@ export default function MovieItem({ movie }) {
       </div>
       <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
         <p className="text-sm leading-6 text-gray-300">⭐ {movie.popularity}</p>
-        {/* TODO release date could be absent */}
+
         <p className="mt-1 text-xs leading-5 text-gray-500">
-          Released{" "}
-          <time dateTime={movie.release_date}>{movie.release_date}</time>
+          {!isReleased && <span>Not released yet</span>}
+          {isReleased && <span>Released&nbsp;{time}</span>}
         </p>
       </div>
     </Link>
