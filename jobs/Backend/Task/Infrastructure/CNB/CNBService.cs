@@ -1,9 +1,9 @@
 ﻿using ExchangeRateUpdater.Infrastructure.CNB.Models;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Linq;
-using Serilog;
 
 namespace ExchangeRateUpdater.Infrastructure.CNB
 {
@@ -42,12 +42,12 @@ namespace ExchangeRateUpdater.Infrastructure.CNB
                 var result = await JsonSerializer.DeserializeAsync
                 <ExRateDailyResponse>(contentStream, options);
 
-                _logger.Information($"Received rates for {string.Join(",", result.Rates.Select(r => r.CurrencyCode))}");
+                _logger.LogDebug($"Received rates for {string.Join(",", result.Rates.Select(r => r.CurrencyCode))}");
                 return result;
             }
             catch (HttpRequestException e)
             {
-                _logger.Error(e, "Error downloading exchange rates");
+                _logger.LogError(e, "Error downloading exchange rates");
                 return null;
             }
         }

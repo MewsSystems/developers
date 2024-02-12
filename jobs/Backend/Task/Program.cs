@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -29,47 +31,24 @@ namespace ExchangeRateUpdater
         public static async Task Main(string[] args)
         {
             try
-            {
-                //var confBuilder = new ConfigurationBuilder();
-
-                // confBuilder.SetBasePath(Directory.GetCurrentDirectory())
-                //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                //    .AddEnvironmentVariables();
-
-                var confBuilder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables();
-
-                var configuration = confBuilder.Build();
-
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Debug()
-                    //.WriteTo.RollingFile(Path.Combine(env.ContentRootPath, "C:\\logs\\log-{Date}.txt"),
-                    //                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] [{EventId}] {Message}{NewLine}{Exception}")
-                    .ReadFrom.Configuration(configuration)
-                    .CreateLogger();
-
-                //Log.Logger = new LoggerConfiguration()
-                //                .ReadFrom.Configuration(confBuilder.Build())
-                //                .WriteTo.Console()
-                //                .CreateLogger();
-
-                Log.Logger.Information("starting serilog in a console app...");
-
+            {               
                 var builder = new HostBuilder()
                    .ConfigureServices((hostContext, services) =>
                    {
                        services.AddHttpClient();
-                       services.AddSingleton<ILogger>(x => Log.Logger);
+                       services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
+                       services.AddSingleton<ILogger>(x => CreateLogger());
                        services.AddSingleton<ExchangeRateProvider>();
                        services.AddSingleton<IExchangeRateProvider>
                             (x => new ExchangeRateProviderWithCaching(x.GetRequiredService<ExchangeRateProvider>()));
                    })
-                   .UseSerilog()
+                   .ConfigureLogging(logging =>
+                   {
+                       logging.ClearProviders();
+                       logging.AddConsole();
+                   })
                    .UseConsoleLifetime();
-
-
+               
                 var host = builder.Build();
                 var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
                 var rates = await provider.GetExchangeRates(currencies);
@@ -86,6 +65,22 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static ILogger CreateLogger()
+        {
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSimpleConsole(options =>
+                {
+                    options.IncludeScopes = false;
+                    options.SingleLine = true;
+                    options.TimestampFormat = "HH:mm:ss ";
+                });
+            });
+
+            ILogger logger = loggerFactory.CreateLogger<Program>();
+            return logger;
         }
     }
 }
