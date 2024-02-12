@@ -50,7 +50,7 @@ namespace ExchangeRateUpdater
 
         public override string ToString()
         {
-            return $"{Multiplier}{SourceCurrency}/{TargetCurrency}={Rate}";
+            return $"{Multiplier} {SourceCurrency}/{TargetCurrency}={Rate}";
         }
 
         private decimal CalculateValue(int multiplier, decimal rate)

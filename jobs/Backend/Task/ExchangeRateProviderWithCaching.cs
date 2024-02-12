@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater
     {
         private readonly IExchangeRateProvider _exchangeRateProvider;
 
-        private IEnumerable<ExchangeRate> _cachedExchangeRates;
+        private List<ExchangeRate> _cachedExchangeRates = new List<ExchangeRate>();
 
         public ExchangeRateProviderWithCaching(IExchangeRateProvider exchangeRateProvider)
         {
@@ -18,21 +18,42 @@ namespace ExchangeRateUpdater
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            if(ContainsAllExchangeRates(currencies))
+            if(!ContainsAllExchangeRates(currencies))
             {
-                return _cachedExchangeRates;
+                RemovePastExchangeRates();
+
+                var exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
+
+                AddNewExchangeRates(exchangeRates);
             }
 
-            return await _exchangeRateProvider.GetExchangeRates(currencies);
+            return _cachedExchangeRates.Where(r => currencies.Contains(r.SourceCurrency));
+        }
+
+        private void AddNewExchangeRates(IEnumerable<ExchangeRate> exchangeRates)
+        {
+            foreach (var exchangeRate in exchangeRates)
+            {
+                if (!_cachedExchangeRates.Contains(exchangeRate))
+                {
+                    _cachedExchangeRates.Add(exchangeRate);
+                }
+            }
+        }
+
+        private void RemovePastExchangeRates()
+        {
+            foreach(var exchangeRate in _cachedExchangeRates)
+            {
+                if(exchangeRate.Date < DateTime.Today)
+                {
+                    _cachedExchangeRates.Remove(exchangeRate);
+                }
+            }
         }
 
         private bool ContainsAllExchangeRates(IEnumerable<Currency> currencies)
         {
-            if(_cachedExchangeRates == null)
-            {
-                return false;
-            }
-
             return currencies.All(c => _cachedExchangeRates.Contains(new ExchangeRate(c, Currency.CZK, DateTime.Today, 0, 0)));
         }
     }
