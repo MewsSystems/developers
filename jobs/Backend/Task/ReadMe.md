@@ -2,7 +2,7 @@
 1) Open the `sln` file `"...\jobs\Backend\Task\ExchangeRateUpdater.sln"` in your favorite IDE and hit the play button and your favorite browser should automagically open on page `https://localhost:5011/swagger` where you can try the generated API
 2) Build the solution and then navigate to `...\jobs\Backend\Task\src\ExchangeRate.API\ExchangeRate.API` and run `dotnet run` in your terminal. Then you have to manually go to your browser and go to the `https://localhost:5011/swagger` to see the API
 
-#Note
+# Note
 I left little notes like this `//Note: note example` throughout the project with ideas for improvements. I would most likely implement or at least discuss them with someone to get a second opinion before sending it to production.
 
 # Solution Description
