@@ -1,6 +1,7 @@
 import MovieDetail from "../components/MovieDetail/MovieDetail";
 import Constants from "../config/constants";
 import BackButton from "../components/BackButton";
+import { IMovie } from "../types/movieTypes";
 
 export default function MovieDetailPage() {
   return (
@@ -11,7 +12,11 @@ export default function MovieDetailPage() {
   );
 }
 
-export async function movieDetailLoader({ params }) {
+export async function movieDetailLoader({
+  params,
+}: {
+  params: { movieID: number };
+}): Promise<IMovie> {
   const requestOptions: RequestInit = {
     method: "GET",
     redirect: "follow",
@@ -28,10 +33,10 @@ export async function movieDetailLoader({ params }) {
       throw new Error("Movie not found");
     }
 
-    const data = await response.json();
+    const data: IMovie = await response.json();
     return data;
   } catch (error) {
     console.error("Error fetching movie detail", error);
-    throw new Error(error);
+    throw error;
   }
 }

@@ -2,9 +2,10 @@ import { useContext } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import MovieItem from "./MovieItem";
 import styles from "./MoviesList.module.css";
+import { IContext } from "../../types/appTypes";
 
 export default function MoviesList() {
-  const { fetchedMovies } = useContext(AppContext);
+  const { fetchedMovies } = useContext<IContext>(AppContext);
 
   return (
     <ul

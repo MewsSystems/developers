@@ -9,9 +9,11 @@ export interface IMovie {
   title: string;
   voteAverage: number;
   voteCount: number;
+  poster_path: string;
+  release_date: string;
 }
 
-export interface IMovieResponse {
+export interface IMoviesData {
   page: number;
   results: IMovie[];
   total_pages: number;

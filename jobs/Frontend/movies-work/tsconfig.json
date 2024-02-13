@@ -21,11 +21,11 @@
 
     /*INFO added*/
     "ignoreDeprecations": "5.0",
-    "strict": false,
-    "noStrictGenericChecks": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "strictBindCallApply": false,
-    "strictFunctionTypes": false,
+    "strict": true,
+    // "noStrictGenericChecks": true,
+    // "noPropertyAccessFromIndexSignature": false,
+    // "strictBindCallApply": false,
+    // "strictFunctionTypes": false,
     "allowJs": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true

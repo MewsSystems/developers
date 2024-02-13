@@ -2,9 +2,8 @@ import { IMovie } from "../../types/movieTypes";
 import Constants from "../../config/constants";
 import { useLoaderData } from "react-router";
 
-export default function MovieDetail() {
-  // QA: What is Partial for?
-  const movie: Partial<IMovie> = useLoaderData();
+const MovieDetail = () => {
+  const movie = useLoaderData() as IMovie;
 
   const imageAvailable = movie.backdrop_path !== null;
   const imagePath = `${Constants.IMAGE_URL}/w500/${movie.backdrop_path}`;
@@ -27,4 +26,6 @@ export default function MovieDetail() {
       </p>
     </>
   );
-}
+};
+
+export default MovieDetail;

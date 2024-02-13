@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import Constants from "../../config/constants";
+import { IMovie } from "../../types/movieTypes";
 
-export default function MovieItem({ movie }) {
+const MovieItem: React.FC<{ movie: IMovie }> = ({ movie }) => {
   const isPosterAvailable = movie.poster_path !== null;
   const imagePath = `${Constants.IMAGE_URL}/w200${movie.poster_path}`;
 
   const time = <time dateTime={movie.release_date}>{movie.release_date}</time>;
-  const isReleased: boolean = movie.release_date ? true : false;
+  const isReleased = movie.release_date ? true : false;
 
   return (
     <Link
@@ -18,7 +19,8 @@ export default function MovieItem({ movie }) {
       <div className="flex items-center min-w-0 gap-x-4">
         <img
           className="h-12 w-12 flex-none rounded-full bg-gray-50"
-          src={isPosterAvailable ? imagePath : null}
+          // TODO src to a alternative img
+          src={isPosterAvailable ? imagePath : ""}
           alt=""
         />
 
@@ -42,4 +44,6 @@ export default function MovieItem({ movie }) {
       </div>
     </Link>
   );
-}
+};
+
+export default MovieItem;

@@ -1,16 +1,8 @@
 import { createContext } from "react";
 import { useState, useEffect } from "react";
 import Constants from "../config/constants";
-import { IMovie, IMovieResponse } from "../types/movieTypes";
-import { IChildren } from "../types/appTypes";
-interface IContext {
-  searchMovieKeyword: string;
-  fetchedMovies: Array<IMovie>;
-  isFetching: boolean;
-  page: number;
-  maximumPage: number;
-  setAppSearchParams: (keyword?: string, page?: number) => void;
-}
+import { IMovie, IMoviesData } from "../types/movieTypes";
+import { IChildren, IContext } from "../types/appTypes";
 
 export const AppContext = createContext<IContext>({
   searchMovieKeyword: "",
@@ -21,12 +13,13 @@ export const AppContext = createContext<IContext>({
   setAppSearchParams: (keyword?: string, page?: number) => {},
 });
 
-const AppContextProvider = ({ children }: IChildren) => {
+const AppContextProvider: React.FC<IChildren> = ({ children }) => {
   const [searchMovieKeyword, setSearchMovieKeyword] = useState("");
   const [page, setPage] = useState(1);
-  const [maximumPage, setMaximumPage] = useState(null);
+  const [maximumPage, setMaximumPage] = useState<number | null>(null);
   const [fetchedMovies, setFetchedMovies] = useState<IMovie[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+
   const searchMovies = async (searchInputKeyword: string, page: number = 1) => {
     const options = {
       method: "GET",
@@ -35,13 +28,14 @@ const AppContextProvider = ({ children }: IChildren) => {
       },
     };
     // TODO optimize the URL creation - use new URL(...)
-    const searchKeywordURLEncoded = encodeURIComponent(searchInputKeyword);
+    const searchKeywordURLEncoded: string =
+      encodeURIComponent(searchInputKeyword);
     setIsFetching(true);
     const response = await fetch(
       `${Constants.API_URL}/${Constants.API_VERSION}/search/movie?query=${searchKeywordURLEncoded}&include_adult=false&language=en-US&page=${page}&api_key=${Constants.API_KEY}`,
       options
     );
-    const data: IMovieResponse = await response.json();
+    const data: IMoviesData = await response.json();
     setIsFetching(false);
     // saving for list view
     const movies: IMovie[] = data.results;
