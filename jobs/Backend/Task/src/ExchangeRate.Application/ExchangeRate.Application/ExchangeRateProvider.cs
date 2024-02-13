@@ -16,7 +16,7 @@ public class ExchangeRateProvider(IExchangeRatesService exchangeRatesService) : 
     public async Task<Domain.ExchangeRate?> GetExchangeRate(Currency requestedCurrency)
     {
         var exchangeRates = await _exchangeRatesService.GetCurrentExchangeRates();
-        var requestedExchangeRate = exchangeRates.FirstOrDefault(rate => rate.SourceCurrency == requestedCurrency);
+        var requestedExchangeRate = exchangeRates.FirstOrDefault(rate => rate.SourceCurrency == requestedCurrency); //Note: here is an opportunity to improve efficiency by using a dictionary for faster lookups
 
         return requestedExchangeRate;
     }

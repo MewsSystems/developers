@@ -7,6 +7,7 @@ namespace ExchangeRate.Infrastructure.Cnb;
 
 public class ExchangeRatesService(IMemoryCache cache, IExchangeRateFetcher fetcher) : IExchangeRatesService
 {
+    //Note: after implementing this cache mechanism, I realized that some kind of CRON scheduler would be better for this task.
     private readonly IMemoryCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     private readonly IExchangeRateFetcher _fetcher = fetcher ?? throw new ArgumentNullException(nameof(fetcher));
  
