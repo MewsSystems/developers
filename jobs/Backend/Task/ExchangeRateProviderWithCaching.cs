@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -16,13 +17,13 @@ namespace ExchangeRateUpdater
             _exchangeRateProvider = exchangeRateProvider;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
         {
             if(!ContainsAllExchangeRates(currencies))
             {
                 RemovePastExchangeRates();
 
-                var exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies);
+                var exchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies, cancellationToken);
 
                 AddNewExchangeRates(exchangeRates);
             }
@@ -54,7 +55,7 @@ namespace ExchangeRateUpdater
 
         private bool ContainsAllExchangeRates(IEnumerable<Currency> currencies)
         {
-            return currencies.All(c => _cachedExchangeRates.Contains(new ExchangeRate(c, Currency.CZK, DateTime.Today, 0, 0)));
+            return currencies.All(c => _cachedExchangeRates.Any(x => x.Equals(new ExchangeRate(c, Currency.CZK, DateTime.Today, 0, 0))));
         }
     }
 }

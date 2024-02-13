@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Infrastructure.CNB
@@ -20,7 +21,7 @@ namespace ExchangeRateUpdater.Infrastructure.CNB
             _logger = logger;
         }
 
-        public async Task<ExRateDailyResponse> GetExDailyRates()
+        public async Task<ExRateDailyResponse> GetExDailyRates(CancellationToken cancellationToken)
         {
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
@@ -29,10 +30,10 @@ namespace ExchangeRateUpdater.Infrastructure.CNB
             HttpClient httpClient = _httpClientFactory.CreateClient();
             try
             {
-                var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+                var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
                 httpResponseMessage.EnsureSuccessStatusCode();    // Throw if not a success code.
                 using var contentStream =
-                   await httpResponseMessage.Content.ReadAsStreamAsync();
+                   await httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken);
 
                 var options = new JsonSerializerOptions
                 {
@@ -40,7 +41,7 @@ namespace ExchangeRateUpdater.Infrastructure.CNB
                 };
 
                 var result = await JsonSerializer.DeserializeAsync
-                <ExRateDailyResponse>(contentStream, options);
+                <ExRateDailyResponse>(contentStream, options, cancellationToken);
 
                 _logger.LogDebug($"Received rates for {string.Join(",", result.Rates.Select(r => r.CurrencyCode))}");
                 return result;

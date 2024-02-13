@@ -11,7 +11,6 @@ namespace ExchangeRateUpdater
             Date = date.Date;
             Multiplier = multiplier;
             Rate = rate;
-            //Value = CalculateValue(multiplier, rate);
         }
 
         public Currency SourceCurrency { get; }
@@ -51,11 +50,6 @@ namespace ExchangeRateUpdater
         public override string ToString()
         {
             return $"{Multiplier} {SourceCurrency}/{TargetCurrency}={Rate}";
-        }
-
-        private decimal CalculateValue(int multiplier, decimal rate)
-        {
-            return rate / (decimal)Math.Pow(10, multiplier);
         }
     }
 }

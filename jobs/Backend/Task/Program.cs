@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -51,12 +52,15 @@ namespace ExchangeRateUpdater
                
                 var host = builder.Build();
                 var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                while(true)
                 {
-                    Console.WriteLine(rate.ToString());
+                    await Execute(provider, CancellationToken.None);
+
+                    if(Console.ReadLine().ToLower() == "q")
+                    {
+                        break;
+                    }
                 }
             }
             catch (Exception e)
@@ -65,6 +69,17 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static async Task Execute(IExchangeRateProvider provider, CancellationToken cancellationToken)
+        {
+            var rates = await provider.GetExchangeRates(currencies, cancellationToken);
+
+            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            foreach (var rate in rates)
+            {
+                Console.WriteLine(rate.ToString());
+            }
         }
 
         private static ILogger CreateLogger()

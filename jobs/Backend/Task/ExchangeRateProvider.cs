@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -25,9 +26,9 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
         {
-            var response = await _cnbService.GetExDailyRates();
+            var response = await _cnbService.GetExDailyRates(cancellationToken);
             return _getDailyRatesResponseHandler.ToExchangeRates(response)
                 .Where(r => currencies.Contains(r.SourceCurrency));
         }
