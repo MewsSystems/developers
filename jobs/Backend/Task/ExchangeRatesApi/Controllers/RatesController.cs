@@ -1,11 +1,13 @@
 using System.Runtime.CompilerServices;
+using ExchangeRatesApi.Models;
 using ExchangeRatesService.Models;
 using ExchangeRatesService.Providers.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRatesApi.Controllers;
 
-[ApiController, Route("api")]
+[ApiController]
+[Route("api/[controller]")]
 public class RatesController : ControllerBase
 {
     private readonly IRatesProvider _rateProvider;
@@ -16,8 +18,8 @@ public class RatesController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/rates")]
-    public async IAsyncEnumerable<ExchangeRate> GetRates([FromQuery] Currency[] codes,
+    [Route("exchange-rates")]
+    public async IAsyncEnumerable<ExchangeRate> GetRates([FromQuery] List<Currency> codes,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var rates = _rateProvider.GetRatesAsync(codes, cancellationToken);
@@ -36,8 +38,8 @@ public class RatesController : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    [Route("/reverse-rates")]
-    public async IAsyncEnumerable<ExchangeRate> GetReverseRates([FromQuery] Currency[] codes,
+    [Route("reverse-rates")]
+    public async IAsyncEnumerable<ExchangeRate> GetReverseRates([FromQuery] List<Currency> codes,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var rates = _rateProvider.GetRatesReverseAsync(codes, 10, cancellationToken);

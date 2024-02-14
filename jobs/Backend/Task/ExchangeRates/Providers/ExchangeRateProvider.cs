@@ -9,15 +9,6 @@ namespace ExchangeRatesService.Providers;
 
 public class ExchangeRateProvider(HttpClient httpClient): IRatesProvider, IAsyncDisposable
     {   
-        /*private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-
-        public ExchangeRateProvider(IHttpClientFactory httpClientFactory, IConfiguration configuration)
-        {
-            _httpClient = httpClientFactory.CreateClient();
-            _configuration = configuration;
-        }*/
-
         public async IAsyncEnumerable<ExchangeRate> GetRatesAsync(IEnumerable<Currency> currencies,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {

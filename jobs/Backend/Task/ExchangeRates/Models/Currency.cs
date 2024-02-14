@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRatesService.Models;
 
@@ -14,8 +15,9 @@ public class Currency
     /// Three-letter ISO 4217 code of the currency.
     /// </summary>
      
-    [JsonPropertyName("currencyCode")]
-    public string Code { get; }
+    [JsonPropertyName("code")]
+    [FromQuery(Name = "code")]
+    public string Code { get; set; }
 
     public static Currency Create(string? code)
     {
@@ -26,6 +28,20 @@ public class Currency
             throw new ArgumentOutOfRangeException(nameof(code), "Currency code must be a three-letter ISO 4217 code");
 
         return new Currency(code);
+    }
+    
+    public static bool TryParse(string? code, out Currency currency)
+    {
+        try
+        {
+            currency = Create(code);
+            return true;
+        }
+        catch
+        {
+            currency = default;
+            return false;
+        }
     }
     
     public override string ToString()

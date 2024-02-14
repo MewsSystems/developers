@@ -1,6 +1,10 @@
-﻿@ExchangeRateUpdater_HostAddress = http://localhost:5144
+﻿@ExchangeRateUpdater_HostAddress = http://localhost:5170
 
-GET {{ExchangeRateUpdater_HostAddress}}/rates
+GET {{ExchangeRateUpdater_HostAddress}}/api/rates
+Accept: application/json
+###
+
+GET {{ExchangeRateUpdater_HostAddress}}/api/reverse-rates
 Accept: application/json
 
 ###
