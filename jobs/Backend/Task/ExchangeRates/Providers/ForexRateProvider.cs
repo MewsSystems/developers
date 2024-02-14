@@ -49,7 +49,7 @@ public class ForexRateProvider(HttpClient httpClient, TimeProvider timeProvider)
             }
         };
         
-        var lastMonth = timeProvider.GetUtcNow().AddMonths(-1).Month;
+        var lastMonth = timeProvider.GetUtcNow().AddMonths(-1);
         
         var response  = (await httpClient.GetFromJsonAsync<ExchangeRateIterator>(
             $"/cnbapi/fxrates/daily-month?lang=EN&yearMonth={lastMonth:yyyy-MM}",
