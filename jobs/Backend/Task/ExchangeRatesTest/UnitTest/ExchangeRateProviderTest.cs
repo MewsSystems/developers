@@ -3,7 +3,7 @@ using System.Text;
 using ExchangeRatesService.Models;
 using ExchangeRatesService.Providers;
 using ExchangeRatesService.Providers.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 using Moq.Protected;
 
@@ -13,12 +13,12 @@ namespace ExchangeRatesTest;
 public class ExchangeRateProviderTest
 {
     private IRatesProvider _service;
-    //private Mock<IHttpClientFactory> _httpClient;
     private Mock<HttpClient> _httpClient;
-    private Mock<IConfiguration> _configuration;
     private Mock<HttpMessageHandler> _httpMessageHandler;
     
     private const string fakeBaseAddress = "https://www.fake.com";
+    
+    private FakeTimeProvider _timeProvider;
     
     [OneTimeSetUp]
     public void Setup()
@@ -26,13 +26,9 @@ public class ExchangeRateProviderTest
         _httpMessageHandler = new Mock<HttpMessageHandler>();
         var httpConcreteClient = new HttpClient(_httpMessageHandler.Object);
         httpConcreteClient.BaseAddress = new Uri(fakeBaseAddress);
-        //_httpClient = new Mock<IHttpClientFactory>(MockBehavior.Strict);
-        //_httpClient.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(httpConcreteClient);
-        _httpClient = new Mock<HttpClient>(MockBehavior.Strict);
-        _configuration = new Mock<IConfiguration>(MockBehavior.Strict);
-        _configuration.SetupGet(x => x[It.Is<string>(s=>s == "ExchangeRateApiUrl")]).Returns(fakeBaseAddress);
-        //_service = new ExchangeRateProvider(_httpClient.Object, _configuration.Object);
-        _service = new ExchangeRateProvider(_httpClient.Object);
+        _service = new ExchangeRateProvider(httpConcreteClient);
+        
+        _timeProvider = new FakeTimeProvider(DateTimeOffset.Parse("2024-02-05T14:00:00.000Z"));
     }
 
     [Test]

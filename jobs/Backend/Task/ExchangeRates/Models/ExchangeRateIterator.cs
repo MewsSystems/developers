@@ -2,5 +2,5 @@
 
 public class ExchangeRateIterator
 {
-    public List<ExchangeRate> rates { get; }
+    public List<ExchangeRate> rates { get; set; }
 }

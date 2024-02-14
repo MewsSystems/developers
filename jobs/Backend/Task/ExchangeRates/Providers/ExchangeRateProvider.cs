@@ -62,10 +62,7 @@ public class ExchangeRateProvider(HttpClient httpClient): IRatesProvider, IAsync
                 },
                 //DefaultBufferSize = 512
             };
-
-            /*var responseMessage =  await httpClient.GetAsync("/cnbapi/exrates/daily?lang=EN");
-            var content = responseMessage.Content.ReadAsStringAsync().Result;
-            var rates = JsonSerializer.Deserialize<ExchangeRateIterator>(content, options)!.rates;*/
+            
             
             var response = (await httpClient.GetFromJsonAsync<ExchangeRateIterator>("/cnbapi/exrates/daily?lang=EN",options,
                 cancellationToken: cancellationToken));

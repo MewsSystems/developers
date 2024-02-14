@@ -14,8 +14,8 @@ public class ExchangeRate
         Amount = amount;
     }
 
-    //[JsonConverter(typeof(CurrencyJsonConverter))]
-    //[JsonPropertyName("currencyCode")]
+    [JsonConverter(typeof(CurrencyJsonConverter))]
+    [JsonPropertyName("currencyCode")]
     public Currency SourceCurrency { get; private set; }
 
     public Currency TargetCurrency { get; private set; }

@@ -12,7 +12,7 @@ builder.Services.AddOptionsWithValidateOnStart<CnbExchangeRateApiConfig>()
     .Bind(builder.Configuration.GetSection("CnbApi"))
     .ValidateDataAnnotations();
 
-builder.Services.AddSingleton<IRatesConverter, RatesConverter>();
+builder.Services.AddScoped<IRatesConverter, RatesConverter>();
 
 builder.Services.AddHttpClient<ExchangeRateProvider>((sp, client) =>
 {
