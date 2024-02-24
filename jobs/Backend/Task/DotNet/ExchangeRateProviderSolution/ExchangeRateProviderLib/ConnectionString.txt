@@ -1,2 +1,0 @@
-Server=127.0.0.1,1433;Database=master;User=sa;Password=S3cur3P@ssW0rd!;TrustServerCertificate=true
-
