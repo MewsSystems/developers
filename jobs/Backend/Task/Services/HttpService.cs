@@ -3,16 +3,19 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace HttpApiService
 {
     public class HttpService
     {
         private HttpClient httpClient = null;
+        private ILogger _logger = null;
 
-        public HttpService()
+        public HttpService(ILogger logger)
         {
             httpClient = new HttpClient();
+            _logger = logger;
             httpClient.DefaultRequestHeaders.Clear();
         }
 
@@ -24,21 +27,22 @@ namespace HttpApiService
 
                 if (httpGetResponse.IsSuccessStatusCode)
                 {
+                    _logger.LogInformation("Exchange rate API call successfull");
                     Stream httpGetResponseStream = await httpGetResponse.Content.ReadAsStreamAsync();
                     return await JsonSerializer.DeserializeAsync<T>(httpGetResponseStream, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 }
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"GET Request resulted in an exception: {ex.Message}");
+                _logger.LogError($"GET Request resulted in an exception: {ex.Message}");
             }
             catch (JsonException ex)
             {
-                Console.WriteLine($"Deserializing GET Response resulted in an exception: {ex.Message}");
+                _logger.LogError($"Deserializing GET Response resulted in an exception: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"HTTPService encountered an unhandled exception when calling GetWithJsonMapping: {ex.Message}");
+                _logger.LogError($"HTTPService encountered an unhandled exception when calling GetWithJsonMapping: {ex.Message}");
                 throw;
             }
 

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Logger;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -20,12 +22,14 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static async Task Main(string[] args)
+        public static async Task Main()
         {
+            ILogger logger = new LoggerService().logger;
+
             try
             {
                 ExchangeRateProvider provider = new ExchangeRateProvider();
-                List<ExchangeRate> exchangeRates = await provider.GetExchangeRates(currencies);
+                List<ExchangeRate> exchangeRates = await provider.GetExchangeRates(currencies, logger);
 
                 Console.WriteLine($"Successfully retrieved {exchangeRates.Count()} exchange rates:");
                 foreach (ExchangeRate exchangeRate in exchangeRates)
@@ -33,9 +37,10 @@ namespace ExchangeRateUpdater
                     Console.WriteLine(exchangeRate.ToString());
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                logger.LogError($"Program encountered an unhandled exception: {ex.Message}");
+                Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
             }
 
             Console.ReadLine();
