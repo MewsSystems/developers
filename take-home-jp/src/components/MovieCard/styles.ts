@@ -10,9 +10,9 @@ export const styles = {
     justifyContent: 'space-between',
   },
   cardLink: {
-    color: 'white',
+    color: colors.whiteSmoke,
     textDecoration: 'underline',
-    textDecorationColor: 'white',
+    textDecorationColor: colors.whiteSmoke,
     fontWeight: 'bold',
   },
 };
