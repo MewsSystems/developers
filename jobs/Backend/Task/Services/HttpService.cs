@@ -47,7 +47,7 @@ namespace HttpApiService
             }
             catch (Exception ex)
             {
-                _logger.LogError($"HTTPService encountered an unhandled exception when calling GetWithJsonMapping: {ex.Message}");
+                _logger.LogError($"HTTPService encountered an unhandled exception when calling {requestUrl}. {ex.Message}");
                 throw;
             }
 

@@ -10,7 +10,7 @@ namespace Logger
 
         public LoggerService()
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
                                             builder.AddConsole()
                                             .AddDebug()
                                             .SetMinimumLevel(LogLevel.Debug));

@@ -9,6 +9,8 @@ namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
+        public ExchangeRateProvider() { }
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -30,19 +32,22 @@ namespace ExchangeRateUpdater
                 ExchangeRateApiResponse exchangeRateApiResponse = await httpService.GetWithJsonMapping<ExchangeRateApiResponse>
                 ($"https://api.cnb.cz/cnbapi/exrates/daily?date={currentUtcDateString}&lang=EN");
 
-                List<ExchangeRateApiData> filteredExchangeRateData =
-                    exchangeRateApiResponse.Rates.Where(x => currencies.Any(y => y.Code == x.CurrencyCode)).ToList();
-
-                logger.LogInformation($"{filteredExchangeRateData.Count} rates remaining from {exchangeRateApiResponse.Rates.Count} total after filtering");
-
-                foreach (ExchangeRateApiData exchangeRate in filteredExchangeRateData)
+                if (exchangeRateApiResponse != null)
                 {
-                    exchangeRates.Add(new ExchangeRate(currencies.FirstOrDefault(x => x.Code == exchangeRate.CurrencyCode), currencies.FirstOrDefault(x => x.Code == "CZK"), exchangeRate.Rate));
+                    List<ExchangeRateApiData> filteredExchangeRateData =
+                        exchangeRateApiResponse.Rates.Where(x => currencies.Any(y => y.Code == x.CurrencyCode)).ToList();
+
+                    logger.LogInformation($"{filteredExchangeRateData.Count} rates remaining from {exchangeRateApiResponse.Rates.Count} total after filtering");
+
+                    foreach (ExchangeRateApiData exchangeRate in filteredExchangeRateData)
+                    {
+                        exchangeRates.Add(new ExchangeRate(currencies.FirstOrDefault(x => x.Code == exchangeRate.CurrencyCode), currencies.FirstOrDefault(x => x.Code == "CZK"), exchangeRate.Rate));
+                    }
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError($"ExchangeRateProvider encountered an unhandled exception when calling GetExchangeRates: {ex.Message}");
+                logger.LogError($"ExchangeRateProvider encountered an unhandled exception: {ex.Message}");
                 throw;
             }
 
