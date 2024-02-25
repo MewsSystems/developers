@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"
+>
+  <div
+    className="MuiBox-root css-1sf3xto"
+  >
+    <div
+      className="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+      style={
+        Object {
+          "backgroundColor": "#F5F5F5",
+          "border": "1px solid #808080",
+          "borderRadius": "5px",
+          "display": "flex",
+        }
+      }
+    >
+      <label
+        className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-filled MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-filled css-e4w4as-MuiFormLabel-root-MuiInputLabel-root"
+        data-shrink={false}
+        htmlFor="Movie Search"
+        id="Movie Search-label"
+      >
+        Search for a movie
+      </label>
+      <div
+        className="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl css-batk84-MuiInputBase-root-MuiFilledInput-root"
+        onClick={[Function]}
+      >
+        <input
+          aria-invalid={false}
+          autoFocus={false}
+          className="MuiInputBase-input MuiFilledInput-input css-10botns-MuiInputBase-input-MuiFilledInput-input"
+          disabled={false}
+          id="Movie Search"
+          onAnimationStart={[Function]}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          placeholder="Search for a movie"
+          required={false}
+          type="text"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="MuiBox-root css-vxx7q6"
+  >
+    <h2>
+      Welcome to Mews search
+    </h2>
+    <h4>
+      Search for a movie above
+    </h4>
+  </div>
+</div>
+`;
