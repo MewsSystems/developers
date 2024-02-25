@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
+using HttpApiService;
 
 namespace ExchangeRateUpdater
 {
@@ -15,27 +14,34 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, string languageCode)
+        public async Task<List<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Clear();
+            List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
 
-            string currentUtcDateString = DateTime.UtcNow.Date.ToString("yyyy-MM-dd");
-
-            ExchangeRateApiResponse exchangeRateApiResponse = await httpClient.GetFromJsonAsync<ExchangeRateApiResponse>(
-        $"https://api.cnb.cz/cnbapi/exrates/daily?date={currentUtcDateString}&lang={languageCode}");
-
-            List<ExchangeRateApiData> filteredExchangeRateData =
-                exchangeRateApiResponse.Rates.Where(x => currencies.Any(y => y.Code == x.CurrencyCode)).ToList();
-
-            var exchangeRateData = new List<ExchangeRate>();
-
-            foreach (ExchangeRateApiData data in filteredExchangeRateData)
+            try
             {
-                exchangeRateData.Add(new ExchangeRate(currencies.FirstOrDefault(x => x.Code == data.CurrencyCode), currencies.FirstOrDefault(x => x.Code == "CZK"), data.Rate));
+                HttpService httpService = new HttpService();
+
+                string currentUtcDateString = DateTime.UtcNow.Date.ToString("yyyy-MM-dd");
+
+                ExchangeRateApiResponse exchangeRateApiResponse = await httpService.GetWithJsonMapping<ExchangeRateApiResponse>
+                ($"https://api.cnb.cz/cnbapi/exrates/daily?date={currentUtcDateString}&lang=EN");
+
+                List<ExchangeRateApiData> filteredExchangeRateData =
+                    exchangeRateApiResponse.Rates.Where(x => currencies.Any(y => y.Code == x.CurrencyCode)).ToList();
+
+                foreach (ExchangeRateApiData exchangeRate in filteredExchangeRateData)
+                {
+                    exchangeRates.Add(new ExchangeRate(currencies.FirstOrDefault(x => x.Code == exchangeRate.CurrencyCode), currencies.FirstOrDefault(x => x.Code == "CZK"), exchangeRate.Rate));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ExchangeRateProvider encountered an unhandled exception when calling GetExchangeRates: {ex.Message}");
+                throw;
             }
 
-            return exchangeRateData;
+            return exchangeRates;
         }
     }
 }
