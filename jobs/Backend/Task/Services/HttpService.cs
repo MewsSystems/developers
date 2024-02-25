@@ -4,18 +4,23 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Contrib.WaitAndRetry;
+using Polly.Retry;
 
 namespace HttpApiService
 {
     public class HttpService
     {
         private HttpClient httpClient = null;
+        private AsyncRetryPolicy<HttpResponseMessage> httpRetryPolicy = null;
         private ILogger _logger = null;
 
         public HttpService(ILogger logger)
         {
             httpClient = new HttpClient();
             _logger = logger;
+            httpRetryPolicy = Policy.Handle<HttpRequestException>().OrResult<HttpResponseMessage>(x => !x.IsSuccessStatusCode).WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(2), retryCount: 3));
             httpClient.DefaultRequestHeaders.Clear();
         }
 
@@ -23,7 +28,7 @@ namespace HttpApiService
         {
             try
             {
-                var httpGetResponse = await httpClient.GetAsync(requestUrl);
+                HttpResponseMessage httpGetResponse = await httpRetryPolicy.ExecuteAsync(() => httpClient.GetAsync(requestUrl));
 
                 if (httpGetResponse.IsSuccessStatusCode)
                 {

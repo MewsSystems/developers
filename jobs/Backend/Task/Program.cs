@@ -40,7 +40,9 @@ namespace ExchangeRateUpdater
             catch (Exception ex)
             {
                 logger.LogError($"Program encountered an unhandled exception: {ex.Message}");
-                Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
+
+                // Don't advertise our stack trace and error to the front end user
+                Console.WriteLine($"Failed to retrieve Exchange Rates. Please try again.");
             }
 
             Console.ReadLine();
