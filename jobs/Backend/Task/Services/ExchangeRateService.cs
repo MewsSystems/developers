@@ -34,25 +34,32 @@ namespace ExchangeService
 
         public async Task Execute()
         {
-            List<ExchangeRate> filteredExchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies, _logger);
-
-            _logger.LogInformation($"Retrieved {filteredExchangeRates.Count()} after filtering");
-
-            if (filteredExchangeRates != null && filteredExchangeRates.Count > 0)
+            try
             {
-                Console.WriteLine($"Successfully retrieved {filteredExchangeRates.Count()} exchange rates:");
-                foreach (ExchangeRate exchangeRate in filteredExchangeRates)
+                List<ExchangeRate> filteredExchangeRates = await _exchangeRateProvider.GetExchangeRates(currencies, _logger);
+
+                _logger.LogInformation($"Retrieved {filteredExchangeRates.Count()} after filtering");
+
+                if (filteredExchangeRates != null && filteredExchangeRates.Count > 0)
                 {
-                    Console.WriteLine(exchangeRate.ToString());
+                    Console.WriteLine($"Successfully retrieved {filteredExchangeRates.Count()} exchange rates:");
+                    foreach (ExchangeRate exchangeRate in filteredExchangeRates)
+                    {
+                        Console.WriteLine(exchangeRate.ToString());
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to retrieve Exchange Rates. Would you like to try again? (Y)");
+                    if (Console.ReadKey().Key == ConsoleKey.Y)
+                    {
+                        await Execute();
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"Failed to retrieve Exchange Rates. Would you like to try again? (Y)");
-                if (Console.ReadKey().Key == ConsoleKey.Y)
-                {
-                    await Execute();
-                }
+                _logger.LogError($"ExchangeRateService encountered an unhandled exception: {ex.Message}");
             }
         }
     }

@@ -20,7 +20,8 @@ namespace HttpApiService
         {
             httpClient = new HttpClient();
             _logger = logger;
-            httpRetryPolicy = Policy.Handle<HttpRequestException>().OrResult<HttpResponseMessage>(x => !x.IsSuccessStatusCode).WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(2), retryCount: 3));
+            httpRetryPolicy = Policy.Handle<HttpRequestException>().OrResult<HttpResponseMessage>(x => !x.IsSuccessStatusCode)
+                                .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(2), retryCount: 3));
             httpClient.DefaultRequestHeaders.Clear();
         }
 
