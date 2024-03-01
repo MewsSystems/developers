@@ -2,18 +2,19 @@
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Helpers;
+using ExchangeRateUpdater.Interfaces;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly ILogger _logger = null;
-        private readonly ApiFetcher _apiFetcher = null;
+        private readonly IApiFetcher _apiFetcher = null;
 
-        public ExchangeRateProvider(ILogger logger)
+        public ExchangeRateProvider(ILogger logger, IApiFetcher apiFetcher)
         {
             _logger = logger;
-            _apiFetcher = new ApiFetcher(_logger);
+            _apiFetcher = apiFetcher;
         }
 
         /// <summary>

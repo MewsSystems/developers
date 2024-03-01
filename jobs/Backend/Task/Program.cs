@@ -27,7 +27,7 @@ namespace ExchangeRateUpdater
 
             try
             {
-                var provider = new ExchangeRateProvider(logger);
+                var provider = new ExchangeRateProvider(logger, new ApiFetcher(logger));
                 var rates = provider.GetExchangeRates(currencies);
 
                 if (rates == null)

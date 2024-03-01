@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http;
 using Polly;
 using System;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Interfaces;
 
 
 namespace ExchangeRateUpdater.Helpers
 {
-    public class ApiFetcher
+    public class ApiFetcher : IApiFetcher
     {
         private readonly HttpClient _httpClient;
         private const  string  ApiHostRoot = "https://api.cnb.cz/cnbapi";
