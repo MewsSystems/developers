@@ -1,62 +1,62 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using System;
 using System.Net.Http;
-using Polly;
-using System;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Polly;
 
+namespace ExchangeRateUpdater.Helpers;
 
-namespace ExchangeRateUpdater.Helpers
+public class ApiFetcher : IApiFetcher
 {
-    public class ApiFetcher : IApiFetcher
+    private const string ApiHostRoot = "https://api.cnb.cz/cnbapi";
+    private readonly HttpClient _httpClient;
+    private readonly ILogger _logger;
+    private readonly Policy _policy;
+
+    public ApiFetcher(ILogger logger)
     {
-        private readonly HttpClient _httpClient;
-        private const  string  ApiHostRoot = "https://api.cnb.cz/cnbapi";
-        private readonly ILogger _logger = null;
-        private readonly Policy _policy;
+        _logger = logger;
+        _httpClient = new HttpClient();
 
-        public ApiFetcher(ILogger logger)
+        _policy = Policy.Handle<HttpRequestException>()
+            .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (exception, timeSpan, retryCount, context) =>
+                {
+                    _logger.LogWarning(
+                        $"Request failed with {exception.Message}. Waiting {timeSpan} before next retry. Retry attempt {retryCount}");
+                });
+    }
+
+    public ApiResponse GetExchangeRates()
+    {
+        _logger.LogInformation("Getting exchange rates from CNB API");
+        var currentUtcTimestamp = DateTime.UtcNow.ToLocalTime().ToString("yyyy-MM-dd");
+
+        // get exchange rates from cb http with policy
+        var result = _policy.Execute(async () => await GetApiResponse(currentUtcTimestamp));
+
+        return result.Result;
+    }
+
+    private async Task<ApiResponse> GetApiResponse(string date)
+    {
+        // retrieve data from the API
+        try
         {
-            _logger = logger;
-            _httpClient = new HttpClient();
-
-            _policy = Policy.Handle<HttpRequestException>()
-                        .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
-                        {
-                            _logger.LogWarning($"Request failed with {exception.Message}. Waiting {timeSpan} before next retry. Retry attempt {retryCount}");
-                        });
+            var response = await _httpClient.GetAsync($"{ApiHostRoot}/exrates/daily?date={date}&lang=EN");
+            response.EnsureSuccessStatusCode();
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            var responseJson = JsonConvert.DeserializeObject<ApiResponse>(responseString);
+            return responseJson;
+        }
+        catch (JsonSerializationException ex)
+        {
+            _logger.LogError($"JSON deserialization failed {ex.Message}");
         }
 
-        public ApiResponse GetExchangeRates()
-        {
-            _logger.LogInformation("Getting exchange rates from CNB API");
-            var currentUtcTimestamp = System.DateTime.UtcNow.ToLocalTime().ToString("yyyy-MM-dd");
 
-            var result = _policy.Execute(async () => await GetApiResponse(currentUtcTimestamp));
-
-            return result.Result;
-        }
-
-        private async Task<ApiResponse> GetApiResponse(string date)
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{ApiHostRoot}/exrates/daily?date={date}&lang=EN");
-                response.EnsureSuccessStatusCode();
-                var responseString = response.Content.ReadAsStringAsync().Result;
-                var responseJson = JsonConvert.DeserializeObject<ApiResponse>(responseString);
-                return responseJson;
-            }
-            catch (JsonSerializationException ex)
-            {
-                _logger.LogError($"JSON deserialization failed {ex.Message}");
-            }
-
-
-            return null;
-
-        }
-
+        return null;
     }
 }

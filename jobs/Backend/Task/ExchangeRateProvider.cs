@@ -1,57 +1,55 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Helpers;
 using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public class ExchangeRateProvider : IExchangeRateProvider
 {
-    public class ExchangeRateProvider : IExchangeRateProvider
+    private readonly IApiFetcher _apiFetcher;
+    private readonly ILogger _logger;
+
+    public ExchangeRateProvider(ILogger logger, IApiFetcher apiFetcher)
     {
-        private readonly ILogger _logger = null;
-        private readonly IApiFetcher _apiFetcher = null;
+        _logger = logger;
+        _apiFetcher = apiFetcher;
+    }
 
-        public ExchangeRateProvider(ILogger logger, IApiFetcher apiFetcher)
+    /// <summary>
+    ///     Should return exchange rates among the specified currencies that are defined by the source. But only those defined
+    ///     by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
+    ///     do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
+    ///     some of the currencies, ignore them.
+    /// </summary>
+    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    {
+        // get exchange rates from cb http
+        var response = _apiFetcher.GetExchangeRates();
+
+        if (response == null)
         {
-            _logger = logger;
-            _apiFetcher = apiFetcher;
+            _logger.LogError("Failed to retrieve exchange rates from CNB API");
+            return null;
         }
 
-        /// <summary>
-        /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-        /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-        /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-        /// some of the currencies, ignore them.
-        /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
-        {
-            // get exchange rates from cb http
-            var response = _apiFetcher.GetExchangeRates();
+        return FilterRates(response, currencies);
+    }
 
-            if (response == null)
-            {
-                _logger.LogError("Failed to retrieve exchange rates from CNB API");
-                return null;
-            }
+    public static IEnumerable<ExchangeRate> FilterRates(ApiResponse responseJson, IEnumerable<Currency> currencies)
+    {
+        // filter out the rates that are not in the list of currencies
+        var rates = new List<ExchangeRate>();
+        var filtered = responseJson.Rates.Where(x => currencies.Any(y => y.Code == x.ISOCode)).ToList();
 
-            return FilterRates(response, currencies);
-        }
+        foreach (var rate in filtered)
+            rates.Add(new ExchangeRate(
+                currencies.FirstOrDefault(x => x.Code == rate.ISOCode),
+                currencies.FirstOrDefault(x => x.Code == "CZK"),
+                rate.Rate
+            ));
 
-        public static IEnumerable<ExchangeRate> FilterRates(ApiResponse responseJson, IEnumerable<Currency> currencies)
-        {
-            var rates = new List<ExchangeRate>();
-            var filtered = responseJson.Rates.Where(x => currencies.Any(y => y.Code == x.ISOCode)).ToList();
-
-            foreach (var rate in filtered)
-            {
-                rates.Add(new ExchangeRate(
-                    currencies.FirstOrDefault(x => x.Code == rate.ISOCode),
-                    currencies.FirstOrDefault(x => x.Code == "CZK"),
-                    rate.Rate
-                ));
-            }
-
-            return rates;
-        }
+        return rates;
     }
 }
