@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -21,20 +23,28 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var logger = new Logger().logger;
+
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(logger);
                 var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                if (rates == null)
+                {
+                    logger.LogInformation("No exchange rates were retrieved.");
+                    return;
+                }
+
+                logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    logger.LogInformation(rate.ToString());
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
             }
 
             Console.ReadLine();
