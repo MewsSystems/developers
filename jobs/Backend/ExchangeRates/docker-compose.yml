@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  app:
+   build: .
+   container_name: app
+   links:
+      - redis 
+   depends_on:
+      - redis
+   environment:
+      - REDIS_URL=redis:6379
+
+  redis:
+    image: redis    
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart:
+      unless-stopped
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - redis:/data
+
+volumes:
+  redis:
+    driver: local
+
