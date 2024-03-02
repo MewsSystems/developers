@@ -29,7 +29,7 @@ const MovieSearch = () => {
         onChange={onInputChange}
       />
       {moviesData && (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {moviesData.results.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
