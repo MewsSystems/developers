@@ -15,6 +15,11 @@ namespace ExchangeRates.App;
 
 public sealed class Program
 {
+    //TODO: we could read it directly from ISO 4217 api to get the latest updates.
+    private static readonly string[] CurrenciesIso =
+             { "AED", "AFN", "ALL", "AMD", "ANG", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP", "CNY", "COP", "COU", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MXV", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STD", "SVC", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "USN", "UYI", "UYU", "UZS", "VEF", "VND", "VUV", "WST", "XAF", "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XDR", "XOF", "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "XXX", "YER", "ZAR", "ZAR", "ZAR", "ZMW", "ZWL" };
+
+
     private static readonly IEnumerable<Currency> Currencies = new[]
     {
             new Currency("USD"),
@@ -35,8 +40,8 @@ public sealed class Program
             var builder = CreateHostBuilder(args).Build();
             var provider = builder.Services.GetRequiredService<IExchangeRateProvider>();
             await builder.StartAsync();
-            var rates = await provider.GetExchangeRates(Currencies, default);
-
+            var filteredCurrencies = Currencies.Where(x => CurrenciesIso.Contains(x.Code)).ToList();
+            var rates = await provider.GetExchangeRates(filteredCurrencies, default);
             var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
             Console.WriteLine($"Successfully retrieved {exchangeRates.Count()} exchange rates:");
             foreach (var rate in exchangeRates)

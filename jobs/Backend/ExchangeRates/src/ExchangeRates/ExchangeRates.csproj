@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CNB.Client\CNB.Client.csproj" />
+    <ProjectReference Include="..\ExchangeRates.Domain\ExchangeRates.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
