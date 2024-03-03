@@ -4,6 +4,7 @@ import { MovieDetail as MovieDetailType } from "@/scenes/MovieDetail/services/ty
 import { Badge } from "@/components/ui/badge";
 import MovieDetailContent from "@/scenes/MovieDetail/components/MovieDetailContent";
 import { Button } from "@/components/ui/button";
+import BackToSearchLink from "@/scenes/MovieDetail/components/BackToSearchLink";
 
 type MovieDetailProps = {
   movieId: string;
@@ -20,22 +21,22 @@ const MovieDetail = async ({ movieId }: MovieDetailProps) => {
       }}
       className="w-screen h-screen bg-center bg-cover bg-no-repeat"
     >
-      <div className="absolute top-0 left-0 w-screen h-screen bg-gray-700/80 z-0"></div>
+      {movie.backdrop_path && (
+        <div className="absolute top-0 left-0 w-screen h-screen bg-gray-700/80 z-0"></div>
+      )}
       <div className="z-10 text-white relative h-screen">
-        <Link href="/" className="absolute top-5 left-5">
-          <Button variant="link" className="text-gray-300">
-            Back to search
-          </Button>
-        </Link>
+        <BackToSearchLink />
         <div className="flex flex-row h-full">
           <div className="w-1/2 pl-12 justify-center flex flex-col gap-3">
             <MovieDetailContent movie={movie} />
           </div>
           <div className="w-1/2 flex flex-row justify-center items-center">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-            />
+            {movie.poster_path && (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+              />
+            )}
           </div>
         </div>
       </div>
