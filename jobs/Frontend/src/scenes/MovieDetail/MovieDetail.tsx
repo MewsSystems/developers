@@ -6,6 +6,13 @@ import BackToSearchLink from "@/scenes/MovieDetail/components/BackToSearchLink";
 type MovieDetailProps = {
   movieId: string;
 };
+
+/**
+ * The server-side MovieDetail scene which is used to display the details of a movie using the TMDB API. It displays the movie title,
+ * tagline, overview, release date, runtime, genres, and the poster. The data are fetched directly in the component.
+ *
+ * @param movieId - The ID of the movie to display the details of.
+ */
 const MovieDetail = async ({ movieId }: MovieDetailProps) => {
   const res = await fetch(
     `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.NEXT_PUBLIC_MOVIES_API_KEY}`,

@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 type MovieDetailContentProps = {
   movie: MovieDetail;
 };
+
+/**
+ * The MovieDetailContent component used in the MovieDetail scene which is used to render the details of a movie.
+ * @param movie - The movie to display the details of.
+ */
 const MovieDetailContent = ({ movie }: MovieDetailContentProps) => {
   return (
     <>

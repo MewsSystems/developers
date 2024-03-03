@@ -1,5 +1,10 @@
 import { MovieSearchResult } from "@/scenes/MovieSearch/services/types";
 
+/**
+ * Fetches movies from TMDB API
+ * @param query - The search query which will be used to search for movies by title
+ * @param page - The page number to fetch
+ */
 const fetchMovies = async (
   query: string,
   page: number,

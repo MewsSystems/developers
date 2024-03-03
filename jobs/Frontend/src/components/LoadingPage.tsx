@@ -1,6 +1,9 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
+/**
+ * The LoadingPage component used to display a loading spinner while a route is loading.
+ */
 const LoadingPage = () => {
   return (
     <div className="h-screen w-screen flex justify-center items-center">

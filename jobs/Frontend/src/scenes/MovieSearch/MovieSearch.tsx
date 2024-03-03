@@ -9,6 +9,11 @@ import { Loader2 } from "lucide-react";
 import MoviesPagination from "@/scenes/MovieSearch/components/MoviesPagination";
 import DebouncedInput from "@/scenes/MovieSearch/components/DebouncedInput";
 
+/**
+ * The client-side MovieSearch scene which is used to search for movies using the TMDB API. It displays a search input and the results
+ * in a grid. The user can navigate through the results using the pagination component. To save the query for the search
+ * and the current page, the search params in URL are used. The search input is debounced to avoid making too many requests.
+ */
 const MovieSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [moviesData, setMoviesData] = useState<MovieSearchResult | null>(null);
