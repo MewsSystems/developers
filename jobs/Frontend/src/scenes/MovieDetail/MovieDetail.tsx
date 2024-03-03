@@ -1,9 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { MovieDetail as MovieDetailType } from "@/scenes/MovieDetail/services/types";
-import { Badge } from "@/components/ui/badge";
 import MovieDetailContent from "@/scenes/MovieDetail/components/MovieDetailContent";
-import { Button } from "@/components/ui/button";
 import BackToSearchLink from "@/scenes/MovieDetail/components/BackToSearchLink";
 
 type MovieDetailProps = {

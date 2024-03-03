@@ -1,19 +1,9 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+import React, { useEffect, useState } from "react";
 import { MovieSearchResult } from "@/scenes/MovieSearch/services/types";
 import fetchMovies from "@/scenes/MovieSearch/services/fetchMovies";
 import MovieCard from "@/scenes/MovieSearch/components/MovieCard";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import MoviesPagination from "@/scenes/MovieSearch/components/MoviesPagination";
