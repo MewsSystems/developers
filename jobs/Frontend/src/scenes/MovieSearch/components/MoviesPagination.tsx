@@ -26,6 +26,15 @@ const getHref = (
   urlParams.set("page", String(page));
   return `${pathname}?${urlParams.toString()}`;
 };
+
+/**
+ * Client-side component used in the MovieSearch scene to display pagination below the results. If there is
+ * only one page, the pagination is not displayed. If the user is on the first or last page, the previous
+ * and next buttons are disabled respectively.
+ *
+ * @param totalPages - The total number of pages.
+ * @param currentPage - The current page that the user is on.
+ */
 const MoviesPagination = ({
   totalPages,
   currentPage,

@@ -5,6 +5,13 @@ import Link from "next/link";
 type MovieCardProps = {
   movie: Movie;
 };
+
+/**
+ * Component used in the MovieSearch scene to display a movie card in the results. It shows the movie title,
+ * release year and has the poster as a background image if available.
+ *
+ * @param movie - The movie to display in the card.
+ */
 const MovieCard = ({ movie }: MovieCardProps) => {
   const hasPoster = Boolean(movie.poster_path);
   return (
