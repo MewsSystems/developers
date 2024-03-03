@@ -19,7 +19,11 @@ const MovieDetailContent = ({ movie }: MovieDetailContentProps) => {
       </div>
       <span className="flex flex-row gap-2">
         <Calendar />
-        <p>Released on {new Date(movie.release_date).toLocaleDateString()}</p>
+        {movie.release_date ? (
+          <p>Released on {new Date(movie.release_date).toLocaleDateString()}</p>
+        ) : (
+          <p>No release date</p>
+        )}
       </span>
       <span className="flex flex-row gap-2">
         <Clock /> <p>{movie.runtime} minutes</p>
