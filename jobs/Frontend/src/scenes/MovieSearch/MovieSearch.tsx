@@ -56,7 +56,7 @@ const MovieSearch = () => {
     <div className="flex flex-col items-center pt-32 gap-8 px-5 pb-32">
       <h1 className="text-5xl font-bold">Movie Search</h1>
       <DebouncedInput
-        className="w-full md:w-1/3"
+        className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
         type="text"
         placeholder="Search for a movie..."
         debouncedOnChange={onInputChange}
@@ -74,7 +74,7 @@ const MovieSearch = () => {
             <p className="text-center text-lg">No movies found</p>
           ) : (
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {moviesData.results.map((movie) => (
                   <MovieCard key={movie.id} movie={movie} />
                 ))}

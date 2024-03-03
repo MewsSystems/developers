@@ -10,7 +10,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
   return (
     <Link href={`/detail/${movie.id}`}>
       <div
-        className={`w-[200px] h-[200px] flex flex-col items-center px-1 justify-center border-2 relative overflow-hidden ${hasPoster ? "before:absolute before:inset-0 before:bg-gray-800 before:opacity-75 before:content-[''] before:z-10" : ""}`}
+        className={`w-full md:w-[200px] h-[200px] flex flex-col items-center px-1 justify-center border-2 relative overflow-hidden ${hasPoster ? "before:absolute before:inset-0 before:bg-gray-800 before:opacity-75 before:content-[''] before:z-10" : ""}`}
       >
         <h2 className="z-20 relative text-white text-center font-semibold">
           {movie.title}
