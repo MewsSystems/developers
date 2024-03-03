@@ -1,7 +1,7 @@
 import React from "react";
 import { MovieDetail } from "@/scenes/MovieDetail/services/types";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Info, Timer } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type MovieDetailContentProps = {
