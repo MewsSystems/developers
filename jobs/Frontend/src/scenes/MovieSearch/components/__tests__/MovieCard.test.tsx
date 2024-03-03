@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import MovieCard from "@/scenes/MovieSearch/components/MovieCard";
-import { Movie } from "@/scenes/MovieSearch/services/types";
 import { testMovie } from "@/jest/fakeData/movie";
 
 describe("MovieCard", () => {
