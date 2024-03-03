@@ -1,7 +1,8 @@
 import React from "react";
+import LoadingPage from "@/components/LoadingPage";
 
 const Loader = () => {
-  return <p>Loading...</p>;
+  return <LoadingPage />;
 };
 
 export default Loader;

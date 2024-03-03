@@ -43,7 +43,7 @@ const MovieSearch = () => {
     router.push(`${pathname}?${urlParams.toString()}`);
   };
   return (
-    <div className="flex flex-col items-center pt-32 gap-8 px-5 pb-32">
+    <div className="flex flex-col items-center pt-16 md:pt-32 gap-8 px-5 pb-32">
       <h1 className="text-5xl font-bold">Movie Search</h1>
       <DebouncedInput
         className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
