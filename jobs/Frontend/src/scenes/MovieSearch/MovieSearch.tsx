@@ -59,7 +59,7 @@ const MovieSearch = () => {
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       )}
       {moviesData && (
-        <>
+        <div className="w-full md:w-fit">
           {moviesData.results.length === 0 ? (
             <p className="text-center text-lg">No movies found</p>
           ) : (
@@ -75,7 +75,7 @@ const MovieSearch = () => {
               />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
