@@ -37,14 +37,12 @@ const MovieSearch = () => {
 
   const onInputChange = (value: string) => {
     const urlParams = new URLSearchParams(searchParams.toString());
-    if (!value) {
-      urlParams.delete("query");
-      urlParams.delete("page");
-      router.push(`${pathname}?${urlParams.toString()}`);
-      return;
-    }
-    urlParams.set("query", value);
     urlParams.delete("page");
+    if (value) {
+      urlParams.set("query", value);
+    } else {
+      urlParams.delete("query");
+    }
     router.push(`${pathname}?${urlParams.toString()}`);
   };
   return (

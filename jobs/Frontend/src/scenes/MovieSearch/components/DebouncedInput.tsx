@@ -37,16 +37,15 @@ const DebouncedInput = ({
     setInputValue(value);
 
     if (timeout) {
+      clearTimeout(timeout);
+
       // If the threshold is reached, call the debouncedOnChange function immediately
       if (clearedCount + 1 >= delayedThreshold) {
-        clearTimeout(timeout);
         setClearedCount(0);
         debouncedOnChange(value);
-        return;
+      } else {
+        setClearedCount(clearedCount + 1);
       }
-
-      clearTimeout(timeout);
-      setClearedCount(clearedCount + 1);
     }
 
     // If the input is empty, call the debouncedOnChange function immediately
