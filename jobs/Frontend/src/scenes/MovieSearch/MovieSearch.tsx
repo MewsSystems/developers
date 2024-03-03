@@ -16,6 +16,7 @@ import DebouncedInput from "@/scenes/MovieSearch/components/DebouncedInput";
  */
 const MovieSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [moviesData, setMoviesData] = useState<MovieSearchResult | null>(null);
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
@@ -24,11 +25,21 @@ const MovieSearch = () => {
   const pathname = usePathname();
 
   useEffect(() => {
+    setError(null);
     if (query && !isNaN(page)) {
-      fetchMovies(query, page).then((data) => {
-        setMoviesData(data);
-        setIsLoading(false);
-      });
+      setIsLoading(true);
+      fetchMovies(query, page)
+        .then((data) => {
+          setMoviesData(data);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setMoviesData(null);
+          setIsLoading(false);
+          setError(
+            "An error occurred while fetching the data. Please try again later.",
+          );
+        });
     } else {
       setMoviesData(null);
       setIsLoading(false);
@@ -61,6 +72,7 @@ const MovieSearch = () => {
       {isLoading && !moviesData && (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       )}
+      {error && !isLoading && <p className="text-red-500">{error}</p>}
       {moviesData && (
         <div className="w-full md:w-fit">
           {moviesData.results.length === 0 ? (

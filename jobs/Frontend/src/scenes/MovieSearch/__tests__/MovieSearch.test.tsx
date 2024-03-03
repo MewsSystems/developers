@@ -107,4 +107,17 @@ describe("MovieSearch", () => {
     render(<MovieSearch />);
     expect(await screen.findByText("No movies found")).toBeVisible();
   });
+
+  it("should render error message if fetch fails", async () => {
+    (useSearchParamsMock as jest.Mock).mockReturnValue(
+      new URLSearchParams("query=test&page=1"),
+    );
+    fetchMoviesMock.mockRejectedValue(new Error("error"));
+    render(<MovieSearch />);
+    expect(
+      await screen.findByText(
+        "An error occurred while fetching the data. Please try again later.",
+      ),
+    ).toBeVisible();
+  });
 });
