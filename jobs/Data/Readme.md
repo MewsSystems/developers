@@ -2,7 +2,7 @@
 
 ## Your task
 
-You have been given a task to look into data of one hotel in a form of following [YouTrack](https://www.jetbrains.com/youtrack/) issue:
+You have been given a task to look into data of one hotel in a form of following [Jira](https://www.atlassian.com/software/jira) issue:
 
 -------------
 
@@ -26,7 +26,7 @@ In the second scenario, the task is assigned to you by a product manager who wan
 
 As a bonus assignment, we want to motivate our hotels to promote online checkin and we want to give them some hard data. Look at the data and your analysis again and estimate what would be the impact on total room revenue if the overall usage of online checkin doubled. 
 
-Include the comments to present your solution and send it to vojta@mews.com. 
+Include the comments to present your solution and send submit it via GreenHouse Recruiting platform. As a part of the interview process, we have also created for you a Slack channel where you can reach out to us if you have any questions about the assignment or more follow-up questions about the role or Mews. 
 
 Thanks and good luck.
 
