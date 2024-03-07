@@ -26,7 +26,7 @@ In the second scenario, the task is assigned to you by a product manager who wan
 
 As a bonus assignment, we want to motivate our hotels to promote online checkin and we want to give them some hard data. Look at the data and your analysis again and estimate what would be the impact on total room revenue if the overall usage of online checkin doubled. 
 
-Include the comments to present your solution and send submit it via GreenHouse Recruiting platform. As a part of the interview process, we have also created for you a Slack channel where you can reach out to us if you have any questions about the assignment or more follow-up questions about the role or Mews. 
+Include the comments to present your solution and send submit it via Greenhouse Recruiting platform. As a part of the interview process, we have also created for you a Slack channel where you can reach out to us if you have any questions about the assignment or more follow-up questions about the role or Mews. 
 
 Thanks and good luck.
 
