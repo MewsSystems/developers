@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>Recommended</AnalysisMode>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisModeSecurity>All</AnalysisModeSecurity>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+</Project>
