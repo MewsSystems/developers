@@ -19,12 +19,11 @@ internal class ExchangeRateApi : IApiRoute
     private async ValueTask<ExchangeRateResponse> GetExchangeRatesAsync(
         [AsParameters] ExchangeRateFilterRequest filter,
         IExchangeRateProvider exchangeRateProvider,
-        IMapper mapper)
+        IMapper mapper,
+        CancellationToken cancellationToken)
     {
-        var currencies = filter.CurrencyCode is not null 
-            ? mapper.Map<IEnumerable<Currency>>(filter.CurrencyCode)
-            : null;
-        var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+        var currencies = mapper.Map<Currency[]>(filter.CurrencyCode);
+        var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies, cancellationToken);
         return mapper.Map<ExchangeRateResponse>(rates);
     }
 }

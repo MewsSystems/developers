@@ -4,5 +4,5 @@ namespace ExchangeRateService.Services;
 
 internal interface IExchangeRateProvider
 {
-    ValueTask<ExchangeRate[]> GetExchangeRatesAsync(IEnumerable<Currency>? currencies);
+    ValueTask<ExchangeRate[]> GetExchangeRatesAsync(IReadOnlyList<Currency> currencies, CancellationToken cancellationToken);
 }

@@ -1,6 +1,10 @@
 ﻿namespace ExchangeRateService.Domain;
 
-internal record ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, decimal Value)
+public record ExchangeRate
 {
+    public required Currency SourceCurrency { get; init; }
+    public required Currency TargetCurrency { get; init; }
+    public required float Value { get; init; }
+    
     public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value}";
 }

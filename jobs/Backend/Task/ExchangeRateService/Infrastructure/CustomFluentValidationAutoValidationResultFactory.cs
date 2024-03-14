@@ -5,10 +5,13 @@ using SharpGrip.FluentValidation.AutoValidation.Shared.Extensions;
 
 namespace ExchangeRateService.Infrastructure;
 
-public partial class CustomFluentValidationAutoValidationResultFactory(
-    ILogger<CustomFluentValidationAutoValidationResultFactory> logger) : IFluentValidationAutoValidationResultFactory
+public partial class CustomFluentValidationAutoValidationResultFactory : IFluentValidationAutoValidationResultFactory
 {
-    private readonly ILogger<CustomFluentValidationAutoValidationResultFactory> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly ILogger<CustomFluentValidationAutoValidationResultFactory> _logger;
+    public CustomFluentValidationAutoValidationResultFactory(ILogger<CustomFluentValidationAutoValidationResultFactory> logger)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); 
+    }
 
     [LoggerMessage(
         EventId = 1,

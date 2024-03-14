@@ -5,7 +5,7 @@ namespace ExchangeRateService.Infrastructure;
 
 public class ExceptionMiddleware(RequestDelegate next)
 {
-    private static readonly Action<ILogger<ExceptionMiddleware>, string, string, string, string, Exception> LogValidationException =
+    private static readonly Action<ILogger<ExceptionMiddleware>, string, string, string, string, Exception?> LogValidationException =
         LoggerMessage.Define<string, string, string, string>(
             LogLevel.Information,
             new EventId(2),

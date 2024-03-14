@@ -45,6 +45,7 @@ The service is still pretty simple, so only directories are used for "separation
 1. FluentValidation with auto registration
 1. AutoMapper with auto registration through Profile files
 1. XUnit for unit/integration tests
+1. Moq for mocking services
 
 ## Getting Started
 

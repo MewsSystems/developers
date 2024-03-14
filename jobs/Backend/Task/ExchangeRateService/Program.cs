@@ -10,6 +10,7 @@ builder.Services.AddHealthChecks();
 
 // Commented due to missing AI (application insights) connection string
 //builder.Services.AddOpenTelemetry().UseAzureMonitor();
+// TODO Setup AI for logging
 
 builder.Services.AddApplicationServices();
 builder.Services.AddDomainApiServices();
