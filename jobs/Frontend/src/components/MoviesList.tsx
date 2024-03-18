@@ -20,7 +20,7 @@ export const MoviesList = () => {
     }
 
     return <div>
-        <Input onChange={handleChange} />
+        <Input onChange={handleChange} placeholder={'Search for a movie'} />
         {movies.map(
             movie =>
                 <div key={movie.id}>
