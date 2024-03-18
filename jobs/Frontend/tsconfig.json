@@ -2,6 +2,15 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "node"],
+    "moduleResolution": "Node",
+    "module": "esnext",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
