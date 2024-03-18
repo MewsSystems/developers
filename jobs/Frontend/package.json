@@ -1,0 +1,11 @@
+{
+  "name": "movie-application",
+  "version": "1.0.0",
+  "description": "Movie application to search and read details about movies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tess Lucia Sinamal",
+  "license": "ISC"
+}
