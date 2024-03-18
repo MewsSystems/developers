@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNB.ApiClient", "CNB.ApiCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Shared", "ExchangeRateUpdater.Shared\ExchangeRateUpdater.Shared.csproj", "{96DE4382-C208-4B53-93C3-B9BA69B7DF57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{517A4F0D-7273-4AB3-BD82-629629B64321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNBApiClientTests", "tests\CNBApiClientTests\CNBApiClientTests.csproj", "{05CBB988-C063-4CFF-8BE8-4E445D561212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdaterConsoleTests", "tests\ExchangeRateUpdaterConsoleTests\ExchangeRateUpdaterConsoleTests.csproj", "{B988D79F-38DF-4A92-83DD-C3A6E74D23BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +42,17 @@ Global
 		{96DE4382-C208-4B53-93C3-B9BA69B7DF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96DE4382-C208-4B53-93C3-B9BA69B7DF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96DE4382-C208-4B53-93C3-B9BA69B7DF57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05CBB988-C063-4CFF-8BE8-4E445D561212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05CBB988-C063-4CFF-8BE8-4E445D561212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05CBB988-C063-4CFF-8BE8-4E445D561212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05CBB988-C063-4CFF-8BE8-4E445D561212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B988D79F-38DF-4A92-83DD-C3A6E74D23BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B988D79F-38DF-4A92-83DD-C3A6E74D23BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B988D79F-38DF-4A92-83DD-C3A6E74D23BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B988D79F-38DF-4A92-83DD-C3A6E74D23BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05CBB988-C063-4CFF-8BE8-4E445D561212} = {517A4F0D-7273-4AB3-BD82-629629B64321}
+		{B988D79F-38DF-4A92-83DD-C3A6E74D23BC} = {517A4F0D-7273-4AB3-BD82-629629B64321}
 	EndGlobalSection
 EndGlobal
