@@ -4,8 +4,29 @@
   "description": "Movie application to search and read details about movies",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "vitest",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "author": "Tess Lucia Sinamal",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "global-jsdom": "^24.0.0",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.2",
+    "vite": "^5.1.6",
+    "vitest": "^1.4.0"
+  }
 }
