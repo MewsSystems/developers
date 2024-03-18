@@ -1,0 +1,9 @@
+global using System.Net;
+global using System.Net.Http.Json;
+global using System.Net.Mime;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using CNB.ApiClient.Exceptions;
+global using CNB.ApiClient.Models;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Options;
