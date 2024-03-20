@@ -4,7 +4,7 @@ import React from "react";
 
 export const router = createBrowserRouter([
     {
-        path: "/movie",
+        path: "/movie/:id",
         element: <MovieDetailsView />,
     },
     {

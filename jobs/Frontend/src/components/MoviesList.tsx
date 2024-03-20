@@ -1,11 +1,13 @@
-import React, {ReactEventHandler, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {searchMovies} from "@/services";
 import {Movie} from "@/types";
-import {Input} from "@mui/material";
+import {Input, List, ListItemButton, Pagination} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 export const MoviesList = () => {
     const [movies, setMovies] = useState<Movie[]>([])
     const [query, setQuery] = useState<string>('')
+    const navigate = useNavigate();
 
     useEffect(() => {
         searchMovies(query).then((response) => {
@@ -19,13 +21,20 @@ export const MoviesList = () => {
         setQuery(value)
     }
 
+    const handleClick = (id: number) => {
+        navigate(`/movie/${id}`);
+    }
+
     return <div>
         <Input onChange={handleChange} placeholder={'Search for a movie'} />
-        {movies.map(
-            movie =>
-                <div key={movie.id}>
-                    <p>{movie.title}</p>
-                    <p>{movie.overview}</p>
-                </div>
-        )}</div>
+        <List>
+            {movies.map(
+                movie =>
+                    <ListItemButton key={movie.id} onClick={() => handleClick(movie.id)}>
+                        {movie.title}
+                    </ListItemButton>
+            )}
+        </List>
+        <Pagination />
+        </div>
 }
