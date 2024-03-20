@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {searchMovies} from "@/services";
 import { Movie} from "@/types";
-import {CircularProgress, Input, InputAdornment, List, ListItemButton, Pagination} from "@mui/material";
+import {Box, CircularProgress, Input, InputAdornment, List, ListItemButton, Pagination} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import { debounce } from '@mui/material/utils'
 
@@ -58,6 +58,11 @@ export const MoviesList = () => {
             {movies.map(
                 movie =>
                     <ListItemButton key={movie.id} onClick={() => handleClick(movie.id)}>
+                        <Box
+                            sx={{maxWidth: { xs: 50 }}}
+                            component="img"
+                            src={'https://image.tmdb.org/t/p/w200' + movie.poster_path}
+                        />
                         {movie.title}
                     </ListItemButton>
             )}
