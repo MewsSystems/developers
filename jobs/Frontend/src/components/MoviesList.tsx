@@ -3,6 +3,7 @@ import {searchMovies} from "@/services";
 import { Movie} from "@/types";
 import {Input, List, ListItemButton, Pagination} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import { debounce } from '@mui/material/utils'
 
 export const MoviesList = () => {
     const [movies, setMovies] = useState<Movie[]>([])
@@ -47,7 +48,7 @@ export const MoviesList = () => {
     }
 
     return <div>
-        <Input onChange={handleChange} placeholder={'Search for a movie'} />
+        <Input onChange={debounce(handleChange, 300)} placeholder={'Search for a movie'} />
         <List>
             {movies.map(
                 movie =>
