@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {searchMovies} from "@/services";
 import { Movie} from "@/types";
-import {Input, List, ListItemButton, Pagination} from "@mui/material";
+import {CircularProgress, Input, InputAdornment, List, ListItemButton, Pagination} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import { debounce } from '@mui/material/utils'
 
@@ -12,6 +12,7 @@ export const MoviesList = () => {
         currentPage: 1
     })
     const [query, setQuery] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const navigate = useNavigate();
     const [, setSearchParams] = useSearchParams()
     const {totalPages, currentPage} = pagination
@@ -21,14 +22,17 @@ export const MoviesList = () => {
     }, [currentPage]);
 
     useEffect(() => {
+        setIsLoading(true)
         searchMovies(query, currentPage).then(({results, total_pages}) => {
                 setMovies(results)
                 setPagination({
                     ...pagination,
                     totalPages: total_pages
                 })
+                setIsLoading(false)
             }
         )
+
     }, [query, currentPage]);
 
     const handleChange = (event) => {
@@ -49,6 +53,7 @@ export const MoviesList = () => {
 
     return <div>
         <Input onChange={debounce(handleChange, 300)} placeholder={'Search for a movie'} />
+        {isLoading && <CircularProgress size={20}/>}
         <List>
             {movies.map(
                 movie =>
