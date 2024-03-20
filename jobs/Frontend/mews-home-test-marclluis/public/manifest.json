@@ -1,0 +1,20 @@
+{
+  "short_name": "Movie Search",
+  "name": "Create React App Sample",
+  "icons": [
+    {
+      "src": "favicon_new.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo100.png",
+      "type": "image/png",
+      "sizes": "100x100"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
