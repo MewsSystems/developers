@@ -2,4 +2,14 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
+  --primary-shade: #2b303a;
+  --secondary-shade: #02a5fd;
+  --text-shade: #f7fff7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }

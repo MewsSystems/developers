@@ -1,0 +1,23 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 1.5rem;
+
+  .title {
+    color: white;
+    font-weight: 400;
+  }
+
+  .divider {
+    width: 80%;
+  }
+
+  .movieCardsContainer {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}

@@ -1,7 +1,4 @@
 import './App.css';
+import { Home } from './pages/home/Home';
 
-function App() {
-  return <h1>Movie finder</h1>;
-}
-
-export default App;
+export const App = () => <Home />;

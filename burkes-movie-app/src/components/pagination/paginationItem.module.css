@@ -1,0 +1,8 @@
+.pageNumber {
+  list-style: none;
+  color: var(--text-shade);
+}
+
+.active {
+  color: red;
+}

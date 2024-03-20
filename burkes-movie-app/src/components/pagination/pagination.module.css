@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  width: 80%;
+  color: var(--text-shade);
+
+  .button {
+    list-style: none;
+  }
+}
