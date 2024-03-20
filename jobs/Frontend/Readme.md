@@ -14,3 +14,34 @@ To retrieve information about movies, use [TheMovieDb API](https://developers.th
 To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
 We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
 The use of any additional library is allowed and up to you.
+
+
+# Rsbuild Project
+
+## Setup
+
+Install the dependencies:
+
+```bash
+pnpm install
+```
+
+## Get Started
+
+Start the dev server:
+
+```bash
+pnpm dev
+```
+
+Build the app for production:
+
+```bash
+pnpm build
+```
+
+Preview the production build locally:
+
+```bash
+pnpm preview
+```
