@@ -1,20 +1,34 @@
 import React, {useEffect, useState} from 'react'
 import {searchMovies} from "@/services";
-import {Movie} from "@/types";
+import { Movie} from "@/types";
 import {Input, List, ListItemButton, Pagination} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 export const MoviesList = () => {
     const [movies, setMovies] = useState<Movie[]>([])
+    const [pagination, setPagination] = useState({
+        totalPages: 1,
+        currentPage: 1
+    })
     const [query, setQuery] = useState<string>('')
     const navigate = useNavigate();
+    const [, setSearchParams] = useSearchParams()
+    const {totalPages, currentPage} = pagination
 
     useEffect(() => {
-        searchMovies(query).then((response) => {
-            setMovies(response.results)
+        setSearchParams(`?${new URLSearchParams({ page: currentPage.toString() })}`)
+    }, [currentPage]);
+
+    useEffect(() => {
+        searchMovies(query, currentPage).then(({results, total_pages}) => {
+                setMovies(results)
+                setPagination({
+                    ...pagination,
+                    totalPages: total_pages
+                })
             }
         )
-    }, [query]);
+    }, [query, currentPage]);
 
     const handleChange = (event) => {
         const {value} = event.target
@@ -23,6 +37,13 @@ export const MoviesList = () => {
 
     const handleClick = (id: number) => {
         navigate(`/movie/${id}`);
+    }
+
+    const handleClickPagination = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setPagination({
+            ...pagination,
+            currentPage: newPage,
+        })
     }
 
     return <div>
@@ -35,6 +56,6 @@ export const MoviesList = () => {
                     </ListItemButton>
             )}
         </List>
-        <Pagination />
+        <Pagination count={totalPages} onChange={handleClickPagination} />
         </div>
 }
