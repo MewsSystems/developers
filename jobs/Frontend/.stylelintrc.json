@@ -5,6 +5,8 @@
       "^[a-zA-Z]+([a-zA-Z0-9]+)$",
       { "message": "Expected class names selector to be camelCase" }
     ],
-    "declaration-block-no-redundant-longhand-properties": null
+    "declaration-block-no-redundant-longhand-properties": null,
+    "media-feature-range-notation": null,
+    "shorthand-property-no-redundant-values": null
   }
 }

@@ -27,8 +27,6 @@ const Movies = ({ query }: MoviesProps) => {
     hasNextPage,
   } = result
 
-  console.log('STATUS> ', result.status)
-
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage()
   }, [fetchNextPage, hasNextPage, inView])

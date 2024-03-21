@@ -76,9 +76,6 @@ export interface MoviePage {
   total_results: number
 }
 
-const API = 'https://api.themoviedb.org'
-const API_KEY = '03b8572954325680265531140190fd2a'
-
 // https://developer.themoviedb.org/reference/search-movie
 export const useMovies = (query: string) => {
   return useInfiniteQuery<MoviePage>({
@@ -89,13 +86,13 @@ export const useMovies = (query: string) => {
       lastPage && lastPage.page < lastPage.total_pages
         ? lastPage.page + 1
         : undefined,
-    queryFn: async ({ pageParam, queryKey }) => {
+    queryFn: async ({ pageParam }) => {
       // simulate slower network
       await new Promise((resolve) => setTimeout(resolve, 300))
 
       return axios
         .get(
-          `${API}/3/search/movie?api_key=${API_KEY}&page=${pageParam}&query=${query}`,
+          `${PUBLIC_API_URL}/3/search/movie?api_key=${PUBLIC_API_KEY}&page=${pageParam}&query=${query}`,
         )
         .then((res) => res.data)
     },
@@ -111,7 +108,7 @@ export const useMovie = (movieId: string) => {
       await new Promise((resolve) => setTimeout(resolve, 300))
 
       return axios
-        .get(`${API}/3/movie/${movieId}?api_key=${API_KEY}`)
+        .get(`${PUBLIC_API_URL}/3/movie/${movieId}?api_key=${PUBLIC_API_KEY}`)
         .then((res) => res.data)
     },
   })

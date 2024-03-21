@@ -1,7 +1,7 @@
 import { SyntheticEvent } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import css from './search.module.css'
-import logo from '../../../../static/mewies.png'
+import logo from '@static/mewies.png'
 
 interface SearchProps {
   onChange: (query: string) => void
