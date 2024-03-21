@@ -1,0 +1,11 @@
+.grid {
+  font-size: 16px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 15px;
+  justify-content: left;
+}
+
+.item {
+  flex: 0 0 110px;
+}

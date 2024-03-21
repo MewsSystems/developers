@@ -1,0 +1,10 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "selector-class-pattern": [
+      "^[a-zA-Z]+([a-zA-Z0-9]+)$",
+      { "message": "Expected class names selector to be camelCase" }
+    ],
+    "declaration-block-no-redundant-longhand-properties": null
+  }
+}

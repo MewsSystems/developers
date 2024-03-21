@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.wrapper p {
+  font-size: 24px;
+  color: #222;
+  text-shadow: 1px 0px #ccc;
+}

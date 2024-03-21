@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "rsbuild dev --open",
     "build": "rsbuild build",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview",
+    "lint": "stylelint '**/*.css'",
+    "types": "tsc --noEmit",
+    "test": "pnpm run lint && pnpm run types"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -14,9 +17,17 @@
   "devDependencies": {
     "@rsbuild/core": "^0.5.1",
     "@rsbuild/plugin-react": "^0.5.1",
+    "@tanstack/react-query": "^5.28.4",
+    "@tanstack/react-router": "^1.21.0",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
+    "axios": "^1.6.8",
+    "clsx": "^2.1.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.2"
+    "react-intersection-observer": "^9.8.1",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0",
+    "typescript": "^5.4.2",
+    "use-debounce": "^10.0.0"
   }
 }

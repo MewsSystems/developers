@@ -1,0 +1,83 @@
+.wrapper {
+  padding: 10px;
+  gap: 10px;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+@media (max-width: 600px) {
+  .poster {
+    display: none;
+  }
+}
+
+.poster {
+  flex: 0 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 12px #ddd;
+}
+
+.poster img {
+  vertical-align: top;
+}
+
+.movieInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.noImage {
+  width: 220px;
+  height: 330px;
+  background: linear-gradient(to bottom, #333, #222);
+}
+
+.title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.rating {
+  padding: 8px 0;
+}
+
+.overview {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table {
+  margin-top: 15px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  width: 130px;
+  padding: 8px 5px;
+}
+
+.table td {
+  padding: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.table tr:nth-child(2n + 1) {
+  background: #d9d9e9;
+}
+
+.table tr:nth-child(2n) {
+  background: #ecf0f1;
+}
