@@ -34,11 +34,12 @@
 }
 
 .title {
+  padding-top: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .rating {

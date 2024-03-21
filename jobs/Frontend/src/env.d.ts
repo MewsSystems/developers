@@ -1,3 +1,8 @@
 /// <reference types="@rsbuild/core/types" />
-declare const PUBLIC_API_KEY: string
-declare const PUBLIC_API_URL: string
+
+declare var process: {
+  env: {
+    PUBLIC_API_KEY: string
+    PUBLIC_API_URL: string
+  }
+}

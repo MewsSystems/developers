@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import api from 'api'
 
 export interface Genre {
   id: number
@@ -90,10 +90,8 @@ export const useMovies = (query: string) => {
       // simulate slower network
       await new Promise((resolve) => setTimeout(resolve, 300))
 
-      return axios
-        .get(
-          `${PUBLIC_API_URL}/3/search/movie?api_key=${PUBLIC_API_KEY}&page=${pageParam}&query=${query}`,
-        )
+      return api
+        .get(`/3/search/movie?page=${pageParam}&query=${query}`)
         .then((res) => res.data)
     },
   })
@@ -107,9 +105,7 @@ export const useMovie = (movieId: string) => {
       // simulate slower network
       await new Promise((resolve) => setTimeout(resolve, 300))
 
-      return axios
-        .get(`${PUBLIC_API_URL}/3/movie/${movieId}?api_key=${PUBLIC_API_KEY}`)
-        .then((res) => res.data)
+      return api.get(`/3/movie/${movieId}`).then((res) => res.data)
     },
   })
 }
