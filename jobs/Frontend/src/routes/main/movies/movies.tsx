@@ -50,10 +50,12 @@ const Movies = ({ query }: MoviesProps) => {
     )
   })
 
+  const totalResults = data.pages[0].total_results
+
   return (
     <div className={css.wrapper}>
       <div className={css.totalResutls}>
-        {data.pages[0].total_results} Results
+        {totalResults} Result{totalResults !== 1 ? 's' : ''}
       </div>
       {grids}
       <div ref={ref} />
