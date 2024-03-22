@@ -1,9 +1,11 @@
 .grid {
-  font-size: 16px;
-  display: flex;
-  flex-flow: row wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
   gap: 15px;
-  justify-content: left;
+  margin: 0 auto;
+  align-items: start;
+  align-content: start;
+  justify-content: center;
 }
 
 .item {

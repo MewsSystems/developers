@@ -10,7 +10,7 @@
 }
 
 .movie {
-  width: 204px;
+  width: 200px;
   height: 270px;
   display: flex;
   flex-flow: column nowrap;
@@ -30,7 +30,7 @@
 }
 
 .poster {
-  height: 184px;
+  height: 180px;
   border-radius: 8px;
   overflow: hidden;
 }

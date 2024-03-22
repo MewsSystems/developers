@@ -21,8 +21,8 @@ const Movie = ({ data }: MovieProps) => {
           <img
             loading="lazy"
             src={POSTER_URL + data.poster_path}
-            width="110"
-            height="165"
+            width="180"
+            height="180"
           />
         ) : (
           <div className={css.noImage} />

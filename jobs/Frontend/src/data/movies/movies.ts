@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import api from 'api'
+import api from 'services/api'
 
 export interface Genre {
   id: number
