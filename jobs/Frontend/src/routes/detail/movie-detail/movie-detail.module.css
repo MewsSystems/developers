@@ -3,6 +3,7 @@
   gap: 10px;
   display: flex;
   flex-flow: row nowrap;
+  align-items: flex-start;
 }
 
 @media (max-width: 600px) {
