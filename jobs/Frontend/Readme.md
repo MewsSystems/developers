@@ -16,7 +16,7 @@ We use styled-components as our main CSS-in-JS framework, yet feel free to use o
 The use of any additional library is allowed and up to you.
 
 
-# Rsbuild Project
+# Mewies
 
 ## Setup
 
