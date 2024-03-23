@@ -1,0 +1,15 @@
+export const MOCK_MOVIE = {
+  adult: false,
+  genre_ids: [1],
+  id: 1,
+  original_language: 'en',
+  original_title: 'mock title',
+  overview: 'mock overview',
+  popularity: 1,
+  release_date: '01-01-2020',
+  poster_path: '/mock-path.jpg',
+  title: 'mock title',
+  video: false,
+  vote_average: 1,
+  vote_count: 1,
+};

@@ -26,6 +26,7 @@ export const Home = () => {
   const loading = search && isMovieListLoading;
   const foundData = search && data && data.results.length > 0;
   const noResults = search && data && data.results.length === 0;
+  console.log('🚀 ~ Home ~ data:', data);
 
   return (
     <Page>

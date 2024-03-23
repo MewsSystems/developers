@@ -17,7 +17,10 @@ export const PaginationItem = ({
   const isActive = page === currentPage;
 
   return (
-    <li className={classNames(css.pageNumber, isActive && css.active)}>
+    <li
+      className={classNames(css.pageNumber, isActive && css.active)}
+      data-testid="pagination-item"
+    >
       <span onClick={() => setCurrentPage(page)}>{page}</span>
     </li>
   );

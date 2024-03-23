@@ -1,2 +1,4 @@
 export const generatePageNumbers = (numberOfPages: number) =>
-  [...Array(numberOfPages).keys()].map((pageNumber) => pageNumber + 1);
+  numberOfPages > 0
+    ? [...Array(numberOfPages).keys()].map((pageNumber) => pageNumber + 1)
+    : [];
