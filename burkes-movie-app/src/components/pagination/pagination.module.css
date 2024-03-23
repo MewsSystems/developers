@@ -2,7 +2,6 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  color: var(--text-shade);
 
   .button {
     list-style: none;

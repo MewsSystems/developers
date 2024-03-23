@@ -28,7 +28,7 @@ describe('Home', () => {
     ).toBeInTheDocument();
   });
 
-  it('displays loading when fetching data', () => {
+  it('displays loading when fetching data', async () => {
     mockUseMoviesSearchQuery.mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -37,10 +37,13 @@ describe('Home', () => {
     customRender(<Home />);
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'a' } });
 
+    // await execution of debouncedSearch, which has 400ms delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it('displays no results message whe search returns no results', () => {
+  it('displays no results message whe search returns no results', async () => {
     mockUseMoviesSearchQuery.mockReturnValue({
       data: { results: [], total_pages: 0, page: 0, total_results: 0 },
       isLoading: false,
@@ -49,6 +52,9 @@ describe('Home', () => {
     render(<Home />);
 
     fireEvent.change(screen.getByRole('textbox'), { target: { value: 'a' } });
+
+    // await execution of debouncedSearch, which has 400ms delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     expect(
       screen.getByText(/no results found, please alter your search/i)

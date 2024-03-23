@@ -6,6 +6,8 @@
   --primary-shade: #2b303a;
   --secondary-shade: #02a5fd;
   --text-shade: #f7fff7;
+
+  color: var(--text-shade);
 }
 
 * {

@@ -18,12 +18,20 @@ const MOVIES_QUERY_KEYS = {
 };
 
 export const fetchMoviesBySearchTerm = async (search: string, page: number) => {
-  const queryUrl = `${MOVIE_DATA_URL}&query=${search ?? ''}&page=${page}`;
-  const res = await fetch(queryUrl);
+  try {
+    const queryUrl = `${MOVIE_DATA_URL}&query=${search ?? ''}&page=${page}`;
+    const res = await fetch(queryUrl);
 
-  const data = await res.json();
+    const data = await res.json();
 
-  return data;
+    return data;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      throw new Error(err.message);
+    } else {
+      throw new Error('unknown error');
+    }
+  }
 };
 
 export const useMoviesSearchQuery = (

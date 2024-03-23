@@ -1,3 +1,4 @@
+import { debounce } from 'lodash';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -17,31 +18,41 @@ export const Home = () => {
     setCurrentPage(1);
   };
 
-  const { data, isLoading: isMovieListLoading } = useMoviesSearchQuery(
-    search,
-    currentPage
-  );
+  const debouncedSearch = debounce(handleSearch, 400);
+
+  const {
+    data,
+    isLoading: isMovieListLoading,
+    error,
+  } = useMoviesSearchQuery(search, currentPage);
 
   const isSearchEmpty = !search;
-  const loading = search && isMovieListLoading;
-  const foundData = search && data && data.results.length > 0;
-  const noResults = search && data && data.results.length === 0;
-  console.log('🚀 ~ Home ~ data:', data);
+  const isError = search && error;
+  const isLoading = search && isMovieListLoading;
+  const isFoundData = search && data && data.results.length > 0;
+  const isNoResults = search && data && data.results.length === 0;
 
   return (
     <Page>
       <div className={css.contentContainer}>
         <h1 className={css.title}>Mews Movie Search</h1>
-        <input value={search} onChange={handleSearch} />
+        <input onChange={debouncedSearch} />
         <hr className={css.divider} />
 
         {isSearchEmpty && (
           <h1 className={css.title}>Please type something to begin search</h1>
         )}
 
-        {loading && <h1 className={css.title}>Loading...</h1>}
+        {isLoading && <h1 className={css.title}>Loading...</h1>}
 
-        {foundData && (
+        {isError && (
+          <h1 className={css.title}>
+            There seems to have been an error, the API might be down. Refer to
+            the console for more details.
+          </h1>
+        )}
+
+        {isFoundData && (
           <>
             <Pagination
               numberOfPages={data.total_pages}
@@ -63,7 +74,7 @@ export const Home = () => {
           </>
         )}
 
-        {noResults && (
+        {isNoResults && (
           <h1 className={css.title}>
             No results found, please alter your search
           </h1>
