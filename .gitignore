@@ -18,6 +18,18 @@
 *.tgz
 *.sublime-*
 
+# next.js
+/.next/
+/out/
+build
+
+# testing
+/coverage
+
+# local env files
+.env*.local
+
 node_modules
+.env
 bower_components
 npm-debug.log
