@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 0;
   gap: 1.5rem;
 
   .title {
@@ -11,11 +10,10 @@
   }
 
   .divider {
-    width: 80%;
+    width: 903px;
   }
 
   .movieCardsContainer {
-    width: 80%;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;

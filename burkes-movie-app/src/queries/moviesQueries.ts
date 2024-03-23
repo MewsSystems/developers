@@ -17,7 +17,7 @@ const MOVIES_QUERY_KEYS = {
   ],
 };
 
-export const fetchMovies = async (search: string, page: number) => {
+export const fetchMoviesBySearchTerm = async (search: string, page: number) => {
   const queryUrl = `${MOVIE_DATA_URL}&query=${search ?? ''}&page=${page}`;
   const res = await fetch(queryUrl);
 
@@ -33,6 +33,6 @@ export const useMoviesSearchQuery = (
   return useQuery({
     staleTime: MOVIES_DATA_STALE_TIME,
     queryKey: MOVIES_QUERY_KEYS.search(search, page),
-    queryFn: () => fetchMovies(search, page),
+    queryFn: () => fetchMoviesBySearchTerm(search, page),
   });
 };

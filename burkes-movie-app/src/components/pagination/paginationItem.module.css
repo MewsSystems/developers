@@ -1,6 +1,11 @@
 .pageNumber {
   list-style: none;
   color: var(--text-shade);
+  border-radius: 3px;
+  width: 26px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
 }
 
 .active {

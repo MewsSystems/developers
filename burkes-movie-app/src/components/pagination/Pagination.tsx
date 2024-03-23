@@ -28,6 +28,7 @@ export const Pagination = ({
       </li>
       {pageNumbers.map((pageNumber) => (
         <PaginationItem
+          key={pageNumber}
           page={pageNumber}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

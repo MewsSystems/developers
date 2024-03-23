@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { App } from './App.tsx';
-
 import './index.css';
+import { MovieDetail } from './pages/movieDetail/MovieDetail.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+  },
+  {
+    path: '/:movieId',
+    element: <MovieDetail />,
   },
 ]);
 

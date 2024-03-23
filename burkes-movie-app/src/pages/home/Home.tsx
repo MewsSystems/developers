@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import css from './home.module.css';
 
@@ -51,7 +52,9 @@ export const Home = () => {
               {!isMovieListLoading && data && (
                 <>
                   {data.results.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
+                    <Link key={movie.id} to={`/${movie.id}`} state={movie}>
+                      <MovieCard movie={movie} />
+                    </Link>
                   ))}
                 </>
               )}

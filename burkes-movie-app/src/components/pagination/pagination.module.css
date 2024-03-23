@@ -1,8 +1,7 @@
 .container {
   display: flex;
-  gap: 2px;
+  gap: 10px;
   flex-wrap: wrap;
-  width: 80%;
   color: var(--text-shade);
 
   .button {

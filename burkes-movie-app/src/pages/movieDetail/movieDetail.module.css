@@ -1,0 +1,22 @@
+.contentContainer {
+  color: var(--text-shade);
+
+  .title {
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 24px;
+    font-weight: 200;
+  }
+
+  .linkContainer {
+    text-align: center;
+    margin-top: 20px;
+
+    .link {
+      color: var(--text-shade);
+      font-size: 26px;
+    }
+  }
+}
