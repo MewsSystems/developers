@@ -1,6 +1,6 @@
 import { Movie } from '@/types/Movie'
 
-export interface APIResponse {
+export interface SearchMoviesAPIResponse {
   page: number
   results: Movie[]
   total_pages: number

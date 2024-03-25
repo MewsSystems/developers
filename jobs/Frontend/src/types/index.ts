@@ -1,2 +1,2 @@
 export * from './Movie'
-export * from './APIResponse'
+export * from './SearchMoviesAPIResponse'

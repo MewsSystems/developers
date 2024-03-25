@@ -1,10 +1,10 @@
 import { API_KEY, API_URL } from '@/const'
-import { APIResponse, Movie } from '@/types'
+import { SearchMoviesAPIResponse, Movie } from '@/types'
 
 const searchMovies = async (
     query: string,
     page: number
-): Promise<APIResponse> => {
+): Promise<SearchMoviesAPIResponse> => {
   const url = `${API_URL}/search/movie?query=${query}&api_key=${API_KEY}&page=${page}`
   try {
     const response = await fetch(url);
