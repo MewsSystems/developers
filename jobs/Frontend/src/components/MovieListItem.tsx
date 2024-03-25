@@ -4,7 +4,7 @@ import {
   styled,
   Typography,
 } from '@mui/material'
-import { getMoviePosterPath } from '@/utils'
+import {getMoviePosterDimensions, getMoviePosterPath} from '@/utils'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Movie } from '@/types'
@@ -13,14 +13,12 @@ interface MovieListItemProps {
   movie: Movie
 }
 
-const posterOriginalWidth = 200
-const posterWidth = posterOriginalWidth / 4
-const posterHeight = posterOriginalWidth / 2.66
-const paddingListItem = 8
+const posterWidth = 50
+const { height: posterHeight } = getMoviePosterDimensions(posterWidth)
 
-const StyledListItemButton = styled(ListItemButton)`
-  padding: ${paddingListItem}px;
-`
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  padding: theme.spacing(1)
+}))
 
 const StyledBox = styled(Box)(({ theme }) => ({
   width: posterWidth + 'px',
@@ -45,7 +43,7 @@ export const MovieListItem = ({ movie }: MovieListItemProps) => {
       {poster_path ? (
         <StyledBox
           component="img"
-          src={getMoviePosterPath(posterOriginalWidth, poster_path)}
+          src={getMoviePosterPath(200, poster_path)}
           alt={title}
         />
       ) : (

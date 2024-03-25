@@ -1,19 +1,21 @@
 import React from 'react'
 import { Movie } from '@/types'
-import { ListItem } from '@mui/material'
+import { ListItem, useTheme } from '@mui/material'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
-import {MovieListItem} from "@/components";
+import { MovieListItem } from '@/components'
+import { getMoviePosterDimensions } from '@/utils'
 
 interface MoviesListProps {
   movies: Movie[]
 }
 
-const posterOriginalWidth = 200
-const posterWidth = posterOriginalWidth / 4
-const posterHeight = posterOriginalWidth / 2.66
-const paddingListItem = 8
+const posterWidth = 50
+const { height: posterHeight } = getMoviePosterDimensions(posterWidth)
 
 export const MovieList = ({ movies }: MoviesListProps) => {
+  const theme = useTheme()
+  const paddingItem = parseInt(theme.spacing(2), 10)
+
   const renderRow = (props: ListChildComponentProps) => {
     const { index, style } = props
     const { id } = movies[index]
@@ -29,7 +31,7 @@ export const MovieList = ({ movies }: MoviesListProps) => {
     <FixedSizeList
       height={400}
       width={'100%'}
-      itemSize={posterHeight + paddingListItem * 2}
+      itemSize={posterHeight + paddingItem}
       itemCount={movies.length}
       overscanCount={5}
     >

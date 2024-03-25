@@ -7,9 +7,11 @@ interface MovieDetailsProps {
   movie: Movie
 }
 
+const posterWidth = 500
+
 const StyledImage = styled('img')`
   width: 100%;
-  max-width: 500px;
+  max-width: ${posterWidth}px;
 `
 
 export const MovieDetails = ({ movie }: MovieDetailsProps) => {
@@ -28,7 +30,7 @@ export const MovieDetails = ({ movie }: MovieDetailsProps) => {
     <Grid container>
       <Grid item md={4} xs={12}>
         <StyledImage
-          src={getMoviePosterPath(500, poster_path)}
+          src={getMoviePosterPath(posterWidth, poster_path)}
           alt={title}
         />
       </Grid>
