@@ -57,7 +57,7 @@ export const MoviesListView = () => {
     setCurrentPage(newPage)
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setQuery(value)
   }
@@ -66,7 +66,7 @@ export const MoviesListView = () => {
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <StyledInput
-          onChange={debounce(handleChange, 300)}
+          onChange={debounce(handleInputChange, 300)}
           placeholder={'Search for a movie'}
           defaultValue={query}
         />
