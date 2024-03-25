@@ -1,10 +1,5 @@
-import {
-  Box,
-  ListItemButton,
-  styled,
-  Typography,
-} from '@mui/material'
-import {getMoviePosterDimensions, getMoviePosterPath} from '@/utils'
+import { Box, ListItemButton, styled, Typography } from '@mui/material'
+import { getMoviePosterDimensions, getMoviePosterPath } from '@/utils'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Movie } from '@/types'
@@ -17,7 +12,7 @@ const posterWidth = 50
 const { height: posterHeight } = getMoviePosterDimensions(posterWidth)
 
 const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
-  padding: theme.spacing(1)
+  padding: theme.spacing(1),
 }))
 
 const StyledBox = styled(Box)(({ theme }) => ({

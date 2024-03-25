@@ -2,7 +2,7 @@ import { MovieList } from '@/components'
 import React, { useEffect, useState } from 'react'
 import { Movie } from '@/types'
 import { useMovieSearch } from '@/context'
-import {movieService} from '@/services'
+import { movieService } from '@/services'
 import {
   CircularProgress,
   Grid,
@@ -42,12 +42,13 @@ export const MoviesListView = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    movieService.searchMovies(query, currentPage).then(({ results, total_pages }) => {
-      setMovies(results)
-      setTotalPages(total_pages)
-      setIsLoading(false)
-    })
-
+    movieService
+      .searchMovies(query, currentPage)
+      .then(({ results, total_pages }) => {
+        setMovies(results)
+        setTotalPages(total_pages)
+        setIsLoading(false)
+      })
   }, [query, currentPage])
 
   const handleClickPagination = (
@@ -74,7 +75,11 @@ export const MoviesListView = () => {
       </Grid>
       <Grid item xs={12}>
         {hasResults && <MovieList movies={movies} />}
-        {hasNoResults && <Typography variant={'body1'} color={'textSecondary'}>No results</Typography>}
+        {hasNoResults && (
+          <Typography variant={'body1'} color={'textSecondary'}>
+            No results
+          </Typography>
+        )}
       </Grid>
       {hasResults && (
         <Grid item xs={12}>
