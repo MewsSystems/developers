@@ -6,6 +6,6 @@ interface Props {
   children: ReactNode;
 }
 
-export const Page = ({ children }: Props) => (
+export const PageContainer = ({ children }: Props) => (
   <div className={css.container}>{children}</div>
 );

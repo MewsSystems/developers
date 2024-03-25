@@ -1,11 +1,11 @@
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import css from './movieDetail.module.css';
-
 import posterNotFound from '@/assets/posterNotFound.svg';
-import { Page } from '@/components/page/Page';
+import { PageContainer } from '@/components/page/Page';
 import { MOVIE_IMAGE_BASE_URL } from '@/const/endpoints';
+
+import css from './movieDetail.module.css';
 
 export const MovieDetail = () => {
   const location = useLocation();
@@ -16,7 +16,7 @@ export const MovieDetail = () => {
     : posterNotFound;
 
   return (
-    <Page>
+    <PageContainer>
       <div className={css.contentContainer}>
         <img src={posterSrc} />
         <div className={css.title}>TITLE: {movie.title}</div>
@@ -32,6 +32,6 @@ export const MovieDetail = () => {
           </Link>
         </div>
       </div>
-    </Page>
+    </PageContainer>
   );
 };

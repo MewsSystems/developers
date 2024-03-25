@@ -20,13 +20,19 @@ module.exports = {
       'error',
       {
         alphabetize: { order: 'asc' },
+        pathGroups: [
+          {
+            pattern: '@/**',
+            group: "index"
+          }
+        ],
         groups: [
           'builtin',
           'external',
           'internal',
-          'sibling',
-          'index',
-          'parent'
+          'parent',
+          'index', 
+          'sibling', 
         ],
         'newlines-between': 'always'
       }

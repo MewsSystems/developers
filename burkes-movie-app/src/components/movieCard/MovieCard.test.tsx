@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { MovieCard } from './MovieCard';
-
 import posterNotFound from '@/assets/posterNotFound.svg';
 import { MOCK_MOVIE } from '@/const/test/testConst';
+
+import { MovieCard } from './MovieCard';
 
 const MOCK_MOVIE_NO_POSTER_PATH = {
   ...MOCK_MOVIE,

@@ -2,11 +2,11 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Home } from './Home';
-
 import * as moviesQueries from '@/queries/moviesQueries';
 import { customRender } from '@/test/utils/customRender';
 import { MoviesApiResponse } from '@/types';
+
+import { Home } from './Home';
 
 describe('Home', () => {
   const mockUseMoviesSearchQuery = vi.spyOn(

@@ -1,8 +1,8 @@
-import css from './movieCard.module.css';
-
 import posterNotFound from '@/assets/posterNotFound.svg';
 import { MOVIE_IMAGE_BASE_URL } from '@/const/endpoints';
 import { Movie } from '@/types';
+
+import css from './movieCard.module.css';
 
 interface Props {
   movie: Movie;

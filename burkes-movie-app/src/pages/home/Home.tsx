@@ -2,12 +2,12 @@ import { debounce } from 'lodash';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import css from './home.module.css';
-
 import { MovieCard } from '@/components/movieCard/MovieCard';
-import { Page } from '@/components/page/Page';
+import { PageContainer } from '@/components/page/Page';
 import { Pagination } from '@/components/pagination/Pagination';
 import { useMoviesSearchQuery } from '@/queries/moviesQueries';
+
+import css from './home.module.css';
 
 export const Home = () => {
   const [search, setSearch] = useState('');
@@ -29,11 +29,11 @@ export const Home = () => {
   const isSearchEmpty = !search;
   const isError = search && error;
   const isLoading = search && isMovieListLoading;
-  const isFoundData = search && data && data.results.length > 0;
-  const isNoResults = search && data && data.results.length === 0;
+  const isFoundData = search && data?.results && data.results.length > 0;
+  const isNoResults = search && data?.results && data.results.length === 0;
 
   return (
-    <Page>
+    <PageContainer>
       <div className={css.contentContainer}>
         <h1 className={css.title}>Mews Movie Search</h1>
         <input onChange={debouncedSearch} />
@@ -80,6 +80,6 @@ export const Home = () => {
           </h1>
         )}
       </div>
-    </Page>
+    </PageContainer>
   );
 };

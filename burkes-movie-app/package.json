@@ -9,8 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
-    "tsc": "tsc"
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.28.4",
