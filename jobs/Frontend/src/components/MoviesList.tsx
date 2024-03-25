@@ -1,35 +1,23 @@
 import React, {useEffect, useState} from 'react'
 import {searchMovies} from "@/services";
 import { Movie} from "@/types";
-import {Box, CircularProgress, Input, InputAdornment, List, ListItemButton, Pagination} from "@mui/material";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {Box, CircularProgress, Input, List, ListItemButton, Pagination} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 import { debounce } from '@mui/material/utils'
 import {getMoviePosterPath} from "@/utils/getMoviePosterPath";
+import {useMovieSearch} from "@/context/MovieSearchProvider";
 
 export const MoviesList = () => {
     const [movies, setMovies] = useState<Movie[]>([])
-    const [pagination, setPagination] = useState({
-        totalPages: 1,
-        currentPage: 1
-    })
-    const [query, setQuery] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const navigate = useNavigate();
-    const [, setSearchParams] = useSearchParams()
-    const {totalPages, currentPage} = pagination
-
-    useEffect(() => {
-        setSearchParams(`?${new URLSearchParams({ page: currentPage.toString() })}`)
-    }, [currentPage]);
+    const {query, setQuery, totalPages, currentPage, setCurrentPage, setTotalPages} = useMovieSearch()
 
     useEffect(() => {
         setIsLoading(true)
         searchMovies(query, currentPage).then(({results, total_pages}) => {
                 setMovies(results)
-                setPagination({
-                    ...pagination,
-                    totalPages: total_pages
-                })
+                setTotalPages(total_pages)
                 setIsLoading(false)
             }
         )
@@ -46,14 +34,11 @@ export const MoviesList = () => {
     }
 
     const handleClickPagination = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-        setPagination({
-            ...pagination,
-            currentPage: newPage,
-        })
+        setCurrentPage(newPage)
     }
 
     return <div>
-        <Input onChange={debounce(handleChange, 300)} placeholder={'Search for a movie'} />
+        <Input onChange={debounce(handleChange, 300)} placeholder={'Search for a movie'} defaultValue={query} />
         {isLoading && <CircularProgress size={20}/>}
         <List>
             {movies.map(
@@ -68,6 +53,6 @@ export const MoviesList = () => {
                     </ListItemButton>
             )}
         </List>
-        <Pagination count={totalPages} onChange={handleClickPagination} />
+        <Pagination count={totalPages} onChange={handleClickPagination} page={currentPage} />
         </div>
 }
