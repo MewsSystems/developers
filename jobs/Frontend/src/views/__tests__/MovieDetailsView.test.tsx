@@ -12,6 +12,8 @@ vi.mock('@/services', () => ({
             poster_path: 'Image',
             release_date: '1978-11-15',
             title: 'Title',
+            vote_count: 9,
+            vote_average: 7.5
         }) as Partial<Movie>
     }
 }));
@@ -28,12 +30,16 @@ describe('Movie Details View', () => {
             </MemoryRouter>
         )
 
-        const overview = await screen.findByText(/Overview/)
-        const title = await screen.findByText(/Title/)
-        const release_date = await screen.findByText(/1978-11-15/)
+        const overview = await screen.findByText(/Overview/i)
+        const title = await screen.findByText(/Title/i)
+        const release_date = await screen.findByText(/11\/15\/1978/i)
+        const stars = await screen.findAllByTestId(/StarIcon/i)
+        const vote_average = await screen.findByTestId(/voteCount/i)
 
         expect(overview).toBeInTheDocument()
         expect(title).toBeInTheDocument()
         expect(release_date).toBeInTheDocument()
+        expect(stars.length).toBe(4)
+        expect(vote_average).toBeInTheDocument()
     })
 })
