@@ -5,15 +5,37 @@ const searchMovies = async (
     query: string,
     page: number
 ): Promise<APIResponse> => {
-  const data = await fetch(
-      `${API_URL}/search/movie?query=${query}&api_key=${API_KEY}&page=${page}`
-  )
-  return data.json()
+  const url = `${API_URL}/search/movie?query=${query}&api_key=${API_KEY}&page=${page}`
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`API call failed with status: ${response.status}`);
+    }
+
+    return response.json();
+
+  } catch (error) {
+    console.error("Failed to search movies:", error);
+    throw error;
+  }
 }
 
 const getMovieDetails = async (id: number): Promise<Movie> => {
-  const data = await fetch(`${API_URL}/movie/${id}?api_key=${API_KEY}`)
-  return data.json()
+    const url = `${API_URL}/movie/${id}?api_key=${API_KEY}`
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`API call failed with status: ${response.status}`);
+      }
+
+      return response.json();
+
+    } catch (error) {
+      console.error("Failed to fetch movie details:", error);
+      throw error;
+    }
 }
 
 export const movieService = {
