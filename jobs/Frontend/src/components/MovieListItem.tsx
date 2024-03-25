@@ -1,4 +1,4 @@
-import {Box, ListItemButton, Typography} from "@mui/material";
+import {Box, ListItemButton, styled, Typography} from "@mui/material";
 import {getMoviePosterPath} from "@/utils";
 import React from "react";
 import {useNavigate} from "react-router-dom";
@@ -13,6 +13,19 @@ const posterWidth = posterOriginalWidth / 4
 const posterHeight = posterOriginalWidth / 2.66
 const paddingListItem = 8
 
+const StyledListItemButton = styled(ListItemButton)`
+    padding: ${paddingListItem}px;
+`
+
+const StyledBox = styled(Box)`
+    width: ${posterWidth}px;
+    height: ${posterHeight}px;
+    
+    &.default-img {
+        background-color: gray;
+    }
+`
+
 export const MovieListItem = ({movie}: MovieListItemProps) => {
     const navigate = useNavigate()
     const { id, poster_path, title } = movie
@@ -21,27 +34,16 @@ export const MovieListItem = ({movie}: MovieListItemProps) => {
         navigate(`/movie/${id}`)
     }
 
-    return <ListItemButton
+    return <StyledListItemButton
         onClick={() => handleClick(id)}
-        sx={{ p: paddingListItem + 'px' }}
     >
-        {poster_path ? (
-            <Box
-                sx={{ width: { xs: posterWidth }, height: { xs: posterHeight } }}
-                component="img"
-                src={getMoviePosterPath(posterOriginalWidth, poster_path)}
-            />
-        ) : (
-            <Box
-                sx={{
-                    width: { xs: posterWidth },
-                    height: { xs: posterHeight },
-                    backgroundColor: 'grey',
-                }}
-            />
-        )}
+        {poster_path ?
+            <StyledBox component="img" src={getMoviePosterPath(posterOriginalWidth, poster_path)} />
+         :
+            <StyledBox className={'default-img'} />
+        }
         <Typography color="textSecondary" variant="body1">
             {title}
         </Typography>
-    </ListItemButton>
+    </StyledListItemButton>
 }
