@@ -20,7 +20,7 @@ export const MoviesList = ({movies}: MoviesListProps) => {
             movie =>
                 <ListItemButton key={movie.id} onClick={() => handleClick(movie.id)}>
                     <Box
-                        sx={{maxWidth: { xs: 50 }}}
+                        sx={{width: { xs: 50 }, height: { xs: 75 }}}
                         component="img"
                         src={getMoviePosterPath(200, movie.poster_path)}
                     />
