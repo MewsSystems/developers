@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Movie} from "@/types";
 import {getMovieDetails} from "@/services";
-import {getMoviePosterPath} from "@/utils";
+import {MovieDetails} from "@/components/MovieDetails";
 
 export const MovieDetailsView = () => {
     const { id } = useParams();
@@ -16,12 +16,5 @@ export const MovieDetailsView = () => {
         )
     }, []);
 
-    return (
-        <div>
-            <h1>{movie.title}</h1>
-            <p>{movie.overview}</p>
-            <p>{movie.release_date}</p>
-            <img src={getMoviePosterPath(200, movie.poster_path)}></img>
-        </div>
-    )
+    return <MovieDetails movie={movie} />
 }
