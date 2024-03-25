@@ -1,11 +1,16 @@
 import { Movie } from '@/types'
 import React from 'react'
 import { getMoviePosterPath } from '@/utils'
-import { Divider, Grid, Rating, Stack, Typography } from '@mui/material'
+import { Divider, Grid, Rating, Stack, styled, Typography } from '@mui/material'
 
 interface MovieDetailsProps {
   movie: Movie
 }
+
+const StyledImage = styled('img')`
+  width: 100%;
+  max-width: 500px;
+`
 
 export const MovieDetails = ({ movie }: MovieDetailsProps) => {
   const {
@@ -21,10 +26,13 @@ export const MovieDetails = ({ movie }: MovieDetailsProps) => {
 
   return (
     <Grid container>
-      <Grid item xs={4}>
-        <img src={getMoviePosterPath(500, poster_path)} alt={title} />
+      <Grid item md={4} xs={12}>
+        <StyledImage
+          src={getMoviePosterPath(500, poster_path)}
+          alt={title}
+        />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item md={8} xs={12}>
         <Stack spacing={1}>
           <Typography color="textSecondary" variant={'h2'} component={'h1'}>
             {title}
@@ -35,7 +43,11 @@ export const MovieDetails = ({ movie }: MovieDetailsProps) => {
           </Typography>
           <Stack direction={'row'} alignItems={'center'} spacing={1}>
             <Rating value={formattedVoteAverage} readOnly />
-            <Typography color="textSecondary" variant={'body2'} data-testid={'voteCount'}>
+            <Typography
+              color="textSecondary"
+              variant={'body2'}
+              data-testid={'voteCount'}
+            >
               ({vote_count})
             </Typography>
           </Stack>
