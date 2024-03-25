@@ -4,7 +4,7 @@ import { Movie} from "@/types";
 import {Box, CircularProgress, Input, List, ListItemButton, Pagination} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import { debounce } from '@mui/material/utils'
-import {getMoviePosterPath} from "@/utils/getMoviePosterPath";
+import {getMoviePosterPath} from "@/utils";
 import {useMovieSearch} from "@/context/MovieSearchProvider";
 
 export const MoviesList = () => {

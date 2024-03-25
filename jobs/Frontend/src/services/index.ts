@@ -1,7 +1,7 @@
 import {API_KEY, API_URL} from "@/const";
-import {API_Response, Movie} from "@/types";
+import {APIResponse, Movie} from "@/types";
 
-export const searchMovies = async (query: string, page: number): Promise<API_Response> => {
+export const searchMovies = async (query: string, page: number): Promise<APIResponse> => {
     const data = await fetch(`${API_URL}/search/movie?query=${query}&api_key=${API_KEY}&page=${page}`)
     return data.json()
 }

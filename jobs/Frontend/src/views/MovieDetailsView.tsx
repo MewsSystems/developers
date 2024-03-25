@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Movie} from "@/types";
 import {getMovieDetails} from "@/services";
-import {getMoviePosterPath} from "@/utils/getMoviePosterPath";
+import {getMoviePosterPath} from "@/utils";
 
 export const MovieDetailsView = () => {
     const { id } = useParams();
