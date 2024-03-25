@@ -13,7 +13,7 @@ const posterWidth = posterOriginalWidth / 4
 const posterHeight = posterOriginalWidth / 2.66
 const paddingListItem = 8
 
-export const MoviesList = ({ movies }: MoviesListProps) => {
+export const MovieList = ({ movies }: MoviesListProps) => {
   const renderRow = (props: ListChildComponentProps) => {
     const { index, style } = props
     const { id } = movies[index]

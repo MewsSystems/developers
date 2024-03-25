@@ -1,4 +1,4 @@
-import { MoviesList } from '@/components'
+import { MovieList } from '@/components'
 import React, { useEffect, useState } from 'react'
 import { Movie } from '@/types'
 import { useMovieSearch } from '@/context'
@@ -73,7 +73,7 @@ export const MoviesListView = () => {
         {isLoading && <CircularProgress size={loaderSize} />}
       </Grid>
       <Grid item xs={12}>
-        {hasResults && <MoviesList movies={movies} />}
+        {hasResults && <MovieList movies={movies} />}
         {hasNoResults && <Typography variant={'body1'}>No results</Typography>}
       </Grid>
       {hasResults && (
