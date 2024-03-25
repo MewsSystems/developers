@@ -4,6 +4,7 @@ import { Movie} from "@/types";
 import {Box, CircularProgress, Input, InputAdornment, List, ListItemButton, Pagination} from "@mui/material";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import { debounce } from '@mui/material/utils'
+import {getMoviePosterPath} from "@/utils/getMoviePosterPath";
 
 export const MoviesList = () => {
     const [movies, setMovies] = useState<Movie[]>([])
@@ -61,7 +62,7 @@ export const MoviesList = () => {
                         <Box
                             sx={{maxWidth: { xs: 50 }}}
                             component="img"
-                            src={'https://image.tmdb.org/t/p/w200' + movie.poster_path}
+                            src={getMoviePosterPath(200, movie.poster_path)}
                         />
                         {movie.title}
                     </ListItemButton>
