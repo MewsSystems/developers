@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Movie } from '@/types'
-import {movieService} from '@/services'
+import { movieService } from '@/services'
 import { MovieDetails } from '@/components'
 
 export const MovieDetailsView = () => {
   const { id } = useParams()
-  const [movie, setMovie] = useState<Movie>([])
+  const [movie, setMovie] = useState<Movie | null>(null)
 
   useEffect(() => {
     const idFormatted = parseInt(id)
@@ -14,8 +14,7 @@ export const MovieDetailsView = () => {
     movieService.getMovieDetails(idFormatted).then((response) => {
       setMovie(response)
     })
-
   }, [])
 
-  return <MovieDetails movie={movie} />
+  return movie && <MovieDetails movie={movie} />
 }
