@@ -2,7 +2,7 @@ import React from 'react'
 import { Movie } from '@/types'
 import { ListItem } from '@mui/material'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
-import {MovieListItem} from "@/components/MovieListItem";
+import {MovieListItem} from "@/components";
 
 interface MoviesListProps {
   movies: Movie[]

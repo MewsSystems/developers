@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Movie } from '@/types'
 import {movieService} from '@/services'
-import { MovieDetails } from '@/components/MovieDetails'
+import { MovieDetails } from '@/components'
 
 export const MovieDetailsView = () => {
   const { id } = useParams()

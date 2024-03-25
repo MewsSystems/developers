@@ -74,7 +74,7 @@ export const MoviesListView = () => {
       </Grid>
       <Grid item xs={12}>
         {hasResults && <MovieList movies={movies} />}
-        {hasNoResults && <Typography variant={'body1'}>No results</Typography>}
+        {hasNoResults && <Typography variant={'body1'} color={'textSecondary'}>No results</Typography>}
       </Grid>
       {hasResults && (
         <Grid item xs={12}>
