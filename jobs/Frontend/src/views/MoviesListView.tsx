@@ -22,11 +22,11 @@ export const MoviesListView = () => {
 
     }, [query, currentPage]);
 
-    const handleClickPagination = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    const handleClickPagination = (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => {
         setCurrentPage(newPage)
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {value} = event.target
         setQuery(value)
     }
