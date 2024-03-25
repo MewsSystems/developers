@@ -38,7 +38,7 @@ export const MovieListItem = ({movie}: MovieListItemProps) => {
         onClick={() => handleClick(id)}
     >
         {poster_path ?
-            <StyledBox component="img" src={getMoviePosterPath(posterOriginalWidth, poster_path)} />
+            <StyledBox component="img" src={getMoviePosterPath(posterOriginalWidth, poster_path)} alt={title} />
          :
             <StyledBox className={'default-img'} />
         }

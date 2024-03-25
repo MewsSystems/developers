@@ -22,7 +22,7 @@ export const MovieDetails = ({ movie }: MovieDetailsProps) => {
   return (
     <Grid container>
       <Grid item xs={4}>
-        <img src={getMoviePosterPath(500, poster_path)} />
+        <img src={getMoviePosterPath(500, poster_path)} alt={title} />
       </Grid>
       <Grid item xs={8}>
         <Stack spacing={1}>
