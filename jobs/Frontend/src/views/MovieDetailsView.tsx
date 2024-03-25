@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Movie } from '@/types'
-import { getMovieDetails } from '@/services'
+import {movieService} from '@/services'
 import { MovieDetails } from '@/components/MovieDetails'
 
 export const MovieDetailsView = () => {
@@ -10,9 +10,11 @@ export const MovieDetailsView = () => {
 
   useEffect(() => {
     const idFormatted = parseInt(id)
-    getMovieDetails(idFormatted).then((response) => {
+
+    movieService.getMovieDetails(idFormatted).then((response) => {
       setMovie(response)
     })
+
   }, [])
 
   return <MovieDetails movie={movie} />

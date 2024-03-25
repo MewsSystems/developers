@@ -1,9 +1,8 @@
 import React from 'react'
 import { Movie } from '@/types'
-import { Box, ListItemButton, ListItem, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { getMoviePosterPath } from '@/utils'
+import { ListItem } from '@mui/material'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
+import {MovieListItem} from "@/components/MovieListItem";
 
 interface MoviesListProps {
   movies: Movie[]
@@ -16,39 +15,12 @@ const paddingListItem = 8
 
 export const MoviesList = ({ movies }: MoviesListProps) => {
   const renderRow = (props: ListChildComponentProps) => {
-    const navigate = useNavigate()
     const { index, style } = props
-    const { id, poster_path, title } = movies[index]
-
-    const handleClick = (id: number) => {
-      navigate(`/movie/${id}`)
-    }
+    const { id } = movies[index]
 
     return (
       <ListItem style={style} key={id} component="div" disablePadding>
-        <ListItemButton
-          onClick={() => handleClick(id)}
-          sx={{ p: paddingListItem + 'px' }}
-        >
-          {poster_path ? (
-            <Box
-              sx={{ width: { xs: posterWidth }, height: { xs: posterHeight } }}
-              component="img"
-              src={getMoviePosterPath(posterOriginalWidth, poster_path)}
-            />
-          ) : (
-            <Box
-              sx={{
-                width: { xs: posterWidth },
-                height: { xs: posterHeight },
-                backgroundColor: 'grey',
-              }}
-            />
-          )}
-          <Typography color="textSecondary" variant="body1">
-            {title}
-          </Typography>
-        </ListItemButton>
+        <MovieListItem movie={movies[index]} />
       </ListItem>
     )
   }
