@@ -1,0 +1,4 @@
+/dist
+/.husky
+yarn-error.log
+.env
