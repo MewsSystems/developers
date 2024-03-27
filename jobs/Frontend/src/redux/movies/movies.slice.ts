@@ -1,9 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { MoviesState } from "./movies.slice.types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { Movie, MoviesState } from "./movies.slice.types";
+import { moviesThunks } from "./movies.slice.thunks";
 
 // Define the initial state using that type
 const initialState: MoviesState = {
-  results: [],
+  search: {
+    results: [],
+    page: 1,
+    total_pages: null,
+  },
   query: "",
   selectedMovie: null,
 };
@@ -13,40 +18,29 @@ export const moviesSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setMovieResults: (state) => {
-      state.results = [
-        {
-          id: 1,
-          title: "The Shawshank Redemption",
-          year: "1994",
-          genre: "Drama",
-          director: "Frank Darabont",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg",
-        },
-        {
-          id: 2,
-          title: "The Godfather",
-          year: "1972",
-          genre: "Crime, Drama",
-          director: "Francis Ford Coppola",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg",
-        },
-        {
-          id: 3,
-          title: "The Dark Knight",
-          year: "2008",
-          genre: "Action, Crime, Drama",
-          director: "Christopher Nolan",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight.jpg",
-        },
-      ];
+    setSelectedMovie: (state, action: PayloadAction<Movie>) => {
+      state.selectedMovie = action.payload;
     },
+    setQuery: (state, action: PayloadAction<string>) => {
+      state.query = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(moviesThunks.searchMovies.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.search.results = action.payload.results;
+        state.search.total_pages = action.payload.total_pages;
+        if (
+          action.payload.total_pages &&
+          action.payload.total_pages > state.search.page
+        ) {
+          state.search.page += 1;
+        }
+      }
+    });
   },
 });
 
-export const { setMovieResults: increment } = moviesSlice.actions;
+export const { setSelectedMovie, setQuery } = moviesSlice.actions;
 
 export default moviesSlice.reducer;
