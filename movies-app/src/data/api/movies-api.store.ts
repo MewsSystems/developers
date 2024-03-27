@@ -1,5 +1,30 @@
+import {injectable} from 'inversify';
+
+const API_KEY = '03b8572954325680265531140190fd2a';
+const SEARCH_ENDPOINT = 'https://api.themoviedb.org/3/search/movie';
+
+// TODO: should be accessible only to other stores
+@injectable()
 export class MoviesApi {
-    init(): Promise<unknown> {
-        return fetch('https://api.themoviedb.org/3/movie/11?api_key=03b8572954325680265531140190fd2a');
+    search({
+        query,
+        page = 1,
+        language = 'en-US', // todo: enum with locals
+        includeAdult = false,
+    }: Readonly<{
+        query: string;
+        page?: number;
+        language?: string;
+        includeAdult?: boolean;
+    }>): Promise<unknown> {
+        // todo: dispose fetch in progress if not needed ?
+        return fetch(
+            `${SEARCH_ENDPOINT}?query=${query}&include_adult=${includeAdult}&language=${language}&page=${page}&api_key=${API_KEY}`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                },
+            }
+        ).then(response => response.json());
     }
 }
