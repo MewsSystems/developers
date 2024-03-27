@@ -1,5 +1,5 @@
 function App() {
-  return <>Movie List</>;
+  return <div>Movie List</div>;
 }
 
 export default App;
