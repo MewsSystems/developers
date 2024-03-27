@@ -11,3 +11,4 @@
 ## TODO
 
 - [ ] Use some type of svg loader
+- [ ] Add scss modules for classNames encapsulation
