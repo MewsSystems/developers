@@ -7,17 +7,17 @@ export type MoviesResponse = Readonly<{
 
 export type Movie = Readonly<{
     adult: boolean;
-    backdrop_path: string;
+    backdrop_path: string | null
     genre_ids: number[];
     id: number;
     original_language: string;
     original_title: string;
     overview: string;
     popularity: number;
-    poster_path: string;
+    poster_path: string | null;
     release_date: string;
     title: string;
-    video: boolean;
+    video: boolean | null;
     vote_average: number;
     vote_count: number;
 }>;
@@ -41,7 +41,7 @@ export const movieTypeguard = (value: unknown): value is Movie => {
         && 'vote_average' in value
         && 'vote_count' in value
         && typeof value.adult === 'boolean'
-        && typeof value.backdrop_path === 'string'
+        && (typeof value.backdrop_path === 'string' || value.backdrop_path === null)
         && Array.isArray(value.genre_ids)
         && value.genre_ids.every((element: unknown) => typeof element === 'number')
         && typeof value.id === 'number'
@@ -49,10 +49,10 @@ export const movieTypeguard = (value: unknown): value is Movie => {
         && typeof value.original_title === 'string'
         && typeof value.overview === 'string'
         && typeof value.popularity === 'number'
-        && typeof value.poster_path === 'string'
+        && (typeof value.poster_path === 'string' || value.poster_path === null)
         && typeof value.release_date === 'string'
         && typeof value.title === 'string'
-        && typeof value.video === 'boolean'
+        && (typeof value.video === 'boolean' || value.video === null)
         && typeof value.vote_average === 'number'
         && typeof value.vote_count === 'number';
 }
