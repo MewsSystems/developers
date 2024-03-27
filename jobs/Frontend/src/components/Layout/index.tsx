@@ -3,10 +3,8 @@ import { Container } from "./components/Container";
 
 export function Layout() {
   return (
-    <>
-      <Container>
-        <Outlet />
-      </Container>
-    </>
+    <Container>
+      <Outlet />
+    </Container>
   );
 }

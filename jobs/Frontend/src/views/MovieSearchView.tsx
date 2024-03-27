@@ -1,3 +1,5 @@
+import { MovieSearch } from "../components/MovieSearch";
+
 export const MovieSearchView = () => {
-  return <div>Movie Search</div>;
+  return <MovieSearch />;
 };
