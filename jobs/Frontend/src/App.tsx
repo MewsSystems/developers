@@ -1,5 +1,7 @@
+import { Router } from "./components/Router";
+
 function App() {
-  return <div>Movie List</div>;
+  return <Router />;
 }
 
 export default App;
