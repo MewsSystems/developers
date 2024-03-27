@@ -15,3 +15,5 @@
 - [ ] Add typeguard lib like zod
 - [ ] Manage public/private stores by IOC
 - [ ] BEFORE PR: reformat all filed
+- [ ] i18n
+- [ ] Logger for project

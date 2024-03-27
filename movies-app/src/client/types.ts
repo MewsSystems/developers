@@ -1,3 +1,10 @@
+export type MoviesResponse = Readonly<{
+    page: number;
+    results: Movie[];
+    total_pages: number;
+    total_results: number;
+}>;
+
 export type Movie = Readonly<{
     adult: boolean;
     backdrop_path: string;
@@ -48,4 +55,18 @@ export const movieTypeguard = (value: unknown): value is Movie => {
         && typeof value.video === 'boolean'
         && typeof value.vote_average === 'number'
         && typeof value.vote_count === 'number';
+}
+
+export const moviesResponseTypeguard = (value: unknown): value is MoviesResponse => {
+    return value !== null
+        && typeof value === 'object'
+        && 'page' in value
+        && 'results' in value
+        && 'total_pages' in value
+        && 'total_results' in value
+        && typeof value.page === 'number'
+        && Array.isArray(value.results)
+        && value.results.every(movieTypeguard)
+        && typeof value.total_pages === 'number'
+        && typeof value.total_results === 'number';
 }

@@ -1,0 +1,10 @@
+.search {
+  &__error {
+    color: red;
+    height: 20px;
+
+    &_hidden {
+      visibility: hidden;
+    }
+  }
+}
