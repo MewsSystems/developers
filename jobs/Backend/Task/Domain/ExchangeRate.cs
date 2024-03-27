@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Domain
 {
     public class ExchangeRate
     {
@@ -9,11 +9,11 @@
             Value = value;
         }
 
-        public Currency SourceCurrency { get; }
+        public Currency SourceCurrency { get; set; }
 
-        public Currency TargetCurrency { get; }
+        public Currency TargetCurrency { get; set; }
 
-        public decimal Value { get; }
+        public decimal Value { get; set; }
 
         public override string ToString()
         {
