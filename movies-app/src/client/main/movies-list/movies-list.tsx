@@ -2,9 +2,10 @@ import React from 'react';
 import {observer} from "mobx-react";
 import {resolve, useInjection} from "inversify-react";
 import classNames from 'classnames';
-import {MoviesStore} from "./movies.store";
-import { Movie } from "../../data/types";
+import {MoviesStore} from "../movies.store";
+import { Movie } from "../../../data/types";
 import { MovieInfo } from './movie';
+import './movies-list.scss';
 
 export const MoviesList = observer(() => {
     const moviesStore = useInjection(MoviesStore);

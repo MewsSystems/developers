@@ -5,7 +5,7 @@ import {MoviesApi} from '../data/api/movies-api.store';
 import {Header} from './header';
 import {MainPage} from './main/main';
 import {MoviePage} from './movie/movie';
-import './common/styles/reset.css';
+import './app.scss';
 
 export const App = () => {
     const moviesApi = useInjection(MoviesApi);

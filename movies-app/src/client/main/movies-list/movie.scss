@@ -1,0 +1,19 @@
+.movie {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  &__poster {
+    width: 200px;
+    height: 300px;
+  }
+}

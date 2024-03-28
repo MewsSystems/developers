@@ -1,0 +1,29 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+  width: var(--common-medium-size);
+
+  &__pages {
+    display: flex;
+  }
+
+  &__item {
+    padding: 5px;
+    border: 1px solid var(--common-color-blue-2);
+    border-radius: 5px;
+    margin: 0 5px;
+    background-color: var(--common-color-blue-1);
+    cursor: pointer;
+
+    &_disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__dots {
+    margin: 0 5px;
+    align-self: end;
+  }
+}

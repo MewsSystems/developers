@@ -70,7 +70,6 @@ export class MoviesStore {
             }),
         );
 
-        // todo: reset error on new search
         this._disposeBag.add(
             merge(
                 searchInput$.pipe(
@@ -83,6 +82,8 @@ export class MoviesStore {
                     })),
                 ),
                 serverError$,
+                // reset instantly on input change
+                this._searchString$.pipe(map(() => undefined)),
             ).subscribe(error => {
                 runInAction(() => {
                     this._error = error;
