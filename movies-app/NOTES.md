@@ -17,3 +17,4 @@
 - [ ] BEFORE PR: reformat all filed
 - [ ] i18n
 - [ ] Logger for project
+- [ ] Get rid of snake_case

@@ -1,8 +1,9 @@
-import {debounce, debounceTime, filter, map, mapTo, merge, Subject, Subscription, switchMap} from "rxjs";
+import { debounce, debounceTime, filter, map, mapTo, merge, share, Subject, Subscription, switchMap } from "rxjs";
 import {observable, action, runInAction, computed, makeObservable} from "mobx";
 import {inject, injectable} from "inversify";
 
 import {MoviesApi} from "../../data/api/movies-api.store";
+import { Movie, MoviesResponse } from "../../data/types";
 
 const enum MovieSearchErrorType {
     BadInput,
@@ -20,6 +21,7 @@ export class MoviesStore {
     private _searchString: string = '';
     @observable
     private _error: MovieSearchError | undefined = undefined;
+    private readonly _moviesResponses = observable.array<MoviesResponse>([]);
     private readonly _searchString$ = new Subject<string>();
     private readonly _disposeBag: Set<Subscription> = new Set();
     constructor(
@@ -31,7 +33,23 @@ export class MoviesStore {
         const serverError$ = new Subject<MovieSearchError>();
         const searchInput$ = this._searchString$.pipe(
             debounceTime(500),
+            share(),
         );
+
+        const moviesData$ = searchInput$.pipe(
+            filter(isQueryValid),
+            switchMap(searchString => this._moviesApi.search({query: searchString})),
+        );
+
+        this._disposeBag.add(
+            moviesData$.subscribe(moviesData => {
+                runInAction(() => {
+                    this._moviesResponses.clear();
+                    this._moviesResponses.push(moviesData);
+                    console.warn('### data', moviesData);
+                });
+            })
+        )
 
         this._disposeBag.add(
             searchInput$.pipe(
@@ -52,6 +70,7 @@ export class MoviesStore {
             }),
         );
 
+        // todo: reset error on new search
         this._disposeBag.add(
             merge(
                 searchInput$.pipe(
@@ -78,6 +97,41 @@ export class MoviesStore {
 
     get searchString(): string {
         return this._searchString;
+    }
+
+    @computed
+    get totalPages(): number {
+        // every response has the same total_pages
+        return this._moviesResponses[0]?.total_pages ?? 0;
+    }
+
+    @computed.struct
+    get currentPages(): readonly number[] {
+        return this._moviesResponses.map(response => response.page);
+    }
+
+    @computed.struct
+    get pagesToPickFrom(): readonly number[] {
+        // showing 2 first pages, 2 last pages and 4 pages around current page
+        const currentLowestPage = this.currentPages[0];
+        const currentHighestPage = this.currentPages[this.currentPages.length - 1];
+        const pages = new Set([
+            1,
+            2,
+            currentLowestPage - 2,
+            currentLowestPage - 1,
+            ...this.currentPages,
+            currentHighestPage + 1,
+            currentHighestPage + 2,
+            this.totalPages - 1,
+            this.totalPages,
+        ]);
+        return Array.from(pages).filter(page => page > 0 && page <= this.totalPages);
+    }
+
+    @computed.struct
+    get movies(): readonly Movie[] {
+        return this._moviesResponses.flatMap(response => response.results);
     }
 
     get error(): MovieSearchError | undefined {

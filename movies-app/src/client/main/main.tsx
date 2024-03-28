@@ -1,17 +1,19 @@
 import React from 'react';
 import {Search} from "./search";
+import { Pagination } from "./pagination";
+import { MoviesList } from "./movies-list.component";
 
 export const MainPage = () => {
     return (
         <main className="main">
-            <div className="search">
+            <div className="main__search">
                 <Search />
             </div>
-            <div className="pagination">
-                pages
+            <div className="main__pagination">
+                <Pagination />
             </div>
-            <div className="movies-list">
-                movies
+            <div className="main__movies-list">
+                <MoviesList />
             </div>
         </main>
     );
