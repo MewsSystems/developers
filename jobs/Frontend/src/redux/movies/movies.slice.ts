@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Movie, MoviesState } from "./movies.slice.types";
 import { moviesThunks } from "./movies.slice.thunks";
+import { Movie, MoviesState } from "./movies.slice.types";
 
 // Define the initial state using that type
 const initialState: MoviesState = {
@@ -8,6 +8,7 @@ const initialState: MoviesState = {
     results: [],
     page: 1,
     total_pages: null,
+    loading: false,
   },
   query: "",
   selectedMovie: null,
@@ -23,6 +24,9 @@ export const moviesSlice = createSlice({
     },
     setQuery: (state, action: PayloadAction<string>) => {
       state.query = action.payload;
+    },
+    changeLoading: (state, action: PayloadAction<boolean>) => {
+      state.search.loading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -41,6 +45,7 @@ export const moviesSlice = createSlice({
   },
 });
 
-export const { setSelectedMovie, setQuery } = moviesSlice.actions;
+export const { setSelectedMovie, setQuery, changeLoading } =
+  moviesSlice.actions;
 
 export default moviesSlice.reducer;

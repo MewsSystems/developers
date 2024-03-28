@@ -1,3 +1,28 @@
+import Box from "@mui/material/Box";
+import { useAppSelector } from "../../../redux/hooks";
+import { moviesSelectors } from "../../../redux/movies/movies.slice.selectors";
+import { MovieList } from "../../MovieList";
+import { Typography } from "@mui/material";
+
 export const SearchResults = () => {
-  return <div>Search Results</div>;
+  const query = useAppSelector(moviesSelectors.getQuery);
+  const hasSearchResults = useAppSelector(moviesSelectors.hasResults);
+  const isLoading = useAppSelector(moviesSelectors.isLoading);
+
+  if (!hasSearchResults && !isLoading) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <Typography variant="h5">Loading...</Typography>;
+  }
+
+  return (
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        Search results for: <b>{query}</b>
+      </Typography>
+      <MovieList />
+    </Box>
+  );
 };
