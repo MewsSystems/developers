@@ -1,8 +1,8 @@
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { moviesSelectors } from "../redux/movies/movies.slice.selectors";
 import { moviesThunks } from "../redux/movies/movies.slice.thunks";
-import { useParams } from "react-router-dom";
 
 export const useMovieDetails = () => {
   const params = useParams<{ id: string }>();

@@ -28,6 +28,11 @@ export const moviesSlice = createSlice({
     changeLoading: (state, action: PayloadAction<boolean>) => {
       state.search.loading = action.payload;
     },
+    clearSelectedMovie: (state, action: PayloadAction<number>) => {
+      if (state.selectedMovie?.id !== action.payload) {
+        state.selectedMovie = null;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(moviesThunks.searchMovies.fulfilled, (state, action) => {
@@ -45,7 +50,7 @@ export const moviesSlice = createSlice({
   },
 });
 
-export const { setSelectedMovie, setQuery, changeLoading } =
+export const { setSelectedMovie, setQuery, changeLoading, clearSelectedMovie } =
   moviesSlice.actions;
 
 export default moviesSlice.reducer;

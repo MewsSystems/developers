@@ -1,12 +1,19 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { FC } from "react";
-import { PartialMovie } from "../../../redux/movies/movies.slice.types";
+import { useAppDispatch } from "../../../redux/hooks";
+import { clearSelectedMovie } from "../../../redux/movies/movies.slice";
+import { Movie } from "../../../redux/movies/movies.slice.types";
 import { getImageURL } from "../../../utils/image";
 import { StyledCardLink } from "./StyledCardLink";
 
-export const MovieCard: FC<{ movie: PartialMovie }> = ({ movie }) => {
+export const MovieCard: FC<{ movie: Movie }> = ({ movie }) => {
+  const dispatch = useAppDispatch();
+
   return (
-    <StyledCardLink to={`/movie/${movie.id}`}>
+    <StyledCardLink
+      to={`/movie/${movie.id}`}
+      onClick={() => dispatch(clearSelectedMovie(movie.id))}
+    >
       <Card elevation={0}>
         <CardMedia
           component="img"
