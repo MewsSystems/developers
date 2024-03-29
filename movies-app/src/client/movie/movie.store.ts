@@ -4,7 +4,7 @@ import { makeObservable, observable, runInAction } from "mobx";
 import { Disposable } from "~data/disposable";
 import { MoviesApi } from "~data/api/movies-api.store";
 import type { Movie } from "~data/types";
-import { movieTypeguard } from "~data/types";
+import { movieLikeTypeguard } from "~data/types";
 import { locationWithMovieStateTypeguard } from "./types";
 
 @injectable()
@@ -27,8 +27,11 @@ export class MovieStore extends Disposable {
                 }
                 try {
                     const parseData = JSON.parse(locationState.movie);
-                    if (movieTypeguard(parseData)) {
-                        return parseData;
+                    if (movieLikeTypeguard(parseData)) {
+                        return {
+                            ...parseData,
+                            releaseDate: new Date(parseData.releaseDate),
+                        };
                     }
                 } catch (e) {
                     console.error('Error parsing movie', e);

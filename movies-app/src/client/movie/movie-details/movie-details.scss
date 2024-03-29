@@ -1,0 +1,9 @@
+.movie-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 10px;
+
+  &__title {
+    font-weight: 700;
+  }
+}

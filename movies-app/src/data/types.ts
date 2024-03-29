@@ -17,7 +17,8 @@ export type Movie = Readonly<{
     voteCount: number;
 }>;
 
-export const movieTypeguard = (value: unknown): value is Movie => {
+// JSON.parse() will use strings for Date objects
+export const movieLikeTypeguard = (value: unknown): value is Movie & Readonly<{ releaseDate: string }> => {
     return value !== null
         && typeof value === 'object'
         && 'id' in value
