@@ -7,10 +7,8 @@ export const moviesSelectors = {
   getCurrentSearchPage: (state: RootState) => state.movies.search.page,
   getQuery: (state: RootState) => state.movies.query,
   getSelectedMovie: (state: RootState) => state.movies.selectedMovie,
-  getSearchPageData: (state: RootState) => {
-    const { page, total_pages } = state.movies.search;
-    return { page: page ?? 0, total_pages: total_pages ?? 0 };
-  },
+  getSearchPage: (state: RootState) => state.movies.search.page ?? 0,
+  getTotalPages: (state: RootState) => state.movies.search.total_pages ?? 0,
   getSelectedMovieTitle: (state: RootState) =>
     state.movies.selectedMovie?.title ?? "Title not found",
   getSelectedMovieTagLine: (state: RootState) =>

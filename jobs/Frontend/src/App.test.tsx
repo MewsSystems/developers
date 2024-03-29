@@ -1,9 +1,11 @@
 import App from "./App";
 import { render, screen } from "./test/utils";
 
-describe("Simple working test", () => {
-  it("the title is visible", () => {
+describe("App", () => {
+  it("app renders and the main input is visible", () => {
     render(<App />);
-    expect(screen.getByText(/Search results/i)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Search for a movie/i)
+    ).toBeInTheDocument();
   });
 });

@@ -6,9 +6,8 @@ import { moviesThunks } from "../../redux/movies/movies.slice.thunks";
 
 export const LoadMoreMovies: FC = () => {
   const dispatch = useAppDispatch();
-  const { page, total_pages } = useAppSelector(
-    moviesSelectors.getSearchPageData
-  );
+  const page = useAppSelector(moviesSelectors.getSearchPage);
+  const total_pages = useAppSelector(moviesSelectors.getTotalPages);
 
   const handleLoadMore = async () => {
     if (page < total_pages) {
