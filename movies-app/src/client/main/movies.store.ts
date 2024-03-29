@@ -1,14 +1,16 @@
-import { debounce, debounceTime, filter, map, mapTo, merge, share, Subject, Subscription, switchMap } from "rxjs";
-import {observable, action, runInAction, computed, makeObservable} from "mobx";
-import {inject, injectable} from "inversify";
+import { debounceTime, filter, map, merge, share, Subject, switchMap } from "rxjs";
+import { observable, runInAction, computed, makeObservable } from "mobx";
+import { injectable } from "inversify";
 
-import {MoviesApi} from "../../data/api/movies-api.store";
-import { Movie, MoviesResponse } from "../../data/types";
+import { MoviesApi } from "~data/api/movies-api.store";
+import { Disposable } from "~data/disposable";
+import { Movie, MoviesPage } from "~data/types";
 
 const enum MovieSearchErrorType {
     BadInput,
     ServerError,
 }
+
 type MovieSearchError = Readonly<{
     type: MovieSearchErrorType;
     message: string; // todo: i18n
@@ -16,18 +18,16 @@ type MovieSearchError = Readonly<{
 const MIN_CHARACTERS_FOR_SEARCH = 3;
 
 @injectable()
-export class MoviesStore {
-    @observable
-    private _searchString: string = '';
+export class MoviesStore extends Disposable {
     @observable
     private _error: MovieSearchError | undefined = undefined;
-    private readonly _moviesResponses = observable.array<MoviesResponse>([]);
+    private readonly _moviesResponses = observable.array<MoviesPage>([]);
     private readonly _searchString$ = new Subject<string>();
-    private readonly _disposeBag: Set<Subscription> = new Set();
+
     constructor(
-        @inject(MoviesApi)
         private readonly _moviesApi: MoviesApi,
     ) {
+        super();
         makeObservable(this);
 
         const serverError$ = new Subject<MovieSearchError>();
@@ -46,7 +46,6 @@ export class MoviesStore {
                 runInAction(() => {
                     this._moviesResponses.clear();
                     this._moviesResponses.push(moviesData);
-                    console.warn('### data', moviesData);
                 });
             })
         )
@@ -92,18 +91,10 @@ export class MoviesStore {
         );
     }
 
-    dispose(): void {
-        this._disposeBag.forEach(sub => sub.unsubscribe());
-    }
-
-    get searchString(): string {
-        return this._searchString;
-    }
-
     @computed
     get totalPages(): number {
         // every response has the same total_pages
-        return this._moviesResponses[0]?.total_pages ?? 0;
+        return this._moviesResponses[0]?.totalPages ?? 0;
     }
 
     @computed.struct
@@ -132,7 +123,7 @@ export class MoviesStore {
 
     @computed.struct
     get movies(): readonly Movie[] {
-        return this._moviesResponses.flatMap(response => response.results);
+        return this._moviesResponses.flatMap(response => response.movies);
     }
 
     get error(): MovieSearchError | undefined {

@@ -1,5 +1,13 @@
 import {injectable} from 'inversify';
-import { MoviesResponse, moviesResponseTypeguard, movieTypeguard } from "../types";
+import {
+    movieFromMovieResponse, moviePageFromMoviesResponse,
+    MovieResponse,
+    movieResponseTypeguard,
+    MoviesResponse,
+    moviesResponseTypeguard,
+} from "./types";
+import { from, map, Observable } from "rxjs";
+import { Movie, MoviesPage } from "../types";
 
 const API_KEY = '03b8572954325680265531140190fd2a';
 const SEARCH_ENDPOINT = 'https://api.themoviedb.org/3/search/movie';
@@ -17,19 +25,35 @@ export class MoviesApi {
         page?: number;
         language?: string;
         includeAdult?: boolean;
-    }>): Promise<MoviesResponse> {
+    }>): Observable<MoviesPage> {
         // todo: dispose fetch in progress if not needed ?
-        return fetch(
+        return from(this.getData(
             `${SEARCH_ENDPOINT}?query=${query}&include_adult=${includeAdult}&language=${language}&page=${page}&api_key=${API_KEY}`,
-            {
-                headers: {
-                    Accept: 'application/json',
-                },
-            }
-        )
+            moviesResponseTypeguard
+        )).pipe(
+            map(moviePageFromMoviesResponse),
+        );
+    }
+
+    // NB!
+    // In fact detailed movie info differs from search result movie info
+    // and have more info, like instead of genre_ids it has genres with names
+    // but until we need this info we can use the same type
+    getMovieInfo(movieId: number): Observable<Movie> {
+        return from(this.getData(
+            `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`,
+            movieResponseTypeguard,
+        )).pipe(
+            map(movieFromMovieResponse)
+        );
+    }
+
+    private getData<T>(url: string, tepeguard: (value: unknown) => value is T): Promise<T> {
+        // todo: dispose fetch in progress if not needed ?
+        return fetch(url, { headers: { Accept: 'application/json' }})
             .then(response => response.json())
             .then(data => new Promise((resolve, reject) => {
-                moviesResponseTypeguard(data) ? resolve(data) : reject(new Error('Invalid data'));
+                tepeguard(data) ? resolve(data) : reject(new Error(`Data not passing typeguard: ${JSON.stringify(data)}`));
             }));
     }
 }

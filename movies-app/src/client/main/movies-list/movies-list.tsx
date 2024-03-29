@@ -3,7 +3,7 @@ import {observer} from "mobx-react";
 import {resolve, useInjection} from "inversify-react";
 import classNames from 'classnames';
 import {MoviesStore} from "../movies.store";
-import { Movie } from "../../../data/types";
+import { MovieResponse } from "../../../data/api/types";
 import { MovieInfo } from './movie';
 import './movies-list.scss';
 
