@@ -11,7 +11,7 @@ module.exports = {
   plugins: ['react-refresh'],
   overrides: [
     {
-      files: ['./src/api/instance.ts'],
+      files: ['./src/api/instance.ts', './src/**/*.test.*'],
       rules: { 'no-restricted-imports': 'off' },
     }
   ],
