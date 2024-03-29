@@ -1,8 +1,9 @@
+import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useAppSelector } from "../../../redux/hooks";
 import { moviesSelectors } from "../../../redux/movies/movies.slice.selectors";
-import { CircularProgress, Typography } from "@mui/material";
 import { MovieDetailsCard } from "./MovieDetailsCard";
+import { MovieTitle } from "./MovieTitle";
 
 export const MovieDetails = () => {
   const selectedMovie = useAppSelector(moviesSelectors.getSelectedMovie);
@@ -20,19 +21,7 @@ export const MovieDetails = () => {
       py={2}
     >
       <Box overflow="auto">
-        <Box
-          position="sticky"
-          top={0}
-          sx={{ backgroundColor: "white" }}
-          textAlign="center"
-        >
-          <Typography variant="h4">{selectedMovie.title}</Typography>
-          {selectedMovie.tagline && (
-            <Typography variant="subtitle1" gutterBottom>
-              {selectedMovie.tagline}
-            </Typography>
-          )}
-        </Box>
+        <MovieTitle />
         <MovieDetailsCard />
       </Box>
     </Box>

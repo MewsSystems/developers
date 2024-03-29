@@ -6,15 +6,18 @@ import { changeLoading, setSelectedMovie } from "./movies.slice";
 
 const searchMovies = createAsyncThunk<
   MovieSearch | undefined,
-  string,
+  void,
   { state: RootState; rejectWithValue: Error }
->("movies/searchMovies", async (query: string, thunkApi) => {
+>("movies/searchMovies", async (_, thunkApi) => {
   const { getState, dispatch, rejectWithValue } = thunkApi;
   dispatch(changeLoading(true));
 
-  const currentPage = getState().movies.search.page;
+  const moviesState = getState().movies;
+
+  const page = moviesState.search.page;
+  const query = moviesState.query;
   try {
-    return MoviesAPI.search(query, currentPage);
+    return MoviesAPI.search(query, page + 1);
   } catch (error) {
     rejectWithValue(error);
   } finally {

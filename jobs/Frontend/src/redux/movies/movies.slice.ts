@@ -6,7 +6,7 @@ import { Movie, MoviesState } from "./movies.slice.types";
 const initialState: MoviesState = {
   search: {
     results: [],
-    page: 1,
+    page: 0,
     total_pages: null,
     loading: false,
   },
@@ -37,7 +37,14 @@ export const moviesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(moviesThunks.searchMovies.fulfilled, (state, action) => {
       if (action.payload) {
-        state.search.results = action.payload.results;
+        if (state.search.results.length === 0) {
+          state.search.results = action.payload.results;
+        } else {
+          state.search.results = [
+            ...state.search.results,
+            ...action.payload.results,
+          ];
+        }
         state.search.total_pages = action.payload.total_pages;
         if (
           action.payload.total_pages &&

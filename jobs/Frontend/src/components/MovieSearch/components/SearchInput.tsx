@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, styled } from "@mui/material";
 import { debounce } from "lodash";
 import { ChangeEvent, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -6,15 +6,20 @@ import { setQuery } from "../../../redux/movies/movies.slice";
 import { moviesSelectors } from "../../../redux/movies/movies.slice.selectors";
 import { moviesThunks } from "../../../redux/movies/movies.slice.thunks";
 
+const StyledInputWrapper = styled(Box)`
+  width: 300px;
+  text-align: center;
+`;
+
 export const SearchInput = () => {
   const dispatch = useAppDispatch();
   const query = useAppSelector(moviesSelectors.getQuery);
 
   const debouncedSearch = useMemo(
     () =>
-      debounce(async (term) => {
+      debounce(async () => {
         try {
-          dispatch(moviesThunks.searchMovies(term));
+          dispatch(moviesThunks.searchMovies());
         } catch (error) {
           console.error(error);
         }
@@ -27,11 +32,11 @@ export const SearchInput = () => {
   ) => {
     const query = event.target.value;
     dispatch(setQuery(query));
-    debouncedSearch(query);
+    debouncedSearch();
   };
 
   return (
-    <Box sx={{ width: 300, textAlign: "center" }}>
+    <StyledInputWrapper>
       <TextField
         fullWidth
         size="small"
@@ -39,6 +44,6 @@ export const SearchInput = () => {
         onChange={handleSearchChange}
         placeholder="Search for a movie"
       />
-    </Box>
+    </StyledInputWrapper>
   );
 };
