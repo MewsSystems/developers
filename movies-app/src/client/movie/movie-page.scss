@@ -10,6 +10,11 @@
     margin-bottom: 20px;
   }
 
+  &__image-block {
+    width: 45%;
+    text-align: right;
+  }
+
   &__info {
     display: flex;
     justify-content: center;
@@ -17,7 +22,8 @@
   }
 
   &__details {
-    margin-left: 20px;
+    width: 55%;
+    padding-left: 20px;
   }
 
   &__overview {

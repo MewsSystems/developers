@@ -1,8 +1,8 @@
 .pagination {
   display: flex;
   justify-content: space-between;
-  margin: 0 10px;
-  width: var(--common-medium-size);
+  padding: 0 10px;
+  width: 100%;
 
   &__pages {
     display: flex;
@@ -20,10 +20,10 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-  }
 
-  &__dots {
-    margin: 0 5px;
-    align-self: end;
+    &_current {
+      background-color: var(--common-color-blue-3);
+      cursor: default;
+    }
   }
 }

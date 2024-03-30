@@ -11,7 +11,7 @@ export type Movie = Readonly<{
     originalLanguage: string;
     originalTitle: string;
     posterPath?: string;
-    overview: string;
+    overview?: string;
     releaseDate: Date;
     voteAverage: number;
     voteCount: number;
@@ -33,7 +33,7 @@ export const movieLikeTypeguard = (value: unknown): value is Movie & Readonly<{ 
         && typeof value.id === 'number'
         && typeof value.originalLanguage === 'string'
         && typeof value.originalTitle === 'string'
-        && typeof value.overview === 'string'
+        && (typeof value.overview === 'string' || value.overview === undefined)
         && (typeof value.posterPath === 'string' || value.posterPath === undefined)
         && typeof value.releaseDate === 'string'
         && typeof value.title === 'string'

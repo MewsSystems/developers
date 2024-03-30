@@ -1,4 +1,4 @@
-import { debounceTime, filter, map, merge, share, Subject, switchMap } from "rxjs";
+import { combineLatest, debounceTime, delay, filter, map, merge, of, share, startWith, Subject, switchMap } from "rxjs";
 import { observable, runInAction, computed, makeObservable } from "mobx";
 import { injectable } from "inversify";
 
@@ -23,6 +23,8 @@ export class MoviesStore extends Disposable {
     private _error: MovieSearchError | undefined = undefined;
     private readonly _moviesResponses = observable.array<MoviesPage>([]);
     private readonly _searchString$ = new Subject<string>();
+    private readonly _loadPage$ = new Subject<number>();
+    private readonly _loadMore$ = new Subject<void>();
 
     constructor(
         private readonly _moviesApi: MoviesApi,
@@ -34,6 +36,43 @@ export class MoviesStore extends Disposable {
         const searchInput$ = this._searchString$.pipe(
             debounceTime(500),
             share(),
+        );
+
+        const searchQuery$ = searchInput$.pipe(
+            filter(isQueryValid),
+            share(),
+        );
+
+        const page$ = this._loadPage$.pipe(
+            startWith(1),
+        );
+
+        this._disposeBag.add(
+            combineLatest([searchQuery$, page$]).pipe(
+                switchMap(([searchString, page]) => this._moviesApi.search({query: searchString, page})),
+            ).subscribe(moviesData => {
+                runInAction(() => {
+                    this._moviesResponses.clear();
+                    this._moviesResponses.push(moviesData);
+                });
+            })
+        );
+
+
+        this._disposeBag.add(
+            combineLatest([
+                this._searchString$,
+                this._loadMore$,
+            ]).pipe(
+                switchMap(([searchString]) => {
+                    return this._moviesApi.search({query: searchString, page: this.currentPages[this.currentPages.length - 1] + 1})
+                })).subscribe({
+                next: moviesData => {
+                    runInAction(() => {
+                        this._moviesResponses.push(moviesData);
+                    });
+                }
+            })
         );
 
         const moviesData$ = searchInput$.pipe(
@@ -48,41 +87,21 @@ export class MoviesStore extends Disposable {
                     this._moviesResponses.push(moviesData);
                 });
             })
-        )
-
-        this._disposeBag.add(
-            searchInput$.pipe(
-                filter(isQueryValid),
-                switchMap(searchString => this._moviesApi.search({query: searchString})),
-            ).subscribe({
-                next: (data) => {
-                    console.warn('### data', data);
-                },
-                error: err => {
-                    serverError$.next({
-                        type: MovieSearchErrorType.ServerError,
-                        message: 'Oops, something went wrong. Please try again later.',
-                    });
-                    // todo: send error to sentry, kibana, etc
-                    console.error('Failed to get data from server: ', err);
-                },
-            }),
         );
 
         this._disposeBag.add(
             merge(
                 searchInput$.pipe(
-                    filter(query => query.length > 0),
-                    filter(query => !isQueryValid(query)),
-                    debounceTime(500),
-                    map(() => ({
-                        type: MovieSearchErrorType.BadInput,
-                        message: `Please enter at least ${MIN_CHARACTERS_FOR_SEARCH} characters`,
-                    })),
+                    switchMap(query => {
+                        return query.length === 0 || isQueryValid(query)
+                            ? of(undefined)
+                            : of({
+                                type: MovieSearchErrorType.BadInput,
+                                message: `Please enter at least ${MIN_CHARACTERS_FOR_SEARCH} characters`,
+                            }).pipe(delay(500));
+                    }),
                 ),
                 serverError$,
-                // reset instantly on input change
-                this._searchString$.pipe(map(() => undefined)),
             ).subscribe(error => {
                 runInAction(() => {
                     this._error = error;
@@ -100,6 +119,24 @@ export class MoviesStore extends Disposable {
     @computed.struct
     get currentPages(): readonly number[] {
         return this._moviesResponses.map(response => response.page);
+    }
+
+    @computed
+    get firstOfCurrentPages(): number | undefined {
+        return this.currentPages[0];
+    }
+
+    @computed
+    get lastOfCurrentPages(): number | undefined {
+        return this.currentPages[this.currentPages.length - 1];
+    }
+
+    setCurrentPage(page: number): void {
+        this._loadPage$.next(page);
+    }
+
+    loadMore(): void {
+        this._loadMore$.next();
     }
 
     @computed.struct

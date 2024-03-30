@@ -13,7 +13,7 @@ export type MovieResponse = Readonly<{
     original_language: string;
     original_title: string;
     poster_path: string | null;
-    overview: string;
+    overview?: string;
     release_date: string;
     vote_average: number;
     vote_count: number;
@@ -35,7 +35,7 @@ export const movieResponseTypeguard = (value: unknown): value is MovieResponse =
         && typeof value.id === 'number'
         && typeof value.original_language === 'string'
         && typeof value.original_title === 'string'
-        && typeof value.overview === 'string'
+        && (typeof value.overview === 'string' || value.overview === null)
         && (typeof value.poster_path === 'string' || value.poster_path === null)
         && typeof value.release_date === 'string'
         && typeof value.title === 'string'
@@ -88,7 +88,7 @@ export function movieFromMovieResponse({
         originalLanguage: original_language,
         originalTitle: original_title,
         posterPath: poster_path !== null ? poster_path : undefined,
-        overview: overview,
+        overview: overview !== null ? overview : undefined,
         releaseDate: new Date(release_date),
         voteAverage: vote_average,
         voteCount: vote_count,

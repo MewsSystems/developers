@@ -1,0 +1,11 @@
+.load-more {
+  display: flex;
+  justify-content: center;
+
+  &__button {
+    width: 90%;
+    height: 40px;
+    border: 1px solid var(--common-color-blue-1);
+    background-color: #ffffff;
+  }
+}
