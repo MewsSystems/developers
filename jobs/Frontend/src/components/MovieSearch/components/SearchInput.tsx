@@ -19,7 +19,7 @@ export const SearchInput = () => {
     () =>
       debounce(async () => {
         try {
-          dispatch(moviesThunks.searchMovies());
+          dispatch(moviesThunks.searchMovies({ resetResults: true }));
         } catch (error) {
           console.error(error);
         }
@@ -32,6 +32,12 @@ export const SearchInput = () => {
   ) => {
     const query = event.target.value;
     dispatch(setQuery(query));
+
+    // If the query is empty, don't search
+    if (!query) {
+      return;
+    }
+
     debouncedSearch();
   };
 

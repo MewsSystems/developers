@@ -33,6 +33,9 @@ export const moviesSlice = createSlice({
         state.selectedMovie = null;
       }
     },
+    resetSearch: (state) => {
+      state.search = initialState.search;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(moviesThunks.searchMovies.fulfilled, (state, action) => {
@@ -57,7 +60,12 @@ export const moviesSlice = createSlice({
   },
 });
 
-export const { setSelectedMovie, setQuery, changeLoading, clearSelectedMovie } =
-  moviesSlice.actions;
+export const {
+  setSelectedMovie,
+  setQuery,
+  changeLoading,
+  clearSelectedMovie,
+  resetSearch,
+} = moviesSlice.actions;
 
 export default moviesSlice.reducer;

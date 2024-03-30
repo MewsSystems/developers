@@ -6,7 +6,7 @@ export const BackToHomeButton = () => {
   return (
     <Box mt={2}>
       <Link to="/">
-        <Button>Search new movie</Button>
+        <Button variant="outlined">Search new movie</Button>
       </Link>
     </Box>
   );

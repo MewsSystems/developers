@@ -6,12 +6,13 @@ import { moviesThunks } from "../../redux/movies/movies.slice.thunks";
 
 export const LoadMoreMovies: FC = () => {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(moviesSelectors.isLoading);
   const page = useAppSelector(moviesSelectors.getSearchPage);
   const total_pages = useAppSelector(moviesSelectors.getTotalPages);
 
   const handleLoadMore = async () => {
     if (page < total_pages) {
-      await dispatch(moviesThunks.searchMovies());
+      await dispatch(moviesThunks.searchMovies({ resetResults: false }));
     }
   };
 
@@ -20,8 +21,13 @@ export const LoadMoreMovies: FC = () => {
   }
 
   return (
-    <Button variant="contained" color="primary" onClick={handleLoadMore}>
-      Load More
+    <Button
+      variant="contained"
+      disabled={isLoading}
+      color="primary"
+      onClick={handleLoadMore}
+    >
+      {isLoading ? "Loading..." : "Load More"}
     </Button>
   );
 };

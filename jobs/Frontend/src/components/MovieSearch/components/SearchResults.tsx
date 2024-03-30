@@ -13,16 +13,16 @@ export const SearchResults = () => {
     return null;
   }
 
-  if (isLoading) {
-    return <Typography variant="h5">Loading...</Typography>;
-  }
-
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>
-        Search results for: <b>{query}</b>
-      </Typography>
-      <MovieList />
+      {hasSearchResults && (
+        <>
+          <Typography variant="h5" gutterBottom>
+            Search results for: <b>{query}</b>
+          </Typography>
+          <MovieList />
+        </>
+      )}
     </Box>
   );
 };

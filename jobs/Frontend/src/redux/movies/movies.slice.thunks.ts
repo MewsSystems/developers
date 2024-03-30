@@ -2,14 +2,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { MoviesAPI } from "../../api/movies";
 import { MovieSearch } from "./movies.slice.types";
 import { RootState } from "../store";
-import { changeLoading, setSelectedMovie } from "./movies.slice";
+import { changeLoading, resetSearch, setSelectedMovie } from "./movies.slice";
+import { sleep } from "../../utils/time";
 
 const searchMovies = createAsyncThunk<
   MovieSearch | undefined,
-  void,
+  { resetResults: boolean },
   { state: RootState; rejectWithValue: Error }
->("movies/searchMovies", async (_, thunkApi) => {
+>("movies/searchMovies", async ({ resetResults }, thunkApi) => {
   const { getState, dispatch, rejectWithValue } = thunkApi;
+  if (resetResults) {
+    dispatch(resetSearch());
+  }
+
   dispatch(changeLoading(true));
 
   const moviesState = getState().movies;
@@ -17,6 +22,8 @@ const searchMovies = createAsyncThunk<
   const page = moviesState.search.page;
   const query = moviesState.query;
   try {
+    // Simulate a delay to show the loading state
+    await sleep(Math.random() * 1500);
     return MoviesAPI.search(query, page + 1);
   } catch (error) {
     rejectWithValue(error);
