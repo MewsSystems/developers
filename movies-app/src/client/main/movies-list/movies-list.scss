@@ -1,8 +1,20 @@
 .movies-list {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 20%);
   row-gap: 10px;
+
+  @media (min-width: 751px) and (max-width: 1000px) {
+    grid-template-columns: repeat(4, 25%);
+  }
+
+  @media (min-width: 501px) and (max-width: 750px) {
+    grid-template-columns: repeat(3, 33.3%);
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(2, 50%);
+  }
 
   &__movie {
     transition: transform 200ms;

@@ -9,7 +9,8 @@
   --common-color-error: #FFAF45;
   --common-medium-size: 400px;
 
-  max-width: 1000px;
+  width: 1000px;
+  max-width: 100%;
   min-height: 100vh;
   background-color: var(--common-color-light);
   margin: 0 auto;

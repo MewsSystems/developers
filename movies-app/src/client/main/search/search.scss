@@ -6,6 +6,7 @@
   &__input,
   &__error {
     width: var(--common-medium-size);
+    max-width: 90%;
   }
 
   &__input {

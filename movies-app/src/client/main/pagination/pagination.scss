@@ -1,11 +1,13 @@
 .pagination {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 0 10px;
   width: 100%;
 
   &__pages {
     display: flex;
+    flex-wrap: wrap;
   }
 
   &__item {

@@ -36,6 +36,10 @@
     text-align: right;
   }
 
+  &__poster {
+    max-width: 100%;
+  }
+
   &__info {
     display: flex;
     justify-content: center;
