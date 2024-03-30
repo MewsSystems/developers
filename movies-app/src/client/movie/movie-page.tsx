@@ -5,7 +5,16 @@ import { observer } from "mobx-react";
 import { MovieStore } from "./movie.store";
 import posterNotAvailable from '../common/images/not_available.jpg'
 import { MovieDetails } from "./movie-info/movie-details";
-import './movie-page.scss';
+import {
+    MoviePageWrapper,
+    MovieOverview,
+    MovieTitle,
+    MovieDetailsWrapper,
+    MovieInfo,
+    MovieImageBlock,
+    MoviePoster,
+    HomeButton,
+} from './movie-page.styled';
 
 export const MoviePage = observer(() => {
     const movieStore = useInjection(MovieStore);
@@ -18,10 +27,10 @@ export const MoviePage = observer(() => {
 
     if (movieStore.couldNotLoadMovie) {
         return (
-            <div className="movie-page">
-                <div className="movie-page__error">Oops, something went wrong.</div>
-                <div className="movie-page__home-button" onClick={goToHomePage}>Go to home page</div>
-            </div>
+            <MoviePageWrapper>
+                <div>Oops, something went wrong.</div>
+                <HomeButton onClick={goToHomePage}>Go to home page</HomeButton>
+            </MoviePageWrapper>
         );
     }
 
@@ -30,23 +39,22 @@ export const MoviePage = observer(() => {
     }
 
     return (
-        <div className="movie-page">
-            <div className="movie-page__title">{movie.title}</div>
-            <div className="movie-page__info">
-                <div className="movie-page__image-block">
-                    <img
-                        className="movie-page__poster"
+        <MoviePageWrapper>
+            <MovieTitle>{movie.title}</MovieTitle>
+            <MovieInfo>
+                <MovieImageBlock>
+                    <MoviePoster
                         src={movie.posterPath
                             ? `https://image.tmdb.org/t/p/w200${movie.posterPath}`
                             : posterNotAvailable}
                         alt={movie.title}
                     />
-                </div>
-                <div className="movie-page__details">
+                </MovieImageBlock>
+                <MovieDetailsWrapper>
                     <MovieDetails movie={movie}/>
-                </div>
-            </div>
-            <div className="movie-page__overview">{movie.overview}</div>
-        </div>
+                </MovieDetailsWrapper>
+            </MovieInfo>
+            <MovieOverview>{movie.overview}</MovieOverview>
+        </MoviePageWrapper>
     );
 });

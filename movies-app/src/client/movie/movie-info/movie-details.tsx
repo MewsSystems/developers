@@ -1,33 +1,33 @@
 import React, { Fragment } from 'react';
 import {observer} from "mobx-react";
 import { Movie } from "~data/types";
-import './movie-details.scss';
+import { MovieDetailsWrapper, InfoTitle } from "./movie-details.styled";
 
 type MovieProps = Readonly<{ movie: Movie }>;
 export const MovieDetails = observer(({ movie }: MovieProps) => {
     return (
-        <div className="movie-details">
+        <MovieDetailsWrapper>
             {
                 movie.originalTitle && (
                     <Fragment>
-                        <div className="movie-details__title">Original title</div>
-                        <div className="movie-details__value">{movie.originalTitle}</div>
+                        <InfoTitle>Original title</InfoTitle>
+                        <div>{movie.originalTitle}</div>
                     </Fragment>
                 )
             }
             {
                 movie.originalLanguage && (
                     <Fragment>
-                        <div className="movie-details__title">Original language</div>
-                        <div className="movie-details__value">{movie.originalLanguage}</div>
+                        <InfoTitle>Original language</InfoTitle>
+                        <div>{movie.originalLanguage}</div>
                     </Fragment>
                 )
             }
             {
                 movie.voteAverage && (
                     <Fragment>
-                        <div className="movie-details__title">Rating</div>
-                        <div className="movie-details__value">{movie.voteAverage}</div>
+                        <InfoTitle>Rating</InfoTitle>
+                        <div>{movie.voteAverage}</div>
                         {/*<div className="movie-page__vote-count">{movie.voteCount}</div>*/}
                     </Fragment>
                 )
@@ -35,12 +35,12 @@ export const MovieDetails = observer(({ movie }: MovieProps) => {
             {
                 movie.releaseDate && (
                     <Fragment>
-                        <div className="movie-details__title">Release date</div>
-                        <div className="movie-details__value">{movie.releaseDate.toDateString()}</div>
+                        <InfoTitle>Release date</InfoTitle>
+                        <div>{movie.releaseDate.toDateString()}</div>
                     </Fragment>
                 )
             }
-        </div>
+        </MovieDetailsWrapper>
     );
 
 });

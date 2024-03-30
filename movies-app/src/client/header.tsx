@@ -1,20 +1,20 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from './common/images/logo.svg';
-import './header.scss';
+import { HeaderWrapper, LogoWrapper } from './header.styled';
 
 export const Header = () => {
     const navigate = useNavigate();
     const goToHomePage = () => navigate(`/`);
 
     return (
-        <header className="header" onClick={goToHomePage}>
-            <div className="header__logo">
+        <HeaderWrapper onClick={goToHomePage}>
+            <LogoWrapper>
                 <Logo />
-            </div>
-            <h1 className="header__title">
+            </LogoWrapper>
+            <h1>
                 MovieMantra
             </h1>
-        </header>
+        </HeaderWrapper>
     );
 };

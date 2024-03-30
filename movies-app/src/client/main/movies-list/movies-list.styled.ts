@@ -1,8 +1,10 @@
-.movies-list {
+import styled from 'styled-components';
+
+export const MoviesWrapper = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(5, 20%);
   row-gap: 10px;
+  grid-template-columns: repeat(5, 20%);
 
   @media (min-width: 751px) and (max-width: 1000px) {
     grid-template-columns: repeat(4, 25%);
@@ -15,12 +17,12 @@
   @media (max-width: 500px) {
     grid-template-columns: repeat(2, 50%);
   }
+`;
 
-  &__movie {
-    transition: transform 200ms;
+export const MovieItem = styled.div`
+  transition: transform 200ms;
 
-    &:hover {
-      transform: scale(1.05);
-    }
+  &:hover {
+    transform: scale(1.05);
   }
-}
+`;

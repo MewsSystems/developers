@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
-import {observer} from "mobx-react";
-import {useInjection} from "inversify-react";
-import classNames from 'classnames';
-import {MoviesStore} from "../movies.store";
-import './load-more.scss';
+import React from 'react';
+import { observer } from "mobx-react";
+import { useInjection } from "inversify-react";
+import { MoviesStore } from "../movies.store";
+import { LoadMoreWrapper, LoadMoreButton } from './load-more.styled';
 
 export const LoadMore = observer(() => {
     const moviesStore = useInjection(MoviesStore);
@@ -18,11 +17,11 @@ export const LoadMore = observer(() => {
 
 
     return (
-        <div className="load-more">
-            <div className="load-more__button" onClick={loadMore}>
+        <LoadMoreWrapper>
+            <LoadMoreButton onClick={loadMore}>
                 Load more
-            </div>
-        </div>
+            </LoadMoreButton>
+        </LoadMoreWrapper>
     );
 
 });

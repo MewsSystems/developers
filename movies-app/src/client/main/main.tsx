@@ -6,33 +6,33 @@ import { Pagination } from "./pagination/pagination";
 import { MoviesList } from "./movies-list/movies-list";
 import { LoadMore } from "./load-more/load-more";
 import { MoviesStore } from "./movies.store";
-import './main.scss';
+import { MainWrapper, LoadMoreWrapper, MoviesListWrapper, PaginationWrapper, SearchWrapper } from './main.styled';
 
 export const MainPage = observer(() => {
     const moviesStore = useInjection(MoviesStore);
 
     return (
-        <main className="main">
-            <div className="main__search">
+        <MainWrapper>
+            <SearchWrapper>
                 <Search/>
-            </div>
+            </SearchWrapper>
             {
                 moviesStore.noResultsFound
-                    ? <div className="main__no-results">No results found</div>
+                    ? <div>No results found</div>
                     : (
                         <Fragment>
-                            <div className="main__pagination">
+                            <PaginationWrapper>
                                 <Pagination/>
-                            </div>
-                            <div className="main__movies-list">
+                            </PaginationWrapper>
+                            <MoviesListWrapper>
                                 <MoviesList/>
-                            </div>
-                            <div className="main__load-more">
+                            </MoviesListWrapper>
+                            <LoadMoreWrapper>
                                 <LoadMore/>
-                            </div>
+                            </LoadMoreWrapper>
                         </Fragment>
                     )
             }
-        </main>
+        </MainWrapper>
     );
 });

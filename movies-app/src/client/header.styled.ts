@@ -1,4 +1,6 @@
-.header {
+import styled from 'styled-components';
+
+export const HeaderWrapper = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,9 +8,9 @@
   width: 100%;
   background-color: var(--common-color-blue-3);
   cursor: pointer;
+`;
 
-  &__logo {
-    width: 60px;
-    height: 60px;
-  }
-}
+export const LogoWrapper = styled.div`
+  width: 60px;
+  height: 60px;
+`;

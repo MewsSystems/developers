@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import { observer } from "mobx-react";
 import { useInjection } from "inversify-react";
-import classNames from 'classnames';
 import { MoviesStore } from "../movies.store";
 import { Page } from "./page";
-import './pagination.scss';
+import { PaginationWrapper, PaginationPagesWrapper, PageItem } from './pagination.styled';
 
 export const Pagination = observer(() => {
     const moviesStore = useInjection(MoviesStore);
@@ -19,21 +18,16 @@ export const Pagination = observer(() => {
         }
     }
 
-
     return (
-        <div className="pagination">
-            <div
-                className={classNames(
-                    'pagination__item',
-                    {
-                        'pagination__item_disabled': moviesStore.currentPages.includes(1),
-                    }
-                )}
+        <PaginationWrapper>
+            <PageItem
+                current={false}
+                disabled={moviesStore.currentPages.includes(1)}
                 onClick={() => selectPage((moviesStore?.firstOfCurrentPages ?? 1) - 1)}
             >
                 Previous
-            </div>
-            <div className="pagination__pages">
+            </PageItem>
+            <PaginationPagesWrapper>
                 {
                     moviesStore.pagesToPickFrom.map((page, i) => (
                         <Fragment key={page.toString()}>
@@ -41,24 +35,19 @@ export const Pagination = observer(() => {
                                 page={page}
                                 selectPage={selectPage}
                                 previousItemInPagination={moviesStore.pagesToPickFrom[i - 1]}
-                                pageClassname={"pagination__item"}
-                                pageCurrentClassname={"pagination__item_current"}
                             />
                         </Fragment>
                     ))
                 }
-            </div>
-            <div className={classNames(
-                'pagination__item',
-                {
-                    'pagination__item_disabled': moviesStore.currentPages.includes(moviesStore.totalPages),
-                }
-            )}
-                 onClick={() => selectPage((moviesStore.lastOfCurrentPages ?? 1) + 1)}
+            </PaginationPagesWrapper>
+            <PageItem
+                current={false}
+                disabled={moviesStore.currentPages.includes(moviesStore.totalPages)}
+                onClick={() => selectPage((moviesStore.lastOfCurrentPages ?? 1) + 1)}
             >
                 Next
-            </div>
-        </div>
+            </PageItem>
+        </PaginationWrapper>
     );
 
 });

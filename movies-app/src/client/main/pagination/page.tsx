@@ -1,23 +1,18 @@
 import React, { Fragment } from 'react';
-import {observer} from "mobx-react";
-import {useInjection} from "inversify-react";
-import classNames from 'classnames';
-import {MoviesStore} from "../movies.store";
-import './page.scss';
+import { observer } from "mobx-react";
+import { useInjection } from "inversify-react";
+import { MoviesStore } from "../movies.store";
+import { PageItem, Dots } from './pagination.styled';
 
 type PageProps = Readonly<{
     page: number;
     selectPage: (page: number) => void;
     previousItemInPagination: number | undefined;
-    pageClassname: string;
-    pageCurrentClassname: string;
 }>;
 export const Page = observer(({
     page,
     selectPage,
     previousItemInPagination,
-    pageClassname,
-    pageCurrentClassname,
 }: PageProps) => {
     const moviesStore = useInjection(MoviesStore);
 
@@ -25,36 +20,49 @@ export const Page = observer(({
     if (moviesStore.currentPages.includes(page) && moviesStore.firstOfCurrentPages !== page) {
         return null
     }
-    const pageClass = classNames(
-        pageClassname,
-        {
-            [pageCurrentClassname]: moviesStore.currentPages.includes(page),
-        }
-    );
     if (moviesStore.currentPages.includes(page) && moviesStore.firstOfCurrentPages === page) {
         return (
-            <div key={page.toString()} className={pageClass} onClick={() => selectPage(page)}>
+            <PageItem
+                disabled={false}
+                current={true}
+                key={page.toString()}
+                onClick={() => selectPage(page)}
+            >
                 {
                     moviesStore.firstOfCurrentPages === moviesStore.lastOfCurrentPages
                         ? moviesStore.firstOfCurrentPages
                         : `${moviesStore.firstOfCurrentPages} - ${moviesStore.lastOfCurrentPages}`
                 }
-            </div>
+            </PageItem>
         )
 
     }
 
+    const isCurrentPage = moviesStore.currentPages.includes(page);
     // if there is a gap between current item and previous item, render additional dots
     if (previousItemInPagination && previousItemInPagination !== page - 1) {
         return (
             <Fragment key={page.toString()}>
-                <div className="dots">...</div>
-                <div className={pageClass} onClick={() => selectPage(page)}>{page}</div>
+                <Dots>...</Dots>
+                <PageItem
+                    disabled={false}
+                    current={isCurrentPage}
+                    onClick={() => selectPage(page)}
+                >
+                    {page}
+                </PageItem>
             </Fragment>
         )
     }
     return (
-        <div key={page.toString()} className={pageClass} onClick={() => selectPage(page)}>{page}</div>
+        <PageItem
+            disabled={false}
+            current={isCurrentPage}
+            key={page.toString()}
+            onClick={() => selectPage(page)}
+        >
+            {page}
+        </PageItem>
     );
 
 });

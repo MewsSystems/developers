@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Movie } from "~data/types";
 import { IMAGE_BASE_URL } from "~data/api/constants";
 import posterNotAvailable from '../../common/images/not_available.jpg'
-import './movie.scss';
+import { MovieWrapper, MoviePoster, MovieTitle } from './movie.styled'
 
 type MovieProps = Readonly<{ movie: Movie }>;
 export const MovieInfo = observer(({ movie }: MovieProps) => {
@@ -14,14 +14,13 @@ export const MovieInfo = observer(({ movie }: MovieProps) => {
     }
 
     return (
-        <div className="movie" onClick={goToMovie}>
-            <div className="movie__title">{movie.title}</div>
-            <img
-                className="movie__poster"
+        <MovieWrapper onClick={goToMovie}>
+            <MovieTitle>{movie.title}</MovieTitle>
+            <MoviePoster
                 src={movie.posterPath ? `${IMAGE_BASE_URL}${movie.posterPath}` : posterNotAvailable}
                 alt={movie.title}
             />
-        </div>
+        </MovieWrapper>
     );
 
 });
