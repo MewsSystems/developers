@@ -8,7 +8,7 @@ import './load-more.scss';
 export const LoadMore = observer(() => {
     const moviesStore = useInjection(MoviesStore);
 
-    if (moviesStore.movies.length === 0 || moviesStore.currentPages[moviesStore.currentPages.length - 1] === moviesStore.totalPages) {
+    if (moviesStore.movies.length === 0 || moviesStore.lastOfCurrentPages === moviesStore.totalPages) {
         return null;
     }
 

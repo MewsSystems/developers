@@ -16,6 +16,10 @@
     background-color: var(--common-color-blue-1);
     cursor: pointer;
 
+    &:hover:not(&_current):not(&_disabled) {
+      background-color: var(--common-color-blue-4);
+    }
+
     &_disabled {
       opacity: 0.5;
       cursor: not-allowed;

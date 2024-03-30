@@ -30,7 +30,7 @@ export class MovieStore extends Disposable {
                     if (movieLikeTypeguard(parseData)) {
                         return {
                             ...parseData,
-                            releaseDate: new Date(parseData.releaseDate),
+                            releaseDate: parseData.releaseDate ? new Date(parseData.releaseDate) : undefined,
                         };
                     }
                 } catch (e) {
