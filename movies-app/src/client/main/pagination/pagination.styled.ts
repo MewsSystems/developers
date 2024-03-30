@@ -20,6 +20,7 @@ export const PageItem = styled.div<{ disabled: boolean; current: boolean }>`
   border: 1px solid var(--common-color-blue-2);
   border-radius: 5px;
   cursor: pointer;
+  font-size: 14px;
 
   &:hover {
     ${props => !props.disabled && !props.current && css`

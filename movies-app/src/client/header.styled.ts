@@ -8,6 +8,9 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   background-color: var(--common-color-blue-3);
   cursor: pointer;
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 900;
 `;
 
 export const LogoWrapper = styled.div`

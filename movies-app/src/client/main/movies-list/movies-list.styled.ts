@@ -24,5 +24,6 @@ export const MovieItem = styled.div`
 
   &:hover {
     transform: scale(1.05);
+    z-index: 1;
   }
 `;

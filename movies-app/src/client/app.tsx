@@ -4,11 +4,13 @@ import { Header } from './header';
 import { MainPage } from './main/main';
 import { MoviePage } from './movie/movie-page';
 import { GlobalStyle, AppWrapper } from './app.styled';
+import { GlobalFonts } from './common/fonts/typography.styled';
 import './common/styles/reset.css';
 
 export const App = () => {
     return (
         <>
+            <GlobalFonts />
             <GlobalStyle/>
             <AppWrapper>
                 <Router>

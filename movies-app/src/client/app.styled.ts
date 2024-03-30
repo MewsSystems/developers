@@ -22,4 +22,5 @@ export const AppWrapper = styled.div`
   min-height: 100vh;
   background-color: var(--common-color-light);
   margin: 0 auto;
+  font-family: 'Work Sans', sans-serif;
 `;
