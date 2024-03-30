@@ -5,8 +5,9 @@ import { injectable } from "inversify";
 import { MoviesApi } from "~data/api/movies-api.store";
 import { Disposable } from "~data/disposable";
 import { Movie, MoviesPage } from "~data/types";
+import { logger } from "~data/logger/logger.store";
 
-const enum MovieSearchErrorType {
+export const enum MovieSearchErrorType {
     BadInput,
     ServerError,
 }
@@ -16,6 +17,10 @@ type MovieSearchError = Readonly<{
     message: string; // todo: i18n
 }>;
 const MIN_CHARACTERS_FOR_SEARCH = 3;
+const SERVER_ERROR: MovieSearchError = {
+    type: MovieSearchErrorType.ServerError,
+    message: 'Oops, something went wrong. Please try again later.',
+};
 
 @injectable()
 export class MoviesStore extends Disposable {
@@ -38,23 +43,30 @@ export class MoviesStore extends Disposable {
             share(),
         );
 
-        const searchQuery$ = searchInput$.pipe(
-            filter(isQueryValid),
-            share(),
-        );
-
-        const page$ = this._loadPage$.pipe(
-            startWith(1),
-        );
-
         this._disposeBag.add(
-            combineLatest([searchQuery$, page$]).pipe(
+            combineLatest(
+                [
+                    searchInput$.pipe(
+                        filter(isQueryValid),
+                    ),
+                    this._loadPage$.pipe(
+                        startWith(1),
+                    ),
+                ]
+            ).pipe(
                 switchMap(([searchString, page]) => this._moviesApi.search({query: searchString, page})),
-            ).subscribe(moviesData => {
-                runInAction(() => {
-                    this._moviesResponses.clear();
-                    this._moviesResponses.push(moviesData);
-                });
+            ).subscribe({
+                next: moviesData => {
+                    runInAction(() => {
+                        this._moviesResponses.clear();
+                        this._moviesResponses.push(moviesData);
+                    });
+                },
+                error: error => {
+                    serverError$.next(SERVER_ERROR);
+                    logger.error('Failed getting movies: ', error);
+                },
+
             })
         );
 
@@ -65,27 +77,17 @@ export class MoviesStore extends Disposable {
                 this._loadMore$,
             ]).pipe(
                 switchMap(([searchString]) => {
-                    return this._moviesApi.search({query: searchString, page: this.currentPages[this.currentPages.length - 1] + 1})
+                    return this._moviesApi.search({query: searchString, page: (this.lastOfCurrentPages ?? 1) + 1})
                 })).subscribe({
                 next: moviesData => {
                     runInAction(() => {
                         this._moviesResponses.push(moviesData);
                     });
-                }
-            })
-        );
-
-        const moviesData$ = searchInput$.pipe(
-            filter(isQueryValid),
-            switchMap(searchString => this._moviesApi.search({query: searchString})),
-        );
-
-        this._disposeBag.add(
-            moviesData$.subscribe(moviesData => {
-                runInAction(() => {
-                    this._moviesResponses.clear();
-                    this._moviesResponses.push(moviesData);
-                });
+                },
+                error: error => {
+                    serverError$.next(SERVER_ERROR);
+                    logger.error('Failed getting more movies for page: ', error);
+                },
             })
         );
 

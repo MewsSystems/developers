@@ -1,16 +1,19 @@
 import { injectable } from "inversify";
-import { from, map, of, Subject, switchMap, take } from "rxjs";
+import { map, of, Subject, switchMap, take } from "rxjs";
 import { makeObservable, observable, runInAction } from "mobx";
 import { Disposable } from "~data/disposable";
 import { MoviesApi } from "~data/api/movies-api.store";
 import type { Movie } from "~data/types";
 import { movieLikeTypeguard } from "~data/types";
 import { locationWithMovieStateTypeguard } from "./types";
+import { logger } from "~data/logger/logger.store";
 
 @injectable()
 export class MovieStore extends Disposable {
     @observable.ref
     private _movieInfo: Movie | undefined = undefined;
+    @observable
+    private _couldNotLoadMovie = false;
     private _locationState$ = new Subject();
 
     constructor(
@@ -34,7 +37,7 @@ export class MovieStore extends Disposable {
                         };
                     }
                 } catch (e) {
-                    console.error('Error parsing movie', e);
+                    logger.error('Error parsing movie from location state: ', e);
                 }
                 return undefined;
             }),
@@ -50,12 +53,22 @@ export class MovieStore extends Disposable {
                     const movieStringId = window.location.href.match(/\/movie\/(\d+)/)?.[1];
                     const movieId = movieStringId ? parseInt(movieStringId) : undefined;
                     if ( movieId === undefined || isNaN(movieId)) {
-                        throw new Error('Movie id is invalid');
+                        throw new Error(`Movie id in url is invalid: ${movieStringId}`);
                     }
                     return this._moviesApi.getMovieInfo(movieId);
                 }),
-            ).subscribe(movieInfo => {
-                runInAction(() => this._movieInfo = movieInfo);
+            ).subscribe({
+                next: movie => {
+                    runInAction(() => {
+                        this._movieInfo = movie;
+                    });
+                },
+                error: e => {
+                    logger.error('Error getting movie info: ', e);
+                    runInAction(() => {
+                        this._couldNotLoadMovie = true;
+                    });
+                }
             })
         );
     }
@@ -66,5 +79,9 @@ export class MovieStore extends Disposable {
 
     get movieInfo(): Movie | undefined {
         return this._movieInfo;
+    }
+
+    get couldNotLoadMovie(): boolean {
+        return this._couldNotLoadMovie;
     }
 }

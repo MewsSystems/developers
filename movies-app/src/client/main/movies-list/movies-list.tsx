@@ -1,9 +1,7 @@
 import React from 'react';
-import {observer} from "mobx-react";
-import {resolve, useInjection} from "inversify-react";
-import classNames from 'classnames';
-import {MoviesStore} from "../movies.store";
-import { MovieResponse } from "../../../data/api/types";
+import { observer } from "mobx-react";
+import { useInjection } from "inversify-react";
+import { MoviesStore } from "../movies.store";
 import { MovieInfo } from './movie';
 import './movies-list.scss';
 

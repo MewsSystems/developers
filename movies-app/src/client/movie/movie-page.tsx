@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useInjection } from "inversify-react";
 import { observer } from "mobx-react";
 import { MovieStore } from "./movie.store";
@@ -10,8 +10,20 @@ import './movie-page.scss';
 export const MoviePage = observer(() => {
     const movieStore = useInjection(MovieStore);
     const location = useLocation();
+    const navigate = useNavigate();
+    const goToHomePage = () => navigate(`/`);
     movieStore.setLocationState(location.state);
     const movie = movieStore.movieInfo;
+
+
+    if (movieStore.couldNotLoadMovie) {
+        return (
+            <div className="movie-page">
+                <div className="movie-page__error">Oops, something went wrong.</div>
+                <div className="movie-page__home-button" onClick={goToHomePage}>Go to home page</div>
+            </div>
+        );
+    }
 
     if (!movie) {
         return null;
