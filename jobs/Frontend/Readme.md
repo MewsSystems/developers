@@ -11,3 +11,17 @@ and then run it with:
 ```
 npm run dev
 ```
+
+## Tests
+
+to run the tests run either:
+
+```
+npm run test
+```
+
+or
+
+```
+npm run test:ui
+```

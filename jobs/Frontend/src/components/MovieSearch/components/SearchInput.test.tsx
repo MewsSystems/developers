@@ -1,5 +1,3 @@
-// make a test that verifies the input changes value and that an api call is being made
-
 import { fireEvent, render, screen } from "../../../test/utils";
 import { SearchInput } from "./SearchInput";
 

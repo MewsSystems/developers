@@ -1,6 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import moviesReducer from "./movies/movies.slice";
 
+export function setupMockStore(preloadedState?: RootState) {
+  return configureStore({
+    reducer: {
+      movies: moviesReducer,
+    },
+    preloadedState: preloadedState || undefined,
+  });
+}
+
 export const store = configureStore({
   reducer: {
     movies: moviesReducer,

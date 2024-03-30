@@ -11,6 +11,8 @@ export const LoadMoreMovies: FC = () => {
   const total_pages = useAppSelector(moviesSelectors.getTotalPages);
 
   const handleLoadMore = async () => {
+    console.log("Load more movies");
+
     if (page < total_pages) {
       await dispatch(moviesThunks.searchMovies({ resetResults: false }));
     }
