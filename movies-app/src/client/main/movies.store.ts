@@ -26,6 +26,8 @@ const SERVER_ERROR: MovieSearchError = {
 export class MoviesStore extends Disposable {
     @observable
     private _error: MovieSearchError | undefined = undefined;
+    @observable
+    private _noResultsFound = false;
     private readonly _moviesResponses = observable.array<MoviesPage>([]);
     private readonly _searchString$ = new Subject<string>();
     private readonly _loadPage$ = new Subject<number>();
@@ -49,8 +51,13 @@ export class MoviesStore extends Disposable {
                     searchInput$.pipe(
                         filter(isQueryValid),
                     ),
-                    this._loadPage$.pipe(
-                        startWith(1),
+                    merge(
+                        this._loadPage$.pipe(
+                            startWith(1),
+                        ),
+                        searchInput$.pipe(
+                            map(() => 1),
+                        ),
                     ),
                 ]
             ).pipe(
@@ -60,6 +67,7 @@ export class MoviesStore extends Disposable {
                     runInAction(() => {
                         this._moviesResponses.clear();
                         this._moviesResponses.push(moviesData);
+                        this._noResultsFound = moviesData.movies.length === 0;
                     });
                 },
                 error: error => {
@@ -131,6 +139,10 @@ export class MoviesStore extends Disposable {
     @computed
     get lastOfCurrentPages(): number | undefined {
         return this.currentPages[this.currentPages.length - 1];
+    }
+
+    get noResultsFound(): boolean {
+        return this._noResultsFound;
     }
 
     setCurrentPage(page: number): void {
