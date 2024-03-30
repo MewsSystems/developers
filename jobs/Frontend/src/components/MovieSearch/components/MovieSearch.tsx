@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
-import { SearchInput } from "./SearchInput";
-import { SearchResults } from "./SearchResults";
 import { LoadMoreMovies } from "../../LoadMoreMovies";
 import { MovieSearchLoading } from "./MovieSearchLoading";
+import { SearchInput } from "./SearchInput";
+import { SearchResults } from "./SearchResults";
 
 export const MovieSearch = () => {
   return (
@@ -10,13 +10,11 @@ export const MovieSearch = () => {
       <Box display="flex" justifyContent="center">
         <SearchInput />
       </Box>
-      <Box pt={2}>
+      <Box pt={2} pb={2}>
         <MovieSearchLoading />
         <SearchResults />
       </Box>
-      <Box p={4} display="flex" justifyContent="center">
-        <LoadMoreMovies />
-      </Box>
+      <LoadMoreMovies />
     </Box>
   );
 };

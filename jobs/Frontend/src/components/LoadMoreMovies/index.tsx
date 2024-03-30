@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { moviesSelectors } from "../../redux/movies/movies.slice.selectors";
@@ -11,8 +11,6 @@ export const LoadMoreMovies: FC = () => {
   const total_pages = useAppSelector(moviesSelectors.getTotalPages);
 
   const handleLoadMore = async () => {
-    console.log("Load more movies");
-
     if (page < total_pages) {
       await dispatch(moviesThunks.searchMovies({ resetResults: false }));
     }
@@ -23,13 +21,23 @@ export const LoadMoreMovies: FC = () => {
   }
 
   return (
-    <Button
-      variant="contained"
-      disabled={isLoading}
-      color="primary"
-      onClick={handleLoadMore}
-    >
-      {isLoading ? "Loading..." : "Load More"}
-    </Button>
+    <Box pb={2} display="flex" justifyContent="center">
+      <Box
+        position="fixed"
+        bottom={16}
+        display="flex"
+        width="100%"
+        justifyContent="center"
+      >
+        <Button
+          variant="contained"
+          disabled={isLoading}
+          color="primary"
+          onClick={handleLoadMore}
+        >
+          {isLoading ? "Loading..." : "Load More"}
+        </Button>
+      </Box>
+    </Box>
   );
 };
