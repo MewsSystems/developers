@@ -1,10 +1,12 @@
 import {
     MovieSearchParams,
     MovieSearchResultDTO,
+    MovieDTO,
 } from '../../api/interfaces/movie.interface.ts'
 import {
     MovieSearch,
     MovieSearchResult,
+    Movie,
 } from '../interfaces/movie.interface.ts'
 
 export const mapSearchMovieToParams = (
@@ -14,9 +16,7 @@ export const mapSearchMovieToParams = (
     page: data.page,
 })
 
-export const mapMovieSearchResultFromDTO = (
-    data: MovieSearchResultDTO
-): MovieSearchResult => ({
+const mapMovieFromDTO = (data: MovieDTO): Movie => ({
     adult: data.adult,
     backdrop_path: data.backdrop_path,
     genre_ids: data.genre_ids,
@@ -31,4 +31,13 @@ export const mapMovieSearchResultFromDTO = (
     video: data.video,
     vote_average: data.vote_average,
     vote_count: data.vote_count,
+})
+
+export const mapMovieSearchResultFromDTO = (
+    data: MovieSearchResultDTO
+): MovieSearchResult => ({
+    page: data.page,
+    total_pages: data.total_pages,
+    total_results: data.total_results,
+    results: data.results.map(mapMovieFromDTO),
 })

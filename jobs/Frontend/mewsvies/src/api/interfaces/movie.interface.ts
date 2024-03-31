@@ -4,6 +4,13 @@ export interface MovieSearchParams {
 }
 
 export interface MovieSearchResultDTO {
+    page: number
+    total_pages: number
+    total_results: number
+    results: MovieDTO[]
+}
+
+export interface MovieDTO {
     adult: boolean
     backdrop_path: string
     genre_ids: number[]

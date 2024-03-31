@@ -9,7 +9,9 @@ const URL_SEARCH = 'search/movie'
 export const getMovieSearch = async (
     params: MovieSearchParams
 ): Promise<MovieSearchResultDTO> => {
-    return httpClient.get(URL_SEARCH, {
+    const { data } = await httpClient.get(URL_SEARCH, {
         params,
     })
+
+    return data
 }

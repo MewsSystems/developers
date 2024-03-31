@@ -4,6 +4,13 @@ export interface MovieSearch {
 }
 
 export interface MovieSearchResult {
+    page: number
+    total_pages: number
+    total_results: number
+    results: Movie[]
+}
+
+export interface Movie {
     adult: boolean
     backdrop_path: string
     genre_ids: number[]
