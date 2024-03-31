@@ -5,6 +5,7 @@ import { MainPage } from './main/main';
 import { MoviePage } from './movie/movie-page';
 import { GlobalStyle, AppWrapper } from './app.styled';
 import { GlobalFonts } from './common/fonts/typography.styled';
+import { NotFound } from './not-found/not-found';
 import './common/styles/reset.css';
 
 export const App = () => {
@@ -18,6 +19,7 @@ export const App = () => {
                     <Routes>
                         <Route path="/" Component={MainPage}/>
                         <Route path="/movie/:id" Component={MoviePage}/>
+                        <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </Router>
             </AppWrapper>
