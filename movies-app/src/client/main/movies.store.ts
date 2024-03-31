@@ -1,11 +1,11 @@
-import { combineLatest, debounceTime, delay, filter, map, merge, of, share, startWith, Subject, switchMap } from "rxjs";
-import { observable, runInAction, computed, makeObservable } from "mobx";
-import { injectable } from "inversify";
+import { combineLatest, debounceTime, delay, filter, map, merge, of, share, startWith, Subject, switchMap } from 'rxjs';
+import { observable, runInAction, computed, makeObservable } from 'mobx';
+import { injectable } from 'inversify';
 
-import { MoviesApi } from "~data/api/movies-api.store";
-import { Disposable } from "~data/disposable";
-import { Movie, MoviesPage } from "~data/types";
-import { logger } from "~data/logger/logger.store";
+import { MoviesApi } from '~data/api/movies-api.store';
+import { Disposable } from '~data/disposable';
+import { Movie, MoviesPage } from '~data/types';
+import { logger } from '~data/logger/logger.store';
 
 export const enum MovieSearchErrorType {
     BadInput,

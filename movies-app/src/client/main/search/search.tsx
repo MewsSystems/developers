@@ -1,9 +1,8 @@
 import React from 'react';
-import { observer } from "mobx-react";
-import { useInjection } from "inversify-react";
-import { MoviesStore } from "../movies.store";
+import { observer } from 'mobx-react';
+import { useInjection } from 'inversify-react';
+import { MoviesStore } from '../movies.store';
 import { SearchError, SearchInput, SearchWrapper, } from './search.styled';
-
 
 export const Search = observer(() => {
     const moviesStore = useInjection(MoviesStore);

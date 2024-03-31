@@ -1,5 +1,5 @@
-import { Subscription } from "rxjs";
-import { injectable } from "inversify";
+import { Subscription } from 'rxjs';
+import { injectable } from 'inversify';
 
 @injectable()
 export class Disposable {

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
-import { observer } from "mobx-react";
-import { useInjection } from "inversify-react";
-import { MoviesStore } from "../movies.store";
+import { observer } from 'mobx-react';
+import { useInjection } from 'inversify-react';
+import { MoviesStore } from '../movies.store';
 import { PageItem, Dots } from './pagination.styled';
 
 type PageProps = Readonly<{

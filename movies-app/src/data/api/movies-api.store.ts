@@ -1,13 +1,11 @@
-import {injectable} from 'inversify';
+import { injectable } from 'inversify';
 import {
     movieFromMovieResponse, moviePageFromMoviesResponse,
-    MovieResponse,
     movieResponseTypeguard,
-    MoviesResponse,
     moviesResponseTypeguard,
-} from "./types";
-import { from, map, Observable } from "rxjs";
-import { Movie, MoviesPage } from "../types";
+} from './types';
+import { from, map, Observable } from 'rxjs';
+import { Movie, MoviesPage } from '../types';
 
 const API_KEY = '03b8572954325680265531140190fd2a';
 const SEARCH_ENDPOINT = 'https://api.themoviedb.org/3/search/movie';
@@ -50,7 +48,7 @@ export class MoviesApi {
 
     private getData<T>(url: string, tepeguard: (value: unknown) => value is T): Promise<T> {
         // todo: dispose fetch in progress if not needed ?
-        return fetch(url, { headers: { Accept: 'application/json' }})
+        return fetch(url, {headers: {Accept: 'application/json'}})
             .then(response => response.json())
             .then(data => new Promise((resolve, reject) => {
                 tepeguard(data) ? resolve(data) : reject(new Error(`Data not passing typeguard: ${JSON.stringify(data)}`));

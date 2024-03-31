@@ -1,12 +1,12 @@
-import { injectable } from "inversify";
-import { map, of, Subject, switchMap, take } from "rxjs";
-import { makeObservable, observable, runInAction } from "mobx";
-import { Disposable } from "~data/disposable";
-import { MoviesApi } from "~data/api/movies-api.store";
-import type { Movie } from "~data/types";
-import { movieLikeTypeguard } from "~data/types";
-import { locationWithMovieStateTypeguard } from "./types";
-import { logger } from "~data/logger/logger.store";
+import { injectable } from 'inversify';
+import { map, of, Subject, switchMap, take } from 'rxjs';
+import { makeObservable, observable, runInAction } from 'mobx';
+import { Disposable } from '~data/disposable';
+import { MoviesApi } from '~data/api/movies-api.store';
+import type { Movie } from '~data/types';
+import { movieLikeTypeguard } from '~data/types';
+import { locationWithMovieStateTypeguard } from './types';
+import { logger } from '~data/logger/logger.store';
 
 @injectable()
 export class MovieStore extends Disposable {
@@ -52,7 +52,7 @@ export class MovieStore extends Disposable {
                     // If there is no location state, get movie from API
                     const movieStringId = window.location.href.match(/\/movie\/(\d+)/)?.[1];
                     const movieId = movieStringId ? parseInt(movieStringId) : undefined;
-                    if ( movieId === undefined || isNaN(movieId)) {
+                    if (movieId === undefined || isNaN(movieId)) {
                         throw new Error(`Movie id in url is invalid: ${movieStringId}`);
                     }
                     return this._moviesApi.getMovieInfo(movieId);

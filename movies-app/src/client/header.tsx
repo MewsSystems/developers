@@ -10,7 +10,7 @@ export const Header = () => {
     return (
         <HeaderWrapper onClick={goToHomePage}>
             <LogoWrapper>
-                <Logo />
+                <Logo/>
             </LogoWrapper>
             <h1>
                 MovieMantra

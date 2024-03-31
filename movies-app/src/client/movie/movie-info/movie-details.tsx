@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import {observer} from "mobx-react";
-import { Movie } from "~data/types";
-import { MovieDetailsWrapper, InfoTitle } from "./movie-details.styled";
+import { observer } from 'mobx-react';
+import { Movie } from '~data/types';
+import { MovieDetailsWrapper, InfoTitle } from './movie-details.styled';
 
 type MovieProps = Readonly<{ movie: Movie }>;
-export const MovieDetails = observer(({ movie }: MovieProps) => {
+export const MovieDetails = observer(({movie}: MovieProps) => {
     return (
         <MovieDetailsWrapper>
             {
@@ -27,8 +27,7 @@ export const MovieDetails = observer(({ movie }: MovieProps) => {
                 movie.voteAverage && (
                     <Fragment>
                         <InfoTitle>Rating</InfoTitle>
-                        <div>{movie.voteAverage}</div>
-                        {/*<div className="movie-page__vote-count">{movie.voteCount}</div>*/}
+                        <div>{movie.voteAverage} / 10</div>
                     </Fragment>
                 )
             }

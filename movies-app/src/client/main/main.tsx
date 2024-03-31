@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
-import { observer } from "mobx-react";
-import { useInjection } from "inversify-react";
-import { Search } from "./search/search";
-import { Pagination } from "./pagination/pagination";
-import { MoviesList } from "./movies-list/movies-list";
-import { LoadMore } from "./load-more/load-more";
-import { MoviesStore } from "./movies.store";
+import { observer } from 'mobx-react';
+import { useInjection } from 'inversify-react';
+import { Search } from './search/search';
+import { Pagination } from './pagination/pagination';
+import { MoviesList } from './movies-list/movies-list';
+import { LoadMore } from './load-more/load-more';
+import { MoviesStore } from './movies.store';
 import { MainWrapper, LoadMoreWrapper, MoviesListWrapper, PaginationWrapper, SearchWrapper } from './main.styled';
 
 export const MainPage = observer(() => {

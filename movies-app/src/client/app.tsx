@@ -10,7 +10,7 @@ import './common/styles/reset.css';
 export const App = () => {
     return (
         <>
-            <GlobalFonts />
+            <GlobalFonts/>
             <GlobalStyle/>
             <AppWrapper>
                 <Router>

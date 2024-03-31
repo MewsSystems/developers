@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useInjection } from "inversify-react";
-import { observer } from "mobx-react";
-import { MovieStore } from "./movie.store";
+import { useInjection } from 'inversify-react';
+import { observer } from 'mobx-react';
+import { MovieStore } from './movie.store';
 import posterNotAvailable from '../common/images/not_available.jpg'
-import { MovieDetails } from "./movie-info/movie-details";
+import { MovieDetails } from './movie-info/movie-details';
 import {
     MoviePageWrapper,
     MovieOverview,

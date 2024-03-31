@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { observer } from "mobx-react";
-import { useInjection } from "inversify-react";
-import { MoviesStore } from "../movies.store";
-import { Page } from "./page";
+import { observer } from 'mobx-react';
+import { useInjection } from 'inversify-react';
+import { MoviesStore } from '../movies.store';
+import { Page } from './page';
 import { PaginationWrapper, PaginationPagesWrapper, PageItem } from './pagination.styled';
 
 export const Pagination = observer(() => {
