@@ -1,14 +1,15 @@
 import { useState } from 'react'
-
 interface SearchProps {
+    query: string
     onSearch: (query: string) => void
 }
 
-export default function Search({ onSearch }: SearchProps) {
-    const [searchQuery, setSearchQuery] = useState('')
-    const onChange = (value: string) => {
-        setSearchQuery(value)
-        onSearch(value)
+export default function Search({ query, onSearch }: SearchProps) {
+    const [value, setValue] = useState(query)
+
+    const onChange = (query: string) => {
+        setValue(query)
+        onSearch(query)
     }
 
     return (
@@ -17,7 +18,7 @@ export default function Search({ onSearch }: SearchProps) {
                 <input
                     type="text"
                     placeholder="Type to search a movie"
-                    value={searchQuery}
+                    value={value}
                     onChange={(e) => onChange(e.target.value)}
                 />
             </div>
