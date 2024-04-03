@@ -26,3 +26,28 @@ export interface Movie {
     vote_average: number
     vote_count: number
 }
+
+export interface MovieInformationGenre {
+    id: number
+    name: string
+}
+
+export interface MovieInformationProductionCompany {
+    id: number
+    logo_path: string
+    name: string
+    origin_country: string
+}
+
+export interface MovieInformationProductionCountry {
+    iso_3166_1: string
+    name: string
+}
+
+export interface MovieInformationSpokenLanguage {
+    english_name: string
+    iso_639_1: string
+    name: string
+}
+
+export interface MovieInformation {}
