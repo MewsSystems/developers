@@ -1,0 +1,48 @@
+:root {
+  /* Font settings */
+  font-family: Roboto, regular;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Color settings */
+  color-scheme: dark;
+  background-color: #242424;
+  --off-white: #ffffffe8;
+
+  /* Font optimizations */
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Search container */
+  --search-container-width: 50rem;
+  --search-container-height: 30rem;
+
+  --search-container-bar-height: 7.5rem;
+
+  /* Images & placeholders */
+  --img-thumbnail-width: 18rem;
+  --img-thumbnail-height: 10.13rem;
+  --img-placeholder-color: rgb(44, 44, 44);
+
+  /* Movie detail modal */
+  --modal-width: 50rem;
+  --modal-height: 30rem;
+
+  /* z-index setting */
+  --z-background: -100;
+  --z-placeholder: -10;
+  --z-filter: 1;
+  --z-overlay: 10;
+  --z-modal: 100;
+}
+
+/* Font by: https://indieground.net/product/road-rage-font/ */
+@font-face {
+  font-family: "Road Rage";
+  src: url("./fonts/RoadRage.woff2") format("woff2"),
+    url("./fonts/RoadRage.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

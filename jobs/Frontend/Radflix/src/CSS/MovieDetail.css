@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+}
+
+.modal {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow: hidden;
+
+  width: var(--modal-width);
+  height: var(--modal-height);
+  margin-left: calc(var(--modal-width) / (-2));
+  margin-top: calc(var(--modal-height) / (-2));
+
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-modal);
+
+  background-color: #272727;
+  -webkit-box-shadow: 0px 0rem 20px 0px rgb(0 0 0);
+  -moz-box-shadow: 0px 0rem 20px 0px rgb(0 0 0);
+  box-shadow: 0px 0rem 20px 0px rgb(0 0 0);
+
+  animation: fade-in 0.2s;
+}
+
+.modal-backdrop {
+  position: fixed;
+
+  height: 100%;
+  width: 100%;
+  z-index: var(--z-overlay);
+
+  background-color: #000000c9;
+  animation: fade-in 0.2s;
+}
+
+.modal-poster {
+  position: absolute;
+  height: var(--modal-height);
+  aspect-ratio: auto;
+}
+
+.poster-placeholder {
+  width: calc(var(--modal-width) * .40);
+  height: var(--modal-height);
+  background-color: var(--img-placeholder-color);
+  z-index: var(--z-placeholder);
+}
+
+.modal-info {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: calc(var(--modal-width) * .60);
+}
+
+.modal-info-small {
+  margin: 1rem 0;
+}
+
+.modal-info div:nth-of-type(2) {
+  padding-left: 2rem;
+}
+
+.modal-overview {
+  padding: 1rem 0 0 0;
+  height: 20rem;
+  overflow-y: scroll;
+}
+
+h1 {
+  color: var(--off-white);
+  margin: 0;
+  padding: 0 1rem;
+  width: -webkit-fill-available;
+  white-space: break-spaces;
+  text-align: start;
+}
+
+.flag {
+  padding-left: 0.5rem;
+}
+
+span {
+  display: flex;
+  white-space: break-spaces;
+  padding: 0 1rem;
+}
+
+span p {
+  margin: 0 0.5rem;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
