@@ -13,9 +13,5 @@ export default function MovieList({ movies }: MovieListProps) {
         </div>
     ))
 
-    return (
-        <>
-            <div>{listItems}</div>
-        </>
-    )
+    return <>{listItems}</>
 }

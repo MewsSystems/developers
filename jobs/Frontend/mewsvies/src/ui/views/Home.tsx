@@ -26,7 +26,7 @@ function Home() {
 
     const getContent = () => {
         if (hasError) {
-            return <div>Something went wrong...</div>
+            return <strong>Something went wrong...</strong>
         }
 
         // TODO add empty state
