@@ -26,7 +26,7 @@ export const mapSearchMovieToParams = (
     page: `${data.page}`,
 })
 
-const mapMovieFromDTO = (data: MovieDTO): Movie => ({
+export const mapMovieFromDTO = (data: MovieDTO): Movie => ({
     adult: data.adult,
     backdrop_path: data.backdrop_path,
     genre_ids: data.genre_ids,
