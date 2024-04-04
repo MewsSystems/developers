@@ -1,5 +1,5 @@
 import { Movie } from '../../domain/interfaces/movie.interface.ts'
-import { MovieItem } from './MovieItem.tsx'
+import MovieItem from './MovieItem.tsx'
 
 interface MovieListProps {
     movies: Movie[]

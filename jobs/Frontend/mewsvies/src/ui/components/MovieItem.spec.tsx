@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react'
-import { MovieItem } from './MovieItem.tsx'
+import MovieItem from './MovieItem.tsx'
 import { Movie } from '../../domain/interfaces/movie.interface.ts'
 
 const mockedUsedNavigate = jest.fn()
@@ -34,6 +34,6 @@ describe('MovieItem', () => {
         expect(movieTitle).toBeTruthy()
 
         fireEvent.click(movieTitle)
-        expect(mockedUsedNavigate).toHaveBeenCalled()
+        expect(mockedUsedNavigate).toHaveBeenCalledWith('/movie/1')
     })
 })

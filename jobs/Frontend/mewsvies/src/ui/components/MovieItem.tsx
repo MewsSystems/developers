@@ -7,7 +7,7 @@ interface MovieItemProps {
     movie: Movie
 }
 
-export function MovieItem({ movie }: MovieItemProps) {
+export default function MovieItem({ movie }: MovieItemProps) {
     const navigate = useNavigate()
 
     const posterPath = getImageURL(movie.poster_path)
