@@ -44,6 +44,10 @@ function Home() {
         setSearchParams({ query, page: `${page}` })
     }
 
+    /*
+     * useEffect to fetch the movie list when the query or page changes
+     * The list is also fetched when you land on the page and there are some query params
+     */
     useEffect(() => {
         setQueryParams()
         searchMovie()
