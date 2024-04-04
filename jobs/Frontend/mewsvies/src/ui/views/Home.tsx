@@ -24,6 +24,13 @@ function Home() {
 
     const showPagination: boolean = searchResult?.total_pages > 1 || false
 
+    const onSearch = (query: string) => {
+        if (hasError) {
+            setHasError(false)
+        }
+        setQuery(query)
+    }
+
     const getContent = () => {
         if (hasError) {
             return <strong>Something went wrong...</strong>
@@ -34,44 +41,36 @@ function Home() {
         return <MovieList movies={searchResult.results} />
     }
 
-    const searchMovie = async () => {
-        if (!query) {
-            return
-        }
-
-        if (hasError) {
-            setHasError(false)
-        }
-
-        try {
-            setIsLoading(true)
-            const list = await getMovieSearch({ query, page })
-            setSearchResult(list)
-        } catch (error) {
-            setHasError(true)
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    const setQueryParams = () => {
-        setSearchParams({ query, page: `${page}` })
-    }
-
     /*
      * useEffect to fetch the movie list when the query or page changes
      * The list is also fetched when you land on the page and there are some query params
      * (Not the best way as you have to refetch the all list when you came back from the movie detail page)
      */
     useEffect(() => {
-        setQueryParams()
+        const searchMovie = async () => {
+            if (!query) {
+                return
+            }
+
+            try {
+                setIsLoading(true)
+                const list = await getMovieSearch({ query, page })
+                setSearchResult(list)
+            } catch (error) {
+                setHasError(true)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        setSearchParams({ query, page: `${page}` })
         searchMovie()
-    }, [query, page])
+    }, [query, page, setSearchParams])
 
     return (
         <>
             {isLoading && <Loading />}
-            <Search query={query} onSearch={debounce(setQuery, 500)} />
+            <Search query={query} onSearch={debounce(onSearch, 500)} />
             {getContent()}
             {showPagination && (
                 <Pagination
