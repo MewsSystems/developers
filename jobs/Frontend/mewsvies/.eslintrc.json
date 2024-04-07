@@ -1,0 +1,29 @@
+{
+    "env": {
+        "node": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "prettier",
+        "react-app"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "project": "./tsconfig.json",
+        "parser": "@typescript-eslint/parser"
+    },
+    "plugins": [
+        "prettier"
+    ],
+    "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "prettier/prettier": "error"
+    },
+    "ignorePatterns": [
+        "/dist/*",
+        "/extension/*",
+        "/node_modules/*"
+    ]
+}
