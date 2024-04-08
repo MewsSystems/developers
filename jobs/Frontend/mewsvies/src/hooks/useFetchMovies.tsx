@@ -26,9 +26,6 @@ export const useFetchMovies = (url: string) => {
     return useQuery<MovieResult>(["movieList", memoizedUrl], fetchData, {
         onSuccess: (data) => {
             queryClient.setQueryData(["movieList"], data);
-
-            // ! TODO: remove this before production
-            console.log("Data set in queryClient:", data);
         },
         onError: (error) => {
             console.error("Error fetching movies:", error);

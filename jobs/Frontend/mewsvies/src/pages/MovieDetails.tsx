@@ -36,9 +36,6 @@ export const MovieDetails = () => {
     const currentMovies = queryClient.getQueryData<MovieResult>("movieList");
     const navigate = useNavigate();
 
-    // ! TODO: remove this before production
-    console.log("MovieDetails =>  currentMovies: ", currentMovies);
-
     if (!currentMovies) return <p>Doing another request - Loading movie details...</p>;
 
     const movie = currentMovies.results?.find((movie: Movie) => movie.id.toString() === id);

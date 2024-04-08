@@ -41,9 +41,6 @@ export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
 
     const { data, isLoading, isError } = useFetchMovies(handleURL(term, page));
 
-    // TODO: remove this before production
-    console.log("MovieGrid =>  term: ", term, "data: ", data);
-
     return (
         <MainContainer className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-80vh items-center">
             {isLoading && <Loading />}
