@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MovieDetails } from "./MovieDetails";
+import { MovieDetails } from ".././MovieDetails";
 
 const queryClient = new QueryClient();
 

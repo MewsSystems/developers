@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { useQueryClient } from "react-query";
 
@@ -7,12 +6,19 @@ import { Pagination } from "./Pagination";
 import { Movie, MovieGridProps } from "../interfaces";
 import { handleURL } from "../utils/handleUrl";
 import { useFetchMovies } from "../hooks/useFetchMovies";
+import { Loading } from "./Loading";
 
-const MovieGridContainer = styled.div`
+const MainContainer = styled.main`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+`;
+const MovieGridContainer = styled.section`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 20px;
     padding: 20px;
+    width: 100%;
 `;
 
 export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
@@ -29,44 +35,38 @@ export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
     console.log("MovieGrid =>  term: ", term, "data: ", data);
 
     return (
-        <main>
-            {!isLoading && data && data.total_pages && (
-                <Pagination
-                    page={page}
-                    total_pages={data.total_pages}
-                    onPreviousPage={() => handlePageChange(page - 1)}
-                    onNextPage={() => handlePageChange(page + 1)}
-                />
-            )}
-            {isLoading ? (
-                <p>Loading movies ...</p>
-            ) : isError ? (
-                <p>Error: Unable to fetch data</p>
-            ) : term.trim().length === 0 ? (
+        <MainContainer className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-80vh items-center">
+            {isLoading && <Loading />}
+            {isError && <p>Error: Unable to fetch data</p>}
+            {data && (
                 <>
-                    <h2>Showing Top Popular Movies</h2>
-                    <MovieGridContainer>
-                        {data &&
-                            data.results.map((item: Movie) => (
-                                <MovieItem key={item.id} movie={item} />
-                            ))}
-                    </MovieGridContainer>
-                </>
-            ) : data && data.results.length === 0 ? (
-                <>
-                    <h2>No results found for: {term}</h2>
-                </>
-            ) : (
-                <>
-                    <h2>Showing results for: {term}</h2>
-                    <MovieGridContainer>
-                        {data &&
-                            data.results.map((item: Movie) => (
-                                <MovieItem key={item.id} movie={item} />
-                            ))}
-                    </MovieGridContainer>
+                    {term.trim().length === 0 ? (
+                        <h2 className="text-2xl font-bold my-8">Showing Top Popular Movies</h2>
+                    ) : (
+                        <h2 className="text-2xl font-bold my-8">Showing results for: {term}</h2>
+                    )}
+                    {data.results.length === 0 ? (
+                        <h2 className="text-1xl font-bold my-8">
+                            No results found for:
+                            <span className="text-gray-700">{term}</span>
+                        </h2>
+                    ) : (
+                        <>
+                            <Pagination
+                                page={page}
+                                total_pages={data.total_pages}
+                                onPreviousPage={() => handlePageChange(page - 1)}
+                                onNextPage={() => handlePageChange(page + 1)}
+                            />
+                            <MovieGridContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                                {data.results.map((item: Movie) => (
+                                    <MovieItem key={item.id} movie={item} />
+                                ))}
+                            </MovieGridContainer>
+                        </>
+                    )}
                 </>
             )}
-        </main>
+        </MainContainer>
     );
 };

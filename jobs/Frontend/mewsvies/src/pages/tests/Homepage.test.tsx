@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Homepage } from "./Homepage";
+import { Homepage } from ".././Homepage";
 
 const queryClient = new QueryClient();
 
@@ -15,7 +15,7 @@ describe("Homepage", () => {
         render(<MockHomepage />);
 
         expect(screen.getByRole("heading", { name: /Mewsvies/i })).toBeInTheDocument();
-        expect(screen.getByRole("navigation")).toBeInTheDocument();
+        expect(screen.getByRole("search")).toBeInTheDocument();
         expect(screen.getByRole("contentinfo")).toBeInTheDocument();
         expect(screen.getByText("David Portilla")).toBeInTheDocument();
     });

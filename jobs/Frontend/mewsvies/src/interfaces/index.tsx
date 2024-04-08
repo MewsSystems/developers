@@ -32,4 +32,3 @@ export interface Movie {
     poster_path: string;
     vote_average: string;
 }
-

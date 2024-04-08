@@ -1,5 +1,6 @@
 import { useQueryClient } from "react-query";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { MovieResult, Movie } from "../interfaces";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
@@ -33,19 +34,46 @@ export const MovieDetails = () => {
         navigate(-1);
     };
 
+    const StyledLink = styled(Link)`
+        color: #3182ce;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border: 1px solid #3182ce;
+        border-radius: 0.25rem;
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: #3182ce;
+            color: white;
+        }
+    `;
+
     return (
         <>
             <Header />
-            <main>
-                <Link to="#" onClick={handleGoBack}>
+            <main className="flex flex-col py-4">
+                <StyledLink to="#" onClick={handleGoBack} className="mt-4 max-w-4xl mx-auto">
                     Go back
-                </Link>
-                <h1>{title}</h1>
-                <p>{overview}</p>
-                <p>Release Date: {releaseDate}</p>
-                <p>Original Language: {language}</p>
-                <p>Vote Average: {vote}</p>
-                <img src={`${IMAGE_PATH}/${image}.jpg`} alt={title} />
+                </StyledLink>
+
+                <article className="bg-white p-6 max-w-4xl mx-auto">
+                    <div className="flex flex-col sm:flex-row">
+                        <img
+                            src={`${IMAGE_PATH}/${image}.jpg`}
+                            alt={title}
+                            className="mr-8 rounded-lg"
+                        />
+                        <div className="text-left">
+                            <h2 className="text-4xl text-gray-700 my-6 leading-8 font-semibold">
+                                {title}
+                            </h2>
+                            <p className="text-lg mb-2">{overview}</p>
+                            <p className="text-md">Release Date: {releaseDate}</p>
+                            <p className="text-md">Original Language: {language}</p>
+                            <p className="text-md">Vote Average: {vote}</p>
+                        </div>
+                    </div>
+                </article>
             </main>
             <Footer />
         </>
