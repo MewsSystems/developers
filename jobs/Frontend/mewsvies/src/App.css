@@ -1,38 +1,49 @@
+:root {
+  --btn-primary: #ff5a65;
+  --btn-secondary: #ff5a6580;
+  --black:#1c1d24;
+  --text: #494951;
+  --text-light: #8d8d92;
+  --deep-blue: #172135;
+  --ligth-blue: #edf4fe;
+  --footer:#1c1d24;
+  --sand: #f8f5f2;
+  --white: #fff;
+}
+
+@font-face {
+  font-family: 'Axiforma';
+  src: local('Axiforma'), local('Axiforma'),
+      url('./assets/axiforma/Axiforma-Regular.woff2') format('woff2'),
+      url('./assets/axiforma/Axiforma-Regular.woff') format('woff'),
+      url('./assets/axiforma/Axiforma-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Axiforma-Bold';
+  src: local('Axiforma'), local('Axiforma'),
+      url('./assets/axiforma/Axiforma-Bold.woff2') format('woff2'),
+      url('./assets/axiforma/Axiforma-Bold.woff') format('woff'),
+      url('./assets/axiforma/Axiforma-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Axiforma-Light';
+  src: local('Axiforma'), local('Axiforma'),
+      url('./assets/axiforma/Axiforma-Light.woff2') format('woff2'),
+      url('./assets/axiforma/Axiforma-Light.woff') format('woff'),
+      url('./assets/axiforma/Axiforma-Light.ttf') format('truetype');
+}
+
+html, body{
+  font-family: "Axiforma", sans-serif;
+  font-style: normal;
+  color: var(--text);
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  min-height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

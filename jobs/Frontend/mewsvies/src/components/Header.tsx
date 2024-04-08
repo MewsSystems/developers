@@ -1,12 +1,49 @@
+import styled from "styled-components";
+import mewsLogo from "../assets/mews-logo.svg";
+
+const HeaderContainer = styled.header`
+    background-color: var(--deep-blue);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+const Logo = styled.img`
+    width: 120px;
+    height: 15px;
+`;
+
+const LogoLink = styled.a`
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+`;
+
+const LogoText = styled.h2`
+    font-family: "Axiforma-Light", sans-serif;
+
+    span {
+        font-family: "Axiforma-Bold", sans-serif;
+    }
+`;
+
 export const Header = () => {
     return (
-        <header className="bg-gray-800 text-white py-4 top-0 left-0 w-full z-10">
-            <div className="container mx-auto px-4 flex flex-col items-center">
-                <h1 className="text-2xl sm:text-3xl font-bold">Mewsvies</h1>
-                <h2 className="text-sm sm:text-base mt-1">
-                    movies app from <span className="font-bold">themoviedb API</span>
-                </h2>
-            </div>
-        </header>
+        <HeaderContainer className="bg-gray-800 text-white py-4 w-full">
+            <LogoLink href="/">
+                <Logo
+                    className="image h-full w-full object-contain"
+                    src={mewsLogo}
+                    alt="Mews Logo"
+                />
+                <em>vies</em>
+            </LogoLink>
+            <LogoText className="text-xs xs:text-base mt-1">
+                movies app from <span className="font-bold">themoviedb API</span>
+            </LogoText>
+        </HeaderContainer>
     );
 };

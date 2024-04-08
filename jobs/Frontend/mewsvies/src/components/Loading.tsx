@@ -12,7 +12,6 @@ const jump = keyframes`
 
 const Loader = styled.div`
     width: 100%;
-    position: relative;
 
     .loading {
         opacity: 0;
@@ -31,11 +30,11 @@ const Loader = styled.div`
     }
 
     .ball {
-        background-color: #777;
+        background-color: var(--btn-primary);
         border-radius: 50%;
-        margin: 5px;
-        height: 10px;
-        width: 10px;
+        margin: 0 5px;
+        height: 8px;
+        width: 8px;
         animation: ${jump} 0.5s ease-in infinite;
     }
 
@@ -50,9 +49,9 @@ const Loader = styled.div`
 
 export const Loading = () => {
     return (
-        <Loader className="py-80 flex flex-col">
-            <p className="mt-1 text-sm text-gray-700"> Loading movies ...</p>
-            <div className="loading show mt-10">
+        <Loader>
+            <div className="loading show">
+                <p className="mt-4 text-sm text-gray-700 absolute"> Loading movies </p>
                 <div className="ball"></div>
                 <div className="ball"></div>
                 <div className="ball"></div>

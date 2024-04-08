@@ -7,6 +7,29 @@ import { Footer } from "../components/Footer";
 
 const IMAGE_PATH = process.env.REACT_APP_IMAGE_POSTER;
 
+const StyledLink = styled(Link)`
+    background-color: var(--btn-primary);
+    border: 1px solid var(--btn-primary);
+    border-radius: 15px;
+    color: var(--white);
+    font-family: "Axiforma-Regular", sans-serif;
+    font-size: 0.875rem;
+    padding: 0.5rem 2rem;
+    transition: all 0.25s ease-in;
+
+    &:hover {
+        color: var(--btn-primary);
+        background-color: var(--white);
+        border-color: var(--btn-primary-hover);
+        transition: all 0.25s ease-in;
+    }
+`;
+
+const MovieTitle = styled.h2`
+    color: var(--btn-primary);
+    font-family: "Axiforma-Regular", sans-serif;
+`;
+
 export const MovieDetails = () => {
     const { id } = useParams<{ id: string }>();
     const queryClient = useQueryClient();
@@ -34,39 +57,25 @@ export const MovieDetails = () => {
         navigate(-1);
     };
 
-    const StyledLink = styled(Link)`
-        color: #3182ce;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border: 1px solid #3182ce;
-        border-radius: 0.25rem;
-        transition: all 0.3s;
-
-        &:hover {
-            background-color: #3182ce;
-            color: white;
-        }
-    `;
-
     return (
         <>
             <Header />
-            <main className="flex flex-col py-4">
+            <main className="flex flex-col py-4 flex-1">
                 <StyledLink to="#" onClick={handleGoBack} className="mt-4 max-w-4xl mx-auto">
                     Go back
                 </StyledLink>
 
                 <article className="bg-white p-6 max-w-4xl mx-auto">
                     <div className="flex flex-col sm:flex-row">
-                        <img
-                            src={`${IMAGE_PATH}/${image}.jpg`}
-                            alt={title}
-                            className="mr-8 rounded-lg"
-                        />
+                        {image ? (
+                            <img
+                                src={`${IMAGE_PATH}/${image}`}
+                                alt={title}
+                                className="sm:mr-8 rounded-lg"
+                            />
+                        ) : null}
                         <div className="text-left">
-                            <h2 className="text-4xl text-gray-700 my-6 leading-8 font-semibold">
-                                {title}
-                            </h2>
+                            <MovieTitle className="text-4xl my-6">{title}</MovieTitle>
                             <p className="text-lg mb-2">{overview}</p>
                             <p className="text-md">Release Date: {releaseDate}</p>
                             <p className="text-md">Original Language: {language}</p>

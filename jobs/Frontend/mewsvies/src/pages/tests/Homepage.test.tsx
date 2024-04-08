@@ -14,7 +14,7 @@ describe("Homepage", () => {
     test("renders Homepage with SearchForm, MovieGrid, Header, and Footer", () => {
         render(<MockHomepage />);
 
-        expect(screen.getByRole("heading", { name: /Mewsvies/i })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: /movies app/i })).toBeInTheDocument();
         expect(screen.getByRole("search")).toBeInTheDocument();
         expect(screen.getByRole("contentinfo")).toBeInTheDocument();
         expect(screen.getByText("David Portilla")).toBeInTheDocument();

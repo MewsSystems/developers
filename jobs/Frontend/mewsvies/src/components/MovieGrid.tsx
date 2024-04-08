@@ -12,6 +12,7 @@ const MainContainer = styled.main`
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    width: 100%;
 `;
 const MovieGridContainer = styled.section`
     display: grid;
@@ -19,6 +20,15 @@ const MovieGridContainer = styled.section`
     grid-gap: 20px;
     padding: 20px;
     width: 100%;
+`;
+
+const MovieGridTitle = styled.h2`
+    font-family: "Axiforma-Light", sans-serif;
+
+    span {
+        font-family: "Axiforma-Bold", sans-serif;
+        text-transform: capitalize;
+    }
 `;
 
 export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
@@ -41,15 +51,19 @@ export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
             {data && (
                 <>
                     {term.trim().length === 0 ? (
-                        <h2 className="text-2xl font-bold my-8">Showing Top Popular Movies</h2>
+                        <MovieGridTitle className="text-2xl font-bold my-8">
+                            Showing Top Popular Movies
+                        </MovieGridTitle>
                     ) : (
-                        <h2 className="text-2xl font-bold my-8">Showing results for: {term}</h2>
+                        <MovieGridTitle className="text-2xl font-bold my-8">
+                            Showing results for: <span className="text-gray-700">{term}</span>
+                        </MovieGridTitle>
                     )}
                     {data.results.length === 0 ? (
-                        <h2 className="text-1xl font-bold my-8">
+                        <MovieGridTitle className="text-1xl font-bold my-8">
                             No results found for:
                             <span className="text-gray-700">{term}</span>
-                        </h2>
+                        </MovieGridTitle>
                     ) : (
                         <>
                             <Pagination
@@ -63,6 +77,12 @@ export const MovieGrid = ({ term, page, setPage }: MovieGridProps) => {
                                     <MovieItem key={item.id} movie={item} />
                                 ))}
                             </MovieGridContainer>
+                            <Pagination
+                                page={page}
+                                total_pages={data.total_pages}
+                                onPreviousPage={() => handlePageChange(page - 1)}
+                                onNextPage={() => handlePageChange(page + 1)}
+                            />
                         </>
                     )}
                 </>

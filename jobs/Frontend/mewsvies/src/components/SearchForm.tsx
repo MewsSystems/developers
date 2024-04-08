@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { SearchFormProps } from "../interfaces";
+
+const SectionContainer = styled.section`
+    background-color: var(--sand);
+
+    input {
+        font-family: "Axiforma-Light", sans-serif;
+        min-width: 300px;
+    }
+`;
 
 export const SearchForm = ({ handleSearch, term }: SearchFormProps) => {
     const [inputValue, setInputValue] = useState("");
@@ -23,7 +33,7 @@ export const SearchForm = ({ handleSearch, term }: SearchFormProps) => {
     }, [term]);
 
     return (
-        <section className="flex flex-col items-center mt-8" role="search">
+        <SectionContainer className="flex flex-col items-center py-8" role="search">
             <form
                 onSubmit={handleSubmit}
                 className="flex justify-center items-center"
@@ -38,8 +48,8 @@ export const SearchForm = ({ handleSearch, term }: SearchFormProps) => {
                 />
             </form>
             {inputValue.trim().length === 0 ? (
-                <p className="mt-2 text-sm text-gray-500">Please write a search term.</p>
+                <p className="mt-2 text-xs text-gray-500">Please write a search term.</p>
             ) : null}
-        </section>
+        </SectionContainer>
     );
 };

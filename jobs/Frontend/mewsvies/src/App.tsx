@@ -20,7 +20,7 @@ function App() {
                     </Routes>
                 </Router>
                 {/* React Query Devtools for debugging */}
-                <ReactQueryDevtools initialIsOpen={true} />
+                <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
         </div>
     );
