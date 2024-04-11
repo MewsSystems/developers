@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Services.Domain
 {
     public class Currency
     {
@@ -15,6 +15,11 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public static implicit operator Currency(string code)
+        {
+            return new Currency(code);
         }
     }
 }
