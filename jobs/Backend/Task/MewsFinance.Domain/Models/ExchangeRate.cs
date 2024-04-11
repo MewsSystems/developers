@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace MewsFinance.Domain.Models
 {
     public class ExchangeRate
     {
@@ -14,10 +14,5 @@
         public Currency TargetCurrency { get; }
 
         public decimal Value { get; }
-
-        public override string ToString()
-        {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
-        }
     }
 }
