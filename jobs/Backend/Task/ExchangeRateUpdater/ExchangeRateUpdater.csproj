@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MewsFinance.Application\MewsFinance.Application.csproj" />
+    <ProjectReference Include="..\MewsFinance.Infrastructure\MewsFinance.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

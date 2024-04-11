@@ -24,7 +24,7 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
         }
 
         [Fact]
-        public void When_Requesting_Exchange_Rates_For_Currencies_Then_Return_Available_Exchange_Rates()
+        public async Task When_Requesting_Exchange_Rates_For_Currencies_Then_Return_Available_Exchange_Rates()
         {
             // Arrange
             var currencyCodes = new string[] { "USD", "EUR" };
@@ -33,12 +33,12 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
             var exchangeRateRequest = new ExchangeRateRequest { CurrencyCodes = currencyCodes };
 
             _financialClientMock.Setup(client => client.GetExchangeRates(It.IsAny<DateTime>()))
-                                .Returns(exchangeRates);
+                                .ReturnsAsync(exchangeRates);
             _mapperMock.Setup(m => m.Map<IEnumerable<ExchangeRateResponse>>(exchangeRates))
                        .Returns(expectedExchangeRates);
 
             // Act
-            var result = _sut.GetExchangeRates(exchangeRateRequest);
+            var result = await _sut.GetExchangeRates(exchangeRateRequest);
 
             // Assert
             result.Should().NotBeNull();

@@ -15,11 +15,11 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
             _mapper = mapper;
         }
 
-        public IEnumerable<ExchangeRateResponse> GetExchangeRates(ExchangeRateRequest exchangeRateRequest)
+        public async Task<IEnumerable<ExchangeRateResponse>> GetExchangeRates(ExchangeRateRequest exchangeRateRequest)
         {
             var currencyCodes = exchangeRateRequest.CurrencyCodes;
 
-            var exchangeRates = _financialClient.GetExchangeRates(DateTime.UtcNow);
+            var exchangeRates = await _financialClient.GetExchangeRates(DateTime.UtcNow);
 
             var exchangeRateResponse = _mapper.Map<IEnumerable<ExchangeRateResponse>>(exchangeRates);
 

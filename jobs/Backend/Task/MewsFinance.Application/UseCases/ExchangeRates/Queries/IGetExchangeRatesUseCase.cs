@@ -4,6 +4,6 @@ namespace MewsFinance.Application.Interfaces
 {
     public interface IGetExchangeRatesUseCase
     {
-        IEnumerable<ExchangeRateResponse> GetExchangeRates(ExchangeRateRequest exchangeRateRequest);
+        Task<IEnumerable<ExchangeRateResponse>> GetExchangeRates(ExchangeRateRequest exchangeRateRequest);
     }
 }
