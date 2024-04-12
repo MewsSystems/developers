@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater
 {
-    public class Currency
+    public record Currency
     {
         public Currency(string code)
         {
