@@ -1,0 +1,1 @@
+export { getMovieSearchList } from './services'
