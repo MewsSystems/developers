@@ -9,7 +9,7 @@ export const AppRouting = () => {
                 element={<HomePage />}
             />
             <Route
-                path='/visit-detail/:visitId'
+                path='/movie/:id'
                 element={<MovieDetailPage />}
             />
         </Routes>

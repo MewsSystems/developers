@@ -5,7 +5,7 @@ const rootElement = document.getElementById('root')
 export const muiTheme = createTheme({
     typography: {
         fontSize: 16,
-        fontFamily: ['Noto Sans', 'sans-serif'].join(','),
+        fontFamily: ['Kanit', 'sans-serif'].join(','),
         allVariants: {
             color: '#333',
         },
@@ -13,7 +13,12 @@ export const muiTheme = createTheme({
     shape: {
         borderRadius: 6,
     },
-    palette: {},
+    palette: {
+        primary: {
+            main: '#AADBE7',
+            contrastText: '#525B69',
+        },
+    },
     components: {
         MuiPopover: {
             defaultProps: {

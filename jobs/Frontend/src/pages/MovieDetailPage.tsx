@@ -1,3 +1,6 @@
+import { useParams } from 'react-router-dom'
+
 export const MovieDetailPage = () => {
-    return <div>MovieDetailPage</div>
+    const { id } = useParams()
+    return <div>MovieDetailPage - {id}</div>
 }

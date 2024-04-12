@@ -9,3 +9,8 @@ export interface ApiConfig {
     apiKey?: string
     headerConfig: HeaderConfig
 }
+
+export interface CollectionResponse<T> {
+    page: number
+    results: T[]
+}
