@@ -57,3 +57,13 @@ for every 1 usd we get 23.354 czk
 This is saying 
 - for every 1 AUD we get 15.465 CZK 
 - for every 100 TRY we get 72.398 CZK
+
+## Out of scope
+Thoughts on things that didn't have time for.
+
+- CNB updates rates daily so should cache these
+- There is no validation on currency codes so if cnb returned a invalid one we would still use it
+- Proper error handling and retry logic
+- Proper application logging and metrics
+- Any Authentication and authorisation
+- Proper config management ie appsettings.json…
