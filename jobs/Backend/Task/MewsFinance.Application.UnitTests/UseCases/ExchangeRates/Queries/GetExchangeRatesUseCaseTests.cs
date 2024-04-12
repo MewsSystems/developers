@@ -31,16 +31,12 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
             var sourceCurrencyCodes = new string[] { "USD", "EUR", "JPY" };
             var providedCurrencyCodes = new string[] { "EUR", "JPY", "RUB", "TRY" };
             var expectedCurrencyCodesResult = new string[] { "EUR", "JPY" };
+            var isDataRetrievalSuccessful = true;
 
-            var providedExchangeRates = CreateExchangeRates(providedCurrencyCodes, TargetCurrency);
-            var expectedExchangeRatesResult = CreateExchangeRates(expectedCurrencyCodesResult, TargetCurrency);
-
-            var expectedExchangeRateResponses = ToExchangeRateResponses(expectedExchangeRatesResult);            
-
-            _financialClientMock.Setup(client => client.GetExchangeRates(It.IsAny<DateTime>()))
-                                .ReturnsAsync(providedExchangeRates);
-            _mapperMock.Setup(m => m.Map<IEnumerable<ExchangeRateResponse>>(It.IsAny< IEnumerable<ExchangeRate>>()))
-                       .Returns(expectedExchangeRateResponses);
+            var expectedExchangeRateResponses = SetupMocks(
+                providedCurrencyCodes, 
+                expectedCurrencyCodesResult,
+                isDataRetrievalSuccessful);
 
             var exchangeRateRequest = new ExchangeRateRequest { CurrencyCodes = sourceCurrencyCodes };
 
@@ -52,7 +48,33 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
             result.Should().BeEquivalentTo(expectedExchangeRateResponses);
         }
 
-        private static IEnumerable<ExchangeRate> CreateExchangeRates(string[] currencyCodes, string targetCurrency)
+        [Fact]
+        public async Task When_Error_Retrieving_Exchange_Rates_For_Currencies_Then_Return_No_Exchange_Rates()
+        {
+            // Arrange
+            var sourceCurrencyCodes = new string[] { "USD", "EUR", "JPY" };
+            var providedCurrencyCodes = new string[] { "EUR", "JPY", "RUB", "TRY" };
+            var expectedCurrencyCodesResult = Array.Empty<string>();
+            var isDataRetrievalSuccessful = false;
+
+            SetupMocks(
+                providedCurrencyCodes, 
+                expectedCurrencyCodesResult,
+                isDataRetrievalSuccessful);
+
+            var exchangeRateRequest = new ExchangeRateRequest { CurrencyCodes = sourceCurrencyCodes };
+
+            // Act
+            var result = await _sut.GetExchangeRates(exchangeRateRequest);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
+        }
+
+        private static IEnumerable<ExchangeRate> CreateExchangeRates(
+            IEnumerable<string> currencyCodes, 
+            string targetCurrency)
         {
             var exchangeRates = currencyCodes.Select(code => new ExchangeRate(
                 new Currency(code), new Currency(targetCurrency), 3));
@@ -60,11 +82,34 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
             return exchangeRates;
         }
 
-        private static IEnumerable<ExchangeRateResponse> ToExchangeRateResponses(IEnumerable<ExchangeRate> exchangeRates)
+        private static IEnumerable<ExchangeRateResponse> ToExchangeRateResponses(
+            IEnumerable<ExchangeRate> exchangeRates)
         {
             var responses = exchangeRates.Select(e => new ExchangeRateResponse(e.SourceCurrency, e.TargetCurrency, e.Value));
 
             return responses;
+        }
+
+        private IEnumerable<ExchangeRateResponse> SetupMocks(
+            IEnumerable<string> providedCurrencyCodes,
+            IEnumerable<string> expectedCurrencyCodesResult,
+            bool isDataRetrievalSuccessful)
+        {
+            var providedExchangeRates = CreateExchangeRates(providedCurrencyCodes, TargetCurrency);
+            var providedExchangeRateResponse = new Response<IEnumerable<ExchangeRate>>(
+                data: providedExchangeRates,
+                isSuccess: isDataRetrievalSuccessful,
+                message: string.Empty);
+            var expectedExchangeRatesResult = CreateExchangeRates(expectedCurrencyCodesResult, TargetCurrency);
+
+            var expectedExchangeRateResponses = ToExchangeRateResponses(expectedExchangeRatesResult);
+
+            _financialClientMock.Setup(client => client.GetExchangeRates(It.IsAny<DateTime>()))
+                                .ReturnsAsync(providedExchangeRateResponse);
+            _mapperMock.Setup(m => m.Map<IEnumerable<ExchangeRateResponse>>(It.IsAny<IEnumerable<ExchangeRate>>()))
+                       .Returns(expectedExchangeRateResponses);
+
+            return expectedExchangeRateResponses;
         }
     }
 }

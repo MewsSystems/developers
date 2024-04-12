@@ -23,7 +23,7 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
 
         public string TargetCurrencyCode => "CZK";
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(DateTime date)
+        public async Task<Response<IEnumerable<ExchangeRate>>> GetExchangeRates(DateTime date)
         {
             var dateStr = date.ToString(@"yyyy-MM-dd");
             string url = $"exrates/daily?date={dateStr}";
@@ -31,28 +31,49 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
             var response = await _httpClient.GetAsync(url);
             string content = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode
+                || string.IsNullOrWhiteSpace(content))
             {
-                throw new HttpRequestException(content, null, response.StatusCode);
-            }            
+                var message = response.ReasonPhrase ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(content))
-            {              
-                return Enumerable.Empty<ExchangeRate>();
-            }
+                return CreateEmptyDataResponse(response.IsSuccessStatusCode, message);                
+            }  
 
             var apiResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<CnbExchangeRateResponse>(content);
 
             if(apiResponse == null)
             {
-                return Enumerable.Empty<ExchangeRate>();
+                var message = string.Empty;
+
+                return CreateEmptyDataResponse(response.IsSuccessStatusCode, message);
             }
 
             var exchangeRates = _mapper.Map<IEnumerable<ExchangeRate>>(
                 apiResponse.Rates,
                 opt => opt.Items[MappingConstants.TargetCurrencyCode] = TargetCurrencyCode);
 
-            return exchangeRates;
+            return CreateDataResponse(
+                exchangeRates: exchangeRates, 
+                isSuccess: true, 
+                message: string.Empty);
+        }
+
+        private static Response<IEnumerable<ExchangeRate>> CreateEmptyDataResponse(
+            bool isSuccess, string message)
+        {
+            return new Response<IEnumerable<ExchangeRate>>(
+                    data: Enumerable.Empty<ExchangeRate>(),
+                    isSuccess: isSuccess,
+                    message: message);
+        }
+
+        private static Response<IEnumerable<ExchangeRate>> CreateDataResponse(
+            IEnumerable<ExchangeRate> exchangeRates, bool isSuccess, string message)
+        {
+            return new Response<IEnumerable<ExchangeRate>>(
+                    data: exchangeRates,
+                    isSuccess: isSuccess,
+                    message: message);
         }
     }
 }

@@ -20,7 +20,14 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
         {
             var sourceCurrencyCodes = exchangeRateRequest.CurrencyCodes;
 
-            var exchangeRates = await _financialClient.GetExchangeRates(DateTime.UtcNow);
+            var exchangeRateClientResponse = await _financialClient.GetExchangeRates(DateTime.UtcNow);
+
+            if (!exchangeRateClientResponse.IsSuccess)
+            {
+                return Enumerable.Empty<ExchangeRateResponse>();
+            }
+
+            var exchangeRates = exchangeRateClientResponse.Data;
 
             var filteredExchangeRates = exchangeRates.FilterBySourceCurrency(sourceCurrencyCodes);
 
