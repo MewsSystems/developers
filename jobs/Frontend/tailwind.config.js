@@ -5,7 +5,13 @@ export default {
         preflight: false,
     },
     theme: {
+        container: {
+            center: true,
+            padding: {
+                DEFAULT: '1.25rem',
+            },
+        },
         extend: {},
     },
-    plugins: [],
+    plugins: ['prettier-plugin-tailwindcss'],
 }
