@@ -23,8 +23,9 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            //currencies = currencies.ToList();
-            if (!currencies.Any())
+            var uniqueCurrencies = currencies.Distinct().ToList();
+            
+            if (uniqueCurrencies.Count == 0)
             {
                 return [];
             }
@@ -32,8 +33,8 @@ namespace ExchangeRateUpdater
             var rates = await _exchangeRatesRepository.GetExchangeRatesAsync();
             
             // generate a list of currency pairs to find rates for (USD, NZD), (USD,CZK) etc
-            var currencyPairs = currencies
-                .SelectMany(_ => currencies, (sourceCurrency, targetCurrency) => (sourceCurrency, targetCurrency))
+            var currencyPairs = uniqueCurrencies
+                .SelectMany(_ => uniqueCurrencies, (sourceCurrency, targetCurrency) => (sourceCurrency, targetCurrency))
                 .Where(pair => pair.sourceCurrency !=  pair.targetCurrency);
             
             // filter out any currency pair that does not have a exchange rate 
