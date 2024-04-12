@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MewsFinance.Application.Clients;
+using MewsFinance.Application.Extensions;
 using MewsFinance.Application.Interfaces;
 
 namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
@@ -17,11 +18,13 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
 
         public async Task<IEnumerable<ExchangeRateResponse>> GetExchangeRates(ExchangeRateRequest exchangeRateRequest)
         {
-            var currencyCodes = exchangeRateRequest.CurrencyCodes;
+            var sourceCurrencyCodes = exchangeRateRequest.CurrencyCodes;
 
             var exchangeRates = await _financialClient.GetExchangeRates(DateTime.UtcNow);
 
-            var exchangeRateResponse = _mapper.Map<IEnumerable<ExchangeRateResponse>>(exchangeRates);
+            var filteredExchangeRates = exchangeRates.FilterBySourceCurrency(sourceCurrencyCodes);
+
+            var exchangeRateResponse = _mapper.Map<IEnumerable<ExchangeRateResponse>>(filteredExchangeRates);
 
             return exchangeRateResponse;
         }

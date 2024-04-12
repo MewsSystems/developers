@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MewsFinance.Application.Clients;
 using MewsFinance.Domain.Models;
+using MewsFinance.Infrastructure.CnbFinancialClient.Mappings;
 using System.Net.Http.Headers;
 
 namespace MewsFinance.Infrastructure.CnbFinancialClient
@@ -19,6 +20,8 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
 
             _mapper = mapper;
         }
+
+        public string TargetCurrencyCode => "CZK";
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(DateTime date)
         {
@@ -45,7 +48,9 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
                 return Enumerable.Empty<ExchangeRate>();
             }
 
-            var exchangeRates = _mapper.Map<IEnumerable<ExchangeRate>>(apiResponse.Rates);
+            var exchangeRates = _mapper.Map<IEnumerable<ExchangeRate>>(
+                apiResponse.Rates,
+                opt => opt.Items[MappingConstants.TargetCurrencyCode] = TargetCurrencyCode);
 
             return exchangeRates;
         }

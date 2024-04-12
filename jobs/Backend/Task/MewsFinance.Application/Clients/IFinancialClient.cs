@@ -4,6 +4,7 @@ namespace MewsFinance.Application.Clients
 {
     public interface IFinancialClient
     {
+        public string TargetCurrencyCode { get; }
         public Task<IEnumerable<ExchangeRate>> GetExchangeRates(DateTime date);
     }
 }
