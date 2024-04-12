@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Repositories;
 
@@ -20,12 +21,17 @@ namespace ExchangeRateUpdater
             new Currency("TRY"),
             new Currency("XYZ")
         };
+        
+        private static readonly HttpClient CnbClient = new()
+        {
+            BaseAddress = new Uri("https://api.cnb.cz"),
+        };
 
         public static async Task Main(string[] args)
         {
             try
             {
-                var czechExchangeRates = new CzechExchangeRatesRepository();
+                var czechExchangeRates = new CzechExchangeRatesRepository(CnbClient);
                 var provider = new ExchangeRateProvider(czechExchangeRates);
                 var rates = await provider.GetExchangeRates(currencies);
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -9,12 +8,18 @@ namespace ExchangeRateUpdater.Repositories;
 
 public class CzechExchangeRatesRepository : IExchangeRatesRepository
 {
+    private readonly HttpClient _cnbHttpClient;
 
     private static readonly Currency CzechCurrency = new("CZK");
-    
+
+    public CzechExchangeRatesRepository(HttpClient cnbHttpClient)
+    {
+        _cnbHttpClient = cnbHttpClient;
+    }
+
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
     {
-        var ratesResponse = await CnbClient.GetAsync("/cnbapi/exrates/daily?lang=EN");
+        var ratesResponse = await _cnbHttpClient.GetAsync("/cnbapi/exrates/daily?lang=EN");
         ratesResponse.EnsureSuccessStatusCode();
         var czechRates = await ratesResponse.Content.ReadFromJsonAsync<DailyRatesResponse>();
 
@@ -26,12 +31,12 @@ public class CzechExchangeRatesRepository : IExchangeRatesRepository
         return czechRates.Rates.Select(rate => new ExchangeRate(
                 new Currency(rate.CurrencyCode), 
                 CzechCurrency, 
-                rate.Rate / rate.Amount)) // dividing by amount here as the api can return a rate set for a different amount
+                NormaliseRate(rate.Rate, rate.Amount))) // dividing by amount here as the api can return a rate set for a different amount
             .ToList();
     }
 
-    private static readonly HttpClient CnbClient = new()
+    private static decimal NormaliseRate(decimal rate, int amount)
     {
-        BaseAddress = new Uri("https://api.cnb.cz"),
-    };
+        return amount > 0 ? rate / amount : rate;
+    }
 }
