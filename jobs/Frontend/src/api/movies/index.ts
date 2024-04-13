@@ -1,1 +1,1 @@
-export { getMovieSearchList } from './services'
+export { getMovieSearchList, getMovieDetail } from './services'

@@ -11,7 +11,13 @@ import { FC } from 'react'
 import { HomeSearchContentProps } from '../../types'
 
 export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
-    const { isLoading, isError, handleChangePage, searchData } = props
+    const {
+        isLoading,
+        isError,
+        handleChangePage,
+        searchData,
+        prefetchMovieData,
+    } = props
 
     return (
         <Stack
@@ -27,6 +33,7 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
                     <Grid
                         container
                         spacing={2}
+                        className='mb-10'
                     >
                         {searchData?.results?.map(
                             ({ id, title, release_date, poster_path }) => (
@@ -36,19 +43,35 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
                                     md={4}
                                     key={id}
                                 >
-                                    <Stack className=' h-full overflow-hidden rounded-md border-solid border-primary-main'>
+                                    <Stack
+                                        className=' h-full overflow-hidden rounded-md border-solid border-primary-main'
+                                        onMouseEnter={() =>
+                                            prefetchMovieData(id)
+                                        }
+                                    >
                                         <img
                                             src={
-                                                poster_path || fallbackImageSrc
+                                                poster_path
+                                                    ? `https://media.themoviedb.org/t/p/w220_and_h330_face${poster_path}`
+                                                    : fallbackImageSrc
                                             }
                                             alt={`${title} poster`}
                                             className='max-h-[18.75rem] min-h-[12.5rem] object-cover'
                                         />
                                         <Divider />
-                                        <Typography>
-                                            {release_date.substring(0, 4)}
-                                        </Typography>
-                                        <Typography>{title}</Typography>
+                                        <Stack className=' p-4'>
+                                            {release_date && (
+                                                <Typography>
+                                                    {release_date.substring(
+                                                        0,
+                                                        4,
+                                                    )}
+                                                </Typography>
+                                            )}
+                                            <Typography className='font-medium'>
+                                                {title}
+                                            </Typography>
+                                        </Stack>
                                     </Stack>
                                 </Grid>
                             ),

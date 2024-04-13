@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getRestApiConfig } from '../config'
-import { MovieSearchCollection, MovieSearchProps } from './types'
+import type { MovieSearchCollection, MovieSearchProps } from './types'
+import type { MovieDetail } from '../../types'
 
 export const getMovieSearchList = async ({
     movieTitle,
@@ -13,10 +14,25 @@ export const getMovieSearchList = async ({
         baseUrl,
     ).href
 
-    const response = await axios.get<MovieSearchCollection>(
+    const { data } = await axios.get<MovieSearchCollection>(
         endpointUrl,
         headerConfig,
     )
 
-    return response.data
+    return data
+}
+
+export const getMovieDetail = async (
+    movie_id: number,
+): Promise<MovieDetail> => {
+    const { baseUrl, headerConfig, apiKey } = getRestApiConfig()
+
+    const endpointUrl = new URL(
+        `/3/movie/${movie_id}?api_key=${apiKey}`,
+        baseUrl,
+    ).href
+
+    const { data } = await axios.get<MovieDetail>(endpointUrl, headerConfig)
+
+    return data
 }

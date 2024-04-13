@@ -1,5 +1,13 @@
-import { MovieSearch } from '.'
+import type { MovieSearch } from '.'
 
-export type HomeSearchContentProps = Omit<MovieSearch, 'submitSearchedTitle'>
+export type HomeSearchContentProps = Omit<
+    MovieSearch,
+    'submitSearchedTitle'
+> & {
+    prefetchMovieData: (movie_id: number) => Promise<void>
+}
 
-export interface UseHomeSearchHook extends HomeSearchContentProps {}
+export type UseHomeSearchHook = Omit<
+    HomeSearchContentProps,
+    'prefetchMovieData'
+>
