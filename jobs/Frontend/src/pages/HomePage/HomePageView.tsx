@@ -7,22 +7,25 @@ import {
     Stack,
     Typography,
 } from '@mui/material'
-import { HomePageViewProps } from './types'
-import { FC } from 'react'
+import type { HomePageViewProps } from './types'
+import type { FC } from 'react'
+import { HomeSearchContent } from './components'
 
-export const HomePageView: FC<HomePageViewProps> = ({
-    submitSearchedTitle,
-}) => {
+export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
+    const { submitSearchedTitle, ...searchContentData } = movieSearch
     return (
-        <Box component='main'>
+        <Box
+            component='main'
+            className='pb-7'
+        >
             <Stack
                 component='section'
-                className='container mt-8 max-w-[48rem] gap-6 md:mt-10 md:gap-12 lg:mt-28 lg:gap-20'
+                className='container mt-8 max-w-[48rem] gap-6 pb-9 md:mt-10 md:gap-12 lg:mt-28 lg:gap-20'
             >
                 <Stack className='w-full items-center gap-4 text-center'>
                     <Typography
                         variant='h1'
-                        className='text-secondary-main text-6xl font-medium md:text-7xl'
+                        className='text-6xl font-medium text-secondary-main md:text-7xl'
                     >
                         Flick Index
                     </Typography>
@@ -44,6 +47,7 @@ export const HomePageView: FC<HomePageViewProps> = ({
                     placeholder='Batman: begins...'
                 />
             </Stack>
+            <HomeSearchContent {...searchContentData} />
         </Box>
     )
 }

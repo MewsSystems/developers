@@ -4,7 +4,7 @@ import { MovieSearchCollection, MovieSearchProps } from './types'
 
 export const getMovieSearchList = async ({
     movieTitle,
-    page = 1,
+    page,
 }: MovieSearchProps): Promise<MovieSearchCollection> => {
     const { baseUrl, headerConfig, apiKey } = getRestApiConfig()
 

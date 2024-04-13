@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { HomePageViewProps, UseHomeHookProps } from '../types'
 import { useMovieSearch } from './useMovieSearch'
 
 export const usePage = (props: UseHomeHookProps): HomePageViewProps => {
-    const { submitSearchedTitle } = useMovieSearch()
+    const movieSearch = useMovieSearch()
 
-    return { submitSearchedTitle }
+    return { movieSearch }
 }
