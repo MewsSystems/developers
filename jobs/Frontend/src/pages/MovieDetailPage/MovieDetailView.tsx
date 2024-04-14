@@ -1,23 +1,9 @@
 import type { MovieDetailPageProps } from './types'
 import type { FC } from 'react'
-import {
-    Box,
-    Button,
-    Chip,
-    Grid,
-    Rating,
-    Skeleton,
-    Stack,
-    Typography,
-} from '@mui/material'
-import {
-    AccessTime,
-    ArrowBack,
-    CalendarToday,
-    Home,
-    Language,
-} from '@mui/icons-material'
-import { MoviePoster } from '../../components'
+import { Box, Button, Grid, Skeleton, Stack, Typography } from '@mui/material'
+import { ArrowBack, Home } from '@mui/icons-material'
+import { MoviePoster, PostersContent } from '../../components'
+import { TopSummary } from './components'
 
 export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
     const {
@@ -27,13 +13,16 @@ export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
         navigateBack,
         navigateHome,
         isPreviousPageAvailable,
+        similarMovieData,
+        isSimilarLoading,
+        isSimilarError,
+        prefetchSimilarMovieData,
     } = props
 
-    const stopedLoadingWithData = !isLoading && detailData
+    const stopedLoadingWithData = !isLoading && !!detailData
 
     return (
-        <Box className='relative pb-7'>
-            <Box className=' absolute inset-x-0 top-0 -z-[1] bg-gray-100 sm:h-[18rem]' />
+        <Box className='relative bg-gradient-to-b from-gray-200 to-white bg-[length:100%_40rem] bg-no-repeat pb-7'>
             <Box
                 component='main'
                 className='container pt-8'
@@ -60,136 +49,72 @@ export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
                         home
                     </Button>
                 </Stack>
-                <Grid
-                    container
-                    spacing={3}
-                >
+                {isError ? (
+                    <Stack className='mb-6 w-full flex-row items-center justify-center rounded-md bg-gray-100 py-7'>
+                        <Typography>
+                            There's been an error with loading data for the
+                            selected movie. Please try again.
+                        </Typography>
+                    </Stack>
+                ) : (
                     <Grid
-                        item
-                        xs={6}
-                        sm={4}
-                        className='relative'
+                        container
+                        spacing={3}
+                        className='mb-10'
                     >
-                        {stopedLoadingWithData ? (
-                            <MoviePoster
-                                poster_path={detailData?.poster_path}
-                                title={detailData?.title}
-                                className='w-full'
-                            />
-                        ) : (
-                            <Skeleton
-                                className='h-[18.75rem] w-full scale-100'
-                                variant='rectangular'
-                            />
-                        )}
-                        <Box className='absolute bottom-0 left-6 h-px w-14 bg-primary-main' />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={6}
-                        sm={8}
-                    >
-                        <Stack className='w-full gap-11'>
-                            <Stack className='flex-row gap-6 rounded-md bg-white px-4 py-3 md:px-6 md:py-5'>
-                                <Stack className='gap-2'>
-                                    {stopedLoadingWithData ? (
-                                        <>
-                                            <Typography className='text-8xl font-medium leading-[4rem]'>
-                                                {Math.round(
-                                                    detailData?.popularity,
-                                                )}
-                                                %
-                                            </Typography>
-                                            <Stack>
-                                                <Rating
-                                                    value={
-                                                        detailData?.vote_average /
-                                                        2
-                                                    }
-                                                    precision={0.5}
-                                                    readOnly
-                                                />
-                                                <Typography>
-                                                    total:{' '}
-                                                    {detailData?.vote_count}
-                                                </Typography>
-                                            </Stack>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Skeleton className='h-24 w-44 scale-100' />
-                                            <Stack>
-                                                <Skeleton className='scale-80 h-9 w-44' />
-                                                <Skeleton className='scale-80 h-9 w-40' />
-                                            </Stack>
-                                        </>
-                                    )}
-                                </Stack>
-                                <Stack className='gap-6'>
-                                    <Stack className='gap-3 sm:flex-row'>
-                                        <Stack className='flex-row items-center gap-1'>
-                                            <CalendarToday fontSize='small' />
-                                            <Typography>
-                                                {detailData?.release_date.substring(
-                                                    0,
-                                                    4,
-                                                )}
-                                            </Typography>
-                                        </Stack>
-                                        <Stack className='flex-row items-center gap-1'>
-                                            <Language fontSize='small' />
-                                            <Typography>
-                                                {detailData?.original_language}
-                                            </Typography>
-                                        </Stack>
-                                        <Stack className='flex-row items-center gap-1'>
-                                            <AccessTime fontSize='small' />
-                                            <Typography>
-                                                {detailData?.runtime}min
-                                            </Typography>
-                                        </Stack>
-                                    </Stack>
-                                    <Stack className='hidden flex-row gap-2 sm:flex'>
-                                        {detailData?.genres.map((genre) => (
-                                            <Chip
-                                                key={genre.id}
-                                                label={genre.name}
-                                                className='rounded-lg text-base'
-                                            />
-                                        ))}
-                                    </Stack>
-                                </Stack>
+                        <Grid
+                            item
+                            xs={6}
+                            sm={4}
+                            className='relative'
+                        >
+                            {stopedLoadingWithData ? (
+                                <MoviePoster
+                                    poster_path={detailData?.poster_path}
+                                    title={detailData?.title}
+                                    className='w-full'
+                                />
+                            ) : (
+                                <Skeleton
+                                    className='h-[18.75rem] w-full scale-100'
+                                    variant='rectangular'
+                                />
+                            )}
+                            {detailData?.overview && (
+                                <Box className='absolute bottom-0 left-6 h-px w-14 bg-primary-main' />
+                            )}
+                        </Grid>
+                        <Grid
+                            item
+                            xs={6}
+                            sm={8}
+                        >
+                            <Stack className='w-full gap-6'>
+                                <TopSummary
+                                    detailData={detailData}
+                                    isLoading={isLoading}
+                                />
                             </Stack>
-                            <Box>
-                                <Typography
-                                    variant='h1'
-                                    className='pb-2 text-4xl font-medium'
-                                >
-                                    {detailData?.title}
-                                </Typography>
-                                <Typography className='text-base'>
-                                    {detailData?.overview}
-                                </Typography>
-                            </Box>
-                        </Stack>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Box className='w-full items-center gap-4 text-center'>
+                )}
+                <Stack className='gap-6'>
                     <Typography
-                        variant='h1'
-                        className='text-6xl font-medium text-secondary-main md:text-7xl'
+                        variant='h2'
+                        className='text-2xl font-medium'
                     >
-                        Movie Detail
+                        You might also like
                     </Typography>
-                </Box>
-                <Box className='flex justify-center'>
-                    <Box className='overflow-hidden rounded-md border-solid border-primary-main'>
-                        <Box className='p-4'>
-                            <Box className='w-12 text-base' />
-                            <Box className='text-base' />
-                        </Box>
-                    </Box>
-                </Box>
+                    <PostersContent
+                        limitMovies
+                        searchData={similarMovieData}
+                        isLoading={isSimilarLoading}
+                        isError={isSimilarError}
+                        errorText="Seems there's been an error with finding similar movies, please try it again later."
+                        noDataText="Seems there's no similar title to this one."
+                        prefetchFunction={prefetchSimilarMovieData}
+                    />
+                </Stack>
             </Box>
         </Box>
     )

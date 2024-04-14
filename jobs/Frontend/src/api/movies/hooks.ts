@@ -1,5 +1,9 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { getMovieDetail, getMovieSearchList } from './services'
+import {
+    getMovieDetail,
+    getMovieSearchList,
+    getSimilarMovies,
+} from './services'
 import { MovieSearchProps } from './types'
 
 export const useMovieSearchQuery = ({
@@ -11,6 +15,14 @@ export const useMovieSearchQuery = ({
         queryFn: () => getMovieSearchList({ movieTitle, page }),
         placeholderData: keepPreviousData,
         enabled: movieTitle.length > 2,
+    })
+
+export const useMovieSimilarQuery = (movie_id?: number) =>
+    useQuery({
+        queryKey: ['search', 'similar', movie_id],
+        queryFn: () => getSimilarMovies(movie_id),
+        placeholderData: keepPreviousData,
+        enabled: !!movie_id,
     })
 
 export const useMovieDetailQuery = (movie_id?: number) =>

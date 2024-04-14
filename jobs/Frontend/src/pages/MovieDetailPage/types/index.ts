@@ -1,4 +1,7 @@
+import type { MovieSearchCollection } from '../../../api/movies/types'
 import type { MovieDetail } from '../../../types'
+
+export * from './components'
 
 export interface MovieDetailPageProps {
     detailData?: MovieDetail
@@ -7,6 +10,10 @@ export interface MovieDetailPageProps {
     navigateBack: () => void
     navigateHome: () => void
     isPreviousPageAvailable: boolean
+    similarMovieData?: MovieSearchCollection
+    isSimilarLoading: boolean
+    isSimilarError: boolean
+    prefetchSimilarMovieData: (similarMovieId: number) => Promise<void>
 }
 
 export interface UseMovieDetailHookProps {}

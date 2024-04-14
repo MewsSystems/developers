@@ -30,7 +30,7 @@ export const MovieThumbnail = (props: MovieThumbnailProps) => {
                     </Typography>
                 </Stack>
                 <Button
-                    onClick={() => navigate(`movie/${id}`)}
+                    onClick={() => navigate(`/movie/${id}`)}
                     variant='contained'
                 >
                     see details

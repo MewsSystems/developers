@@ -36,3 +36,21 @@ export const getMovieDetail = async (
 
     return data
 }
+
+export const getSimilarMovies = async (
+    movie_id?: number,
+): Promise<MovieSearchCollection> => {
+    const { baseUrl, headerConfig, apiKey } = getRestApiConfig()
+
+    const endpointUrl = new URL(
+        `/3/movie/${movie_id}/similar?api_key=${apiKey}`,
+        baseUrl,
+    ).href
+
+    const { data } = await axios.get<MovieSearchCollection>(
+        endpointUrl,
+        headerConfig,
+    )
+
+    return data
+}
