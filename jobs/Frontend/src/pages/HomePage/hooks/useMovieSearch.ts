@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { debounce } from 'lodash'
 import { useMovieSearchQuery } from '../../../api/movies/hooks'
 import { MovieSearch } from '../types'
@@ -16,6 +16,8 @@ export const useMovieSearch = (): MovieSearch => {
         page: currentPage,
     })
 
+    const searchInputRef = useRef<HTMLInputElement>(null)
+
     const submitSearchedTitle = debounce((movieTitle: string) => {
         setCurrentSearchTitle(movieTitle)
     }, 500)
@@ -25,9 +27,21 @@ export const useMovieSearch = (): MovieSearch => {
         value: number,
     ) => {
         setCurrentPage(value)
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    }
+
+    const clearTitle = () => {
+        setCurrentSearchTitle('')
+
+        if (searchInputRef.current) {
+            searchInputRef.current.value = ''
+        }
     }
 
     return {
+        currentSearchTitle,
+        clearTitle,
+        searchInputRef,
         submitSearchedTitle,
         searchData,
         isLoading,

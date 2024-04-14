@@ -1,7 +1,8 @@
-import { Search } from '@mui/icons-material'
+import { Clear, Search } from '@mui/icons-material'
 import {
     Box,
     Divider,
+    IconButton,
     InputAdornment,
     OutlinedInput,
     Stack,
@@ -12,15 +13,22 @@ import type { FC } from 'react'
 import { HomeSearchContent } from './components'
 
 export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
-    const { submitSearchedTitle, ...searchContentData } = movieSearch
+    const {
+        submitSearchedTitle,
+        currentSearchTitle,
+        clearTitle,
+        searchInputRef,
+        ...searchContentData
+    } = movieSearch
+
     return (
         <Box
             component='main'
-            className='pb-7'
+            className='relative bg-gradient-to-b from-primary-main to-white bg-[length:100%_18rem] bg-no-repeat pb-7'
         >
             <Stack
                 component='section'
-                className='container mt-8 max-w-[48rem] gap-6 pb-9 md:mt-10 md:gap-12 lg:mt-28 lg:gap-20'
+                className='container max-w-[48rem] gap-6 pb-9 pt-8 md:gap-12 md:pt-10 lg:gap-20 lg:pt-28'
             >
                 <Stack className='w-full items-center gap-4 text-center'>
                     <Typography
@@ -38,16 +46,32 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
                     </Typography>
                 </Stack>
                 <OutlinedInput
+                    inputRef={searchInputRef}
+                    className='sticky top-0'
                     onChange={({ target }) => submitSearchedTitle(target.value)}
                     startAdornment={
                         <InputAdornment position='start'>
                             <Search />
                         </InputAdornment>
                     }
+                    endAdornment={
+                        currentSearchTitle.length > 0 && (
+                            <InputAdornment position='end'>
+                                <IconButton
+                                    size='small'
+                                    onClick={clearTitle}
+                                >
+                                    <Clear />
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }
                     placeholder='Batman: begins...'
                 />
             </Stack>
-            <HomeSearchContent {...searchContentData} />
+            {currentSearchTitle.length > 2 ? (
+                <HomeSearchContent {...searchContentData} />
+            ) : null}
         </Box>
     )
 }

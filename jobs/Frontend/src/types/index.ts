@@ -1,3 +1,5 @@
+export * from './components'
+
 export interface MovieSearchItem {
     id: number
     release_date: string
