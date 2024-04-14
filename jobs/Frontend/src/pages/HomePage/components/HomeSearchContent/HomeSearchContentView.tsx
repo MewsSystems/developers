@@ -28,6 +28,8 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
             {!(isLoading || isError || searchData?.results.length === 0) ? (
                 <Box className='mx-auto'>
                     <Pagination
+                        size='medium'
+                        siblingCount={0}
                         count={searchData?.total_pages}
                         variant='outlined'
                         onChange={handleChangePage}
