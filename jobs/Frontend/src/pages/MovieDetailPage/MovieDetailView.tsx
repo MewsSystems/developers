@@ -8,7 +8,6 @@ import {
     Rating,
     Skeleton,
     Stack,
-    Tooltip,
     Typography,
 } from '@mui/material'
 import {
