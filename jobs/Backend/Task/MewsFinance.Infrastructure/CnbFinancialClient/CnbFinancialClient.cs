@@ -2,23 +2,25 @@
 using MewsFinance.Application.Clients;
 using MewsFinance.Domain.Models;
 using MewsFinance.Infrastructure.CnbFinancialClient.Mappings;
-using System.Net.Http.Headers;
+using MewsFinance.Infrastructure.Http;
+using Microsoft.Extensions.Logging;
 
 namespace MewsFinance.Infrastructure.CnbFinancialClient
 {
     public class CnbFinancialClient : IFinancialClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public CnbFinancialClient(HttpClient httpClient, IMapper mapper)
+        public CnbFinancialClient(
+            IHttpClientWrapper httpClientWrapper, 
+            IMapper mapper,
+            ILogger<CnbFinancialClient> logger)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
-            _httpClient.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-
+            _httpClientWrapper = httpClientWrapper;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public string TargetCurrencyCode => "CZK";
@@ -28,7 +30,27 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
             var dateStr = date.ToString(@"yyyy-MM-dd");
             string url = $"exrates/daily?date={dateStr}";
 
-            var response = await _httpClient.GetAsync(url);
+            try
+            {
+                var exchangeRateResponse = await GetExchangeRateResponse(url);
+
+                return exchangeRateResponse;
+            }
+            catch (Exception exc)
+            {
+                var message = exc.Message;
+
+                _logger.LogError(exc, exc.Message);
+
+                return CreateEmptyDataResponse(
+                    isSuccess: false, 
+                    message);
+            }           
+        }
+
+        private async Task<Response<IEnumerable<ExchangeRate>>> GetExchangeRateResponse(string url)
+        {
+            var response = await _httpClientWrapper.GetAsync(url);
             string content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode
@@ -36,12 +58,12 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
             {
                 var message = response.ReasonPhrase ?? string.Empty;
 
-                return CreateEmptyDataResponse(response.IsSuccessStatusCode, message);                
-            }  
+                return CreateEmptyDataResponse(response.IsSuccessStatusCode, message);
+            }
 
             var apiResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<CnbExchangeRateResponse>(content);
 
-            if(apiResponse == null)
+            if (apiResponse == null)
             {
                 var message = string.Empty;
 
@@ -53,8 +75,8 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient
                 opt => opt.Items[MappingConstants.TargetCurrencyCode] = TargetCurrencyCode);
 
             return CreateDataResponse(
-                exchangeRates: exchangeRates, 
-                isSuccess: true, 
+                exchangeRates: exchangeRates,
+                isSuccess: true,
                 message: string.Empty);
         }
 

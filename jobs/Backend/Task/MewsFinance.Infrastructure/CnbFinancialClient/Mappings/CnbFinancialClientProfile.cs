@@ -9,7 +9,7 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient.Mappings
         {
             CreateMap<CnbExchangeRate, ExchangeRate>()
                 .ConstructUsing((rate, context) => new ExchangeRate(
-                    sourceCurrency: new Currency(rate.CurrencyCode),
+                    sourceCurrency: new Currency(rate.CurrencyCode ?? string.Empty),
                     targetCurrency: new Currency((string)context.Items[MappingConstants.TargetCurrencyCode]),
                     rate.Rate));
         }       

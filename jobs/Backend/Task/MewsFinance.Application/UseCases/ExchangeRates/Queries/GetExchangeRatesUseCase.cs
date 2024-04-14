@@ -18,7 +18,7 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
 
         public async Task<IEnumerable<ExchangeRateResponse>> GetExchangeRates(ExchangeRateRequest exchangeRateRequest)
         {
-            var sourceCurrencyCodes = exchangeRateRequest.CurrencyCodes;
+            var currencyCodes = exchangeRateRequest.CurrencyCodes;
 
             var exchangeRateClientResponse = await _financialClient.GetExchangeRates(DateTime.UtcNow);
 
@@ -29,7 +29,7 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
 
             var exchangeRates = exchangeRateClientResponse.Data;
 
-            var filteredExchangeRates = exchangeRates.FilterBySourceCurrency(sourceCurrencyCodes);
+            var filteredExchangeRates = exchangeRates.FilterBySourceCurrency(currencyCodes);
 
             var exchangeRateResponse = _mapper.Map<IEnumerable<ExchangeRateResponse>>(filteredExchangeRates);
 

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MewsFinance.Application.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MewsFinance.Infrastructure", "MewsFinance.Infrastructure\MewsFinance.Infrastructure.csproj", "{AB486071-790B-463E-AD50-E4801631ED7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MewsFinance.Infrastructure.UnitTests", "MewsFinance.Infrastructure.UnitTests\MewsFinance.Infrastructure.UnitTests.csproj", "{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{AB486071-790B-463E-AD50-E4801631ED7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB486071-790B-463E-AD50-E4801631ED7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB486071-790B-463E-AD50-E4801631ED7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{74464914-7F3B-4105-893A-B92658EA74B7} = {432585B4-F8F0-4225-8968-BA02400CDD75}
+		{E7D2DC12-1751-4E54-A4F7-EBC3EEF27B01} = {432585B4-F8F0-4225-8968-BA02400CDD75}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0EC51ED2-C2DF-4AD3-A57F-4752AD28A89C}
