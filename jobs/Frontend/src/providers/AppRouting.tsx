@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { HomePage, MovieDetailPage } from '../pages'
+import { FallbackPage, HomePage, MovieDetailPage } from '../pages'
 
 export const AppRouting = () => {
     return (
@@ -11,6 +11,10 @@ export const AppRouting = () => {
             <Route
                 path='/movie/:id'
                 element={<MovieDetailPage />}
+            />
+            <Route
+                path='*'
+                element={<FallbackPage />}
             />
         </Routes>
     )

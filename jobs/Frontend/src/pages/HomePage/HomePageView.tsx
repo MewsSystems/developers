@@ -2,6 +2,8 @@ import { Clear, Search } from '@mui/icons-material'
 import {
     Box,
     Divider,
+    FormControl,
+    FormHelperText,
     IconButton,
     InputAdornment,
     OutlinedInput,
@@ -20,6 +22,9 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
         searchInputRef,
         ...searchContentData
     } = movieSearch
+
+    const showHelper =
+        currentSearchTitle.length > 0 && currentSearchTitle.length < 3
 
     return (
         <Box
@@ -45,29 +50,38 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
                         Search. Discover. Enjoy
                     </Typography>
                 </Stack>
-                <OutlinedInput
-                    className='bg-white'
-                    inputRef={searchInputRef}
-                    onChange={({ target }) => submitSearchedTitle(target.value)}
-                    startAdornment={
-                        <InputAdornment position='start'>
-                            <Search />
-                        </InputAdornment>
-                    }
-                    endAdornment={
-                        currentSearchTitle.length > 0 && (
-                            <InputAdornment position='end'>
-                                <IconButton
-                                    size='small'
-                                    onClick={clearTitle}
-                                >
-                                    <Clear />
-                                </IconButton>
+                <FormControl>
+                    <OutlinedInput
+                        className='bg-white'
+                        inputRef={searchInputRef}
+                        onChange={({ target }) =>
+                            submitSearchedTitle(target.value)
+                        }
+                        startAdornment={
+                            <InputAdornment position='start'>
+                                <Search />
                             </InputAdornment>
-                        )
-                    }
-                    placeholder='Batman: begins...'
-                />
+                        }
+                        endAdornment={
+                            currentSearchTitle.length > 0 && (
+                                <InputAdornment position='end'>
+                                    <IconButton
+                                        size='small'
+                                        onClick={clearTitle}
+                                    >
+                                        <Clear />
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }
+                        placeholder='Batman: begins...'
+                    />
+                    {showHelper && (
+                        <FormHelperText id='search-helper-text'>
+                            You need to type at least 3 characters to search
+                        </FormHelperText>
+                    )}
+                </FormControl>
             </Stack>
             {currentSearchTitle.length > 2 ? (
                 <HomeSearchContent {...searchContentData} />

@@ -97,6 +97,21 @@ export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
                                 />
                             </Stack>
                         </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                            className='sm:hidden'
+                        >
+                            <Typography
+                                variant='h1'
+                                className='pb-2 text-2xl font-medium md:text-4xl'
+                            >
+                                {detailData?.title}
+                            </Typography>
+                            <Typography className='text-base'>
+                                {detailData?.overview}
+                            </Typography>
+                        </Grid>
                     </Grid>
                 )}
                 <Stack className='gap-6'>

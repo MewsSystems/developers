@@ -65,7 +65,8 @@ export const PostersContent = (props: PosterContentProps) => {
                 movieItems?.map((thumbnailItem) => (
                     <Grid
                         item
-                        xs={6}
+                        xs={12}
+                        sm={6}
                         md={4}
                         key={thumbnailItem.id}
                     >

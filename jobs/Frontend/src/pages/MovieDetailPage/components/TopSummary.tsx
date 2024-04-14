@@ -7,11 +7,11 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
 
     return (
         <>
-            <Stack className='flex-row gap-6 rounded-md bg-white px-4 py-3 md:px-6 md:py-5'>
+            <Stack className='gap-4 rounded-md bg-white px-4 py-3 sm:flex-row md:gap-6 md:px-6 md:py-5'>
                 <Stack className='gap-2'>
                     {stopedLoadingWithData ? (
                         <>
-                            <Typography className='text-[3.2rem] font-medium leading-none md:text-8xl md:leading-[4rem]'>
+                            <Typography className='text-[2rem] font-medium leading-none sm:text-[3.2rem] md:text-8xl md:leading-[4rem]'>
                                 {Math.round(detailData?.vote_average * 10)}%
                             </Typography>
                             <Stack>
@@ -37,7 +37,7 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                     )}
                 </Stack>
                 <Stack className='gap-6'>
-                    <Stack className='flex-wrap gap-3 sm:flex-row'>
+                    <Stack className='flex-wrap gap-1 sm:flex-row sm:gap-3'>
                         <Stack className='flex-row items-center gap-1'>
                             <CalendarToday fontSize='small' />
                             {stopedLoadingWithData ? (
@@ -107,11 +107,11 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                 </Stack>
                 <Typography
                     variant='h1'
-                    className='pb-2 text-2xl font-medium md:text-4xl'
+                    className=' hidden pb-2 text-2xl font-medium sm:inline-block md:text-4xl'
                 >
                     {detailData?.title}
                 </Typography>
-                <Typography className='text-base'>
+                <Typography className='hidden text-base sm:inline-block '>
                     {detailData?.overview}
                 </Typography>
             </Box>
