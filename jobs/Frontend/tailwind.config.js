@@ -34,5 +34,5 @@ export default {
             },
         },
     },
-    plugins: ['prettier-plugin-tailwindcss'],
+    plugins: ['prettier-plugin-tailwindcss', '@tailwindcss/line-clamp'],
 }
