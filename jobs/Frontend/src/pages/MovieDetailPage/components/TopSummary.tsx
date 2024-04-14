@@ -11,7 +11,7 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                 <Stack className='gap-2'>
                     {stopedLoadingWithData ? (
                         <>
-                            <Typography className='text-8xl font-medium leading-[4rem]'>
+                            <Typography className='text-[3.2rem] font-medium leading-none md:text-8xl md:leading-[4rem]'>
                                 {Math.round(detailData?.vote_average * 10)}%
                             </Typography>
                             <Stack>
@@ -19,6 +19,7 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                                     value={detailData?.vote_average / 2}
                                     precision={0.25}
                                     readOnly
+                                    size='small'
                                 />
                                 <Typography>
                                     total: {detailData?.vote_count}
@@ -87,9 +88,26 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                 </Stack>
             </Stack>
             <Box>
+                <Stack className='mb-2 flex-row flex-wrap gap-2 sm:hidden'>
+                    {stopedLoadingWithData
+                        ? detailData?.genres.map((genre) => (
+                              <Chip
+                                  key={genre.id}
+                                  label={genre.name}
+                                  size='small'
+                                  className='rounded-lg text-sm'
+                              />
+                          ))
+                        : [...Array(3)].map((_, index) => (
+                              <Skeleton
+                                  key={index}
+                                  className='h-9 w-16'
+                              />
+                          ))}
+                </Stack>
                 <Typography
                     variant='h1'
-                    className='pb-2 text-4xl font-medium'
+                    className='pb-2 text-2xl font-medium md:text-4xl'
                 >
                     {detailData?.title}
                 </Typography>

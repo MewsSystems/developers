@@ -80,9 +80,10 @@ export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
                                     variant='rectangular'
                                 />
                             )}
-                            {detailData?.overview && (
-                                <Box className='absolute bottom-0 left-6 h-px w-14 bg-primary-main' />
-                            )}
+                            {detailData?.overview &&
+                                detailData.overview.length > 195 && (
+                                    <Box className='absolute bottom-0 left-6 h-px w-14 bg-primary-main' />
+                                )}
                         </Grid>
                         <Grid
                             item

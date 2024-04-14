@@ -46,6 +46,7 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
                     </Typography>
                 </Stack>
                 <OutlinedInput
+                    className='bg-white'
                     inputRef={searchInputRef}
                     onChange={({ target }) => submitSearchedTitle(target.value)}
                     startAdornment={
