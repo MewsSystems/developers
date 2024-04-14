@@ -23,7 +23,7 @@ export const getMovieSearchList = async ({
 }
 
 export const getMovieDetail = async (
-    movie_id: number,
+    movie_id?: number,
 ): Promise<MovieDetail> => {
     const { baseUrl, headerConfig, apiKey } = getRestApiConfig()
 

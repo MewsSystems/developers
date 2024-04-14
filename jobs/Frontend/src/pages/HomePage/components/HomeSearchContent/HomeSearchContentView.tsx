@@ -39,8 +39,7 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
                         >
                             <Stack className='overflow-hidden rounded-md border-solid border-primary-main'>
                                 <Skeleton
-                                    height={300}
-                                    className='scale-100'
+                                    className='h-[18.75rem] scale-100'
                                     variant='rectangular'
                                 />
                                 <Stack className='p-4'>

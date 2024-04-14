@@ -24,7 +24,7 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
     return (
         <Box
             component='main'
-            className='relative bg-gradient-to-b from-primary-main to-white bg-[length:100%_18rem] bg-no-repeat pb-7'
+            className='bg-gradient-to-b from-primary-main to-white bg-[length:100%_18rem] bg-no-repeat pb-7'
         >
             <Stack
                 component='section'
@@ -47,7 +47,6 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
                 </Stack>
                 <OutlinedInput
                     inputRef={searchInputRef}
-                    className='sticky top-0'
                     onChange={({ target }) => submitSearchedTitle(target.value)}
                     startAdornment={
                         <InputAdornment position='start'>

@@ -13,8 +13,9 @@ export const useMovieSearchQuery = ({
         enabled: movieTitle.length > 2,
     })
 
-export const useMovieDetailQuery = (movie_id: number) =>
+export const useMovieDetailQuery = (movie_id?: number) =>
     useQuery({
         queryKey: ['movie', movie_id],
         queryFn: () => getMovieDetail(movie_id),
+        enabled: !!movie_id,
     })

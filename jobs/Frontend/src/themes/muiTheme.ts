@@ -20,29 +20,11 @@ export const muiTheme = createTheme({
         },
     },
     components: {
-        MuiPopover: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiPopper: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiDialog: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiModal: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiMenu: {
-            defaultProps: {
-                container: rootElement,
+        MuiButton: {
+            styleOverrides: {
+                contained: {
+                    boxShadow: 'none',
+                },
             },
         },
     },

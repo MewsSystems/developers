@@ -4,7 +4,7 @@ export interface MovieSearchItem {
     id: number
     release_date: string
     title: string
-    poster_path: string
+    poster_path?: string
 }
 
 interface Genre {
@@ -18,4 +18,5 @@ export interface MovieDetail extends MovieSearchItem {
     runtime: number
     vote_average: number
     vote_count: number
+    popularity: number
 }
