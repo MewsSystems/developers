@@ -4,11 +4,11 @@ import {
     Typography,
     Stack,
     Grid,
-    Divider,
+    Skeleton,
 } from '@mui/material'
-import fallbackImageSrc from '../../../../assets/fallback-image.png'
 import { FC } from 'react'
 import { HomeSearchContentProps } from '../../types'
+import { MovieThumbnail } from '../../../../components'
 
 export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
     const {
@@ -25,7 +25,32 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
             className='container'
         >
             {isLoading ? (
-                <Typography>Loading...</Typography>
+                <Grid
+                    container
+                    spacing={2}
+                    className='mb-10'
+                >
+                    {[...Array(3)].map((_, index) => (
+                        <Grid
+                            item
+                            xs={6}
+                            md={4}
+                            key={index}
+                        >
+                            <Stack className='overflow-hidden rounded-md border-solid border-primary-main'>
+                                <Skeleton
+                                    height={300}
+                                    className='scale-100'
+                                    variant='rectangular'
+                                />
+                                <Stack className='p-4'>
+                                    <Skeleton className='w-12 text-base' />
+                                    <Skeleton className='text-base' />
+                                </Stack>
+                            </Stack>
+                        </Grid>
+                    ))}
+                </Grid>
             ) : isError ? (
                 <Typography>Error...</Typography>
             ) : !!searchData?.results && searchData?.results.length > 0 ? (
@@ -35,47 +60,21 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
                         spacing={2}
                         className='mb-10'
                     >
-                        {searchData?.results?.map(
-                            ({ id, title, release_date, poster_path }) => (
-                                <Grid
-                                    item
-                                    xs={6}
-                                    md={4}
-                                    key={id}
-                                >
-                                    <Stack
-                                        className=' h-full overflow-hidden rounded-md border-solid border-primary-main'
-                                        onMouseEnter={() =>
-                                            prefetchMovieData(id)
-                                        }
-                                    >
-                                        <img
-                                            src={
-                                                poster_path
-                                                    ? `https://media.themoviedb.org/t/p/w220_and_h330_face${poster_path}`
-                                                    : fallbackImageSrc
-                                            }
-                                            alt={`${title} poster`}
-                                            className='max-h-[18.75rem] min-h-[12.5rem] object-cover'
-                                        />
-                                        <Divider />
-                                        <Stack className=' p-4'>
-                                            {release_date && (
-                                                <Typography>
-                                                    {release_date.substring(
-                                                        0,
-                                                        4,
-                                                    )}
-                                                </Typography>
-                                            )}
-                                            <Typography className='font-medium'>
-                                                {title}
-                                            </Typography>
-                                        </Stack>
-                                    </Stack>
-                                </Grid>
-                            ),
-                        )}
+                        {searchData?.results?.map((thumbnailItem) => (
+                            <Grid
+                                item
+                                xs={6}
+                                md={4}
+                                key={thumbnailItem.id}
+                            >
+                                <MovieThumbnail
+                                    onMouseEnter={() =>
+                                        prefetchMovieData(thumbnailItem.id)
+                                    }
+                                    {...thumbnailItem}
+                                />
+                            </Grid>
+                        ))}
                     </Grid>
                     <Box className='mx-auto'>
                         <Pagination

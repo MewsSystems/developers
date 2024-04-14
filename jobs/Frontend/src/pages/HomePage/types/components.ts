@@ -2,7 +2,10 @@ import type { MovieSearch } from '.'
 
 export type HomeSearchContentProps = Omit<
     MovieSearch,
-    'submitSearchedTitle'
+    | 'submitSearchedTitle'
+    | 'currentSearchTitle'
+    | 'searchInputRef'
+    | 'clearTitle'
 > & {
     prefetchMovieData: (movie_id: number) => Promise<void>
 }
