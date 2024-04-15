@@ -1,5 +1,9 @@
-import {MovieDbSearchMoviesDto} from './interfaces/movieDbSearchMoviesDto';
+import { TmdbDto } from '../interfaces/tmdbDto.ts';
+import { MovieMapper } from '../mapping/movieMapper.ts';
 
+// working with images https://developer.themoviedb.org/docs/image-basics
+
+// TODO: add comment that this can come from a config / ENV
 const movieDbApiKey = '03b8572954325680265531140190fd2a';
 const movieDbBaseUrl = 'https://api.themoviedb.org';
 
@@ -17,5 +21,7 @@ export const searchMovies = async (query: string) => {
         throw new Error('Invalid response');
     }
 
-    return await response.json() as MovieDbSearchMoviesDto;
+    const responseDto = await response.json() as TmdbDto.SearchMovies;
+
+    return MovieMapper.searchFromDto(responseDto);
 };

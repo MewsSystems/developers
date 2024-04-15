@@ -8,7 +8,7 @@ export default function Movies() {
     return (
         <>
             <SearchInput query={query} setQuery={setQuery} />
-            <MoviesList query={query} />
+            { !!query && <MoviesList query={query} /> }
         </>
     );
 }
