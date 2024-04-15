@@ -77,7 +77,10 @@ namespace MewsFinance.Application.UnitTests.UseCases.ExchangeRates.Queries
             string targetCurrency)
         {
             var exchangeRates = currencyCodes.Select(code => new ExchangeRate(
-                new Currency(code), new Currency(targetCurrency), 3));
+                sourceCurrency: new Currency(code), 
+                targetCurrency: new Currency(targetCurrency), 
+                value: 3, 
+                currencyAmount: 1));
 
             return exchangeRates;
         }

@@ -29,7 +29,7 @@ namespace MewsFinance.Application.UseCases.ExchangeRates.Queries
 
             var exchangeRates = exchangeRateClientResponse.Data;
 
-            var filteredExchangeRates = exchangeRates.FilterBySourceCurrency(currencyCodes);
+            var filteredExchangeRates = exchangeRates.FilterBySourceCurrencyAndUnitAmount(currencyCodes);
 
             var exchangeRateResponse = _mapper.Map<IEnumerable<ExchangeRateResponse>>(filteredExchangeRates);
 

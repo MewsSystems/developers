@@ -11,7 +11,8 @@ namespace MewsFinance.Infrastructure.CnbFinancialClient.Mappings
                 .ConstructUsing((rate, context) => new ExchangeRate(
                     sourceCurrency: new Currency(rate.CurrencyCode ?? string.Empty),
                     targetCurrency: new Currency((string)context.Items[MappingConstants.TargetCurrencyCode]),
-                    rate.Rate));
+                    value: rate.Rate,
+                    currencyAmount: rate.Amount));
         }       
     }
 }
