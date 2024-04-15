@@ -1,7 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import z from "zod";
-import { searchMoviesQueryOptions } from "../services/movies";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { searchMoviesQueryOptions } from "../services/movies";
+import { SearchInput } from "../components/SearchInput";
+import styled from "styled-components";
+
+const HomeContainer = styled.div`
+  display: flex;
+`;
 
 const movieSearchSchema = z.object({
   page: z.number().catch(1),
@@ -19,17 +26,34 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const navigate = useNavigate({ from: Route.fullPath });
   const { page, query } = Route.useSearch();
   const moviesQuery = useSuspenseQuery(
     searchMoviesQueryOptions(Route.useLoaderDeps()),
   );
+  const [queryDraft, setQueryDraft] = useState(query);
+
+  useEffect(() => {
+    void navigate({
+      search: (old) => ({
+        ...old,
+        query: queryDraft,
+      }),
+    });
+  }, [navigate, queryDraft]);
 
   return (
-    <div>
+    <HomeContainer>
       <h3>Welcome Home!</h3>
-      <span>{page}</span>
-      <span>{query}</span>
+      <SearchInput
+        placeholder="Search"
+        value={queryDraft}
+        onChange={(e) => {
+          setQueryDraft(e.target.value);
+        }}
+      />
+      <p>{page}</p>
       <pre>{JSON.stringify(moviesQuery.data, null, 2)}</pre>
-    </div>
+    </HomeContainer>
   );
 }
