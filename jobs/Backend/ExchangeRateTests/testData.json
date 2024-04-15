@@ -1,0 +1,283 @@
+{
+  "rates": [
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Austrálie",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "AUD",
+      "rate": 15.405
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Brazílie",
+      "currency": "real",
+      "amount": 1,
+      "currencyCode": "BRL",
+      "rate": 4.638
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Bulharsko",
+      "currency": "lev",
+      "amount": 1,
+      "currencyCode": "BGN",
+      "rate": 12.952
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Čína",
+      "currency": "žen-min-pi",
+      "amount": 1,
+      "currencyCode": "CNY",
+      "rate": 3.284
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Dánsko",
+      "currency": "koruna",
+      "amount": 1,
+      "currencyCode": "DKK",
+      "rate": 3.395
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "EMU",
+      "currency": "euro",
+      "amount": 1,
+      "currencyCode": "EUR",
+      "rate": 25.325
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Filipíny",
+      "currency": "peso",
+      "amount": 100,
+      "currencyCode": "PHP",
+      "rate": 41.823
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Hongkong",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "HKD",
+      "rate": 3.036
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Indie",
+      "currency": "rupie",
+      "amount": 100,
+      "currencyCode": "INR",
+      "rate": 28.485
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Indonesie",
+      "currency": "rupie",
+      "amount": 1000,
+      "currencyCode": "IDR",
+      "rate": 1.5
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Island",
+      "currency": "koruna",
+      "amount": 100,
+      "currencyCode": "ISK",
+      "rate": 16.805
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Izrael",
+      "currency": "nový šekel",
+      "amount": 1,
+      "currencyCode": "ILS",
+      "rate": 6.397
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Japonsko",
+      "currency": "jen",
+      "amount": 100,
+      "currencyCode": "JPY",
+      "rate": 15.439
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Jižní Afrika",
+      "currency": "rand",
+      "amount": 1,
+      "currencyCode": "ZAR",
+      "rate": 1.253
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Kanada",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "CAD",
+      "rate": 17.296
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Korejská republika",
+      "currency": "won",
+      "amount": 100,
+      "currencyCode": "KRW",
+      "rate": 1.719
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Maďarsko",
+      "currency": "forint",
+      "amount": 100,
+      "currencyCode": "HUF",
+      "rate": 6.424
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Malajsie",
+      "currency": "ringgit",
+      "amount": 1,
+      "currencyCode": "MYR",
+      "rate": 4.973
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Mexiko",
+      "currency": "peso",
+      "amount": 1,
+      "currencyCode": "MXN",
+      "rate": 1.434
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "MMF",
+      "currency": "ZPČ",
+      "amount": 1,
+      "currencyCode": "XDR",
+      "rate": 31.28
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Norsko",
+      "currency": "koruna",
+      "amount": 1,
+      "currencyCode": "NOK",
+      "rate": 2.178
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Nový Zéland",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "NZD",
+      "rate": 14.122
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Polsko",
+      "currency": "zlotý",
+      "amount": 1,
+      "currencyCode": "PLN",
+      "rate": 5.898
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Rumunsko",
+      "currency": "leu",
+      "amount": 1,
+      "currencyCode": "RON",
+      "rate": 5.091
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Singapur",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "SGD",
+      "rate": 17.47
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Švédsko",
+      "currency": "koruna",
+      "amount": 1,
+      "currencyCode": "SEK",
+      "rate": 2.191
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Švýcarsko",
+      "currency": "frank",
+      "amount": 1,
+      "currencyCode": "CHF",
+      "rate": 26.043
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Thajsko",
+      "currency": "baht",
+      "amount": 100,
+      "currencyCode": "THB",
+      "rate": 64.736
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Turecko",
+      "currency": "lira",
+      "amount": 100,
+      "currencyCode": "TRY",
+      "rate": 73.349
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "USA",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "USD",
+      "rate": 23.768
+    },
+    {
+      "validFor": "2024-04-15",
+      "order": 73,
+      "country": "Velká Británie",
+      "currency": "libra",
+      "amount": 1,
+      "currencyCode": "GBP",
+      "rate": 29.66
+    }
+  ]
+}
