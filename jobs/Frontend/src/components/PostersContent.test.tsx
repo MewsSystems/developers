@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, screen, MatcherFunction } from '@testing-library/react'
 import { PostersContent } from './PostersContent'
 import { useNavigate } from 'react-router-dom'
@@ -69,7 +69,7 @@ describe('PostersContent', () => {
         expect(screen.getByText(errorText)).toBeInTheDocument()
     })
 
-    it('displays no data message when there are no results', () => {
+    test('displays no data message when there are no results', () => {
         const props: PosterContentProps = {
             searchData: {
                 results: [],

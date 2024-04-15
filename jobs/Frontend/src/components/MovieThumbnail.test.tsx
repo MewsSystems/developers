@@ -1,5 +1,5 @@
 // Import testing utilities and the component to be tested
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, fireEvent, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { MovieThumbnail } from './MovieThumbnail'
