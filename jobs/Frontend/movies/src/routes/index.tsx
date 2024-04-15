@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import z from "zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import styled from "styled-components";
+
 import { searchMoviesQueryOptions } from "../services/movies";
 import { SearchInput } from "../components/SearchInput";
-import styled from "styled-components";
 
 const HomeContainer = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 
 const movieSearchSchema = z.object({
