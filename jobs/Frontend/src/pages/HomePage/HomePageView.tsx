@@ -68,6 +68,7 @@ export const HomePageView: FC<HomePageViewProps> = ({ movieSearch }) => {
                                     <IconButton
                                         size='small'
                                         onClick={clearTitle}
+                                        data-testid='clear-search'
                                     >
                                         <Clear />
                                     </IconButton>
