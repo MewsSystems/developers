@@ -30,7 +30,7 @@ describe('MovieThumbnail', () => {
         vi.mocked(useNavigate).mockImplementation(() => mockNavigate)
     })
 
-    it('renders correctly with given props', () => {
+    test('renders correctly with given props', () => {
         render(
             <BrowserRouter>
                 <MovieThumbnail {...movieProps} />
@@ -46,7 +46,7 @@ describe('MovieThumbnail', () => {
         ).toBeInTheDocument()
     })
 
-    it('navigates to the movie details page on button click', () => {
+    test('navigates to the movie details page on button click', () => {
         render(
             <BrowserRouter>
                 <MovieThumbnail {...movieProps} />
