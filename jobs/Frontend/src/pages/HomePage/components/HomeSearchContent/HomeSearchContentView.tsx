@@ -16,6 +16,7 @@ export const HomeSearchContentView: FC<HomeSearchContentProps> = (props) => {
         <Stack
             component='section'
             className='container'
+            role='region'
         >
             <PostersContent
                 searchData={searchData}
