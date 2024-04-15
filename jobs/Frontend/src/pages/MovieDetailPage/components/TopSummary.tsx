@@ -76,6 +76,7 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                                       key={genre.id}
                                       label={genre.name}
                                       className='rounded-lg text-base'
+                                      test-id={`genre-chip-${genre.id}`}
                                   />
                               ))
                             : [...Array(3)].map((_, index) => (
