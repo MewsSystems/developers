@@ -35,6 +35,7 @@ export const PostersContent = (props: PosterContentProps) => {
                             <Skeleton
                                 className='h-[18.75rem] scale-100'
                                 variant='rectangular'
+                                data-testid='Skeleton'
                             />
                             <Stack className='p-4'>
                                 <Skeleton className='w-12 text-base' />
