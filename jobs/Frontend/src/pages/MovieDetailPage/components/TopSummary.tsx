@@ -28,10 +28,19 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                         </>
                     ) : (
                         <>
-                            <Skeleton className='h-24 w-44 scale-100' />
+                            <Skeleton
+                                data-testid='Skeleton'
+                                className='h-24 w-44 scale-100'
+                            />
                             <Stack>
-                                <Skeleton className='scale-80 h-9 w-44' />
-                                <Skeleton className='scale-80 h-9 w-40' />
+                                <Skeleton
+                                    data-testid='Skeleton'
+                                    className='scale-80 h-9 w-44'
+                                />
+                                <Skeleton
+                                    data-testid='Skeleton'
+                                    className='scale-80 h-9 w-40'
+                                />
                             </Stack>
                         </>
                     )}
@@ -45,7 +54,10 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                                     {detailData?.release_date.substring(0, 4)}
                                 </Typography>
                             ) : (
-                                <Skeleton className='scale-80 h-9 w-10' />
+                                <Skeleton
+                                    data-testid='Skeleton'
+                                    className='scale-80 h-9 w-10'
+                                />
                             )}
                         </Stack>
                         <Stack className='flex-row items-center gap-1'>
@@ -55,7 +67,10 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                                     {detailData?.original_language}
                                 </Typography>
                             ) : (
-                                <Skeleton className='scale-80 h-9 w-10' />
+                                <Skeleton
+                                    data-testid='Skeleton'
+                                    className='scale-80 h-9 w-10'
+                                />
                             )}
                         </Stack>
                         <Stack className='flex-row items-center gap-1'>
@@ -65,7 +80,10 @@ export const TopSummary = ({ detailData, isLoading }: TopSummaryProps) => {
                                     {detailData?.runtime}min
                                 </Typography>
                             ) : (
-                                <Skeleton className='scale-80 h-9 w-10' />
+                                <Skeleton
+                                    data-testid='Skeleton'
+                                    className='scale-80 h-9 w-10'
+                                />
                             )}
                         </Stack>
                     </Stack>

@@ -76,6 +76,7 @@ export const MovieDetailView: FC<MovieDetailPageProps> = (props) => {
                                 />
                             ) : (
                                 <Skeleton
+                                    data-testid='Skeleton'
                                     className='h-[18.75rem] w-full scale-100'
                                     variant='rectangular'
                                 />
