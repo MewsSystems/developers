@@ -49,7 +49,7 @@ export async function fetchMovies({
   return fetch(
     `https://api.themoviedb.org/3/search/movie?page=${page}&query=${encodeURIComponent(
       query,
-    )}&include_adult=false&language=en-US&page=1&api_key=${
+    )}&include_adult=false&language=en-US&&api_key=${
       import.meta.env.VITE_TMDB_API_KEY
     }`,
   )

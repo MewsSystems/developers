@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { searchMoviesQueryOptions } from "../services/movies";
 import { SearchInput } from "../components/SearchInput";
 import { MovieCard } from "../components/MovieCard";
+import { Pagination } from "../components/Pagination";
 
 const HomeContainer = styled.div`
   display: flex;
@@ -50,14 +51,23 @@ function Home() {
       search: (old) => ({
         ...old,
         query: queryDraft,
+        page: 1,
       }),
     });
   }, [navigate, queryDraft]);
 
+  const onPageChange = (newPage: number) => {
+    void navigate({
+      search: (old) => ({
+        ...old,
+        page: newPage,
+      }),
+    });
+  };
+
   return (
     <HomeContainer>
       <h3>Welcome Home!</h3>
-      <p>{page}</p>
       <SearchInput
         placeholder="Search"
         value={queryDraft}
@@ -70,6 +80,11 @@ function Home() {
           <MovieCard movie={movie} key={movie.id} />
         ))}
       </MoviesContainer>
+      <Pagination
+        currentPage={moviesQuery.data.page}
+        totalPages={moviesQuery.data.totalPages}
+        onPageChange={onPageChange}
+      />
     </HomeContainer>
   );
 }
