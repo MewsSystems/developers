@@ -22,6 +22,9 @@ img, video, svg {
 body {
   margin: 0;
   min-height: 100dvh; 
+  background-color: #efefef;
+  max-width: 72rem;
+  margin: 0px auto;
 } 
 
 h1, h2, h3, h4, h5, h6 {

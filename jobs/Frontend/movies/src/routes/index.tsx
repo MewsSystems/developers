@@ -6,10 +6,20 @@ import styled from "styled-components";
 
 import { searchMoviesQueryOptions } from "../services/movies";
 import { SearchInput } from "../components/SearchInput";
+import { MovieCard } from "../components/MovieCard";
 
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  margin: 8px 12px;
+`;
+
+const MoviesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 8px;
 `;
 
 const movieSearchSchema = z.object({
@@ -47,6 +57,7 @@ function Home() {
   return (
     <HomeContainer>
       <h3>Welcome Home!</h3>
+      <p>{page}</p>
       <SearchInput
         placeholder="Search"
         value={queryDraft}
@@ -54,8 +65,11 @@ function Home() {
           setQueryDraft(e.target.value);
         }}
       />
-      <p>{page}</p>
-      <pre>{JSON.stringify(moviesQuery.data, null, 2)}</pre>
+      <MoviesContainer>
+        {moviesQuery.data.movies.map((movie) => (
+          <MovieCard movie={movie} key={movie.id} />
+        ))}
+      </MoviesContainer>
     </HomeContainer>
   );
 }
