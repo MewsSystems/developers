@@ -1,3 +1,4 @@
 export const enum ReactQueryPrimaryKey {
-    SearchMovies = 'search-movies'
+    TmdbSearchMovies = 'tmdb-search-movies',
+    TmdbMovieDetail = 'tmdb-movie-detail',
 }

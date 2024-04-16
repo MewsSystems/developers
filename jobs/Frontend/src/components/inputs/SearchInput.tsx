@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { Label, TextInput } from './SearchInput.styled';
 
 export interface SearchInputData {
     query: string;
@@ -10,8 +11,8 @@ export default function SearchInput({ query, setQuery }: SearchInputData) {
 
     return (
         <>
-            <label htmlFor={inputId}>Search</label>
-            <input
+            <Label htmlFor={inputId}>Search movies</Label>
+            <TextInput
                 autoFocus
                 id={inputId}
                 type="search"

@@ -3,10 +3,10 @@ export namespace MovieModel {
         page: number;
         totalPages: number;
         totalResults: number;
-        results: SearchMovieItem[];
+        results: MovieItem[];
     }
 
-    export interface SearchMovieItem {
+    export interface MovieItem {
         adult: boolean;
         backdropUrl: string;
         id: number;
@@ -15,6 +15,34 @@ export namespace MovieModel {
         overview: string;
         popularity: string;
         posterUrl: string;
+        title: string;
+        video: boolean;
+        voteAverage: number;
+        voteCount: number;
+    }
+
+    export interface MovieDetail {
+        adult: boolean;
+        backdropUrl: string;
+        belongsToCollection: string;
+        budget: number;
+        genres: {
+            id: number;
+            name: string;
+        }[];
+        homepage: string;
+        id: string;
+        imbdId: string;
+        originalLanguage: string;
+        originalTitle: string;
+        overview: string;
+        popularity: string;
+        posterUrl: string;
+        releaseDate: Date;
+        revenue: number;
+        runtime: number;
+        status: string;
+        tagline: string;
         title: string;
         video: boolean;
         voteAverage: number;
