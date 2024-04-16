@@ -1,0 +1,94 @@
+import React from "react";
+import styled from "styled-components";
+import { Movie } from "../services/movies";
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding-bottom: 12px;
+`;
+
+const StyledHeroContainer = styled.div<{ $imageSrc: string }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 350px;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+  z-index: 1;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+
+  color: white;
+
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    background: url(${(props) => props.$imageSrc});
+    background-size: cover;
+    z-index: -1;
+  }
+`;
+const StyledHeroContentContainer = styled.div`
+  display: flex;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  padding: 18px 12px;
+`;
+
+const StyledHeroInfoContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const StyledHeroGendersContainer = styled.div`
+  display: flex;
+`;
+
+const StyledContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  margin: 0px auto;
+  padding: 14px 8px;
+`;
+
+export interface MovieDetailProps {
+  movie: Movie;
+}
+
+export const MovieDetail: React.FC<MovieDetailProps> = ({ movie }) => {
+  return (
+    <StyledContainer>
+      <StyledHeroContainer $imageSrc={movie.imgSrc}>
+        <StyledHeroContentContainer>
+          <h1>{movie.title}</h1>
+          <StyledHeroInfoContainer>
+            <h3>{movie.rating}</h3>
+            <h3>{movie.runtime} minutes</h3>
+          </StyledHeroInfoContainer>
+          <StyledHeroGendersContainer>
+            {movie.genres.join()}
+          </StyledHeroGendersContainer>
+        </StyledHeroContentContainer>
+      </StyledHeroContainer>
+      <StyledContentContainer>
+        <p>{movie.overview}</p>
+        <span>{movie.productionCompanies.join()}</span>
+      </StyledContentContainer>
+    </StyledContainer>
+  );
+};

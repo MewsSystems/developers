@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { findMovieQueryOptions } from "../../services/movies";
+import { MovieDetail } from "../../components/MovieDetail";
+import styled from "styled-components";
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 42px 32px;
+`;
 
 export const Route = createFileRoute("/movies/$movieId")({
   loader: (opts) =>
@@ -15,9 +24,8 @@ function Movie() {
   const movieQuery = useSuspenseQuery(findMovieQueryOptions(movieId));
 
   return (
-    <>
-      <div>{`Hello /movies/${movieId}!`}</div>
-      <pre>{JSON.stringify(movieQuery.data, null, 2)}</pre>
-    </>
+    <StyledContainer>
+      <MovieDetail movie={movieQuery.data} />
+    </StyledContainer>
   );
 }
