@@ -18,15 +18,17 @@ const StyledPaginationItem = styled.li<{
   display: flex;
   align-items: center;
   border-radius: 16px;
-  font-size: 13px;
+  font-size: var(--fs-300);
+  font-family: var(--fs-serif);
+  color: var(--clr-slate-800);
   min-width: 32px;
 
   background-color: ${(props) =>
-    props.$selected ? "rgba(0, 0, 0, 0.08)" : "trasnparent"};
+    props.$selected ? "var(--clr-blue-300)" : "trasnparent"};
 
   &:hover {
     background-color: ${(props) =>
-      props.$isDots ? "transparent" : "rgba(0, 0, 0, 0.04)"};
+      props.$isDots ? "transparent" : "var(--clr-blue-200)"};
     cursor: ${(props) => (props.$isDots ? "default" : "pointer")};
   }
 `;
@@ -37,7 +39,7 @@ const range = (start: number, end: number) => {
   const length = end - start + 1;
   return Array.from({ length }, (_, idx) => idx + start);
 };
-const siblingCount = 2;
+const siblingCount = 1;
 
 export interface PaginationProps {
   onPageChange: (page: number) => void;

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import styled from "styled-components";
 import { MovieResult } from "../services/movies";
+import { media } from "../styles/breakpoints";
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -14,9 +15,22 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledTitleContainer = styled.div`
-  background: darkgray;
+  background: var(--clr-blue-500);
   border-radius: 8px 8px 0px 0px;
   text-align: center;
+  padding: 12px 8px;
+`;
+
+const StyledTitle = styled.h1`
+  font-family: var(--ff-serif);
+  font-size: var(--fs-400);
+  color: var(--clr-blue-100);
+  font-weight: bold;
+  line-height: 1.75rem;
+
+  ${media.lg`
+    font-size: var(--fs-300);
+  `}
 `;
 
 const StyledImgContainer = styled.div`
@@ -46,6 +60,16 @@ const StyledOverview = styled.h4`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
+  font-size: var(--fs-400);
+  font-family: var(--ff-serif);
+  color: var(--clr-slate-700);
+`;
+
+const StyledRating = styled.h5`
+  margin-top: 12px;
+  font-size: var(--fs-300);
+  color: var(--clr-blue-400);
+  font-family: var(--ff-sans);
 `;
 
 export const MovieCard: React.FC<{ movie: MovieResult }> = ({
@@ -61,7 +85,7 @@ export const MovieCard: React.FC<{ movie: MovieResult }> = ({
       {...props}
     >
       <StyledTitleContainer>
-        <h2 title={movie.title}>{movie.title}</h2>
+        <StyledTitle title={movie.title}>{movie.title}</StyledTitle>
       </StyledTitleContainer>
       <StyledCardBody>
         <StyledImgContainer>
@@ -72,7 +96,7 @@ export const MovieCard: React.FC<{ movie: MovieResult }> = ({
           <StyledOverview title={movie.overview}>
             {movie.overview}
           </StyledOverview>
-          <h5>{movie.rating.toFixed(1)} out of 10</h5>
+          <StyledRating>{movie.rating.toFixed(1)} out of 10</StyledRating>
         </StyledMovieInfoContainer>
       </StyledCardBody>
     </StyledLink>

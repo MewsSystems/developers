@@ -8,6 +8,7 @@ import { searchMoviesQueryOptions } from "../services/movies";
 import { SearchInput } from "../components/SearchInput";
 import { MovieCard } from "../components/MovieCard";
 import { Pagination } from "../components/Pagination";
+import { media } from "../styles/breakpoints";
 
 const HomeContainer = styled.div`
   display: flex;
@@ -16,11 +17,49 @@ const HomeContainer = styled.div`
   margin: 8px 12px;
 `;
 
+const StyledIntroContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap; 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 24px;
+  
+  ${media.lg`
+    padding: 12px 16px;
+  `};
+`;
+
+const StyledWelcome = styled.h1`
+  font-size: var(--fs-700);
+  color: var(--clr-slate-900);
+  font-family: var(--ff-serif);
+
+  ${media.lg`
+    font-size: var(--fs-600); 
+  `};
+`;
+
+const StyledInstructions = styled.p`
+  font-size: var(--fs-500);
+  color: var(--clr-blue-700);
+  font-family: var(--ff-sand);
+
+  ${media.lg`
+    font-size: var(--fs-400); 
+  `};
+`;
+
 const MoviesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: 1fr;
-  gap: 8px;
+  gap: 10px;
+  padding-top: 8px;
+
+  ${media.sm`
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  `}
 `;
 
 const movieSearchSchema = z.object({
@@ -40,7 +79,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const navigate = useNavigate({ from: Route.fullPath });
-  const { page, query } = Route.useSearch();
+  const { query } = Route.useSearch();
   const moviesQuery = useSuspenseQuery(
     searchMoviesQueryOptions(Route.useLoaderDeps()),
   );
@@ -67,9 +106,15 @@ function Home() {
 
   return (
     <HomeContainer>
-      <h3>Welcome Home!</h3>
+      <StyledIntroContainer>
+        <StyledWelcome>Welcome to Mews Movies assigment web</StyledWelcome>
+        <StyledInstructions>
+          Search your favorite movie and click to see more details
+        </StyledInstructions>
+      </StyledIntroContainer>
+
       <SearchInput
-        placeholder="Search"
+        placeholder="Search movie"
         value={queryDraft}
         onChange={(e) => {
           setQueryDraft(e.target.value);
