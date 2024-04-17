@@ -11,10 +11,8 @@ export default function MovieCard({ movie }: { movie: any }) {
       </div>
       <div className="description">
         <h2>{movie.title}</h2>
-        <p>{movie.overview}</p>
-        <Link to={`/${movie.id}`} className="button detail_link">
-          Movie detail
-        </Link>
+        <p className="card_overview">{movie.overview}</p>
+        <div className="button detail_link">Movie detail</div>
       </div>
     </Link>
   );

@@ -1,0 +1,9 @@
+.tag {
+  margin: 0;
+  border: 1px solid var(--green-background);
+  border-radius: 20px;
+  padding: 5px 15px;
+  display: flex;
+  width: fit-content;
+  cursor: default;
+}

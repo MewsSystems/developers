@@ -31,6 +31,10 @@
   width: 50%;
 }
 
+.card_overview {
+  margin-bottom: 50px;
+}
+
 .detail_link {
   position: absolute;
   right: 15px;
