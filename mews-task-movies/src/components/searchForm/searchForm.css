@@ -1,0 +1,24 @@
+.search_form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: flex-start;
+  margin-bottom: 50px;
+}
+
+input {
+  border: none;
+  border-radius: 20px;
+  width: 90vw;
+  max-width: 500px;
+  height: 40px;
+  padding: 10px;
+  color: var(--dark-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+label {
+  margin: 0;
+  font-size: 1.2rem;
+}

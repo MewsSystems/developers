@@ -1,7 +1,13 @@
+import './movieDetail.css';
+import { Link } from 'react-router-dom';
+
 export default function MovieDetail() {
   return (
-    <div>
+    <main>
       <h1>Movie Detail</h1>
-    </div>
+      <Link to={'/'} className="button">
+        back
+      </Link>
+    </main>
   );
 }

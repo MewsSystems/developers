@@ -1,5 +1,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import MovieCard from '../../components/movieCard/movieCard';
+import SearchForm from '../../components/searchForm/searchForm';
+import MovieList from '../../components/movieList/movieList';
 
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
@@ -34,16 +35,9 @@ export default function HomePage() {
 
   return (
     <main>
-      <h1>Movies</h1>
-      <form>
-        <label htmlFor="movie">Search for the movie: </label>
-        <input type="text" id="movie" value={search} onChange={handleSearch} />
-      </form>
-      <div>
-        {movies.map((movie: any) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </div>
+      <h1>Find your movie</h1>
+      <SearchForm searchValue={search} searchFunction={handleSearch} />
+      <MovieList movieValues={movies} />
     </main>
   );
 }

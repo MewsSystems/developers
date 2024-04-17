@@ -1,0 +1,8 @@
+.movie_list_container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
+  gap: 40px;
+}
