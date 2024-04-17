@@ -24,7 +24,7 @@ const StyledPaginationItem = styled.li<{
   min-width: 32px;
 
   background-color: ${(props) =>
-    props.$selected ? "var(--clr-blue-300)" : "trasnparent"};
+    props.$selected ? "var(--clr-blue-300)" : "transparent"};
 
   &:hover {
     background-color: ${(props) =>

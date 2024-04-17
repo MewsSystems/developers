@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Movie } from "../services/movies";
+import { media } from "../styles/breakpoints";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ const StyledContainer = styled.div`
   width: 100%;
   background: white;
   border-radius: 8px;
-  padding-bottom: 12px;
+  padding-bottom: 28px;
 `;
 
 const StyledHeroContainer = styled.div<{ $imageSrc: string }>`
@@ -41,7 +42,7 @@ const StyledHeroContainer = styled.div<{ $imageSrc: string }>`
 `;
 const StyledHeroContentContainer = styled.div`
   display: flex;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
   flex-direction: column;
   width: 100%;
@@ -49,13 +50,50 @@ const StyledHeroContentContainer = styled.div`
   padding: 18px 12px;
 `;
 
+const StyledHeroTitle = styled.h1`
+  font-size: var(--fs-500);
+  font-family: var(--ff-serif);
+  color: var(--clr-slate-100);
+  font-weight: bold;
+  text-wrap: pretty;
+`;
+
 const StyledHeroInfoContainer = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledRating = styled.h3`
+  font-size: var(--fs-400);
+  font-family: var(--ff-sans);
+  color: var(--clr-slate-200);
+  font-weight: 900;
+`;
+
+const StyledRuntime = styled.h3`
+  font-size: var(--fs-300);
+  font-family: var(--ff-sans);
+  color: var(--clr-slate-200);
+  font-weight: 200;
 `;
 
 const StyledHeroGendersContainer = styled.div`
   display: flex;
+  margin-top: 14px;
+  gap: 8px;
+`;
+
+const StyledGender = styled.span`
+  background: var(--clr-slate-50);
+  color: var(--clr-slate-800);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: var(--fs-200);
+  font-family: var(--ff-serif);
+  line-height: 20px;
 `;
 
 const StyledContentContainer = styled.div`
@@ -63,7 +101,23 @@ const StyledContentContainer = styled.div`
   flex-direction: column;
   max-width: 720px;
   margin: 0px auto;
-  padding: 14px 8px;
+  padding: 14px 12px;
+`;
+
+const StyledOverview = styled.p`
+  font-family: var(--ff-sans);
+  font-size: 20px;
+  color: var(--clr-slate-800);
+
+  ${media.sm`
+    font-size: var(--fs-400);
+  `}
+`;
+
+const StyledProduction = styled.span`
+  font-family; var(--ff-serif);
+  font-size: var(--fs-300);
+  color: var(--clr-slate-700);
 `;
 
 export interface MovieDetailProps {
@@ -75,19 +129,23 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ movie }) => {
     <StyledContainer>
       <StyledHeroContainer $imageSrc={movie.imgSrc}>
         <StyledHeroContentContainer>
-          <h1>{movie.title}</h1>
+          <StyledHeroTitle>{movie.title}</StyledHeroTitle>
           <StyledHeroInfoContainer>
-            <h3>{movie.rating}</h3>
-            <h3>{movie.runtime} minutes</h3>
+            <StyledRating>{`⭐️ ${movie.rating}`}</StyledRating>
+            <StyledRuntime>{`⏱️ ${movie.runtime} minutes`}</StyledRuntime>
           </StyledHeroInfoContainer>
           <StyledHeroGendersContainer>
-            {movie.genres.join()}
+            {movie.genres.map((gender, index) => (
+              <StyledGender key={index}>{gender}</StyledGender>
+            ))}
           </StyledHeroGendersContainer>
         </StyledHeroContentContainer>
       </StyledHeroContainer>
       <StyledContentContainer>
-        <p>{movie.overview}</p>
-        <span>{movie.productionCompanies.join()}</span>
+        <StyledOverview>{movie.overview}</StyledOverview>
+        <StyledProduction>
+          {movie.productionCompanies.join(", ")}
+        </StyledProduction>
       </StyledContentContainer>
     </StyledContainer>
   );
