@@ -1,22 +1,29 @@
 import './movieDetail.css';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Tag from '../../components/tag/tag';
+import Tag from '../tag/tag';
 import { getMovieById } from '../../data/getMovies';
 
-export default function MovieDetail() {
-  const params = useParams();
-
+export default function MovieDetail({
+  selectedMovieId,
+  setSelectedMovie,
+}: {
+  selectedMovieId: number;
+  setSelectedMovie: any;
+}) {
   const [movie, setMovie] = useState(Object);
 
   useEffect(() => {
-    getMovieById(params, setMovie);
-  }, [params]);
+    getMovieById(selectedMovieId, setMovie);
+  }, [selectedMovieId]);
 
   return (
-    <main>
+    <>
       <h1>{movie.title}</h1>
+      <div className="back_button_container">
+        <button className="button" onClick={() => setSelectedMovie(0)}>
+          back
+        </button>
+      </div>
       <div className="detail_container">
         {movie.poster_path && (
           <img
@@ -63,9 +70,6 @@ export default function MovieDetail() {
           </div>
         </div>
       </div>
-      <Link to={'/'} className="button">
-        back
-      </Link>
-    </main>
+    </>
   );
 }

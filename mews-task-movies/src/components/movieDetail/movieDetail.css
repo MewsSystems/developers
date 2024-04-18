@@ -35,6 +35,15 @@
   gap: 15px;
 }
 
+.back_button_container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 @media (min-width: 1000px) {
 
   .movie_img {

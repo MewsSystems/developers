@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 20px;
   justify-content: flex-start;
-  margin-bottom: 50px;
 }
 
 input {
@@ -15,10 +14,37 @@ input {
   padding: 10px;
   color: var(--dark-text);
   font-size: 1.2rem;
-  cursor: pointer;
+  cursor: text;
 }
 
 label {
   margin: 0;
   font-size: 1.2rem;
+}
+
+.clear_button {
+  position: relative;
+  top: -62px;
+  left: calc(90vw - 45px);
+  color: var(--dark-red);
+  font-size: 2rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 560px) {
+  .clear_button {
+    left: 455px;
+  }
+}
+
+
+@media (min-width: 1200px) {
+  .clear_button:hover {
+    color: var(--light-red);
+  }
 }

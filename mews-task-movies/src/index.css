@@ -5,7 +5,13 @@
   --green-background: rgb(0, 67, 67);
   --light-text: white;
   --dark-text: black;
+  --light-red: rgb(211, 0, 0);
+  --dark-red: rgb(157, 0, 0);
 }
+
+/* html {
+  width: 100vw;
+} */
 
 * {
   box-sizing: border-box;
@@ -54,6 +60,10 @@ h3 {
 p {
   font-size: 1.1rem;
   cursor: default;
+}
+
+button {
+  all: unset;
 }
 
 .button {

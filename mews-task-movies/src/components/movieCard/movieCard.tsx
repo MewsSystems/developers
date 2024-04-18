@@ -1,8 +1,16 @@
 import './movieCard.css';
-import { Link } from 'react-router-dom';
-export default function MovieCard({ movie }: { movie: any }) {
+export default function MovieCard({
+  movie,
+  handleSelectedMovie,
+}: {
+  movie: any;
+  handleSelectedMovie: any;
+}) {
   return (
-    <Link to={`/${movie.id}`} className="movie_card_container">
+    <div
+      onClick={() => handleSelectedMovie(movie.id)}
+      className="movie_card_container"
+    >
       {movie.poster_path && (
         <div className="movie_card_image_wrapper">
           <img
@@ -17,6 +25,6 @@ export default function MovieCard({ movie }: { movie: any }) {
         <p className="card_overview">{movie.overview}</p>
         <div className="button detail_link">Movie detail</div>
       </div>
-    </Link>
+    </div>
   );
 }

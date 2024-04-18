@@ -23,7 +23,7 @@ export const getMovies = async (
 };
 
 export const getMovieById = async (
-  params: Readonly<Params<string>>,
+  movieId: number,
   setSelectedMovieData: React.Dispatch<Object>,
 ) => {
   const options = {
@@ -33,7 +33,7 @@ export const getMovieById = async (
     },
   };
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${params.movieId}?api_key=03b8572954325680265531140190fd2a`,
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=03b8572954325680265531140190fd2a`,
     options,
   );
   const movieData = await response.json();

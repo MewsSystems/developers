@@ -16,8 +16,9 @@ export default function SearchForm({
         value={searchValue}
         onChange={searchFunction}
         placeholder="type the movie name..."
-        lang="en"
+        className="movie_serach_input"
       />
+      <button className="clear_button">x</button>
     </form>
   );
 }
