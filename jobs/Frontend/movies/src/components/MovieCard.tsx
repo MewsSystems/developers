@@ -1,14 +1,12 @@
 import React from "react";
-import { Link } from "@tanstack/react-router";
 import styled from "styled-components";
-import { MovieResult } from "../services/movies";
+
+import { MovieResult } from "../services/movies/searchMovies";
 import { media } from "../styles/breakpoints";
 
-const StyledLink = styled(Link)`
+const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  color: inherit;
   background-color: white;
   border-radius: 8px;
   padding; 8px;
@@ -72,18 +70,9 @@ const StyledRating = styled.h5`
   font-family: var(--ff-sans);
 `;
 
-export const MovieCard: React.FC<{ movie: MovieResult }> = ({
-  movie,
-  ...props
-}) => {
+export const MovieCard: React.FC<{ movie: MovieResult }> = ({ movie }) => {
   return (
-    <StyledLink
-      to="/movies/$movieId"
-      params={{
-        movieId: movie.id,
-      }}
-      {...props}
-    >
+    <StyledContainer>
       <StyledTitleContainer>
         <StyledTitle title={movie.title}>{movie.title}</StyledTitle>
       </StyledTitleContainer>
@@ -93,12 +82,10 @@ export const MovieCard: React.FC<{ movie: MovieResult }> = ({
         </StyledImgContainer>
 
         <StyledMovieInfoContainer>
-          <StyledOverview title={movie.overview}>
-            {movie.overview}
-          </StyledOverview>
+          <StyledOverview title={movie.overview}>{movie.overview}</StyledOverview>
           <StyledRating>{movie.rating.toFixed(1)} out of 10</StyledRating>
         </StyledMovieInfoContainer>
       </StyledCardBody>
-    </StyledLink>
+    </StyledContainer>
   );
 };

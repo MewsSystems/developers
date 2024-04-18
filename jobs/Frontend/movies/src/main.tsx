@@ -8,7 +8,7 @@ import { routeTree } from "./routeTree.gen";
 export const queryClient = new QueryClient();
 
 // Create a new router instance
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     queryClient,
@@ -33,6 +33,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </QueryClientProvider>
+    </QueryClientProvider>,
   );
 }

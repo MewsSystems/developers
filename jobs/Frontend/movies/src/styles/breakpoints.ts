@@ -1,5 +1,7 @@
 import { css } from "styled-components";
 
+export type DeviceSizes = keyof typeof device;
+
 export const device = {
   xs: "320px",
   sm: "640px",

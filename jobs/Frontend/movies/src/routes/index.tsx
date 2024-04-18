@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import z from "zod";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 
-import { searchMoviesQueryOptions } from "../services/movies";
+import { searchMoviesQueryOptions } from "../services/movies/searchMovies";
 import { SearchInput } from "../components/SearchInput";
 import { MovieCard } from "../components/MovieCard";
 import { Pagination } from "../components/Pagination";
@@ -62,6 +62,11 @@ const MoviesContainer = styled.div`
   `}
 `;
 
+const StyledLink = styled(Link)`
+  display: flex;
+  text-decoration: none;
+`;
+
 const movieSearchSchema = z.object({
   page: z.number().catch(1),
   query: z.string().catch(""),
@@ -70,19 +75,14 @@ const movieSearchSchema = z.object({
 export const Route = createFileRoute("/")({
   validateSearch: movieSearchSchema,
   loaderDeps: ({ search }) => ({ ...search }),
-  loader: (opts) =>
-    opts.context.queryClient.ensureQueryData(
-      searchMoviesQueryOptions(opts.deps),
-    ),
+  loader: (opts) => opts.context.queryClient.ensureQueryData(searchMoviesQueryOptions(opts.deps)),
   component: Home,
 });
 
 function Home() {
   const navigate = useNavigate({ from: Route.fullPath });
   const { query } = Route.useSearch();
-  const moviesQuery = useSuspenseQuery(
-    searchMoviesQueryOptions(Route.useLoaderDeps()),
-  );
+  const moviesQuery = useSuspenseQuery(searchMoviesQueryOptions(Route.useLoaderDeps()));
   const [queryDraft, setQueryDraft] = useState(query);
 
   useEffect(() => {
@@ -122,7 +122,15 @@ function Home() {
       />
       <MoviesContainer>
         {moviesQuery.data.movies.map((movie) => (
-          <MovieCard movie={movie} key={movie.id} />
+          <StyledLink
+            key={movie.id}
+            to="/movies/$movieId"
+            params={{
+              movieId: movie.id,
+            }}
+          >
+            <MovieCard movie={movie} />
+          </StyledLink>
         ))}
       </MoviesContainer>
       <Pagination

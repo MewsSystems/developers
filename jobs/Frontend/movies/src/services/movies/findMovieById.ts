@@ -1,99 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
 
-export interface SearchResponse {
-  page: number;
-  results: SearchMovieResult[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface SearchMovieResult {
-  adult: boolean;
-  backdrop_path: null | string;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: Date;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
-
-export interface SearchResults {
-  page: number;
-  movies: MovieResult[];
-  totalPages: number;
-  totalResults: number;
-}
-
-export interface MovieResult {
-  id: number;
-  overview: string;
-  title: string;
-  rating: number;
-  imgSrc: string;
-}
-
-export async function fetchMovies({
-  page = 1,
-  query = "",
-}: {
-  page?: number;
-  query?: string;
-}) {
-  return fetch(
-    `https://api.themoviedb.org/3/search/movie?page=${page}&query=${encodeURIComponent(
-      query,
-    )}&include_adult=false&language=en-US&&api_key=${import.meta.env.VITE_TMDB_API_KEY}`,
-  )
-    .then((response) => response.json())
-    .then(
-      ({
-        page,
-        results,
-        total_pages,
-        total_results,
-      }: SearchResponse): SearchResults => ({
-        page,
-        movies: results.map(
-          ({ id, overview, title, vote_average, poster_path }) => ({
-            id,
-            overview,
-            title,
-            rating: vote_average,
-
-            imgSrc: `https://image.tmdb.org/t/p/w500${poster_path}`,
-          }),
-        ),
-        totalPages: total_pages,
-        totalResults: total_results,
-      }),
-    );
-}
-
-export const searchMoviesQueryOptions = (opts: {
-  page?: number;
-  query?: string;
-}) =>
-  queryOptions({
-    queryKey: ["movies", opts],
-    queryFn: () => fetchMovies(opts),
-  });
-
 export interface MovieResponse {
   adult: boolean;
   backdrop_path: string;
-  belongs_to_collection: null;
+  belongs_to_collection?: BelongsToCollection;
   budget: number;
   genres: Genre[];
   homepage: string;
   id: number;
   imdb_id: string;
+  origin_country?: string[];
   original_language: string;
   original_title: string;
   overview: string;
@@ -113,6 +29,13 @@ export interface MovieResponse {
   vote_count: number;
 }
 
+export interface BelongsToCollection {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
+}
+
 export interface Genre {
   id: number;
   name: string;
@@ -120,7 +43,7 @@ export interface Genre {
 
 export interface ProductionCompany {
   id: number;
-  logo_path: null | string;
+  logo_path?: string;
   name: string;
   origin_country: string;
 }
@@ -149,7 +72,7 @@ export interface Movie {
   runtime: number;
 }
 
-export async function fetchMovie(id: string): Promise<Movie> {
+export async function fetchMovieById(id: string): Promise<Movie> {
   return fetch(
     `https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${import.meta.env.VITE_TMDB_API_KEY}`,
   )
@@ -181,8 +104,8 @@ export async function fetchMovie(id: string): Promise<Movie> {
     );
 }
 
-export const findMovieQueryOptions = (id: string) =>
+export const findMovieByIdQueryOptions = (id: string) =>
   queryOptions({
     queryKey: ["movies", id],
-    queryFn: () => fetchMovie(id),
+    queryFn: () => fetchMovieById(id),
   });

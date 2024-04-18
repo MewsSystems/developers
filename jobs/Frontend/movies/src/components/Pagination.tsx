@@ -113,12 +113,18 @@ export const Pagination: React.FC<PaginationProps> = ({
   return (
     <StyledPaginationContainer>
       {currentPage !== 1 && (
-        <StyledPaginationItem onClick={onPrevious}>{"<"}</StyledPaginationItem>
+        <StyledPaginationItem data-testid="lower" onClick={onPrevious}>
+          {"<"}
+        </StyledPaginationItem>
       )}
       {paginationRange.map((pageNumber, index) => {
         if (typeof pageNumber === "string") {
           return (
-            <StyledPaginationItem key={index + pageNumber} $isDots>
+            <StyledPaginationItem
+              data-testid={`dots-${index}`}
+              key={index + pageNumber}
+              $isDots
+            >
               {DOTS}
             </StyledPaginationItem>
           );
@@ -134,7 +140,9 @@ export const Pagination: React.FC<PaginationProps> = ({
         );
       })}
       {currentPage !== totalPages && (
-        <StyledPaginationItem onClick={onNext}>{">"}</StyledPaginationItem>
+        <StyledPaginationItem data-testid="greater" onClick={onNext}>
+          {">"}
+        </StyledPaginationItem>
       )}
     </StyledPaginationContainer>
   );

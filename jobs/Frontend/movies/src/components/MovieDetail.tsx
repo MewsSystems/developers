@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Movie } from "../services/movies";
+import { Movie } from "../services/movies/findMovieById";
 import { media } from "../styles/breakpoints";
 
 const StyledContainer = styled.div`
@@ -131,7 +131,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ movie }) => {
         <StyledHeroContentContainer>
           <StyledHeroTitle>{movie.title}</StyledHeroTitle>
           <StyledHeroInfoContainer>
-            <StyledRating>{`⭐️ ${movie.rating}`}</StyledRating>
+            <StyledRating>{`⭐️ ${movie.rating.toFixed(1)}`}</StyledRating>
             <StyledRuntime>{`⏱️ ${movie.runtime} minutes`}</StyledRuntime>
           </StyledHeroInfoContainer>
           <StyledHeroGendersContainer>
@@ -143,9 +143,7 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ movie }) => {
       </StyledHeroContainer>
       <StyledContentContainer>
         <StyledOverview>{movie.overview}</StyledOverview>
-        <StyledProduction>
-          {movie.productionCompanies.join(", ")}
-        </StyledProduction>
+        <StyledProduction>{movie.productionCompanies.join(", ")}</StyledProduction>
       </StyledContentContainer>
     </StyledContainer>
   );

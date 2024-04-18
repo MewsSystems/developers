@@ -2,7 +2,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 
-import { findMovieQueryOptions } from "../../services/movies";
+import { findMovieByIdQueryOptions } from "../../services/movies/findMovieById";
 import { MovieDetail } from "../../components/MovieDetail";
 
 const StyledContainer = styled.div`
@@ -30,16 +30,14 @@ const StyledBackButton = styled.button`
 
 export const Route = createFileRoute("/movies/$movieId")({
   loader: (opts) =>
-    opts.context.queryClient.ensureQueryData(
-      findMovieQueryOptions(opts.params.movieId),
-    ),
+    opts.context.queryClient.ensureQueryData(findMovieByIdQueryOptions(opts.params.movieId)),
   component: Movie,
 });
 
 function Movie() {
   const router = useRouter();
   const { movieId } = Route.useParams();
-  const movieQuery = useSuspenseQuery(findMovieQueryOptions(movieId));
+  const movieQuery = useSuspenseQuery(findMovieByIdQueryOptions(movieId));
   return (
     <StyledContainer>
       <StyledBackButton
