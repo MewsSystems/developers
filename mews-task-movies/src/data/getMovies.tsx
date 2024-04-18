@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 export const getMovies = async (
   searchValue: string,
   setMoviesData: Dispatch<SetStateAction<never[]>>,
+  pageNumber: Number,
+  setAllMoviesData: any,
 ) => {
   const options = {
     method: 'GET',
@@ -11,12 +13,13 @@ export const getMovies = async (
     },
   };
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${searchValue}&api_key=03b8572954325680265531140190fd2a`,
+    `https://api.themoviedb.org/3/search/movie?query=${searchValue}&page=${pageNumber}&api_key=03b8572954325680265531140190fd2a`,
     options,
   );
   const moviesData = await response.json();
 
   console.log('moviesData', moviesData);
+  setAllMoviesData(moviesData);
   setMoviesData(moviesData.results);
   console.log('moviesData.result', moviesData.results);
 };

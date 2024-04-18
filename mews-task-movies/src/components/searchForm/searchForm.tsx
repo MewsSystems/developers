@@ -9,7 +9,9 @@ export default function SearchForm({
 }) {
   return (
     <form className="search_form">
-      <label htmlFor="movie">Search for the movie: </label>
+      <label htmlFor="movie" id="movies_view">
+        Search for the movie:{' '}
+      </label>
       <input
         type="text"
         id="movie"
