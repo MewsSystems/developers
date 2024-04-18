@@ -129,21 +129,25 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ movie }) => {
     <StyledContainer>
       <StyledHeroContainer $imageSrc={movie.imgSrc}>
         <StyledHeroContentContainer>
-          <StyledHeroTitle>{movie.title}</StyledHeroTitle>
+          <StyledHeroTitle data-testid="movieDetailTitle">{movie.title}</StyledHeroTitle>
           <StyledHeroInfoContainer>
-            <StyledRating>{`⭐️ ${movie.rating.toFixed(1)}`}</StyledRating>
-            <StyledRuntime>{`⏱️ ${movie.runtime} minutes`}</StyledRuntime>
+            <StyledRating data-testid="movieDetailRating">{`⭐️ ${movie.rating.toFixed(1)}`}</StyledRating>
+            <StyledRuntime data-testid="movieDetailRuntime">{`⏱️ ${movie.runtime} minutes`}</StyledRuntime>
           </StyledHeroInfoContainer>
           <StyledHeroGendersContainer>
             {movie.genres.map((gender, index) => (
-              <StyledGender key={index}>{gender}</StyledGender>
+              <StyledGender data-testid="movieDetailGender" key={index}>
+                {gender}
+              </StyledGender>
             ))}
           </StyledHeroGendersContainer>
         </StyledHeroContentContainer>
       </StyledHeroContainer>
       <StyledContentContainer>
-        <StyledOverview>{movie.overview}</StyledOverview>
-        <StyledProduction>{movie.productionCompanies.join(", ")}</StyledProduction>
+        <StyledOverview data-testid="movieDetailOverview">{movie.overview}</StyledOverview>
+        <StyledProduction data-testid="movieDetailProduction">
+          {movie.productionCompanies.join(", ")}
+        </StyledProduction>
       </StyledContentContainer>
     </StyledContainer>
   );

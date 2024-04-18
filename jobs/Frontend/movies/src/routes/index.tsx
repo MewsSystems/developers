@@ -75,14 +75,19 @@ const movieSearchSchema = z.object({
 export const Route = createFileRoute("/")({
   validateSearch: movieSearchSchema,
   loaderDeps: ({ search }) => ({ ...search }),
-  loader: (opts) => opts.context.queryClient.ensureQueryData(searchMoviesQueryOptions(opts.deps)),
+  loader: (opts) =>
+    opts.context.queryClient.ensureQueryData(
+      searchMoviesQueryOptions(opts.deps),
+    ),
   component: Home,
 });
 
 function Home() {
   const navigate = useNavigate({ from: Route.fullPath });
   const { query } = Route.useSearch();
-  const moviesQuery = useSuspenseQuery(searchMoviesQueryOptions(Route.useLoaderDeps()));
+  const moviesQuery = useSuspenseQuery(
+    searchMoviesQueryOptions(Route.useLoaderDeps()),
+  );
   const [queryDraft, setQueryDraft] = useState(query);
 
   useEffect(() => {
@@ -123,6 +128,7 @@ function Home() {
       <MoviesContainer>
         {moviesQuery.data.movies.map((movie) => (
           <StyledLink
+            data-testid="movie-card"
             key={movie.id}
             to="/movies/$movieId"
             params={{

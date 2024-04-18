@@ -9,7 +9,10 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "test:e2e": "pnpm exec playwright test",
+    "test:e2e:debug": "pnpm exec playwright test --debug",
+    "test:e2e:show-report": "pnpm exec playwright show-report"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.29.2",
@@ -20,6 +23,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.43.1",
     "@tanstack/router-devtools": "^1.27.0",
     "@tanstack/router-vite-plugin": "^1.26.21",
     "@testing-library/jest-dom": "^6.4.2",
