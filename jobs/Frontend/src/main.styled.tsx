@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import { Color } from './enums/style/color.ts';
 import { Spacer } from './enums/style/spacer.ts';
 
-// TODO use theme provider for the shared styles like colors?
+// Possible to use theme provider for the shared styles like colors
 export const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;

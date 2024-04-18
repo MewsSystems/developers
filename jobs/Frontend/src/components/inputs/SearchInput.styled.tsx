@@ -14,6 +14,6 @@ export const TextInput = styled.input`
     border: 2px solid ${Color.Accent};
     background-color: ${Color.Background};
     color: ${Color.Primary};
-    border-radius: ${BorderRadius.Md};
+    border-radius: ${BorderRadius.Md} 0;
     padding: ${Spacer.Sm} ${Spacer.Md};
 `;

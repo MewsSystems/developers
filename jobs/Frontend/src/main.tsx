@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { MovieDetail } from './components/MovieDetail.tsx';
 import Movies from './components/Movies.tsx';
 import { GlobalStyle } from './main.styled.tsx';
+import { NotFound } from './components/NotFound.tsx';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,12 +14,16 @@ const root = ReactDOM.createRoot(
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
-    { path: '/', element: <App/>, children: [
+    {
+        path: '/',
+        element: <App/>,
+        errorElement: <NotFound/>,
+        children: [
             { index: true, element: <Movies /> },
             { path: '/movie/:movieId', element: <MovieDetail /> }
         ]
     },
-])
+]);
 
 root.render(
     <QueryClientProvider client={queryClient}>

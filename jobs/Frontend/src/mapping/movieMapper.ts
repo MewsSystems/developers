@@ -1,14 +1,16 @@
 import { TmdbDto } from '../interfaces/tmdbDto.ts';
 import { MovieModel } from '../interfaces/movieModel.ts';
 import config from '../config.json';
+import { BackdropImageSize } from '../enums/images/backdropImageSize.ts';
+import { PosterImageSize } from '../enums/images/posterImageSize.ts';
 
 export namespace MovieMapper {
-    // TODO: add enums for supported image sizes? - https://developer.themoviedb.org/reference/configuration-details
-    const buildAssetPath = (size: string, assetPath: string) => {
+    // working with images https://developer.themoviedb.org/docs/image-basics
+    const buildAssetUrl = <TSize>(size: TSize, assetPath: string) => {
         return assetPath ? `${config.tmdb.assetBaseUrl}${size}${assetPath}` : '';
     }
 
-    export const searchMoviesFromDto = (dto: TmdbDto.SearchMovies): MovieModel.SearchMovies => {
+    export const movieListFromDto = (dto: TmdbDto.MovieList): MovieModel.MovieList => {
         const {
             page,
             total_pages,
@@ -41,13 +43,13 @@ export namespace MovieMapper {
 
         return {
             adult,
-            backdropUrl: buildAssetPath('w1280', backdrop_path),
+            getBackdropUrl: (size: BackdropImageSize) => buildAssetUrl(size, backdrop_path),
             id,
             originalLanguage: original_language,
             originalTitle: original_title,
             overview,
             popularity,
-            posterUrl: buildAssetPath('w780', poster_path),
+            getPosterUrl: (size: PosterImageSize) => buildAssetUrl(size, poster_path),
             title,
             video,
             voteAverage: vote_average,
@@ -70,12 +72,9 @@ export namespace MovieMapper {
             overview,
             popularity,
             poster_path,
-            //production_companies,
-            //production_countries,
             release_date,
             revenue,
             runtime,
-            //spoken_languages,
             status,
             tagline,
             title,
@@ -86,7 +85,7 @@ export namespace MovieMapper {
 
         return {
             adult,
-            backdropUrl: buildAssetPath('w1280', backdrop_path),
+            getBackdropUrl: (size: BackdropImageSize) => buildAssetUrl(size, backdrop_path),
             belongsToCollection: belongs_to_collection,
             budget,
             genres: genres.map(({ id, name }) => ({ id, name })),
@@ -97,7 +96,7 @@ export namespace MovieMapper {
             originalTitle: original_title,
             overview,
             popularity,
-            posterUrl: buildAssetPath('w780', poster_path),
+            getPosterUrl: (size: PosterImageSize) => buildAssetUrl(size, poster_path),
             releaseDate: new Date(Date.parse(release_date)),
             revenue,
             runtime,

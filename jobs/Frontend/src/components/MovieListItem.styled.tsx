@@ -6,14 +6,17 @@ import { FontSize } from '../enums/style/fontSize.ts';
 import { BorderRadius } from '../enums/style/borderRadius.ts';
 import { BsFilm } from 'react-icons/bs';
 import { Breakpoint } from '../enums/style/breakpoint.ts';
+import { TransitionDuration } from '../enums/style/transitionDuration.ts';
 
 export const MoviesListLi = styled.li`
     display: block;
     width: 100%;
-    border-radius: ${BorderRadius.Md};
+    border-top-left-radius: ${BorderRadius.Md};
+    border-top-right-radius: ${BorderRadius.Md};
+    border-bottom: 2px solid ${Color.Accent};
     overflow: hidden;
     margin-bottom: ${Spacer.Md};
-    transition: box-shadow .3s;
+    transition: box-shadow ${TransitionDuration.Medium};
 
     @media (min-width: ${Breakpoint.Sm}) {
         width: calc(50% - ${Spacer.Md});
@@ -26,14 +29,13 @@ export const MoviesListLi = styled.li`
 
     &:hover,
     &:focus {
-        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-        0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+        box-shadow: 0px -1px 8px 2px rgba(0,0,0,0.3);
     }
 `;
 
 export const MovieCard = styled(Link)`
     overflow: hidden;
+    height: 100%;
     border-top-left-radius: ${BorderRadius.Md};
     border-top-right-radius: ${BorderRadius.Md};
     border: 2px solid ${Color.Accent};
@@ -45,7 +47,12 @@ export const MovieCard = styled(Link)`
                     rgba(0, 0, 0, 0),
                     ${Color.Accent}
             ) 1 100%;
-    
+    transition: background ${TransitionDuration.Medium};
+
+    &:hover,
+    &:focus {
+        background: linear-gradient(180deg, rgba(173,0,10,0) 75%, rgba(255,209,0,1) 100%);
+    }
 `;
 
 export const MovieCardBody = styled.div`
@@ -68,15 +75,14 @@ export const MovieCardOverview = styled.p`
     text-overflow: ellipsis;
 `;
 
-// TODO: add fallback image
 export const MovieCardImg = styled.img`
     width: 100%;
     aspect-ratio: 2 / 3;
 `;
 
 export const MovieCardImgPlaceholder = styled.div`
-    color: ${Color.Primary};
-    background-color: ${Color.SecondaryAccent};
+    color: ${Color.SecondaryAccent};
+    background-color: ${Color.Accent};
     width: 100%;
     aspect-ratio: 2 / 3;
     display: flex;
@@ -87,6 +93,5 @@ export const MovieCardImgPlaceholder = styled.div`
 
 export const MovieCardImgPlaceholderIcon = styled(BsFilm)`
     font-size: 6rem;
-    opacity: .75;
     transform: rotate(30deg);
 `;

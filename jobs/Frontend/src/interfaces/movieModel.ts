@@ -1,5 +1,11 @@
+import { BackdropImageSize } from '../enums/images/backdropImageSize.ts';
+import { PosterImageSize } from '../enums/images/posterImageSize.ts';
+
 export namespace MovieModel {
-    export interface SearchMovies {
+    type GetBackdropUrl = (size: BackdropImageSize) => string;
+    type GetPosterUrl = (size: PosterImageSize) => string;
+
+    export interface MovieList {
         page: number;
         totalPages: number;
         totalResults: number;
@@ -8,13 +14,13 @@ export namespace MovieModel {
 
     export interface MovieItem {
         adult: boolean;
-        backdropUrl: string;
+        getBackdropUrl: GetBackdropUrl;
         id: number;
         originalLanguage: string;
         originalTitle: string;
         overview: string;
         popularity: string;
-        posterUrl: string;
+        getPosterUrl: GetPosterUrl;
         title: string;
         video: boolean;
         voteAverage: number;
@@ -23,7 +29,7 @@ export namespace MovieModel {
 
     export interface MovieDetail {
         adult: boolean;
-        backdropUrl: string;
+        getBackdropUrl: GetBackdropUrl;
         belongsToCollection: string;
         budget: number;
         genres: {
@@ -37,7 +43,7 @@ export namespace MovieModel {
         originalTitle: string;
         overview: string;
         popularity: string;
-        posterUrl: string;
+        getPosterUrl: GetPosterUrl;
         releaseDate: Date;
         revenue: number;
         runtime: number;

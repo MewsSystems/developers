@@ -1,5 +1,5 @@
 export namespace TmdbDto {
-    export interface SearchMovies {
+    export interface MovieList {
         page: number;
         total_pages: number;
         total_results: number;
@@ -63,23 +63,6 @@ export namespace TmdbDto {
         video: boolean;
         vote_average: number;
         vote_count: number;
-    }
-
-    // TODO: do we need to use the config endpoint?
-    // https://developer.themoviedb.org/reference/configuration-details
-    export interface ConfigDetails {
-        images: ConfigImage[];
-        change_keys: string[];
-    }
-
-    export interface ConfigImage {
-        base_url: string;
-        secure_base_url: string;
-        backdrop_sizes: string[];
-        logo_sizes: string[];
-        poster_sizes: string[];
-        profile_sizes: string[];
-        still_sizes: string[];
     }
 }
 

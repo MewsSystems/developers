@@ -1,20 +1,31 @@
 import styled, { css } from 'styled-components';
-import { Spacer } from './enums/style/spacer.ts';
+import { Spacer } from '../enums/style/spacer.ts';
+import { Color } from '../enums/style/color.ts';
+import { BorderRadius } from '../enums/style/borderRadius.ts';
+
+const contentWidth = '60rem';
 
 const primarySectionStyles = css`
     margin: 0 auto;
-    max-width: 60rem;
+    max-width: ${contentWidth};
     width: 100%;
     padding: 0 ${Spacer.Lg};
 `;
 
 export const Header = styled.header`
     ${primarySectionStyles};
+    background: linear-gradient(286deg, ${Color.Accent} 0%, ${Color.SecondaryAccent} 100%);
+
+    @media (min-width: ${contentWidth}) {
+        border-bottom-left-radius: ${BorderRadius.Md};
+        border-bottom-right-radius: ${BorderRadius.Md};
+    }
 `;
 
 export const Main = styled.main`
     ${primarySectionStyles};
     flex-grow: 1;
+    padding-top: ${Spacer.Md};
 `;
 
 export const Footer = styled.footer`
