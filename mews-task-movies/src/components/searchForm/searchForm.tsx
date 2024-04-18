@@ -16,6 +16,7 @@ export default function SearchForm({
         value={searchValue}
         onChange={searchFunction}
         placeholder="type the movie name..."
+        lang="en"
       />
     </form>
   );

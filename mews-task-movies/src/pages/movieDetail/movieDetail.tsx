@@ -32,10 +32,12 @@ export default function MovieDetail() {
     <main>
       <h1>{movie.title}</h1>
       <div className="detail_container">
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          className="movie_img"
-        />
+        {movie.poster_pa && (
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            className="movie_img"
+          />
+        )}
         <div className="detail_text">
           <div className="text_item">
             <h2>Original title</h2>
@@ -71,7 +73,7 @@ export default function MovieDetail() {
           </div>
           <div className="text_item">
             <h2>Overview</h2>
-            <p>{movie.overview}</p>
+            {movie.overview ? <p>{movie.overview}</p> : '–'}
           </div>
         </div>
       </div>
