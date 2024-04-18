@@ -18,7 +18,7 @@ export default function MovieDetail() {
     <main>
       <h1>{movie.title}</h1>
       <div className="detail_container">
-        {movie.poster_pa && (
+        {movie.poster_path && (
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             className="movie_img"
