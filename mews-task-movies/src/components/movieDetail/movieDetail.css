@@ -27,11 +27,17 @@
 
 .text_item {
   margin: 0;
+  max-width: 400px;
+}
+
+.overview {
+  max-width: unset;
 }
 
 .genres_container {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
 }
 

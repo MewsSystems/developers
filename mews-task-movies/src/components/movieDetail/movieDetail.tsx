@@ -39,7 +39,7 @@ export default function MovieDetail({
           <div className="text_item">
             <h2>Genres</h2>
             <div className="genres_container">
-              {movie.genres
+              {movie.genres && movie.genres.length > 0
                 ? movie.genres.map((genre: any) => (
                     <Tag key={genre.id} name={genre.name} />
                   ))
@@ -64,7 +64,7 @@ export default function MovieDetail({
               '–'
             )}
           </div>
-          <div className="text_item">
+          <div className="text_item overview">
             <h2>Overview</h2>
             {movie.overview ? <p>{movie.overview}</p> : '–'}
           </div>
