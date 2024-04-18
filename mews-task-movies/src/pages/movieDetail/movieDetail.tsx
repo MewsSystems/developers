@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Tag from '../../components/tag/tag';
+import { getMovieById } from '../../data/getMovies';
 
 export default function MovieDetail() {
   const params = useParams();
@@ -10,22 +11,7 @@ export default function MovieDetail() {
   const [movie, setMovie] = useState(Object);
 
   useEffect(() => {
-    const getMovieById = async () => {
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-        },
-      };
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${params.movieId}?api_key=03b8572954325680265531140190fd2a`,
-        options,
-      );
-      const movieData = await response.json();
-      console.log('movieData', movieData);
-      setMovie(movieData);
-    };
-    getMovieById();
+    getMovieById(params, setMovie);
   }, [params]);
 
   return (
