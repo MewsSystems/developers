@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Params } from 'react-router-dom';
 
 export const getMovies = async (
   searchValue: string,

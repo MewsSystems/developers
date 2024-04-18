@@ -38,7 +38,7 @@ export default function MovieDetail({
           </div>
           <div className="text_item">
             <h2>Genres</h2>
-            <div className="genres_container">
+            <div className="text_item_container">
               {movie.genres && movie.genres.length > 0
                 ? movie.genres.map((genre: any) => (
                     <Tag key={genre.id} name={genre.name} />
@@ -48,21 +48,23 @@ export default function MovieDetail({
           </div>
           <div className="text_item">
             <h2>Origin country</h2>
-            <p>
+            <div className="text_item_container">
               {movie.origin_country
                 ? movie.origin_country.map((country: string) => (
                     <Tag key={country} name={country} />
                   ))
                 : '–'}
-            </p>
+            </div>
           </div>
           <div className="text_item">
             <h2>Original language</h2>
-            {movie.original_language ? (
-              <Tag name={movie.original_language} />
-            ) : (
-              '–'
-            )}
+            <div className="text_item_container">
+              {movie.original_language ? (
+                <Tag name={movie.original_language} />
+              ) : (
+                '–'
+              )}
+            </div>
           </div>
           <div className="text_item overview">
             <h2>Overview</h2>

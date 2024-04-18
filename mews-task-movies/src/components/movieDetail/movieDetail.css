@@ -34,7 +34,7 @@
   max-width: unset;
 }
 
-.genres_container {
+.text_item_container {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
