@@ -48,6 +48,7 @@ function App() {
         <Title>Mews Movie Search App</Title>
         <SearchBarContainer>
           <Input
+            aria-label="Search a movie"
             type="text"
             onChange={(e) => console.log(e)}
             placeholder="Search a movie"
