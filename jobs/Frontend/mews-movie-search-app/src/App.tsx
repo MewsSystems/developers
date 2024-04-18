@@ -1,47 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-
-type MovieListResponse = {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-};
-
-type Movie = {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
+import { Movies } from "./Movies";
 
 function App() {
-  const [movies, setMovies] = React.useState<MovieListResponse | null>(null);
-
-  const getList = async () => {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${
-        import.meta.env.VITE_TMDB_KEY
-      }&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`
-    );
-    const data = await res.json();
-    setMovies(data);
-  };
-
-  React.useEffect(() => {
-    getList();
-  }, []);
-
   return (
     <MainLayout>
       <HeaderNav>
@@ -55,21 +16,7 @@ function App() {
           />
         </SearchBarContainer>
       </HeaderNav>
-      <MovieContainer>
-        {movies?.results &&
-          movies?.results.map((movie: Movie) => {
-            return (
-              <MovieItem key={movie.id}>
-                <MoviePoster>
-                  <MoviePosterImage
-                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                    alt={movie.title}
-                  />
-                </MoviePoster>
-              </MovieItem>
-            );
-          })}
-      </MovieContainer>
+      <Movies />
     </MainLayout>
   );
 }
@@ -107,25 +54,4 @@ const MainLayout = styled.main`
   flex-direction: column;
   font-family: "Poppins", sans-serif;
   font-weight: 800;
-`;
-
-const MovieContainer = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: auto;
-`;
-
-const MovieItem = styled.li`
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: auto;
-`;
-const MoviePosterImage = styled.img`
-  width: 100%;
-  height: 100%;
-  border-width: 8px;
-  border-radius: 1.5rem;
-`;
-const MoviePoster = styled.div`
-  padding: 1rem;
 `;
