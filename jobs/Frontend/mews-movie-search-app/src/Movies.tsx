@@ -10,24 +10,27 @@ import styled from "styled-components";
 /* Local utility functions */
 
 /* Component definition */
-export const Movies = () => {
-  const { movies } = useMovies();
-  return (
+export const Movies = ({ searchTerm }: { searchTerm?: string }) => {
+  const { movies } = useMovies({ searchTerm });
+  return movies?.results && movies?.results.length > 0 ? (
     <MovieContainer>
-      {movies?.results &&
-        movies?.results.map((movie: Movie) => {
-          return (
-            <MovieItem key={movie.id}>
-              <MoviePoster>
-                <MoviePosterImage
-                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                  alt={movie.title}
-                />
-              </MoviePoster>
-            </MovieItem>
-          );
-        })}
+      {movies.results.map((movie: Movie) => {
+        return (
+          <MovieItem key={movie.id}>
+            <MoviePoster>
+              <MoviePosterImage
+                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                alt={movie.title}
+              />
+            </MoviePoster>
+          </MovieItem>
+        );
+      })}
     </MovieContainer>
+  ) : (
+    <NoResults>
+      <span>No results are found!</span>
+    </NoResults>
   );
 };
 const MovieContainer = styled.ul`
@@ -49,4 +52,15 @@ const MoviePosterImage = styled.img`
 `;
 const MoviePoster = styled.div`
   padding: 1rem;
+`;
+
+const NoResults = styled.div`
+  padding: 1rem;
+  place-content: center;
+  height: 100%;
+  display: grid;
+  & > span {
+    font-size: 2rem;
+    color: #e3fef7;
+  }
 `;
