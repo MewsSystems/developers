@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Movies } from "./Movies";
 
 function App() {
+  const [search, setSearch] = React.useState("");
+
   return (
     <MainLayout>
       <HeaderNav>
@@ -11,12 +13,12 @@ function App() {
           <Input
             aria-label="Search a movie"
             type="text"
-            onChange={(e) => console.log(e)}
+            onChange={(e) => setSearch(e.currentTarget.value)}
             placeholder="Search a movie"
           />
         </SearchBarContainer>
       </HeaderNav>
-      <Movies />
+      <Movies searchTerm={search} />
     </MainLayout>
   );
 }

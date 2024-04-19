@@ -25,24 +25,56 @@ export type Movie = {
 };
 type useMoviesArgTypes = {
   page?: number;
+  searchTerm?: string;
 };
-export const useMovies = ({ page = 1 } = {} as useMoviesArgTypes) => {
+const domainURL = `https://api.themoviedb.org/3/`;
+const emptyMovieListResponse: MovieListResponse = {
+  results: [],
+  page: 0,
+  total_pages: 0,
+  total_results: 0,
+};
+export const useMovies = (
+  { page = 1, searchTerm = "" } = {} as useMoviesArgTypes
+) => {
   const [movies, setMovies] = React.useState<MovieListResponse | null>(null);
+  const querySearch = searchTerm ? `query=${searchTerm}` : null;
 
   const getList = async () => {
-    console.log(page);
-    const res = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${
+    try {
+      const fetchURL = `${domainURL}movie/popular?api_key=${
         import.meta.env.VITE_TMDB_KEY
-      }&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`
-    );
-    const data = await res.json();
-    setMovies(data);
+      }&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`;
+      const res = await fetch(fetchURL);
+      const data = await res.json();
+
+      setMovies(data);
+    } catch (error) {
+      setMovies(emptyMovieListResponse);
+    }
+  };
+
+  const getMoviesBySearch = async () => {
+    try {
+      const res = await fetch(
+        `${domainURL}search/movie?api_key=${
+          import.meta.env.VITE_TMDB_KEY
+        }&${querySearch}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`
+      );
+      const data = await res.json();
+      setMovies(data);
+    } catch (error) {
+      setMovies(emptyMovieListResponse);
+    }
   };
 
   React.useEffect(() => {
-    getList();
-  }, [page]);
+    if (searchTerm) {
+      getMoviesBySearch();
+    } else {
+      getList();
+    }
+  }, [page, searchTerm]);
 
   return { movies };
 };
