@@ -1,8 +1,9 @@
 /* Global imports */
 import * as React from "react";
-import { Movie, useMovies } from "./useMovies";
+import { useMovies } from "./useMovies";
 import styled from "styled-components";
 import { useLocation } from "wouter";
+import { Movie } from "./types/movies";
 
 /* Local imports */
 
@@ -43,12 +44,14 @@ const MovieContainer = styled.ul`
   display: flex;
   flex-wrap: wrap;
   overflow-y: auto;
+  list-style: none;
 `;
 
 const MovieItem = styled.li`
   display: flex;
-  flex-wrap: wrap;
-  overflow-y: auto;
+  flex-direction: column;
+  list-style: none;
+  text-align: center;
 `;
 const MoviePosterImage = styled.img`
   width: 100%;
