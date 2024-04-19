@@ -3,7 +3,7 @@ export const getPaginationModel = (currentPage: number, numberOfPages: number): 
     const getNumberArray = (from: number, count: number) =>
         Array.from(Array(count).keys(), (_, i) => from + i);
 
-    if (numberOfPages < 6) {
+    if (numberOfPages <= 6) {
         return getNumberArray(1, numberOfPages);
     }
 

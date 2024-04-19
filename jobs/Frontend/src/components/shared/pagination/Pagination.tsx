@@ -1,8 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { UrlSearchParamKey } from '../../../enums/urlSearchParamKey';
-import { PaginationRow, PaginationSeparator } from './Pagination.styled';
+import { PaginationButton, PaginationRow, PaginationSeparator } from './Pagination.styled';
 import { getPaginationModel } from './paginationUtils';
-import { Button } from '../Button';
 
 interface PaginationProps {
     currentPage: number;
@@ -50,7 +49,7 @@ function PageLink({highlighted, page, currentSearchParams}: PageLinkProps) {
     }
 
     return (
-        <Button
+        <PaginationButton
             as={Link}
             to={`?${pageSearchParams}`}
             className={highlighted ? 'active' : ''}
@@ -60,6 +59,6 @@ function PageLink({highlighted, page, currentSearchParams}: PageLinkProps) {
             }}
         >
             {page}
-        </Button>
+        </PaginationButton>
     );
 }

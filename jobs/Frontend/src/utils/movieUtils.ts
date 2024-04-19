@@ -4,6 +4,14 @@ export const displayRatings = (voteAverage: number, voteCount: number) => {
     return `${displayRatingPercent} from ${displayRatingCount} ratings`;
 };
 
-export const displayRuntime = (runtime: number) => runtime > 60
-    ? `${Math.floor(runtime / 60)}h ${runtime % 60}m`
-    : `${runtime}m`;
+export const displayRuntime = (runtime: number) => {
+    if (runtime < 60) {
+        return `${runtime}m`;
+    }
+
+    const displayHours = `${Math.floor(runtime / 60)}h`;
+
+    return runtime % 60 === 0
+        ? displayHours
+        : `${displayHours} ${runtime % 60}m`;
+};
