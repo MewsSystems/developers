@@ -24,6 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     const { children } = this.props;
     const { error } = this.state;
+
     if (error)
       return (
         <>
