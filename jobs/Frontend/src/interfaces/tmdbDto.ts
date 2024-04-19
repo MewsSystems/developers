@@ -3,13 +3,12 @@ export namespace TmdbDto {
         page: number;
         total_pages: number;
         total_results: number;
-        results: MovieItem[];
+        results: MoviePreview[];
     }
 
-    export interface MovieItem {
+    export interface MovieBase {
         adult: boolean;
         backdrop_path: string;
-        genre_ids: number[];
         id: number;
         original_language: string;
         original_title: string;
@@ -22,9 +21,11 @@ export namespace TmdbDto {
         vote_count: number;
     }
 
-    export interface MovieDetail {
-        adult: boolean;
-        backdrop_path: string;
+    export interface MoviePreview extends MovieBase {
+        genre_ids: number[];
+    }
+
+    export interface MovieDetail extends MovieBase {
         belongs_to_collection: string;
         budget: number;
         genres: {
@@ -32,13 +33,7 @@ export namespace TmdbDto {
             name: string;
         }[];
         homepage: string;
-        id: string;
         imdb_id: string;
-        original_language: string;
-        original_title: string;
-        overview: string;
-        popularity: string;
-        poster_path: string;
         production_companies: {
             id: number;
             logo_path: string;
@@ -59,19 +54,15 @@ export namespace TmdbDto {
         }[];
         status: string;
         tagline: string;
-        title: string;
-        video: boolean;
-        vote_average: number;
-        vote_count: number;
     }
 
     export interface MovieCredits {
         id: number;
-        cast: CastItem[];
-        crew: CrewItem[];
+        cast: CastMember[];
+        crew: CrewMember[];
     }
 
-    export interface PersonItemBase {
+    export interface PersonBase {
         adult: boolean;
         gender: Gender;
         id: number;
@@ -83,13 +74,13 @@ export namespace TmdbDto {
         credit_id: number;
     }
 
-    export interface CastItem extends PersonItemBase {
+    export interface CastMember extends PersonBase {
         cast_id: number;
         character: string;
         order: number;
     }
 
-    export interface CrewItem extends PersonItemBase {
+    export interface CrewMember extends PersonBase {
         department: string;
         job: string;
     }

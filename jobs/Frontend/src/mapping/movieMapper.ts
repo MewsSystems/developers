@@ -24,62 +24,54 @@ export namespace MovieMapper {
             page,
             totalPages: total_pages,
             totalResults: total_results,
-            results: results?.map(movieItemFromDto)
+            results: results?.map(moviePreviewFromDto)
         };
     };
 
-    export const movieItemFromDto = (dto: TmdbDto.MovieItem): MovieModel.MovieItem => {
-        const {
-            adult,
-            backdrop_path,
-            id,
-            original_language,
-            original_title,
-            overview,
-            popularity,
-            poster_path,
-            title,
-            video,
-            vote_average,
-            vote_count
-        } = dto;
-
-        return {
-            adult,
-            getBackdropUrl: (size: BackdropImageSize) => buildAssetUrl(size, backdrop_path),
-            id,
-            originalLanguage: original_language,
-            originalTitle: original_title,
-            overview,
-            popularity,
-            getPosterUrl: (size: PosterImageSize) => buildAssetUrl(size, poster_path),
-            title,
-            video,
-            voteAverage: vote_average,
-            voteCount: vote_count,
-        };
+    export const moviePreviewFromDto = (dto: TmdbDto.MoviePreview): MovieModel.MoviePreview => {
+        return movieBaseFromDto(dto);
     };
 
     export const movieDetailFromDto = (dto: TmdbDto.MovieDetail): MovieModel.MovieDetail => {
         const {
-            adult,
-            backdrop_path,
             belongs_to_collection,
             budget,
             genres,
             homepage,
-            id,
             imdb_id,
-            original_language,
-            original_title,
-            overview,
-            popularity,
-            poster_path,
             release_date,
             revenue,
             runtime,
             status,
             tagline,
+            ...movieBase
+        } = dto;
+
+        return {
+            ...movieBaseFromDto(movieBase),
+            belongsToCollection: belongs_to_collection,
+            budget,
+            genres: genres.map(({ id, name }) => ({ id, name })),
+            homepage,
+            imbdId: imdb_id,
+            releaseDate: new Date(Date.parse(release_date)),
+            revenue,
+            runtime,
+            status,
+            tagline
+        }
+    }
+
+    export const movieBaseFromDto = (dto: TmdbDto.MovieBase): MovieModel.MovieBase => {
+        const {
+            adult,
+            backdrop_path,
+            id,
+            original_language,
+            original_title,
+            overview,
+            popularity,
+            poster_path,
             title,
             video,
             vote_average,
@@ -89,27 +81,17 @@ export namespace MovieMapper {
         return {
             adult,
             getBackdropUrl: (size: BackdropImageSize) => buildAssetUrl(size, backdrop_path),
-            belongsToCollection: belongs_to_collection,
-            budget,
-            genres: genres.map(({ id, name }) => ({ id, name })),
-            homepage,
             id,
-            imbdId: imdb_id,
             originalLanguage: original_language,
             originalTitle: original_title,
             overview,
             popularity,
             getPosterUrl: (size: PosterImageSize) => buildAssetUrl(size, poster_path),
-            releaseDate: new Date(Date.parse(release_date)),
-            revenue,
-            runtime,
-            status,
-            tagline,
             title,
             video,
             voteAverage: vote_average,
             voteCount: vote_count,
-        }
+        };
     }
 
     export const movieCreditsFromDto = (dto: TmdbDto.MovieCredits): MovieModel.MovieCredits => {
@@ -121,12 +103,12 @@ export namespace MovieMapper {
 
         return {
             id,
-            cast: cast?.map(castItemFromDto),
-            crew: crew?.map(crewItemFromDto)
+            cast: cast?.map(castMemberFromDto),
+            crew: crew?.map(crewMemberFromDto)
         }
     };
 
-    export const castItemFromDto = (dto: TmdbDto.CastItem): MovieModel.CastItem => {
+    export const castMemberFromDto = (dto: TmdbDto.CastMember): MovieModel.CastMember => {
         const {
             cast_id,
             character,
@@ -135,14 +117,14 @@ export namespace MovieMapper {
         } = dto;
 
         return {
-            ...personItemBaseFromDto(personBase),
+            ...personBaseFromDto(personBase),
             castId: cast_id,
             character,
             order
         };
     };
 
-    export const crewItemFromDto = (dto: TmdbDto.CrewItem): MovieModel.CrewItem => {
+    export const crewMemberFromDto = (dto: TmdbDto.CrewMember): MovieModel.CrewMember => {
         const {
             department,
             job,
@@ -151,13 +133,13 @@ export namespace MovieMapper {
 
 
         return {
-            ...personItemBaseFromDto(personBase),
+            ...personBaseFromDto(personBase),
             department,
             job
         };
     };
 
-    export const personItemBaseFromDto = (dto: TmdbDto.PersonItemBase): MovieModel.PersonItemBase => {
+    export const personBaseFromDto = (dto: TmdbDto.PersonBase): MovieModel.PersonBase => {
         const {
             adult,
             gender,

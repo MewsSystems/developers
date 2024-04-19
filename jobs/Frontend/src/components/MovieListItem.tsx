@@ -12,7 +12,7 @@ import { FallbackImg } from './shared/FallbackImg.tsx';
 import { IconBaseProps } from 'react-icons';
 import { displayRatings } from '../utils/movieUtils.ts';
 
-export function MovieListItem({id, getPosterUrl, title, voteAverage, voteCount}: MovieModel.MovieItem) {
+export function MovieListItem({id, getPosterUrl, title, voteAverage, voteCount}: MovieModel.MoviePreview) {
     const posterUrl = getPosterUrl(PosterImageSize.Width500);
     const cardTitleId = useId();
 

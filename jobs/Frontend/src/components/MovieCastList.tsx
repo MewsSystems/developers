@@ -72,7 +72,7 @@ function MovieCastListSkeletonLoader() {
     );
 }
 
-function MovieCastMemberCard(castMember: MovieModel.CastItem) {
+function MovieCastMemberCard(castMember: MovieModel.CastMember) {
     const {
         name,
         character,

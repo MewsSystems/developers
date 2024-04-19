@@ -12,10 +12,10 @@ export namespace MovieModel {
         page: number;
         totalPages: number;
         totalResults: number;
-        results: MovieItem[];
+        results: MoviePreview[];
     }
 
-    export interface MovieItem {
+    export interface MovieBase {
         adult: boolean;
         getBackdropUrl: GetBackdropImageUrl;
         id: number;
@@ -30,9 +30,9 @@ export namespace MovieModel {
         voteCount: number;
     }
 
-    export interface MovieDetail {
-        adult: boolean;
-        getBackdropUrl: GetBackdropImageUrl;
+    export interface MoviePreview extends MovieBase { /* empty */ }
+
+    export interface MovieDetail extends MovieBase {
         belongsToCollection: string;
         budget: number;
         genres: {
@@ -40,31 +40,21 @@ export namespace MovieModel {
             name: string;
         }[];
         homepage: string;
-        id: string;
         imbdId: string;
-        originalLanguage: string;
-        originalTitle: string;
-        overview: string;
-        popularity: string;
-        getPosterUrl: GetPosterImageUrl;
         releaseDate: Date;
         revenue: number;
         runtime: number;
         status: string;
         tagline: string;
-        title: string;
-        video: boolean;
-        voteAverage: number;
-        voteCount: number;
     }
 
     export interface MovieCredits {
         id: number;
-        cast: CastItem[];
-        crew: CrewItem[];
+        cast: CastMember[];
+        crew: CrewMember[];
     }
 
-    export interface PersonItemBase {
+    export interface PersonBase {
         adult: boolean;
         gender: Gender;
         id: number;
@@ -76,13 +66,13 @@ export namespace MovieModel {
         creditId: number;
     }
 
-    export interface CastItem extends PersonItemBase {
+    export interface CastMember extends PersonBase {
         castId: number;
         character: string;
         order: number;
     }
 
-    export interface CrewItem extends PersonItemBase {
+    export interface CrewMember extends PersonBase {
         department: string;
         job: string;
     }
