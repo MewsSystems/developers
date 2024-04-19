@@ -1,17 +1,18 @@
 import { useId } from 'react';
 import { Label, TextInput } from './SearchInput.styled';
 
-export interface SearchInputData {
+interface SearchInputProps {
+    label: string;
     query: string;
     setQuery: (query: string) => void;
 }
 
-export default function SearchInput({ query, setQuery }: SearchInputData) {
+export default function SearchInput({ label, query, setQuery }: SearchInputProps) {
     const inputId = useId();
 
     return (
         <>
-            <Label htmlFor={inputId}>Search movies</Label>
+            <Label htmlFor={inputId}>{label}</Label>
             <TextInput
                 autoFocus
                 id={inputId}

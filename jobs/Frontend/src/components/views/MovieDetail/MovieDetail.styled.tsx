@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { Spacer } from '../../enums/style/spacer.ts';
-import { BorderRadius } from '../../enums/style/borderRadius.ts';
+import { Spacer } from '../../../enums/style/spacer.ts';
+import { BorderRadius } from '../../../enums/style/borderRadius.ts';
+import { Breakpoint } from '../../../enums/style/breakpoint.ts';
 
 export const ClosingBackdropImage = styled.img`
     mask-image: linear-gradient(transparent, rgb(0 0 0) 45%);
@@ -13,13 +14,23 @@ export const ClosingBackdropImage = styled.img`
 export const MoviePosterImage = styled.img`
     aspect-ratio: 2 / 3;
     width: 15rem;
-    margin: 0 ${Spacer.Md} ${Spacer.Md} 0;
+    margin: 0 0 ${Spacer.Md} 0;
     border-radius: ${BorderRadius.Md};
+
+    @media (min-width: ${Breakpoint.Sm}) {
+        margin-right: ${Spacer.Md};
+    }
 `;
 
-export const MovieDetailIntro = styled.div`
+export const MovieDetailIntro = styled.section`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+
+    @media (min-width: ${Breakpoint.Sm}) {
+        align-items: flex-start;
+        flex-direction: row;
+    }
 `;
 
 export const MovieDetailIntroBody = styled.div`

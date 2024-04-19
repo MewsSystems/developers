@@ -54,7 +54,7 @@ export namespace MovieMapper {
             genres: genres.map(({ id, name }) => ({ id, name })),
             homepage,
             imbdId: imdb_id,
-            releaseDate: new Date(Date.parse(release_date)),
+            releaseDate: release_date ? new Date(Date.parse(release_date)) : undefined,
             revenue,
             runtime,
             status,

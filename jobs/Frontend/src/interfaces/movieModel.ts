@@ -41,7 +41,7 @@ export namespace MovieModel {
         }[];
         homepage: string;
         imbdId: string;
-        releaseDate: Date;
+        releaseDate?: Date;
         revenue: number;
         runtime: number;
         status: string;

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../enums/reactQueryPrimaryKey.ts';
-import { getMovieCredits } from '../api/tmdbApi.ts';
-import { ProfileImageSize } from '../enums/images/profileImageSize.ts';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
+import { getMovieCredits } from '../../../api/tmdbApi.ts';
+import { ProfileImageSize } from '../../../enums/images/profileImageSize.ts';
 import {
     CastMemberName,
     CastMemberPlaceholderIcon,
@@ -10,9 +10,10 @@ import {
     MovieCastRow
 } from './MovieCastList.styled.tsx';
 import { IconBaseProps } from 'react-icons';
-import { FallbackImg } from './shared/FallbackImg.tsx';
-import { MovieModel } from '../interfaces/movieModel.ts';
-import { VisuallyHidden } from './shared/A11y.tsx';
+import { FallbackImg } from '../../shared/FallbackImg.tsx';
+import { MovieModel } from '../../../interfaces/movieModel.ts';
+import { VisuallyHidden } from '../../shared/A11y.tsx';
+import { useId } from 'react';
 
 export function MovieCastList({ movieId }: { movieId: number }) {
     const enabled = !!movieId && !isNaN(movieId);
@@ -40,9 +41,6 @@ export function MovieCastList({ movieId }: { movieId: number }) {
         cast
     } = data;
 
-    // TODO: remove
-    console.log({cast});
-
     if (!cast || cast.length === 0) {
         return null;
     }
@@ -51,7 +49,7 @@ export function MovieCastList({ movieId }: { movieId: number }) {
         <MovieCastMemberCard key={castMember.id} {...castMember}/>);
 
     return (
-        <MovieCastRow>
+        <MovieCastRow aria-label='Movies cast'>
             {castCards}
         </MovieCastRow>
     );
@@ -79,17 +77,20 @@ function MovieCastMemberCard(castMember: MovieModel.CastMember) {
         getProfileImgUrl
     } = castMember;
 
+    const nameId = useId();
+
     return (
         <MovieCastCard>
             <FallbackImg
                 src={getProfileImgUrl(ProfileImageSize.Width185)}
                 alt=""
                 cssAspectRatio='2 / 3'
+                imgProps={{ 'aria-labelledby': nameId }}
                 placeholderIcon={(props: IconBaseProps) => <CastMemberPlaceholderIcon {...props}/>}
                 placeholderLabel='Missing cast member picture'
             />
             <MovieCastCardBody>
-                <CastMemberName>{name}</CastMemberName>
+                <CastMemberName id={nameId}>{name}</CastMemberName>
                 <span>{character}</span>
             </MovieCastCardBody>
         </MovieCastCard>

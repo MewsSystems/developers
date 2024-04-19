@@ -1,24 +1,24 @@
 import styled from 'styled-components';
-import { Spacer } from '../enums/style/spacer.ts';
+import { Spacer } from '../../../enums/style/spacer.ts';
 import { Link } from 'react-router-dom';
-import { Color } from '../enums/style/color.ts';
-import { FontSize } from '../enums/style/fontSize.ts';
-import { BorderRadius } from '../enums/style/borderRadius.ts';
+import { Color } from '../../../enums/style/color.ts';
+import { FontSize } from '../../../enums/style/fontSize.ts';
+import { BorderRadius } from '../../../enums/style/borderRadius.ts';
 import { BsFilm } from 'react-icons/bs';
-import { Breakpoint } from '../enums/style/breakpoint.ts';
-import { TransitionDuration } from '../enums/style/transitionDuration.ts';
+import { Breakpoint } from '../../../enums/style/breakpoint.ts';
+import { TransitionDuration } from '../../../enums/style/transitionDuration.ts';
+
+const cardBorderWidth = '2px';
 
 export const MoviesListLi = styled.li`
     display: block;
     width: 100%;
     border-top-left-radius: ${BorderRadius.Md};
     border-top-right-radius: ${BorderRadius.Md};
-    border-bottom: 2px solid ${Color.Accent};
-    overflow: hidden;
+    border-bottom: ${cardBorderWidth} solid ${Color.Accent};
     margin-bottom: ${Spacer.Md};
-    transition: box-shadow ${TransitionDuration.Medium};
 
-    @media (min-width: ${Breakpoint.Sm}) {
+    @media (min-width: ${Breakpoint.Xs}) {
         width: calc(50% - ${Spacer.Sm});
         
         &:nth-child(even) {
@@ -40,20 +40,18 @@ export const MoviesListLi = styled.li`
             margin-right: ${Spacer.Sm};
         }
     }
-
-    &:hover,
-    &:focus {
-        box-shadow: 0px -1px 8px 2px rgba(0,0,0,0.3);
-    }
 `;
 
 export const MovieCard = styled(Link)`
+    display: flex;
+    flex-wrap: wrap;
     overflow: hidden;
     height: 100%;
     border-top-left-radius: ${BorderRadius.Md};
     border-top-right-radius: ${BorderRadius.Md};
-    border: 2px solid ${Color.Accent};
-    display: block;
+    border: ${cardBorderWidth} solid ${Color.Accent};
+    border-bottom: none;
+    border-top: ${cardBorderWidth} solid ${Color.Background};
     text-decoration: none;
     border-image:
             linear-gradient(
@@ -61,16 +59,22 @@ export const MovieCard = styled(Link)`
                     rgba(0, 0, 0, 0),
                     ${Color.Accent}
             ) 1 100%;
-    transition: background ${TransitionDuration.Medium};
+    transition: box-shadow ${TransitionDuration.Medium};
 
     &:hover,
     &:focus {
-        background: linear-gradient(180deg, rgba(173,0,10,0) 75%, rgba(255,209,0,1) 100%);
+        box-shadow: 0px -1px 8px 2px rgba(0,0,0,0.3);
+        
+        .movie-card-body {
+            background: linear-gradient(0deg, ${Color.SecondaryAccent} 0%, transparent 100%);
+        }
     }
 `;
 
 export const MovieCardBody = styled.div`
     padding: ${Spacer.Md};
+    width: 100%;
+    transition: background ${TransitionDuration.Medium};
 `;
 
 export const MovieCardTitle = styled.h5`
@@ -81,28 +85,7 @@ export const MovieCardTitle = styled.h5`
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-`;
-
-export const MovieCardOverview = styled.p`
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-export const MovieCardImg = styled.img`
-    width: 100%;
-    aspect-ratio: 2 / 3;
-`;
-
-export const MovieCardImgPlaceholder = styled.div`
-    color: ${Color.SecondaryAccent};
-    background-color: ${Color.Accent};
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    margin-top: 0;
 `;
 
 export const MovieCardImgPlaceholderIcon = styled(BsFilm)`

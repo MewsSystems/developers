@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { Spacer } from '../enums/style/spacer.ts';
+import { Spacer } from '../../../enums/style/spacer.ts';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { BorderRadius } from '../enums/style/borderRadius.ts';
-import { Gradient } from '../enums/style/gradient.ts';
+import { BorderRadius } from '../../../enums/style/borderRadius.ts';
+import { Gradient } from '../../../enums/style/gradient.ts';
 
-export const MovieCastRow = styled.div`
+export const MovieCastRow = styled.section`
     max-width: 100%;
     overflow-y: auto;
     display: flex;
@@ -14,6 +14,9 @@ export const MovieCastRow = styled.div`
     background: ${Gradient.AccentsLinearTitled};
     border-radius: ${BorderRadius.Md};
     padding: ${Spacer.Md};
+    scroll-behavior: smooth;
+    scroll-padding-left: ${Spacer.Md};
+    scroll-snap-type: x mandatory;
 `;
 
 export const MovieCastCard = styled.div`
@@ -24,6 +27,7 @@ export const MovieCastCard = styled.div`
     border-radius: ${Spacer.Md} 0;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.6);
+    scroll-snap-align: start;
     
     &:last-child {
         margin-right: 0;

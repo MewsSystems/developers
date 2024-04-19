@@ -1,20 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../../enums/reactQueryPrimaryKey.ts';
-import { getMovieDetail } from '../../api/tmdbApi.ts';
-import { Link, useParams } from 'react-router-dom';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
+import { getMovieDetail } from '../../../api/tmdbApi.ts';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
     ClosingBackdropImage,
     MovieDetailIntro,
     MovieDetailIntroBody,
     MoviePosterImage
 } from './MovieDetail.styled.tsx';
-import { BackdropImageSize } from '../../enums/images/backdropImageSize.ts';
-import { Button } from '../shared/Button.tsx';
-import { Spacer } from '../../enums/style/spacer.ts';
-import { PosterImageSize } from '../../enums/images/posterImageSize.ts';
-import { MovieCastList } from '../MovieCastList.tsx';
+import { BackdropImageSize } from '../../../enums/images/backdropImageSize.ts';
+import { Button } from '../../shared/Button.tsx';
+import { Spacer } from '../../../enums/style/spacer.ts';
+import { PosterImageSize } from '../../../enums/images/posterImageSize.ts';
+import { MovieCastList } from './MovieCastList.tsx';
 import { BsClock } from 'react-icons/bs';
-import { displayRatings, displayRuntime } from '../../utils/movieUtils.ts';
+import { displayRatings, displayRuntime } from '../../../utils/movieUtils.ts';
+import { ReactNode } from 'react';
+import { Loader } from '../../shared/Loader.tsx';
 
 export function MovieDetail() {
     const { movieId } = useParams();
@@ -26,11 +28,11 @@ export function MovieDetail() {
     });
 
     if (!enabled) {
-        return (<span>Movie not found</span>);
+        return (<h2>Movie not found</h2>);
     }
 
     if (isPending) {
-        return (<span>Loading</span>);
+        return (<Loader><h2>Loading movie detail</h2></Loader>);
     }
 
     if (isError) {
@@ -54,18 +56,6 @@ export function MovieDetail() {
         voteCount
     } = data;
 
-    // TODO: remove
-    console.log(data);
-
-    // TODO
-    /*
-    * show
-    * - vote avg & vote count; use icons
-    * - poster, to the left of the image
-    * - runtime
-    * - link to TMDB & IMBD
-    * */
-
     const backdropUrl = getBackdropUrl(BackdropImageSize.Width1280);
     const posterUrl = getPosterUrl(PosterImageSize.Width500);
 
@@ -74,24 +64,32 @@ export function MovieDetail() {
         <><span>{genres.map(g => g.name).join(', ')}</span><br/></>
     );
 
-    // TODO: the year can be missing
-    // TODO: runtime can be 0
-    // TODO: there can be no ratings
     return (
         <>
             <MovieDetailIntro>
                 {posterUrl && <MoviePosterImage alt="" src={posterUrl} />}
                 <MovieDetailIntroBody>
-                    <h2>{title} <i>({releaseDate.getFullYear()})</i></h2>
+                    <h2>
+                        {title}
+                        {releaseDate && <>{' '}<i>({releaseDate.getFullYear()})</i></>}
+                    </h2>
+
                     {tagline && <blockquote>{tagline}</blockquote>}
                     {genresSummary}
-                    {runtime > 0 && <><span><BsClock/> {displayRuntime(runtime)}</span><br/></>}
+                    {runtime > 0 && <><span><BsClock /> {displayRuntime(runtime)}</span><br/></>}
                     <i>{displayRatings(voteAverage, voteCount)}</i>
+
                     {overview && <p>{overview}</p>}
+
                     <p>
                         <Button as="a" href={`https://www.themoviedb.org/movie/${id}`} title="See on TMDB">TMBD</Button>
-                        {imbdId && <Button as="a" href={`https://www.imdb.com/title/${imbdId}`}
-                                           title="See on IMDB">IMBD</Button>}
+                        {imbdId && <Button
+                            as="a"
+                            href={`https://www.imdb.com/title/${imbdId}`}
+                            title="See on IMDB">
+                                IMBD
+                            </Button>
+                        }
                     </p>
                 </MovieDetailIntroBody>
             </MovieDetailIntro>
@@ -100,14 +98,32 @@ export function MovieDetail() {
 
             {backdropUrl && <ClosingBackdropImage alt="" src={backdropUrl}/>}
 
-            <Button
-                as={Link}
-                to={-1}
-                style={{marginTop: Spacer.Lg}}
-            >
+            <BackButton>
                 Back to search
-            </Button>
+            </BackButton>
         </>
     );
 }
 
+function BackButton({ children }: { children: ReactNode }) {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const goBack = () => {
+        // prevent leaving site; initial location is 'default', subsequent have an unique id
+        if (location.key !== 'default') {
+            navigate(-1)
+        } else {
+            navigate('/');
+        }
+    }
+
+    return (
+        <Button
+            onClick={goBack}
+            style={{marginTop: Spacer.Lg}}
+        >
+            {children}
+        </Button>
+    );
+}

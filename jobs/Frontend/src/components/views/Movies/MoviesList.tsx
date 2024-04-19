@@ -1,7 +1,8 @@
-import { Pagination } from './shared/pagination/Pagination.tsx';
-import { MoviesListUl } from './MoviesList.styled';
+import { Pagination } from '../../shared/pagination/Pagination.tsx';
+import { MoviesListUl } from './MoviesList.styled.tsx';
 import { MovieListItem } from './MovieListItem.tsx';
-import { MovieModel } from '../interfaces/movieModel.ts';
+import { MovieModel } from '../../../interfaces/movieModel.ts';
+import { Spacer } from '../../../enums/style/spacer.ts';
 
 interface MovieListProps {
     page: number,
@@ -14,8 +15,9 @@ export function MoviesList({page, data}: MovieListProps) {
         totalPages
     } = data;
 
-    // TODO: remove
-    console.log(results);
+    if (results.length === 0) {
+        return <h2 style={{paddingTop: Spacer.Lg}}>No movies found</h2>
+    }
 
     const movieListItems = results.map(movie => <MovieListItem key={movie.id} {...movie} />);
 

@@ -1,8 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 import { Color } from '../../enums/style/color.ts';
+import { Spacer } from '../../enums/style/spacer.ts';
 
 export const LoaderWrapper = styled.div`
-    text-align: center;
+    vertical-align: middle;
 `;
 
 const spinning = keyframes`
@@ -13,10 +14,11 @@ const spinning = keyframes`
 
 export const LoadingIndicator = styled.div`
     display: inline-block;
-    width: 6rem;
-    height: 6rem;
-    border: .5rem solid rgba(15,15,15,.3);
+    width: 2rem;
+    height: 2rem;
+    margin-left: ${Spacer.Md};
+    border: .25rem solid transparent;
     border-radius: 50%;
-    border-top-color: ${Color.Accent};
-    animation: ${spinning} 1.5s linear infinite; 
+    border-color: ${Color.Accent} transparent transparent ${Color.Accent};
+    animation: ${spinning} 1.25s linear infinite; 
 `;

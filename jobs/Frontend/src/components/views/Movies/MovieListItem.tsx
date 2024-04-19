@@ -1,16 +1,16 @@
-import { MovieModel } from '../interfaces/movieModel.ts';
+import { MovieModel } from '../../../interfaces/movieModel.ts';
 import {
     MovieCard,
     MovieCardBody,
     MovieCardImgPlaceholderIcon,
     MovieCardTitle,
     MoviesListLi
-} from './MovieListItem.styled';
-import { PosterImageSize } from '../enums/images/posterImageSize.ts';
+} from './MovieListItem.styled.tsx';
+import { PosterImageSize } from '../../../enums/images/posterImageSize.ts';
 import { useId } from 'react';
-import { FallbackImg } from './shared/FallbackImg.tsx';
+import { FallbackImg } from '../../shared/FallbackImg.tsx';
 import { IconBaseProps } from 'react-icons';
-import { displayRatings } from '../utils/movieUtils.ts';
+import { displayRatings } from '../../../utils/movieUtils.ts';
 
 export function MovieListItem({id, getPosterUrl, title, voteAverage, voteCount}: MovieModel.MoviePreview) {
     const posterUrl = getPosterUrl(PosterImageSize.Width500);
@@ -27,7 +27,7 @@ export function MovieListItem({id, getPosterUrl, title, voteAverage, voteCount}:
                     placeholderIcon={(props: IconBaseProps) => <MovieCardImgPlaceholderIcon {...props}/>}
                     placeholderLabel='Missing movie picture'
                 />
-                <MovieCardBody>
+                <MovieCardBody className='movie-card-body'>
                     <MovieCardTitle id={cardTitleId}>{title}</MovieCardTitle>
                     <i>{displayRatings(voteAverage, voteCount)}</i>
                 </MovieCardBody>

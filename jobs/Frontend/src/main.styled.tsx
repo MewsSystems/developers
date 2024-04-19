@@ -7,18 +7,22 @@ export const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
     }
-
+    
     body {
         margin: 0;
-        padding: 0; 
-        // font-family based on - https://modernfontstacks.com/
-        font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
+        padding: 0;
         font-weight: normal;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: ${Color.Primary};
         background-color: ${Color.Background};
         text-align: left;
+    }
+    
+    body, 
+    button {
+        // font-family based on - https://modernfontstacks.com/
+        font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif;
     }
     
     #root {

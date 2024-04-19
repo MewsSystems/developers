@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { LoaderWrapper, LoadingIndicator } from './Loader.styled';
+import { VisuallyHidden } from './A11y.tsx';
 
-export function Loader() {
+export function Loader({ children }: { children?: ReactNode }) {
     const [isShown, setIsShown] = useState(false);
 
     // flicker prevention
@@ -14,9 +15,13 @@ export function Loader() {
     });
 
     return (
-        <LoaderWrapper style={{ display: isShown ? 'block' : 'none' }}>
-            <LoadingIndicator aria-hidden="true" />            
-            <p>Loading</p>
+        <LoaderWrapper style={{ display: isShown ? 'inline-block' : 'none' }}>
+            {
+                children
+                    ? children
+                    : <VisuallyHidden>Loading</VisuallyHidden>
+            }
+            <LoadingIndicator aria-hidden="true" />
         </LoaderWrapper>
     );
 };

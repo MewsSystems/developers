@@ -4,7 +4,7 @@ import { PaginationRow, PaginationSeparator } from './Pagination.styled.tsx';
 import { getPaginationModel } from './paginationUtils.ts';
 import { Button } from '../Button.tsx';
 
-export interface PaginationProps {
+interface PaginationProps {
     currentPage: number;
     numberOfPages: number;
 }
@@ -51,8 +51,9 @@ function PageLink({ highlighted, page, currentSearchParams }: PageLinkProps) {
 
     return (
         <Button
+            as={Link}
             to={`?${pageSearchParams}`}
-            className={highlighted && 'active'}
+            className={highlighted ? 'active' : ''}
             aria-label={`Go to page ${page}`}
             onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }}
         >
