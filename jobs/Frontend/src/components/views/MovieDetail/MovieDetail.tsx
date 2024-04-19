@@ -17,6 +17,7 @@ import { BsClock } from 'react-icons/bs';
 import { displayRatings, displayRuntime } from '../../../utils/movieUtils';
 import { ReactNode } from 'react';
 import { Loader } from '../../shared/Loader';
+import { NetworkErrorMessage } from '../../shared/Error';
 
 export function MovieDetail() {
     const {movieId} = useParams();
@@ -36,9 +37,7 @@ export function MovieDetail() {
     }
 
     if (isError) {
-        return (
-            <span>Failed to load data, please reload this page or came back later</span>
-        );
+        return <NetworkErrorMessage/>;
     }
 
     const {

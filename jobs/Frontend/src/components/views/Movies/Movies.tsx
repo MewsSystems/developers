@@ -8,6 +8,7 @@ import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
 import { searchMovies } from '../../../api/tmdbApi';
 import { Loader } from '../../shared/Loader';
 import { TrendingMovies } from './TrendingMovies';
+import { NetworkErrorMessage } from '../../shared/Error';
 
 export default function Movies() {
     const [debouncedQuery, page, query, setQuery] = useMoviesData();
@@ -38,9 +39,7 @@ export default function Movies() {
     }
 
     if (isError) {
-        return (
-            <span>Failed to load data, please reload this page or came back later</span>
-        );
+        return <NetworkErrorMessage/>;
     }
 
     return (

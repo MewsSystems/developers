@@ -1,19 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
 import { getMovieCredits } from '../../../api/tmdbApi';
-import { ProfileImageSize } from '../../../enums/images/profileImageSize';
-import {
-    CastMemberName,
-    CastMemberPlaceholderIcon,
-    MovieCastCard,
-    MovieCastCardBody,
-    MovieCastRow
-} from './MovieCastList.styled';
-import { IconBaseProps } from 'react-icons';
-import { FallbackImg } from '../../shared/FallbackImg';
-import { MovieModel } from '../../../interfaces/movieModel';
+import { MovieCastRow } from './MovieCastList.styled';
 import { VisuallyHidden } from '../../shared/A11y';
-import { useId } from 'react';
+import { NetworkErrorMessage } from '../../shared/Error';
+import { MovieCastMemberCard } from './MovieCastMemberCard';
+import { MovieCastCard } from './MovieCastMemberCard.styled';
 
 export function MovieCastList({movieId}: { movieId: number }) {
     const enabled = !!movieId && !isNaN(movieId);
@@ -32,9 +24,7 @@ export function MovieCastList({movieId}: { movieId: number }) {
     }
 
     if (isError) {
-        return (
-            <span>Failed to load data, please reload this page or came back later</span>
-        );
+        return <NetworkErrorMessage/>;
     }
 
     const {
@@ -70,29 +60,3 @@ function MovieCastListSkeletonLoader() {
     );
 }
 
-function MovieCastMemberCard(castMember: MovieModel.CastMember) {
-    const {
-        name,
-        character,
-        getProfileImgUrl
-    } = castMember;
-
-    const nameId = useId();
-
-    return (
-        <MovieCastCard>
-            <FallbackImg
-                src={getProfileImgUrl(ProfileImageSize.Width185)}
-                alt=""
-                cssAspectRatio="2 / 3"
-                imgProps={{'aria-labelledby': nameId}}
-                placeholderIcon={(props: IconBaseProps) => <CastMemberPlaceholderIcon {...props}/>}
-                placeholderLabel="Missing cast member picture"
-            />
-            <MovieCastCardBody>
-                <CastMemberName id={nameId}>{name}</CastMemberName>
-                <span>{character}</span>
-            </MovieCastCardBody>
-        </MovieCastCard>
-    );
-}

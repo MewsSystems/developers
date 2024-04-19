@@ -4,6 +4,7 @@ import { trendingMovies } from '../../../api/tmdbApi';
 import { Spacer } from '../../../enums/style/spacer';
 import { Loader } from '../../shared/Loader';
 import { MoviesList } from './MoviesList';
+import { NetworkErrorMessage } from '../../shared/Error';
 
 export function TrendingMovies({page}: { page: number }) {
     const timeWindow = 'day';
@@ -23,9 +24,7 @@ export function TrendingMovies({page}: { page: number }) {
     }
 
     if (isError) {
-        return (
-            <span>Failed to load data, please reload this page or came back later</span>
-        );
+        return <NetworkErrorMessage/>;
     }
 
     const {
