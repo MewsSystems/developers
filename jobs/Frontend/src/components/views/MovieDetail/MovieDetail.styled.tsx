@@ -2,14 +2,7 @@ import styled from 'styled-components';
 import { Spacer } from '../../../enums/style/spacer';
 import { BorderRadius } from '../../../enums/style/borderRadius';
 import { Breakpoint } from '../../../enums/style/breakpoint';
-
-export const ClosingBackdropImage = styled.img`
-    mask-image: linear-gradient(transparent, rgb(0 0 0) 45%);
-    aspect-ratio: 16 / 9;
-    width: 100%;
-    border-bottom-left-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-`;
+import { Gradient } from '../../../enums/style/gradient';
 
 export const MoviePosterImage = styled.img`
     aspect-ratio: 2 / 3;
@@ -36,4 +29,12 @@ export const MovieDetailIntro = styled.section`
 export const MovieDetailIntroBody = styled.div`
     display: flex;
     flex-direction: column;
+`;
+
+export const ClosingBackdropImage = styled.img`
+    mask-image: ${Gradient.FadeTop};
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-bottom-left-radius: ${BorderRadius.Md};
+    border-bottom-right-radius: ${BorderRadius.Md};
 `;

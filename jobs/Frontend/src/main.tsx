@@ -8,7 +8,7 @@ import { GlobalStyle } from './main.styled';
 import { NotFound } from './components/views/NotFound';
 
 const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
+    document.getElementById('root')!
 );
 
 const queryClient = new QueryClient();

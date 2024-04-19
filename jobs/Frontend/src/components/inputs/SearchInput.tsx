@@ -19,7 +19,7 @@ export default function SearchInput({label, query, setQuery}: SearchInputProps) 
                 type="search"
                 maxLength={1_000}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => { setQuery(e.target.value); }}
             />
         </>
     );

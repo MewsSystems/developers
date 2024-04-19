@@ -60,7 +60,7 @@ export function MovieDetail() {
     const posterUrl = getPosterUrl(PosterImageSize.Width500);
 
     const genresSummary = (
-        genres && genres.length > 0 &&
+        genres.length > 0 &&
         <><span>{genres.map(g => g.name).join(', ')}</span><br/></>
     );
 

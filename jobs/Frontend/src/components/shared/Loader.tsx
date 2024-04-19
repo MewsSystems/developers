@@ -11,7 +11,7 @@ export function Loader({children}: { children?: ReactNode }) {
             setIsShown(true);
         }, 200);
 
-        return () => clearTimeout(timer);
+        return () => { clearTimeout(timer); };
     });
 
     return (

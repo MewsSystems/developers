@@ -41,11 +41,11 @@ export function MovieCastList({movieId}: { movieId: number }) {
         cast
     } = data;
 
-    if (!cast || cast.length === 0) {
+    if (cast.length === 0) {
         return null;
     }
 
-    const castCards = cast?.map((castMember) =>
+    const castCards = cast.map((castMember) =>
         <MovieCastMemberCard key={castMember.id} {...castMember}/>);
 
     return (

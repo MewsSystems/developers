@@ -24,7 +24,7 @@ export namespace MovieMapper {
             page,
             totalPages: total_pages,
             totalResults: total_results,
-            results: results?.map(moviePreviewFromDto)
+            results: results.map(moviePreviewFromDto)
         };
     };
 
@@ -103,8 +103,8 @@ export namespace MovieMapper {
 
         return {
             id,
-            cast: cast?.map(castMemberFromDto),
-            crew: crew?.map(crewMemberFromDto)
+            cast: cast.map(castMemberFromDto),
+            crew: crew.map(crewMemberFromDto)
         };
     };
 

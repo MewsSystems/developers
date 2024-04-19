@@ -28,7 +28,7 @@ export default function Movies() {
         </>
     );
 
-    if (isPending && !data) {
+    if (isPending) {
         return (
             <>
                 {search}
@@ -81,8 +81,8 @@ const useMoviesData = (): UseMoviesDataResult => {
             });
         }, 200);
 
-        return () => clearTimeout(timeout);
-    }, [query]);
+        return () => { clearTimeout(timeout); };
+    }, [debouncedQuery, query, setSearchParams]);
 
     const page = getCurrentPage(searchParams);
 

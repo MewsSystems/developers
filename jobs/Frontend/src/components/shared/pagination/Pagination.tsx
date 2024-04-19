@@ -16,7 +16,7 @@ interface PageLinkProps {
 }
 
 export function Pagination({currentPage, numberOfPages}: PaginationProps) {
-    const [searchParams, _] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const model = getPaginationModel(currentPage, numberOfPages);
 
     const pageLinks = model.map((item, i) => {
