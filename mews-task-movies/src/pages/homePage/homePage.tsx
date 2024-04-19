@@ -7,45 +7,44 @@ import { getMovies } from '../../data/getMovies';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
-  const [allMoviesData, setAllMoviesData] = useState(Object);
+  const [totalPagesNumber, setTotalPagesNumber] = useState(Number);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(Number);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [selectedMovieId, setSelectedMovieId] = useState(Number);
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
   useEffect(() => {
-    getMovies(search, setMovies, pageNumber, setAllMoviesData);
-  }, [search, pageNumber]);
+    getMovies(search, setMovies, currentPageNumber, setTotalPagesNumber);
+  }, [search, currentPageNumber]);
 
   const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
     setSearch(e.target.value);
   };
 
   const handleSelectedMovie = (movieId: number) => {
-    setSelectedMovie(movieId);
+    setSelectedMovieId(movieId);
   };
 
   const movieListElement = document.getElementById('movies_view');
+  console.log('movieListElement', movieListElement);
 
   const handlePageNumberPlus = () => {
-    setPageNumber((prevNumber) => prevNumber + 1);
+    setCurrentPageNumber((prevNumber) => prevNumber + 1);
     movieListElement?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handlePageNumberMinus = () => {
-    setPageNumber((prevNumber) => prevNumber - 1);
+    setCurrentPageNumber((prevNumber) => prevNumber - 1);
     movieListElement?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const totalPagesNumber = allMoviesData.total_pages;
-
   console.log('movies', movies);
-  console.log('selectedMovie', selectedMovie);
-  console.log('pageNumber', pageNumber);
+  console.log('selectedMovie', selectedMovieId);
+  console.log('pageNumber', currentPageNumber);
   console.log('totalPagesNumber', totalPagesNumber);
 
   return (
     <main>
-      {selectedMovie === 0 && (
+      {selectedMovieId === 0 && (
         <>
           <h1>Find your movie</h1>
           <SearchForm searchValue={search} searchFunction={handleSearch} />
@@ -55,7 +54,7 @@ export default function HomePage() {
           />
           {search.length > 0 && (
             <PagesNavigation
-              pageNumber={pageNumber}
+              pageNumber={currentPageNumber}
               totalPagesNumber={totalPagesNumber}
               increasePage={handlePageNumberPlus}
               decreasePage={handlePageNumberMinus}
@@ -63,10 +62,10 @@ export default function HomePage() {
           )}
         </>
       )}
-      {selectedMovie > 0 && (
+      {selectedMovieId > 0 && (
         <MovieDetail
-          selectedMovieId={selectedMovie}
-          setSelectedMovie={setSelectedMovie}
+          selectedMovieId={selectedMovieId}
+          setSelectedMovie={setSelectedMovieId}
         />
       )}
     </main>

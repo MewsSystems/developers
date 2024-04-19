@@ -4,22 +4,22 @@ export const getMovies = async (
   searchValue: string,
   setMoviesData: Dispatch<SetStateAction<never[]>>,
   pageNumber: Number,
-  setAllMoviesData: any,
+  setTotalPagesNumber: React.Dispatch<SetStateAction<number>>,
 ) => {
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-    },
-  };
+  console.log('process.env.API_KEY', process.env, process.env.API_KEY);
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${searchValue}&page=${pageNumber}&api_key=03b8572954325680265531140190fd2a`,
-    options,
+    `https://api.themoviedb.org/3/search/movie?query=${searchValue}&page=${pageNumber}&api_key=${process.env.REACT_APP_API_KEY}`,
+    {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+      },
+    },
   );
   const moviesData = await response.json();
 
   console.log('moviesData', moviesData);
-  setAllMoviesData(moviesData);
+  setTotalPagesNumber(moviesData.total_pages);
   setMoviesData(moviesData.results);
   console.log('moviesData.result', moviesData.results);
 };

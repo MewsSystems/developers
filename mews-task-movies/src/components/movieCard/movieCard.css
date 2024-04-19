@@ -1,10 +1,13 @@
 .movie_card_container {
   width: 90vw;
+  max-width: 390px;
+  height: 300px;
   box-shadow: 5px 2px 25px var(--green-background);
   border-radius: 20px;
   margin: 0;
   display: flex;
   text-decoration: none;
+  justify-content: space-between;
   cursor: pointer;
   position: relative;
 }
@@ -14,26 +17,37 @@
   height: 100%;
   overflow: hidden;
   position: relative;
-  border-radius: 20px 0 0 20px;
+  border-radius: 0 20px 20px 0px;
   margin: 0;
 }
 
 .movie_card_image {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
+  border-radius: 0 20px 0px 20px;
 }
 
 .description {
   margin: 15px;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
 }
 
 .card_overview {
-  margin-bottom: 50px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  line-height: 25px;
 }
 
 .detail_link {
@@ -44,19 +58,6 @@
 
 .detail_link:hover {
   scale: 1;
-}
-
-@media (min-width: 700px) {
-  .movie_card_container {
-    width: calc(45vw - 40px)
-  }
-}
-
-
-@media (min-width: 1000px) {
-  .movie_card_container {
-    width: calc(30vw - 40px)
-  }
 }
 
 @media (min-width: 1200px) {
