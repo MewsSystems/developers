@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Movie, useMovies } from "./useMovies";
 import styled from "styled-components";
+import { useLocation } from "wouter";
 
 /* Local imports */
 
@@ -12,11 +13,16 @@ import styled from "styled-components";
 /* Component definition */
 export const Movies = ({ searchTerm }: { searchTerm?: string }) => {
   const { movies } = useMovies({ searchTerm });
+  const [, setLocation] = useLocation();
+
   return movies?.results && movies?.results.length > 0 ? (
     <MovieContainer>
       {movies.results.map((movie: Movie) => {
         return (
-          <MovieItem key={movie.id}>
+          <MovieItem
+            key={movie.id}
+            onClick={() => setLocation(`/movies/${movie.id}`)}
+          >
             <MoviePoster>
               <MoviePosterImage
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}

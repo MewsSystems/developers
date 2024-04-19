@@ -1,24 +1,37 @@
 import React from "react";
 import styled from "styled-components";
 import { Movies } from "./Movies";
+import { Route } from "wouter";
+import { MoviesDetailView } from "./MoviesDetailView";
 
 function App() {
   const [search, setSearch] = React.useState("");
 
   return (
     <MainLayout>
-      <HeaderNav>
-        <Title>Mews Movie Search App</Title>
-        <SearchBarContainer>
-          <Input
-            aria-label="Search a movie"
-            type="text"
-            onChange={(e) => setSearch(e.currentTarget.value)}
-            placeholder="Search a movie"
-          />
-        </SearchBarContainer>
-      </HeaderNav>
-      <Movies searchTerm={search} />
+      {/*  Movies View */}
+      <Route
+        path="/"
+        component={() => (
+          <>
+            <HeaderNav>
+              <Title>Mews Movie Search App</Title>
+              <SearchBarContainer>
+                <Input
+                  aria-label="Search a movie"
+                  type="text"
+                  onChange={(e) => setSearch(e.currentTarget.value)}
+                  placeholder="Search a movie"
+                />
+              </SearchBarContainer>
+            </HeaderNav>
+            <Movies searchTerm={search} />
+          </>
+        )}
+      />
+
+      {/*  Details Movie View */}
+      <Route path="/movies/:id" component={MoviesDetailView} />
     </MainLayout>
   );
 }
