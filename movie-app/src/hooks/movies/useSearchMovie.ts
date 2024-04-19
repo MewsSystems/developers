@@ -1,15 +1,84 @@
 import { fetchAPI, movieDbApiKey } from "../../api/config.ts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useRef, useState } from "react";
+import { debounce } from "@mui/material";
 
-export const useSearchMovieList = (query: string, page: number = 1) => {
-  const getMoviesList = fetchAPI(
-    `search/movie?api_key=${movieDbApiKey}&query=${query}&page=${page}`,
-  );
+export interface Movie {
+  adult: boolean;
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
 
-  return useQuery({
-    queryKey: ["searchMovie", query, page],
-    queryFn: () => getMoviesList,
+interface MovieApiResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export const useSearchMovie = () => {
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const [currentSearch, setCurrentSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["searchMovie", currentSearch, page],
+    queryFn: () =>
+      fetchAPI(
+        `search/movie?api_key=${movieDbApiKey}&query=${currentSearch}&page=${page}`,
+      ),
     placeholderData: keepPreviousData,
-    enabled: query.length > 1,
+    enabled: currentSearch.length > 2,
   });
+
+  const handleSearch = debounce((search: string) => {
+    setCurrentSearch(search);
+    setPage(1); // Reset page to 1 when performing a new search
+  }, 500);
+
+  const handlePageChange = (_: ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    window.scroll({ top: 0, left: 0, behavior: "smooth" });
+  };
+
+  const handleClear = () => {
+    if (searchRef.current) searchRef.current.value = "";
+    setCurrentSearch("");
+    setPage(1);
+  };
+
+  const {
+    page: currentPage,
+    results,
+    total_pages: totalPages,
+    total_results: totalResults,
+  } = (data as MovieApiResponse) || {};
+
+  return {
+    page,
+    currentPage,
+    results,
+    totalPages,
+    totalResults,
+    handleSearch,
+    handlePageChange,
+    handleClear,
+    data,
+    currentSearch,
+    searchRef,
+    isError,
+    isLoading,
+  };
 };
