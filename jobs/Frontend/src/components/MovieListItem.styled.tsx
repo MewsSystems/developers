@@ -19,12 +19,26 @@ export const MoviesListLi = styled.li`
     transition: box-shadow ${TransitionDuration.Medium};
 
     @media (min-width: ${Breakpoint.Sm}) {
-        width: calc(50% - ${Spacer.Md});
-        margin-right: ${Spacer.Md};
+        width: calc(50% - ${Spacer.Sm});
+        
+        &:nth-child(even) {
+            margin-left: ${Spacer.Sm};
+        }
+
+        &:nth-child(odd) {
+            margin-right: ${Spacer.Sm};
+        }
     }
     
     @media (min-width: ${Breakpoint.Md}) {
-        width: calc(25% - ${Spacer.Md});
+        // 1/4 of the width - average spacing around the items
+        width: calc(25% - ${Spacer.Sm} - ${Spacer.Xs});
+
+        &:nth-child(4n + 2),
+        &:nth-child(4n + 3) {
+            margin-left: ${Spacer.Sm};
+            margin-right: ${Spacer.Sm};
+        }
     }
 
     &:hover,

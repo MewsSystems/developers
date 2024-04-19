@@ -1,5 +1,5 @@
-import { Footer, Header, Main, TmdbAttributionText, TmdbLogoImg } from './Layout.styled';
-import tmdbShortLogo from '../assets/tmdb-short-logo.svg';
+import { Footer, Header, Main, TmdbAttributionText, TmdbLogoImg } from './Layout.styled.tsx';
+import tmdbShortLogo from '../../assets/tmdb-short-logo.svg';
 import { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {

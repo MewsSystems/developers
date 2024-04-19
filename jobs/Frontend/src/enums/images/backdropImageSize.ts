@@ -1,5 +1,5 @@
 export const enum BackdropImageSize {
-    Large = 'w1280',
-    Medium = 'w780',
-    Small = 'w300'
+    Width1280 = 'w1280',
+    Width780 = 'w780',
+    Width300 = 'w300'
 }

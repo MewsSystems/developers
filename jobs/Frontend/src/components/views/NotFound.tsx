@@ -1,4 +1,4 @@
-import Layout from './Layout.tsx';
+import Layout from '../shared/Layout.tsx';
 import { Link } from 'react-router-dom';
 
 export function NotFound() {

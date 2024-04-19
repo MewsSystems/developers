@@ -2,10 +2,10 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { MovieDetail } from './components/MovieDetail.tsx';
-import Movies from './components/Movies.tsx';
+import { MovieDetail } from './components/views/MovieDetail.tsx';
+import Movies from './components/views/Movies.tsx';
 import { GlobalStyle } from './main.styled.tsx';
-import { NotFound } from './components/NotFound.tsx';
+import { NotFound } from './components/views/NotFound.tsx';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

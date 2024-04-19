@@ -3,6 +3,8 @@ import { MovieModel } from '../interfaces/movieModel.ts';
 import config from '../config.json';
 import { BackdropImageSize } from '../enums/images/backdropImageSize.ts';
 import { PosterImageSize } from '../enums/images/posterImageSize.ts';
+import { Gender } from '../enums/gender.ts';
+import { ProfileImageSize } from '../enums/images/profileImageSize.ts';
 
 export namespace MovieMapper {
     // working with images https://developer.themoviedb.org/docs/image-basics
@@ -14,14 +16,15 @@ export namespace MovieMapper {
         const {
             page,
             total_pages,
-            total_results
+            total_results,
+            results
         } = dto;
 
         return {
             page,
             totalPages: total_pages,
             totalResults: total_results,
-            results: dto.results?.map(movieItemFromDto)
+            results: results?.map(movieItemFromDto)
         };
     };
 
@@ -107,5 +110,85 @@ export namespace MovieMapper {
             voteAverage: vote_average,
             voteCount: vote_count,
         }
+    }
+
+    export const movieCreditsFromDto = (dto: TmdbDto.MovieCredits): MovieModel.MovieCredits => {
+        const {
+            id,
+            cast,
+            crew
+        } = dto;
+
+        return {
+            id,
+            cast: cast?.map(castItemFromDto),
+            crew: crew?.map(crewItemFromDto)
+        }
+    };
+
+    export const castItemFromDto = (dto: TmdbDto.CastItem): MovieModel.CastItem => {
+        const {
+            cast_id,
+            character,
+            order,
+            ...personBase
+        } = dto;
+
+        return {
+            ...personItemBaseFromDto(personBase),
+            castId: cast_id,
+            character,
+            order
+        };
+    };
+
+    export const crewItemFromDto = (dto: TmdbDto.CrewItem): MovieModel.CrewItem => {
+        const {
+            department,
+            job,
+            ...personBase
+        } = dto;
+
+
+        return {
+            ...personItemBaseFromDto(personBase),
+            department,
+            job
+        };
+    };
+
+    export const personItemBaseFromDto = (dto: TmdbDto.PersonItemBase): MovieModel.PersonItemBase => {
+        const {
+            adult,
+            gender,
+            id,
+            known_for_department,
+            name,
+            original_name,
+            popularity,
+            profile_path,
+            credit_id
+        } = dto;
+
+        return {
+            adult,
+            gender: genderFromDto(gender),
+            id,
+            knownForDepartment: known_for_department,
+            name,
+            originalName: original_name,
+            popularity,
+            getProfileImgUrl: (size: ProfileImageSize) => buildAssetUrl(size, profile_path),
+            creditId: credit_id
+        };
+    };
+
+    const genderFromDto = (dtoGender: TmdbDto.Gender): Gender => {
+        return ({
+            [TmdbDto.Gender.NotSpecified]: Gender.NotSpecified,
+            [TmdbDto.Gender.Female]: Gender.Female,
+            [TmdbDto.Gender.Male]: Gender.Male,
+            [TmdbDto.Gender.NonBinary]: Gender.NonBinary
+        })[dtoGender] || Gender.NotSpecified;
     }
 }

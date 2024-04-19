@@ -64,5 +64,42 @@ export namespace TmdbDto {
         vote_average: number;
         vote_count: number;
     }
+
+    export interface MovieCredits {
+        id: number;
+        cast: CastItem[];
+        crew: CrewItem[];
+    }
+
+    export interface PersonItemBase {
+        adult: boolean;
+        gender: Gender;
+        id: number;
+        known_for_department: string;
+        name: string;
+        original_name: string;
+        popularity: number;
+        profile_path: string;
+        credit_id: number;
+    }
+
+    export interface CastItem extends PersonItemBase {
+        cast_id: number;
+        character: string;
+        order: number;
+    }
+
+    export interface CrewItem extends PersonItemBase {
+        department: string;
+        job: string;
+    }
+
+    // https://developer.themoviedb.org/reference/person-details#genders
+    export const enum Gender {
+        NotSpecified = 0,
+        Female = 1,
+        Male = 2,
+        NonBinary = 3
+    }
 }
 

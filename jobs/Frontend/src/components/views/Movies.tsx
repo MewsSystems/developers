@@ -1,11 +1,11 @@
-import SearchInput from './inputs/SearchInput';
+import SearchInput from '../inputs/SearchInput.tsx';
 import { useEffect, useState } from 'react';
-import { MoviesList } from './MoviesList';
+import { MoviesList } from '../MoviesList.tsx';
 import { useSearchParams } from 'react-router-dom';
-import { UrlSearchParamKey } from '../enums/urlSearchParamKey.ts';
+import { UrlSearchParamKey } from '../../enums/urlSearchParamKey.ts';
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../enums/reactQueryPrimaryKey.ts';
-import { searchMovies, trendingMovies } from '../api/tmdbApi.ts';
+import { ReactQueryPrimaryKey } from '../../enums/reactQueryPrimaryKey.ts';
+import { searchMovies, trendingMovies } from '../../api/tmdbApi.ts';
 
 export default function Movies() {
     const [searchParams, setSearchParams] = useSearchParams();

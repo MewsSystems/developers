@@ -18,6 +18,7 @@ interface PageLinkProps {
 export function Pagination({ currentPage, numberOfPages }: PaginationProps) {
     const [searchParams, _] = useSearchParams();
     const model = getPaginationModel(currentPage, numberOfPages);
+
     const pageLinks = model.map((item, i) => {
         const key = `${item}-${i}`;
         return (
@@ -50,10 +51,10 @@ function PageLink({ highlighted, page, currentSearchParams }: PageLinkProps) {
 
     return (
         <Button
-            as={Link}
             to={`?${pageSearchParams}`}
             className={highlighted && 'active'}
             aria-label={`Go to page ${page}`}
+            onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }}
         >
             { page }
         </Button>

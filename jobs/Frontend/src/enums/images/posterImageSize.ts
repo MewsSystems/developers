@@ -1,5 +1,5 @@
 export const enum PosterImageSize {
-    Large = 'w780',
-    Medium = 'w500',
-    Small = 'w342'
+    Width780 = 'w780',
+    Width500 = 'w500',
+    Width342 = 'w342'
 }

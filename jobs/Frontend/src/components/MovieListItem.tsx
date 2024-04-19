@@ -2,34 +2,34 @@ import { MovieModel } from '../interfaces/movieModel.ts';
 import {
     MovieCard,
     MovieCardBody,
-    MovieCardImg,
-    MovieCardImgPlaceholder,
     MovieCardImgPlaceholderIcon,
     MovieCardTitle,
     MoviesListLi
 } from './MovieListItem.styled';
 import { PosterImageSize } from '../enums/images/posterImageSize.ts';
 import { useId } from 'react';
+import { FallbackImg } from './shared/FallbackImg.tsx';
+import { IconBaseProps } from 'react-icons';
+import { displayRatings } from '../utils/movieUtils.ts';
 
 export function MovieListItem({id, getPosterUrl, title, voteAverage, voteCount}: MovieModel.MovieItem) {
-    const posterUrl = getPosterUrl(PosterImageSize.Medium);
+    const posterUrl = getPosterUrl(PosterImageSize.Width500);
     const cardTitleId = useId();
-    const displayRatingPercent = `${Math.round(voteAverage * 10)}%`;
-    const displayRatingCount = new Intl.NumberFormat('en-US').format(voteCount);
 
     return (
         <MoviesListLi>
             <MovieCard to={`/movie/${id}`}>
-                {
-                    posterUrl
-                        ? <MovieCardImg alt="" aria-labelledby={cardTitleId} src={posterUrl}/>
-                        : <MovieCardImgPlaceholder aria-label='Missing movie picture' role='img'>
-                            <MovieCardImgPlaceholderIcon aria-hidden={true}/>
-                        </MovieCardImgPlaceholder>
-                }
+                <FallbackImg
+                    src={posterUrl}
+                    alt=""
+                    imgProps={{ 'aria-labelledby': cardTitleId }}
+                    cssAspectRatio='2 / 3'
+                    placeholderIcon={(props: IconBaseProps) => <MovieCardImgPlaceholderIcon {...props}/>}
+                    placeholderLabel='Missing movie picture'
+                />
                 <MovieCardBody>
                     <MovieCardTitle id={cardTitleId}>{title}</MovieCardTitle>
-                    <i>{displayRatingPercent} from {displayRatingCount} ratings</i>
+                    <i>{displayRatings(voteAverage, voteCount)}</i>
                 </MovieCardBody>
             </MovieCard>
         </MoviesListLi>
