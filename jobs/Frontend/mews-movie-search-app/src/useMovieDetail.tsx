@@ -1,8 +1,10 @@
 import React from "react";
 import { domainURL } from "./utils/constant";
+import { MovieDetailResponse } from "./types/movies";
 
 export const useMovieDetail = (id: number) => {
-  const [movieDetail, setMovieDetail] = React.useState({});
+  const [movieDetail, setMovieDetail] =
+    React.useState<MovieDetailResponse | null>(null);
 
   const getDetail = async () => {
     try {
@@ -14,7 +16,7 @@ export const useMovieDetail = (id: number) => {
 
       setMovieDetail(data);
     } catch (error) {
-      setMovieDetail({});
+      setMovieDetail(null);
     }
   };
 
