@@ -11,21 +11,32 @@ export default function PagesNavigation({
   increasePage: () => void;
   decreasePage: () => void;
 }) {
+  const diableNextPage = totalPagesNumber === pageNumber;
+  const diablePreviousPage = pageNumber === 1;
+
   return (
     <nav className="page_navigation">
-      {pageNumber > 1 && (
-        <span className="button control" onClick={decreasePage}>
-          {'<'}
-        </span>
-      )}
+      <button
+        className={`${
+          diablePreviousPage ? 'disabled button control' : 'button control'
+        } `}
+        onClick={decreasePage}
+        disabled={diablePreviousPage}
+      >
+        {'<'}
+      </button>
       <span className="page_number">
         {pageNumber} / {totalPagesNumber}
       </span>
-      {totalPagesNumber > pageNumber && (
-        <span className="button control" onClick={increasePage}>
-          {'>'}
-        </span>
-      )}
+      <button
+        className={`${
+          diableNextPage ? 'disabled button control' : 'button control'
+        } `}
+        onClick={increasePage}
+        disabled={diableNextPage}
+      >
+        {'>'}
+      </button>
     </nav>
   );
 }

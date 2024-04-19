@@ -24,10 +24,9 @@ label {
 
 .clear_button {
   position: relative;
-  top: -62px;
+  top: -61px;
   left: calc(90vw - 45px);
-  color: var(--dark-red);
-  font-size: 2rem;
+  font-size: 1rem;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -45,6 +44,6 @@ label {
 
 @media (min-width: 1200px) {
   .clear_button:hover {
-    color: var(--light-red);
+    scale: 1.05;
   }
 }

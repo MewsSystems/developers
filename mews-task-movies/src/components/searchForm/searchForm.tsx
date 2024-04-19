@@ -20,7 +20,7 @@ export default function SearchForm({
         placeholder="type the movie name..."
         className="movie_serach_input"
       />
-      <button className="clear_button">x</button>
+      <button className="clear_button">❌</button>
     </form>
   );
 }

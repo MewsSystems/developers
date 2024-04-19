@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-  --dark-background: rgb(0, 45, 45);
-  --green-background: rgb(0, 67, 67);
-  --light-text: white;
-  --dark-text: black;
-  --light-red: rgb(211, 0, 0);
-  --dark-red: rgb(157, 0, 0);
+  --dark-background: #002D2D;
+  --green-background: #006565;
+  --light-text: #FFFFFF;
+  --dark-text: #000000;
+  --disabled-background: #4d4d4dad;
+  --disabled-text: #282828;
 }
 
 * {

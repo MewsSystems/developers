@@ -15,6 +15,7 @@
   overflow: hidden;
   position: relative;
   border-radius: 20px 0 0 20px;
+  margin: 0;
 }
 
 .movie_card_image {

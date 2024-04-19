@@ -13,11 +13,22 @@
 }
 
 .control {
-  font-size: 1.3rem;
+  font-size: 2rem;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: unset;
+}
+
+.disabled {
+  background-color: var(--disabled-background);
+  color: var(--disabled-text);
+}
+
+.disabled:hover {
+  scale: 1;
+  cursor: default;
 }
