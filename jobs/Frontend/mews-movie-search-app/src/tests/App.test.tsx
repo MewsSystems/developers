@@ -16,12 +16,12 @@ describe("App", () => {
   it("renders the headline", async () => {
     Arrange();
     const headline = await screen.findByText("Mews Movie Search App");
-    expect(headline).toBeDefined();
+    expect(headline).toBeInTheDocument();
   });
   it("renders the input search", async () => {
     Arrange();
     const input = await screen.findByLabelText("Search a movie");
-    expect(input).toBeDefined();
+    expect(input).toBeInTheDocument();
   });
   it("renders a list of movies", async () => {
     useMoviesSpy.mockReturnValue({
@@ -54,7 +54,7 @@ describe("App", () => {
     Arrange();
 
     const list = await screen.findByRole("list");
-    expect(list).toBeDefined();
+    expect(list).toBeInTheDocument();
     const movies = await screen.findAllByRole("listitem");
     expect(movies).toHaveLength(1);
   });
