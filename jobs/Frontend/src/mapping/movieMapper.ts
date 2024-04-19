@@ -1,16 +1,16 @@
-import { TmdbDto } from '../interfaces/tmdbDto.ts';
-import { MovieModel } from '../interfaces/movieModel.ts';
+import { TmdbDto } from '../interfaces/tmdbDto';
+import { MovieModel } from '../interfaces/movieModel';
 import config from '../config.json';
-import { BackdropImageSize } from '../enums/images/backdropImageSize.ts';
-import { PosterImageSize } from '../enums/images/posterImageSize.ts';
-import { Gender } from '../enums/gender.ts';
-import { ProfileImageSize } from '../enums/images/profileImageSize.ts';
+import { BackdropImageSize } from '../enums/images/backdropImageSize';
+import { PosterImageSize } from '../enums/images/posterImageSize';
+import { Gender } from '../enums/gender';
+import { ProfileImageSize } from '../enums/images/profileImageSize';
 
 export namespace MovieMapper {
     // working with images https://developer.themoviedb.org/docs/image-basics
     const buildAssetUrl = <TSize>(size: TSize, assetPath: string) => {
         return assetPath ? `${config.tmdb.assetBaseUrl}${size}${assetPath}` : '';
-    }
+    };
 
     export const movieListFromDto = (dto: TmdbDto.MovieList): MovieModel.MovieList => {
         const {
@@ -51,7 +51,7 @@ export namespace MovieMapper {
             ...movieBaseFromDto(movieBase),
             belongsToCollection: belongs_to_collection,
             budget,
-            genres: genres.map(({ id, name }) => ({ id, name })),
+            genres: genres.map(({id, name}) => ({id, name})),
             homepage,
             imbdId: imdb_id,
             releaseDate: release_date ? new Date(Date.parse(release_date)) : undefined,
@@ -59,8 +59,8 @@ export namespace MovieMapper {
             runtime,
             status,
             tagline
-        }
-    }
+        };
+    };
 
     export const movieBaseFromDto = (dto: TmdbDto.MovieBase): MovieModel.MovieBase => {
         const {
@@ -92,7 +92,7 @@ export namespace MovieMapper {
             voteAverage: vote_average,
             voteCount: vote_count,
         };
-    }
+    };
 
     export const movieCreditsFromDto = (dto: TmdbDto.MovieCredits): MovieModel.MovieCredits => {
         const {
@@ -105,7 +105,7 @@ export namespace MovieMapper {
             id,
             cast: cast?.map(castMemberFromDto),
             crew: crew?.map(crewMemberFromDto)
-        }
+        };
     };
 
     export const castMemberFromDto = (dto: TmdbDto.CastMember): MovieModel.CastMember => {
@@ -172,5 +172,5 @@ export namespace MovieMapper {
             [TmdbDto.Gender.Male]: Gender.Male,
             [TmdbDto.Gender.NonBinary]: Gender.NonBinary
         })[dtoGender] || Gender.NotSpecified;
-    }
+    };
 }

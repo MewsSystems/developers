@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Color } from '../../enums/style/color.ts';
+import { Color } from '../../enums/style/color';
 
 export const FallbackImgImg = styled.img`
     width: 100%;

@@ -1,8 +1,8 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { UrlSearchParamKey } from '../../../enums/urlSearchParamKey.ts';
-import { PaginationRow, PaginationSeparator } from './Pagination.styled.tsx';
-import { getPaginationModel } from './paginationUtils.ts';
-import { Button } from '../Button.tsx';
+import { UrlSearchParamKey } from '../../../enums/urlSearchParamKey';
+import { PaginationRow, PaginationSeparator } from './Pagination.styled';
+import { getPaginationModel } from './paginationUtils';
+import { Button } from '../Button';
 
 interface PaginationProps {
     currentPage: number;
@@ -15,7 +15,7 @@ interface PageLinkProps {
     currentSearchParams: URLSearchParams;
 }
 
-export function Pagination({ currentPage, numberOfPages }: PaginationProps) {
+export function Pagination({currentPage, numberOfPages}: PaginationProps) {
     const [searchParams, _] = useSearchParams();
     const model = getPaginationModel(currentPage, numberOfPages);
 
@@ -30,7 +30,7 @@ export function Pagination({ currentPage, numberOfPages }: PaginationProps) {
                     currentSearchParams={searchParams}
                 />
                 : <PaginationSeparator key={key}>{item}</PaginationSeparator>
-        )
+        );
     });
 
     return (
@@ -40,7 +40,7 @@ export function Pagination({ currentPage, numberOfPages }: PaginationProps) {
     );
 }
 
-function PageLink({ highlighted, page, currentSearchParams }: PageLinkProps) {
+function PageLink({highlighted, page, currentSearchParams}: PageLinkProps) {
     const pageSearchParams = new URLSearchParams(currentSearchParams);
 
     if (page <= 1) {
@@ -55,9 +55,11 @@ function PageLink({ highlighted, page, currentSearchParams }: PageLinkProps) {
             to={`?${pageSearchParams}`}
             className={highlighted ? 'active' : ''}
             aria-label={`Go to page ${page}`}
-            onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            onClick={() => {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }}
         >
-            { page }
+            {page}
         </Button>
     );
 }

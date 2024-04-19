@@ -25,5 +25,5 @@ export const getPaginationModel = (currentPage: number, numberOfPages: number): 
         return [1, '...', ...getNumberArray(lowerBound, 4)];
     }
 
-    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', numberOfPages]
+    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', numberOfPages];
 };

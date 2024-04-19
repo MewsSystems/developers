@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { Spacer } from '../../enums/style/spacer.ts';
-import { BorderRadius } from '../../enums/style/borderRadius.ts';
-import { Gradient } from '../../enums/style/gradient.ts';
+import { Spacer } from '../../enums/style/spacer';
+import { BorderRadius } from '../../enums/style/borderRadius';
+import { Gradient } from '../../enums/style/gradient';
 
 const contentWidth = '60rem';
 

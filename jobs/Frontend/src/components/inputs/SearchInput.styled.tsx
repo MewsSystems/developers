@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Color } from '../../enums/style/color.ts';
-import { FontSize } from '../../enums/style/fontSize.ts';
-import { Spacer } from '../../enums/style/spacer.ts';
-import { BorderRadius } from '../../enums/style/borderRadius.ts';
+import { Color } from '../../enums/style/color';
+import { FontSize } from '../../enums/style/fontSize';
+import { Spacer } from '../../enums/style/spacer';
+import { BorderRadius } from '../../enums/style/borderRadius';
 
 export const Label = styled.label`
     font-size: ${FontSize.Lg};

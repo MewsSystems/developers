@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
-import { getMovieCredits } from '../../../api/tmdbApi.ts';
-import { ProfileImageSize } from '../../../enums/images/profileImageSize.ts';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
+import { getMovieCredits } from '../../../api/tmdbApi';
+import { ProfileImageSize } from '../../../enums/images/profileImageSize';
 import {
     CastMemberName,
     CastMemberPlaceholderIcon,
     MovieCastCard,
     MovieCastCardBody,
     MovieCastRow
-} from './MovieCastList.styled.tsx';
+} from './MovieCastList.styled';
 import { IconBaseProps } from 'react-icons';
-import { FallbackImg } from '../../shared/FallbackImg.tsx';
-import { MovieModel } from '../../../interfaces/movieModel.ts';
-import { VisuallyHidden } from '../../shared/A11y.tsx';
+import { FallbackImg } from '../../shared/FallbackImg';
+import { MovieModel } from '../../../interfaces/movieModel';
+import { VisuallyHidden } from '../../shared/A11y';
 import { useId } from 'react';
 
-export function MovieCastList({ movieId }: { movieId: number }) {
+export function MovieCastList({movieId}: { movieId: number }) {
     const enabled = !!movieId && !isNaN(movieId);
-    const { data, isError, isPending } = useQuery({
+    const {data, isError, isPending} = useQuery({
         queryKey: [ReactQueryPrimaryKey.TmdbMovieCredits, movieId],
         queryFn: () => getMovieCredits(Number(movieId)),
         enabled
@@ -28,7 +28,7 @@ export function MovieCastList({ movieId }: { movieId: number }) {
     }
 
     if (isPending) {
-        return <MovieCastListSkeletonLoader />;
+        return <MovieCastListSkeletonLoader/>;
     }
 
     if (isError) {
@@ -49,15 +49,15 @@ export function MovieCastList({ movieId }: { movieId: number }) {
         <MovieCastMemberCard key={castMember.id} {...castMember}/>);
 
     return (
-        <MovieCastRow aria-label='Movies cast'>
+        <MovieCastRow aria-label="Movies cast">
             {castCards}
         </MovieCastRow>
     );
 }
 
 function MovieCastListSkeletonLoader() {
-    const skeletonCards = Array.from({ length: 6 }, (_, i) => {
-        return <MovieCastCard key={`${i}-placeholder`} />;
+    const skeletonCards = Array.from({length: 6}, (_, i) => {
+        return <MovieCastCard key={`${i}-placeholder`}/>;
     });
 
     return (
@@ -84,10 +84,10 @@ function MovieCastMemberCard(castMember: MovieModel.CastMember) {
             <FallbackImg
                 src={getProfileImgUrl(ProfileImageSize.Width185)}
                 alt=""
-                cssAspectRatio='2 / 3'
-                imgProps={{ 'aria-labelledby': nameId }}
+                cssAspectRatio="2 / 3"
+                imgProps={{'aria-labelledby': nameId}}
                 placeholderIcon={(props: IconBaseProps) => <CastMemberPlaceholderIcon {...props}/>}
-                placeholderLabel='Missing cast member picture'
+                placeholderLabel="Missing cast member picture"
             />
             <MovieCastCardBody>
                 <CastMemberName id={nameId}>{name}</CastMemberName>

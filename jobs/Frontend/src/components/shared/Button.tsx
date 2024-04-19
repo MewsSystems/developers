@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Color } from '../../enums/style/color.ts';
-import { BorderRadius } from '../../enums/style/borderRadius.ts';
-import { Spacer } from '../../enums/style/spacer.ts';
-import { FontSize } from '../../enums/style/fontSize.ts';
-import { Breakpoint } from '../../enums/style/breakpoint.ts';
+import { Color } from '../../enums/style/color';
+import { BorderRadius } from '../../enums/style/borderRadius';
+import { Spacer } from '../../enums/style/spacer';
+import { FontSize } from '../../enums/style/fontSize';
+import { Breakpoint } from '../../enums/style/breakpoint';
 
 export const Button = styled.button`
     display: inline-block;
@@ -24,16 +24,16 @@ export const Button = styled.button`
         padding: ${Spacer.Sm} ${Spacer.Md};
         min-width: 3rem;
     }
-    
+
     &.active {
         background-color: ${Color.SecondaryAccent};
     }
-    
+
     &:last-child {
         margin-right: 0;
     }
-    
-    &:hover, 
+
+    &:hover,
     &:focus {
         color: ${Color.Background};
         background-color: ${Color.Accent};

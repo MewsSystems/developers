@@ -1,14 +1,14 @@
 import styled, { keyframes } from 'styled-components';
-import { Color } from '../../enums/style/color.ts';
-import { Spacer } from '../../enums/style/spacer.ts';
+import { Color } from '../../enums/style/color';
+import { Spacer } from '../../enums/style/spacer';
 
 export const LoaderWrapper = styled.div`
     vertical-align: middle;
 `;
 
 const spinning = keyframes`
-    to { 
-        transform: rotate(360deg); 
+    to {
+        transform: rotate(360deg);
     }
 `;
 
@@ -20,5 +20,5 @@ export const LoadingIndicator = styled.div`
     border: .25rem solid transparent;
     border-radius: 50%;
     border-color: ${Color.Accent} transparent transparent ${Color.Accent};
-    animation: ${spinning} 1.25s linear infinite; 
+    animation: ${spinning} 1.25s linear infinite;
 `;

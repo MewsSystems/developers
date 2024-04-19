@@ -1,7 +1,7 @@
-import { BackdropImageSize } from '../enums/images/backdropImageSize.ts';
-import { PosterImageSize } from '../enums/images/posterImageSize.ts';
-import { ProfileImageSize } from '../enums/images/profileImageSize.ts';
-import { Gender } from '../enums/gender.ts';
+import { BackdropImageSize } from '../enums/images/backdropImageSize';
+import { PosterImageSize } from '../enums/images/posterImageSize';
+import { ProfileImageSize } from '../enums/images/profileImageSize';
+import { Gender } from '../enums/gender';
 
 export namespace MovieModel {
     type GetBackdropImageUrl = (size: BackdropImageSize) => string;
@@ -30,7 +30,8 @@ export namespace MovieModel {
         voteCount: number;
     }
 
-    export interface MoviePreview extends MovieBase { /* empty */ }
+    export interface MoviePreview extends MovieBase { /* empty */
+    }
 
     export interface MovieDetail extends MovieBase {
         belongsToCollection: string;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Spacer } from '../../../enums/style/spacer.ts';
+import { Spacer } from '../../../enums/style/spacer';
 
 export const MoviesListUl = styled.ul`
     padding: ${Spacer.Md} 0 0 0;

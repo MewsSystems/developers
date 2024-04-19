@@ -1,7 +1,7 @@
-import { TmdbDto } from '../interfaces/tmdbDto.ts';
-import { MovieMapper } from '../mapping/movieMapper.ts';
+import { TmdbDto } from '../interfaces/tmdbDto';
+import { MovieMapper } from '../mapping/movieMapper';
 import config from '../config.json';
-import { MovieModel } from '../interfaces/movieModel.ts';
+import { MovieModel } from '../interfaces/movieModel';
 
 const createTmdbQueryBase = () => new URLSearchParams([
     ['api_key', config.tmdb.apiKey]
@@ -33,7 +33,7 @@ export const getMovieCredits = async (movieId: number): Promise<MovieModel.Movie
     const responseDto = await response.json() as TmdbDto.MovieCredits;
 
     return MovieMapper.movieCreditsFromDto(responseDto);
-}
+};
 
 // docs: https://developer.themoviedb.org/reference/search-movie
 export const searchMovies = async (query: string, page: number = 1): Promise<MovieModel.MovieList> => {

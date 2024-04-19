@@ -1,4 +1,4 @@
-import { FallbackImgImg, FallbackImgPlaceholder } from './FallbackImg.styled.tsx';
+import { FallbackImgImg, FallbackImgPlaceholder } from './FallbackImg.styled';
 import { IconType } from 'react-icons';
 import { ImgHTMLAttributes } from 'react';
 
@@ -11,18 +11,18 @@ interface FallbackImgProps {
     placeholderLabel: string;
 }
 
-export function FallbackImg({ alt, src, imgProps, cssAspectRatio, placeholderIcon, placeholderLabel }: FallbackImgProps) {
+export function FallbackImg({alt, src, imgProps, cssAspectRatio, placeholderIcon, placeholderLabel}: FallbackImgProps) {
     if (src) {
-        return <FallbackImgImg alt={alt} src={src} {...imgProps} style={{ aspectRatio: cssAspectRatio }} />
+        return <FallbackImgImg alt={alt} src={src} {...imgProps} style={{aspectRatio: cssAspectRatio}}/>;
     }
 
     return (
         <FallbackImgPlaceholder
             aria-label={placeholderLabel}
-            role='img'
-            style={{ aspectRatio: cssAspectRatio }}
+            role="img"
+            style={{aspectRatio: cssAspectRatio}}
         >
-            {placeholderIcon({ 'aria-hidden': true })}
+            {placeholderIcon({'aria-hidden': true})}
         </FallbackImgPlaceholder>
     );
 }

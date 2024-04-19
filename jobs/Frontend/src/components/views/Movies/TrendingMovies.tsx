@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
-import { trendingMovies } from '../../../api/tmdbApi.ts';
-import { Spacer } from '../../../enums/style/spacer.ts';
-import { Loader } from '../../shared/Loader.tsx';
-import { MoviesList } from './MoviesList.tsx';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
+import { trendingMovies } from '../../../api/tmdbApi';
+import { Spacer } from '../../../enums/style/spacer';
+import { Loader } from '../../shared/Loader';
+import { MoviesList } from './MoviesList';
 
 export function TrendingMovies({page}: { page: number }) {
     const timeWindow = 'day';

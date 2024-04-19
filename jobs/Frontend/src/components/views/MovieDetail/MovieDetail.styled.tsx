@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Spacer } from '../../../enums/style/spacer.ts';
-import { BorderRadius } from '../../../enums/style/borderRadius.ts';
-import { Breakpoint } from '../../../enums/style/breakpoint.ts';
+import { Spacer } from '../../../enums/style/spacer';
+import { BorderRadius } from '../../../enums/style/borderRadius';
+import { Breakpoint } from '../../../enums/style/breakpoint';
 
 export const ClosingBackdropImage = styled.img`
     mask-image: linear-gradient(transparent, rgb(0 0 0) 45%);

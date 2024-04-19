@@ -7,7 +7,7 @@ interface SearchInputProps {
     setQuery: (query: string) => void;
 }
 
-export default function SearchInput({ label, query, setQuery }: SearchInputProps) {
+export default function SearchInput({label, query, setQuery}: SearchInputProps) {
     const inputId = useId();
 
     return (

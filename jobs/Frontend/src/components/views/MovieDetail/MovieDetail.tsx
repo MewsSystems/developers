@@ -1,27 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
-import { getMovieDetail } from '../../../api/tmdbApi.ts';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
+import { getMovieDetail } from '../../../api/tmdbApi';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
     ClosingBackdropImage,
     MovieDetailIntro,
     MovieDetailIntroBody,
     MoviePosterImage
-} from './MovieDetail.styled.tsx';
-import { BackdropImageSize } from '../../../enums/images/backdropImageSize.ts';
-import { Button } from '../../shared/Button.tsx';
-import { Spacer } from '../../../enums/style/spacer.ts';
-import { PosterImageSize } from '../../../enums/images/posterImageSize.ts';
-import { MovieCastList } from './MovieCastList.tsx';
+} from './MovieDetail.styled';
+import { BackdropImageSize } from '../../../enums/images/backdropImageSize';
+import { Button } from '../../shared/Button';
+import { Spacer } from '../../../enums/style/spacer';
+import { PosterImageSize } from '../../../enums/images/posterImageSize';
+import { MovieCastList } from './MovieCastList';
 import { BsClock } from 'react-icons/bs';
-import { displayRatings, displayRuntime } from '../../../utils/movieUtils.ts';
+import { displayRatings, displayRuntime } from '../../../utils/movieUtils';
 import { ReactNode } from 'react';
-import { Loader } from '../../shared/Loader.tsx';
+import { Loader } from '../../shared/Loader';
 
 export function MovieDetail() {
-    const { movieId } = useParams();
+    const {movieId} = useParams();
     const enabled = !!movieId;
-    const { data, isError, isPending } = useQuery({
+    const {data, isError, isPending} = useQuery({
         queryKey: [ReactQueryPrimaryKey.TmdbMovieDetail, movieId],
         queryFn: () => getMovieDetail(Number(movieId)),
         enabled
@@ -67,7 +67,7 @@ export function MovieDetail() {
     return (
         <>
             <MovieDetailIntro>
-                {posterUrl && <MoviePosterImage alt="" src={posterUrl} />}
+                {posterUrl && <MoviePosterImage alt="" src={posterUrl}/>}
                 <MovieDetailIntroBody>
                     <h2>
                         {title}
@@ -76,7 +76,7 @@ export function MovieDetail() {
 
                     {tagline && <blockquote>{tagline}</blockquote>}
                     {genresSummary}
-                    {runtime > 0 && <><span><BsClock /> {displayRuntime(runtime)}</span><br/></>}
+                    {runtime > 0 && <><span><BsClock/> {displayRuntime(runtime)}</span><br/></>}
                     <i>{displayRatings(voteAverage, voteCount)}</i>
 
                     {overview && <p>{overview}</p>}
@@ -87,8 +87,8 @@ export function MovieDetail() {
                             as="a"
                             href={`https://www.imdb.com/title/${imbdId}`}
                             title="See on IMDB">
-                                IMBD
-                            </Button>
+                            IMBD
+                        </Button>
                         }
                     </p>
                 </MovieDetailIntroBody>
@@ -105,18 +105,18 @@ export function MovieDetail() {
     );
 }
 
-function BackButton({ children }: { children: ReactNode }) {
+function BackButton({children}: { children: ReactNode }) {
     const navigate = useNavigate();
     const location = useLocation();
 
     const goBack = () => {
         // prevent leaving site; initial location is 'default', subsequent have an unique id
         if (location.key !== 'default') {
-            navigate(-1)
+            navigate(-1);
         } else {
             navigate('/');
         }
-    }
+    };
 
     return (
         <Button

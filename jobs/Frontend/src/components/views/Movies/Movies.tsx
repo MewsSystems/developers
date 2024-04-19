@@ -1,20 +1,20 @@
-import SearchInput from '../../inputs/SearchInput.tsx';
+import SearchInput from '../../inputs/SearchInput';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { MoviesList } from './MoviesList.tsx';
+import { MoviesList } from './MoviesList';
 import { useSearchParams } from 'react-router-dom';
-import { UrlSearchParamKey } from '../../../enums/urlSearchParamKey.ts';
+import { UrlSearchParamKey } from '../../../enums/urlSearchParamKey';
 import { useQuery } from '@tanstack/react-query';
-import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey.ts';
-import { searchMovies } from '../../../api/tmdbApi.ts';
-import { Loader } from '../../shared/Loader.tsx';
-import { TrendingMovies } from './TrendingMovies.tsx';
+import { ReactQueryPrimaryKey } from '../../../enums/reactQueryPrimaryKey';
+import { searchMovies } from '../../../api/tmdbApi';
+import { Loader } from '../../shared/Loader';
+import { TrendingMovies } from './TrendingMovies';
 
 export default function Movies() {
     const [debouncedQuery, page, query, setQuery] = useMoviesData();
 
     const enabled = !!debouncedQuery;
 
-    const { data, isError, isPending, isFetching } = useQuery({
+    const {data, isError, isPending, isFetching} = useQuery({
         queryKey: [ReactQueryPrimaryKey.TmdbSearchMovies, debouncedQuery, page],
         queryFn: () => searchMovies(debouncedQuery, page),
         placeholderData: (prev) => prev,
@@ -23,8 +23,8 @@ export default function Movies() {
 
     const search = (
         <>
-            <SearchInput label='Search movies' {...{ query, setQuery }}/>
-            { isFetching && <Loader/> }
+            <SearchInput label="Search movies" {...{query, setQuery}}/>
+            {isFetching && <Loader/>}
         </>
     );
 
@@ -32,7 +32,7 @@ export default function Movies() {
         return (
             <>
                 {search}
-                <TrendingMovies page={page} />
+                <TrendingMovies page={page}/>
             </>
         );
     }
@@ -48,8 +48,8 @@ export default function Movies() {
             {search}
             {
                 query
-                    ? <MoviesList {...{ data, page }} />
-                    : <TrendingMovies page={page} />
+                    ? <MoviesList {...{data, page}} />
+                    : <TrendingMovies page={page}/>
             }
         </>
     );
@@ -96,4 +96,4 @@ const getCurrentPage = (searchParams: URLSearchParams) => {
 
     return isNaN(page) || page <= 1
         ? 1 : page;
-}
+};

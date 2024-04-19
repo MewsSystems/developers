@@ -1,8 +1,8 @@
-import { Footer, Header, Main, TmdbAttributionText, TmdbLogoImg } from './Layout.styled.tsx';
+import { Footer, Header, Main, TmdbAttributionText, TmdbLogoImg } from './Layout.styled';
 import tmdbShortLogo from '../../assets/tmdb-short-logo.svg';
 import { ReactNode } from 'react';
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout({children}: { children: ReactNode }) {
     return (
         <>
             <Header>
@@ -15,8 +15,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 
             <Footer>
                 {/* attribution added following TMDBs Terms of Use */}
-                <TmdbAttributionText>This website uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.</TmdbAttributionText><br/>
-                <TmdbLogoImg alt="TMDB logo" src={tmdbShortLogo} />
+                <TmdbAttributionText>This website uses TMDB and the TMDB APIs but is not endorsed, certified, or
+                    otherwise approved by TMDB.</TmdbAttributionText><br/>
+                <TmdbLogoImg alt="TMDB logo" src={tmdbShortLogo}/>
             </Footer>
         </>
     );

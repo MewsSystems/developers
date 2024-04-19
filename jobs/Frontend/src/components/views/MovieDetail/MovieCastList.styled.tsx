@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Spacer } from '../../../enums/style/spacer.ts';
+import { Spacer } from '../../../enums/style/spacer';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { BorderRadius } from '../../../enums/style/borderRadius.ts';
-import { Gradient } from '../../../enums/style/gradient.ts';
+import { BorderRadius } from '../../../enums/style/borderRadius';
+import { Gradient } from '../../../enums/style/gradient';
 
 export const MovieCastRow = styled.section`
     max-width: 100%;
@@ -28,7 +28,7 @@ export const MovieCastCard = styled.div`
     overflow: hidden;
     background: rgba(255, 255, 255, 0.6);
     scroll-snap-align: start;
-    
+
     &:last-child {
         margin-right: 0;
     }
