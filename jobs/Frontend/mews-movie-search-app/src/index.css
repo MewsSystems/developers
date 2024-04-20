@@ -8,6 +8,16 @@
     url('./assets/fonts/Poppins') format('truetype');
 }
 
+html,
+body {
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
+  background-color: #77B0AA;
+
+}
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -26,6 +36,7 @@
   4. Improve text rendering
 */
 body {
+  margin:0;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }

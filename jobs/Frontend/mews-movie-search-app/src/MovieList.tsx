@@ -46,6 +46,7 @@ const Input = styled.input`
   border-radius: 5px;
   width: 200px;
   font-size: 1rem;
+  outline: none;
 `;
 
 const Title = styled.h3`
@@ -57,6 +58,9 @@ const HeaderNav = styled.nav`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  position: sticky;
+  top: 0px;
+  z-index: 1;
 `;
 const SearchBarContainer = styled.div`
   background: white;

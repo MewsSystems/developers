@@ -19,7 +19,6 @@ export default App;
 
 const MainLayout = styled.main`
   display: flex;
-  background-color: #77b0aa;
   flex-direction: column;
   font-family: "Poppins", sans-serif;
   font-weight: 800;
