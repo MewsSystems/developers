@@ -14,13 +14,19 @@ const theme = createTheme({
     h1: { fontSize: 56, fontWeight: 700 },
     h2: { fontSize: 32, fontWeight: 700 },
     h3: { fontSize: 20, fontWeight: 700 },
+    body2: { fontSize: 14 },
   },
 
   components: {
-    MuiTypography: {
+    MuiDivider: {
+      defaultProps: {
+        "aria-hidden": true,
+        color: "#EDC239",
+        flexItem: true,
+      },
       styleOverrides: {
         root: {
-          color: "#F1F1E6",
+          width: 5,
         },
       },
     },
@@ -41,6 +47,13 @@ const theme = createTheme({
       },
     },
     MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          color: "#F1F1E6",
+        },
+      },
+    },
+    MuiTypography: {
       styleOverrides: {
         root: {
           color: "#F1F1E6",

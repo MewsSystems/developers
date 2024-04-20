@@ -1,21 +1,22 @@
 import { HTMLAttributes } from "react";
-import { Movie } from "../hooks/movies/useSearchMovie.ts";
 import { Box } from "@mui/material";
 
-type MovieImgProps = Pick<Movie, "title"> & {
+type MovieImgProps = {
   posterPath?: string | null;
+  isDetail?: boolean;
 } & HTMLAttributes<HTMLImageElement>;
 
 const MovieImg = (props: MovieImgProps) => {
-  const { posterPath, title, ...imgProps } = props;
+  const { isDetail = false, posterPath, ...imgProps } = props;
 
   return (
     <Box
       aria-hidden
       sx={{
         flexShrink: 0,
-        height: 200,
-        width: 300,
+        height: isDetail ? 600 : 200,
+        width: isDetail ? 400 : 300,
+        maxWidth: 1,
         borderRadius: 5,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",

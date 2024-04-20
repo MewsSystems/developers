@@ -2,46 +2,13 @@ import { fetchAPI, movieDbApiKey } from "../../api/config.ts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useRef, useState } from "react";
 import { debounce } from "@mui/material";
-
-export interface Movie {
-  adult: boolean;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string | null;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
-
-interface MovieApiResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
+import { MoviesSearchApiResponse } from "./types.ts";
 
 export const useSearchMovie = () => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [currentSearch, setCurrentSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["searchMovie", currentSearch, page],
-    queryFn: () =>
-      fetchAPI(
-        `search/movie?api_key=${movieDbApiKey}&query=${currentSearch}&page=${page}`,
-      ),
-    placeholderData: keepPreviousData,
-    enabled: currentSearch.length > 2,
-  });
 
   const handleSearch = debounce((search: string) => {
     setCurrentSearch(search);
@@ -59,12 +26,22 @@ export const useSearchMovie = () => {
     setPage(1);
   };
 
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["searchMovie", currentSearch, page],
+    queryFn: () =>
+      fetchAPI(
+        `search/movie?api_key=${movieDbApiKey}&query=${currentSearch}&page=${page}`,
+      ),
+    placeholderData: keepPreviousData,
+    enabled: currentSearch.length > 2,
+  });
+
   const {
     page: currentPage,
     results,
     total_pages: totalPages,
     total_results: totalResults,
-  } = (data as MovieApiResponse) || {};
+  } = (data as MoviesSearchApiResponse) || {};
 
   return {
     page,

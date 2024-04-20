@@ -1,6 +1,6 @@
 import { Pagination, TextField, Typography } from "@mui/material";
 import { useSearchMovie } from "../hooks/movies/useSearchMovie.ts";
-import SearchMovieContent from "../components/SearchMovieContent.tsx";
+import SearchMovieContent from "../components/search/SearchMovieContent.tsx";
 
 const HomePage = () => {
   const {
@@ -44,7 +44,7 @@ const HomePage = () => {
           handleClear={handleClear}
         />
 
-        {!!results.length && (
+        {!!results?.length && (
           <Pagination
             color="primary"
             count={totalPages}
