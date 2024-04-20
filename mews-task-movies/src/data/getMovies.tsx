@@ -1,12 +1,22 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export const getMovies = async (
+export const getMoviesWithActualParametres = async (
   searchValue: string,
   setMoviesData: Dispatch<SetStateAction<never[]>>,
   pageNumber: Number,
   setTotalPagesNumber: React.Dispatch<SetStateAction<number>>,
 ) => {
-  console.log('process.env.API_KEY', process.env, process.env.API_KEY);
+  if (searchValue) {
+    const moviesData = await getMovies(searchValue, pageNumber);
+    setTotalPagesNumber(moviesData.total_pages);
+    setMoviesData(moviesData.results);
+  } else {
+    setTotalPagesNumber(1);
+    setMoviesData([]);
+  }
+};
+
+const getMovies = async (searchValue: string, pageNumber: Number) => {
   const response = await fetch(
     `https://api.themoviedb.org/3/search/movie?query=${searchValue}&page=${pageNumber}&api_key=${process.env.REACT_APP_API_KEY}`,
     {
@@ -16,12 +26,8 @@ export const getMovies = async (
       },
     },
   );
-  const moviesData = await response.json();
 
-  console.log('moviesData', moviesData);
-  setTotalPagesNumber(moviesData.total_pages);
-  setMoviesData(moviesData.results);
-  console.log('moviesData.result', moviesData.results);
+  return await response.json();
 };
 
 export const getMovieById = async (
@@ -39,6 +45,6 @@ export const getMovieById = async (
     options,
   );
   const movieData = await response.json();
-  console.log('movieData', movieData);
+  // console.log('movieData', movieData);
   setSelectedMovieData(movieData);
 };

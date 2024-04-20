@@ -3,7 +3,7 @@ import SearchForm from '../../components/searchForm/searchForm';
 import MovieList from '../../components/movieList/movieList';
 import MovieDetail from '../../components/movieDetail/movieDetail';
 import PagesNavigation from '../../components/pagesNavigation/pagesNavigation';
-import { getMovies } from '../../data/getMovies';
+import { getMoviesWithActualParametres } from '../../data/getMovies';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
@@ -15,10 +15,17 @@ export default function HomePage() {
   const labelRef = useRef<HTMLLabelElement>(null);
 
   useEffect(() => {
-    getMovies(search, setMovies, currentPageNumber, setTotalPagesNumber);
+    getMoviesWithActualParametres(
+      search,
+      setMovies,
+      currentPageNumber,
+      setTotalPagesNumber,
+    );
+    console.log('Blblbl', search, currentPageNumber);
   }, [search, currentPageNumber]);
 
   const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
+    console.log('blblbl2', e.target.value);
     setSearch(e.target.value);
   };
 
@@ -36,10 +43,10 @@ export default function HomePage() {
     labelRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  console.log('movies', movies);
-  console.log('selectedMovie', selectedMovieId);
-  console.log('pageNumber', currentPageNumber);
-  console.log('totalPagesNumber', totalPagesNumber);
+  // console.log('movies', movies);
+  // console.log('selectedMovie', selectedMovieId);
+  // console.log('pageNumber', currentPageNumber);
+  // console.log('totalPagesNumber', totalPagesNumber);
 
   return (
     <main>
