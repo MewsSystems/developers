@@ -43,11 +43,6 @@ export default function HomePage() {
     labelRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // console.log('movies', movies);
-  // console.log('selectedMovie', selectedMovieId);
-  // console.log('pageNumber', currentPageNumber);
-  // console.log('totalPagesNumber', totalPagesNumber);
-
   return (
     <main>
       {selectedMovieId === 0 && (

@@ -45,6 +45,5 @@ export const getMovieById = async (
     options,
   );
   const movieData = await response.json();
-  // console.log('movieData', movieData);
   setSelectedMovieData(movieData);
 };
