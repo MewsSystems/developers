@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import SearchForm from '../../components/searchForm/searchForm';
 import MovieList from '../../components/movieList/movieList';
 import MovieDetail from '../../components/movieDetail/movieDetail';
@@ -12,6 +12,8 @@ export default function HomePage() {
   const [selectedMovieId, setSelectedMovieId] = useState(Number);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
+  const formRef = useRef<HTMLLabelElement>(null);
+
   useEffect(() => {
     getMovies(search, setMovies, currentPageNumber, setTotalPagesNumber);
   }, [search, currentPageNumber]);
@@ -24,17 +26,18 @@ export default function HomePage() {
     setSelectedMovieId(movieId);
   };
 
-  const movieListElement = document.getElementById('movies_view');
-  console.log('movieListElement', movieListElement);
-
   const handlePageNumberPlus = () => {
     setCurrentPageNumber((prevNumber) => prevNumber + 1);
-    movieListElement?.scrollIntoView({ behavior: 'smooth' });
+    if (formRef.current != null) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handlePageNumberMinus = () => {
     setCurrentPageNumber((prevNumber) => prevNumber - 1);
-    movieListElement?.scrollIntoView({ behavior: 'smooth' });
+    if (formRef.current != null) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   console.log('movies', movies);
@@ -47,7 +50,11 @@ export default function HomePage() {
       {selectedMovieId === 0 && (
         <>
           <h1>Find your movie</h1>
-          <SearchForm searchValue={search} searchFunction={handleSearch} />
+          <SearchForm
+            searchValue={search}
+            searchFunction={handleSearch}
+            ref={formRef}
+          />
           <MovieList
             movieValues={movies}
             handleSelectedMovie={handleSelectedMovie}

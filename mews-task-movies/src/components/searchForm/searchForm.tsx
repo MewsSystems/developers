@@ -1,15 +1,19 @@
+import { Ref, forwardRef } from 'react';
 import './searchForm.css';
 
-export default function SearchForm({
-  searchValue,
-  searchFunction,
-}: {
-  searchValue: any;
-  searchFunction: any;
-}) {
+export default forwardRef(function SearchForm(
+  {
+    searchValue,
+    searchFunction,
+  }: {
+    searchValue: any;
+    searchFunction: any;
+  },
+  ref: Ref<HTMLLabelElement>,
+) {
   return (
     <form className="search_form">
-      <label htmlFor="movie" id="movies_view">
+      <label htmlFor="movie" ref={ref}>
         Search for the movie:{' '}
       </label>
       <input
@@ -23,4 +27,4 @@ export default function SearchForm({
       <button className="clear_button">❌</button>
     </form>
   );
-}
+});
