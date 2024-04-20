@@ -1,4 +1,5 @@
 import { HTMLAttributes } from "react";
+
 import { Box } from "@mui/material";
 
 type MovieImgProps = {
