@@ -1,5 +1,7 @@
 import { Component, ReactNode } from "react";
 
+import { Link, Typography } from "@mui/material";
+
 type Props = {
   children?: ReactNode;
 };
@@ -28,15 +30,13 @@ export class ErrorBoundary extends Component<Props, State> {
     if (error)
       return (
         <>
-          <div>
-            <h1>Ooooops</h1>
-            <p>
-              We're sorry, but it seems like there's been an error. Please try
-              going back to the homepage and navigating from there.
-            </p>
+          <Typography variant="h1">Ooooops</Typography>
+          <Typography variant="body1" sx={{ mt: 2, mb: 5 }}>
+            We're sorry, but it seems like there's been an error. Please try
+            going back to the homepage and navigating from there.
+          </Typography>
 
-            <a href={"/"}>Go back to homepage</a>
-          </div>
+          <Link href="/">Go back to homepage</Link>
         </>
       );
 
