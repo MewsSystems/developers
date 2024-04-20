@@ -12,7 +12,7 @@ export default function HomePage() {
   const [selectedMovieId, setSelectedMovieId] = useState(Number);
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
-  const formRef = useRef<HTMLLabelElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
 
   useEffect(() => {
     getMovies(search, setMovies, currentPageNumber, setTotalPagesNumber);
@@ -28,16 +28,12 @@ export default function HomePage() {
 
   const handlePageNumberPlus = () => {
     setCurrentPageNumber((prevNumber) => prevNumber + 1);
-    if (formRef.current != null) {
-      formRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    labelRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handlePageNumberMinus = () => {
     setCurrentPageNumber((prevNumber) => prevNumber - 1);
-    if (formRef.current != null) {
-      formRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    labelRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   console.log('movies', movies);
@@ -53,7 +49,7 @@ export default function HomePage() {
           <SearchForm
             searchValue={search}
             searchFunction={handleSearch}
-            ref={formRef}
+            ref={labelRef}
           />
           <MovieList
             movieValues={movies}
