@@ -1,8 +1,11 @@
-import { fetchAPI, movieDbApiKey } from "../../api/config.ts";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ChangeEvent, useRef, useState } from "react";
+
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+
 import { debounce } from "@mui/material";
-import { MoviesSearchApiResponse } from "./types.ts";
+
+import { fetchAPI, movieDbApiKey } from "@/api/config.ts";
+import { MoviesSearchApiResponse } from "@/hooks/movies/types.ts";
 
 export const useSearchMovie = () => {
   const searchRef = useRef<HTMLInputElement>(null);

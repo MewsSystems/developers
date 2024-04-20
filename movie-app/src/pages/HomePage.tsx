@@ -1,6 +1,7 @@
 import { Pagination, TextField, Typography } from "@mui/material";
-import { useSearchMovie } from "../hooks/movies/useSearchMovie.ts";
-import SearchMovieContent from "../components/search/SearchMovieContent.tsx";
+
+import SearchMovieContent from "@/components/search/SearchMovieContent.tsx";
+import { useSearchMovie } from "@/hooks/movies/useSearchMovie.ts";
 
 const HomePage = () => {
   const {

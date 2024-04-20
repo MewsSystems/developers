@@ -1,8 +1,11 @@
-import MovieImg from "./MovieImg.tsx";
-import { Box, Button, Rating, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+import { Box, Button, Rating, Typography } from "@mui/material";
+
 import MovieDetailInformation from "./MovieDetailInformation.tsx";
-import { Movie } from "../../hooks/movies/types.ts";
+import MovieImg from "./MovieImg.tsx";
+
+import { Movie } from "@/hooks/movies/types.ts";
 
 type MovieTileProps = { isDetail?: boolean } & Movie;
 

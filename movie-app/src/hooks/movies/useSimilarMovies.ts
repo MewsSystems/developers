@@ -1,7 +1,10 @@
-import { fetchAPI, movieDbApiKey } from "../../api/config.ts";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MoviesSearchApiResponse } from "./types.ts";
 import { useParams } from "react-router-dom";
+
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+
+import { MoviesSearchApiResponse } from "./types.ts";
+
+import { fetchAPI, movieDbApiKey } from "@/api/config.ts";
 
 export const useSimilarMovies = () => {
   const { id } = useParams();

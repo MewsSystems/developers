@@ -1,10 +1,12 @@
-import MovieTile from "../components/movie/MovieTile.tsx";
-import { useMovieDetail } from "../hooks/movies/useMovieDetail.ts";
-import { CircularProgress, Typography } from "@mui/material";
-import ErrorMessage from "../components/common/ErrorMessage.tsx";
 import { useNavigate } from "react-router-dom";
-import { useSimilarMovies } from "../hooks/movies/useSimilarMovies.ts";
-import SearchMovieContent from "../components/search/SearchMovieContent.tsx";
+
+import { CircularProgress, Typography } from "@mui/material";
+
+import ErrorMessage from "@/components/common/ErrorMessage.tsx";
+import MovieTile from "@/components/movie/MovieTile.tsx";
+import SearchMovieContent from "@/components/search/SearchMovieContent.tsx";
+import { useMovieDetail } from "@/hooks/movies/useMovieDetail.ts";
+import { useSimilarMovies } from "@/hooks/movies/useSimilarMovies.ts";
 
 const MovieDetailPage = () => {
   const navigate = useNavigate();

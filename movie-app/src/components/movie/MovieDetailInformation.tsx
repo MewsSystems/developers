@@ -1,5 +1,6 @@
 import { Box, Divider, Typography } from "@mui/material";
-import { Movie } from "../../hooks/movies/useSearchMovie.ts";
+
+import { Movie } from "@/hooks/movies/types.ts";
 
 type MovieDetailInformationProps = Pick<
   Movie,

@@ -1,12 +1,16 @@
-import "./App.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage.tsx";
-import MovieDetailPage from "./pages/MovieDetailPage.tsx";
-import NotFoundPage from "./pages/NotFoundPage.tsx";
-import { ErrorBoundary } from "../ErrorBoundary.tsx";
-import theme from "./theme.tsx";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { CssBaseline, ThemeProvider } from "@mui/material";
+
+import { ErrorBoundary } from "../ErrorBoundary.tsx";
+import theme from "./styles/theme.tsx";
+
+import "./App.css";
+import HomePage from "@/pages/HomePage.tsx";
+import MovieDetailPage from "@/pages/MovieDetailPage.tsx";
+import NotFoundPage from "@/pages/NotFoundPage.tsx";
 
 const queryClient = new QueryClient();
 

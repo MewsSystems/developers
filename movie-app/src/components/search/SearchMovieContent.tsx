@@ -1,7 +1,8 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
-import ErrorMessage from "../common/ErrorMessage.tsx";
-import MovieTile from "../movie/MovieTile.tsx";
-import { Movie } from "../../hooks/movies/useSearchMovie.ts";
+
+import ErrorMessage from "@/components/common/ErrorMessage.tsx";
+import MovieTile from "@/components/movie/MovieTile.tsx";
+import { Movie } from "@/hooks/movies/types.ts";
 
 interface SearchMovieContentProps {
   isLoading?: boolean;

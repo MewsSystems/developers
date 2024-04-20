@@ -1,12 +1,14 @@
 import { createTheme } from "@mui/material/styles";
 
+import { colors } from "@/styles/colors.ts";
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#7589F3",
+      main: colors.primary.blue,
     },
     secondary: {
-      main: "#EDC239",
+      main: colors.primary.yellow,
     },
   },
   typography: {
@@ -21,7 +23,7 @@ const theme = createTheme({
     MuiDivider: {
       defaultProps: {
         "aria-hidden": true,
-        color: "#EDC239",
+        color: colors.primary.yellow,
         flexItem: true,
       },
       styleOverrides: {
@@ -33,7 +35,7 @@ const theme = createTheme({
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          color: "#F1F1E6",
+          color: colors.primary.font,
         },
       },
     },
@@ -41,22 +43,22 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 50,
-          backgroundColor: "#0d0e16",
-          color: "#F1F1E6",
+          backgroundColor: colors.secondary.darkBlue,
+          color: colors.primary.font,
         },
       },
     },
     MuiPaginationItem: {
       styleOverrides: {
         root: {
-          color: "#F1F1E6",
+          color: colors.primary.font,
         },
       },
     },
     MuiTypography: {
       styleOverrides: {
         root: {
-          color: "#F1F1E6",
+          color: colors.primary.font,
         },
       },
     },
