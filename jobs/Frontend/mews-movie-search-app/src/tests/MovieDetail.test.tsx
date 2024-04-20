@@ -54,7 +54,10 @@ describe("Movie Detail", () => {
   };
 
   it("should render movie detail page", async () => {
-    useMovieDetailSpy.mockReturnValue({ movieDetail: movieDetail });
+    useMovieDetailSpy.mockReturnValue({
+      movieDetail: movieDetail,
+      isLoading: false,
+    });
     Arrange();
 
     const title = await screen.findByRole("heading", {
