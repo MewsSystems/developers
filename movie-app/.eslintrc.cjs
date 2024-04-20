@@ -32,7 +32,7 @@ module.exports = {
               // mui libraries
               ["^@mui"],
               // project alias imports
-              ["@api|@components|@hooks|@pages|@organisms|@pages|@styles"],
+              ["@api|@components|@hooks|@pages|@organisms|@pages|@styles|@tests"],
               // relative imports
               ["^[./]"]
             ]

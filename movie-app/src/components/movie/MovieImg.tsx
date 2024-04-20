@@ -13,6 +13,7 @@ const MovieImg = (props: MovieImgProps) => {
   return (
     <Box
       aria-hidden
+      data-testid="movie-img"
       sx={{
         flexShrink: 0,
         height: isDetail ? 600 : 200,
@@ -22,7 +23,7 @@ const MovieImg = (props: MovieImgProps) => {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundImage: posterPath
-          ? `url('https://media.themoviedb.org/t/p/w220_and_h330_face${posterPath}')`
+          ? `url('https://media.themoviedb.org/t/p/w220_and_h330_face${posterPath}')` // TODO rework url to const
           : "linear-gradient(to right bottom, #02011D, #474860)",
       }}
       {...imgProps}

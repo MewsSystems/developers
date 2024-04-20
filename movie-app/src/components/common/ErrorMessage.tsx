@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 
 interface ErrorMessageProps {
   error?: string;
-  handleClear?: () => void;
+  handleClear: () => void;
 }
 
 const ErrorMessage = ({ error, handleClear }: ErrorMessageProps) => (

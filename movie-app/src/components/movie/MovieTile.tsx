@@ -79,26 +79,28 @@ export const MovieTile = ({ isDetail = false, ...props }: MovieTileProps) => {
           </Typography>
         )}
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            alignItems: "center",
-            justifyContent: { xs: "center", md: "flex-start" },
-          }}
-        >
-          <Rating
-            max={5}
-            precision={0.5}
-            name="Movie rating"
-            size="small"
-            value={voteAverage / 2}
-            readOnly
-          />
-          <Typography variant="body2" sx={{ fontSize: 12 }}>
-            ({voteCount})
-          </Typography>
-        </Box>
+        {voteAverage && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "flex-start" },
+            }}
+          >
+            <Rating
+              max={5}
+              precision={0.5}
+              name="Movie rating"
+              size="small"
+              value={voteAverage / 2}
+              readOnly
+            />
+            <Typography variant="body2" sx={{ fontSize: 12 }}>
+              ({voteCount || 0})
+            </Typography>
+          </Box>
+        )}
 
         <Typography
           variant="body2"
