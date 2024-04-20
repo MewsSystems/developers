@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link, useParams } from "wouter";
 import { useMovieDetail } from "./useMovieDetail";
 import { imageDomainURL } from "./utils/constant";
+import { LoadingMessage } from "./Loading";
 
 /* Local imports */
 
@@ -18,7 +19,7 @@ const separateIntoCommas = (strings: string[]) => {
 /* Component definition */
 export const MoviesDetailView = () => {
   const params = useParams<{ id: string }>();
-  const { movieDetail } = useMovieDetail(Number(params.id));
+  const { movieDetail, isLoading } = useMovieDetail(Number(params.id));
 
   return (
     <MovieDetailLayout>
@@ -29,7 +30,9 @@ export const MoviesDetailView = () => {
           </Column>
         </Row>
         <Gap />
-        {movieDetail ? (
+        {isLoading ? (
+          <LoadingMessage />
+        ) : movieDetail ? (
           <Row>
             <Poster>
               <img
