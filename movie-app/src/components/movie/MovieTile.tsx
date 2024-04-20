@@ -124,7 +124,15 @@ export const MovieTile = ({ isDetail = false, ...props }: MovieTileProps) => {
 
                 {!isDetail && (
                     <Button
-                        onClick={() => navigate(`/movie/${id}`)}
+                        onClick={() => {
+                            navigate(`/movie/${id}`)
+                            // scroll top from similar to detail
+                            window.scroll({
+                                top: 0,
+                                left: 0,
+                                behavior: 'smooth',
+                            })
+                        }}
                         variant="contained"
                         sx={{
                             width: { xs: 1, md: 'auto' },

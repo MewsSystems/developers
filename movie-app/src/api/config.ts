@@ -1,21 +1,23 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from 'axios'
+
+export const movieDbPosterPath = 'https://media.themoviedb.org/t/p/'
 
 const api = axios.create({
-  headers: { "Content-Type": "application/json" },
-  baseURL: "https://api.themoviedb.org/3/",
-});
+    headers: { 'Content-Type': 'application/json' },
+    baseURL: 'https://api.themoviedb.org/3/',
+})
 
 export const fetchAPI = async <TResponse>(
-  path: string,
-  options: AxiosRequestConfig = {},
-  fallback: TResponse | null = null,
+    path: string,
+    options: AxiosRequestConfig = {},
+    fallback: TResponse | null = null
 ): Promise<TResponse | null> => {
-  try {
-    const { data } = await api<TResponse>(path, options);
-    return data;
-  } catch {
-    return fallback;
-  }
-};
+    try {
+        const { data } = await api<TResponse>(path, options)
+        return data
+    } catch {
+        return fallback
+    }
+}
 
-export const movieDbApiKey = import.meta.env.VITE_MOVIEDB_API_KEY;
+export const movieDbApiKey = import.meta.env.VITE_MOVIEDB_API_KEY
