@@ -1,12 +1,13 @@
 /* Global imports */
-import { useMovies } from "../hooks/useMovies";
 import styled from "styled-components";
 import { useLocation } from "wouter";
-import { LoadingMessage } from "./ui/LoadingMessage";
-import { UIEvent } from "react";
-import { Text } from "@components/ui/Layout";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 /* Local imports */
+import { useMovies } from "../hooks/useMovies";
+import { LoadingMessage } from "./ui/LoadingMessage";
+import { Text } from "@components/ui/Layout";
 
 /* Types  */
 
@@ -14,6 +15,7 @@ import { Text } from "@components/ui/Layout";
 
 /* Component definition */
 export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
+  const { ref, inView } = useInView();
   const [, setLocation] = useLocation();
   const {
     data: movies,
@@ -21,15 +23,14 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
     isLoading,
     isFetching,
     error,
+    hasNextPage,
   } = useMovies(searchTerm);
 
-  const handleScroll = (e: UIEvent<HTMLElement>) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-
-    if (scrollHeight - Math.ceil(scrollTop) === clientHeight) {
+  useEffect(() => {
+    if (inView && hasNextPage) {
       fetchNextPage();
     }
-  };
+  }, [inView, fetchNextPage, hasNextPage]);
 
   if (error) {
     return <div> Something went wrong!</div>;
@@ -37,10 +38,10 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
 
   return (
     <Container>
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <LoadingMessage />
       ) : (
-        <ListScroll onScroll={handleScroll}>
+        <ListScroll>
           <MovieContainer>
             {movies &&
               movies.pages &&
@@ -51,6 +52,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
                       <MovieItem
                         key={movie.id}
                         onClick={() => setLocation(`/movies/${movie.id}`)}
+                        ref={ref}
                       >
                         <MoviePoster>
                           <MoviePosterImage
@@ -58,6 +60,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
                             alt={movie.title}
                           />
                         </MoviePoster>
+                        <Text color="white">{movie.title}</Text>
                       </MovieItem>
                     );
                   })
@@ -70,6 +73,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
                 )
               )}
           </MovieContainer>
+          {isFetching && <LoadingMessage text="Loading more content..." />}
         </ListScroll>
       )}
     </Container>
@@ -92,12 +96,6 @@ const MovieContainer = styled.ul`
   list-style: none;
 `;
 
-const MovieItem = styled.li`
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  text-align: center;
-`;
 const MoviePosterImage = styled.img`
   border-width: 8px;
   max-width: 300px;
@@ -106,6 +104,13 @@ const MoviePosterImage = styled.img`
   &:hover {
     box-shadow: 5px 2px 10px black;
   }
+`;
+
+const MovieItem = styled.li`
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  text-align: center;
 `;
 const MoviePoster = styled.div`
   padding: 1rem;
