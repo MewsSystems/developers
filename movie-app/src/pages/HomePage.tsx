@@ -1,20 +1,22 @@
+import { useNavigate } from 'react-router-dom'
+
 import { Pagination, TextField, Typography } from '@mui/material'
 
 import SearchMovieContent from '@/components/search/SearchMovieContent.tsx'
 import { useSearchMovie } from '@/hooks/movies/useSearchMovie.ts'
 
 const HomePage = () => {
+    const navigate = useNavigate()
     const {
-        page,
-        totalPages,
-        currentSearch,
-        searchRef,
-        results,
-        handleSearch,
+        currentPage,
         handlePageChange,
-        handleClear,
-        isLoading,
+        handleSearchChange,
         isError,
+        isLoading,
+        results,
+        searchQuery,
+        searchRef,
+        totalPages,
     } = useSearchMovie()
 
     return (
@@ -30,7 +32,7 @@ const HomePage = () => {
                 aria-label="Search movie"
                 fullWidth
                 helperText={
-                    currentSearch.length < 3
+                    searchQuery?.length < 3
                         ? 'You need to enter at least 3 characters to start search'
                         : ''
                 }
@@ -38,14 +40,14 @@ const HomePage = () => {
                 inputProps={{ 'data-testid': 'search' }}
                 inputRef={searchRef}
                 name="search"
-                onChange={(event) => handleSearch(event.target.value)}
+                onChange={(event) => handleSearchChange(event.target.value)}
             />
             <>
                 <SearchMovieContent
                     isLoading={isLoading}
                     isError={isError}
                     results={results}
-                    handleClear={handleClear}
+                    handleClear={() => navigate('/', { replace: true })}
                 />
 
                 {!!results?.length && (
@@ -53,7 +55,11 @@ const HomePage = () => {
                         color="primary"
                         count={totalPages}
                         onChange={handlePageChange}
-                        page={page}
+                        page={currentPage}
+                        sx={{
+                            display: 'inline-flex',
+                            mx: { xs: -2, md: 'auto' },
+                        }}
                     />
                 )}
             </>

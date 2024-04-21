@@ -1,30 +1,43 @@
-# React + TypeScript + Vite
+# Movie Search Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains a solution for the Mews frontend developer task. The task involves creating a simple movie search application using React and TypeScript.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To begin working on the project, follow these steps:
 
-## Expanding the ESLint configuration
+1. **Fork the Repository**: Start by forking this repository to your own GitHub account.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. **Clone the Repository**: Clone the forked repository to your local machine.
 
-- Configure the top-level `parserOptions` property like this:
+3. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies using npm or yarn:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
+    ```bash
+    cd mews-frontend-task/movie-app
+    npm install
+    ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+4. **Start the Development Server**: Run the development server to see the project in action:
+
+    ```bash
+    npm run dev
+    ```
+
+   This command will start the development server at `http://localhost:5173`.
+5. **Run test**: Run all available test using command 
+    ```bash
+   npm run test
+    ```
+
+## Folder Structure
+
+The project follows a standard folder structure:
+
+- `src/`: Contains the source code of the application.
+    - `api/`: Contains integration logic for fetching [TheMovieDb API](https://developers.themoviedb.org/3/getting-started/introduction) api.
+    - `components/`: Contains reusable components used across the application.
+    - `hooks/`: Contains reusable hooks used across the application and supporting types definitions.
+    - `layout/`: Contains layout component used as main UI wrapper around application.
+    - `pages/`: Contains the main views of the application (search and movie detail).
+    - `styles/`: Contains main definitions and setup for styling.
+    - `tests/`: Contains test environment setup and mocks.

@@ -19,3 +19,10 @@ html > body {
   min-height: 100vh;
   background-color: #1a1a2c;
 }
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}

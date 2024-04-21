@@ -17,7 +17,7 @@ vi.mock('@/hooks/movies/useSearchMovie.ts', () => ({
         currentSearch: 'test',
         searchRef: { current: null },
         results: [{ id: 1, title: 'Test Movie' }],
-        handleSearch: vi.fn(),
+        handleSearchChange: vi.fn(),
         handlePageChange: vi.fn(),
         handleClear: vi.fn(),
         isLoading: false,
