@@ -2,9 +2,18 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Link, useParams } from "wouter";
-import { useMovieDetail } from "./useMovieDetail";
-import { imageDomainURL } from "./utils/constant";
-import { LoadingMessage } from "./Loading";
+import { useMovieDetail } from "../hooks/useMovieDetail";
+import { imageDomainURL } from "../utils/constant";
+import { LoadingMessage } from "../components/ui/LoadingMessage";
+import {
+  Text,
+  Column,
+  Row,
+  Separator,
+  Wrapper,
+  Gap,
+  Title,
+} from "../components/ui/Layout";
 
 /* Local imports */
 
@@ -24,14 +33,12 @@ export const MoviesDetailView = () => {
   return (
     <MovieDetailLayout>
       <Column>
-        <Row>
-          <Column>
-            <Link to={"/"}> Back</Link>
-          </Column>
-        </Row>
+        <Link to={".."}>
+          <Text color="white">Back</Text>
+        </Link>
         <Gap />
         {isLoading ? (
-          <LoadingMessage />
+          <LoadingMessage text="Loading movie detail..." />
         ) : movieDetail ? (
           <Row>
             <Poster>
@@ -44,10 +51,12 @@ export const MoviesDetailView = () => {
             <Content>
               <Wrapper>
                 <Title>{movieDetail?.title}</Title>
-                <Text size="lg">🎖️{movieDetail?.popularity}</Text>
+                <Text color="white" size="lg">
+                  🎖️{movieDetail?.popularity}
+                </Text>
               </Wrapper>
               <Wrapper>
-                <Text>
+                <Text color="white">
                   🗓️{" "}
                   {new Date(
                     movieDetail?.release_date ?? ""
@@ -60,47 +69,34 @@ export const MoviesDetailView = () => {
                 </Text>
               </Wrapper>
               <Wrapper>
-                <Text>{movieDetail.overview}</Text>
+                <Text color="white">{movieDetail.overview}</Text>
               </Wrapper>
               <Separator />
               <Wrapper>
-                <Text size="md">
-                  Genre:
-                  {separateIntoCommas(
-                    movieDetail.genres.map((gen) => gen.name)
-                  )}
+                <Text size="lg">
+                  Genre:{" "}
+                  <Text color="white">
+                    {separateIntoCommas(
+                      movieDetail.genres.map((gen) => gen.name)
+                    )}
+                  </Text>
                 </Text>
               </Wrapper>
             </Content>
           </Row>
         ) : (
-          <span>No data found</span>
+          <Text size="xl">No data found</Text>
         )}
       </Column>
     </MovieDetailLayout>
   );
 };
-const Gap = styled.div`
-  padding: 1rem;
-`;
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const Separator = styled.hr`
-  border: 0px;
-  height: 1px;
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-`;
 const MovieDetailLayout = styled.div`
   display: flex;
   padding: 1rem;
   height: 100vh;
+  width: 100%;
+  flex-direction: column;
 `;
 
 const Poster = styled.section`
@@ -113,34 +109,4 @@ const Content = styled.section`
   display: flex;
   flex: 1;
   flex-direction: column;
-`;
-
-const Wrapper = styled.div`
-  margin: 1rem 0px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Title = styled.h3`
-  font-size: 2rem;
-  font-weight: bolder;
-`;
-const Text = styled.span<{ size?: "base" | "xs" | "sm" | "md" | "lg" | "xl" }>`
-  font-size: ${(props) => {
-    switch (props.size) {
-      case "xs":
-        return "0.25rem";
-      case "sm":
-        return "0.5rem";
-      case "md":
-        return "0.75rem";
-      case "lg":
-        return "1.5rem";
-      case "xl":
-        return "3rem";
-      default:
-        return "1rem";
-    }
-  }};
 `;

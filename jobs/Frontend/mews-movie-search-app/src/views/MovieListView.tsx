@@ -1,7 +1,7 @@
 /* Global imports */
 import * as React from "react";
+import { Movies } from "../components/Movies";
 import styled from "styled-components";
-import { Movies } from "./Movies";
 
 /* Local imports */
 
@@ -21,24 +21,27 @@ export const MovieListView = () => {
 
     return () => clearTimeout(timeout);
   }, [query]);
-
   return (
     <>
-      <HeaderNav>
-        <Title>Mews Movie Search App</Title>
-        <SearchBarContainer>
-          <Input
-            aria-label="Search a movie"
-            type="text"
-            onChange={(e) => setQuery(e.currentTarget.value)}
-            placeholder="Search a movie"
-          />
-        </SearchBarContainer>
-      </HeaderNav>
+      <SearchBarContainer>
+        <Input
+          aria-label="Search a movie"
+          type="text"
+          onChange={(e) => setQuery(e.currentTarget.value)}
+          placeholder="Search a movie"
+        />
+      </SearchBarContainer>
       <Movies searchTerm={search} />
     </>
   );
 };
+
+const SearchBarContainer = styled.div`
+  background: #153448;
+  grid-area: search;
+  justify-content: center;
+  display: flex;
+`;
 const Input = styled.input`
   padding: 0.5rem;
   margin: 1rem;
@@ -47,21 +50,4 @@ const Input = styled.input`
   width: 200px;
   font-size: 1rem;
   outline: none;
-`;
-
-const Title = styled.h3`
-  color: white;
-  padding: 0.5rem 1rem;
-`;
-const HeaderNav = styled.nav`
-  background: #1a1a1a;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  position: sticky;
-  top: 0px;
-  z-index: 1;
-`;
-const SearchBarContainer = styled.div`
-  background: white;
 `;
