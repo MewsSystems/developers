@@ -1,4 +1,4 @@
-import { render, screen } from "../../tests/utils";
+import { act, fireEvent, render, screen, userEvent } from "../../tests/utils";
 import App from "../App";
 import * as useMovies from "../hooks/useMovies";
 
@@ -12,8 +12,8 @@ const MockIntersectionObserver = vi.fn(() => ({
 
 vi.stubGlobal(`IntersectionObserver`, MockIntersectionObserver);
 
-describe("App", () => {
-  afterAll(() => {
+describe("Movies", () => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -77,5 +77,12 @@ describe("App", () => {
     expect(list).toBeInTheDocument();
     const movies = await screen.findAllByRole("listitem");
     expect(movies).toHaveLength(1);
+  });
+  it("should change the filtered items when the search term changes", async () => {
+    Arrange();
+
+    const searchInput = await screen.findByLabelText("Search a movie");
+    await userEvent.type(searchInput, "Dune: One");
+    expect(searchInput).toHaveValue("Dune: One");
   });
 });
