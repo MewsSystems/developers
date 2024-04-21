@@ -3,6 +3,14 @@ import App from "../App";
 import * as useMovies from "../hooks/useMovies";
 
 const useMoviesSpy = vi.spyOn(useMovies, "useMovies");
+const MockIntersectionObserver = vi.fn(() => ({
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  takeRecords: vi.fn(),
+  unobserve: vi.fn(),
+}));
+
+vi.stubGlobal(`IntersectionObserver`, MockIntersectionObserver);
 
 describe("App", () => {
   afterAll(() => {
