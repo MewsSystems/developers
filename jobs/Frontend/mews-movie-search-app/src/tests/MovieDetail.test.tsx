@@ -1,7 +1,7 @@
 import { screen, render } from "@testing-library/react";
 
-import * as useMovieDetail from "../useMovieDetail";
-import { MoviesDetailView } from "../MoviesDetailView";
+import * as useMovieDetail from "../hooks/useMovieDetail";
+import { MoviesDetailView } from "../views/MoviesDetailView";
 import { MovieDetailResponse } from "../types/movies";
 
 const useMovieDetailSpy = vi.spyOn(useMovieDetail, "useMovieDetail");
