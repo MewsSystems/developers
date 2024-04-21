@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Switch } from "wouter";
 import { MoviesDetailView } from "./views/MoviesDetailView";
 import { MovieListView } from "./views/MovieListView";
