@@ -1,25 +1,18 @@
 import React from "react";
-import styled from "styled-components";
-import { Route } from "wouter";
-import { MoviesDetailView } from "./MoviesDetailView";
-import { MovieListView } from "./MovieList";
+import { Route, Switch } from "wouter";
+import { MoviesDetailView } from "./views/MoviesDetailView";
+import { MovieListView } from "./views/MovieListView";
+import { Layout } from "@components/ui/Layout";
 
 function App() {
   return (
-    <MainLayout>
-      {/*  Movies View */}
-      <Route path="/" component={MovieListView} />
-      {/*  Details Movie View */}
-      <Route path="/movies/:id" component={MoviesDetailView} />
-    </MainLayout>
+    <Layout>
+      <Switch>
+        <Route path="/" component={() => <MovieListView></MovieListView>} />
+        <Route path="/movies/:id" component={MoviesDetailView} />
+      </Switch>
+    </Layout>
   );
 }
 
 export default App;
-
-const MainLayout = styled.main`
-  display: flex;
-  flex-direction: column;
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-`;
