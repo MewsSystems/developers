@@ -11,26 +11,22 @@ import styled from "styled-components";
 /* Component definition */
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Grid>
+    <Flex>
       <HeaderNav>
         <Title color="#DFD0B8">Mews Movie Search App</Title>
       </HeaderNav>
       <MoviesContainer>{children}</MoviesContainer>
-    </Grid>
+    </Flex>
   );
 };
 
-const Grid = styled.div`
-  display: grid;
+const Flex = styled.div`
+  display: flex;
   height: 100vh;
   font-family: "Poppins", sans-serif;
   font-weight: 800;
   overflow: hidden;
-  grid-template-rows: 0.5fr 0.5fr auto;
-  grid-template-areas:
-    "nav nav nav nav"
-    "search search search search"
-    "content content content content";
+  flex-direction: column;
 `;
 
 const Title = styled.h3<{ color?: string }>`
@@ -43,12 +39,10 @@ const HeaderNav = styled.nav`
   display: flex;
   flex-direction: column;
   width: 100%;
-  grid-area: nav;
 `;
 
 const MoviesContainer = styled.div`
   background: #3c5b6f;
-  grid-area: content;
 `;
 
 const Gap = styled.div`
@@ -57,6 +51,10 @@ const Gap = styled.div`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+  @media (max-width: 700px) {
+    flex-direction: column;
+    overflow-y: scroll;
+  }
 `;
 const Column = styled.div`
   display: flex;

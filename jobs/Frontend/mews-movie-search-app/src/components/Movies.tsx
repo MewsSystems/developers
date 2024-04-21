@@ -51,7 +51,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
   }
 
   return (
-    <Container layout>
+    <Container>
       {isLoading ? (
         <LoadingMessage />
       ) : (
@@ -109,12 +109,17 @@ const MovieContainer = styled(motion.ul)`
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+  justify-content: center;
+  flex-direction: row;
 `;
 
 const MoviePosterImage = styled.img`
   border-width: 8px;
   max-width: 300px;
   border-radius: 1.5rem;
+  @media (max-width: 600px) {
+    max-width: 100%;
+  }
 
   &:hover {
     box-shadow: 5px 2px 10px black;

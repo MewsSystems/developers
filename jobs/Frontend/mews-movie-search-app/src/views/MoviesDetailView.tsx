@@ -103,11 +103,20 @@ const MovieDetailLayout = styled(motion.div)`
   height: 100vh;
   width: 100%;
   flex-direction: column;
+
+  overflow: auto;
+  @media (max-width: 700px) {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
 `;
 
 const Poster = styled(motion.section)`
   display: flex;
   justify-content: center;
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 `;
 const Content = styled(motion.section)`
   padding: 1rem;
