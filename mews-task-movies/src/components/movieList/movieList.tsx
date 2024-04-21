@@ -1,11 +1,12 @@
 import './movieList.css';
 import MovieCard from '../movieCard/movieCard';
+
 export default function MovieList({
   movieValues,
   handleSelectedMovie,
 }: {
-  movieValues: any;
-  handleSelectedMovie: any;
+  movieValues: unknown[];
+  handleSelectedMovie: (movieId: number) => void;
 }) {
   return (
     <div className="movie_list_container">

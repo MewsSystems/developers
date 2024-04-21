@@ -41,7 +41,7 @@ export const getMovieById = async (
     },
   };
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=03b8572954325680265531140190fd2a`,
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.REACT_APP_API_KEY}`,
     options,
   );
   const movieData = await response.json();

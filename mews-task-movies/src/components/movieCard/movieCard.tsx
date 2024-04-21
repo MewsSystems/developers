@@ -1,10 +1,11 @@
 import './movieCard.css';
+
 export default function MovieCard({
   movie,
   handleSelectedMovie,
 }: {
   movie: any;
-  handleSelectedMovie: any;
+  handleSelectedMovie: (movieId: number) => void;
 }) {
   return (
     <div

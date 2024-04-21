@@ -21,11 +21,9 @@ export default function HomePage() {
       currentPageNumber,
       setTotalPagesNumber,
     );
-    console.log('Blblbl', search, currentPageNumber);
   }, [search, currentPageNumber]);
 
   const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
-    console.log('blblbl2', e.target.value);
     setSearch(e.target.value);
   };
 
