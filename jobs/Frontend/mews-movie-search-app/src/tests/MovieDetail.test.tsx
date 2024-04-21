@@ -57,6 +57,9 @@ describe("Movie Detail", () => {
     useMovieDetailSpy.mockReturnValue({
       movieDetail: movieDetail,
       isLoading: false,
+      isFetching: false,
+      status: "success",
+      error: null,
     });
     Arrange();
 
