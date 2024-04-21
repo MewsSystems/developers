@@ -8,11 +8,25 @@ import { useInView } from "react-intersection-observer";
 import { useMovies } from "../hooks/useMovies";
 import { LoadingMessage } from "./ui/LoadingMessage";
 import { Text } from "@components/ui/Layout";
+import { motion } from "framer-motion";
 
 /* Types  */
 
 /* Local utility functions */
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
+const listItem = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
+};
 /* Component definition */
 export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
   const { ref, inView } = useInView();
@@ -37,12 +51,12 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
   }
 
   return (
-    <Container>
+    <Container layout>
       {isLoading ? (
         <LoadingMessage />
       ) : (
         <ListScroll>
-          <MovieContainer>
+          <MovieContainer variants={container} initial="hidden" animate="show">
             {movies &&
               movies.pages &&
               movies.pages.map((page, index) =>
@@ -50,6 +64,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
                   page.results.map((movie) => {
                     return (
                       <MovieItem
+                        variants={listItem}
                         key={movie.id}
                         onClick={() => setLocation(`/movies/${movie.id}`)}
                         ref={ref}
@@ -80,7 +95,7 @@ export const Movies = ({ searchTerm = "" }: { searchTerm: string }) => {
   );
 };
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -90,7 +105,7 @@ const ListScroll = styled.div`
   height: 100vh;
   position: relative;
 `;
-const MovieContainer = styled.ul`
+const MovieContainer = styled(motion.ul)`
   display: flex;
   flex-wrap: wrap;
   list-style: none;
@@ -106,7 +121,7 @@ const MoviePosterImage = styled.img`
   }
 `;
 
-const MovieItem = styled.li`
+const MovieItem = styled(motion.li)`
   display: flex;
   flex-direction: column;
   list-style: none;

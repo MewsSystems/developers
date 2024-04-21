@@ -8,7 +8,7 @@ function App() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={() => <MovieListView></MovieListView>} />
+        <Route path="/" component={() => <MovieListView />} />
         <Route path="/movies/:id" component={MoviesDetailView} />
       </Switch>
     </Layout>

@@ -1,5 +1,4 @@
 /* Global imports */
-import * as React from "react";
 import styled from "styled-components";
 import { Link, useParams } from "wouter";
 import { useMovieDetail } from "../hooks/useMovieDetail";
@@ -14,6 +13,7 @@ import {
   Gap,
   Title,
 } from "../components/ui/Layout";
+import { motion } from "framer-motion";
 
 /* Local imports */
 
@@ -41,14 +41,20 @@ export const MoviesDetailView = () => {
           <LoadingMessage text="Loading movie detail..." />
         ) : movieDetail ? (
           <Row>
-            <Poster>
-              <img
+            <Poster
+              key="detail"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.img
                 style={{ borderRadius: "10px" }}
                 src={`${imageDomainURL}w400/${movieDetail?.poster_path}`}
                 alt={movieDetail?.title}
+                animate={{ scale: [0, 1] }}
               />
             </Poster>
-            <Content>
+            <Content animate={{ opacity: [0, 1] }}>
               <Wrapper>
                 <Title>{movieDetail?.title}</Title>
                 <Text color="white" size="lg">
@@ -91,7 +97,7 @@ export const MoviesDetailView = () => {
     </MovieDetailLayout>
   );
 };
-const MovieDetailLayout = styled.div`
+const MovieDetailLayout = styled(motion.div)`
   display: flex;
   padding: 1rem;
   height: 100vh;
@@ -99,11 +105,11 @@ const MovieDetailLayout = styled.div`
   flex-direction: column;
 `;
 
-const Poster = styled.section`
+const Poster = styled(motion.section)`
   display: flex;
   justify-content: center;
 `;
-const Content = styled.section`
+const Content = styled(motion.section)`
   padding: 1rem;
   width: 100%;
   display: flex;
