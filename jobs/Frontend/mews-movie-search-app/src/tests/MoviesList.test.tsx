@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, userEvent } from "../../tests/utils";
+import { render, screen, userEvent } from "../../tests/utils";
 import App from "../App";
 import * as useMovies from "../hooks/useMovies";
 
