@@ -8,8 +8,8 @@ This is a simple React single-page application (SPA) built with Vite that allows
 - **Movie Details**: View additional information about each movie by clicking on it.
 
 ### Demo
-[Demo](https://github.com/cubanducko/mews-frontend-challenge/assets/6534054/9f107b48-e9c6-49be-ab63-a5c59be7df1b)
 
+[Demo](https://github.com/cubanducko/mews-frontend-challenge/assets/6534054/9f107b48-e9c6-49be-ab63-a5c59be7df1b)
 
 ## Getting Started
 
@@ -39,7 +39,7 @@ To run this project locally, ensure you have [Node.js](https://nodejs.org/) and 
 
 This project is deployed on Vercel. You can try the live version of the application by following the link below:
 
-[Movie Search SPA - Live Demo](https://mews-frontend-challenge.vercel.app/) <!-- Replace with your Vercel project URL -->
+[Movie Search SPA - Live Demo](https://mews-frontend-challenge.vercel.app/)
 
 ## License
 
