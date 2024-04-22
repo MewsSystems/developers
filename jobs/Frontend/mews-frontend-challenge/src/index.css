@@ -75,13 +75,16 @@
     @apply bg-background text-primary;
   }
 
-  :root {
-    font-family: "Axiforma Bold", "Axiforma Book", Arial, sans-serif;
+  html {
+    @apply font-sans antialiased;
   }
-}
 
-@layer base {
   a {
     @apply text-primary underline-offset-4 hover:underline;
   }
+}
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
