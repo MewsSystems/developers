@@ -11,6 +11,7 @@ import Layout from '@/layout/Layout.tsx'
 import HomePage from '@/pages/HomePage.tsx'
 import MovieDetailPage from '@/pages/MovieDetailPage.tsx'
 import NotFoundPage from '@/pages/NotFoundPage.tsx'
+import { paths } from '@/paths.ts'
 
 const queryClient = new QueryClient()
 
@@ -21,10 +22,10 @@ const App = () => (
             <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<Layout />}>
+                        <Route path={paths.homepage} element={<Layout />}>
                             <Route path="" element={<HomePage />} />
                             <Route
-                                path="/movie/:id"
+                                path={`${paths.movieDetail}:id`}
                                 element={<MovieDetailPage />}
                             />
                             <Route path="/*" element={<NotFoundPage />} />

@@ -4,6 +4,7 @@ import { Pagination, TextField, Typography } from '@mui/material'
 
 import SearchMovieContent from '@/components/search/SearchMovieContent.tsx'
 import { useSearchMovie } from '@/hooks/movies/useSearchMovie.ts'
+import { paths } from '@/paths.ts'
 
 const HomePage = () => {
     const navigate = useNavigate()
@@ -26,7 +27,7 @@ const HomePage = () => {
                 Hunting for the perfect movie has never been easier! Simply
                 enter keywords into the search bar and let our app work its
                 magic. Start your journey now and unlock a universe of cinematic
-                wonders
+                wonders. Feel free to type in your language, we got your back!
             </Typography>
             <TextField
                 aria-label="Search movie"
@@ -47,7 +48,9 @@ const HomePage = () => {
                     isLoading={isLoading}
                     isError={isError}
                     results={results}
-                    handleClear={() => navigate('/', { replace: true })}
+                    handleClear={() =>
+                        navigate(paths.homepage, { replace: true })
+                    }
                 />
 
                 {!!results?.length && (

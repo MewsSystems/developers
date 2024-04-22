@@ -2,6 +2,8 @@ import { Outlet, useNavigate } from 'react-router-dom'
 
 import { Fab } from '@mui/material'
 
+import { paths } from '@/paths.ts'
+
 const Layout = () => {
     const navigate = useNavigate()
 
@@ -11,7 +13,7 @@ const Layout = () => {
                 aria-label="Navigate home"
                 size="small"
                 onClick={() =>
-                    navigate('/', {
+                    navigate(paths.homepage, {
                         replace: true,
                         state: { redirectedPage: 'homepage' },
                     })

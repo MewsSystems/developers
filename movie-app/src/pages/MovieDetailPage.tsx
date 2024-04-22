@@ -7,6 +7,7 @@ import MovieTile from '@/components/movie/MovieTile.tsx'
 import SearchMovieContent from '@/components/search/SearchMovieContent.tsx'
 import { useMovieDetail } from '@/hooks/movies/useMovieDetail.ts'
 import { useSimilarMovies } from '@/hooks/movies/useSimilarMovies.ts'
+import { paths } from '@/paths.ts'
 
 const MovieDetailPage = () => {
     const navigate = useNavigate()
@@ -22,7 +23,7 @@ const MovieDetailPage = () => {
     }
 
     if (isError) {
-        return <ErrorMessage handleClear={() => navigate('/')} />
+        return <ErrorMessage handleClear={() => navigate(paths.homepage)} />
     }
 
     return data ? (
@@ -33,9 +34,9 @@ const MovieDetailPage = () => {
                 You might also like
             </Typography>
             <SearchMovieContent
-                // give 3 alternatives
+                // give 6 alternatives
                 results={similarMoviesData?.slice(0, 6)}
-                handleClear={() => navigate('/')}
+                handleClear={() => navigate(paths.homepage)}
                 isError={similarMoviesError}
                 isLoading={isSimilarMoviesLoading}
             />
@@ -43,7 +44,7 @@ const MovieDetailPage = () => {
     ) : (
         <ErrorMessage
             error="We could not match any of the movie to the requested id."
-            handleClear={() => navigate('/')}
+            handleClear={() => navigate(paths.homepage)}
         />
     )
 }
