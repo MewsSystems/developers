@@ -17,7 +17,7 @@ export function SearchInput() {
   useDebounce(
     () => {
       if (initialQuery === searchQuery) return;
-      history.push(getSearchRoute({ ...searchParams, q: searchQuery }));
+      history.push(getSearchRoute({ page: 1, q: searchQuery }));
     },
     300,
     [searchQuery],
