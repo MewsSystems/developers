@@ -6,8 +6,8 @@ export default forwardRef(function SearchForm(
     searchValue,
     searchFunction,
   }: {
-    searchValue: any;
-    searchFunction: any;
+    searchValue: string;
+    searchFunction: (e: React.ChangeEvent<HTMLInputElement>) => void;
   },
   ref: Ref<HTMLLabelElement>,
 ) {

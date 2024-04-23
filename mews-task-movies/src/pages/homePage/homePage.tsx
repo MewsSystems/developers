@@ -1,4 +1,5 @@
 import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { Movie } from '../../data/interfaces';
 import SearchForm from '../../components/searchForm/searchForm';
 import MovieList from '../../components/movieList/movieList';
 import MovieDetail from '../../components/movieDetail/movieDetail';
@@ -7,10 +8,10 @@ import { getMoviesWithActualParametres } from '../../data/getMovies';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
-  const [totalPagesNumber, setTotalPagesNumber] = useState(Number);
-  const [movies, setMovies] = useState([]);
-  const [selectedMovieId, setSelectedMovieId] = useState(Number);
-  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectedMovieId, setSelectedMovieId] = useState<number>(-1);
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
 
   const labelRef = useRef<HTMLLabelElement>(null);
 
@@ -23,7 +24,7 @@ export default function HomePage() {
     );
   }, [search, currentPageNumber]);
 
-  const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
@@ -43,7 +44,7 @@ export default function HomePage() {
 
   return (
     <main>
-      {selectedMovieId === 0 && (
+      {selectedMovieId === -1 ? (
         <>
           <h1>Find your movie</h1>
           <SearchForm
@@ -64,8 +65,7 @@ export default function HomePage() {
             />
           )}
         </>
-      )}
-      {selectedMovieId > 0 && (
+      ) : (
         <MovieDetail
           selectedMovieId={selectedMovieId}
           setSelectedMovie={setSelectedMovieId}

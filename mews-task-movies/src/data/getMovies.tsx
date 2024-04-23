@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
+import { Movie } from './interfaces';
 
 export const getMoviesWithActualParametres = async (
   searchValue: string,
-  setMoviesData: Dispatch<SetStateAction<never[]>>,
-  pageNumber: Number,
+  setMoviesData: Dispatch<SetStateAction<Movie[]>>,
+  pageNumber: number,
   setTotalPagesNumber: React.Dispatch<SetStateAction<number>>,
 ) => {
   if (searchValue) {
@@ -16,9 +17,9 @@ export const getMoviesWithActualParametres = async (
   }
 };
 
-const getMovies = async (searchValue: string, pageNumber: Number) => {
+const getMovies = async (searchValue: string, pageNumber: number) => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/search/movie?query=${searchValue}&page=${pageNumber}&api_key=${process.env.REACT_APP_API_KEY}`,
+    `${process.env.REACT_APP_API_BASE_PATH}/search/movie?query=${searchValue}&page=${pageNumber}&api_key=${process.env.REACT_APP_API_KEY}`,
     {
       method: 'GET',
       headers: {
@@ -32,7 +33,7 @@ const getMovies = async (searchValue: string, pageNumber: Number) => {
 
 export const getMovieById = async (
   movieId: number,
-  setSelectedMovieData: React.Dispatch<Object>,
+  setSelectedMovieData: React.Dispatch<Movie>,
 ) => {
   const options = {
     method: 'GET',
@@ -41,7 +42,7 @@ export const getMovieById = async (
     },
   };
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.REACT_APP_API_KEY}`,
+    `${process.env.REACT_APP_API_BASE_PATH}/movie/${movieId}?api_key=${process.env.REACT_APP_API_KEY}`,
     options,
   );
   const movieData = await response.json();

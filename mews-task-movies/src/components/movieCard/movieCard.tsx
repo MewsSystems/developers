@@ -1,10 +1,11 @@
+import { Movie } from '../../data/interfaces';
 import './movieCard.css';
 
 export default function MovieCard({
   movie,
   handleSelectedMovie,
 }: {
-  movie: any;
+  movie: Movie;
   handleSelectedMovie: (movieId: number) => void;
 }) {
   return (
@@ -20,7 +21,7 @@ export default function MovieCard({
       {movie.poster_path && (
         <div className="movie_card_image_wrapper">
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            src={`${process.env.REACT_APP_IMG_BASE_PATH}${movie.poster_path}`}
             className="movie_card_image"
             alt={`${movie.title} movie poster`}
           ></img>
