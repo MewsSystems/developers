@@ -3,6 +3,7 @@ import { MovieCard } from '../MovieCard/MovieCard';
 import { StyledMain } from './Search.styled';
 import { useMovies } from '../../hook/useMovies';
 import { SearchBox } from '../SearchBox/SearchBox';
+import { SearchControls } from '../SearchControls/SearchControls';
 
 const Search = () => {
   const {
@@ -10,6 +11,7 @@ const Search = () => {
     searchQuery,
     setSearchQuery,
     page,
+    numberOfPages,
     incrementPageNumber,
     decrementPageNumber,
   } = useMovies();
@@ -17,13 +19,24 @@ const Search = () => {
   return (
     <StyledMain>
       <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+      <SearchControls
+        page={page}
+        numberOfPages={numberOfPages}
+        incrementPageNumber={incrementPageNumber}
+        decrementPageNumber={decrementPageNumber}
+        showControls={Boolean(searchQuery)}
+      />
+
       {Children.toArray(movies.map((movie) => <MovieCard movie={movie} />))}
 
-      <div>
-        <button onClick={decrementPageNumber}>Back</button>
-        {page}
-        <button onClick={incrementPageNumber}>Next</button>
-      </div>
+      <SearchControls
+        page={page}
+        numberOfPages={numberOfPages}
+        incrementPageNumber={incrementPageNumber}
+        decrementPageNumber={decrementPageNumber}
+        showControls={Boolean(searchQuery)}
+      />
     </StyledMain>
   );
 };

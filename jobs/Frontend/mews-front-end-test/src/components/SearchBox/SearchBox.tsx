@@ -8,6 +8,7 @@ const SearchBox: FC<Props> = ({ searchQuery, setSearchQuery }) => {
   return (
     <form>
       <StyledSearchBox
+        type={'text'}
         value={searchQuery}
         onChange={(event: FormEvent<HTMLInputElement>) => {
           setSearchQuery(event.currentTarget.value);
