@@ -1,27 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import {
-  StyledAppContainer,
-  StyledHeader,
-  StyledMain,
-  StyledSearchBox,
-  StyledTitle,
-} from './App.styled';
-import { MovieCard } from './components/MovieCard';
+import { StyledAppContainer } from './App.styled';
+import { Search } from './components/Search/Search';
+import { Header } from './components/Header/Header';
+import { MovieApiResponse, sendRequest } from './api/sendRequest';
 
 function App() {
+  useEffect(() => {
+    sendRequest()
+      .then((response: MovieApiResponse) => {
+        console.log('response: ', response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <StyledAppContainer>
-      <StyledHeader>
-        <StyledTitle>Search for movies</StyledTitle>
-      </StyledHeader>
-
-      <StyledMain>
-        <StyledSearchBox />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-      </StyledMain>
+      <Header />
+      <Search />
     </StyledAppContainer>
   );
 }
