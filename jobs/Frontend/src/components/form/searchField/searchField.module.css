@@ -1,0 +1,59 @@
+.wrapper {
+  position: relative;
+}
+
+.field {
+  font-size: 14px;
+  position: relative;
+
+  border-top: 20px solid transparent;
+}
+
+.field input {
+  border: none;
+  appearance: none;
+  background: #f2f2f2;
+  padding: 12px;
+  padding-top: 16px;
+  border-radius: 3px;
+  width: 250px;
+  font-size: 14px;
+}
+
+.field .placeholder {
+  position: absolute;
+  left: 12px;
+  top: 8px;  
+  transform: translateY(-50%);
+  width: calc(100% - 24px);  
+  color: #aaa;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: 
+    top 0.3s ease,
+    color 0.3s ease,
+    font-size 0.3s ease;
+}
+
+.field input:focus + .placeholder {
+  top: -10px;
+  font-size: 10px;
+  color: #222;
+}
+
+.field input:not(:placeholder-shown) + .placeholder,
+.field input:focus + .placeholder {
+  top: -10px;
+  font-size: 10px;
+  color: #222;
+}
+
+.clear-icon {
+  background: #f2f2f2;
+  border: none;
+  top: 1pc;
+  right: 6px;
+  position: absolute;
+  cursor: pointer;
+}
