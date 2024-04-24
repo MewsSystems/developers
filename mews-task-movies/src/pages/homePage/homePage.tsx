@@ -7,7 +7,7 @@ import PagesNavigation from '../../components/pagesNavigation/pagesNavigation';
 import { getMoviesWithActualParametres } from '../../data/getMovies';
 
 export default function HomePage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState<string>('');
   const [totalPagesNumber, setTotalPagesNumber] = useState<number>(1);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [selectedMovieId, setSelectedMovieId] = useState<number>(-1);
