@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Movie } from '../../data/interfaces';
 import SearchForm from '../../components/searchForm/searchForm';
 import MovieList from '../../components/movieList/movieList';
