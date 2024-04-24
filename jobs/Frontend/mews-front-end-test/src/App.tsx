@@ -1,25 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {
+  StyledAppContainer,
+  StyledHeader,
+  StyledMain,
+  StyledSearchBox,
+  StyledTitle,
+} from './App.styled';
+import { MovieCard } from './components/MovieCard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StyledAppContainer>
+      <StyledHeader>
+        <StyledTitle>Search for movies</StyledTitle>
+      </StyledHeader>
+
+      <StyledMain>
+        <StyledSearchBox />
+        <MovieCard />
+        <MovieCard />
+        <MovieCard />
+      </StyledMain>
+    </StyledAppContainer>
   );
 }
 
