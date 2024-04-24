@@ -1,5 +1,5 @@
-import './searchForm.css';
 import { Ref, forwardRef } from 'react';
+import './searchForm.css';
 
 export default forwardRef(function SearchForm(
   {
