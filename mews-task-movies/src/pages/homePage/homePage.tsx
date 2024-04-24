@@ -56,7 +56,7 @@ export default function HomePage() {
             movieValues={movies}
             handleSelectedMovie={handleSelectedMovie}
           />
-          {search.length > 0 && (
+          {totalPagesNumber > 1 && (
             <PagesNavigation
               pageNumber={currentPageNumber}
               totalPagesNumber={totalPagesNumber}
