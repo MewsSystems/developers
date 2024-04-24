@@ -1,6 +1,6 @@
 import { apiKey } from '../env';
 
-interface Movie {
+export interface Movie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -24,12 +24,14 @@ export interface MovieApiResponse {
   total_results: number;
 }
 
-const jackReacher = `https://api.themoviedb.org/3/search/movie?query=Jack+Reacher&api_key=${apiKey}`;
+interface SendRequest {
+  (searchQuery: string, page?: number): Promise<MovieApiResponse>;
+}
 
-const firstFilm = `https://api.themoviedb.org/3/movie/75780?&api_key=${apiKey}`;
+const sendRequest: SendRequest = async (searchQuery, page = 1) => {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&page=${page}&api_key=${apiKey}`;
 
-const sendRequest = async (): Promise<MovieApiResponse> => {
-  const movieRequest = await fetch(jackReacher);
+  const movieRequest = await fetch(url);
 
   if (!movieRequest.ok) {
     return Promise.reject(new Error('Something went wrong.'));

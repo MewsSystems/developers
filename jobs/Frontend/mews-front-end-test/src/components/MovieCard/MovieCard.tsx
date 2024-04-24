@@ -1,11 +1,15 @@
 import { FC } from 'react';
 import { StyledCard } from './MovieCard.styled';
+import { Movie } from '../../api/sendRequest';
 
-const MovieCard: FC = () => {
+interface Props {
+  movie: Movie;
+}
+
+const MovieCard: FC<Props> = ({ movie }) => {
   return (
     <StyledCard>
-      <p>Stuff</p>
-      <p>Stuff</p>
+      <p>{movie.title}</p>
     </StyledCard>
   );
 };
