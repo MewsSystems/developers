@@ -25,13 +25,19 @@ export interface MovieApiResponse {
 }
 
 interface SendRequest {
-  (searchQuery: string, page?: number): Promise<MovieApiResponse>;
+  (url: string, options?: RequestInit): Promise<MovieApiResponse>;
 }
 
-const sendRequest: SendRequest = async (searchQuery, page = 1) => {
-  const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&page=${page}&api_key=${apiKey}`;
-
-  const movieRequest = await fetch(url);
+const sendRequest: SendRequest = async (
+  url,
+  options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+    },
+  },
+) => {
+  const movieRequest = await fetch(url, options);
 
   if (!movieRequest.ok) {
     return Promise.reject(new Error('Something went wrong.'));
@@ -40,4 +46,28 @@ const sendRequest: SendRequest = async (searchQuery, page = 1) => {
   return movieRequest.json();
 };
 
-export { sendRequest };
+interface GetMoviesRequest {
+  (searchQuery: string, page?: number): Promise<MovieApiResponse>;
+}
+
+const getMoviesRequest: GetMoviesRequest = (searchQuery: string, page = 1) => {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&page=${page}&api_key=${apiKey}`;
+
+  return sendRequest(url);
+};
+
+const getConfigRequest = () => {
+  const url = 'https://api.themoviedb.org/3/configuration';
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: apiKey,
+    },
+  };
+
+  return sendRequest(url, options);
+};
+
+export { sendRequest, getMoviesRequest };

@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { Movie, MovieApiResponse, sendRequest } from '../api/sendRequest';
-import { initialMovieState, movieReducer } from './movieReducer';
+import {
+  getMoviesRequest,
+  Movie,
+  MovieApiResponse,
+  sendRequest,
+} from '../api/sendRequest';
+import { initialMovieState, reducer } from './reducer';
 
 export interface UseMovies {
   movies: Movie[];
@@ -13,7 +18,7 @@ export interface UseMovies {
 }
 
 const useMovies = (): UseMovies => {
-  const [moviesState, dispatch] = useReducer(movieReducer, initialMovieState);
+  const [moviesState, dispatch] = useReducer(reducer, initialMovieState);
 
   const { movies, searchQuery, page, numberOfPages } = moviesState;
 
@@ -45,7 +50,7 @@ const useMovies = (): UseMovies => {
 
   useEffect(() => {
     if (Boolean(searchQuery)) {
-      sendMovieRequest(searchQuery, page)
+      getMoviesRequest(searchQuery, page)
         .then((response: MovieApiResponse) => {
           dispatch({
             movies: response.results,

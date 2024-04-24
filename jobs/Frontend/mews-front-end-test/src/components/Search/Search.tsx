@@ -5,8 +5,14 @@ import { useMovies } from '../../hook/useMovies';
 import { SearchBox } from '../SearchBox/SearchBox';
 import { SearchControls } from '../SearchControls/SearchControls';
 import { Link } from 'react-router-dom';
+import {
+  setCurrentMovie,
+  setCurrentSearch,
+} from '../../redux/movies/movieSlice';
+import { useDispatch } from 'react-redux';
 
 const Search = () => {
+  const dispatch = useDispatch();
   const {
     movies,
     searchQuery,
@@ -34,7 +40,24 @@ const Search = () => {
           movies.map((movie) => {
             return (
               <StyledListItem>
-                <Link to={'/details'}>
+                <Link
+                  to={'/details'}
+                  onClick={() => {
+                    console.log('here we go');
+
+                    console.log("movie we're putting into the store: ", movie);
+
+                    dispatch(setCurrentMovie(movie));
+                    dispatch(
+                      setCurrentSearch({
+                        movies,
+                        searchQuery,
+                        page,
+                        numberOfPages,
+                      }),
+                    );
+                  }}
+                >
                   <MovieCard movie={movie} />
                 </Link>
               </StyledListItem>

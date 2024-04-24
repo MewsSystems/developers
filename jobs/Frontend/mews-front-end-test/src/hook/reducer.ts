@@ -7,7 +7,7 @@ interface MovieState {
   numberOfPages: number;
 }
 
-const movieReducer = (
+const reducer = (
   currentState: MovieState,
   nextState:
     | Partial<MovieState>
@@ -24,4 +24,4 @@ const initialMovieState: MovieState = {
   numberOfPages: 1,
 };
 
-export { movieReducer, initialMovieState };
+export { reducer, initialMovieState };

@@ -3,17 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { App } from './routes/App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  redirect,
+} from 'react-router-dom';
 import { ErrorPage } from './ErrorPage';
 import { Details } from './routes/Details';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+
+const redirectLoader = () => {
+  return redirect('/search');
+};
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    loader: redirectLoader,
     errorElement: <ErrorPage />,
   },
-
+  { path: 'search', element: <App />, errorElement: <ErrorPage /> },
   { path: 'details', element: <Details /> },
 ]);
 
@@ -22,7 +32,9 @@ const root = document.getElementById('root');
 if (root) {
   ReactDOM.createRoot(root).render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </React.StrictMode>,
   );
 }
