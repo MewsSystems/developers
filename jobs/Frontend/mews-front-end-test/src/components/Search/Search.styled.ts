@@ -4,4 +4,8 @@ const StyledMain = styled.main`
   margin: 0 auto;
 `;
 
-export { StyledMain };
+const StyledListItem = styled.li`
+  list-style-type: none;
+`;
+
+export { StyledMain, StyledListItem };

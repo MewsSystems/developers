@@ -1,9 +1,10 @@
 import React, { Children } from 'react';
 import { MovieCard } from '../MovieCard/MovieCard';
-import { StyledMain } from './Search.styled';
+import { StyledListItem, StyledMain } from './Search.styled';
 import { useMovies } from '../../hook/useMovies';
 import { SearchBox } from '../SearchBox/SearchBox';
 import { SearchControls } from '../SearchControls/SearchControls';
+import { Link } from 'react-router-dom';
 
 const Search = () => {
   const {
@@ -28,7 +29,19 @@ const Search = () => {
         showControls={Boolean(searchQuery)}
       />
 
-      {Children.toArray(movies.map((movie) => <MovieCard movie={movie} />))}
+      <ul>
+        {Children.toArray(
+          movies.map((movie) => {
+            return (
+              <StyledListItem>
+                <Link to={'/details'}>
+                  <MovieCard movie={movie} />
+                </Link>
+              </StyledListItem>
+            );
+          }),
+        )}
+      </ul>
 
       <SearchControls
         page={page}

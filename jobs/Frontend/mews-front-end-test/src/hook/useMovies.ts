@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { Movie, MovieApiResponse, sendRequest } from '../api/sendRequest';
+import { initialMovieState, movieReducer } from './movieReducer';
 
 export interface UseMovies {
   movies: Movie[];
@@ -10,30 +11,6 @@ export interface UseMovies {
   incrementPageNumber: () => void;
   decrementPageNumber: () => void;
 }
-
-interface MovieState {
-  movies: Movie[];
-  searchQuery: string;
-  page: number;
-  numberOfPages: number;
-}
-
-const movieReducer = (
-  currentState: MovieState,
-  nextState:
-    | Partial<MovieState>
-    | ((currentState: MovieState) => Partial<MovieState>),
-) => ({
-  ...currentState,
-  ...(typeof nextState === 'function' ? nextState(currentState) : nextState),
-});
-
-const initialMovieState: MovieState = {
-  movies: [],
-  searchQuery: '',
-  page: 1,
-  numberOfPages: 1,
-};
 
 const useMovies = (): UseMovies => {
   const [moviesState, dispatch] = useReducer(movieReducer, initialMovieState);
@@ -80,6 +57,8 @@ const useMovies = (): UseMovies => {
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      dispatch({ ...initialMovieState });
     }
   }, [searchQuery, page, sendMovieRequest]);
 
