@@ -2,12 +2,16 @@ import { ActionKind } from "@/constants";
 import { ReactNode } from "react";
 import { MovieSearchResult } from "@/types";
 
-export type AppProviderProps = { readonly children: ReactNode };
+export type AppProviderProps = {
+  readonly children: ReactNode;
+  ssrState?: State | undefined;
+};
 export type State = {
   searchTerm: string;
   searchResult: MovieSearchResult;
   searchInProgress: boolean;
   page: number;
+  started: boolean;
 };
 
 // source: https://medium.com/hackernoon/finally-the-typescript-redux-hooks-events-blog-you-were-looking-for-c4663d823b01
@@ -26,6 +30,7 @@ type SearchPayload = {
   [ActionKind.UPDATE_SEARCH_TERM]: string;
   [ActionKind.SEARCH_MOVIES_REQUEST]: undefined;
   [ActionKind.SEARCH_MOVIES_SUCCESS]: MovieSearchResult;
+  [ActionKind.HYDRATE]: undefined;
 };
 
 export type Actions = ActionMap<SearchPayload>[keyof ActionMap<SearchPayload>];

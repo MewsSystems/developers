@@ -3,6 +3,7 @@ import { Movie } from "@/types";
 import { fallbackImageHandler } from "@/utils/helpers";
 import {
   Grid,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -21,11 +22,18 @@ export const getServerSideProps = (async (context) => {
 
   const id = context?.params.id as unknown as number;
   const movie = await movieService.getById(id);
-  movie.posterImage = movie.posterImage.replace("/w92", "/w185");
   return { props: { ...movie } };
 }) satisfies GetServerSideProps<Movie>;
 
-export default function Detail({ id, title, posterImage, overview }: Movie) {
+export default function Detail({
+  id,
+  title,
+  posterImage,
+  overview,
+  homepage,
+  genres,
+  spokenLanguages,
+}: Movie) {
   return (
     <Grid container justifyContent="center" spacing={2}>
       <Grid item xs={8} marginTop={9}>
@@ -52,6 +60,22 @@ export default function Detail({ id, title, posterImage, overview }: Movie) {
               <TableRow>
                 <TableCell>Overview</TableCell>
                 <TableCell>{overview}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Homepage</TableCell>
+                <TableCell>
+                  <Link target="_blank" href={homepage}>
+                    {homepage}
+                  </Link>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Genres</TableCell>
+                <TableCell>{genres.join(", ")}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Spoken languages</TableCell>
+                <TableCell>{spokenLanguages.join(", ")}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

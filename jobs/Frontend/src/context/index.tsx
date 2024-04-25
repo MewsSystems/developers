@@ -13,6 +13,7 @@ const initialState: State = {
   searchResult: defaultResult,
   searchInProgress: false,
   page: 1,
+  started: false,
 };
 
 export const AppContext = createContext<{
@@ -23,8 +24,8 @@ export const AppContext = createContext<{
   dispatch: () => null,
 });
 
-export function AppProvider({ children }: AppProviderProps) {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+export function AppProvider({ children, ssrState }: AppProviderProps) {
+  const [state, dispatch] = useReducer(appReducer, ssrState || initialState);
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return (
@@ -34,6 +35,12 @@ export function AppProvider({ children }: AppProviderProps) {
 
 function appReducer(state: State, action: Actions): State {
   switch (action.type) {
+    case ActionKind.HYDRATE: {
+      return {
+        ...state,
+        started: true,
+      };
+    }
     case ActionKind.UPDATE_SEARCH_TERM: {
       return {
         ...state,

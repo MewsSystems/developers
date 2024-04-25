@@ -10,7 +10,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  console.log(req.body);
   const response = await fetch(
     `https://api.themoviedb.org/3/search/movie?query=${req.query.query}&page=${req.query.page}&api_key=03b8572954325680265531140190fd2a`
   );

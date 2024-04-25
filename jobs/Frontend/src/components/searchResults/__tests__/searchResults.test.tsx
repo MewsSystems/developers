@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { SearchResults } from "../searchResults";
-import { Movie } from "@/types";
+import { MovieSummary } from "@/types";
 
 jest.mock("next/image", () => () => <span></span>);
 
-const defaultMovies: Movie[] = [
+const defaultMovies: MovieSummary[] = [
   {
     id: 1,
     title: "title1",

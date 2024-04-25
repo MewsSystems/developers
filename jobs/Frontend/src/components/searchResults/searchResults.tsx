@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Divider from "@mui/material/Divider";
 import { ResultsListItemProps, ResultsListProps } from "./types";
-import { Movie } from "@/types";
+import { MovieSummary } from "@/types";
 import {
   Avatar,
   ImageListItem,
@@ -65,7 +65,7 @@ export const SearchResults: React.FC<ResultsListProps> = ({ results }) => (
     sx={{ width: "100%", bgcolor: "background.paper" }}
     key="search-results"
   >
-    {results?.movies.map((item: Movie) => (
+    {results?.movies.map((item: MovieSummary) => (
       <SearchResultsListItem key={item.id} item={item} />
     ))}
   </List>

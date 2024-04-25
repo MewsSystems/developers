@@ -24,7 +24,7 @@ describe('moveService', () => {
       results: [],
     });
 
-    const actual = await movieService.search('dune');
+    const actual = await movieService.search('dune', 1);
     expect(actual).toEqual({
       page: 0,
       movies: []

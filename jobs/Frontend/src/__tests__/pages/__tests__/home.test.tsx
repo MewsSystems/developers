@@ -1,11 +1,21 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Home from "@/pages/index";
+import Home, { getServerSideProps } from "@/pages/index";
 import { movieService } from "@/services/movieService";
 import { AppProvider } from "@/context";
+import { TestReq, TestRes } from "@/types";
 
-jest.mock("../../services/movieService");
+jest.mock("next/router", () => ({
+  push: jest.fn(),
+}));
+
+jest.mock("../../../services/movieService");
+
+const defaultResults = {
+  page: 1,
+  results: [],
+};
 
 function TestComponent() {
   return (
@@ -92,5 +102,54 @@ describe("Home", () => {
     spinner = screen.queryByRole("progressbar");
 
     expect(spinner).toBeInTheDocument();
+  });
+
+  it("should return empty when search term or number not given", async () => {
+    const context = {
+      req: jest.fn() as TestReq,
+      res: jest.fn() as TestRes,
+      query: {
+        query: "",
+        page: "",
+      },
+      resolvedUrl: "",
+    };
+
+    (movieService.search as jest.Mock<any>).mockResolvedValue(defaultResults);
+
+    const props = await getServerSideProps(context);
+
+    expect(props).toEqual({
+      props: {
+        searchTerm: "",
+        searchResult: {},
+      },
+    });
+  });
+
+  it("should fetch results when search term and number given", async () => {
+    const context = {
+      req: jest.fn() as TestReq,
+      res: jest.fn() as TestRes,
+      query: {
+        query: "test",
+        page: "1",
+      },
+      resolvedUrl: "",
+    };
+
+    (movieService.search as jest.Mock<any>).mockResolvedValue(defaultResults);
+
+    const props = await getServerSideProps(context);
+
+    expect(props).toEqual({
+      props: {
+        searchTerm: "test",
+        searchResult: {
+          page: 1,
+          results: [],
+        },
+      },
+    });
   });
 });

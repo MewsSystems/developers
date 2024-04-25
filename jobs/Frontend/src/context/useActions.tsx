@@ -21,11 +21,17 @@ export const useActions = (dispatch: Dispatch<Actions>) => {
       payload,
     });
 
+  const hydrate = () =>
+    dispatch({
+      type: ActionKind.HYDRATE,
+    });
+
   const useAction = (action: Function) => useCallback(action, [dispatch]);
 
   return {
     setSearchTerm: useAction(setSearchTerm),
     setSearchRequest: useAction(setSearchRequest),
     setSearchSuccess: useAction(setSearchSuccess),
+    hydrate: useAction(hydrate),
   };
 };

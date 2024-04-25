@@ -1,7 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import { useStore } from "@/context";
-import styles from "./searchField.module.css";
-import { Spinner } from "../spinner/spinner";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";

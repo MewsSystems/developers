@@ -1,27 +1,25 @@
 import { render, screen } from "@testing-library/react";
 
-jest.mock("next/image", () => (props) => <span>{props.src}</span>);
+jest.mock("next/image", () => (props: any) => <span>{props.src}</span>);
 
-import { Movie } from "@/types";
-import Detail, { getServerSideProps } from "../[id]";
-import { GetServerSideProps } from "next";
+import { Movie, MovieSummary, TestReq, TestRes } from "@/types";
+import Detail, { getServerSideProps } from "../../../../pages/detail/[id]";
 import { IncomingMessage, ServerResponse } from "http";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
 import { movieService } from "@/services/movieService";
 
-jest.mock("../../../services/movieService");
+jest.mock("../../../../services/movieService");
 
-type TestReq = IncomingMessage & {
-  cookies: NextApiRequestCookies;
-} & jest.Mock<any>;
-
-type TestRes = ServerResponse & jest.Mock<any>;
-
-const defaultMovie: Movie & { [key: string]: string | number | undefined } = {
+const defaultMovie: Movie & {
+  [key: string]: string | string[] | number | undefined;
+} = {
   id: 1,
   title: "Movie title",
   overview: "Overview summary text",
   posterImage: "image",
+  genres: ["Romance", "Comedy"],
+  homepage: "https://net.com",
+  spokenLanguages: ["Italian"],
 };
 
 describe("Detail page", () => {
@@ -67,13 +65,6 @@ describe("Detail page", () => {
       resolvedUrl: "",
     };
 
-    const defaultMovie: Movie = {
-      id: 1,
-      title: "test",
-      overview: "overview",
-      posterImage: "https://w92/1.jpg",
-    };
-
     (movieService.getById as jest.Mock<any>).mockResolvedValue(defaultMovie);
 
     const props = await getServerSideProps(context);
@@ -81,9 +72,12 @@ describe("Detail page", () => {
     expect(props).toEqual({
       props: {
         id: 1,
-        title: "test",
-        overview: "overview",
-        posterImage: "https://w185/1.jpg",
+        title: "Movie title",
+        overview: "Overview summary text",
+        posterImage: "image",
+        genres: ["Romance", "Comedy"],
+        homepage: "https://net.com",
+        spokenLanguages: ["Italian"],
       },
     });
   });
