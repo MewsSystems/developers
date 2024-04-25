@@ -8,6 +8,13 @@ import {
 import { initialMovieState, reducer } from './reducer';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
+import { useAppSelector } from '../redux/hooks/hooks';
+import {
+  getMoviesSelector,
+  getNumberOfPagesSelector,
+  getPageSelector,
+  getSearchQuerySelector,
+} from '../redux/selectors';
 
 export interface UseMovies {
   movies: Movie[];
@@ -22,8 +29,27 @@ export interface UseMovies {
 
 const useMovies = (): UseMovies => {
   const reduxDispatch = useDispatch();
+  const lastMovies = useAppSelector(getMoviesSelector);
+  const lastSearchQuery = useAppSelector(getSearchQuerySelector);
+  const lastPage = useAppSelector(getPageSelector);
+  const lastNumberOfPages = useAppSelector(getNumberOfPagesSelector);
 
-  const [moviesState, dispatch] = useReducer(reducer, initialMovieState);
+  const [moviesState, dispatch] = useReducer(
+    reducer,
+    initialMovieState,
+    (initialState) => {
+      if (Boolean(lastSearchQuery)) {
+        return {
+          movies: lastMovies,
+          searchQuery: lastSearchQuery,
+          page: lastPage,
+          numberOfPages: lastNumberOfPages,
+        };
+      }
+
+      return initialState;
+    },
+  );
 
   const { movies, searchQuery, page, numberOfPages } = moviesState;
 
