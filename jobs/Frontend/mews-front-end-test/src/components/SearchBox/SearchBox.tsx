@@ -8,6 +8,7 @@ const SearchBox: FC<Props> = ({ searchQuery, setSearchQuery }) => {
   return (
     <form>
       <StyledSearchBox
+        placeholder={'Enter a movie name to search'}
         type={'text'}
         value={searchQuery}
         onChange={(event: FormEvent<HTMLInputElement>) => {

@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import {
-  getMoviesRequest,
-  Movie,
-  MovieApiResponse,
-  sendRequest,
-} from '../api/sendRequest';
+import { getMoviesRequest, Movie, MovieApiResponse } from '../api/sendRequest';
 import { initialMovieState, reducer } from './reducer';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
@@ -77,11 +72,11 @@ const useMovies = (): UseMovies => {
     dispatch({ searchQuery: query, page: 1 });
   };
 
-  const sendMovieRequest = useCallback(sendRequest, [sendRequest]);
+  const getMovies = useCallback(getMoviesRequest, [getMoviesRequest]);
 
   useEffect(() => {
     if (Boolean(searchQuery)) {
-      getMoviesRequest(searchQuery, page)
+      getMovies(searchQuery, page)
         .then((response: MovieApiResponse) => {
           dispatch({
             movies: response.results,
@@ -97,7 +92,7 @@ const useMovies = (): UseMovies => {
     } else {
       dispatch({ ...initialMovieState });
     }
-  }, [searchQuery, page, sendMovieRequest]);
+  }, [searchQuery, page, getMovies]);
 
   return {
     movies,

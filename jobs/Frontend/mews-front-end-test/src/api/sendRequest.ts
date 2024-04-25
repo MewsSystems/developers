@@ -70,4 +70,4 @@ const getConfigRequest = () => {
   return sendRequest(url, options);
 };
 
-export { sendRequest, getMoviesRequest, getConfigRequest };
+export { getMoviesRequest, getConfigRequest };

@@ -1,17 +1,16 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Header } from '../components/Header/Header';
 import { StyledAppContainer } from './App.styled';
 import { getCurrentMoviesSelector } from '../redux/selectors';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks/hooks';
+import { Movie } from '../api/sendRequest';
 
-const Details: FC = () => {
-  const movie = useAppSelector(getCurrentMoviesSelector);
+interface Props {
+  movie: Movie;
+}
 
-  useEffect(() => {
-    console.log('movie: ', movie);
-  }, []);
-
+const DetailsDisplay: FC<Props> = ({ movie }) => {
   return (
     <StyledAppContainer>
       <Header />
@@ -19,17 +18,22 @@ const Details: FC = () => {
       <div>Just a load of stuff about your film</div>
 
       <section>
-        <p>{movie.adult}</p>
-        <p>{movie.id}</p>
-        <p>{movie.overview}</p>
-        <p>{movie.popularity}</p>
-        <p>{movie.release_date}</p>
-        <p>{movie.vote_average}</p>
-        <p>{movie.vote_count}</p>
-        <img src={movie.poster_path} alt={'Movie poster'} />
+        <p>{`Adult content: ${movie.adult ? 'Yes' : 'No'}`}</p>
+        <p>{`Movie ID: ${movie.id}`}</p>
+        <p>{`Overview: ${movie.overview}`}</p>
+        <p>{`Popularity: ${movie.popularity}`}</p>
+        <p>{`Release date: ${movie.release_date}`}</p>
+        <p>{`Average rating: ${movie.vote_average}`}</p>
+        <p>{`Vote count: ${movie.vote_count}`}</p>
       </section>
     </StyledAppContainer>
   );
 };
 
-export { Details };
+const Details: FC = () => {
+  const movie = useAppSelector(getCurrentMoviesSelector);
+
+  return <DetailsDisplay movie={movie} />;
+};
+
+export { Details, DetailsDisplay };
