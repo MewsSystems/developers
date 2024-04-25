@@ -1,6 +1,10 @@
 import React, { FC } from 'react';
 import { UseMovies } from '../../hook/useMovies';
-import { StyledLegend } from './SearchControl.styled';
+import {
+  StyledButton,
+  StyledFieldSet,
+  StyledLegend,
+} from './SearchControl.styled';
 
 interface Props
   extends Pick<
@@ -20,12 +24,12 @@ const SearchControls: FC<Props> = ({
   id,
 }) => {
   return showControls ? (
-    <fieldset>
+    <StyledFieldSet>
       <StyledLegend>{`navigation-controls-${id}`}</StyledLegend>
-      <button onClick={decrementPageNumber}>Back</button>
+      <StyledButton onClick={decrementPageNumber}>Back</StyledButton>
       {`${page} of ${numberOfPages}`}
-      <button onClick={incrementPageNumber}>Next</button>
-    </fieldset>
+      <StyledButton onClick={incrementPageNumber}>Next</StyledButton>
+    </StyledFieldSet>
   ) : null;
 };
 

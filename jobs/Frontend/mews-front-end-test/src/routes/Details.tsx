@@ -2,29 +2,31 @@ import React, { FC } from 'react';
 import { Header } from '../components/Header/Header';
 import { StyledAppContainer } from './App.styled';
 import { getCurrentMoviesSelector } from '../redux/selectors';
-import { Link } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks/hooks';
 import { Movie } from '../api/sendRequest';
+import { StyledLink, StyledParagraph } from './Details.styled.';
 
 interface Props {
   movie: Movie;
 }
 
 const DetailsDisplay: FC<Props> = ({ movie }) => {
+  const releaseDate = new Date(movie.release_date).toLocaleDateString();
+
   return (
     <StyledAppContainer>
       <Header />
-      <Link to={'/'}>Back to search</Link>
-      <div>Just a load of stuff about your film</div>
+      <StyledLink to={'/'}>Back to search</StyledLink>
+      <h2>{movie.title}</h2>
 
       <section>
-        <p>{`Adult content: ${movie.adult ? 'Yes' : 'No'}`}</p>
-        <p>{`Movie ID: ${movie.id}`}</p>
-        <p>{`Overview: ${movie.overview}`}</p>
-        <p>{`Popularity: ${movie.popularity}`}</p>
-        <p>{`Release date: ${movie.release_date}`}</p>
-        <p>{`Average rating: ${movie.vote_average}`}</p>
-        <p>{`Vote count: ${movie.vote_count}`}</p>
+        <StyledParagraph>{`Adult content: ${movie.adult ? 'Yes' : 'No'}`}</StyledParagraph>
+        <StyledParagraph>{`Movie ID: ${movie.id}`}</StyledParagraph>
+        <StyledParagraph>{`Overview: ${movie.overview}`}</StyledParagraph>
+        <StyledParagraph>{`Popularity: ${movie.popularity}`}</StyledParagraph>
+        <StyledParagraph>{`Release date: ${releaseDate}`}</StyledParagraph>
+        <StyledParagraph>{`Average rating: ${movie.vote_average}`}</StyledParagraph>
+        <StyledParagraph>{`Vote count: ${movie.vote_count}`}</StyledParagraph>
       </section>
     </StyledAppContainer>
   );

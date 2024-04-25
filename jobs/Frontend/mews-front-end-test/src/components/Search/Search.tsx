@@ -47,10 +47,6 @@ const SearchDisplay: FC<SearchDisplayProps> = ({ useMoviesBundle }) => {
                 <Link
                   to={'/details'}
                   onClick={() => {
-                    console.log('here we go');
-
-                    console.log("movie we're putting into the store: ", movie);
-
                     dispatch(setCurrentMovie(movie));
                     dispatch(
                       setCurrentSearch({

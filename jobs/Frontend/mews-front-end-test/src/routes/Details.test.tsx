@@ -14,7 +14,7 @@ describe('DetailsDisplay', () => {
     ).toBeInTheDocument();
     expect(await screen.findByText(/popularity: 92.99/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(/release date: 2012-12-20/i),
+      await screen.findByText(/release date: 20\/12\/2012/i),
     ).toBeInTheDocument();
     expect(
       await screen.findByText(/average rating: 6.62/i),
