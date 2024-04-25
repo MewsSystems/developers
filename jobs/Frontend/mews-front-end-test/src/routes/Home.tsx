@@ -1,10 +1,9 @@
 import React from 'react';
-import './App.css';
-import { StyledAppContainer } from './App.styled';
+import { StyledAppContainer } from './Home.styled';
 import { Search } from '../components/Search/Search';
 import { Header } from '../components/Header/Header';
 
-function App() {
+function Home() {
   return (
     <StyledAppContainer>
       <Header />
@@ -13,4 +12,4 @@ function App() {
   );
 }
 
-export { App };
+export { Home };

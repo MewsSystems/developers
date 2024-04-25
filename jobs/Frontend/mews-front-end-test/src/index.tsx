@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { App } from './routes/App';
+import { Home } from './routes/Home';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     loader: redirectLoader,
     errorElement: <ErrorPage />,
   },
-  { path: 'search', element: <App />, errorElement: <ErrorPage /> },
+  { path: 'search', element: <Home />, errorElement: <ErrorPage /> },
   { path: 'details', element: <Details /> },
 ]);
 

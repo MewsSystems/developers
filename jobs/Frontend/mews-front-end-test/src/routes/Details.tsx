@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Header } from '../components/Header/Header';
-import { StyledAppContainer } from './App.styled';
+import { StyledAppContainer } from './Home.styled';
 import { getCurrentMoviesSelector } from '../redux/selectors';
 import { useAppSelector } from '../redux/hooks/hooks';
 import { Movie } from '../api/sendRequest';
