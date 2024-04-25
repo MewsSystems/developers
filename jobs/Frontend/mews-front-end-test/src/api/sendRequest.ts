@@ -2,7 +2,7 @@ import { apiKey } from '../env';
 
 export interface Movie {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
   genre_ids: number[];
   id: number;
   original_language: string;
@@ -63,11 +63,11 @@ const getConfigRequest = () => {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: apiKey,
+      Authorization: `Bearer ${apiKey}`,
     },
   };
 
   return sendRequest(url, options);
 };
 
-export { sendRequest, getMoviesRequest };
+export { sendRequest, getMoviesRequest, getConfigRequest };

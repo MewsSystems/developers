@@ -6,6 +6,8 @@ import {
   sendRequest,
 } from '../api/sendRequest';
 import { initialMovieState, reducer } from './reducer';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from '@reduxjs/toolkit';
 
 export interface UseMovies {
   movies: Movie[];
@@ -15,9 +17,12 @@ export interface UseMovies {
   numberOfPages: number;
   incrementPageNumber: () => void;
   decrementPageNumber: () => void;
+  dispatch: Dispatch;
 }
 
 const useMovies = (): UseMovies => {
+  const reduxDispatch = useDispatch();
+
   const [moviesState, dispatch] = useReducer(reducer, initialMovieState);
 
   const { movies, searchQuery, page, numberOfPages } = moviesState;
@@ -43,7 +48,7 @@ const useMovies = (): UseMovies => {
   };
 
   const setSearchQuery = (query: string) => {
-    dispatch({ searchQuery: query });
+    dispatch({ searchQuery: query, page: 1 });
   };
 
   const sendMovieRequest = useCallback(sendRequest, [sendRequest]);
@@ -55,6 +60,7 @@ const useMovies = (): UseMovies => {
           dispatch({
             movies: response.results,
             numberOfPages: response.total_pages,
+            page: response.page,
           });
 
           console.log('response: ', response);
@@ -70,11 +76,12 @@ const useMovies = (): UseMovies => {
   return {
     movies,
     searchQuery,
-    setSearchQuery,
     numberOfPages,
     page,
+    setSearchQuery,
     incrementPageNumber,
     decrementPageNumber,
+    dispatch: reduxDispatch,
   };
 };
 

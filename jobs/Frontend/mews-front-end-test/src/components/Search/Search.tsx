@@ -1,7 +1,7 @@
-import React, { Children } from 'react';
+import React, { Children, FC } from 'react';
 import { MovieCard } from '../MovieCard/MovieCard';
 import { StyledListItem, StyledMain } from './Search.styled';
-import { useMovies } from '../../hook/useMovies';
+import { UseMovies, useMovies } from '../../hook/useMovies';
 import { SearchBox } from '../SearchBox/SearchBox';
 import { SearchControls } from '../SearchControls/SearchControls';
 import { Link } from 'react-router-dom';
@@ -9,10 +9,12 @@ import {
   setCurrentMovie,
   setCurrentSearch,
 } from '../../redux/movies/movieSlice';
-import { useDispatch } from 'react-redux';
 
-const Search = () => {
-  const dispatch = useDispatch();
+interface SearchDisplayProps {
+  useMoviesBundle: UseMovies;
+}
+
+const SearchDisplay: FC<SearchDisplayProps> = ({ useMoviesBundle }) => {
   const {
     movies,
     searchQuery,
@@ -21,7 +23,8 @@ const Search = () => {
     numberOfPages,
     incrementPageNumber,
     decrementPageNumber,
-  } = useMovies();
+    dispatch,
+  } = useMoviesBundle;
 
   return (
     <StyledMain>
@@ -33,6 +36,7 @@ const Search = () => {
         incrementPageNumber={incrementPageNumber}
         decrementPageNumber={decrementPageNumber}
         showControls={Boolean(searchQuery)}
+        id={'top'}
       />
 
       <ul>
@@ -72,9 +76,12 @@ const Search = () => {
         incrementPageNumber={incrementPageNumber}
         decrementPageNumber={decrementPageNumber}
         showControls={Boolean(searchQuery)}
+        id={'bottom'}
       />
     </StyledMain>
   );
 };
 
-export { Search };
+const Search = () => <SearchDisplay useMoviesBundle={useMovies()} />;
+
+export { Search, SearchDisplay };
