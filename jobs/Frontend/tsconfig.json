@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "jsx": "react",
+    "types": ["node"],
+    "esModuleInterop": true,
+  },
+}
