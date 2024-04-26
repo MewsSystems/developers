@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.ConsoleApp", ".\ExchangeRateFinder.ConsoleApp\ExchangeRateFinder.ConsoleApp.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Domain", ".\ExchangeRateUpgrader.Domain\ExchangeRateFinder.Domain.csproj", "{5823A292-06F8-4FC3-9DA4-80928C86BDB9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Infrastructure", ".\ExchangeRateUpdater.Infrastructure\ExchangeRateFinder.Infrastructure.csproj", "{8314D8B3-BC35-4553-B13F-17657E9EB022}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Application", ".\ExchangeRateUpdater.Application\ExchangeRateFinder.Application.csproj", "{769534B9-475A-4152-9D57-5B4E54A3FE09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateFinder.API", ".\ExchangeRateFinder.API\ExchangeRateFinder.API.csproj", "{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5823A292-06F8-4FC3-9DA4-80928C86BDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5823A292-06F8-4FC3-9DA4-80928C86BDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5823A292-06F8-4FC3-9DA4-80928C86BDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5823A292-06F8-4FC3-9DA4-80928C86BDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8314D8B3-BC35-4553-B13F-17657E9EB022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8314D8B3-BC35-4553-B13F-17657E9EB022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8314D8B3-BC35-4553-B13F-17657E9EB022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8314D8B3-BC35-4553-B13F-17657E9EB022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{769534B9-475A-4152-9D57-5B4E54A3FE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{769534B9-475A-4152-9D57-5B4E54A3FE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{769534B9-475A-4152-9D57-5B4E54A3FE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{769534B9-475A-4152-9D57-5B4E54A3FE09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C43885F-425D-4AD1-8969-806130106D17}
+	EndGlobalSection
+EndGlobal
