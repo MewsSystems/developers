@@ -15,6 +15,7 @@
     "@types/node": "^16.18.96",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
+    "axios": "^1.6.8",
     "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.2.1",
     "react": "^18.2.0",
