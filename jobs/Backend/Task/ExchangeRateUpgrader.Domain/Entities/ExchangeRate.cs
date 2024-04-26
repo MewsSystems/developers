@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateFinder.Domain.Entities
 {
-    public class ExchangeRate
+    public class CalculatedExchangeRate
     {
         public string SourceCurrency { get; set; }
 

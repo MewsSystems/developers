@@ -1,4 +1,5 @@
 ﻿using ExchangeRateFinder.Application.Models;
+using ExchangeRateFinder.Domain.Entities;
 using ExchangeRateFinder.Domain.Services;
 using ExchangeRateFinder.Infrastructure.Models;
 using ExchangeRateFinder.Infrastructure.Services;

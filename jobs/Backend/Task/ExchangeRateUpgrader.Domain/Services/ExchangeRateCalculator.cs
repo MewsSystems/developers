@@ -4,14 +4,14 @@ namespace ExchangeRateFinder.Domain.Services
 {
     public interface IExchangeRateCalculator
     {
-        ExchangeRate CalculateExchangeRate(int amount, decimal rate, string sourceCurrency, string targetCurrency);
+        CalculatedExchangeRate CalculateExchangeRate(int amount, decimal rate, string sourceCurrency, string targetCurrency);
     }
 
     public class ExchangeRateCalculator : IExchangeRateCalculator
     {
-        public ExchangeRate CalculateExchangeRate(int amount, decimal rate, string sourceCurrency, string targetCurrency)
+        public CalculatedExchangeRate CalculateExchangeRate(int amount, decimal rate, string sourceCurrency, string targetCurrency)
         {
-            return new ExchangeRate
+            return new CalculatedExchangeRate
             {
                 SourceCurrency = sourceCurrency,
                 TargetCurrency = targetCurrency,
