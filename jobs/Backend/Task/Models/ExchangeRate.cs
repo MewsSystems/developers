@@ -17,7 +17,7 @@
 
         public override string ToString()
         {
-            return $"In {Amount} {TargetCurrency} is {Rate} {SourceCurrency}";
+            return $"In {Amount} {SourceCurrency} is {Rate} {TargetCurrency}";
         }
     }
 }

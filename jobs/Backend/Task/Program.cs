@@ -55,13 +55,13 @@ app.Run();
 
 //try
 //{
-    
+
 //    var rates = await provider.GetExchangeRates(currencies);
 
 //    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
 //    foreach (var rate in rates)
 //    {
-//        Console.WriteLine($"{rate?.Amount} {rate?.TargetCurrency.Code} = {rate?.Rate} {rate?.SourceCurrency.Code}");
+//        Console.WriteLine($"{rate?.Amount} {rate?.SourceCurrency.Code} = {rate?.Rate} {rate?.TargetCurrency.Code}");
 //    }
 //}
 //catch (Exception e)
