@@ -1,13 +1,7 @@
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-import translation from "./en/translation.json";
-
-export const resources = {
-  en: {
-    translation,
-  },
-} as const;
+import translation from "../public/i18n/en/translation.json";
 
 i18n
   .use(LanguageDetector)
@@ -17,7 +11,11 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    resources,
+    resources: {
+      en: {
+        translation,
+      },
+    },
   });
 
 export default i18n;
