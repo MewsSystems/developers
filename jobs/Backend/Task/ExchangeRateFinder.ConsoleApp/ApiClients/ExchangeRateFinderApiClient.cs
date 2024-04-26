@@ -16,7 +16,7 @@ namespace ExchangeRateFinder.ConsoleApp.ApiClients
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<CalculatedExchangeRateResponse>> CallApiAsync(string apiUrl)
+        public async Task<List<CalculatedExchangeRateResponse>> GetCalculatedExchangeRatesAsync(string apiUrl)
         {
             try
             {

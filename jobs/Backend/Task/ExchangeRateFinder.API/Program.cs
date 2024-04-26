@@ -39,31 +39,27 @@ var updateCZKExchangeRateData = app.Services.GetRequiredService<IUpdateCZKExchan
 // Update CZK exchange rate data on startup
 updateCZKExchangeRateData.UpdateDataAsync();
 
-// Schedule the update of CZK exchange rate data to run daily at 14:30 PM
-// This is when it is update 
-
+// Schedule the update of CZK exchange rate data to run daily at 14:35 PM
+// It is mentioned in their website that the data is updated daily at 14:30 PM
 ScheduleUpdateService(updateCZKExchangeRateData);
 
 app.Run();
 
-// Function to schedule the update service
 void ScheduleUpdateService(IUpdateCZKExchangeRateDataService service)
 {
-    // Get the time until the next run
     var timeUntilNextRun = GetTimeUntilNextRun();
 
-    // Set up a timer to run the service
     var scheduler = new Timer(async (state) =>
     {
         await service.UpdateDataAsync();
-    }, null, timeUntilNextRun, TimeSpan.FromHours(24)); // Repeat every 24 hours
+    }, null, timeUntilNextRun, TimeSpan.FromHours(24)); 
 }
 
-// Function to calculate the time until the next run at 2:30 AM
+// Function to calculate the time until the next run at 14:35 PM
 TimeSpan GetTimeUntilNextRun()
 {
     var now = DateTime.Now;
-    var nextRun = new DateTime(now.Year, now.Month, now.Day, 14, 30, 0);
+    var nextRun = new DateTime(now.Year, now.Month, now.Day, 14, 35, 0);
     if (now > nextRun)
     {
         nextRun = nextRun.AddDays(1);

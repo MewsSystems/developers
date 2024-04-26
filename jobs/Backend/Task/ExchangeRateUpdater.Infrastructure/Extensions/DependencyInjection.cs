@@ -1,5 +1,4 @@
-﻿using ExchangeRateFinder.Infrastructure.Interfaces;
-using ExchangeRateFinder.Infrastructure.Models;
+﻿using ExchangeRateFinder.Infrastructure.Models;
 using ExchangeRateFinder.Infrastructure.Services;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Infrastructure.Repositories;
@@ -15,7 +14,7 @@ namespace ExchangeRateFinder.Infrastructure.Extensions
             services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
             services.AddTransient<IExchangeRateParser, ExchangeRateParser>();
             services.AddTransient<IWebDataFetcher, WebDataFetcher>();
-            services.AddTransient<ICachingService<ExchangeRate>, CachingService<ExchangeRate>>();
+            services.AddSingleton<ICachingService<ExchangeRate>, CachingService<ExchangeRate>>();
 
             services.AddDbContext<ExchangeRateDbContext>(options =>
                     options.UseInMemoryDatabase("ExchangeRates"), ServiceLifetime.Singleton);

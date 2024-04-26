@@ -1,5 +1,4 @@
-﻿using ExchangeRateFinder.Application.Models;
-using ExchangeRateFinder.Domain.Entities;
+﻿using ExchangeRateFinder.Domain.Entities;
 using ExchangeRateFinder.Domain.Services;
 using ExchangeRateFinder.Infrastructure.Models;
 using ExchangeRateFinder.Infrastructure.Services;
@@ -10,7 +9,7 @@ namespace ExchangeRateUpdater.Application
 {
     public interface IExchangeRateService 
     {
-        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencies);
+        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes);
     }
     public class ExchangeRateService : IExchangeRateService
     {
@@ -31,18 +30,18 @@ namespace ExchangeRateUpdater.Application
             _logger = logger;
         }
 
-        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencies)
+        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes)
         {
-            if (currencies == null)
-                throw new ArgumentNullException(nameof(currencies));
+            if (currencyCodes == null)
+                throw new ArgumentNullException(nameof(currencyCodes));
 
             //Do different 
             var calculatedExchangeRates = new List<CalculatedExchangeRate>();
 
-            foreach (var currency in currencies)
+            foreach (var currencyCode in currencyCodes)
             {
-                var exchangeRateModel = await _cachingService.GetOrAddAsync(currency, 
-                    async () => await _exchangeRateRepository.GetByCodeAsync(currency));
+                var exchangeRateModel = await _cachingService.GetOrAddAsync($"{sourceCurrency}-{currencyCode}", 
+                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrency));
 
                 if(exchangeRateModel != null)
                 {
@@ -61,7 +60,7 @@ namespace ExchangeRateUpdater.Application
                 }
                 else
                 {
-                    _logger.LogError($"Exchange rate for currency {currencies} was not found.");
+                    _logger.LogWarning($"Exchange rate for currency {currencyCode} was not found.");
                 }
             }
 

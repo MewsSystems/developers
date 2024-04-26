@@ -7,8 +7,8 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
     public interface IExchangeRateRepository
     {
         Task<List<ExchangeRate>> GetAllAsync();
-        Task<ExchangeRate> GetByCodeAsync(string code);
-        Task UpdateAllAsync(List<ExchangeRate> newData);
+        Task<ExchangeRate> GetAsync(string code, string sourceCurrency);
+        Task UpdateAllAsync(string sourceCurrnecy, List<ExchangeRate> newData);
     }
 
     public class ExchangeRateRepository : IExchangeRateRepository
@@ -26,21 +26,21 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
             return await _context.ExchangeRates.ToListAsync();
         }
 
-        public async Task<ExchangeRate> GetByCodeAsync(string code)
+        public async Task<ExchangeRate> GetAsync(string code, string sourceCurrency)
         {
-            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.Code == code);
+            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.Code == code && e.SourceCurrency == sourceCurrency);
         }
 
-        public async Task UpdateAllAsync(List<ExchangeRate> newData)
+        public async Task UpdateAllAsync(string sourceCurrnecy, List<ExchangeRate> newData)
         {
             var existingData = await GetAllAsync();
 
             foreach(var newDataItem in newData)
             {
-                var existingItem = await GetByCodeAsync(newDataItem.Code);
+                var existingItem = await GetAsync(newDataItem.Code, sourceCurrnecy);
                 if(existingItem != null)
                 {
-                    await UpdateAsync(newDataItem);
+                    await UpdateAsync(existingItem, newDataItem);
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
             {
                 if (!newData.Any(n => n.Code == existingItem.Code))
                 {
-                    await DeleteAsync(existingItem.Code);
+                    await DeleteAsync(existingItem.Code, sourceCurrnecy);
                 }
             }
         }
@@ -64,15 +64,18 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        private async Task UpdateAsync(ExchangeRate exchangeRate)
+        private async Task UpdateAsync(ExchangeRate existingEntity, ExchangeRate updatedEntity)
         {
-            _context.Entry(exchangeRate).State = EntityState.Modified;
+            // That should be the only updated properties
+            existingEntity.Rate = updatedEntity.Rate;
+            existingEntity.Amount = updatedEntity.Amount;
+
             await _context.SaveChangesAsync();
         }
 
-        private async Task DeleteAsync(string code)
+        private async Task DeleteAsync(string code, string sourceCurrency)
         {
-            var exchangeRate = await GetByCodeAsync(code);
+            var exchangeRate = await GetAsync(code, sourceCurrency);
             if (exchangeRate != null)
             {
                 _context.ExchangeRates.Remove(exchangeRate);

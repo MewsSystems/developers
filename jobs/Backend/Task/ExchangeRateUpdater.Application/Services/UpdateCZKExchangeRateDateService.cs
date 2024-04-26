@@ -43,17 +43,17 @@ namespace ExchangeRateFinder.Application
             // Get the data from source 
             try
             {
-                _logger.LogInformation("Updating of CZK exchange rate data has started.");
+                _logger.LogInformation($"Updating of CZK exchange rate data has started at {DateTime.Now}");
 
                 var exchangeRateData = await _webDataFetcher.GetDataFromUrl(_options.Url);
                 // Parse it 
                 var exchangeRates = _exchangeRateParser.Parse(SourceCurrency, exchangeRateData);
 
                 // Update the database
-                await _exchangeRateRepository.UpdateAllAsync(exchangeRates);
+                await _exchangeRateRepository.UpdateAllAsync(SourceCurrency, exchangeRates);
 
                 // Update the cache
-                var exchangeRatesForCache = exchangeRates.ToDictionary(x => x.Code, x => x);
+                var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{SourceCurrency}-{x.Code}", x => x);
                 _cachingService.UpdateCache(exchangeRatesForCache);
 
                 _logger.LogInformation("Updating of CZK exchange rate data has finished.");

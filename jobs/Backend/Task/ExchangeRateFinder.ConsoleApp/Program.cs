@@ -22,21 +22,21 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        private static string sourceCurrency = "CZK";
+        private const string sourceCurrency = "CZK";
+        private const string API_URL = "https://localhost:7210";
 
         static async Task Main(string[] args)
         {
 
-            // We need that since we want to make sure the API is running and have ingested initially the 
-            Thread.Sleep(5000);
+            // Sleep for 5 seconds to ensure the API is running
+            WaitForApiInitializationAsync();
 
-            string currencyCodes = string.Join(",", currencies.Select(c => c.Code));
-            string apiUrl = $"https://localhost:7210/exchange-rates?sourceCurrency={sourceCurrency}&targetCurrencies={currencyCodes}";
+            string apiUrl = ConstructApiUrl(sourceCurrency, currencies);
             ExchangeRateFinderApiClient apiClient = new ExchangeRateFinderApiClient();
 
             try
             {
-                var exchangeRateResponse = await apiClient.CallApiAsync(apiUrl);
+                var exchangeRateResponse = await apiClient.GetCalculatedExchangeRatesAsync(apiUrl);
                 foreach(var exchangeRate in exchangeRateResponse)
                 {
                     Console.WriteLine(exchangeRate.ToString());
@@ -48,6 +48,17 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private static void WaitForApiInitializationAsync()
+        {
+            Thread.Sleep(5000);
+        }
+
+        private static string ConstructApiUrl(string sourceCurrency, IEnumerable<Currency> currencies)
+        {
+            var currencyCodes = string.Join(",", currencies.Select(c => c.Code));
+            return $"{API_URL}/exchange-rates?sourceCurrency={sourceCurrency}&targetCurrencies={currencyCodes}";
         }
     }
 }

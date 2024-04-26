@@ -21,7 +21,7 @@ namespace ExchangeRateFinder.Domain.Services
 
         private decimal CalculateRate(int amount, decimal rate)
         {
-            return (amount > 1) ? rate / amount : rate;
+            return (amount > 1) ?  amount / rate : rate;
         }
     }
 }
