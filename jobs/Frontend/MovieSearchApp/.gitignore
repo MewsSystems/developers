@@ -1,0 +1,9 @@
+.DS_Store
+/.idea
+node_modules
+/.cache
+/build
+/public/build
+.env
+
+
