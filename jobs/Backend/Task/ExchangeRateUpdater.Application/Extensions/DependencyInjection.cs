@@ -1,6 +1,4 @@
-﻿using ExchangeRateFinder.Application.Configuration;
-using ExchangeRateUpdater.Application;
-using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater.Application;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateFinder.Application.Extensions
@@ -10,7 +8,7 @@ namespace ExchangeRateFinder.Application.Extensions
         public static void AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IExchangeRateService, ExchangeRateService>();
-            services.AddSingleton<IUpdateExchangeRateDateService, UpdateExchangeRateDateService>();
+            services.AddSingleton<IUpdateCZKExchangeRateDataService, UpdateCZKExchangeRateDataService>();
         }
     }
 }

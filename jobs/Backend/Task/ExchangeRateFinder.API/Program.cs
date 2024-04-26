@@ -34,17 +34,20 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Get the update service
-var updateService = app.Services.GetRequiredService<IUpdateExchangeRateDateService>();
+var updateCZKExchangeRateData = app.Services.GetRequiredService<IUpdateCZKExchangeRateDataService>();
 
-updateService.UpdateDataAsync();
+// Update CZK exchange rate data on startup
+updateCZKExchangeRateData.UpdateDataAsync();
 
-// Schedule the update service to run daily at 2:30 AM
-ScheduleUpdateService(updateService);
+// Schedule the update of CZK exchange rate data to run daily at 14:30 PM
+// This is when it is update 
+
+ScheduleUpdateService(updateCZKExchangeRateData);
 
 app.Run();
 
 // Function to schedule the update service
-void ScheduleUpdateService(IUpdateExchangeRateDateService service)
+void ScheduleUpdateService(IUpdateCZKExchangeRateDataService service)
 {
     // Get the time until the next run
     var timeUntilNextRun = GetTimeUntilNextRun();
@@ -60,7 +63,7 @@ void ScheduleUpdateService(IUpdateExchangeRateDateService service)
 TimeSpan GetTimeUntilNextRun()
 {
     var now = DateTime.Now;
-    var nextRun = new DateTime(now.Year, now.Month, now.Day, 2, 30, 0);
+    var nextRun = new DateTime(now.Year, now.Month, now.Day, 14, 30, 0);
     if (now > nextRun)
     {
         nextRun = nextRun.AddDays(1);

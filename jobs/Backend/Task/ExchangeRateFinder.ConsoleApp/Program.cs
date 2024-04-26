@@ -1,11 +1,4 @@
-﻿using ExchangeRateFinder;
-using ExchangeRateFinder.Application.Extensions;
-using ExchangeRateFinder.Infrastructure.Extensions;
-using ExchangeRateSyncService.Extensions;
-using ExchangeRateUpdater.Application;
-using ExchangeRateUpdater.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using ExchangeRateFinder.ConsoleApp.ApiClients;
 using System;
 using System.Collections.Generic;
 using System.Linq;

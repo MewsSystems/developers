@@ -1,6 +1,6 @@
-﻿namespace ExchangeRateUpdater.Application
+﻿namespace ExchangeRateFinder.Application.Models
 {
-    public class ExchangeRateViewModel
+    public class CalculatedExchangeRate
     {
         public string SourceCurrency { get; set; }
 

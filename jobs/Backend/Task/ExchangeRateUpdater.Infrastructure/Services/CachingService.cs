@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateFinder.Infrastructure.Caching
+﻿namespace ExchangeRateFinder.Infrastructure.Services
 {
     public interface ICachingService<T>
     {

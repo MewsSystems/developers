@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-using ExchangeRateFinder.Infrastructure.Interfaces;
 using ExchangeRateFinder.Infrastructure.Models;
 
 
 namespace ExchangeRateUpdater.Infrastructure.Repositories
 {
+    public interface IExchangeRateRepository
+    {
+        Task<List<ExchangeRate>> GetAllAsync();
+        Task<ExchangeRate> GetByCodeAsync(string code);
+        Task UpdateAllAsync(List<ExchangeRate> newData);
+    }
 
     public class ExchangeRateRepository : IExchangeRateRepository
 

@@ -1,11 +1,11 @@
-﻿using ExchangeRateFinder.Domain.Entities;
+﻿using ExchangeRateFinder.ConsoleApp.Responses;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ExchangeRateFinder
+namespace ExchangeRateFinder.ConsoleApp.ApiClients
 {
     class ExchangeRateFinderApiClient
     {
@@ -16,15 +16,16 @@ namespace ExchangeRateFinder
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<ExchangeRateResponse>> CallApiAsync(string apiUrl)
+        public async Task<List<CalculatedExchangeRateResponse>> CallApiAsync(string apiUrl)
         {
-            try { 
-            
+            try
+            {
+
                 HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
                 response.EnsureSuccessStatusCode();
-                var  json =  await response.Content.ReadAsStringAsync();
+                var json = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<List<ExchangeRateResponse>>(json);
+                return JsonConvert.DeserializeObject<List<CalculatedExchangeRateResponse>>(json);
             }
             catch (HttpRequestException ex)
             {

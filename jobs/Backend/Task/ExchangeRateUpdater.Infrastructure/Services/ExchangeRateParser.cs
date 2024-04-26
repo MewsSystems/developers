@@ -1,4 +1,5 @@
 ﻿using ExchangeRateFinder.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Globalization;
 namespace ExchangeRateFinder.Infrastructure.Services
 {
@@ -39,6 +40,8 @@ namespace ExchangeRateFinder.Infrastructure.Services
                 }
                 else
                 {
+                    //TO DO: Log instead of error 
+                    
                     throw new FormatException($"Invalid number of fields in line {i}: {lines[i]}");
                 }
             }

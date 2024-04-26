@@ -1,5 +1,4 @@
-﻿using ExchangeRateFinder.Infrastructure.Caching;
-using ExchangeRateFinder.Infrastructure.Interfaces;
+﻿using ExchangeRateFinder.Infrastructure.Interfaces;
 using ExchangeRateFinder.Infrastructure.Models;
 using ExchangeRateFinder.Infrastructure.Services;
 using ExchangeRateUpdater.Infrastructure;
