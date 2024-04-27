@@ -1,3 +1,4 @@
+using ExchangeRateFinder.API.Extensions;
 using ExchangeRateFinder.Application;
 using ExchangeRateFinder.Application.Configuration;
 using ExchangeRateFinder.Application.Extensions;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<CBNConfiguration>(builder.Configuration.GetSection(nameof(CBNConfiguration)));
 
 // Add services to the container.
+builder.Services.AddApi();
 builder.Services.AddDomain();
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();

@@ -32,29 +32,6 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         }
 
         [Fact]
-        public async void GetExchangeRates_Throws_WhenCurrenciesIsNull()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                async() => await _target.GetExchangeRates("CZK", null));
-        }
-
-        [Fact]
-        public async void GetExchangeRates_Throws_WhenSourceCurrencyCodeIsEmpty()
-        {
-            var currencies = new List<string> { "USD", "BGN" };
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                async () => await _target.GetExchangeRates("", currencies));
-        }
-
-        [Fact]
-        public async void GetExchangeRates_Throws_WhenSourceCurrencyCodeIsNull()
-        {
-            var currencies = new List<string> { "USD", "BGN" };
-            await Assert.ThrowsAsync<ArgumentNullException>(
-                async () => await _target.GetExchangeRates(null, currencies));
-        }
-
-        [Fact]
         public async void GetExchangeRates_ReturnsNull_WhenExchangeRateIsNull()
         {
             // Arrange
