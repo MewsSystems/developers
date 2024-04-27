@@ -1,5 +1,6 @@
 using ExchangeRateFinder.API.Mappers;
 using ExchangeRateFinder.API.RequestModels;
+using ExchangeRateFinder.API.ViewModels;
 using ExchangeRateUpdater.Application;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,9 @@ namespace ExchangeRateFinder.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<CalculatedExchangeRateResponseModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetExchangeRates([FromQuery] ExchangeRateRequestModel request)
         {
             if (!ModelState.IsValid)
