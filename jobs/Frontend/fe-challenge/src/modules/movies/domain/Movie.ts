@@ -1,11 +1,13 @@
+import { formatDate } from '@/modules/movies/domain/utils/formatDate';
+
 export interface MovieData {
   id: number;
   title: string;
   overview: string;
   voteAverage: number;
   releaseDate: string;
-  backdropImage: string;
-  posterImage: string;
+  backdropImage?: string;
+  posterImage?: string;
 }
 
 export class Movie {
@@ -14,8 +16,8 @@ export class Movie {
   private readonly _overview: string;
   private readonly _voteAverage: number;
   private readonly _releaseDate: string;
-  private readonly _backdropImage: string;
-  private readonly _posterImage: string;
+  private readonly _backdropImage?: string;
+  private readonly _posterImage?: string;
 
   constructor({
     id,
@@ -53,6 +55,10 @@ export class Movie {
 
   get releaseDate() {
     return this._releaseDate;
+  }
+
+  get releaseDateFormatted() {
+    return this._releaseDate ? formatDate(this._releaseDate) : '';
   }
 
   get backdropImage() {

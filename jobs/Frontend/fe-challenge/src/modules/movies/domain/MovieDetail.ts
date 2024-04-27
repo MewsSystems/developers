@@ -3,7 +3,7 @@ import { Movie, MovieData } from '@/modules/movies/domain/Movie';
 export interface CastPerson {
   characterName: string;
   originalName: string;
-  profileImage: string;
+  profileImage?: string;
 }
 
 interface MovieDetailData extends MovieData {

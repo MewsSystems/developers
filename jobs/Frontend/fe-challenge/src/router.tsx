@@ -4,7 +4,7 @@ import ErrorPage from '@/pages/ErrorPage';
 import Search from '@/pages/Search';
 import Movie from '@/pages/Movie';
 
-const router = createBrowserRouter([
+export const routes = [
   {
     path: '/',
     element: <Layout />,
@@ -22,6 +22,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+const router = createBrowserRouter(routes);
 
 export default router;

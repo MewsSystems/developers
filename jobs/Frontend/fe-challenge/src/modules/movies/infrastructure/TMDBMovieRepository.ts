@@ -67,8 +67,10 @@ export class TMDBMovieRepository implements MovieRepository {
   private buildImageURL(
     imagePath: string,
     imageSize: BackdropSizes | PosterSizes | ProfileSizes,
-  ) {
-    return `${API_IMAGE_PATH}/${imageSize}/${imagePath}`;
+  ): string | undefined {
+    return imagePath
+      ? `${API_IMAGE_PATH}/${imageSize}/${imagePath}`
+      : undefined;
   }
 
   private buildBackdropImageURL(imagePath: string, imageSize: BackdropSizes) {
