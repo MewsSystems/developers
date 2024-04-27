@@ -17,12 +17,12 @@ namespace ExchangeRateFinder.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetExchangeRates([FromQuery]string sourceCurrency, string targetCurrencies)
+        public async Task<IActionResult> GetExchangeRates([FromQuery]string sourceCurrencyCode, string targetCurrencyCodes)
         {
             try
             {
-                string[] currencyCodes = targetCurrencies.Split(',');
-                var exchangeRates = await _exchangeRateService.GetExchangeRates(sourceCurrency, currencyCodes);
+                string[] currencyCodes = targetCurrencyCodes.Split(',');
+                var exchangeRates = await _exchangeRateService.GetExchangeRates(sourceCurrencyCode, currencyCodes);
 
                 return Ok(exchangeRates);
             }

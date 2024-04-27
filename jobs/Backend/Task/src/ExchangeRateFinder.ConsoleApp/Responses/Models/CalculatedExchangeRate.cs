@@ -2,15 +2,15 @@
 {
     public class CalculatedExchangeRate
     {
-        public string SourceCurrency { get; set; }
+        public string SourceCurrencyCode { get; set; }
 
-        public string TargetCurrency { get; set; }
+        public string TargetCurrencyCode { get; set; }
 
-        public decimal Value { get; set; }
+        public decimal Rate { get; set; }
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value:F3}";
+            return $"{SourceCurrencyCode}/{TargetCurrencyCode}={Rate:F3}";
         }
     }
 }

@@ -7,8 +7,8 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
     public interface IExchangeRateRepository
     {
         Task<List<ExchangeRate>> GetAllAsync(CancellationToken cancellation = default);
-        Task<ExchangeRate> GetAsync(string code, string sourceCurrency, CancellationToken cancellation = default);
-        Task UpdateAllAsync(string sourceCurrency, List<ExchangeRate> newData, CancellationToken cancellation = default);
+        Task<ExchangeRate> GetAsync(string code, string sourceCurrencyCode, CancellationToken cancellation = default);
+        Task UpdateAllAsync(string sourceCurrencyCode, List<ExchangeRate> newData, CancellationToken cancellation = default);
     }
 
     public class ExchangeRateRepository : IExchangeRateRepository
@@ -26,18 +26,18 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
             return await _context.ExchangeRates.ToListAsync(cancellation);
         }
 
-        public async Task<ExchangeRate> GetAsync(string code, string sourceCurrency, CancellationToken cancellation = default)
+        public async Task<ExchangeRate> GetAsync(string code, string sourceCurrencyCode, CancellationToken cancellation = default)
         {
-            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.CurrencyCode == code && e.SourceCurrency == sourceCurrency, cancellation);
+            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.TargetCurrencyCode == code && e.SourceCurrencyCode == sourceCurrencyCode, cancellation);
         }
 
-        public async Task UpdateAllAsync(string sourceCurrency, List<ExchangeRate> newData, CancellationToken cancellationToken = default)
+        public async Task UpdateAllAsync(string sourceCurrencyCode, List<ExchangeRate> newData, CancellationToken cancellationToken = default)
         {
             var existingData = await GetAllAsync(cancellationToken);
 
             foreach(var newDataItem in newData)
             {
-                var existingItem = await GetAsync(newDataItem.CurrencyCode, sourceCurrency, cancellationToken);
+                var existingItem = await GetAsync(newDataItem.TargetCurrencyCode, sourceCurrencyCode, cancellationToken);
                 if(existingItem != null)
                 {
                     await UpdateAsync(existingItem, newDataItem, cancellationToken);
@@ -50,9 +50,9 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
 
             foreach (var existingItem in existingData)
             {
-                if (!newData.Any(n => n.CurrencyCode == existingItem.CurrencyCode))
+                if (!newData.Any(n => n.TargetCurrencyCode == existingItem.TargetCurrencyCode))
                 {
-                    await DeleteAsync(existingItem.CurrencyCode, sourceCurrency, cancellationToken);
+                    await DeleteAsync(existingItem.TargetCurrencyCode, sourceCurrencyCode, cancellationToken);
                 }
             }
         }
@@ -67,15 +67,15 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
         private async Task UpdateAsync(ExchangeRate existingEntity, ExchangeRate updatedEntity, CancellationToken cancellationToken = default)
         {
             // That should be the only updated properties
-            existingEntity.Rate = updatedEntity.Rate;
+            existingEntity.Value = updatedEntity.Value;
             existingEntity.Amount = updatedEntity.Amount;
 
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task DeleteAsync(string code, string sourceCurrency, CancellationToken cancellationToken = default)
+        private async Task DeleteAsync(string code, string sourceCurrencyCode, CancellationToken cancellationToken = default)
         {
-            var exchangeRate = await GetAsync(code, sourceCurrency, cancellationToken);
+            var exchangeRate = await GetAsync(code, sourceCurrencyCode, cancellationToken);
             if (exchangeRate != null)
             {
                 _context.ExchangeRates.Remove(exchangeRate);

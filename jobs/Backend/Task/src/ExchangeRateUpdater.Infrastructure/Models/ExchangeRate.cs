@@ -2,14 +2,14 @@
 
 namespace ExchangeRateFinder.Infrastructure.Models
 {
-    [PrimaryKey(nameof(SourceCurrency), nameof(CurrencyCode))]
+    [PrimaryKey(nameof(SourceCurrencyCode), nameof(TargetCurrencyCode))]
     public class ExchangeRate
     {
-        public string CurrencyCode { get; set; } 
-        public string Country { get; set; }
-        public string SourceCurrency { get; set; }
-        public string TargetCurrency { get; set; }
+        public string SourceCurrencyCode { get; set; }
+        public string TargetCurrencyCode { get; set; }
+        public string TargetCurrencyName { get; set; }
+        public string CountryName { get; set; }
         public int Amount { get; set; }
-        public decimal Rate { get; set; }
+        public decimal Value { get; set; } 
     }
 }

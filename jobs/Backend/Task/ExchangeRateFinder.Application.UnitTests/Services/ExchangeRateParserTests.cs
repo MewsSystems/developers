@@ -20,55 +20,54 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         public void Parse_ReturnsExchangeRates_WhenDataIsValid()
         {
             // Arrange
-            string sourceCurrency = "CZK";
+            string sourceCurrencyCode = "CZK";
             string data = "25.04.2024 #81\n" +
                           "Header1|Header2|Header3|Header4|Header5\n" +
-                          "Country1|dollar|100|USD|1.25\n" +
-                          "Country2|euro|50|EUR|0.75";
+                          "CountryName1|dollar|100|USD|1.25\n" +
+                          "CountryName2|euro|50|EUR|0.75";
 
             // Act
-            var exchangeRates = _parser.Parse(sourceCurrency, data);
+            var exchangeRates = _parser.Parse(sourceCurrencyCode, data);
 
             // Assert
             Assert.NotNull(exchangeRates);
             Assert.Equal(2, exchangeRates.Count);
 
-            Assert.Equal("Country1", exchangeRates[0].Country);
-            Assert.Equal("dollar", exchangeRates[0].TargetCurrency);
-            Assert.Equal("CZK", exchangeRates[0].SourceCurrency);
+            Assert.Equal("CountryName1", exchangeRates[0].CountryName);
+            Assert.Equal("dollar", exchangeRates[0].TargetCurrencyName);
+            Assert.Equal("CZK", exchangeRates[0].SourceCurrencyCode);
             Assert.Equal(100, exchangeRates[0].Amount);
-            Assert.Equal("USD", exchangeRates[0].CurrencyCode);
-            Assert.Equal(1.25m, exchangeRates[0].Rate);
+            Assert.Equal(1.25m, exchangeRates[0].Value);
 
 
-            Assert.Equal("Country2", exchangeRates[1].Country);
-            Assert.Equal("euro", exchangeRates[1].TargetCurrency);
+            Assert.Equal("CountryName2", exchangeRates[1].CountryName);
+            Assert.Equal("euro", exchangeRates[1].TargetCurrencyName);
+            Assert.Equal("CZK", exchangeRates[1].SourceCurrencyCode);
             Assert.Equal(50, exchangeRates[1].Amount);
-            Assert.Equal("EUR", exchangeRates[1].CurrencyCode);
-            Assert.Equal(0.75m, exchangeRates[1].Rate);
-            Assert.Equal("CZK", exchangeRates[1].SourceCurrency);
+            Assert.Equal(0.75m, exchangeRates[1].Value);
         }
 
         [Fact]
-        public void Parse_SkipsExchangeRates_WhenDataIsMissing()
+        public void Parse_SkipsExchangeRate_WhenDataIsMissing()
         {
             // Arrange
-            string sourceCurrency = "CZK";
+            string sourceCurrencyCode = "CZK";
             string data = "25.04.2024 #81\n" +
                           "Header1|Header2|Header3|Header4|Header5\n" +
-                          "Country1|dollar|100|USD|1.25\n" +
-                          "Country2|euro|100|EUR"; // MissingData
+                          "CountryName1|dollar|100|USD|1.25\n" +
+                          "CountryName2|euro|100|EUR"; // MissingData
 
             // Act
-            var exchangeRates = _parser.Parse(sourceCurrency, data);
+            var exchangeRates = _parser.Parse(sourceCurrencyCode, data);
 
             // Assert
             Assert.NotNull(exchangeRates);
             Assert.Single(exchangeRates);
 
-            Assert.Equal("Country1", exchangeRates[0].Country);
-            Assert.Equal("dollar", exchangeRates[0].TargetCurrency);
-            Assert.Equal("CZK", exchangeRates[0].SourceCurrency);
+            Assert.Equal("CountryName1", exchangeRates[0].CountryName);
+            Assert.Equal("dollar", exchangeRates[0].TargetCurrencyName);
+            Assert.Equal("USD", exchangeRates[0].TargetCurrencyCode);
+            Assert.Equal("CZK", exchangeRates[0].SourceCurrencyCode);
         }
     }
 }

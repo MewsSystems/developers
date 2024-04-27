@@ -4,24 +4,24 @@ namespace ExchangeRateFinder.Domain.Services
 {
     public interface IExchangeRateCalculator
     {
-        CalculatedExchangeRate Calculate(int amount, decimal rate, string sourceCurrency, string targetCurrency);
+        CalculatedExchangeRate Calculate(int amount, decimal value, string SourceCurrencyCode, string TargetCurrencyCode);
     }
 
     public class ExchangeRateCalculator : IExchangeRateCalculator
     {
-        public CalculatedExchangeRate Calculate(int amount, decimal rate, string sourceCurrency, string targetCurrency)
+        public CalculatedExchangeRate Calculate(int amount, decimal value, string SourceCurrencyCode, string TargetCurrencyCode)
         {
             return new CalculatedExchangeRate
             {
-                SourceCurrency = sourceCurrency,
-                TargetCurrency = targetCurrency,
-                Value = CalculateRate(amount, rate)
+                SourceCurrencyCode = SourceCurrencyCode,
+                TargetCurrencyCode = TargetCurrencyCode,
+                Rate = CalculateRate(amount, value)
             };
         }
 
-        private decimal CalculateRate(int amount, decimal rate)
+        private decimal CalculateRate(int amount, decimal value)
         {
-            return (amount > 1) ?  amount / rate : rate;
+            return (amount > 1) ?  amount / value : value;
         }
     }
 }

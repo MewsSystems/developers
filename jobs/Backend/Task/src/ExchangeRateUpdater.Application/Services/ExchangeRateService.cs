@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.Application
 {
     public interface IExchangeRateService 
     {
-        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
+        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
     }
     public class ExchangeRateService : IExchangeRateService
     {
@@ -30,31 +30,31 @@ namespace ExchangeRateUpdater.Application
             _logger = logger;
         }
 
-        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default)
+        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default)
         {
-            if (currencyCodes == null || string.IsNullOrEmpty(sourceCurrency))
+            if (currencyCodes == null || string.IsNullOrEmpty(sourceCurrencyCode))
                 throw new ArgumentNullException(nameof(currencyCodes));
 
             var calculatedExchangeRates = new List<CalculatedExchangeRate>();
 
             foreach (var currencyCode in currencyCodes)
             {
-                var exchangeRateModel = await _cachingService.GetOrAddAsync($"{sourceCurrency}-{currencyCode}", 
-                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrency, cancellationToken));
+                var exchangeRateModel = await _cachingService.GetOrAddAsync($"{sourceCurrencyCode}-{currencyCode}", 
+                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrencyCode, cancellationToken));
 
                 if(exchangeRateModel != null)
                 {
                     var exchangeRate = _exchangeRateCalculator.Calculate(
                                         exchangeRateModel.Amount,
-                                        exchangeRateModel.Rate,
-                                        sourceCurrency,
-                                        exchangeRateModel.CurrencyCode);
+                                        exchangeRateModel.Value,
+                                        sourceCurrencyCode,
+                                        exchangeRateModel.TargetCurrencyCode);
 
                     calculatedExchangeRates.Add(new CalculatedExchangeRate()
                     {
-                        TargetCurrency = exchangeRate.TargetCurrency,
-                        SourceCurrency = exchangeRate.SourceCurrency,
-                        Value = exchangeRate.Value,
+                        TargetCurrencyCode = exchangeRate.TargetCurrencyCode,
+                        SourceCurrencyCode = exchangeRate.SourceCurrencyCode,
+                        Rate = exchangeRate.Rate,
                     });
                 }
                 else

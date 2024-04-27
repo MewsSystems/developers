@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateFinder.ConsoleApp.Requests.Models
 {
     public class Currency
     {

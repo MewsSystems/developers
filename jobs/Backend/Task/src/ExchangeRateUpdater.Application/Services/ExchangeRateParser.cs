@@ -5,7 +5,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
 {
     public interface IExchangeRateParser
     {
-        List<ExchangeRate> Parse(string sourceCurrency, string data);
+        List<ExchangeRate> Parse(string sourceCurrencyCode, string data);
     }
     public class ExchangeRateParser : IExchangeRateParser
     {
@@ -15,7 +15,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
         {
             _logger = logger;
         }
-        public List<ExchangeRate> Parse(string sourceCurrency, string data)
+        public List<ExchangeRate> Parse(string sourceCurrencyCode, string data)
         {
             var exchangeRates = new List<ExchangeRate>();
             string[] lines = data.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -26,7 +26,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
 
                 if (properties.Length == 5)
                 {
-                    string country = properties[0].Trim();
+                    string CountryName = properties[0].Trim();
                     string currencyName = properties[1].Trim();
                     int amount = int.Parse(properties[2]);
                     string currencyCode = properties[3].Trim();
@@ -34,12 +34,12 @@ namespace ExchangeRateFinder.Infrastructure.Services
 
                     var exchange = new ExchangeRate
                     {
-                        Country = country,
-                        TargetCurrency = currencyName,
-                        SourceCurrency = sourceCurrency,
+                        CountryName = CountryName,
+                        TargetCurrencyCode = currencyCode,
+                        SourceCurrencyCode = sourceCurrencyCode,
+                        TargetCurrencyName = currencyName,
                         Amount = amount,
-                        CurrencyCode = currencyCode,
-                        Rate = exchangeRate
+                        Value = exchangeRate
                     };
 
                     exchangeRates.Add(exchange);

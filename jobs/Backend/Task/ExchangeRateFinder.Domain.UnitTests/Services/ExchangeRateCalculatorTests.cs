@@ -18,18 +18,18 @@ namespace ExchangeRateFinder.Domain.UnitTests.Services
         [InlineAutoData(1000, 2.8, "GBP", "USD", 357.143f)]
         public void Calculate_ReturnsCorrectValues(
                int amount,
-               decimal rate,
-               string sourceCurrency,
-               string targetCurrency,
+               decimal value,
+               string sourceCurrencyCode,
+               string targetCurrencyCode,
                string expected)
         {
             // Act
-            var result = _target.Calculate(amount, rate, sourceCurrency, targetCurrency);
+            var result = _target.Calculate(amount, value, sourceCurrencyCode, targetCurrencyCode);
 
             // Assert
-            Assert.Equal(sourceCurrency, result.SourceCurrency);
-            Assert.Equal(targetCurrency, result.TargetCurrency);
-            Assert.Equal(expected, result.Value.ToString("0.###"));
+            Assert.Equal(sourceCurrencyCode, result.SourceCurrencyCode);
+            Assert.Equal(targetCurrencyCode, result.TargetCurrencyCode);
+            Assert.Equal(expected, result.Rate.ToString("0.###"));
         }
     }
 }

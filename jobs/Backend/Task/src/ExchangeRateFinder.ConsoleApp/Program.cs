@@ -1,5 +1,5 @@
 ﻿using ExchangeRateFinder.ConsoleApp.ApiClients;
-using ExchangeRateFinder.ConsoleApp.Responses;
+using ExchangeRateFinder.ConsoleApp.Requests.Models;
 using ExchangeRateFinder.ConsoleApp.Responses.Models;
 using Newtonsoft.Json;
 using System;
@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        private const string sourceCurrency = "CZK";
+        private const string SourceCurrencyCode = "CZK";
         private const string API_URL = "https://localhost:7210/api";
 
         static async Task Main(string[] args)
@@ -34,7 +34,7 @@ namespace ExchangeRateUpdater
             // Sleep for 5 seconds to ensure the API is running
             WaitForApiInitializationAsync();
 
-            string apiUrl = ConstructApiUrl(sourceCurrency, currencies);
+            string apiUrl = ConstructApiUrl(SourceCurrencyCode, currencies);
             HttpClientService apiClient = new HttpClientService();
 
             try
@@ -60,10 +60,10 @@ namespace ExchangeRateUpdater
             Thread.Sleep(5000);
         }
 
-        private static string ConstructApiUrl(string sourceCurrency, IEnumerable<Currency> currencies)
+        private static string ConstructApiUrl(string sourceCurrencyCode, IEnumerable<Currency> currencies)
         {
             var currencyCodes = string.Join(",", currencies.Select(c => c.Code));
-            return $"{API_URL}/exchange-rates?sourceCurrency={sourceCurrency}&targetCurrencies={currencyCodes}";
+            return $"{API_URL}/exchange-rates?sourceCurrencyCode={sourceCurrencyCode}&targetCurrencyCodes={currencyCodes}";
         }
     }
 }

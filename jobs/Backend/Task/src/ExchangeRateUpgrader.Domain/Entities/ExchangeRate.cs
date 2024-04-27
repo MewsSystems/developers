@@ -2,11 +2,11 @@
 {
     public class CalculatedExchangeRate
     {
-        public string Id => $"{SourceCurrency}-{TargetCurrency}";
-        public string SourceCurrency { get; set; }
+        public string Id => $"{SourceCurrencyCode}-{TargetCurrencyCode}";
+        public string SourceCurrencyCode { get; set; }
 
-        public string TargetCurrency { get; set; }
+        public string TargetCurrencyCode { get; set; }
 
-        public decimal Value { get; set; }
+        public decimal Rate { get; set; }
     }
 }

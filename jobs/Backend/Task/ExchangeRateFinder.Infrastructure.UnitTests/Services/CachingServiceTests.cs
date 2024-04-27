@@ -1,9 +1,6 @@
-using ExchangeRateFinder.Domain.Services;
 using ExchangeRateFinder.Infrastructure.Models;
 using ExchangeRateFinder.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Moq;
-using System;
 
 namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
 {
@@ -23,12 +20,12 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
             var key = "USD";
             var cachedItem = new ExchangeRate()
             {
-                Country = "USA",
-                SourceCurrency = "CZK",
-                TargetCurrency = "USD",
-                CurrencyCode = "USD",
+                CountryName = "USA",
+                SourceCurrencyCode = "CZK",
+                TargetCurrencyCode = "USD",
+                TargetCurrencyName = "dollar",
                 Amount = 1,
-                Rate = 2.5m,
+                Value = 2.5m,
             };
 
 
@@ -41,8 +38,8 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
             var result = await _target.GetOrAddAsync(key, mockGetItemCallback.Object);
 
             // Assert
-            Assert.Equal(cachedItem.Country, result.Country);
-            Assert.Equal(cachedItem.Rate, result.Rate);
+            Assert.Equal(cachedItem.CountryName, result.CountryName);
+            Assert.Equal(cachedItem.Value, result.Value);
             Assert.Equal(cachedItem.Amount, result.Amount);
             mockGetItemCallback.Verify(callback => callback(), Times.Never);
         }
@@ -54,12 +51,12 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
             var key = "USD";
             var exchangeRate = new ExchangeRate()
             {
-                Country = "USA",
-                SourceCurrency = "CZK",
-                TargetCurrency = "USD",
-                CurrencyCode = "USD",
+                CountryName = "USA",
+                SourceCurrencyCode = "CZK",
+                TargetCurrencyCode = "USD",
+                TargetCurrencyName = "dollar",
                 Amount = 1,
-                Rate = 2.5m,
+                Value = 2.5m,
             };
 
             var mockGetItemCallback = new Mock<Func<Task<ExchangeRate>>>();
@@ -69,8 +66,8 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
             var result = await _target.GetOrAddAsync(key, mockGetItemCallback.Object);
 
             // Assert
-            Assert.Equal(exchangeRate.Country, result.Country);
-            Assert.Equal(exchangeRate.Rate, result.Rate);
+            Assert.Equal(exchangeRate.CountryName, result.CountryName);
+            Assert.Equal(exchangeRate.Value, result.Value);
             Assert.Equal(exchangeRate.Amount, result.Amount);
             mockGetItemCallback.Verify(callback => callback(), Times.Once);
         }

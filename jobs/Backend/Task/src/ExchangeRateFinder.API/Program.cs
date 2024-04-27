@@ -31,10 +31,10 @@ app.MapControllers();
 
 var updateCZKExchangeRateData = app.Services.GetRequiredService<IUpdateCZKExchangeRateDataService>();
 
-// Update CZK exchange rate data on startup
+// Update CZK exchange Value data on startup
 updateCZKExchangeRateData.UpdateDataAsync();
 
-// Schedule the update of CZK exchange rate data to run daily at 14:35 PM
+// Schedule the update of CZK exchange Value data to run daily at 14:35 PM
 // It is mentioned in their website that the data is updated daily at 14:30 PM
 ScheduleUpdateService(updateCZKExchangeRateData);
 

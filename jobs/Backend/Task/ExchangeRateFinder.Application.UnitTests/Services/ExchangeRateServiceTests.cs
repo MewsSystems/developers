@@ -39,7 +39,7 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         }
 
         [Fact]
-        public async void GetExchangeRates_Throws_WhenSourceCurrencyIsEmpty()
+        public async void GetExchangeRates_Throws_WhenSourceCurrencyCodeIsEmpty()
         {
             var currencies = new List<string> { "USD", "BGN" };
             await Assert.ThrowsAsync<ArgumentNullException>(
@@ -47,7 +47,7 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         }
 
         [Fact]
-        public async void GetExchangeRates_Throws_WhenSourceCurrencyIsNull()
+        public async void GetExchangeRates_Throws_WhenSourceCurrencyCodeIsNull()
         {
             var currencies = new List<string> { "USD", "BGN" };
             await Assert.ThrowsAsync<ArgumentNullException>(
@@ -58,14 +58,14 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         public async void GetExchangeRates_ReturnsNull_WhenExchangeRateIsNull()
         {
             // Arrange
-            var sourceCurrency = "CZK";
+            var sourceCurrencyCode = "CZK";
             var currencies = new List<string> { "USD" };
             ExchangeRate exchangeRate = null;
             _exchangeRateCachingMock.Setup(e => e.GetOrAddAsync(It.IsAny<string>(), It.IsAny<Func<Task<ExchangeRate>>>()))
                 .ReturnsAsync(exchangeRate);
 
             // Act 
-            var exchangeRates = await _target.GetExchangeRates(sourceCurrency, currencies);
+            var exchangeRates = await _target.GetExchangeRates(sourceCurrencyCode, currencies);
 
             // Assert
             Assert.Empty(exchangeRates);
@@ -76,33 +76,33 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
         public async void GetExchangeRates_ReturnsCorrectExchangeRates()
         {
             // Arrange
-            var sourceCurrency = "CZK";
+            var sourceCurrencyCode = "CZK";
             var currencies = new List<string> { "USD" };
             var exchangeRate = new ExchangeRate()
             {
-                Country = "USA",
-                SourceCurrency = sourceCurrency,
-                TargetCurrency = "USD",
-                CurrencyCode = "USD",
+                CountryName = "USA",
+                SourceCurrencyCode = sourceCurrencyCode,
+                TargetCurrencyCode = "USD",
+                TargetCurrencyName = "dollar",
                 Amount = 1,
-                Rate = 2.5m,
+                Value = 2.5m,
             };
-            var caclulatedValue = 2.5m;
+            var caclulatedRate = 2.5m;
 
             _exchangeRateCachingMock.Setup(e => e.GetOrAddAsync(It.IsAny<string>(), It.IsAny<Func<Task<ExchangeRate>>>()))
                 .ReturnsAsync(exchangeRate);
 
             _exchangeRateCalculatorMock.Setup(c => c.Calculate(It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<string>(), It.IsAny<string>())).Returns(
-                new Domain.Entities.CalculatedExchangeRate() { SourceCurrency = sourceCurrency, TargetCurrency = exchangeRate.TargetCurrency, Value = caclulatedValue });
+                new Domain.Entities.CalculatedExchangeRate() { SourceCurrencyCode = sourceCurrencyCode, TargetCurrencyCode = exchangeRate.TargetCurrencyCode, Rate = caclulatedRate });
 
             // Act 
-            var exchangeRates = await _target.GetExchangeRates(sourceCurrency, currencies);
+            var exchangeRates = await _target.GetExchangeRates(sourceCurrencyCode, currencies);
 
             // Assert
             Assert.Single(exchangeRates);
-            Assert.Equal(sourceCurrency, exchangeRates.First().SourceCurrency);
-            Assert.Equal(exchangeRate.TargetCurrency, exchangeRates.First().TargetCurrency);
-            Assert.Equal(caclulatedValue, exchangeRates.First().Value);
+            Assert.Equal(sourceCurrencyCode, exchangeRates.First().SourceCurrencyCode);
+            Assert.Equal(exchangeRate.TargetCurrencyCode, exchangeRates.First().TargetCurrencyCode);
+            Assert.Equal(caclulatedRate, exchangeRates.First().Rate);
             _exchangeRateCalculatorMock.Verify(e => e.Calculate(It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
     }
