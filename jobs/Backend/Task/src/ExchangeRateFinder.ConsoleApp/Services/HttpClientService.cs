@@ -7,17 +7,16 @@ namespace ExchangeRateFinder.ConsoleApp.ApiClients
     class HttpClientService
     {
         private HttpClient _httpClient;
-
-        public HttpClientService()
+        public HttpClientService(IHttpClientFactory _httpClientFactory)
         {
-            _httpClient = new HttpClient();
+            _httpClient = _httpClientFactory.CreateClient();
         }
 
-        public async Task<string> GetCalculatedExchangeRatesAsync(string apiUrl)
+        public async Task<string> GetDataAsync(string endpoint)
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }

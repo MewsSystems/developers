@@ -44,7 +44,7 @@ namespace ExchangeRateFinder.Application
             {
                 _logger.LogInformation($"Updating of CZK exchange rate data has started at {DateTime.Now}");
 
-                var exchangeRateData = await _httpClientService.GetDataFromUrl(_options.Url);
+                var exchangeRateData = await _httpClientService.GetDataAsync(_options.Url);
                 // Parse it 
                 var exchangeRates = _exchangeRateParser.Parse(SourceCurrencyCode, exchangeRateData);
 

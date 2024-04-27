@@ -2,23 +2,26 @@
 {
     public interface IHttpClientService
     {
-        Task<string> GetDataFromUrl(string url);
+        Task<string> GetDataAsync(string url);
     }
     public class HttpClientService : IHttpClientService
     {
-        public async Task<string> GetDataFromUrl(string url)
+        private HttpClient _httpClient;
+        public HttpClientService(IHttpClientFactory _httpClientFactory)
         {
-            using (HttpClient client = new HttpClient())
+            _httpClient = _httpClientFactory.CreateClient();
+        }
+        public async Task<string> GetDataAsync(string url)
+        {
+           
+            HttpResponseMessage response = await _httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    throw new Exception($"Failed to retrieve data. Status code: {response.StatusCode}");
-                }
+                return await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                throw new Exception($"Failed to retrieve data. Status code: {response.StatusCode}");
             }
         }
     }

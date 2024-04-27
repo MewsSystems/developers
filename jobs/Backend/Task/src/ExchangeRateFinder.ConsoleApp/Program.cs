@@ -2,11 +2,13 @@
 using ExchangeRateFinder.ConsoleApp.Requests.Models;
 using ExchangeRateFinder.ConsoleApp.Responses.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,12 +40,15 @@ namespace ExchangeRateFinder.ConsoleApp
             // Load configuration from appsettings.json
             var configuration = LoadConfiguration();
 
-            var apiUrl = ConstructApiUrl(configuration.GetSection("ExchangeRateFinderAPI")["Url"], SourceCurrencyCode, Currencies);
+            // Creating http client service to make calls to the API  
+            var httpClientFactory = CreateHttpClientFactory();
+            var httpClientService = new HttpClientService(httpClientFactory);
 
-            HttpClientService apiClientService = new HttpClientService();
             try
             {
-                var response = await apiClientService.GetCalculatedExchangeRatesAsync(apiUrl);
+                var endpoint = ConstructEndpoint(configuration.GetSection("ExchangeRateFinderAPI")["Url"], SourceCurrencyCode, Currencies);
+                var response = await httpClientService.GetDataAsync(endpoint);
+
                 var exchangeRates = JsonConvert.DeserializeObject<List<CalculatedExchangeRate>>(response);
 
                 foreach (var exchangeRate in exchangeRates)
@@ -68,12 +73,22 @@ namespace ExchangeRateFinder.ConsoleApp
                  .Build();
         }
 
+        private static IHttpClientFactory CreateHttpClientFactory()
+        {
+            var services = new ServiceCollection();
+            services.AddHttpClient();
+            var serviceProvider = services.BuildServiceProvider();
+            var httpClientFactory = serviceProvider.GetService<IHttpClientFactory>();
+
+            return httpClientFactory;
+        }
+
         private static void WaitForApiInitializationAsync()
         {
             Thread.Sleep(5000);
         }
 
-        private static string ConstructApiUrl(string apiUrl, string sourceCurrencyCode, IEnumerable<Currency> currencies)
+        private static string ConstructEndpoint(string apiUrl, string sourceCurrencyCode, IEnumerable<Currency> currencies)
         {
             var currencyCodes = string.Join(",", currencies.Select(c => c.Code));
             return $"{apiUrl}/exchange-rates?sourceCurrencyCode={sourceCurrencyCode}&targetCurrencyCodes={currencyCodes}";

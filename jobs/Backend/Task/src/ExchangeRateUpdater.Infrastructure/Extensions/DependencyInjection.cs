@@ -11,13 +11,13 @@ namespace ExchangeRateFinder.Infrastructure.Extensions
     {
         public static void AddInfrastructure(this IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
             services.AddTransient<IHttpClientService, HttpClientService>();
             
             services.AddSingleton<ICachingService<ExchangeRate>, CachingService<ExchangeRate>>();
             services.AddDbContext<ExchangeRateDbContext>(options =>
                     options.UseInMemoryDatabase("ExchangeRates"), ServiceLifetime.Singleton);
-
         }
     }
 }
