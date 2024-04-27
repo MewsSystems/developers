@@ -19,10 +19,11 @@ namespace ExchangeRateFinder.API.Controllers
         }
 
         //That endpoint could be called via cron job on infrastructure level,
-        //instead of what we have now as logic in the Program.cs about scheduling a task
+        //instead of what we have now as logic in the Program.cs about scheduling a task.
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateCzkExchangeRateData()
+        [HttpPost("sync-czk-exchange-rate-data")]
+        public async Task<IActionResult> GetExchangeRates()
         {
             try
             {
