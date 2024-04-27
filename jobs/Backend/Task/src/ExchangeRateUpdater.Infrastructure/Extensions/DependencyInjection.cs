@@ -14,8 +14,8 @@ namespace ExchangeRateFinder.Infrastructure.Extensions
             services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
             services.AddTransient<IExchangeRateParser, ExchangeRateParser>();
             services.AddTransient<IWebDataFetcher, WebDataFetcher>();
+            
             services.AddSingleton<ICachingService<ExchangeRate>, CachingService<ExchangeRate>>();
-
             services.AddDbContext<ExchangeRateDbContext>(options =>
                     options.UseInMemoryDatabase("ExchangeRates"), ServiceLifetime.Singleton);
 

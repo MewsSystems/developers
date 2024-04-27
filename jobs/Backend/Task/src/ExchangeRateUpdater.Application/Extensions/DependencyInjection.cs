@@ -8,7 +8,7 @@ namespace ExchangeRateFinder.Application.Extensions
         public static void AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IExchangeRateService, ExchangeRateService>();
-            services.AddSingleton<IUpdateCZKExchangeRateDataService, UpdateCZKExchangeRateDataService>();
+            services.AddTransient<IUpdateCZKExchangeRateDataService, UpdateCZKExchangeRateDataService>();
         }
     }
 }

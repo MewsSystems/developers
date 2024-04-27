@@ -1,5 +1,5 @@
 ﻿using ExchangeRateFinder.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 using System.Globalization;
 namespace ExchangeRateFinder.Infrastructure.Services
 {
@@ -9,12 +9,18 @@ namespace ExchangeRateFinder.Infrastructure.Services
     }
     public class ExchangeRateParser : IExchangeRateParser
     {
+        private readonly ILogger<ExchangeRateParser> _logger;
+
+        public ExchangeRateParser(ILogger<ExchangeRateParser> logger)
+        {
+            _logger = logger;
+        }
         public List<ExchangeRate> Parse(string sourceCurrency, string data)
         {
             var exchangeRates = new List<ExchangeRate>();
             string[] lines = data.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            for (int i = 2; i < lines.Length; i++)
+            for (int i = 2; i < lines.Length; i++) // We are skipping the first two lines
             {
                 string[] properties = lines[i].Split('|');
 
@@ -40,9 +46,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
                 }
                 else
                 {
-                    //TO DO: Log instead of error 
-                    
-                    throw new FormatException($"Invalid number of fields in line {i}: {lines[i]}");
+                    _logger.LogError($"{typeof(ExchangeRateParser)} unable to process fields in line {i}: {lines[i]}");
                 }
             }
 

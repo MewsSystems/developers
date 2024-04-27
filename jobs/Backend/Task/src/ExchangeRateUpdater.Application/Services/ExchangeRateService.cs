@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.Application
 {
     public interface IExchangeRateService 
     {
-        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes);
+        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
     }
     public class ExchangeRateService : IExchangeRateService
     {
@@ -30,22 +30,21 @@ namespace ExchangeRateUpdater.Application
             _logger = logger;
         }
 
-        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes)
+        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default)
         {
             if (currencyCodes == null)
                 throw new ArgumentNullException(nameof(currencyCodes));
 
-            //Do different 
             var calculatedExchangeRates = new List<CalculatedExchangeRate>();
 
             foreach (var currencyCode in currencyCodes)
             {
                 var exchangeRateModel = await _cachingService.GetOrAddAsync($"{sourceCurrency}-{currencyCode}", 
-                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrency));
+                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrency, cancellationToken));
 
                 if(exchangeRateModel != null)
                 {
-                    var exchangeRate = _exchangeRateCalculator.CalculateExchangeRate(
+                    var exchangeRate = _exchangeRateCalculator.Calculate(
                                         exchangeRateModel.Amount,
                                         exchangeRateModel.Rate,
                                         sourceCurrency,

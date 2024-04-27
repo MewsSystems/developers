@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExchangeRateFinder.API.Controllers
 {
     [ApiController]
-    [Route("exchange-rates")]
+    [Route("api/exchange-rates")]
     public class ExchangeRateController : ControllerBase
     {
         private readonly IExchangeRateService _exchangeRateService;

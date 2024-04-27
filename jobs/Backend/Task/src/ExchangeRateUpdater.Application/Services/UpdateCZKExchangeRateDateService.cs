@@ -40,7 +40,6 @@ namespace ExchangeRateFinder.Application
 
         public async Task UpdateDataAsync()
         {
-            // Get the data from source 
             try
             {
                 _logger.LogInformation($"Updating of CZK exchange rate data has started at {DateTime.Now}");
@@ -56,7 +55,7 @@ namespace ExchangeRateFinder.Application
                 var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{SourceCurrency}-{x.Code}", x => x);
                 _cachingService.UpdateCache(exchangeRatesForCache);
 
-                _logger.LogInformation("Updating of CZK exchange rate data has finished.");
+                _logger.LogInformation($"Updating of CZK exchange rate data has finished at {DateTime.Now}");
             }
             catch (Exception ex)
             {

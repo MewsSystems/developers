@@ -16,7 +16,7 @@ namespace ExchangeRateFinder.ConsoleApp.ApiClients
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<CalculatedExchangeRateResponse>> GetCalculatedExchangeRatesAsync(string apiUrl)
+        public async Task<CalculatedExchangeRateResponse> GetCalculatedExchangeRatesAsync(string apiUrl)
         {
             try
             {
@@ -25,7 +25,7 @@ namespace ExchangeRateFinder.ConsoleApp.ApiClients
                 response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<List<CalculatedExchangeRateResponse>>(json);
+                return JsonConvert.DeserializeObject<CalculatedExchangeRateResponse>(json);
             }
             catch (HttpRequestException ex)
             {

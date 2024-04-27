@@ -24,7 +24,6 @@
 
         public void UpdateCache(Dictionary<string, T> newCache)
         {
-            // Replace the entire cache with the new one
             _cache.Clear();
             foreach (var kvp in newCache)
             {

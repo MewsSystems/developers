@@ -23,7 +23,7 @@ namespace ExchangeRateUpdater
         };
 
         private const string sourceCurrency = "CZK";
-        private const string API_URL = "https://localhost:7210";
+        private const string API_URL = "https://localhost:7210/api";
 
         static async Task Main(string[] args)
         {
@@ -36,8 +36,8 @@ namespace ExchangeRateUpdater
 
             try
             {
-                var exchangeRateResponse = await apiClient.GetCalculatedExchangeRatesAsync(apiUrl);
-                foreach(var exchangeRate in exchangeRateResponse)
+                var response = await apiClient.GetCalculatedExchangeRatesAsync(apiUrl);
+                foreach(var exchangeRate in response.ExchangeRates)
                 {
                     Console.WriteLine(exchangeRate.ToString());
                 }
