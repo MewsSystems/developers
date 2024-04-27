@@ -27,13 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
-// Get the update service
 var updateCZKExchangeRateData = app.Services.GetRequiredService<IUpdateCZKExchangeRateDataService>();
 
 // Update CZK exchange rate data on startup

@@ -32,7 +32,7 @@ namespace ExchangeRateUpdater.Application
 
         public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrency, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default)
         {
-            if (currencyCodes == null)
+            if (currencyCodes == null || string.IsNullOrEmpty(sourceCurrency))
                 throw new ArgumentNullException(nameof(currencyCodes));
 
             var calculatedExchangeRates = new List<CalculatedExchangeRate>();
@@ -48,7 +48,7 @@ namespace ExchangeRateUpdater.Application
                                         exchangeRateModel.Amount,
                                         exchangeRateModel.Rate,
                                         sourceCurrency,
-                                        exchangeRateModel.Code);
+                                        exchangeRateModel.CurrencyCode);
 
                     calculatedExchangeRates.Add(new CalculatedExchangeRate()
                     {

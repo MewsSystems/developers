@@ -14,7 +14,7 @@ namespace ExchangeRateFinder.Application
 
     public class UpdateCZKExchangeRateDataService : IUpdateCZKExchangeRateDataService
     {
-        private readonly IWebDataFetcher _webDataFetcher;
+        private readonly IHttpClientService _httpClientService;
         private readonly IExchangeRateParser _exchangeRateParser;
         private readonly ICachingService<ExchangeRate> _cachingService;
         private readonly IExchangeRateRepository _exchangeRateRepository;
@@ -23,14 +23,14 @@ namespace ExchangeRateFinder.Application
         private readonly string SourceCurrency = "CZK";
 
         public UpdateCZKExchangeRateDataService(
-            IWebDataFetcher webDataFetcher, 
+            IHttpClientService httpClientService, 
             IExchangeRateParser exchangeRateParser, 
             ICachingService<ExchangeRate> cacheService, 
             IExchangeRateRepository exchangeRateRepository,
             IOptions<CBNConfiguration> options,
             ILogger<UpdateCZKExchangeRateDataService> logger)
         {
-            _webDataFetcher = webDataFetcher;
+            _httpClientService = httpClientService;
             _exchangeRateParser = exchangeRateParser;
             _cachingService = cacheService;
             _exchangeRateRepository = exchangeRateRepository;
@@ -44,7 +44,7 @@ namespace ExchangeRateFinder.Application
             {
                 _logger.LogInformation($"Updating of CZK exchange rate data has started at {DateTime.Now}");
 
-                var exchangeRateData = await _webDataFetcher.GetDataFromUrl(_options.Url);
+                var exchangeRateData = await _httpClientService.GetDataFromUrl(_options.Url);
                 // Parse it 
                 var exchangeRates = _exchangeRateParser.Parse(SourceCurrency, exchangeRateData);
 
@@ -52,7 +52,7 @@ namespace ExchangeRateFinder.Application
                 await _exchangeRateRepository.UpdateAllAsync(SourceCurrency, exchangeRates);
 
                 // Update the cache
-                var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{SourceCurrency}-{x.Code}", x => x);
+                var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{SourceCurrency}-{x.CurrencyCode}", x => x);
                 _cachingService.UpdateCache(exchangeRatesForCache);
 
                 _logger.LogInformation($"Updating of CZK exchange rate data has finished at {DateTime.Now}");

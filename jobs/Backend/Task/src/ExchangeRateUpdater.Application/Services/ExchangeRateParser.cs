@@ -27,7 +27,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
                 if (properties.Length == 5)
                 {
                     string country = properties[0].Trim();
-                    string currency = properties[1].Trim();
+                    string currencyName = properties[1].Trim();
                     int amount = int.Parse(properties[2]);
                     string currencyCode = properties[3].Trim();
                     decimal exchangeRate = decimal.Parse(properties[4].Replace(",", "."), CultureInfo.InvariantCulture);
@@ -35,10 +35,10 @@ namespace ExchangeRateFinder.Infrastructure.Services
                     var exchange = new ExchangeRate
                     {
                         Country = country,
-                        TargetCurrency = currency,
+                        TargetCurrency = currencyName,
                         SourceCurrency = sourceCurrency,
                         Amount = amount,
-                        Code = currencyCode,
+                        CurrencyCode = currencyCode,
                         Rate = exchangeRate
                     };
 

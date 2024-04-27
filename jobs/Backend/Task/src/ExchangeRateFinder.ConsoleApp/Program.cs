@@ -1,4 +1,7 @@
 ﻿using ExchangeRateFinder.ConsoleApp.ApiClients;
+using ExchangeRateFinder.ConsoleApp.Responses;
+using ExchangeRateFinder.ConsoleApp.Responses.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +35,14 @@ namespace ExchangeRateUpdater
             WaitForApiInitializationAsync();
 
             string apiUrl = ConstructApiUrl(sourceCurrency, currencies);
-            ExchangeRateFinderApiClient apiClient = new ExchangeRateFinderApiClient();
+            HttpClientService apiClient = new HttpClientService();
 
             try
             {
                 var response = await apiClient.GetCalculatedExchangeRatesAsync(apiUrl);
-                foreach(var exchangeRate in response.ExchangeRates)
+                var exchangeRates = JsonConvert.DeserializeObject<List<CalculatedExchangeRate>>(response);
+
+                foreach (var exchangeRate in exchangeRates)
                 {
                     Console.WriteLine(exchangeRate.ToString());
                 }

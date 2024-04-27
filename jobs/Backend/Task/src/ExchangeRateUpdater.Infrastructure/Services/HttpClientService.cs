@@ -1,10 +1,10 @@
 ﻿namespace ExchangeRateFinder.Infrastructure.Services
 {
-    public interface IWebDataFetcher
+    public interface IHttpClientService
     {
         Task<string> GetDataFromUrl(string url);
     }
-    public class WebDataFetcher : IWebDataFetcher
+    public class HttpClientService : IHttpClientService
     {
         public async Task<string> GetDataFromUrl(string url)
         {

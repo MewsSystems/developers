@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
 
         public async Task<ExchangeRate> GetAsync(string code, string sourceCurrency, CancellationToken cancellation = default)
         {
-            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.Code == code && e.SourceCurrency == sourceCurrency, cancellation);
+            return await _context.ExchangeRates.FirstOrDefaultAsync(e => e.CurrencyCode == code && e.SourceCurrency == sourceCurrency, cancellation);
         }
 
         public async Task UpdateAllAsync(string sourceCurrency, List<ExchangeRate> newData, CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
 
             foreach(var newDataItem in newData)
             {
-                var existingItem = await GetAsync(newDataItem.Code, sourceCurrency, cancellationToken);
+                var existingItem = await GetAsync(newDataItem.CurrencyCode, sourceCurrency, cancellationToken);
                 if(existingItem != null)
                 {
                     await UpdateAsync(existingItem, newDataItem, cancellationToken);
@@ -50,9 +50,9 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
 
             foreach (var existingItem in existingData)
             {
-                if (!newData.Any(n => n.Code == existingItem.Code))
+                if (!newData.Any(n => n.CurrencyCode == existingItem.CurrencyCode))
                 {
-                    await DeleteAsync(existingItem.Code, sourceCurrency, cancellationToken);
+                    await DeleteAsync(existingItem.CurrencyCode, sourceCurrency, cancellationToken);
                 }
             }
         }

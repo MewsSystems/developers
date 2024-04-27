@@ -22,11 +22,6 @@ namespace ExchangeRateFinder.API.Controllers
             try
             {
                 string[] currencyCodes = targetCurrencies.Split(',');
-                if (currencyCodes == null || currencyCodes.Length == 0)
-                {
-                    return BadRequest("At least one currency pair must be provided.");
-                }
-
                 var exchangeRates = await _exchangeRateService.GetExchangeRates(sourceCurrency, currencyCodes);
 
                 return Ok(exchangeRates);
@@ -37,6 +32,5 @@ namespace ExchangeRateFinder.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
     }
 }
