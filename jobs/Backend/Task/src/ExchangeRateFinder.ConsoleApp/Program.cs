@@ -1,7 +1,6 @@
 ﻿using ExchangeRateFinder.ConsoleApp.ApiClients;
 using ExchangeRateFinder.ConsoleApp.Requests.Models;
 using ExchangeRateFinder.ConsoleApp.Responses.Models;
-using ExchangeRateFinder.Infrastructure.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateFinder.ConsoleApp
 {
     public static class Program
     {
@@ -33,7 +32,7 @@ namespace ExchangeRateUpdater
         static async Task Main(string[] args)
         {
 
-            // Sleep for 5 seconds to ensure the API is running
+            // Wait for 5 seconds to ensure the API is running
             WaitForApiInitializationAsync();
 
             // Load configuration from appsettings.json

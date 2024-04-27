@@ -2,8 +2,8 @@ using ExchangeRateFinder.API.Extensions;
 using ExchangeRateFinder.Application;
 using ExchangeRateFinder.Application.Configuration;
 using ExchangeRateFinder.Application.Extensions;
+using ExchangeRateFinder.Domain.Extensions;
 using ExchangeRateFinder.Infrastructure.Extensions;
-using ExchangeRateSyncService.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

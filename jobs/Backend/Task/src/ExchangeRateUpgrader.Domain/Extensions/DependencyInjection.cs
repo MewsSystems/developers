@@ -1,7 +1,7 @@
 ﻿using ExchangeRateFinder.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExchangeRateSyncService.Extensions
+namespace ExchangeRateFinder.Domain.Extensions
 {
     public static class DependencyInjection
     {
