@@ -4,19 +4,20 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateFinder.ConsoleApp.ApiClients
 {
-    class HttpClientService
+    public class HttpClientService
     {
-        private HttpClient _httpClient;
-        public HttpClientService(IHttpClientFactory _httpClientFactory)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public HttpClientService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = _httpClientFactory.CreateClient();
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<string> GetDataAsync(string endpoint)
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+                var client = _httpClientFactory.CreateClient("ExternalApi");
+                var response = await client.GetAsync(endpoint);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }

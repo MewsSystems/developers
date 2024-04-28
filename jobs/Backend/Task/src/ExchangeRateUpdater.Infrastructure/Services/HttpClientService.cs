@@ -4,17 +4,19 @@
     {
         Task<string> GetDataAsync(string url);
     }
+
     public class HttpClientService : IHttpClientService
     {
-        private HttpClient _httpClient;
-        public HttpClientService(IHttpClientFactory _httpClientFactory)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public HttpClientService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = _httpClientFactory.CreateClient();
+            _httpClientFactory = httpClientFactory;
         }
+
         public async Task<string> GetDataAsync(string url)
         {
-           
-            HttpResponseMessage response = await _httpClient.GetAsync(url);
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
