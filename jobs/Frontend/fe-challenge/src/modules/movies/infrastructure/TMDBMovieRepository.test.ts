@@ -14,9 +14,9 @@ describe('TMDBMovieRepository', () => {
   const http = new FetchHttpRepository();
 
   test('should fetch movies by page number', async () => {
-    const apiPodcastRepository = new TMDBMovieRepository(http);
+    const apiMovieRepository = new TMDBMovieRepository(http);
 
-    const movies = await apiPodcastRepository.search('Batman', 1);
+    const movies = await apiMovieRepository.search('Batman', 1);
 
     expect(movies).toEqual({
       page: moviesResultMock[0].page,
@@ -37,7 +37,7 @@ describe('TMDBMovieRepository', () => {
       totalResults: moviesResultMock[0].total_results,
     });
 
-    const moviesPage2 = await apiPodcastRepository.search('Batman', 2);
+    const moviesPage2 = await apiMovieRepository.search('Batman', 2);
 
     expect(moviesPage2).toEqual({
       page: moviesResultMock[1].page,
@@ -60,9 +60,9 @@ describe('TMDBMovieRepository', () => {
   });
 
   test('should fetch movie detail', async () => {
-    const apiPodcastRepository = new TMDBMovieRepository(http);
+    const apiMovieRepository = new TMDBMovieRepository(http);
 
-    const movie = await apiPodcastRepository.getDetail(1);
+    const movie = await apiMovieRepository.getDetail(1);
     const movieMock = movieDetailMock;
 
     expect(movie).toEqual(

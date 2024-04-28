@@ -1,7 +1,7 @@
 import { renderWithQueryClientAndRouter, screen } from '@/utils/test-utils';
 import { server } from '@/mocks/server';
 import { routes } from '@/router';
-import MovieDetail from '@/pages/MovieDetail/MovieDetail';
+import MovieDetail from '@/pages/movie-detail/MovieDetail';
 
 describe('Movies detail page', () => {
   beforeAll(() => server.listen());

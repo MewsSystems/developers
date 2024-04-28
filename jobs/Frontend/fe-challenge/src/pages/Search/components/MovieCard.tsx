@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import EmptyImageSkeleton from '@/components/EmptyImageSkeleton';
 import { Movie } from '@/modules/movies/domain/Movie';
-import useBuildLocationState from '@/pages/Search/hooks/useBuildLocationState';
+import useBuildLocationState from '@/pages/search/hooks/useBuildLocationState';
 
 interface MovieCardProps {
   movie: Movie;

@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import EmptyImageSkeleton from '@/components/EmptyImageSkeleton';
 import IMDBIcon from '@/components/IMDBIcon';
-import MovieGenres from '@/pages/MovieDetail/components/MovieGenres';
-import useGetMovieDetail from '@/pages/MovieDetail/hooks/useGetMovieDetail';
-import MovieActors from '@/pages/MovieDetail/components/MovieActors';
+import MovieGenres from '@/pages/movie-detail/components/MovieGenres';
+import useGetMovieDetail from '@/pages/movie-detail/hooks/useGetMovieDetail';
+import MovieActors from '@/pages/movie-detail/components/MovieActors';
 
 const MovieDetail = () => {
   const { movieId } = useParams();
