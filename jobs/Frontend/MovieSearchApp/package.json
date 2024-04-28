@@ -9,7 +9,7 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "prepare": "husky install"
+    "test": "vitest run"
   },
   "dependencies": {
     "@remix-run/css-bundle": "2.9.1",
@@ -32,8 +32,6 @@
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-react": "7.34.1",
     "eslint-plugin-react-hooks": "4.6.1",
-    "husky": "9.0.11",
-    "lint-staged": "15.2.2",
     "prettier": "3.2.5",
     "stylelint": "16.4.0",
     "typescript": "5.4.5",
@@ -43,10 +41,5 @@
   },
   "engines": {
     "node": ">=20.12.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint --cache --fix",
-    "*.css": "stylelint --fix",
-    "*.{ts,tsx,css,md}": "prettier --write"
   }
 }

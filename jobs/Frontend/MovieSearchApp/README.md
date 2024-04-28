@@ -1,4 +1,4 @@
-# Movie Search App 📽️
+# Movie Search App 🎞️
 
 A simple movie search application built with Remix and Vite.
 
