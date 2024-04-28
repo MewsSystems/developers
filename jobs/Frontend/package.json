@@ -6,7 +6,9 @@
     "lint": "eslint ./src --ext .js,.ts,.tsx",
     "start": "webpack serve --open --mode development",
     "format:check": "prettier --check src/",
-    "format:write": "prettier --write src/"
+    "format:write": "prettier --write src/",
+    "stylelint": "stylelint **/*.tsx",
+    "build": "webpack --mode production"
   },
   "author": "Fátima Alexandra Santos Catanho",
   "license": "ISC",
@@ -30,7 +32,10 @@
     "eslint-plugin-react": "^7.34.1",
     "html-webpack-plugin": "^5.6.0",
     "image-minimizer-webpack-plugin": "^4.0.0",
+    "postcss-styled-syntax": "^0.6.4",
     "prettier": "^3.2.5",
+    "stylelint": "^16.4.0",
+    "stylelint-config-standard": "^36.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
     "webpack": "^5.91.0",
@@ -41,6 +46,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.0"
+    "react-router-dom": "^6.23.0",
+    "styled-components": "^6.1.8"
   }
 }
