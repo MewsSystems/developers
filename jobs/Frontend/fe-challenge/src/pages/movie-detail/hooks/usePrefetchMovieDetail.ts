@@ -5,7 +5,7 @@ import { getMovieDetail } from '@/modules/movies/application/getMovieDetail';
 import {
   MOVIE_DETAIL_STALE_TIME,
   buildMovieDetailQueryKey,
-} from '@/pages/movie-detail-tmp/hooks-tmp/useGetMovieDetail';
+} from '@/pages/movie-detail/hooks/useGetMovieDetail';
 
 const httpRepository = new FetchHttpRepository();
 const moviesRepository = new TMDBMovieRepository(httpRepository);

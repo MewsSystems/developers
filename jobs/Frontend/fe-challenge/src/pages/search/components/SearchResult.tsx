@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import MovieCard from '@/pages/search-tmp/components-tmp/MovieCard';
-import useSearchMovie from '@/pages/search-tmp/hooks-tmp/useSearchMovie';
-import EmptySearch from '@/pages/search-tmp/components-tmp/EmptySearch';
-import useInfiniteScroll from '@/pages/search-tmp/hooks-tmp/useInfiniteScroll';
-import ResultsNumber from '@/pages/search-tmp/components-tmp/ResultsNumber';
-import usePrefetchMovieDetail from '@/pages/movie-detail-tmp/hooks-tmp/usePrefetchMovieDetail';
+import MovieCard from '@/pages/search/components/MovieCard';
+import useSearchMovie from '@/pages/search/hooks/useSearchMovie';
+import EmptySearch from '@/pages/search/components/EmptySearch';
+import useInfiniteScroll from '@/pages/search/hooks/useInfiniteScroll';
+import ResultsNumber from '@/pages/search/components/ResultsNumber';
+import usePrefetchMovieDetail from '@/pages/movie-detail/hooks/usePrefetchMovieDetail';
 
 interface SearchResultProps {
   query: string;
