@@ -8,7 +8,7 @@ import {
   waitFor,
   within,
 } from '@/utils/test-utils';
-import Search from '@/pages/search';
+import Search from '@/pages/search-tmp';
 import { server } from '@/mocks/server';
 import { routes } from '@/router';
 import { moviesResultMock } from '@/mocks/data';

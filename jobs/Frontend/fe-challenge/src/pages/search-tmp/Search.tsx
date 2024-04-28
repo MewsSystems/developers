@@ -1,10 +1,10 @@
 import { Suspense, useEffect, useState } from 'react';
-import SearchResult from '@/pages/search/components/SearchResult';
+import SearchResult from '@/pages/search-tmp/components-tmp/SearchResult';
 import Loading from '@/pages/loading';
 import SearchInput from '@/components/SearchInput';
 import useDebounceValue from '@/hooks/useDebounceValue';
-import EmptySearch from '@/pages/search/components/EmptySearch';
-import useQuerySearch from '@/pages/search/hooks/useQuerySearch';
+import EmptySearch from '@/pages/search-tmp/components-tmp/EmptySearch';
+import useQuerySearch from '@/pages/search-tmp/hooks-tmp/useQuerySearch';
 
 const Search = () => {
   const { querySearch, setQuerySearch } = useQuerySearch();
