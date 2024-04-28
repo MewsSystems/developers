@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Loading from '@/pages/loading';
+import Loading from '@/pages/loading-tmp';
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 

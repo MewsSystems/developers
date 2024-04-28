@@ -1,8 +1,8 @@
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import ErrorPage from '@/pages/error-page';
+import ErrorPage from '@/pages/error-page-tmp';
 import Search from '@/pages/search-tmp';
-import MovieDetail from '@/pages/movie-detail';
+import MovieDetail from '@/pages/movie-detail-tmp';
 
 export const routes = [
   {

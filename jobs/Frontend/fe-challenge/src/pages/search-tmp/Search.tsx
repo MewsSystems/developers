@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 import SearchResult from '@/pages/search-tmp/components-tmp/SearchResult';
-import Loading from '@/pages/loading';
+import Loading from '@/pages/loading-tmp';
 import SearchInput from '@/components/SearchInput';
 import useDebounceValue from '@/hooks/useDebounceValue';
 import EmptySearch from '@/pages/search-tmp/components-tmp/EmptySearch';

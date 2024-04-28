@@ -4,7 +4,7 @@ import useSearchMovie from '@/pages/search-tmp/hooks-tmp/useSearchMovie';
 import EmptySearch from '@/pages/search-tmp/components-tmp/EmptySearch';
 import useInfiniteScroll from '@/pages/search-tmp/hooks-tmp/useInfiniteScroll';
 import ResultsNumber from '@/pages/search-tmp/components-tmp/ResultsNumber';
-import usePrefetchMovieDetail from '@/pages/movie-detail/hooks/usePrefetchMovieDetail';
+import usePrefetchMovieDetail from '@/pages/movie-detail-tmp/hooks-tmp/usePrefetchMovieDetail';
 
 interface SearchResultProps {
   query: string;
