@@ -1,5 +1,6 @@
 * {
   font-family: sans-serif;
+  font-size: 16px;
   box-sizing: border-box;
 }
 
@@ -16,6 +17,12 @@
   border: 0;
 }
 
-:global(.active) {
-  color: red;
+body {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
 }

@@ -1,0 +1,137 @@
+.container {
+  display: grid;
+  position: relative;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "poster content"
+    "director director"
+    "cast cast";
+  padding: 24px;
+  column-gap: 24px;
+  background-color: var(--background-primary);
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  overflow: hidden;
+}
+
+.posterWrapper {
+  grid-area: poster;
+  position: relative;
+  width: 300px;
+  height: 450px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.content {
+  grid-area: content;
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  row-gap: 16px;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: repeat(5, min-content);
+  grid-template-areas:
+    ". score"
+    ". score"
+    ". score"
+    "tagline tagline"
+    "overview overview";
+}
+
+.scoreWrapper {
+  grid-area: score;
+  position: relative;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.facts {
+  font-weight: 300;
+  color: var(--text-secondary);
+  margin: 8px 0 0 0;
+}
+
+.homepage {
+  font-size: 18px;
+  font-weight: 300;
+  margin: 16px 0 0 0;
+
+  & > a {
+    color: var(--link-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.tagline {
+  grid-area: tagline;
+  font-size: 24px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 24px 0 0 0;
+
+  &::before {
+    content: "“";
+    font-weight: 600;
+  }
+
+  &::after {
+    content: "”";
+    font-weight: 600;
+  }
+}
+
+.overview {
+  grid-area: overview;
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 24px 0 0 0;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.sectionText {
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 8px 0 0 0;
+}
+
+.director {
+  grid-area: director;
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  margin-top: 24px;
+}
+
+.cast {
+  grid-area: cast;
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  margin-top: 8px;
+}

@@ -1,0 +1,67 @@
+.container {
+  display: grid;
+  position: relative;
+  width: 100%;
+  grid-template-columns: min-content 1fr min-content;
+  justify-content: center;
+  align-items: center;
+  column-gap: 16px;
+  background-color: var(--background-terciary);
+  border-radius: 6px;
+  border: 1px solid var(--border-primary);
+  padding: 12px 24px;
+  margin: 16px 0 0 0;
+}
+
+.form {
+  display: grid;
+  position: relative;
+  grid-auto-flow: column;
+
+  & span {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 300;
+  }
+}
+
+.inputWrapper {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: center;
+  column-gap: 8px;
+}
+
+.input {
+  display: grid;
+  position: relative;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+
+  &:disabled {
+    opacity: 0.6;
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
+}
+
+.hiddenSubmitButton {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

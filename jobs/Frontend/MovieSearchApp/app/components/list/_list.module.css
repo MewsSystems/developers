@@ -1,0 +1,9 @@
+.list {
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  row-gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0 0;
+}

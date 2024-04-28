@@ -1,0 +1,43 @@
+/** Light theme */
+
+:root {
+  --background-primary: white;
+  --background-secondary: whitesmoke;
+  --background-terciary: aliceblue;
+  --image-background: lavender;
+  --text-primary: black;
+  --text-secondary: gray;
+  --link-primary: royalblue;
+  --border-primary: lavender;
+  --border-secondary: lightgray;
+  --icon-primary: royalblue;
+  --icon-secondary: silver;
+  --label: royalblue;
+  --score-chart-background: lavender;
+  --score-chart-progress: royalblue;
+  --error-background: mistyrose;
+  --error-text: darkred;
+}
+
+/** Dark theme */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-primary: black;
+    --background-secondary: gray;
+    --background-terciary: midnightblue;
+    --image-background: darkslateblue;
+    --text-primary: white;
+    --text-secondary: silver;
+    --link-primary: cornflowerblue;
+    --border-primary: darkslateblue;
+    --border-secondary: slategray;
+    --icon-primary: cornflowerblue;
+    --icon-secondary: lightgray;
+    --label: cornflowerblue;
+    --score-chart-background: darkslateblue;
+    --score-chart-progress: cornflowerblue;
+    --error-background: mistyrose;
+    --error-text: darkred;
+  }
+}

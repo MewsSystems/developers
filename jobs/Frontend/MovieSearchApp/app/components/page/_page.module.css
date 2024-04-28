@@ -1,0 +1,11 @@
+.container {
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  width: 100%;
+  min-height: 100%;
+  justify-content: stretch;
+  align-content: start;
+  padding: 16px 16px;
+  background-color: var(--background-secondary);
+}

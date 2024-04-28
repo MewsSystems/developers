@@ -8,7 +8,12 @@ import {
   ScrollRestoration,
 } from "@remix-run/react"
 import { cssBundleHref } from "@remix-run/css-bundle"
-import "~/styles/global.module.css"
+
+import { Header } from "~/components/header"
+import { Footer } from "~/components/footer/_footer"
+
+import "~/styles/global.css"
+import "~/styles/colors.css"
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -26,16 +31,9 @@ export function Layout({ children }: { children: ReactNode }) {
         <Links />
       </head>
       <body>
-        <header>
-          <h1>🎞️ Movie Search App</h1>
-        </header>
+        <Header />
         {children}
-        <footer>
-          <p>
-            This app is using data from{" "}
-            <a href="https://www.themoviedb.org/">TMDB</a>
-          </p>
-        </footer>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>

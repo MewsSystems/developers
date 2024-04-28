@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  justify-items: center;
+  align-items: center;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+
+  & path {
+    fill: var(--icon-secondary);
+  }
+}

@@ -1,0 +1,22 @@
+.link {
+  position: relative;
+  color: var(--link-primary);
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.disabledLink {
+  position: relative;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: not-allowed;
+}

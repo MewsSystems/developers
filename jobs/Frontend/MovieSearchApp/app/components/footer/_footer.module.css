@@ -1,0 +1,28 @@
+.container {
+  display: grid;
+  position: relative;
+  width: 100%;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-primary);
+  background-color: var(--background-primary);
+}
+
+.text {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.link {
+  color: var(--link-primary);
+  font-size: 12px;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

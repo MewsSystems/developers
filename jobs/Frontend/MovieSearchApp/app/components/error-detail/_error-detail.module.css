@@ -1,0 +1,38 @@
+.container {
+  display: grid;
+  position: relative;
+  grid-auto-flow: row;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: var(--error-background);
+  border: 1px solid var(--border-primary);
+  overflow: hidden;
+
+  &:nth-child(2) {
+    margin: 24px 0 0 0;
+  }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--error-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--error-text);
+  margin: 8px 0 0 0;
+}
+
+.message {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--error-text);
+  margin: 16px 0 0 0;
+}
