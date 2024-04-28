@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ExchangeRateUpdater.Infrastructure\ExchangeRateFinder.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ExchangeRateFinder.Infrastructure\ExchangeRateFinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,11 +2,11 @@
 {
     public class CalculatedExchangeRate
     {
-        public string SourceCurrencyCode { get; set; }
+        public string SourceCurrencyCode { get; init; }
 
-        public string TargetCurrencyCode { get; set; }
+        public string TargetCurrencyCode { get; init; }
 
-        public decimal Rate { get; set; }
+        public decimal Rate { get; init; }
 
         public override string ToString()
         {

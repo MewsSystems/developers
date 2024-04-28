@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.ConsoleApp", "src\ExchangeRateFinder.ConsoleApp\ExchangeRateFinder.ConsoleApp.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Domain", "src\ExchangeRateUpgrader.Domain\ExchangeRateFinder.Domain.csproj", "{5823A292-06F8-4FC3-9DA4-80928C86BDB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Domain", "src\ExchangeRateFinder.Domain\ExchangeRateFinder.Domain.csproj", "{5823A292-06F8-4FC3-9DA4-80928C86BDB9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Infrastructure", "src\ExchangeRateUpdater.Infrastructure\ExchangeRateFinder.Infrastructure.csproj", "{8314D8B3-BC35-4553-B13F-17657E9EB022}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Infrastructure", "src\ExchangeRateFinder.Infrastructure\ExchangeRateFinder.Infrastructure.csproj", "{8314D8B3-BC35-4553-B13F-17657E9EB022}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Application", "src\ExchangeRateUpdater.Application\ExchangeRateFinder.Application.csproj", "{769534B9-475A-4152-9D57-5B4E54A3FE09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.Application", "src\ExchangeRateFinder.Application\ExchangeRateFinder.Application.csproj", "{769534B9-475A-4152-9D57-5B4E54A3FE09}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateFinder.API", "src\ExchangeRateFinder.API\ExchangeRateFinder.API.csproj", "{9D99D4AA-4A37-48A9-B5AC-7043F4CF937C}"
 EndProject

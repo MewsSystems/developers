@@ -12,7 +12,7 @@
    </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRateUpdater.Application\ExchangeRateFinder.Application.csproj" />
+    <ProjectReference Include="..\ExchangeRateFinder.Application\ExchangeRateFinder.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

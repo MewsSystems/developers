@@ -51,18 +51,19 @@ namespace ExchangeRateFinder.ConsoleApp
 
                 var exchangeRates = JsonConvert.DeserializeObject<List<CalculatedExchangeRate>>(response);
 
+                Console.WriteLine($"Successfully retrieved {exchangeRates.Count()} exchange rates:");
                 foreach (var exchangeRate in exchangeRates)
                 {
                     Console.WriteLine(exchangeRate.ToString());
                 }
-
-                Console.ReadLine();
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
+            Console.ReadLine();
         }
 
         private static IConfigurationRoot LoadConfiguration()
@@ -75,6 +76,7 @@ namespace ExchangeRateFinder.ConsoleApp
 
         private static IHttpClientFactory CreateHttpClientFactory()
         {
+            // Setup HttpClientFactory and configure HttpClient
             var services = new ServiceCollection();
             services.AddHttpClient();
             var serviceProvider = services.BuildServiceProvider();

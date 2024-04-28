@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateFinder.Infrastructure.csproj" />
-    <ProjectReference Include="..\ExchangeRateUpgrader.Domain\ExchangeRateFinder.Domain.csproj" />
+    <ProjectReference Include="..\ExchangeRateFinder.Infrastructure\ExchangeRateFinder.Infrastructure.csproj" />
+    <ProjectReference Include="..\ExchangeRateFinder.Domain\ExchangeRateFinder.Domain.csproj" />
   </ItemGroup>
 
 </Project>
