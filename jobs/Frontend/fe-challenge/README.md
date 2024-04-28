@@ -2,7 +2,7 @@
 
 An application for searching movies.
 
-Check out the live version of the project [here](https://mews-fe-challenge-kuj0jz3ze-frans-projects-95f294e6.vercel.app/).
+Check out the live version of the project [here](https://mews-fe-challenge.vercel.app/).
 
 ## Setup and Run
 
