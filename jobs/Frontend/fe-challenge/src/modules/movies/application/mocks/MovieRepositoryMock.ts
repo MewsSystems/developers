@@ -22,6 +22,9 @@ export const movieDetailMock = new MovieDetail({
   cast: [],
   directors: [],
   productionCompanies: [],
+  country: 'country',
+  tagline: 'tagline',
+  voteCount: 100,
 });
 
 export class MovieRepositoryMock implements MovieRepository {
