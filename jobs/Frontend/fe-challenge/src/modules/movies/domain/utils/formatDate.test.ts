@@ -9,4 +9,8 @@ describe('formatDate', () => {
   test('should return "Invalid Date" if the date passed is not valid', () => {
     expect(formatDate('invalid-date')).toEqual('Invalid Date');
   });
+
+  test('should return year', () => {
+    expect(formatDate('2024-02-12', { year: 'numeric' })).toEqual('2024');
+  });
 });

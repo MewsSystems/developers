@@ -11,6 +11,9 @@ interface MovieDetailData extends MovieData {
   cast: Array<CastPerson>;
   directors: Array<string>;
   runtime: number;
+  country: string;
+  tagline: string;
+  imdbId?: string;
   productionCompanies: Array<string>;
 }
 
@@ -19,6 +22,9 @@ export class MovieDetail extends Movie {
   private readonly _cast: Array<CastPerson>;
   private readonly _directors: Array<string>;
   private readonly _runtime: number;
+  private readonly _country: string;
+  private readonly _tagline: string;
+  private readonly _imdbId?: string;
   private readonly _productionCompanies: Array<string>;
 
   constructor({
@@ -26,6 +32,9 @@ export class MovieDetail extends Movie {
     cast,
     directors,
     runtime,
+    country,
+    tagline,
+    imdbId,
     productionCompanies,
     ...rest
   }: MovieDetailData) {
@@ -34,6 +43,9 @@ export class MovieDetail extends Movie {
     this._cast = cast;
     this._directors = directors;
     this._runtime = runtime;
+    this._imdbId = imdbId;
+    this._country = country;
+    this._tagline = tagline;
     this._productionCompanies = productionCompanies;
   }
 
@@ -49,8 +61,30 @@ export class MovieDetail extends Movie {
     return this._directors;
   }
 
+  get directorsFormatted() {
+    return this._directors.join(', ');
+  }
+
   get runtime() {
     return this._runtime;
+  }
+
+  get imdbId() {
+    return this._imdbId;
+  }
+
+  get imdbURL() {
+    return this._imdbId
+      ? `https://www.imdb.com/title/${this._imdbId}`
+      : undefined;
+  }
+
+  get country() {
+    return this._country;
+  }
+
+  get tagline() {
+    return this._tagline;
   }
 
   get productionCompanies() {

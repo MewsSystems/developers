@@ -4,6 +4,7 @@ import useSearchMovie from '@/pages/Search/hooks/useSearchMovie';
 import EmptySearch from '@/pages/Search/components/EmptySearch';
 import useInfiniteScroll from '@/pages/Search/hooks/useInfiniteScroll';
 import ResultsNumber from '@/pages/Search/components/ResultsNumber';
+import usePrefetchMovieDetail from '@/pages/MovieDetail/hooks/usePrefetchMovieDetail';
 
 interface SearchResultProps {
   query: string;
@@ -14,6 +15,7 @@ const SearchResult = ({ query }: SearchResultProps) => {
   const { ref } = useInfiniteScroll(hasNextPage, fetchNextPage);
   const noData = useMemo(() => data?.pages[0].totalResults === 0, [data]);
   const numResults = useMemo(() => data?.pages[0].totalResults, [data]);
+  const { prefetch } = usePrefetchMovieDetail();
 
   return noData ? (
     <EmptySearch>
@@ -34,6 +36,7 @@ const SearchResult = ({ query }: SearchResultProps) => {
               <li
                 key={movie.id}
                 ref={index + 1 === results.length ? ref : undefined}
+                onMouseEnter={() => prefetch(movie.id)}
               >
                 <MovieCard movie={movie} />
               </li>

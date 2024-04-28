@@ -11,6 +11,7 @@ import {
 import { MovieResultDTO } from '@/modules/movies/infrastructure/http/dto/MovieResultDTO';
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
+const API_LANGUAGE = 'en-US';
 const API_IMAGE_PATH = 'https://image.tmdb.org/t/p';
 const DIRECTOR_JOB = 'Director';
 
@@ -37,7 +38,13 @@ export class TMDBMovieRepository implements MovieRepository {
   async search(query: string, page: number): Promise<MovieSearchResult> {
     const moviesResult = await this.http.get<MovieResultDTO>(
       `${API_BASE_URL}/search/movie`,
-      { query, page, include_adult: false, api_key: API_KEY },
+      {
+        query,
+        page,
+        include_adult: false,
+        api_key: API_KEY,
+        language: API_LANGUAGE,
+      },
     );
 
     return {
@@ -56,8 +63,10 @@ export class TMDBMovieRepository implements MovieRepository {
     return {
       id: movieDTO.id,
       title: movieDTO.title,
+      originalTitle: movieDTO.original_title,
       overview: movieDTO.overview,
       voteAverage: movieDTO.vote_average,
+      voteCount: movieDTO.vote_count,
       releaseDate: movieDTO.release_date,
       backdropImage: this.buildBackdropImageURL(movieDTO.backdrop_path, 'w780'),
       posterImage: this.buildPosterImageURL(movieDTO.poster_path, 'w500'),
@@ -86,6 +95,8 @@ export class TMDBMovieRepository implements MovieRepository {
       `${API_BASE_URL}/movie/${id}`,
       {
         api_key: API_KEY,
+        append_to_response: 'credits',
+        language: API_LANGUAGE,
       },
     );
 
@@ -97,6 +108,9 @@ export class TMDBMovieRepository implements MovieRepository {
       ...this.parseMovieFields(movieDetail),
       genres: movieDetail.genres.map((genre) => genre.name),
       runtime: movieDetail.runtime,
+      country: (movieDetail.origin_country || []).join(', '),
+      tagline: movieDetail.tagline,
+      imdbId: movieDetail.imdb_id,
       cast: this.buildMovieDetailCast(movieDetail.credits.cast),
       directors: movieDetail.credits.crew
         .filter((crew) => crew.job === DIRECTOR_JOB)
@@ -111,10 +125,10 @@ export class TMDBMovieRepository implements MovieRepository {
     const firstSix = cast
       .slice()
       .sort((a, b) => a.order - b.order)
-      .slice(0, 7);
+      .slice(0, 6);
 
     return firstSix.map((person) => ({
-      characterName: person.name,
+      characterName: person.character.replace('(voice)', ''),
       originalName: person.original_name,
       profileImage: this.buildProfileImageURL(person.profile_path, 'w185'),
     }));

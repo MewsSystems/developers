@@ -11,6 +11,7 @@ export interface MovieDetailDTO extends Omit<MovieDTO, 'genre_ids'> {
   production_countries: Array<ProductionCountryDTO>;
   revenue: number;
   runtime: number;
+  origin_country: Array<string>;
   spoken_languages: Array<SpokenLanguageDTO>;
   status: string;
   tagline: string;

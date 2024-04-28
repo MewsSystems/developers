@@ -6,7 +6,6 @@ export const handlers: RequestHandler[] = [
     const requestUrl = new URL(request.url);
     const page = Number(requestUrl.searchParams.get('page'));
     const currentPage = page - 1;
-
     return HttpResponse.json(moviesResultMock[currentPage % 2]);
   }),
 

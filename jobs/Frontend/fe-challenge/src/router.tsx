@@ -2,7 +2,7 @@ import { Outlet, createBrowserRouter } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import ErrorPage from '@/pages/ErrorPage';
 import Search from '@/pages/Search';
-import Movie from '@/pages/Movie';
+import MovieDetail from '@/pages/MovieDetail';
 
 export const routes = [
   {
@@ -15,8 +15,8 @@ export const routes = [
         children: [
           { index: true, element: <Search /> },
           {
-            path: '/movie/:id',
-            element: <Movie />,
+            path: '/movie/:movieId',
+            element: <MovieDetail />,
           },
         ],
       },

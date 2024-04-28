@@ -1,12 +1,14 @@
-export const formatDate = (inputDate: string): string => {
+const defaultOptions: Intl.DateTimeFormatOptions = {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+};
+
+export const formatDate = (
+  inputDate: string,
+  options: Intl.DateTimeFormatOptions = defaultOptions,
+): string => {
   const date = new Date(inputDate);
-
-  const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  };
-
   const formattedDate = date.toLocaleDateString('en-US', options);
 
   return formattedDate;
