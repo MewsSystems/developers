@@ -71,5 +71,85 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
             Assert.Equal(exchangeRate.Amount, result.Amount);
             mockGetItemCallback.Verify(callback => callback(), Times.Once);
         }
+
+        [Fact]
+        public void UpdateCache_AddsNewKeysToCache_WithNewKeys()
+        {
+            // Arrange
+            var oldCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key1", new ExchangeRate()},
+                { "key2",  new ExchangeRate()}
+            };
+
+
+            var newCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key1",  new ExchangeRate() },
+                { "key2",  new ExchangeRate()},
+                { "key3",  new ExchangeRate() }
+            };
+
+            // Act
+            var oldCacheUpdated = _target.UpdateCache(oldCache);
+            var newCacheUpdated = _target.UpdateCache(newCache);
+
+            // Assert
+            Assert.Equal(3, newCacheUpdated.Count);
+            Assert.True(newCacheUpdated.ContainsKey("key3"));
+        }
+
+        [Fact]
+        public void UpdateCache_UpdatesExistingKeysInCache_WithExistingKeys()
+        {
+            // Arrange
+            var oldCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key1", new ExchangeRate() { Amount = 2 } }
+            };
+
+
+            var newCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key1",  new ExchangeRate() {Amount = 3} },
+                { "key2",  new ExchangeRate() },
+                { "key3",  new ExchangeRate() }
+            };
+
+            // Act
+            var oldCacheUpdated = _target.UpdateCache(oldCache);
+            var newCacheUpdated = _target.UpdateCache(newCache);
+
+
+            // Assert
+            Assert.Equal(3, newCacheUpdated.Count);
+            Assert.True(newCacheUpdated.ContainsKey("key1"));
+            Assert.Equal(3, newCacheUpdated["key1"].Amount);
+        }
+
+        [Fact]
+        public void UpdateCache_WithRemovedKeys_RemovesKeysFromCache()
+        {
+            // Arrange
+            var oldCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key1", new ExchangeRate() { Amount = 2 } },
+                { "key3", new ExchangeRate() { Amount = 3 } }
+            };
+
+
+            var newCache = new Dictionary<string, ExchangeRate>
+            {
+                { "key3",  new ExchangeRate() }
+            };
+
+            // Act
+            var oldCacheUpdated = _target.UpdateCache(oldCache);
+            var newCacheUpdated = _target.UpdateCache(newCache);
+
+            // Assert
+            Assert.Equal(1, newCacheUpdated.Count);
+            Assert.False(newCacheUpdated.ContainsKey("key1"));
+        }
     }
 }

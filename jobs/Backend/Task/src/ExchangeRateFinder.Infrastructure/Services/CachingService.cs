@@ -3,7 +3,7 @@
     public interface ICachingService<T>
     {
         Task<T> GetOrAddAsync(string key, Func<Task<T>> getItemCallback);
-        void UpdateCache(Dictionary<string, T> newCache);
+        Dictionary<string, T> UpdateCache(Dictionary<string, T> newCache);
     }
 
     public class CachingService<T> : ICachingService<T> where T : class
@@ -22,13 +22,35 @@
             return item;
         }
 
-        public void UpdateCache(Dictionary<string, T> newCache)
+        public Dictionary<string, T> UpdateCache(Dictionary<string, T> newCache)
         {
-            _cache.Clear();
+            var keysToRemove = new List<string>();
+
+            // Update existing elements and identify keys to remove
+            foreach (var kvp in _cache)
+            {
+                if (newCache.ContainsKey(kvp.Key))
+                {
+                    _cache[kvp.Key] = newCache[kvp.Key];
+                    newCache.Remove(kvp.Key); 
+                }
+                else
+                {
+                    keysToRemove.Add(kvp.Key);
+                }
+            }
+
+            foreach (var keyToRemove in keysToRemove)
+            {
+                _cache.Remove(keyToRemove);
+            }
+
             foreach (var kvp in newCache)
             {
                 _cache[kvp.Key] = kvp.Value;
             }
+
+            return _cache;
         }
     }
 }
