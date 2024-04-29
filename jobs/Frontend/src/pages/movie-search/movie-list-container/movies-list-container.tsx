@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDebounce } from '@uidotdev/usehooks';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider/Divider';
 import { MovieListContainerProps } from './movies-list-container.interface';
@@ -18,14 +19,26 @@ const MovieListContainer = ({
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
   useEffect(() => {
+    const updateURL = () => {
+      const params = new URLSearchParams(location.search);
+      const currentSearchTerm = params.get('search');
+      if (currentSearchTerm !== searchTerm) {
+        params.set('search', searchTerm ? searchTerm : '');
+        navigate(`?${params.toString()}`);
+      }
+    };
+
     const fetchMovies = async () => {
-      if (searchTerm !== null) {
+      if (debouncedSearchTerm) {
         setLoading(true);
         try {
           const response = await fetch(
             `https://api.themoviedb.org/3/search/movie?page=${page}&query=${encodeURIComponent(
-              searchTerm,
+              debouncedSearchTerm ? debouncedSearchTerm : '',
             )}&include_adult=false&language=en-US&&api_key=${process.env.THEMOVIEDB_API_KEY}`,
           );
           if (!response.ok) {
@@ -41,10 +54,12 @@ const MovieListContainer = ({
           setLoading(false);
         }
       }
+
+      updateURL();
     };
 
     fetchMovies();
-  }, [searchTerm, page]);
+  }, [page, debouncedSearchTerm]);
 
   return (
     <Grid item xs={12}>

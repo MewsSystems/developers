@@ -5,7 +5,10 @@ import SearchBar from '../../../shared/components/search-bar/search-bar';
 import { StyledContainer } from './search-container.styled';
 import { SearchContainerProps } from './search-container.interface';
 
-const SearchContainer = ({ handleOnSearch }: SearchContainerProps) => {
+const SearchContainer = ({
+  searchTerm,
+  handleOnSearch,
+}: SearchContainerProps) => {
   return (
     <Grid item xs={12}>
       <StyledContainer container alignItems="center">
@@ -18,7 +21,7 @@ const SearchContainer = ({ handleOnSearch }: SearchContainerProps) => {
             Search for any movie by title. Find detailed information for all
             your favorite films. Start exploring now!
           </Typography>
-          <SearchBar onSearch={handleOnSearch} />
+          <SearchBar searchTerm={searchTerm} onSearch={handleOnSearch} />
         </Grid>
       </StyledContainer>
     </Grid>

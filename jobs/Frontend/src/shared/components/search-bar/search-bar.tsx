@@ -4,7 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Icon from '@mui/material/Icon';
 import { SearchBarProps } from './search-bar.interface';
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onSearch }: SearchBarProps) => {
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     onSearch(event.target.value);
   };
@@ -13,6 +13,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     <OutlinedInput
       onChange={handleSearch}
       style={{ backgroundColor: 'white' }}
+      value={searchTerm ? searchTerm : ''}
       endAdornment={
         <InputAdornment position="end">
           <Icon>search</Icon>
