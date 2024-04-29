@@ -43,7 +43,28 @@ namespace ExchangeRateUpdater.Infrastructure.Tests
             var httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("{ \"rates\": [ { \"currencyCode\": \"USD\", \"rate\": 20, \"amount\": 1 } ] }"),
+                Content = new StringContent(@"{ 
+        ""rates"": [
+            {
+                ""validFor"": ""2024-04-26"",
+                ""order"": 82,
+                ""country"": ""Australia"",
+                ""currency"": ""dollar"",
+                ""amount"": 1,
+                ""currencyCode"": ""AUD"",
+                ""rate"": 15.35
+            },
+            {
+                ""validFor"": ""2024-04-26"",
+                ""order"": 82,
+                ""country"": ""Brazil"",
+                ""currency"": ""real"",
+                ""amount"": 1,
+                ""currencyCode"": ""BRL"",
+                ""rate"": 4.555
+            }
+        ]
+    }")
             };
 
             SetupHttpMessageHandlerMock(httpResponse);
@@ -53,7 +74,7 @@ namespace ExchangeRateUpdater.Infrastructure.Tests
 
             // Assert
             Assert.False(result.IsError);
-            Assert.Single(result.Value);
+            Assert.Equal(2, result.Value.Count());
         }
 
         [Fact]
