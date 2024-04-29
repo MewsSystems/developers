@@ -7,11 +7,11 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace ExchangeRateUpdater.Api.Controllers
 {
     /// <summary>
-    /// 
+    /// Controller for fetching exchange rates
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-            [Produces("application/json")]
+    [Produces("application/json")]
     public class ExchangeRateController : ControllerBase
     {
         private readonly ILogger<ExchangeRateController> _logger;
