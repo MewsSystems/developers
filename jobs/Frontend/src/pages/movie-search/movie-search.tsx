@@ -16,7 +16,7 @@ const MovieSearch = () => {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
   const handleOnSearch = (searchTerm: string) => {
-    setPagination(initPagination);
+    setPagination((currentPagination) => ({ ...currentPagination, page: 1 }));
     setSearchTerm(searchTerm === '' ? null : searchTerm);
   };
 
