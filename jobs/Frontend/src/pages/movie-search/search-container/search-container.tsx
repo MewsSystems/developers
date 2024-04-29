@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import SearchBar from '../../../components/search-bar/search-bar';
+import SearchBar from '../../../shared/components/search-bar/search-bar';
 import { StyledContainer } from './search-container.styled';
 import { SearchContainerProps } from './search-container.interface';
 

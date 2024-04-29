@@ -21,6 +21,14 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
   }
 
+  .d-justify-content-center {
+    justify-content: center;
+  }
+
+  .d-align-items-center {
+    align-items: center;
+  }
+
   .p-t-4 {
     padding-top: var(--spacing-4);
   }

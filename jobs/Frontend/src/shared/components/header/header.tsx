@@ -1,7 +1,7 @@
 import React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import { StyledAppBar, StyledHeaderImg } from './header.styled';
-import logo from '../../assets/images/movie-search-logo.png';
+import logo from '../../../assets/images/movie-search-logo.png';
 
 const Header = () => {
   return (

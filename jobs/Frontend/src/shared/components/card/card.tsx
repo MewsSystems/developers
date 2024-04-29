@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { StyledImage } from './card.styled';
-import FallBackImg from '../../assets/images/fallback-image.png';
+import FallBackImg from '../../../assets/images/fallback-image.png';
 
 const Card = ({ imageUrl, title, subtitle, releaseDate }) => {
   return (

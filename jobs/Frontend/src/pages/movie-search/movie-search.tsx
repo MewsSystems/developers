@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import Pagination from '../../components/pagination/pagination';
-import Header from '../../components/header/header';
-import { PaginationInfo } from '../../interfaces/pagination.interface';
-import { MovieList } from '../../interfaces/movie.interface';
+import Pagination from '../../shared/components/pagination/pagination';
+import Header from '../../shared/components/header/header';
+import { PaginationInfo } from '../../shared/interfaces/pagination.interface';
+import { MovieList } from '../../shared/interfaces/movie.interface';
 import MovieListContainer from './movie-list-container/movies-list-container';
 import SearchContainer from './search-container/search-container';
 import debounce from '@mui/utils/debounce/debounce';
 
 const MovieSearch = () => {
-  const initPagination = { page: 1, count: null };
+  const initPagination = { page: 1, count: null, total: null };
 
   const [pagination, setPagination] = useState<PaginationInfo>(initPagination);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
@@ -26,10 +26,11 @@ const MovieSearch = () => {
     }));
   };
 
-  const handleFetchMoviesSuccess = (movies: MovieList) => {
+  const handleFetchMoviesSuccess = (results: MovieList) => {
     setPagination((currentPagination) => ({
       ...currentPagination,
-      count: movies.total_pages,
+      count: results.total_pages,
+      total: results.total_results,
     }));
   };
 
@@ -46,6 +47,7 @@ const MovieSearch = () => {
         <MovieListContainer
           searchTerm={searchTerm}
           page={pagination.page}
+          total={pagination.total}
           onFetchMoviesSuccess={handleFetchMoviesSuccess}
           onFetchMoviesError={handleFetchMoviesError}
         />
