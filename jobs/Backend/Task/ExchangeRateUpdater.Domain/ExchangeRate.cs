@@ -9,9 +9,9 @@
             Value = value;
         }
 
-        public Currency SourceCurrency { get; set; }
+        public Currency SourceCurrency { get; }
 
-        public Currency TargetCurrency { get; set; }
+        public Currency TargetCurrency { get; }
 
         public decimal Value { get; }
 
