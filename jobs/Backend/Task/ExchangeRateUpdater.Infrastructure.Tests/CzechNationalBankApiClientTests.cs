@@ -70,7 +70,7 @@ namespace ExchangeRateUpdater.Infrastructure.Tests
             SetupHttpMessageHandlerMock(httpResponse);
 
             // Act
-            var result = await _apiClient.GetCentralBankRates("2022-01-01", CancellationToken.None);
+            var result = await _apiClient.GetCentralBankRates(CancellationToken.None);
 
             // Assert
             Assert.False(result.IsError);
@@ -89,7 +89,7 @@ namespace ExchangeRateUpdater.Infrastructure.Tests
             SetupHttpMessageHandlerMock(httpResponse);
 
             // Act
-            var result = await _apiClient.GetCentralBankRates("2022-01-01", CancellationToken.None);
+            var result = await _apiClient.GetCentralBankRates(CancellationToken.None);
 
             // Assert
             Assert.True(result.IsError);
@@ -108,26 +108,7 @@ namespace ExchangeRateUpdater.Infrastructure.Tests
             SetupHttpMessageHandlerMock(httpResponse);
 
             // Act
-            var result = await _apiClient.GetCentralBankRates("2022-01-01", CancellationToken.None);
-
-            // Assert
-            Assert.True(result.IsError);
-        }
-
-        [Fact]
-        public async Task GetCentralBankRates_ReturnsError_WhenDateFormatIsInvalid()
-        {
-            // Arrange
-            var invalidDateFormat = "01-01-2022";
-            var httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.BadRequest,
-            };
-
-            SetupHttpMessageHandlerMock(httpResponse);
-
-            // Act
-            var result = await _apiClient.GetCentralBankRates(invalidDateFormat, CancellationToken.None);
+            var result = await _apiClient.GetCentralBankRates(CancellationToken.None);
 
             // Assert
             Assert.True(result.IsError);

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using ErrorOr;
 using ExchangeRateUpdater.Domain;
 
@@ -11,13 +12,14 @@ namespace ExchangeRateUpdater.Infrastructure
         {
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<ErrorOr<IEnumerable<ExchangeRate>>> GetCentralBankRates(string exchangeRateDate, CancellationToken cancellationToken)
+        public async Task<ErrorOr<IEnumerable<ExchangeRate>>> GetCentralBankRates(CancellationToken cancellationToken)
         {
             var httpClient = _httpClientFactory.CreateClient("CzechNationalBankApi");
+            var currentDate = DateTime.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             try
             {
-                var response = await httpClient.GetAsync($"exrates/daily?date={exchangeRateDate}&lang=EN");
+                var response = await httpClient.GetAsync($"exrates/daily?date={currentDate}&lang=EN");
 
                 if (!response.IsSuccessStatusCode)
                 {

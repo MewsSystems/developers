@@ -16,8 +16,7 @@ namespace ExchangeRateUpdater.Application.ExchangeRates.Queries.GetDailyExchange
         }
         public async Task<ErrorOr<IEnumerable<ExchangeRate>>> Handle(GetDailyExchangeRatesQuery query, CancellationToken cancellationToken)
         {
-            var currentDate = DateTime.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var responseOrError = await _exchangeRateProviderRepository.GetCentralBankRates(currentDate, cancellationToken);
+            var responseOrError = await _exchangeRateProviderRepository.GetCentralBankRates(cancellationToken);
 
             return responseOrError;
         }

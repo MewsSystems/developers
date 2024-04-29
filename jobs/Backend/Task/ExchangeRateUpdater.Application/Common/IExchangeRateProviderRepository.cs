@@ -5,6 +5,6 @@ namespace ExchangeRateUpdater.Infrastructure
 {
     public interface IExchangeRateProviderRepository
     {
-        Task<ErrorOr<IEnumerable<ExchangeRate>>> GetCentralBankRates(string exchangeRateDate, CancellationToken cancellationToken);
+        Task<ErrorOr<IEnumerable<ExchangeRate>>> GetCentralBankRates(CancellationToken cancellationToken);
     }
 }
