@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -23,7 +24,11 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+                var provider = new ExchangeRateProvider(
+                        new System.Net.Http.HttpClient(), 
+                        factory.CreateLogger<ExchangeRateProvider>()
+                    );
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
