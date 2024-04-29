@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider/Divider';
 import { MovieListContainerProps } from './movies-list-container.interface';
@@ -29,6 +30,7 @@ const MovieListContainer = ({
           );
           if (!response.ok) {
             onFetchMoviesError();
+            return;
           }
           const result: MovieList = await response.json();
           setMovies(result.results);
@@ -66,12 +68,17 @@ const MovieListContainer = ({
             >
               <Grid item xs={1} lg={3} />
               <Grid item xs={10} lg={6}>
-                <Card
-                  imageUrl={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  title={movie.title}
-                  subtitle={movie.overview}
-                  releaseDate={movie.release_date?.split('-')?.[0]}
-                />
+                <Link
+                  to={`/movie/${movie.id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <Card
+                    imageUrl={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    title={movie.title}
+                    subtitle={movie.release_date?.split('-')?.[0]}
+                    description={movie.overview}
+                  />
+                </Link>
                 <Divider style={{ width: '100%' }} className="p-t-16" />
               </Grid>
             </Grid>

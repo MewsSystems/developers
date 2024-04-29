@@ -40,28 +40,25 @@ const MovieSearch = () => {
   };
 
   return (
-    <>
-      <Header />
-      <Grid container justifyContent="center" alignItems="center">
-        <SearchContainer handleOnSearch={handleOnSearch} />
-        <MovieListContainer
-          searchTerm={searchTerm}
-          page={pagination.page}
-          total={pagination.total}
-          onFetchMoviesSuccess={handleFetchMoviesSuccess}
-          onFetchMoviesError={handleFetchMoviesError}
-        />
-        {searchTerm && pagination.count && (
-          <Grid item className="p-t-16 p-b-16">
-            <Pagination
-              page={pagination.page}
-              count={pagination.count}
-              onPageChange={handleOnPageChange}
-            />
-          </Grid>
-        )}
-      </Grid>
-    </>
+    <Grid container justifyContent="center" alignItems="center">
+      <SearchContainer handleOnSearch={handleOnSearch} />
+      <MovieListContainer
+        searchTerm={searchTerm}
+        page={pagination.page}
+        total={pagination.total}
+        onFetchMoviesSuccess={handleFetchMoviesSuccess}
+        onFetchMoviesError={handleFetchMoviesError}
+      />
+      {searchTerm && pagination.count && (
+        <Grid item className="p-t-16 p-b-16">
+          <Pagination
+            page={pagination.page}
+            count={pagination.count}
+            onPageChange={handleOnPageChange}
+          />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 

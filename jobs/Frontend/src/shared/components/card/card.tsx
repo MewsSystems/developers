@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
-import { StyledImage } from './card.styled';
+import { StyledGrid, StyledImage } from './card.styled';
 import FallBackImg from '../../../assets/images/fallback-image.png';
 
-const Card = ({ imageUrl, title, subtitle, releaseDate }) => {
+const Card = ({ imageUrl, title, subtitle, description }) => {
   return (
-    <Grid container className="d-flex">
+    <StyledGrid container className="d-flex">
       <Grid item>
         <StyledImage
           src={imageUrl}
@@ -18,13 +18,13 @@ const Card = ({ imageUrl, title, subtitle, releaseDate }) => {
       <Grid item xs={8}>
         <Typography variant="h6">{title}</Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          {releaseDate}
-        </Typography>
-        <Typography variant="subtitle1" className="line-clamp-4">
           {subtitle}
         </Typography>
+        <Typography variant="subtitle1" className="line-clamp-4">
+          {description}
+        </Typography>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 };
 
