@@ -18,7 +18,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             src={movie.posterImage}
             loading="lazy"
             alt={movie.title}
-            className="w-full h-auto rounded-xl aspect-[2/3]"
+            className="w-full h-auto rounded-default aspect-[2/3]"
           />
         ) : (
           <EmptyImageSkeleton />

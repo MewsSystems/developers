@@ -20,7 +20,7 @@ const TextInput = ({
   return (
     <input
       className={classNames(
-        'rounded-xl px-4 py-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-700',
+        'rounded-default px-4 py-2 border focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-700',
         className,
       )}
       name={name}

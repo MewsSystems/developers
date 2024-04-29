@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
 import EmptyImageSkeleton from '@/components/EmptyImageSkeleton';
-import IMDBIcon from '@/components/IMDBIcon';
-import MovieGenres from '@/pages/movie-detail/components/MovieGenres';
 import useGetMovieDetail from '@/pages/movie-detail/hooks/useGetMovieDetail';
 import MovieActors from '@/pages/movie-detail/components/MovieActors';
+import MovieExtraInfo from '@/pages/movie-detail/components/MovieExtraInfo';
+import MovieTitle from '@/pages/movie-detail/components/MovieTitle';
+import MovieInfoSection from '@/pages/movie-detail/components/MovieInfoSection';
+import IMDBLink from '@/pages/movie-detail/components/IMDBLink';
 
 const MovieDetail = () => {
   const { movieId } = useParams();
@@ -11,11 +13,11 @@ const MovieDetail = () => {
 
   return (
     <article>
-      <section className="grid md:grid-cols-[330px_1fr] gap-12">
-        <div className="aspect-[2/3]">
+      <section className="grid md:grid-cols-[330px_1fr] gap-10 sm:gap-12">
+        <div className="max-w-[300px] md:max-w-fit aspect-[2/3] mx-auto md:mx-0">
           {movie.posterImage ? (
             <img
-              className="rounded-xl mx-auto max-w-[300px] md:max-w-full"
+              className="rounded-default"
               src={movie.posterImage}
               alt={movie.title}
             />
@@ -23,28 +25,9 @@ const MovieDetail = () => {
             <EmptyImageSkeleton />
           )}
         </div>
-
         <section>
-          <h1 className="text-2xl font-bold">
-            {movie.title}{' '}
-            {movie.releaseYear ? (
-              <span className="font-light text-gray-600">
-                ({movie.releaseYear})
-              </span>
-            ) : null}
-          </h1>
-          {movie.originalTitle ? (
-            <h2 className="text-lg italic mb-1">{movie.originalTitle}</h2>
-          ) : null}
-          <div className="flex">
-            <span className='after:content-["·"] after:px-1'>
-              {movie.country}
-            </span>
-            <span className='after:content-["·"] after:px-1'>
-              {movie.runtime} min
-            </span>
-            <MovieGenres genres={movie.genres} />
-          </div>
+          <MovieTitle movie={movie} />
+          <MovieExtraInfo movie={movie} />
           <div className="font-semibold mt-4 mb-2">Score</div>
           <div className="text-2xl font-bold">
             {movie.voteAveragePercent} %{' '}
@@ -59,25 +42,14 @@ const MovieDetail = () => {
             <p>{movie.overview}</p>
           </section>
           {movie.directorsFormatted ? (
-            <>
-              <div className="font-semibold mt-4 mb-2">Directed by</div>
-              <div>{movie.directorsFormatted}</div>
-            </>
+            <MovieInfoSection title="Directed by">
+              {movie.directorsFormatted}
+            </MovieInfoSection>
           ) : null}
-          <div className="font-semibold mt-4 mb-2">Top Actors</div>
-          <div>
+          <MovieInfoSection title="Top Actors">
             <MovieActors cast={movie.cast} />
-          </div>
-          {movie.imdbId ? (
-            <a
-              rel="noopener noreferrer"
-              href={movie.imdbURL}
-              target="_blank"
-              className="bg-[#EFC200] inline-block text-sm px-2 rounded-md mt-3"
-            >
-              <IMDBIcon className="h-8 text-gray-600" />
-            </a>
-          ) : null}
+          </MovieInfoSection>
+          {movie.imdbURL ? <IMDBLink imdbURL={movie.imdbURL} /> : null}
         </section>
       </section>
     </article>

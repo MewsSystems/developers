@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-primary: #1f2937;
+    --border-radius: 0.7rem;
+  }
+
   body {
-    @apply text-gray-800 text-base;
+    @apply text-primary text-base;
   }
 }
