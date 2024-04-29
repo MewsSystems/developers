@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider/Divider';
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { FeedbackContainerProps } from './feedback-container.interface';
 

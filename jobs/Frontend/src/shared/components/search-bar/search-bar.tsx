@@ -12,6 +12,7 @@ const SearchBar = ({ searchTerm, onSearch }: SearchBarProps) => {
   return (
     <OutlinedInput
       onChange={handleSearch}
+      placeholder="Search..."
       style={{ backgroundColor: 'white' }}
       value={searchTerm ? searchTerm : ''}
       endAdornment={

@@ -1,16 +1,54 @@
-# Mews frontend developer task
+# Movie Search
 
-You should start with creating a fork of the repository. When you're finished with the task, you should create a pull request.
+Frontend Challenge - React client that consumes an API and can list and detail
+movies.
 
-Your task will be to create a simple movie search application. The application will have 2 views - search and movie detail. The search view is the default view, and should contain search input and display paginated list of found movies with a way to load additional batch. Search should start automatically after typing into the input is finished - there is no need for a search button. Clicking on a movie gets you to the movie detail view where detailed information about the movie should be listed. 
+### DEMO
 
-To retrieve information about movies, use [TheMovieDb API](https://developers.themoviedb.org/3/getting-started/introduction). You can use our api key to authorize requests:
+To see the website running go to:
+[Movie Search App](https://peaceful-palmier-221e1d.netlify.app/)
+
+---
+
+## IMPORTANT
+
+- I could use `redux` to manage the app state, but it is a small app soo I
+  didn't want to overengineer.
+
+---
+
+### About the project
+
+This is a project made in:
+
+- `React` with `Typescript`.
+- `Material UI` and `styled-components` for styling.
+
+I set it up without the use of "create-react-app".
+
+### Prerequisites
+
+For development, you will only need `Node.js` and `Git` installed in your
+environment.
+
+### Install
+
+    $ git clone https://github.com/FatiAlex/movie-search.git
+    $ cd movie-search
+    $ npm install
+
+### Configuration
+
+The project is ready to start working.
+
+### Running the project
+
+```bash
+npm run start
 ```
-03b8572954325680265531140190fd2a
+
+### Build for production
+
+```bash
+npm run build
 ```
-
-## Required technologies
-
-To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
-We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
-The use of any additional library is allowed and up to you.
