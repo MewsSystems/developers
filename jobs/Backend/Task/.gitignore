@@ -1,0 +1,22 @@
+# Build Folders
+**/bin/
+**/obj/
+
+# User-specific files
+**/.vs/
+**/.vscode/
+**/.idea/
+*.user
+*.suo
+
+# Optionally, if you want to ignore the restore packages
+**/packages/
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
