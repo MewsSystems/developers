@@ -1,2 +1,5 @@
 # Build
 /dist
+# Tests
+coverage
+test-report.json
