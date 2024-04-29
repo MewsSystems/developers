@@ -5,6 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { merge } = require('webpack-merge');
+const Dotenv = require('dotenv-webpack');
 
 const commonConfig = {
   entry: './src/index.tsx',
@@ -16,6 +17,9 @@ const commonConfig = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    alias: {
+      '@mui/styled-engine': '@mui/styled-engine-sc'
+    },
   },
   module: {
     rules: [
@@ -35,6 +39,7 @@ const commonConfig = {
       template: './public/index.html',
       filename: './index.html',
     }),
+    new Dotenv(),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [

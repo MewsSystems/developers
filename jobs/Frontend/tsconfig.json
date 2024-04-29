@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "types": ["node"],
     "esModuleInterop": true,
+    "paths": {
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+    }
   },
+  "files": [
+    "./config/typescript/assets.d.ts"
+  ],
 }
