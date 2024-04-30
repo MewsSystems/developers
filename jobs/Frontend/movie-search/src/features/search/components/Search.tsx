@@ -1,5 +1,4 @@
-import { Box, CircularProgress, TextField, Typography } from '@mui/material';
-import { deepPurple } from '@mui/material/colors';
+import { Box, CircularProgress, Paper, TextField, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridEventListener, GridSearchIcon } from '@mui/x-data-grid';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -49,7 +48,7 @@ export default function Search() {
     {
       field: 'poster_path',
       headerName: t('movieDetails.poster'),
-      width: 150,
+      width: 100,
       renderCell: params => (
         <img height={100} src={ENDPOINT_URL_IMAGES_w500 + params.value} alt={t('movieDetails.poster')} />
       )
@@ -57,7 +56,7 @@ export default function Search() {
     {
       field: 'title',
       headerName: t('movieDetails.title'),
-      width: 250
+      width: 200
     },
     {
       field: 'release_date',
@@ -109,12 +108,12 @@ export default function Search() {
 
   return (
     <>
-      <Typography sx={{ mb: 8 }} variant="h2">
+      <Typography sx={{ mb: 2 }} variant="h2">
         {t('common.appTitle')}
       </Typography>
 
-      <Box sx={{ m: 2, display: 'flex', alignItems: 'flex-end' }}>
-        <GridSearchIcon sx={{ color: deepPurple[500], mr: 1, my: 0.5 }} />
+      <Paper sx={{ m: 2, p: 4, borderRadius: 2, display: 'flex', alignItems: 'flex-end' }} elevation={3}>
+        <GridSearchIcon sx={{ color: 'primary.main', mr: 1, my: 0.5 }} />
         <TextField
           id="movie-search-input"
           label="Search Title"
@@ -124,11 +123,11 @@ export default function Search() {
           onChange={handleChange}
           onKeyUp={handleSearch}
         />
-      </Box>
+      </Paper>
 
       {shouldRenderLoading && <CircularProgress sx={{ m: 4 }} />}
 
-      <Box sx={{ mt: 4 }}>
+      <Paper sx={{ mt: 2, borderRadius: 2 }} elevation={3}>
         <Box sx={{ mt: 2 }}>
           {shouldRenderError && (
             <Typography variant="h5" color="error">
@@ -145,7 +144,7 @@ export default function Search() {
               '& .MuiDataGrid-cell:focus': {
                 outline: 'none'
               },
-              '& .MuiDataGrid-row:hover': { cursor: 'pointer' }
+              '& .MuiDataGrid-row:hover': { cursor: 'pointer', color: 'primary.main' }
             }}
             rows={movies}
             columns={columns}
@@ -159,7 +158,7 @@ export default function Search() {
             }}
           />
         )}
-      </Box>
+      </Paper>
     </>
   );
 }
