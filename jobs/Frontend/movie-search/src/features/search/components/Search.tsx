@@ -48,48 +48,50 @@ export default function Search() {
   const columns: GridColDef<Movie>[] = [
     {
       field: 'poster_path',
-      headerName: 'Poster',
+      headerName: t('movieDetails.poster'),
       width: 150,
-      renderCell: params => <img height={100} src={ENDPOINT_URL_IMAGES_w500 + params.value} alt="Movie poster" />
+      renderCell: params => (
+        <img height={100} src={ENDPOINT_URL_IMAGES_w500 + params.value} alt={t('movieDetails.poster')} />
+      )
     },
     {
       field: 'title',
-      headerName: 'Title',
+      headerName: t('movieDetails.title'),
       width: 250
     },
     {
       field: 'release_date',
-      headerName: 'Release Date',
+      headerName: t('movieDetails.releaseDate'),
       width: 120,
       valueFormatter: (value: string) => value.substring(0, 4)
     },
     {
       field: 'adult',
-      headerName: 'R-18',
+      headerName: t('movieDetails.adult'),
       width: 60,
-      valueFormatter: (value: boolean) => (value ? 'Yes' : 'No')
+      valueFormatter: (value: boolean) => (value ? t('common.yes') : t('common.no'))
     },
     {
       field: 'popularity',
-      headerName: 'Popularity',
+      headerName: t('movieDetails.popularity'),
       type: 'number',
       width: 120
     },
     {
       field: 'vote_average',
-      headerName: 'Vote Average',
+      headerName: t('movieDetails.voteAverage'),
       type: 'number',
       width: 120
     },
     {
       field: 'vote_count',
-      headerName: 'Vote Count',
+      headerName: t('movieDetails.voteCount'),
       type: 'number',
       width: 100
     },
     {
       field: 'original_language',
-      headerName: 'Original Language',
+      headerName: t('movieDetails.originalLanguage'),
       width: 130,
       align: 'center',
       valueFormatter: (value: string) => value.toUpperCase()
