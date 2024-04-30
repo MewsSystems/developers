@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
@@ -20,16 +21,16 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
                 using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
                 var provider = new ExchangeRateProvider(
-                        new System.Net.Http.HttpClient(), 
+                        new System.Net.Http.HttpClient(),
                         factory.CreateLogger<ExchangeRateProvider>()
                     );
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

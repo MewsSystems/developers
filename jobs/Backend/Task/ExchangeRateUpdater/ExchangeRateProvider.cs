@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
@@ -25,15 +26,19 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            if(currencies is null || !currencies.Any()) {
+            if (currencies is null || !currencies.Any())
+            {
                 return Enumerable.Empty<ExchangeRate>();
             }
 
-            var response = _httpClient.GetFromJsonAsync<ExchangeRateResponsePayload>("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN").Result;
+            // TODO : Make it async
+            // TODO : USE Options for url(so can use test urls)
 
-            if(response is null || response.Rates is null || !response.Rates.Any())
+            var response = await _httpClient.GetFromJsonAsync<ExchangeRateResponsePayload>("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
+
+            if (response is null || response.Rates is null || !response.Rates.Any())
             {
                 _logger.LogWarning("Exchange rate response contained no rates");
 
@@ -42,10 +47,11 @@ namespace ExchangeRateUpdater
 
             var returnRates = new List<ExchangeRate>();
             var payloadRates = response.Rates;
-            foreach(var currency in currencies) 
+            foreach (var currency in currencies)
             {
                 var rate = payloadRates.FirstOrDefault(r => r.CurrencyCode == currency.Code);
-                if(rate is not null){
+                if (rate is not null)
+                {
                     returnRates.Add(new ExchangeRate(new Currency(CZECH_KORUNA_CODE), new Currency(rate.CurrencyCode), rate.Rate));
                 }
             }

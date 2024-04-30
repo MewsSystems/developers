@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using Castle.Core.Logging;
 using ExchangeRateUpdater;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ namespace ExchangeRateUpdaterTests;
 public class ExchangeRateProviderTests
 {
     [Fact]
-    public void GetExchangeRates_NoCurrenciesPassedAndAClientResponseWithRates_ResponseIsEmpty()
+    public async Task GetExchangeRates_NoCurrenciesPassedAndAClientResponseWithRates_ResponseIsEmpty()
     {
         var response = @"{
         ""rates"": [
@@ -27,13 +28,13 @@ public class ExchangeRateProviderTests
         ]}";
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
-        var rates = provider.GetExchangeRates(Array.Empty<Currency>());
+        var rates = await provider.GetExchangeRates(Array.Empty<Currency>());
 
         Assert.Empty(rates);
     }
 
     [Fact]
-    public void GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatContainsAUDRate_ResponseContainsExpectedRate()
+    public async Task GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatContainsAUDRate_ResponseContainsExpectedRate()
     {
         const string AUDCode = "AUD";
         const decimal Rate = 15.35M;
@@ -51,14 +52,14 @@ public class ExchangeRateProviderTests
         ]}}";
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
-        var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode) });
+        var rates = await provider.GetExchangeRates(new[] { new Currency(AUDCode) });
 
         Assert.NotEmpty(rates);
         Assert.Contains(rates, rate => rate.TargetCurrency.Code == AUDCode && rate.Value == Rate);
     }
 
     [Fact]
-    public void GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatDoesNotContainAUDRate_ResponseIsEmpty()
+    public async Task GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatDoesNotContainAUDRate_ResponseIsEmpty()
     {
         const string AUDCode = "AUD";
         var response = $@"{{
@@ -75,13 +76,13 @@ public class ExchangeRateProviderTests
         ]}}";
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
-        var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode) });
+        var rates = await provider.GetExchangeRates(new[] { new Currency(AUDCode) });
 
         Assert.Empty(rates);
     }
 
     [Fact]
-    public void GetExchangeRates_WithTwoRequestCurrenciesThatAreContainedIntheClientResponse_ResponseContainsExpectedRates()
+    public async Task GetExchangeRates_WithTwoRequestCurrenciesThatAreContainedIntheClientResponse_ResponseContainsExpectedRates()
     {
         const string AUDCode = "AUD";
         const decimal AUDRate = 15.35M;
@@ -110,7 +111,7 @@ public class ExchangeRateProviderTests
         ]}}";
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
-        var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode), new Currency(CADCode) });
+        var rates = await provider.GetExchangeRates(new[] { new Currency(AUDCode), new Currency(CADCode) });
 
         Assert.NotEmpty(rates);
         Assert.Equal(2, rates.Count());
