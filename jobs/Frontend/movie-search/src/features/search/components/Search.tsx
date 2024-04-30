@@ -28,7 +28,7 @@ export default function Search() {
         .then(response => response.data)
         .catch((error: AxiosError) => {
           console.error(error.toJSON());
-          throw new Error(`Failed to fetch movies`);
+          throw new Error(t('error.failedMoviesFetch'));
         })
   });
 
@@ -97,6 +97,10 @@ export default function Search() {
 
   return (
     <>
+      <Typography sx={{ mb: 8 }} variant="h2">
+        {t('common.appTitle')}
+      </Typography>
+
       <Box sx={{ m: 2, display: 'flex', alignItems: 'flex-end' }}>
         <GridSearchIcon sx={{ color: deepPurple[500], mr: 1, my: 0.5 }} />
         <TextField
@@ -108,31 +112,40 @@ export default function Search() {
           onKeyUp={handleSearch}
         />
       </Box>
-      {isLoading && <CircularProgress />}
-      {error && (
-        <Typography variant="body2" color="error">
-          Error: {error.message}
-        </Typography>
-      )}
-      {movies.length > 0 && (
-        <DataGrid
-          sx={{
-            '& .MuiDataGrid-cell:focus': {
-              outline: 'none'
-            }
-          }}
-          rows={movies}
-          columns={columns}
-          onRowClick={handleRowClick}
-          rowHeight={100}
-          pageSizeOptions={[defaultPageSize, 10, 25, 100]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: defaultPageSize, page: 0 }
-            }
-          }}
-        />
-      )}
+
+      <Box sx={{ mt: 4 }}>
+        {isLoading && <CircularProgress />}
+
+        <Box sx={{ mt: 2 }}>
+          {error && (
+            <Typography variant="h5" color="error">
+              Error: {error.message}
+            </Typography>
+          )}
+
+          {movies.length === 0 && query !== '' && <Typography variant="h5">{t('error.noMoviesMatch')}</Typography>}
+        </Box>
+
+        {movies.length > 0 && (
+          <DataGrid
+            sx={{
+              '& .MuiDataGrid-cell:focus': {
+                outline: 'none'
+              }
+            }}
+            rows={movies}
+            columns={columns}
+            onRowClick={handleRowClick}
+            rowHeight={100}
+            pageSizeOptions={[defaultPageSize, 10, 25, 100]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: defaultPageSize, page: 0 }
+              }
+            }}
+          />
+        )}
+      </Box>
     </>
   );
 }

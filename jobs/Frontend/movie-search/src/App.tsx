@@ -9,7 +9,7 @@ function App() {
       <CssBaseline>
         <Stack
           sx={{
-            marginTop: 'calc(100svh / 6)'
+            marginTop: 'calc(100svh / 32)'
           }}
           direction="column"
           alignItems="center"

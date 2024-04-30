@@ -1,5 +1,9 @@
 {
-	"common": {
-		"appTitle": "Movie Search"
-	}
+  "common": {
+    "appTitle": "Movie Search"
+  },
+  "error": {
+    "failedMoviesFetch": "Failed to fetch movies.",
+    "noMoviesMatch": "No matching movie(s) found."
+  }
 }

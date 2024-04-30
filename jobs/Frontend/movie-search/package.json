@@ -35,7 +35,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,css,scss}\"",
-    "interface": "i18next-resources-for-ts interface -i ./public/i18n/en -o ./src/@types/resources.d.ts"
+    "interface": "i18next-resources-for-ts interface -i ./src/locales/en -o ./src/@types/resources.d.ts"
   },
   "eslintConfig": {
     "extends": [
