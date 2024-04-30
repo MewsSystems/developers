@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
 import { getMovieDetails } from '../../api/getMovieDetails';
+import formatCurrency from '../../common/helpers/formatCurrency';
 import formatDate from '../../common/helpers/formateDate';
 import { Details } from '../models/Details';
 
@@ -43,9 +44,15 @@ export default function MovieDetails() {
   return (
     <>
       <Box sx={{ mb: 8 }}>
-        <Typography variant="h2">{title}</Typography>
+        <Box textAlign="center">
+          <Typography variant="h2">{title}</Typography>
+        </Box>
         {details && (
-          <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={2}>
+          <Stack
+            direction="row"
+            divider={<Divider orientation="vertical" flexItem />}
+            spacing={2}
+            justifyContent="space-between">
             <Typography variant="subtitle1" color="primary.main">
               {`${t('movieDetails.status')}: ${details.status}`}
             </Typography>
@@ -89,12 +96,40 @@ export default function MovieDetails() {
               />
             </Box>
 
-            <Paper sx={{ p: 4, borderRadius: 2, maxWidth: '70rem', height: 'fit-content' }} elevation={3}>
-              <Typography variant="h5" color="primary.main">
-                {t('movieDetails.overview')}
-              </Typography>
-              <Typography variant="body1">{details.overview}</Typography>
-            </Paper>
+            <Stack direction="column" spacing={2}>
+              <Paper sx={{ p: 4, borderRadius: 2, maxWidth: '70rem', height: 'fit-content' }} elevation={3}>
+                <Stack direction="column" spacing={2}>
+                  <Box>
+                    <Typography variant="h5" color="primary.main">
+                      {t('movieDetails.overview')}
+                    </Typography>
+                    <Typography variant="body1">{details.overview}</Typography>
+                  </Box>
+
+                  <Box textAlign="center">
+                    <Typography variant="subtitle1" color="primary.main">
+                      {`"${details.tagline}"`}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Paper>
+
+              <Paper sx={{ p: 4, borderRadius: 2, maxWidth: '70rem', height: 'fit-content' }} elevation={3}>
+                <Stack
+                  direction="row"
+                  divider={<Divider orientation="vertical" flexItem />}
+                  spacing={2}
+                  justifyContent="space-between">
+                  <Typography variant="subtitle1" color="primary.main">
+                    {`${t('movieDetails.budget')}: ${formatCurrency(details.budget)}`}
+                  </Typography>
+
+                  <Typography variant="subtitle1" color="primary.main">
+                    {`${t('movieDetails.revenue')}: ${formatCurrency(details.revenue)}`}
+                  </Typography>
+                </Stack>
+              </Paper>
+            </Stack>
           </Stack>
         )}
       </Box>

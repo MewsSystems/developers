@@ -16,7 +16,9 @@
     "popularity": "Popularity",
     "voteCount": "Vote Count",
     "voteAverage": "Vote Average",
-    "status": "Status"
+    "status": "Status",
+    "budget": "Budget",
+    "revenue": "Revenue"
   },
   "error": {
     "failedMoviesFetch": "Failed to fetch movies.",
