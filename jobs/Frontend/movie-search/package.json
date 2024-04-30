@@ -8,6 +8,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@mui/x-data-grid": "^7.3.1",
     "@tanstack/react-query": "^5.32.0",
     "@tanstack/react-query-devtools": "^5.32.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -34,7 +35,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,html,css,scss}\"",
-    "interface": "i18next-resources-for-ts interface -i ./public/i18n/en -o ./src/@types/resources.d.ts"
+    "interface": "i18next-resources-for-ts interface -i ./src/locales/en -o ./src/@types/resources.d.ts"
   },
   "eslintConfig": {
     "extends": [
