@@ -119,7 +119,7 @@ export default function MovieDetails() {
                   </Box>
 
                   <Box textAlign="center">
-                    <Typography sx={{ fontStyle: 'italic' }} variant="h6" color="primary.main">
+                    <Typography sx={{ fontStyle: 'italic' }} variant="subtitle1" color="primary.main">
                       {`"${details.tagline}"`}
                     </Typography>
                   </Box>
@@ -164,16 +164,18 @@ export default function MovieDetails() {
                       </Typography>
                     </Box>
 
-                    <Box>
-                      <Typography sx={{ fontWeight: 'bold' }} variant="subtitle1" display="inline">
-                        {`${t('movieDetails.hompage')}: `}
-                      </Typography>
-                      <Typography variant="subtitle1" display="inline">
-                        <Tooltip title={details.homepage} arrow>
-                          <Link href={details.homepage}>{<LinkIcon sx={{ my: -1 }}></LinkIcon>}</Link>
-                        </Tooltip>
-                      </Typography>
-                    </Box>
+                    {details.homepage && (
+                      <Box>
+                        <Typography sx={{ fontWeight: 'bold' }} variant="subtitle1" display="inline">
+                          {`${t('movieDetails.hompage')}: `}
+                        </Typography>
+                        <Typography variant="subtitle1" display="inline">
+                          <Tooltip title={details.homepage} arrow>
+                            <Link href={details.homepage}>{<LinkIcon sx={{ my: -1 }}></LinkIcon>}</Link>
+                          </Tooltip>
+                        </Typography>
+                      </Box>
+                    )}
                   </Stack>
 
                   <Stack direction="column" alignItems="left" justifyContent="space-between">
