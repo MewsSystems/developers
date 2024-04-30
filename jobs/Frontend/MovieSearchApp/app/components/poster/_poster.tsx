@@ -9,9 +9,15 @@ export const Poster = ({ src, alt }: Props) => {
   const hasPoster = src !== null
 
   return hasPoster ? (
-    <img className={styles.poster} src={src} alt={alt} loading={"lazy"} />
+    <img
+      className={styles.poster}
+      src={src}
+      alt={alt}
+      loading={"lazy"}
+      data-testid={"poster-image"}
+    />
   ) : (
-    <div className={styles.unkownPoster}>
+    <div className={styles.unkownPoster} data-testid={"poster-placeholder"}>
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fillRule="evenodd"

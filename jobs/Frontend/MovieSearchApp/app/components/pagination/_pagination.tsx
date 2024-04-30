@@ -69,6 +69,7 @@ export const Pagination = ({ totalPages }: Props) => {
             defaultValue={currentPage}
             min={MIN_PAGE}
             max={totalPages}
+            data-testid={"page-input"}
           />
           <span>of {totalPages}</span>
         </section>
