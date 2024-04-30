@@ -1,4 +1,3 @@
-import type { ReactNode } from "react"
 import styles from "./_header.module.css"
 
 export const Header = () => {

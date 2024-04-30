@@ -1,8 +1,9 @@
+import type { ReactNode } from "react"
 import { Link, LinkProps } from "@remix-run/react"
 import styles from "./_pagination-link.module.css"
 
 type Props = {
-  children: React.ReactNode
+  children: ReactNode
   disabled: boolean
   to: LinkProps["to"]
 }

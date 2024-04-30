@@ -9,7 +9,9 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@remix-run/css-bundle": "2.9.1",
@@ -29,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "7.7.1",
     "@typescript-eslint/parser": "7.7.1",
     "@vitejs/plugin-react": "4.2.1",
+    "cypress": "13.8.1",
     "eslint": "8.56.0",
     "eslint-import-resolver-typescript": "3.6.1",
     "eslint-plugin-import": "2.29.1",

@@ -1,4 +1,4 @@
-import { Form, Link, useSearchParams, useSubmit } from "@remix-run/react"
+import { Form, useSearchParams, useSubmit } from "@remix-run/react"
 import { setNewSearchParams } from "~/utils/set-new-search-params"
 import styles from "./_pagination.module.css"
 import { PaginationLink } from "~/components/pagination/_pagination-link"

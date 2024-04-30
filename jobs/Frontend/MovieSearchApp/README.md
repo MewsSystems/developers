@@ -4,7 +4,7 @@ A simple movie search application built with Remix and Vite.
 
 ## Features 
 
-- Search for movies by title
+- Search for movie by title
 - View movie details
 
 ## Tech Stack
@@ -18,6 +18,7 @@ A simple movie search application built with Remix and Vite.
 - [CSS Modules](https://github.com/css-modules/css-modules)
 - [Vitest](https://vitest.dev)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
+- [Cypress](https://www.cypress.io)
 
 ## Prerequisites
 
@@ -26,11 +27,37 @@ A simple movie search application built with Remix and Vite.
 
 ## Getting Started
 
+### Set up your TMDB API key
+
+1. Duplicate the `.env.example` file and rename it to `.env` by running the following command
+```shellscript
+cp .env.example .env
+```
+2. Open the `.env` file
+3. Paste your TMDB API key in the `TMDB_API_KEY` variable
+
+### Install dependencies
+
+```shellscript
+npm install
+```
+
+
 ### Development
 
 ```shellscript
 # Start the Vite dev server
 npm run dev 
+```
+
+### Testing
+
+```shellscript
+# Run unit and integration tests
+npm run test
+
+# Run end-to-end tests
+npm run cypress:run
 ```
 
 ### Deployment

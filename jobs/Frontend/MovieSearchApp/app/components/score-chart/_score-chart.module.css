@@ -8,7 +8,6 @@
 }
 
 .chart {
-  size: 80px;
   fill: var(--score-chart-background);
   stroke: var(--score-chart-progress);
   stroke-width: 0;

@@ -1,3 +1,4 @@
+import type { FormEvent } from "react"
 import { Form, useSearchParams, useSubmit } from "@remix-run/react"
 import styles from "./_search.module.css"
 import {
@@ -14,12 +15,12 @@ export const Search = () => {
 
   const isResetButtonVisible = searchQuery.length > 0
 
-  const handleChange = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget
     submit(form)
   }
 
-  const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleReset = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget
     form.search.value = ""
     submit(form)
@@ -39,6 +40,7 @@ export const Search = () => {
 
       <section className={styles.inputWrapper}>
         <input
+          autoFocus={true}
           placeholder={"Movie title..."}
           className={styles.input}
           type="text"
