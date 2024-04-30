@@ -7,10 +7,13 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
+import useDelayedRender from '../../../hooks/useDelayRender';
 import { searchMovie } from '../../api/searchMovie';
 import { Movie } from '../../movies/models/Movie';
 
 export default function Search() {
+  const defaultPageSize = 8;
+
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -35,6 +38,10 @@ export default function Search() {
   useEffect(() => {
     if (data?.results) setMovies(data.results);
   }, [data]);
+
+  const shouldRenderError = useDelayedRender(error !== null);
+  const shouldRenderNoMovies = useDelayedRender(movies.length === 0 && query !== '');
+  const shouldRenderLoading = useDelayedRender(isLoading);
 
   const columns: GridColDef<Movie>[] = [
     {
@@ -87,13 +94,9 @@ export default function Search() {
     }
   ];
 
-  const handleRowClick: GridEventListener<'rowClick'> = params => navigate(`/movie/${params.row.id}`);
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
-
   const handleSearch = () => navigate(`/search?query=${query}`);
-
-  const defaultPageSize = 8;
+  const handleRowClick: GridEventListener<'rowClick'> = params => navigate(`/movie/${params.row.id}`);
 
   return (
     <>
@@ -113,17 +116,17 @@ export default function Search() {
         />
       </Box>
 
-      <Box sx={{ mt: 4 }}>
-        {isLoading && <CircularProgress />}
+      {shouldRenderLoading && <CircularProgress sx={{ m: 4 }} />}
 
+      <Box sx={{ mt: 4 }}>
         <Box sx={{ mt: 2 }}>
-          {error && (
+          {shouldRenderError && (
             <Typography variant="h5" color="error">
-              Error: {error.message}
+              Error: {error?.message}
             </Typography>
           )}
 
-          {movies.length === 0 && query !== '' && <Typography variant="h5">{t('error.noMoviesMatch')}</Typography>}
+          {shouldRenderNoMovies && <Typography variant="h5">{t('error.noMoviesMatch')}</Typography>}
         </Box>
 
         {movies.length > 0 && (
@@ -131,7 +134,8 @@ export default function Search() {
             sx={{
               '& .MuiDataGrid-cell:focus': {
                 outline: 'none'
-              }
+              },
+              '& .MuiDataGrid-row:hover': { cursor: 'pointer' }
             }}
             rows={movies}
             columns={columns}
