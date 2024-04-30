@@ -1,5 +1,6 @@
 import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Search from './features/search/components/Search';
 import { theme } from './themes/theme';
 
@@ -14,7 +15,12 @@ function App() {
           direction="column"
           alignItems="center"
           justifyContent="center">
-          <Search></Search>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/search/" />} />
+              <Route path="search" element={<Search />} />
+            </Routes>
+          </BrowserRouter>
         </Stack>
       </CssBaseline>
     </ThemeProvider>

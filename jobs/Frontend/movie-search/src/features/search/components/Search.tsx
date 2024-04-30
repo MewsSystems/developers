@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
 import useDelayedRender from '../../../hooks/useDelayRender';
 import { searchMovie } from '../../api/searchMovie';
@@ -20,9 +20,9 @@ export default function Search() {
     document.title = t('common.appTitle');
   }, [t]);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get('query') || '');
   const navigate = useNavigate();
-  const [query, setQuery] = useState<string>('');
-  const [movies, setMovies] = useState<Movie[]>([]);
 
   const { isLoading, data, error } = useQuery({
     queryKey: ['movies', query],
@@ -34,6 +34,8 @@ export default function Search() {
           throw new Error(t('error.failedMoviesFetch'));
         })
   });
+
+  const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     if (data?.results) setMovies(data.results);
@@ -95,7 +97,12 @@ export default function Search() {
   ];
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
-  const handleSearch = () => navigate(`/search?query=${query}`);
+
+  const handleSearch = () => {
+    if (!query) return;
+    setSearchParams({ query: query }, { replace: true });
+  };
+
   const handleRowClick: GridEventListener<'rowClick'> = params => navigate(`/movie/${params.row.id}`);
 
   return (
@@ -107,6 +114,7 @@ export default function Search() {
       <Box sx={{ m: 2, display: 'flex', alignItems: 'flex-end' }}>
         <GridSearchIcon sx={{ color: deepPurple[500], mr: 1, my: 0.5 }} />
         <TextField
+          id="movie-search-input"
           label="Search Title"
           sx={{ width: '40rem' }}
           variant="standard"
