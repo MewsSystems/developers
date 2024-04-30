@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater
 {
@@ -13,11 +14,15 @@ namespace ExchangeRateUpdater
         private const string CZECH_KORUNA_CODE = "CZK";
         private readonly HttpClient _httpClient;
         private readonly ILogger<ExchangeRateProvider> _logger;
+        private readonly ExchangeRateProviderOptions _exchangeRateProviderOptions;
 
-        public ExchangeRateProvider(HttpClient httpClient, ILogger<ExchangeRateProvider> logger)
+        public ExchangeRateProvider(HttpClient httpClient,
+                                    ILogger<ExchangeRateProvider> logger,
+                                    IOptions<ExchangeRateProviderOptions> options)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _exchangeRateProviderOptions = options.Value;
         }
 
         /// <summary>
@@ -33,10 +38,17 @@ namespace ExchangeRateUpdater
                 return Enumerable.Empty<ExchangeRate>();
             }
 
-            // TODO : Make it async
-            // TODO : USE Options for url(so can use test urls)
+            ExchangeRateResponsePayload response = null;
+            try
+            {
+                response = await _httpClient.GetFromJsonAsync<ExchangeRateResponsePayload>(_exchangeRateProviderOptions.ApiRequestUri);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error thrown calling exchange rate api");
 
-            var response = await _httpClient.GetFromJsonAsync<ExchangeRateResponsePayload>("https://api.cnb.cz/cnbapi/exrates/daily?lang=EN");
+                throw;
+            }
 
             if (response is null || response.Rates is null || !response.Rates.Any())
             {

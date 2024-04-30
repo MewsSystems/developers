@@ -5,12 +5,37 @@ using System.Runtime.CompilerServices;
 using Castle.Core.Logging;
 using ExchangeRateUpdater;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 namespace ExchangeRateUpdaterTests;
 
 public class ExchangeRateProviderTests
 {
+    private readonly ILogger<ExchangeRateProvider> _logger;
+    private readonly string _testResponse;
+    private readonly IOptions<ExchangeRateProviderOptions> _options;
+
+    public ExchangeRateProviderTests()
+    {
+        _logger = Substitute.For<ILogger<ExchangeRateProvider>>();
+        _testResponse = @"{
+        ""rates"": [
+            {
+                ""validFor"": ""2024-04-26"",
+                ""order"": 82,
+                ""country"": ""AUD"",
+                ""currency"": ""dollar"",
+                ""amount"": 1,
+                ""currencyCode"": ""AUD"",
+                ""rate"": 30
+            }
+        ]}";
+        _options = Substitute.For<IOptions<ExchangeRateProviderOptions>>();
+        var providerOptions = new ExchangeRateProviderOptions { ApiRequestUri = "https://www.google.com" };
+        _options.Value.Returns(providerOptions);
+    }
+
     [Fact]
     public async Task GetExchangeRates_NoCurrenciesPassedAndAClientResponseWithRates_ResponseIsEmpty()
     {
@@ -119,32 +144,122 @@ public class ExchangeRateProviderTests
         Assert.Contains(rates, rate => rate.TargetCurrency.Code == CADCode && rate.Value == CADRate);
     }
 
-    private static ExchangeRateProvider CreateExchangeRateProvider(string response)
+    [Fact]
+    public async Task GetExchangeRates_ErrorFromRemoteApi_ExceptionIsThrown()
     {
+        var httpClient = new HttpClient(new MockErrorHttpMessageHandler());
+        var provider = new ExchangeRateProvider(httpClient, _logger, _options);
+
+        await Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            await provider.GetExchangeRates(new[] { new Currency("AUD") });
+        });
+    }
+
+    [Fact]
+    public async Task GetExchangeRates_ErrorFromRemoteApi_ExceptionIsLogged()
+    {
+        var httpClient = new HttpClient(new MockErrorHttpMessageHandler());
+        var testableLogger = new TestableLogger<ExchangeRateProvider>();
+        var provider = new ExchangeRateProvider(httpClient, testableLogger, _options);
+
+        await Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            await provider.GetExchangeRates(new[] { new Currency("AUD") });
+        });
+
+        Assert.True(testableLogger.ErrorLogged);
+    }
+
+    [Fact]
+    public async Task GetExchangeRates_ApiUriFromOptionsIsUsed()
+    {
+        var providerOptions = new ExchangeRateProviderOptions { ApiRequestUri = "https://www.google.com/" };
+        var httpHandler = new MockHttpMessageHandler(_testResponse);
+        var httpClient = new HttpClient(httpHandler);
+        var provider = new ExchangeRateProvider(httpClient, _logger, Options.Create(providerOptions));
+
+        await provider.GetExchangeRates(new[] { new Currency("AUD") });
+
+        Assert.Same(providerOptions.ApiRequestUri, httpHandler.LastUri?.ToString());
+    }
+
+    private ExchangeRateProvider CreateExchangeRateProvider(string? response = null)
+    {
+        if (response == null)
+        {
+            response = _testResponse;
+        }
+
         var httpHandler = new MockHttpMessageHandler(response);
         var httpClient = new HttpClient(httpHandler);
 
-        var provider = new ExchangeRateProvider(httpClient, Substitute.For<ILogger<ExchangeRateProvider>>());
+        var provider = new ExchangeRateProvider(httpClient, _logger, _options);
         return provider;
+    }
+
+    class MockErrorHttpMessageHandler : HttpMessageHandler
+    {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+            CancellationToken cancellationToken)
+        {
+            return new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+            };
+        }
     }
 
     class MockHttpMessageHandler : HttpMessageHandler
     {
         private readonly string _response;
+        private Uri? _lastUri;
 
         public MockHttpMessageHandler(string response)
         {
             _response = response;
         }
 
+        public Uri? LastUri => _lastUri;
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             CancellationToken cancellationToken)
         {
+            _lastUri = request.RequestUri;
             return new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(_response)
             };
+        }
+    }
+
+    public class TestableLogger<T> : ILogger<T>
+    {
+        private bool _errorLogged = false;
+
+        public bool ErrorLogged => _errorLogged;
+
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            if (logLevel == LogLevel.Error)
+            {
+                _errorLogged = true;
+            }
         }
     }
 }

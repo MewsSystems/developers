@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater
 {
@@ -28,7 +29,8 @@ namespace ExchangeRateUpdater
                 using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
                 var provider = new ExchangeRateProvider(
                         new System.Net.Http.HttpClient(),
-                        factory.CreateLogger<ExchangeRateProvider>()
+                        factory.CreateLogger<ExchangeRateProvider>(),
+                        Options.Create(new ExchangeRateProviderOptions{ ApiRequestUri="https://api.cnb.cz/cnbapi/exrates/daily?lang=EN" })
                     );
                 var rates = await provider.GetExchangeRates(currencies);
 
