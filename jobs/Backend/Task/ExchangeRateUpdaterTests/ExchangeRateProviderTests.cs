@@ -11,7 +11,7 @@ namespace ExchangeRateUpdaterTests;
 public class ExchangeRateProviderTests
 {
     [Fact]
-    public void GivenNoCurrenciesAndAClientResponseWithRates_WhenGetExchangeRatesCalled_ResponseIsEmpty()
+    public void GetExchangeRates_NoCurrenciesPassedAndAClientResponseWithRates_ResponseIsEmpty()
     {
         var response = @"{
         ""rates"": [
@@ -25,7 +25,6 @@ public class ExchangeRateProviderTests
                 ""rate"": 15.35
             }
         ]}";
-
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
         var rates = provider.GetExchangeRates(Array.Empty<Currency>());
@@ -34,11 +33,10 @@ public class ExchangeRateProviderTests
     }
 
     [Fact]
-    public void GivenAnAUDCurrencyRequestAndAClientResponseThatContainsAUDRate_WhenGetExchangeRatesCalled_ResponseContainsAUDExchangeRate()
+    public void GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatContainsAUDRate_ResponseContainsExpectedRate()
     {
         const string AUDCode = "AUD";
         const decimal Rate = 15.35M;
-
         var response = $@"{{
         ""rates"": [
             {{
@@ -51,7 +49,6 @@ public class ExchangeRateProviderTests
                 ""rate"": {Rate}
             }}
         ]}}";
-
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
         var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode) });
@@ -61,10 +58,9 @@ public class ExchangeRateProviderTests
     }
 
     [Fact]
-    public void GivenAnAUDCurrencyRequestAndAClientResponseThatDoesNotContainAUDRate_WhenGetExchangeRatesCalled_ResponseIsEmpty()
+    public void GetExchangeRates_WithAnAUDCurrencyRequestAndAClientResponseThatDoesNotContainAUDRate_ResponseIsEmpty()
     {
         const string AUDCode = "AUD";
-
         var response = $@"{{
         ""rates"": [
             {{
@@ -77,7 +73,6 @@ public class ExchangeRateProviderTests
                 ""rate"": 30
             }}
         ]}}";
-
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
         var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode) });
@@ -86,13 +81,12 @@ public class ExchangeRateProviderTests
     }
 
     [Fact]
-    public void GivenTwoRequestCurrenciesThatAreContainedIntheClientResponse_WhenGetExchangeRatesIsCalled_ResponseContainsRequestedCurrencyRates()
+    public void GetExchangeRates_WithTwoRequestCurrenciesThatAreContainedIntheClientResponse_ResponseContainsExpectedRates()
     {
         const string AUDCode = "AUD";
         const decimal AUDRate = 15.35M;
         const string CADCode = "CAD";
         const decimal CADRate = 17.195M;
-
         var response = $@"{{
         ""rates"": [
             {{
@@ -114,7 +108,6 @@ public class ExchangeRateProviderTests
                 ""rate"": {CADRate}
             }}
         ]}}";
-
         ExchangeRateProvider provider = CreateExchangeRateProvider(response);
 
         var rates = provider.GetExchangeRates(new[] { new Currency(AUDCode), new Currency(CADCode) });
