@@ -75,6 +75,6 @@ public class ExchangeRateProvider
 
     protected record ExchangeRateResponsePayload(ExchangeRateResponse[] Rates);
 
-    public record ExchangeRateResponse(string CurrencyCode, decimal Rate, int Amount);
+    protected internal record ExchangeRateResponse(string CurrencyCode, decimal Rate, int Amount);
 }
 

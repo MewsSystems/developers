@@ -1,6 +1,6 @@
 namespace ExchangeRateUpdater;
 
-public class CzkExchangeRateFactory {
+internal class CzkExchangeRateFactory {
     public ExchangeRate Create(ExchangeRateProvider.ExchangeRateResponse rateResponse)
     {
         return new ExchangeRate (new Currency(ExchangeRateProvider.CZECH_KORUNA_CODE),
