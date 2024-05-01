@@ -27,6 +27,13 @@ export type Movie = {
   vote_count: number;
 };
 
+export class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = "HttpError";
+  }
+}
+
 async function get(path: string, init?: RequestInit) {
   const response = await fetch(
     `${FMDB_API_URL}/${path}&api_key=${FMDB_API_KEY}`,
@@ -40,7 +47,7 @@ async function get(path: string, init?: RequestInit) {
   );
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new HttpError(response.status, "Network response was not ok");
   }
 
   return response.json();
@@ -52,7 +59,9 @@ export function findMovies(
   init?: RequestInit
 ): Promise<Results<Movie>> {
   return get(
-    `/search/movie?query=${encodeURIComponent(query)}&include_adult=true&language=en-US&page=${page}`,
+    `/search/movie?query=${encodeURIComponent(
+      query
+    )}&include_adult=true&language=en-US&page=${page}`,
     init
   );
 }

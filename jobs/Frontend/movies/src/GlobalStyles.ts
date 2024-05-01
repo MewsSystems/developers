@@ -76,4 +76,13 @@ export default createGlobalStyle`
 
     font-family: var(--font-sans-serif);
   }
+
+  /*
+    UX bits
+  */
+
+  #root { 
+    --color-dark-gray: hsl(170, 4%, 38%);
+    --color-light-gray: hsl(170, 4%, 86%);
+  }
 `;
