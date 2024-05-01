@@ -1,9 +1,16 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import SearchMovies from "./pages/SearchMovies";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <PageContainer>
       <h1>Something</h1>
+      <QueryClientProvider client={queryClient}>
+        <SearchMovies />
+      </QueryClientProvider>
     </PageContainer>
   );
 }

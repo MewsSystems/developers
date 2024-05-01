@@ -1,0 +1,1 @@
+export const FMDB_API_KEY = import.meta.env.VITE_FMDB_API_KEY || '';
