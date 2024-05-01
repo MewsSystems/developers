@@ -82,7 +82,9 @@ export default createGlobalStyle`
   */
 
   #root { 
-    --color-dark-gray: hsl(170, 4%, 38%);
-    --color-light-gray: hsl(170, 4%, 86%);
+    --color-dark-text: hsl(240, 10%, 3.92%);
+    --color-light-text: hsl(240, 3.83%, 46.08%);
+    --color-dark-gray: hsl(170, 0%, 38%);
+    --color-light-gray: hsl(170, 0%, 86%);
   }
 `;

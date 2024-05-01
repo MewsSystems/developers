@@ -1,6 +1,7 @@
 import { TMDB_API_KEY } from "../config";
 
 const TMDB_API_URL = "https://api.themoviedb.org/3";
+const TMDB_IMAGES_BASE_PATH = "http://image.tmdb.org/t/p/";
 
 export class HttpError extends Error {
   constructor(public status: number, message: string) {
@@ -33,6 +34,17 @@ export type Movie = {
   vote_count: number;
 };
 
+export type PosterSize =
+  | "w92"
+  | "w154"
+  | "w185"
+  | "w342"
+  | "w500"
+  | "w780"
+  | "original";
+
+export type BackdropSize = "w300" | "w780" | "w1280" | "original";
+
 async function get(path: string, init?: RequestInit) {
   const response = await fetch(
     `${TMDB_API_URL}/${path}&api_key=${TMDB_API_KEY}`,
@@ -63,4 +75,12 @@ export function findMovies(
     )}&include_adult=true&language=en-US&page=${page}`,
     init
   );
+}
+
+export function posterUrl(path: string, size: PosterSize) {
+  return `${TMDB_IMAGES_BASE_PATH}${size}${path}`;
+}
+
+export function backdropUrl(path: string, size: BackdropSize) {
+  return `${TMDB_IMAGES_BASE_PATH}${size}${path}`;
 }
