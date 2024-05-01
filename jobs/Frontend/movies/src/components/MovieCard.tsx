@@ -1,4 +1,4 @@
-import { Movie } from "src/api/fmdb";
+import { Movie } from "src/api/tmdb";
 import styled from "styled-components";
 
 type MovieCardProps = {

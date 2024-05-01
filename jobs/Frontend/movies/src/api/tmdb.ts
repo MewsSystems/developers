@@ -1,7 +1,13 @@
-import { FMDB_API_KEY } from "../config";
-import delay from "./delay";
+import { TMDB_API_KEY } from "../config";
 
-const FMDB_API_URL = "https://api.themoviedb.org/3";
+const TMDB_API_URL = "https://api.themoviedb.org/3";
+
+export class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = "HttpError";
+  }
+}
 
 export type Results<T> = {
   page: number;
@@ -27,16 +33,9 @@ export type Movie = {
   vote_count: number;
 };
 
-export class HttpError extends Error {
-  constructor(public status: number, message: string) {
-    super(message);
-    this.name = "HttpError";
-  }
-}
-
 async function get(path: string, init?: RequestInit) {
   const response = await fetch(
-    `${FMDB_API_URL}/${path}&api_key=${FMDB_API_KEY}`,
+    `${TMDB_API_URL}/${path}&api_key=${TMDB_API_KEY}`,
     {
       method: "GET",
       headers: {

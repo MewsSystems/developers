@@ -1,11 +1,11 @@
-import { HttpError } from "src/api/fmdb";
+import { HttpError } from "src/api/tmdb";
 import { FallbackProps } from "./ErrorBoundary";
 import styled from "styled-components";
 
 function ErrorFallback({ error }: FallbackProps) {
   const message =
     error instanceof HttpError && error.status >= 500
-      ? "FMDB server is down. Please try later."
+      ? "TMDB server is down. Please try later."
       : error.message;
   return (
     <CenteredContainer role="alert">

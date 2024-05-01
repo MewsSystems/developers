@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { HttpError, findMovies } from "src/api/fmdb";
+import { HttpError, findMovies } from "src/api/tmdb";
 
 function useMoviesQuery(query: string) {
   const queryResult = useInfiniteQuery({
