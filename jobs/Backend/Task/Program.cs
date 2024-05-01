@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
@@ -16,25 +18,48 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("XYZ"),
+            new Currency("BRL") // Added
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs/exchangeRateUpdater.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            Log.Information("Starting the Exchange Rate Updater");
+            Log.Information("The data for the current working day is available after 14:30 CEST");
+
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                if (rates.Any())
                 {
-                    Console.WriteLine(rate.ToString());
+                    Log.Information("Successfully retrieved {Count} exchange rates", rates.Count());
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
+                else
+                {
+                    Log.Warning("No exchange rates were retrieved.");
+                }
+
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Log.Error(e, "Could not retrieve exchange rates");
+            }
+            finally
+            {
+                Log.Information("Ending the Exchange Rate Updater");
+                Log.CloseAndFlush();
             }
 
             Console.ReadLine();
