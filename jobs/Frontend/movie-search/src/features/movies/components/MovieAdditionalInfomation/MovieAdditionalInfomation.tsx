@@ -69,7 +69,7 @@ export default function MovieAdditionalInformation({ details, sxPaperContainer }
               {`${t('movieDetails.budget')}: `}
             </Typography>
             <Typography variant="subtitle1" display="inline">
-              {formatCurrency(details.budget)}
+              {details.budget ? formatCurrency(details.budget) : t('error.notAvailable')}
             </Typography>
           </Box>
 
@@ -78,7 +78,7 @@ export default function MovieAdditionalInformation({ details, sxPaperContainer }
               {`${t('movieDetails.revenue')}: `}
             </Typography>
             <Typography variant="subtitle1" display="inline">
-              {formatCurrency(details.revenue)}
+              {details.revenue ? formatCurrency(details.revenue) : t('error.notAvailable')}
             </Typography>
           </Box>
 
