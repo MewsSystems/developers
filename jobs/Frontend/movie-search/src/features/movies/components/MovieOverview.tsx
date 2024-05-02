@@ -22,7 +22,7 @@ export default function MovieOverview({ details, sxPaperContainer }: OverviewPro
 
         <Box textAlign="center">
           {details?.tagline && (
-            <Typography sx={{ fontStyle: 'italic' }} variant="subtitle1" color="primary.main">
+            <Typography sx={{ fontStyle: 'italic', fontWeight: 'lighter' }} variant="h6" color="primary.main">
               {`"${details.tagline}"`}
             </Typography>
           )}

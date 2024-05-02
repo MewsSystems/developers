@@ -8,7 +8,7 @@ export const theme = createTheme({
       main: deepPurple[500]
     },
     secondary: {
-      main: grey[500]
+      main: grey[600]
     },
     error: {
       main: red[500]

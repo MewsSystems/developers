@@ -12,7 +12,7 @@ import { searchMovies } from '../../api/searchMovie';
 import { Movie } from '../../movies/models/Movie';
 
 export default function Search() {
-  const defaultPageSize = 8;
+  const defaultPageSize = 6;
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -48,6 +48,7 @@ export default function Search() {
     {
       field: 'poster_path',
       headerName: t('movieDetails.poster'),
+      sortable: false,
       width: 100,
       renderCell: params => (
         <img height={100} src={ENDPOINT_URL_IMAGES_w500 + params.value} alt={t('movieDetails.poster')} />
@@ -56,43 +57,43 @@ export default function Search() {
     {
       field: 'title',
       headerName: t('movieDetails.title'),
-      width: 200
+      width: 240
     },
     {
       field: 'release_date',
       headerName: t('movieDetails.releaseDate'),
-      width: 120,
+      width: 155,
       valueFormatter: (value: Movie['release_date']) => value.substring(0, 4)
     },
     {
       field: 'adult',
       headerName: t('movieDetails.adult'),
-      width: 60,
+      width: 100,
       valueFormatter: (value: Movie['adult']) => (value ? t('common.yes') : t('common.no'))
     },
     {
       field: 'popularity',
       headerName: t('movieDetails.popularity'),
       type: 'number',
-      width: 120
+      width: 130
     },
     {
       field: 'vote_average',
       headerName: t('movieDetails.voteAverage'),
       type: 'number',
-      width: 120,
+      width: 130,
       valueFormatter: (value: Movie['vote_average']) => `${Math.round(value)}/10`
     },
     {
       field: 'vote_count',
       headerName: t('movieDetails.voteCount'),
       type: 'number',
-      width: 100
+      width: 130
     },
     {
       field: 'original_language',
       headerName: t('movieDetails.originalLanguage'),
-      width: 130,
+      minWidth: 160,
       align: 'center',
       valueFormatter: (value: Movie['original_language']) => value.toUpperCase()
     }
