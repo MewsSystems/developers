@@ -8,7 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import AppRoutes from '../../../configs/appRoutes';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
 import useDelayedRender from '../../../hooks/useDelayRender';
-import { searchMovie } from '../../api/searchMovie';
+import { searchMovies } from '../../api/searchMovie';
 import { Movie } from '../../movies/models/Movie';
 
 export default function Search() {
@@ -26,7 +26,7 @@ export default function Search() {
   const { isLoading, data, error } = useQuery({
     queryKey: ['movies', query],
     queryFn: async () =>
-      searchMovie(query)
+      searchMovies(query)
         .then(response => response.data)
         .catch((error: AxiosError) => {
           console.error(error.toJSON());
