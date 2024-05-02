@@ -75,25 +75,25 @@ export default function Search() {
       field: 'popularity',
       headerName: t('movieDetails.popularity'),
       type: 'number',
-      width: 130
+      width: 140
     },
     {
       field: 'vote_average',
       headerName: t('movieDetails.voteAverage'),
       type: 'number',
-      width: 130,
+      width: 155,
       valueFormatter: (value: Movie['vote_average']) => `${Math.round(value)}/10`
     },
     {
       field: 'vote_count',
       headerName: t('movieDetails.voteCount'),
       type: 'number',
-      width: 130
+      width: 140
     },
     {
       field: 'original_language',
       headerName: t('movieDetails.originalLanguage'),
-      minWidth: 160,
+      minWidth: 185,
       align: 'center',
       valueFormatter: (value: Movie['original_language']) => value.toUpperCase()
     }
