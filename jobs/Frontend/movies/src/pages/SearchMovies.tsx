@@ -22,22 +22,26 @@ function SearchMovies({}) {
         />
       </SearchBar>
       {isFetching && <Spinner />}
+
       <>
         {isError && <p>Error occured</p>}
         {error && error instanceof Error && <p>{error.message}</p>}
       </>
+
       <MoviesSection>
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </MoviesSection>
-      <button
-        name="loadMore"
-        onClick={() => fetchNextPage()}
-        disabled={isQueryChanging || isFetching || !hasNextPage}
-      >
-        Load more
-      </button>
+
+      {hasNextPage && (
+        <LoadMoreButton
+          onClick={() => fetchNextPage()}
+          disabled={isQueryChanging || isFetching || !hasNextPage}
+        >
+          Load more
+        </LoadMoreButton>
+      )}
     </Wrapper>
   );
 }
@@ -46,6 +50,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding-bottom: 32px;
 `;
 
 const SearchBar = styled.section`
@@ -76,6 +81,24 @@ const MoviesSection = styled.section`
   gap: 30px;
   align-items: baseline;
   justify-content: center;
+`;
+
+const LoadMoreButton = styled.button`
+  align-self: center;
+  width: fit-content;
+  background-color: var(--color-light-gray);
+  color: black;
+  border: 3px solid black;
+  border-radius: 3px;
+  padding: 8px 32px;
+  font-size: 0.75rem;
+  cursor: pointer;
+
+  &:focus,
+  &:hover {
+    outline: 1px solid black;
+    outline-offset: 0px;
+  }
 `;
 
 export default SearchMovies;
