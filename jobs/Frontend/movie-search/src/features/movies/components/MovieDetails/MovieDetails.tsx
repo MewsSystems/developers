@@ -75,7 +75,7 @@ export default function MovieDetails() {
               />
             </Box>
 
-            <Stack direction="column" spacing={4}>
+            <Stack sx={{ width: 'calc(100svw / 2)' }} direction="column" spacing={4}>
               <MovieOverview details={details} sxPaperContainer={sxPaperContainer} />
               <MovieReception details={details} sxPaperContainer={sxPaperContainer} />
               <MovieAdditionalInformation details={details} sxPaperContainer={sxPaperContainer} />
