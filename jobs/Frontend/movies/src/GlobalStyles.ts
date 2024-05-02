@@ -87,4 +87,5 @@ export default createGlobalStyle`
     --color-dark-gray: hsl(170, 0%, 38%);
     --color-light-gray: hsl(170, 0%, 86%);
   }
+  
 `;

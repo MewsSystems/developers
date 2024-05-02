@@ -3,6 +3,7 @@ import useDebouncedState from "src/hooks/useDebouncedSetState";
 import MovieCard from "src/components/MovieCard";
 import styled from "styled-components";
 import Spinner from "src/components/Spinner";
+import { Link } from "wouter";
 
 function SearchMovies({}) {
   const [query, setQuery, isQueryChanging] = useDebouncedState("", 1000);
@@ -30,7 +31,9 @@ function SearchMovies({}) {
 
       <MoviesSection>
         {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <Link href={`/movies/${movie.id}`}>
+            <MovieCard key={movie.id} movie={movie} />
+          </Link>
         ))}
       </MoviesSection>
 
@@ -54,20 +57,20 @@ const Wrapper = styled.div`
 `;
 
 const SearchBar = styled.section`
+  display: flex;
+  justify-content: center;
   padding: 16px 16px;
   background-color: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(8px);
   box-shadow: 0 10px 10px -5px rgba(200, 200, 200, 0.2);
   background-color: white;
-  margin-left: -50vw;
-  margin-right: -50vw;
 `;
 
 const Input = styled.input`
   padding: 8px 16px;
   border-radius: 8px;
   border: 3px solid black;
-  width: 25vw;
+  flex: 0 1 50vw;
 
   &:focus {
     outline: 1px solid black;
