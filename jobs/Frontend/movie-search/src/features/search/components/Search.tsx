@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import AppRoutes from '../../../configs/appRoutes';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
 import useDelayedRender from '../../../hooks/useDelayRender';
 import { searchMovie } from '../../api/searchMovie';
@@ -12,8 +13,8 @@ import { Movie } from '../../movies/models/Movie';
 
 export default function Search() {
   const defaultPageSize = 8;
-
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = t('common.appTitle');
@@ -21,7 +22,6 @@ export default function Search() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('query') || '');
-  const navigate = useNavigate();
 
   const { isLoading, data, error } = useQuery({
     queryKey: ['movies', query],
@@ -104,7 +104,7 @@ export default function Search() {
     setSearchParams({ query: query }, { replace: true });
   };
 
-  const handleRowClick: GridEventListener<'rowClick'> = params => navigate(`/movie/${params.row.id}`);
+  const handleRowClick: GridEventListener<'rowClick'> = params => navigate(`${AppRoutes.Movie}/${params.row.id}`);
 
   return (
     <>
@@ -116,6 +116,7 @@ export default function Search() {
         <GridSearchIcon sx={{ color: 'primary.main', mr: 1, my: 0.5 }} />
         <TextField
           id="movie-search-input"
+          data-testid="movie-search-input"
           label="Search Title"
           sx={{ width: '40rem' }}
           variant="standard"
@@ -130,7 +131,7 @@ export default function Search() {
       <Paper sx={{ mt: 2, borderRadius: 2 }} elevation={3}>
         <Box sx={{ mt: 2 }}>
           {shouldRenderError && (
-            <Typography variant="h5" color="error">
+            <Typography data-testid="movie-search-error" variant="h5" color="error">
               Error: {error?.message}
             </Typography>
           )}
@@ -140,6 +141,7 @@ export default function Search() {
 
         {movies.length > 0 && (
           <DataGrid
+            data-testid="movie-search-grid"
             sx={{
               '& .MuiDataGrid-cell:focus': {
                 outline: 'none'

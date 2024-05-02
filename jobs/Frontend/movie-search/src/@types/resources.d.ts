@@ -31,7 +31,7 @@ interface Resources {
       "productionCountries": "Production Countries"
     },
     "error": {
-      "failedMoviesFetch": "Failed to fetch movies.",
+      "failedMoviesFetch": "Failed to fetch movie(s).",
       "noMoviesMatch": "No matching movie(s) found."
     }
   }

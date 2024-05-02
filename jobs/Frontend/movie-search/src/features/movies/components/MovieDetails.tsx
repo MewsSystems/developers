@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import AppRoutes from '../../../configs/appRoutes';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
 import { getMovieDetails } from '../../api/getMovieDetails';
 import formatCurrency from '../../common/helpers/formatCurrency';
@@ -14,6 +15,7 @@ import { Details } from '../models/Details';
 export default function MovieDetails() {
   const { movieId } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { isLoading, data, error } = useQuery({
     queryKey: ['details', movieId],
@@ -22,7 +24,12 @@ export default function MovieDetails() {
         .then(response => response.data)
         .catch((error: AxiosError) => {
           console.error(error.toJSON());
-          throw new Error(t('error.failedMoviesFetch'));
+
+          if (error.response?.status === 404) {
+            navigate(AppRoutes.PageNotFound, { replace: true });
+          } else {
+            throw new Error(t('error.failedMoviesFetch'));
+          }
         })
   });
 
