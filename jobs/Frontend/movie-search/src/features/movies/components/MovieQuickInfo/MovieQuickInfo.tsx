@@ -12,7 +12,7 @@ export default function MovieQuickInfo({ details, title }: QuickInfoProps) {
   const { t } = useTranslation();
 
   return (
-    <Stack data-testid="movie-quick-info-section" direction="column" sx={{ mb: 8 }} spacing={1}>
+    <Stack data-testid="movie-quick-info-section" direction="column" sx={{ mb: 8 }} spacing={1} alignItems="center">
       <Box textAlign="center">
         <Typography variant="h2">{title}</Typography>
       </Box>

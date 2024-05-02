@@ -19,11 +19,7 @@ export default function MovieReception({ details, sxPaperContainer }: ReceptionP
           </Typography>
         </Box>
 
-        <Stack
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
-          spacing={2}
-          justifyContent="space-evenly">
+        <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} justifyContent="space-evenly">
           <Box>
             <Typography sx={{ fontWeight: 400 }} variant="h6" display="inline" color="secondary.main">
               {`${t('movieDetails.voteAverage')}: `}

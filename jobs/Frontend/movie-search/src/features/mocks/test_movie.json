@@ -1,0 +1,76 @@
+{
+  "adult": false,
+  "backdrop_path": "/fY3lD0jM5AoHJMunjGWqJ0hRteI.jpg",
+  "belongs_to_collection": null,
+  "budget": 13000000,
+  "genres": [
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 27,
+      "name": "Horror"
+    },
+    {
+      "id": 28,
+      "name": "Action"
+    }
+  ],
+  "homepage": "https://tickets.godzilla.com",
+  "id": 940721,
+  "imdb_id": "tt23289160",
+  "origin_country": ["JP"],
+  "original_language": "ja",
+  "original_title": "ゴジラ-1.0",
+  "overview": "Postwar Japan is at its lowest point when a new crisis emerges in the form of a giant monster, baptized in the horrific power of the atomic bomb.",
+  "popularity": 370.856,
+  "poster_path": "/hkxxMIGaiCTmrEArK7J56JTKUlB.jpg",
+  "production_companies": [
+    {
+      "id": 882,
+      "logo_path": "/iDw9Xxok1d9WAM2zFicI8p3khTH.png",
+      "name": "TOHO",
+      "origin_country": "JP"
+    },
+    {
+      "id": 182161,
+      "logo_path": "/wvG4lK0m76M6jK8WbWkXNecA7SP.png",
+      "name": "TOHO Studios",
+      "origin_country": "JP"
+    },
+    {
+      "id": 12386,
+      "logo_path": "/oxvw2Mrq3GcTxFc2mlT7E5tpek7.png",
+      "name": "Robot Communications",
+      "origin_country": "JP"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    }
+  ],
+  "release_date": "2023-11-03",
+  "revenue": 115857413,
+  "runtime": 125,
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    },
+    {
+      "english_name": "Japanese",
+      "iso_639_1": "ja",
+      "name": "日本語"
+    }
+  ],
+  "status": "Released",
+  "tagline": "Postwar Japan. From zero to minus.",
+  "title": "Godzilla Minus One",
+  "video": false,
+  "vote_average": 7.9,
+  "vote_count": 548
+}

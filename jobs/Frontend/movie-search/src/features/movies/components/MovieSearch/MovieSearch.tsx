@@ -5,13 +5,13 @@ import { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import AppRoutes from '../../../configs/appRoutes';
-import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
-import useDelayedRender from '../../../hooks/useDelayRender';
-import { searchMovies } from '../../api/searchMovie';
-import { Movie } from '../../movies/models/Movie';
+import AppRoutes from '../../../../configs/appRoutes';
+import { ENDPOINT_URL_IMAGES_w500 } from '../../../../configs/config';
+import useDelayedRender from '../../../../hooks/useDelayRender';
+import { searchMovies } from '../../../api/searchMovie';
+import { Movie } from '../../models/Movie';
 
-export default function Search() {
+export default function MovieSearch() {
   const defaultPageSize = 6;
   const { t } = useTranslation();
   const navigate = useNavigate();

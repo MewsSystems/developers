@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppRoutes from './configs/appRoutes';
 import PageNotFound from './features/error/components/PageNotFound';
 import MovieDetails from './features/movies/components/MovieDetails/MovieDetails';
-import Search from './features/search/components/Search';
+import MovieSearch from './features/movies/components/MovieSearch/MovieSearch';
 import { theme } from './themes/theme';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Navigate to={AppRoutes.Search} />} />
-              <Route path={AppRoutes.Search} element={<Search />} />
+              <Route path={AppRoutes.Search} element={<MovieSearch />} />
               <Route path={`${AppRoutes.Movie}/:movieId`} element={<MovieDetails />} />
               <Route path={AppRoutes.PageNotFound} element={<PageNotFound />} />
               <Route path="*" element={<PageNotFound />} />

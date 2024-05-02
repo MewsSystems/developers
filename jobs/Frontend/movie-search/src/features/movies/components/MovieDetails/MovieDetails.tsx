@@ -64,7 +64,7 @@ export default function MovieDetails() {
         )}
 
         {details && (
-          <Stack direction="row" spacing={10} alignItems="center">
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={10} alignItems="center">
             <Box>
               <img
                 style={{ boxShadow: '5px 5px 6px rgba(0, 0, 0, 0.3)' }}
