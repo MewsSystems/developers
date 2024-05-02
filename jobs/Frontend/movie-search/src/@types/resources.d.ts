@@ -8,10 +8,11 @@ interface Resources {
     "movieDetails": {
       "appTitle": "{{movieTitle}} — Movie Search",
       "additionalInfo": "Additional Information",
+      "overview": "Overview",
+      "reception": "Reception",
       "poster": "Poster",
       "logo": "Logo",
       "adult": "R-18",
-      "overview": "Overview",
       "releaseDate": "Release Date",
       "genres": "Genres",
       "originalTitle": "Original Title",

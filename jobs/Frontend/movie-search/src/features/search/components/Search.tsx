@@ -62,13 +62,13 @@ export default function Search() {
       field: 'release_date',
       headerName: t('movieDetails.releaseDate'),
       width: 120,
-      valueFormatter: (value: string) => value.substring(0, 4)
+      valueFormatter: (value: Movie['release_date']) => value.substring(0, 4)
     },
     {
       field: 'adult',
       headerName: t('movieDetails.adult'),
       width: 60,
-      valueFormatter: (value: boolean) => (value ? t('common.yes') : t('common.no'))
+      valueFormatter: (value: Movie['adult']) => (value ? t('common.yes') : t('common.no'))
     },
     {
       field: 'popularity',
@@ -80,7 +80,8 @@ export default function Search() {
       field: 'vote_average',
       headerName: t('movieDetails.voteAverage'),
       type: 'number',
-      width: 120
+      width: 120,
+      valueFormatter: (value: Movie['vote_average']) => `${Math.round(value)}/10`
     },
     {
       field: 'vote_count',
@@ -93,7 +94,7 @@ export default function Search() {
       headerName: t('movieDetails.originalLanguage'),
       width: 130,
       align: 'center',
-      valueFormatter: (value: string) => value.toUpperCase()
+      valueFormatter: (value: Movie['original_language']) => value.toUpperCase()
     }
   ];
 

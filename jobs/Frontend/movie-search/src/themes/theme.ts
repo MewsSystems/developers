@@ -1,4 +1,4 @@
-import { amber, blue, deepPurple, red } from '@mui/material/colors';
+import { amber, blue, deepPurple, grey, red } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
@@ -8,7 +8,7 @@ export const theme = createTheme({
       main: deepPurple[500]
     },
     secondary: {
-      main: deepPurple[500]
+      main: grey[500]
     },
     error: {
       main: red[500]
