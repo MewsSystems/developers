@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppRoutes from './configs/appRoutes';
 import PageNotFound from './features/error/components/PageNotFound';
-import MovieDetails from './features/movies/components/MovieDetails';
+import MovieDetails from './features/movies/components/MovieDetails/MovieDetails';
 import Search from './features/search/components/Search';
 import { theme } from './themes/theme';
 

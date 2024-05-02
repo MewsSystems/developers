@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Details } from '../models/Details';
+import { Details } from '../../models/Details';
 
 interface OverviewProps {
   readonly details: Details | null;
@@ -11,7 +11,7 @@ export default function MovieOverview({ details, sxPaperContainer }: OverviewPro
   const { t } = useTranslation();
 
   return (
-    <Paper sx={sxPaperContainer} elevation={3}>
+    <Paper data-testid="movie-overview-section" sx={sxPaperContainer} elevation={3}>
       <Stack direction="column" spacing={2}>
         <Box>
           <Typography variant="h5" color="primary.main">

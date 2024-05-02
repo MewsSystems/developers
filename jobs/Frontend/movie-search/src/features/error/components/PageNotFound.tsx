@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 
 export default function PageNotFound() {
   return (
-    <Stack direction="column" alignItems="center" spacing={4}>
+    <Stack data-testid="page-not-found-content" direction="column" alignItems="center" spacing={4}>
       <Typography variant="h1">{'(╯°□°)╯︵ ┻━┻'}</Typography>
       <Typography sx={{ fontWeight: 'bold' }} variant="h2" color="error.main">
         404

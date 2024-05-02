@@ -1,7 +1,7 @@
 import { Box, Divider, Stack, Tooltip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import formatDate from '../../common/helpers/formateDate';
-import { Details } from '../models/Details';
+import formatDate from '../../../common/helpers/formateDate';
+import { Details } from '../../models/Details';
 
 interface QuickInfoProps {
   readonly details: Details | null;
@@ -12,7 +12,7 @@ export default function MovieQuickInfo({ details, title }: QuickInfoProps) {
   const { t } = useTranslation();
 
   return (
-    <Stack direction="column" sx={{ mb: 8 }} spacing={1}>
+    <Stack data-testid="movie-quick-info-section" direction="column" sx={{ mb: 8 }} spacing={1}>
       <Box textAlign="center">
         <Typography variant="h2">{title}</Typography>
       </Box>

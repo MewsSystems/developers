@@ -1,6 +1,6 @@
 import { Box, Divider, Paper, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Details } from '../models/Details';
+import { Details } from '../../models/Details';
 
 interface ReceptionProps {
   readonly details: Details;
@@ -11,7 +11,7 @@ export default function MovieReception({ details, sxPaperContainer }: ReceptionP
   const { t } = useTranslation();
 
   return (
-    <Paper sx={sxPaperContainer} elevation={3}>
+    <Paper data-testid="movie-reception-section" sx={sxPaperContainer} elevation={3}>
       <Stack direction="column" spacing={1}>
         <Box>
           <Typography variant="h5" color="primary.main">

@@ -4,14 +4,14 @@ import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import AppRoutes from '../../../configs/appRoutes';
-import { ENDPOINT_URL_IMAGES_w500 } from '../../../configs/config';
-import { getMovieDetails } from '../../api/getMovieDetails';
-import { Details } from '../models/Details';
-import MovieAdditionalInformation from './MovieAdditionalInfomation';
-import MovieOverview from './MovieOverview';
-import MovieQuickInfo from './MovieQuickInfo';
-import MovieReception from './MovieReception';
+import AppRoutes from '../../../../configs/appRoutes';
+import { ENDPOINT_URL_IMAGES_w500 } from '../../../../configs/config';
+import { getMovieDetails } from '../../../api/getMovieDetails';
+import { Details } from '../../models/Details';
+import MovieAdditionalInformation from '../MovieAdditionalInfomation/MovieAdditionalInfomation';
+import MovieOverview from '../MovieOverview/MovieOverview';
+import MovieQuickInfo from '../MovieQuickInfo/MovieQuickInfo';
+import MovieReception from '../MovieReception/MovieReception';
 
 export default function MovieDetails() {
   const { movieId } = useParams();
@@ -51,7 +51,7 @@ export default function MovieDetails() {
   const sxPaperContainer: SxProps<Theme> = { p: 4, borderRadius: 2, maxWidth: '70rem', height: 'fit-content' };
 
   return (
-    <>
+    <div data-testid="movie-details-page">
       <MovieQuickInfo details={details} title={title} />
 
       {isLoading && <CircularProgress sx={{ m: 4 }} />}
@@ -83,6 +83,6 @@ export default function MovieDetails() {
           </Stack>
         )}
       </Box>
-    </>
+    </div>
   );
 }
