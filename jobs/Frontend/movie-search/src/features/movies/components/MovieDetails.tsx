@@ -59,14 +59,17 @@ export default function MovieDetails() {
                 {details.status}
               </Typography>
             </Tooltip>
+
             <Tooltip title={t('movieDetails.releaseDate')} arrow>
               <Typography variant="subtitle1" color="primary.main">
                 {formatDate(details.release_date)}
               </Typography>
             </Tooltip>
+
             <Typography variant="subtitle1" color="primary.main">
               {`${t('movieDetails.adult')}: ${data?.adult ? t('common.yes') : t('common.no')}`}
             </Typography>
+
             <Tooltip title={t('movieDetails.originalLanguage')} arrow>
               <Typography variant="subtitle1" color="primary.main">
                 {details.original_language.toUpperCase()}

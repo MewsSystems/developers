@@ -1,11 +1,13 @@
-import { render } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import App from "./App";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render } from '@testing-library/react';
+import App from './App';
 
-it("should render App", () => {
+const queryClient = new QueryClient();
+
+it('should render App', () => {
   render(
-    <MemoryRouter>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </MemoryRouter>,
+    </QueryClientProvider>
   );
 });
