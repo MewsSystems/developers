@@ -14,8 +14,7 @@ jobs:
     steps:
     - name: Checkout
       run: git config --global core.autocrlf true
-    - name: List
-      run: ls
+    - uses: actions/checkout@v2
     - name: Restore dependencies
       run: |
           ls
