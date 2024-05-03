@@ -13,11 +13,18 @@ jobs:
 
     steps:
     - name: Checkout
-      working-directory: jobs\Backend\Task\
-      run: git config --global core.autocrlf true
+      run: |
+       cd jobs/Backend/Task/
+       git config --global core.autocrlf true
     - name: Restore dependencies
-      run: dotnet restore
+      run: |
+       cd jobs/Backend/Task/
+       dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: |
+       cd jobs/Backend/Task/
+       dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: |
+       cd jobs/Backend/Task/
+       dotnet test --configuration Release --no-build --verbosity normal
