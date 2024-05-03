@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.API.Endpoints.V1.ExchangeRates.GetExchangeRate
 	public class ExchangeRateRequestModel
 	{
 		/// <summary>
-		/// Target currency
+		/// Currency in ISO format
 		/// </summary>
 		[Required]
 		[FromQuery]
@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater.API.Endpoints.V1.ExchangeRates.GetExchangeRate
 		public string TargetCurrency { get; set; }
 
 		/// <summary>
-		/// Year-Month of the exchange value
+		/// Month in ISO format (yyyy-MM)
 		/// </summary>
 		[FromQuery]
 		public DateTime? Date { get; set; } 

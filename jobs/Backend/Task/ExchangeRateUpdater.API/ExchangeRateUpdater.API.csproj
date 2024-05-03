@@ -8,4 +8,8 @@
 	  <ProjectReference Include="..\ExchangeRateUpdater.Domain.Core\ExchangeRateUpdater.Domain.Core.csproj" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
 </Project>

@@ -12,8 +12,7 @@ namespace ExchangeRateUpdater.Tests
 		public TestSetup(IMessageSink messageSink)
 		  : base(messageSink)
 		{
-			//Environment.SetEnvironmentVariable("BANK_CLIENT_URL", "https://localmock/api/");
-			Environment.SetEnvironmentVariable("BANK_CLIENT_URL", "https://api.cnb.cz/cnbapi/");
+			Environment.SetEnvironmentVariable("BANK_CLIENT_URL", "https://localmock/api/");
 		}
 	}
 }

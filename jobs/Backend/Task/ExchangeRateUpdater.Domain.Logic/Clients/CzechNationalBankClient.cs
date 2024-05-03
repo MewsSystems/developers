@@ -42,6 +42,7 @@ namespace ExchangeRateUpdater.Domain.Logic.Clients
 			return data.Rates.Select(e => new ExchangeRate(
 				_bankCurrency,
 				target,
+				DateTime.Parse(e.ValidFor),
 				e.Rate
 				));
 		}
