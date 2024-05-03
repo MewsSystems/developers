@@ -32,38 +32,57 @@ function MovieDetail({ id }: MovieDetailProps) {
   return (
     <Wrapper>
       <PosterImage path={movie.poster_path} size="w500" />
-      
-      <div>
-        <Title>
-          {movie.title}
-          <Year>({getFullYear(movie.release_date)})</Year>
-        </Title>
-        <Genres>{movie.genres.map((g) => g.name).join(", ")}</Genres>
-      </div>
 
-      <SectionTitle>Overview</SectionTitle>
-      <Overview>{movie.overview}</Overview>
+      <Sections>
+        <div>
+          <Title>
+            {movie.title}
+            <Year>({getFullYear(movie.release_date)})</Year>
+          </Title>
+          <Genres>{movie.genres.map((g) => g.name).join(", ")}</Genres>
+        </div>
 
-      <div>Score:{Math.round(movie.vote_average * 10)}%</div>
-      <div>Voted:{movie.vote_count}</div>
+        <section>
+          <SectionTitle>Overview</SectionTitle>
+          <Overview>{movie.overview}</Overview>
+        </section>
 
-      {movie.backdrop_path && (
-        <img
-          src={backdropUrl(movie.backdrop_path, "w1280")}
-          alt="poster"
-          role="presentation"
-        />
-      )}
-      
+        <section>
+          <p>Score: {Math.round(movie.vote_average * 10)}%</p>
+          <p>Voted: {movie.vote_count}</p>
+        </section>
+
+        {movie.backdrop_path && (
+          <img
+            src={backdropUrl(movie.backdrop_path, "w780")}
+            alt="poster"
+            role="presentation"
+          />
+        )}
+      </Sections>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   display: grid;
-  gap: 32px;
+  gap: 16px;
   padding-top: 16px;
   padding-bottom: 16px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+`;
+
+const Sections = styled.div`
+  display: grid;
+  grid-auto-rows: minmax(80px, min-content);
+  gap: 32px;
 `;
 
 const Title = styled.h1`
