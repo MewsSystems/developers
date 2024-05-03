@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout
-      working-directory: jobs/Backend/Task/
+      working-directory: jobs\Backend\Task\
       run: git config --global core.autocrlf true
     - name: Restore dependencies
       run: dotnet restore
