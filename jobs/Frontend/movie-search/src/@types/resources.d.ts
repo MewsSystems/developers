@@ -2,8 +2,8 @@ interface Resources {
   "translation": {
     "common": {
       "appTitle": "Movie Search",
-      "yes": "Yes",
-      "no": "No"
+      "termsOfUse": "Terms of Use",
+      "privacyPolicy": "Privacy Policy"
     },
     "movieDetails": {
       "appTitle": "{{movieTitle}} — Movie Search",
@@ -12,7 +12,6 @@ interface Resources {
       "reception": "Reception",
       "poster": "Poster",
       "logo": "Logo",
-      "adult": "R-18",
       "releaseDate": "Release Date",
       "genres": "Genres",
       "originalTitle": "Original Title",

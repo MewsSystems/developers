@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Stack, SxProps, Theme, Typography } from '@mui/material';
+import { Box, CircularProgress, Paper, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AppRoutes from '../../../../configs/appRoutes';
 import { ENDPOINT_URL_IMAGES_w500 } from '../../../../configs/config';
 import { getMovieDetails } from '../../../api/getMovieDetails';
+import Footer from '../../../common/components/Footer/Footer';
 import { Details } from '../../models/Details';
 import MovieAdditionalInformation from '../MovieAdditionalInfomation/MovieAdditionalInfomation';
 import MovieOverview from '../MovieOverview/MovieOverview';
@@ -58,9 +59,11 @@ export default function MovieDetails() {
 
       <Box sx={{ mt: 4 }}>
         {error !== null && (
-          <Typography sx={{ mt: 2 }} variant="h5" color="error">
-            Error: {error?.message}
-          </Typography>
+          <Paper sx={{ m: 2, p: 3, borderRadius: 2 }} elevation={3}>
+            <Typography variant="h6" color="error">
+              Error: {error?.message}
+            </Typography>
+          </Paper>
         )}
 
         {details && (
@@ -75,7 +78,10 @@ export default function MovieDetails() {
               />
             </Box>
 
-            <Stack sx={{ width: 'calc(100svw / 2)' }} direction="column" spacing={4}>
+            <Stack
+              sx={{ minWidth: 'calc(100svw / 2)', maxWidth: 'calc(100svw - 1rem)', pb: 3 }}
+              direction="column"
+              spacing={4}>
               <MovieOverview details={details} sxPaperContainer={sxPaperContainer} />
               <MovieReception details={details} sxPaperContainer={sxPaperContainer} />
               <MovieAdditionalInformation details={details} sxPaperContainer={sxPaperContainer} />
@@ -83,6 +89,7 @@ export default function MovieDetails() {
           </Stack>
         )}
       </Box>
+      <Footer></Footer>
     </div>
   );
 }

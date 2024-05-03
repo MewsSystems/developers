@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+It uses the TMDB-API and is subject to [TMDB's terms of use](https://www.themoviedb.org/api-terms-of-use).
+
+### 📽️ [API Documentation](https://developer.themoviedb.org/docs/getting-started)
+
 ## Prerequisite
 Create a `.env` file at the project's root level. It must contain a variable `REACT_APP_API_KEY` containing the TMBD API key.
 

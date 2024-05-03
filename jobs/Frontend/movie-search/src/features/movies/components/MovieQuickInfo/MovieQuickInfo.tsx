@@ -13,7 +13,7 @@ export default function MovieQuickInfo({ details, title }: QuickInfoProps) {
 
   return (
     <Stack data-testid="movie-quick-info-section" direction="column" sx={{ mb: 8 }} spacing={1} alignItems="center">
-      <Box textAlign="center">
+      <Box textAlign="center" maxWidth="calc(100svw - 45rem)">
         <Typography variant="h2">{title}</Typography>
       </Box>
       {details && (
@@ -34,10 +34,6 @@ export default function MovieQuickInfo({ details, title }: QuickInfoProps) {
             </Typography>
           </Tooltip>
 
-          <Typography variant="subtitle1" color="primary.main">
-            {`${t('movieDetails.adult')}: ${details.adult ? t('common.yes') : t('common.no')}`}
-          </Typography>
-
           <Tooltip title={t('movieDetails.originalLanguage')} arrow>
             <Typography variant="subtitle1" color="primary.main">
               {details.original_language.toUpperCase()}
@@ -46,7 +42,9 @@ export default function MovieQuickInfo({ details, title }: QuickInfoProps) {
 
           <Tooltip title={t('movieDetails.genres')} arrow>
             <Typography variant="subtitle1" color="primary.main">
-              {details.genres.map((genre, index) => (index === 0 ? genre.name : `, ${genre.name}`))}
+              {details.genres.length
+                ? details.genres.map((genre, index) => (index === 0 ? genre.name : `, ${genre.name}`))
+                : t('error.notAvailable')}
             </Typography>
           </Tooltip>
 

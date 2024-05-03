@@ -25,7 +25,7 @@ export default function MovieReception({ details, sxPaperContainer }: ReceptionP
               {`${t('movieDetails.voteAverage')}: `}
             </Typography>
             <Typography variant="h5" display="inline" color="primary.main">
-              {`${Math.round(details.vote_average)}/10`}
+              {details.vote_average ? `${Math.round(details.vote_average)}/10` : t('error.notAvailable')}
             </Typography>
           </Box>
 
@@ -34,7 +34,7 @@ export default function MovieReception({ details, sxPaperContainer }: ReceptionP
               {`${t('movieDetails.voteCount')}: `}
             </Typography>
             <Typography variant="h5" display="inline" color="primary.main">
-              {details.vote_count}
+              {details.vote_count ? details.vote_count : t('error.notAvailable')}
             </Typography>
           </Box>
         </Stack>

@@ -14,6 +14,7 @@ interface MovieData extends Omit<ApiData, 'results'> {
  *
  * @throws Throws an error if the API request fails.
  */
-export async function searchMovies(query: string) {
-  return await authenticatedApiClient.get<MovieData>(`/search/movie?query=${query}`);
+export async function searchMovies(query: string, page?: number) {
+  const pageParameter = page ? `&page=${page}` : '';
+  return await authenticatedApiClient.get<MovieData>(`/search/movie?query=${query}${pageParameter}`);
 }

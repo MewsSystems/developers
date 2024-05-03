@@ -86,8 +86,13 @@ export default function MovieAdditionalInformation({ details, sxPaperContainer }
             <Typography sx={{ fontWeight: 'bold' }} variant="subtitle1" display="inline">
               {`${t('movieDetails.productionCompanies')}: `}
             </Typography>
+
             <Typography variant="subtitle1" display="inline">
-              {details.production_companies.map((company, index) => (index === 0 ? company.name : `, ${company.name}`))}
+              {details.production_companies.length
+                ? details.production_companies.map((company, index) =>
+                    index === 0 ? company.name : `, ${company.name}`
+                  )
+                : t('error.notAvailable')}
             </Typography>
           </Box>
 
@@ -96,7 +101,11 @@ export default function MovieAdditionalInformation({ details, sxPaperContainer }
               {`${t('movieDetails.productionCountries')}: `}
             </Typography>
             <Typography variant="subtitle1" display="inline">
-              {details.production_countries.map((country, index) => (index === 0 ? country.name : `, ${country.name}`))}
+              {details.production_countries.length
+                ? details.production_countries.map((country, index) =>
+                    index === 0 ? country.name : `, ${country.name}`
+                  )
+                : t('error.notAvailable')}
             </Typography>
           </Box>
         </Stack>
