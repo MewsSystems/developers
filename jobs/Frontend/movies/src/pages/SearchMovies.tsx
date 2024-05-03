@@ -31,8 +31,8 @@ function SearchMovies({}) {
 
       <MoviesSection>
         {movies.map((movie) => (
-          <Link href={`/movies/${movie.id}`}>
-            <MovieCard key={movie.id} movie={movie} />
+          <Link key={movie.id} href={`/movies/${movie.id}`}>
+            <MovieCard movie={movie} />
           </Link>
         ))}
       </MoviesSection>

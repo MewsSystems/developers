@@ -13,7 +13,7 @@ function MovieCard({ movie }: MovieCardProps) {
       <PosterImage path={movie.poster_path} size="w342" />
       <figcaption>
         <Title>{movie.title}</Title>
-        <Year>{getFullYear(movie.release_date)}</Year>
+        <Year>{getFullYear(movie.release_date) || "-"}</Year>
       </figcaption>
     </Figure>
   );

@@ -1,4 +1,3 @@
-export function getFullYear(date: string) {
-    return new Date(date).getFullYear();
+export function getFullYear(date: string): number {
+  return new Date(date).getFullYear();
 }
-
