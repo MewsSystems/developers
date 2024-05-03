@@ -13,7 +13,7 @@ function SearchMovies({}) {
 
   const [query, setQuery, isQueryChanging] = useDebouncedState(
     queryParam || "",
-    1000
+    250
   );
 
   const { movies, isError, error, isFetching, hasNextPage, fetchNextPage } =
