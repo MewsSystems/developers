@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Domain.Logic.UseCases.Queries.GetExchangeRates
 {
+	/// <summary>
+	/// Impelmentation for the get exchange query
+	/// </summary>
 	public class GetExchangeRateQuery : IGetExchangeRateQuery
 	{
 		private readonly ILogger _logger;

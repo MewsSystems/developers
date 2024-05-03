@@ -3,6 +3,9 @@ using ExchangeRateUpdater.Domain.Core.UseCases.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Domain.Logic.Clients;
 using ExchangeRateUpdater.Domain.Logic.UseCases.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Host.Middleware;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace ExchangeRateUpdater.Host
 {

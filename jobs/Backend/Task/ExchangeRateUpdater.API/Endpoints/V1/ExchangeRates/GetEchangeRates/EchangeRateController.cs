@@ -3,7 +3,6 @@ using ExchangeRateUpdater.Domain.Core.UseCases.Queries.GetExchangeRates;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,4 +1,9 @@
-﻿namespace ExchangeRateUpdater.Host.Middleware
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+
+namespace ExchangeRateUpdater.Host.Middleware
 {
 	public class ErrorHandlingMiddleware
 	{
