@@ -16,8 +16,18 @@ namespace ExchangeRateUpdater.API.Validation
 			}
 
 			return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-				.Select(t => new RegionInfo(t.LCID))
-				.Select(c => c.ISOCurrencySymbol)
+				.Select(t =>
+				{
+					try
+					{
+						return new RegionInfo(t.LCID);
+					}
+					catch
+					{
+						return null;
+					}
+				})
+				.Select(c => c?.ISOCurrencySymbol)
 				.Contains(value.ToString(), StringComparer.OrdinalIgnoreCase);
 		}
 	}

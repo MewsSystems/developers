@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7294",
+      "applicationUrl": "https://localhost:2525",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "BANK_CLIENT_URL": "https://api.cnb.cz/cnbapi/"
