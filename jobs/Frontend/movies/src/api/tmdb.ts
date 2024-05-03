@@ -125,7 +125,7 @@ export function findMovies(
   return get(
     `search/movie?query=${encodeURIComponent(
       query
-    )}&include_adult=true&language=en-US&page=${page}`,
+    )}&include_adult=false&language=en-US&page=${page}`,
     init
   );
 }
