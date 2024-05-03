@@ -14,6 +14,7 @@ jobs:
     steps:
     - name: Checkout
       run: |
+       ls 
        cd jobs/Backend/Task/
        git config --global core.autocrlf true
     - name: Restore dependencies
