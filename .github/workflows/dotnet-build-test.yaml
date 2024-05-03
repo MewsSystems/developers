@@ -16,15 +16,11 @@ jobs:
       run: git config --global core.autocrlf true
     - uses: actions/checkout@v2
     - name: Restore dependencies
-      run: |
-          ls
-          cd jobs/Backend/Task/
-          dotnet restore
+      working-directory: jobs/Backend/Task/
+      run: dotnet restore
     - name: Build
-      run: |
-          cd jobs/Backend/Task/
-          dotnet build --configuration Release --no-restore
+      working-directory: jobs/Backend/Task/
+      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: |
-          cd jobs/Backend/Task/
-          dotnet test --configuration Release --no-build --verbosity normal
+      working-directory: jobs/Backend/Task/
+      run: dotnet test --configuration Release --no-build --verbosity normal
