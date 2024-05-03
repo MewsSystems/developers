@@ -5,6 +5,7 @@ import { Link, useSearch } from "wouter";
 import MovieCard from "src/components/MovieCard";
 import styled from "styled-components";
 import Spinner from "src/components/Spinner";
+import AttributionNotice from "src/components/AttributionNotice";
 
 function SearchMovies({}) {
   const search = useSearch();
@@ -36,13 +37,14 @@ function SearchMovies({}) {
           onChange={(e) => setQuery(e.target.value)}
         />
       </SearchBar>
+      <AttributionNotice />
       {isFetching && <Spinner />}
 
       <>
         {isError && <p>Error occured</p>}
         {error && error instanceof Error && <p>{error.message}</p>}
       </>
-
+      
       <MoviesSection>
         {movies.map((movie) => (
           <Link key={movie.id} href={`/movies/${movie.id}`}>
@@ -58,7 +60,7 @@ function SearchMovies({}) {
         >
           Load more
         </LoadMoreButton>
-      )}
+      )}      
     </Wrapper>
   );
 }
