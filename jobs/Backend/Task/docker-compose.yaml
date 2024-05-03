@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  exchange-rate-updater:
+    container_name: exchange-rate-updater
+    environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        BANK_CLIENT_URL: https://api.cnb.cz/cnbapi/
+    build:
+      context: .
+      dockerfile: .\Dockerfile
+    ports:
+      - "2424:80"
