@@ -14,8 +14,11 @@ jobs:
     steps:
     - name: Checkout
       run: git config --global core.autocrlf true
+    - name: List
+      run: ls
     - name: Restore dependencies
       run: |
+          ls
           cd jobs/Backend/Task/
           dotnet restore
     - name: Build
