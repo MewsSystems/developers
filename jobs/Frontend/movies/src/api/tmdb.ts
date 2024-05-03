@@ -1,6 +1,6 @@
 import { TMDB_API_KEY } from "../config";
 
-const TMDB_API_URL = "https://api.themoviedb.org/3";
+const TMDB_API_URL = "https://api.themoviedb.org/3/";
 const TMDB_IMAGES_BASE_PATH = "http://image.tmdb.org/t/p/";
 
 export class HttpError extends Error {
@@ -123,7 +123,7 @@ export function findMovies(
   init?: RequestInit
 ): Promise<Results<Movie>> {
   return get(
-    `/search/movie?query=${encodeURIComponent(
+    `search/movie?query=${encodeURIComponent(
       query
     )}&include_adult=true&language=en-US&page=${page}`,
     init
@@ -131,7 +131,7 @@ export function findMovies(
 }
 
 export function fetchMovieById(id: string): Promise<MovieDetail> {
-  return get(`/movie/${id}`);
+  return get(`movie/${id}`);
 }
 
 export function posterUrl(path: string, size: PosterSize) {

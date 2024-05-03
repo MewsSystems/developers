@@ -17,9 +17,9 @@ function App() {
             <Route path="/movies/:id">
               {(params) => <MovieDetail id={params.id} />}
             </Route>
-            <Route path="/" component={SearchMovies} />
+            <Route path="/search" component={SearchMovies} />
             <Route path="*">
-              <Redirect to="/" />
+              <Redirect to="/search" />
             </Route>
           </Switch>
         </QueryClientProvider>

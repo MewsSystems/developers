@@ -1,15 +1,29 @@
 import useMoviesQuery from "src/hooks/useMoviesQuery";
 import useDebouncedState from "src/hooks/useDebouncedSetState";
+import { useEffect } from "react";
+import { Link, useSearch } from "wouter";
 import MovieCard from "src/components/MovieCard";
 import styled from "styled-components";
 import Spinner from "src/components/Spinner";
-import { Link } from "wouter";
 
 function SearchMovies({}) {
-  const [query, setQuery, isQueryChanging] = useDebouncedState("", 1000);
+  const search = useSearch();
+  const queryParam = new URLSearchParams(search).get("query") || "";
+
+  const [query, setQuery, isQueryChanging] = useDebouncedState(
+    queryParam || "",
+    1000
+  );
 
   const { movies, isError, error, isFetching, hasNextPage, fetchNextPage } =
     useMoviesQuery(query);
+
+  // update url param when query changes with just replacing history
+  useEffect(() => {
+    if (queryParam != query) {
+      window.history.pushState(null, "", `?${new URLSearchParams({ query })}`);
+    }
+  }, [query]);
 
   return (
     <Wrapper>
