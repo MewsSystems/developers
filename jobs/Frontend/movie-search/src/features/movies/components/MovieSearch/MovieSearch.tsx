@@ -14,7 +14,7 @@ import { movieSearchColumnsDefinition } from '../../models/MovieSearchColumnsDef
 
 export default function MovieSearch() {
   const defaultPageSize = 20;
-  const localPageKey = 'lastGridPage';
+  const sessionPageKey = 'lastGridPage';
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export default function MovieSearch() {
   });
 
   useEffect(() => {
-    const storedPage = localStorage.getItem(localPageKey);
+    const storedPage = sessionStorage.getItem(sessionPageKey);
     const restoredPage = parseInt(storedPage ?? '');
     if (restoredPage) setPaginatioNModel({ ...paginationModel, page: restoredPage } as GridPaginationModel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +82,7 @@ export default function MovieSearch() {
   const handleSearch = () => setSearchParams({ query: query }, { replace: true });
 
   const handleRowClick: GridEventListener<'rowClick'> = params => {
-    localStorage.setItem(localPageKey, `${paginationModel?.page}`);
+    sessionStorage.setItem(sessionPageKey, `${paginationModel?.page}`);
     navigate(`${AppRoutes.Movie}/${params.row.id}`);
   };
 
