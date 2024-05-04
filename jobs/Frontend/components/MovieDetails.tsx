@@ -1,6 +1,6 @@
 "use client";
 
-import { tabletMediaQuery } from "@/breakpoints";
+import { desktopMediaQuery, tabletMediaQuery } from "@/breakpoints";
 import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
 import { getYear } from "@/utils/date.util";
 import { getImageUrl } from "@/utils/image.util";
@@ -9,13 +9,16 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  gap: 50px;
+  gap: 10px;
   flex-direction: column;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 10px;
 
-  ${tabletMediaQuery} {
+  ${desktopMediaQuery} {
     flex-direction: row;
+    padding: 0 20px;
+    margin-top: 40px;
+    gap: 50px;
   }
 `;
 
@@ -38,7 +41,7 @@ const StyledImage = styled(Image)`
   height: 400px;
   align-self: center;
 
-  ${tabletMediaQuery} {
+  ${desktopMediaQuery} {
     width: 500px;
     height: 750px;
   }
@@ -135,7 +138,7 @@ const MovieDetails = ({
             {genres?.map((genre) => genre.name).join(", ")}
           </TextUnderTitle>
         </TextUnderTitleContainer>
-        {tagline && <>{tagline}</>}
+        {tagline && <p>{tagline}</p>}
         <OverviewContainer>{overview}</OverviewContainer>
         <h4>Production Companies:</h4>
         <ul>

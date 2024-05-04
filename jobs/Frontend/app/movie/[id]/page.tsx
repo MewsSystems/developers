@@ -3,6 +3,8 @@ import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb/moviesDbMovieDetailsResponse";
 import { MovieDetail } from "@/interfaces/movie";
 import MovieDetailsContainer from "@/components/MovieDetails";
+import Navigation from "@/components/Navigation";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Details",
@@ -59,23 +61,28 @@ interface MoviePageProps {
 export default async function Page({ params }: MoviePageProps) {
   const movie = await fetchData(params.id);
 
-  if (movie) {
-    return (
-      <MovieDetailsContainer
-        genres={movie.genres}
-        originalLanguage={movie.originalLanguage}
-        originalTitle={movie.originalTitle}
-        overview={movie.overview}
-        productionCompanies={movie.productionCompanies}
-        posterUrl={movie.posterUrl}
-        releaseDate={movie.releaseDate}
-        runtime={movie.runtime}
-        status={movie.status}
-        tagline={movie.tagline}
-        title={movie.title}
-      />
-    );
-  }
-
-  return <>No movie for this ID</>;
+  return (
+    <>
+      <Header>
+        <Navigation />
+      </Header>
+      {movie ? (
+        <MovieDetailsContainer
+          genres={movie.genres}
+          originalLanguage={movie.originalLanguage}
+          originalTitle={movie.originalTitle}
+          overview={movie.overview}
+          productionCompanies={movie.productionCompanies}
+          posterUrl={movie.posterUrl}
+          releaseDate={movie.releaseDate}
+          runtime={movie.runtime}
+          status={movie.status}
+          tagline={movie.tagline}
+          title={movie.title}
+        />
+      ) : (
+        <>No movie for this ID</>
+      )}
+    </>
+  );
 }

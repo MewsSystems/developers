@@ -3,6 +3,8 @@ import StyledComponentsRegistry from "@/styles/registry";
 import GlobalStyles from "@/styles/GlobalStyles";
 import ThemeProvider from "./theme-provider";
 import { Inter } from "next/font/google";
+import Header from "@/components/Header";
+import Navigation from "@/components/Navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
