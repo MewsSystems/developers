@@ -1,16 +1,16 @@
 import { CircularProgress, Paper, TextField, Typography } from '@mui/material';
-import { DataGrid, GridEventListener, GridPaginationModel, GridSearchIcon } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridEventListener, GridPaginationModel, GridSearchIcon } from '@mui/x-data-grid';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import AppRoutes from '../../../../configs/appRoutes';
+import { ENDPOINT_URL_IMAGES_w92 } from '../../../../configs/config';
 import useDelayedRender from '../../../../hooks/useDelayRender';
 import { searchMovies } from '../../../api/searchMovie';
 import Footer from '../../../common/components/Footer/Footer';
 import { Movie } from '../../models/Movie';
-import { movieSearchColumnsDefinition } from '../../models/MovieSearchColumnsDefinition';
 
 export default function MovieSearch() {
   const defaultPageSize = 20;
@@ -86,6 +86,55 @@ export default function MovieSearch() {
     navigate(`${AppRoutes.Movie}/${params.row.id}`);
   };
 
+  const columnsDefinition: GridColDef<Movie>[] = [
+    {
+      field: 'poster_path',
+      headerName: t('movieDetails.poster'),
+      sortable: false,
+      width: 100,
+      renderCell: params => (
+        <img height={100} src={ENDPOINT_URL_IMAGES_w92 + params.value} alt={t('movieDetails.poster')} />
+      )
+    },
+    {
+      field: 'title',
+      headerName: t('movieDetails.title'),
+      width: 240
+    },
+    {
+      field: 'release_date',
+      headerName: t('movieDetails.releaseDate'),
+      width: 155,
+      valueFormatter: (value: Movie['release_date']) => value.substring(0, 4)
+    },
+    {
+      field: 'popularity',
+      headerName: t('movieDetails.popularity'),
+      type: 'number',
+      width: 140
+    },
+    {
+      field: 'vote_average',
+      headerName: t('movieDetails.voteAverage'),
+      type: 'number',
+      width: 155,
+      valueFormatter: (value: Movie['vote_average']) => `${Math.round(value)}/10`
+    },
+    {
+      field: 'vote_count',
+      headerName: t('movieDetails.voteCount'),
+      type: 'number',
+      width: 140
+    },
+    {
+      field: 'original_language',
+      headerName: t('movieDetails.originalLanguage'),
+      minWidth: 185,
+      align: 'center',
+      valueFormatter: (value: Movie['original_language']) => value.toUpperCase()
+    }
+  ];
+
   return (
     <>
       <Typography sx={{ mb: 2 }} variant="h2">
@@ -138,7 +187,7 @@ export default function MovieSearch() {
               '& .MuiDataGrid-row:hover': { cursor: 'pointer', color: 'primary.main' }
             }}
             rows={movies}
-            columns={movieSearchColumnsDefinition}
+            columns={columnsDefinition}
             onRowClick={handleRowClick}
             rowHeight={100}
             pageSizeOptions={[defaultPageSize, 50, 100]}
