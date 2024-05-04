@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const ImagePlaceholder = styled.div`
   width: 120px;
-  height: 200px;
+  height: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,7 +53,7 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
             src={getImageUrl(200, posterUrl)}
             alt={title}
             width={120}
-            height={200}
+            height={180}
             priority
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII="

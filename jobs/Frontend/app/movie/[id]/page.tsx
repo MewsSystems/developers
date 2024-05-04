@@ -49,8 +49,6 @@ const fetchData = async (id: string) => {
     status: movieResponseData.status,
   };
 
-  console.log(movieData); // TODO - remove
-
   return movieData;
 };
 

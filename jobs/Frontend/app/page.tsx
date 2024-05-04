@@ -4,13 +4,14 @@ import SearchBar from "@/components/SearchBar";
 import { MovieSearch } from "@/interfaces/movie";
 import { MoviesDbMovie, MoviesDbSearchResponse } from "@/interfaces/MoviesDb";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
+import Pagination from "@/components/Pagination";
 
 export const metadata: Metadata = {
   title: "Search",
 };
 
-const fetchData = async (query: string) => {
-  const moviesUrl = constructMovieDbUrl("/search/movie", query);
+const fetchData = async (query: string, page?: number) => {
+  const moviesUrl = constructMovieDbUrl("/search/movie", query, page);
   const moviesResponse = await fetch(moviesUrl);
 
   if (!moviesResponse.ok) {
@@ -22,7 +23,7 @@ const fetchData = async (query: string) => {
     );
 
     // Don't return any movies instead of erroring
-    return [];
+    return { movies: [], totalPages: 0 };
   }
 
   const moviesSearchResponseData =
@@ -42,21 +43,33 @@ const fetchData = async (query: string) => {
     }),
   );
 
-  return moviesData;
+  return {
+    movies: moviesData,
+    totalPages: moviesSearchResponseData.total_pages,
+  };
 };
 
 interface SearchPageProps {
-  searchParams: { query: string };
+  searchParams: { query: string; page?: number };
 }
 
 export default async function Page({ searchParams }: SearchPageProps) {
-  const movies = await fetchData(searchParams.query);
-  console.log(movies); // TODO - remove
+  const { movies, totalPages } = await fetchData(
+    searchParams.query,
+    searchParams.page,
+  );
 
   return (
     <>
       <SearchBar />
-      <MovieCardsContainer movies={movies} />
+      {searchParams.query ? (
+        <>
+          <MovieCardsContainer movies={movies} />
+          <Pagination totalPages={totalPages} />
+        </>
+      ) : (
+        <p>Search for a movie using the search bar above</p>
+      )}
     </>
   );
 }
