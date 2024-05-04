@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import MovieCardsContainer from "@/components/MovieCardsContainer";
+import MovieCardsContainer from "@/components/MovieCards";
 import SearchBar from "@/components/SearchBar";
-import { Movie } from "@/interfaces/movie";
+import { MovieSearch } from "@/interfaces/movie";
 import { MoviesDbMovie, MoviesDbSearchResponse } from "@/interfaces/MoviesDb";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 
@@ -29,16 +29,18 @@ const fetchData = async (query: string) => {
     (await moviesResponse.json()) as MoviesDbSearchResponse<MoviesDbMovie>;
 
   // Map response so we don't return any unnecessary information
-  const moviesData: Movie[] = moviesSearchResponseData.results.map((movie) => ({
-    id: movie.id,
-    originalLanguage: movie.original_language,
-    originalTitle: movie.original_title,
-    overview: movie.overview,
-    popularity: movie.popularity,
-    posterUrl: movie.poster_path,
-    releaseDate: movie.release_date,
-    title: movie.title,
-  }));
+  const moviesData: MovieSearch[] = moviesSearchResponseData.results.map(
+    (movie) => ({
+      id: movie.id,
+      originalLanguage: movie.original_language,
+      originalTitle: movie.original_title,
+      overview: movie.overview,
+      popularity: movie.popularity,
+      posterUrl: movie.poster_path,
+      releaseDate: movie.release_date,
+      title: movie.title,
+    }),
+  );
 
   return moviesData;
 };

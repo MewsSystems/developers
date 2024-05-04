@@ -1,10 +1,10 @@
 "use client";
 
-import imageLoader from "@/loader";
 import Image from "next/image";
 import styled from "styled-components";
 import { getYear } from "@/utils/date.util";
 import Link from "next/link";
+import { getImageUrl } from "@/utils/image.util";
 
 const Container = styled.div`
   border: 1px solid ${(props) => props.theme.primary.border};
@@ -50,13 +50,13 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
       <Container>
         {posterUrl ? (
           <StyledImage
-            src={posterUrl}
+            src={getImageUrl(200, posterUrl)}
             alt={title}
-            loader={imageLoader}
             width={120}
             height={200}
             priority
-            // I have not optimised the quality or generated a wider srcset of these images for this task, as the MovieDb does not support it
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII="
           />
         ) : (
           <ImagePlaceholder>No Image</ImagePlaceholder>

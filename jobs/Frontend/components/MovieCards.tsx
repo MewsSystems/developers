@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import MovieCard from "./MovieCard";
-import { Movie } from "@/interfaces/movie";
+import { MovieSearch } from "@/interfaces/movie";
 
 const Container = styled.div`
   display: flex;
@@ -10,11 +10,11 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-interface MovieCardsContainerProps {
-  movies: Movie[];
+interface MovieCardsProps {
+  movies: MovieSearch[];
 }
 
-const MovieCardsContainer = ({ movies }: MovieCardsContainerProps) => {
+const MovieCards = ({ movies }: MovieCardsProps) => {
   return (
     <Container>
       {movies.map((movie, index) => (
@@ -30,4 +30,4 @@ const MovieCardsContainer = ({ movies }: MovieCardsContainerProps) => {
   );
 };
 
-export default MovieCardsContainer;
+export default MovieCards;

@@ -4,8 +4,6 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    loader: "custom",
-    loaderFile: "loader.ts",
     remotePatterns: [
       {
         protocol: "https",
@@ -13,7 +11,6 @@ const nextConfig = {
         pathname: "/t/p/**",
       },
     ],
-    imageSizes: [342, 780], // PosterSizes from the MovieDb
   },
 };
 
