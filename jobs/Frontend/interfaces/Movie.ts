@@ -19,13 +19,11 @@ export interface ProductionCompany {
 export interface MovieSearch extends BaseMovie {}
 
 export interface MovieDetail extends BaseMovie {
-  budget: number;
   genres: MovieGenre[];
   originalLanguage: string;
   originalTitle: string;
   overview: string;
   productionCompanies: ProductionCompany[];
-  revenue: number;
   runtime: number;
   status: string;
   tagline: string;

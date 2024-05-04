@@ -29,7 +29,6 @@ const fetchData = async (id: string) => {
 
   // Map response so we don't return any unnecessary information
   const movieData: MovieDetail = {
-    budget: movieResponseData.budget,
     genres: movieResponseData.genres,
     id: movieResponseData.id,
     originalLanguage: movieResponseData.original_language,
@@ -44,12 +43,13 @@ const fetchData = async (id: string) => {
       }),
     ),
     releaseDate: movieResponseData.release_date,
-    revenue: movieResponseData.revenue,
     runtime: movieResponseData.runtime,
     tagline: movieResponseData.tagline,
     title: movieResponseData.title,
     status: movieResponseData.status,
   };
+
+  console.log(movieData); // TODO - remove
 
   return movieData;
 };
@@ -60,12 +60,10 @@ interface MoviePageProps {
 
 export default async function Page({ params }: MoviePageProps) {
   const movie = await fetchData(params.id);
-  console.log(movie); // TODO - remove
 
   if (movie) {
     return (
       <MovieDetailsContainer
-        budget={movie.budget}
         genres={movie.genres}
         originalLanguage={movie.originalLanguage}
         originalTitle={movie.originalTitle}
@@ -73,7 +71,6 @@ export default async function Page({ params }: MoviePageProps) {
         productionCompanies={movie.productionCompanies}
         posterUrl={movie.posterUrl}
         releaseDate={movie.releaseDate}
-        revenue={movie.revenue}
         runtime={movie.runtime}
         status={movie.status}
         tagline={movie.tagline}

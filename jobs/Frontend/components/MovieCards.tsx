@@ -8,6 +8,7 @@ const Container = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 20px;
 `;
 
 interface MovieCardsProps {

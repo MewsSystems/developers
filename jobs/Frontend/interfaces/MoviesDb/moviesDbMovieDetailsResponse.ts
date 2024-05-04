@@ -10,7 +10,6 @@ interface ProductionCompany {
 }
 
 export interface MoviesDbMovieDetailsResponse {
-  budget: number;
   genres: MovieGenre[];
   id: number;
   original_language: string;
@@ -19,7 +18,6 @@ export interface MoviesDbMovieDetailsResponse {
   poster_path: string | null;
   production_companies: ProductionCompany[];
   release_date: string;
-  revenue: number;
   runtime: number;
   status: string;
   tagline: string;

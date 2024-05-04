@@ -1,22 +1,44 @@
 "use client";
 
+import { tabletMediaQuery } from "@/breakpoints";
 import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
 import { getImageUrl } from "@/utils/image.util";
 import Image from "next/image";
+import { Fragment } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
   gap: 50px;
+  flex-direction: column;
+
+  ${tabletMediaQuery} {
+    flex-direction: row;
+  }
 `;
 
 const TextContainer = styled.div`
+  border: 1px solid ${(props) => props.theme.primary.border};
+  border-radius: 5px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
 `;
 
+const OverviewContainer = styled.div`
+  max-width: 750px;
+`;
+
 const StyledImage = styled(Image)`
   border-radius: 10px;
+  width: 250px;
+  height: 400px;
+  align-self: center;
+
+  ${tabletMediaQuery} {
+    width: 500px;
+    height: 750px;
+  }
 `;
 
 const ImagePlaceholder = styled.div`
@@ -28,7 +50,6 @@ const ImagePlaceholder = styled.div`
 `;
 
 interface MovieDetailsProps {
-  budget: number;
   genres: MovieGenre[];
   originalLanguage: string;
   originalTitle: string;
@@ -36,7 +57,6 @@ interface MovieDetailsProps {
   productionCompanies: ProductionCompany[];
   posterUrl: string | null;
   releaseDate: string;
-  revenue: number;
   runtime: number;
   status: string;
   tagline: string;
@@ -44,7 +64,6 @@ interface MovieDetailsProps {
 }
 
 const MovieDetails = ({
-  budget,
   genres,
   originalLanguage,
   originalTitle,
@@ -52,7 +71,6 @@ const MovieDetails = ({
   posterUrl,
   productionCompanies,
   releaseDate,
-  revenue,
   runtime,
   status,
   tagline,
@@ -74,23 +92,29 @@ const MovieDetails = ({
         <ImagePlaceholder>No Image</ImagePlaceholder>
       )}
       <TextContainer>
-        <p>{title}</p>
-        <p>{tagline}</p>
-        <p>{releaseDate}</p>
-        <p>{budget}</p>
-        <p>{genres?.map((genre) => genre.name)}</p>
-        <p>{originalLanguage}</p>
-        <p>{originalTitle}</p>
-        <p>{overview}</p>
-        <p>
-          {productionCompanies?.map((productionCompany) => [
-            productionCompany.name,
-            productionCompany.originCountry,
-          ])}
-        </p>
-        <p>{revenue}</p>
-        <p>{runtime}</p>
-        <p>{status}</p>
+        <h1>{title}</h1>
+        {tagline && <>{tagline}</>}
+        <OverviewContainer>{overview}</OverviewContainer>
+        <p>Release Date: {releaseDate}</p>
+        <p>Genres: {genres?.map((genre) => genre.name).join(", ")}</p>
+        <p>Original Language: {originalLanguage.toUpperCase()}</p>
+        <p>Original Title: {originalTitle}</p>
+        Production Companies:
+        {productionCompanies?.map(
+          (
+            productionCompany, // TODO - seperator
+            index,
+          ) => (
+            <Fragment key={index}>
+              Name: {productionCompany.name}
+              {productionCompany.originCountry && (
+                <>Origin Country: {productionCompany.originCountry}</>
+              )}
+            </Fragment>
+          ),
+        )}
+        <p>Runtime: {runtime}</p>
+        <p>Status: {status}</p>
       </TextContainer>
     </Container>
   );

@@ -10,7 +10,7 @@ const Container = styled.div`
   border: 1px solid ${(props) => props.theme.primary.border};
   border-radius: 10px;
   margin: 5px 0;
-  width: 250px;
+  width: 300px;
   display: flex;
   gap: 5px;
 `;
