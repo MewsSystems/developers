@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ExchangeRateUpdater-base": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "EXCHANGE_RATE_UPDATER_URL": "http://localhost:2424/"
+      }
+    }
+  }
+}

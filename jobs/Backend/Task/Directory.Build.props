@@ -1,0 +1,11 @@
+﻿<Project>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(IsTestProject) == '' or $(IsTestProject) == 'false'">
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+</Project>

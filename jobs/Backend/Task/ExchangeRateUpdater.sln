@@ -1,9 +1,42 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.API", "ExchangeRateUpdater.API\ExchangeRateUpdater.API.csproj", "{97260F17-C2FB-4CA1-8271-2D12142DE43F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{850D4AE3-321C-46EB-94AE-FC772A5D6C11}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		docker-compose.yaml = docker-compose.yaml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Host", "ExchangeRateUpdater.Host\ExchangeRateUpdater.Host.csproj", "{A38E4B85-583B-459B-B00C-C3B2EB3A10BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.Core", "ExchangeRateUpdater.Domain.Core\ExchangeRateUpdater.Domain.Core.csproj", "{2A3A5506-AAE7-414E-AF27-C79AA22D39D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Domain.Logic", "ExchangeRateUpdater.Domain.Logic\ExchangeRateUpdater.Domain.Logic.csproj", "{17C7F57F-F821-4757-A07F-3B94F467A4B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{D989DB80-22BC-4082-9B1E-DF1B7EE17931}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater-base", "ExchangeRateUpdater-base\ExchangeRateUpdater-base.csproj", "{41B0A551-2CC1-46EF-B9CF-B49D37D258B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{AEAE0C64-E026-4605-9C06-0041F33F1179}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\.gitignore = ..\..\..\.gitignore
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{A1947FFC-0437-4351-8E7E-12F6CCF9B858}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\.github\workflows\dotnet-build-test.yaml = ..\..\..\.github\workflows\dotnet-build-test.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{4B156BD0-A752-4586-9553-5F101E7C4072}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +44,38 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97260F17-C2FB-4CA1-8271-2D12142DE43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97260F17-C2FB-4CA1-8271-2D12142DE43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97260F17-C2FB-4CA1-8271-2D12142DE43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97260F17-C2FB-4CA1-8271-2D12142DE43F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A38E4B85-583B-459B-B00C-C3B2EB3A10BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A38E4B85-583B-459B-B00C-C3B2EB3A10BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A38E4B85-583B-459B-B00C-C3B2EB3A10BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A38E4B85-583B-459B-B00C-C3B2EB3A10BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A3A5506-AAE7-414E-AF27-C79AA22D39D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A3A5506-AAE7-414E-AF27-C79AA22D39D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A3A5506-AAE7-414E-AF27-C79AA22D39D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A3A5506-AAE7-414E-AF27-C79AA22D39D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17C7F57F-F821-4757-A07F-3B94F467A4B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C7F57F-F821-4757-A07F-3B94F467A4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17C7F57F-F821-4757-A07F-3B94F467A4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17C7F57F-F821-4757-A07F-3B94F467A4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D989DB80-22BC-4082-9B1E-DF1B7EE17931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D989DB80-22BC-4082-9B1E-DF1B7EE17931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D989DB80-22BC-4082-9B1E-DF1B7EE17931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D989DB80-22BC-4082-9B1E-DF1B7EE17931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B0A551-2CC1-46EF-B9CF-B49D37D258B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B0A551-2CC1-46EF-B9CF-B49D37D258B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B0A551-2CC1-46EF-B9CF-B49D37D258B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B0A551-2CC1-46EF-B9CF-B49D37D258B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1947FFC-0437-4351-8E7E-12F6CCF9B858} = {AEAE0C64-E026-4605-9C06-0041F33F1179}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D1FB897-7BDD-48C6-863B-1FCF83D27B0B}
 	EndGlobalSection
 EndGlobal

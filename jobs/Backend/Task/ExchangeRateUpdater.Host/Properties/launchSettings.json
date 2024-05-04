@@ -1,0 +1,24 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:24875",
+      "sslPort": 44384
+    }
+  },
+  "profiles": {
+    "ExchangeRateUpdater.Host": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:2525",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BANK_CLIENT_URL": "https://api.cnb.cz/cnbapi/"
+      }
+    }
+  }
+}
