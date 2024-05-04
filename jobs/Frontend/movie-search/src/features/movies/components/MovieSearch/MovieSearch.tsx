@@ -25,7 +25,7 @@ export default function MovieSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [movies, setMovies] = useState<Set<Movie>>(new Set());
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [paginationModel, setPaginatioNModel] = useState<GridPaginationModel | undefined>({
     pageSize: defaultPageSize,
     page: 0
@@ -61,11 +61,10 @@ export default function MovieSearch() {
 
   useEffect(() => {
     if (data?.pages.length) {
-      const movieDataPage = new Set(data.pages.flatMap(page => page.results));
+      const movieDataPage = data.pages.flatMap(page => page.results);
 
-      if (movieDataPage.size !== movies.size) {
-        const newMovies = new Set([...movies, ...movieDataPage]);
-        setMovies(newMovies);
+      if (movieDataPage.length !== movies.length) {
+        setMovies([...movieDataPage]);
 
         if (hasNextPage) fetchNextPage();
       }
@@ -73,7 +72,9 @@ export default function MovieSearch() {
   }, [data, fetchNextPage, hasNextPage, movies]);
 
   const shouldRenderError = useDelayedRender(error !== null);
-  const shouldRenderNoMovies = useDelayedRender(!isLoading && isSuccess && !error && movies.size === 0 && query !== '');
+  const shouldRenderNoMovies = useDelayedRender(
+    !isLoading && isSuccess && !error && movies.length === 0 && query !== ''
+  );
   const shouldRenderLoading = useDelayedRender(isLoading);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
@@ -126,7 +127,7 @@ export default function MovieSearch() {
         </Paper>
       )}
 
-      {movies.size > 0 && (
+      {movies.length > 0 && (
         <Paper sx={{ m: 2, borderRadius: 2, height: 'calc(100svh - 25rem)' }} elevation={3}>
           <DataGrid
             data-testid="movie-search-grid"
@@ -136,7 +137,7 @@ export default function MovieSearch() {
               },
               '& .MuiDataGrid-row:hover': { cursor: 'pointer', color: 'primary.main' }
             }}
-            rows={Array.from(movies)}
+            rows={movies}
             columns={movieSearchColumnsDefinition}
             onRowClick={handleRowClick}
             rowHeight={100}
