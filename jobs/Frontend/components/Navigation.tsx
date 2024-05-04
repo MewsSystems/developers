@@ -18,6 +18,11 @@ const Button = styled.button`
   border-radius: 8px;
   height: 30px;
   width: 150px;
+
+  &:hover {
+    cursor: pointer;
+    background: ${(props) => props.theme.primary.buttonHover};
+  }
 `;
 
 const Navigation = () => {

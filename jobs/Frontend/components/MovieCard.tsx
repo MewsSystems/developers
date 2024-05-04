@@ -16,6 +16,10 @@ const Container = styled.div`
   gap: 5px;
   background: ${(props) => props.theme.card.background};
   border: 1px solid ${(props) => props.theme.card.border};
+
+  &:hover {
+    border: 1px solid ${(props) => props.theme.card.borderHover};
+  }
 `;
 
 const ImagePlaceholder = styled.div`

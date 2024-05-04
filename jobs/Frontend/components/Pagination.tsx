@@ -34,8 +34,10 @@ const Button = styled.button`
 
   &:hover {
     cursor: pointer;
+    background: ${(props) => props.theme.primary.buttonHover};
 
     &.disabled {
+      background: ${(props) => props.theme.primary.background};
       cursor: not-allowed;
     }
   }

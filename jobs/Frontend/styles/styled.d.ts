@@ -11,6 +11,7 @@ declare module "styled-components" {
       background: string;
       border: string;
       button: string;
+      buttonHover: string;
     };
     secondary: {
       text: string;
@@ -18,6 +19,7 @@ declare module "styled-components" {
     card: {
       background: string;
       border: string;
+      borderHover: string;
     };
     tag: {
       background: string;
