@@ -7,7 +7,7 @@ const Container = styled.div`
 `;
 
 const TestComponent = () => {
-  return <Container>Test</Container>;
+  return <Container>Test, Test</Container>;
 };
 
 export default TestComponent;
