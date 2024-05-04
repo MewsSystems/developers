@@ -2,15 +2,17 @@
 
 import { tabletMediaQuery } from "@/breakpoints";
 import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
+import { getYear } from "@/utils/date.util";
 import { getImageUrl } from "@/utils/image.util";
 import Image from "next/image";
-import { Fragment } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
   gap: 50px;
   flex-direction: column;
+  justify-content: center;
+  margin-top: 40px;
 
   ${tabletMediaQuery} {
     flex-direction: row;
@@ -18,9 +20,10 @@ const Container = styled.div`
 `;
 
 const TextContainer = styled.div`
-  border: 1px solid ${(props) => props.theme.primary.border};
+  border: 1px solid ${(props) => props.theme.card.border};
+  background: ${(props) => props.theme.card.background};
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px 40px;
   display: flex;
   flex-direction: column;
 `;
@@ -47,6 +50,38 @@ const ImagePlaceholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Tag = styled.div`
+  background: ${(props) => props.theme.tag.background};
+  width: 100px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // Could have different coloured tags for different statuses
+  color: ${(props) => props.theme.secondary.text};
+  border-radius: 8px;
+`;
+
+const Title = styled.h1`
+  margin-bottom: 0;
+  padding-bottom: 0;
+`;
+
+const TextUnderTitleContainer = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+const TextUnderTitle = styled.p`
+  margin-top: 0;
+  padding-top: 0;
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  gap: 10px;
 `;
 
 interface MovieDetailsProps {
@@ -92,29 +127,33 @@ const MovieDetails = ({
         <ImagePlaceholder>No Image</ImagePlaceholder>
       )}
       <TextContainer>
-        <h1>{title}</h1>
+        <Title>{title}</Title>
+        <TextUnderTitleContainer>
+          <TextUnderTitle>{getYear(releaseDate)}</TextUnderTitle>-
+          <TextUnderTitle>{runtime}m</TextUnderTitle>-
+          <TextUnderTitle>
+            {genres?.map((genre) => genre.name).join(", ")}
+          </TextUnderTitle>
+        </TextUnderTitleContainer>
         {tagline && <>{tagline}</>}
         <OverviewContainer>{overview}</OverviewContainer>
-        <p>Release Date: {releaseDate}</p>
-        <p>Genres: {genres?.map((genre) => genre.name).join(", ")}</p>
-        <p>Original Language: {originalLanguage.toUpperCase()}</p>
-        <p>Original Title: {originalTitle}</p>
-        Production Companies:
-        {productionCompanies?.map(
-          (
-            productionCompany, // TODO - seperator
-            index,
-          ) => (
-            <Fragment key={index}>
+        <h4>Production Companies:</h4>
+        <ul>
+          {productionCompanies?.map((productionCompany, index) => (
+            <li key={index}>
               Name: {productionCompany.name}
               {productionCompany.originCountry && (
-                <>Origin Country: {productionCompany.originCountry}</>
+                <> - Origin Country: {productionCompany.originCountry}</>
               )}
-            </Fragment>
-          ),
-        )}
-        <p>Runtime: {runtime}</p>
-        <p>Status: {status}</p>
+            </li>
+          ))}
+        </ul>
+        <p>Original Title: {originalTitle}</p>
+
+        <TagContainer>
+          <Tag>{status}</Tag>
+          <Tag>Lang: {originalLanguage.toUpperCase()}</Tag>
+        </TagContainer>
       </TextContainer>
     </Container>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { tabletMediaQuery } from "@/breakpoints";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styled from "styled-components";
 import { useDebouncedCallback } from "use-debounce";
@@ -7,8 +8,17 @@ import { useDebouncedCallback } from "use-debounce";
 const SearchBarInput = styled.input`
   color: ${(props) => props.theme.primary.text};
   border: 1px solid ${(props) => props.theme.primary.border};
-  border-radius: 5px;
-  padding: 5px;
+  border-radius: 25px;
+  padding: 5px 15px;
+  display: flex;
+  margin: 15px auto;
+  width: 250px;
+  height: 25px;
+  font-size: 14px;
+
+  ${tabletMediaQuery} {
+    width: 350px;
+  }
 `;
 
 const SearchBar = () => {
@@ -34,6 +44,7 @@ const SearchBar = () => {
     <SearchBarInput
       onChange={(event) => handleSearch(event.target.value)}
       defaultValue={searchParams.get("query")?.toString()}
+      placeholder="Search for a movie"
     />
   );
 };

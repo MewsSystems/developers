@@ -6,9 +6,10 @@ import { MovieSearch } from "@/interfaces/movie";
 
 const Container = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 5px 15px;
   flex-wrap: wrap;
   margin-top: 20px;
+  justify-content: center;
 `;
 
 interface MovieCardsProps {

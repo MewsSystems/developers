@@ -1,5 +1,6 @@
 "use client";
 
+import { tabletMediaQuery } from "@/breakpoints";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styled from "styled-components";
 
@@ -8,19 +9,27 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+
+  ${tabletMediaQuery} {
+    margin-bottom: 0;
+  }
 `;
 
 const Button = styled.button`
   font-size: 14px;
-  width: 75px;
-  height: 25px;
+  width: 100px;
+  height: 45px;
   background: ${(props) => props.theme.primary.button};
   border: 1px solid ${(props) => props.theme.primary.border};
   border-radius: 5px;
+  color: ${(props) => props.theme.secondary.text};
 
   &.disabled {
     background: ${(props) => props.theme.primary.background};
+    color: ${(props) => props.theme.primary.text};
+    opacity: 0.5;
   }
 
   &:hover {

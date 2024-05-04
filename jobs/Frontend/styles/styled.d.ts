@@ -12,5 +12,15 @@ declare module "styled-components" {
       border: string;
       button: string;
     };
+    secondary: {
+      text: string;
+    };
+    card: {
+      background: string;
+      border: string;
+    };
+    tag: {
+      background: string;
+    };
   }
 }

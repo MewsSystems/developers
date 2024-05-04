@@ -7,12 +7,14 @@ import Link from "next/link";
 import { getImageUrl } from "@/utils/image.util";
 
 const Container = styled.div`
-  border: 1px solid ${(props) => props.theme.primary.border};
   border-radius: 10px;
   margin: 5px 0;
   width: 300px;
+  height: 180px;
   display: flex;
   gap: 5px;
+  background: ${(props) => props.theme.card.background};
+  border: 1px solid ${(props) => props.theme.card.border};
 `;
 
 const ImagePlaceholder = styled.div`
@@ -35,6 +37,17 @@ const StyledLink = styled(Link)`
 
 const TextContainer = styled.div`
   padding: 5px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Title = styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 interface MovieCardProps {
@@ -62,8 +75,8 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
           <ImagePlaceholder>No Image</ImagePlaceholder>
         )}
         <TextContainer>
-          <p>{title}</p>
-          <p>{getYear(releaseDate)}</p>
+          <Title>{title + title}</Title>
+          <p>{releaseDate ? getYear(releaseDate) : "N/A"}</p>
         </TextContainer>
       </Container>
     </StyledLink>
