@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { getYear } from "@/utils/date.util";
@@ -48,6 +49,7 @@ const Title = styled.p`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  width: 150px;
 `;
 
 interface MovieCardProps {
@@ -58,24 +60,34 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [posterUrl, id, releaseDate, title]);
+
+  const base64Image =
+    "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII=";
+
   return (
     <StyledLink href={`movie/${id.toString()}`}>
       <Container>
         {posterUrl ? (
           <StyledImage
-            src={getImageUrl(200, posterUrl)}
+            src={loading ? base64Image : getImageUrl(200, posterUrl)}
             alt={title}
             width={120}
             height={180}
             priority
             placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII="
+            blurDataURL={base64Image}
+            onLoad={() => setLoading(false)}
           />
         ) : (
           <ImagePlaceholder>No Image</ImagePlaceholder>
         )}
         <TextContainer>
-          <Title>{title + title}</Title>
+          <Title>{title}</Title>
           <p>{releaseDate ? getYear(releaseDate) : "N/A"}</p>
         </TextContainer>
       </Container>
