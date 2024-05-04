@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain.Core.Clients;
+using ExchangeRateUpdater.Domain.Core.Exceptions;
 using ExchangeRateUpdater.Domain.Core.UseCases.CommonModels;
 using Microsoft.Extensions.Logging;
 using System;
@@ -35,6 +36,10 @@ namespace ExchangeRateUpdater.Domain.Logic.Clients
 			}
 
 			var response = await _client.GetAsync(url.ToString());
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new DomainException(System.Net.HttpStatusCode.BadGateway, $"Invalid response from {nameof(CzechNationalBankClient)} client {response.StatusCode}");
+			}
 
 			Currency target = new Currency(targetCurrency);
 

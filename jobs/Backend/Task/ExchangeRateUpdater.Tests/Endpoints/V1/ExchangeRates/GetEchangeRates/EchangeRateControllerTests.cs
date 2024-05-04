@@ -75,5 +75,16 @@ namespace ExchangeRateUpdater.Tests.Endpoints.V1.ExchangeRates.GetEchangeRates
 			Assert.True(!response.IsSuccessStatusCode);
 			Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 		}
+
+		[Fact]
+		public async Task InvalidResponseFromBankClient()
+		{
+			this._bankClientMock.SetMockResponse(HttpStatusCode.InternalServerError, string.Empty);
+
+			var response = await _client.GetAsync($"/v1/ExchangeRates?TargetCurrency=EUR");
+
+			Assert.True(!response.IsSuccessStatusCode);
+			Assert.Equal(HttpStatusCode.BadGateway, response.StatusCode);
+		}
 	}
 }
