@@ -1,10 +1,10 @@
 export interface Movie {
   id: number;
-  original_language: string;
-  original_title: string;
+  originalLanguage: string;
+  originalTitle: string;
   overview: string;
   popularity: number;
-  poster_path: string;
-  release_date: string;
+  posterUrl: string | null;
+  releaseDate: string;
   title: string;
 }

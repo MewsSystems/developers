@@ -1,45 +1,46 @@
-import SearchBar from "@/components/SearchBar";
-import { Movie } from "@/interfaces/Movie";
-import { MoviesResponse } from "@/interfaces/MoviesResponse";
-import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import { Metadata } from "next";
+import MovieCardsContainer from "@/components/MovieCardsContainer";
+import SearchBar from "@/components/SearchBar";
+import { Movie } from "@/interfaces/movie";
+import { MoviesDbMovie, MoviesDbSearchResponse } from "@/interfaces/MoviesDb";
+import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 
 export const metadata: Metadata = {
   title: "Search",
 };
 
 const fetchData = async (query: string) => {
-  const url = constructMovieDbUrl("/search/movie", query);
+  const moviesUrl = constructMovieDbUrl("/search/movie", query);
+  const moviesResponse = await fetch(moviesUrl);
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
+  if (!moviesResponse.ok) {
     // Logging here will be server-side not client, so it is not exposed. Additionally, we could log to a service we may use
     console.error(
       "Could not retrieve movies. Error: ",
-      response.status,
-      response.statusText,
+      moviesResponse.status,
+      moviesResponse.statusText,
     );
 
     // Don't return any movies instead of erroring
     return [];
   }
 
-  const moviesResponse = (await response.json()) as MoviesResponse;
+  const moviesSearchResponseData =
+    (await moviesResponse.json()) as MoviesDbSearchResponse<MoviesDbMovie>;
 
   // Map response so we don't return any unnecessary information
-  const movies: Movie[] = moviesResponse.results.map((movie) => ({
+  const moviesData: Movie[] = moviesSearchResponseData.results.map((movie) => ({
     id: movie.id,
-    original_language: movie.original_language,
-    original_title: movie.original_title,
+    originalLanguage: movie.original_language,
+    originalTitle: movie.original_title,
     overview: movie.overview,
     popularity: movie.popularity,
-    poster_path: movie.poster_path,
-    release_date: movie.release_date,
+    posterUrl: movie.poster_path,
+    releaseDate: movie.release_date,
     title: movie.title,
   }));
 
-  return movies;
+  return moviesData;
 };
 
 interface SearchPageProps {
@@ -53,6 +54,7 @@ export default async function Page({ searchParams }: SearchPageProps) {
   return (
     <>
       <SearchBar />
+      <MovieCardsContainer movies={movies} />
     </>
   );
 }
