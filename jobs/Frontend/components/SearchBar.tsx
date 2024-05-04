@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styled from "styled-components";
+import { useDebouncedCallback } from "use-debounce";
 
 const SearchBarInput = styled.input`
   color: ${(props) => props.theme.primary.text};
@@ -15,7 +16,7 @@ const SearchBar = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const handleSearch = (term: string) => {
+  const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
 
     if (term) {
@@ -25,7 +26,7 @@ const SearchBar = () => {
     }
 
     replace(`${pathname}?${params.toString()}`);
-  };
+  }, 300);
 
   return (
     <SearchBarInput
@@ -47,5 +48,6 @@ export default SearchBar;
  *
  * TODO - Debouncing:
  * To debounce the request so it's not called until the user finishes typing - https://github.com/xnimorz/use-debounce
+ * Why? Prevents unnecessary trips to the API while the user is typing
  * This could be written as a custom hook that is shared and to save on import size, but for the purposes of this exercise I'd prefer to save the time
  */
