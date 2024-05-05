@@ -17,7 +17,7 @@ const sharedStyled = css`
   background: ${(props) => props.theme.primary.button};
   color: ${(props) => props.theme.secondary.text};
   border-radius: 8px;
-  height: 30px;
+  height: 45px;
   width: 150px;
 
   &:hover {

@@ -13,7 +13,7 @@ const SearchBarInput = styled.input`
   display: flex;
   margin: 15px auto;
   width: 250px;
-  height: 35px;
+  height: 45px;
   font-size: 16px;
 
   ${tabletMediaQuery} {
