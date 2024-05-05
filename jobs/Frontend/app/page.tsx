@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import MovieCards from "@/components/MovieCards";
 import SearchBar from "@/components/SearchBar";
-import { MovieSearch } from "@/interfaces/Movie";
+import { MovieSearch } from "@/interfaces/movie";
 import { MoviesDbMovie, MoviesDbSearchResponse } from "@/interfaces/MoviesDb";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import Pagination from "@/components/Pagination";

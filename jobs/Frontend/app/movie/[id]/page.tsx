@@ -4,7 +4,7 @@ import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb/moviesDbMovi
 import MovieDetailsContainer from "@/components/MovieDetails";
 import Navigation from "@/components/Navigation";
 import Header from "@/components/Header";
-import { MovieDetail } from "@/interfaces/Movie";
+import { MovieDetail } from "@/interfaces/movie";
 
 export const metadata: Metadata = {
   title: "Details",

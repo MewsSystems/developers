@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 import MovieCard from "./MovieCard";
-import { MovieSearch } from "@/interfaces/Movie";
+import { MovieSearch } from "@/interfaces/movie";
 
 const Container = styled.div`
   display: flex;
