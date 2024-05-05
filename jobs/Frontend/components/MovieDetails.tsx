@@ -135,7 +135,8 @@ const MovieDetails = ({
       <TextContainer>
         <Title>{title}</Title>
         <TextUnderTitle>
-          {getYear(releaseDate)} - {runtime}m
+          {releaseDate && <>{getYear(releaseDate)} - </>}
+          {runtime}m
           {genres.length > 0 && (
             <> - {genres?.map((genre) => genre.name).join(", ")}</>
           )}
