@@ -50,11 +50,16 @@ const StyledImage = styled(Image)`
 `;
 
 const ImagePlaceholder = styled.div`
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${desktopMediaQuery} {
+    width: 500px;
+    height: 750px;
+  }
 `;
 
 const Tag = styled.div`
