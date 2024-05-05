@@ -1,7 +1,6 @@
 "use client";
 
 import { tabletMediaQuery } from "@/breakpoints";
-import { MovieSearch } from "@/interfaces/movie";
 import styled from "styled-components";
 
 const Container = styled.div`

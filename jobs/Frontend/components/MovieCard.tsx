@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { getYear } from "@/utils/date.util";
@@ -63,13 +62,8 @@ interface MovieCardProps {
   title: string;
 }
 
+// A skeleton loading state would be nice on these cards
 const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [posterUrl, id, releaseDate, title]);
-
   const base64Image =
     "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII=";
 
@@ -78,14 +72,13 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
       <Container>
         {posterUrl ? (
           <StyledImage
-            src={loading ? base64Image : getImageUrl(200, posterUrl)}
+            src={getImageUrl(200, posterUrl)}
             alt={title}
             width={120}
             height={180}
             priority
             placeholder="blur"
             blurDataURL={base64Image}
-            onLoad={() => setLoading(false)}
           />
         ) : (
           <ImagePlaceholder>No Image</ImagePlaceholder>
