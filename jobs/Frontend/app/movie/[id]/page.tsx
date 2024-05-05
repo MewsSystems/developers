@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { headers } from "next/headers";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb";
 import MovieDetailsContainer from "@/components/MovieDetails";
