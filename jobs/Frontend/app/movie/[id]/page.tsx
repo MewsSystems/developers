@@ -64,8 +64,6 @@ interface MoviePageProps {
 export default async function Page({ params, searchParams }: MoviePageProps) {
   const movie = await fetchData(params.id);
 
-  console.log(searchParams);
-
   return (
     <>
       <Header>

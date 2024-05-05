@@ -13,10 +13,10 @@ test.describe("navigation", () => {
     expect(await page.title()).toBe("Details");
   });
 
-  test("can click on and go to home page when referer is undefined", async ({
+  test("can click on and go to home page when queryParams are undefined", async ({
     page,
   }) => {
-    await page.goto("/movie/601796", { referer: undefined });
+    await page.goto("/movie/601796");
 
     await page.getByText("Home").click();
     await page.waitForURL("**/");
@@ -24,13 +24,11 @@ test.describe("navigation", () => {
     await expect(page).toHaveTitle(/Search/);
   });
 
-  test("can click on and go to home page when referer is set", async ({
+  test("can click on and go to home page when queryParams are set", async ({
     page,
   }) => {
     await page.goto("/?query=a&page=1");
-    await page.goto("/movie/601796", {
-      referer: "http://127.0.0.1:3000?query=a&page=1",
-    });
+    await page.goto("/movie/601796?query=a&page=1");
 
     await page.locator("nav").locator("button").first().click();
     await page.waitForURL("**/");
