@@ -1,8 +1,8 @@
 "use client";
 
-import { tabletMediaQuery } from "@/breakpoints";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styled from "styled-components";
+import { tabletMediaQuery } from "@/breakpoints";
 
 const Container = styled.div`
   display: flex;

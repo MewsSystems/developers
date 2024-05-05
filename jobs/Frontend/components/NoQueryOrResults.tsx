@@ -1,7 +1,7 @@
 "use client";
 
-import { tabletMediaQuery } from "@/breakpoints";
 import styled from "styled-components";
+import { tabletMediaQuery } from "@/breakpoints";
 
 const Container = styled.div`
   display: flex;

@@ -1,11 +1,12 @@
 "use client";
 
-import { desktopMediaQuery, tabletMediaQuery } from "@/breakpoints";
-import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
-import { getYear } from "@/utils/date.util";
-import { getImageUrl } from "@/utils/image.util";
 import Image from "next/image";
 import styled from "styled-components";
+import { desktopMediaQuery } from "@/breakpoints";
+import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
+import { getYear } from "@/utils/date.util";
+import { getImageUrl, IMAGE_PLACEHOLDER_URL } from "@/utils/image.util";
+import ProductionCompanies from "./ProductionCompanies";
 
 const Container = styled.div`
   display: flex;
@@ -18,6 +19,7 @@ const Container = styled.div`
     flex-direction: row;
     padding: 0 20px;
     margin-top: 40px;
+    margin-bottom: 40px;
     gap: 50px;
   }
 `;
@@ -29,10 +31,10 @@ const TextContainer = styled.div`
   padding: 20px 40px;
   display: flex;
   flex-direction: column;
-`;
 
-const OverviewContainer = styled.div`
-  max-width: 750px;
+  ${desktopMediaQuery} {
+    max-width: 750px;
+  }
 `;
 
 const StyledImage = styled(Image)`
@@ -73,17 +75,13 @@ const Title = styled.h1`
 `;
 
 const TextUnderTitle = styled.p`
-  margin: 0;
+  margin: 0 0 15px 0;
   padding: 0;
 `;
 
 const TagContainer = styled.div`
   display: flex;
   gap: 10px;
-`;
-
-const SmallHeading = styled.h4`
-  margin-bottom: 0;
 `;
 
 interface MovieDetailsProps {
@@ -123,7 +121,7 @@ const MovieDetails = ({
           height={750}
           priority
           placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII="
+          blurDataURL={IMAGE_PLACEHOLDER_URL}
         />
       ) : (
         <ImagePlaceholder>No Image</ImagePlaceholder>
@@ -137,21 +135,9 @@ const MovieDetails = ({
           )}
         </TextUnderTitle>
         {tagline && <p>{tagline}</p>}
-        <OverviewContainer>{overview}</OverviewContainer>
+        <p>{overview}</p>
         {productionCompanies.length > 0 && (
-          <>
-            <SmallHeading>Production Companies:</SmallHeading>
-            <ul>
-              {productionCompanies?.map((productionCompany, index) => (
-                <li key={index}>
-                  Name: {productionCompany.name}
-                  {productionCompany.originCountry && (
-                    <> - Origin Country: {productionCompany.originCountry}</>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </>
+          <ProductionCompanies productionCompanies={productionCompanies} />
         )}
         <p>Original Title: {originalTitle}</p>
         <TagContainer>

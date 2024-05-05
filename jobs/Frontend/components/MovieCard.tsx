@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import styled from "styled-components";
 import { getYear } from "@/utils/date.util";
-import Link from "next/link";
-import { getImageUrl } from "@/utils/image.util";
+import { getImageUrl, IMAGE_PLACEHOLDER_URL } from "@/utils/image.util";
 
 const Container = styled.div`
   border-radius: 10px;
@@ -64,9 +64,6 @@ interface MovieCardProps {
 
 // A skeleton loading state would be nice on these cards
 const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
-  const base64Image =
-    "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAABLCAYAAACGPXWeAAABBElEQVR42u3VQREAAAQAMJLL5qGXHM5WYtk9FQDAaSl0ABA6ACB0AEDoAIDQAUDoAIDQAQChAwBCBwChAwBCBwCEDgAIHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKELHQCEDgAIHQAQOgAgdAAQOgAgdABA6ACA0AFA6ACA0AEAoQMAQgcAoQMAQgcAhA4ACB0AhA4ACB0AEDoAIHQAEDoAIHQAQOgAgNABQOgAgNABAKEDAEIHAKEDAEIHAIQOAAgdAJ5Zv3PQTkffvswAAAAASUVORK5CYII=";
-
   return (
     <StyledLink href={`movie/${id.toString()}`}>
       <Container>
@@ -78,7 +75,7 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
             height={180}
             priority
             placeholder="blur"
-            blurDataURL={base64Image}
+            blurDataURL={IMAGE_PLACEHOLDER_URL}
           />
         ) : (
           <ImagePlaceholder>No Image</ImagePlaceholder>

@@ -1,9 +1,9 @@
 "use client";
 
-import { tabletMediaQuery } from "@/breakpoints";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styled from "styled-components";
 import { useDebouncedCallback } from "use-debounce";
+import { tabletMediaQuery } from "@/breakpoints";
 
 const SearchBarInput = styled.input`
   color: ${(props) => props.theme.primary.text};
