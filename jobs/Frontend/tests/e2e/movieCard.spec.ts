@@ -3,12 +3,12 @@ import { test, expect } from "@playwright/test";
 test.describe("movieCard", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("");
-    await page.locator("input").fill("");
+    await page.waitForURL("**/");
   });
 
   test("movie cards shows expected properties", async ({ page }) => {
-    await page.locator("input").fill("a");
-    await page.waitForTimeout(1500);
+    await page.goto("/?query=a&page1");
+    await page.waitForURL("**/?query=a&page1");
 
     expect(await page.locator("img").count()).toBeGreaterThan(0);
     await expect(page.locator("a").first()).toContainText(/a/i);
@@ -20,8 +20,8 @@ test.describe("movieCard", () => {
   });
 
   test("clicking a movie card goes to its' details page", async ({ page }) => {
-    await page.locator("input").fill("a");
-    await page.waitForTimeout(1000);
+    await page.goto("/?query=a&page1");
+    await page.waitForURL("**/?query=a&page1");
 
     await page.locator("a").first().click();
     await page.waitForURL("**/movie/**");

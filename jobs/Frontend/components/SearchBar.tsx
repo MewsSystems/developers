@@ -13,11 +13,12 @@ const SearchBarInput = styled.input`
   display: flex;
   margin: 15px auto;
   width: 250px;
-  height: 25px;
-  font-size: 14px;
+  height: 35px;
+  font-size: 16px;
 
   ${tabletMediaQuery} {
     width: 350px;
+    font-size: 14px;
   }
 `;
 

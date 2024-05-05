@@ -70,7 +70,7 @@ const Pagination = ({ totalPages }: PaginationProps) => {
   };
 
   return (
-    <Container>
+    <Container data-testid="pagination">
       <Button
         onClick={() => handleClick(query, currentPage - 1)}
         disabled={currentPage === 1}
@@ -78,7 +78,9 @@ const Pagination = ({ totalPages }: PaginationProps) => {
       >
         Previous
       </Button>
-      Page {currentPage} of {totalPages}
+      <span data-testid="pageNumbers">
+        Page {currentPage} of {totalPages}
+      </span>
       <Button
         onClick={() => handleClick(query, currentPage + 1)}
         disabled={currentPage === totalPages}
