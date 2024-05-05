@@ -4,7 +4,7 @@
 
 Accessible here - https://developers-frontend-jake-towers-projects.vercel.app. For the purposes of this task I've used a feature branch, but in the real world this would be a master/main branch and driven from dev/staging/production environments.
 
-As requested, I have created a Pull Request which can be found here - TODO
+As requested, I have created a Pull Request which can be found here - https://github.com/MewsSystems/developers/pull/585.
 
 ## Tech
 
@@ -18,6 +18,7 @@ As requested, I have created a Pull Request which can be found here - TODO
 - .nvmrc - Tells you the preferred Node version to use for this project
 - [Playwright](https://playwright.dev/) - End to End (E2E) tests for the project
 - [Jest](https://jestjs.io/) - Unit tests for the project
+- [Coolors](https://coolors.co/) - To generate the colour palette
 
 ## Running locally
 
@@ -63,6 +64,8 @@ Run the application locally first, then run
 ```
 npm run test:e2e
 ```
+
+Currently these tests will hit the MovieDb API. It would be good to use something like [MSW](https://mswjs.io/) to intercept the requests and return mock data so that the API is not hit when running the tests locally.
 
 ## Deployment
 
