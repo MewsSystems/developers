@@ -86,7 +86,7 @@ export default async function Page({ params, searchParams }: MoviePageProps) {
           title={movie.title}
         />
       ) : (
-        <>No movie for this ID</>
+        <p>No movie found.</p>
       )}
     </>
   );
