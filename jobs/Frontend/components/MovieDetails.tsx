@@ -72,19 +72,18 @@ const Title = styled.h1`
   padding-bottom: 0;
 `;
 
-const TextUnderTitleContainer = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
 const TextUnderTitle = styled.p`
-  margin-top: 0;
-  padding-top: 0;
+  margin: 0;
+  padding: 0;
 `;
 
 const TagContainer = styled.div`
   display: flex;
   gap: 10px;
+`;
+
+const SmallHeading = styled.h4`
+  margin-bottom: 0;
 `;
 
 interface MovieDetailsProps {
@@ -131,28 +130,30 @@ const MovieDetails = ({
       )}
       <TextContainer>
         <Title>{title}</Title>
-        <TextUnderTitleContainer>
-          <TextUnderTitle>{getYear(releaseDate)}</TextUnderTitle>-
-          <TextUnderTitle>{runtime}m</TextUnderTitle>-
-          <TextUnderTitle>
-            {genres?.map((genre) => genre.name).join(", ")}
-          </TextUnderTitle>
-        </TextUnderTitleContainer>
+        <TextUnderTitle>
+          {getYear(releaseDate)} - {runtime}m
+          {genres.length > 0 && (
+            <> - {genres?.map((genre) => genre.name).join(", ")}</>
+          )}
+        </TextUnderTitle>
         {tagline && <p>{tagline}</p>}
         <OverviewContainer>{overview}</OverviewContainer>
-        <h4>Production Companies:</h4>
-        <ul>
-          {productionCompanies?.map((productionCompany, index) => (
-            <li key={index}>
-              Name: {productionCompany.name}
-              {productionCompany.originCountry && (
-                <> - Origin Country: {productionCompany.originCountry}</>
-              )}
-            </li>
-          ))}
-        </ul>
+        {productionCompanies.length > 0 && (
+          <>
+            <SmallHeading>Production Companies:</SmallHeading>
+            <ul>
+              {productionCompanies?.map((productionCompany, index) => (
+                <li key={index}>
+                  Name: {productionCompany.name}
+                  {productionCompany.originCountry && (
+                    <> - Origin Country: {productionCompany.originCountry}</>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
         <p>Original Title: {originalTitle}</p>
-
         <TagContainer>
           <Tag>{status}</Tag>
           <Tag>Lang: {originalLanguage.toUpperCase()}</Tag>

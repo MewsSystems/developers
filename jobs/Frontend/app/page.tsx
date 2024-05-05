@@ -6,7 +6,7 @@ import { MoviesDbMovie, MoviesDbSearchResponse } from "@/interfaces/MoviesDb";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import Pagination from "@/components/Pagination";
 import Header from "@/components/Header";
-import NoQuery from "@/components/NoQuery";
+import NoQueryOrResults from "@/components/NoQueryOrResults";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -66,13 +66,13 @@ export default async function Page({ searchParams }: SearchPageProps) {
       <Header>
         <SearchBar />
       </Header>
-      {searchParams.query ? (
+      {searchParams.query && movies.length > 0 ? (
         <>
           <MovieCards movies={movies} />
           <Pagination totalPages={totalPages} />
         </>
-      ) : (
-        <NoQuery />
+      ) :  (
+        <NoQueryOrResults query={searchParams.query} moviesCount={movies.length} />
       )}
     </>
   );
