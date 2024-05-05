@@ -45,6 +45,8 @@ const SearchBar = () => {
       onChange={(event) => handleSearch(event.target.value)}
       defaultValue={searchParams.get("query")?.toString()}
       placeholder="Search for a movie"
+      type="search"
+      name="search"
     />
   );
 };
