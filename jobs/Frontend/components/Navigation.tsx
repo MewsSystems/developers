@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { tabletMediaQuery } from "@/breakpoints";
 
-const Container = styled.div`
+const Container = styled.nav`
   padding: 10px;
 
   ${tabletMediaQuery} {
