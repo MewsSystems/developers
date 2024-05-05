@@ -19,6 +19,7 @@ const sharedStyled = css`
   border-radius: 8px;
   height: 45px;
   width: 150px;
+  font-size: 14px;
 
   &:hover {
     cursor: pointer;
@@ -32,7 +33,9 @@ const StyledButton = styled.button`
 
 const StyledLink = styled(Link)`
   ${sharedStyled}
-  padding: 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
 `;
 
