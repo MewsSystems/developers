@@ -4,6 +4,7 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

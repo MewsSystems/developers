@@ -72,6 +72,7 @@ const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
   return (
     <StyledLink
       href={`movie/${id.toString()}?query=${query}&page=${currentPage}`}
+      prefetch={false}
     >
       <Container>
         {posterUrl ? (
