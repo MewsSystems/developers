@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { getYear } from "@/utils/date.util";
 import { getImageUrl, IMAGE_PLACEHOLDER_URL } from "@/utils/image.util";
+import { useSearchParams } from "next/navigation";
 
 const Container = styled.div`
   border-radius: 10px;
@@ -64,8 +65,14 @@ interface MovieCardProps {
 
 // A skeleton loading state would be nice on these cards
 const MovieCard = ({ id, posterUrl, releaseDate, title }: MovieCardProps) => {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query") ?? "";
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   return (
-    <StyledLink href={`movie/${id.toString()}`}>
+    <StyledLink
+      href={`movie/${id.toString()}?query=${query}&page=${currentPage}`}
+    >
       <Container>
         {posterUrl ? (
           <StyledImage

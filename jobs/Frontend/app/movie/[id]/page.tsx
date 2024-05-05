@@ -57,19 +57,22 @@ const fetchData = async (id: string) => {
 };
 
 interface MoviePageProps {
-  params: { id: string };
+  params: { id: string; query?: string; page?: string };
+  searchParams: { query?: string; page?: string };
 }
 
-export default async function Page({ params }: MoviePageProps) {
+export default async function Page({ params, searchParams }: MoviePageProps) {
   const movie = await fetchData(params.id);
 
-  const headersList = headers();
-  const referer = headersList.get("referer");
+  console.log(searchParams);
 
   return (
     <>
       <Header>
-        <Navigation referer={referer} />
+        <Navigation
+          query={searchParams.query ?? ""}
+          page={searchParams.page ?? ""}
+        />
       </Header>
       {movie ? (
         <MovieDetailsContainer

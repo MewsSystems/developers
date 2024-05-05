@@ -40,16 +40,17 @@ const StyledLink = styled(Link)`
 `;
 
 interface NavigationProps {
-  referer: string | null;
+  query: string;
+  page: string;
 }
 
-const Navigation = ({ referer }: NavigationProps) => {
+const Navigation = ({ query, page }: NavigationProps) => {
   const router = useRouter();
 
   // If you land directly on a movie details page you won't have a search to go back to, instead go to homepage
   return (
     <Container>
-      {referer?.includes("query") && referer?.includes("page") ? (
+      {query && page ? (
         <StyledButton onClick={() => router.back()}>
           Back to Search
         </StyledButton>
