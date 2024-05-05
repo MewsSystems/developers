@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import styled from "styled-components";
+import Link from "next/link";
+import styled, { css } from "styled-components";
 import { tabletMediaQuery } from "@/breakpoints";
 
 const Container = styled.nav`
@@ -12,7 +13,7 @@ const Container = styled.nav`
   }
 `;
 
-const Button = styled.button`
+const sharedStyled = css`
   background: ${(props) => props.theme.primary.button};
   color: ${(props) => props.theme.secondary.text};
   border-radius: 8px;
@@ -25,12 +26,33 @@ const Button = styled.button`
   }
 `;
 
-const Navigation = () => {
+const StyledButton = styled.button`
+  ${sharedStyled}
+`;
+
+const StyledLink = styled(Link)`
+  ${sharedStyled}
+  padding: 5px 15px;
+  text-decoration: none;
+`;
+
+interface NavigationProps {
+  referer: string | null;
+}
+
+const Navigation = ({ referer }: NavigationProps) => {
   const router = useRouter();
 
+  // If you land directly on a movie details page you won't have a search to go back to, instead go to homepage
   return (
     <Container>
-      <Button onClick={() => router.back()}>Back to Search</Button>
+      {referer ? (
+        <StyledButton onClick={() => router.back()}>
+          Back to Search
+        </StyledButton>
+      ) : (
+        <StyledLink href={"/"}>Home</StyledLink>
+      )}
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { headers } from "next/headers";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
 import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb";
 import MovieDetailsContainer from "@/components/MovieDetails";
@@ -62,10 +63,13 @@ interface MoviePageProps {
 export default async function Page({ params }: MoviePageProps) {
   const movie = await fetchData(params.id);
 
+  const headersList = headers();
+  const referer = headersList.get("referer");
+
   return (
     <>
       <Header>
-        <Navigation />
+        <Navigation referer={referer} />
       </Header>
       {movie ? (
         <MovieDetailsContainer
