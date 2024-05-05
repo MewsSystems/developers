@@ -10,6 +10,7 @@ import NoQueryOrResults from "@/components/NoQueryOrResults";
 
 export const metadata: Metadata = {
   title: "Search",
+  description: "Search page for finding movies",
 };
 
 const fetchData = async (query: string, page?: number) => {
@@ -71,8 +72,11 @@ export default async function Page({ searchParams }: SearchPageProps) {
           <MovieCards movies={movies} />
           <Pagination totalPages={totalPages} />
         </>
-      ) :  (
-        <NoQueryOrResults query={searchParams.query} moviesCount={movies.length} />
+      ) : (
+        <NoQueryOrResults
+          query={searchParams.query}
+          moviesCount={movies.length}
+        />
       )}
     </>
   );

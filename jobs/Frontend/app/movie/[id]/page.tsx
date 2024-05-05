@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { constructMovieDbUrl } from "@/utils/movieDbUrl.util";
-import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb/moviesDbMovieDetailsResponse";
+import { MoviesDbMovieDetailsResponse } from "@/interfaces/MoviesDb";
 import MovieDetailsContainer from "@/components/MovieDetails";
 import Navigation from "@/components/Navigation";
 import Header from "@/components/Header";
@@ -8,6 +8,7 @@ import { MovieDetail } from "@/interfaces/movie";
 
 export const metadata: Metadata = {
   title: "Details",
+  description: "Details of the selected movie",
 };
 
 const fetchData = async (id: string) => {

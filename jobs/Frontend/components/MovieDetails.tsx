@@ -122,6 +122,7 @@ const MovieDetails = ({
           priority
           placeholder="blur"
           blurDataURL={IMAGE_PLACEHOLDER_URL}
+          // Currently the NextJS server is optimising and caching these images, in the real world you'd want to serve them from a CDN and have some form of image optimisation/transformation
         />
       ) : (
         <ImagePlaceholder>No Image</ImagePlaceholder>

@@ -13,7 +13,7 @@ const Container = styled.div`
   margin-bottom: 30px;
 
   ${tabletMediaQuery} {
-    margin-bottom: 0;
+    margin-bottom: 10px;
   }
 `;
 
@@ -51,6 +51,7 @@ const Pagination = ({ totalPages }: PaginationProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+
   const query = searchParams.get("query") ?? "";
   const currentPage = Number(searchParams.get("page")) || 1;
 
