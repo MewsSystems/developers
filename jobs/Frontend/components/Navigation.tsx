@@ -46,7 +46,7 @@ const Navigation = ({ referer }: NavigationProps) => {
   // If you land directly on a movie details page you won't have a search to go back to, instead go to homepage
   return (
     <Container>
-      {referer ? (
+      {referer?.includes("query") && referer?.includes("page") ? (
         <StyledButton onClick={() => router.back()}>
           Back to Search
         </StyledButton>
