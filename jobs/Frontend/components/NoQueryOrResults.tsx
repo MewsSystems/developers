@@ -9,6 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 30px;
   padding: 0 20px;
+  text-align: center;
 
   ${tabletMediaQuery} {
     align-items: center;
