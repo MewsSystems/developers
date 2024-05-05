@@ -1,7 +1,7 @@
 "use client";
 
 import { desktopMediaQuery, tabletMediaQuery } from "@/breakpoints";
-import { MovieGenre, ProductionCompany } from "@/interfaces/movie";
+import { MovieGenre, ProductionCompany } from "@/interfaces/Movie";
 import { getYear } from "@/utils/date.util";
 import { getImageUrl } from "@/utils/image.util";
 import Image from "next/image";
