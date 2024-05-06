@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater.Host.Middleware
 			}
 			catch (DomainException ex)
 			{
-				this._logger.LogError(ex, ex.Message);
+				this._logger.LogWarning(ex, ex.Message);
 				context.Response.StatusCode = (int)ex.StatusCode;
 			}
 			catch (Exception ex)
