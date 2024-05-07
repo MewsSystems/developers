@@ -60,7 +60,7 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
                 CountryName = "USA",
                 SourceCurrencyCode = sourceCurrencyCode,
                 TargetCurrencyCode = "USD",
-                TargetCurrencyName = "dollar",
+                SourceCurrencyName = "dollar",
                 Amount = 1,
                 Value = 2.5m,
             };

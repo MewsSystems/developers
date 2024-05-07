@@ -20,7 +20,7 @@ namespace ExchangeRateFinder.Application
         private readonly IExchangeRateRepository _exchangeRateRepository;
         private readonly ILogger<UpdateCZKExchangeRateDataService> _logger;
         private readonly CBNConfiguration _options;
-        private readonly string SourceCurrencyCode = "CZK";
+        private readonly string TargetCurrencyCode = "CZK";
 
         public UpdateCZKExchangeRateDataService(
             IHttpClientService httpClientService, 
@@ -46,13 +46,13 @@ namespace ExchangeRateFinder.Application
 
                 var exchangeRateData = await _httpClientService.GetDataAsync(_options.Url);
                 // Parse it 
-                var exchangeRates = _exchangeRateParser.Parse(SourceCurrencyCode, exchangeRateData);
+                var exchangeRates = _exchangeRateParser.Parse(TargetCurrencyCode, exchangeRateData);
 
                 // Update the database
-                await _exchangeRateRepository.UpdateAllAsync(SourceCurrencyCode, exchangeRates);
+                await _exchangeRateRepository.UpdateAllAsync(TargetCurrencyCode, exchangeRates);
 
                 // Update the cache
-                var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{SourceCurrencyCode}-{x.TargetCurrencyCode}", x => x);
+                var exchangeRatesForCache = exchangeRates.ToDictionary(x => $"{TargetCurrencyCode}-{x.SourceCurrencyCode}", x => x);
                 _cachingService.UpdateCache(exchangeRatesForCache);
 
                 _logger.LogInformation($"Updating of CZK exchange rate data has finished at {DateTime.Now}");

@@ -23,7 +23,7 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
                 CountryName = "USA",
                 SourceCurrencyCode = "CZK",
                 TargetCurrencyCode = "USD",
-                TargetCurrencyName = "dollar",
+                SourceCurrencyName = "dollar",
                 Amount = 1,
                 Value = 2.5m,
             };
@@ -54,7 +54,7 @@ namespace ExchangeRateFinder.Infrastructure.UnitTests.Services
                 CountryName = "USA",
                 SourceCurrencyCode = "CZK",
                 TargetCurrencyCode = "USD",
-                TargetCurrencyName = "dollar",
+                SourceCurrencyName = "dollar",
                 Amount = 1,
                 Value = 2.5m,
             };

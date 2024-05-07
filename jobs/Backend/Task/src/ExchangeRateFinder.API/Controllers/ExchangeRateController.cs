@@ -37,8 +37,8 @@ namespace ExchangeRateFinder.API.Controllers
 
             try
             {
-                var currencyCodes = request.TargetCurrencyCodes.Split(',');
-                var exchangeRates = await _exchangeRateService.GetExchangeRates(request.SourceCurrencyCode, currencyCodes);
+                var targetCurrencyCodes = request.TargetCurrencyCodes.Split(',');
+                var exchangeRates = await _exchangeRateService.GetExchangeRates(request.SourceCurrencyCode, targetCurrencyCodes);
                 var mappedExchangeRates = exchangeRates.Select(e => _calculatedExchangeRateResponseMapper.Map(e)).ToList();
 
                 return Ok(mappedExchangeRates);

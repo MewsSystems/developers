@@ -7,7 +7,7 @@ namespace ExchangeRateFinder.Infrastructure.Models
     {
         public string SourceCurrencyCode { get; set; } = string.Empty;
         public string TargetCurrencyCode { get; set; } = string.Empty;
-        public string TargetCurrencyName { get; set; } = string.Empty;
+        public string SourceCurrencyName { get; set; } = string.Empty;
         public string CountryName { get; set; } = string.Empty;
         public int Amount { get; set; }
         public decimal Value { get; set; } 

@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.Application
 {
     public interface IExchangeRateService 
     {
-        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
+        Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> targetCurrencyCodes, CancellationToken cancellationToken = default);
     }
     public class ExchangeRateService : IExchangeRateService
     {
@@ -30,14 +30,14 @@ namespace ExchangeRateUpdater.Application
             _logger = logger;
         }
 
-        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default)
+        public async Task<List<CalculatedExchangeRate>> GetExchangeRates(string sourceCurrencyCode, IEnumerable<string> targetCurrencyCodes, CancellationToken cancellationToken = default)
         {
             var calculatedExchangeRates = new List<CalculatedExchangeRate>();
 
-            foreach (var currencyCode in currencyCodes)
+            foreach (var targetCurrencyCode in targetCurrencyCodes)
             {
-                var exchangeRateModel = await _cachingService.GetOrAddAsync($"{sourceCurrencyCode}-{currencyCode}", 
-                    async () => await _exchangeRateRepository.GetAsync(currencyCode, sourceCurrencyCode, cancellationToken));
+                var exchangeRateModel = await _cachingService.GetOrAddAsync($"{targetCurrencyCode}-{sourceCurrencyCode}", 
+                    async () => await _exchangeRateRepository.GetAsync(targetCurrencyCode, sourceCurrencyCode, cancellationToken));
 
                 if(exchangeRateModel != null)
                 {
@@ -56,7 +56,7 @@ namespace ExchangeRateUpdater.Application
                 }
                 else
                 {
-                    _logger.LogWarning($"Exchange rate for currency {currencyCode} was not found.");
+                    _logger.LogWarning($"Exchange rate for currency {targetCurrencyCode} was not found.");
                 }
             }
 

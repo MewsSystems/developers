@@ -15,7 +15,7 @@ namespace ExchangeRateFinder.Infrastructure.Services
         {
             _logger = logger;
         }
-        public List<ExchangeRate> Parse(string sourceCurrencyCode, string data)
+        public List<ExchangeRate> Parse(string targetCurrencyCode, string data)
         {
             var exchangeRates = new List<ExchangeRate>();
             string[] lines = data.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -29,21 +29,21 @@ namespace ExchangeRateFinder.Infrastructure.Services
                     string countryName = properties[0].Trim();
                     string currencyName = properties[1].Trim();
                     int amount = int.Parse(properties[2]);
-                    string currencyCode = properties[3].Trim();
+                    string sourceCurrencyCode = properties[3].Trim();
                     decimal exchangeRate = decimal.Parse(properties[4].Replace(",", "."), CultureInfo.InvariantCulture);
 
                     if (!string.IsNullOrEmpty(countryName) &&
                         !string.IsNullOrEmpty(currencyName) &&
-                        !string.IsNullOrEmpty(currencyCode) &&
+                        !string.IsNullOrEmpty(sourceCurrencyCode) &&
                         amount > 0 &&
                         exchangeRate > 0) 
                     { 
                         var exchange = new ExchangeRate
                         {
                             CountryName = countryName,
-                            TargetCurrencyCode = currencyCode,
+                            TargetCurrencyCode = targetCurrencyCode,
                             SourceCurrencyCode = sourceCurrencyCode,
-                            TargetCurrencyName = currencyName,
+                            SourceCurrencyName = currencyName,
                             Amount = amount,
                             Value = exchangeRate
                         };

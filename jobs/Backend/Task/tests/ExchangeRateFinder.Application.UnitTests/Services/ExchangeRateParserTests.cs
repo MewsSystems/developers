@@ -34,15 +34,15 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
             Assert.Equal(2, exchangeRates.Count);
 
             Assert.Equal("CountryName1", exchangeRates[0].CountryName);
-            Assert.Equal("dollar", exchangeRates[0].TargetCurrencyName);
-            Assert.Equal("CZK", exchangeRates[0].SourceCurrencyCode);
+            Assert.Equal("dollar", exchangeRates[0].SourceCurrencyName);
+            Assert.Equal("CZK", exchangeRates[0].TargetCurrencyCode);
             Assert.Equal(100, exchangeRates[0].Amount);
             Assert.Equal(1.25m, exchangeRates[0].Value);
 
 
             Assert.Equal("CountryName2", exchangeRates[1].CountryName);
-            Assert.Equal("euro", exchangeRates[1].TargetCurrencyName);
-            Assert.Equal("CZK", exchangeRates[1].SourceCurrencyCode);
+            Assert.Equal("euro", exchangeRates[1].SourceCurrencyName);
+            Assert.Equal("CZK", exchangeRates[1].TargetCurrencyCode);
             Assert.Equal(50, exchangeRates[1].Amount);
             Assert.Equal(0.75m, exchangeRates[1].Value);
         }
@@ -65,9 +65,9 @@ namespace ExchangeRateFinder.Application.UnitTests.Services
             Assert.Single(exchangeRates);
 
             Assert.Equal("CountryName1", exchangeRates[0].CountryName);
-            Assert.Equal("dollar", exchangeRates[0].TargetCurrencyName);
-            Assert.Equal("USD", exchangeRates[0].TargetCurrencyCode);
-            Assert.Equal("CZK", exchangeRates[0].SourceCurrencyCode);
+            Assert.Equal("dollar", exchangeRates[0].SourceCurrencyName);
+            Assert.Equal("USD", exchangeRates[0].SourceCurrencyCode);
+            Assert.Equal("CZK", exchangeRates[0].TargetCurrencyCode);
         }
     }
 }
