@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Providers;
 using ExchangeRateUpdater.Services;
 using Serilog;
 
@@ -11,9 +13,11 @@ namespace ExchangeRateUpdater
 {
     public class Program
     {
+        private readonly FileSystem _fileSystem;
+        private readonly HttpClient _httpClient;
         private readonly HttpClientService _httpClientService;
         private readonly CacheService _cacheService;
-        private readonly ExchangeRateService _exchangeRateService;
+        private readonly CZKBankExchangeRateProvider _exchangeRateService;
         private readonly DateTime currentDate = DateTime.UtcNow;
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -31,9 +35,11 @@ namespace ExchangeRateUpdater
 
         public Program()
         {
-            _httpClientService = new HttpClientService();
-            _cacheService = new CacheService();
-            _exchangeRateService = new ExchangeRateService(_httpClientService, _cacheService);
+            _fileSystem = new FileSystem();
+            _httpClient = new HttpClient();
+            _httpClientService = new HttpClientService(_httpClient);
+            _cacheService = new CacheService(_fileSystem);
+            _exchangeRateService = new CZKBankExchangeRateProvider(_httpClientService, _cacheService);
         }
 
         public static async Task Main(string[] args)
