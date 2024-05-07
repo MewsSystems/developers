@@ -87,7 +87,7 @@ namespace ExchangeRateFinder.ConsoleApp
 
         private static void WaitForApiInitializationAsync()
         {
-            Thread.Sleep(5000);
+            Thread.Sleep(7000);
         }
 
         private static string ConstructEndpoint(string apiUrl, string sourceCurrencyCode, IEnumerable<Currency> currencies)

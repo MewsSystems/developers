@@ -13,7 +13,7 @@ namespace ExchangeRateFinder.Domain.UnitTests.Services
         }
 
         [Theory]
-        [InlineAutoData(1, 2.5, "USD", "EUR", 2.5f)]
+        [InlineAutoData(1, 2.5, "USD", "EUR", 0.4f)]
         [InlineAutoData(10, 2, "GBP", "USD", 5)]
         [InlineAutoData(1000, 2.8, "GBP", "USD", 357.143f)]
         public void Calculate_ReturnsCorrectValues(
