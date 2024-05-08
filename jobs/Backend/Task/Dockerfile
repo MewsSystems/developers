@@ -4,7 +4,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 COPY . .
-# COPY ["Nuget.config", "/root/.nuget/NuGet/NuGet.Config"]
+
 COPY ["Directory.Build.props", "."]
 COPY ["Directory.Packages.props", "."]
 RUN dotnet restore "ExchangeRateUpdater.sln"

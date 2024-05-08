@@ -18,6 +18,6 @@ public class GetSupportedExchangeRatesQueryHandler(
     {
         var exchangeRates = await _externalExchangeRatesProvider.ProvideAsync();
 
-        return exchangeRates.Where(er => _exchangeRatesOptions.SupportedCurrencies.ToList().Contains(er.SourceCurrency.Code.ToUpper()));
+        return exchangeRates.Where(er => _exchangeRatesOptions.SupportedCurrencies!.ToList().Contains(er.SourceCurrency.Code.ToUpper()));
     }
 }

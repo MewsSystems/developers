@@ -5,5 +5,5 @@ namespace ExchangeRateUpdater.Infrastructure.Options;
 public class ExchangeRatesOptions
 {
     [Required]
-    public IEnumerable<string> SupportedCurrencies { get; set; } = default!;
+    public IEnumerable<string>? SupportedCurrencies { get; set; }
 }
