@@ -17,7 +17,6 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
-*.env
 *.code-workspace
 
 node_modules

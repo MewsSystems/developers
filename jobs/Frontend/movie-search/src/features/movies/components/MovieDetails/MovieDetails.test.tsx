@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { expect, it } from 'vitest';
 import MovieDetails from './MovieDetails';
 
 const queryClient = new QueryClient();

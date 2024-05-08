@@ -5,6 +5,7 @@ import { PRIVACY_POLICY_LINK, TERMS_OF_USE_LINK } from '../../../../configs/conf
 export default function Footer() {
   return (
     <Stack
+      data-testid="movie-search-footer"
       m={4}
       left={-35}
       bottom={0}

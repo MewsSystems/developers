@@ -68,7 +68,7 @@ export default function MovieSearch() {
   const shouldRenderError = error !== null;
   const shouldRenderLoading = isLoading || isFetching;
   const shouldRenderMovies = !(isLoading || isFetching) && movies.length > 0;
-  const shouldRenderNoMovies = useDelayedRender(!error && movies.length === 0 && query !== '', 500);
+  const shouldRenderNoMovies = useDelayedRender(!error && movies.length === 0 && query !== '');
 
   const setUrlParams = (page: string, replaceOption = false) => {
     setPage(page);
@@ -88,10 +88,12 @@ export default function MovieSearch() {
   const handleSelectChange = (event: SelectChangeEvent) => setUrlParams(event.target.value);
 
   const ContentToRender = () => {
+    let content;
+
     if (shouldRenderLoading) {
-      return <CircularProgress sx={{ m: 4 }} />;
+      content = <CircularProgress sx={{ m: 4 }} />;
     } else if (shouldRenderError) {
-      return (
+      content = (
         <Paper sx={{ m: 2, p: 3, borderRadius: 2 }} elevation={3}>
           <Typography data-testid="movie-search-error" variant="h6" color="error">
             Error: {error?.message}
@@ -99,7 +101,7 @@ export default function MovieSearch() {
         </Paper>
       );
     } else if (shouldRenderNoMovies) {
-      return (
+      content = (
         <Paper sx={{ m: 2, p: 3, borderRadius: 2 }} elevation={3}>
           <Typography data-testid="movie-search-no-movies" variant="h6" color="info.main">
             {t('error.noMoviesMatch')}
@@ -107,7 +109,7 @@ export default function MovieSearch() {
         </Paper>
       );
     } else if (shouldRenderMovies) {
-      return (
+      content = (
         <Stack direction="column" spacing={2} alignItems="center" divider={<Divider orientation="vertical" />}>
           <EnhancedTable rows={movies} />
 
@@ -151,6 +153,8 @@ export default function MovieSearch() {
         </Stack>
       );
     }
+
+    return content;
   };
 
   return (

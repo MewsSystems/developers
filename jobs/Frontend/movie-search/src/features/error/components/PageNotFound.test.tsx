@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
 import PageNotFound from './PageNotFound';
 
 it('renders page-not-found-content', () => {

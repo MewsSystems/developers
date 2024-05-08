@@ -1,4 +1,4 @@
-export const API_KEY = process.env.REACT_APP_API_KEY;
+export const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 export const ENDPOINT_URL_BASE = 'https://api.themoviedb.org/3';
 export const ENDPOINT_URL_IMAGES_w92 = 'https://image.tmdb.org/t/p/w92';
 export const ENDPOINT_URL_IMAGES_w500 = 'https://image.tmdb.org/t/p/w500';

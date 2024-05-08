@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
 import testData from '../../../../mocks/test_movie.json';
 import { Details } from '../../../models/Details';
 import MovieQuickInfo from './MovieQuickInfo';

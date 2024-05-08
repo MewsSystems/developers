@@ -27,7 +27,7 @@ export default function EnhancedTable({ rows }: EnhancedTableProps) {
 
   return (
     <Paper sx={{ m: 2, borderRadius: 2, overflowY: 'auto' }} elevation={3}>
-      <TableContainer sx={{ height: 'calc(100svh - 28rem)' }}>
+      <TableContainer data-testid="movie-enhanced-table" sx={{ height: 'calc(100svh - 28rem)' }}>
         <Table stickyHeader aria-labelledby="movie-search-table" size="small">
           <EnhancedTableHead order={order} orderBy={orderBy} rowCount={rows.length} />
           <TableBody>

@@ -69,7 +69,7 @@ export default function EnhancedTableHead({ order, orderBy }: EnhancedTableProps
   ];
 
   return (
-    <TableHead>
+    <TableHead data-testid="movie-enhanced-table-head">
       <TableRow>
         {headCells.map(headCell => (
           <TableCell
