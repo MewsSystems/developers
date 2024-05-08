@@ -1,0 +1,15 @@
+<Project>
+	<PropertyGroup>
+		<NetTargetVersion>net8.0</NetTargetVersion>
+		<LangVersion>latest</LangVersion>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+	</PropertyGroup>
+</Project>
