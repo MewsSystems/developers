@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <Stack
       m={4}
-      left={0}
+      left={-35}
       bottom={0}
       width="100%"
       position="fixed"

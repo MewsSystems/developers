@@ -1,8 +1,8 @@
 import LinkIcon from '@mui/icons-material/Link';
 import { Box, Link, Paper, Stack, SxProps, Theme, Tooltip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import formatCurrency from '../../../common/helpers/formatCurrency';
-import { Details } from '../../models/Details';
+import formatCurrency from '../../../../common/helpers/formatCurrency';
+import { Details } from '../../../models/Details';
 
 interface AdditionalInformationProps {
   readonly details: Details;

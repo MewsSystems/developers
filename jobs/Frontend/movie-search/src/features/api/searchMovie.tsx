@@ -2,7 +2,7 @@ import authenticatedApiClient from '../auth/authenticatedApiClient';
 import { Movie } from '../movies/models/Movie';
 import { ApiData } from './models/ApiData';
 
-interface MovieData extends Omit<ApiData, 'results'> {
+export interface MovieData extends Omit<ApiData, 'results'> {
   results: Movie[];
 }
 
@@ -14,7 +14,7 @@ interface MovieData extends Omit<ApiData, 'results'> {
  *
  * @throws Throws an error if the API request fails.
  */
-export async function searchMovies(query: string, page?: number) {
+export async function searchMovies(query: string, page?: string) {
   const pageParameter = page ? `&page=${page}` : '';
   return await authenticatedApiClient.get<MovieData>(`/search/movie?query=${query}${pageParameter}`);
 }

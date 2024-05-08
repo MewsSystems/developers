@@ -3,7 +3,9 @@ interface Resources {
     "common": {
       "appTitle": "Movie Search",
       "termsOfUse": "Terms of Use",
-      "privacyPolicy": "Privacy Policy"
+      "privacyPolicy": "Privacy Policy",
+      "nextPage": "Next Page",
+      "previousPage": "Previous Page"
     },
     "movieDetails": {
       "appTitle": "{{movieTitle}} — Movie Search",

@@ -1,6 +1,6 @@
 import { Box, Divider, Paper, Stack, SxProps, Theme, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Details } from '../../models/Details';
+import { Details } from '../../../models/Details';
 
 interface ReceptionProps {
   readonly details: Details;

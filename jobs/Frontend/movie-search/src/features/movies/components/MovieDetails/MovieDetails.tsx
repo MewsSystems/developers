@@ -9,10 +9,10 @@ import { ENDPOINT_URL_IMAGES_w500 } from '../../../../configs/config';
 import { getMovieDetails } from '../../../api/getMovieDetails';
 import Footer from '../../../common/components/Footer/Footer';
 import { Details } from '../../models/Details';
-import MovieAdditionalInformation from '../MovieAdditionalInfomation/MovieAdditionalInfomation';
-import MovieOverview from '../MovieOverview/MovieOverview';
-import MovieQuickInfo from '../MovieQuickInfo/MovieQuickInfo';
-import MovieReception from '../MovieReception/MovieReception';
+import MovieAdditionalInformation from './MovieAdditionalInfomation/MovieAdditionalInfomation';
+import MovieOverview from './MovieOverview/MovieOverview';
+import MovieQuickInfo from './MovieQuickInfo/MovieQuickInfo';
+import MovieReception from './MovieReception/MovieReception';
 
 export default function MovieDetails() {
   const { movieId } = useParams();

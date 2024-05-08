@@ -1,8 +1,8 @@
 import { Theme } from '@emotion/react';
 import { SxProps } from '@mui/material';
 import { render, screen } from '@testing-library/react';
-import testData from '../../../mocks/test_movie.json';
-import { Details } from '../../models/Details';
+import testData from '../../../../mocks/test_movie.json';
+import { Details } from '../../../models/Details';
 import MovieAdditionalInformation from './MovieAdditionalInfomation';
 
 const testMovie = testData as Details;

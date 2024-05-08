@@ -1,22 +1,33 @@
-import { CircularProgress, Paper, TextField, Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridEventListener, GridPaginationModel, GridSearchIcon } from '@mui/x-data-grid';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import SearchIcon from '@mui/icons-material/Search';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import AppRoutes from '../../../../configs/appRoutes';
-import { ENDPOINT_URL_IMAGES_w92 } from '../../../../configs/config';
+import { useSearchParams } from 'react-router-dom';
 import useDelayedRender from '../../../../hooks/useDelayRender';
 import { searchMovies } from '../../../api/searchMovie';
 import Footer from '../../../common/components/Footer/Footer';
 import { Movie } from '../../models/Movie';
+import EnhancedTable from './EnhancedTable/EnhancedTable';
 
 export default function MovieSearch() {
-  const defaultPageSize = 20;
-  const sessionPageKey = 'lastGridPage';
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = t('common.appTitle');
@@ -25,18 +36,9 @@ export default function MovieSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [page, setPage] = useState(searchParams.get('page') || '1');
+  const [pageRange, setPageRange] = useState<number[]>([]);
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [paginationModel, setPaginatioNModel] = useState<GridPaginationModel | undefined>({
-    pageSize: defaultPageSize,
-    page: 0
-  });
-
-  useEffect(() => {
-    const storedPage = sessionStorage.getItem(sessionPageKey);
-    const restoredPage = parseInt(storedPage ?? '');
-    if (restoredPage) setPaginatioNModel({ ...paginationModel, page: restoredPage } as GridPaginationModel);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -46,94 +48,42 @@ export default function MovieSearch() {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  const { data, error, isLoading, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['movies', debouncedQuery],
-    queryFn: async ({ pageParam }) =>
-      searchMovies(debouncedQuery, pageParam)
+  const { data, error, isLoading, isFetching } = useQuery({
+    queryKey: ['movies', debouncedQuery, page],
+    queryFn: async () =>
+      searchMovies(debouncedQuery, page)
         .then(response => response.data)
         .catch((error: AxiosError) => {
           console.error(error.toJSON());
           throw new Error(t('error.failedMoviesFetch'));
-        }),
-    initialPageParam: 1,
-    getNextPageParam: response => (response.page < response.total_pages ? ++response.page : undefined)
+        })
   });
 
   useEffect(() => {
-    if (data?.pages.length) {
-      const movieDataPage = data.pages.flatMap(page => page.results);
-
-      if (movieDataPage.length !== movies.length) {
-        setMovies([...movieDataPage]);
-
-        if (hasNextPage) fetchNextPage();
-      }
-    }
-  }, [data, fetchNextPage, hasNextPage, movies]);
+    setMovies(data?.results ?? []);
+    setPageRange(Array.from({ length: data?.total_pages ?? 0 }, (_, i) => i + 1));
+  }, [data]);
 
   const shouldRenderError = useDelayedRender(error !== null);
-  const shouldRenderNoMovies = useDelayedRender(
-    !isLoading && isSuccess && !error && movies.length === 0 && query !== ''
-  );
   const shouldRenderLoading = useDelayedRender(isLoading);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
+  const handleSearch = () => setSearchParams({ query: query, page: page }, { replace: true });
 
-  const handleSearch = () => setSearchParams({ query: query }, { replace: true });
-
-  const handleRowClick: GridEventListener<'rowClick'> = params => {
-    sessionStorage.setItem(sessionPageKey, `${paginationModel?.page}`);
-    navigate(`${AppRoutes.Movie}/${params.row.id}`);
+  const setNewPage = (page: string) => {
+    setPage(page);
+    setSearchParams({ query: query, page: page });
   };
 
-  const columnsDefinition: GridColDef<Movie>[] = [
-    {
-      field: 'poster_path',
-      headerName: t('movieDetails.poster'),
-      sortable: false,
-      width: 100,
-      renderCell: params => (
-        <img height={100} src={ENDPOINT_URL_IMAGES_w92 + params.value} alt={t('movieDetails.poster')} />
-      )
-    },
-    {
-      field: 'title',
-      headerName: t('movieDetails.title'),
-      width: 240
-    },
-    {
-      field: 'release_date',
-      headerName: t('movieDetails.releaseDate'),
-      width: 155,
-      valueFormatter: (value: Movie['release_date']) => value.substring(0, 4)
-    },
-    {
-      field: 'popularity',
-      headerName: t('movieDetails.popularity'),
-      type: 'number',
-      width: 140
-    },
-    {
-      field: 'vote_average',
-      headerName: t('movieDetails.voteAverage'),
-      type: 'number',
-      width: 155,
-      valueFormatter: (value: Movie['vote_average']) => `${Math.round(value)}/10`
-    },
-    {
-      field: 'vote_count',
-      headerName: t('movieDetails.voteCount'),
-      type: 'number',
-      width: 140
-    },
-    {
-      field: 'original_language',
-      headerName: t('movieDetails.originalLanguage'),
-      minWidth: 185,
-      align: 'center',
-      valueFormatter: (value: Movie['original_language']) => value.toUpperCase()
-    }
-  ];
+  const handleNextPage = () => {
+    if (data && data?.page < data?.total_pages) setNewPage(`${++data.page}`);
+  };
+
+  const handlePreviousPage = () => {
+    if (data && data?.page > 1) setNewPage(`${--data.page}`);
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent) => setNewPage(event.target.value);
 
   return (
     <>
@@ -141,8 +91,8 @@ export default function MovieSearch() {
         {t('common.appTitle')}
       </Typography>
 
-      <Paper sx={{ m: 2, p: 4, borderRadius: 2, display: 'flex', alignItems: 'flex-end' }} elevation={3}>
-        <GridSearchIcon sx={{ color: 'primary.main', mr: 1, my: 0.5 }} />
+      <Paper sx={{ m: 3, p: 4, borderRadius: 2, display: 'flex', alignItems: 'flex-end' }} elevation={3}>
+        <SearchIcon sx={{ color: 'primary.main', mr: 1, my: 0.5 }} />
         <TextField
           id="movie-search-input"
           data-testid="movie-search-input"
@@ -168,35 +118,53 @@ export default function MovieSearch() {
         </>
       )}
 
-      {shouldRenderNoMovies && (
-        <Paper sx={{ m: 2, p: 3, borderRadius: 2 }} elevation={3}>
-          <Typography data-testid="movie-search-no-movies" variant="h6" color="info.main">
-            {t('error.noMoviesMatch')}
-          </Typography>
-        </Paper>
+      {movies.length > 0 && (
+        <Stack direction="column" spacing={2} alignItems="center" divider={<Divider orientation="vertical" />}>
+          <EnhancedTable rows={movies} />
+
+          {isFetching && <CircularProgress sx={{ m: 4 }} />}
+
+          {!isFetching && (
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Button
+                sx={{ width: 175, height: 45 }}
+                size="large"
+                variant="outlined"
+                startIcon={<KeyboardArrowLeftIcon />}
+                onClick={handlePreviousPage}
+                disabled={data?.page === 1}>
+                {t('common.previousPage')}
+              </Button>
+
+              <FormControl variant="filled" sx={{ m: 1, minWidth: 80 }} size="small">
+                <InputLabel id="movie-search-page-select-label">{`/ ${data?.total_pages}`}</InputLabel>
+                <Select
+                  id="movie-search-page-select"
+                  labelId="movie-search-page-select-label"
+                  value={page}
+                  label="Page"
+                  onChange={handleSelectChange}>
+                  {pageRange.map(page => (
+                    <MenuItem value={page}>{page}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Button
+                sx={{ width: 175, height: 45 }}
+                size="large"
+                variant="outlined"
+                endIcon={<KeyboardArrowRightIcon />}
+                onClick={handleNextPage}
+                disabled={data?.page === data?.total_pages}>
+                {t('common.nextPage')}
+              </Button>
+            </Stack>
+          )}
+        </Stack>
       )}
 
-      {movies.length > 0 && (
-        <Paper sx={{ m: 2, borderRadius: 2, height: 'calc(100svh - 25rem)' }} elevation={3}>
-          <DataGrid
-            data-testid="movie-search-grid"
-            sx={{
-              '& .MuiDataGrid-cell:focus': {
-                outline: 'none'
-              },
-              '& .MuiDataGrid-row:hover': { cursor: 'pointer', color: 'primary.main' }
-            }}
-            rows={movies}
-            columns={columnsDefinition}
-            onRowClick={handleRowClick}
-            rowHeight={100}
-            pageSizeOptions={[defaultPageSize, 50, 100]}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginatioNModel}
-          />
-        </Paper>
-      )}
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }

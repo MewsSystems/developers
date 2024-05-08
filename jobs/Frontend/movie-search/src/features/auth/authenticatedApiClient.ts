@@ -19,7 +19,7 @@ authenticatedApiClient.interceptors.request.use(
    * @returns The modified configuration object with the added API key parameter.
    */
   config => {
-    config.params = { ...config.params, api_key: API_KEY };
+    config.params = { ...config.params, api_key: API_KEY, language: 'en-US' };
     return config;
   },
   /**

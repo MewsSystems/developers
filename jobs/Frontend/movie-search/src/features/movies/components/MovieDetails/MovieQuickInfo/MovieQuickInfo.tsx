@@ -1,7 +1,7 @@
 import { Box, Divider, Stack, Tooltip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import formatDate from '../../../common/helpers/formateDate';
-import { Details } from '../../models/Details';
+import formatDate from '../../../../common/helpers/formateDate';
+import { Details } from '../../../models/Details';
 
 interface QuickInfoProps {
   readonly details: Details | null;
