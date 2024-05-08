@@ -17,6 +17,7 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
+*.code-workspace
 
 node_modules
 bower_components
