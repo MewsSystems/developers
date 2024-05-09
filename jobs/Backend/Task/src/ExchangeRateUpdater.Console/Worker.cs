@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using ExchangeRateUpdater.Core.Providers;
+using ExchangeRateUpdater.Core.Exceptions;
 
 namespace ExchangeRateUpdater.Console
 {
@@ -33,9 +34,13 @@ namespace ExchangeRateUpdater.Console
                         System.Console.WriteLine(rate.ToString());
                     }
                 }
-                catch (Exception e)
+                catch (CzechNationalBankApiException e)
                 {
                     System.Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine($"Error retrieving exchange rates: '{e.Message}'.");
                 }
             }
             catch (Exception ex)

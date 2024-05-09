@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
-using ExchangeRateUpdater.CzechNationalBankApi;
 using ExchangeRateUpdater.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Console;
-using ExchangeRateUpdater.Core.Providers;
+using Microsoft.Extensions.Configuration;
+using ExchangeRateUpdater.CzechNationalBank;
 
 namespace ExchangeRateUpdater
 {
@@ -14,13 +14,18 @@ namespace ExchangeRateUpdater
         {
             try
             {
+                var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
                 var builder = Host.CreateApplicationBuilder();
+                
+                builder.Configuration.AddJsonFile($"appsettings.{environmentName}.json", optional: false);
+
+                var settings = new Settings(builder.Configuration);
 
                 builder.Logging.AddConsole();
                 builder.Services.AddHostedService<Worker>();
                 builder.Services.ConfigureApplication();
-                builder.Services.ConfigureApi();
-                builder.Services.AddSingleton<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
+                builder.Services.ConfigureCzechNationalBank(settings.CzechNationalBankConfiguration);
 
                 builder.Build().Run();
             }

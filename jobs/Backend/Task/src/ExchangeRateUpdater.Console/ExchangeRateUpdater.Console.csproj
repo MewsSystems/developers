@@ -14,7 +14,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
-    <ProjectReference Include="..\ExchangeRateUpdater.CzechNationalBankApi\ExchangeRateUpdater.CzechNationalBankApi.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.CzechNationalBankApi\ExchangeRateUpdater.CzechNationalBank.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Release.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

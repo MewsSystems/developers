@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Console
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Core", "src\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{FE5851B5-111D-4384-A805-4F32B816191D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBankApi", "src\ExchangeRateUpdater.CzechNationalBankApi\ExchangeRateUpdater.CzechNationalBankApi.csproj", "{538A7304-BEAF-43DE-8A57-FF1C34F9D3AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBank", "src\ExchangeRateUpdater.CzechNationalBankApi\ExchangeRateUpdater.CzechNationalBank.csproj", "{538A7304-BEAF-43DE-8A57-FF1C34F9D3AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBankApiTests", "tests\ExchangeRateUpdater.CzechNationalBankApiTests\ExchangeRateUpdater.CzechNationalBankApiTests.csproj", "{EC4ADDDA-44C0-44CF-8C5C-6C252C22F1A3}"
 EndProject
