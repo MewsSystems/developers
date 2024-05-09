@@ -2,9 +2,22 @@
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider : IExchangeRateProvider
+    public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
-        public ExchangeRateProvider()
+        private static IEnumerable<Currency> currencies = new[]
+        {
+            new Currency("USD"),
+            new Currency("EUR"),
+            new Currency("CZK"),
+            new Currency("JPY"),
+            new Currency("KES"),
+            new Currency("RUB"),
+            new Currency("THB"),
+            new Currency("TRY"),
+            new Currency("XYZ")
+        };
+
+        public CzechNationalBankExchangeRateProvider()
         {
         }
 
@@ -14,7 +27,7 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public Task<IEnumerable<ExchangeRate>> GetExchangeRates()
         {
             return Task.FromResult(Enumerable.Empty<ExchangeRate>());
         }

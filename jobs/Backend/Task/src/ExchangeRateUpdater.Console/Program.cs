@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater
                 builder.Services.AddHostedService<Worker>();
                 builder.Services.ConfigureApplication();
                 builder.Services.ConfigureApi();
-                builder.Services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+                builder.Services.AddSingleton<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
 
                 builder.Build().Run();
             }

@@ -7,18 +7,6 @@ namespace ExchangeRateUpdater.Console
     {
         private readonly IExchangeRateProvider _exchangeRateProvider;
 
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
 
         public Worker(IExchangeRateProvider exchangeRateProvider)
         {
@@ -37,7 +25,7 @@ namespace ExchangeRateUpdater.Console
 
                 try
                 {
-                    var rates = await _exchangeRateProvider.GetExchangeRates(currencies);
+                    var rates = await _exchangeRateProvider.GetExchangeRates();
 
                     System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)
