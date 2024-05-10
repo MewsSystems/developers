@@ -17,7 +17,7 @@ const Input = styled.input`
   border-radius: 18px;
   border-style: solid;
   border-width: 5px;
-  margin-top: 15px;
+  margin: 16px 0;
   color: #333;
   font-family: "Helvetica", sans-serif;
   font-size: 26px;
@@ -32,7 +32,7 @@ const SearchIcon = styled(Search)`
 `
 
 type DebouncedSearchInputProps = {
-    onSearchChange: (search: string) => void;
+    onSearchChange: (search: string, page?: number) => Promise<void>;
     placeholder?: string;
     delay?: number;
     disabled?: boolean;
@@ -52,7 +52,7 @@ export const DebouncedSearchInput = ({
     useDebounce(() => onSearchChange(searchValue), delay, [searchValue]);
 
     return (
-        <Wrapper>
+        <Wrapper onSubmit={e => e.preventDefault()}>
             <Input
                 type="search"
                 placeholder={placeholder}

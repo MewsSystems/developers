@@ -9,6 +9,7 @@ import Trending from "@/components/Trending";
 import Pagination from "@/components/Pagination";
 import { useSearchParams } from "next/navigation";
 import { Movie } from "@/types/Movie";
+import Popular from "@/components/Popular";
 
 type Results = {
   page: number;
@@ -31,8 +32,7 @@ export default function Home() {
     });
   };
 
-  const handleSearch = async (query: string, pageNumber: number) => {
-    console.log(query, currentPage)
+  const handleSearch = async (query: string, pageNumber?: number) => {
     if (!query) {
       setData(null); // Clear data if query is empty
       return;
@@ -48,8 +48,10 @@ export default function Home() {
       const response = await fetch(url, options);
       const data = await response.json();
       setData(data);
+
     } catch (error) {
       console.error("Error fetching data:", error);
+      setData(null);
     }
   };
 
@@ -61,7 +63,9 @@ export default function Home() {
         placeholder="Search for a movie or a tv show..."
       />
 
-      {!data || (data?.results.length === 0 && <Trending />)}
+      {!data && <Trending />}
+
+      {!data && <Popular />}
 
       {data && data?.results.length > 0 && (
         <>

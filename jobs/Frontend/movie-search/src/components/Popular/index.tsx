@@ -1,9 +1,9 @@
 import { buildMovieDBUrl } from '@/utils/buildMovieDBUrl';
 import React, { useEffect, useState } from 'react'
 import { Movie } from '@/types/Movie';
+import { VerticalCard } from '../Card/VerticalCard';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-import { VerticalCard } from '../Card/VerticalCard';
 
 const List = styled.ul`
     display: flex;
@@ -17,7 +17,7 @@ const Section = styled.section`
 `
 
 const getTrending = async () => {
-    const url = buildMovieDBUrl("trending/movie/day");
+    const url = buildMovieDBUrl("movie/now_playing");
     const options = { method: "GET", headers: { accept: "application/json" } };
 
     const response = await fetch(url, options);
@@ -25,7 +25,7 @@ const getTrending = async () => {
     return data.results as Movie[];
 };
 
-export default function Trending() {
+export default function Popular() {
     const [trending, setTrending] = useState<Movie[]>([]);
     const { push } = useRouter();
 
@@ -43,7 +43,7 @@ export default function Trending() {
 
     return (
         <Section>
-            <h2>Trending today</h2>
+            <h2>Now playing</h2>
             <List>
                 {
 

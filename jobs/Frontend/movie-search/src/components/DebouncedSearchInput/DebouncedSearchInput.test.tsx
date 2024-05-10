@@ -1,10 +1,30 @@
 import '@testing-library/jest-dom';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DebouncedSearchInput } from '.';
 
 
+
+jest.mock('next/navigation', () => ({
+    ...require('next-router-mock'),
+    useSearchParams: () => ({
+        get: jest.fn(),
+        query: {
+            taskId: 'testId',
+        },
+    }),
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: jest.fn().mockReturnValue('/some-route'),
+}));
+
+
 describe('DebouncedSearchForm', () => {
+
+
+
     const user = userEvent.setup({
         delay: null,
     });

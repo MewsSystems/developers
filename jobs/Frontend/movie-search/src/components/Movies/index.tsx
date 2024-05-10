@@ -3,7 +3,6 @@ import { Movie } from '@/types/Movie';
 import { useRouter } from 'next/navigation';
 import React from 'react'
 import { Card } from '../Card';
-import Pagination from '../Pagination';
 
 type MoviesProps = {
     movies: Movie[]
@@ -15,11 +14,10 @@ export default function Movies({ movies }: MoviesProps) {
         push(`/movies/${movieId}`)
     }
 
-    return (movies ? (<><ul>
+    return (movies ? (<ul>
         {
             movies.map((movie) => <Card key={movie.id} movie={movie} handleClick={handleClick} />)
         }
-    </ul >
-    </>) : (<p>Please search for a movie</p>)
+    </ul >) : (<p>Please search for a movie</p>)
     )
 }

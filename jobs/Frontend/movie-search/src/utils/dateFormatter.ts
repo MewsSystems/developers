@@ -6,3 +6,8 @@ export const dateFormatter = (date: string) => {
     day: "2-digit",
   });
 };
+
+export const extractYear = (date: string) => {
+  const newDate = new Date(date);
+  return newDate.getFullYear();
+};

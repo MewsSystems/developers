@@ -5,28 +5,39 @@ import styled from 'styled-components';
 import { dateFormatter } from '@/utils/dateFormatter';
 
 const CardContainer = styled.li`
-    display: flex;;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 12px;
+    padding: 18px;
+    cursor: pointer;
+    &:hover {
+        background-color: #ffffff70;
+        color: black;
+        border: 1px solid #ffffff;
+        border-radius: 14px;
+        scale: 1.1;
+    }
+`;
 
-    padding: 10px;
+const StyledImage = styled(Image)`
+    border-radius: 12px;
 `
 
 type CardProps = { movie: Movie, handleClick: (id: number) => void }
 
-export const Card = ({ movie, handleClick }: CardProps) => {
+export const TrendingCard = ({ movie, handleClick }: CardProps) => {
     return (
         <CardContainer key={movie.id} onClick={() => handleClick(movie.id)}>
-            <Image
-                width={90}
-                height={120}
+            <StyledImage
+                width={120}
+                height={180}
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.original_title}
             />
             <div>
-                <h2>{movie.original_title}</h2>
+                <strong>{movie.original_title}</strong>
                 <p>{dateFormatter(movie.release_date)}</p>
-                <p>{movie.overview}</p>
             </div>
         </CardContainer>
     )
