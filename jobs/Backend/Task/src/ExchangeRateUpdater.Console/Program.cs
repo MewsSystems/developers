@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Console;
 using Microsoft.Extensions.Configuration;
 using ExchangeRateUpdater.CzechNationalBank;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
@@ -26,6 +27,7 @@ namespace ExchangeRateUpdater
                 builder.Services.AddHostedService<Worker>();
                 builder.Services.ConfigureApplication();
                 builder.Services.ConfigureCzechNationalBank(settings.CzechNationalBankConfiguration);
+                builder.Services.AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration));
 
                 builder.Build().Run();
             }

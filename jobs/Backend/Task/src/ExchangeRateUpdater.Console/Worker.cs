@@ -1,17 +1,21 @@
 ﻿using Microsoft.Extensions.Hosting;
 using ExchangeRateUpdater.Core.Providers;
 using ExchangeRateUpdater.Core.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Console
 {
     public class Worker : BackgroundService
     {
         private readonly IExchangeRateProvider _exchangeRateProvider;
+        private readonly ILogger<Worker> _logger;
 
-
-        public Worker(IExchangeRateProvider exchangeRateProvider)
+        public Worker(
+            IExchangeRateProvider exchangeRateProvider,
+            ILogger<Worker> logger)
         {
             _exchangeRateProvider = exchangeRateProvider;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -20,7 +24,7 @@ namespace ExchangeRateUpdater.Console
             {
                 if (stoppingToken.IsCancellationRequested)
                 {
-                    System.Console.WriteLine("The process has been cancelled at {DateTime}", DateTime.UtcNow);
+                    _logger.LogDebug($"The process has been cancelled at {DateTime.UtcNow}");
                     stoppingToken.ThrowIfCancellationRequested();
                 }
 
@@ -28,24 +32,24 @@ namespace ExchangeRateUpdater.Console
                 {
                     var rates = await _exchangeRateProvider.GetExchangeRates();
 
-                    System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    _logger.LogDebug($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)
                     {
-                        System.Console.WriteLine(rate.ToString());
+                        _logger.LogInformation(rate.ToString());
                     }
                 }
                 catch (CzechNationalBankApiException e)
                 {
-                    System.Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                    _logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.", e);
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine($"Error retrieving exchange rates: '{e.Message}'.");
+                    _logger.LogError($"Error retrieving exchange rates: '{e.Message}'.", e);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                System.Console.WriteLine("There was an unhandled error in the worker with exception: {Exception}", ex.Message);
+                _logger.LogError($"There was an unhandled error in the worker with exception: {e.Message}", e);
             }
         }
     }

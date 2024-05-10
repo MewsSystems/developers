@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Core.Configuration;
 using ExchangeRateUpdater.Core.Providers;
 using ExchangeRateUpdater.CzechNationalBank.Api;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -8,13 +9,16 @@ namespace ExchangeRateUpdater
     {
         private readonly ICzechNationalBankApi _czechNationalBankApi;
         private readonly CzechNationalBankConfiguration _configuration;
+        private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
 
         public CzechNationalBankExchangeRateProvider(
             ICzechNationalBankApi czechNationalBankApi,
-            CzechNationalBankConfiguration configuration)
+            CzechNationalBankConfiguration configuration,
+            ILogger<CzechNationalBankExchangeRateProvider> logger)
         {
             _czechNationalBankApi = czechNationalBankApi;
             _configuration = configuration;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace ExchangeRateUpdater
             var exchangeRatesDailyDto = await _czechNationalBankApi.GetExchangeRates();
             if (exchangeRatesDailyDto == null || !exchangeRatesDailyDto.Rates.Any())
             {
-                // #TODO: Log
+                _logger.LogDebug("Did not retrieve exchange rates");
                 return rates;
             }
 
