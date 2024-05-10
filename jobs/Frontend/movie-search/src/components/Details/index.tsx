@@ -2,6 +2,7 @@
 
 import { MovieDetails } from "@/types/MovieDetail";
 import { extractYear } from "@/utils/dateFormatter";
+import { getScoreColor } from "@/utils/getScoreColor";
 import { minutesToHoursMinutes } from "@/utils/minutesToHours";
 import Image from "next/image";
 import React from "react";
@@ -11,12 +12,11 @@ const DetailsWrapper = styled.section<{ img?: string }>`
   padding: 3rem 6rem;
   display: flex;
   gap: 24px;
-  background-image: linear-gradient(black, black),
-    ${(props) => (props.img ? `url(${props.img})` : "white")};
+
+    background:linear-gradient(0deg, rgba(59, 6, 37, 0.6), rgba(83, 48, 69, 0.9)),${(props) => (props.img ? `url(${props.img})` : "white")};
+
   background-repeat: no-repeat;
   background-size: cover;
-  background-blend-mode: saturation;
-  backdrop-filter: blur(10px);
   height: 60vh;
 `;
 

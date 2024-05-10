@@ -1,4 +1,4 @@
-const getScoreColor = (score: number) => {
+export const getScoreColor = (score: number) => {
   if (score > 7) {
     return "green";
   } else if (score > 5) {

@@ -5,17 +5,41 @@ import styles from "./page.module.css";
 import { buildMovieDBUrl } from "@/utils/buildMovieDBUrl";
 import Movies from "@/components/Movies";
 import { DebouncedSearchInput } from "@/components/DebouncedSearchInput";
-import Trending from "@/components/Trending";
 import Pagination from "@/components/Pagination";
 import { useSearchParams } from "next/navigation";
 import { Movie } from "@/types/Movie";
-import Popular from "@/components/Popular";
+import dynamic from 'next/dynamic'
+
 
 type Results = {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
+};
+
+const DynamicSection = dynamic(() => import('@/components/Section'), {
+  loading: () => <p>Loading...</p>,
+})
+
+
+const getPopular = async () => {
+  const url = buildMovieDBUrl("movie/now_playing");
+  const options = { method: "GET", headers: { accept: "application/json" } };
+
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data.results as Movie[];
+};
+
+
+const getTrending = async () => {
+  const url = buildMovieDBUrl("trending/movie/day");
+  const options = { method: "GET", headers: { accept: "application/json" } };
+
+  const response = await fetch(url, options);
+  const data = await response.json();
+  return data.results as Movie[];
 };
 
 export default function Home() {
@@ -75,9 +99,9 @@ export default function Home() {
         placeholder="Search for a movie or a tv show..."
       />
 
-      {!data && <Trending />}
+      {!data && <DynamicSection title="Trending" getMovies={getTrending} />}
 
-      {!data && <Popular />}
+      {!data && <DynamicSection title="Popular" getMovies={getPopular} />}
 
       {data && data?.results.length > 0 && (
         <>

@@ -1,13 +1,9 @@
 export interface MovieDetails {
   adult: boolean;
   backdrop_path: string;
-  budget: number;
   genres: Genre[];
   homepage: string;
   id: number;
-  imdb_id: string;
-  origin_country: string[];
-  original_language: string;
   original_title: string;
   overview: string;
   popularity: number;
