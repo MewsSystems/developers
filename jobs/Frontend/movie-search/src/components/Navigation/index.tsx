@@ -22,8 +22,7 @@ export default function Navigation() {
     return (
         <NavigationWrapper>
             <List>
-                <li><Film /></li>
-                <li><Link href={"/"} > Home</Link></li>
+                <li><Link href={"/"} replace> <Film /></Link></li>
             </List>
         </NavigationWrapper>
     )

@@ -32,6 +32,8 @@ export const VerticalCard = ({ movie, handleClick }: CardProps) => {
             <StyledImage
                 width={120}
                 height={180}
+                quality={75}
+                loading='lazy'
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.original_title}
             />

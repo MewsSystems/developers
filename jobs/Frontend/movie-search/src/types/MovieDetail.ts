@@ -1,9 +1,8 @@
-type MovieDetails = {
+export interface MovieDetails {
   adult: boolean;
   backdrop_path: string;
-  belongs_to_collection: any;
   budget: number;
-  genres: any[];
+  genres: Genre[];
   homepage: string;
   id: number;
   imdb_id: string;
@@ -13,16 +12,25 @@ type MovieDetails = {
   overview: string;
   popularity: number;
   poster_path: string;
-  production_companies: any[];
-  production_countries: any[];
   release_date: string;
   revenue: number;
   runtime: number;
-  spoken_languages: { english_name: string; iso_639_1: string; name: string }[];
+  spoken_languages: Languages[];
   status: string;
   tagline: string;
   title: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
+}
+
+interface Languages {
+  english_name: string;
+  iso_639_1: string;
+  name: string;
+}
+
+interface Genre {
+  id: number;
+  name: string;
+}

@@ -16,7 +16,7 @@ const Section = styled.section`
     }
 `
 
-const getTrending = async () => {
+const getPopular = async () => {
     const url = buildMovieDBUrl("movie/now_playing");
     const options = { method: "GET", headers: { accept: "application/json" } };
 
@@ -26,13 +26,13 @@ const getTrending = async () => {
 };
 
 export default function Popular() {
-    const [trending, setTrending] = useState<Movie[]>([]);
+    const [popular, setPopular] = useState<Movie[]>([]);
     const { push } = useRouter();
 
     useEffect(() => {
         const fetch = async () => {
-            const response = await getTrending();
-            setTrending(response);
+            const response = await getPopular();
+            setPopular(response);
         }
         fetch();
     }, [])
@@ -47,10 +47,10 @@ export default function Popular() {
             <List>
                 {
 
-                    trending &&
-                    trending.slice(0, 10).map(trendingMovie => <VerticalCard
-                        key={trendingMovie.id}
-                        movie={trendingMovie} handleClick={handleClick} />)}
+                    popular &&
+                    popular.slice(0, 10).map(popularMovie => <VerticalCard
+                        key={popularMovie.id}
+                        movie={popularMovie} handleClick={handleClick} />)}
             </List>
         </Section>
     )

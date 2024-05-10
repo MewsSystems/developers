@@ -1,6 +1,7 @@
 "use client";
 
-import { extractYear, dateFormatter } from "@/utils/dateFormatter";
+import { MovieDetails } from "@/types/MovieDetail";
+import { extractYear } from "@/utils/dateFormatter";
 import { minutesToHoursMinutes } from "@/utils/minutesToHours";
 import Image from "next/image";
 import React from "react";
@@ -15,6 +16,7 @@ const DetailsWrapper = styled.section<{ img?: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: saturation;
+  backdrop-filter: blur(10px);
   height: 60vh;
 `;
 
@@ -47,16 +49,6 @@ const TagLine = styled.p`
   margin-bottom: 12px;
 `;
 
-function getScoreColor(score: number): string {
-    if (score > 7) {
-        return "green";
-    } else if (score > 5) {
-        return "orange";
-    } else {
-        return "red";
-    }
-}
-
 export default function Details({ movie }: { movie: MovieDetails }) {
     const [hours, remainingMinutes] = minutesToHoursMinutes(movie.runtime);
 
@@ -65,6 +57,7 @@ export default function Details({ movie }: { movie: MovieDetails }) {
             img={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
         >
             <Image
+                quality={75}
                 width={190}
                 height={290}
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -76,7 +69,6 @@ export default function Details({ movie }: { movie: MovieDetails }) {
                     <Year>({extractYear(movie.release_date)})</Year>
                 </h2>
                 <p>
-                    {dateFormatter(movie.release_date)} -{" "}
                     {movie.genres.map((genre, index) => {
                         if (index === movie.genres.length - 1) {
                             return genre.name;
