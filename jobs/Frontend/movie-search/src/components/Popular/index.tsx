@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
 const List = styled.ul`
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 18px;
+    width: 90vw;
 `
 
 const Section = styled.section`
