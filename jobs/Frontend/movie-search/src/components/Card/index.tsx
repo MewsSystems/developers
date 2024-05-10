@@ -12,7 +12,9 @@ const CardContainer = styled.li`
     padding: 10px;
 `
 
-export default function MovieCard({ movie, handleClick }: { movie: Movie, handleClick: (id: number) => void }) {
+type CardProps = { movie: Movie, handleClick: (id: number) => void }
+
+export const Card = ({ movie, handleClick }: CardProps) => {
     return (
         <CardContainer key={movie.id} onClick={() => handleClick(movie.id)}>
             <Image

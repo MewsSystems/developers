@@ -2,7 +2,7 @@
 import { Movie } from '@/types/Movie';
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import MovieCard from '../MovieCard';
+import { Card } from '../Card';
 
 type MoviesProps = {
     movies: Movie[]
@@ -16,7 +16,7 @@ export default function Movies({ movies }: MoviesProps) {
 
     return (movies ? (<ul>
         {
-            movies.map((movie) => <MovieCard key={movie.id} movie={movie} handleClick={handleClick} />)
+            movies.map((movie) => <Card key={movie.id} movie={movie} handleClick={handleClick} />)
         }
     </ul >) : (<p>Please search for a movie</p>)
     )
