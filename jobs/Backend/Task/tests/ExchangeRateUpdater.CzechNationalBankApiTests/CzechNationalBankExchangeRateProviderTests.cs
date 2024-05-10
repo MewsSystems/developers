@@ -79,8 +79,10 @@ namespace ExchangeRateUpdater.CzechNationalBankApiTests
         {
             #region Arrange
             var exchangeRatesDaily = _fixture.Create<ExchangeRatesDailyDto>();
-            var invalidRate = _fixture.Build<ExchangeRateResponse>().With(x => x.Rate, 0).Create();
-            exchangeRatesDaily.Rates.Add(invalidRate);
+            var invalidRate0 = _fixture.Build<ExchangeRateResponse>().With(x => x.Rate, 0).Create();
+            exchangeRatesDaily.Rates.Add(invalidRate0);
+            var invalidRateNegative = _fixture.Build<ExchangeRateResponse>().With(x => x.Rate, -10).Create();
+            exchangeRatesDaily.Rates.Add(invalidRateNegative);
             var currencies = exchangeRatesDaily.Rates.Select(x => x.CurrencyCode);
 
             _czechNationalBankApiMock.Setup(x => x.GetExchangeRatesAsync()).ReturnsAsync((ExchangeRatesDailyDto?)exchangeRatesDaily);
@@ -94,8 +96,9 @@ namespace ExchangeRateUpdater.CzechNationalBankApiTests
             #endregion
 
             #region Assert
-            result.Count().Should().Be(exchangeRatesDaily.Rates.Count - 1);
-            result.Should().NotContain(x => x.SourceCurrency.Code == invalidRate.CurrencyCode);
+            result.Count().Should().Be(exchangeRatesDaily.Rates.Count - 2);
+            result.Should().NotContain(x => x.SourceCurrency.Code == invalidRate0.CurrencyCode);
+            result.Should().NotContain(x => x.SourceCurrency.Code == invalidRateNegative.CurrencyCode);
             #endregion
         }
 

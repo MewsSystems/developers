@@ -47,16 +47,6 @@ namespace ExchangeRateUpdater.CzechNationalBankTests.Data
                 },
                 "DEF/CZK=1"
             };
-            yield return new object[]
-            {
-                new ExchangeRateResponse
-                {
-                    Amount = -10,
-                    CurrencyCode = "EFG",
-                    Rate = 10m
-                },
-                "EFG/CZK=-1"
-            };
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

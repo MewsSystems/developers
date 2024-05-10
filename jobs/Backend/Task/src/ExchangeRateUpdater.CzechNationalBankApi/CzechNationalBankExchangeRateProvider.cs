@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Core.Models.CzechNationalBank;
+﻿using ExchangeRateUpdater.Core.Exceptions;
+using ExchangeRateUpdater.Core.Models.CzechNationalBank;
 using ExchangeRateUpdater.Core.Providers;
 using ExchangeRateUpdater.CzechNationalBank.Api;
 using Microsoft.Extensions.Logging;
@@ -42,6 +43,10 @@ namespace ExchangeRateUpdater
                 try
                 {
                     rates.Add(new CzechNationalBankExchangeRate(currencyRate.Amount, currencyRate.Rate, currencyRate.CurrencyCode));
+                }
+                catch (ExchangeRateException e)
+                {
+                    _logger.LogError(e, $"Failed to calculate exchange rate");
                 }
                 catch (Exception e)
                 {
