@@ -6,6 +6,7 @@ import { buildMovieDBUrl } from "@/utils/buildMovieDBUrl";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Movies from "@/components/Movies";
+import { DebouncedSearchInput } from "@/components/DebouncedSearchInput";
 
 export type Movie = {
   id: number;
@@ -24,8 +25,7 @@ export default function Home() {
   const [query, setQuery] = useState<string>("");
   const [data, setData] = useState<Movie[]>([]);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  const handleSearch = async (query: string) => {
     console.log("handleSearch");
     if (!query) return;
 
@@ -41,18 +41,12 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <form>
-        <input
-          id="search"
-          name="search"
-          placeholder="Search for a movie or a tv show..."
-          value={query}
-          onChange={(e) => setQuery(e.currentTarget.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </form>
+      <DebouncedSearchInput
+        onSearchChange={handleSearch}
+        delay={1500}
+        placeholder="Search for a movie or a tv show..." />
 
-      <Movies movies={data} />
+      {data && <Movies movies={data} />}
     </main>
   );
 }
