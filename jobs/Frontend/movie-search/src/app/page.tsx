@@ -3,50 +3,77 @@
 import { useState } from "react";
 import styles from "./page.module.css";
 import { buildMovieDBUrl } from "@/utils/buildMovieDBUrl";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import Movies from "@/components/Movies";
 import { DebouncedSearchInput } from "@/components/DebouncedSearchInput";
+import Trending from "@/components/Trending";
+import Pagination from "@/components/Pagination";
+import { useSearchParams } from "next/navigation";
+import { Movie } from "@/types/Movie";
 
-export type Movie = {
-  id: number;
-  original_title: string;
-  title: string;
-  overview: string;
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
-  popularity: number;
-  poster_path: string;
-  release_date: string;
+type Results = {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
 };
 
 export default function Home() {
-  const [query, setQuery] = useState<string>("");
-  const [data, setData] = useState<Movie[]>([]);
+  const [data, setData] = useState<Results | null>();
+  const [currentPage, setCurrentPage] = useState(data?.page ?? 1);
 
-  const handleSearch = async (query: string) => {
-    console.log("handleSearch");
-    if (!query) return;
+  const searchParams = useSearchParams();
 
-    const url = buildMovieDBUrl("search/movie", query);
-    const options = { method: "GET", headers: { accept: "application/json" } };
-
-    const response = await fetch(url, options);
-    const data = await response.json();
-    setData(data.results);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(() => {
+      handleSearch(searchParams.get("query") ?? "", pageNumber)
+      console.log(pageNumber)
+      return pageNumber;
+    });
   };
 
+  const handleSearch = async (query: string, pageNumber: number) => {
+    console.log(query, currentPage)
+    if (!query) {
+      setData(null); // Clear data if query is empty
+      return;
+    }
 
+    try {
+      const url = buildMovieDBUrl("search/movie", query, pageNumber ?? currentPage);
+      const options = {
+        method: "GET",
+        headers: { accept: "application/json" },
+      };
+
+      const response = await fetch(url, options);
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <main className={styles.main}>
       <DebouncedSearchInput
         onSearchChange={handleSearch}
         delay={1500}
-        placeholder="Search for a movie or a tv show..." />
+        placeholder="Search for a movie or a tv show..."
+      />
 
-      {data && <Movies movies={data} />}
+      {!data || (data?.results.length === 0 && <Trending />)}
+
+      {data && data?.results.length > 0 && (
+        <>
+          <h2>Results({data.total_results})</h2>
+          <Movies movies={data?.results} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={data.total_pages}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </main>
   );
 }

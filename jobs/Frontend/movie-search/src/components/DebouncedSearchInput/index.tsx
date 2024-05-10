@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { useDebounce } from "react-use";
 import styled from "styled-components";
@@ -44,6 +45,9 @@ export const DebouncedSearchInput = ({
     disabled = false,
 }: DebouncedSearchInputProps) => {
     const [searchValue, setSearchValue] = useState("");
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { push } = useRouter();
 
     useDebounce(() => onSearchChange(searchValue), delay, [searchValue]);
 
@@ -53,9 +57,12 @@ export const DebouncedSearchInput = ({
                 type="search"
                 placeholder={placeholder}
                 value={searchValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearchValue(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set("query", e.target.value);
+                    push(`${pathname}?${params.toString()}`);
+                    setSearchValue(e.target.value);
+                }}
                 disabled={disabled}
             />
             {!searchValue && <SearchIcon />}
