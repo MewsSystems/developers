@@ -25,6 +25,7 @@ namespace ExchangeRateUpdater
 
                 builder.Logging.AddConsole();
                 builder.Services.AddHostedService<Worker>();
+                builder.Services.AddSingleton(settings.AppConfiguration);
                 builder.Services.ConfigureApplication();
                 builder.Services.ConfigureCzechNationalBank(settings.CzechNationalBankConfiguration);
                 builder.Services.AddSerilog(config => config.ReadFrom.Configuration(builder.Configuration));

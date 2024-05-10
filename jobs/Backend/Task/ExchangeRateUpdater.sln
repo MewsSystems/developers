@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Core", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBank", "src\ExchangeRateUpdater.CzechNationalBankApi\ExchangeRateUpdater.CzechNationalBank.csproj", "{538A7304-BEAF-43DE-8A57-FF1C34F9D3AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBankApiTests", "tests\ExchangeRateUpdater.CzechNationalBankApiTests\ExchangeRateUpdater.CzechNationalBankApiTests.csproj", "{EC4ADDDA-44C0-44CF-8C5C-6C252C22F1A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.CzechNationalBankTests", "tests\ExchangeRateUpdater.CzechNationalBankApiTests\ExchangeRateUpdater.CzechNationalBankTests.csproj", "{EC4ADDDA-44C0-44CF-8C5C-6C252C22F1A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

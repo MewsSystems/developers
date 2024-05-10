@@ -2,6 +2,7 @@
 using ExchangeRateUpdater.Core.Providers;
 using ExchangeRateUpdater.Core.Exceptions;
 using Microsoft.Extensions.Logging;
+using ExchangeRateUpdater.Core.Configuration;
 
 namespace ExchangeRateUpdater.Console
 {
@@ -9,13 +10,16 @@ namespace ExchangeRateUpdater.Console
     {
         private readonly IExchangeRateProvider _exchangeRateProvider;
         private readonly ILogger<Worker> _logger;
+        private readonly AppConfiguration _appConfiguration;
 
         public Worker(
             IExchangeRateProvider exchangeRateProvider,
-            ILogger<Worker> logger)
+            ILogger<Worker> logger,
+            AppConfiguration appConfiguration)
         {
             _exchangeRateProvider = exchangeRateProvider;
             _logger = logger;
+            _appConfiguration = appConfiguration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,7 +34,8 @@ namespace ExchangeRateUpdater.Console
 
                 try
                 {
-                    var rates = await _exchangeRateProvider.GetExchangeRatesAsync();
+                    var currencies = _appConfiguration.AvailableCurrencies.Split(',').ToList();
+                    var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
 
                     _logger.LogDebug($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)

@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Core.Exceptions;
 using ExchangeRateUpdater.Core.Models.CzechNationalBank;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,12 +13,18 @@ namespace ExchangeRateUpdater.CzechNationalBank.Api
     public class CzechNationalBankApi : ICzechNationalBankApi
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILogger<CzechNationalBankApi> _logger;
+
         private readonly JsonSerializerOptions _jsonSerializerOptions;
         private const string GetExchangeRatesEndpoint = "cnbapi/exrates/daily";
 
-        public CzechNationalBankApi(IHttpClientFactory clientFactory)
+        public CzechNationalBankApi(
+            IHttpClientFactory clientFactory,
+            ILogger<CzechNationalBankApi> logger)
         {
             _clientFactory = clientFactory;
+            _logger = logger;
+
             _jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -38,7 +45,7 @@ namespace ExchangeRateUpdater.CzechNationalBank.Api
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = response?.ReasonPhrase != null ? response.ReasonPhrase : "Unknown reason";
-                // #TODO: Log
+                _logger.LogError(errorMessage, "Could not retrieve data from the Czech National Bank Api");
                 throw new CzechNationalBankApiException(errorMessage);
             }
 
@@ -51,8 +58,8 @@ namespace ExchangeRateUpdater.CzechNationalBank.Api
             }
             catch (Exception e)
             {
-                // #TODO: Log
-                throw new CzechNationalBankApiException(e.Message);
+                _logger.LogError(e, "Failed parsing response");
+                throw new CzechNationalBankApiException("Failed parsing response");
             }
         }
 

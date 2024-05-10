@@ -11,5 +11,7 @@ namespace ExchangeRateUpdater.Console
         }
 
         public CzechNationalBankConfiguration CzechNationalBankConfiguration { get; set; }
+
+        public AppConfiguration AppConfiguration { get; set; }
     }
 }
