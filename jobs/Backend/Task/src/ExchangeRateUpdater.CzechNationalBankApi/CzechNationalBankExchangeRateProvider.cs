@@ -27,11 +27,11 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync()
         {
             var rates = new List<ExchangeRate>();
 
-            var exchangeRatesDailyDto = await _czechNationalBankApi.GetExchangeRates();
+            var exchangeRatesDailyDto = await _czechNationalBankApi.GetExchangeRatesAsync();
             if (exchangeRatesDailyDto == null || !exchangeRatesDailyDto.Rates.Any())
             {
                 _logger.LogDebug("Did not retrieve exchange rates");

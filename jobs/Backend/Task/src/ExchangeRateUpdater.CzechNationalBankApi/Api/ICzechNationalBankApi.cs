@@ -4,6 +4,6 @@ namespace ExchangeRateUpdater.CzechNationalBank.Api
 {
     public interface ICzechNationalBankApi
     {
-        Task<ExchangeRatesDailyDto?> GetExchangeRates();
+        Task<ExchangeRatesDailyDto?> GetExchangeRatesAsync();
     }
 }

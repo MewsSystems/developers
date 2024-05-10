@@ -2,7 +2,7 @@
 {
     public interface IExchangeRateProvider
     {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRates();
+        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync();
 
         IEnumerable<Currency> GetCurrencies();
     }

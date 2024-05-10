@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater.CzechNationalBank.Api
             };
         }
 
-        public async Task<ExchangeRatesDailyDto?> GetExchangeRates()
+        public async Task<ExchangeRatesDailyDto?> GetExchangeRatesAsync()
         {
             using var client = _clientFactory.CreateClient(CzechNationalBankAdapter.ApiClientName);
 

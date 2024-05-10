@@ -30,7 +30,7 @@ namespace ExchangeRateUpdater.Console
 
                 try
                 {
-                    var rates = await _exchangeRateProvider.GetExchangeRates();
+                    var rates = await _exchangeRateProvider.GetExchangeRatesAsync();
 
                     _logger.LogDebug($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)
