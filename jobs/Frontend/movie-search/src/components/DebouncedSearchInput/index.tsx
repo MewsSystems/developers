@@ -37,12 +37,12 @@ type DebouncedSearchInputProps = {
     disabled?: boolean;
 };
 
-export function DebouncedSearchInput({
+export const DebouncedSearchInput = ({
     onSearchChange,
     placeholder = "Search...",
     delay = 300,
     disabled = false,
-}: DebouncedSearchInputProps) {
+}: DebouncedSearchInputProps) => {
     const [searchValue, setSearchValue] = useState("");
 
     useDebounce(() => onSearchChange(searchValue), delay, [searchValue]);
