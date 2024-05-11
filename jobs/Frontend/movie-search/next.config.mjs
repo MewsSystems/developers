@@ -18,6 +18,9 @@ const nextConfig = {
     styledComponents: true,
   },
   productionBrowserSourceMaps: true,
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 export default nextConfig;

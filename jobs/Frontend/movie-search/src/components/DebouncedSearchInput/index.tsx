@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useDebounce } from "react-use";
 import styled from "styled-components";
 
@@ -54,18 +54,20 @@ export const DebouncedSearchInput = ({
 
     return (
         <Wrapper onSubmit={e => e.preventDefault()}>
-            <Input
-                type="search"
-                placeholder={placeholder}
-                value={searchValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set("query", e.target.value);
-                    push(`${pathname}?${params.toString()}`);
-                    setSearchValue(e.target.value);
-                }}
-                disabled={disabled}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+                <Input
+                    type="search"
+                    placeholder={placeholder}
+                    value={searchValue}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set("query", e.target.value);
+                        push(`${pathname}?${params.toString()}`);
+                        setSearchValue(e.target.value);
+                    }}
+                    disabled={disabled}
+                />
+            </Suspense>
             {!searchValue && <SearchIcon />}
         </Wrapper>
     );
