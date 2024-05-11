@@ -6,13 +6,12 @@ import styled from 'styled-components';
 
 const List = styled.ul`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
 `
 
 const Section = styled.section`
-    width: 100vw;
-    padding: 1rem 6rem;
+    width: 100%;
 `;
 
 const SectionTitle = styled.h2`

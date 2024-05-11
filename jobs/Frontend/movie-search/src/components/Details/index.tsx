@@ -18,6 +18,11 @@ const DetailsWrapper = styled.section<{ img?: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   height: 60vh;
+
+  @media (max-width: 600px) {
+      flex-direction: column;
+      height: 100vh;
+    }
 `;
 
 const ScoreWrapper = styled.div`

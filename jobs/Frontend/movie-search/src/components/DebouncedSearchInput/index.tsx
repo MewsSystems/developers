@@ -23,6 +23,10 @@ const Input = styled.input`
   appearance: none;
 
   background-color: rgb(var(--input-background-color));
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+    }
 `;
 
 const SearchIcon = styled(Search)`
@@ -30,6 +34,9 @@ const SearchIcon = styled(Search)`
 	right: 30px;
 	top: 34px;
 	display: block;
+    @media (max-width: 600px) {
+        display: none;
+    }
 `
 
 type DebouncedSearchInputProps = {
