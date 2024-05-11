@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{095C4342-27DF-4399-AD67-FD7C7D1BF503}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{29BB2C30-D39D-423A-BD53-21D7E184FFC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.UnitTests", "tests\ExchangeRateUpdater.UnitTests\ExchangeRateUpdater.UnitTests.csproj", "{C8F01250-3F9F-49CB-991B-F1B43837C374}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +21,16 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F01250-3F9F-49CB-991B-F1B43837C374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F01250-3F9F-49CB-991B-F1B43837C374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F01250-3F9F-49CB-991B-F1B43837C374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F01250-3F9F-49CB-991B-F1B43837C374}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0} = {095C4342-27DF-4399-AD67-FD7C7D1BF503}
+		{C8F01250-3F9F-49CB-991B-F1B43837C374} = {29BB2C30-D39D-423A-BD53-21D7E184FFC9}
 	EndGlobalSection
 EndGlobal
