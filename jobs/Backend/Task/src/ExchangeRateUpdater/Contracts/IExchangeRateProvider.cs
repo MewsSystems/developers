@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using ExchangeRateUpdater.Models;
-
-namespace ExchangeRateUpdater.Contracts;
+﻿namespace ExchangeRateUpdater.Contracts;
 
 public interface IExchangeRateProvider
 {

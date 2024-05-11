@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ExchangeRateUpdater.Contracts;
-using ExchangeRateUpdater.Models;
-
-namespace ExchangeRateUpdater.Services;
+﻿namespace ExchangeRateUpdater.Services;
 
 public class ExchangeRateProvider : IExchangeRateProvider
 {
