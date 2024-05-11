@@ -1,5 +1,5 @@
-﻿namespace ExchangeRateUpdater
-{
+﻿namespace ExchangeRateUpdater.Presentation.Cli;
+
     public class Currency
     {
         public Currency(string code)
@@ -17,4 +17,3 @@
             return Code;
         }
     }
-}

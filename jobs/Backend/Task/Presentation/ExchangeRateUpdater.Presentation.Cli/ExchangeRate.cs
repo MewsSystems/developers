@@ -1,5 +1,5 @@
-﻿namespace ExchangeRateUpdater
-{
+﻿namespace ExchangeRateUpdater.Presentation.Cli;
+
     public class ExchangeRate
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
@@ -20,4 +20,4 @@
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
         }
     }
-}
+
