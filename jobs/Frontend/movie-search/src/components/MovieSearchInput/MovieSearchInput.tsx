@@ -15,14 +15,15 @@ export default function MovieSearchInput({
   const { replace } = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
 
+  // this function could be moved around to be more reusable but we could reuse this input elsewhere
   const handleMovieSearch = (searchTerm: string) => {
     const params = new URLSearchParams(searchParams);
 
     if (searchTerm) {
-      params.set("query", searchTerm);
+      params.set("searchterm", searchTerm);
       params.set("page", "1");
     } else {
-      params.delete("query");
+      params.delete("searchterm");
       params.delete("page");
     }
 

@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 };
 
 interface HomePageProps {
-  searchParams: { query: string; page: number };
+  searchParams: { searchterm: string; page: number };
 }
 
 export default async function Home({ searchParams }: HomePageProps) {
-  const movies = await fetchMovies(searchParams.query, searchParams.page);
+  const movies = await fetchMovies(searchParams.searchterm, searchParams.page);
 
   return (
     <main>
