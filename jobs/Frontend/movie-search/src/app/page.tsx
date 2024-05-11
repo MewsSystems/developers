@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { buildMovieDBUrl } from "@/utils/buildMovieDBUrl";
 import Movies from "@/components/Movies";
@@ -93,11 +93,13 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <DebouncedSearchInput
-        onSearchChange={handleSearch}
-        delay={1500}
-        placeholder="Search for a movie or a tv show..."
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <DebouncedSearchInput
+          onSearchChange={handleSearch}
+          delay={1500}
+          placeholder="Search for a movie or a tv show..."
+        />
+      </Suspense>
 
       {!data && <DynamicSection title="Trending" getMovies={getTrending} />}
 
