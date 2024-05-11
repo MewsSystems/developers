@@ -19,6 +19,10 @@ The `ExchangeRateUpdater.Presentation.Cli` application accepts command line argu
 ### Docker
 To run the app via docker, first ensure you have built an image from the Dockerfile in `ExchangeRateUpdater.Presentation.Cli` (and have docker desktop running).
 
+Step 1 - Inside of Task folder run the command `docker build -t my-app .`
+Step 2 - Run the docker container: `docker run my-app "2024-01-01" -c "USD, GBP, JPY"`
+![alt text](image.png)
+
 Then you can use `docker run` to run the image, passing command line arguments as normal.
 
 e.g. 
