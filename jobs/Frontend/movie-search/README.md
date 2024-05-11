@@ -1,5 +1,11 @@
 Movie search app with Next.js, TypeScript and styled-components
 
+Live site: 
+
+<img width="1696" alt="Screenshot 2024-05-11 at 17 22 42" src="https://github.com/aLe3ouLa/developers/assets/2874216/99e3333e-a84a-4e24-be73-77f47db8cb21">
+
+<img width="1704" alt="Screenshot 2024-05-11 at 17 22 53" src="https://github.com/aLe3ouLa/developers/assets/2874216/2c92f930-c610-4302-8597-605c316161c2">
+
 ## Getting Started
 
 First, run the development server:
