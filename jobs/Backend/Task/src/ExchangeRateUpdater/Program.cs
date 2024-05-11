@@ -19,7 +19,8 @@ public static class Program
     {
         try
         {
-            var provider = new ExchangeRateProvider();
+            var client = new ExternalBankApiClient(new RestClient("https://api.cnb.cz/cnbapi/"));
+            var provider = new ExchangeRateProvider(client);
             var rates = provider.GetExchangeRates(Currencies).ToList();
 
             Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
