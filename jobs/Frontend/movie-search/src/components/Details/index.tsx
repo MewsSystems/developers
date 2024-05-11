@@ -13,7 +13,7 @@ const DetailsWrapper = styled.section<{ img?: string }>`
   display: flex;
   gap: 24px;
 
-    background:linear-gradient(0deg, rgba(59, 6, 37, 0.6), rgba(83, 48, 69, 0.9)),${(props) => (props.img ? `url(${props.img})` : "white")};
+  background:linear-gradient(0deg, rgb(var(--background-start-rgb)), rgb(var(--background-end-rg))),${(props) => (props.img ? `url(${props.img})` : "white")};
 
   background-repeat: no-repeat;
   background-size: cover;
@@ -21,19 +21,17 @@ const DetailsWrapper = styled.section<{ img?: string }>`
 `;
 
 const ScoreWrapper = styled.div`
-    margin: 12px 0;
-
+    margin: var(--space-md) 0;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-md);
 `
 
 const Score = styled.p<{ color: string }>`
   background-color: ${(props) => props.color};
   width: 28px;
   height: 28px;
-  border-radius: 50%;
-
+  border-radius: var(--border-radius--circle);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +43,8 @@ const Year = styled.span`
 
 const TagLine = styled.p`
   font-style: italic;
-  color: #bab3b3;
-  margin-bottom: 12px;
+  color: #5b675e;
+  margin-bottom: var(--space-md);
 `;
 
 export default function Details({ movie }: { movie: MovieDetails }) {

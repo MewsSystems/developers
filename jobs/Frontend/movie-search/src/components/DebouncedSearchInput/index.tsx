@@ -11,23 +11,24 @@ const Wrapper = styled.form`
 
 const Input = styled.input`
   width: 100%;
-  padding: 10px 20px;
+  padding: var(--space-md) var(--space-lg);
   max-height: 60px;
-  border-color: #888;
-  border-radius: 18px;
+  border-color: var(--input-border-color);
+  border-radius: var(--border-radius);
   border-style: solid;
-  border-width: 5px;
-  margin: 16px 0;
-  color: #333;
-  font-family: "Helvetica", sans-serif;
-  font-size: 26px;
+  border-width: 3px;
+  margin: var(--space-lg) 0;
+  color: rgb(var(--input-border-color));
+  font-size: 24px;
   appearance: none;
+
+  background-color: rgb(var(--input-background-color));
 `;
 
 const SearchIcon = styled(Search)`
     position: absolute;
 	right: 30px;
-	top: 30px;
+	top: 34px;
 	display: block;
 `
 

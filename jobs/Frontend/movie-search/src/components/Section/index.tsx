@@ -8,13 +8,15 @@ const List = styled.ul`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 18px;
-    width: 90vw;
 `
 
 const Section = styled.section`
-    h2 {
-        margin-bottom: 24px;
-    }
+    width: 100vw;
+    padding: 1rem 6rem;
+`;
+
+const SectionTitle = styled.h2`
+     margin-bottom: 24px;
 `
 
 type DynamicSectionProps = { title: string, getMovies: () => Promise<Movie[]> }
@@ -37,10 +39,9 @@ export default function DynamicSection({ title, getMovies }: DynamicSectionProps
 
     return (
         <Section>
-            <h2>{title}</h2>
+            <SectionTitle>{title}</SectionTitle>
             <List>
                 {
-
                     movies &&
                     movies.slice(0, 10).map(movie => <VerticalCard
                         key={movie.id}

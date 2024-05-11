@@ -7,22 +7,27 @@ import { dateFormatter } from '@/utils/dateFormatter';
 const CardContainer = styled.li`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 18px;
+    gap: var(--space-md);
+    padding: var(--space-md);
     cursor: pointer;
+    text-align: left;
     &:hover {
-        background-color: #ffffff70;
-        color: black;
+        background-color: rgb(var(--hover-card));
+        color: rgb(var(--foreground-rgb));
         border: 1px solid #ffffff;
-        border-radius: 14px;
+        border-radius: 2px;
         scale: 1.1;
     }
 `;
 
 const StyledImage = styled(Image)`
-    border-radius: 12px;
-`
+    border-radius:var(--border-radius);
+`;
+
+const Date = styled.p`
+    font-size: 12px;
+    margin-top: var(--space-sm);
+`;
 
 type CardProps = { movie: Movie, handleClick: (id: number) => void }
 
@@ -39,7 +44,7 @@ export const VerticalCard = ({ movie, handleClick }: CardProps) => {
             />
             <div>
                 <strong>{movie.original_title}</strong>
-                <p>{dateFormatter(movie.release_date)}</p>
+                <Date>{dateFormatter(movie.release_date)}</Date>
             </div>
         </CardContainer>
     )

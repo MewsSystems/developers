@@ -7,23 +7,22 @@ import { dateFormatter } from '@/utils/dateFormatter';
 const CardContainer = styled.li`
     display: flex;;
     align-items: center;
-    gap: 12px;
-
-    padding: 10px;
+    gap: var(--space-md);
+    padding: var(--space-md);
     cursor: pointer;
     &:hover {
-        background-color: #ffffff70;
-        color: black;
+        background-color: rgb(var(--hover-card));
+        color: rgb(var(--foreground-rgb));
         border: 1px solid #ffffff;
-        border-radius: 14px;
+        border-radius: 2px;
         scale: 1.1;
     }
 `;
 
 const Date = styled.p`
-    font-style: italic;
-    color: gray;
-`
+    font-size: 12px;
+    margin-top: var(--space-sm);
+`;
 
 const Overview = styled.p`
     margin-top: 12px;
