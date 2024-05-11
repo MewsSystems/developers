@@ -26,7 +26,7 @@ export default function Navigation() {
     return (
         <NavigationWrapper>
             <List>
-                <li><Link href={"/"} replace> <Film /></Link></li>
+                <li><Link href={"/"} aria-label="Movie search website" replace> <Film /></Link></li>
                 <li><ThemeToggle /></li>
             </List>
         </NavigationWrapper>

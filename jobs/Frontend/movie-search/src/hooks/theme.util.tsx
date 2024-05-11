@@ -64,6 +64,7 @@ export default function SetTheme() {
             id="themeToggle"
             onClick={toggleTheme}
             data-theme={theme}
+            aria-label={`Change theme to ${theme}`}
         >
             {theme === 'dark' ? <Moon /> : <Sun />}
         </ToggleTheme>

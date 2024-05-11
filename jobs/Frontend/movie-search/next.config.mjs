@@ -17,6 +17,7 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  productionBrowserSourceMaps: true,
 };
 
 export default nextConfig;
