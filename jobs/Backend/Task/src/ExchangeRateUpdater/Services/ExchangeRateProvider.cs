@@ -12,4 +12,9 @@ public class ExchangeRateProvider : IExchangeRateProvider
     {
         return Enumerable.Empty<ExchangeRate>();
     }
+
+    public Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
+    {
+        return Task.FromResult(Enumerable.Empty<ExchangeRate>());
+    }
 }
