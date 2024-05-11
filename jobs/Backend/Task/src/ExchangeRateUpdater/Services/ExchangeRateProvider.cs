@@ -5,11 +5,10 @@ public class ExchangeRateProvider : IExchangeRateProvider
     private readonly string _baseCurrencyCode;
     private readonly IExternalBankApiClient _client;
 
-    public ExchangeRateProvider(IExternalBankApiClient client)
+    public ExchangeRateProvider(IExternalBankApiClient client, IOptions<ApplicationSettings> settings)
     {
         _client = client;
-        // TODO read base currency from settings?
-        _baseCurrencyCode = "CZK";
+        _baseCurrencyCode = settings.Value.BaseCurrencyCode;
     }
 
     /// <summary>

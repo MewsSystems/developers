@@ -9,11 +9,13 @@ public class ExchangeRateProviderTests
     public void SetUp()
     {
         _client = new Mock<IExternalBankApiClient>();
-        _sut = new ExchangeRateProvider(_client.Object);
+        _fakeSettings = Options.Create(new ApplicationSettings { BaseCurrencyCode = "CZK" });
+        _sut = new ExchangeRateProvider(_client.Object, _fakeSettings);
     }
 
     private Mock<IExternalBankApiClient> _client = default!;
     private ExchangeRateProvider _sut = default!;
+    private IOptions<ApplicationSettings> _fakeSettings = default!;
 
     [Test]
     public async Task GetExchangeRatesAsync_ShouldReturnExchangeRatesAmongSpecifiedCurrencies_WithSpecificCurrencies()

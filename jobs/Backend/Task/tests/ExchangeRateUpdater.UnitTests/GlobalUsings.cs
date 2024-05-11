@@ -1,5 +1,11 @@
 ﻿global using ExchangeRateUpdater.Contracts;
 global using ExchangeRateUpdater.Models;
+global using ExchangeRateUpdater.Settings;
 global using FluentAssertions;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using Microsoft.Extensions.Options;
 global using Moq;
 global using NUnit.Framework;
+global using RestSharp;
+global using RichardSzalay.MockHttp;
+global using System.Text.Json;

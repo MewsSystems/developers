@@ -1,39 +1,20 @@
-﻿namespace ExchangeRateUpdater;
+﻿using ExchangeRateUpdater;
 
-public static class Program
-{
-    private static readonly IEnumerable<Currency> Currencies = new[]
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices((context, services) =>
     {
-        new Currency("USD"),
-        new Currency("EUR"),
-        new Currency("CZK"),
-        new Currency("JPY"),
-        new Currency("KES"),
-        new Currency("RUB"),
-        new Currency("THB"),
-        new Currency("TRY"),
-        new Currency("XYZ")
-    };
+        services.AddOptions<ExternalBankApiSettings>()
+            .Bind(context.Configuration.GetSection(ExternalBankApiSettings.ConfigurationName))
+            .ValidateDataAnnotations();
 
-    public static void Main(string[] args)
-    {
-        try
-        {
-            var client = new ExternalBankApiClient(new RestClient("https://api.cnb.cz/cnbapi/"));
-            var provider = new ExchangeRateProvider(client);
-            var rates = provider.GetExchangeRates(Currencies).ToList();
+        services.AddOptions<ApplicationSettings>()
+            .Bind(context.Configuration.GetSection(ApplicationSettings.ConfigurationName));
 
-            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-            foreach (var rate in rates)
-            {
-                Console.WriteLine(rate.ToString());
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-        }
+        services.AddSingleton<IExternalBankApiClient, ExternalBankApiClient>();
+        services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
 
-        Console.ReadLine();
-    }
-}
+        services.AddHostedService<Worker>();
+    })
+    .Build();
+
+host.Run();

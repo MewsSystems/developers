@@ -7,10 +7,10 @@ public class ExternalBankApiClient : IExternalBankApiClient
 {
     private readonly RestClient _restClient;
 
-    public ExternalBankApiClient(RestClient restClient)
+    public ExternalBankApiClient(IOptions<ExternalBankApiSettings> settings, RestClient? restClient = null)
     {
-        _restClient = restClient;
-        // TODO set url from settings
+        _restClient = restClient ?? new RestClient(new RestClientOptions(settings.Value.BaseUri)
+            { ThrowOnAnyError = true });
     }
 
     /// <inheritdoc />
@@ -29,7 +29,6 @@ public class ExternalBankApiClient : IExternalBankApiClient
             restRequest.AddQueryParameter("lang", lang);
 
         var response = await _restClient.ExecuteAsync<GetDailyExchangeRatesResponse>(restRequest, cancellationToken);
-        response.ThrowIfError();
 
         return response.Data!;
     }
