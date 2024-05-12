@@ -4,6 +4,7 @@ import {
   MovieCardContainer,
   Poster,
   ReleaseDate,
+  StyledLink,
   Title,
 } from "./MovieCardStyledComponents";
 import getYear from "@/utils/GetYear";
@@ -20,15 +21,20 @@ export interface MovieCardProps {
 
 export default function MovieCard({ movie, index }: MovieCardProps) {
   return (
-    <Link key={movie.id} href={`/movie/${movie.id}?fromSearch=true`}>
+    <StyledLink key={movie.id} href={`/movie/${movie.id}?fromSearch=true`}>
       <MovieCardContainer>
-        <Poster
-          src={`https://image.tmdb.org/t/p/w200${movie.posterPath}`}
-          alt={`${movie.title} poster`}
-        />
+        {movie.posterPath ? (
+          <Poster
+            as="img"
+            src={`https://image.tmdb.org/t/p/w200${movie.posterPath}`}
+            alt={`${movie.title} poster`}
+          />
+        ) : (
+          <Poster>No Image Available</Poster>
+        )}
         <Title data-testid={`movieTitle${index}`}>{movie.title}</Title>
         <ReleaseDate>{getYear(movie.releaseDate)}</ReleaseDate>
       </MovieCardContainer>
-    </Link>
+    </StyledLink>
   );
 }
