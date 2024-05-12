@@ -1,5 +1,5 @@
 import MovieDetails from "@/components/MovieDetails/MovieDetails";
-import MovieNavigation from "@/components/MovieNavigation/MovieNavigation";
+import MovieNavigation from "@/components/MovieDetails/MovieNavigation/MovieNavigation";
 import { fetchSingleMovie } from "@/data/FetchSingleMovie";
 
 interface MovieDeatilsPageProps {
