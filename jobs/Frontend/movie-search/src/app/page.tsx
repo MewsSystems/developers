@@ -1,6 +1,7 @@
+import { Metadata } from "next";
+import MoviePagination from "@/components/MoviePagination/MoviePagination";
 import MovieSearchInput from "@/components/MovieSearchInput/MovieSearchInput";
 import { fetchMovies } from "@/utils/FetchMovies";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "MEWS Movie Search",
@@ -12,7 +13,11 @@ interface HomePageProps {
 }
 
 export default async function Home({ searchParams }: HomePageProps) {
-  const movies = await fetchMovies(searchParams.searchterm, searchParams.page);
+  const { movies, totalPages } = await fetchMovies(
+    "/search/movie",
+    searchParams.searchterm,
+    searchParams.page
+  );
 
   return (
     <main>
@@ -33,6 +38,7 @@ export default async function Home({ searchParams }: HomePageProps) {
           </li>
         ))}
       </ul>
+      <MoviePagination totalPages={totalPages} />
     </main>
   );
 }

@@ -1,8 +1,12 @@
 import { BaseMovie, TMDBSearchResponse } from "@/interfaces/MovieInterfaces";
 import { buildMovieApiUrl } from "./buildMovieApiUrl";
 
-export const fetchMovies = async (searchterm: string, page: number) => {
-  const movieApiUrl = buildMovieApiUrl("/search/movie", searchterm, page);
+export const fetchMovies = async (
+  movieUrl: string,
+  searchterm: string,
+  page: number
+) => {
+  const movieApiUrl = buildMovieApiUrl(movieUrl, searchterm, page);
   const movieFetchOptions = {
     method: "GET",
     headers: { accept: "application/json" },
@@ -22,5 +26,8 @@ export const fetchMovies = async (searchterm: string, page: number) => {
     };
   });
 
-  return MovieDataArray;
+  return {
+    movies: MovieDataArray,
+    totalPages: movies.total_pages,
+  };
 };
