@@ -25,10 +25,10 @@ export default async function Home({ searchParams }: HomePageProps) {
       <h1>Movie Search</h1>
       <MovieSearchInput />
       <ul>
-        {movies.map((movie) => (
+        {movies.map((movie, index) => (
           <Link key={movie.id} href={`/movie/${movie.id}`}>
             <li>
-              <h2>{movie.title}</h2>
+              <h2 data-testid={`movieTitle${index}`}>{movie.title}</h2>
               <p>{movie.overview}</p>
               <p>{movie.releaseDate}</p>
               {movie.posterPath && (
