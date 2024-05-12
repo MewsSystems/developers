@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api", "ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj", "{DEC423D9-69D7-4937-BDB3-5F705285970A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Api", "ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj", "{DEC423D9-69D7-4937-BDB3-5F705285970A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Application", "ExchangeRateUpdater.Application\ExchangeRateUpdater.Application.csproj", "{D8E5FDFA-8C24-4CB1-915C-5D03B17DE0FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Application", "ExchangeRateUpdater.Application\ExchangeRateUpdater.Application.csproj", "{D8E5FDFA-8C24-4CB1-915C-5D03B17DE0FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.ApiTests", "..\ExchangeRateUpdater.ApiTests\ExchangeRateUpdater.ApiTests.csproj", "{DB803F81-A939-4371-9011-3BD8D962B05B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.ApiTests", "ExchangeRateUpdater.ApiTests\ExchangeRateUpdater.ApiTests.csproj", "{FC0F93D6-00FE-47C9-9926-24659C1FA7A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{D8E5FDFA-8C24-4CB1-915C-5D03B17DE0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8E5FDFA-8C24-4CB1-915C-5D03B17DE0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8E5FDFA-8C24-4CB1-915C-5D03B17DE0FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB803F81-A939-4371-9011-3BD8D962B05B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB803F81-A939-4371-9011-3BD8D962B05B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB803F81-A939-4371-9011-3BD8D962B05B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB803F81-A939-4371-9011-3BD8D962B05B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0F93D6-00FE-47C9-9926-24659C1FA7A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0F93D6-00FE-47C9-9926-24659C1FA7A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0F93D6-00FE-47C9-9926-24659C1FA7A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0F93D6-00FE-47C9-9926-24659C1FA7A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
