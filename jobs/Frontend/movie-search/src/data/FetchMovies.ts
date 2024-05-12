@@ -20,7 +20,6 @@ export const fetchMovies = async (
     return {
       id: movie.id,
       title: movie.title,
-      overview: movie.overview,
       releaseDate: movie.release_date,
       posterPath: movie.poster_path,
     };

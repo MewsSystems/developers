@@ -1,6 +1,7 @@
+import { Metadata } from "next";
 import MovieNavigation from "@/components/MovieNavigation/MovieNavigation";
 import { fetchSingleMovie } from "@/data/FetchSingleMovie";
-import { Metadata } from "next";
+import { runtimeToHoursMinutes } from "@/utils/RuntimeToMinutes";
 
 export const metadata: Metadata = {
   title: "MEWS Movie Search - Movie Details",
@@ -29,7 +30,7 @@ export default async function MovieDetailsPage({
           alt={`${data.title} poster`}
         />
       )}
-      <p>{data.runtime}</p>
+      <p>{runtimeToHoursMinutes(data.runtime)}</p>
     </main>
   );
 }
