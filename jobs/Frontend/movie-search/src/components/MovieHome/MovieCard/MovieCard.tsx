@@ -6,6 +6,7 @@ import {
   ReleaseDate,
   Title,
 } from "./MovieCardStyledComponents";
+import getYear from "@/utils/GetYear";
 
 export interface MovieCardProps {
   movie: {
@@ -26,7 +27,7 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
           alt={`${movie.title} poster`}
         />
         <Title data-testid={`movieTitle${index}`}>{movie.title}</Title>
-        <ReleaseDate>{movie.releaseDate}</ReleaseDate>
+        <ReleaseDate>{getYear(movie.releaseDate)}</ReleaseDate>
       </MovieCardContainer>
     </Link>
   );
