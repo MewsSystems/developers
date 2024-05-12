@@ -10,9 +10,8 @@ interface MovieSearchInputProps {
 export default function MovieSearchInput({
   delay = 500,
 }: MovieSearchInputProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const { movieSearch } = useSearchNavigation();
+  const { movieSearch, searchterm: defaultQuery } = useSearchNavigation();
+  const [searchTerm, setSearchTerm] = useState(defaultQuery || "");
 
   const [debouncedHandleMovieSearch] = useDebounce(movieSearch, delay);
 
