@@ -1,18 +1,18 @@
 ﻿using ExchangeRateUpdater.Core.Exceptions;
 using ExchangeRateUpdater.Core.Models.CzechNationalBank;
 using ExchangeRateUpdater.Core.Providers;
-using ExchangeRateUpdater.CzechNationalBank.Api;
+using ExchangeRateUpdater.CzechNationalBank.Sources;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
     public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly ICzechNationalBankApi _czechNationalBankApi;
+        private readonly ICzechNationalBankSource _czechNationalBankApi;
         private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
 
         public CzechNationalBankExchangeRateProvider(
-            ICzechNationalBankApi czechNationalBankApi,
+            ICzechNationalBankSource czechNationalBankApi,
             ILogger<CzechNationalBankExchangeRateProvider> logger)
         {
             _czechNationalBankApi = czechNationalBankApi;

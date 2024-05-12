@@ -1,6 +1,6 @@
 using AutoFixture;
 using ExchangeRateUpdater.Core.Models.CzechNationalBank;
-using ExchangeRateUpdater.CzechNationalBank.Api;
+using ExchangeRateUpdater.CzechNationalBank.Sources;
 using ExchangeRateUpdater.CzechNationalBankTests.Data;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ namespace ExchangeRateUpdater.CzechNationalBankApiTests
     public class CzechNationalBankExchangeRateProviderTests
     {
         private readonly Fixture _fixture = new Fixture();
-        private readonly Mock<ICzechNationalBankApi> _czechNationalBankApiMock;
+        private readonly Mock<ICzechNationalBankSource> _czechNationalBankApiMock;
         private readonly Mock<ILogger<CzechNationalBankExchangeRateProvider>> _logger;
         private readonly IEnumerable<string> _availableCurrencies;
 
@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.CzechNationalBankApiTests
 
         public CzechNationalBankExchangeRateProviderTests()
         {
-            _czechNationalBankApiMock = new Mock<ICzechNationalBankApi>(MockBehavior.Strict);
+            _czechNationalBankApiMock = new Mock<ICzechNationalBankSource>(MockBehavior.Strict);
             _logger = new Mock<ILogger<CzechNationalBankExchangeRateProvider>>();
             _availableCurrencies = _fixture.CreateMany<string>();
 

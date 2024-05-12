@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using ExchangeRateUpdater.Core.Exceptions;
 using ExchangeRateUpdater.Core.Models.CzechNationalBank;
-using ExchangeRateUpdater.CzechNationalBank.Api;
+using ExchangeRateUpdater.CzechNationalBank.Sources;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;

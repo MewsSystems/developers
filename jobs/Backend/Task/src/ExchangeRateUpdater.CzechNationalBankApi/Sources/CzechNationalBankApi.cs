@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater.CzechNationalBank.Api
+namespace ExchangeRateUpdater.CzechNationalBank.Sources
 {
     /// <summary>
     /// API Swagger: https://api.cnb.cz/cnbapi/swagger-ui.html
     /// Ref: https://developers.cnb.cz/discuss/633c52c8da0e79003c33a2c1
     /// </summary>
-    public class CzechNationalBankApi : ICzechNationalBankApi
+    public class CzechNationalBankApi : ICzechNationalBankSource
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<CzechNationalBankApi> _logger;

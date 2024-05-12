@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Core.Configuration;
 using ExchangeRateUpdater.Core.Providers;
-using ExchangeRateUpdater.CzechNationalBank.Api;
+using ExchangeRateUpdater.CzechNationalBank.Sources;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using System.Net;
@@ -15,7 +15,7 @@ namespace ExchangeRateUpdater.CzechNationalBank
         {
             service.AddSingleton(configuration);
             service.AddSingleton<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
-            service.AddSingleton<ICzechNationalBankApi, CzechNationalBankApi>();
+            service.AddSingleton<ICzechNationalBankSource, CzechNationalBankApi>();
 
             service.AddHttpClient(ApiClientName, x =>
                 {

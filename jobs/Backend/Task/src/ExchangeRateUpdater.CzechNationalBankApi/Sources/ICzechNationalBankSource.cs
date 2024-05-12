@@ -1,8 +1,8 @@
 ﻿using ExchangeRateUpdater.Core.Models.CzechNationalBank;
 
-namespace ExchangeRateUpdater.CzechNationalBank.Api
+namespace ExchangeRateUpdater.CzechNationalBank.Sources
 {
-    public interface ICzechNationalBankApi
+    public interface ICzechNationalBankSource
     {
         Task<ExchangeRatesDailyDto?> GetExchangeRatesAsync();
     }
