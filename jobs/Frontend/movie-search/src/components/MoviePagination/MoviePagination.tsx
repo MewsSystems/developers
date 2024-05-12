@@ -17,6 +17,9 @@ export default function MoviePagination({ totalPages }: MoviePaginationProps) {
       >
         Previous
       </button>
+      <span>
+        {currentPage} of {totalPages}
+      </span>
       <button
         disabled={currentPage === totalPages}
         onClick={() => movieSearch(searchterm, currentPage + 1)}
