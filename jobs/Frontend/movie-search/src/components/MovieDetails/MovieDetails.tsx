@@ -15,7 +15,7 @@ interface MovieDeatilsPageProps {
 
 export default function MovieDetails({ movie }: MovieDeatilsPageProps) {
   return (
-    <MainContainer>
+    <MainContainer data-testid="movieDetails">
       <Title>{movie.title}</Title>
       <Text>{movie.overview}</Text>
       <Text>Release Date: {movie.release_date}</Text>
