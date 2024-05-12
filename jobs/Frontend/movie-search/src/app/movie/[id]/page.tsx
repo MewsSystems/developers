@@ -1,0 +1,31 @@
+import { fetchSingleMovie } from "@/data/FetchSingleMovie";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "MEWS Movie Search - Movie Details",
+  description: "Movie Details",
+};
+
+interface MovieDeatilsPageProps {
+  params: { id: number };
+}
+
+export default async function MovieDetailsPage({
+  params,
+}: MovieDeatilsPageProps) {
+  const data = await fetchSingleMovie("/movie/", params.id);
+  return (
+    <main>
+      <h1>{data.title}</h1>
+      <p>{data.overview}</p>
+      <p>{data.release_date}</p>
+      {data.poster_path && (
+        <img
+          src={`https://image.tmdb.org/t/p/w200${data.poster_path}`}
+          alt={`${data.title} poster`}
+        />
+      )}
+      <p>{data.runtime}</p>
+    </main>
+  );
+}

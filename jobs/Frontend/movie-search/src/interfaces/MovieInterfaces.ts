@@ -15,3 +15,9 @@ export interface BaseMovie {
   release_date: string;
   title: string;
 }
+
+export interface BaseMovieDetails extends BaseMovie {
+  runtime: number;
+  status: string;
+  tagline: string;
+}

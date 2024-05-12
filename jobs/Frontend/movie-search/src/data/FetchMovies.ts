@@ -1,5 +1,5 @@
 import { BaseMovie, TMDBSearchResponse } from "@/interfaces/MovieInterfaces";
-import { buildMovieApiUrl } from "./buildMovieApiUrl";
+import { buildMovieApiUrl } from "../utils/buildMovieApiUrl";
 
 export const fetchMovies = async (
   movieUrl: string,
