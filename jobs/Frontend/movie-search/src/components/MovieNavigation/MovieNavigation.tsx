@@ -1,6 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
+import {
+  BackButton,
+  NavigationHeader,
+} from "./MovieNavigationStyledComponents";
 
 interface MovieNavigationProps {
   isFromSearch: boolean;
@@ -12,8 +16,16 @@ export default function MovieNavigation({
   const router = useRouter();
 
   if (isFromSearch) {
-    return <button onClick={() => router.back()}>Back To Search</button>;
+    return (
+      <NavigationHeader>
+        <BackButton onClick={() => router.back()}>Back To Search</BackButton>
+      </NavigationHeader>
+    );
   }
 
-  return <button onClick={() => router.push("/")}>Home</button>;
+  return (
+    <NavigationHeader>
+      <BackButton onClick={() => router.push("/")}>Home</BackButton>;
+    </NavigationHeader>
+  );
 }
