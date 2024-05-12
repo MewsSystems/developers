@@ -1,44 +1,65 @@
+using ExchangeRateUpdater.Api.Auth;
+using ExchangeRateUpdater.Api.Handlers;
+using ExchangeRateUpdater.Application.Features.ExchangeRates.GetByCurrency;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using System.Net;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+ApplicationBootstrapper.AddServices(builder.Services, builder.Configuration);
+builder.Services.Configure<AuthSettings>(
+    builder.Configuration.GetSection(AuthSettings.ConfigSectionId));
+
+builder.Services.AddExceptionHandler<ExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x =>
+{
+    var apiKeyScheme = new OpenApiSecurityScheme
+    {
+        Description = "Api Key needed to access endpoints",
+        In = ParameterLocation.Header,
+        Name = "X-Api-Key",
+        Type = SecuritySchemeType.ApiKey,
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "ApiKeyAuth"
+        }
+    };
+    x.AddSecurityDefinition("ApiKeyAuth", apiKeyScheme);
+    var securityRequirement = new OpenApiSecurityRequirement
+    {
+        [apiKeyScheme] = new List<string>()
+    };
+    x.AddSecurityRequirement(securityRequirement);
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var api = app
+    .MapGroup("/")
+    .AddEndpointFilter<AuthEndpointFilter>();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+api.MapPost("exchangeRates",
+    (IMediator mediator, [FromBody] GetExchangeRatesByCurrencyQuery query) => mediator.Send(query))
+    .ProducesValidationProblem()
+    .Produces<GetExchangeRatesByCurrencyQueryResponse>((int)HttpStatusCode.OK)
+    .Produces<ProblemDetails>((int)HttpStatusCode.InternalServerError)
+    .Produces((int)HttpStatusCode.Unauthorized)
+    .WithOpenApi();
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public partial class Program { }

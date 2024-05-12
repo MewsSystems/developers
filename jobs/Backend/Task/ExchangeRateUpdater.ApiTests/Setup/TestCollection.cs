@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ExchangeRateUpdater.ApiTests.Setup;
 
-namespace ExchangeRateUpdater.ApiTests.Setup
+[CollectionDefinition("ExchangeRateUpdaterTests")]
+public class ExchangeRateUpdaterTestCollection : ICollectionFixture<ExchangeRateUpdaterApplicationFactory>
 {
-    internal class TestCollection
-    {
-    }
 }
