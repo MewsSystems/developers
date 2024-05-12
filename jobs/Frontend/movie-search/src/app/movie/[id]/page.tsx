@@ -1,3 +1,4 @@
+import MovieNavigation from "@/components/MovieNavigation/MovieNavigation";
 import { fetchSingleMovie } from "@/data/FetchSingleMovie";
 import { Metadata } from "next";
 
@@ -8,14 +9,17 @@ export const metadata: Metadata = {
 
 interface MovieDeatilsPageProps {
   params: { id: number };
+  searchParams: { fromSearch: boolean };
 }
 
 export default async function MovieDetailsPage({
   params,
+  searchParams,
 }: MovieDeatilsPageProps) {
   const data = await fetchSingleMovie("/movie/", params.id);
   return (
     <main>
+      <MovieNavigation isFromSearch={searchParams.fromSearch} />
       <h1>{data.title}</h1>
       <p>{data.overview}</p>
       <p>{data.release_date}</p>
