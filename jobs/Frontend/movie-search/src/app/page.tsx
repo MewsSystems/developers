@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import MoviePagination from "@/components/MoviePagination/MoviePagination";
-import MovieSearchInput from "@/components/MovieSearchInput/MovieSearchInput";
 import { fetchMovies } from "@/data/FetchMovies";
-import Link from "next/link";
+import MovieCard from "@/components/MovieCard/MovieCard";
+import MovieCardContainer from "@/components/MovieCard/MovieCardContainer";
+import MovieHeader from "@/components/MovieHeader/MovieHeader";
 
 export const metadata: Metadata = {
   title: "MEWS Movie Search",
@@ -22,26 +23,16 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   return (
     <main>
-      <h1>Movie Search</h1>
-      <MovieSearchInput />
+      <MovieHeader />
+      {movies.length > 0 && (
+        <MovieCardContainer>
+          {movies.map((movie, index) => (
+            <MovieCard key={movie.id} index={index} movie={movie} />
+          ))}
+        </MovieCardContainer>
+      )}
 
-      <ul>
-        {movies.map((movie, index) => (
-          <Link key={movie.id} href={`/movie/${movie.id}?fromSearch=true`}>
-            <li>
-              <h2 data-testid={`movieTitle${index}`}>{movie.title}</h2>
-              <p>{movie.releaseDate}</p>
-              {movie.posterPath && (
-                <img
-                  src={`https://image.tmdb.org/t/p/w200${movie.posterPath}`}
-                  alt={`${movie.title} poster`}
-                />
-              )}
-            </li>
-          </Link>
-        ))}
-      </ul>
-      <MoviePagination totalPages={totalPages} />
+      {totalPages > 1 && <MoviePagination totalPages={totalPages} />}
     </main>
   );
 }
