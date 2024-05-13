@@ -8,7 +8,7 @@ public class ExchangeRateProfile : Profile
 {
     public ExchangeRateProfile()
     {
-        CreateMap<CnbExchangeRateResponseDto, ExchangeRate>().ConstructUsing(exchangeRate =>
+        CreateMap<CnbExchangeRateResponseItem, ExchangeRate>().ConstructUsing(exchangeRate =>
             new ExchangeRate(
                 new Currency("CZK"),
                 new Currency(exchangeRate.CurrencyCode),

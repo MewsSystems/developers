@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Application.Interfaces;
+﻿using AutoMapper;
+using ExchangeRateUpdater.Application.Interfaces;
 using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.Enums;
 using ExchangeRateUpdater.Infrastructure.Interfaces;
@@ -8,10 +9,12 @@ namespace ExchangeRateUpdater.Application.Services;
 public class ExchangeRateProvider : IExchangeRateProvider
 {
     private IExchangeRateApi _exchangeRateApi;
+    private readonly IMapper _mapper;
 
-    public ExchangeRateProvider(IExchangeRateApi exchangeRateApi)
+    public ExchangeRateProvider(IExchangeRateApi exchangeRateApi, IMapper mapper)
     {
         _exchangeRateApi = exchangeRateApi;
+        _mapper = mapper;
     }
 
     public void SetExchangeRateApi(IExchangeRateApi exchangeRateApi)
@@ -29,6 +32,7 @@ public class ExchangeRateProvider : IExchangeRateProvider
     {
         var exchangeRates = await _exchangeRateApi.GetExchangeRatesAsync(date, language);
 
-        return exchangeRates.Where(rate => currencies.Any(currency => currency.Code == rate.TargetCurrency.Code));
+        return _mapper.Map<IEnumerable<ExchangeRate>>(exchangeRates)
+            .Where(rate => currencies.Any(currency => currency.Code == rate.TargetCurrency.Code));
     }
 }

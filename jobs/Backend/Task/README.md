@@ -17,6 +17,7 @@ It allows to extract for the current date the exchange rates data from the [Czec
 ## Build and Run
 To build and run the sample, type the following command:
 
+`cd .\ExchangeRateUpdater.ConsoleApp`
 `dotnet run`
 
 To run the configured tests:

@@ -13,9 +13,9 @@ public class ExchangeRate
         Value = value;
     }
 
-    public Currency SourceCurrency { get; }
+    public Currency SourceCurrency { get; init; } = new("CZK");
 
-    public Currency TargetCurrency { get; }
+    public Currency TargetCurrency { get; init; } = new("CZK");
 
     public decimal Value { get; }
 

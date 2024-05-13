@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using ExchangeRateUpdater.Application.MappingProfiles;
-using ExchangeRateUpdater.Domain.Entities;
-using ExchangeRateUpdater.Domain.Enums;
+﻿using ExchangeRateUpdater.Domain.Enums;
 using ExchangeRateUpdater.Infrastructure.Apis;
 using ExchangeRateUpdater.Infrastructure.Dtos;
 using FluentAssertions;
@@ -16,7 +13,6 @@ namespace ExchangeRateUpdater.UnitTests.Infrastructure;
 public class CnbExchangeRateApiTest
 {
     private readonly Mock<ILogger<CnbExchangeRateApi>> _loggerMock;
-    private readonly IMapper _mapper;
     private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock = new();
     private readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
@@ -29,9 +25,6 @@ public class CnbExchangeRateApiTest
     public CnbExchangeRateApiTest()
     {
         _loggerMock = new Mock<ILogger<CnbExchangeRateApi>>();
-
-        var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile(typeof(ExchangeRateProfile)));
-        _mapper = mapperConfig.CreateMapper();
     }
 
     [Theory]
@@ -40,7 +33,7 @@ public class CnbExchangeRateApiTest
     {
         var response = new CnbExchangeRateResponse
         (
-            new List<CnbExchangeRateResponseDto>
+            new List<CnbExchangeRateResponseItem>
             {
                 new(1, "Japan", "yen", "JPY", 80, 15.285m, ""),
                 new(1, "EMU", "euro", "EUR", 80, 4.503m, ""),
@@ -49,28 +42,20 @@ public class CnbExchangeRateApiTest
                 new(1, "Country", "XYZ", "XYZ", 80, 3.342m, "")
             }
         );
-        var rates = new List<ExchangeRate>
-        {
-            new(new Currency("CZK"), new Currency("JPY"), 15.285m),
-            new(new Currency("CZK"), new Currency("EUR"), 4.503m),
-            new(new Currency("CZK"), new Currency("USD"), 12.750m),
-            new(new Currency("CZK"), new Currency("ARS"), 16.910m),
-            new(new Currency("CZK"), new Currency("XYZ"), 3.342m)
-        };
         var httpResponseMessage = new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.OK,
             Content = new StringContent(JsonSerializer.Serialize(response, jsonSerializerOptions))
         };
 
-        _cnbExchangeRateApi = new CnbExchangeRateApi(GetHttpClientMock(httpResponseMessage), _loggerMock.Object, _mapper);
+        _cnbExchangeRateApi = new CnbExchangeRateApi(GetHttpClientMock(httpResponseMessage), _loggerMock.Object);
 
         var exchangeRates = await _cnbExchangeRateApi.GetExchangeRatesAsync(date, language);
 
         exchangeRates.Should()
             .NotBeNullOrEmpty()
-            .And.AllBeOfType(typeof(ExchangeRate));
-        exchangeRates.Should().BeEquivalentTo(rates);
+            .And.AllBeOfType(typeof(CnbExchangeRateResponseItem));
+        exchangeRates.Should().BeEquivalentTo(response.Rates);
         _httpMessageHandlerMock.Protected().Verify(
            "SendAsync",
            Times.Once(),
@@ -99,7 +84,7 @@ public class CnbExchangeRateApiTest
             StatusCode = statusCode,
             Content = new StringContent(errorMsg)
         };
-        _cnbExchangeRateApi = new CnbExchangeRateApi(GetHttpClientMock(httpResponseMessage), _loggerMock.Object, _mapper);
+        _cnbExchangeRateApi = new CnbExchangeRateApi(GetHttpClientMock(httpResponseMessage), _loggerMock.Object);
 
         var act = async () => await _cnbExchangeRateApi.GetExchangeRatesAsync(new DateOnly(2024, 5, 1), Language.EN);
         

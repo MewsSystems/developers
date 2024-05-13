@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using ExchangeRateUpdater.Domain.Entities;
-using ExchangeRateUpdater.Domain.Enums;
+﻿using ExchangeRateUpdater.Domain.Enums;
 using ExchangeRateUpdater.Infrastructure.Dtos;
 using ExchangeRateUpdater.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -13,20 +11,18 @@ public class CnbExchangeRateApi : IExchangeRateApi
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<CnbExchangeRateApi> _logger;
-    private readonly IMapper _mapper;
     private readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
-    public CnbExchangeRateApi(HttpClient httpClient, ILogger<CnbExchangeRateApi> logger, IMapper mapper)
+    public CnbExchangeRateApi(HttpClient httpClient, ILogger<CnbExchangeRateApi> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
-        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(DateOnly? date, Language? language)
+    public async Task<IEnumerable<CnbExchangeRateResponseItem>> GetExchangeRatesAsync(DateOnly? date, Language? language)
     {
         var requestUri = CreateExchangeRateUri(date, language);
 
@@ -43,10 +39,10 @@ public class CnbExchangeRateApi : IExchangeRateApi
             if (exchangeRates?.Rates is not null && (exchangeRates.Rates?.Any() ?? false))
             {
                 _logger.LogDebug("GetExchangeRates successful: {Response}", content);
-                return _mapper.Map<IEnumerable<ExchangeRate>>(exchangeRates.Rates);
+                return exchangeRates.Rates;
             }
 
-            return Enumerable.Empty<ExchangeRate>();
+            return Enumerable.Empty<CnbExchangeRateResponseItem>();
         }
         catch(HttpRequestException httpRequestException)
         {

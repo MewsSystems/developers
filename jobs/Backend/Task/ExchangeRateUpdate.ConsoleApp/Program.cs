@@ -12,7 +12,6 @@ builder.ConfigureAppConfiguration(x => x.AddJsonFile("appsettings.json"));
 builder.ConfigureServices((context, services) => {
     services.AddApplicationServices();
     services.AddInfrastructureServices(context.Configuration);
-    services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 });
 
 using IHost host = builder.Build();
@@ -53,4 +52,5 @@ static async void RunProgram(IServiceProvider hostProvider)
     }
 
     Console.ReadLine();
+    Environment.Exit(0);
 }

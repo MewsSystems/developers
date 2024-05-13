@@ -9,5 +9,6 @@ public static class Extensions
     public static void AddApplicationServices(this IServiceCollection services)
     {
         services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }
