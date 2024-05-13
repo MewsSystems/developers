@@ -1,11 +1,20 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
+import SearchView from './routes/SearchView';
+import MovieDetailView from './routes/MovieDetailView';
+import { Routes, Route } from 'react-router';
+import { MOVIE_DETAIL_VIEW_ROUTE_PATH, SEARCH_VIEW_ROUTE_PATH } from './constants';
+import LogoLink from './components/Logo/LogoLink';
+import './App.css';
 
 function App() {
-  return (
-		<Typography variant='h2' component='h2' data-test='heading'>
-			Movie Search
-		</Typography>
+	return (
+		<div className='page-container'>
+			<LogoLink />
+
+			<Routes>
+				<Route path={SEARCH_VIEW_ROUTE_PATH} element={<SearchView />} />
+				<Route path={MOVIE_DETAIL_VIEW_ROUTE_PATH} element={<MovieDetailView />} />
+			</Routes>
+		</div>
 	);
 }
 
