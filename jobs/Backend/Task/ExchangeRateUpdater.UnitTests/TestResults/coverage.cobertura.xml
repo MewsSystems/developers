@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.7798" branch-rate="0.7082999999999999" version="1.9" timestamp="1715585261" lines-covered="85" lines-valid="109" branches-covered="17" branches-valid="24">
+  <sources>
+    <source></source>
+  </sources>
+  <packages>
+    <package name="ExchangeRateUpdater.Application" line-rate="0.85" branch-rate="1" complexity="5">
+      <classes>
+        <class name="ExchangeRateUpdater.Application.Services.ExchangeRateProvider" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Application/Services/ExchangeRateProvider.cs" line-rate="0.5714" branch-rate="1" complexity="2">
+          <methods>
+            <method name="SetExchangeRateApi" signature="(ExchangeRateUpdater.Infrastructure.Interfaces.IExchangeRateApi)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="0" branch="False" />
+                <line number="19" hits="0" branch="False" />
+                <line number="20" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(ExchangeRateUpdater.Infrastructure.Interfaces.IExchangeRateApi)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="3" branch="False" />
+                <line number="13" hits="3" branch="False" />
+                <line number="14" hits="3" branch="False" />
+                <line number="15" hits="3" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="18" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="20" hits="0" branch="False" />
+            <line number="12" hits="3" branch="False" />
+            <line number="13" hits="3" branch="False" />
+            <line number="14" hits="3" branch="False" />
+            <line number="15" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Application.Services.ExchangeRateProvider/&lt;&gt;c__DisplayClass3_0" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Application/Services/ExchangeRateProvider.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="&lt;GetExchangeRatesAsync&gt;b__0" signature="(ExchangeRateUpdater.Domain.Entities.ExchangeRate)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="32" hits="62" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="32" hits="62" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Application.Services.ExchangeRateProvider/&lt;GetExchangeRatesAsync&gt;d__3" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Application/Services/ExchangeRateProvider.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="29" hits="3" branch="False" />
+                <line number="30" hits="3" branch="False" />
+                <line number="33" hits="3" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="29" hits="3" branch="False" />
+            <line number="30" hits="3" branch="False" />
+            <line number="33" hits="3" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Application.MappingProfiles.ExchangeRateProfile" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Application/MappingProfiles/ExchangeRateProfile.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="7" branch="False" />
+                <line number="10" hits="7" branch="False" />
+                <line number="11" hits="7" branch="False" />
+                <line number="12" hits="7" branch="False" />
+                <line number="13" hits="7" branch="False" />
+                <line number="14" hits="7" branch="False" />
+                <line number="15" hits="7" branch="False" />
+                <line number="16" hits="7" branch="False" />
+                <line number="17" hits="7" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="9" hits="7" branch="False" />
+            <line number="10" hits="7" branch="False" />
+            <line number="11" hits="7" branch="False" />
+            <line number="12" hits="7" branch="False" />
+            <line number="13" hits="7" branch="False" />
+            <line number="14" hits="7" branch="False" />
+            <line number="15" hits="7" branch="False" />
+            <line number="16" hits="7" branch="False" />
+            <line number="17" hits="7" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="ExchangeRateUpdater.Domain" line-rate="0.6086" branch-rate="1" complexity="9">
+      <classes>
+        <class name="ExchangeRateUpdater.Domain.Entities.Currency" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Domain/Entities/Currency.cs" line-rate="0.625" branch-rate="1" complexity="3">
+          <methods>
+            <method name="get_Code" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="174" branch="False" />
+              </lines>
+            </method>
+            <method name="ToString" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="0" branch="False" />
+                <line number="17" hits="0" branch="False" />
+                <line number="18" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="98" branch="False" />
+                <line number="6" hits="98" branch="False" />
+                <line number="7" hits="98" branch="False" />
+                <line number="8" hits="98" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="13" hits="174" branch="False" />
+            <line number="16" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="18" hits="0" branch="False" />
+            <line number="5" hits="98" branch="False" />
+            <line number="6" hits="98" branch="False" />
+            <line number="7" hits="98" branch="False" />
+            <line number="8" hits="98" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Domain.Entities.ExchangeRate" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdater.Domain/Entities/ExchangeRate.cs" line-rate="0.6" branch-rate="1" complexity="6">
+          <methods>
+            <method name="get_SourceCurrency" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="40" branch="False" />
+              </lines>
+            </method>
+            <method name="get_TargetCurrency" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="87" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Value" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="20" hits="40" branch="False" />
+              </lines>
+            </method>
+            <method name="ToString" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="0" branch="False" />
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="0" branch="False" />
+                <line number="6" hits="0" branch="False" />
+                <line number="7" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(ExchangeRateUpdater.Domain.Entities.Currency,ExchangeRateUpdater.Domain.Entities.Currency,System.Decimal)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="45" branch="False" />
+                <line number="10" hits="45" branch="False" />
+                <line number="11" hits="45" branch="False" />
+                <line number="12" hits="45" branch="False" />
+                <line number="13" hits="45" branch="False" />
+                <line number="14" hits="45" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="16" hits="40" branch="False" />
+            <line number="18" hits="87" branch="False" />
+            <line number="20" hits="40" branch="False" />
+            <line number="23" hits="0" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="5" hits="0" branch="False" />
+            <line number="6" hits="0" branch="False" />
+            <line number="7" hits="0" branch="False" />
+            <line number="9" hits="45" branch="False" />
+            <line number="10" hits="45" branch="False" />
+            <line number="11" hits="45" branch="False" />
+            <line number="12" hits="45" branch="False" />
+            <line number="13" hits="45" branch="False" />
+            <line number="14" hits="45" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="ExchangeRateUpdater.Infrastructure" line-rate="0.8181" branch-rate="0.7082999999999999" complexity="27">
+      <classes>
+        <class name="ExchangeRateUpdater.Infrastructure.Extensions" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdate.Infrastructure/Extensions.cs" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="AddInfrastructureServices" signature="(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="11" hits="0" branch="False" />
+                <line number="12" hits="0" branch="False" />
+                <line number="13" hits="0" branch="False" />
+                <line number="14" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="29" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="15" hits="0" branch="False" />
+                <line number="16" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="False" />
+            <line number="12" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="14" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="29" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="15" hits="0" branch="False" />
+            <line number="16" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Infrastructure.Dtos.CnbExchangeRateResponse" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdate.Infrastructure/Dtos/CnbExchangeRateResponse.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Rates" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="3" hits="24" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="3" hits="24" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Infrastructure.Dtos.CnbExchangeRateResponseDto" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdate.Infrastructure/Dtos/CnbExchangeRateResponseDto.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Amount" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="3" hits="240" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="3" hits="240" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Infrastructure.Apis.CnbExchangeRateApi" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdate.Infrastructure/Apis/CnbExchangeRateApi.cs" line-rate="0.9722" branch-rate="0.9285" complexity="15">
+          <methods>
+            <method name="CreateExchangeRateUri" signature="(System.Nullable`1&lt;System.DateOnly&gt;,System.Nullable`1&lt;ExchangeRateUpdater.Domain.Enums.Language&gt;)" line-rate="1" branch-rate="1" complexity="8">
+              <lines>
+                <line number="64" hits="7" branch="False" />
+                <line number="65" hits="7" branch="False" />
+                <line number="67" hits="7" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="14" type="jump" coverage="100%" />
+                    <condition number="28" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="68" hits="4" branch="False" />
+                <line number="69" hits="4" branch="False" />
+                <line number="70" hits="4" branch="False" />
+                <line number="71" hits="3" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="116" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="72" hits="1" branch="False" />
+                <line number="73" hits="1" branch="False" />
+                <line number="74" hits="1" branch="False" />
+                <line number="75" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="183" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="76" hits="1" branch="False" />
+                <line number="77" hits="1" branch="False" />
+                <line number="78" hits="1" branch="False" />
+                <line number="80" hits="7" branch="False" />
+                <line number="81" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name="CreateHttpRequestExceptionMessage" signature="(System.Net.Http.HttpResponseMessage)" line-rate="0.9" branch-rate="0.8332999999999999" complexity="6">
+              <lines>
+                <line number="84" hits="3" branch="False" />
+                <line number="85" hits="3" branch="True" condition-coverage="83.33% (5/6)">
+                  <conditions>
+                    <condition number="16" type="jump" coverage="100%" />
+                    <condition number="26" type="jump" coverage="100%" />
+                    <condition number="36" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="88" hits="1" branch="False" />
+                <line number="89" hits="1" branch="False" />
+                <line number="92" hits="1" branch="False" />
+                <line number="93" hits="1" branch="False" />
+                <line number="96" hits="1" branch="False" />
+                <line number="97" hits="1" branch="False" />
+                <line number="100" hits="0" branch="False" />
+                <line number="102" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger`1&lt;ExchangeRateUpdater.Infrastructure.Apis.CnbExchangeRateApi&gt;,AutoMapper.IMapper)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="7" branch="False" />
+                <line number="18" hits="7" branch="False" />
+                <line number="19" hits="7" branch="False" />
+                <line number="20" hits="7" branch="False" />
+                <line number="22" hits="7" branch="False" />
+                <line number="23" hits="7" branch="False" />
+                <line number="24" hits="7" branch="False" />
+                <line number="25" hits="7" branch="False" />
+                <line number="26" hits="7" branch="False" />
+                <line number="27" hits="7" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="64" hits="7" branch="False" />
+            <line number="65" hits="7" branch="False" />
+            <line number="67" hits="7" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="14" type="jump" coverage="100%" />
+                <condition number="28" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="68" hits="4" branch="False" />
+            <line number="69" hits="4" branch="False" />
+            <line number="70" hits="4" branch="False" />
+            <line number="71" hits="3" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="116" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="72" hits="1" branch="False" />
+            <line number="73" hits="1" branch="False" />
+            <line number="74" hits="1" branch="False" />
+            <line number="75" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="183" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="76" hits="1" branch="False" />
+            <line number="77" hits="1" branch="False" />
+            <line number="78" hits="1" branch="False" />
+            <line number="80" hits="7" branch="False" />
+            <line number="81" hits="7" branch="False" />
+            <line number="84" hits="3" branch="False" />
+            <line number="85" hits="3" branch="True" condition-coverage="83.33% (5/6)">
+              <conditions>
+                <condition number="16" type="jump" coverage="100%" />
+                <condition number="26" type="jump" coverage="100%" />
+                <condition number="36" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="88" hits="1" branch="False" />
+            <line number="89" hits="1" branch="False" />
+            <line number="92" hits="1" branch="False" />
+            <line number="93" hits="1" branch="False" />
+            <line number="96" hits="1" branch="False" />
+            <line number="97" hits="1" branch="False" />
+            <line number="100" hits="0" branch="False" />
+            <line number="102" hits="3" branch="False" />
+            <line number="17" hits="7" branch="False" />
+            <line number="18" hits="7" branch="False" />
+            <line number="19" hits="7" branch="False" />
+            <line number="20" hits="7" branch="False" />
+            <line number="22" hits="7" branch="False" />
+            <line number="23" hits="7" branch="False" />
+            <line number="24" hits="7" branch="False" />
+            <line number="25" hits="7" branch="False" />
+            <line number="26" hits="7" branch="False" />
+            <line number="27" hits="7" branch="False" />
+          </lines>
+        </class>
+        <class name="ExchangeRateUpdater.Infrastructure.Apis.CnbExchangeRateApi/&lt;GetExchangeRatesAsync&gt;d__5" filename="https://raw.githubusercontent.com/MewsSystems/developers/aa86ba199b43d3ff3941a109d5a1110ed7082f5d/jobs/Backend/Task/ExchangeRateUpdate.Infrastructure/Apis/CnbExchangeRateApi.cs" line-rate="0.7726999999999999" branch-rate="0.5" complexity="8">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.7726999999999999" branch-rate="0.5" complexity="8">
+              <lines>
+                <line number="30" hits="7" branch="False" />
+                <line number="31" hits="7" branch="False" />
+                <line number="33" hits="7" branch="False" />
+                <line number="35" hits="7" branch="False" />
+                <line number="38" hits="7" branch="False" />
+                <line number="39" hits="7" branch="False" />
+                <line number="40" hits="4" branch="False" />
+                <line number="42" hits="4" branch="False" />
+                <line number="43" hits="4" branch="True" condition-coverage="50% (4/8)">
+                  <conditions>
+                    <condition number="436" type="jump" coverage="50%" />
+                    <condition number="447" type="jump" coverage="50%" />
+                    <condition number="461" type="jump" coverage="50%" />
+                    <condition number="479" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="44" hits="4" branch="False" />
+                <line number="45" hits="4" branch="False" />
+                <line number="46" hits="4" branch="False" />
+                <line number="49" hits="0" branch="False" />
+                <line number="51" hits="3" branch="False" />
+                <line number="52" hits="3" branch="False" />
+                <line number="53" hits="3" branch="False" />
+                <line number="54" hits="3" branch="False" />
+                <line number="56" hits="0" branch="False" />
+                <line number="57" hits="0" branch="False" />
+                <line number="58" hits="0" branch="False" />
+                <line number="59" hits="0" branch="False" />
+                <line number="61" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="30" hits="7" branch="False" />
+            <line number="31" hits="7" branch="False" />
+            <line number="33" hits="7" branch="False" />
+            <line number="35" hits="7" branch="False" />
+            <line number="38" hits="7" branch="False" />
+            <line number="39" hits="7" branch="False" />
+            <line number="40" hits="4" branch="False" />
+            <line number="42" hits="4" branch="False" />
+            <line number="43" hits="4" branch="True" condition-coverage="50% (4/8)">
+              <conditions>
+                <condition number="436" type="jump" coverage="50%" />
+                <condition number="447" type="jump" coverage="50%" />
+                <condition number="461" type="jump" coverage="50%" />
+                <condition number="479" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="44" hits="4" branch="False" />
+            <line number="45" hits="4" branch="False" />
+            <line number="46" hits="4" branch="False" />
+            <line number="49" hits="0" branch="False" />
+            <line number="51" hits="3" branch="False" />
+            <line number="52" hits="3" branch="False" />
+            <line number="53" hits="3" branch="False" />
+            <line number="54" hits="3" branch="False" />
+            <line number="56" hits="0" branch="False" />
+            <line number="57" hits="0" branch="False" />
+            <line number="58" hits="0" branch="False" />
+            <line number="59" hits="0" branch="False" />
+            <line number="61" hits="4" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
