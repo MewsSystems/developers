@@ -18,14 +18,25 @@ export default function MovieNavigation({
   if (isFromSearch) {
     return (
       <NavigationHeader>
-        <BackButton onClick={() => router.back()}>Back To Search</BackButton>
+        <BackButton
+          data-testid="MovieDetailsBackButton"
+          onClick={() => router.back()}
+        >
+          Back To Search
+        </BackButton>
       </NavigationHeader>
     );
   }
 
   return (
     <NavigationHeader>
-      <BackButton onClick={() => router.push("/")}>Home</BackButton>;
+      <BackButton
+        data-testid="MovieDetailsBackButton"
+        onClick={() => router.push("/")}
+      >
+        Home
+      </BackButton>
+      ;
     </NavigationHeader>
   );
 }
