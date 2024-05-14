@@ -5,12 +5,15 @@ import formatDate from '../../utilities/DateFormatter';
 
 describe('MovieDetail component', () => {
 	const mockMovie = {
-        id: 1,
+		id: 1,
 		title: 'Test Movie',
 		tagline: 'Test Tagline',
 		release_date: '2022-05-01',
 		runtime: 120,
-		genres: [{ id: 1, name: 'Action' }, { id: 2, name: 'Adventure' }],
+		genres: [
+			{ id: 1, name: 'Action' },
+			{ id: 2, name: 'Adventure' },
+		],
 		overview: 'Test Overview',
 		vote_average: 7.5,
 		vote_count: 1000,

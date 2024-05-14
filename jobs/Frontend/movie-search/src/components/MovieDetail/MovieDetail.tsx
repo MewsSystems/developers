@@ -24,7 +24,7 @@ const MovieDetail = ({ movie }: { movie: Movie }) => {
 	const imagePath = movie.backdrop_path ? movie.backdrop_path : IMAGE_BACKGROUND_UNAVAILABLE_URL;
 
 	return (
-		<Box display='flex' justifyContent='center'>
+		<Box className='movie-detail' display='flex' justifyContent='center'>
 			<Card
 				elevation={0}
 				sx={{

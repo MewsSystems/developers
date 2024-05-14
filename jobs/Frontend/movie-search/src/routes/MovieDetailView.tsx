@@ -5,7 +5,11 @@ import { useMovies } from '../hooks/useMovies';
 const MovieDetailView = () => {
 	const { movie, loading } = useMovies();
 
-	return <>{loading ? <LoadingComponent /> : movie && <MovieDetail movie={movie} />}</>;
+	return (
+		<div className='movie-detail-view'>
+			{loading ? <LoadingComponent /> : movie && <MovieDetail movie={movie} />}
+		</div>
+	);
 };
 
 export default MovieDetailView;

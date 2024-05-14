@@ -27,6 +27,7 @@ const MovieListItem = ({ movie }: { movie: MovieSummary }) => {
 
 	return (
 		<Card
+			className='movie-list-item'
 			elevation={0}
 			sx={{
 				display: 'flex',

@@ -4,7 +4,12 @@ import { SEARCH_VIEW_ROUTE_PATH } from '../../constants';
 
 const LogoLink = () => {
 	return (
-		<Box display='flex' justifyContent='center' alignItems={'center'} margin={'10px'}>
+		<Box
+			className='logo-link'
+			display='flex'
+			justifyContent='center'
+			alignItems={'center'}
+			margin={'10px'}>
 			<Link href={SEARCH_VIEW_ROUTE_PATH} sx={{ textDecoration: 'none' }}>
 				<Card sx={{ padding: '20px', borderRadius: '80px' }}>
 					<Typography variant='h3' component='h3' data-test='heading'>

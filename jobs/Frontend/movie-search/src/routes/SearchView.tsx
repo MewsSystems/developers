@@ -8,9 +8,9 @@ const SearchView = () => {
 	const { movies, query, setQuery, page, setPage, totalPages, loading } = useMovies();
 
 	return (
-		<>
+		<div className='search-view'>
 			<Box display='flex' justifyContent='center'>
-				<SearchBox query={query} onSearch={setQuery} />
+				<SearchBox search-test={'search'} query={query} onSearch={setQuery} />
 			</Box>
 			{loading ? (
 				<LoadingComponent />
@@ -19,7 +19,7 @@ const SearchView = () => {
 					<MovieList movies={movies} page={page} setPage={setPage} totalPages={totalPages} />
 				)
 			)}
-		</>
+		</div>
 	);
 };
 

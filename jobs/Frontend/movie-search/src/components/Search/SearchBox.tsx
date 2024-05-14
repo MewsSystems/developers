@@ -2,16 +2,17 @@ import { Box, TextField } from '@mui/material';
 
 const SearchBox = ({ query, onSearch }: { query: string; onSearch: (term: string) => void }) => {
 	const performSearch = (event: any) => {
-		const value = event.target.value;
-		if (value && value.trim().length === 0) {
+		const term = event.target.value;
+		// remove white space from search term
+		if (term && term.trim().length === 0) {
 			return;
 		}
 
-		onSearch(value);
+		onSearch(term);
 	};
 
 	return (
-		<Box sx={{ width: 600, maxWidth: '100%' }}>
+		<Box className='search-box' sx={{ width: 600, maxWidth: '100%' }}>
 			<TextField
 				label='Search'
 				value={query}

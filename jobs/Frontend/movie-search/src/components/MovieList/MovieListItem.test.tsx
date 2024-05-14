@@ -1,8 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import MovieListItem from './MovieListItem';
-import {
-	OVERVIEW_UNAVAILABLE_TEXT,
-} from '../../constants';
+import { OVERVIEW_UNAVAILABLE_TEXT } from '../../constants';
 
 describe('MovieListItem component', () => {
 	const mockMovie = {
