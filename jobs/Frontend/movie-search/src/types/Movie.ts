@@ -8,10 +8,10 @@ type Movie = {
     backdrop_path: string;
     vote_average: number;
     vote_count: number;
-    genres: [{
+    genres: {
         id: number,
         name: string
-    }],
+    }[],
 }
 
 export default Movie;

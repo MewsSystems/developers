@@ -54,6 +54,7 @@ const MovieDetail = ({ movie }: { movie: Movie }) => {
 					<div>
 						{movie.genres.map((genre) => (
 							<Button
+								key={genre.id}
 								variant='outlined'
 								sx={{
 									borderRadius: '20px',

@@ -1,8 +1,8 @@
 type MovieSummary = {
     id: number;
     title: string;
-    overview: string;
-    poster_path: string;
+    overview: string | undefined;
+    poster_path: string | undefined;
     vote_average: number;
 }
 

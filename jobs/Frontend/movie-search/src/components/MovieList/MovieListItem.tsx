@@ -35,7 +35,9 @@ const MovieListItem = ({ movie }: { movie: MovieSummary }) => {
 			}}>
 			<Link href={detailPath}>
 				<CardMedia
+					component={'img'}
 					image={imagePath}
+					alt={movie.title}
 					sx={{
 						width: '92px',
 						height: '138px',
