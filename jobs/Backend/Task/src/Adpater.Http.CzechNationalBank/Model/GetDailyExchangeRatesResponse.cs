@@ -16,7 +16,7 @@ namespace Adpater.Http.CzechNationalBank.Model
         [JsonPropertyName("country")]
         public string Country { get; set; }
 
-        [JsonPropertyName("curremct")]
+        [JsonPropertyName("currency")]
         public string Currency { get; set; }
 
         [JsonPropertyName("currencyCode")]

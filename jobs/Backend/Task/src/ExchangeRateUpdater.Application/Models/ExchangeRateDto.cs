@@ -1,5 +1,4 @@
 ﻿using Ardalis.GuardClauses;
-using ExchangeRateUpdater.Domain.Entities;
 
 namespace ExchangeRateUpdater.Application.Models
 {

@@ -1,5 +1,4 @@
-﻿using Ardalis.GuardClauses;
-using ExchangeRateUpdater.Domain.DomainExceptions;
+﻿using ExchangeRateUpdater.Domain.DomainExceptions;
 using System;
 
 namespace ExchangeRateUpdater.Domain.Entities
