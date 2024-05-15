@@ -26,27 +26,28 @@ namespace Adpater.Http.CzechNationalBank
             _logger = Guard.Against.Null(logger);
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRates(Currency source, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExchangeRate>> GetDailyExchangeRates(Currency target, CancellationToken cancellationToken)
         {
             try
             {
-                Guard.Against.Null(source);
+                Guard.Against.Null(target);
 
-                if (!source.Equals(DefaultCurrency))
-                    throw new ArgumentException("Czech National Bank API only exchange from CZN");
+                if (!target.Equals(DefaultCurrency))
+                    throw new ArgumentException("Czech National Bank API only exchange to CZN");
 
                 using HttpClient client = _httpClientFactory.CreateClient("CzechNationalBankApi");
 
                 var url = $"{client.BaseAddress}/exrates/daily?lang=EN";
 
-                _logger.LogInformation("Retrieving daily exchange rates from Czech National Bank", url);
+                _logger.LogInformation("Retrieving daily exchange rates from Czech National Bank API", url);
 
                 var exchangeRatesResponse = await client.GetFromJsonAsync<GetDailyExchangeRatesResponse>(url, cancellationToken);
 
-                _logger.LogInformation("{number} exchange rates retrieved from Czech National Bank", exchangeRatesResponse?.Rates.Length);
+                _logger.LogInformation("{number} exchange rates retrieved from Czech National Bank API", exchangeRatesResponse?.Rates.Length);
 
                 var exchangeRates = exchangeRatesResponse?.Rates
-                    .Select(currency => ExchangeRate.Create(DefaultCurrency, Currency.Create(currency.CurrencyCode), currency.Rate));
+                    .Where(exchange => exchange.Amount > 0)
+                    .Select(exchange => ExchangeRate.Create(Currency.Create(exchange.CurrencyCode), target, exchange.Rate / exchange.Amount));
 
                 return exchangeRates ?? Enumerable.Empty<ExchangeRate>();
             }

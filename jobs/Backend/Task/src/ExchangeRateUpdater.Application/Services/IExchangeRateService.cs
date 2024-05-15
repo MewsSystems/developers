@@ -4,6 +4,6 @@ namespace ExchangeRateUpdater.Application.Services
 {
     public interface IExchangeRateService
     {
-        Task<IEnumerable<ExchangeRateDto>> GetDailyExchangeRateForCurrencies(CurrencyDto source, IEnumerable<CurrencyDto> targetCurrencies, CancellationToken cancellationToken);
+        Task<IEnumerable<ExchangeRateDto>> GetDailyExchangeRateForCurrencies(CurrencyDto target, IEnumerable<CurrencyDto> currencies, CancellationToken cancellationToken);
     }
 }

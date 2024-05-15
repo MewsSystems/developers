@@ -22,16 +22,16 @@ namespace ExchangeRateUpdater.Domain.UseCases
         }
 
         
-        public async Task<IEnumerable<ExchangeRate>> ExecuteAsync(Currency source, IEnumerable<Currency> targetCurrencies, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExchangeRate>> ExecuteAsync(Currency target, IEnumerable<Currency> currencies, CancellationToken cancellationToken)
         {
             try
             {
-                Guard.Against.Null(source);
-                Guard.Against.NullOrEmpty(targetCurrencies);
+                Guard.Against.Null(target);
+                Guard.Against.NullOrEmpty(currencies);
 
-                var exchangeRates = await _exchangeRateProvider.GetDailyExchangeRates(source, cancellationToken);
+                var exchangeRates = await _exchangeRateProvider.GetDailyExchangeRates(target, cancellationToken);
 
-                return exchangeRates?.Where(x => targetCurrencies.Any(y => y.Code.Equals(x.TargetCurrency.Code))) ?? Enumerable.Empty<ExchangeRate>();
+                return exchangeRates?.Where(x => currencies.Any(y => y.Code.Equals(x.SourceCurrency.Code))) ?? Enumerable.Empty<ExchangeRate>();
             }
             catch (Exception e)
             {

@@ -19,7 +19,7 @@ namespace ExchangeRateUpdate.Domain.Test.UseCases
         }
 
         [Fact]
-        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenTargetCurrenciesIsNull_ShouldThrowArgumentException()
+        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenCurrenciesAreNull_ShouldThrowArgumentException()
         {
             var sut = new GetDailyExchangeRateUseCase(_exchangeRateProviderMock.Object, _logger.Object);
 
@@ -29,7 +29,7 @@ namespace ExchangeRateUpdate.Domain.Test.UseCases
         }
 
         [Fact]
-        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenTargetCurrenciesIsEmpty_ShouldThrowArgumentException()
+        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenCurrenciesAreEmpty_ShouldThrowArgumentException()
         {
             var sut = new GetDailyExchangeRateUseCase(_exchangeRateProviderMock.Object, _logger.Object);
 
@@ -39,7 +39,7 @@ namespace ExchangeRateUpdate.Domain.Test.UseCases
         }
 
         [Fact]
-        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenSourceCurrencyIsNull_ShouldThrowArgumentException()
+        public void GetDailyExchangeRateUseCase_ExecuteAsync_WhenTargetCurrencyIsNull_ShouldThrowArgumentException()
         {
             var sut = new GetDailyExchangeRateUseCase(_exchangeRateProviderMock.Object, _logger.Object);
 
@@ -66,7 +66,7 @@ namespace ExchangeRateUpdate.Domain.Test.UseCases
         {
             var exchangeRatesResponse = new[]
             {
-                ExchangeRate.Create(Currency.Create("FGH"), Currency.Create("CDE"), 3)
+                ExchangeRate.Create(Currency.Create("CDE"), Currency.Create("FGH"), 3)
             };
 
             _exchangeRateProviderMock.Setup(x => x.GetDailyExchangeRates(It.IsAny<Currency>(), It.IsAny<CancellationToken>()))
@@ -80,8 +80,8 @@ namespace ExchangeRateUpdate.Domain.Test.UseCases
             exchangeRates.Should().HaveCount(1);
             
             var exchangeRate = exchangeRates.FirstOrDefault();
-            exchangeRate.SourceCurrency.Code.Should().Be("FGH");
-            exchangeRate.TargetCurrency.Code.Should().Be("CDE");
+            exchangeRate.SourceCurrency.Code.Should().Be("CDE");
+            exchangeRate.TargetCurrency.Code.Should().Be("FGH");
             exchangeRate.Value.Should().Be(3);
         }
 

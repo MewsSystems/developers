@@ -9,6 +9,6 @@ namespace ExchangeRateUpdater.Domain.Ports
     public interface IExchangeRateProvider
     {
         
-        Task<IEnumerable<ExchangeRate>> GetDailyExchangeRates(Currency from, CancellationToken cancellationToken);
+        Task<IEnumerable<ExchangeRate>> GetDailyExchangeRates(Currency target, CancellationToken cancellationToken);
     }
 }

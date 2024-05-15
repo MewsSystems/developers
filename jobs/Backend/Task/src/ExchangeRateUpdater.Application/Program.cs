@@ -31,7 +31,7 @@ namespace ExchangeRateUpdater.Application
                 var service = services.GetRequiredService<IExchangeRateService>();
 
                 var currenciesToExchange = settings.CurrenciesToExchange.Select(x => new CurrencyDto(x)).ToList();
-                var rates = await service.GetDailyExchangeRateForCurrencies(settings.ExchangeFrom, currenciesToExchange , default(CancellationToken));
+                var rates = await service.GetDailyExchangeRateForCurrencies(settings.ExchangeTo, currenciesToExchange, default(CancellationToken));
 
                 System.Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

@@ -23,7 +23,7 @@ namespace Adpater.Http.CzechNationalBank.Test
         }
 
         [Fact]
-        public void CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_SourceCurrencyNotCZK_ShouldThrowAnArgumentException()
+        public void CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_TargetCurrencyIsNotCZK_ShouldThrowAnArgumentException()
         {
             var sut = new CzechNationalBankExchangeRateProvider(_httpClientFactoryMock.Object, new NullLogger<CzechNationalBankExchangeRateProvider>());
 
@@ -33,7 +33,7 @@ namespace Adpater.Http.CzechNationalBank.Test
         }
 
         [Fact]
-        public void CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_SourceCurrencyNull_ShouldThrowAnArgumentException()
+        public void CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_TargetCurrencyNull_ShouldThrowAnArgumentException()
         {
             var sut = new CzechNationalBankExchangeRateProvider(_httpClientFactoryMock.Object, new NullLogger<CzechNationalBankExchangeRateProvider>());
 
@@ -73,6 +73,34 @@ namespace Adpater.Http.CzechNationalBank.Test
         }
 
         [Fact]
+        public async Task CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_HttpCodeIs200_AndAmountIsZero_ShouldSkipValue()
+        {
+            _fakeHttpMessageHandler.SetReponse(new HttpResponseMessage
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Content = new StringContent(@"{
+                  ""rates"": [
+                    {
+                      ""amount"": 0,
+                      ""country"": ""Brazil"",
+                      ""currency"": ""BRL"",
+                      ""currencyCode"": ""BRL"",
+                      ""order"": 0,
+                      ""rate"": 4,
+                      ""validFor"": ""2024-05-14""
+                    }
+                  ]
+                }")
+            });
+
+            var sut = new CzechNationalBankExchangeRateProvider(_httpClientFactoryMock.Object, new NullLogger<CzechNationalBankExchangeRateProvider>());
+
+            var exchangeRates = await sut.GetDailyExchangeRates(Currency.Create("CZK"), default(CancellationToken));
+
+            exchangeRates.Should().BeEmpty();
+        }
+
+        [Fact]
         public async Task CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_HttpCodeIs200_AndContentValid_ShouldReturnExchangeRateList()
         {
             _fakeHttpMessageHandler.SetReponse(new HttpResponseMessage
@@ -100,13 +128,13 @@ namespace Adpater.Http.CzechNationalBank.Test
             exchangeRates.Should().NotBeNullOrEmpty();
             var exchangeRate = exchangeRates.FirstOrDefault();
 
-            exchangeRate.SourceCurrency.Should().BeEquivalentTo(Currency.Create("CZK"));
-            exchangeRate.TargetCurrency.Should().BeEquivalentTo(Currency.Create("BRL"));
+            exchangeRate.SourceCurrency.Should().BeEquivalentTo(Currency.Create("BRL"));
+            exchangeRate.TargetCurrency.Should().BeEquivalentTo(Currency.Create("CZK"));
             exchangeRate.Value.Should().Be(4);
         }
 
         [Fact]
-        public async Task CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_HttpCodeIs200_AndContentInvalid_ShouldThrowAnException()
+        public void CzechNationalBankExchangeRateProvider_GetDailyExchangeRates_HttpCodeIs200_AndContentInvalid_ShouldThrowAnException()
         {
             _fakeHttpMessageHandler.SetReponse(new HttpResponseMessage
             {
