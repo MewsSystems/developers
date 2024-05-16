@@ -53,7 +53,7 @@ namespace Adpater.Http.CzechNationalBank
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error when retrieving information from Czech National Bank");
+                _logger.LogError(ex, "Error when retrieving information from Czech National Bank API");
                 throw;
             }
         }

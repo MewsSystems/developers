@@ -13,8 +13,8 @@ namespace ExchangeRateUpdater.Application.Services
 
         public ExchangeRateService(IGetDailyExchangeRateUseCase getDailyExchangeRateUseCase, ILogger<ExchangeRateService> logger)
         {
-            _getDailyExchangeRateUseCase = getDailyExchangeRateUseCase;
-            _logger = logger;
+            _getDailyExchangeRateUseCase = Guard.Against.Null(getDailyExchangeRateUseCase);
+            _logger = Guard.Against.Null(logger);
         }
 
         public async Task<IEnumerable<ExchangeRateDto>> GetDailyExchangeRateForCurrencies(CurrencyDto source,
