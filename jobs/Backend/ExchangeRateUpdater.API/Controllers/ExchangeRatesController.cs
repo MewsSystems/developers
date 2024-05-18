@@ -29,30 +29,9 @@ namespace ExchangeRateUpdater.API.Controllers
             // mediator
             var exchangeRates = await _mediator.Send(new GetExchangeRatesQuery 
             {
-                BaseCurrency = request.BaseCurrency,
-                TargetCurrencies = request.TargetCurrencies, // TODO this may not convert
+                TargetCurrencies = (IEnumerable<Application.Models.Currency>)request.TargetCurrencies, // TODO this may not convert
                 RoundingDecimal = request.RoundingDecimal
             });
-
-            /*
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            return View();
-            */
 
             return Ok(exchangeRates);
         }
