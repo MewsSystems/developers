@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates
 
         public async Task<GetExchangeRatesQueryResult> Handle(GetExchangeRatesQuery query, CancellationToken cancellationToken) 
         {
-            var queriedCurrencies = (IEnumerable<Currency>)query.TargetCurrencies;// explicit cast not the best
+            var queriedCurrencies = query.TargetCurrencies;// explicit cast not the best
 
             var exchangeRates = await _exchangeRateProvider.GetExchangeRates(queriedCurrencies); 
 

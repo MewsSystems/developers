@@ -2,7 +2,7 @@
 {
     public class CnbApiClientConfiguration
     {
-        public string ApiBaseUrl { get; set; }
+        public string ApiBaseUri { get; set; }
 
         /*
          * Note: Normally there would be other API specific properties here

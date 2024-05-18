@@ -1,8 +1,9 @@
-﻿namespace ExchangeRateUpdater.API.Models.RequestModels
+﻿using ExchangeRateUpdater.Application.Models;
+
+namespace ExchangeRateUpdater.API.Models.RequestModels
 {
     public class GetExchangeRatesRequest
     {
-        public IEnumerable<string> TargetCurrencies { get; set; }
-        public decimal RoundingDecimal { get; set; } = 2;
+        public IEnumerable<string> Currencies { get; set; }
     }
 }

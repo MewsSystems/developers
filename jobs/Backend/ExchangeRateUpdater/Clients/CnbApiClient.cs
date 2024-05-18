@@ -13,12 +13,12 @@ namespace ExchangeRateUpdater.Clients
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            //_client.BaseAddress = new Uri(_configuration.ApiBaseUrl);
+            _client.BaseAddress = new Uri(_configuration.ApiBaseUri);
         }
 
         public async Task<GetExchangeRatesResponse> GetDailyExchangeRates(DateTime? date, string? lang)
         {
-            var httpResponseMessage = await _client.GetAsync("cnbapi/exrates/daily"); // todo > outsource those URLs
+            var httpResponseMessage = await _client.GetAsync("exrates/daily"); // todo > outsource those URLs
 
             var response = await httpResponseMessage.Content.ReadAsStringAsync();
 

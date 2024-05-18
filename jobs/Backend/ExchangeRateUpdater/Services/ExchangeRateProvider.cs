@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ExchangeRateUpdater.Application.Models;
+﻿using ExchangeRateUpdater.Application.Models;
 using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Interfaces;
 
@@ -20,11 +18,11 @@ namespace ExchangeRateUpdater.Application.Services
         private readonly Currency _baseCurrency;
         private readonly decimal _roundingDecimal;
 
-        public ExchangeRateProvider(ICnbApiClient client, Currency baseCurrency, decimal roundingDecimal)
+        public ExchangeRateProvider(ICnbApiClient client)
         {
             _cnbApiClient = client;
             _baseCurrency = new Currency("CZK"); // TODO to come from config
-            _roundingDecimal = roundingDecimal; // TODO to remove?
+            _roundingDecimal = 2; // TODO to remove?
         }
 
         /// <summary>
