@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.Clients;
+﻿using ExchangeRateUpdater.Clients.CnbApi;
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -16,11 +16,6 @@ namespace ExchangeRateUpdater.ClientFactories
             _configuration = configuration;
             _clientFactory = clientFactory;
             _loggerFactory = loggerFactory;
-        }
-
-        public IExternalApiClient CreateApiClient()
-        {
-            return CreateCnbApiClient();
         }
 
         public ICnbApiClient CreateCnbApiClient()

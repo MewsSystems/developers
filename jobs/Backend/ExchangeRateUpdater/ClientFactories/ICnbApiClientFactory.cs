@@ -2,7 +2,7 @@
 
 namespace ExchangeRateUpdater.ClientFactories
 {
-    public interface ICnbApiClientFactory : IExternalApiClientFactory
+    public interface ICnbApiClientFactory
     {
         ICnbApiClient CreateCnbApiClient();
     }

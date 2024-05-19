@@ -1,19 +1,16 @@
 ﻿using ExchangeRateUpdater.Application.Models;
-using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Interfaces;
 
 namespace ExchangeRateUpdater.Application.Services
 {
-    public interface IExchangeRateProvider 
-    {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<string> currencies);
-    }
-
     public class ExchangeRateProvider : IExchangeRateProvider
     {
         // NOTES: this is going to be an interesting discussion,
-        // how to generalise this client so that the GetExchangeRates method could
+        // how to generalise this so that the GetExchangeRates method could
         // use any client (if we are to extend this to other banks)
+        // OR should this ExchangeRateProvider class be split to
+        // CnbExchangeRateProvider inheriting IExchangeRateProvider (probably this)
+
         private readonly ICnbApiClient _cnbApiClient;
         private readonly Currency _targetCurrency;
 

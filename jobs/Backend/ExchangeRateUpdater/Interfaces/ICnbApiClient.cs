@@ -1,4 +1,4 @@
-﻿using ExchangeRateUpdater.Clients;
+﻿using ExchangeRateUpdater.Clients.CnbApi.DTOs;
 
 namespace ExchangeRateUpdater.Interfaces
 {

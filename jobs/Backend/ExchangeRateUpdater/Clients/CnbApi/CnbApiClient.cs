@@ -1,9 +1,10 @@
-﻿using ExchangeRateUpdater.Configuration;
+﻿using ExchangeRateUpdater.Clients.CnbApi.DTOs;
+using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace ExchangeRateUpdater.Clients
+namespace ExchangeRateUpdater.Clients.CnbApi
 {
     public class CnbApiClient : ICnbApiClient
     {
@@ -23,7 +24,7 @@ namespace ExchangeRateUpdater.Clients
         {
             try
             {
-                var httpResponseMessage = await _client.GetAsync("exrates/daily");
+                var httpResponseMessage = await _client.GetAsync("exraes/daily");
 
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -45,22 +46,11 @@ namespace ExchangeRateUpdater.Clients
                 _logger.LogError(ex, "A HttpRequestException occurred to the CNB API");
                 throw;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Some error occurred connecting to the CNB API");
+                throw;
+            }
         }
-    }
-
-    public class GetExchangeRatesResponseDto
-    {
-        public IEnumerable<ExchangeRateResponseDto> Rates { get; set; }
-    }
-
-    public class ExchangeRateResponseDto
-    {
-        public string ValidFor { get; set; }
-        public int Order { get; set; }
-        public string Country { get; set; }
-        public string Currency { get; set; }
-        public int Amount { get; set; }
-        public string CurrencyCode { get; set; }
-        public decimal Rate { get; set; }
     }
 }

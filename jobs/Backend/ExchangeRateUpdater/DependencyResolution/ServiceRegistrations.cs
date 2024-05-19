@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater.DependencyResolution

@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Interfaces;
 using MediatR;
 
 namespace ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates
