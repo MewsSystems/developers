@@ -22,9 +22,11 @@ namespace ExchangeRateUpdater.Clients.CnbApi
 
         public async Task<GetExchangeRatesResponseDto> GetDailyExchangeRates(DateTime? date, string? lang)
         {
+            var requestUri = "exrates/daily";
+
             try
             {
-                var httpResponseMessage = await _client.GetAsync("exraes/daily");
+                var httpResponseMessage = await _client.GetAsync(requestUri);
 
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
