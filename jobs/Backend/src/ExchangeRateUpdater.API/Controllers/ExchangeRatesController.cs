@@ -1,11 +1,9 @@
 ﻿using ExchangeRateUpdater.API.Models.RequestModels;
 using ExchangeRateUpdater.API.Models.ResponseModels;
 using ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates;
-using ExchangeRateUpdater.Application.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ExchangeRateUpdater.API.Controllers
 {
@@ -27,7 +25,6 @@ namespace ExchangeRateUpdater.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("")]
         public async Task<IActionResult> GetExchangeRates([FromQuery] GetExchangeRatesRequest request)
         {
