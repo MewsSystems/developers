@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 import Home from "./pages/Home";
 import RouterErrorPage from "./RouterErrorPage.tsx";
+import MovieDetails from "./pages/MovieDetails";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: "movies/:movieId",
-        element: <h2>Detail</h2>,
+        element: <MovieDetails />,
       },
     ],
   },
