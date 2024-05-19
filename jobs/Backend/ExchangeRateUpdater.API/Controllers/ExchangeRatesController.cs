@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
+using ExchangeRateUpdater.API.Validators;
 
 namespace ExchangeRateUpdater.API.Controllers
 {
@@ -15,11 +16,13 @@ namespace ExchangeRateUpdater.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<ExchangeRatesController> _logger;
+        private readonly IValidator<GetExchangeRatesRequest> _getRatesValidator;
 
-        public ExchangeRatesController(IMediator mediator, ILogger<ExchangeRatesController> logger)
+        public ExchangeRatesController(IMediator mediator, ILogger<ExchangeRatesController> logger, IValidator<GetExchangeRatesRequest> getRatesValidator)
         {
             _mediator = mediator;
             _logger = logger;
+            _getRatesValidator = getRatesValidator;
         }
 
         [HttpGet]
@@ -29,8 +32,7 @@ namespace ExchangeRateUpdater.API.Controllers
         [Route("")]
         public async Task<IActionResult> GetExchangeRates([FromQuery] GetExchangeRatesRequest request)
         {
-            CurrencyValidator currencyValidator = new CurrencyValidator();
-            ValidationResult result = currencyValidator.Validate(request);
+            var result = await _getRatesValidator.ValidateAsync(request);
 
             if (!result.IsValid)
             {
@@ -55,32 +57,6 @@ namespace ExchangeRateUpdater.API.Controllers
             });
 
             return Ok(exchangeRates);
-        }
-
-        public class CurrencyValidator : AbstractValidator<GetExchangeRatesRequest>
-        {
-            // TODO: to think how to store currencies better
-            private List<string> ValidCurrencies = new List<string>
-            {
-                "CZK",
-                "GBP",
-                "USD"
-            };
-
-            public CurrencyValidator()
-            {
-                RuleForEach(x => x.Currencies).ChildRules(order =>
-                {
-                    order.RuleFor(x => x).Must(MustBeAValidCurrency)
-                    .WithMessage("Invalid currency supplied");
-                });
-            }
-
-            private bool MustBeAValidCurrency(string code)
-            {
-                bool isValid = ValidCurrencies.Contains(code);
-                return isValid;
-            }
         }
     }
 }

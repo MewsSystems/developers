@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.API.Models.RequestModels;
+using ExchangeRateUpdater.API.Validators;
 using ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Application.Models;
 using ExchangeRateUpdater.DependencyResolution;
@@ -15,8 +16,8 @@ services.AddMvc();
 services.AddConfigurationSections(configuration);
 services.AddServiceRegistrations();
 services.AddExternalApiRegistrations();
-// validator services.AddScoped<IValidator<Currency>, CurrencyValidator>();
-services.AddScoped<IValidator<GetExchangeRatesRequest>, CurrencyValidator>();
+
+services.AddScoped<IValidator<GetExchangeRatesRequest>, GetExchangeRatesRequestValidator>();
 services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(GetExchangeRatesQuery).Assembly));
 services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
