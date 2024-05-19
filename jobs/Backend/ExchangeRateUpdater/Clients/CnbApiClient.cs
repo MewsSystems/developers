@@ -1,6 +1,7 @@
-﻿using ExchangeRateUpdater.Application.Models;
-using ExchangeRateUpdater.Configuration;
+﻿using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace ExchangeRateUpdater.Clients
 {
@@ -8,45 +9,51 @@ namespace ExchangeRateUpdater.Clients
     {
         private readonly CnbApiClientConfiguration _configuration;
         private readonly HttpClient _client;
+        private readonly ILogger<CnbApiClient> _logger;
 
-        public CnbApiClient(CnbApiClientConfiguration configuration, HttpClient client)
+        public CnbApiClient(CnbApiClientConfiguration configuration, HttpClient client, ILogger<CnbApiClient> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _client.BaseAddress = new Uri(_configuration.ApiBaseUri);
+            _logger = logger;
         }
 
-        public async Task<GetExchangeRatesResponse> GetDailyExchangeRates(DateTime? date, string? lang)
+        public async Task<GetExchangeRatesResponseDto> GetDailyExchangeRates(DateTime? date, string? lang)
         {
-            var httpResponseMessage = await _client.GetAsync("exrates/daily"); // todo > outsource those URLs
+            try
+            {
+                var httpResponseMessage = await _client.GetAsync("exrates/daily");
 
-            var response = await httpResponseMessage.Content.ReadAsStringAsync();
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"CNB Api returned Status Code: {httpResponseMessage.StatusCode}");
 
-            // TODO: map response to target
-            var asd = new GetExchangeRatesResponse();
+                    throw new Exception("Request did not return success status code.");
+                }
 
-            return asd;
+                var response = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<GetExchangeRatesResponseDto>(response);
+
+                _logger.LogInformation($"CNB Api exrates request successful");
+
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "A HttpRequestException occurred to the CNB API");
+                throw;
+            }
         }
     }
 
-    public class GetExchangeRatesResponse
+    public class GetExchangeRatesResponseDto
     {
-        public IEnumerable<ExchangeRateResponse> ExchangeRates { get; set; }
+        public IEnumerable<ExchangeRateResponseDto> Rates { get; set; }
     }
 
-
-    /*
-     * To represent the objects received from the CNB Api
-     *  
-      "validFor": "2019-05-17",
-      "order": 94,
-      "country": "Australia",
-      "currency": "dollar",
-      "amount": 1,
-      "currencyCode": "AUD",
-      "rate": 15.858
-     */
-    public class ExchangeRateResponse
+    public class ExchangeRateResponseDto
     {
         public string ValidFor { get; set; }
         public int Order { get; set; }

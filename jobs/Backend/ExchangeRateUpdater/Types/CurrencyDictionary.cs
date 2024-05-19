@@ -9,7 +9,7 @@ namespace ExchangeRateUpdater.Types
 
         public static bool ContainsCode(string code) 
         {
-            return _items.ContainsKey(code);
+            return _items.ContainsKey(code.ToUpper());
         }
 
         private static Dictionary<string, Currency> _items = new Dictionary<string, Currency>()
@@ -21,7 +21,20 @@ namespace ExchangeRateUpdater.Types
             ["KES"] = new Currency("KES"),
             ["RUB"] = new Currency("RUB"),
             ["THB"] = new Currency("THB"),
-            ["EUR"] = new Currency("EUR")
+            ["EUR"] = new Currency("EUR"),
+            ["SGD"] = new Currency("SGD"),
+            ["CHF"] = new Currency("CHF"),
+            ["SEK"] = new Currency("SEK"),
+            ["KRW"] = new Currency("KRW"),
+            ["ZAR"] = new Currency("ZAR"),
+            ["PLN"] = new Currency("PLN"),
+            ["RON"] = new Currency("RON"),
+            ["PHP"] = new Currency("PHP"),
+            ["NOK"] = new Currency("NOK"),
+            ["NZD"] = new Currency("NZD"),
+            ["MXN"] = new Currency("MXN"),
+            ["MYR"] = new Currency("MYR"),
+            ["AUD"] = new Currency("AUD")
             /* TODO: Add a definite list of currencies */
         };
     }

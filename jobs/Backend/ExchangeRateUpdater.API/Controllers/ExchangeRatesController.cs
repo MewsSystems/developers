@@ -1,12 +1,11 @@
 ﻿using ExchangeRateUpdater.API.Models.RequestModels;
+using ExchangeRateUpdater.API.Models.ResponseModels;
 using ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Application.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Http;
-using ExchangeRateUpdater.API.Validators;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ExchangeRateUpdater.API.Controllers
 {
@@ -39,24 +38,19 @@ namespace ExchangeRateUpdater.API.Controllers
                 return BadRequest("Invalid Currency Supplied");
             }
 
-            // TODO: outsource this conversion
-            var targetCurrencies = new List<Currency>();
-
-            foreach (string c in request.Currencies) 
+            var queryResult = await _mediator.Send(new GetExchangeRatesQuery 
             {
-                var currency = new Currency(c);
-
-                targetCurrencies.Add(currency);
-            }
-
-            // duplicate currencies ? > remove
-
-            var exchangeRates = await _mediator.Send(new GetExchangeRatesQuery 
-            {
-                TargetCurrencies = targetCurrencies
+                Currencies = request.Currencies.Select(x => x.ToUpper()).ToList()
             });
 
-            return Ok(exchangeRates);
+            var response = new GetExchangeRatesResponse()
+            {
+                TargetCurrency = "CZK",
+                Date = DateTime.Today.ToString("d"),
+                ExchangeRates = queryResult.ExchangeRates.Select(x => x.ToString()).ToList()
+            };
+
+            return Ok(response);
         }
     }
 }

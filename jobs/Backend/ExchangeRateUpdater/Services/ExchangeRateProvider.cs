@@ -6,23 +6,21 @@ namespace ExchangeRateUpdater.Application.Services
 {
     public interface IExchangeRateProvider 
     {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<string> currencies);
     }
 
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        // this is going to be an interesting discussion,
+        // NOTES: this is going to be an interesting discussion,
         // how to generalise this client so that the GetExchangeRates method could
-        // use any client (if we are to extend this to other banks
+        // use any client (if we are to extend this to other banks)
         private readonly ICnbApiClient _cnbApiClient;
-        private readonly Currency _baseCurrency;
-        private readonly decimal _roundingDecimal;
+        private readonly Currency _targetCurrency;
 
         public ExchangeRateProvider(ICnbApiClient client)
         {
             _cnbApiClient = client;
-            _baseCurrency = new Currency("CZK"); // TODO to come from config
-            _roundingDecimal = 2; // TODO to remove?
+            _targetCurrency = new Currency("CZK"); // TODO to come from config?
         }
 
         /// <summary>
@@ -31,41 +29,16 @@ namespace ExchangeRateUpdater.Application.Services
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<string> currencies)
         {
-            var requestedCurrencyCodes = GetCurrencyCodesAsString(currencies);
-
-            // call external API
             var apiResponse = await _cnbApiClient.GetDailyExchangeRates(null, null);
 
-            var apiExchangeRates = apiResponse.ExchangeRates;
-
-            var exchangeRates = new List<ExchangeRate>();
-
-            foreach (ExchangeRateResponse rate in apiExchangeRates) 
-            {
-                // if currency code matches with requested curerncy, include it
-                if (requestedCurrencyCodes.Contains(rate.CurrencyCode)) 
-                {
-                    var exchangeRate = new ExchangeRate(_baseCurrency, new Currency(rate.CurrencyCode), rate.Rate);
-
-                    exchangeRates.Add(exchangeRate);
-                }
-            }
+            var exchangeRates = apiResponse.Rates
+                .Where(exRate => currencies.Select(c => c).Contains(exRate.CurrencyCode.ToUpper()))
+                .Select(exRate => new ExchangeRate(new Currency(exRate.CurrencyCode), _targetCurrency, (exRate.Rate / exRate.Amount)))
+                .ToList();
 
             return exchangeRates;
-        }
-
-        private IEnumerable<string> GetCurrencyCodesAsString(IEnumerable<Currency> currencies) 
-        {
-            var currencyCodes = new List<string>();
-
-            foreach (Currency c in currencies) 
-            {
-                currencyCodes.Add(c.ToString());
-            }
-
-            return currencyCodes;
         }
     }
 }

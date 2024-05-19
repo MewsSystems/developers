@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Clients;
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.ClientFactories
 {
@@ -8,17 +9,25 @@ namespace ExchangeRateUpdater.ClientFactories
     {
         private readonly CnbApiClientConfiguration _configuration;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public CnbApiClientFactory(CnbApiClientConfiguration configuration, IHttpClientFactory clientFactory)
+        public CnbApiClientFactory(CnbApiClientConfiguration configuration, IHttpClientFactory clientFactory, ILoggerFactory loggerFactory)
         {
             _configuration = configuration;
-            _clientFactory = clientFactory; 
+            _clientFactory = clientFactory;
+            _loggerFactory = loggerFactory;
         }
 
-        public ICnbApiClient CreateClient()
+        public IExternalApiClient CreateApiClient()
+        {
+            return CreateCnbApiClient();
+        }
+
+        public ICnbApiClient CreateCnbApiClient()
         {
             var httpClient = _clientFactory.CreateClient();
-            return new CnbApiClient(_configuration, httpClient);
+            ILogger<CnbApiClient> logger = _loggerFactory.CreateLogger<CnbApiClient>();
+            return new CnbApiClient(_configuration, httpClient, logger);
         }
     }
 }

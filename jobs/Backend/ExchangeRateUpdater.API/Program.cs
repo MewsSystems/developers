@@ -1,11 +1,8 @@
 using ExchangeRateUpdater.API.Models.RequestModels;
 using ExchangeRateUpdater.API.Validators;
 using ExchangeRateUpdater.Application.ExchangeRates.Queries.GetExchangeRates;
-using ExchangeRateUpdater.Application.Models;
 using ExchangeRateUpdater.DependencyResolution;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
-using static ExchangeRateUpdater.API.Controllers.ExchangeRatesController;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -20,7 +17,7 @@ services.AddExternalApiRegistrations();
 services.AddScoped<IValidator<GetExchangeRatesRequest>, GetExchangeRatesRequestValidator>();
 services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(GetExchangeRatesQuery).Assembly));
 services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 

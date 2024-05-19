@@ -1,14 +1,13 @@
 ﻿using ExchangeRateUpdater.Clients;
-using ExchangeRateUpdater.Configuration;
 
 namespace ExchangeRateUpdater.Interfaces
 {
-    public interface ICnbApiClient
+    public interface ICnbApiClient : IExternalApiClient
     {
         /*
-         * Should be a representation of ALL the possible operations that one can do
+         * TODO: Should be a representation of ALL the possible operations that one can do
          * on the CNB Api: https://api.cnb.cz/cnbapi/swagger-ui.html#/
          */
-        Task<GetExchangeRatesResponse> GetDailyExchangeRates(DateTime? date, string? lang);
+        Task<GetExchangeRatesResponseDto> GetDailyExchangeRates(DateTime? date, string? lang);
     }
 }
