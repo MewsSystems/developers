@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Application.Test
         }
 
         [Fact]
-        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_SourceCurrencyNull_ShoudThrowArgumentException()
+        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_TargetCurrencyNull_ShoudThrowArgumentException()
         {
             var sut = new ExchangeRateService(_getDailyExchangeRateUseCaseMock.Object, new NullLogger<ExchangeRateService>());
 
@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.Application.Test
         }
 
         [Fact]
-        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_TargetCurrencyNull_ShoudThrowArgumentException()
+        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_SoruceCurrenciesNull_ShoudThrowArgumentException()
         {
             var sut = new ExchangeRateService(_getDailyExchangeRateUseCaseMock.Object, new NullLogger<ExchangeRateService>());
 
@@ -38,7 +38,7 @@ namespace ExchangeRateUpdater.Application.Test
         }
 
         [Fact]
-        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_TargetCurrencyEmpty_ShoudThrowArgumentException()
+        public void ExchangeRateService_GetDailyExchangeRateForCurrencies_SourceCurrencyEmpty_ShoudThrowArgumentException()
         {
             var sut = new ExchangeRateService(_getDailyExchangeRateUseCaseMock.Object, new NullLogger<ExchangeRateService>());
 
