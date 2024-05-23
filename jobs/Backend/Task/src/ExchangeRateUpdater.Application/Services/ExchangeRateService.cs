@@ -17,20 +17,20 @@ namespace ExchangeRateUpdater.Application.Services
             _logger = Guard.Against.Null(logger);
         }
 
-        public async Task<IEnumerable<ExchangeRateDto>> GetDailyExchangeRateForCurrencies(CurrencyDto source,
-                                                                                    IEnumerable<CurrencyDto> targetCurrencies,
+        public async Task<IEnumerable<ExchangeRateDto>> GetDailyExchangeRateForCurrencies(CurrencyDto target,
+                                                                                    IEnumerable<CurrencyDto> currencies,
                                                                                     CancellationToken cancellationToken)
         {
             try
             {
-                Guard.Against.Null(source);
-                Guard.Against.NullOrEmpty(targetCurrencies);
+                Guard.Against.Null(target);
+                Guard.Against.NullOrEmpty(currencies);
 
-                _logger.LogInformation("Retrieving exchange rates from {source} to {targets}", source, targetCurrencies);
-                var sourceCurrency = source.ToDomain();
-                var targets = targetCurrencies.Select(currency => currency.ToDomain());
+                _logger.LogInformation("Retrieving exchange rates from {currencies} to {target}", currencies, target);
+                var targetCurrency = target.ToDomain();
+                var currenciesToExchange = currencies.Select(currency => currency.ToDomain());
 
-                var exchangeRates = await _getDailyExchangeRateUseCase.ExecuteAsync(sourceCurrency, targets, cancellationToken);
+                var exchangeRates = await _getDailyExchangeRateUseCase.ExecuteAsync(targetCurrency, currenciesToExchange, cancellationToken);
 
                 return exchangeRates?.Select(rate => rate.ToDto()) ?? Enumerable.Empty<ExchangeRateDto>();
 
