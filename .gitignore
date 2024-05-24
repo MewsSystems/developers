@@ -22,3 +22,4 @@ node_modules
 bower_components
 npm-debug.log
 *.vsidx
+/jobs/Backend/Task/.vs/ExchangeRates/v17/TestStore/0
