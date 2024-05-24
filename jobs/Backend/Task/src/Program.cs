@@ -37,7 +37,6 @@ namespace ExchangeRateUpdater
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
-
             var hostBuilder = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
                 {
