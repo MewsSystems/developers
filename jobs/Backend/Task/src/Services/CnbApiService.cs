@@ -1,9 +1,5 @@
-using System.Net.Http;
-using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Newtonsoft.Json;
 using ExchangeRateUpdater.Models;
+using Newtonsoft.Json;
 
 namespace ExchangeRateUpdater.Services
 {

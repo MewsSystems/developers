@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using ExchangeRateUpdater.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Services
 {

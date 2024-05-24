@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
-using ExchangeRateUpdater.Models;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Http;
-using System.IO;
 
 namespace ExchangeRateUpdater
 {
@@ -32,38 +28,38 @@ namespace ExchangeRateUpdater
             var host = CreateHostBuilder(args).Build();
 
             var rates = host.Services.GetService<IExchangeRateProvider>().GetExchangeRates(currencies, System.Threading.CancellationToken.None).GetAwaiter().GetResult();
-        
+
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());
             }
         }
 
-    private static IHostBuilder CreateHostBuilder(string[] args)
-    {
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
 
-        var hostBuilder = Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, builder) =>
-            {
-                builder.SetBasePath(Directory.GetCurrentDirectory());
-            })
-            .ConfigureServices((context, services) =>
-            {
-                // Remove httpClient default Console.WriteLine behaviour
-                services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
-
-                // Services
-                services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
-                services.AddSingleton<ICnbApiService, CnbApiService>();
-
-                // CnbHttpClient
-                services.AddHttpClient("CnbClient", x => 
+            var hostBuilder = Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, builder) =>
                 {
-                    x.BaseAddress = new Uri("https://api.cnb.cz");
-                });
-            });
+                    builder.SetBasePath(Directory.GetCurrentDirectory());
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    // Remove httpClient default Console.WriteLine behaviour
+                    services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
-        return hostBuilder;
-    }
+                    // Services
+                    services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+                    services.AddSingleton<ICnbApiService, CnbApiService>();
+
+                    // CnbHttpClient
+                    services.AddHttpClient("CnbClient", x =>
+                    {
+                        x.BaseAddress = new Uri("https://api.cnb.cz");
+                    });
+                });
+
+            return hostBuilder;
+        }
     }
 }
