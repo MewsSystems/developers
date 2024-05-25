@@ -16,8 +16,8 @@ public class ExchangeRateUpdaterTests
     public ExchangeRateUpdaterTests()
     {
         _cnbApiServiceMock = new Mock<ICnbApiService>();
+        
         _currenciesOptionsMock = new Mock<IOptionsMonitor<CurrenciesOptions>>();
-
         _currenciesOptionsMock
             .Setup(x => x.CurrentValue)
             .Returns(new CurrenciesOptions

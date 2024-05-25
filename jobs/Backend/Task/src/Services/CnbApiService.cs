@@ -1,5 +1,7 @@
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Options;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Services
 {
@@ -11,7 +13,7 @@ namespace ExchangeRateUpdater.Services
 
         public CnbApiService(IHttpClientFactory clientFactory)
         {
-            _client = clientFactory.CreateClient("CnbClient");
+            _client = clientFactory.CreateClient(CnbApiOptions.ClientName);
         }
 
         public async Task<CnbRateDailyResponse> GetExchangeRate(CancellationToken cancellationToken)

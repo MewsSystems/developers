@@ -42,16 +42,19 @@ namespace ExchangeRateUpdater
                     services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
 
                     // Options
-                    services.Configure<CurrenciesOptions>(_configuration.GetSection(CurrenciesOptions.CurrenciesOptionsName));
+                    services.Configure<CurrenciesOptions>(_configuration.GetSection(CurrenciesOptions.OptionsName));
+                    
+                    var cnbApiOptions = new CnbApiOptions();
+                    _configuration.GetSection(CnbApiOptions.OptionsName).Bind(cnbApiOptions);
 
                     // Services
                     services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
                     services.AddSingleton<ICnbApiService, CnbApiService>();
 
                     // CnbHttpClient
-                    services.AddHttpClient("CnbClient", x =>
+                    services.AddHttpClient(CnbApiOptions.ClientName, x =>
                     {
-                        x.BaseAddress = new Uri(_configuration["CnbApi:BaseAddress"]);
+                        x.BaseAddress = new Uri(cnbApiOptions.BaseAddress);
                     });
                 });
 
