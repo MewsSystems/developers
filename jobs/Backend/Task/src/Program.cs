@@ -11,24 +11,11 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
-            var rates = host.Services.GetService<IExchangeRateProvider>().GetExchangeRates(currencies, System.Threading.CancellationToken.None).GetAwaiter().GetResult();
+            var rates = host.Services.GetService<IExchangeRateProvider>().GetExchangeRates(System.Threading.CancellationToken.None).GetAwaiter().GetResult();
 
             foreach (var rate in rates)
             {

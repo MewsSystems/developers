@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater.Services
             _currenciesOptions = currenciesOptions.CurrentValue;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

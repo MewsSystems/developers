@@ -24,7 +24,7 @@ namespace ExchangeRateUpdater.Services
                 RequestUri = new Uri(GET_RATES_ENDPOINT, UriKind.Relative)
             };
 
-            var httpResponse = await _client.SendAsync(httpRequest);
+            var httpResponse = await _client.SendAsync(httpRequest, cancellationToken);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -34,7 +34,7 @@ namespace ExchangeRateUpdater.Services
                 };
             }
 
-            var response = await httpResponse.Content.ReadAsStringAsync();
+            var response = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
 
             var cnbRates = JsonConvert.DeserializeObject<CnbRateDailyResponse>(response);
 
