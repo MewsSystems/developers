@@ -1,5 +1,7 @@
 ﻿using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Options;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -8,12 +10,26 @@ namespace ExchangeRateUpdaterTest.Services;
 public class ExchangeRateUpdaterTests
 {
     private readonly Mock<ICnbApiService> _cnbApiServiceMock;
+    private readonly Mock<IOptionsMonitor<CurrenciesOptions>> _currenciesOptionsMock;
     private readonly ExchangeRateProvider _exchangeRateProvider;
 
     public ExchangeRateUpdaterTests()
     {
         _cnbApiServiceMock = new Mock<ICnbApiService>();
-        _exchangeRateProvider = new ExchangeRateProvider(_cnbApiServiceMock.Object);
+        _currenciesOptionsMock = new Mock<IOptionsMonitor<CurrenciesOptions>>();
+
+        _currenciesOptionsMock
+            .Setup(x => x.CurrentValue)
+            .Returns(new CurrenciesOptions
+            {
+                Currencies = new List<string>
+                {
+                    "USD", 
+                    "EUR"
+                }
+            });
+
+        _exchangeRateProvider = new ExchangeRateProvider(_cnbApiServiceMock.Object, _currenciesOptionsMock.Object);
     }
 
 
@@ -32,18 +48,12 @@ public class ExchangeRateUpdaterTests
             }
         };
 
-        var currencies = new List<Currency>
-        {
-            new Currency("USD"),
-            new Currency("EUR")
-        };
-
         _cnbApiServiceMock
             .Setup(service => service.GetExchangeRate(cancellationToken))
             .ReturnsAsync(cnbRates);
 
         // Act
-        var result = await _exchangeRateProvider.GetExchangeRates(currencies, cancellationToken);
+        var result = await _exchangeRateProvider.GetExchangeRates(cancellationToken);
 
         // Assert
         var exchangeRates = result.ToList();
@@ -67,18 +77,12 @@ public class ExchangeRateUpdaterTests
             }
         };
 
-        var currencies = new List<Currency>
-        {
-            new Currency("USD"),
-            new Currency("EUR")
-        };
-
         _cnbApiServiceMock
             .Setup(service => service.GetExchangeRate(cancellationToken))
             .ReturnsAsync(cnbRates);
 
         // Act
-        var result = await _exchangeRateProvider.GetExchangeRates(currencies, cancellationToken);
+        var result = await _exchangeRateProvider.GetExchangeRates(cancellationToken);
 
         // Assert
         var exchangeRates = result.ToList();

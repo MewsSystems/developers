@@ -30,7 +30,7 @@ namespace ExchangeRateUpdater.Services
             {
                 return new CnbRateDailyResponse
                 {
-                    Rates = new System.Collections.Generic.List<CnbRate>()
+                    Rates = new List<CnbRate>()
                 };
             }
 
