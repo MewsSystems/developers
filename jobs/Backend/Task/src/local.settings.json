@@ -1,0 +1,5 @@
+{
+    "CnbApi": {
+        "BaseAddress": "https://api.cnb.cz"
+    }
+}

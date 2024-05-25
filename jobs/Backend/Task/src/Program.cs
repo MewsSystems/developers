@@ -37,6 +37,12 @@ namespace ExchangeRateUpdater
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
+            var _configuration = new ConfigurationBuilder()
+                .AddJsonFile("local.settings.json",
+                    optional: true,
+                    reloadOnChange: true)
+                .Build();
+
             var hostBuilder = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) =>
                 {
@@ -54,7 +60,7 @@ namespace ExchangeRateUpdater
                     // CnbHttpClient
                     services.AddHttpClient("CnbClient", x =>
                     {
-                        x.BaseAddress = new Uri("https://api.cnb.cz");
+                        x.BaseAddress = new Uri(_configuration["CnbApi:BaseAddress"]);
                     });
                 });
 
