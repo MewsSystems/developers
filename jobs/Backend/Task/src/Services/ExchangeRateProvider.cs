@@ -1,4 +1,6 @@
 ﻿using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Options;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Services
 {
@@ -12,12 +14,15 @@ namespace ExchangeRateUpdater.Services
         /// </summary>
 
         private readonly ICnbApiService _cnbApiService;
+        private readonly CurrenciesOptions _currenciesOptions;
 
         public ExchangeRateProvider(
-            ICnbApiService cnbApiService
+            ICnbApiService cnbApiService,
+            IOptionsMonitor<CurrenciesOptions> currenciesOptions
         )
         {
             _cnbApiService = cnbApiService;
+            _currenciesOptions = currenciesOptions.CurrentValue;
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken)
@@ -29,16 +34,20 @@ namespace ExchangeRateUpdater.Services
 
             var result = new List<ExchangeRate>();
 
-            foreach (var currency in currencies)
+            foreach (var currencyCode in _currenciesOptions.Currencies)
             {
-                var rate = cnbRates.Rates.FirstOrDefault(x => x.CurrencyCode.Equals(currency.Code));
+                var currencyTarget = new Currency(currencyCode);
+
+                var rate = cnbRates.Rates.FirstOrDefault(x => x.CurrencyCode.Equals(currencyTarget.Code));
 
                 if (rate == null)
                 {
                     continue;
                 }
 
-                var exchangeRate = new ExchangeRate(new Currency("CZK"), currency, rate.Rate/rate.Amount);
+                var value = rate.Rate / rate.Amount;
+
+                var exchangeRate = new ExchangeRate(new Currency("CZK"), currencyTarget, value);
 
                 result.Add(exchangeRate);
             }

@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Options;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +53,9 @@ namespace ExchangeRateUpdater
                 {
                     // Remove httpClient default Console.WriteLine behaviour
                     services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
+
+                    // Options
+                    services.Configure<CurrenciesOptions>(_configuration.GetSection(CurrenciesOptions.CurrenciesOptionsName));
 
                     // Services
                     services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();

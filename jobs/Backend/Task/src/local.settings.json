@@ -1,5 +1,18 @@
 {
     "CnbApi": {
         "BaseAddress": "https://api.cnb.cz"
+    },
+    "CurrenciesOptions": {
+        "Currencies": [
+            "USD",
+            "EUR",
+            "CZK",
+            "JPY",
+            "KES",
+            "RUB",
+            "THB",
+            "TRY",
+            "XYZ"
+        ]
     }
 }
