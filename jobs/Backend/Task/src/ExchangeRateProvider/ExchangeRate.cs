@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater;
+namespace ExchangeRateProvider;
 
 public class ExchangeRate
 {

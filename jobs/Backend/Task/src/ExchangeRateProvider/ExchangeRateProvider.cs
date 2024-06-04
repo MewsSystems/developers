@@ -1,8 +1,8 @@
-using System.Text.Json;
+using ExchangeRateProvider.Http;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateProvider;
 
-public class ExchangeRateProvider(HttpClient httpClient): IExchangeRateProvider
+public class ExchangeRateProvider(IExchangeRateClient exchangeRateClient): IExchangeRateProvider
 {
     private const string TargetCurrencyCode = "CZK";
 
@@ -14,31 +14,14 @@ public class ExchangeRateProvider(HttpClient httpClient): IExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "cnbapi/exrates/daily");
-        var response = await httpClient.SendAsync(request);
-
-        response.EnsureSuccessStatusCode();
-
-        var stream = await response.Content.ReadAsStreamAsync();
-
-        var exRatesResponse = await JsonSerializer.DeserializeAsync<ExchangeRatesDailyResponse>(
-            stream,
-			new JsonSerializerOptions
-			{
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-
-        if (exRatesResponse?.Rates is null) return [];
+        var rates = await exchangeRateClient.GetDailyExchangeRates();
         
-        return exRatesResponse.Rates
-            .Where(r =>
-                r.CurrencyCode != null &&
-                r.Rate != null &&
-                r.Amount != null)
+        return rates
+            .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))
             .Select(r =>
                 new ExchangeRate(
                     new Currency(r.CurrencyCode!),
                     new Currency(TargetCurrencyCode),
-					decimal.Divide(r.Rate!.Value, r.Amount!.Value)));
-	}
+                    decimal.Divide(r.Rate!.Value, r.Amount!.Value)));
+    }
 }

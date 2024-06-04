@@ -1,4 +1,6 @@
-﻿public class CurrencyRate
+﻿namespace ExchangeRateProvider.Http;
+
+public class CurrencyRate
 {
 	public string? ValidFor { get; set; }
 	public int? Order { get; set; }
@@ -11,5 +13,5 @@
 
 public class ExchangeRatesDailyResponse
 {
-	public IEnumerable<CurrencyRate>? Rates { get; set; }
+	public List<CurrencyRate>? Rates { get; set; }
 }
