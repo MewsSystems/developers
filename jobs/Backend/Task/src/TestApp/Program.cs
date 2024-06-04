@@ -2,15 +2,11 @@ using ExchangeRateUpdater;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 
-IEnumerable<Currency> currencies = new[]
-{
-    new Currency("USD"),
+IEnumerable<Currency> currencies =
+[
+	new Currency("USD"),
     new Currency("EUR"),
     new Currency("CZK"),
     new Currency("JPY"),
@@ -19,7 +15,7 @@ IEnumerable<Currency> currencies = new[]
     new Currency("THB"),
     new Currency("TRY"),
     new Currency("XYZ")
-};
+];
 
 
 var configBuilder = new ConfigurationBuilder();
@@ -32,7 +28,9 @@ var builder = Host.CreateDefaultBuilder(args)
     {
         services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>(client =>
         {
-            client.BaseAddress = new Uri(context.Configuration["BaseUrl"]);
+            var baseUrl = context.Configuration["BaseUrl"] ?? throw new Exception("BaseUrl configuration not found.");
+
+			client.BaseAddress = new Uri(baseUrl);
         });
     });
 
