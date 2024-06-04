@@ -47,7 +47,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
 
             if (freshData.Any())
             {
-                await _repository.SaveExchangeRates(datasetKey, new ExchangeRateDataset(request.Date, freshData));
+                await _repository.SaveExchangeRates(datasetKey, new ExchangeRateDataset(request.Date, freshData, ExchangeRateDataset.Channel.Direct));
             }
             else
             {
@@ -72,14 +72,16 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
                 foreach (var language in supportedLanguages)
                 {
                     var key = PrepareDatasetKey(currency, language, date);
+                    var cachedData = await _repository.GetExchangeRates(key);
 
-                    if (!await _repository.HasExchangeRates(key))
+                    // Update only if the data is not already cached or if the cached data is not from the worker channel
+                    if (cachedData == null || cachedData.DataChannel != ExchangeRateDataset.Channel.Worker)
                     {
                         var freshData = await exchangeRateProvider.GetDailyExchangeRates(date, language, cancellationToken);
 
                         if (freshData.Any())
                         {
-                            await _repository.SaveExchangeRates(key, new ExchangeRateDataset(date, freshData));
+                            await _repository.SaveExchangeRates(key, new ExchangeRateDataset(date, freshData, ExchangeRateDataset.Channel.Worker));
                         }
                         else
                         {

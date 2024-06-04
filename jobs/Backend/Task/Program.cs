@@ -11,6 +11,7 @@ using System;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.Extensions.Logging;
+using ExchangeRateUpdater;
 
 internal class Program
 {
@@ -36,6 +37,7 @@ internal class Program
         });
         builder.Services.AddHttpClient();
         builder.Services.Configure<CzechNationalBankConfig>(configuration.GetSection("CzechNationalBank"));
+        builder.Services.Configure<DefaultExchangeRateProviderConfig>(configuration.GetSection("DefaultExchangeRateProvider"));
         builder.Services.AddTransient<ICzechNationalBankClient, CzechNationalBankClient>();
         builder.Services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
         builder.Services.AddTransient<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();

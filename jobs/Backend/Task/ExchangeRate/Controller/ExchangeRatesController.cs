@@ -52,6 +52,11 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
             {
                 return BadRequest(new ErrorResponse("Invalid date format. Please use 'yyyy-MM-dd'."));
             }
+            // Validate parsedDate is not later than today
+            else if (parsedDate > DateOnly.FromDateTime(DateTime.Today))
+            {
+                return BadRequest(new ErrorResponse("Invalid date. No exchange rate exists for a future date."));
+            }
 
             // Validate the language code
             if (!Enum.TryParse<Language>(language, true, out var parsedLanguage))
@@ -101,7 +106,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
             catch (System.Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while fetching daily exchange rates.");
-                return StatusCode(500, "Internal server error. Please try again later.");
+                return StatusCode(500, new ErrorResponse(ex.Message));
             }
         }
     }
