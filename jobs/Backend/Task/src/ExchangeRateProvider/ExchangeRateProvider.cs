@@ -12,9 +12,9 @@ public class ExchangeRateProvider(IExchangeRateClient exchangeRateClient): IExch
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
     {
-        var rates = await exchangeRateClient.GetDailyExchangeRates();
+	    var rates = await exchangeRateClient.GetDailyExchangeRates(cancellationToken).ConfigureAwait(false);
         
         return rates
             .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))

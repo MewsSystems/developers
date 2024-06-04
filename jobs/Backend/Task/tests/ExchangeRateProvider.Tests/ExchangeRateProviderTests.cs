@@ -13,7 +13,7 @@ namespace ExchangeRateProvider.Tests
 			var exchangeRateClient = new Mock<IExchangeRateClient>();
 
 			exchangeRateClient.Setup(client =>
-				client.GetDailyExchangeRates())
+				client.GetDailyExchangeRates(default))
 					.Returns(() =>
 					{
 						return Task.FromResult(
@@ -52,7 +52,7 @@ namespace ExchangeRateProvider.Tests
 			var exchangeRateClient = new Mock<IExchangeRateClient>();
 
 			exchangeRateClient.Setup(client =>
-					client.GetDailyExchangeRates())
+					client.GetDailyExchangeRates(default))
 				.Returns(() =>
 				{
 					return Task.FromResult(

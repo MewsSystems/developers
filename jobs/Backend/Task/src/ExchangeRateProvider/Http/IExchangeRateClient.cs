@@ -3,5 +3,5 @@ namespace ExchangeRateProvider.Http;
 
 public interface IExchangeRateClient
 {
-    Task<IEnumerable<CurrencyRate>> GetDailyExchangeRates();
+    Task<IEnumerable<CurrencyRate>> GetDailyExchangeRates(CancellationToken cancellationToken = default);
 }

@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
 
-
 var configBuilder = new ConfigurationBuilder();
 configBuilder.SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
@@ -46,10 +45,13 @@ IEnumerable<Currency> currencies =
 	new Currency("XYZ")
 ];
 
+var cancellationToken = new CancellationTokenSource();
+
+
 try
 {
     var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-    var rates = await provider.GetExchangeRates(currencies);
+    var rates = await provider.GetExchangeRates(currencies, cancellationToken.Token).ConfigureAwait(false);
 
     var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
     Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");

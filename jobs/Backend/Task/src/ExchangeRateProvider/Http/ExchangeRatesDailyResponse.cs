@@ -13,5 +13,5 @@ public class CurrencyRate
 
 public class ExchangeRatesDailyResponse
 {
-	public List<CurrencyRate>? Rates { get; set; }
+	public IEnumerable<CurrencyRate>? Rates { get; set; }
 }
