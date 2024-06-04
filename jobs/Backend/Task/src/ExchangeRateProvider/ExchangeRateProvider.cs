@@ -22,6 +22,6 @@ public class ExchangeRateProvider(IExchangeRateClient exchangeRateClient): IExch
                 new ExchangeRate(
                     new Currency(r.CurrencyCode!),
                     new Currency(TargetCurrencyCode),
-                    decimal.Divide(r.Rate!.Value, r.Amount!.Value)));
+                    decimal.Divide(r.Rate!.Value, r!.Amount!.Value)));
     }
 }

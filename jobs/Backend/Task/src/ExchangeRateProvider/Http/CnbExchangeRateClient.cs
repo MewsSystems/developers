@@ -15,7 +15,7 @@ public class CnbExchangeRateClient(HttpClient httpClient) : IExchangeRateClient
 
         var exRatesResponse = await JsonSerializer.DeserializeAsync<ExchangeRatesDailyResponse>(
             stream,
-            new JsonSerializerOptions
+			new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
