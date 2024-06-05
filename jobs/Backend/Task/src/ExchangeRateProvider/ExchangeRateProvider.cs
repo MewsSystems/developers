@@ -1,9 +1,11 @@
 using ExchangeRateProvider.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ExchangeRateProvider;
 
-public class ExchangeRateProvider(IBankApiClient bankApiClient): IExchangeRateProvider
+public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache memoryCache): IExchangeRateProvider
 {
+	private const string CacheKey = "rates";
     private const string TargetCurrencyCode = "CZK";
 
     /// <summary>
@@ -14,14 +16,26 @@ public class ExchangeRateProvider(IBankApiClient bankApiClient): IExchangeRatePr
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
     {
-	    var rates = await bankApiClient.GetDailyExchangeRatesAsync(cancellationToken).ConfigureAwait(false);
-        
-        return rates
+	    var rates = await GetBankCurrencyRatesAsync(cancellationToken);
+
+	    return rates
             .Where(r => currencies.Any(c => c.Code == r.CurrencyCode))
             .Select(r =>
                 new ExchangeRate(
                     new Currency(r.CurrencyCode),
                     new Currency(TargetCurrencyCode),
                     decimal.Divide(r.Rate, r.Amount)));
+    }
+
+    private async Task<IEnumerable<BankCurrencyRate>> GetBankCurrencyRatesAsync(CancellationToken cancellationToken)
+    {
+	    var rates = memoryCache.Get<IEnumerable<BankCurrencyRate>>(CacheKey);
+
+	    if (rates != null) return rates;
+
+		rates = await bankApiClient.GetDailyExchangeRatesAsync(cancellationToken).ConfigureAwait(false);
+		memoryCache.Set(CacheKey, rates, TimeSpan.FromMinutes(60));
+
+	    return rates;
     }
 }

@@ -14,6 +14,7 @@ var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
 	    services
+		    .AddMemoryCache()
 		    .AddSingleton<IExchangeRateProvider, ExchangeRateProvider.ExchangeRateProvider>()
 		    .AddHttpClient<IBankApiClient, CnbBankApiClient>(client =>
 		    {

@@ -1,4 +1,5 @@
 using ExchangeRateProvider.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Shouldly;
 
@@ -10,6 +11,7 @@ namespace ExchangeRateProvider.Tests
 		public async Task ProviderShouldIgnoreCurrenciesNotReturnedByTheApi()
 		{
 			// Arrange
+			var cache = new MemoryCache(new MemoryCacheOptions());
 			var bankApiClient = new Mock<IBankApiClient>();
 
 			bankApiClient.Setup(client =>
@@ -26,7 +28,7 @@ namespace ExchangeRateProvider.Tests
 					));
 
 			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(bankApiClient.Object);
+			var provider = new ExchangeRateProvider(bankApiClient.Object, cache);
 
 			// Act
 			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
@@ -45,6 +47,7 @@ namespace ExchangeRateProvider.Tests
 		public async Task ProviderShouldTakeIntoAccountAmount()
 		{
 			// Arrange
+			var cache = new MemoryCache(new MemoryCacheOptions());
 			var bankApiClient = new Mock<IBankApiClient>();
 
 			bankApiClient.Setup(client =>
@@ -61,7 +64,7 @@ namespace ExchangeRateProvider.Tests
 				));
 
 			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(bankApiClient.Object);
+			var provider = new ExchangeRateProvider(bankApiClient.Object, cache);
 
 			// Act
 			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
