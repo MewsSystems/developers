@@ -1,5 +1,5 @@
-using ExchangeRateProvider.Http;
-using ExchangeRateProvider;
+using ExchangeRateProvider.BankApiClients.Cnb;
+using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,7 +15,7 @@ var builder = Host.CreateDefaultBuilder(args)
     {
 	    services
 		    .AddSingleton<IExchangeRateProvider, ExchangeRateProvider.ExchangeRateProvider>()
-		    .AddHttpClient<IExchangeRateClient, CnbExchangeRateClient>(client =>
+		    .AddHttpClient<IBankApiClient, CnbBankApiClient>(client =>
 		    {
 			    var baseUrl = context.Configuration["BaseUrl"] ??
 			                  throw new Exception("BaseUrl configuration not found.");
@@ -47,11 +47,10 @@ IEnumerable<Currency> currencies =
 
 var cancellationToken = new CancellationTokenSource();
 
-
 try
 {
     var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-    var rates = await provider.GetExchangeRates(currencies, cancellationToken.Token).ConfigureAwait(false);
+    var rates = await provider.GetExchangeRatesAsync(currencies, cancellationToken.Token).ConfigureAwait(false);
 
     var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
     Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");

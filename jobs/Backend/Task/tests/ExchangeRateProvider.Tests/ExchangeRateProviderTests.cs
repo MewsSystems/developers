@@ -1,4 +1,4 @@
-using ExchangeRateProvider.Http;
+using ExchangeRateProvider.Models;
 using Moq;
 using Shouldly;
 
@@ -10,30 +10,26 @@ namespace ExchangeRateProvider.Tests
 		public async Task ProviderShouldIgnoreCurrenciesNotReturnedByTheApi()
 		{
 			// Arrange
-			var exchangeRateClient = new Mock<IExchangeRateClient>();
+			var bankApiClient = new Mock<IBankApiClient>();
 
-			exchangeRateClient.Setup(client =>
-				client.GetDailyExchangeRates(default))
-					.Returns(() =>
-					{
-						return Task.FromResult(
-							(IEnumerable<CurrencyRate>)new[]
+			bankApiClient.Setup(client =>
+				client.GetDailyExchangeRatesAsync(default))
+					.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
+						[
+							new BankCurrencyRate()
 							{
-								new CurrencyRate()
-								{
-									CurrencyCode = "EUR",
-									Amount = 1,
-									Rate = 24.2m
-								}
+								CurrencyCode = "EUR",
+								Amount = 1,
+								Rate = 24.2m
 							}
-						);
-					});
+						]
+					));
 
 			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(exchangeRateClient.Object);
+			var provider = new ExchangeRateProvider(bankApiClient.Object);
 
 			// Act
-			var exchangeRates = await provider.GetExchangeRates(currencies);
+			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
 
 			// Assert
 			exchangeRates.ShouldNotBeNull();
@@ -49,29 +45,26 @@ namespace ExchangeRateProvider.Tests
 		public async Task ProviderShouldTakeIntoAccountAmount()
 		{
 			// Arrange
-			var exchangeRateClient = new Mock<IExchangeRateClient>();
+			var bankApiClient = new Mock<IBankApiClient>();
 
-			exchangeRateClient.Setup(client =>
-					client.GetDailyExchangeRates(default))
-				.Returns(() =>
-				{
-					return Task.FromResult(
-						(IEnumerable<CurrencyRate>)new[]
+			bankApiClient.Setup(client =>
+					client.GetDailyExchangeRatesAsync(default))
+				.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
+					[
+						new BankCurrencyRate()
 						{
-							new CurrencyRate()
-							{
-								CurrencyCode = "JPY",
-								Amount = 100,
-								Rate = 14.528m
-							}
+							CurrencyCode = "JPY",
+							Amount = 100,
+							Rate = 14.528m
 						}
-					);
-				});
+					]
+				));
+
 			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(exchangeRateClient.Object);
+			var provider = new ExchangeRateProvider(bankApiClient.Object);
 
 			// Act
-			var exchangeRates = await provider.GetExchangeRates(currencies);
+			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
 
 			// Assert
 			exchangeRates.ShouldNotBeNull();
