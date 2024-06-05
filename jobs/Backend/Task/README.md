@@ -36,3 +36,11 @@ In our current problem we can assume that the "TargetCurrency" is "always" CZK a
 		- and the rate is the exchange rate from the line (we might need to divide it for currencies that ore converted to CZK in larger amounts : 10, 100, 1000 ...)
 		- this is the final set of data that we will pass in the constructor of the ExchangerateProvider class.
 		- the method 'GetExchangeRates' will extract only the rates for the currencies that are passed in as a parameter (the ones defined in the Program.cs file).
+
+---
+## Notes
+Because this is a console app and I added XUnit to it we need the following line in the .csproj file:
+```xml
+	<GenerateProgramFile>false</GenerateProgramFile>
+````
+More info here : [console apps containing xUnit](https://andrewlock.net/fixing-the-error-program-has-more-than-one-entry-point-defined-for-console-apps-containing-xunit-tests/)

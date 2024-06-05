@@ -63,7 +63,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         /// <param name="currentRow"></param>
         /// <returns></returns>
-        private ExchangeRate ParseDataRow(string currentRow)
+        public ExchangeRate ParseDataRow(string currentRow)
         {
             if (string.IsNullOrWhiteSpace(currentRow))
             {

@@ -25,6 +25,9 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
+            string res = Test_GetExchangeRate.GetTestData_No_Header();
+
+
             try
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
