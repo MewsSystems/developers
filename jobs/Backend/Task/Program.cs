@@ -25,23 +25,29 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
-
-            CheckBankURL checkBankURL = new CheckBankURL();
-
-            bool isURLActive = await checkBankURL.VerifyURLActive();
-
-
-            if (!isURLActive)
-            {
-                Console.WriteLine("Bank URL is not active. Exiting...");
-                Console.ReadLine();
-                return;
-            }
-
-
             try
             {
-                var provider = new ExchangeRateProvider();
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+                string bankURL = configuration.GetSection("centralBankUrl").Value;
+
+                if (string.IsNullOrWhiteSpace(bankURL))
+                {
+                    throw new Exception("Bank URL is not set in configuration file.");
+                }
+
+
+                string serverResponse = await new RemoteData(bankURL).GetRatesForToday();
+
+                if (string.IsNullOrWhiteSpace(serverResponse))
+                {
+                    Console.WriteLine("No exchange rates found.");
+                }
+
+                IEnumerable<ExchangeRate> ratesFromBank = new GetExchangeRate(serverResponse).ParseBankResponse();
+
+                var provider = new ExchangeRateProvider(ratesFromBank);
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
