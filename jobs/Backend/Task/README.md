@@ -39,7 +39,7 @@ In our current problem we can assume that the "TargetCurrency" is "always" CZK a
 
 ---
 ## Notes
-Because this is a console app and I added XUnit to it we need the following line in the .csproj file:
+Because this is a console app and I added XUnit to it >>> we need the following line in the .csproj file:
 ```xml
 	<GenerateProgramFile>false</GenerateProgramFile>
 ````
