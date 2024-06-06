@@ -31,10 +31,10 @@ In our current problem we can assume that the "TargetCurrency" is "always" CZK a
 		- making sure that has the right amount of fields
 		- the values in the fields are of the right type
 	- after that we will create an object of type ExchangeRate for each line where:
-		- the source-currency is the foreight currency fom the line
+		- the source-currency is the foreign currency fom the line
 		- the target-currency is CZK
-		- and the rate is the exchange rate from the line (we might need to divide it for currencies that ore converted to CZK in larger amounts : 10, 100, 1000 ...)
-		- this is the final set of data that we will pass in the constructor of the ExchangerateProvider class.
+		- and the rate is the exchange rate from the line (we might need to divide it for currencies that are converted to CZK in larger amounts : 10, 100, 1000 ...)
+	- this is the final set of data that we will pass in the constructor of the ExchangerateProvider class.
 		- the method 'GetExchangeRates' will extract only the rates for the currencies that are passed in as a parameter (the ones defined in the Program.cs file).
 
 ---
