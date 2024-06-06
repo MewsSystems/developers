@@ -22,12 +22,5 @@ namespace ExchangeRateUpdater.ExchangeRate.Repository
         /// <param name="key">The key identifying the dataset.</param>
         /// <returns>A task representing the asynchronous operation, returning the exchange rate dataset if found; otherwise, null.</returns>
         Task<ExchangeRateDataset> GetExchangeRates(string key);
-
-        /// <summary>
-        /// Checks if the repository contains exchange rates dataset associated with the specified key.
-        /// </summary>
-        /// <param name="key">The key identifying the dataset.</param>
-        /// <returns>A task representing the asynchronous operation, returning true if the dataset exists; otherwise, false.</returns>
-        Task<bool> HasExchangeRates(string key);
     }
 }

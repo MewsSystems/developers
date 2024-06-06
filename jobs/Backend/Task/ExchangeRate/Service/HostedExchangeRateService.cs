@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.ExchangeRate.Constant;
 using ExchangeRateUpdater.ExchangeRate.Controller.Model;
+using ExchangeRateUpdater.ExchangeRate.Exception;
 using ExchangeRateUpdater.ExchangeRate.Factory;
 using ExchangeRateUpdater.ExchangeRate.Model;
 using ExchangeRateUpdater.ExchangeRate.Repository;
@@ -48,14 +49,13 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
             if (freshData.Any())
             {
                 await _repository.SaveExchangeRates(datasetKey, new ExchangeRateDataset(request.Date, freshData, ExchangeRateDataset.Channel.Direct));
+                return PrepareResponseData(request, freshData);
             }
             else
             {
                 _logger.LogInformation($"No exchange rate data found for specified date - {request}");
-                throw new System.Exception("No exchange rate data found for specified date");
+                throw new ExchangeRateUpdaterException("No exchange rate data found for specified date");
             }
-
-            return PrepareResponseData(request, freshData);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
             catch (System.Exception e)
             {
                 _logger.LogError(e, "Error while updating exchange rates");
-                throw new System.Exception("Error fetching exchange rates, please try again", e);
+                throw new ExchangeRateUpdaterException("Error fetching exchange rates, please try again", e);
             }
         }
 

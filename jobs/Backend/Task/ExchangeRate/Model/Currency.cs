@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater.ExchangeRate.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExchangeRateUpdater.ExchangeRate.Model
 {
     /// <summary>
     /// Represents a currency using its three-letter ISO 4217 code.
@@ -13,6 +15,7 @@
         /// <summary>
         /// Gets the three-letter ISO 4217 code of the currency.
         /// </summary>
+        [Required]
         public string Code { get; } = code;
 
         /// <summary>

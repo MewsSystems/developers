@@ -43,19 +43,24 @@ namespace ExchangeRateUpdater.ExchangeRate.Factory
         /// <returns>An instance of the exchange rate provider.</returns>
         public IExchangeRateProvider GetProvider(Currency currency)
         {
+            ArgumentNullException.ThrowIfNull(currency);
+
             var defaultExchangeRateProviderConfig = _defaultExchangeRateProviderMonitor.CurrentValue;
+
+            if (defaultExchangeRateProviderConfig == null || !defaultExchangeRateProviderConfig.ContainsKey(currency.Code))
+            {
+                throw new ExchangeRateUpdaterException($"No default exchange rate provider defined for source currency: {currency.Code}");
+            }
 
             return currency.Code switch
             {
                 "CZK" => defaultExchangeRateProviderConfig.GetCZKProvider() switch
                 {
                     "CzechNationalBank" => new CzechNationalBankExchangeRateProvider(_czechNationalBankClient, _czechNationalBankExchangeRateProviderLogger),
-                    _ => throw new ExchangeRateUpdaterException($"No default exchange rate provider defined for source currency: {currency}"),
+                    _ => throw new ExchangeRateUpdaterException($"No default exchange rate provider defined for source currency: {currency.Code}"),
                 },
-
-                _ => throw new ExchangeRateUpdaterException($"No exchange rate provider for source currency: {currency}"),
+                _ => throw new ExchangeRateUpdaterException($"No exchange rate provider for source currency: {currency.Code}"),
             };
-            ;
         }
     }
 }

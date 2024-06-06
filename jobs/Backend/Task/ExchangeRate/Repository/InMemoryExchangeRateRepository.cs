@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.ExchangeRate.Model;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.ExchangeRate.Model;
 
 namespace ExchangeRateUpdater.ExchangeRate.Repository
 {
@@ -44,19 +45,13 @@ namespace ExchangeRateUpdater.ExchangeRate.Repository
         /// <inheritdoc/>
         public Task<bool> SaveExchangeRates(string key, ExchangeRateDataset dataset)
         {
-            lock (_lockObject)
+           lock (_lockObject)
             {
-                _exchangeRateData[key] = dataset;
+                if (dataset.ExchangeRates.Any())
+                {
+                    _exchangeRateData[key] = dataset;
+                }
                 return Task.FromResult(true);
-            }
-        }
-
-        /// <inheritdoc/>
-        public Task<bool> HasExchangeRates(string key)
-        {
-            lock (_lockObject)
-            {
-                return Task.FromResult(_exchangeRateData.ContainsKey(key));
             }
         }
     }

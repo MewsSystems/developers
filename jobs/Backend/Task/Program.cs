@@ -38,6 +38,7 @@ internal class Program
         builder.Services.AddHttpClient();
         builder.Services.Configure<CzechNationalBankConfig>(configuration.GetSection("CzechNationalBank"));
         builder.Services.Configure<DefaultExchangeRateProviderConfig>(configuration.GetSection("DefaultExchangeRateProvider"));
+        builder.Services.AddTransient<IHttpService, HttpService>();
         builder.Services.AddTransient<ICzechNationalBankClient, CzechNationalBankClient>();
         builder.Services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
         builder.Services.AddTransient<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
@@ -58,6 +59,7 @@ internal class Program
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseMiddleware<ExceptionMiddleware>();
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();

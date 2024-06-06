@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.ExchangeRate.Constant;
+using ExchangeRateUpdater.ExchangeRate.Exception;
 using ExchangeRateUpdater.ExchangeRate.Model;
 using ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank.Model;
 using Microsoft.Extensions.Logging;
@@ -23,17 +24,25 @@ namespace ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank
         /// <inheritdoc/>
         public async Task<IEnumerable<ExchangeRateData>> GetDailyExchangeRates(DateOnly targetDate, Language language, CancellationToken cancellationToken)
         {
-            // Supports only EN and CZ languages
-            if (language != Language.CZ && language != Language.EN)
+            try
             {
-                _logger.LogInformation($"Unsupported language {language}. Defaulting to {Language.EN}.");
-                language = Language.EN;
-            }
+                // Supports only EN and CZ languages
+                if (language != Language.CZ && language != Language.EN)
+                {
+                    _logger.LogInformation($"Unsupported language {language}. Defaulting to {Language.EN}.");
+                    language = Language.EN;
+                }
 
-            var request = new FetchCzechNationalBankDailyExchangeRateRequest(targetDate, language);
-            var response = await _czechNationalBankClient.GetDailyExchangeRates(request, cancellationToken);
-            var exchangeRates = response.ExchangeRates.Select(cnbRate => new ExchangeRateData(cnbRate.Currency, cnbRate.CurrencyCode, cnbRate.Country, decimal.Divide(cnbRate.Rate, cnbRate.Amount))).ToList();
-            return exchangeRates;
+                var request = new FetchCzechNationalBankDailyExchangeRateRequest(targetDate, language);
+                var response = await _czechNationalBankClient.GetDailyExchangeRates(request, cancellationToken);
+                var exchangeRates = response.ExchangeRates.Select(cnbRate => new ExchangeRateData(cnbRate.Currency, cnbRate.CurrencyCode, cnbRate.Country, decimal.Divide(cnbRate.Rate, cnbRate.Amount))).ToList();
+                return exchangeRates;
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching daily exchange rates from the Czech National Bank.");
+                throw new ExchangeRateUpdaterException("An error occurred while fetching daily exchange rates from the Czech National Bank.", ex);
+            }
         }
 
         /// <inheritdoc/>

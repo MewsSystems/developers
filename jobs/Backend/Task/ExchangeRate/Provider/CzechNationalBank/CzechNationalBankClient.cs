@@ -1,12 +1,12 @@
-﻿using ExchangeRateUpdater.ExchangeRate.Exception;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.ExchangeRate.Exception;
 using ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank.Model;
 using ExchangeRateUpdater.Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank
 {
@@ -20,9 +20,9 @@ namespace ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank
     /// <param name="httpClient">The HTTP client.</param>
     /// <param name="czechNationalBankConfigMonitor">The monitor for Czech National Bank configuration options.</param>
     /// <param name="logger">The logger.</param>
-    internal class CzechNationalBankClient(HttpClient httpClient, IOptionsMonitor<CzechNationalBankConfig> czechNationalBankConfigMonitor, ILogger<CzechNationalBankClient> logger) : ICzechNationalBankClient
+    internal class CzechNationalBankClient(IHttpService httpService, IOptionsMonitor<CzechNationalBankConfig> czechNationalBankConfigMonitor, ILogger<CzechNationalBankClient> logger) : ICzechNationalBankClient
     {
-        private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        private readonly IHttpService _httpService = httpService ?? throw new ArgumentNullException(nameof(httpService));
         private readonly IOptionsMonitor<CzechNationalBankConfig> _czechNationalBankConfigMonitor = czechNationalBankConfigMonitor ?? throw new ArgumentNullException(nameof(czechNationalBankConfigMonitor));
         private readonly ILogger<CzechNationalBankClient> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -34,10 +34,8 @@ namespace ExchangeRateUpdater.ExchangeRate.Provider.CzechNationalBank
 
             try
             {
-                var exchangeRateResponse = await _httpClient.GetAsync(url, cancellationToken);
-                exchangeRateResponse.EnsureSuccessStatusCode();
-                var exchangeRateJsonResponse = await exchangeRateResponse.Content.ReadAsStringAsync(cancellationToken);
-                var exchangeRateResponseData = JsonUtil.Deserialize<CzechNationalBankDailyExchangeRateResponse>(exchangeRateJsonResponse);
+                var exchangeRateResponse = await _httpService.GetAsync(url, cancellationToken);
+                var exchangeRateResponseData = JsonUtil.Deserialize<CzechNationalBankDailyExchangeRateResponse>(exchangeRateResponse);
                 return exchangeRateResponseData;
             }
             catch (HttpRequestException e)

@@ -64,6 +64,18 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
                 return BadRequest(new ErrorResponse("Invalid language value. Please use 'EN' or 'CZ'."));
             }
 
+            // Validate baseCurrency is not null or empty
+            if (string.IsNullOrWhiteSpace(baseCurrency))
+            {
+                return BadRequest(new ErrorResponse("baseCurrency cannot be null or empty."));
+            }
+            
+            // Validate targetCurrencies is not null or empty
+            if (string.IsNullOrWhiteSpace(targetCurrencies))
+            {
+                return BadRequest(new ErrorResponse("Target currencies cannot be null or empty."));
+            }
+
             // Split and trim the target currency codes
             var targetCurrencyCodes = Regex.Split(targetCurrencies, @"\s*,\s*")
                                            .Where(code => !string.IsNullOrWhiteSpace(code))
@@ -75,12 +87,6 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
 
             // Create the request object
             var request = new FetchDailyExchangeRateRequestInternal(new Currency(baseCurrency), parsedDate, parsedLanguage, targetCurrencyList);
-
-            // Check model state validity
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             try
             {
@@ -102,11 +108,6 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
             {
                 _logger.LogInformation(ex, "An error occurred while fetching daily exchange rates.");
                 return BadRequest(new ErrorResponse(ex.Message));
-            }
-            catch (System.Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching daily exchange rates.");
-                return StatusCode(500, new ErrorResponse(ex.Message));
             }
         }
     }
