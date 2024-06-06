@@ -27,6 +27,7 @@ var builder = Host.CreateDefaultBuilder(args)
 		    {
 			    options.Retry.MaxRetryAttempts = 4;
 			    options.Retry.BackoffType = DelayBackoffType.Exponential;
+				options.Retry.UseJitter = true;
 		    });
     });
 
