@@ -1,82 +1,74 @@
 using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 
-namespace ExchangeRateProvider.Tests
+namespace ExchangeRateProvider.Tests;
+
+public class ExchangeRateProviderTests
 {
-	public class ExchangeRateProviderTests
+	[Fact]
+	public async Task ProviderShouldIgnoreCurrenciesNotReturnedByTheApi()
 	{
-		[Fact]
-		public async Task ProviderShouldIgnoreCurrenciesNotReturnedByTheApi()
-		{
-			// Arrange
-			var cache = new MemoryCache(new MemoryCacheOptions());
-			var bankApiClient = new Mock<IBankApiClient>();
+		// Arrange
+		var cache = new MemoryCache(new MemoryCacheOptions());
+		var bankApiClient = new Mock<IBankApiClient>();
+		var logger = new Mock<ILogger>();
 
-			bankApiClient.Setup(client =>
-				client.GetDailyExchangeRatesAsync(default))
-					.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
-						[
-							new BankCurrencyRate()
-							{
-								CurrencyCode = "EUR",
-								Amount = 1,
-								Rate = 24.2m
-							}
-						]
-					));
-
-			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(bankApiClient.Object, cache);
-
-			// Act
-			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
-
-			// Assert
-			exchangeRates.ShouldNotBeNull();
-			exchangeRates.ShouldBeUnique();
-			exchangeRates.ShouldContain(
-				r =>
-					r.SourceCurrency.Code == "EUR" && 
-				    r.TargetCurrency.Code == "CZK" && 
-				    r.Value == 24.2m);
-		}
-
-		[Fact]
-		public async Task ProviderShouldTakeIntoAccountAmount()
-		{
-			// Arrange
-			var cache = new MemoryCache(new MemoryCacheOptions());
-			var bankApiClient = new Mock<IBankApiClient>();
-
-			bankApiClient.Setup(client =>
-					client.GetDailyExchangeRatesAsync(default))
+		bankApiClient.Setup(client =>
+			client.GetDailyExchangeRatesAsync(default))
 				.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
 					[
-						new BankCurrencyRate()
-						{
-							CurrencyCode = "JPY",
-							Amount = 100,
-							Rate = 14.528m
-						}
+						new BankCurrencyRate(1, "EUR", 24.2m)
 					]
 				));
 
-			var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-			var provider = new ExchangeRateProvider(bankApiClient.Object, cache);
+		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
 
-			// Act
-			var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
+		// Act
+		var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
 
-			// Assert
-			exchangeRates.ShouldNotBeNull();
-			exchangeRates.ShouldBeUnique();
-			exchangeRates.ShouldContain(
-				r =>
-					r.SourceCurrency.Code == "JPY" &&
-					r.TargetCurrency.Code == "CZK" &&
-					r.Value == 0.14528m);
-		}
+		// Assert
+		exchangeRates.ShouldNotBeNull();
+		exchangeRates.ShouldBeUnique();
+		exchangeRates.ShouldContain(
+			r =>
+				r.SourceCurrency.Code == "EUR" && 
+			    r.TargetCurrency.Code == "CZK" && 
+			    r.Value == 24.2m);
+	}
+
+	[Fact]
+	public async Task ProviderShouldTakeIntoAccountAmount()
+	{
+		// Arrange
+		var cache = new MemoryCache(new MemoryCacheOptions());
+		var bankApiClient = new Mock<IBankApiClient>();
+		var logger = new Mock<ILogger>();
+
+		bankApiClient.Setup(client =>
+				client.GetDailyExchangeRatesAsync(default))
+			.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
+				[
+					new BankCurrencyRate(100, "JPY", 14.528m)
+				]
+			));
+
+		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
+
+		// Act
+		var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
+
+		// Assert
+		exchangeRates.ShouldNotBeNull();
+		exchangeRates.ShouldBeUnique();
+		exchangeRates.ShouldContain(
+			r =>
+				r.SourceCurrency.Code == "JPY" &&
+				r.TargetCurrency.Code == "CZK" &&
+				r.Value == 0.14528m);
 	}
 }

@@ -41,12 +41,11 @@ public sealed class CnbBankApiClient(HttpClient httpClient) : IBankApiClient
 		    .Where(r =>
 			    r is { Amount: not null, CurrencyCode: not null, Rate: not null })
 		    .Select(r =>
-			    new BankCurrencyRate
-			    {
-				    Amount = r.Amount!.Value,
-				    CurrencyCode = r.CurrencyCode!,
-				    Rate = r.Rate!.Value
-			    });
+			    new BankCurrencyRate(
+				    r.Amount!.Value,
+				    r.CurrencyCode!,
+				    r.Rate!.Value
+			    ));
     }
 
 }
