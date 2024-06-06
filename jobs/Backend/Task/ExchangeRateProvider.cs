@@ -7,6 +7,7 @@ namespace ExchangeRateUpdater
     public class ExchangeRateProvider
     {
         private readonly IEnumerable<ExchangeRate> _exchangeRates;
+        private IEnumerable<ExchangeRate> ExchangeRates { get => _exchangeRates; }
 
         public ExchangeRateProvider(IEnumerable<ExchangeRate> exchangeRates)
         {
@@ -22,7 +23,7 @@ namespace ExchangeRateUpdater
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
-            if (_exchangeRates != null)
+            if (ExchangeRates != null || ExchangeRates.Count() > 0)
             {
                 foreach (Currency currentCurrency in currencies)
                 {
