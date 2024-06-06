@@ -28,14 +28,9 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
         /// <param name="date">The date for which to update the exchange rates.</param>
         /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task UpdateDailyExchangeRates(
+        Task UpdateDailyExchangeRatesAsync(
             Currency currency,
             DateOnly date,
             CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Sets up a worker that periodically updates the exchange rates in the repository.
-        /// </summary>
-        void SetupExchangeRateUpdaterWorker();
     }
 }

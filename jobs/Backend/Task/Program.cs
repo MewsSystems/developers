@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using Hangfire;
-using Hangfire.MemoryStorage;
 using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater;
+using Quartz;
+using ExchangeRateUpdater.ExchangeRate.Job;
 
 internal class Program
 {
@@ -44,12 +44,23 @@ internal class Program
         builder.Services.AddTransient<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
         builder.Services.AddTransient<IExchangeRateService, HostedExchangeRateService>();
         builder.Services.AddSingleton<IExchangeRateRepository, InMemoryExchangeRateRepository>();
-        builder.Services.AddHangfire(configuration => configuration
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings()
-            .UseStorage(new MemoryStorage()));
-        builder.Services.AddHangfireServer();
+        builder.Services.AddQuartz(q =>
+        {
+            //Czech National Bank updates exchange rates every working day at 14:30 local time
+            //Source: https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/
+            var jobId = "CzechNationalBankExchangeRateUpdateJob";
+            var jobTriggerId = "CzechNationalBankExchangeRateUpdateJobTrigger";
+            var jobKey = new JobKey(jobId);
+            q.AddJob<CzechNationalBankExchangeRateUpdateJob>(opts => opts.WithIdentity(jobKey));
+            q.AddTrigger(opts => opts
+                .ForJob(jobKey)
+                .WithIdentity(jobTriggerId)
+                .WithCronSchedule("35-59/5 14 * * * ?", //Runs every 5 minutes between 14:35 and 15:59 Czech local time
+                x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"))
+                ));
+        });
 
+        builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         var app = builder.Build();
 
@@ -63,10 +74,6 @@ internal class Program
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
-        app.UseHangfireDashboard();
-
-        app.Services.GetRequiredService<IExchangeRateService>().SetupExchangeRateUpdaterWorker();
-
         app.Run();
     }
 }

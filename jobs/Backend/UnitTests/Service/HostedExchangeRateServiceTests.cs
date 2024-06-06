@@ -223,7 +223,7 @@ namespace ExchangeRateUpdater.Tests
             exchangeRateProviderFactoryMock.Setup(factory => factory.GetProvider(currency)).Throws(new Exception("Error fetching data"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<ExchangeRateUpdaterException>(() => service.UpdateDailyExchangeRates(currency, date, cancellationToken));
+            await Assert.ThrowsAsync<ExchangeRateUpdaterException>(() => service.UpdateDailyExchangeRatesAsync(currency, date, cancellationToken));
         }
 
         [Fact]
@@ -333,7 +333,7 @@ namespace ExchangeRateUpdater.Tests
             exchangeRateProviderFactoryMock.Setup(factory => factory.GetProvider(currency)).Returns(providerMock.Object);
 
             // Act
-            await service.UpdateDailyExchangeRates(currency, date, cancellationToken);
+            await service.UpdateDailyExchangeRatesAsync(currency, date, cancellationToken);
 
             // Assert
             repositoryMock.Verify(repo => repo.SaveExchangeRates(It.IsAny<string>(), It.IsAny<ExchangeRateDataset>()), Times.Never); // Repository Save method not called
@@ -369,7 +369,7 @@ namespace ExchangeRateUpdater.Tests
             Mock.Get(exchangeRateProviderFactoryMock.Object.GetProvider(currency)).Setup(provider => provider.GetSupportedLanguages()).Returns([Language.EN]);
 
             // Act
-            await service.UpdateDailyExchangeRates(currency, date, cancellationToken);
+            await service.UpdateDailyExchangeRatesAsync(currency, date, cancellationToken);
 
             // Assert
             repositoryMock.Verify(repo => repo.SaveExchangeRates(It.IsAny<string>(), It.IsAny<ExchangeRateDataset>()), Times.Once); // Repository Save method called once

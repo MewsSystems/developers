@@ -9,7 +9,6 @@ using ExchangeRateUpdater.ExchangeRate.Exception;
 using ExchangeRateUpdater.ExchangeRate.Factory;
 using ExchangeRateUpdater.ExchangeRate.Model;
 using ExchangeRateUpdater.ExchangeRate.Repository;
-using Hangfire;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.ExchangeRate.Service
@@ -20,14 +19,12 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
     internal class HostedExchangeRateService(
         IExchangeRateProviderFactory exchangeRateProviderFactory,
         IExchangeRateRepository repository,
-        ILogger<HostedExchangeRateService> logger,
-        IRecurringJobManager recurringJobManager) : IExchangeRateService
+        ILogger<HostedExchangeRateService> logger) : IExchangeRateService
     {
         private readonly IExchangeRateProviderFactory _exchangeRateProviderFactory = exchangeRateProviderFactory ?? throw new ArgumentNullException(nameof(exchangeRateProviderFactory));
         private readonly IExchangeRateRepository _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         private readonly ILogger<HostedExchangeRateService> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        private readonly IRecurringJobManager _recurringJobManager = recurringJobManager ?? throw new ArgumentNullException(nameof(recurringJobManager));
-
+        
         /// <summary>
         /// Fetches daily exchange rates asynchronously.
         /// </summary>
@@ -61,7 +58,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
         /// <summary>
         /// Updates daily exchange rates for the specified currency and date.
         /// </summary>
-        public async Task UpdateDailyExchangeRates(Currency currency, DateOnly date, CancellationToken cancellationToken)
+        public async Task UpdateDailyExchangeRatesAsync(Currency currency, DateOnly date, CancellationToken cancellationToken)
         {
             try
             {
@@ -97,23 +94,6 @@ namespace ExchangeRateUpdater.ExchangeRate.Service
                 _logger.LogError(e, "Error while updating exchange rates");
                 throw new ExchangeRateUpdaterException("Error fetching exchange rates, please try again", e);
             }
-        }
-
-        /// <summary>
-        /// Sets up the worker that periodically updates exchange rates using Hangfire.
-        /// </summary>
-        public void SetupExchangeRateUpdaterWorker()
-        {
-            _recurringJobManager.AddOrUpdate(
-                "CzechNationalBankExchangeRateUpdater",
-                () => UpdateDailyExchangeRates(new Currency("CZK"), DateOnly.FromDateTime(DateTime.Today), new CancellationToken()),
-                "35-59/5 14 * * *", // Every 5 minutes between 2:35 PM and 3:00 PM
-                new RecurringJobOptions
-                {
-                    TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
-                });
-
-            _logger.LogInformation($"{nameof(HostedExchangeRateService)} Worker setup complete");
         }
 
         /// <summary>
