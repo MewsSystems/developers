@@ -6,7 +6,6 @@ using ExchangeRateUpdater.ExchangeRate.Model;
 using ExchangeRateUpdater.ExchangeRate.Provider;
 using ExchangeRateUpdater.ExchangeRate.Repository;
 using ExchangeRateUpdater.ExchangeRate.Service;
-using Hangfire;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -21,7 +20,6 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
             var cachedData = new ExchangeRateDataset(
                 new DateOnly(2024, 6, 4), // Date matches requested date
                 [new ExchangeRateData("Dollar", "USD", "USA", 1.2m)], 
@@ -33,8 +31,7 @@ namespace ExchangeRateUpdater.Tests
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -51,9 +48,6 @@ namespace ExchangeRateUpdater.Tests
             Assert.NotNull(response);
             Assert.NotEmpty(response.ExchangeRates);
             repositoryMock.Verify(repo => repo.GetExchangeRates(It.IsAny<string>()), Times.Once); // Repository method called once
-
-            // Additional assertion: Verify that the recurring job manager was not called
-            recurringJobManagerMock.VerifyNoOtherCalls(); // Ensure no other methods were called on the recurring job manager
         }
 
         [Fact]
@@ -63,13 +57,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -105,13 +97,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -137,13 +127,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -174,13 +162,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -206,13 +192,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var currency = new Currency("USD");
@@ -233,13 +217,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -278,13 +260,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var request = new FetchDailyExchangeRateRequestInternal(
@@ -313,13 +293,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var currency = new Currency("USD");
@@ -346,13 +324,11 @@ namespace ExchangeRateUpdater.Tests
             var repositoryMock = new Mock<IExchangeRateRepository>();
             var exchangeRateProviderFactoryMock = new Mock<IExchangeRateProviderFactory>();
             var loggerMock = new Mock<ILogger<HostedExchangeRateService>>();
-            var recurringJobManagerMock = new Mock<IRecurringJobManager>();
 
             var service = new HostedExchangeRateService(
                 exchangeRateProviderFactoryMock.Object,
                 repositoryMock.Object,
-                loggerMock.Object,
-                recurringJobManagerMock.Object
+                loggerMock.Object
             );
 
             var currency = new Currency("USD");

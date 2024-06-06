@@ -41,24 +41,6 @@ namespace ExchangeRateUpdater.Tests
         }
 
         [Fact]
-        public async Task GetDailyExchangeRates_ReturnsBadRequest_ForInvalidLanguage()
-        {
-            // Arrange
-            string baseCurrency = "USD";
-            string date = DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
-            string language = "FR";
-            string targetCurrencies = "EUR,GBP";
-
-            // Act
-            var result = await _controller.GetDailyExchangeRates(baseCurrency, date, language, targetCurrencies, CancellationToken.None);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
-            Assert.Equal("Invalid language value. Please use 'EN' or 'CZ'.", errorResponse.Message);
-        }
-
-        [Fact]
         public async Task GetDailyExchangeRates_ReturnsOk_ForValidRequest()
         {
             // Arrange
@@ -137,23 +119,6 @@ namespace ExchangeRateUpdater.Tests
             string baseCurrency = "USD";
             string? date = null;
             string language = "EN";
-            string targetCurrencies = "EUR,GBP";
-
-            // Act
-            var result = await _controller.GetDailyExchangeRates(baseCurrency, date, language, targetCurrencies, CancellationToken.None);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(400, badRequestResult.StatusCode);
-        }
-
-        [Fact]
-        public async Task GetDailyExchangeRates_ReturnsBadRequest_ForMissingLanguage()
-        {
-            // Arrange
-            string baseCurrency = "USD";
-            string date = DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
-            string? language = null;
             string targetCurrencies = "EUR,GBP";
 
             // Act
@@ -360,24 +325,6 @@ namespace ExchangeRateUpdater.Tests
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
             Assert.Equal("Invalid date format. Please use 'yyyy-MM-dd'.", errorResponse.Message);
-        }
-
-        [Fact]
-        public async Task GetDailyExchangeRates_ReturnsBadRequest_ForOverlyLongLanguage()
-        {
-            // Arrange
-            string baseCurrency = "USD";
-            string date = DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd");
-            string language = new string('E', 1000);
-            string targetCurrencies = "EUR,GBP";
-
-            // Act
-            var result = await _controller.GetDailyExchangeRates(baseCurrency, date, language, targetCurrencies, CancellationToken.None);
-
-            // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
-            Assert.Equal("Invalid language value. Please use 'EN' or 'CZ'.", errorResponse.Message);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
         public async Task<IActionResult> GetDailyExchangeRates(
             [FromQuery][Required] string baseCurrency,
             [FromQuery][Required] string date,
-            [FromQuery][Required] string language,
+            [FromQuery] string language,
             [FromQuery][Required] string targetCurrencies,
             CancellationToken cancellationToken)
         {
@@ -61,7 +61,8 @@ namespace ExchangeRateUpdater.ExchangeRate.Controller
             // Validate the language code
             if (!Enum.TryParse<Language>(language, true, out var parsedLanguage))
             {
-                return BadRequest(new ErrorResponse("Invalid language value. Please use 'EN' or 'CZ'."));
+                _logger.LogInformation("Language code not provided. Defaulting to English.");
+                parsedLanguage = Language.EN;
             }
 
             // Validate baseCurrency is not null or empty

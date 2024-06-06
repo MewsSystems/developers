@@ -55,7 +55,7 @@ internal class Program
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
                 .WithIdentity(jobTriggerId)
-                .WithCronSchedule("35-59/5 14 * * * ?", //Runs every 5 minutes between 14:35 and 14:59 Czech local time
+                .WithCronSchedule("35-59/5 7 * * * ?", //Runs every 5 minutes between 14:35 and 15:59 Czech local time
                 x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"))
                 ));
         });
