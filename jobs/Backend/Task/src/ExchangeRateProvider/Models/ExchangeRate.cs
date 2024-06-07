@@ -1,13 +1,7 @@
 namespace ExchangeRateProvider.Models;
 
-public class ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
+public record ExchangeRate(Currency SourceCurrency, Currency TargetCurrency, decimal Value)
 {
-    public Currency SourceCurrency { get; } = sourceCurrency;
-
-    public Currency TargetCurrency { get; } = targetCurrency;
-
-    public decimal Value { get; } = value;
-
     public override string ToString()
     {
         return $"{SourceCurrency}/{TargetCurrency}={Value}";

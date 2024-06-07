@@ -9,7 +9,7 @@ namespace ExchangeRateProvider.Tests;
 public class ExchangeRateProviderTests
 {
 	[Fact]
-	public async Task ProviderShouldIgnoreCurrenciesNotReturnedByTheApi()
+	public async Task When_provider_is_called_with_currencies_not_available_in_bank_api_Then_provider_should_ignore_them()
 	{
 		// Arrange
 		var cache = new MemoryCache(new MemoryCacheOptions());
@@ -41,7 +41,7 @@ public class ExchangeRateProviderTests
 	}
 
 	[Fact]
-	public async Task ProviderShouldTakeIntoAccountAmount()
+	public async Task When_bank_api_rate_has_amount_greater_than_one_Then_provider_should_divide_the_rate_by_the_amount()
 	{
 		// Arrange
 		var cache = new MemoryCache(new MemoryCacheOptions());

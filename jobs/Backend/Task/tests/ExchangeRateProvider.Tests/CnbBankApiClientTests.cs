@@ -1,10 +1,9 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using ExchangeRateProvider.BankApiClients.Cnb;
+﻿using ExchangeRateProvider.BankApiClients.Cnb;
 using ExchangeRateProvider.Models;
 using Moq;
 using Moq.Protected;
 using Shouldly;
+using System.Net;
 
 namespace ExchangeRateProvider.Tests;
 
@@ -15,7 +14,7 @@ public class CnbBankApiClientTests
 	public async Task CnbBankApiClientCorrectlyParsesResponseAndReturnModel()
 	{
 		// Arrange
-		var responseContent =
+		const string responseContent =
 			"""
 		    {
 		      "rates": [

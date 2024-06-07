@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateProvider.BankApiClients.Cnb.Models;
 
-public class CnbBankResponse
+public record CnbBankResponse
 {
 	public IEnumerable<CnbBankCurrencyRate>? Rates { get; set; }
 }
