@@ -1,0 +1,6 @@
+﻿services:
+  exchangerateupdater.host:
+    image: exchangerateupdater.host
+    build:
+      context: .
+      dockerfile: ExchangeRateUpdater.Host/Dockerfile
