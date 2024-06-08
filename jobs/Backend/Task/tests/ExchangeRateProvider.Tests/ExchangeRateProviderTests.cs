@@ -14,10 +14,10 @@ public class ExchangeRateProviderTests
 		// Arrange
 		var cache = new MemoryCache(new MemoryCacheOptions());
 		var bankApiClient = new Mock<IBankApiClient>();
-		var logger = new Mock<ILogger>();
+		var logger = new Mock<ILogger<IExchangeRateProvider>>();
 
 		bankApiClient.Setup(client =>
-			client.GetDailyExchangeRatesAsync(default))
+			client.GetDailyExchangeRatesAsync(null, default))
 				.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
 					[
 						new BankCurrencyRate(1, "EUR", 24.2m)
@@ -46,13 +46,15 @@ public class ExchangeRateProviderTests
 		// Arrange
 		var cache = new MemoryCache(new MemoryCacheOptions());
 		var bankApiClient = new Mock<IBankApiClient>();
-		var logger = new Mock<ILogger>();
+		var logger = new Mock<ILogger<IExchangeRateProvider>>();
+		const decimal jpyRate = 14.528m;
+		const long jpyAmount = 100L;
 
 		bankApiClient.Setup(client =>
-				client.GetDailyExchangeRatesAsync(default))
+				client.GetDailyExchangeRatesAsync(null, default))
 			.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
 				[
-					new BankCurrencyRate(100, "JPY", 14.528m)
+					new BankCurrencyRate(jpyAmount, "JPY", jpyRate)
 				]
 			));
 
@@ -69,6 +71,24 @@ public class ExchangeRateProviderTests
 			r =>
 				r.SourceCurrency.Code == "JPY" &&
 				r.TargetCurrency.Code == "CZK" &&
-				r.Value == 0.14528m);
+				r.Value == decimal.Divide(jpyRate, jpyAmount));
+	}
+
+	[Fact]
+	public async Task When_a_future_date_is_specified_Then_the_provider_should_throw_an_exception()
+	{
+		// Arrange
+		var cache = new MemoryCache(new MemoryCacheOptions());
+		var bankApiClient = new Mock<IBankApiClient>();
+		var logger = new Mock<ILogger<IExchangeRateProvider>>();
+
+		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
+
+		// Act/Assert
+		await Should.ThrowAsync<ArgumentException>(async () =>
+			{
+				await provider.GetExchangeRatesAsync(currencies, DateTimeOffset.UtcNow.Date.AddDays(2));
+			});
 	}
 }

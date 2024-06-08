@@ -2,5 +2,5 @@
 
 public interface IBankApiClient
 {
-    Task<IEnumerable<BankCurrencyRate>> GetDailyExchangeRatesAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<BankCurrencyRate>> GetDailyExchangeRatesAsync(DateTimeOffset? validFor = null, CancellationToken cancellationToken = default);
 }

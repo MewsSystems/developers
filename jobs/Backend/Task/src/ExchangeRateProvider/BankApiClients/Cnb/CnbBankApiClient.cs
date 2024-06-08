@@ -6,16 +6,24 @@ namespace ExchangeRateProvider.BankApiClients.Cnb;
 
 public sealed class CnbBankApiClient(HttpClient httpClient) : IBankApiClient
 {
-    public async Task<IEnumerable<BankCurrencyRate>> GetDailyExchangeRatesAsync(CancellationToken cancellationToken = default)
-    {
-        var apiRatesResponse = await GetRatesFromBankApiAsync(cancellationToken);
+    public async Task<IEnumerable<BankCurrencyRate>> GetDailyExchangeRatesAsync(DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
+	{
+        var apiRatesResponse = await GetRatesFromBankApiAsync(validFor, cancellationToken);
 
         return TransformToCurrencyRates(apiRatesResponse);
     }
 
-    private async Task<IEnumerable<CnbBankCurrencyRate>> GetRatesFromBankApiAsync(CancellationToken cancellationToken)
+    private async Task<IEnumerable<CnbBankCurrencyRate>> GetRatesFromBankApiAsync(DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
     {
-	    var request = new HttpRequestMessage(HttpMethod.Get, "cnbapi/exrates/daily");
+	    var requestUri = "cnbapi/exrates/daily";
+
+	    if (validFor.HasValue)
+	    {
+		    requestUri += "?date=" + validFor.Value.ToString("yyyy-MM-dd");
+	    }
+	    
+	    var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+
 	    var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
 	    response.EnsureSuccessStatusCode();

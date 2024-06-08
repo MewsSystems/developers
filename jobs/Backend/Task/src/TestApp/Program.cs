@@ -3,6 +3,7 @@ using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Polly;
 
 var configBuilder = new ConfigurationBuilder();
@@ -14,7 +15,11 @@ var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
 	    services
-		    .AddMemoryCache()
+		    .AddLogging(builder => builder.AddConsole())
+		    .AddMemoryCache(options =>
+		    {
+			    options.SizeLimit = 1024;
+		    })
 		    .AddSingleton<IExchangeRateProvider, ExchangeRateProvider.ExchangeRateProvider>()
 		    .AddHttpClient<IBankApiClient, CnbBankApiClient>(client =>
 		    {
@@ -52,7 +57,7 @@ var cancellationToken = new CancellationTokenSource();
 try
 {
     var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-    var rates = await provider.GetExchangeRatesAsync(currencies, cancellationToken.Token).ConfigureAwait(false);
+    var rates = await provider.GetExchangeRatesAsync(currencies, null, cancellationToken.Token).ConfigureAwait(false);
 
     var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
     Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");

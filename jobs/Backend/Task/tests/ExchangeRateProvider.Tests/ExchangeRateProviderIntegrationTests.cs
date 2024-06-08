@@ -71,7 +71,7 @@ public class ExchangeRateProviderIntegrationTests
 		var bankApiClient = new CnbBankApiClient(httpClient);
 
 		var cache = new MemoryCache(new MemoryCacheOptions());
-		var logger = new Mock<ILogger>();
+		var logger = new Mock<ILogger<IExchangeRateProvider>>();
 
 		// Act
 		var exchangeRatesProvider = new ExchangeRateProvider(bankApiClient, cache, logger.Object);

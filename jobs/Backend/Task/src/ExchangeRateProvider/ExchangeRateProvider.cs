@@ -4,10 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateProvider;
 
-public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache memoryCache, ILogger logger): IExchangeRateProvider
+public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache memoryCache, ILogger<IExchangeRateProvider> logger): IExchangeRateProvider
 {
 	private const string CacheKey = "rates";
-    private const string TargetCurrencyCode = "CZK";
+	private const double CacheDurationFromNow = 60;
+    private const string DefaultTargetCurrencyCode = "CZK";
 
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -15,9 +16,14 @@ public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache mem
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
     {
-		var rates = await GetBankCurrencyRatesAsync(cancellationToken);
+	    if (validFor != null && validFor.Value > DateTimeOffset.UtcNow)
+	    {
+		    throw new ArgumentException("The validFor parameter value cannot be a date in the future");
+	    }
+
+		var rates = await GetBankCurrencyRatesAsync(validFor, cancellationToken);
 
 	    return rates
             .Where(r => currencies.Any(c =>
@@ -26,19 +32,20 @@ public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache mem
             .Select(r =>
                 new ExchangeRate(
                     new Currency(r.CurrencyCode),
-                    new Currency(TargetCurrencyCode),
+                    new Currency(DefaultTargetCurrencyCode),
                     decimal.Divide(r.Rate, r.Amount)));
     }
 
-    private async Task<IEnumerable<BankCurrencyRate>> GetBankCurrencyRatesAsync(CancellationToken cancellationToken)
+    private async Task<IEnumerable<BankCurrencyRate>> GetBankCurrencyRatesAsync(DateTimeOffset? validFor, CancellationToken cancellationToken)
     {
-	    var rates = memoryCache.Get<IEnumerable<BankCurrencyRate>>(CacheKey);
+	    var cacheKey = GetKey(validFor);
+		var rates = memoryCache.Get<IEnumerable<BankCurrencyRate>>(cacheKey);
 
 	    if (rates != null) return rates;
 
 	    try
 	    {
-		    rates = await bankApiClient.GetDailyExchangeRatesAsync(cancellationToken).ConfigureAwait(false);
+		    rates = await bankApiClient.GetDailyExchangeRatesAsync(validFor, cancellationToken).ConfigureAwait(false);
 	    }
 		catch (Exception e)
 	    {
@@ -46,8 +53,22 @@ public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache mem
 		    throw;
 	    }
 
-		memoryCache.Set(CacheKey, rates, TimeSpan.FromMinutes(60));
+	    var ratesAsArray = rates.ToArray();
 
-	    return rates;
+		memoryCache.Set(cacheKey, ratesAsArray,
+			new MemoryCacheEntryOptions
+			{
+				AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(CacheDurationFromNow),
+				Size = ratesAsArray.Length
+			});
+
+	    return ratesAsArray;
+    }
+
+    private string GetKey(DateTimeOffset? validFor)
+    {
+	    validFor ??= DateTimeOffset.UtcNow;
+
+	    return $"{CacheKey}-{validFor.Value:yyyy-MM-dd}";
     }
 }
