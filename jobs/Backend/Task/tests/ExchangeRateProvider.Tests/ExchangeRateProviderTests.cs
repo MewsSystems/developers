@@ -1,6 +1,7 @@
 using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 using Shouldly;
 
@@ -8,6 +9,8 @@ namespace ExchangeRateProvider.Tests;
 
 public class ExchangeRateProviderTests
 {
+	private readonly TimeProvider _timeProvider = TimeProvider.System;
+
 	[Fact]
 	public async Task When_provider_is_called_with_currencies_not_available_in_bank_api_Then_provider_should_ignore_them()
 	{
@@ -25,7 +28,7 @@ public class ExchangeRateProviderTests
 				));
 
 		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object, _timeProvider);
 
 		// Act
 		var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
@@ -59,7 +62,7 @@ public class ExchangeRateProviderTests
 			));
 
 		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object, _timeProvider);
 
 		// Act
 		var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
@@ -81,14 +84,16 @@ public class ExchangeRateProviderTests
 		var cache = new MemoryCache(new MemoryCacheOptions());
 		var bankApiClient = new Mock<IBankApiClient>();
 		var logger = new Mock<ILogger<IExchangeRateProvider>>();
+		var now = new DateTimeOffset(2024, 6, 8, 0, 0, 0, TimeSpan.Zero);
+		var timeProvider = new FakeTimeProvider(now);
 
 		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object);
+		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object, timeProvider);
 
 		// Act/Assert
 		await Should.ThrowAsync<ArgumentException>(async () =>
 			{
-				await provider.GetExchangeRatesAsync(currencies, DateTimeOffset.UtcNow.Date.AddDays(2));
+				await provider.GetExchangeRatesAsync(currencies, now.AddDays(1));
 			});
 	}
 }

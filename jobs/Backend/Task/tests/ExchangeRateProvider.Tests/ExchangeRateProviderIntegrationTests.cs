@@ -74,7 +74,7 @@ public class ExchangeRateProviderIntegrationTests
 		var logger = new Mock<ILogger<IExchangeRateProvider>>();
 
 		// Act
-		var exchangeRatesProvider = new ExchangeRateProvider(bankApiClient, cache, logger.Object);
+		var exchangeRatesProvider = new ExchangeRateProvider(bankApiClient, cache, logger.Object, TimeProvider.System);
 
 
 		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));

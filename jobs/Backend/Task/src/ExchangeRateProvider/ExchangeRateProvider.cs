@@ -4,7 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateProvider;
 
-public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache memoryCache, ILogger<IExchangeRateProvider> logger): IExchangeRateProvider
+public class ExchangeRateProvider(
+	IBankApiClient bankApiClient,
+	IMemoryCache memoryCache,
+	ILogger<IExchangeRateProvider> logger,
+	TimeProvider timeProvider): IExchangeRateProvider
 {
 	private const string CacheKey = "rates";
 	private const double CacheDurationFromNow = 60;
@@ -18,7 +22,7 @@ public class ExchangeRateProvider(IBankApiClient bankApiClient, IMemoryCache mem
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
     {
-	    if (validFor != null && validFor.Value > DateTimeOffset.UtcNow)
+	    if (validFor != null && validFor.Value > timeProvider.GetUtcNow())
 	    {
 		    throw new ArgumentException("The validFor parameter value cannot be a date in the future");
 	    }
