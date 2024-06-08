@@ -1,9 +1,9 @@
-﻿using ExchangeRateUpdater;
+﻿using Application.Common.Models;
 
 namespace Application.CzechNationalBank.Providers
 {
     public interface IExchangeRateProvider
     {
-        IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
     }
 }
