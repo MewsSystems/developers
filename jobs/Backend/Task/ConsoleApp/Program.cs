@@ -1,9 +1,17 @@
-﻿using System;
+﻿using Application;
+using Application.CzechNationalBank.Providers;
+
+using Autofac;
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ExchangeRateUpdater
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         private static IEnumerable<Currency> currencies = new[]
@@ -21,9 +29,14 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            // I did think about moving this to the Application project but this seems 
+             // quite console app / test type of functionality so left it here.  In reality you 
+             // might expect ExchangeRateProvider to be exposed as an API or just be available as 
+             // an internal service
             try
             {
-                var provider = new ExchangeRateProvider();
+                var container = DependencyInjection.Register();
+                var provider = container.Resolve<IExchangeRateProvider>();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
