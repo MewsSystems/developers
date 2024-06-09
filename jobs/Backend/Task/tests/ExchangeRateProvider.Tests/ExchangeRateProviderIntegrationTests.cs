@@ -18,38 +18,38 @@ public class ExchangeRateProviderIntegrationTests
         // Arrange
         var responseContent =
             """
-			{
-			  "rates": [
-			    {
-			      "validFor": "2024-06-06",
-			      "order": 109,
-			      "country": "Australia",
-			      "currency": "dollar",
-			      "amount": 1,
-			      "currencyCode": "AUD",
-			      "rate": 15.049
-			    },
-			    {
-			      "validFor": "2024-06-06",
-			      "order": 109,
-			      "country": "Brazil",
-			      "currency": "real",
-			      "amount": 1,
-			      "currencyCode": "BRL",
-			      "rate": 4.281
-			    },
-			    {
-			      "validFor": "2024-06-06",
-			      "order": 109,
-			      "country": "Japan",
-			      "currency": "yen",
-			      "amount": 100,
-			      "currencyCode": "JPY",
-			      "rate": 14.514
-			    }
-			  ]
-			}
-			""";
+            {
+              "rates": [
+                {
+                  "validFor": "2024-06-06",
+                  "order": 109,
+                  "country": "Australia",
+                  "currency": "dollar",
+                  "amount": 1,
+                  "currencyCode": "AUD",
+                  "rate": 15.049
+                },
+                {
+                  "validFor": "2024-06-06",
+                  "order": 109,
+                  "country": "Brazil",
+                  "currency": "real",
+                  "amount": 1,
+                  "currencyCode": "BRL",
+                  "rate": 4.281
+                },
+                {
+                  "validFor": "2024-06-06",
+                  "order": 109,
+                  "country": "Japan",
+                  "currency": "yen",
+                  "amount": 100,
+                  "currencyCode": "JPY",
+                  "rate": 14.514
+                }
+              ]
+            }
+            """;
 
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
