@@ -4,6 +4,7 @@ using ExchangeRateProvider.Models;
 
 namespace ExchangeRateProvider.BankApiClients.Cnb;
 
+// API specification: https://api.cnb.cz/cnbapi/api-docs (copied to .\src\ExchangeRateProvider\BankApiClients\Cnb\spec.json for easy reference)
 public sealed class CnbBankApiClient(HttpClient httpClient) : IBankApiClient
 {
     public async Task<IEnumerable<BankCurrencyRate>> GetDailyExchangeRatesAsync(DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)

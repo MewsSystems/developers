@@ -1,11 +1,8 @@
-using ExchangeRateProvider.BankApiClients.Cnb;
 using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OpenTelemetry.Metrics;
-using Polly;
+using TestApp;
 
 var configBuilder = new ConfigurationBuilder()
 	.SetBasePath(Directory.GetCurrentDirectory())
@@ -15,34 +12,7 @@ var configBuilder = new ConfigurationBuilder()
 var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
-	    services
-		    .AddSingleton(TimeProvider.System)
-		    .AddLogging(builder => builder.AddConsole())
-		    .AddMemoryCache(options =>
-		    {
-			    options.SizeLimit = 1024;
-		    })
-		    .AddSingleton<IExchangeRateProvider, ExchangeRateProvider.ExchangeRateProvider>()
-		    .AddHttpClient<IBankApiClient, CnbBankApiClient>(client =>
-		    {
-			    var baseUrl = context.Configuration["BaseUrl"] ??
-			                  throw new Exception("BaseUrl configuration not found.");
-
-			    client.BaseAddress = new Uri(baseUrl);
-		    })
-		    .AddStandardResilienceHandler(options =>
-		    {
-			    options.Retry.MaxRetryAttempts = 4;
-			    options.Retry.BackoffType = DelayBackoffType.Exponential;
-				options.Retry.UseJitter = true;
-		    });
-	    services.AddOpenTelemetry()
-		    .WithMetrics(options =>
-		    {
-			    options
-				    .AddMeter("ExchangeRateProvider")
-				    .AddConsoleExporter();
-		    });
+	    services.AddExchangeRateProviderServices(context);
     });
 
 var host = builder.Build();
@@ -61,12 +31,10 @@ IEnumerable<Currency> currencies =
 	new Currency("XYZ")
 ];
 
-var cancellationToken = new CancellationTokenSource();
-
 try
 {
 	var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-	var rates = await provider.GetExchangeRatesAsync(currencies, null, cancellationToken.Token)
+	var rates = await provider.GetExchangeRatesAsync(currencies)
 		.ConfigureAwait(false);
 
 	var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
