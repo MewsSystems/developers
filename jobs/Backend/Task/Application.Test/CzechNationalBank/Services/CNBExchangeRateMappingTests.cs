@@ -44,6 +44,21 @@ namespace Application.Test.CzechNationalBank.Mappings
         }
 
         [Fact]
+        public void ConvertToExchangeRates_WithAmount100_ReturnsNormalisedExchangeRate()
+        {
+            var cnbDto = new CNBExRateDailyRestDto
+            {
+                CurrencyCode = "ZAR",
+                Rate = 1.2m,
+                Amount = 100
+            };
+
+            var result = cnbExchangeRateMappingService.ConvertToExchangeRates(new[] { cnbDto });
+
+            result.Should().BeEquivalentTo(new List<ExchangeRate> { new ExchangeRate(new Currency("ZAR"), new Currency("CZK"), 0.012m) });
+        }
+
+        [Fact]
         public void ConvertToExchangeRates_WithAmount0_ReturnsEmpty()
         {
             var cnbDto = new CNBExRateDailyRestDto
