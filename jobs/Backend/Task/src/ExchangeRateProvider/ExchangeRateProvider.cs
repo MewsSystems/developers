@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 using ExchangeRateProvider.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -13,14 +14,17 @@ public class ExchangeRateProvider(
 	private const string CacheKey = "rates";
 	private const double CacheDurationFromNow = 60;
     private const string DefaultTargetCurrencyCode = "CZK";
+    private static readonly Meter Meter = new ("ExchangeRateProvider");
+    private static readonly Counter<long> ApiErrorCount = Meter.CreateCounter<long>("bank_api_error_count", "Number of failed responses from bank API");
+    private static readonly Counter<long> ApiSuccessCount = Meter.CreateCounter<long>("bank_api_success_count", "Number of successful responses from bank API");
 
-    /// <summary>
-    /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-    /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-    /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-    /// some of the currencies, ignore them.
-    /// </summary>
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
+	/// <summary>
+	/// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
+	/// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
+	/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
+	/// some of the currencies, ignore them.
+	/// </summary>
+	public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, DateTimeOffset? validFor = null, CancellationToken cancellationToken = default)
     {
 	    if (validFor != null && validFor.Value > timeProvider.GetUtcNow())
 	    {
@@ -50,10 +54,12 @@ public class ExchangeRateProvider(
 	    try
 	    {
 		    rates = await bankApiClient.GetDailyExchangeRatesAsync(validFor, cancellationToken).ConfigureAwait(false);
+			ApiSuccessCount.Add(1);
 	    }
 		catch (Exception e)
 	    {
 		    logger.LogError(e, "Error when retrieving the currency rates from the bank API.");
+			ApiErrorCount.Add(1);
 		    throw;
 	    }
 
@@ -66,7 +72,7 @@ public class ExchangeRateProvider(
 				Size = ratesAsArray.Length
 			});
 
-	    return ratesAsArray;
+		return ratesAsArray;
     }
 
     private static string GetKey(DateTimeOffset? validFor)

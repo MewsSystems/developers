@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Metrics;
 using Polly;
 
 var configBuilder = new ConfigurationBuilder()
@@ -35,6 +36,13 @@ var builder = Host.CreateDefaultBuilder(args)
 			    options.Retry.BackoffType = DelayBackoffType.Exponential;
 				options.Retry.UseJitter = true;
 		    });
+	    services.AddOpenTelemetry()
+		    .WithMetrics(options =>
+		    {
+			    options
+				    .AddMeter("ExchangeRateProvider")
+				    .AddConsoleExporter();
+		    });
     });
 
 var host = builder.Build();
@@ -57,20 +65,21 @@ var cancellationToken = new CancellationTokenSource();
 
 try
 {
-    var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
-    var rates = await provider.GetExchangeRatesAsync(currencies, null, cancellationToken.Token).ConfigureAwait(false);
+	var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
+	var rates = await provider.GetExchangeRatesAsync(currencies, null, cancellationToken.Token)
+		.ConfigureAwait(false);
 
-    var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
-    Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");
-    foreach (var rate in exchangeRates)
-    {
-        Console.WriteLine(rate.ToString());
-    }
+	var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
+	Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");
+	foreach (var rate in exchangeRates)
+	{
+		Console.WriteLine(rate.ToString());
+	}
 }
 catch (Exception e)
 {
-    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+	Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
 }
 
 Console.WriteLine("Press any key to close the app.");
-Console.ReadLine();
+Console.ReadKey();
