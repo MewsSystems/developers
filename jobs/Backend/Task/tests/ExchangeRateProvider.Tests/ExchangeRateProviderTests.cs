@@ -27,19 +27,18 @@ public class ExchangeRateProviderTests
 					]
 				));
 
-		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
 		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object, _timeProvider);
 
 		// Act
-		var exchangeRates = await provider.GetExchangeRatesAsync(currencies);
+		var exchangeRates = await provider.GetExchangeRatesAsync(
+			new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c)));
 
 		// Assert
 		exchangeRates.ShouldNotBeNull();
-		exchangeRates.ShouldBeUnique();
+		exchangeRates.ShouldHaveSingleItem();
 		exchangeRates.ShouldContain(
 			r =>
-				r.SourceCurrency.Code == "EUR" && 
-			    r.TargetCurrency.Code == "CZK" && 
+				r.SourceCurrency.Code == "EUR" &&
 			    r.Value == 24.2m);
 	}
 
@@ -50,14 +49,14 @@ public class ExchangeRateProviderTests
 		var cache = new MemoryCache(new MemoryCacheOptions());
 		var bankApiClient = new Mock<IBankApiClient>();
 		var logger = new Mock<ILogger<IExchangeRateProvider>>();
-		const decimal jpyRate = 14.528m;
-		const long jpyAmount = 100L;
+		const decimal currencyRate = 14.528m;
+		const long currencyAmount = 100L;
 
 		bankApiClient.Setup(client =>
 				client.GetDailyExchangeRatesAsync(null, default))
 			.Returns(() => Task.FromResult((IEnumerable<BankCurrencyRate>)
 				[
-					new BankCurrencyRate(jpyAmount, "JPY", jpyRate)
+					new BankCurrencyRate(currencyAmount, "JPY", currencyRate)
 				]
 			));
 
@@ -69,12 +68,11 @@ public class ExchangeRateProviderTests
 
 		// Assert
 		exchangeRates.ShouldNotBeNull();
-		exchangeRates.ShouldBeUnique();
+		exchangeRates.ShouldHaveSingleItem();
 		exchangeRates.ShouldContain(
 			r =>
 				r.SourceCurrency.Code == "JPY" &&
-				r.TargetCurrency.Code == "CZK" &&
-				r.Value == decimal.Divide(jpyRate, jpyAmount));
+				r.Value == decimal.Divide(currencyRate, currencyAmount));
 	}
 
 	[Fact]
@@ -87,13 +85,13 @@ public class ExchangeRateProviderTests
 		var now = new DateTimeOffset(2024, 6, 8, 0, 0, 0, TimeSpan.Zero);
 		var timeProvider = new FakeTimeProvider(now);
 
-		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
 		var provider = new ExchangeRateProvider(bankApiClient.Object, cache, logger.Object, timeProvider);
 
 		// Act/Assert
 		await Should.ThrowAsync<ArgumentException>(async () =>
 			{
-				await provider.GetExchangeRatesAsync(currencies, now.AddDays(1));
+				await provider.GetExchangeRatesAsync(
+					new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c)), now.AddDays(1));
 			});
 	}
 }

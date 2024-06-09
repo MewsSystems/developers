@@ -11,7 +11,7 @@ public class CnbBankApiClientTests
 {
 
 	[Fact]
-	public async Task CnbBankApiClientCorrectlyParsesResponseAndReturnModel()
+	public async Task Given_a_specific_api_response_Should_parse_it_correctly_and_return_common_model()
 	{
 		// Arrange
 		const string responseContent =
@@ -69,8 +69,9 @@ public class CnbBankApiClientTests
 		var bankApiClient = new CnbBankApiClient(httpClient);
 
 		// Act
-		var bankCurrencyRates = await bankApiClient.GetDailyExchangeRatesAsync(default);
+		var bankCurrencyRates = await bankApiClient.GetDailyExchangeRatesAsync();
 
+		// Assert
 		BankCurrencyRate[] expectedRates =
 		[
 			new BankCurrencyRate(1L, "AUD", 15.049m),
@@ -78,7 +79,6 @@ public class CnbBankApiClientTests
 			new BankCurrencyRate(100L, "JPY", 14.514m)
 		];
 
-		// Assert
 		bankCurrencyRates.ToArray().ShouldBeEquivalentTo(expectedRates);
 	}
 }

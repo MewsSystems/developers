@@ -6,8 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 
-var configBuilder = new ConfigurationBuilder();
-configBuilder.SetBasePath(Directory.GetCurrentDirectory())
+var configBuilder = new ConfigurationBuilder()
+	.SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
     .Build();
 

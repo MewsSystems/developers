@@ -69,7 +69,7 @@ public class ExchangeRateProvider(
 	    return ratesAsArray;
     }
 
-    private string GetKey(DateTimeOffset? validFor)
+    private static string GetKey(DateTimeOffset? validFor)
     {
 	    validFor ??= DateTimeOffset.UtcNow;
 
