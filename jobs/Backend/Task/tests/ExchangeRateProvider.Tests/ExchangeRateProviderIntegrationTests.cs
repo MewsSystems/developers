@@ -12,12 +12,12 @@ namespace ExchangeRateProvider.Tests;
 public class ExchangeRateProviderIntegrationTests
 {
 
-	[Fact]
-	public async Task When_exchange_provider_is_called_with_currencies_not_returned_by_api_Then_those_are_ignored()
-	{
-		// Arrange
-		var responseContent =
-			"""
+    [Fact]
+    public async Task When_exchange_provider_is_called_with_currencies_not_returned_by_api_Then_those_are_ignored()
+    {
+        // Arrange
+        var responseContent =
+            """
 			{
 			  "rates": [
 			    {
@@ -51,40 +51,40 @@ public class ExchangeRateProviderIntegrationTests
 			}
 			""";
 
-		var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
-		httpMessageHandlerMock
-			.Protected()
-			.Setup<Task<HttpResponseMessage>>(
-				"SendAsync",
-				ItExpr.IsAny<HttpRequestMessage>(),
-				ItExpr.IsAny<CancellationToken>())
-			.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
-			{
-				Content = new StringContent(responseContent)
-			});
+        httpMessageHandlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(responseContent)
+            });
 
-		var httpClient = new HttpClient(httpMessageHandlerMock.Object)
-		{
-			BaseAddress = new Uri("https://test.local")
-		};
-		var bankApiClient = new CnbBankApiClient(httpClient);
+        var httpClient = new HttpClient(httpMessageHandlerMock.Object)
+        {
+            BaseAddress = new Uri("https://test.local")
+        };
+        var bankApiClient = new CnbBankApiClient(httpClient);
 
-		var cache = new MemoryCache(new MemoryCacheOptions());
-		var logger = new Mock<ILogger<IExchangeRateProvider>>();
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var logger = new Mock<ILogger<IExchangeRateProvider>>();
 
-		// Act
-		var exchangeRatesProvider = new ExchangeRateProvider(bankApiClient, cache, logger.Object, TimeProvider.System);
+        // Act
+        var exchangeRatesProvider = new ExchangeRateProvider(bankApiClient, cache, logger.Object, TimeProvider.System);
 
 
-		var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
-		var rates = await exchangeRatesProvider.GetExchangeRatesAsync(currencies);
+        var currencies = new[] { "USD", "EUR", "JPY" }.Select(c => new Currency(c));
+        var rates = await exchangeRatesProvider.GetExchangeRatesAsync(currencies);
 
-		// Assert
-		rates.ShouldHaveSingleItem();
-		rates.Single().SourceCurrency.Code.ShouldBe("JPY");
+        // Assert
+        rates.ShouldHaveSingleItem();
+        rates.Single().SourceCurrency.Code.ShouldBe("JPY");
 
-	}
+    }
 
 }
 

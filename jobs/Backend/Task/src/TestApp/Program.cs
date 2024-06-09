@@ -6,14 +6,14 @@ using TestApp;
 
 var configBuilder = new ConfigurationBuilder()
 	.SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .Build();
+	.AddJsonFile("appsettings.json")
+	.Build();
 
 var builder = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((context, services) =>
-    {
-	    services.AddExchangeRateProviderServices(context);
-    });
+	.ConfigureServices((context, services) =>
+	{
+		services.AddExchangeRateProviderServices(context);
+	});
 
 var host = builder.Build();
 

@@ -10,12 +10,12 @@ namespace ExchangeRateProvider.Tests;
 public class CnbBankApiClientTests
 {
 
-	[Fact]
-	public async Task Given_a_specific_api_response_Should_parse_it_correctly_and_return_common_model()
-	{
-		// Arrange
-		const string responseContent =
-			"""
+    [Fact]
+    public async Task Given_a_specific_api_response_Should_parse_it_correctly_and_return_common_model()
+    {
+        // Arrange
+        const string responseContent =
+            """
 		    {
 		      "rates": [
 		        {
@@ -49,36 +49,36 @@ public class CnbBankApiClientTests
 		    }
 		    """;
 
-		var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
-		httpMessageHandlerMock
-			.Protected()
-			.Setup<Task<HttpResponseMessage>>(
-				"SendAsync",
-				ItExpr.IsAny<HttpRequestMessage>(),
-				ItExpr.IsAny<CancellationToken>())
-			.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
-			{
-				Content = new StringContent(responseContent)
-			});
+        httpMessageHandlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(responseContent)
+            });
 
-		var httpClient = new HttpClient(httpMessageHandlerMock.Object)
-		{
-			BaseAddress = new Uri("https://test.local")
-		};
-		var bankApiClient = new CnbBankApiClient(httpClient);
+        var httpClient = new HttpClient(httpMessageHandlerMock.Object)
+        {
+            BaseAddress = new Uri("https://test.local")
+        };
+        var bankApiClient = new CnbBankApiClient(httpClient);
 
-		// Act
-		var bankCurrencyRates = await bankApiClient.GetDailyExchangeRatesAsync();
+        // Act
+        var bankCurrencyRates = await bankApiClient.GetDailyExchangeRatesAsync();
 
-		// Assert
-		BankCurrencyRate[] expectedRates =
-		[
-			new BankCurrencyRate(1L, "AUD", 15.049m),
-			new BankCurrencyRate(1L, "BRL", 4.281m),
-			new BankCurrencyRate(100L, "JPY", 14.514m)
-		];
+        // Assert
+        BankCurrencyRate[] expectedRates =
+        [
+            new BankCurrencyRate(1L, "AUD", 15.049m),
+            new BankCurrencyRate(1L, "BRL", 4.281m),
+            new BankCurrencyRate(100L, "JPY", 14.514m)
+        ];
 
-		bankCurrencyRates.ToArray().ShouldBeEquivalentTo(expectedRates);
-	}
+        bankCurrencyRates.ToArray().ShouldBeEquivalentTo(expectedRates);
+    }
 }

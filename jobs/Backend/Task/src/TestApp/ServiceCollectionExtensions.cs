@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
 			.AddHttpClient<IBankApiClient, CnbBankApiClient>(client =>
 			{
 				var baseUrl = context.Configuration["BaseUrl"] ??
-				              throw new Exception("BaseUrl configuration not found.");
+							  throw new Exception("BaseUrl configuration not found.");
 
 				client.BaseAddress = new Uri(baseUrl);
 			})
