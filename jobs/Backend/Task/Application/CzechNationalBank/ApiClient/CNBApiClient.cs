@@ -12,26 +12,26 @@ using System.Text.Json;
 
 namespace Application.CzechNationalBank.ApiClient
 {
-    public sealed class CNBClient(
-        HttpClient httpClient,
-        ILogger<CNBClient> logger) : IDisposable, ICNBClient
+    public sealed class CNBApiClient(
+        HttpClient _httpClient,
+        ILogger<CNBApiClient> _logger) : IDisposable, ICNCApiClient
     {
         public async Task<CNBExRateDailyResponseDto?> GetExRateDailies()
         {
             try
             {
                 // may want to consider using Polly for retries
-                var resp = await httpClient.GetFromJsonAsync<CNBExRateDailyResponseDto>(
+                var resp = await _httpClient.GetFromJsonAsync<CNBExRateDailyResponseDto>(
                     CNBApiConfiguration.DailyExchangeRatesEndpoint, new JsonSerializerOptions(JsonSerializerDefaults.Web));
                 return resp;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error fetching exchange rates from CNB.");
+                _logger.LogError(ex, "Error fetching exchange rates from CNB.");
                 return null;
             }
         }
 
-        public void Dispose() => httpClient?.Dispose();
+        public void Dispose() => _httpClient?.Dispose();
     }
 }

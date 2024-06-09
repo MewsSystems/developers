@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Application.Common.Services;
 using Application.Common.Validations;
 using Application.CzechNationalBank.ApiClient;
 using Application.CzechNationalBank.ApiClient.Dtos;
@@ -22,23 +23,25 @@ namespace Application.Test.CzechNationalBank.Providers
 {
     public class ExchangeRateProviderTests
     {
-        private readonly ICNBClient cNBClient;
-        private readonly IExchangeRateProvider exchangeRateProvider;
-        private readonly ILogger<ExchangeRateProvider> logger;
+        private readonly ICNCApiClient _cNBClient;
+        private readonly IExchangeRateProvider _exchangeRateProvider;
+        private readonly ILogger<ExchangeRateProvider> _logger;
+        private readonly ICurrenciesValidationService _currenciesValidationService;
 
         public ExchangeRateProviderTests()
         {
-            cNBClient = A.Fake<ICNBClient>();
-            logger = A.Fake<ILogger<ExchangeRateProvider>>();
-            var currencyValidator = new CurrencyValidator();
+            _cNBClient = A.Fake<ICNCApiClient>();
+            _logger = A.Fake<ILogger<ExchangeRateProvider>>();
             var mapper = new CNBExchangeRateMappingService(A.Fake<ILogger<CNBExchangeRateMappingService>>());
-            exchangeRateProvider = new ExchangeRateProvider(cNBClient, logger, currencyValidator, mapper);
+            _currenciesValidationService = A.Fake<ICurrenciesValidationService>();
+            _exchangeRateProvider = new ExchangeRateProvider(_cNBClient, _logger, _currenciesValidationService, mapper);
         }
 
         [Fact]
         public async Task GetExchangeRates_WithValidInput_ReturnsRates()
         {
-            A.CallTo(() => cNBClient.GetExRateDailies()).Returns(new CNBExRateDailyResponseDto()
+            A.CallTo(() => _currenciesValidationService.ValidateAndLogWarning(A<IEnumerable<Currency>>._)).DoesNothing();
+            A.CallTo(() => _cNBClient.GetExRateDailies()).Returns(new CNBExRateDailyResponseDto()
             {
                 Rates = [ 
                     new CNBExRateDailyRestDto() {
@@ -67,9 +70,10 @@ namespace Application.Test.CzechNationalBank.Providers
                 new Currency("HUF")
             };
 
-            var res = await exchangeRateProvider.GetExchangeRates(currencies);
+            var res = await _exchangeRateProvider.GetExchangeRates(currencies);
 
-            A.CallTo(() => cNBClient.GetExRateDailies()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _currenciesValidationService.ValidateAndLogWarning(currencies)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _cNBClient.GetExRateDailies()).MustHaveHappenedOnceExactly();
             res.Should().BeEquivalentTo(new List<ExchangeRate>
             {
                 new ExchangeRate(new Currency("AUD"), new Currency("CZK"), 15.0354m),

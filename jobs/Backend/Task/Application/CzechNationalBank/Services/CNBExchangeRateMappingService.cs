@@ -12,10 +12,11 @@ using System.Threading.Tasks;
 
 namespace Application.CzechNationalBank.Mappings
 {
-    public class CNBExchangeRateMappingService(ILogger<CNBExchangeRateMappingService> logger) : ICNBExchangeRateMappingService
+    public class CNBExchangeRateMappingService(ILogger<CNBExchangeRateMappingService> _logger) : ICNBExchangeRateMappingService
     {
         public static string CzechCurrencyCode => "CZK";
 
+        // would normally use an extension method or perhaps automapper but need to handle case where Amount is 0
         public IList<ExchangeRate> ConvertToExchangeRates(IEnumerable<CNBExRateDailyRestDto> dtos)
         {
             var results = new List<ExchangeRate>();
@@ -23,15 +24,13 @@ namespace Application.CzechNationalBank.Mappings
             {
                 if (dto.Amount <= 0)
                 {
-                    logger.LogWarning("Amount is 0 for currency code {CurrencyCode}. Skipping.", dto.CurrencyCode);
+                    _logger.LogWarning("Amount is 0 for currency code {CurrencyCode}. Skipping.", dto.CurrencyCode);
+                    continue;
                 }
-                else
-                {
-                    var sourceCurrency = new Currency(dto.CurrencyCode);
-                    var targetCurrency = new Currency(CzechCurrencyCode);
-                    var rate = dto.Rate / dto.Amount;
-                    results.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate));
-                }
+                var sourceCurrency = new Currency(dto.CurrencyCode);
+                var targetCurrency = new Currency(CzechCurrencyCode);
+                var rate = dto.Rate / dto.Amount;
+                results.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate));
             }
             return results;
         }

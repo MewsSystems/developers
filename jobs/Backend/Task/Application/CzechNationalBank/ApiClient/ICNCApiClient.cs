@@ -2,7 +2,7 @@
 
 namespace Application.CzechNationalBank.ApiClient
 {
-    public interface ICNBClient : IDisposable
+    public interface ICNCApiClient : IDisposable
     {
         Task<CNBExRateDailyResponseDto?> GetExRateDailies();
     }

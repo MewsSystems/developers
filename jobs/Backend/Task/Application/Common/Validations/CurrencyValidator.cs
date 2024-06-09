@@ -18,7 +18,7 @@ namespace Application.Common.Validations
         {
             RuleFor(currency => currency.Code)
                 .Must(x => ValidISO4217.Contains(x))
-                .WithMessage("Currency code is not valid ISO4217 code.");
+                .WithMessage("Currency code {PropertyValue} is not valid ISO4217 code.");
         }
     }
 }

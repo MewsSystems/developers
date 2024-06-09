@@ -7,6 +7,7 @@ using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 
 using System;
@@ -26,8 +27,13 @@ namespace Application
         {
             // Microsoft DI
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging();
-            serviceCollection.AddHttpClient<ICNBClient, CNBClient>(CNBApiConfiguration.SetupHttpClient);
+            
+            serviceCollection.AddLogging(builder => builder
+                .AddFilter("Application", LogLevel.Warning)
+                .AddFilter("System", LogLevel.Warning)
+                .AddConsole());
+            
+            serviceCollection.AddHttpClient<ICNCApiClient, CNBApiClient>(CNBApiConfiguration.SetupHttpClient);
             serviceCollection.AddValidatorsFromAssemblyContaining<CurrencyValidator>();
 
             // Autofac
