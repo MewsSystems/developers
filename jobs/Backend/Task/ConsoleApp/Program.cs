@@ -34,8 +34,8 @@ namespace ExchangeRateUpdater
             try
             {
                 var container = DependencyInjection.Register();
-                var provider = container.Resolve<IExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies);
+                var exchangeRateProvider = container.Resolve<IExchangeRateProvider>();
+                var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
