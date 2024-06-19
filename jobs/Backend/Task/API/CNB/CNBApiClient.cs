@@ -7,12 +7,17 @@ using System;
 
 namespace ExchangeRateUpdater.API.CNB
 {
-    public static class CNBApiClient
+    public interface ICNBApiClient
+    {
+        Task<ExRateDailyResponse> GetDailyRates(string lang = "EN", DateTime? date = null);
+    }
+
+    public class CNBApiClient : ICNBApiClient
     {
         private const string API_URL = "https://api.cnb.cz/cnbapi";
         private const string EX_RATES = "exrates";
         private const string DAILY_RATES = "daily";
-        public static async Task<ExRateDailyResponse> GetDailyRates(string lang = "EN", DateTime? date = null)
+        public async Task<ExRateDailyResponse> GetDailyRates(string lang = "EN", DateTime? date = null)
         {
             using var hc = new HttpClient();
             var query = DAILY_RATES + $"?lang={lang}";
@@ -26,6 +31,5 @@ namespace ExchangeRateUpdater.API.CNB
 
             return await response.Content.ReadFromJsonAsync<ExRateDailyResponse>();
         }
-
     }
 }
