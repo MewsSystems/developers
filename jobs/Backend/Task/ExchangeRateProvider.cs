@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ExchangeRateUpdater.API.CNB;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -11,9 +13,16 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        /// 
+        
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var currencyCodes = currencies.Select(c => c.Code).ToList();
+
+            var result = await CNBApiClient.GetDailyRates();
+
+            return result.Rates.Where(r => currencyCodes.Contains(r.CurrencyCode))
+                .Select(r => new ExchangeRate(new Currency(r.CurrencyCode), new Currency("CZK"), r.Rate / r.Amount));            
         }
     }
 }
