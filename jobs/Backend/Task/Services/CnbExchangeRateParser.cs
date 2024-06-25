@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Services
 
             return apiResponse.Rates
                .Where(rate => currencies.Any(c => c.Code == rate.CurrencyCode))
-                .Select(rate => new ExchangeRate(new Currency(GeneralConstants.BaseCurrencyCode), new Currency(rate.CurrencyCode), rate.RateValue))
+                .Select(rate => new ExchangeRate(new Currency(GeneralConstants.BaseCurrencyCode), new Currency(rate.CurrencyCode), rate.RateValue / rate.Amount))
                .ToList();
         }
     }
