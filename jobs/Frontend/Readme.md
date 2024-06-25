@@ -15,3 +15,39 @@ To retrieve information about movies, use [TheMovieDb API](https://developers.th
 To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
 We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
 The use of any additional library is allowed and up to you.
+
+## Requirements
+
+- Node.js >= 20.14.0 (LTS)
+
+## Tech Stack
+
+- TypeScript
+- React
+- Tailwind CSS
+- Vite
+- pnpm
+
+## How to Install
+
+- Install node_modules \
+  `pnpm install`
+- Optionally, make a copy of `.env.example` as `.env` \
+  Set `VITE_THEMOVIEDB_API_URL` as the API URL of THEMOVIEDB \
+  Set `VITE_THEMOVIEDB_API_KEY` as the API KEY of THEMOVIEDB \
+  `cp .env.example .env`
+
+## How to Run
+
+- `pnpm dev` to run the app in local
+
+## How to Build
+
+- `pnpm build` to build the app
+- `pnpm preview` to preview the productioin in local
+
+## Commands for Devlopment
+
+- `pnpm lint` to check and fix lint errors
+- `pnpm format` to enforce coding styles
+- `pnpm test` to run automated tests

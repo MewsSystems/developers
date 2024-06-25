@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  @apply h-full;
+}
+
+body {
+  @apply h-full antialiased;
+}
+
+div#root {
+  @apply h-full;
+}
+
+:root {
+  font-family: Inter, sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    --tw-font-sans: "InterVariable", sans-serif;
+  }
+}
