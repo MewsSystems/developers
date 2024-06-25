@@ -22,3 +22,5 @@ node_modules
 bower_components
 npm-debug.log
 /jobs/Backend/Task/.vs/ExchangeRateUpdater
+jobs/Backend/Task/.vs/ProjectEvaluation/exchangerateupdater.metadata.v7.bin
+jobs/Backend/Task/.vs/ProjectEvaluation/exchangerateupdater.projects.v7.bin
