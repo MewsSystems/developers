@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
 using Newtonsoft.Json;
@@ -16,9 +17,9 @@ namespace ExchangeRateUpdater.Services
             var apiResponse = JsonConvert.DeserializeObject<ExchangeRateApiResponse>(data);
 
             return apiResponse.Rates
-                .Where(rate => currencies.Any(c => c.Code == rate.CurrencyCode))
-                .Select(rate => new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), rate.RateValue))
-                .ToList();
+               .Where(rate => currencies.Any(c => c.Code == rate.CurrencyCode))
+                .Select(rate => new ExchangeRate(new Currency(GeneralConstants.BaseCurrencyCode), new Currency(rate.CurrencyCode), rate.RateValue))
+               .ToList();
         }
     }
 }
