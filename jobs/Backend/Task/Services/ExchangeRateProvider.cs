@@ -28,7 +28,10 @@ namespace ExchangeRateUpdater.Services
             var exchangeRates = new List<ExchangeRate>();
             try
             {
-                var response = await _httpClient.GetStringAsync(_url);
+                var today = DateTime.Now.ToString("yyyy-MM-dd");
+                var requestUrl = string.Format(_url, today);
+
+                var response = await _httpClient.GetStringAsync(requestUrl);
                 return _exchangeRateParser.Parse(response, currencies);
 
             }
