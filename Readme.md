@@ -8,7 +8,7 @@ Would you like to **meet us**? Hear us talk or check if we're coming to your are
 
 <a name='about-mews'/>
 
-## 📚 About Mews 
+## 📚 About Mews
 
 > We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 65+ countries in 2000+ hotels, we have truly started a revolution.
 
@@ -25,7 +25,7 @@ In the following sections, we'll try to answer frequently asked question that we
 
 <a name='product'/>
 
-### 🏨 Product 
+### 🏨 Product
 
 - **What are the applications you are building?** The biggest part is the system for employees of hotels (receptionists, housekeepers, accountants, revenue managers, essentially everybody). For them, we also have native mobile applications with a subset of the functionality. Then we have web application for guests of the hotels and booking widget that hotels can put to their websites. We also offer hotels a kiosk application that they can put into their lobby and guests can checkin there. The full list of products is visible on our [website](https://www.mews.com/en/products).
 - **What are your plans for the future?** We don't create fixed long term roadmaps. We plan and commit for the upcoming 4 months. And the rest of the roadmap represents rather a list of opportunities or problems we're going to solve most likely. You can check presentation of our CPO about [2021 roadmap](https://www.youtube.com/watch?v=Mr-FhBnouvg).
@@ -35,7 +35,7 @@ In the following sections, we'll try to answer frequently asked question that we
 
 <a name='technology'/>
 
-### 👨‍💻 Technology 
+### 👨‍💻 Technology
 
 - **Which technologies do you use?** Generally, we try to use technology that is familiar to the development community. The benefit of using common technology is that everybody knows it well, and if not, they're able to Google the answers to their own questions. We also try to avoid building in-house solutions, but rather use third party services for responsibilities that are not directly related to our business (e.g. NewRelic for performance monitoring and logging, Sentry for error reporting, SendGrid for mailing). We want to focus on our product. Check our [Stackshare](https://stackshare.io/mews-systems/mews) to see a full list of what we use and check our [Platform documentation](https://www.mews.com/platform-documentation) for philosophy behind our platform and other things like security, disaster recovery, infrastructure etc.
 - **What is the architecture of the backend?** The "executable" is a plain ASP.NET Core application with no extra caveats. We use Entity Framework with code-first approach, and we use Azure DB (a version of MSSQL) as our database. We run the application in Azure using App Services, so we don't need to manage the web servers or virtual machines. In general, there is data layer to access Azure DB, Azure Storage, Cosmos DB and Redis, business layer consisting of various components and a transactional layer (web, API, background jobs). BTW you can check our [Awesome Mews](https://github.com/MewsSystems/awesome-mews) reading list to see what is our philosophy, not only on backend. One speciality is functional programming, which we try to pragmatically use within our codebase, check out [this talk](https://www.youtube.com/watch?v=t20txMT82ws) for more detailed info.
@@ -47,7 +47,7 @@ In the following sections, we'll try to answer frequently asked question that we
 
 <a name='teamwork'/>
 
-### ⛹️ Teamwork 
+### ⛹️ Teamwork
 
 - **Do you look for any specialists?** Both, specialists and "generic" developers are fine. We try to learn about their individual skills over time. Once we know what they enjoy working on, we try to embrace that and assign projects that each person is interested in. We have enough of a workload for the generic developers, which extends to all layers of our applications including new features and/or fixing bugs. At the moment, we have 15 teams with different responsibilities, so there are options to choose from. As we grow, we start to look for specialists especially in platform teams (infrastructure, security, tooling, design systems).
 - **Which team will I work in?** That's hard to tell in advance. Basically there are two factors that we take into account. First, we look at past experience and preferences of the candidate. Second, we look at our own needs that are based on company strategy. And combine those two inputs to find the best match in one of 15 teams in the following divisions and families (segmented by customers they build products for):
@@ -68,7 +68,7 @@ In the following sections, we'll try to answer frequently asked question that we
 - **Do you have any code style rules?** We believe in naming things the right way rather than adding comments. We have our own set of code style rules (99% of .NET FW rules on backend, AirBnb on frontend) that are run during any build. If your code violates any of the rules, no one will be able to build the project. The goal is to have a uniform code style throughout the whole platform. We also create our own analyzers for common mistakes that appear during code-reviews.
 - **How often do you schedule refactoring?** We do not schedule refactoring. We consider it to be an integral part of development work. When implementing a new feature, it is important to verify that all of the team code and architecture quality standards are applied. The fixes and features should all be done properly from the beginning. Refactoring is also being done as part of technical roadmap which happens continuously, parallel to product roadmap.
 - **How do you handle changes in the architecture of the system?** We try to introduce changes gradually while extending the capabilities of our system. For bigger changes, both on backend and frontend, we currently have platform teams whose only responsibility is to improve the system architecture, develop libraries and tools for other teams that are more focused on product. So platform teams prepare everything necessary in advance, so that product teams can adopt it in the upcoming period as part of their technical roadmap.
-- **How many meetings would I have in a day?** That's up to team to decide, in most teams there is a short daily standup meeting. Once in a sprint, there is a grooming and planning meeting of the team (some teams have those merged). On Friday, there is a 30 minute meeting of all people in tech department with latest updates which then continues with 30 minute company-wide call, finishing with 30 minute company-wide question time. Averaging this out, it's like an hour a day. 
+- **How many meetings would I have in a day?** That's up to team to decide, in most teams there is a short daily standup meeting. Once in a sprint, there is a grooming and planning meeting of the team (some teams have those merged). On Friday, there is a 30 minute meeting of all people in tech department with latest updates which then continues with 30 minute company-wide call, finishing with 30 minute company-wide question time. Averaging this out, it's like an hour a day.
 - **What is the company language?** In Prague office, where development is located, around 50% of people are Czech and the rest is mix of many other nationalities. Therefore most of the meetings and communication is held in English.
 
 <a name='job'/>
