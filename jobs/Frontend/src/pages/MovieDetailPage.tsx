@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import { useMovies } from "../hooks/useMovies";
+import Button from "../components/Button";
 
 const Container = styled.div`
   padding: 16px;
@@ -24,7 +25,7 @@ const MovieDetailPage: React.FC = () => {
     <Container>
       <h1>{movieDetail.title}</h1>
       <Link to="/">
-        <button>Go Back</button>
+        <Button>Go Back</Button>
       </Link>
       <p>{movieDetail.overview}</p>
       <img

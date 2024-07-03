@@ -5,7 +5,16 @@ import SearchPage from "./pages/SearchPage";
 import MovieDetailPage from "./pages/MovieDetailPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { ThemeProvider, DefaultTheme } from "styled-components";
 import GlobalStyle from "./globalStyles";
+
+const theme: DefaultTheme = {
+  colors: {
+    primary: "mediumseagreen",
+    secondary: "white",
+    background: "#333",
+  },
+};
 
 console.log("load the app");
 const router = createBrowserRouter([
@@ -24,9 +33,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <GlobalStyle />
-    <Header />
-    <RouterProvider router={router} />
-    <Footer />
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Header />
+      <RouterProvider router={router} />
+      <Footer />
+    </ThemeProvider>
   </React.StrictMode>,
 );

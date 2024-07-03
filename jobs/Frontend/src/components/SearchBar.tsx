@@ -14,10 +14,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = memo(({ onSearch }) => {
-  console.log("load the search bar");
-
   const doSearch = useCallback((value: string) => {
-    console.log("Changed value:", value);
     onSearch(value);
   }, []);
 
@@ -28,9 +25,8 @@ const SearchBar: React.FC<SearchBarProps> = memo(({ onSearch }) => {
 
   return (
     <Input
-      placeholder="Search for a movie..."
+      placeholder="Search for a movie title..."
       onChange={(e) => {
-        console.log("typing:", e.target.value);
         debouncedSearch(e.target.value);
       }}
     />
