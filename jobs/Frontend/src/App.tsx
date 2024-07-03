@@ -7,7 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import GlobalStyle from "./globalStyles";
 
-console.log('load the app')
+console.log("load the app");
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,12 +19,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement,
+);
 root.render(
   <React.StrictMode>
     <GlobalStyle />
     <Header />
     <RouterProvider router={router} />
     <Footer />
-  </React.StrictMode>
-)
+  </React.StrictMode>,
+);

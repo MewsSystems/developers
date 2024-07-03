@@ -1,5 +1,5 @@
-const API_KEY = '03b8572954325680265531140190fd2a';
-const BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = "03b8572954325680265531140190fd2a";
+const BASE_URL = "https://api.themoviedb.org/3";
 
 export interface Movie {
   adult: boolean;
@@ -66,15 +66,20 @@ export interface MovieDetails {
   vote_count: number;
 }
 
-export const fetchMovies = async (query: string, page: number): Promise<Movie[]> => {
-  const response = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`);
-  const data = await response.json() as MovieResponse;
+export const fetchMovies = async (
+  query: string,
+  page: number,
+): Promise<Movie[]> => {
+  const response = await fetch(
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`,
+  );
+  const data = (await response.json()) as MovieResponse;
   // TODO add static typing with typia
   return data.results;
 };
 
 export const fetchMovieDetail = async (id: string): Promise<MovieDetails> => {
   const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
-  const data = await response.json() as MovieDetails;
+  const data = (await response.json()) as MovieDetails;
   return data;
 };

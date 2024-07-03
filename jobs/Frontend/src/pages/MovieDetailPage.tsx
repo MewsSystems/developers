@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { useMovies } from '../hooks/useMovies';
+import React, { useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import styled from "styled-components";
+import { useMovies } from "../hooks/useMovies";
 
 const Container = styled.div`
   padding: 16px;
@@ -23,9 +23,14 @@ const MovieDetailPage: React.FC = () => {
   return (
     <Container>
       <h1>{movieDetail.title}</h1>
-      <Link to="/"><button>Go Back</button></Link>
+      <Link to="/">
+        <button>Go Back</button>
+      </Link>
       <p>{movieDetail.overview}</p>
-      <img src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} alt={movieDetail.title} />
+      <img
+        src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`}
+        alt={movieDetail.title}
+      />
     </Container>
   );
 };
