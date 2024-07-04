@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Button";
 import PageContainer from "../components/PageContainer";
-import { useMovies } from "../hooks/useMovies";
+import { useGetMovieDetail } from "../hooks/movies";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const ResponsiveTwoColumns = styled.div`
@@ -30,20 +30,16 @@ const RoundedImg = styled.img`
 
 const MovieDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { movieDetail, getMovieDetail, loading, error } = useMovies();
 
-  useEffect(() => {
-    if (!id) return;
-    getMovieDetail(id);
-  }, [id, getMovieDetail]);
+  const { data: movieDetail, isLoading, isError } = useGetMovieDetail(id || "");
 
   return (
     <PageContainer>
       <Link to="/">
         <Button>Go back to the search page</Button>
       </Link>
-      {loading && <LoadingSpinner />}
-      {error && <div>Error: {error}</div>}
+      {isLoading && <LoadingSpinner />}
+      {isError && <div>Error: Impossible to fetch the data</div>}
       {movieDetail && (
         <ResponsiveTwoColumns>
           <Column>

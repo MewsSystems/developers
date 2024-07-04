@@ -13,6 +13,7 @@ const Card = styled.div`
 const RoundedImg = styled.img`
   border-radius: 8px;
   width: 130px;
+  height: 195px;
 `;
 
 const RoundedImgPlaceholder = styled.div`

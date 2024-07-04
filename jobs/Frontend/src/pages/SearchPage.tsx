@@ -1,11 +1,11 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
 import MovieCardGrid from "../components/MovieCardGrid";
 import Button from "../components/Button";
 import LoadingSpinner from "../components/LoadingSpinner";
 import PageContainer from "../components/PageContainer";
-import { useMovies } from "../hooks/useMovies";
+import { useSearchMovies } from "../hooks/movies";
 import { SearchContext } from "../contexts/SearchContext";
 
 const CenteredContent = styled.div`
@@ -16,33 +16,29 @@ const MessageEmptyResult = styled.div`
   text-align: center;
   margin-top: 16px;
 `;
-
 const SearchPage: React.FC = memo(() => {
-  const { movies, searchMovies, resetMovies, loading, error } = useMovies();
-  const [page, setPage] = useState(1);
   const { searchTerms, setSearchTerms } = React.useContext(SearchContext);
 
-  useEffect(() => {
-    if (searchTerms) {
-      searchMovies(searchTerms, page);
-    }
-  }, [searchTerms, page, searchMovies]);
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+    useSearchMovies(searchTerms);
 
   const handleSearch = (searchQuery: string) => {
     setSearchTerms(searchQuery);
-    resetMovies();
-    setPage(1);
   };
 
-  const loadMore = () => setPage((prevPage) => prevPage + 1);
+  const loadMore = () => {
+    fetchNextPage();
+  };
+
+  const movies = data?.pages.flatMap((page) => page);
 
   return (
     <PageContainer>
       <SearchBar initialValue={searchTerms} onSearch={handleSearch} />
-      {error && <div>Error: {error}</div>}
-      <MovieCardGrid movies={movies} />
-      {loading && <LoadingSpinner />}
-      {movies.length > 0 ? (
+      {isError && <div>Error: Impossible to fetch the data</div>}
+      {movies && <MovieCardGrid movies={movies} />}
+      {isLoading && <LoadingSpinner />}
+      {movies && movies.length > 0 && hasNextPage ? (
         <CenteredContent>
           <Button onClick={loadMore}>Load More</Button>
         </CenteredContent>

@@ -2,6 +2,7 @@ import React from "react";
 import * as ReactDOM from "react-dom/client";
 import styled, { ThemeProvider } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SearchContextProvider } from "./contexts/SearchContext";
 import SearchPage from "./pages/SearchPage";
 import MovieDetailPage from "./pages/MovieDetailPage";
@@ -27,20 +28,30 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 10 * 60 * 1000, // keep the cache for 5 minutes
+    },
+  },
+});
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <SearchContextProvider>
-        <GlobalStyle />
-        <GlobalContainer>
-          <Header />
-          <RouterProvider router={router} />
-          <Footer />
-        </GlobalContainer>
-      </SearchContextProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <SearchContextProvider>
+          <GlobalStyle />
+          <GlobalContainer>
+            <Header />
+            <RouterProvider router={router} />
+            <Footer />
+          </GlobalContainer>
+        </SearchContextProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );

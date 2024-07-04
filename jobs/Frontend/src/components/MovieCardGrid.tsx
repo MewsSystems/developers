@@ -10,7 +10,6 @@ const Grid = styled.div`
 `;
 
 const MovieCardGrid: React.FC<{ movies: Movie[] }> = ({ movies }) => {
-    console.log(movies);
   return (
     <Grid>
       {movies.map((movie) => (
