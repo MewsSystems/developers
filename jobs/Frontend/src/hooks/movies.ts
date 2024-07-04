@@ -1,10 +1,9 @@
-import {
-  useQuery,
-  useQueryClient,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { fetchMovies, fetchMovieDetail } from "../api";
 
+/**
+ * This hook fetches the movies list based on the query string.
+ */
 export const useSearchMovies = (query: string) => {
   return useInfiniteQuery({
     queryKey: ["movies", query],
@@ -22,6 +21,9 @@ export const useSearchMovies = (query: string) => {
   });
 };
 
+/**
+ * This hook fetches the movie detail based on the movie ID.
+ */
 export const useGetMovieDetail = (id: string) => {
   return useQuery({
     queryKey: ["movieDetail", id],

@@ -1,5 +1,5 @@
 {
-  "name": "react-app-grid-score",
+  "name": "movie-search-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,19 +8,15 @@
     "build": "tsc && vite build",
     "test": "vitest",
     "checkts": "tsc --noEmit",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky",
-    "format": "prettier . --write"
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "format": "prettier . --write",
+    "analyze": "vite-bundle-visualizer"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.49.2",
     "@types/lodash": "^4.17.6",
     "lodash": "^4.17.21",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.24.1",
     "remove": "^0.1.5",
@@ -28,21 +24,18 @@
   },
   "devDependencies": {
     "@testing-library/react": "^16.0.0",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "fetch-mock": "^10.0.7",
     "husky": "^9.0.11",
     "jsdom": "^24.1.0",
-    "lint-staged": "^15.2.2",
-    "prettier": "3.2.5",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "3.3.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
     "vitest": "^1.6.0"
   }
 }

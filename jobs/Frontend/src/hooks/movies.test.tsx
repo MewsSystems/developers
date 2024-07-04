@@ -5,6 +5,8 @@ import fetchMock from "fetch-mock";
 import type { MovieResponse, MovieDetails } from "../api";
 import { useSearchMovies, useGetMovieDetail } from "./movies";
 
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -30,22 +32,22 @@ const MockedMovieDetailResponse: DeepPartial<MovieDetails> = {
 };
 
 fetchMock.get(
-  "https://api.themoviedb.org/3/search/movie?api_key=03b8572954325680265531140190fd2a&query=success&page=1",
+  `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=success&page=1`,
   MockedMovieResponse,
 );
 
 fetchMock.get(
-  "https://api.themoviedb.org/3/search/movie?api_key=03b8572954325680265531140190fd2a&query=failure500&page=1",
+  `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=failure500&page=1`,
   500,
 );
 
 fetchMock.get(
-  "https://api.themoviedb.org/3/movie/1?api_key=03b8572954325680265531140190fd2a",
+  `https://api.themoviedb.org/3/movie/1?api_key=${API_KEY}`,
   MockedMovieDetailResponse,
 );
 
 fetchMock.get(
-  "https://api.themoviedb.org/3/movie/failure500?api_key=03b8572954325680265531140190fd2a",
+  `https://api.themoviedb.org/3/movie/failure500?api_key=${API_KEY}`,
   500,
 );
 
