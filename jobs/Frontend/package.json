@@ -17,12 +17,11 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@types/lodash": "^4.17.6",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.24.1",
     "remove": "^0.1.5",
     "styled-components": "^6.1.11"
