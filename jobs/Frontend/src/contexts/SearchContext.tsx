@@ -6,14 +6,13 @@ export const SearchContext = createContext({
   setSearchTerms: (searchTerms: string) => {},
 });
 
-export const SearchContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-
+export const SearchContextProvider: React.FC<PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [searchTerms, setSearchTerms] = useState("");
 
   return (
-    <SearchContext.Provider
-      value={{ searchTerms, setSearchTerms }}
-    >
+    <SearchContext.Provider value={{ searchTerms, setSearchTerms }}>
       {children}
     </SearchContext.Provider>
   );

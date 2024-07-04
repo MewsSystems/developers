@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const LoadingSpinner = styled.div`
   border: 16px solid #f3f3f3;

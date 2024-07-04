@@ -11,7 +11,7 @@ const ResponsiveTwoColumns = styled.div`
   flex-wrap: wrap;
   gap: 16px;
 
-  max-width: 600px;
+  max-width: 768px;
   margin: 0 auto;
 
   @media (max-width: 768px) {

@@ -1,6 +1,6 @@
 import React from "react";
 import * as ReactDOM from "react-dom/client";
-import styled, { ThemeProvider, DefaultTheme } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SearchContextProvider } from "./contexts/SearchContext";
 import SearchPage from "./pages/SearchPage";
@@ -8,15 +8,7 @@ import MovieDetailPage from "./pages/MovieDetailPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import GlobalStyle from "./globalStyles";
-
-const theme: DefaultTheme = {
-  colors: {
-    primary: "mediumseagreen",
-    secondary: "white",
-    background: "#333",
-    link: "#70757a",
-  },
-};
+import theme from "./theme";
 
 const GlobalContainer = styled.div`
   display: flex;
@@ -36,7 +28,7 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
   <React.StrictMode>
@@ -50,5 +42,5 @@ root.render(
         </GlobalContainer>
       </SearchContextProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
