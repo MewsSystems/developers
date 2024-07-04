@@ -15,6 +15,13 @@ const RoundedImg = styled.img`
   width: 130px;
 `;
 
+const RoundedImgPlaceholder = styled.div`
+  border-radius: 8px;
+  width: 130px;
+  height: 195px;
+  background-color: #f0f0f0;
+`;
+
 const MovieTitle = styled.p`
   margin: 0;
   text-align: center;
@@ -25,10 +32,14 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => {
   return (
     <Card>
       <StyledLink to={`/movie/${movie.id}`}>
-        <RoundedImg
-          src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-          alt={movie.title}
-        />
+        {movie.poster_path ? (
+          <RoundedImg
+            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+            alt={movie.title}
+          />
+        ) : (
+          <RoundedImgPlaceholder />
+        )}
         <MovieTitle>{movie.title}</MovieTitle>
       </StyledLink>
     </Card>

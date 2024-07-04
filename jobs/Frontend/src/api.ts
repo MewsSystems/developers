@@ -74,7 +74,7 @@ export const fetchMovies = async (
     `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`,
   );
   const data = (await response.json()) as MovieResponse;
-  // TODO add static typing with typia
+  // TODO: add runtime type checking using typia (nice to have)
   return data.results;
 };
 

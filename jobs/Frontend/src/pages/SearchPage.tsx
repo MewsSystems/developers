@@ -9,8 +9,34 @@ const Container = styled.div`
   padding: 16px;
 `;
 
-const CenteredText = styled.div`
+const CenteredContent = styled.div`
   text-align: center;
+`;
+
+const LoadingSpinner = styled.div`
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+  margin-top: 16px;
+  margin-bottom: 16px;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const MessageEmptyResult = styled.div`
+  text-align: center;
+  margin-top: 16px;
 `;
 
 const SearchPage: React.FC = memo(() => {
@@ -35,12 +61,20 @@ const SearchPage: React.FC = memo(() => {
   return (
     <Container>
       <SearchBar onSearch={handleSearch} />
-      {loading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
       <MovieCardGrid movies={movies} />
-      <CenteredText>
-        <Button onClick={loadMore}>Load More</Button>
-      </CenteredText>
+      {loading && <LoadingSpinner />}
+      {movies.length > 0 ? (
+        <CenteredContent>
+          <Button onClick={loadMore}>Load More</Button>
+        </CenteredContent>
+      ) : (
+        <MessageEmptyResult>
+          {query.length > 0
+            ? "No results found."
+            : "Start to type a movie title!"}
+        </MessageEmptyResult>
+      )}
     </Container>
   );
 });
