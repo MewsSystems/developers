@@ -1,37 +1,14 @@
 import React, { useState, useEffect, memo } from "react";
+import styled from "styled-components";
 import SearchBar from "../components/SearchBar";
 import MovieCardGrid from "../components/MovieCardGrid";
-import styled from "styled-components";
-import { useMovies } from "../hooks/useMovies";
 import Button from "../components/Button";
-
-const Container = styled.div`
-  padding: 16px;
-`;
+import LoadingSpinner from "../components/LoadingSpinner";
+import PageContainer from "../components/PageContainer";
+import { useMovies } from "../hooks/useMovies";
 
 const CenteredContent = styled.div`
   text-align: center;
-`;
-
-const LoadingSpinner = styled.div`
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 2s linear infinite;
-  margin: 0 auto;
-  margin-top: 16px;
-  margin-bottom: 16px;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 const MessageEmptyResult = styled.div`
@@ -59,7 +36,7 @@ const SearchPage: React.FC = memo(() => {
   const loadMore = () => setPage((prevPage) => prevPage + 1);
 
   return (
-    <Container>
+    <PageContainer>
       <SearchBar onSearch={handleSearch} />
       {error && <div>Error: {error}</div>}
       <MovieCardGrid movies={movies} />
@@ -75,7 +52,7 @@ const SearchPage: React.FC = memo(() => {
             : "Please, type a movie title to start!"}
         </MessageEmptyResult>
       )}
-    </Container>
+    </PageContainer>
   );
 });
 

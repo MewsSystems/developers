@@ -1,11 +1,28 @@
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import { useMovies } from "../hooks/useMovies";
 import Button from "../components/Button";
+import PageContainer from "../components/PageContainer";
+import { useMovies } from "../hooks/useMovies";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-const Container = styled.div`
-  padding: 16px;
+const RoundedImg = styled.img`
+  border-radius: 8px;
+  width: 300px;
+`;
+
+const ResponsiveTwoColumns = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const Column = styled.div`
+  flex: 1;
 `;
 
 const MovieDetailPage: React.FC = () => {
@@ -17,22 +34,28 @@ const MovieDetailPage: React.FC = () => {
     getMovieDetail(id);
   }, [id, getMovieDetail]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!movieDetail) return <div>No movie found.</div>;
-
   return (
-    <Container>
-      <h1>{movieDetail.title}</h1>
+    <PageContainer>
       <Link to="/">
         <Button>Go Back</Button>
       </Link>
-      <p>{movieDetail.overview}</p>
-      <img
-        src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`}
-        alt={movieDetail.title}
-      />
-    </Container>
+      {loading && <LoadingSpinner />}
+      {error && <div>Error: {error}</div>}
+      {movieDetail && (
+        <ResponsiveTwoColumns>
+          <Column>
+            <h1>{movieDetail.title}</h1>
+            <p>{movieDetail.overview}</p>
+          </Column>
+          <Column>
+            <RoundedImg
+              src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`}
+              alt={movieDetail.title}
+            />
+          </Column>
+        </ResponsiveTwoColumns>
+      )}
+    </PageContainer>
   );
 };
 
