@@ -3,7 +3,7 @@ import debounce from "lodash/debounce";
 import styled from "styled-components";
 
 const Input = styled.input`
-  width: 100%;
+  width: calc(100% - 32px);
   padding: 8px;
   margin: 16px 0;
   font-size: 16px;

@@ -72,7 +72,7 @@ const SearchPage: React.FC = memo(() => {
         <MessageEmptyResult>
           {query.length > 0
             ? "No results found."
-            : "Start to type a movie title!"}
+            : "Please, type a movie title to start!"}
         </MessageEmptyResult>
       )}
     </Container>
