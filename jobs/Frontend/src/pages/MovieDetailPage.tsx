@@ -6,15 +6,13 @@ import PageContainer from "../components/PageContainer";
 import { useMovies } from "../hooks/useMovies";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const RoundedImg = styled.img`
-  border-radius: 8px;
-  width: 300px;
-`;
-
 const ResponsiveTwoColumns = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+
+  max-width: 600px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -23,6 +21,11 @@ const ResponsiveTwoColumns = styled.div`
 
 const Column = styled.div`
   flex: 1;
+`;
+
+const RoundedImg = styled.img`
+  border-radius: 8px;
+  width: 300px;
 `;
 
 const MovieDetailPage: React.FC = () => {
@@ -37,7 +40,7 @@ const MovieDetailPage: React.FC = () => {
   return (
     <PageContainer>
       <Link to="/">
-        <Button>Go Back</Button>
+        <Button>Go back to the search page</Button>
       </Link>
       {loading && <LoadingSpinner />}
       {error && <div>Error: {error}</div>}

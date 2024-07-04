@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, memo } from "react";
+import React, { useCallback, useMemo, memo, useState } from "react";
 import debounce from "lodash/debounce";
 import styled from "styled-components";
 
@@ -10,28 +10,35 @@ const Input = styled.input`
 `;
 
 interface SearchBarProps {
+  initialValue: string;
   onSearch: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = memo(({ onSearch }) => {
-  const doSearch = useCallback((value: string) => {
-    onSearch(value);
-  }, []);
+const SearchBar: React.FC<SearchBarProps> = memo(
+  ({ initialValue, onSearch }) => {
+    const [searchTerms, setSearchTerms] = useState(initialValue);
 
-  // memoize the debounce call with useMemo
-  // so it doesn't get recreated on every render
-  const debouncedSearch = useMemo(() => {
-    return debounce(doSearch, 500);
-  }, [doSearch]);
+    const doSearch = useCallback((value: string) => {
+      onSearch(value);
+    }, []);
 
-  return (
-    <Input
-      placeholder="Search for a movie title..."
-      onChange={(e) => {
-        debouncedSearch(e.target.value);
-      }}
-    />
-  );
-});
+    // memoize the debounce call with useMemo
+    // so it doesn't get recreated on every render
+    const debouncedSearch = useMemo(() => {
+      return debounce(doSearch, 500);
+    }, [doSearch]);
+
+    return (
+      <Input
+        value={searchTerms}
+        placeholder="Search for a movie title..."
+        onChange={(e) => {
+          setSearchTerms(e.target.value);
+          debouncedSearch(e.target.value);
+        }}
+      />
+    );
+  }
+);
 
 export default SearchBar;

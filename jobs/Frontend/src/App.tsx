@@ -2,6 +2,7 @@ import React from "react";
 import * as ReactDOM from "react-dom/client";
 import styled, { ThemeProvider, DefaultTheme } from "styled-components";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { SearchContextProvider } from "./contexts/SearchContext";
 import SearchPage from "./pages/SearchPage";
 import MovieDetailPage from "./pages/MovieDetailPage";
 import Header from "./components/Header";
@@ -40,12 +41,14 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <GlobalContainer>
-        <Header />
-        <RouterProvider router={router} />
-        <Footer />
-      </GlobalContainer>
+      <SearchContextProvider>
+        <GlobalStyle />
+        <GlobalContainer>
+          <Header />
+          <RouterProvider router={router} />
+          <Footer />
+        </GlobalContainer>
+      </SearchContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

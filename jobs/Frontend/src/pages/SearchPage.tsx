@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import LoadingSpinner from "../components/LoadingSpinner";
 import PageContainer from "../components/PageContainer";
 import { useMovies } from "../hooks/useMovies";
+import { SearchContext } from "../contexts/SearchContext";
 
 const CenteredContent = styled.div`
   text-align: center;
@@ -19,16 +20,16 @@ const MessageEmptyResult = styled.div`
 const SearchPage: React.FC = memo(() => {
   const { movies, searchMovies, resetMovies, loading, error } = useMovies();
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState("");
+  const { searchTerms, setSearchTerms } = React.useContext(SearchContext);
 
   useEffect(() => {
-    if (query) {
-      searchMovies(query, page);
+    if (searchTerms) {
+      searchMovies(searchTerms, page);
     }
-  }, [query, page, searchMovies]);
+  }, [searchTerms, page, searchMovies]);
 
   const handleSearch = (searchQuery: string) => {
-    setQuery(searchQuery);
+    setSearchTerms(searchQuery);
     resetMovies();
     setPage(1);
   };
@@ -37,7 +38,7 @@ const SearchPage: React.FC = memo(() => {
 
   return (
     <PageContainer>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar initialValue={searchTerms} onSearch={handleSearch} />
       {error && <div>Error: {error}</div>}
       <MovieCardGrid movies={movies} />
       {loading && <LoadingSpinner />}
@@ -47,7 +48,7 @@ const SearchPage: React.FC = memo(() => {
         </CenteredContent>
       ) : (
         <MessageEmptyResult>
-          {query.length > 0
+          {searchTerms.length > 0
             ? "No results found."
             : "Please, type a movie title to start!"}
         </MessageEmptyResult>
