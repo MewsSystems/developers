@@ -1,12 +1,16 @@
 import React, { useState, useEffect, memo } from "react";
 import SearchBar from "../components/SearchBar";
-import MovieCard from "../components/MovieCard";
+import MovieCardGrid from "../components/MovieCardGrid";
 import styled from "styled-components";
 import { useMovies } from "../hooks/useMovies";
 import Button from "../components/Button";
 
 const Container = styled.div`
   padding: 16px;
+`;
+
+const CenteredText = styled.div`
+  text-align: center;
 `;
 
 const SearchPage: React.FC = memo(() => {
@@ -33,12 +37,10 @@ const SearchPage: React.FC = memo(() => {
       <SearchBar onSearch={handleSearch} />
       {loading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
-      <div>
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </div>
-      <Button onClick={loadMore}>Load More</Button>
+      <MovieCardGrid movies={movies} />
+      <CenteredText>
+        <Button onClick={loadMore}>Load More</Button>
+      </CenteredText>
     </Container>
   );
 });

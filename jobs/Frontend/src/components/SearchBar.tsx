@@ -19,8 +19,9 @@ const SearchBar: React.FC<SearchBarProps> = memo(({ onSearch }) => {
   }, []);
 
   // memoize the debounce call with useMemo
+  // so it doesn't get recreated on every render
   const debouncedSearch = useMemo(() => {
-    return debounce(doSearch, 1000);
+    return debounce(doSearch, 500);
   }, [doSearch]);
 
   return (

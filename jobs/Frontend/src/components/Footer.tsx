@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
   return (
     <FooterContainer>
       <CenteredText>
-        &copy; 2024 Mews front-end test made by François Cabrol with ❤️
+        &copy; 2024 Mews front-end test - made by François Cabrol with ❤️
       </CenteredText>
     </FooterContainer>
   );

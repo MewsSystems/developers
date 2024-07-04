@@ -13,6 +13,7 @@ const theme: DefaultTheme = {
     primary: "mediumseagreen",
     secondary: "white",
     background: "#333",
+    link: "#70757a",
   },
 };
 
