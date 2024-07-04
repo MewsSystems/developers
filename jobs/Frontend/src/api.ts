@@ -18,7 +18,7 @@ export interface Movie {
   vote_count: number;
 }
 
-interface MovieResponse {
+export interface MovieResponse {
   page: number;
   results: Movie[];
   total_pages: number;
@@ -68,11 +68,18 @@ export interface MovieDetails {
 
 export const fetchMovies = async (
   query: string,
-  page: number,
+  page: number
 ): Promise<Movie[]> => {
   const response = await fetch(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`,
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`
   );
+  if (!response.ok) {
+    console.error("Impossible to fetch the movies", {
+      query,
+      response,
+    });
+    throw new Error(`Impossible to fetch movies. Status code ${response.status}`);
+  }
   const data = (await response.json()) as MovieResponse;
   // TODO: add runtime type checking using typia (nice to have)
   return data.results;
@@ -80,6 +87,13 @@ export const fetchMovies = async (
 
 export const fetchMovieDetail = async (id: string): Promise<MovieDetails> => {
   const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`);
+  if (!response.ok) {
+    console.error("Impossible to fetch the movie details", {
+      id,
+      response,
+    });
+    throw new Error(`Impossible to fetch movie details. Status code ${response.status}`);
+  }
   const data = (await response.json()) as MovieDetails;
   return data;
 };
