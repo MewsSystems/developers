@@ -20,6 +20,16 @@
 
 `npm run test`
 
+## Run the cypress test
+There is currently just one use case written as an example.
+
+You need the dev server running:
+- npm run dev
+And then to run headless:
+- npm run cypress:run
+or to debug:
+- npm run cypress:open
+
 ## Check the typing
 
 `npm run checkts`

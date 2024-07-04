@@ -31,7 +31,7 @@ const MovieTitle = styled.p`
 
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => {
   return (
-    <Card>
+    <Card data-test="card">
       <StyledLink to={`/movie/${movie.id}`}>
         {movie.poster_path ? (
           <RoundedImg

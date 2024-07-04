@@ -10,7 +10,9 @@
     "checkts": "tsc --noEmit",
     "preview": "vite preview",
     "format": "prettier . --write",
-    "analyze": "vite-bundle-visualizer"
+    "analyze": "vite-bundle-visualizer",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.49.2",
@@ -29,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "cypress": "^13.13.0",
     "fetch-mock": "^10.0.7",
     "husky": "^9.0.11",
     "jsdom": "^24.1.0",

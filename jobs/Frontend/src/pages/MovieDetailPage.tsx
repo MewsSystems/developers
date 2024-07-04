@@ -44,7 +44,7 @@ const MovieDetailPage: React.FC = () => {
         <ResponsiveTwoColumns>
           <Column>
             <h1>{movieDetail.title}</h1>
-            <p>{movieDetail.overview}</p>
+            <p data-test="overview">{movieDetail.overview}</p>
           </Column>
           <Column>
             <RoundedImg
