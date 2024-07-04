@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import arrow from "./arrow.svg";
-import axios from "axios";
-
-const API_KEY = "03b8572954325680265531140190fd2a";
-const API_URL = "https://api.themoviedb.org/3/search/movie";
+import { MovieItem } from "../MovieItem/MovieItem";
+import { ScrollToTopButton } from "../ScrollToTopButton/ScrollToTopButton";
+import { useMovies } from "../../hooks/useMovies/useMovies";
+import { useScroll } from "../../hooks/useScroll/useScroll";
 
 const StyledFormLabel = styled.label`
   color: black;
@@ -33,19 +32,6 @@ const MovieList = styled.ul`
   justify-content: center;
 `;
 
-const MovieItem = styled.li`
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 25%;
-  font-size: 2vmin;
-`;
-
-const Poster = styled.img`
-  height: 30vmin;
-`;
-
 const LoadMoreButton = styled.button`
   padding: 2vmin 3vmin;
   background-color: #007bff;
@@ -61,85 +47,11 @@ const LoadMoreButton = styled.button`
   }
 `;
 
-const ScrollToTopButton = styled.button`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 2vmin;
-  background-color: #ff6a00;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 8vmin;
-  height: 8vmin;
-  display: ${(props) => (props.show ? "block" : "none")};
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  & > img {
-    width: 4vmin;
-    height: 4vmin;
-  }
-`;
-
 export const Form = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  const [movies, setMovies] = useState([]);
-  const [hasMore, setHasMore] = useState(false);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
-  useEffect(() => {
-    if (query.length > 0) {
-      const fetchMovies = async () => {
-        try {
-          const response = await axios.get(API_URL, {
-            params: {
-              api_key: API_KEY,
-              query: query,
-              page: page,
-            },
-          });
-
-          if (page === 1) {
-            setMovies(response.data.results);
-          } else {
-            setMovies((prevMovies) => [
-              ...prevMovies,
-              ...response.data.results,
-            ]);
-          }
-          console.log(response.data.total_pages);
-          setHasMore(page < response.data.total_pages);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchMovies();
-    } else {
-      setMovies([]);
-    }
-  }, [query, page]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.pageYOffset > 0) {
-        setShowScrollButton(true);
-      } else {
-        setShowScrollButton(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const { movies, hasMore, loading, error } = useMovies(query, page);
+  const showScrollButton = useScroll();
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
@@ -170,15 +82,11 @@ export const Form = () => {
           onChange={handleInputChange}
         />
       </form>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       <MovieList>
         {movies.map((movie) => (
-          <MovieItem key={movie.id}>
-            <Poster
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-            />
-            <h2>{movie.title}</h2>
-            <p>{movie.overview}</p>
-          </MovieItem>
+          <MovieItem key={movie.id} movie={movie} />
         ))}
       </MovieList>
       {hasMore && (
@@ -188,9 +96,7 @@ export const Form = () => {
         onClick={scrollToTop}
         show={showScrollButton}
         title="Scroll to Top"
-      >
-        <img src={arrow} />
-      </ScrollToTopButton>
+      />
     </>
   );
 };
