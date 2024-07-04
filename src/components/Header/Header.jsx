@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import logo from "./logo.svg";
+import { Form } from "../Form/Form";
 
 const AppHeader = styled.header`
   min-height: 100vh;
@@ -29,36 +30,11 @@ const RotatingLogo = styled.img`
   }
 `;
 
-const StyledFormLabel = styled.label`
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  font-size: calc(10px + 2vmin);
-  margin: calc(10px + 2vmin);
-`;
-
-const Input = styled.input`
-  width: 60%;
-  &:not(:focus) {
-    box-shadow: 0 0 2px 2px #ff6a00;
-  }
-`;
-
 export const Header = () => {
   return (
     <AppHeader>
       <RotatingLogo src={logo} alt="logo" />
-      <form>
-        <StyledFormLabel htmlFor="movie-input">
-          What would you like to find?
-        </StyledFormLabel>
-        <Input
-          id="movie-input"
-          type="text"
-          placeholder="Type your search here"
-        />
-      </form>
+      <Form />
     </AppHeader>
   );
 };
