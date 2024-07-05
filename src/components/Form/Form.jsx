@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { MovieItem } from "../MovieItem/MovieItem";
+import { MovieDetails } from "../MovieDetails/MovieDetails";
 import { ScrollToTopButton } from "../ScrollToTopButton/ScrollToTopButton";
 import { useMovies } from "../../hooks/useMovies/useMovies";
 import { useScroll } from "../../hooks/useScroll/useScroll";
@@ -50,6 +51,7 @@ const LoadMoreButton = styled.button`
 export const Form = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [movieSelected, setMovieSelected] = useState(null);
   const { movies, hasMore, loading, error } = useMovies(query, page);
   const showScrollButton = useScroll();
 
@@ -68,30 +70,51 @@ export const Form = () => {
     });
   };
 
+  const handleMovieSelected = (movie) => {
+    setMovieSelected(movie);
+  };
+
+  const handleBackToList = () => {
+    setMovieSelected(null);
+  };
+  console.log(movieSelected);
   return (
     <>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <StyledFormLabel htmlFor="movie-input">
-          What would you like to find?
-        </StyledFormLabel>
-        <Input
-          id="movie-input"
-          type="text"
-          placeholder="Type your search here"
-          value={query}
-          onChange={handleInputChange}
-        />
-      </form>
+      {!movieSelected && (
+        <form onSubmit={(e) => e.preventDefault()}>
+          <StyledFormLabel htmlFor="movie-input">
+            What would you like to find?
+          </StyledFormLabel>
+          <Input
+            id="movie-input"
+            type="text"
+            placeholder="Type your search here"
+            value={query}
+            onChange={handleInputChange}
+          />
+        </form>
+      )}
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      <MovieList>
-        {movies.map((movie) => (
-          <MovieItem key={movie.id} movie={movie} />
-        ))}
-      </MovieList>
-      {hasMore && (
-        <LoadMoreButton onClick={handleLoadMore}>Load More</LoadMoreButton>
+      {movieSelected ? (
+        <MovieDetails movie={movieSelected} onBackToList={handleBackToList} />
+      ) : (
+        <>
+          <MovieList>
+            {movies.map((movie) => (
+              <MovieItem
+                key={movie.id}
+                movie={movie}
+                onClick={() => handleMovieSelected(movie)}
+              />
+            ))}
+          </MovieList>
+          {hasMore && (
+            <LoadMoreButton onClick={handleLoadMore}>Load More</LoadMoreButton>
+          )}
+        </>
       )}
+
       <ScrollToTopButton
         onClick={scrollToTop}
         show={showScrollButton}

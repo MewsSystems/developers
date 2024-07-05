@@ -14,9 +14,9 @@ const Poster = styled.img`
   height: 30vmin;
 `;
 
-export const MovieItem = ({ movie }) => {
+export const MovieItem = ({ movie, onClick }) => {
   return (
-    <MovieItemWrapper>
+    <MovieItemWrapper onClick={onClick}>
       <Poster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
       <h2>{movie.title}</h2>
       <p>{movie.overview}</p>
