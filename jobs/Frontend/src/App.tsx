@@ -32,6 +32,10 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: 10 * 60 * 1000, // keep the cache for 5 minutes
+      // Retry failed requests 3 times
+      // Except in the cypress tests where we want to fail fast
+      // @ts-ignore
+      retry: typeof Cypress !== "undefined" ? 0 : 3,
     },
   },
 });

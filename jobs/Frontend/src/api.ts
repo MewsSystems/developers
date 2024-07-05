@@ -83,7 +83,7 @@ export const fetchMovies = async (
     );
   }
   const data = (await response.json()) as MovieResponse;
-  // TODO: add runtime type checking using typia (nice to have)
+  // TODO: add runtime type checking using typia (nice to have at least in dev when calling external APIs)
   return data.results;
 };
 

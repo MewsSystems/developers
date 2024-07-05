@@ -1,4 +1,4 @@
-import { defineConfig } from "cypress"
+import { defineConfig } from "cypress";
 
 export default defineConfig({
   fixturesFolder: "test/cypress/fixtures",
@@ -12,4 +12,4 @@ export default defineConfig({
     specPattern: "test/cypress/integration/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "test/cypress/support/index.ts",
   },
-})
+});

@@ -19,7 +19,7 @@ const MessageEmptyResult = styled.div`
 const SearchPage: React.FC = memo(() => {
   const { searchTerms, setSearchTerms } = React.useContext(SearchContext);
 
-  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+  const { data, isLoading, error, fetchNextPage, hasNextPage } =
     useSearchMovies(searchTerms);
 
   const handleSearch = (searchQuery: string) => {
@@ -35,12 +35,14 @@ const SearchPage: React.FC = memo(() => {
   return (
     <PageContainer>
       <SearchBar initialValue={searchTerms} onSearch={handleSearch} />
-      {isError && <div>Error: Impossible to fetch the data</div>}
+      {error && <div>Error: Impossible to fetch the data</div>}
       {movies && <MovieCardGrid movies={movies} />}
       {isLoading && <LoadingSpinner />}
       {movies && movies.length > 0 && hasNextPage ? (
         <CenteredContent>
-          <Button onClick={loadMore}>Load More</Button>
+          <Button data-test="load-more" onClick={loadMore}>
+            Load More
+          </Button>
         </CenteredContent>
       ) : (
         <MessageEmptyResult>
