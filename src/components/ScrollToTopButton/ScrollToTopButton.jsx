@@ -15,7 +15,7 @@ const Button = styled.button`
   transition: background-color 0.3s ease;
   width: 8vmin;
   height: 8vmin;
-  display: ${(props) => (props.show ? "block" : "none")};
+  display: ${(props) => (props.$show ? "block" : "none")};
 
   &:hover {
     background-color: #0056b3;
@@ -28,7 +28,7 @@ const Button = styled.button`
 `;
 
 export const ScrollToTopButton = ({ show, onClick }) => (
-  <Button onClick={onClick} show={show} title="Scroll to Top">
+  <Button onClick={onClick} $show={show} title="Scroll to Top">
     <img src={arrow} alt="Scroll to top" />
   </Button>
 );

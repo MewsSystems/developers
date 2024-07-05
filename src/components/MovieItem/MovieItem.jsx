@@ -17,7 +17,10 @@ const Poster = styled.img`
 export const MovieItem = ({ movie, onClick }) => {
   return (
     <MovieItemWrapper onClick={onClick}>
-      <Poster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+      <Poster
+        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+        alt="Movie poster"
+      />
       <h2>{movie.title}</h2>
       <p>{movie.overview}</p>
     </MovieItemWrapper>
