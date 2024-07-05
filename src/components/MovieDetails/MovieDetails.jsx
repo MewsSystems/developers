@@ -29,6 +29,12 @@ const Poster = styled.img`
   height: 30vmin;
 `;
 
+const Rating = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: 1vmin;
+`;
+
 const BackToListButton = styled.button`
   padding: 1vmin 2vmin;
   background-color: #007bff;
@@ -44,7 +50,11 @@ const BackToListButton = styled.button`
   }
 `;
 
-export const MovieDetails = ({ movie, onBackToList }) => {
+export const MovieDetails = ({ movie, onBackToList, genres }) => {
+  const genreNames = movie.genre_ids.map((id) => {
+    const genre = genres.find((g) => g.id === id);
+    return genre ? genre.name : "Unknown";
+  });
   return (
     <>
       <MovieItemWrapper>
@@ -52,7 +62,13 @@ export const MovieDetails = ({ movie, onBackToList }) => {
         <MovieData>
           <MovieTitle>{movie.title}</MovieTitle>
           <p>Release date: {movie.release_date}</p>
+          <h4>Genres: {genreNames.join(", ")}</h4>
           <p>{movie.overview}</p>
+          <Rating>
+            <h4>Rating:</h4>
+            <h2>{movie.vote_average}</h2> based on <h4>{movie.vote_count}</h4>{" "}
+            reviews
+          </Rating>
         </MovieData>
       </MovieItemWrapper>
       <BackToListButton onClick={onBackToList}>Back to list</BackToListButton>

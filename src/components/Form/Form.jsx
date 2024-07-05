@@ -5,6 +5,7 @@ import { MovieDetails } from "../MovieDetails/MovieDetails";
 import { ScrollToTopButton } from "../ScrollToTopButton/ScrollToTopButton";
 import { useMovies } from "../../hooks/useMovies/useMovies";
 import { useScroll } from "../../hooks/useScroll/useScroll";
+import { useGenres } from "../../hooks/useGenres/useGenres";
 
 const StyledFormLabel = styled.label`
   color: black;
@@ -53,6 +54,7 @@ export const Form = () => {
   const [page, setPage] = useState(1);
   const [movieSelected, setMovieSelected] = useState(null);
   const { movies, hasMore, loading, error } = useMovies(query, page);
+  const { genres } = useGenres();
   const showScrollButton = useScroll();
 
   const handleInputChange = (e) => {
@@ -77,7 +79,7 @@ export const Form = () => {
   const handleBackToList = () => {
     setMovieSelected(null);
   };
-  console.log(movieSelected);
+
   return (
     <>
       {!movieSelected && (
@@ -97,7 +99,11 @@ export const Form = () => {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {movieSelected ? (
-        <MovieDetails movie={movieSelected} onBackToList={handleBackToList} />
+        <MovieDetails
+          movie={movieSelected}
+          onBackToList={handleBackToList}
+          genres={genres}
+        />
       ) : (
         <>
           <MovieList>
