@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater
 {
     public class CnbExchangeRateService : IExchangeRateService
     {
-        private static readonly string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=08.07.2024";
+        private static readonly string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
         private readonly ILogger _logger;
 
         public CnbExchangeRateService()

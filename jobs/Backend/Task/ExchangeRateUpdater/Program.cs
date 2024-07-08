@@ -26,7 +26,7 @@ namespace ExchangeRateUpdater
             var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
             IExchangeRateService exchangeRateService = new CnbExchangeRateService();
-            IExchangeRateProvider exchangeRateProvider = new ExchangeRateProvider(exchangeRateService);
+            IExchangeRateProvider exchangeRateProvider = new CnbExchangeRateProvider(exchangeRateService);
 
             var currencies = new List<Currency>
             {

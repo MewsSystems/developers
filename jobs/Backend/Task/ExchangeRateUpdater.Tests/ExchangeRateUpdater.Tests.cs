@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater.Tests
                 .Setup(service => service.FetchExchangeRateDataAsync())
                 .ReturnsAsync("31 Jan 2022 #21\nCountry|Currency|Amount|Code|Rate\nUSA|dollar|1|USD|21.657\nEurozone|euro|1|EUR|24.865\nUK|pound|1|GBP|29.752");
 
-            var provider = new ExchangeRateProvider(mockExchangeRateService.Object);
+            var provider = new CnbExchangeRateProvider(mockExchangeRateService.Object);
             var currencies = new List<Currency>
             {
                 new Currency("USD"),
@@ -44,7 +44,7 @@ namespace ExchangeRateUpdater.Tests
                 .Setup(service => service.FetchExchangeRateDataAsync())
                 .ReturnsAsync("31 Jan 2022 #21\nCountry|Currency|Amount|Code|Rate\nUSA|dollar|1|USD|21.657\nEurozone|euro|1|EUR|24.865\nUK|pound|1|GBP|29.752");
 
-            var provider = new ExchangeRateProvider(mockExchangeRateService.Object);
+            var provider = new CnbExchangeRateProvider(mockExchangeRateService.Object);
             var currencies = new List<Currency>
             {
                 new Currency("USD"),
@@ -70,7 +70,7 @@ namespace ExchangeRateUpdater.Tests
                 .Setup(service => service.FetchExchangeRateDataAsync())
                 .ReturnsAsync("31 Jan 2022 #21\nCountry|Currency|Amount|Code|Rate\nUSA|dollar|1|USD|21.657\nEurozone|euro|1|EUR|24.865\nUK|pound|1|GBP|29.752");
 
-            var provider = new ExchangeRateProvider(mockExchangeRateService.Object);
+            var provider = new CnbExchangeRateProvider(mockExchangeRateService.Object);
             var currencies = new List<Currency>
             {
                 new Currency("JPY"),

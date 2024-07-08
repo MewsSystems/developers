@@ -7,15 +7,15 @@ using Serilog;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider : IExchangeRateProvider
+    public class CnbExchangeRateProvider : IExchangeRateProvider
     {
         private readonly IExchangeRateService _exchangeRateService;
         private readonly ILogger _logger;
 
-        public ExchangeRateProvider(IExchangeRateService exchangeRateService)
+        public CnbExchangeRateProvider(IExchangeRateService exchangeRateService)
         {
             _exchangeRateService = exchangeRateService ?? throw new ArgumentNullException(nameof(exchangeRateService));
-            _logger = Log.ForContext<ExchangeRateProvider>();
+            _logger = Log.ForContext<CnbExchangeRateProvider>();
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
