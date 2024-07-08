@@ -3,41 +3,72 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly IExchangeRateService _exchangeRateService;
-
-        public ExchangeRateProvider()
-        {
-        }
+        private readonly ILogger _logger;
 
         public ExchangeRateProvider(IExchangeRateService exchangeRateService)
         {
             _exchangeRateService = exchangeRateService ?? throw new ArgumentNullException(nameof(exchangeRateService));
+            _logger = Log.ForContext<ExchangeRateProvider>();
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var exchangeRates = new List<ExchangeRate>();
-            var data = await _exchangeRateService.FetchExchangeRateDataAsync();
-
-            var lines = data.Split('\n').Skip(2); // Skip headers
-            foreach (var line in lines)
+            if (currencies == null || !currencies.Any())
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
+                _logger.Error("The currencies collection is null or empty.");
+                throw new ArgumentException("Currencies collection cannot be null or empty.", nameof(currencies));
+            }
 
-                var parts = line.Split('|');
-                var currencyCode = parts[3];
-                var rate = decimal.Parse(parts[4], CultureInfo.InvariantCulture);
+            var exchangeRates = new List<ExchangeRate>();
 
-                var targetCurrency = currencies.FirstOrDefault(c => c.Code == currencyCode);
-                if (targetCurrency != null)
+            try
+            {
+                _logger.Information("Fetching exchange rate data.");
+                var data = await _exchangeRateService.FetchExchangeRateDataAsync();
+                _logger.Information("Successfully fetched exchange rate data.");
+
+                var lines = data.Split('\n').Skip(2); // Skip headers
+
+                foreach (var line in lines)
                 {
-                    exchangeRates.Add(new ExchangeRate(new Currency("CZK"), targetCurrency, rate));
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    var parts = line.Split('|');
+                    if (parts.Length < 5)
+                    {
+                        _logger.Warning("Unexpected line format: {Line}", line);
+                        continue;
+                    }
+
+                    var currencyCode = parts[3];
+                    if (!decimal.TryParse(parts[4], NumberStyles.Any, CultureInfo.InvariantCulture, out var rate))
+                    {
+                        _logger.Warning("Unable to parse rate for line: {Line}", line);
+                        continue;
+                    }
+
+                    var targetCurrency = currencies.FirstOrDefault(c => c.Code == currencyCode);
+                    if (targetCurrency != null)
+                    {
+                        exchangeRates.Add(new ExchangeRate(new Currency("CZK"), targetCurrency, rate));
+                    }
+                    else
+                    {
+                        _logger.Warning("Target currency {CurrencyCode} not found in provided currencies.", currencyCode);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "An error occurred while getting exchange rates.");
+                throw;
             }
 
             return exchangeRates;

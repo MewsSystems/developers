@@ -6,8 +6,23 @@ namespace ExchangeRateUpdater
     {
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
-            SourceCurrency = sourceCurrency ?? throw new ArgumentNullException(nameof(sourceCurrency));
-            TargetCurrency = targetCurrency ?? throw new ArgumentNullException(nameof(targetCurrency));
+            if (sourceCurrency == null)
+            {
+                throw new ArgumentNullException(nameof(sourceCurrency), "Source currency cannot be null.");
+            }
+
+            if (targetCurrency == null)
+            {
+                throw new ArgumentNullException(nameof(targetCurrency), "Target currency cannot be null.");
+            }
+
+            if (value <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "Exchange rate value must be greater than zero.");
+            }
+
+            SourceCurrency = sourceCurrency;
+            TargetCurrency = targetCurrency;
             Value = value;
         }
 
