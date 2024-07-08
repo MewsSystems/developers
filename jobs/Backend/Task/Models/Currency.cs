@@ -1,10 +1,12 @@
-﻿namespace ExchangeRateUpdater
+using System;
+
+namespace ExchangeRateUpdater
 {
     public class Currency
     {
         public Currency(string code)
         {
-            Code = code;
+            Code = code ?? throw new ArgumentNullException(nameof(code));
         }
 
         /// <summary>
@@ -17,4 +19,5 @@
             return Code;
         }
     }
+
 }

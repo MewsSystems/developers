@@ -1,43 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            IExchangeRateService exchangeRateService = new CnbExchangeRateService();
+            IExchangeRateProvider exchangeRateProvider = new ExchangeRateProvider(exchangeRateService);
 
-        public static void Main(string[] args)
-        {
-            try
+            var currencies = new List<Currency>
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                new Currency("USD"),
+                new Currency("EUR"),
+                new Currency("CZK"),
+                new Currency("JPY"),
+                new Currency("KES"),
+                new Currency("RUB"),
+                new Currency("THB"),
+                new Currency("TRY"),
+                new Currency("XYZ")
+            };
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
+            var exchangeRates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+            foreach (var rate in exchangeRates)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine(rate);
             }
-
-            Console.ReadLine();
         }
     }
 }
