@@ -43,14 +43,14 @@ namespace ExchangeRateUpdater
                     var parts = line.Split('|');
                     if (parts.Length < 5)
                     {
-                        _logger.Warning("Unexpected line format: {Line}", line);
+                        _logger.Fatal("Unexpected line format: {Line}", line);
                         continue;
                     }
 
                     var currencyCode = parts[3];
                     if (!decimal.TryParse(parts[4], NumberStyles.Any, CultureInfo.InvariantCulture, out var rate))
                     {
-                        _logger.Warning("Unable to parse rate for line: {Line}", line);
+                        _logger.Fatal("Unable to parse rate for line: {Line}", line);
                         continue;
                     }
 
