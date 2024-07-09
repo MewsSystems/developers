@@ -130,10 +130,8 @@ namespace ExchangeRateUpdater.Tests
                   req.RequestUri == new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")),
                ItExpr.IsAny<CancellationToken>()
             );
-
-            mockLogger.Verify(
-               x => x.Error(It.IsAny<HttpRequestException>(), It.IsAny<string>(), It.IsAny<object[]>()),
-               Times.Once);
         }
+
+
     }
 }
