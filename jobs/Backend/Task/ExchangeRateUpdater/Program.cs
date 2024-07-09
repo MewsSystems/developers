@@ -32,7 +32,7 @@ namespace ExchangeRateUpdater
             {
                 new Currency("USD"),
                 new Currency("EUR"),
-                new Currency("CZK"),
+                new Currency("CZK"),// This is passed in but never ends up in the output because of rules that were set in ExchangeRate if (value <= 0)
                 new Currency("JPY"),
                 new Currency("KES"),
                 new Currency("RUB"),
