@@ -59,10 +59,6 @@ namespace ExchangeRateUpdater
                     {
                         exchangeRates.Add(new ExchangeRate(new Currency("CZK"), targetCurrency, rate));
                     }
-                    else
-                    {
-                        _logger.Warning("Target currency {CurrencyCode} not found in provided currencies.", currencyCode);
-                    }
                 }
             }
             catch (Exception ex)
