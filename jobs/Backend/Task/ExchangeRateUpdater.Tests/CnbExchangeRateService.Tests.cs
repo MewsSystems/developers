@@ -12,7 +12,7 @@ namespace ExchangeRateUpdater.Tests
 {
     public class CnbExchangeRateServiceTests
     {
-        private const string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+      private const string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
 
         [Fact]
         public async Task FetchExchangeRateDataAsync_ShouldReturnData_WhenResponseIsSuccessful()

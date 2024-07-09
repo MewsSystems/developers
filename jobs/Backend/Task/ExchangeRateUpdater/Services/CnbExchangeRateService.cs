@@ -7,7 +7,7 @@ namespace ExchangeRateUpdater
 {
     public class CnbExchangeRateService : IExchangeRateService
     {
-        private static readonly string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+        private readonly string ExchangeRateUrl;
         public HttpClient HttpClient { get; set; }
         public ILogger Logger { get; set; }
 
@@ -15,6 +15,7 @@ namespace ExchangeRateUpdater
         {
             Logger = Log.ForContext<CnbExchangeRateService>();
             HttpClient = new HttpClient();
+            ExchangeRateUrl = EnvironmentHelper.GetEnvironmentVariable("CNB_EXCHANGE_RATE_URL");
         }
 
         public async Task<string> FetchExchangeRateDataAsync()
