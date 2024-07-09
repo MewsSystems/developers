@@ -12,29 +12,12 @@ namespace ExchangeRateUpdater.Tests
 {
     public class CnbExchangeRateServiceTests
     {
-        private static DateTime _lastRequestTime = DateTime.MinValue;
-        private static readonly object _lock = new object();
-
-        private async Task RateLimit()
-        {
-            lock (_lock)
-            {
-                var timeSinceLastRequest = DateTime.UtcNow - _lastRequestTime;
-                if (timeSinceLastRequest < TimeSpan.FromSeconds(1))
-                {
-                    var delay = TimeSpan.FromSeconds(1) - timeSinceLastRequest;
-                    Thread.Sleep(delay);
-                }
-                _lastRequestTime = DateTime.UtcNow;
-            }
-        }
+        private const string ExchangeRateUrl = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
 
         [Fact]
         public async Task FetchExchangeRateDataAsync_ShouldReturnData_WhenResponseIsSuccessful()
         {
             // Arrange
-            await RateLimit();
-
             var mockLogger = new Mock<ILogger>();
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
@@ -44,7 +27,7 @@ namespace ExchangeRateUpdater.Tests
                   "SendAsync",
                   ItExpr.Is<HttpRequestMessage>(req =>
                      req.Method == HttpMethod.Get &&
-                     req.RequestUri == new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")),
+                     req.RequestUri == new Uri(ExchangeRateUrl)),
                   ItExpr.IsAny<CancellationToken>()
                )
                .ReturnsAsync(new HttpResponseMessage
@@ -54,10 +37,7 @@ namespace ExchangeRateUpdater.Tests
                })
                .Verifiable();
 
-            var httpClient = new HttpClient(handlerMock.Object)
-            {
-                BaseAddress = new Uri("https://www.cnb.cz/")
-            };
+            var httpClient = new HttpClient(handlerMock.Object);
 
             var service = new CnbExchangeRateService
             {
@@ -76,18 +56,15 @@ namespace ExchangeRateUpdater.Tests
                Times.Once(),
                ItExpr.Is<HttpRequestMessage>(req =>
                   req.Method == HttpMethod.Get &&
-                  req.RequestUri == new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")),
+                  req.RequestUri == new Uri(ExchangeRateUrl)),
                ItExpr.IsAny<CancellationToken>()
             );
         }
-
 
         [Fact]
         public async Task FetchExchangeRateDataAsync_ShouldLogErrorAndThrowException_WhenRequestFails()
         {
             // Arrange
-            await RateLimit();
-
             var mockLogger = new Mock<ILogger>();
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
@@ -97,7 +74,7 @@ namespace ExchangeRateUpdater.Tests
                   "SendAsync",
                   ItExpr.Is<HttpRequestMessage>(req =>
                      req.Method == HttpMethod.Get &&
-                     req.RequestUri == new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")),
+                     req.RequestUri == new Uri(ExchangeRateUrl)),
                   ItExpr.IsAny<CancellationToken>()
                )
                .ReturnsAsync(new HttpResponseMessage
@@ -106,10 +83,7 @@ namespace ExchangeRateUpdater.Tests
                })
                .Verifiable();
 
-            var httpClient = new HttpClient(handlerMock.Object)
-            {
-                BaseAddress = new Uri("https://www.cnb.cz/")
-            };
+            var httpClient = new HttpClient(handlerMock.Object);
 
             var service = new CnbExchangeRateService
             {
@@ -127,11 +101,9 @@ namespace ExchangeRateUpdater.Tests
                Times.Once(),
                ItExpr.Is<HttpRequestMessage>(req =>
                   req.Method == HttpMethod.Get &&
-                  req.RequestUri == new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")),
+                  req.RequestUri == new Uri(ExchangeRateUrl)),
                ItExpr.IsAny<CancellationToken>()
             );
         }
-
-
     }
 }
