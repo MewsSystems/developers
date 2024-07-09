@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  exchange-rate-updater-api:
+    image: exchange-rate-updater-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
