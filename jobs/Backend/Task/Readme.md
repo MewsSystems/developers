@@ -1,0 +1,12 @@
+## Features
+- I take the exchange rate data from CNB's rest api (api.cnb.cz).
+- Since the API provides the information for both commonly and uncommonly traded currencies in different endpoints, the data is fetched from both concurrently:
+  - The data for the commonly traded currencies is published every working day at 14:30 and is valid for that whole day. This endpoint always returns the most up to date information when called without a date.
+  - The data for the other currencies is updated the last working day of each month and is valid for the entirety of the comming month. That's why I retrieve the data for the previous month in Czechia's timezone.
+- The test program has been refactored to HostApplicationBuilder, both as a showcase and to enable some nice out of the box features:
+  - Logging
+  - Dependency injection
+  - Cancellation through CancellationToken and application lifecycle
+- The usage of HttpClient has the following considerations:
+  - It's injected and its lifecycle is managed by the framework. This would be important should this be a real application since HttpClient objects are expensive to recreate.
+  - It uses retry and timeout policies so it's more resilient.

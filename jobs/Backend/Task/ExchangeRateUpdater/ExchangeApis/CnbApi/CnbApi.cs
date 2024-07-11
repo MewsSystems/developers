@@ -30,9 +30,14 @@ public class CnbApi(HttpClient client) : IExchangeApi
 
     private async Task<IEnumerable<ExchangeRate>> GetFxrates(CancellationToken cancellationToken)
     {
-        var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+        /* 
+         * Data is published the last working day of each month and valid for the entire next month
+         * so we always need to get the data for the previous month.
+        */
+        var timezone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"); // Czechia's timezone
         var lastMonthDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddMonths(-1);
         var yearMonth = lastMonthDateTime.ToString("yyyy-MM");
+
         var exrates = await _client.GetFromJsonAsync<RatesResultDto>($"fxrates/daily-month?lang=EN&yearMonth={yearMonth}", cancellationToken);
         return exrates.ToExchangeRates("CZK");
     }
