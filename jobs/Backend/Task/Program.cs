@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,25 +21,37 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             try
             {
+                //Build a default host, letting .net do the heavy lifting by registring a ILoggerFactory for ILogger<T>,
+                //appsettings loading and a container etc :-)
+                var host = Host.CreateDefaultBuilder();
+
+                //Register services
+
+                //Retrieve from container
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine($"Could not retrieve exchange rates: '{ex.Message}'.");
+
+                Environment.Exit(-1);
             }
 
             Console.ReadLine();
+
+            Environment.Exit(0);
         }
     }
 }
