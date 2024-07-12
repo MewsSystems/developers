@@ -40,7 +40,7 @@ namespace CzechNationalBankApi
             czechItems.AddRange(ParseStreamAsCSV(dailyResponseStream));
 
 
-            var fxResponse = await _httpClient.GetAsync($"en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt?year={date:yyyy}&month={date:M}");
+            var fxResponse = await _httpClient.GetAsync($"en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt?year={date:yyyy}&month={date:MM}");
 
             fxResponse.EnsureSuccessStatusCode();
 
