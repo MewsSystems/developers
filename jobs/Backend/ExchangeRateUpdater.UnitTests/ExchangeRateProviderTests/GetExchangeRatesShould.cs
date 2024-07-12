@@ -45,7 +45,7 @@ namespace ExchangeRateUpdater.UnitTests.ExchangeRateProviderTests
         }
 
         [Fact]
-        public async Task ReturnExpectedCurrencies_OnlyIfRequested()
+        public async Task ReturnExpectedCurrencies_OnlyIfRequested_CaseInsensitive()
         {
             var dummyCurrencies = new[] {
                 new Currency("AAA"),
@@ -66,7 +66,8 @@ namespace ExchangeRateUpdater.UnitTests.ExchangeRateProviderTests
             _czechBankApiService.GetExchangeRatesAsync().Returns(dummyResponse);
 
             var actual = await _exchangeRateProvider.GetExchangeRatesAsync(dummyCurrencies);
-
+            
+            actual.Count().Should().Be(expected.Length);
             actual.Should().BeEquivalentTo(expected);
         }
 
