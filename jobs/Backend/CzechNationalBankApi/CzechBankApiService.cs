@@ -25,8 +25,7 @@ namespace CzechNationalBankApi
             //  Second check, and final: https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt?year=2024&month=6
             //All values from the two api endpoints come back like: Country|Currency|Amount|Code|Rate
 
-            throw new NotImplementedException();
+            return Enumerable.Empty<CzechExchangeItemDto>();
         }
-
     }
 }

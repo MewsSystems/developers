@@ -46,7 +46,7 @@ namespace ExchangeRateUpdater
 
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
 
-            var logger = loggerFactory!.CreateLogger("Program");
+            var logger = loggerFactory!.CreateLogger(nameof(Program));
 
             var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 

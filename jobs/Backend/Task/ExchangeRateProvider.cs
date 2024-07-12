@@ -25,7 +25,41 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            if (!currencies.Any())
+            {
+                _logger.LogInformation("No currencies passed, returning empty list of exchange rates");
+
+                return Enumerable.Empty<ExchangeRate>();
+            }
+
+            var exchangeRatesFromCzechBank = await _czechBankApiService.GetExchangeRatesAsync();
+
+            if (!exchangeRatesFromCzechBank.Any())
+            {
+                _logger.LogError("No exchange rates were returned from the Czech bank api");
+
+                return Enumerable.Empty<ExchangeRate>();
+            }
+
+            var exchangeRates = new List<ExchangeRate>();
+
+            foreach (var currency in currencies)
+            {
+                var exchangeData = exchangeRatesFromCzechBank.FirstOrDefault(x => x.Code.Equals(currency.Code, StringComparison.InvariantCultureIgnoreCase));
+
+                if(exchangeData != null)
+                {
+                    exchangeRates.Add(new ExchangeRate(currency, new Currency("CZK"), exchangeData.Rate));
+                }
+                else
+                {
+                    _logger.LogInformation($"Couldn't find currency {currency.Code} in exchange rate date, skipping");
+
+                    continue;
+                }
+            }
+
+            return exchangeRates;
         }
     }
 }
