@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdater.Application;
+
+namespace ExchangeRateUpdater
 {
     public class ExchangeRate
     {

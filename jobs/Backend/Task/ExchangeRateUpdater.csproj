@@ -11,5 +11,11 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\CzechNationalBankApi\CzechNationalBankApi.csproj" />
+	  <ProjectReference Include="..\ExchangeRateUpdater.Application\ExchangeRateUpdater.Application.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
