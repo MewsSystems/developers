@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using CzechNationalBankApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CzechNationalBankApi;
 using ExchangeRateUpdater.Application;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
