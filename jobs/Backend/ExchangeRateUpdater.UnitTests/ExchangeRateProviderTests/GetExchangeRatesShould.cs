@@ -1,7 +1,6 @@
-using Castle.Core.Logging;
 using CzechNationalBankApi;
-using FluentAssertions;
 using ExchangeRateUpdater.Application;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
