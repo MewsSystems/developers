@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using CzechNationalBankApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,13 @@ namespace ExchangeRateUpdater
                 var host = Host.CreateDefaultBuilder();
 
                 //Register services
+                host.ConfigureServices((context, services) => {
+
+                    services.AddCzechBankApiService(context.Configuration);
+
+                });
+
+
 
                 //Retrieve from container
                 var provider = new ExchangeRateProvider();
@@ -51,6 +59,8 @@ namespace ExchangeRateUpdater
 
             Console.ReadLine();
 
+            //0 for success, anything else means error!
+            //This means if we are running this in an orchestrator container (like Azure Kubernetes) it can recover from a bad run because it knows!!
             Environment.Exit(0);
         }
     }

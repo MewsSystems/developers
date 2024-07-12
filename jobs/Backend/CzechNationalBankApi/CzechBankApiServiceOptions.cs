@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CzechNationalBankApi
 {
-    public interface ICzechBankApiService
+    public class CzechBankApiServiceOptions
     {
-        Task<IEnumerable<CzechExchangeItemDto>> GetExchangeRatesAsync();
+        public string BaseUrl { get; set; } = string.Empty;
     }
 }
