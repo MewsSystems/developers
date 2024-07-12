@@ -1,15 +1,20 @@
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 
 namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
 {
     public class GetExchangeRatesShould
     {
+        private MockHttpMessageHandler _mockHttpMessageHandler = Substitute.ForPartsOf<MockHttpMessageHandler>();
+        private HttpClient _httpClient;
+        private ILogger<CzechBankApiService> _logger = Substitute.For<ILogger<CzechBankApiService>>();
         private CzechBankApiService _czechBankApiService;
 
         public GetExchangeRatesShould()
         {
-            //Null logger and a mockHttpClient needed
-            //_czechBankApiService = new CzechBankApiService();
+            _httpClient = new HttpClient(_mockHttpMessageHandler);
+
+            _czechBankApiService = new CzechBankApiService(_logger, _httpClient);
         }
 
         [Fact]
@@ -19,7 +24,7 @@ namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
         }
 
         [Fact]
-        public void ThrowExceptionAndNotSwallow()
+        public async Task ThrowExceptionAndNotSwallow()
         {
 
         }

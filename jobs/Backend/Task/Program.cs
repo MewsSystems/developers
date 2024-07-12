@@ -54,7 +54,7 @@ namespace ExchangeRateUpdater
             {
                 logger.LogInformation($"Running GetExchangeRates()....");
 
-                var rates = exchangeRateProvider.GetExchangeRates(currencies);
+                var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
 
                 logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
 
