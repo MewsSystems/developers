@@ -1,12 +1,11 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using System.Net.Http.Json;
 
 namespace CzechNationalBankApi
 {
     /// <summary>
     /// Provides various data from the Czech bank api.
-    /// https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/index.html?date=
+    /// https://api.cnb.cz/cnbapi/api-docs
     /// </summary>
     public class CzechBankApiService : ICzechBankApiService
     {
@@ -23,33 +22,27 @@ namespace CzechNationalBankApi
         {
             var czechItems = new List<CzechExchangeItemDto>();
 
-            //Two stage check - encapsulate within one method
-            //  Some currencies are main currencies, then there are "other" ones. Just check both inside the method and do out best to return something :-)
-            //      https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=11.07.2024
-            //  Second check, and final: https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt?year=2024&month=6
-            //All values from the two api endpoints come back like: Country|Currency|Amount|Code|Rate
-
-            var date = DateTime.UtcNow;
-
-            var dailyResponse = await _httpClient.GetAsync($"en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date={date:dd.MM.yyyyy}");
+            //There are two endpoints to check as there are "exrates" and other "fxrates"
+            var dailyResponse = await _httpClient.GetAsync($"cnbapi/exrates/daily?lang=EN&date={DateTime.UtcNow:yyyy-MM-dd}");
 
             dailyResponse.EnsureSuccessStatusCode();
 
-            var dailyResponseStream = await dailyResponse.Content.ReadAsStreamAsync();
+            var dailyResponseStream = await dailyResponse.Content.ReadFromJsonAsync<CzechExchangeRatesResponseDto>() ?? new();
 
-            czechItems.AddRange(ParseStreamAsCSV(dailyResponseStream));
+            czechItems.AddRange(dailyResponseStream.Rates);
 
+            var lastMonth = DateTime.UtcNow.AddMonths(-1);
 
-            var fxResponse = await _httpClient.GetAsync($"en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt?year={date:yyyy}&month={date:MM}");
+            var fxResponse = await _httpClient.GetAsync($"cnbapi/fxrates/daily-month?lang=EN&yearMonth={lastMonth:yyyy-MM}");
 
             fxResponse.EnsureSuccessStatusCode();
 
-            var fxResponseStream = await fxResponse.Content.ReadAsStreamAsync();
+            var fxResponseStream = await fxResponse.Content.ReadFromJsonAsync<CzechExchangeRatesResponseDto>() ?? new();
 
-            czechItems.AddRange(ParseStreamAsCSV(fxResponseStream));
+            czechItems.AddRange(fxResponseStream.Rates);
 
             //Could have done this using hashsets instead
-            var duplicates = czechItems.GroupBy(x => x.Code.ToLower()).Where(g => g.Count() > 1);
+            var duplicates = czechItems.GroupBy(x => x.CurrencyCode.ToLower()).Where(g => g.Count() > 1);
 
             if (duplicates.Any())
             {
@@ -57,21 +50,6 @@ namespace CzechNationalBankApi
             }
 
             return czechItems;
-        }
-
-        private IEnumerable<CzechExchangeItemDto> ParseStreamAsCSV(Stream data)
-        {
-            var config = new CsvConfiguration(System.Globalization.CultureInfo.CurrentCulture)
-            {
-                Delimiter = "|",
-                ShouldSkipRecord = r => r.Row[0].Contains("#") //This removes the weird extra row in the response from the API
-            };
-
-            using var reader = new StreamReader(data);
-
-            using var csv = new CsvReader(reader, config);
-
-            return csv.GetRecords<CzechExchangeItemDto>().ToList();
         }
     }
 }

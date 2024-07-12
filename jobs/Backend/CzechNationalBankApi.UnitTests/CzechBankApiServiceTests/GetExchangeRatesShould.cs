@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using System.Net.Http.Json;
 
 namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
 {
@@ -22,11 +23,11 @@ namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
         [Fact]
         public async Task ReturnsEmpty_WhenApiReturnsNoData()
         {
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("daily.txt")), Arg.Any<CancellationToken>())
-               .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(string.Empty) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/exrates/daily")), Arg.Any<CancellationToken>())
+               .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(new CzechExchangeRatesResponseDto()) });
 
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("fx_rates.txt")), Arg.Any<CancellationToken>())
-                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(string.Empty) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/fxrates/daily-month")), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(new CzechExchangeRatesResponseDto()) });
 
             var actual = await _czechBankApiService.GetExchangeRatesAsync();
 
@@ -36,20 +37,31 @@ namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
         [Fact]
         public async Task ReturnExpectedData_MapsCorrectlyFromApiTextFormat()
         {
-            var dummyApiDailyResponseData = @$"11 Jul 2024 #133{Environment.NewLine}Country|Currency|Amount|Code|Rate{Environment.NewLine}Australia|dollar|1|AUD|15.777";
+            var dummyApiExRatesDailyResponseData = new CzechExchangeRatesResponseDto
+            {
+                Rates = new List<CzechExchangeItemDto> {
+                    new CzechExchangeItemDto { Country = "Australia", Currency = "dollar", Amount = 1, CurrencyCode = "AUD", Rate = 15.763m }
+                }
+            };
 
-            var dummyApiFxRatesResponseData = @$"28 Jun 2024 #6{Environment.NewLine}Country|Currency|Amount|Code|Rate{Environment.NewLine}Afghanistan|afghani|100|AFN|32.957{Environment.NewLine}Albania|lek|100|ALL|25.052";
+            var dummyApiFxRatesResponseData = new CzechExchangeRatesResponseDto
+            {
+                Rates = new List<CzechExchangeItemDto> {
+                    new CzechExchangeItemDto { Country = "Afghanistan", Currency = "afghani", Amount = 100, CurrencyCode = "AFN", Rate = 32.957m },
+                    new CzechExchangeItemDto { Country = "Albania", Currency = "lek", Amount = 100, CurrencyCode = "ALL", Rate = 25.052m }
+                }
+            };
 
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("daily.txt")), Arg.Any<CancellationToken>())
-                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(dummyApiDailyResponseData) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/exrates/daily")), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(dummyApiExRatesDailyResponseData) });
 
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("fx_rates.txt")), Arg.Any<CancellationToken>())
-                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(dummyApiFxRatesResponseData) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/fxrates/daily-month")), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(dummyApiFxRatesResponseData) });
 
             var expected = new List<CzechExchangeItemDto>() { 
-                new CzechExchangeItemDto { Country = "Australia", Currency = "dollar", Amount = 1, Code = "AUD", Rate = 15.777m },
-                new CzechExchangeItemDto { Country = "Afghanistan", Currency = "afghani", Amount = 100, Code = "AFN", Rate = 32.957m },
-                new CzechExchangeItemDto { Country = "Albania", Currency = "lek", Amount = 100, Code = "ALL", Rate = 25.052m },
+                new CzechExchangeItemDto { Country = "Australia", Currency = "dollar", Amount = 1, CurrencyCode = "AUD", Rate = 15.763m },
+                new CzechExchangeItemDto { Country = "Afghanistan", Currency = "afghani", Amount = 100, CurrencyCode = "AFN", Rate = 32.957m },
+                new CzechExchangeItemDto { Country = "Albania", Currency = "lek", Amount = 100, CurrencyCode = "ALL", Rate = 25.052m },
             };
 
             var actual = await _czechBankApiService.GetExchangeRatesAsync();
@@ -70,15 +82,25 @@ namespace CzechNationalBankApi.UnitTests.CzechBankApiServiceTests
         [Fact]
         public async Task ThrowsExceptionWhenDuplicateCurrencyInfoFound()
         {
-            var dummyApiDailyResponseData = @$"11 Jul 2024 #133{Environment.NewLine}Country|Currency|Amount|Code|Rate{Environment.NewLine}Australia|dollar|1|AUD|15.777";
+            var dummyApiExRatesDailyResponseData = new CzechExchangeRatesResponseDto { 
+                Rates = new List<CzechExchangeItemDto> {
+                    new CzechExchangeItemDto { Country = "Australia", Currency = "dollar", Amount = 1, CurrencyCode = "AUD", Rate = 15.763m } 
+                }
+            };
 
-            var dummyApiFxRatesResponseData = @$"28 Jun 2024 #6{Environment.NewLine}Country|Currency|Amount|Code|Rate{Environment.NewLine}Afghanistan|afghani|100|AFN|32.957{Environment.NewLine}Albania|lek|100|ALL|25.052{Environment.NewLine}Australia|dollar|1|AUD|15.777";
+            var dummyApiFxRatesResponseData = new CzechExchangeRatesResponseDto { 
+                Rates = new List<CzechExchangeItemDto> {
+                    new CzechExchangeItemDto { Country = "Afghanistan", Currency = "afghani", Amount = 100, CurrencyCode = "AFN", Rate = 32.957m },
+                    new CzechExchangeItemDto { Country = "Albania", Currency = "lek", Amount = 100, CurrencyCode = "ALL", Rate = 25.052m },
+                    new CzechExchangeItemDto { Country = "Australia", Currency = "dollar", Amount = 1, CurrencyCode = "AUD", Rate = 15.763m }
+                }
+            };
 
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("daily.txt")), Arg.Any<CancellationToken>())
-                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(dummyApiDailyResponseData) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/exrates/daily")), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(dummyApiExRatesDailyResponseData) });
 
-            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("fx_rates.txt")), Arg.Any<CancellationToken>())
-                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(dummyApiFxRatesResponseData) });
+            _mockHttpMessageHandler.MockSend(Arg.Is<HttpRequestMessage>(x => x.RequestUri!.OriginalString.Contains("cnbapi/fxrates/daily-month")), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = JsonContent.Create(dummyApiFxRatesResponseData) });
 
             var actual = _czechBankApiService.GetExchangeRatesAsync;
 

@@ -52,9 +52,9 @@ namespace ExchangeRateUpdater.UnitTests.ExchangeRateProviderTests
             };
 
             var dummyResponse = new[] { 
-                new CzechExchangeItemDto { Amount = 1, Code = "AaA", Country = "An Awesome Alliance", Currency = "awesome", Rate = 22.33m },
-                new CzechExchangeItemDto { Amount = 100, Code = "BOB", Country = "Bob country", Currency = "bobcoin", Rate = 12m },
-                new CzechExchangeItemDto { Amount = 999, Code = "ZZZ", Country = "Sleeping country", Currency = "sleeps", Rate = 129919m },
+                new CzechExchangeItemDto { Amount = 1, CurrencyCode = "AaA", Country = "An Awesome Alliance", Currency = "awesome", Rate = 22.33m },
+                new CzechExchangeItemDto { Amount = 100, CurrencyCode = "BOB", Country = "Bob country", Currency = "bobcoin", Rate = 12m },
+                new CzechExchangeItemDto { Amount = 999, CurrencyCode = "ZZZ", Country = "Sleeping country", Currency = "sleeps", Rate = 129919m },
             };
 
             var expected = new[] {

@@ -43,7 +43,7 @@ namespace ExchangeRateUpdater
 
             foreach (var currency in currencies)
             {
-                var exchangeData = exchangeRatesFromCzechBank.FirstOrDefault(x => x.Code.Equals(currency.Code, StringComparison.InvariantCultureIgnoreCase));
+                var exchangeData = exchangeRatesFromCzechBank.FirstOrDefault(x => x.CurrencyCode.Equals(currency.Code, StringComparison.InvariantCultureIgnoreCase));
 
                 if(exchangeData != null)
                 {
