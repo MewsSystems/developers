@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Lib.Shared
 {
     public class ExchangeRate
     {
