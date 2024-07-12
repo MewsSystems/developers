@@ -53,7 +53,7 @@ namespace ExchangeRateUpdater
                 }
                 else
                 {
-                    _logger.LogInformation($"Couldn't find currency {currency.Code} in exchange rate date, skipping");
+                    _logger.LogInformation($"Couldn't find currency {currency.Code} in exchange rate data, skipping");
 
                     continue;
                 }
