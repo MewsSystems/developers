@@ -18,10 +18,10 @@ namespace CzechNationalBankApi
             {
                 options.BaseAddress = new Uri(apiConfiguration.BaseUrl);
 
-            }).AddPolicyHandler(GetransientRetryPolicy());
+            }).AddPolicyHandler(GetTransientRetryPolicy());
         }
 
-        private static IAsyncPolicy<HttpResponseMessage> GetransientRetryPolicy()
+        private static IAsyncPolicy<HttpResponseMessage> GetTransientRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
