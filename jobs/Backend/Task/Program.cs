@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Ext;
+using ExchangeRateUpdater.Model;
 
 namespace ExchangeRateUpdater
 {
@@ -23,13 +25,19 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(new CnbClient());
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine(rate);
+                }
+
+                foreach (var rate in rates)
+                {
+                    var exampleAmount = Math.Round(1000 * rate.Value, 2, MidpointRounding.AwayFromZero);
+                    Console.WriteLine($"Converting 1000 {rate.SourceCurrency} to {rate.TargetCurrency} using ({rate}): {exampleAmount} {rate.TargetCurrency}");
                 }
             }
             catch (Exception e)
