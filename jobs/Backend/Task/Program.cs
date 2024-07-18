@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.ExternalVendors.CzechNationalBank;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, collection) =>
+                {
+                    collection.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
+                })
+                .ConfigureAppConfiguration((context, builder) => builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true))
+                .Build();
 
-        public static void Main(string[] args)
-        {
+            var provider = ActivatorUtilities.CreateInstance<CzechNationalBankExchangeRateProvider>(host.Services);
+            
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var config = host.Services.GetRequiredService<IConfiguration>();
+                var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
+                var currencies = codes.Select(code => new Currency(code)).ToList();
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
