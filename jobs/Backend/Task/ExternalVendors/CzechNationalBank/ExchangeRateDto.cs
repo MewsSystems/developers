@@ -1,19 +1,15 @@
-﻿namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
 {
-    using System;
-    using System.Collections.Generic;
-
-    using System.Text.Json;
-    using System.Text.Json.Serialization;
-    using System.Globalization;
-
     public partial class ExchangeRateDto
     {
         [JsonPropertyName("rates")]
-        public Rate[] Rates { get; set; }
+        public ExchangeRateResult[] Rates { get; set; }
     }
 
-    public partial class Rate
+    public partial class ExchangeRateResult
     {
         [JsonPropertyName("validFor")]
         public DateTimeOffset ValidFor { get; set; }
@@ -34,6 +30,6 @@
         public string CurrencyCode { get; set; }
 
         [JsonPropertyName("rate")]
-        public decimal RateRate { get; set; }
+        public decimal Rate { get; set; }
     }
 }
