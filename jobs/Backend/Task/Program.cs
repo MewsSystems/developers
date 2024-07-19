@@ -15,7 +15,8 @@ namespace ExchangeRateUpdater
         public static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration((context, builder) => builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true))
+                .ConfigureAppConfiguration((context, builder) =>
+                    builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true))
                 .ConfigureServices((context, services) =>
                 {
                     services.Configure<CzechNationalBankSettings>(context.Configuration.GetSection("CNB_API"));
@@ -31,18 +32,21 @@ namespace ExchangeRateUpdater
                 .Build();
 
             var provider = ActivatorUtilities.CreateInstance<CzechNationalBankExchangeRateProvider>(host.Services);
-            
+
             try
             {
-                var config = host.Services.GetRequiredService<IConfiguration>();
-                var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
-                var currencies = codes.Select(code => new Currency(code)).ToList();
-                var rates = await provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                for (int i = 0; i < 3; i++)
                 {
-                    Console.WriteLine(rate.ToString());
+                    var config = host.Services.GetRequiredService<IConfiguration>();
+                    var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
+                    var currencies = codes.Select(code => new Currency(code)).ToList();
+                    var rates = await provider.GetExchangeRates(currencies);
+
+                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
             }
             catch (Exception e)

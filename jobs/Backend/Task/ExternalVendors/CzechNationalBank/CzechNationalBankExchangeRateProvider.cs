@@ -1,8 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
 {
@@ -11,14 +13,17 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
         private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
         private readonly IExchangeRateClient _client;
         private readonly IMemoryCache _rateStorage;
+        private readonly IOptions<CzechNationalBankSettings> _configuration;
 
-        public CzechNationalBankExchangeRateProvider(ILogger<CzechNationalBankExchangeRateProvider> logger, IExchangeRateClient client, IMemoryCache rateStorage)
+        public CzechNationalBankExchangeRateProvider(ILogger<CzechNationalBankExchangeRateProvider> logger,
+            IExchangeRateClient client, IMemoryCache rateStorage, IOptions<CzechNationalBankSettings> configuration)
         {
             _logger = logger;
             _client = client;
             _rateStorage = rateStorage;
+            _configuration = configuration;
         }
-        
+
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
         /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -29,23 +34,31 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
         {
             _logger.LogInformation("Retrieving exchange rates for { currencies }", currencies);
             var rates = new List<ExchangeRate>();
-            var RateStorage = new ConcurrentDictionary<string, ExchangeRateResult>();
 
-            var exchangeRates = await _client.GetDailyExchangeRates();
-
-            foreach (ExchangeRateResult rate in exchangeRates.Rates)
+            if (!_rateStorage.TryGetValue("currentRates",
+                    out Dictionary<string, ExchangeRateResult> currentExchangeRates))
             {
-                RateStorage.AddOrUpdate(rate.CurrencyCode, rate, (s, rate1) => rate);
+                _logger.LogDebug("Cache miss for rate retrieval. Retrieving rates from 3rd party API.");
+                var exchangeRates = await _client.GetDailyExchangeRates();
+                Dictionary<string, ExchangeRateResult> rateDictionary =
+                    exchangeRates.Rates.ToDictionary(rate => rate.CurrencyCode);
+
+                // TODO:    Went with a naive expiration time, ideally this would be based off of whenever the external service refreshes their results. 
+                _rateStorage.Set("currentRates", rateDictionary,
+                    TimeSpan.FromMinutes(_configuration.Value.REFRESH_RATE_IN_MINUTES));
+                currentExchangeRates = rateDictionary;
             }
 
             foreach (Currency currency in currencies)
             {
-                if (RateStorage.TryGetValue(currency.Code, out var requestedCurrencyRate))
+                if (currentExchangeRates.TryGetValue(currency.Code, out var requestedCurrencyRate))
                 {
-                    rates.Add(new ExchangeRate(currency, 
-                        new Currency("CZK"), 
-                        requestedCurrencyRate.Rate / requestedCurrencyRate.Amount // divide Rate / Amount to ensure all rates returned are consistent with 1 CZK
-                        ) 
+                    rates.Add(new ExchangeRate(currency,
+                            new Currency("CZK"),
+                            requestedCurrencyRate.Rate /
+                            requestedCurrencyRate
+                                .Amount // divide Rate / Amount to ensure all rates returned are consistent with 1 CZK
+                        )
                     );
                 }
             }
