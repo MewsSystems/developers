@@ -14,22 +14,12 @@ namespace ExchangeRateUpdater
     {
         public static async Task Main(string[] args)
         {
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration((context, builder) =>
-                    builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true))
-                .ConfigureServices((context, services) =>
-                {
-                    services.Configure<CzechNationalBankSettings>(context.Configuration.GetSection("CNB_API"));
-                    services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
-                    services.AddTransient<IExchangeRateClient, CzechApiClient>();
-                    services.AddMemoryCache();
-                    services.AddHttpClient("ExchangeRateApi", (provider, client) =>
-                    {
-                        var settings = provider.GetRequiredService<IOptions<CzechNationalBankSettings>>().Value;
-                        client.BaseAddress = settings.BASE_URL;
-                    });
-                })
-                .Build();
+            var builder = Host.CreateDefaultBuilder();
+            // .ConfigureAppConfiguration((context, builder) =>
+            //     builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true));
+
+            ConfigureServices(builder);
+            var host = builder.Build();
 
             var provider = ActivatorUtilities.CreateInstance<CzechNationalBankExchangeRateProvider>(host.Services);
 
@@ -55,6 +45,22 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static void ConfigureServices(IHostBuilder host)
+        {
+            host.ConfigureServices((context, services) =>
+            {
+                services.Configure<CzechNationalBankSettings>(context.Configuration.GetSection("CNB_API"));
+                services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
+                services.AddTransient<IExchangeRateClient, CzechApiClient>();
+                services.AddMemoryCache();
+                services.AddHttpClient("ExchangeRateApi", (provider, client) =>
+                {
+                    var settings = provider.GetRequiredService<IOptions<CzechNationalBankSettings>>().Value;
+                    client.BaseAddress = settings.BASE_URL;
+                });
+            });
         }
     }
 }

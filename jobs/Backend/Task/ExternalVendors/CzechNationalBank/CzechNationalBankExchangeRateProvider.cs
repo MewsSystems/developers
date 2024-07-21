@@ -35,7 +35,7 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
             _logger.LogInformation("Retrieving exchange rates for { currencies }", currencies);
             var rates = new List<ExchangeRate>();
 
-            if (!_rateStorage.TryGetValue("currentRates",
+            if (!_rateStorage.TryGetValue(_configuration.Value.RATE_STORAGE_KEY,
                     out Dictionary<string, ExchangeRateResult> currentExchangeRates))
             {
                 _logger.LogDebug("Cache miss for rate retrieval. Retrieving rates from 3rd party API.");
@@ -44,7 +44,7 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
                     exchangeRates.Rates.ToDictionary(rate => rate.CurrencyCode);
 
                 // TODO:    Went with a naive expiration time, ideally this would be based off of whenever the external service refreshes their results. 
-                _rateStorage.Set("currentRates", rateDictionary,
+                _rateStorage.Set(_configuration.Value.RATE_STORAGE_KEY, rateDictionary,
                     TimeSpan.FromMinutes(_configuration.Value.REFRESH_RATE_IN_MINUTES));
                 currentExchangeRates = rateDictionary;
             }
