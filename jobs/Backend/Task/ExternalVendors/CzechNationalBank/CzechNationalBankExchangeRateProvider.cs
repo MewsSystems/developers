@@ -33,8 +33,18 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             _logger.LogInformation("Retrieving exchange rates for { currencies }", currencies);
-            var rates = new List<ExchangeRate>();
+            var currentExchangeRates = await GetExchangeRatesOrFetchFromCache();
+            return currentExchangeRates == null
+                ? Enumerable.Empty<ExchangeRate>()
+                : FormatRates(currencies, currentExchangeRates);
+        }
 
+        /// <summary>
+        /// Retrieves exchange rates from the cache if available, otherwise fetches them from a web service and stores them in the cache.
+        /// </summary>
+        /// <returns>A dictionary containing the exchange rates, with currency codes as keys and exchange rate results as values.</returns>
+        private async Task<Dictionary<string, ExchangeRateResult>> GetExchangeRatesOrFetchFromCache()
+        {
             // if rates are not present in cache, ask web service for current rates
             if (!_rateStorage.TryGetValue(_configuration.Value.RATE_STORAGE_KEY,
                     out Dictionary<string, ExchangeRateResult> currentExchangeRates))
@@ -42,10 +52,10 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
                 _logger.LogDebug("Cache miss for rate retrieval. Retrieving rates from 3rd party API.");
                 var exchangeRates = await _client.GetDailyExchangeRates();
 
-                if (exchangeRates == null || exchangeRates.Rates.Length == 0)
+                if (exchangeRates == null || exchangeRates.Rates.Count == 0)
                 {
                     _logger.LogWarning("No exchange rates retrieved from the API.");
-                    return Array.Empty<ExchangeRate>();
+                    return new Dictionary<string, ExchangeRateResult>();
                 }
 
                 Dictionary<string, ExchangeRateResult> rateDictionary =
@@ -61,6 +71,20 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
                 _logger.LogDebug("Cache hit for rate retrieval. Retrieving exchange rates from cache.");
             }
 
+            return currentExchangeRates;
+        }
+
+        /// <summary>
+        /// Formats the exchange rates for the specified currencies based on the current exchange rate values.
+        /// </summary>
+        /// <param name="currencies">The list of currencies to format the exchange rates for.</param>
+        /// <param name="currentExchangeRates">The dictionary of current exchange rates.</param>
+        /// <returns>The formatted exchange rates.</returns>
+        private IEnumerable<ExchangeRate> FormatRates(IEnumerable<Currency> currencies,
+            Dictionary<string, ExchangeRateResult> currentExchangeRates)
+        {
+            List<ExchangeRate> rates = new List<ExchangeRate>();
+
             foreach (Currency currency in currencies)
             {
                 if (currentExchangeRates.TryGetValue(currency.Code, out var requestedCurrencyRate))
@@ -72,6 +96,11 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
                                 .Amount // divide Rate / Amount to ensure all rates returned are consistent with 1 CZK
                         )
                     );
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        $"Desired currency {currency.Code} was not found in Exchange Rate table. Ignoring.");
                 }
             }
 

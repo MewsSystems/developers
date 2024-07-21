@@ -19,19 +19,16 @@ namespace ExchangeRateUpdater
 
             try
             {
-                for (int i = 0; i < 3; i++)
+                var config = host.Services.GetRequiredService<IConfiguration>();
+                var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
+
+                var currencies = codes.Select(code => new Currency(code)).ToList();
+
+                var rates = await provider.GetExchangeRates(currencies);
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                foreach (var rate in rates)
                 {
-                    var config = host.Services.GetRequiredService<IConfiguration>();
-                    var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
-
-                    var currencies = codes.Select(code => new Currency(code)).ToList();
-
-                    var rates = await provider.GetExchangeRates(currencies);
-                    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                    foreach (var rate in rates)
-                    {
-                        Console.WriteLine(rate.ToString());
-                    }
+                    Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
@@ -45,13 +42,7 @@ namespace ExchangeRateUpdater
         private static IHost CreateHost()
         {
             var builder = Host.CreateDefaultBuilder();
-            ConfigureServices(builder);
-            return builder.Build();
-        }
-
-        private static void ConfigureServices(IHostBuilder host)
-        {
-            host.ConfigureServices((context, services) =>
+            builder.ConfigureServices((context, services) =>
             {
                 services.Configure<CzechNationalBankSettings>(context.Configuration.GetSection("CNB_API"));
                 services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
@@ -63,6 +54,7 @@ namespace ExchangeRateUpdater
                     client.BaseAddress = settings.BASE_URL;
                 });
             });
+            return builder.Build();
         }
     }
 }
