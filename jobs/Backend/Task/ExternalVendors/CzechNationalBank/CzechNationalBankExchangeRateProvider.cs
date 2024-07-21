@@ -11,17 +11,17 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
     public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
         private readonly ILogger<CzechNationalBankExchangeRateProvider> _logger;
+        private readonly IOptions<CzechNationalBankSettings> _configuration;
         private readonly IExchangeRateClient _client;
         private readonly IMemoryCache _rateStorage;
-        private readonly IOptions<CzechNationalBankSettings> _configuration;
 
         public CzechNationalBankExchangeRateProvider(ILogger<CzechNationalBankExchangeRateProvider> logger,
             IExchangeRateClient client, IMemoryCache rateStorage, IOptions<CzechNationalBankSettings> configuration)
         {
             _logger = logger;
+            _configuration = configuration;
             _client = client;
             _rateStorage = rateStorage;
-            _configuration = configuration;
         }
 
         /// <summary>
@@ -35,18 +35,30 @@ namespace ExchangeRateUpdater.ExternalVendors.CzechNationalBank
             _logger.LogInformation("Retrieving exchange rates for { currencies }", currencies);
             var rates = new List<ExchangeRate>();
 
+            // if rates are not present in cache, ask web service for current rates
             if (!_rateStorage.TryGetValue(_configuration.Value.RATE_STORAGE_KEY,
                     out Dictionary<string, ExchangeRateResult> currentExchangeRates))
             {
                 _logger.LogDebug("Cache miss for rate retrieval. Retrieving rates from 3rd party API.");
                 var exchangeRates = await _client.GetDailyExchangeRates();
+
+                if (exchangeRates == null || exchangeRates.Rates.Length == 0)
+                {
+                    _logger.LogWarning("No exchange rates retrieved from the API.");
+                    return Array.Empty<ExchangeRate>();
+                }
+
                 Dictionary<string, ExchangeRateResult> rateDictionary =
                     exchangeRates.Rates.ToDictionary(rate => rate.CurrencyCode);
 
-                // TODO:    Went with a naive expiration time, ideally this would be based off of whenever the external service refreshes their results. 
+                // TODO: Went with a naive expiration time, ideally this would be based off of whenever the external service refreshes their results. 
                 _rateStorage.Set(_configuration.Value.RATE_STORAGE_KEY, rateDictionary,
                     TimeSpan.FromMinutes(_configuration.Value.REFRESH_RATE_IN_MINUTES));
                 currentExchangeRates = rateDictionary;
+            }
+            else
+            {
+                _logger.LogDebug("Cache hit for rate retrieval. Retrieving exchange rates from cache.");
             }
 
             foreach (Currency currency in currencies)

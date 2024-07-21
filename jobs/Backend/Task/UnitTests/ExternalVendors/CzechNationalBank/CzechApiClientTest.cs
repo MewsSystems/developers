@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using ExchangeRateUpdater.ExternalVendors.CzechNationalBank;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Contrib.HttpClient;
 using Xunit;
@@ -19,7 +20,7 @@ public class CzechApiClientTest
     {
         _handler = new Mock<HttpMessageHandler>();
         var factory = _handler.CreateClientFactory();
-        
+
         Mock.Get(factory).Setup(x => x.CreateClient(It.IsAny<string>()))
             .Returns(() =>
             {
@@ -28,13 +29,15 @@ public class CzechApiClientTest
                 return client;
             });
 
-        _client = new CzechApiClient(factory);
+        Mock<ILogger<CzechApiClient>> logger = new();
+        _client = new CzechApiClient(factory, logger.Object);
     }
-    
+
     [Fact]
     public async void InternalServerError()
     {
         _handler.SetupAnyRequest().ReturnsResponse(HttpStatusCode.InternalServerError);
-        await _client.GetDailyExchangeRates();
+        var rates = await _client.GetDailyExchangeRates();
+        Assert.Empty(rates.Rates);
     }
 }

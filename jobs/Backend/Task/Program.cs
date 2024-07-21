@@ -14,13 +14,7 @@ namespace ExchangeRateUpdater
     {
         public static async Task Main(string[] args)
         {
-            var builder = Host.CreateDefaultBuilder();
-            // .ConfigureAppConfiguration((context, builder) =>
-            //     builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true));
-
-            ConfigureServices(builder);
-            var host = builder.Build();
-
+            var host = CreateHost();
             var provider = ActivatorUtilities.CreateInstance<CzechNationalBankExchangeRateProvider>(host.Services);
 
             try
@@ -29,9 +23,10 @@ namespace ExchangeRateUpdater
                 {
                     var config = host.Services.GetRequiredService<IConfiguration>();
                     var codes = config.GetSection("DESIRED_CURRENCIES").Get<List<string>>();
-                    var currencies = codes.Select(code => new Currency(code)).ToList();
-                    var rates = await provider.GetExchangeRates(currencies);
 
+                    var currencies = codes.Select(code => new Currency(code)).ToList();
+
+                    var rates = await provider.GetExchangeRates(currencies);
                     Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                     foreach (var rate in rates)
                     {
@@ -45,6 +40,13 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static IHost CreateHost()
+        {
+            var builder = Host.CreateDefaultBuilder();
+            ConfigureServices(builder);
+            return builder.Build();
         }
 
         private static void ConfigureServices(IHostBuilder host)
