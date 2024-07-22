@@ -1,9 +1,19 @@
-﻿using System;
+﻿using Application;
+using Application.Common.Models;
+using Application.CzechNationalBank.Providers;
+
+using Autofac;
+
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         private static IEnumerable<Currency> currencies = new[]
@@ -19,12 +29,13 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var container = DependencyInjection.Register();
+                var exchangeRateProvider = container.Resolve<IExchangeRateProvider>();
+                var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
