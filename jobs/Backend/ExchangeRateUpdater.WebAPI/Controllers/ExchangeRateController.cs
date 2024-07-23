@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRateUpdater.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class ExchangeRateController : ControllerBase
+    public class ExchangeRateController : CustomBaseController
     {
         private readonly ILogger<ExchangeRateController> _logger;
 
