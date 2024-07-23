@@ -17,6 +17,7 @@ namespace ExchangeRateUpdater.WebAPI.Controllers
         [HttpGet(Name = "GetExchangeRates")]
         public async Task<IActionResult> Get()
         {
+            _logger.LogInformation("Getting Exchange Rates from Exchange Rate Controller");
             return Ok("Initial Exchange Rate Controller Creation");
         }
     }
