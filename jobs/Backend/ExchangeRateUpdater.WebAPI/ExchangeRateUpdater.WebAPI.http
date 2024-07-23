@@ -1,0 +1,6 @@
+@ExchangeRateUpdater.WebAPI_HostAddress = http://localhost:5078
+
+GET {{ExchangeRateUpdater.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
