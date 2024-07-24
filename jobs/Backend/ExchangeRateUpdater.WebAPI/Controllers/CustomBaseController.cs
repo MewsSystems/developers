@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater.WebAPI.Controllers
     /// This handles routing and adding the ApiController decorator in a single location.
     /// Also allows for any additional functionality that is shared across all controllers
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CustomBaseController : ControllerBase
     {

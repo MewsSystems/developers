@@ -1,12 +1,14 @@
-﻿using ExchangeRateUpdater.Core.DTO;
+﻿using Asp.Versioning;
+using ExchangeRateUpdater.Core.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExchangeRateUpdater.WebAPI.Controllers
+namespace ExchangeRateUpdater.WebAPI.Controllers.v1
 {
     /// <summary>
     /// Responsible for handling any requests related to Exchange Rates
     /// </summary>
+    [ApiVersion("1.0")]
     public class ExchangeRateController : CustomBaseController
     {
         private readonly ILogger<ExchangeRateController> _logger;
@@ -28,7 +30,7 @@ namespace ExchangeRateUpdater.WebAPI.Controllers
         /// <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
         /// Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
         [HttpGet(Name = "GetExchangeRates")]
-        public async Task<IActionResult> Get(ExchangeRateGetRequest? request)
+        public async Task<IActionResult> Get()
         {
             try
             {
