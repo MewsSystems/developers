@@ -21,9 +21,12 @@ namespace ExchangeRateUpdater.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets exchange rate in
+        /// Gets a list of exchange rates for a specified list of currency codes
         /// </summary>
-        /// <returns></returns>
+        /// <param name="request">Get Request object made up of a list of currency codes to get exchange rates for 
+        /// and an optional date parameter.  The current DateTime of the request will be used if the value is null.</param>
+        /// <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
+        /// Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
         [HttpGet(Name = "GetExchangeRates")]
         public async Task<IActionResult> Get(ExchangeRateGetRequest? request)
         {
