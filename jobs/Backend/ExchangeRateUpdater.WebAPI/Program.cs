@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using ExchangeRateUpdater.WebAPI.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -42,6 +43,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+//Custom Global Exception Handler
+app.UseExceptionHandlingMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

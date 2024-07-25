@@ -31,25 +31,5 @@
             <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
             Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
         </member>
-        <member name="T:ExchangeRateUpdater.WebAPI.Controllers.v2.ExchangeRateController">
-            <summary>
-            Responsible for handling any requests related to Exchange Rates
-            </summary>
-        </member>
-        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v2.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v2.ExchangeRateController})">
-            <summary>
-            Constructor for creating insance of the ExchangeRate Controller
-            </summary>
-            <param name="logger">Serilog logger</param>
-        </member>
-        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v2.ExchangeRateController.Get">
-            <summary>
-            Gets a list of exchange rates for a specified list of currency codes BUT THE SECOND ONE
-            </summary>
-            <param name="request">Get Request object made up of a list of currency codes to get exchange rates for 
-            and an optional date parameter.  The current DateTime of the request will be used if the value is null.</param>
-            <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
-            Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
-        </member>
     </members>
 </doc>
