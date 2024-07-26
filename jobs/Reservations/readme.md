@@ -5,8 +5,12 @@
 > [!NOTE]
 > This task will involve a separate repository.
 
-Start by forking [the mews-reservations-int repo](https://github.com/snewell92/mews-reservations-int/tree/main) and
+Start by forking [the mews-reservations-int repo](https://github.com/MewsSystems/reservations-interview) and
 following the "Running the App" portion of the readme.
+
+```sh
+git clone git@github.com:MewsSystems/reservations-interview.git
+```
 
 You will be acting as if you are the lead engineer on a team, executing tasks from the `/backlog`. You are free to pick up
 any tasks you can reasonably do in ~90 minutes. You must indicate which tasks are complete and which are partially complete.
