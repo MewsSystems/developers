@@ -48,7 +48,25 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "Exchange Rate API", Version = "1.0" });
 });
 
-var app = builder.Build();
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+if (allowedOrigins == null || allowedOrigins.Length == 0)
+{
+    throw new InvalidOperationException("AllowedOrigins section is missing or empty in configuration.");
+}
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder
+            .WithOrigins(allowedOrigins)
+            .WithHeaders("Authorization", "origin", "accept", "content-type")
+            .WithMethods("GET", "POST", "PUT", "DELETE");
+    });
+});
+
+var app = builder.Build(); 
 
 if (!app.Environment.IsDevelopment())
 {
@@ -67,6 +85,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
