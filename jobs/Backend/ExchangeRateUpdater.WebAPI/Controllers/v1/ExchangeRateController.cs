@@ -1,7 +1,8 @@
 ﻿using Asp.Versioning;
 using ExchangeRateUpdater.Core.DTO;
-using Microsoft.AspNetCore.Http;
+using ExchangeRateUpdater.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Emit;
 
 namespace ExchangeRateUpdater.WebAPI.Controllers.v1
 {
@@ -12,33 +13,71 @@ namespace ExchangeRateUpdater.WebAPI.Controllers.v1
     public class ExchangeRateController : CustomBaseController
     {
         private readonly ILogger<ExchangeRateController> _logger;
+        private readonly IExchangeRateGetService _exchangeRateGetService;
 
         /// <summary>
         /// Constructor for creating insance of the ExchangeRate Controller
         /// </summary>
         /// <param name="logger">Serilog logger</param>
-        public ExchangeRateController(ILogger<ExchangeRateController> logger)
+        public ExchangeRateController(ILogger<ExchangeRateController> logger, IExchangeRateGetService exchangeRateGetService)
         {
             _logger = logger;
+            _exchangeRateGetService = exchangeRateGetService;
         }
 
         /// <summary>
-        /// Gets a list of exchange rates for a specified list of currency codes
+        /// Gets a list of all exchange rates currently available from the Czech National Bank
         /// </summary>
-        /// <param name="request">Get Request object made up of a list of currency codes to get exchange rates for 
-        /// and an optional date parameter.  The current DateTime of the request will be used if the value is null.</param>
-        /// <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
-        /// Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
-        [HttpGet(Name = "GetExchangeRates")]
+        /// <returns>Returns a list of Exchange Rates with Source Currency, Target Currency, and Value</returns>
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
                 _logger.LogInformation("Getting Exchange Rates from Exchange Rate Controller");
-                return Ok("Initial Exchange Rate Controller Creation");
+                var results = await _exchangeRateGetService.GetExchangeRates();
+
+                _logger.LogInformation($"Successfully retrieved {results.Count()} Exchange Rates from exchange rate get service");
+                return Ok(results);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while getting all exchange rates.");
+                return Problem(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of all exchange rates currently available from the Czech National Bank filtered down to match the list of currency codes provided by the user
+        /// </summary>
+        /// <param name="currencyCodes">List of currency codes used to filter results coming back from the bank repository</param>
+        /// <returns>Returns a list of filtered Exchange Rates with Source Currency, Target Currency, and Value</returns>
+        [HttpGet("filter")]
+        public async Task<IActionResult> Get([FromQuery] List<string> currencyCodes)
+        {
+            try
+            {
+                if (currencyCodes == null || currencyCodes.Count() == 0)
+                {
+                    _logger.LogWarning("No currency codes provided for Get Filtered Exchange Rates.");
+                    return BadRequest("No currency codes provided for Get Filtered Exchange Rates.");
+                }
+
+                _logger.LogInformation("Getting Filtered Exchange Rates from Exchange Rate Controller");
+                var results = await _exchangeRateGetService.GetFilteredExchangeRates(currencyCodes);
+
+                if (!results.Any())
+                {
+                    _logger.LogInformation("No exchange rates found for the provided currency codes.");
+                    return NotFound("No exchange rates found for the provided currency codes.");
+                }
+
+                _logger.LogInformation($"Successfully retrieved {results.Count()} filtered Exchange Rates from exchange rate get service");
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting filtered exchange rates.");
                 return Problem(ex.Message);
             }
         }

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

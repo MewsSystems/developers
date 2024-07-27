@@ -3,6 +3,7 @@ using ExchangeRateUpdater.WebAPI.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using ExchangeRateUpdater.Infrastructure;
+using ExchangeRateUpdater.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +15,6 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
     .ReadFrom.Services(services);
 });
 
-
-// Add services to the container.
-
 //Add Controllers and set Content Negotiation to application/json
 builder.Services.AddControllers(options =>
 {
@@ -24,6 +22,13 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(new ConsumesAttribute("application/json"));
 });
 
+//Service Dependency Injection for Core Project
+builder.Services.AddExchangeRateUpdaterCore();
+
+//Dependency Injection for Infrastructure Project
+builder.Services.AddExchangeRateUpdaterInfrastructure();
+
+//API Versioning
 builder.Services.AddApiVersioning(config =>
 {
     config.ApiVersionReader = new UrlSegmentApiVersionReader();
@@ -34,7 +39,7 @@ builder.Services.AddApiVersioning(config =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger Configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

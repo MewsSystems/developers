@@ -16,7 +16,7 @@
             Responsible for handling any requests related to Exchange Rates
             </summary>
         </member>
-        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController})">
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController},ExchangeRateUpdater.Core.ServiceContracts.IExchangeRateGetService)">
             <summary>
             Constructor for creating insance of the ExchangeRate Controller
             </summary>
@@ -24,12 +24,16 @@
         </member>
         <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.Get">
             <summary>
-            Gets a list of exchange rates for a specified list of currency codes
+            Gets a list of all exchange rates currently available from the Czech National Bank
             </summary>
-            <param name="request">Get Request object made up of a list of currency codes to get exchange rates for 
-            and an optional date parameter.  The current DateTime of the request will be used if the value is null.</param>
-            <returns>Returns a list of exchange rates for CurrencyCodes in the request object. If there isn't a matching value from
-            Czech National Bank that currency will be ignored and will not have a corresponding exchange rate.</returns>
+            <returns>Returns a list of Exchange Rates with Source Currency, Target Currency, and Value</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.Get(System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets a list of all exchange rates currently available from the Czech National Bank filtered down to match the list of currency codes provided by the user
+            </summary>
+            <param name="currencyCodes">List of currency codes used to filter results coming back from the bank repository</param>
+            <returns>Returns a list of filtered Exchange Rates with Source Currency, Target Currency, and Value</returns>
         </member>
     </members>
 </doc>
