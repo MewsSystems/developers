@@ -35,7 +35,7 @@ namespace ExchangeRateUpdater.Core.Services.ExchangeRate
 
             if (currencySource == null) {
                 _logger.LogWarning("ExchangeRatesGetService - no currency sources currently stored.");
-                return Enumerable.Empty<ExchangeRateResponse>();
+                throw new ArgumentException("No Currency Sources currently configured.");
             }
 
             var exchangeRates = await _exchangeRateRepository.GetExchangeRatesAsync(currencySource.CurrencyCode, currencySource.SourceUrl);
