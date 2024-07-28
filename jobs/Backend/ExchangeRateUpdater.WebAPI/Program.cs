@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Core;
+using Microsoft.EntityFrameworkCore;
+using ExchangeRateUpdater.Infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,12 @@ builder.Services.AddApiVersioning(config =>
 {
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
+});
+
+//Database
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
 // Swagger Configuration
