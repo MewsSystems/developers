@@ -21,6 +21,7 @@
             Constructor for creating insance of the CurrencySourceController Controller
             </summary>
             <param name="logger">Serilog logger</param>
+            <param name="currencySourceGetService">Service that obtains currency source information from the source repository</param>
         </member>
         <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController.Get">
             <summary>

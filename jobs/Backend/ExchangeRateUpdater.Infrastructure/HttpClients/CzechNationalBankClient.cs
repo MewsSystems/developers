@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Core.Domain.Entities;
 using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
-using ExchangeRateUpdater.Core.DTO.Client;
+using ExchangeRateUpdater.Core.DTO.HttpClients;
 using ExchangeRateUpdater.Core.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Infrastructure.Services
+namespace ExchangeRateUpdater.Infrastructure.HttpClients
 {
     public class CzechNationalBankClient : IExchangeRateRepository
     {

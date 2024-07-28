@@ -1,6 +1,6 @@
 ﻿using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
+using ExchangeRateUpdater.Infrastructure.HttpClients;
 using ExchangeRateUpdater.Infrastructure.Repositories;
-using ExchangeRateUpdater.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater.Infrastructure

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Core.DTO.Client
+namespace ExchangeRateUpdater.Core.DTO.HttpClients
 {
     /// <summary>
     /// Response object used to map values back from the Czech National Bank API
