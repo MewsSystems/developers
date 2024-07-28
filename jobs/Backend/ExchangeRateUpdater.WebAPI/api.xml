@@ -11,6 +11,23 @@
             Also allows for any additional functionality that is shared across all controllers
             </summary>
         </member>
+        <member name="T:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController">
+            <summary>
+            Controller to handle all currency sources currently accepted by the application
+            </summary>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController},ExchangeRateUpdater.Core.ServiceContracts.CurrencySource.ICurrencySourceGetService)">
+            <summary>
+            Constructor for creating insance of the CurrencySourceController Controller
+            </summary>
+            <param name="logger">Serilog logger</param>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController.Get">
+            <summary>
+            Gets a list of all of the currency sources currently used in the application
+            </summary>
+            <returns>Returns a list of CurrencySourceResponse containing Currency Code and Source API URL</returns>
+        </member>
         <member name="T:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController">
             <summary>
             Responsible for handling any requests related to Exchange Rates
@@ -21,6 +38,7 @@
             Constructor for creating insance of the ExchangeRate Controller
             </summary>
             <param name="logger">Serilog logger</param>
+            <param name="exchangeRateGetService">Service that obtains current exchange rates from the source repository</param>
         </member>
         <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.Get">
             <summary>
