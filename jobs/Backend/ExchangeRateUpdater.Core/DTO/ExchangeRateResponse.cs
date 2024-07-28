@@ -11,8 +11,9 @@ namespace ExchangeRateUpdater.Core.DTO
     public class ExchangeRateResponse
     {
         public string? SourceCurrency { get; set; }
+        public decimal SourceValue { get; set; }
         public string? TargetCurrency { get; set; }
-        public decimal Value { get; set; }
+        public decimal TargetValue { get; set; }
     }
 
     public static class ExchangeRateExtensions
@@ -22,8 +23,9 @@ namespace ExchangeRateUpdater.Core.DTO
             return new ExchangeRateResponse()
             {
                 SourceCurrency = exchangeRate.SourceCurrency,
+                SourceValue = exchangeRate.SourceValue,
                 TargetCurrency = exchangeRate.TargetCurrency,
-                Value = exchangeRate.Value
+                TargetValue = exchangeRate.TargetValue
             };
         }
     }

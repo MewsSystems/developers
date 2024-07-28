@@ -9,12 +9,13 @@ namespace ExchangeRateUpdater.Core.Domain.Entities
     public class ExchangeRate
     {
         public string? SourceCurrency { get; set; }
+        public decimal SourceValue { get; set; }
         public string? TargetCurrency { get; set; }
-        public decimal Value { get; set; }
+        public decimal TargetValue { get; set; }
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}={TargetValue}";
         }
     }
 }
