@@ -50,7 +50,8 @@ namespace ExchangeRateUpdater.Infrastructure.HttpClients
             //According to original Exchange Rate object ToString method we're using SourceCurrency/TargetCurrency = Value
             //using USD as an example from the CNB API we have currency: USD, Amount: 1, Rate: 23.368
             //That means for the CNB API on this example we would have the Source as USD, Target as CZK, and Rate as 23.368
-            var rates = data.Rates.Select(x => new ExchangeRate() { SourceCurrency = x.CurrencyCode, SourceValue = x.Amount, TargetCurrency = currencyCode, TargetValue = x.Rate });
+            var rates = data.Rates.Select(x => new ExchangeRate(new Currency(x.CurrencyCode), x.Amount, new Currency(currencyCode), x.Rate));
+
             _logger.LogInformation("CzechNationalBankClient - GetExchangeRatesAsync - {ExchangeRates} exchange rates getting returned", rates.Count());
 
             return rates;

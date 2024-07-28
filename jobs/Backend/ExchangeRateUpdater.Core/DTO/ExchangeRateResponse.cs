@@ -22,9 +22,9 @@ namespace ExchangeRateUpdater.Core.DTO
         {
             return new ExchangeRateResponse()
             {
-                SourceCurrency = exchangeRate.SourceCurrency,
+                SourceCurrency = exchangeRate.SourceCurrency.ToString(),
                 SourceValue = exchangeRate.SourceValue,
-                TargetCurrency = exchangeRate.TargetCurrency,
+                TargetCurrency = exchangeRate.TargetCurrency.ToString(),
                 TargetValue = exchangeRate.TargetValue
             };
         }
