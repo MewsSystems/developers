@@ -1,6 +1,8 @@
 ﻿using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
+using ExchangeRateUpdater.Core.ServiceContracts.Auth;
 using ExchangeRateUpdater.Core.ServiceContracts.CurrencySource;
 using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
+using ExchangeRateUpdater.Core.Services.Auth;
 using ExchangeRateUpdater.Core.Services.CurrencySource;
 using ExchangeRateUpdater.Core.Services.ExchangeRate;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,9 @@ namespace ExchangeRateUpdater.Core
 
             //Currency Sources
             services.AddScoped<ICurrencySourceGetService, CurrencySourceGetService>();
+
+            //Auth
+            services.AddTransient<IJwtService, JwtService>();
 
             return services;
         }

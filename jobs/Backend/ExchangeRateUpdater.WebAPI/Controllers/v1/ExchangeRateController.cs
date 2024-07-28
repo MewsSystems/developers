@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using ExchangeRateUpdater.Core.DTO;
 using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Emit;
 
@@ -10,6 +11,7 @@ namespace ExchangeRateUpdater.WebAPI.Controllers.v1
     /// Responsible for handling any requests related to Exchange Rates
     /// </summary>
     [ApiVersion("1.0")]
+    [AllowAnonymous]
     public class ExchangeRateController : CustomBaseController
     {
         private readonly ILogger<ExchangeRateController> _logger;
