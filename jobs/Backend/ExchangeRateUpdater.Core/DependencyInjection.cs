@@ -1,8 +1,8 @@
 ﻿using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
-using ExchangeRateUpdater.Core.ServiceContracts;
 using ExchangeRateUpdater.Core.ServiceContracts.CurrencySource;
-using ExchangeRateUpdater.Core.Services;
+using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
 using ExchangeRateUpdater.Core.Services.CurrencySource;
+using ExchangeRateUpdater.Core.Services.ExchangeRate;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

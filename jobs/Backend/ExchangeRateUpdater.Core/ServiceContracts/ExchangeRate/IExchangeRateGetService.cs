@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Core.ServiceContracts
+namespace ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate
 {
     public interface IExchangeRateGetService
     {

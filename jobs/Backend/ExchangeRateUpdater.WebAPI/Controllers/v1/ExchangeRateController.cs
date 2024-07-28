@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using ExchangeRateUpdater.Core.DTO;
-using ExchangeRateUpdater.Core.ServiceContracts;
+using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Emit;
 

@@ -34,7 +34,7 @@
             Responsible for handling any requests related to Exchange Rates
             </summary>
         </member>
-        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController},ExchangeRateUpdater.Core.ServiceContracts.IExchangeRateGetService)">
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController},ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate.IExchangeRateGetService)">
             <summary>
             Constructor for creating insance of the ExchangeRate Controller
             </summary>

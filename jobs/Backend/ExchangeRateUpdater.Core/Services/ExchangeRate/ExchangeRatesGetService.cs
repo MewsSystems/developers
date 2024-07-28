@@ -1,7 +1,7 @@
 ﻿using ExchangeRateUpdater.Core.Domain.Entities;
 using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
 using ExchangeRateUpdater.Core.DTO;
-using ExchangeRateUpdater.Core.ServiceContracts;
+using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Core.Services
+namespace ExchangeRateUpdater.Core.Services.ExchangeRate
 {
     public class ExchangeRatesGetService : IExchangeRateGetService
     {
@@ -38,11 +38,11 @@ namespace ExchangeRateUpdater.Core.Services
         {
             _logger.LogInformation("GetFilteredExchangeRates of ExchangeRatesGetService called");
             IEnumerable<ExchangeRateResponse> exchangeRates = await GetExchangeRates();
-            
+
             var filteredExchangeRates = exchangeRates.Where(e => currencyCodes.Any(c => e.TargetCurrency.ToUpper() == c.ToUpper()));
 
             _logger.LogInformation("Exchange Rate Repository returned {exchangeRates} results", exchangeRates.Count());
-            
+
             return filteredExchangeRates;
         }
     }
