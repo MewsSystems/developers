@@ -8,9 +8,15 @@ interface Movie {
   title: string;
 }
 
+interface ApiResponse {
+  results: Movie[];
+  total_results: number;
+}
+
 const SearchInput: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [totalResults, setTotalResults] = useState<number>(0);
   const [debouncedQuery, setDebouncedQuery] = useState<string>(query);
 
   useEffect(() => {
@@ -26,7 +32,7 @@ const SearchInput: React.FC = () => {
     const searchMovies = async (searchQuery: string) => {
       if (searchQuery.length > 2) {
         try {
-          const response = await axios.get(
+          const response = await axios.get<ApiResponse>(
             'https://api.themoviedb.org/3/search/movie',
             {
               params: {
@@ -36,11 +42,13 @@ const SearchInput: React.FC = () => {
             },
           );
           setMovies(response.data.results);
+          setTotalResults(response.data.total_results);
         } catch (error) {
           console.error('Error fetching movies:', error);
         }
       } else {
         setMovies([]);
+        setTotalResults(0);
       }
     };
 
@@ -52,6 +60,10 @@ const SearchInput: React.FC = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchQuery = event.target.value;
     setQuery(searchQuery);
+    if (searchQuery === '') {
+      setMovies([]);
+      setTotalResults(0);
+    }
   };
 
   return (
@@ -64,6 +76,7 @@ const SearchInput: React.FC = () => {
         value={query}
         onChange={handleInputChange}
       />
+      <p>Total results: {totalResults}</p>
       <ul>
         {movies.map((movie) => (
           <li key={movie.id}>{movie.title}</li>
