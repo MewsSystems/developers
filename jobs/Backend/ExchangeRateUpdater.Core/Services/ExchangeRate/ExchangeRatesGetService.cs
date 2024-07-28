@@ -50,7 +50,7 @@ namespace ExchangeRateUpdater.Core.Services.ExchangeRate
             _logger.LogInformation("GetFilteredExchangeRates of ExchangeRatesGetService called");
             IEnumerable<ExchangeRateResponse> exchangeRates = await GetExchangeRates();
 
-            var filteredExchangeRates = exchangeRates.Where(e => currencyCodes.Any(c => e.TargetCurrency.ToUpper() == c.ToUpper()));
+            var filteredExchangeRates = exchangeRates.Where(e => currencyCodes.Any(c => e.SourceCurrency.ToUpperInvariant() == c.ToUpperInvariant()));
 
             _logger.LogInformation("Exchange Rate Repository returned {exchangeRates} results", exchangeRates.Count());
 
