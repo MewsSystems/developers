@@ -19,6 +19,7 @@ namespace ExchangeRateUpdater.WebAPI.Controllers.v1
         /// Constructor for creating insance of the ExchangeRate Controller
         /// </summary>
         /// <param name="logger">Serilog logger</param>
+        /// <param name="exchangeRateGetService">Service that obtains current exchange rates from the source repository</param>
         public ExchangeRateController(ILogger<ExchangeRateController> logger, IExchangeRateGetService exchangeRateGetService)
         {
             _logger = logger;
