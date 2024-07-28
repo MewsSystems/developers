@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const API_KEY = '03b8572954325680265531140190fd2a';
@@ -11,29 +11,47 @@ interface Movie {
 const SearchInput: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [debouncedQuery, setDebouncedQuery] = useState<string>(query);
 
-  const searchMovies = async (searchQuery: string) => {
-    if (searchQuery.length > 2) {
-      try {
-        const response = await axios.get('https://api.themoviedb.org/3/search/movie', {
-          params: {
-            api_key: API_KEY,
-            query: searchQuery
-          }
-        });
-        setMovies(response.data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 400);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    const searchMovies = async (searchQuery: string) => {
+      if (searchQuery.length > 2) {
+        try {
+          const response = await axios.get(
+            'https://api.themoviedb.org/3/search/movie',
+            {
+              params: {
+                api_key: API_KEY,
+                query: searchQuery,
+              },
+            },
+          );
+          setMovies(response.data.results);
+        } catch (error) {
+          console.error('Error fetching movies:', error);
+        }
+      } else {
+        setMovies([]);
       }
-    } else {
-      setMovies([]);
+    };
+
+    if (debouncedQuery) {
+      searchMovies(debouncedQuery);
     }
-  };
+  }, [debouncedQuery]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchQuery = event.target.value;
     setQuery(searchQuery);
-    searchMovies(searchQuery);
   };
 
   return (
