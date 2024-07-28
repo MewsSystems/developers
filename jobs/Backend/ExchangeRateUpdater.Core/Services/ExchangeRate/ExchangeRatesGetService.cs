@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Core.Domain.Entities;
 using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
 using ExchangeRateUpdater.Core.DTO;
+using ExchangeRateUpdater.Core.ServiceContracts.CurrencySource;
 using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,18 +17,28 @@ namespace ExchangeRateUpdater.Core.Services.ExchangeRate
     {
         private readonly ILogger<ExchangeRatesGetService> _logger;
         private readonly IExchangeRateRepository _exchangeRateRepository;
+        private readonly ICurrencySourceGetService _currencySourceGetService;
 
-        public ExchangeRatesGetService(ILogger<ExchangeRatesGetService> logger, IExchangeRateRepository exchangeRateRepository)
+        public ExchangeRatesGetService(ILogger<ExchangeRatesGetService> logger, IExchangeRateRepository exchangeRateRepository, ICurrencySourceGetService currencySourceGetService)
         {
             _logger = logger;
             _exchangeRateRepository = exchangeRateRepository;
+            _currencySourceGetService = currencySourceGetService;
         }
 
         public async Task<IEnumerable<ExchangeRateResponse>> GetExchangeRates()
         {
             _logger.LogInformation("GetExchangeRates of ExchangeRatesGetService called");
 
-            var exchangeRates = await _exchangeRateRepository.GetExchangeRatesAsync();
+            IEnumerable<CurrencySourceResponse> allCurrencySources = await _currencySourceGetService.GetAllCurrencySources();
+            var currencySource = allCurrencySources.FirstOrDefault();
+
+            if (currencySource == null) {
+                _logger.LogWarning("ExchangeRatesGetService - no currency sources currently stored.");
+                return Enumerable.Empty<ExchangeRateResponse>();
+            }
+
+            var exchangeRates = await _exchangeRateRepository.GetExchangeRatesAsync(currencySource.CurrencyCode, currencySource.SourceUrl);
 
             _logger.LogInformation("Exchange Rate Repository returned {exchangeRates} results", exchangeRates.Count());
 

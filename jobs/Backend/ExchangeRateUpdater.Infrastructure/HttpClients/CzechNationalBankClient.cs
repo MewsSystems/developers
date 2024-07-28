@@ -23,11 +23,9 @@ namespace ExchangeRateUpdater.Infrastructure.HttpClients
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync()
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string currencyCode, string requestUrl)
         {
-            var requestUrl = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN";
-
-            _logger.LogInformation("CzechNationalBankClient - GetExchangeRatesAsync - Sending request to {RequestUrl}", requestUrl);
+            _logger.LogInformation("CzechNationalBankClient - GetExchangeRatesAsync - Sending request to {RequestUrl} to get {CurrencyCode} exchange rates", requestUrl, currencyCode);
 
             var response = await _httpClient.GetAsync(requestUrl);
 
@@ -49,7 +47,7 @@ namespace ExchangeRateUpdater.Infrastructure.HttpClients
                 return [];
             }
 
-            var rates = data.Rates.Select(x => new ExchangeRate() { SourceCurrency = "CZK", TargetCurrency = x.CurrencyCode, Value = x.Rate });
+            var rates = data.Rates.Select(x => new ExchangeRate() { SourceCurrency = currencyCode, TargetCurrency = x.CurrencyCode, Value = x.Rate });
             _logger.LogInformation("CzechNationalBankClient - GetExchangeRatesAsync - {ExchangeRates} exchange rates getting returned", rates.Count());
 
             return rates;

@@ -12,7 +12,9 @@ namespace ExchangeRateUpdater.Core.Domain.RepositoryContracts
         /// <summary>
         /// Gets all Exchange Rates from the data repository
         /// </summary>
+        /// <param name="currencyCode"></param>
+        /// <param name="requestUrl"></param>
         /// <returns>Returns list of current exchange rates</returns>
-        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync();
+        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string currencyCode, string requestUrl);
     }
 }
