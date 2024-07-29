@@ -1,6 +1,11 @@
 @ExchangeRateUpdater.WebAPI_HostAddress = http://localhost:5078
+@ExchangeRateUpdater.WebAPI_Version = 1
 
-GET {{ExchangeRateUpdater.WebAPI_HostAddress}}/weatherforecast/
+GET {{ExchangeRateUpdater.WebAPI_HostAddress}}/api/v{{ExchangeRateUpdater.WebAPI_Version}}/exchangeRate/
+Accept: application/json
+
+###
+GET {{ExchangeRateUpdater.WebAPI_HostAddress}}/api/v{{ExchangeRateUpdater.WebAPI_Version}}/exchangeRate/filter?currencyCodes=USD&currencyCodes=EUR
 Accept: application/json
 
 ###
