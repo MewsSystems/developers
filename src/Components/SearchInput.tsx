@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const API_KEY = '03b8572954325680265531140190fd2a';
@@ -18,6 +19,7 @@ const SearchInput: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [totalResults, setTotalResults] = useState<number>(0);
   const [debouncedQuery, setDebouncedQuery] = useState<string>(query);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -66,6 +68,11 @@ const SearchInput: React.FC = () => {
     }
   };
 
+
+  const handleRowClick = (id: number) => {
+    navigate(`/movieDetail/${id}`);
+  };
+
   return (
     <>
       <h3>Find your movie</h3>
@@ -79,7 +86,7 @@ const SearchInput: React.FC = () => {
       <p>Total results: {totalResults}</p>
       <ul>
         {movies.map((movie) => (
-          <li key={movie.id}>{movie.title}</li>
+          <li key={movie.id} onClick={() => handleRowClick(movie.id)}>{movie.title}</li>
         ))}
       </ul>
     </>
