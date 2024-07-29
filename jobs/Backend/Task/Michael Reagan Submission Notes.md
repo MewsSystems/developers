@@ -2,6 +2,10 @@
 
 > In order to run the solution you will need to run the "Update-Database" command against the ExchangeRateUpdater.Infrastructure project and have a local instance of MSSQL installed.  Also will need to set WebAPI project as Startup Project
 
+**For easier testing check out the public postman collection I created for this project:** https://www.postman.com/michaellreagan/workspace/mews-net-backend-task/overview
+
+
+## Submission Notes
 This solution is my submission to the implementation of the ExchangeRateProvider built upon a Clean Architecture pattern.
 
 I've opted for a Web API application so that the data can be easily accessed by different front-end or mobile applications as well as other back-end services.
