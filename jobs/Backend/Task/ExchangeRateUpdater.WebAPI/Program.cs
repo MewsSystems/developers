@@ -34,6 +34,9 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(new ConsumesAttribute("application/json"));
 });
 
+//Caching
+builder.Services.AddDistributedMemoryCache();
+
 //Service Dependency Injection for Core Project
 builder.Services.AddExchangeRateUpdaterCore();
 

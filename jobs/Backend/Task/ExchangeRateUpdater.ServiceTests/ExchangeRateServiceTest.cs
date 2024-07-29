@@ -6,11 +6,15 @@ using ExchangeRateUpdater.Core.ServiceContracts.CurrencySource;
 using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
 using ExchangeRateUpdater.Core.Services.ExchangeRate;
 using FluentAssertions;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 using Serilog;
+using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Text;
+using System.Text.Json;
 
 namespace ExchangeRateUpdater.ServiceTests
 {
@@ -22,6 +26,9 @@ namespace ExchangeRateUpdater.ServiceTests
         private readonly IExchangeRateRepository _exchangeRateRepository;
 
         private readonly Mock<ICurrencySourceGetService> _currencySourceGetServiceMock;
+
+        private readonly new Mock<IDistributedCache> _distributedCacheMock;
+
 
         private readonly IFixture _fixture;
 
@@ -39,7 +46,9 @@ namespace ExchangeRateUpdater.ServiceTests
 
             var loggerMock = new Mock<ILogger<ExchangeRatesGetService>>();
             var diagnosticContextMock = new Mock<IDiagnosticContext>();
-            _exchangeRateGetService = new ExchangeRatesGetService(loggerMock.Object, diagnosticContextMock.Object, _exchangeRateRepository, _currencySourceGetServiceMock.Object);
+
+            _distributedCacheMock = new Mock<IDistributedCache>();
+            _exchangeRateGetService = new ExchangeRatesGetService(loggerMock.Object, diagnosticContextMock.Object, _distributedCacheMock.Object, _exchangeRateRepository, _currencySourceGetServiceMock.Object);
         }
 
         #region GetExchangeRates
@@ -55,6 +64,8 @@ namespace ExchangeRateUpdater.ServiceTests
             };
             _currencySourceGetServiceMock.Setup(x => x.GetAllCurrencySources()).ReturnsAsync(currency_source_list);
 
+            _distributedCacheMock.Setup(x => x.GetAsync("ExchangeRate", new CancellationToken())).ReturnsAsync((byte[])null);
+
             //Act
             IEnumerable<ExchangeRateResponse> actual_exchange_rate_response_list = await _exchangeRateGetService.GetExchangeRates();
 
@@ -64,7 +75,7 @@ namespace ExchangeRateUpdater.ServiceTests
 
 
         [Fact]
-        public async Task GetExchangeRates_HasExchangeRates()
+        public async Task GetExchangeRates_HasExchangeRates_NotCached()
         {
             //Arrange
             List<ExchangeRate> exchange_rate_list = new List<ExchangeRate>() {
@@ -79,6 +90,39 @@ namespace ExchangeRateUpdater.ServiceTests
                 _fixture.Build<CurrencySourceResponse>().With(x => x.CurrencyCode, DEFAULT_CURRENCY_CODE).With(x => x.SourceUrl, DEFAULT_API_URL).Create()
             };
             _currencySourceGetServiceMock.Setup(x => x.GetAllCurrencySources()).ReturnsAsync(currency_source_list);
+
+            _distributedCacheMock.Setup(x => x.GetAsync(It.IsAny<string>(), new CancellationToken())).ReturnsAsync((byte[])null);
+
+
+            //Act
+            IEnumerable<ExchangeRateResponse> actual_exchange_rate_response = await _exchangeRateGetService.GetExchangeRates();
+
+            //Assert
+            actual_exchange_rate_response.Should().BeEquivalentTo(exchange_rate_response_list);
+        }
+
+
+        [Fact]
+        public async Task GetExchangeRates_HasExchangeRates_Cached()
+        {
+            //Arrange
+            List<ExchangeRate> exchange_rate_list = new List<ExchangeRate>() {
+                _fixture.Build<ExchangeRate>().Create(),
+                _fixture.Build<ExchangeRate>().Create()
+            };
+
+            List<ExchangeRateResponse> exchange_rate_response_list = exchange_rate_list.Select(temp => temp.ToExchangeRateResponse()).ToList();
+
+            List<CurrencySourceResponse> currency_source_list = new List<CurrencySourceResponse>() {
+                _fixture.Build<CurrencySourceResponse>().With(x => x.CurrencyCode, DEFAULT_CURRENCY_CODE).With(x => x.SourceUrl, DEFAULT_API_URL).Create()
+            };
+            _currencySourceGetServiceMock.Setup(x => x.GetAllCurrencySources()).ReturnsAsync(currency_source_list);
+
+            var response_list = exchange_rate_list.Select(x => x.ToExchangeRateResponse());
+            var jsonString = JsonSerializer.Serialize(response_list);
+            var cache_return = Encoding.UTF8.GetBytes(jsonString);
+
+            _distributedCacheMock.Setup(x => x.GetAsync(It.IsAny<string>(), new CancellationToken())).ReturnsAsync(cache_return);
 
 
             //Act
@@ -117,6 +161,9 @@ namespace ExchangeRateUpdater.ServiceTests
                 _fixture.Build<CurrencySourceResponse>().With(x => x.CurrencyCode, DEFAULT_CURRENCY_CODE).With(x => x.SourceUrl, DEFAULT_API_URL).Create()
             };
             _currencySourceGetServiceMock.Setup(x => x.GetAllCurrencySources()).ReturnsAsync(currency_source_list);
+           
+            _distributedCacheMock.Setup(x => x.GetAsync("ExchangeRate", new CancellationToken())).ReturnsAsync((byte[])null);
+
 
             List<string> currencyCodes = new List<string>() {"USD", "EUR", "GBP"};
 
@@ -159,6 +206,8 @@ namespace ExchangeRateUpdater.ServiceTests
                 _fixture.Build<CurrencySourceResponse>().With(x => x.CurrencyCode, DEFAULT_CURRENCY_CODE).With(x => x.SourceUrl, DEFAULT_API_URL).Create()
             };
             _currencySourceGetServiceMock.Setup(x => x.GetAllCurrencySources()).ReturnsAsync(currency_source_list);
+            
+            _distributedCacheMock.Setup(x => x.GetAsync("ExchangeRate", new CancellationToken())).ReturnsAsync((byte[])null);
 
             //Act
             IEnumerable<ExchangeRateResponse> actual_exchange_rate_response = await _exchangeRateGetService.GetFilteredExchangeRates(currencyCodes);

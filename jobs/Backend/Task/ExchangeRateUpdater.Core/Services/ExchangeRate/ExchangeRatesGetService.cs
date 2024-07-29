@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Core.Domain.RepositoryContracts;
 using ExchangeRateUpdater.Core.DTO;
 using ExchangeRateUpdater.Core.ServiceContracts.CurrencySource;
 using ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
@@ -14,17 +15,20 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Core.Services.ExchangeRate
 {
-    public class ExchangeRatesGetService : IExchangeRateGetService
+    public class ExchangeRatesGetService : BaseCacheService, IExchangeRateGetService
     {
         private readonly ILogger<ExchangeRatesGetService> _logger;
         private readonly IDiagnosticContext _diagnosticContext;
+        private readonly IDistributedCache _distributedCache;
         private readonly IExchangeRateRepository _exchangeRateRepository;
         private readonly ICurrencySourceGetService _currencySourceGetService;
 
-        public ExchangeRatesGetService(ILogger<ExchangeRatesGetService> logger, IDiagnosticContext diagnosticContext, IExchangeRateRepository exchangeRateRepository, ICurrencySourceGetService currencySourceGetService)
+        public ExchangeRatesGetService(ILogger<ExchangeRatesGetService> logger, IDiagnosticContext diagnosticContext, IDistributedCache distributedCache, IExchangeRateRepository exchangeRateRepository, ICurrencySourceGetService currencySourceGetService)
+            :base("ExchangeRate", 10, 2)
         {
             _logger = logger;
             _diagnosticContext = diagnosticContext;
+            _distributedCache = distributedCache;
             _exchangeRateRepository = exchangeRateRepository;
             _currencySourceGetService = currencySourceGetService;
         }
@@ -43,12 +47,28 @@ namespace ExchangeRateUpdater.Core.Services.ExchangeRate
 
             _diagnosticContext.Set("CurrencySource", currencySource);
 
-            var exchangeRates = await _exchangeRateRepository.GetExchangeRatesAsync(currencySource.CurrencyCode, currencySource.SourceUrl);
+            string cacheKey = $"{CacheKey}_{currencySource.CurrencyCode}";
+            var cachedData = await _distributedCache.GetAsync(cacheKey);
+            if (IsCacheEmpty(cachedData))
+            {
+                var exchangeRates = await _exchangeRateRepository.GetExchangeRatesAsync(currencySource.CurrencyCode, currencySource.SourceUrl);
 
-            _diagnosticContext.Set("AllExchangeRates", exchangeRates);
-            _logger.LogInformation("Exchange Rate Repository returned {exchangeRates} results", exchangeRates.Count());
+                _diagnosticContext.Set("AllExchangeRates", exchangeRates);
+                _logger.LogInformation("Exchange Rate Repository returned {exchangeRates} results", exchangeRates.Count());
 
-            return exchangeRates.Select(rate => rate.ToExchangeRateResponse()).ToList();
+                var rates = exchangeRates.Select(rate => rate.ToExchangeRateResponse()).ToList();
+
+                _logger.LogInformation("ExchangeRatesGetService - GetExchangeRates - Adding exchange rates to cache");
+                await _distributedCache.SetAsync(cacheKey, ConvertListToByteArray(rates), CacheOptions);
+
+                return rates;
+            }
+            else
+            {
+                _logger.LogInformation("ExchangeRatesGetService - GetExchangeRates - Cached data found.");
+                var exchangeRates = ConvertByteArrayToList<ExchangeRateResponse>(cachedData);
+                return exchangeRates;
+            }
         }
 
         public async Task<IEnumerable<ExchangeRateResponse>> GetFilteredExchangeRates(List<string> currencyCodes)
