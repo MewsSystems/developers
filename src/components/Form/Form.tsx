@@ -7,6 +7,20 @@ import { useMovies } from "../../hooks/useMovies/useMovies";
 import { useScroll } from "../../hooks/useScroll/useScroll";
 import { useGenres } from "../../hooks/useGenres/useGenres";
 
+export type QueryType=string;
+export type PageType=number;
+
+export interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  overview: string;
+  genre_ids: number[];
+  release_date: string;
+  vote_average: number;
+  vote_count: number;
+}
+
 const StyledFormLabel = styled.label`
   color: black;
   display: flex;
@@ -49,15 +63,15 @@ const LoadMoreButton = styled.button`
   }
 `;
 
-export const Form = () => {
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [movieSelected, setMovieSelected] = useState(null);
+export const Form:React.FC = () => {
+  const [query, setQuery] = useState<QueryType>("");
+  const [page, setPage] = useState<PageType>(1);
+  const [movieSelected, setMovieSelected] = useState<Movie|null>(null);
   const { movies, hasMore, loading, error } = useMovies(query, page);
   const { genres } = useGenres();
   const showScrollButton = useScroll();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
@@ -72,7 +86,7 @@ export const Form = () => {
     });
   };
 
-  const handleMovieSelected = (movie) => {
+  const handleMovieSelected = (movie:Movie) => {
     setMovieSelected(movie);
   };
 
@@ -107,7 +121,7 @@ export const Form = () => {
       ) : (
         <>
           <MovieList>
-            {movies.map((movie) => (
+            {movies.map((movie:Movie) => (
               <MovieItem
                 key={movie.id}
                 movie={movie}
@@ -124,7 +138,6 @@ export const Form = () => {
       <ScrollToTopButton
         onClick={scrollToTop}
         show={showScrollButton}
-        title="Scroll to Top"
       />
     </>
   );
