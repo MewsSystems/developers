@@ -1,6 +1,6 @@
 # Michael Reagan's submission for the .NET Backend Developer task
 
-In order to run the solution you will need to run the "Update-Database" command against the ExchangeRateUpdater.Infrastructure project and have a local instance of MSSQL installed.
+> In order to run the solution you will need to run the "Update-Database" command against the ExchangeRateUpdater.Infrastructure project and have a local instance of MSSQL installed.  Also will need to set WebAPI project as Startup Project
 
 This solution is my submission to the implementation of the ExchangeRateProvider built upon a Clean Architecture pattern.
 
