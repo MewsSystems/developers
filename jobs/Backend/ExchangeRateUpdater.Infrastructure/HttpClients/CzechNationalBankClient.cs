@@ -4,6 +4,7 @@ using ExchangeRateUpdater.Core.DTO.HttpClients;
 using ExchangeRateUpdater.Core.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace ExchangeRateUpdater.Infrastructure.HttpClients
     public class CzechNationalBankClient : IExchangeRateRepository
     {
         private readonly ILogger<CzechNationalBankClient> _logger;
+        private readonly IDiagnosticContext _diagnosticContext;
         private readonly HttpClient _httpClient;
 
-        public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, HttpClient httpClient)
+        public CzechNationalBankClient(ILogger<CzechNationalBankClient> logger, IDiagnosticContext diagnosticContext, HttpClient httpClient)
         {
             _logger = logger;
+            _diagnosticContext = diagnosticContext;
             _httpClient = httpClient;
         }
 
@@ -32,9 +35,11 @@ namespace ExchangeRateUpdater.Infrastructure.HttpClients
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
 
-            _logger.LogInformation("CzechNationalBankClient - GetExchangeRatesAsync - Received response content: {Content}", content);
+            _diagnosticContext.Set("ResponseContent",  content);
 
             CNBExchangeRateResponse? data = JsonConvert.DeserializeObject<CNBExchangeRateResponse>(content);
+
+            _diagnosticContext.Set("ResponseJson", data);
 
             if (data == null)
             {

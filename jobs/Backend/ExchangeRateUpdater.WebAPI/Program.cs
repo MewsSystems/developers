@@ -114,7 +114,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-var app = builder.Build(); 
+var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 if (!app.Environment.IsDevelopment())
 {

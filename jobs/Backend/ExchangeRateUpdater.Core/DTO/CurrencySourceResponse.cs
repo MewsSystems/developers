@@ -12,6 +12,11 @@ namespace ExchangeRateUpdater.Core.DTO
         public Guid CurrencySourceId { get; set; }
         public string? CurrencyCode { get; set; }
         public string? SourceUrl { get; set; }
+
+        public override string ToString()
+        {
+            return $"Currency Source for {CurrencyCode} is {SourceUrl}";
+        }
     }
 
     public static class CurrencySourceExtensions
