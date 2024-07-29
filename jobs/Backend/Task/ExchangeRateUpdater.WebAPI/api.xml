@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExchangeRateUpdater.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:ExchangeRateUpdater.WebAPI.Controllers.CustomBaseController">
+            <summary>
+            Custom Base Controller is used as the base class for all other Web API controllers
+            This handles routing and adding the ApiController decorator in a single location.
+            Also allows for any additional functionality that is shared across all controllers
+            </summary>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.AuthController.PostRegister(ExchangeRateUpdater.Core.DTO.Auth.RegisterUserRequest)">
+            <summary>
+            Registers new users to the application
+            </summary>
+            <param name="registerUserRequest">Request object that holds the registration information about the new user.</param>
+            <returns>Returns the Authentication Response inlcuding Access and Refresh Tokens.</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.AuthController.IsEmailAvailable(System.String)">
+            <summary>
+            Checks to see if emails are unique within the identity database.  Used as part of data attribute validation on registration request
+            </summary>
+            <param name="email">Email to check</param>
+            <returns>Returns true if available, false otherwise.</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.AuthController.PostLogin(ExchangeRateUpdater.Core.DTO.Auth.LoginUserRequest)">
+            <summary>
+            Logs a registered user into the application
+            </summary>
+            <param name="loginRequest">Request object containing username and password for the user.</param>
+            <returns>Returns the Authentication Response inlcuding Access and Refresh Tokens.</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.AuthController.GetLogout">
+            <summary>
+            Logs a user out of the application
+            </summary>
+            <returns>No Content</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.AuthController.GenerateNewAccessToken(ExchangeRateUpdater.Core.DTO.Auth.RefreshTokenRequest)">
+            <summary>
+            Generates a new access token based off of a refresh token, provided everything is valid
+            </summary>
+            <param name="request">Request object containing access token and refresh token.</param>
+            <returns>Returns the Authentication Response inlcuding Access and Refresh Tokens.</returns>
+        </member>
+        <member name="T:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController">
+            <summary>
+            Controller to handle all currency sources currently accepted by the application
+            </summary>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController},ExchangeRateUpdater.Core.ServiceContracts.CurrencySource.ICurrencySourceGetService)">
+            <summary>
+            Constructor for creating insance of the CurrencySourceController Controller
+            </summary>
+            <param name="logger">Serilog logger</param>
+            <param name="currencySourceGetService">Service that obtains currency source information from the source repository</param>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.CurrencySourceController.Get">
+            <summary>
+            Gets a list of all of the currency sources currently used in the application
+            </summary>
+            <returns>Returns a list of CurrencySourceResponse containing Currency Code and Source API URL</returns>
+        </member>
+        <member name="T:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController">
+            <summary>
+            Responsible for handling any requests related to Exchange Rates
+            </summary>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.#ctor(Microsoft.Extensions.Logging.ILogger{ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController},ExchangeRateUpdater.Core.ServiceContracts.ExchangeRate.IExchangeRateGetService)">
+            <summary>
+            Constructor for creating insance of the ExchangeRate Controller
+            </summary>
+            <param name="logger">Serilog logger</param>
+            <param name="exchangeRateGetService">Service that obtains current exchange rates from the source repository</param>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.Get">
+            <summary>
+            Gets a list of all exchange rates currently available from the Czech National Bank
+            </summary>
+            <returns>Returns a list of Exchange Rates with Source Currency, Target Currency, and Value</returns>
+        </member>
+        <member name="M:ExchangeRateUpdater.WebAPI.Controllers.v1.ExchangeRateController.Get(System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets a list of all exchange rates currently available from the Czech National Bank filtered down to match the list of currency codes provided by the user
+            </summary>
+            <param name="currencyCodes">List of currency codes used to filter results coming back from the bank repository</param>
+            <returns>Returns a list of filtered Exchange Rates with Source Currency, Target Currency, and Value</returns>
+        </member>
+    </members>
+</doc>
