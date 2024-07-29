@@ -30,7 +30,7 @@ const RotatingLogo = styled.img`
   }
 `;
 
-export const Header = () => {
+export const Header : React.FC= ():JSX.Element => {
   return (
     <AppHeader>
       <RotatingLogo src={logo} alt="logo" />

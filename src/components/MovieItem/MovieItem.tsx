@@ -1,5 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { Movie } from "../Form/Form";
+
+interface MovieItemProps {
+  movie: Movie;
+  onClick: () => void;
+}
 
 const MovieItemWrapper = styled.li`
   margin: 20px;
@@ -14,7 +20,7 @@ const Poster = styled.img`
   height: 30vmin;
 `;
 
-export const MovieItem = ({ movie, onClick }) => {
+export const MovieItem:React.FC<MovieItemProps> = ({ movie, onClick }) => {
   return (
     <MovieItemWrapper onClick={onClick}>
       <Poster

@@ -1,5 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { Movie } from "../Form/Form";
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface MovieDetailsProps {
+  movie: Movie; 
+  onBackToList: () => void; 
+  genres: Genre[];
+}
 
 const MovieItemWrapper = styled.div`
   margin: 20px;
@@ -50,7 +62,7 @@ const BackToListButton = styled.button`
   }
 `;
 
-export const MovieDetails = ({ movie, onBackToList, genres }) => {
+export const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBackToList, genres }) => {
   const genreNames = movie.genre_ids.map((id) => {
     const genre = genres.find((g) => g.id === id);
     return genre ? genre.name : "Unknown";
@@ -58,7 +70,7 @@ export const MovieDetails = ({ movie, onBackToList, genres }) => {
   return (
     <>
       <MovieItemWrapper>
-        <Poster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+        <Poster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={`Poster ${movie.title}`} />
         <MovieData>
           <MovieTitle>{movie.title}</MovieTitle>
           <p>Release date: {movie.release_date}</p>

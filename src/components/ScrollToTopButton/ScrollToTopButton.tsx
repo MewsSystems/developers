@@ -2,7 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import arrow from "./arrow.svg";
 
-const Button = styled.button`
+interface ScrollToTopButtonProps {
+  show: boolean;
+  onClick: ()=>void;
+}
+
+const Button = styled.button<{$show:boolean}>`
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -27,7 +32,7 @@ const Button = styled.button`
   }
 `;
 
-export const ScrollToTopButton = ({ show, onClick }) => (
+export const ScrollToTopButton:React.FC<ScrollToTopButtonProps> = ({ show, onClick }) => (
   <Button onClick={onClick} $show={show} title="Scroll to Top">
     <img src={arrow} alt="Scroll to top" />
   </Button>
