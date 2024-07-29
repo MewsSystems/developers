@@ -1,18 +1,13 @@
 # Reservation Management
 
-**Fullstack App**
-
-> [!NOTE]
-> This task will involve a separate repository.
-
 Start by forking [the mews-reservations-int repo](https://github.com/MewsSystems/reservations-interview) and
 following the "Running the App" portion of the readme.
 
 You will be acting as if you an engineer on a product team, executing tasks from the `/backlog`. You are free to pick up
-any tasks you can reasonably do in about 90-120 minutes. You must indicate which tasks are complete and which are
+any amount of tasks you can reasonably do in about 90-120 minutes. You must indicate which tasks are complete and which are
 partially complete.
 
-> [!INFO]
+> [!IMPORTANT]
 > You should target completing **three tasks** to their minimum requirements (the 'must's),
 > and target fulfilling **one task's polish** requirements (the 'should's).
 
