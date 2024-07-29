@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,24 +9,19 @@ namespace ExchangeRateUpdater.Core.Domain.Entities
 {
     public class Currency
     {
-        public Currency(string? code)
-        {
-            if (string.IsNullOrEmpty(code)) 
-            { 
-                throw new ArgumentNullException(nameof(code)); 
-            }
-            if (code.Length != 3)
-            {
-                throw new ArgumentException(nameof(code));
-            }
-
-            Code = code.ToUpperInvariant();
-        }
+        private string _code;
 
         /// <summary>
         /// Three-letter ISO 4217 code of the currency.
         /// </summary>
-        public string Code { get; }
+        
+        [Required]
+        [StringLength(3, MinimumLength = 3, ErrorMessage = "Currency must be a 3 letter code.")]
+        public string Code 
+        {
+            get => _code;
+            set => _code = value?.ToUpperInvariant();
+        }
 
         public override string ToString()
         {

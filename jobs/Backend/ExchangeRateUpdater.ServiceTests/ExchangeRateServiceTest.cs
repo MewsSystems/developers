@@ -9,6 +9,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
+using Serilog;
 using System.Diagnostics.Metrics;
 
 namespace ExchangeRateUpdater.ServiceTests
@@ -37,7 +38,8 @@ namespace ExchangeRateUpdater.ServiceTests
             _currencySourceGetServiceMock = new Mock<ICurrencySourceGetService>();
 
             var loggerMock = new Mock<ILogger<ExchangeRatesGetService>>();
-            _exchangeRateGetService = new ExchangeRatesGetService(loggerMock.Object, _exchangeRateRepository, _currencySourceGetServiceMock.Object);
+            var diagnosticContextMock = new Mock<IDiagnosticContext>();
+            _exchangeRateGetService = new ExchangeRatesGetService(loggerMock.Object, diagnosticContextMock.Object, _exchangeRateRepository, _currencySourceGetServiceMock.Object);
         }
 
         #region GetExchangeRates
@@ -96,9 +98,15 @@ namespace ExchangeRateUpdater.ServiceTests
         {
             //Arrange
             List<ExchangeRate> exchange_rate_list = new List<ExchangeRate>() {
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "USD" as string).Create(),
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "EUR" as string).Create(),
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "GBP" as string).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "USD"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "EUR"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "GBP"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create()
             };
             
             List<ExchangeRateResponse> exchange_rate_response_list = exchange_rate_list.Select(temp => temp.ToExchangeRateResponse()).ToList();
@@ -126,15 +134,24 @@ namespace ExchangeRateUpdater.ServiceTests
         {
             //Arrange
             List<ExchangeRate> exchange_rate_list = new List<ExchangeRate>() {
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "USD" as string).Create(),
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "EUR" as string).Create(),
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "DKK" as string).Create(),
-                _fixture.Build<ExchangeRate>().With(x => x.TargetCurrency, "BRL" as string).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "USD"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "EUR"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "DKK"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create(),
+                _fixture.Build<ExchangeRate>()
+                    .With(x => x.SourceCurrency, new Currency() { Code = "BRL"})
+                    .With(x => x.TargetCurrency, new Currency() { Code = DEFAULT_CURRENCY_CODE}).Create()
             };
+
 
             List<string> currencyCodes = new List<string>() { "USD", "EUR" };
 
-            List<ExchangeRateResponse> exchange_rate_response_list = exchange_rate_list.Where(x => currencyCodes.Any(c => x.TargetCurrency.ToUpper() == c.ToUpper())).Select(temp => temp.ToExchangeRateResponse()).ToList();
+            List<ExchangeRateResponse> exchange_rate_response_list = exchange_rate_list.Where(x => currencyCodes.Any(c => x.SourceCurrency.ToString() == c)).Select(temp => temp.ToExchangeRateResponse()).ToList();
 
             _exchangeRateRepositoryMock.Setup(temp => temp.GetExchangeRatesAsync(DEFAULT_CURRENCY_CODE, DEFAULT_API_URL)).ReturnsAsync(exchange_rate_list);
 
