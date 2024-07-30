@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Movie } from "../Form/Form";
 import { Genre } from "../../hooks/useGenres/useGenres";
+import MissingPoster from "../Form/MissingPoster.jpg"
 
 
 export interface MovieDetailsProps {
@@ -67,7 +68,7 @@ export const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBackToList,
   return (
     <>
       <MovieItemWrapper>
-        <Poster src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={`Poster ${movie.title}`} />
+        <Poster src={movie.poster_path? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`:MissingPoster} alt={`Poster ${movie.title}`} />
         <MovieData>
           <MovieTitle>{movie.title}</MovieTitle>
           <p>Release date: {movie.release_date}</p>

@@ -48,6 +48,10 @@ const MovieList = styled.ul`
   justify-content: center;
 `;
 
+const Message = styled.p`
+  font-weight:bold;
+`
+
 const LoadMoreButton = styled.button`
   padding: 2vmin 3vmin;
   background-color: #007bff;
@@ -68,7 +72,7 @@ export const Form:React.FC = () => {
   const [query, setQuery] = useState<QueryType>("");
   const [page, setPage] = useState<PageType>(1);
   const [movieSelected, setMovieSelected] = useState<Movie|null>(null);
-  const { movies, hasMore, loading, error } = useMovies(query, page);
+  const { movies, hasMore, loading, error, noResults } = useMovies(query, page);
   const { genres } = useGenres();
   const showScrollButton = useScroll();
 
@@ -112,8 +116,9 @@ export const Form:React.FC = () => {
           />
         </form>
       )}
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {loading && <Message>Loading...</Message>}
+      {error && <Message>{error}</Message>}
+      {noResults && <Message>Oops, there`s no movie to match your Search...Try again!</Message>}
       {movieSelected ? (
         <MovieDetails
           movie={movieSelected}

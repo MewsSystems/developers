@@ -15,6 +15,7 @@ export const useMovies = (query:QueryType, page:PageType) => {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
+  const [noResults, setNoResults] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -36,6 +37,8 @@ export const useMovies = (query:QueryType, page:PageType) => {
           setMovies((prevMovies) => [...prevMovies, ...response.data.results]);
         }
 
+        response.data.results.length===0 ? setNoResults(true):setNoResults(false);
+
         setHasMore(page < response.data.total_pages);
       } catch (err) {
         setError("Error fetching data");
@@ -49,8 +52,9 @@ export const useMovies = (query:QueryType, page:PageType) => {
     } else {
       setMovies([]);
       setHasMore(false);
+      setNoResults(false);
     }
   }, [query, page]);
  
-  return { movies, hasMore, loading, error };
+  return { movies, hasMore, loading, error, noResults };
 };

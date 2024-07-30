@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Movie } from "../Form/Form";
+import MissingPoster from "../Form/MissingPoster.jpg"
 
 interface MovieItemProps {
   movie: Movie;
@@ -24,7 +25,7 @@ export const MovieItem:React.FC<MovieItemProps> = ({ movie, onClick }) => {
   return (
     <MovieItemWrapper onClick={onClick}>
       <Poster
-        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+        src={movie.poster_path? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`:MissingPoster}
         alt="Movie poster"
       />
       <h2>{movie.title}</h2>
