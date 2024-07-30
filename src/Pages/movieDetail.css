@@ -1,0 +1,9 @@
+body.detail-background {
+  background-image: url('../src/img/movieDetail.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+p,
+h1 {
+  color: black;
+}

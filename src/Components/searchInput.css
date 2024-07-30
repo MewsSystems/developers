@@ -1,5 +1,5 @@
-body {
-  background-image: url('../src/img/backround-image.jpg');
+body.search-background {
+  background-image: url('../src/img/searchInput.jpg');
   background-size: cover; 
   background-repeat: no-repeat;
 }
@@ -9,7 +9,8 @@ body {
   flex-direction: column;
   justify-content: center;
 }
-h1, p {
+.total-results,
+.search h1 {
   color: whitesmoke;
 }
 h1 {
@@ -18,11 +19,14 @@ h1 {
 p {
    font-size: 20px;
 }
+
 .list {
+  display: flex;
   color: whitesmoke;
   font-size: 30px;
-  list-style: none; /* Odstraní tečky z před položek seznamu */
-  padding: 0; /* Odstraní výchozí padding */
+  list-style: none; 
+  padding: 0; 
+  width: 30%;
 }
 
 li {
@@ -31,10 +35,17 @@ li {
   background-color: rgba(236, 230, 230, 0.1); 
   margin: 5px 0; 
   border-radius: 5px; 
-  width: 100%; 
   text-align: left;
 }
 
 li:hover {
   background-color: rgba(211, 202, 202, 0.42);
+}
+img {
+  display: flex;
+}
+.next {
+  display: flex;
+  max-width: 130px;
+  border-radius: 5px;
 }
