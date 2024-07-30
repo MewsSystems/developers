@@ -64,6 +64,7 @@ const LoadMoreButton = styled.button`
 `;
 
 export const Form:React.FC = () => {
+
   const [query, setQuery] = useState<QueryType>("");
   const [page, setPage] = useState<PageType>(1);
   const [movieSelected, setMovieSelected] = useState<Movie|null>(null);
@@ -73,6 +74,7 @@ export const Form:React.FC = () => {
 
   const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
+    setPage(1);
   };
 
   const handleLoadMore = () => {

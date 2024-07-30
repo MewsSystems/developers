@@ -48,6 +48,7 @@ export const useMovies = (query:QueryType, page:PageType) => {
       fetchMovies();
     } else {
       setMovies([]);
+      setHasMore(false);
     }
   }, [query, page]);
  
