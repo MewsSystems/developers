@@ -1,3 +1,4 @@
+import './searchInput.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -68,28 +69,37 @@ const SearchInput: React.FC = () => {
     }
   };
 
-
   const handleRowClick = (id: number) => {
     navigate(`/movieDetail/${id}`);
   };
 
   return (
-    <>
-      <h3>Find your movie</h3>
-      <input
-        type="search"
-        id="search"
-        placeholder="Search for a movie..."
-        value={query}
-        onChange={handleInputChange}
-      />
-      <p>Total results: {totalResults}</p>
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie.id} onClick={() => handleRowClick(movie.id)}>{movie.title}</li>
-        ))}
-      </ul>
-    </>
+    <div className="search">
+      <div className="title">
+        <h1>Find your movie</h1>
+      </div>
+      <div className="input">
+        <input
+          type="search"
+          id="search"
+          placeholder="Search for a movie..."
+          value={query}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="results">
+        <p><strong>Total results: {totalResults}</strong></p>
+      </div>
+      <div className='list'>
+        <ul>
+          {movies.map((movie) => (
+            <li key={movie.id} onClick={() => handleRowClick(movie.id)}>
+              {movie.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };
 

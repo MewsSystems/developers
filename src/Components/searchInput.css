@@ -1,0 +1,40 @@
+body {
+  background-image: url('../src/img/backround-image.jpg');
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+h1, p {
+  color: whitesmoke;
+}
+h1 {
+  font-size: 35px;
+}
+p {
+   font-size: 20px;
+}
+.list {
+  color: whitesmoke;
+  font-size: 30px;
+  list-style: none; /* Odstraní tečky z před položek seznamu */
+  padding: 0; /* Odstraní výchozí padding */
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+  background-color: rgba(236, 230, 230, 0.1); 
+  margin: 5px 0; 
+  border-radius: 5px; 
+  width: 100%; 
+  text-align: left;
+}
+
+li:hover {
+  background-color: rgba(211, 202, 202, 0.42);
+}
