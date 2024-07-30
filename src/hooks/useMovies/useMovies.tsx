@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Movie, PageType, QueryType } from "../../components/Form/Form";
+
+export interface MoviesResponse {
+  results: Movie[];
+  total_pages: number;
+}
 
 const API_KEY = "03b8572954325680265531140190fd2a";
 const API_URL = "https://api.themoviedb.org/3/search/movie";
 
-export const useMovies = (query, page) => {
-  const [movies, setMovies] = useState([]);
+export const useMovies = (query:QueryType, page:PageType) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -16,14 +22,14 @@ export const useMovies = (query, page) => {
       setError(null);
 
       try {
-        const response = await axios.get(API_URL, {
+        const response = await axios.get<MoviesResponse>(API_URL, {
           params: {
             api_key: API_KEY,
             query: query,
             page: page,
           },
         });
-
+        
         if (page === 1) {
           setMovies(response.data.results);
         } else {
@@ -44,6 +50,6 @@ export const useMovies = (query, page) => {
       setMovies([]);
     }
   }, [query, page]);
-
+ 
   return { movies, hasMore, loading, error };
 };

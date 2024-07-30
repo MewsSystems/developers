@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Movie } from "../Form/Form";
+import { Genre } from "../../hooks/useGenres/useGenres";
 
-export interface Genre {
-  id: number;
-  name: string;
-}
 
 export interface MovieDetailsProps {
   movie: Movie; 
