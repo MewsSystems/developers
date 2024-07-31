@@ -17,6 +17,14 @@ a **growing team**, in a fast paced scale up.
 Your submission must be in one Pull Request from a fork, and we encourage you to organize your commits so reviewers can
 step through commit by commit.
 
+## Slack
+
+As part of our test process, we will be sending you an invite to join our Slack channel.
+This will allow you to communicate with our team if you have any questions or need support during the task.
+
+Please keep an eye on your inbox, as sometimes Slack invites can end up in the “Other” or “Junk” folder.
+If you encounter any issues connecting, don’t hesitate to reach out to your recruiter for assistance.
+
 <details>
 
 <summary>Technology</summary>
