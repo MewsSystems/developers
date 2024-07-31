@@ -41,5 +41,5 @@ If you encounter any issues connecting, don’t hesitate to reach out to your re
 
 Here is a video walkthrough of the set up instructions here and on the repo you are to fork.
 
-<div style="position: relative; padding-bottom: 64.90384615384616%; height: 0;"><iframe src="https://www.loom.com/embed/55fdbce7269c47468ddb51bca4b87c64?sid=925d1bf2-6bd1-4d0c-a85d-e38807927ec7" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+<video src="https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.mp4" playsinline="" loop="" autoplay="" poster="https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.jpg" class="css-1dd3ex7"></video>
 
