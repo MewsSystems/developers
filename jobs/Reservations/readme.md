@@ -41,5 +41,5 @@ If you encounter any issues connecting, don’t hesitate to reach out to your re
 
 Here is a video walkthrough of the set up instructions here and on the repo you are to fork.
 
-<video src='https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.jpg' width=1200></video>
+[<img src="https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.jpg" width="50%">](https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.mp4)
 
