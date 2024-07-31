@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../Components/SearchBar';
 import MovieList from '../Components/MovieList';
@@ -7,13 +7,19 @@ import useMovieSearch from '../Components/useMovieSearch';
 import './homePage.css';
 
 const HomePage: React.FC = () => {
-  const [query, setQuery] = useState<string>('');
-  const [debouncedQuery, setDebouncedQuery] = useState<string>(query);
-  const [page, setPage] = useState<number>(1);
+  const {
+    searchInput,
+    page,
+    movies,
+    totalResults,
+    hasMore,
+    setSearchInput,
+    setPage,
+    searchMovies,
+  } = useMovieSearch('', 1);
+
   const navigate = useNavigate();
-
-  const { movies, totalResults, hasMore } = useMovieSearch(debouncedQuery, page);
-
+  const delayTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     document.body.classList.add('search-background');
     return () => {
@@ -21,29 +27,27 @@ const HomePage: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedQuery(query);
-      setPage(1);
-    }, 400);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [query]);
+  const handleInputChange = (newSearchInput: string) => {
+    setSearchInput(newSearchInput);
+    setPage(1);
 
-  const handleInputChange = (searchQuery: string) => {
-    setQuery(searchQuery);
-    if (searchQuery === '') {
-      setPage(1);
+    if (delayTimeout.current) {
+      clearTimeout(delayTimeout.current);
     }
+
+    delayTimeout.current = setTimeout(() => {
+      searchMovies(newSearchInput, 1);
+    }, 400);
   };
 
-  const handleRowClick = (id: number) => {
+  const handleClick = (id: number) => {
     navigate(`/movieDetail/${id}`);
   };
 
   const loadMoreMovies = () => {
-    setPage((prevPage) => prevPage + 1);
+    const nextPage = page + 1;
+    setPage(nextPage);
+    searchMovies(searchInput, nextPage);
   };
 
   return (
@@ -52,7 +56,7 @@ const HomePage: React.FC = () => {
         <h1>Find your movie</h1>
       </div>
       <div className="input">
-        <SearchBar query={query} onQueryChange={handleInputChange} />
+        <SearchBar searchInput={searchInput} onSearchInputChange={handleInputChange} />
       </div>
       <div className="results">
         <p className="total-results">
@@ -60,7 +64,7 @@ const HomePage: React.FC = () => {
         </p>
       </div>
       <div className="list">
-        <MovieList movies={movies} onMovieClick={handleRowClick} />
+        <MovieList movies={movies} onMovieClick={handleClick} />
       </div>
       {movies.length > 0 && hasMore && (
         <LoadMoreButton onLoadMore={loadMoreMovies} hasMore={hasMore} />

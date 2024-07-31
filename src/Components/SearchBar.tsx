@@ -1,18 +1,18 @@
 import React from 'react';
 
 interface SearchBarProps {
-  query: string;
-  onQueryChange: (query: string) => void;
+  searchInput: string;
+  onSearchInputChange: (searchInput: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ query, onQueryChange }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ searchInput, onSearchInputChange }) => {
   return (
     <input
       type="search"
       id="search"
       placeholder="Search for a movie..."
-      value={query}
-      onChange={(e) => onQueryChange(e.target.value)}
+      value={searchInput}
+      onChange={(e) => onSearchInputChange(e.target.value)}
     />
   );
 };

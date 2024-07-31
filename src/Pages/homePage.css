@@ -1,6 +1,6 @@
 body.search-background {
   background-image: url('../src/img/searchInput.jpg');
-  background-size: cover; 
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
@@ -9,44 +9,53 @@ body.search-background {
   flex-direction: column;
   justify-content: center;
 }
+
 .total-results,
 .search h1 {
   color: whitesmoke;
 }
+
 h1 {
   font-size: 35px;
 }
+
 p {
-   font-size: 20px;
+  font-size: 20px;
 }
 
 .list {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   color: whitesmoke;
   font-size: 30px;
-  list-style: none; 
-  padding: 0; 
+  padding: 0;
   width: 30%;
+}
+
+.list ul {
+  list-style: none;
 }
 
 li {
   padding: 10px;
   cursor: pointer;
-  background-color: rgba(236, 230, 230, 0.1); 
-  margin: 5px 0; 
-  border-radius: 5px; 
+  background-color: rgba(236, 230, 230, 0.1);
+  margin: 5px 0;
+  border-radius: 5px;
   text-align: left;
 }
 
 li:hover {
   background-color: rgba(211, 202, 202, 0.42);
 }
+
 img {
   display: flex;
 }
+
 .next {
   display: flex;
   max-width: 130px;
   border-radius: 5px;
 }
-

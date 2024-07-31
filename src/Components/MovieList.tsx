@@ -1,5 +1,6 @@
 import React from 'react';
-import { Movie } from './types'; // Import Movie typu, který je definován ve společném souboru typů.
+import { Movie } from './types'; 
+import '../Pages/homePage.css'
 
 interface MovieListProps {
   movies: Movie[];
