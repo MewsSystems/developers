@@ -9,7 +9,7 @@ You must indicate which tasks are complete and which are partially complete.
 
 > [!IMPORTANT]
 > You should target completing **three tasks** to their minimum requirements (the 'must's),
-> and target fulfilling **one task's polish** requirements (the 'should's).
+> and target fulfilling **one of those task's polish** requirements (the 'should's).
 
 Contribute as if you were intending to own and operate this product to serve customers on an ongoing basis on
 a **growing team**, in a fast paced scale up.
