@@ -1,4 +1,5 @@
 import React from "react";
+import { useMemo } from "react";
 import styled from "styled-components";
 import { Movie } from "../Form/Form";
 import { Genre } from "../../hooks/useGenres/useGenres";
@@ -61,10 +62,11 @@ const BackToListButton = styled.button`
 `;
 
 export const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBackToList, genres }) => {
-  const genreNames = movie.genre_ids.map((id) => {
+  const genreNames = useMemo(()=>
+    movie.genre_ids.map((id) => {
     const genre = genres.find((g) => g.id === id);
     return genre ? genre.name : "Unknown";
-  });
+  }),[movie.genre_ids, genres]);
   return (
     <>
       <MovieItemWrapper>

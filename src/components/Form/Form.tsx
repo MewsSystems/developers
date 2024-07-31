@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { MovieItem } from "../MovieItem/MovieItem";
 import { MovieDetails } from "../MovieDetails/MovieDetails";
@@ -76,33 +76,34 @@ export const Form:React.FC = () => {
   const { genres } = useGenres();
   const showScrollButton = useScroll();
 
-  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setPage(1);
-  };
+  },[])
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     setPage((prevPage) => prevPage + 1);
-  };
+  },[])
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  };
+  },[])
 
-  const handleMovieSelected = (movie:Movie) => {
+  const handleMovieSelected = useCallback((movie:Movie) => {
     setMovieSelected(movie);
-  };
+  },[])
 
-  const handleBackToList = () => {
+  const handleBackToList = useCallback(() => {
     setMovieSelected(null);
-  };
+  },[])
 
   return (
     <>
-      {!movieSelected && (
+      {!movieSelected ? (
+        <>
         <form onSubmit={(e) => e.preventDefault()}>
           <StyledFormLabel htmlFor="movie-input">
             What would you like to find?
@@ -115,19 +116,7 @@ export const Form:React.FC = () => {
             onChange={handleInputChange}
           />
         </form>
-      )}
-      {loading && <Message>Loading...</Message>}
-      {error && <Message>{error}</Message>}
-      {noResults && <Message>Oops, there`s no movie to match your Search...Try again!</Message>}
-      {movieSelected ? (
-        <MovieDetails
-          movie={movieSelected}
-          onBackToList={handleBackToList}
-          genres={genres}
-        />
-      ) : (
-        <>
-          <MovieList>
+        <MovieList>
             {movies.map((movie:Movie) => (
               <MovieItem
                 key={movie.id}
@@ -140,7 +129,16 @@ export const Form:React.FC = () => {
             <LoadMoreButton onClick={handleLoadMore}>Load More</LoadMoreButton>
           )}
         </>
-      )}
+      ):(<MovieDetails
+        movie={movieSelected}
+        onBackToList={handleBackToList}
+        genres={genres}
+      />)}
+      {loading && <Message>Loading...</Message>}
+      {error && <Message>{error}</Message>}
+      {noResults && <Message>Oops, there`s no movie to match your Search...Try again!</Message>}
+        
+    
 
       <ScrollToTopButton
         onClick={scrollToTop}

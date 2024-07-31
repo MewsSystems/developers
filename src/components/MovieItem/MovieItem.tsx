@@ -19,6 +19,7 @@ const MovieItemWrapper = styled.li`
 
 const Poster = styled.img`
   height: 30vmin;
+  max-width: 100%;
 `;
 
 export const MovieItem:React.FC<MovieItemProps> = ({ movie, onClick }) => {
