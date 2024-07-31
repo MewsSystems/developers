@@ -39,7 +39,5 @@ If you encounter any issues connecting, don’t hesitate to reach out to your re
 
 ## Video
 
-Here is a video walkthrough of the set up instructions here and on the repo you are to fork.
-
-https://cdn.loom.com/sessions/thumbnails/55fdbce7269c47468ddb51bca4b87c64-40521da27904769f.mp4
+Here is a [video walkthrough](https://www.loom.com/share/55fdbce7269c47468ddb51bca4b87c64?sid=d8e01deb-f6f2-4434-83b0-a127dc614c11) of the set up instructions here and on the repo you are to fork.
 
