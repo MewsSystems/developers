@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState,useEffect } from "react";
 import styled from "styled-components";
 import { MovieItem } from "../MovieItem/MovieItem";
 import { MovieDetails } from "../MovieDetails/MovieDetails";
@@ -50,6 +50,9 @@ const MovieList = styled.ul`
 
 const Message = styled.p`
   font-weight:bold;
+  display:block;
+  margin: calc(10px + 2vmin);
+  font-size: calc(10px + 2vmin);
 `
 
 const LoadMoreButton = styled.button`
@@ -67,7 +70,7 @@ const LoadMoreButton = styled.button`
   }
 `;
 
-export const Form:React.FC = () => {
+export const Form:React.FC = ():JSX.Element => {
 
   const [query, setQuery] = useState<QueryType>("");
   const [page, setPage] = useState<PageType>(1);
@@ -75,6 +78,7 @@ export const Form:React.FC = () => {
   const { movies, hasMore, loading, error, noResults } = useMovies(query, page);
   const { genres } = useGenres();
   const showScrollButton = useScroll();
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const handleInputChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -94,11 +98,20 @@ export const Form:React.FC = () => {
 
   const handleMovieSelected = useCallback((movie:Movie) => {
     setMovieSelected(movie);
+    setScrollPosition(window.scrollY);
   },[])
+
+
 
   const handleBackToList = useCallback(() => {
     setMovieSelected(null);
   },[])
+
+  useEffect(() => {
+     if (!movieSelected) {
+       window.scrollTo(0, scrollPosition);
+     }
+  }, [movieSelected, scrollPosition]);
 
   return (
     <>

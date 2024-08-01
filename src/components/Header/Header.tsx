@@ -1,15 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import logo from "./logo.svg";
-import { Form } from "../Form/Form";
 
-const AppHeader = styled.header`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  font-size: calc(10px + 2vmin);
-`;
 
 const rotate = keyframes`
 from {
@@ -32,9 +23,8 @@ const RotatingLogo = styled.img`
 
 export const Header : React.FC= ():JSX.Element => {
   return (
-    <AppHeader>
+    <header>
       <RotatingLogo src={logo} alt="logo" />
-      <Form />
-    </AppHeader>
+    </header>
   );
 };
