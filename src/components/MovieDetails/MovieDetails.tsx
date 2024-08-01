@@ -21,6 +21,7 @@ const MovieItemWrapper = styled.div`
   font-size: 2vmin;
   display: flex;
   flex-direction: row;
+  max-height: 60vh;
 `;
 
 const MovieData = styled.div`
@@ -61,7 +62,7 @@ const BackToListButton = styled.button`
   }
 `;
 
-export const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBackToList, genres }) => {
+export const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, onBackToList, genres }):JSX.Element => {
   const genreNames = useMemo(()=>
     movie.genre_ids.map((id) => {
     const genre = genres.find((g) => g.id === id);

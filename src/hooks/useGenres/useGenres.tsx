@@ -10,10 +10,14 @@ export interface GenreResponse {
   genres: Genre[];
 }
 
+interface UseGenresReturn {
+  genres: Genre[];
+}
+
 const API_KEY = "03b8572954325680265531140190fd2a";
 const API_URL = "https://api.themoviedb.org/3/genre/movie/list";
 
-export const useGenres = () => {
+export const useGenres = ():UseGenresReturn => {
   const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {

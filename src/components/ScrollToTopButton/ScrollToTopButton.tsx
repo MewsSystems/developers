@@ -32,7 +32,7 @@ const Button = styled.button<{$show:boolean}>`
   }
 `;
 
-export const ScrollToTopButton:React.FC<ScrollToTopButtonProps> = ({ show, onClick }) => (
+export const ScrollToTopButton:React.FC<ScrollToTopButtonProps> = ({ show, onClick }):JSX.Element => (
   <Button onClick={onClick} $show={show} title="Scroll to Top">
     <img src={arrow} alt="Scroll to top" />
   </Button>

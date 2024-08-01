@@ -15,6 +15,7 @@ const MovieItemWrapper = styled.li`
   border-radius: 4px;
   width: 25%;
   font-size: 2vmin;
+  cursor:pointer;
 `;
 
 const Poster = styled.img`
@@ -22,7 +23,7 @@ const Poster = styled.img`
   max-width: 100%;
 `;
 
-export const MovieItem:React.FC<MovieItemProps> = ({ movie, onClick }) => {
+export const MovieItem:React.FC<MovieItemProps> = ({ movie, onClick }):JSX.Element => {
   return (
     <MovieItemWrapper onClick={onClick}>
       <Poster

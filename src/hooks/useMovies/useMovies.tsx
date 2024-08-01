@@ -7,10 +7,18 @@ export interface MoviesResponse {
   total_pages: number;
 }
 
+interface UseMoviesReturn {
+  movies: Movie[];
+  hasMore: boolean;
+  loading: boolean;
+  error: string | null;
+  noResults: boolean;
+}
+
 const API_KEY = "03b8572954325680265531140190fd2a";
 const API_URL = "https://api.themoviedb.org/3/search/movie";
 
-export const useMovies = (query:QueryType, page:PageType) => {
+export const useMovies = (query:QueryType, page:PageType):UseMoviesReturn => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);

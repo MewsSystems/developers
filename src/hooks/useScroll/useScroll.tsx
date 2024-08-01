@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useScroll = () => {
+export const useScroll = ():boolean => {
   const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
