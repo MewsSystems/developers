@@ -9,6 +9,7 @@ const AppStyled = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  padding-left: calc(100vw - 100%);
 `;
 
 function App() {
