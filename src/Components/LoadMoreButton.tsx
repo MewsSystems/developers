@@ -10,7 +10,7 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({ onLoadMore, hasMore }) 
 
   return (
     <button onClick={onLoadMore} className="next">
-      Next 20 movies...
+      Load more...
     </button>
   );
 };

@@ -3,8 +3,23 @@ body.detail-background {
   background-size: cover; 
   background-repeat: no-repeat;
 }
+button:hover {
+  background-color: #ff4040;
+}
 p,
 h1 {
   color: black;
+}
+.overview {
+  display: flex;
+  max-width:1000px;
+  font-size: 25px;
+}
+.genre {
+  margin: 5px;
+  background-color: blue;
+  color: white;
+  border-radius: 5px;
+  padding: 3px;
 }
 

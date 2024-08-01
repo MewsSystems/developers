@@ -58,11 +58,13 @@ const HomePage: React.FC = () => {
       <div className="input">
         <SearchBar searchInput={searchInput} onSearchInputChange={handleInputChange} />
       </div>
-      <div className="results">
-        <p className="total-results">
-          <strong>Total results: {totalResults}</strong>
-        </p>
-      </div>
+      {totalResults > 0 && (
+        <div className="results">
+          <p className="total-results">
+            <strong>Total results: {totalResults}</strong>
+          </p>
+        </div>
+      )}
       <div className="list">
         <MovieList movies={movies} onMovieClick={handleClick} />
       </div>

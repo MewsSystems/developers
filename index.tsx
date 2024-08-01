@@ -19,9 +19,7 @@ const router = createBrowserRouter([
 const rootElement = document.getElementById('app');
 if (rootElement) {
   createRoot(rootElement).render(
-    <React.StrictMode>
       <RouterProvider router={router} />
-    </React.StrictMode>,
   );
 } else {
   console.error('Root element not found');
