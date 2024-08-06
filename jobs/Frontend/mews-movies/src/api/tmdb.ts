@@ -12,6 +12,8 @@ export const searchMovies = async (query: string, page: number = 1) => {
       page: page,
     },
   });
+
+  console.log(response.data);
   return response.data;
 };
 
@@ -24,6 +26,6 @@ export const getMovieDetails = async (id: string) => {
   return response.data;
 };
 
-export const getMovieImageUrl = (path: string) => {
-  return `${IMAGE_URL}${path}`;
+export const getMovieImageUrl = (path: string | null) => {
+  return path ? `${IMAGE_URL}${path}` : "/assets/image-placeholder.png";
 };

@@ -12,6 +12,7 @@ const GlobalStyles = createGlobalStyle`
    html {
       font-family: 'Open Sans', sans-serif;
       font-size: 16px;
+      color: #414649;
    }
 
    body, h1, h2, h3, h4, h5, h6, p, ol, ul {

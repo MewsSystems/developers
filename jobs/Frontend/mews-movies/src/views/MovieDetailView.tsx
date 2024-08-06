@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getMovieDetails, getMovieImageUrl } from '../api/tmdb';
-import { MovieDetails } from '../types/Movie';
+import { getMovieDetails, getMovieImageUrl } from "../api/tmdb";
+import { MovieDetails } from "../types/MovieInterfaces";
+import { handleBackNavigation } from "../utils/navigationUtils";
 
 const MovieDetailContainer = styled.div`
   padding: 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
 `;
 
 const MoviePoster = styled.img`
   width: 300px;
+  border-radius: 15px;
   height: auto;
-  margin-bottom: 1rem;
+  margin-right: 2rem;
+`;
+
+const MovieDetailText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.5;
 `;
 
 const MovieTitle = styled.h1`
@@ -26,11 +36,12 @@ const MovieOverview = styled.p`
   font-size: 1rem;
   margin-bottom: 1rem;
   max-width: 800px;
-  text-align: center;
+  text-align: left;
 `;
 
 const MovieDetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +59,20 @@ const MovieDetailView: React.FC = () => {
     fetchMovie();
   }, [id]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Backspace") {
+        handleBackNavigation(navigate);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [navigate]);
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -58,11 +83,18 @@ const MovieDetailView: React.FC = () => {
 
   return (
     <MovieDetailContainer>
-      <MoviePoster src={getMovieImageUrl(movie.poster_path)} alt={movie.title} />
-      <MovieTitle>{movie.title}</MovieTitle>
-      <MovieOverview>{movie.overview}</MovieOverview>
-      <p>Release Date: {movie.release_date}</p>
-      <p>Rating: {movie.vote_average}</p>
+      <MoviePoster
+        src={getMovieImageUrl(movie.poster_path)}
+        alt={movie.title}
+      />
+      <MovieDetailText>
+        <MovieTitle>{movie.title}</MovieTitle>
+        <MovieOverview>{movie.overview}</MovieOverview>
+        <p>Release Date: {movie.release_date}</p>
+        <p>Rating: {movie.vote_average}</p>
+        <p>Number of votes: {movie.vote_count}</p>
+        <p>Original language: {movie.original_language}</p>
+      </MovieDetailText>
     </MovieDetailContainer>
   );
 };

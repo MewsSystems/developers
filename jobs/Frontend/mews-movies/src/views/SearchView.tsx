@@ -1,116 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { searchMovies, getMovieImageUrl } from "../api/tmdb";
-import { Movie } from "../types/Movie";
+import { useSearchParams } from "react-router-dom";
+import { searchMovies } from "../api/tmdb";
+import { Movie, MoviesResponse } from "../types/MovieInterfaces";
+import SearchInput from "../components/SearchInput";
+import MovieList from "../components/MovieList";
+import Pagination from "../components/Pagination";
+import { debounce } from "lodash";
 
 const SearchContainer = styled.div`
   padding: 2rem;
 `;
 
-const SearchInput = styled.input`
-  padding: 0.5rem;
-  font-size: 1rem;
-`;
-
-const MovieList = styled.div`
-  margin-top: 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-`;
-
-const MovieCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const MovieImage = styled.img`
-  width: 100%;
-  height: auto;
-`;
-
-const MovieTitle = styled.h3`
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-`;
-
-const MovieReleaseDate = styled.p`
-  font-size: 0.9rem;
-  color: #555;
-`;
-
-const MovieRating = styled.p`
-  font-size: 1rem;
-  color: #000;
-`;
-
 const SearchView: React.FC = () => {
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryFromUrl = searchParams.get("query") || "";
+  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const [query, setQuery] = useState(queryFromUrl);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(pageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchInitiated, setSearchInitiated] = useState(false);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
+    if (!query) {
+      setMovies([]);
+      return;
+    }
     setError(null);
     try {
-      const data = await searchMovies(query, page);
+      const data: MoviesResponse = await searchMovies(query, page);
       setMovies(data.results);
       setTotalPages(data.total_pages);
+      setSearchParams({ query, page: page.toString() });
+      setSearchInitiated(true);
     } catch (err) {
       setError("Error fetching movies");
     }
-  };
+  }, [query, page, setSearchParams]);
+
+  useEffect(() => {
+    const debouncedSearch = debounce(handleSearch, 2000);
+    debouncedSearch();
+
+    return () => debouncedSearch.cancel();
+  }, [query, handleSearch]);
+
+  useEffect(() => {
+    if (query) {
+      handleSearch();
+    }
+  }, [query, page, handleSearch]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
-      setPage((prevPage) => prevPage + 1);
-      handleSearch();
+      setPage((prevPage) => {
+        const newPage = prevPage + 1;
+        setSearchParams({ query, page: newPage.toString() });
+        return newPage;
+      });
     }
   };
 
   const handlePrevPage = () => {
     if (page > 1) {
-      setPage((prevPage) => prevPage - 1);
-      handleSearch();
+      setPage((prevPage) => {
+        const newPage = prevPage - 1;
+        setSearchParams({ query, page: newPage.toString() });
+        return newPage;
+      });
     }
   };
 
   return (
     <SearchContainer>
-      <SearchInput
-        type="text"
-        placeholder="Search for a movie..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
+      <SearchInput value={query} onChange={(e) => setQuery(e.target.value)} />
       {error && <p>{error}</p>}
-      <MovieList>
-        {movies.length > 0 ? (
-          movies.map((movie) => (
-            <MovieCard key={movie.id}>
-              <Link to={`/movie/${movie.id}`}>
-                <MovieImage
-                  src={getMovieImageUrl(movie.poster_path)}
-                  alt={movie.title}
-                />
-                <MovieTitle>{movie.title}</MovieTitle>
-                <MovieReleaseDate>{movie.release_date}</MovieReleaseDate>
-                <MovieRating>{movie.vote_average}</MovieRating>
-              </Link>
-            </MovieCard>
-          ))
-        ) : (
-          <p>No movies found</p>
-        )}
-      </MovieList>
-      <div>
-        {page > 1 && <button onClick={handlePrevPage}>Previous</button>}
-        {page < totalPages && <button onClick={handleNextPage}>Next</button>}
-      </div>
+      {searchInitiated && <p>Movies found: {movies.length}</p>}
+      <MovieList movies={movies} />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+      />
     </SearchContainer>
   );
 };

@@ -1,6 +1,7 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import { handleBackNavigation } from "../utils/navigationUtils";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -23,8 +24,10 @@ const BackButton = styled.button`
   }
 `;
 
-const Logo = styled.div`
+const Logo = styled.a`
   font-size: 1.5rem;
+  text-decoration: none;
+  color: white;
 `;
 
 const Header: React.FC = () => {
@@ -33,10 +36,12 @@ const Header: React.FC = () => {
 
   return (
     <HeaderContainer>
-      {location.pathname !== '/' && (
-        <BackButton onClick={() => navigate(-1)}>&larr; Back</BackButton>
+      {location.pathname !== "/" && (
+        <BackButton onClick={() => handleBackNavigation(navigate)}>
+          &larr; Back
+        </BackButton>
       )}
-      <Logo>Movie Search</Logo>
+      <Logo href="/">Movie Search</Logo>
     </HeaderContainer>
   );
 };
