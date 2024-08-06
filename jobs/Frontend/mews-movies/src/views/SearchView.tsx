@@ -17,6 +17,7 @@ const SearchView: React.FC = () => {
   const queryFromUrl = searchParams.get("query") || "";
   const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
   const [query, setQuery] = useState(queryFromUrl);
+  const [inputValue, setInputValue] = useState(queryFromUrl);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(pageFromUrl);
@@ -33,25 +34,30 @@ const SearchView: React.FC = () => {
       const data: MoviesResponse = await searchMovies(query, page);
       setMovies(data.results);
       setTotalPages(data.total_pages);
-      setSearchParams({ query, page: page.toString() });
       setSearchInitiated(true);
     } catch (err) {
       setError("Error fetching movies");
     }
-  }, [query, page, setSearchParams]);
+  }, [query, page]);
 
   useEffect(() => {
-    const debouncedSearch = debounce(handleSearch, 2000);
-    debouncedSearch();
-
-    return () => debouncedSearch.cancel();
-  }, [query, handleSearch]);
-
-  useEffect(() => {
-    if (query) {
-      handleSearch();
-    }
+    handleSearch();
   }, [query, page, handleSearch]);
+
+  const debouncedSetQuery = useCallback(
+    debounce((newQuery: string) => {
+      setQuery(newQuery);
+      setPage(1);
+      setSearchParams({ query: newQuery, page: "1" });
+    }, 1000),
+    [setQuery, setPage, setSearchParams]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    debouncedSetQuery(newValue);
+  };
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -75,7 +81,7 @@ const SearchView: React.FC = () => {
 
   return (
     <SearchContainer>
-      <SearchInput value={query} onChange={(e) => setQuery(e.target.value)} />
+      <SearchInput value={inputValue} onChange={handleInputChange} />
       {error && <p>{error}</p>}
       {searchInitiated && <p>Movies found: {movies.length}</p>}
       <MovieList movies={movies} />
