@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
@@ -12,6 +12,12 @@ const SearchContainer = styled.div`
   padding: 2rem;
 `;
 
+const MoviesCountParagraph = styled.p`
+  margin: 2rem 0;
+  font-weight: bold;
+  color: gray;
+  `;
+
 const SearchView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryFromUrl = searchParams.get("query") || "";
@@ -22,11 +28,13 @@ const SearchView: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(pageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [searchInitiated, setSearchInitiated] = useState(false);
 
   const handleSearch = useCallback(async () => {
     if (!query) {
       setMovies([]);
+      setTotalResults(0);
       return;
     }
     setError(null);
@@ -34,6 +42,7 @@ const SearchView: React.FC = () => {
       const data: MoviesResponse = await searchMovies(query, page);
       setMovies(data.results);
       setTotalPages(data.total_pages);
+      setTotalResults(data.total_results);
       setSearchInitiated(true);
     } catch (err) {
       setError("Error fetching movies");
@@ -44,14 +53,13 @@ const SearchView: React.FC = () => {
     handleSearch();
   }, [query, page, handleSearch]);
 
-  const debouncedSetQuery = useCallback(
+  const debouncedSetQuery = useRef(
     debounce((newQuery: string) => {
       setQuery(newQuery);
       setPage(1);
       setSearchParams({ query: newQuery, page: "1" });
-    }, 1000),
-    [setQuery, setPage, setSearchParams]
-  );
+    }, 1000)
+  ).current;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -83,7 +91,11 @@ const SearchView: React.FC = () => {
     <SearchContainer>
       <SearchInput value={inputValue} onChange={handleInputChange} />
       {error && <p>{error}</p>}
-      {searchInitiated && <p>Movies found: {movies.length}</p>}
+      {searchInitiated && (
+        <MoviesCountParagraph>
+          Movies found: {totalResults}
+        </MoviesCountParagraph>
+      )}
       <MovieList movies={movies} />
       <Pagination
         page={page}

@@ -8,14 +8,15 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `;
 
 const Image = styled.img`
   width: 100%;
   aspect-ratio: 9/13;
   object-fit: cover;
-  border: 2px solid #e7e7e7;
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
 `;
 
 const StyledLink = styled(Link)`
@@ -23,9 +24,16 @@ const StyledLink = styled(Link)`
   color: inherit;
 `;
 
+const TextBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+`;
+
 const Title = styled.h3`
   font-size: 1.2rem;
-  margin: 0.5rem 0;
+  margin: 0.5rem;
 `;
 
 interface MovieCardProps {
@@ -37,11 +45,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     <Card>
       <StyledLink to={`/movie/${movie.id}`}>
         <Image src={getMovieImageUrl(movie.poster_path)} alt={movie.title} />
-        <Title>
-          {movie.title}
-          {movie.release_date && ` (${movie.release_date.split("-")[0]})`}
-        </Title>
-        <p>Rating: {Number(movie.vote_average).toFixed(1)}</p>
+        <TextBlock>
+          <Title>
+            {movie.title}
+            {movie.release_date && ` (${movie.release_date.split("-")[0]})`}
+          </Title>
+          <p>Rating: {Number(movie.vote_average).toFixed(1)}</p>
+        </TextBlock>
       </StyledLink>
     </Card>
   );

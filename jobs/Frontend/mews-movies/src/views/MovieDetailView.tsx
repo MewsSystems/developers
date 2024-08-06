@@ -16,6 +16,7 @@ const MovieDetailContainer = styled.div`
 const MoviePoster = styled.img`
   width: 300px;
   border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   height: auto;
   margin-right: 2rem;
 `;

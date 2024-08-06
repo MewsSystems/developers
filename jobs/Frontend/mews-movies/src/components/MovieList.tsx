@@ -8,7 +8,7 @@ const List = styled.div<{ cardsPerRow: number }>`
   max-width: 90%;
   display: grid;
   grid-template-columns: repeat(${(props) => props.cardsPerRow}, 1fr);
-  gap: 1rem;
+  gap: 2rem;
 `;
 
 interface MovieListProps {
