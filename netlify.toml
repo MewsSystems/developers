@@ -1,0 +1,4 @@
+[build]
+  base = "jobs/Frontend/mews-movies"
+  command = "npm run build"
+  publish = "dist"
