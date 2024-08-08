@@ -13,17 +13,28 @@ export const searchMovies = async (query: string, page: number = 1) => {
     },
   });
 
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 };
 
 export const getMovieDetails = async (id: string) => {
-  const response = await axios.get(`${BASE_URL}/movie/${id}`, {
-    params: {
-      api_key: API_KEY,
-    },
-  });
-  return response.data;
+  const [detailsResponse, creditsResponse] = await Promise.all([
+    axios.get(`${BASE_URL}/movie/${id}`, {
+      params: {
+        api_key: API_KEY,
+      },
+    }),
+    axios.get(`${BASE_URL}/movie/${id}/credits`, {
+      params: {
+        api_key: API_KEY,
+      },
+    }),
+  ]);
+
+  return {
+    ...detailsResponse.data,
+    credits: creditsResponse.data,
+  };
 };
 
 export const getMovieImageUrl = (path: string | null) => {

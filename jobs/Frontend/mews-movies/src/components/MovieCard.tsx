@@ -48,9 +48,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         <TextBlock>
           <Title>
             {movie.title}
-            {movie.release_date && ` (${movie.release_date.split("-")[0]})`}
+            {movie.release_date &&
+              ` (${new Date(movie.release_date).getFullYear()})`}
           </Title>
-          <p>Rating: {Number(movie.vote_average).toFixed(1)}</p>
+          <p>Rating: {(movie.vote_average || 0).toFixed(1)}</p>
         </TextBlock>
       </StyledLink>
     </Card>
