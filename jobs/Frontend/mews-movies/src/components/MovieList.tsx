@@ -39,13 +39,11 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
   const paginatedMovies = movies.slice(0, cardsPerRow * rows);
 
   return (
-    <>
-      <List cardsPerRow={cardsPerRow}>
-        {paginatedMovies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </List>
-    </>
+    <List cardsPerRow={cardsPerRow}>
+      {paginatedMovies.map((movie) => (
+        <MovieCard key={movie.id} movie={movie} />
+      ))}
+    </List>
   );
 };
 

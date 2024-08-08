@@ -10,6 +10,10 @@ const StyledSearchInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
 `;
 
 const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {

@@ -16,7 +16,7 @@ const MoviesCountParagraph = styled.p`
   margin: 2rem 0;
   font-weight: bold;
   color: gray;
-  `;
+`;
 
 const SearchView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,6 +35,7 @@ const SearchView: React.FC = () => {
     if (!query) {
       setMovies([]);
       setTotalResults(0);
+      setTotalPages(1);
       return;
     }
     setError(null);
@@ -67,6 +68,10 @@ const SearchView: React.FC = () => {
     debouncedSetQuery(newValue);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
   const handleNextPage = () => {
     if (page < totalPages) {
       setPage((prevPage) => {
@@ -87,6 +92,11 @@ const SearchView: React.FC = () => {
     }
   };
 
+  const handlePageChange = (pageNumber: number) => {
+    setPage(pageNumber);
+    setSearchParams({ query, page: pageNumber.toString() });
+  };
+
   return (
     <SearchContainer>
       <SearchInput value={inputValue} onChange={handleInputChange} />
@@ -97,12 +107,15 @@ const SearchView: React.FC = () => {
         </MoviesCountParagraph>
       )}
       <MovieList movies={movies} />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        onNextPage={handleNextPage}
-        onPrevPage={handlePrevPage}
-      />
+      {totalPages > 1 && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+          onPageChange={handlePageChange}
+        />
+      )}
     </SearchContainer>
   );
 };

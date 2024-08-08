@@ -3,4 +3,5 @@ export interface PaginationProps {
   totalPages: number;
   onNextPage: () => void;
   onPrevPage: () => void;
+  onPageChange: (page: number) => void;
 }

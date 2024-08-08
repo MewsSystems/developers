@@ -24,7 +24,7 @@ const BackButton = styled.button`
   }
 `;
 
-const Logo = styled.a`
+const SiteName = styled.a`
   font-size: 1.5rem;
   text-decoration: none;
   color: white;
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
           &larr; Back
         </BackButton>
       )}
-      <Logo href="/">Movie Search</Logo>
+      <SiteName href="/">Movie Search</SiteName>
     </HeaderContainer>
   );
 };
