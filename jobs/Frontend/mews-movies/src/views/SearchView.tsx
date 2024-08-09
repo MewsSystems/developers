@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
@@ -21,13 +21,11 @@ const MoviesCountParagraph = styled.p`
 const SearchView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const queryFromUrl = searchParams.get("query") || "";
-  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
-  const [query, setQuery] = useState(queryFromUrl);
-  const [inputValue, setInputValue] = useState(queryFromUrl);
+  const query = searchParams.get("query") || "";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const [inputValue, setInputValue] = useState(query);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(pageFromUrl);
   const [totalPages, setTotalPages] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [searchInitiated, setSearchInitiated] = useState(false);
@@ -59,54 +57,45 @@ const SearchView: React.FC = () => {
     debounce((newQuery: string) => {
       if (!newQuery) {
         navigate("/");
-        setQuery("");
-        setPage(1);
-        setMovies([]);
-        setTotalResults(0);
-        setTotalPages(1);
+        setSearchParams({});
         setSearchInitiated(false);
       } else {
-        setQuery(newQuery);
-        setPage(1);
         setSearchParams({ query: newQuery, page: "1" });
       }
     }, 1000)
   ).current;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-    debouncedSetQuery(newValue);
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setInputValue(newValue);
+      debouncedSetQuery(newValue);
+    },
+    [debouncedSetQuery]
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (page < totalPages) {
-      setPage((prevPage) => {
-        const newPage = prevPage + 1;
-        setSearchParams({ query, page: newPage.toString() });
-        return newPage;
-      });
+      setSearchParams({ query, page: (page + 1).toString() });
     }
-  };
+  }, [page, totalPages, query, setSearchParams]);
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     if (page > 1) {
-      setPage((prevPage) => {
-        const newPage = prevPage - 1;
-        setSearchParams({ query, page: newPage.toString() });
-        return newPage;
-      });
+      setSearchParams({ query, page: (page - 1).toString() });
     }
-  };
+  }, [page, query, setSearchParams]);
 
-  const handlePageChange = (pageNumber: number) => {
-    setPage(pageNumber);
-    setSearchParams({ query, page: pageNumber.toString() });
-  };
+  const handlePageChange = useCallback(
+    (pageNumber: number) => {
+      setSearchParams({ query, page: pageNumber.toString() });
+    },
+    [query, setSearchParams]
+  );
 
   return (
     <SearchContainer>
