@@ -1,7 +1,7 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { handleBackNavigation } from "../utils/navigationUtils";
+import useNavigateBack from "../hooks/useNavigateBack";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -36,15 +36,13 @@ const SiteName = styled.a`
 `;
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
+  const navigateBack = useNavigateBack();
   const location = useLocation();
 
   return (
     <HeaderContainer>
       {location.pathname !== "/" && (
-        <BackButton onClick={() => handleBackNavigation(navigate)}>
-          &larr; Back
-        </BackButton>
+        <BackButton onClick={navigateBack}>&larr; Back</BackButton>
       )}
       <SiteName href="/">Movie Search</SiteName>
     </HeaderContainer>

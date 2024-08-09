@@ -35,14 +35,14 @@ const ButtonElement = styled.button`
   }
 `;
 
-const PageNumber = styled.button<{ isCurrent: boolean }>`
+const PageNumber = styled.button<{ $isCurrent: boolean }>`
   font-size: 0.7rem;
   padding: 0.5rem;
   margin: 0.25rem;
   border-radius: 0.25rem;
-  background-color: ${({ isCurrent }) => (isCurrent ? "#4b83f1" : "#f1f1f1")};
+  background-color: ${({ $isCurrent }) => ($isCurrent ? "#4b83f1" : "#f1f1f1")};
   border: none;
-  color: ${({ isCurrent }) => (isCurrent ? "white" : "black")};
+  color: ${({ $isCurrent }) => ($isCurrent ? "white" : "black")};
   cursor: pointer;
 
   &:hover {
@@ -100,7 +100,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <PageNumber
           key={pageNumber}
           onClick={() => onPageChange(pageNumber)}
-          isCurrent={pageNumber === page}
+          $isCurrent={pageNumber === page}
         >
           {pageNumber}
         </PageNumber>

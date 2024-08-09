@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getMovieDetails, getMovieImageUrl } from "../api/tmdb";
 import { MovieDetails } from "../types/MovieInterfaces";
-import { handleBackNavigation } from "../utils/navigationUtils";
+import useNavigateBackByBackspacePress from "../hooks/useNavigateBackByBackspacePress";
 
 const MovieDetailContainer = styled.div`
   padding: 3rem;
@@ -55,7 +55,6 @@ const joinByKey = <T, K extends keyof T>(source: T[], key: K): string => {
 
 const MovieDetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,28 +72,16 @@ const MovieDetailView: React.FC = () => {
     fetchMovie();
   }, [id]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Backspace") {
-        handleBackNavigation(navigate);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [navigate]);
-
+  useNavigateBackByBackspacePress();
+  
   if (error) {
     return <p>{error}</p>;
   }
-
+  
   if (!movie) {
     return <p>Loading...</p>;
   }
-
+  
   const director = movie.credits.crew.find(
     (member) => member.job === "Director"
   );
