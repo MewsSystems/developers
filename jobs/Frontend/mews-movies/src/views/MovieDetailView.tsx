@@ -103,6 +103,18 @@ const MovieDetailView: React.FC = () => {
 
   const languages = joinByKey(movie.spoken_languages, "english_name");
 
+  const getFormattedDate = (dateString: string) => {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+
+    return `${day} ${month}, ${year}`;
+  };
+
+  const formattedReleaseDate = getFormattedDate(movie.release_date);
+
   return (
     <MovieDetailContainer>
       <MoviePoster
@@ -113,7 +125,7 @@ const MovieDetailView: React.FC = () => {
         <MovieTitle>{movie.title}</MovieTitle>
         <p>{movie.overview}</p>
         <p>
-          <strong>Release Date:</strong> {movie.release_date}
+          <strong>Release Date:</strong> {formattedReleaseDate}
         </p>
         <p>
           <strong>Rating:</strong> {movie.vote_average}

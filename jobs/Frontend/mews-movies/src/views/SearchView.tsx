@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
 import { Movie, MoviesResponse } from "../types/MovieInterfaces";
 import SearchInput from "../components/SearchInput";
@@ -20,6 +20,7 @@ const MoviesCountParagraph = styled.p`
 
 const SearchView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const queryFromUrl = searchParams.get("query") || "";
   const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
   const [query, setQuery] = useState(queryFromUrl);
@@ -56,9 +57,19 @@ const SearchView: React.FC = () => {
 
   const debouncedSetQuery = useRef(
     debounce((newQuery: string) => {
-      setQuery(newQuery);
-      setPage(1);
-      setSearchParams({ query: newQuery, page: "1" });
+      if (!newQuery) {
+        navigate("/");
+        setQuery("");
+        setPage(1);
+        setMovies([]);
+        setTotalResults(0);
+        setTotalPages(1);
+        setSearchInitiated(false);
+      } else {
+        setQuery(newQuery);
+        setPage(1);
+        setSearchParams({ query: newQuery, page: "1" });
+      }
     }, 1000)
   ).current;
 

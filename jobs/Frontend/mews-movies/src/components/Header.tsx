@@ -5,22 +5,27 @@ import { handleBackNavigation } from "../utils/navigationUtils";
 
 const HeaderContainer = styled.header`
   display: flex;
+  height: 60px;
+  padding: 0 2rem;
   align-items: center;
-  padding: 1rem;
   background-color: #4b83f1;
   color: white;
 `;
 
 const BackButton = styled.button`
   margin-right: 1rem;
+  padding: 0.5rem;
   background: none;
   border: none;
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+  transition: all 0.5s ease;
 
   &:hover {
-    text-decoration: underline;
+    background-color: #dee9ff;
+    color: #4b83f1;
+    border-radius: 10px;
   }
 `;
 

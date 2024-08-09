@@ -13,7 +13,6 @@ export const searchMovies = async (query: string, page: number = 1) => {
     },
   });
 
-  // console.log(response.data);
   return response.data;
 };
 
