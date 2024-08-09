@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { SearchInputProps } from "../types/SearchInterfaces";
 
 const StyledSearchInput = styled.input`
-  width: 30%;
+  width: 90%;
   padding: 0.5rem;
   font-size: 1rem;
   padding: 20px;
@@ -13,6 +13,14 @@ const StyledSearchInput = styled.input`
   &:focus {
     outline: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 30%;
   }
 `;
 

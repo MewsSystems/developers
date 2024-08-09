@@ -6,17 +6,17 @@ const PaginationContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  margin: 1rem;
 `;
 
 const ButtonElement = styled.button`
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  margin: 0.25rem;
   border-radius: 0.25rem;
   background-color: #4b83f1;
   border: none;
   color: white;
-  font-size: 1rem;
   cursor: pointer;
 
   &:hover {
@@ -27,16 +27,22 @@ const ButtonElement = styled.button`
     background-color: gray;
     cursor: not-allowed;
   }
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+  }
 `;
 
 const PageNumber = styled.button<{ isCurrent: boolean }>`
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
+  font-size: 0.7rem;
+  padding: 0.5rem;
+  margin: 0.25rem;
   border-radius: 0.25rem;
   background-color: ${({ isCurrent }) => (isCurrent ? "#4b83f1" : "#f1f1f1")};
   border: none;
   color: ${({ isCurrent }) => (isCurrent ? "white" : "black")};
-  font-size: 1rem;
   cursor: pointer;
 
   &:hover {
@@ -47,6 +53,12 @@ const PageNumber = styled.button<{ isCurrent: boolean }>`
   &:disabled {
     background-color: gray;
     cursor: not-allowed;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
   }
 `;
 

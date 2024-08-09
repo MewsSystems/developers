@@ -6,11 +6,18 @@ import { MovieDetails } from "../types/MovieInterfaces";
 import { handleBackNavigation } from "../utils/navigationUtils";
 
 const MovieDetailContainer = styled.div`
-  padding-top: 3rem;
+  padding: 3rem;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
 `;
 
 const MoviePoster = styled.img`
@@ -18,7 +25,6 @@ const MoviePoster = styled.img`
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   height: auto;
-  margin-right: 2rem;
 `;
 
 const MovieDetailText = styled.div`
