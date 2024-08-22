@@ -4,18 +4,17 @@ Start by forking [the mews-reservations-int repo](https://github.com/MewsSystems
 following the "Running the App" portion of the readme.
 
 You will be acting as if you were an engineer for one of our product teams at Mews, executing tasks from the `/backlog`.
-You are free to pick up any amount of tasks you can reasonably do in about 90-120 minutes.
+You are free to pick up any amount of tasks you can reasonably do in about 90-180 minutes.
 You must indicate which tasks are complete and which are partially complete.
 
 > [!IMPORTANT]
-> You should target completing **three tasks** to their minimum requirements (the 'must's),
-> and target fulfilling **one of those task's polish** requirements (the 'should's).
+> You should target completing **three tasks**.
 
 Contribute as if you were intending to own and operate this product to serve customers on an ongoing basis on
 a **growing team**, in a fast paced scale up.
 
-Your submission must be in one Pull Request from a fork, and we encourage you to organize your commits so reviewers can
-step through commit by commit.
+Your submission must be in one Pull Request from a fork. Organize your commits so reviewers can
+step through commit by commit during review.
 
 <details>
 
@@ -40,4 +39,3 @@ If you encounter any issues connecting, don’t hesitate to reach out to your re
 ## Video
 
 Here is a [video walkthrough](https://www.loom.com/share/55fdbce7269c47468ddb51bca4b87c64?sid=d8e01deb-f6f2-4434-83b0-a127dc614c11) of the set up instructions here and on the repo you are to fork.
-
