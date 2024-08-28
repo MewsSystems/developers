@@ -1,0 +1,11 @@
+﻿services:
+  exchangerateupdater:
+    image: exchangerateupdater
+    build:
+      context: .
+      dockerfile: ExchangeRateUpdater.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80 #https is not configured for simplicity. If necessary, refer to https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-8.0
+    ports:
+      - 5299:80
