@@ -1,3 +1,4 @@
+using ExchangeRateUpdater.Api.Middlewares;
 using ExchangeRateUpdater.Application.GetExchangeRates;
 using ExchangeRateUpdater.Infrastructure.Common;
 using ExchangeRateUpdater.Infrastructure.Common.Configuration;
@@ -20,6 +21,8 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.MapControllers();
 

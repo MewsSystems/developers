@@ -1,6 +1,8 @@
+using ExchangeRateUpdater.Application.Common.Exceptions;
+
 namespace ExchangeRateUpdater.Application.GetExchangeRates;
 
-public class InvalidCurrencyCodeException : ArgumentException
+public class InvalidCurrencyCodeException : CustomValidationException
 {
-    public InvalidCurrencyCodeException(string currencyCode, ArgumentException inner) : base($"Invalid currency code {currencyCode}.", inner) { }
+    public InvalidCurrencyCodeException(string currencyCode, ArgumentException innerException) : base($"Invalid currency code {currencyCode}.", innerException) { }
 }

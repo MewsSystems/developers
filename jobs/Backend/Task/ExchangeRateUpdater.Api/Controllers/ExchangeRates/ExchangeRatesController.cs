@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using ExchangeRateUpdater.Application.GetExchangeRates;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

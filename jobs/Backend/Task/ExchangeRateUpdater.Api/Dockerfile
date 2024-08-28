@@ -6,12 +6,14 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater.Api/"]
-COPY ["ExchangeRateUpdater.Application/ExchangeRateUpdater.Application.csproj", "ExchangeRateUpdater.Application/"]
-COPY ["ExchangeRateUpdater.Domain/ExchangeRateUpdater.Domain.csproj", "ExchangeRateUpdater.Domain/"]
-RUN dotnet restore "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
+COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater/ExchangeRateUpdater.Api/"]
+COPY ["ExchangeRateUpdater.Application/ExchangeRateUpdater.Application.csproj", "ExchangeRateUpdater/ExchangeRateUpdater.Application/"]
+COPY ["ExchangeRateUpdater.Domain/ExchangeRateUpdater.Domain.csproj", "ExchangeRateUpdater/ExchangeRateUpdater.Domain/"]
+COPY ["ExchangeRateUpdater.Infrastructure/ExchangeRateUpdater.Infrastructure.csproj", "ExchangeRateUpdater/ExchangeRateUpdater.Infrastructure/"]
+RUN dotnet restore "ExchangeRateUpdater/ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
+WORKDIR "/src/ExchangeRateUpdater"
 COPY . .
-WORKDIR "/src/ExchangeRateUpdater.Api"
+WORKDIR "/src/ExchangeRateUpdater/ExchangeRateUpdater.Api"
 RUN dotnet build "ExchangeRateUpdater.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
