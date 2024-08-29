@@ -1,3 +1,4 @@
+using ExchangeRateUpdater.Application.Cache;
 using ExchangeRateUpdater.Application.Common.Extensions;
 using ExchangeRateUpdater.Domain;
 using MediatR;
@@ -8,11 +9,17 @@ public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuer
 {
     private readonly ICzechNationalBankExchangeRateClient _exchangeRateClient;
     private readonly ICzechNationalBankExchangeRateClientResponseConverter _clientResponseConverter;
+    private readonly IRedisClient _redisClient;
 
-    public GetExchangeRatesQueryHandler(ICzechNationalBankExchangeRateClient exchangeRateClient, ICzechNationalBankExchangeRateClientResponseConverter clientResponseConverter)
+    public GetExchangeRatesQueryHandler(
+        ICzechNationalBankExchangeRateClient exchangeRateClient,
+        ICzechNationalBankExchangeRateClientResponseConverter clientResponseConverter,
+        IRedisClient redisClient
+    )
     {
         _exchangeRateClient = exchangeRateClient;
         _clientResponseConverter = clientResponseConverter;
+        _redisClient = redisClient;
     }
 
     public async Task<GetExchangeRatesResponse> Handle(GetExchangeRatesQuery request, CancellationToken cancellationToken)
@@ -20,8 +27,7 @@ public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuer
         if (request.CurrencyCodes.IsNullOrEmpty()) return new();
         Validate(request);
 
-        var dateToRequest = GetDate(request);
-        var clientResponse = await _exchangeRateClient.GetAsync(dateToRequest);
+        var clientResponse = await GetClientResponseAsync(request);
         var ratesFromResponse = _clientResponseConverter.Convert(clientResponse);
         var ratesForRequestedCurrencies = ratesFromResponse.Where(c => request.CurrencyCodes!.Contains(c.SourceCurrency.Code));
         return new()
@@ -58,5 +64,16 @@ public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuer
         }
 
         return DateOnly.FromDateTime(DateTime.UtcNow);
+    }
+
+    private async Task<string?> GetClientResponseAsync(GetExchangeRatesQuery request)
+    {
+        var dateToRequest = GetDate(request);
+        var cacheKey = dateToRequest.ToString();
+        var callback = () => _exchangeRateClient.GetAsync(dateToRequest);
+        var expiration = TimeSpan.FromHours(3);
+        
+        var response = await _redisClient.GetAsync(cacheKey, callback, expiration);
+        return response;
     }
 }

@@ -9,3 +9,19 @@
       - ASPNETCORE_URLS=http://+:80 #https is not configured for simplicity. If necessary, refer to https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-8.0
     ports:
       - 5299:80
+    networks:
+      - backend
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - 6379:6379 #Redis server
+      - 9999:8001 #Redis insight client
+    environment:
+      - REDIS_PASSWORD=my-password #When deploying in production envinronments, this credentials should be stored in a secured place, such as a KeyVault.
+      - REDIS_PORT=6379
+    networks:
+      - backend
+        
+networks:
+  backend:
+    driver: bridge

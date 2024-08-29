@@ -1,3 +1,4 @@
+using ExchangeRateUpdater.Application.Cache;
 using ExchangeRateUpdater.Application.GetExchangeRates;
 using ExchangeRateUpdater.Domain;
 using Moq;
@@ -8,8 +9,9 @@ public class GetExchangeRatesQueryHandlerTests
 {
     private readonly Mock<ICzechNationalBankExchangeRateClient> _exchangeRateClientMock = new();
     private readonly Mock<ICzechNationalBankExchangeRateClientResponseConverter> _clientResponseConverterMock = new();
+    private readonly Mock<IRedisClient> _redisClientMock = new();
     
-    private GetExchangeRatesQueryHandler _sut => new(_exchangeRateClientMock.Object, _clientResponseConverterMock.Object);
+    private GetExchangeRatesQueryHandler _sut => new(_exchangeRateClientMock.Object, _clientResponseConverterMock.Object, _redisClientMock.Object);
 
     [Fact]
     public async Task Handle_When_no_currencies_are_requested_Then_response_is_empty()
@@ -44,7 +46,14 @@ public class GetExchangeRatesQueryHandlerTests
         var request = new GetExchangeRatesQuery{ CurrencyCodes = [ "EUR" ] };
         
         const string clientResponse = "ClientResponse";
-        _exchangeRateClientMock.Setup(e => e.GetAsync(DateOnly.FromDateTime(DateTime.UtcNow))).ReturnsAsync(clientResponse);
+        var requestDate = DateOnly.FromDateTime(DateTime.UtcNow).ToString();
+        _redisClientMock
+            .Setup(r => r.GetAsync(
+                requestDate!,
+                It.IsAny<Func<Task<string?>>>(),
+                TimeSpan.FromHours(3)
+            ))
+            .ReturnsAsync(clientResponse);
 
         _clientResponseConverterMock.Setup(c => c.Convert(clientResponse)).Returns([]);
         
@@ -60,10 +69,21 @@ public class GetExchangeRatesQueryHandlerTests
     {
         //Arrange
         const string euroCode = "EUR";
-        var request = new GetExchangeRatesQuery{ CurrencyCodes = [ euroCode ] };
+        var request = new GetExchangeRatesQuery
+        {
+            CurrencyCodes = [ euroCode ],
+            Date = new DateOnly(2024, 2, 28)
+        };
         
         const string clientResponse = "ClientResponse";
-        _exchangeRateClientMock.Setup(e => e.GetAsync(DateOnly.FromDateTime(DateTime.UtcNow))).ReturnsAsync(clientResponse);
+        var requestDate = request.Date.ToString();
+        _redisClientMock
+            .Setup(r => r.GetAsync(
+                requestDate!,
+                It.IsAny<Func<Task<string?>>>(),
+                TimeSpan.FromHours(3)
+            ))
+            .ReturnsAsync(clientResponse);
 
         var euroCurrency = new Currency(euroCode);
         var dollarCurrency = new Currency("USD");
