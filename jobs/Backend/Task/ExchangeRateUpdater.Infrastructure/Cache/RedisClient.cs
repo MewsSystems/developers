@@ -15,7 +15,7 @@ public class RedisClient : IRedisClient
 
     public async Task<T?> GetAsync<T>(string key, Func<Task<T>> callback, TimeSpan expiration)
     {
-        var result = await GetAsync<T>(key);
+        var result = await GetAsync<T?>(key);
         if (result is not null) return result;
 
         var callbackResult = await callback.Invoke();
@@ -27,6 +27,11 @@ public class RedisClient : IRedisClient
     {
         var database = _connectionMultiplexer.GetDatabase();
         var stringValue = await database.StringGetAsync(key);
+        if (stringValue.IsNull)
+        {
+            return default;
+        }
+        
         if (typeof(T?) == typeof(string))
         {
             return (T?)Convert.ChangeType(stringValue, typeof(T?));
