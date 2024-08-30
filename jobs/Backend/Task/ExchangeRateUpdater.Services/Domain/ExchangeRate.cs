@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using ExchangeRateUpdater.Services.Client.ClientModel;
+
+namespace ExchangeRateUpdater.Services.Domain
 {
     public class ExchangeRate
     {
@@ -18,6 +20,14 @@
         public override string ToString()
         {
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
+        }
+
+        public static implicit operator ExchangeRate(ExchangeRateResponse exchangeRateResponse)
+        {
+            return new ExchangeRate(
+                exchangeRateResponse.CurrencyCode,
+                "CZK",
+                (decimal)(exchangeRateResponse.Rate / exchangeRateResponse.Amount));
         }
     }
 }
