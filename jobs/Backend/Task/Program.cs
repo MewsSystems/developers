@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
@@ -8,6 +9,8 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
+    private static readonly HttpClient _httpClient = new();
+    
     private static HashSet<Currency> currencies =
     [
         new Currency("USD"),
@@ -34,10 +37,10 @@ public static class Program
             if (string.IsNullOrWhiteSpace(exchangeRatesUrl))
             {
                 Console.WriteLine("ExchangeRatesUrl has not been provided");
-                return;
+                Environment.Exit(1);
             }
             
-            var provider = new ExchangeRateProvider(exchangeRatesUrl);
+            var provider = new ExchangeRateProvider(_httpClient, exchangeRatesUrl);
             var rates = (await provider.GetExchangeRates(currencies)).ToArray();
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

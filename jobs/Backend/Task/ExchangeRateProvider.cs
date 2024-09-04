@@ -9,10 +9,12 @@ namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider
 {
+    private readonly HttpClient _httpClient;
     private readonly string _url;
 
-    public ExchangeRateProvider(string dailyExchangeRatesUrl)
+    public ExchangeRateProvider(HttpClient httpClient, string dailyExchangeRatesUrl)
     {
+        _httpClient = httpClient;
         _url = dailyExchangeRatesUrl;
     }
     
@@ -51,15 +53,13 @@ public class ExchangeRateProvider
             
         try
         {
-            using var client = new HttpClient();
-
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(_url)
             };
 
-            var response = await client.SendAsync(request);
+            using var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
