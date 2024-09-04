@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider
 {
     private readonly HttpClient _httpClient;
-    private readonly string _url;
+    private readonly ExchangeRatesConfig _exchangeRatesConfig;
 
-    public ExchangeRateProvider(HttpClient httpClient, string dailyExchangeRatesUrl)
+    public ExchangeRateProvider(HttpClient httpClient, IOptions<ExchangeRatesConfig> exchangeRatesConfig)
     {
         _httpClient = httpClient;
-        _url = dailyExchangeRatesUrl;
+        _exchangeRatesConfig = exchangeRatesConfig.Value;
     }
     
     /// <summary>
@@ -24,8 +20,13 @@ public class ExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates()
     {
+        if (_exchangeRatesConfig.Currencies is null)
+        {
+            throw new Exception("Exchange Rates Currencies is null");
+        }
+        
         DailyExchangeRateResponse? rates = await GetDailyExchangeRates();
         if (rates?.Rates is null)
         {
@@ -34,7 +35,7 @@ public class ExchangeRateProvider
 
         return rates.Rates
             .Where(r => !string.IsNullOrWhiteSpace(r.CurrencyCode))
-            .Where(r => currencies.Contains(new Currency(r.CurrencyCode!)))
+            .Where(r => _exchangeRatesConfig.Currencies.Contains(new Currency(r.CurrencyCode!)))
             .Select(r =>
             {
                 var source = new Currency(r.CurrencyCode!);
@@ -50,13 +51,18 @@ public class ExchangeRateProvider
     private async Task<DailyExchangeRateResponse?> GetDailyExchangeRates()
     {
         DailyExchangeRateResponse? result = null;
-            
+
+        if (_exchangeRatesConfig.Url is null)
+        {
+            throw new Exception("Exchange Rates URL is null");
+        }
+        
         try
         {
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(_url)
+                RequestUri = new Uri(_exchangeRatesConfig.Url)
             };
 
             using var response = await _httpClient.SendAsync(request);
