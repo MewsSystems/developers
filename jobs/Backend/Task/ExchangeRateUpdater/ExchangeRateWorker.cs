@@ -1,3 +1,5 @@
+using ExchangeRateUpdater.Services;
+
 namespace ExchangeRateUpdater;
 
 public class ExchangeRateWorker : BackgroundService

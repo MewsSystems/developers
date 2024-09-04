@@ -1,3 +1,5 @@
+using ExchangeRateUpdater.Models;
+
 namespace ExchangeRateUpdater.Tests;
 
 public static class MockData

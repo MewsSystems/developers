@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater;
+using ExchangeRateUpdater.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

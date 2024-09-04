@@ -1,9 +1,10 @@
 ﻿using System.Text.Json;
+using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Services;
 
 public class ExchangeRateProvider
 {

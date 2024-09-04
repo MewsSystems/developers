@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Services;
 
 public class DailyExchangeRateResponse
 {

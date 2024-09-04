@@ -1,3 +1,5 @@
+using ExchangeRateUpdater.Models;
+
 namespace ExchangeRateUpdater;
 
 public class ExchangeRatesConfig

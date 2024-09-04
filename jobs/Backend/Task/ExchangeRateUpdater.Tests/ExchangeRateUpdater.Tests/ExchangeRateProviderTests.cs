@@ -1,4 +1,6 @@
 using System.Net;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
