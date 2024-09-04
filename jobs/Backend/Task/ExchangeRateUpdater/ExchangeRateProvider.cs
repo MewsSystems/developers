@@ -7,11 +7,13 @@ public class ExchangeRateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ExchangeRatesConfig _exchangeRatesConfig;
+    private readonly ILogger<ExchangeRateProvider> _logger;
 
-    public ExchangeRateProvider(HttpClient httpClient, IOptions<ExchangeRatesConfig> exchangeRatesConfig)
+    public ExchangeRateProvider(HttpClient httpClient, IOptions<ExchangeRatesConfig> exchangeRatesConfig, ILogger<ExchangeRateProvider> logger)
     {
         _httpClient = httpClient;
         _exchangeRatesConfig = exchangeRatesConfig.Value;
+        _logger = logger;
     }
     
     /// <summary>
@@ -73,12 +75,12 @@ public class ExchangeRateProvider
             }
             else
             {
-                Console.WriteLine($"Failed to retrieve daily exchange rates: {response.StatusCode}");
+                _logger.LogWarning("Failed to retrieve daily exchange rates: {responseStatus}", response.StatusCode);
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Error while retrieving daily exchange rates: {e}");
+            _logger.LogError(e, "Error while retrieving daily exchange rates");
         }
 
         return result;

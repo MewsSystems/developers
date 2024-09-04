@@ -3,11 +3,13 @@ namespace ExchangeRateUpdater;
 public class ExchangeRateWorker : BackgroundService
 {
     private readonly ExchangeRateProvider _exchangeRateProvider;
+    private readonly ILogger<ExchangeRateWorker> _logger;
     private readonly IHostApplicationLifetime _appLifetime;
 
-    public ExchangeRateWorker(ExchangeRateProvider exchangeRateProvider, IHostApplicationLifetime appLifetime)
+    public ExchangeRateWorker(ExchangeRateProvider exchangeRateProvider, ILogger<ExchangeRateWorker> logger, IHostApplicationLifetime appLifetime)
     {
         _exchangeRateProvider = exchangeRateProvider;
+        _logger = logger;
         _appLifetime = appLifetime;
     }
     
@@ -17,16 +19,16 @@ public class ExchangeRateWorker : BackgroundService
         {
             var rates = (await _exchangeRateProvider.GetExchangeRates()).ToArray();
 
-            Console.WriteLine($"Successfully retrieved {rates.Length} exchange rates:");
+            _logger.LogInformation("Successfully retrieved {numberOfRates} exchange rates:", rates.Length);
 
             foreach (var rate in rates)
             {
-                Console.WriteLine(rate.ToString());
+                _logger.LogInformation("{rate}", rate.ToString());
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            _logger.LogError(e, "Could not retrieve exchange rates.");
         }
         finally
         {

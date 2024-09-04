@@ -6,7 +6,7 @@ builder.Services.Configure<ExchangeRatesConfig>(builder.Configuration.GetSection
 
 builder.Services.AddScoped<ExchangeRateProvider>();
 
-builder.Services.AddHttpClient<ExchangeRateProvider>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddHostedService<ExchangeRateWorker>();
     
