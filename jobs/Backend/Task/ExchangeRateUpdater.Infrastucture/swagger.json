@@ -1,0 +1,1776 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "cnb-api",
+    "contact": {},
+    "license": {}
+  },
+  "host": "api.cnb.cz",
+  "tags": [
+    {
+      "name": "/czeonia",
+      "description": "CZEONIA reference interest rate"
+    },
+    {
+      "name": "/exrates",
+      "description": "Central bank exchange rate fixing"
+    },
+    {
+      "name": "/forward",
+      "description": "Forward exchange rates"
+    },
+    {
+      "name": "/fxrates",
+      "description": "Forex rates of other currencies"
+    },
+    {
+      "name": "/omo",
+      "description": "Open market operations (OMO)"
+    },
+    {
+      "name": "/pribor",
+      "description": "Fixing of Interest Rates on Interbank Deposits (PRIBOR)"
+    },
+    {
+      "name": "/skd",
+      "description": "Average prices/values of short-term bonds (SKD)"
+    }
+  ],
+  "paths": {
+    "/cnbapi/czeonia/daily": {
+      "get": {
+        "tags": [
+          "/czeonia"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/CzeoniaDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/czeonia/daily-year": {
+      "get": {
+        "tags": [
+          "/czeonia"
+        ],
+        "summary": "Returns daily data for selected year",
+        "operationId": "dailyYearUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/CzeoniaDailyYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/daily": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "Language enumeration; default value: CZ",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CZ",
+              "EN"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/daily-currency-month": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns daily data for selected currency and month",
+        "operationId": "dailyCurrencyMonthUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in ISO format",
+            "required": true,
+            "type": "string",
+            "x-example": "AUD"
+          },
+          {
+            "name": "yearMonth",
+            "in": "query",
+            "description": "Month in ISO format (yyyy-MM); default value: NOW",
+            "required": false,
+            "type": "string",
+            "x-example": "2018-12"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateDailyCurrencyMonthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/daily-year": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns daily data for selected year",
+        "operationId": "dailyYearUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateDailyYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/monthly-averages-currency": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns monthly averages for selected currency",
+        "operationId": "monthlyAverageByCurrencyUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in ISO format",
+            "required": true,
+            "type": "string",
+            "x-example": "AUD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateMonthlyAverageCurrencyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/monthly-averages-year": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns monthly averages for selected year",
+        "operationId": "monthlyAverageYearUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateMonthlyAverageYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/monthly-cumulative-averages-currency": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns monthly cumulative averages for selected currency",
+        "operationId": "monthlyCumulativeAveragesCurrencyUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in ISO format",
+            "required": true,
+            "type": "string",
+            "x-example": "AUD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateMonthlyCumulativeAveragesCurrencyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/monthly-cumulative-averages-year": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns monthly cumulative averages for selected year",
+        "operationId": "monthlyCumulativeAveragesYearUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateMonthlyCumulativeAveragesYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/quarterly-averages-currency": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns quarterly averages for selected currency",
+        "operationId": "quarterlyAveragesCurrencyUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in ISO format",
+            "required": true,
+            "type": "string",
+            "x-example": "AUD"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateQuarterlyAveragesCurrencyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/exrates/quarterly-averages-year": {
+      "get": {
+        "tags": [
+          "/exrates"
+        ],
+        "summary": "Returns quarterly averages for selected year",
+        "operationId": "quarterlyAveragesYearUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/ExRateQuarterlyAveragesYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/forward/daily": {
+      "get": {
+        "tags": [
+          "/forward"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET_3",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FwdRateDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/forward/daily-range-currency-pair-maturity": {
+      "get": {
+        "tags": [
+          "/forward"
+        ],
+        "summary": "Returns daily data for selected daily range, currency pair and maturity",
+        "operationId": "dailyRangeCurrencyPairMaturityUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currencyPair",
+            "in": "query",
+            "description": "Currency pair enumeration",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "ALL",
+              "EUR_TO_CZK",
+              "USD_TO_CZK"
+            ]
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd)",
+            "required": true,
+            "type": "string",
+            "format": "date",
+            "x-example": "2015-05-01"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2015-05-31"
+          },
+          {
+            "name": "maturity",
+            "in": "query",
+            "description": "Maturity enumeration",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "ALL",
+              "SIX_MONTH",
+              "THREE_MONTH"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FwdDailyRangeCurrencyPairMaturityResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/fxrates/daily-month": {
+      "get": {
+        "tags": [
+          "/fxrates"
+        ],
+        "summary": "Returns daily data for selected month",
+        "operationId": "dailyMonthUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "Language enumeration; default value: CZ",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CZ",
+              "EN"
+            ]
+          },
+          {
+            "name": "yearMonth",
+            "in": "query",
+            "description": "Month in ISO format (yyyy-MM); default value: NOW",
+            "required": false,
+            "type": "string",
+            "x-example": "2019-01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FxRateDailyMonthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/fxrates/daily-range-currency": {
+      "get": {
+        "tags": [
+          "/fxrates"
+        ],
+        "summary": "Returns daily data for selected monthly range and currency",
+        "operationId": "dailyRangeCurrencyUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "Currency in ISO format",
+            "required": true,
+            "type": "string",
+            "x-example": "AMD"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "Language enumeration; default value: CZ",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CZ",
+              "EN"
+            ]
+          },
+          {
+            "name": "yearMonthFrom",
+            "in": "query",
+            "description": "Month in ISO format (yyyy-MM); default value: NOW",
+            "required": false,
+            "type": "string",
+            "x-example": "2019-01"
+          },
+          {
+            "name": "yearMonthTo",
+            "in": "query",
+            "description": "Month in ISO format (yyyy-MM); default value: NOW",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FxRateDailyRangeCurrencyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/fxrates/daily-year": {
+      "get": {
+        "tags": [
+          "/fxrates"
+        ],
+        "summary": "Returns daily data for selected year",
+        "operationId": "dailyYearUsingGET_3",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "Language enumeration; default value: CZ",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "CZ",
+              "EN"
+            ]
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FxRateDailyYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/omo/daily": {
+      "get": {
+        "tags": [
+          "/omo"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FinmarketDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/omo/daily-year": {
+      "get": {
+        "tags": [
+          "/omo"
+        ],
+        "summary": "Returns daily data for selected year",
+        "operationId": "dailyYearUsingGET_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/FinmarketDailyYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/pribor/daily": {
+      "get": {
+        "tags": [
+          "/pribor"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET_4",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/PriborDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/pribor/daily-year": {
+      "get": {
+        "tags": [
+          "/pribor"
+        ],
+        "summary": "Returns daily data for selected year",
+        "operationId": "dailyYearUsingGET_4",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/PriborDailyYearResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/pribor/daily-year-term": {
+      "get": {
+        "tags": [
+          "/pribor"
+        ],
+        "summary": "Returns daily data for selected year and term",
+        "operationId": "dailyYearTermUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Period enumeration",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "NINE_MONTH",
+              "ONE_DAY",
+              "ONE_MONTH",
+              "ONE_WEEK",
+              "ONE_YEAR",
+              "SIX_MONTH",
+              "THREE_MONTH",
+              "TWO_MONTH",
+              "TWO_WEEKS"
+            ]
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Year as number; default value: NOW",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "x-example": 2015
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/PriborDailyYearTermResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/cnbapi/skd/daily": {
+      "get": {
+        "tags": [
+          "/skd"
+        ],
+        "summary": "Returns last valid data for selected day",
+        "operationId": "dailyUsingGET_5",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Date in ISO format (yyyy-MM-dd); default value: NOW",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-example": "2019-05-17"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/SkdDailyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse": {
+      "type": "object",
+      "title": "BaseResponse"
+    },
+    "CzeoniaDailyResponse": {
+      "type": "object",
+      "properties": {
+        "czeoniaDaily": {
+          "$ref": "#/definitions/CzeoniaRest"
+        }
+      },
+      "title": "CzeoniaDailyResponse"
+    },
+    "CzeoniaDailyYearResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CzeoniaRest"
+          }
+        }
+      },
+      "title": "CzeoniaDailyYearResponse"
+    },
+    "CzeoniaRest": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        },
+        "volumeInCZKmio": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "CzeoniaRest"
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "endPoint": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "string",
+          "enum": [
+            "INTERNAL_SERVER_ERROR",
+            "VALIDATION_ERROR"
+          ]
+        },
+        "happenedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "messageId": {
+          "type": "string"
+        }
+      },
+      "title": "ErrorResponse"
+    },
+    "ExRateDailyCurrencyMonthResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateSelectedRest"
+          }
+        }
+      },
+      "title": "ExRateDailyCurrencyMonthResponse"
+    },
+    "ExRateDailyResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateDailyRest"
+          }
+        }
+      },
+      "title": "ExRateDailyResponse"
+    },
+    "ExRateDailyRest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "country": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "ExRateDailyRest"
+    },
+    "ExRateDailyYearResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateYearRest"
+          }
+        }
+      },
+      "title": "ExRateDailyYearResponse"
+    },
+    "ExRateMonthlyAverageCurrencyResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateMonthlyAverageCurrencyResponse"
+    },
+    "ExRateMonthlyAverageRest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "average": {
+          "type": "number"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "month": {
+          "type": "string",
+          "enum": [
+            "APR",
+            "APR_TO_JUN",
+            "AUG",
+            "DEC",
+            "FEB",
+            "JAN",
+            "JAN_TO_APR",
+            "JAN_TO_AUG",
+            "JAN_TO_DEC",
+            "JAN_TO_FEB",
+            "JAN_TO_JUL",
+            "JAN_TO_JUN",
+            "JAN_TO_MAR",
+            "JAN_TO_MAY",
+            "JAN_TO_NOV",
+            "JAN_TO_OCT",
+            "JAN_TO_SEP",
+            "JUL",
+            "JUL_TO_SEP",
+            "JUN",
+            "MAR",
+            "MAY",
+            "NOV",
+            "OCT",
+            "OCT_TO_DEC",
+            "SEP"
+          ]
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ExRateMonthlyAverageRest"
+    },
+    "ExRateMonthlyAverageYearResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateMonthlyAverageYearResponse"
+    },
+    "ExRateMonthlyCumulativeAveragesCurrencyResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateMonthlyCumulativeAveragesCurrencyResponse"
+    },
+    "ExRateMonthlyCumulativeAveragesYearResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateMonthlyCumulativeAveragesYearResponse"
+    },
+    "ExRateQuarterlyAveragesCurrencyResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateQuarterlyAveragesCurrencyResponse"
+    },
+    "ExRateQuarterlyAveragesYearResponse": {
+      "type": "object",
+      "properties": {
+        "averages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExRateMonthlyAverageRest"
+          }
+        }
+      },
+      "title": "ExRateQuarterlyAveragesYearResponse"
+    },
+    "ExRateSelectedRest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "ExRateSelectedRest"
+    },
+    "ExRateYearRest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "ExRateYearRest"
+    },
+    "FinmarketDailyResponse": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FinmarketRest"
+          }
+        }
+      },
+      "title": "FinmarketDailyResponse"
+    },
+    "FinmarketDailyYearResponse": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FinmarketRest"
+          }
+        }
+      },
+      "title": "FinmarketDailyYearResponse"
+    },
+    "FinmarketRest": {
+      "type": "object",
+      "properties": {
+        "allotmentPercentage": {
+          "type": "number"
+        },
+        "averageAllotedRateInPercent": {
+          "type": "number"
+        },
+        "averageBidRateInPercent": {
+          "type": "number"
+        },
+        "liquidityImpact": {
+          "type": "string"
+        },
+        "marginalRateInPercent": {
+          "type": "number"
+        },
+        "maturityDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "maximumAllotedRateInPercent": {
+          "type": "number"
+        },
+        "maximumBidRateInPercent": {
+          "type": "number"
+        },
+        "minimumAllotedRateInPercent": {
+          "type": "number"
+        },
+        "minimumBidRateInPercent": {
+          "type": "number"
+        },
+        "operationType": {
+          "type": "string"
+        },
+        "settlementDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "totalAllotedVolumeInCZKbln": {
+          "type": "number"
+        },
+        "totalBidVolumeInCZKbln": {
+          "type": "number"
+        },
+        "totalNumberOfAllotedBids": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalNumberOfBids": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "tradeDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "FinmarketRest"
+    },
+    "FwdDailyRangeCurrencyPairMaturityResponse": {
+      "type": "object",
+      "properties": {
+        "forwardPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FwdRateRest"
+          }
+        }
+      },
+      "title": "FwdDailyRangeCurrencyPairMaturityResponse"
+    },
+    "FwdRateDailyResponse": {
+      "type": "object",
+      "properties": {
+        "forwardPoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FwdRateRest"
+          }
+        }
+      },
+      "title": "FwdRateDailyResponse"
+    },
+    "FwdRateRest": {
+      "type": "object",
+      "properties": {
+        "ccyPair": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "EUR_TO_CZK",
+            "USD_TO_CZK"
+          ]
+        },
+        "forwardPoints": {
+          "type": "number"
+        },
+        "maturity": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "SIX_MONTH",
+            "THREE_MONTH"
+          ]
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "FwdRateRest"
+    },
+    "FxRateDailyMonthResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FxRateRest"
+          }
+        }
+      },
+      "title": "FxRateDailyMonthResponse"
+    },
+    "FxRateDailyRangeCurrencyResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FxRateRest"
+          }
+        }
+      },
+      "title": "FxRateDailyRangeCurrencyResponse"
+    },
+    "FxRateDailyYearResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FxRateRest"
+          }
+        }
+      },
+      "title": "FxRateDailyYearResponse"
+    },
+    "FxRateRest": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "country": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "FxRateRest"
+    },
+    "PriborDailyResponse": {
+      "type": "object",
+      "properties": {
+        "pribs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriborRest"
+          }
+        }
+      },
+      "title": "PriborDailyResponse"
+    },
+    "PriborDailyYearResponse": {
+      "type": "object",
+      "properties": {
+        "pribs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriborRest"
+          }
+        }
+      },
+      "title": "PriborDailyYearResponse"
+    },
+    "PriborDailyYearTermResponse": {
+      "type": "object",
+      "properties": {
+        "pribs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PriborRest"
+          }
+        }
+      },
+      "title": "PriborDailyYearTermResponse"
+    },
+    "PriborRest": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "enum": [
+            "NINE_MONTH",
+            "ONE_DAY",
+            "ONE_MONTH",
+            "ONE_WEEK",
+            "ONE_YEAR",
+            "SIX_MONTH",
+            "THREE_MONTH",
+            "TWO_MONTH",
+            "TWO_WEEKS"
+          ]
+        },
+        "pribid": {
+          "type": "number"
+        },
+        "pribor": {
+          "type": "number"
+        },
+        "validFor": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "PriborRest"
+    },
+    "SkdDailyResponse": {
+      "type": "object",
+      "properties": {
+        "skds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SkdRest"
+          }
+        }
+      },
+      "title": "SkdDailyResponse"
+    },
+    "SkdRest": {
+      "type": "object",
+      "properties": {
+        "averagePriceToValue": {
+          "type": "number"
+        },
+        "isin": {
+          "type": "string"
+        },
+        "issueCode": {
+          "type": "string"
+        },
+        "issueName": {
+          "type": "string"
+        },
+        "nominalValueCZK": {
+          "type": "string"
+        },
+        "nominalValueOfSettlementCZK": {
+          "type": "number"
+        },
+        "settlementDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "SkdRest"
+    }
+  }
+}
