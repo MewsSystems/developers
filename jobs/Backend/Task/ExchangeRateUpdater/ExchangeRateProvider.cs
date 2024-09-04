@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Retry;
 
 namespace ExchangeRateUpdater;
 
@@ -58,20 +60,46 @@ public class ExchangeRateProvider
         {
             throw new Exception("Exchange Rates URL is null");
         }
-        
+
         try
         {
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(_exchangeRatesConfig.Url)
-            };
+            ResiliencePipeline resiliencePipeline = new ResiliencePipelineBuilder()
+                .AddRetry(new RetryStrategyOptions
+                {
+                    ShouldHandle = new PredicateBuilder()
+                        .Handle<HttpRequestException>()
+                        .Handle<TaskCanceledException>(),
+                    Delay = TimeSpan.FromSeconds(2),
+                    MaxRetryAttempts = 2,
+                    BackoffType = DelayBackoffType.Exponential,
+                    UseJitter = true,
+                    OnRetry = onRetryArguments =>
+                    {
+                        _logger.LogError(onRetryArguments.Outcome.Exception,
+                            "Error while retrieving daily exchange rates. Retry {retryNumber}",
+                            onRetryArguments.AttemptNumber);
+                        return ValueTask.CompletedTask;
+                    }
+                })
+                .AddTimeout(TimeSpan.FromSeconds(30))
+                .Build();
 
-            using var response = await _httpClient.SendAsync(request);
+            using var response = await resiliencePipeline.ExecuteAsync(async cancellationToken =>
+            {
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(_exchangeRatesConfig.Url)
+                };
+
+                return await _httpClient.SendAsync(request, cancellationToken);
+            });
+
             if (response.IsSuccessStatusCode)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
-                result = JsonSerializer.Deserialize<DailyExchangeRateResponse>(responseBody, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+                result = JsonSerializer.Deserialize<DailyExchangeRateResponse>(responseBody,
+                    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             }
             else
             {
@@ -80,7 +108,7 @@ public class ExchangeRateProvider
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error while retrieving daily exchange rates");
+            _logger.LogError(e, "Can't retrieve daily exchange rates");
         }
 
         return result;
