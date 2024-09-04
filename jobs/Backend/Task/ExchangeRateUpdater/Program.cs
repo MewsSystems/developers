@@ -1,59 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater;
+using ExchangeRateUpdater.Services;
 
-namespace ExchangeRateUpdater;
+var builder = WebApplication.CreateBuilder(args);
 
-public static class Program
-{
-    private static readonly HttpClient _httpClient = new();
+builder.Services.Configure<ExchangeRatesConfig>(builder.Configuration.GetSection("ExchangeRates"));
+
+builder.Services.AddTransient<ExchangeRateProvider>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddHostedService<ExchangeRateWorker>();
     
-    private static HashSet<Currency> currencies =
-    [
-        new Currency("USD"),
-        new Currency("EUR"),
-        new Currency("CZK"),
-        new Currency("JPY"),
-        new Currency("KES"),
-        new Currency("RUB"),
-        new Currency("THB"),
-        new Currency("TRY"),
-        new Currency("XYZ")
-    ];
-
-    public static async Task Main(string[] args)
-    {
-        try
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            
-            var exchangeRatesUrl = configuration["ExchangeRatesUrl"];
-            if (string.IsNullOrWhiteSpace(exchangeRatesUrl))
-            {
-                Console.WriteLine("ExchangeRatesUrl has not been provided");
-                Environment.Exit(1);
-            }
-            
-            var provider = new ExchangeRateProvider(_httpClient, exchangeRatesUrl);
-            var rates = (await provider.GetExchangeRates(currencies)).ToArray();
-
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-            foreach (var rate in rates)
-            {
-                Console.WriteLine(rate.ToString());
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-        }
-
-        Console.ReadLine();
-    }
-}
+var app = builder.Build();
+app.Run();

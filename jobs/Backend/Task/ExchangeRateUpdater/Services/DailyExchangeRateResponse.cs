@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace ExchangeRateUpdater;
+namespace ExchangeRateUpdater.Services;
 
 public class DailyExchangeRateResponse
 {
