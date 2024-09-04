@@ -24,4 +24,10 @@
       <ProjectReference Include="..\..\ExchangeRateUpdater\ExchangeRateUpdater.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="ResponseBodies\**">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
