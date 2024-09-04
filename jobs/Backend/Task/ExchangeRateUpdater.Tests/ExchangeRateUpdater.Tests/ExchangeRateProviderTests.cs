@@ -6,9 +6,9 @@ namespace ExchangeRateUpdater.Tests;
 
 public class ExchangeRateProviderTests
 {
-    private const string _url = "https://example.com";
+    private const string _dummyUrl = "https://example.com";
     
-    [Fact(DisplayName = "GetExchangeRates with 0 results from API")]
+    [Fact(DisplayName = "GetExchangeRates with the API returning 0 results")]
     public async Task GetExchangeRates_0Results()
     {
         // Arrange
@@ -22,7 +22,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
     
         // Act
         var result = await exchangeRateProvider.GetExchangeRates(MockData.Currencies.DefaultCurrencies);
@@ -45,7 +45,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
     
         // Act
         var result = (await exchangeRateProvider.GetExchangeRates(MockData.Currencies.DefaultCurrencies)).ToArray();
@@ -58,7 +58,7 @@ public class ExchangeRateProviderTests
         Assert.Contains(new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.711m), result);
     }
     
-    [Fact(DisplayName = "GetExchangeRates with normal results from API, with non-existing currency")]
+    [Fact(DisplayName = "GetExchangeRates with normal results from API, with a non-existing currency")]
     public async Task GetExchangeRates_NonExistingCurrency()
     {
         // Arrange
@@ -72,7 +72,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
     
         // Act
         var result = (await exchangeRateProvider.GetExchangeRates(MockData.Currencies.NonExistingCurrency)).ToArray();
@@ -95,7 +95,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
 
         // Act
         var result = (await exchangeRateProvider.GetExchangeRates(MockData.Currencies.EmptyCurrencies)).ToArray();
@@ -115,7 +115,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
 
         // Act
         var result = (await exchangeRateProvider.GetExchangeRates(MockData.Currencies.DefaultCurrencies)).ToArray();
@@ -135,7 +135,7 @@ public class ExchangeRateProviderTests
         
         using var httpClient = new HttpClient(mockHttpMessageHandler.Object);
         
-        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _url);
+        var exchangeRateProvider = new ExchangeRateProvider(httpClient, _dummyUrl);
 
         // Act
         var result = (await exchangeRateProvider.GetExchangeRates(MockData.Currencies.DefaultCurrencies)).ToArray();
