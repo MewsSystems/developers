@@ -9,6 +9,13 @@ namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider
 {
+    private readonly string _url;
+
+    public ExchangeRateProvider(string dailyExchangeRatesUrl)
+    {
+        _url = dailyExchangeRatesUrl;
+    }
+    
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
     /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
@@ -31,7 +38,7 @@ public class ExchangeRateProvider
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.cnb.cz/cnbapi/exrates/daily")
+                RequestUri = new Uri(_url)
             };
 
             var response = await client.SendAsync(request);

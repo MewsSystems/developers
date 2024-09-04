@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater;
 
@@ -23,8 +24,20 @@ public static class Program
     {
         try
         {
-            var provider = new ExchangeRateProvider();
-            var rates = provider.GetExchangeRates(currencies);
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+                
+            var exchangeRatesUrl = configuration["ExchangeRatesUrl"];
+            if (string.IsNullOrWhiteSpace(exchangeRatesUrl))
+            {
+                Console.WriteLine("ExchangeRatesUrl has not been provided");
+                return;
+            }
+            
+            var provider = new ExchangeRateProvider(exchangeRatesUrl);
+            var rates = provider.GetExchangeRates(currencies).ToArray();
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
