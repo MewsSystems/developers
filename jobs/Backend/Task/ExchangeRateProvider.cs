@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -14,6 +18,39 @@ namespace ExchangeRateUpdater
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
             return Enumerable.Empty<ExchangeRate>();
+        }
+        
+        private async Task<DailyExchangeRateResponse?> GetDailyExchangeRates()
+        {
+            DailyExchangeRateResponse? result = null;
+            
+            try
+            {
+                using var client = new HttpClient();
+
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri("https://api.cnb.cz/cnbapi/exrates/daily")
+                };
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    result = JsonSerializer.Deserialize<DailyExchangeRateResponse>(responseBody, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to retrieve daily exchange rates: {response.StatusCode}");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while retrieving daily exchange rates: {e}");
+            }
+
+            return result;
         }
     }
 }
