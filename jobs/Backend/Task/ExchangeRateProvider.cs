@@ -22,11 +22,29 @@ public class ExchangeRateProvider
     /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
     /// some of the currencies, ignore them.
     /// </summary>
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        return Enumerable.Empty<ExchangeRate>();
+        DailyExchangeRateResponse? rates = await GetDailyExchangeRates();
+        if (rates?.Rates is null)
+        {
+            return Enumerable.Empty<ExchangeRate>();
+        }
+
+        return rates.Rates
+            .Where(r => !string.IsNullOrWhiteSpace(r.CurrencyCode))
+            .Where(r => currencies.Contains(new Currency(r.CurrencyCode!)))
+            .Select(r =>
+            {
+                var source = new Currency(r.CurrencyCode!);
+                
+                // Target seems to always be CZK, because the data is from the Czech Bank's point of view.
+                var target = new Currency("CZK");
+                var rate = r.Rate / r.Amount;
+                    
+                return new ExchangeRate(source, target, rate);
+            });
     }
-        
+    
     private async Task<DailyExchangeRateResponse?> GetDailyExchangeRates()
     {
         DailyExchangeRateResponse? result = null;

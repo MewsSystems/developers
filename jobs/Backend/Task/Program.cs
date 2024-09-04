@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater;
 
 public static class Program
 {
-    private static IEnumerable<Currency> currencies = new[]
-    {
+    private static HashSet<Currency> currencies =
+    [
         new Currency("USD"),
         new Currency("EUR"),
         new Currency("CZK"),
@@ -18,9 +19,9 @@ public static class Program
         new Currency("THB"),
         new Currency("TRY"),
         new Currency("XYZ")
-    };
+    ];
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         try
         {
@@ -28,7 +29,7 @@ public static class Program
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
-                
+            
             var exchangeRatesUrl = configuration["ExchangeRatesUrl"];
             if (string.IsNullOrWhiteSpace(exchangeRatesUrl))
             {
@@ -37,7 +38,7 @@ public static class Program
             }
             
             var provider = new ExchangeRateProvider(exchangeRatesUrl);
-            var rates = provider.GetExchangeRates(currencies).ToArray();
+            var rates = (await provider.GetExchangeRates(currencies)).ToArray();
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
