@@ -29,6 +29,7 @@ export default function SearchMovies() {
 
   return (
     <div className="container">
+      <Image src="/mewsflix.png" alt="Logo" width={200} height={50} className="logo" />
       <input
         type="text"
         placeholder="Search for a movie..."
