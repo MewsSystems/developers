@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 const fetchMovieDetails = async (id: string) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
@@ -32,6 +33,12 @@ export default function MovieDetails() {
       <p>{data.overview}</p>
       <p>Release Date: {data.release_date}</p>
       <p>Rating: {data.vote_average} / 10</p>
+      <Image
+        src={`https://image.tmdb.org/t/p/w200${data.poster_path}`}
+        alt={data.title}
+        width={200}
+        height={300}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useDebounce } from '../hooks/useDebounce';
 
 const fetchMovies = async (query: string) => {
@@ -34,6 +35,7 @@ export default function SearchMovies() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-input"
+        autoFocus
       />
 
       {isLoading && <p>Loading...</p>}
@@ -43,6 +45,12 @@ export default function SearchMovies() {
         {data?.results?.map(movie => (
           <Link key={movie.id} href={`/movie/${movie.id}`}>
             <h3>{movie.title}</h3>
+            <Image
+              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+              alt={movie.title}
+              width={200}
+              height={300}
+            />
           </Link>
         ))}
       </div>
