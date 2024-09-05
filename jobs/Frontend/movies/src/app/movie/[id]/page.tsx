@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const fetchMovieDetails = async (id: string) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {

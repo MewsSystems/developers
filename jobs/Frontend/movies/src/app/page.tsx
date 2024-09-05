@@ -20,6 +20,8 @@ const fetchMovies = async (query: string, page: number = 1) => {
 
 
 // example: http://localhost:3000/?query=lord%20of%20the&page=3
+// shareable links can be used to set up e2e tests and for development purposes
+// but in the future they can be a feature if we keep in sync URI and app state
 export default function SearchMovies() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -68,8 +70,6 @@ export default function SearchMovies() {
 
   return (
     <div className="container">
-      <Image id="mewslifx-logo" src="/mewsflix.png" alt="Logo" width={200} height={50} className="logo" />
-
       <input
         type="text"
         placeholder="Search for a movie..."

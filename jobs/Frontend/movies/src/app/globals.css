@@ -8,7 +8,7 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0px 20px;
 }
 
 .search-input {
@@ -81,5 +81,5 @@ a {
 }
 
 #mewslifx-logo {
-  padding-bottom: 20px
+  padding: 20px;
 }
