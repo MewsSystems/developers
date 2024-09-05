@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const fetchMovieDetails = async (id: string) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
@@ -15,6 +14,8 @@ const fetchMovieDetails = async (id: string) => {
   return data;
 };
 
+// TODO add good details and have image on the left text on the right
+// TODO make mobile fiendly
 export default function MovieDetails() {
   const pathname = usePathname();
   const movieId = pathname.split('/').pop();
@@ -27,19 +28,22 @@ export default function MovieDetails() {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading movie details.</p>;
+  console.log("DATA: ", data)
 
   return (
     <div className="movie-details">
-      <h1>{data.title}</h1>
-      <p>{data.overview}</p>
-      <p>Release Date: {data.release_date}</p>
-      <p>Rating: {data.vote_average} / 10</p>
       <Image
         src={`https://image.tmdb.org/t/p/w200${data.poster_path}`}
         alt={data.title}
         width={200}
         height={400}
       />
+      <div>
+        <h1>{data.title}</h1>
+        <p>{data.overview}</p>
+        <p>Release Date: {data.release_date}</p>
+        <p>Rating: {data.vote_average} / 10</p>
+      </div>
     </div>
   );
 }

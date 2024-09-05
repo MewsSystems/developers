@@ -68,6 +68,12 @@ export default function SearchMovies() {
     setPage(initialPage);
   }, []);
 
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.log("error loading image", event.target)
+    // TODO use actual placeholder image
+    event.target.srcset = "/mewsflix.png"
+  };
+
   return (
     <div className="container">
       <input
@@ -92,6 +98,7 @@ export default function SearchMovies() {
               alt={movie.title}
               width={200}
               height={300}
+              onError={handleImageError}
             />
           </Link>
         ))}

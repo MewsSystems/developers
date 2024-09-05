@@ -2,17 +2,18 @@ body {
   background-color: #141414;
   color: white;
   font-family: 'Arial', sans-serif;
-  margin: 0;
+  margin: 0px;
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0px 20px;
+  padding: 20px;
 }
 
 .search-input {
-  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   font-size: 18px;
@@ -43,7 +44,9 @@ body {
 }
 
 .movie-details {
-  padding: 20px;
+  display: flex;
+  gap: 40px;
+  padding: 40px;
 }
 
 a {
@@ -56,7 +59,7 @@ a {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-top: 20px;
+  margin: 20px;
 }
 
 .pagination button {
@@ -81,5 +84,5 @@ a {
 }
 
 #mewslifx-logo {
-  padding: 20px;
+  padding: 40px;
 }
