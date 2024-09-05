@@ -68,6 +68,7 @@ export default function SearchMovies() {
 
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error fetching movies.</p>}
+      {data?.results?.length === 0 && <p>There are no movies matching {query}</p>}
 
       <div className="movie-list">
         {data?.results?.map(movie => (
