@@ -37,7 +37,7 @@ export default function MovieDetails() {
         src={`https://image.tmdb.org/t/p/w200${data.poster_path}`}
         alt={data.title}
         width={200}
-        height={300}
+        height={400}
       />
     </div>
   );

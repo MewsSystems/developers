@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -38,7 +38,7 @@ export default function SearchMovies() {
     if (page < totalPages) {
       setPage(prevPage => prevPage + 1);
     }
-  };
+  }
 
   const handlePrevPage = () => {
     if (page > 1) {
@@ -46,9 +46,16 @@ export default function SearchMovies() {
     }
   };
 
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setPage(1);
+      setTotalPages(1);
+    }
+  }, [debouncedQuery]);
+
   return (
     <div className="container">
-      <Image src="/mewsflix.png" alt="Logo" width={200} height={50} className="logo" />
+      <Image id="mewslifx-logo" src="/mewsflix.png" alt="Logo" width={200} height={50} className="logo" />
 
       <input
         type="text"
@@ -76,7 +83,6 @@ export default function SearchMovies() {
         ))}
       </div>
 
-      {/* Pagination Controls */}
       <div className="pagination">
         <button onClick={handlePrevPage} disabled={page === 1}>
           {'<'}
