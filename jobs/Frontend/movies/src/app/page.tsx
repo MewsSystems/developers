@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useDebounce } from '../hooks/useDebounce';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const fetchMovies = async (query: string, page: number = 1) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
@@ -18,6 +18,8 @@ const fetchMovies = async (query: string, page: number = 1) => {
   return data;
 };
 
+
+// example: http://localhost:3000/?query=lord%20of%20the&page=3
 export default function SearchMovies() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -51,7 +53,18 @@ export default function SearchMovies() {
       setPage(1);
       setTotalPages(1);
     }
+
   }, [debouncedQuery]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialQuery = searchParams.get('query') || '';
+    const initialPage = parseInt(searchParams.get('page') || '1', 10);
+    console.log("query: ", initialQuery, "page: ", initialPage)
+
+    setQuery(initialQuery);
+    setPage(initialPage);
+  }, []);
 
   return (
     <div className="container">
