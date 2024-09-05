@@ -15,7 +15,7 @@ const fetchMovieDetails = async (id: string) => {
 };
 
 // TODO add good details and have image on the left text on the right
-// TODO make mobile fiendly
+// TODO add skeleton to image
 export default function MovieDetails() {
   const pathname = usePathname();
   const movieId = pathname.split('/').pop();
@@ -26,7 +26,7 @@ export default function MovieDetails() {
     enabled: !!movieId,
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return null
   if (isError) return <p>Error loading movie details.</p>;
   console.log("DATA: ", data)
 

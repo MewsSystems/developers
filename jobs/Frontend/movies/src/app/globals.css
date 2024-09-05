@@ -1,8 +1,21 @@
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('/public/Poppins-Regular.ttf') format('ttf'),
+    url('/public/Poppins-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   background-color: #141414;
   color: white;
   font-family: 'Arial', sans-serif;
   margin: 0px;
+  font-family: 'MyCustomFont', sans-serif;
+}
+
+h3 {
+  margin: 5px 0px;
 }
 
 .container {
@@ -10,7 +23,7 @@ body {
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 40px;
 }
 
 .search-input {
@@ -25,6 +38,14 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
+}
+
+.movie-list img:hover {
+  box-shadow: 0 0 0 1px white;
+}
+
+.movie-list img {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .movie-item {

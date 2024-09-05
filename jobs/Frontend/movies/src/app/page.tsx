@@ -34,7 +34,7 @@ export default function SearchMovies() {
     enabled: !!debouncedQuery,
   });
 
-  if (data?.total_pages > 1 && data?.total_pages !== totalPages) {
+  if (data?.total_pages >= 1 && data?.total_pages !== totalPages) {
     setTotalPages(data?.total_pages)
   }
 
@@ -104,15 +104,19 @@ export default function SearchMovies() {
         ))}
       </div>
 
-      <div className="pagination">
-        <button onClick={handlePrevPage} disabled={page === 1}>
-          {'<'}
-        </button>
-        <span>Page {page} of {totalPages}</span>
-        <button onClick={handleNextPage} disabled={page === totalPages}>
-          {'>'}
-        </button>
-      </div>
+      {
+        totalPages > 1 &&
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={page === 1}>
+            {'<'}
+          </button>
+          <span>Page {page} of {totalPages}</span>
+          <button onClick={handleNextPage} disabled={page === totalPages}>
+            {'>'}
+          </button>
+        </div>
+      }
+
     </div>
   );
 }
