@@ -7,11 +7,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useDebounce } from '../hooks/useDebounce';
 
-const fetchMovies = async (query: string) => {
+const fetchMovies = async (query: string, page: number = 1) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
     params: {
       api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
       query: query,
+      page: page,
     },
   });
   return data;
@@ -19,17 +20,36 @@ const fetchMovies = async (query: string) => {
 
 export default function SearchMovies() {
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const debouncedQuery = useDebounce(query, 500);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['movies', debouncedQuery],
-    queryFn: () => fetchMovies(debouncedQuery),
+    queryKey: ['movies', debouncedQuery, page],
+    queryFn: () => fetchMovies(debouncedQuery, page),
     enabled: !!debouncedQuery,
   });
+
+  if (data?.total_pages > 1 && data?.total_pages !== totalPages) {
+    setTotalPages(data?.total_pages)
+  }
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage(prevPage => prevPage - 1);
+    }
+  };
 
   return (
     <div className="container">
       <Image src="/mewsflix.png" alt="Logo" width={200} height={50} className="logo" />
+
       <input
         type="text"
         placeholder="Search for a movie..."
@@ -54,6 +74,17 @@ export default function SearchMovies() {
             />
           </Link>
         ))}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="pagination">
+        <button onClick={handlePrevPage} disabled={page === 1}>
+          {'<'}
+        </button>
+        <span>Page {page} of {totalPages}</span>
+        <button onClick={handleNextPage} disabled={page === totalPages}>
+          {'>'}
+        </button>
       </div>
     </div>
   );
