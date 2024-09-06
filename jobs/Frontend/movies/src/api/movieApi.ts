@@ -1,4 +1,5 @@
-import { MovieDetails, MovieResponse } from '@/models/movie';
+import { MovieResponse } from '@/models/movie';
+import { MovieDetails } from '@/models/movieDetails';
 import axios from 'axios';
 
 export const fetchMovieDetails = async (id: string): Promise<MovieDetails> => {

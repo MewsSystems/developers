@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { GenreTag } from '@/components/Tag/Tag';
-import type { MovieDetails } from '@/models/movie';
 import { fetchMovieDetails } from '@/api/movieApi';
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 
