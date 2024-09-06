@@ -21,7 +21,6 @@ h3 {
 .container {
   display: flex;
   flex-direction: column;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px 40px;
 }
@@ -34,11 +33,21 @@ h3 {
   border-radius: 5px;
 }
 
+
 .movie-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
+
+/* Apply the 5-column, 4-row layout for desktop screens to fit 20 result per page */
+@media (min-width: 1024px) {
+  .movie-list {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, auto);
+  }
+}
+
 
 .movie-list img:hover {
   box-shadow: 0 0 0 1px white;
@@ -68,6 +77,15 @@ h3 {
   display: flex;
   gap: 40px;
   padding: 40px;
+}
+
+/* For mobile screens */
+@media (max-width: 768px) {
+  .movie-details {
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+  }
 }
 
 a {
@@ -106,4 +124,10 @@ a {
 
 #mewslifx-logo {
   padding: 40px;
+}
+
+.genres-container {
+  padding-top: 10px;
+  display: flex;
+  gap: 5px;
 }

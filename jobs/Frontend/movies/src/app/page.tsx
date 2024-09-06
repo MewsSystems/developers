@@ -18,6 +18,7 @@ const fetchMovies = async (query: string, page: number = 1) => {
   return data;
 };
 
+// TODO add types for API response
 
 // example: http://localhost:3000/?query=lord%20of%20the&page=3
 // shareable links can be used to set up e2e tests and for development purposes
@@ -70,8 +71,7 @@ export default function SearchMovies() {
 
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     console.log("error loading image", event.target)
-    // TODO use actual placeholder image
-    event.target.srcset = "/mewsflix.png"
+    event.target.srcset = "/image_unavailable.webp";
   };
 
   return (

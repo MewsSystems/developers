@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { GenreTag } from '@/components/Tag/Tag';
 
 const fetchMovieDetails = async (id: string) => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
@@ -14,8 +15,6 @@ const fetchMovieDetails = async (id: string) => {
   return data;
 };
 
-// TODO add good details and have image on the left text on the right
-// TODO add skeleton to image
 export default function MovieDetails() {
   const pathname = usePathname();
   const movieId = pathname.split('/').pop();
@@ -28,7 +27,6 @@ export default function MovieDetails() {
 
   if (isLoading) return null
   if (isError) return <p>Error loading movie details.</p>;
-  console.log("DATA: ", data)
 
   return (
     <div className="movie-details">
@@ -38,12 +36,17 @@ export default function MovieDetails() {
         width={200}
         height={400}
       />
-      <div>
+      <section>
         <h1>{data.title}</h1>
         <p>{data.overview}</p>
-        <p>Release Date: {data.release_date}</p>
-        <p>Rating: {data.vote_average} / 10</p>
-      </div>
+        <p>Release on {data.release_date}</p>
+        <h3>Rating: {data.vote_average.toFixed(1)}</h3>
+        <div className="genres-container">
+          {data?.genres.map((genre: any) => (
+            <GenreTag key={genre.id} name={genre.name} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
