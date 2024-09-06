@@ -5,8 +5,10 @@ import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { GenreTag } from '@/components/Tag/Tag';
+import type { MovieDetails } from '@/models/movie';
 
-const fetchMovieDetails = async (id: string) => {
+// TODO move own file
+const fetchMovieDetails = async (id: string): Promise<MovieDetails> => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
     params: {
       api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
@@ -26,7 +28,7 @@ export default function MovieDetails() {
   });
 
   if (isLoading) return null
-  if (isError) return <p>Error loading movie details.</p>;
+  if (isError || !data) return <p>Error loading movie details.</p>;
 
   return (
     <div className="movie-details">
@@ -42,7 +44,7 @@ export default function MovieDetails() {
         <p>Release on {data.release_date}</p>
         <h3>Rating: {data.vote_average.toFixed(1)}</h3>
         <div className="genres-container">
-          {data?.genres.map((genre: any) => (
+          {data.genres.map(genre => (
             <GenreTag key={genre.id} name={genre.name} />
           ))}
         </div>

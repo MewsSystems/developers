@@ -2,6 +2,18 @@ import { CountryCode } from "./country";
 import { DateString } from "./dateString";
 import { LanguageCode } from "./language";
 
+interface Collection {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
+}
+
+interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface Movie {
   adult: boolean;
   backdrop_path: string | null;
@@ -24,18 +36,6 @@ export interface MovieResponse {
   results: Movie[];
   total_pages: number;
   total_results: number;
-}
-
-interface Collection {
-  id: number;
-  name: string;
-  poster_path: string;
-  backdrop_path: string;
-}
-
-interface Genre {
-  id: number;
-  name: string;
 }
 
 export interface MovieDetails {

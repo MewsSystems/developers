@@ -54,7 +54,17 @@ h3 {
 }
 
 .movie-list img {
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .movie-item {

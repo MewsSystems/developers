@@ -6,8 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDebounce } from '@/hooks/useDebounce';
+import { MovieResponse } from '@/models/movie';
 
-const fetchMovies = async (query: string, page: number = 1) => {
+const fetchMovies = async (query: string, page: number = 1): Promise<MovieResponse> => {
   const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
     params: {
       api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
@@ -15,6 +16,7 @@ const fetchMovies = async (query: string, page: number = 1) => {
       page: page,
     },
   });
+
   return data;
 };
 
@@ -29,14 +31,31 @@ export default function SearchMovies() {
   const [totalPages, setTotalPages] = useState(1);
   const debouncedQuery = useDebounce(query, 500);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError } = useQuery({
     queryKey: ['movies', debouncedQuery, page],
     queryFn: () => fetchMovies(debouncedQuery, page),
     enabled: !!debouncedQuery,
   });
 
-  if (data?.total_pages >= 1 && data?.total_pages !== totalPages) {
-    setTotalPages(data?.total_pages)
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setPage(1);
+      setTotalPages(1);
+    }
+
+  }, [debouncedQuery]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialQuery = searchParams.get('query') || '';
+    const initialPage = parseInt(searchParams.get('page') || '1', 10);
+
+    setQuery(initialQuery);
+    setPage(initialPage);
+  }, []);
+
+  if (data && data.total_pages >= 1 && data.total_pages !== totalPages) {
+    setTotalPages(data.total_pages)
   }
 
   const handleNextPage = () => {
@@ -51,27 +70,9 @@ export default function SearchMovies() {
     }
   };
 
-  useEffect(() => {
-    if (!debouncedQuery) {
-      setPage(1);
-      setTotalPages(1);
-    }
-
-  }, [debouncedQuery]);
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const initialQuery = searchParams.get('query') || '';
-    const initialPage = parseInt(searchParams.get('page') || '1', 10);
-    console.log("query: ", initialQuery, "page: ", initialPage)
-
-    setQuery(initialQuery);
-    setPage(initialPage);
-  }, []);
-
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    console.log("error loading image", event.target)
-    event.target.srcset = "/image_unavailable.webp";
+  const handleMissingImage = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = event.target as HTMLImageElement
+    target.srcset = "/image_unavailable.webp";
   };
 
   return (
@@ -85,24 +86,25 @@ export default function SearchMovies() {
         autoFocus
       />
 
-      {isLoading && <p>Loading...</p>}
       {isError && <p>Error fetching movies.</p>}
       {data?.results?.length === 0 && <p>There are no movies matching {query}</p>}
 
-      <div className="movie-list">
-        {data?.results?.map(movie => (
-          <Link key={movie.id} href={`/movie/${movie.id}`}>
-            <h3>{movie.title}</h3>
-            <Image
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-              alt={movie.title}
-              width={200}
-              height={300}
-              onError={handleImageError}
-            />
-          </Link>
-        ))}
-      </div>
+      {data &&
+        <div className="movie-list">
+          {data.results.map(movie => (
+            <Link key={movie.id} href={`/movie/${movie.id}`}>
+              <h3>{movie.title}</h3>
+              <Image
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+                width={200}
+                height={300}
+                onError={handleMissingImage}
+              />
+            </Link>
+          ))}
+        </div>
+      }
 
       {
         totalPages > 1 &&
