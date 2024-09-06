@@ -11,6 +11,7 @@ body {
   color: white;
   font-family: 'Arial', sans-serif;
   margin: 0px;
+  min-width: 430px;
   font-family: 'MyCustomFont', sans-serif;
 }
 
@@ -23,9 +24,11 @@ h3 {
   flex-direction: column;
   margin: 0 auto;
   padding: 20px 40px;
+  align-items: center;
 }
 
 .search-input {
+  width: 100%;
   padding: 10px;
   margin-bottom: 20px;
   font-size: 18px;
@@ -105,34 +108,6 @@ a {
   text-decoration: none;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin: 20px;
-}
-
-.pagination button {
-  width: 50px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  background-color: #e50914;
-  color: white;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #444;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-size: 18px;
-  color: white;
-}
 
 #mewslifx-logo {
   padding: 40px;

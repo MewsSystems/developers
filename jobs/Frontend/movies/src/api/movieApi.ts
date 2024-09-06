@@ -7,6 +7,7 @@ export const fetchMovieDetails = async (id: string): Promise<MovieDetails> => {
       api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
     },
   });
+
   return data;
 };
 

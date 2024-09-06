@@ -7,11 +7,13 @@ import Image from 'next/image';
 import { useDebounce } from '@/hooks/useDebounce';
 import { fetchMovies } from '@/api/movieApi';
 import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
+import Pagination from '@/components/Pagination/Pagination';
 
 
-// example: http://localhost:3000/?query=lord%20of%20the&page=3
 // shareable links can be used to set up e2e tests and for development purposes
 // but in the future they can be a feature if we keep in sync URI and app state
+// example: http://localhost:3000/?query=lord%20of%20the&page=3
+
 export default function SearchMovies() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -50,13 +52,12 @@ export default function SearchMovies() {
       setPage(prevPage => prevPage + 1);
     }
   }
-
   const handlePrevPage = () => {
     if (page > 1) {
       setPage(prevPage => prevPage - 1);
     }
   };
-  // TODO refactor into components like for pagination
+
   const handleMissingImage = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = event.target as HTMLImageElement
     target.srcset = "/image_unavailable.webp";
@@ -93,18 +94,14 @@ export default function SearchMovies() {
         </div>
       }
 
-      {
-        totalPages > 1 &&
-        <div className="pagination">
-          <button onClick={handlePrevPage} disabled={page === 1}>
-            {'<'}
-          </button>
-          <span>Page {page} of {totalPages}</span>
-          <button onClick={handleNextPage} disabled={page === totalPages}>
-            {'>'}
-          </button>
-        </div>
-      }
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+        />
+      )}
 
     </div>
   );
