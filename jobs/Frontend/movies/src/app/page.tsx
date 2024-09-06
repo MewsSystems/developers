@@ -1,26 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDebounce } from '@/hooks/useDebounce';
-import { MovieResponse } from '@/models/movie';
+import { fetchMovies } from '@/api/movieApi';
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 
-const fetchMovies = async (query: string, page: number = 1): Promise<MovieResponse> => {
-  const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
-    params: {
-      api_key: process.env.NEXT_PUBLIC_TMDB_API_KEY,
-      query: query,
-      page: page,
-    },
-  });
-
-  return data;
-};
-
-// TODO add types for API response
 
 // example: http://localhost:3000/?query=lord%20of%20the&page=3
 // shareable links can be used to set up e2e tests and for development purposes
@@ -69,7 +56,7 @@ export default function SearchMovies() {
       setPage(prevPage => prevPage - 1);
     }
   };
-
+  // TODO refactor into components like for pagination
   const handleMissingImage = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = event.target as HTMLImageElement
     target.srcset = "/image_unavailable.webp";
@@ -86,7 +73,7 @@ export default function SearchMovies() {
         autoFocus
       />
 
-      {isError && <p>Error fetching movies.</p>}
+      {isError && <ErrorMessage>Error fetching movies</ErrorMessage>}
       {data?.results?.length === 0 && <p>There are no movies matching {query}</p>}
 
       {data &&

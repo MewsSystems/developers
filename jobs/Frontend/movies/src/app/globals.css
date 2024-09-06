@@ -80,7 +80,9 @@ h3 {
 .movie-details img {
   width: 300px;
   border-radius: 10px;
+
   margin-bottom: 20px;
+  animation: fadeIn 0.5s;
 }
 
 .movie-details {
