@@ -1,0 +1,7 @@
+# Top level entry required to mark this as a global AnalyzerConfig file
+is_global = true
+
+#### Diagnostic configuration ####
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none
