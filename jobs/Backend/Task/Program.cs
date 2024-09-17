@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static IEnumerable<Currency> _currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,18 +15,25 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var provider = serviceProvider.GetService<ExchangeRateProvider>();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRates(_currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                var ratesList = rates.ToList();
+                Console.WriteLine($"Successfully retrieved {ratesList.Count} exchange rates:");
+                foreach (var rate in ratesList)
                 {
                     Console.WriteLine(rate.ToString());
                 }
+
             }
             catch (Exception e)
             {
@@ -38,6 +41,19 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+        
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            services.AddSingleton<IConfiguration>(configuration);
+
+            services.AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Debug))
+                .AddTransient<ExchangeRateProvider>();
         }
     }
 }
