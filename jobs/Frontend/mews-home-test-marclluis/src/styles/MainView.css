@@ -1,0 +1,28 @@
+.background {
+  background-image: url("../../public/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  position: fixed; /* Keep the background fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; /* Place behind other content */
+}
+
+.container {
+  max-width: 960px; 
+  margin: 0 auto;
+  padding: 20px;
+  position: relative; /* Allow content to scroll within container */
+}
+
+.title {
+  margin-bottom: 20px;
+  color: white;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}

@@ -1,0 +1,26 @@
+.search-container {
+    margin-bottom: 2rem;
+  }
+  
+  .search-paper {
+    display: flex;
+    align-items: center;
+    transition: margin-top 0.3s ease-in-out !important;
+    padding: 2px 4px;
+  }
+  
+  .search-paper:hover {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  .search-input {
+    background-color: transparent !important;
+    border-radius: 0;
+  }
+  
+  .search-input .MuiFilledInput-root {
+    background-color: white;
+    border-radius: 0;
+    transform-origin: top left;
+  }
+  
