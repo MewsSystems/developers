@@ -1,0 +1,12 @@
+.list-container {
+  max-width: 100vw;
+  min-height: 80vh;
+}
+
+.list-fade {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, 20rem);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
