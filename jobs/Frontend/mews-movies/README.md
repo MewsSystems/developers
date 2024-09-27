@@ -8,6 +8,8 @@ This React TypeScript application provides a simple interface for searching movi
 * **Movie Detail View:** Displays detailed information about a selected movie.
 * **Error 404 View:** Informs the user that the information/page they were trying to access doesn't exist and provides a button to go back.
 
+### Published App: [Mews Movies](https://frontend-solution--olena-mews-movies.netlify.app/)
+
 ### Technical Implementation
 
 **Frontend:**
