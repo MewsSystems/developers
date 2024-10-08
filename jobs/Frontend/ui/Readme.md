@@ -1,9 +1,3 @@
-## Hi
-
-I was midway through this task when I applied for your software engineering role. Didn't make the cut but thought I'd finish up what I started. Besides I <3 tasks like these.
-
-My email is contact@nhollas.com
-
 ## The Deployed Application
 
 The deployed application can be found at [https://movie-search-nextjs.vercel.app/](https://movie-search-nextjs.vercel.app/)
