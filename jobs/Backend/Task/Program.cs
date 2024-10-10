@@ -1,43 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.CzechNationalBank;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+internal partial class Program
 {
-    public static class Program
+    static void Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+        ILogger logger = factory.CreateLogger(nameof(Program));
 
-        public static void Main(string[] args)
+        try
         {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+            IHostBuilder builder = Host
+                .CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
                 {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services.Configure<HostedServiceConfiguration>(context.Configuration.GetSection("ExchangeRateUpdater"));
 
-            Console.ReadLine();
+                    services.AddLogging(builder =>
+                    {
+                        builder.AddSimpleConsole(options => options.SingleLine = true);
+                    });
+
+                    services.AddCzechNationalBankClient(context.Configuration);
+                    services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
+                    services.AddHostedService<HostedService>();
+                });
+
+            IHost host = builder.Build();
+            host.Run();
+        }
+        catch (Exception ex)
+        {
+            LogFatal(logger, ex.Message);
         }
     }
+
+    [LoggerMessage(Level = LogLevel.Critical, Message = "Start up failed. {errorMessage}.")]
+    static partial void LogFatal(ILogger logger, string errorMessage);
 }
