@@ -29,8 +29,6 @@ namespace ExchangeRateUpdater.Provider
                 .Where(e => currencies.Select(c => c.Code).Contains(e.CurrencyCode))
                 .Select(e => new ExchangeRate(new Currency(e.CurrencyCode), targetCurrency, e.Rate));
 
-            var aaa = result.ToList();
-
 						return result;
         }
     }
