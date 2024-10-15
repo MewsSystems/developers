@@ -17,7 +17,7 @@ namespace ExchangeRateUpdater
             .AddSingleton<IExchangeRateClient, ExchangeRateClient>()
             .BuildServiceProvider();
 
-			      try
+			        try
             {
                 var rateProvider = serviceProvider.GetService<IExchangeRateProvider>();
                 var rates = await rateProvider.GetExchangeRatesAsync(ExchangeRateSettings.Currencies);

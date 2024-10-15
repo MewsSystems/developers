@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Client
 {
-    public class ExchangeRateClient : IExchangeRateClient
-    {
-        public async Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies)
+	public class ExchangeRateClient : IExchangeRateClient
+	{
+		public async Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies)
 		{			
 			var entities = Enumerable.Empty<ExchangeRateEntity>();
 			var client = new HttpClient();
@@ -27,5 +27,5 @@ namespace ExchangeRateUpdater.Client
 						
 			return entities;
 		}
-    }
+	}
 }

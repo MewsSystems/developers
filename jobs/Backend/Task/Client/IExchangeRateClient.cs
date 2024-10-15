@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Client
 {
-    public interface IExchangeRateClient
-    {
+	public interface IExchangeRateClient
+	{
 		Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies);
 	}
 }
