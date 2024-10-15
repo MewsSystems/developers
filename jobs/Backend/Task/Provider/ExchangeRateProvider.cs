@@ -28,8 +28,8 @@ namespace ExchangeRateUpdater.Provider
             var result = exhangeRateEntities
                 .Where(e => currencies.Select(c => c.Code).Contains(e.CurrencyCode))
                 .Select(e => new ExchangeRate(new Currency(e.CurrencyCode), targetCurrency, e.Rate));
-
-						return result;
+            
+            return result;
         }
     }
 }

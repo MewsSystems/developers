@@ -7,6 +7,6 @@ namespace ExchangeRateUpdater.Client
 {
     public interface IExchangeRateClient
     {
-				Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies);
-		}
+		Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies);
+	}
 }

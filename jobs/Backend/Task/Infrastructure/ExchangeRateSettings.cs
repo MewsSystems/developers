@@ -10,15 +10,15 @@ namespace ExchangeRateUpdater.Infrastructure
 
 		static IEnumerable<Currency> _currencies = new[]
 		{
-						new Currency("USD"),
-						new Currency("EUR"),
-						new Currency("CZK"),
-						new Currency("JPY"),
-						new Currency("KES"),
-						new Currency("RUB"),
-						new Currency("THB"),
-						new Currency("TRY"),
-						new Currency("XYZ")
+			new Currency("USD"),
+			new Currency("EUR"),
+			new Currency("CZK"),
+			new Currency("JPY"),
+			new Currency("KES"),
+			new Currency("RUB"),
+			new Currency("THB"),
+			new Currency("TRY"),
+			new Currency("XYZ")
 		};
 
 		public static IEnumerable<Currency> Currencies => _currencies;

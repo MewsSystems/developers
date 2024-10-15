@@ -13,19 +13,19 @@ namespace ExchangeRateUpdater.Client
     public class ExchangeRateClient : IExchangeRateClient
     {
         public async Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync(IEnumerable<Currency> currencies)
-        {			
-						var entities = Enumerable.Empty<ExchangeRateEntity>();
-						var client = new HttpClient();
+		{			
+			var entities = Enumerable.Empty<ExchangeRateEntity>();
+			var client = new HttpClient();
 
-						var response = await client.GetAsync(new Uri(ExchangeRateSettings.CnbExchangeRatesGetPath));
+			var response = await client.GetAsync(new Uri(ExchangeRateSettings.CnbExchangeRatesGetPath));
 
-						if (response.IsSuccessStatusCode)
-						{
-								var dto = await response.Content.ReadFromJsonAsync<ExchangeRatesDto>();
-								entities = dto.ExchangeRates;
-						}
+			if (response.IsSuccessStatusCode)
+			{
+					var dto = await response.Content.ReadFromJsonAsync<ExchangeRatesDto>();
+					entities = dto.ExchangeRates;
+			}
 						
-						return entities;
-				}
+			return entities;
+		}
     }
 }
