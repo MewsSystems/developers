@@ -1,9 +1,12 @@
 ﻿using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Extensions.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -30,7 +33,14 @@ namespace ExchangeRateUpdater
             builder.Services.AddHttpClient<ICzechNationalBankApiClient, CzechNationalBankApiClient>(httpClient => 
             {
                 httpClient.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
-            });
+            })
+            .AddTransientHttpErrorPolicy(policyBuilder => 
+            {
+                return policyBuilder.WaitAndRetryAsync(6, 
+                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            })
+                
+                ;
             builder.Services.AddTransient<ExchangeRateProvider>();           
 
             var app = builder.Build();
@@ -58,6 +68,6 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
-        }
+        }           
     }
 }
