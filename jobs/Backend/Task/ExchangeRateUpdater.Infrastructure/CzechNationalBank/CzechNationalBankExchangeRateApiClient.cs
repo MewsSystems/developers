@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
         HttpClient httpClient, 
         ILogger<CzechNationalBankExchangeRateApiClient> logger) : IExchangeRateApiClient
     {
-        public Currency Currency => new(WellKnownCurrencyCodes.CZK);
+        public Currency TargetCurrency => new(WellKnownCurrencyCodes.CZK);
 
         public async Task<IReadOnlyList<ApiExchangeRate>> GetDailyExchangeRatesAsync(LanguageCode languageCode = LanguageCode.EN)
         {

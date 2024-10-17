@@ -2,7 +2,7 @@
 {
     public interface IExchangeRateApiClient
     {
-        Currency Currency { get; }
+        Currency TargetCurrency { get; }
 
         Task<IReadOnlyList<ApiExchangeRate>> GetDailyExchangeRatesAsync(LanguageCode languageCode = LanguageCode.EN);
     }

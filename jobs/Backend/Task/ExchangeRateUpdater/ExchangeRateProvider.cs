@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater
             var apiExchangeRates = await exchangeRateApiClient.GetDailyExchangeRatesAsync();
             var apiExchangeRatesByCode = apiExchangeRates.ToDictionary(x => x.CurrencyCode);
 
-            var targetCurreny = exchangeRateApiClient.Currency;
+            var targetCurreny = exchangeRateApiClient.TargetCurrency;
 
             return currencies
                 .DistinctBy(c => c.Code)
