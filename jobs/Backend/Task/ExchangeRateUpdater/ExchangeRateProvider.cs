@@ -15,11 +15,14 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IReadOnlyList<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var currentDate = DateTime.Now;
+            if (!currencies.Any())
+            {
+                return [];
+            }
 
-            var currentExchangeRates = await czechNationalBankApiClient.GetDailyExchangeRatesAsync(currentDate);
+            var currentExchangeRates = await czechNationalBankApiClient.GetDailyExchangeRatesAsync();
 
             var currentExchangeRatesByCode = currentExchangeRates.ToDictionary(x => x.CurrencyCode);
 

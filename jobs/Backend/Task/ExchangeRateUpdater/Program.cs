@@ -31,21 +31,20 @@ namespace ExchangeRateUpdater
             {
                 httpClient.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
             });
-            builder.Services.AddSingleton<ExchangeRateProvider>();
-           
+            builder.Services.AddTransient<ExchangeRateProvider>();           
 
             var app = builder.Build();
 
-            await TestRun(app);
+            await RunTest(app);
         }
 
-        private static async Task TestRun(IHost app)
+        private static async Task RunTest(IHost app)
         {
             try
             {
                 using var scope = app.Services.CreateScope();
                 var provider = scope.ServiceProvider.GetRequiredService<ExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)

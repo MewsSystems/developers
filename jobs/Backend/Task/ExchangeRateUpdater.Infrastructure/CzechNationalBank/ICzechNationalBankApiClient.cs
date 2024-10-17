@@ -10,6 +10,6 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
     {
         string TargetCurrencyCode { get; }
 
-        Task<ExchangeRate[]> GetDailyExchangeRatesAsync(DateTime date);        
+        Task<IReadOnlyList<BankApiExchangeRate>> GetDailyExchangeRatesAsync();        
     }
 }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
-    public record ExchangeRate(string CurrencyCode, decimal Rate);
+    public record BankApiExchangeRate(string CurrencyCode, decimal Rate);
 }

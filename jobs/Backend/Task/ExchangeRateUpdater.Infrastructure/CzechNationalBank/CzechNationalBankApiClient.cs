@@ -9,17 +9,13 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
     public class CzechNationalBankApiClient(HttpClient httpClient) : ICzechNationalBankApiClient
     {
-        private const string DateParameterFormat = "yyyy-MM-dd";
-
         public string TargetCurrencyCode => "CZK";
 
-        public async Task<ExchangeRate[]> GetDailyExchangeRatesAsync(DateTime date)
+        public async Task<IReadOnlyList<BankApiExchangeRate>> GetDailyExchangeRatesAsync()
         {
-            var dateHttpParameter = date.ToString(DateParameterFormat);
+            var response = await httpClient.GetFromJsonAsync<GetDailyExchangeRatesResponse>($"exrates/daily?lang=EN");
 
-            var response = await httpClient.GetFromJsonAsync<GetDailyExchangeRatesResponse>($"exrates/daily?date={dateHttpParameter}&lang=EN");
-
-            return response.Rates.Select(x => new ExchangeRate(x.CurrencyCode, x.Rate)).ToArray();
+            return response.Rates.Select(x => new BankApiExchangeRate(x.CurrencyCode, x.Rate)).ToArray();
         }
     }
 }
