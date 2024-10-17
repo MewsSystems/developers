@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
-    internal class GetDailyExchangeRatesResponse
+    internal class CzechNationalBankExchangeRatesResponse
     {
         [JsonPropertyName("rates")]
         public ExchangeRate[] Rates { get; set; }

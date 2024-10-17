@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Extensions;
+﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,20 +37,20 @@ namespace ExchangeRateUpdater
 
             builder.Services.AddSerilogLogging(builder.Configuration);
 
-            builder.Services.AddHttpClient<ICzechNationalBankApiClient, CzechNationalBankApiClient>(httpClient => 
+            builder.Services.AddHttpClient(HttpClientNames.CzechNationalBankApi, httpClient => 
             {
-                var bankApiSettings = builder.Configuration
-                    .GetSection("CzechNationalBankApi")
-                    .Get<CzechNationalBankApiSettings>();
+                var baseUrl = builder.Configuration.GetValue<string>("CzechNationalBankApiBaseUrl");
 
-                httpClient.BaseAddress = new Uri(bankApiSettings.BaseUrl);
+                httpClient.BaseAddress = new Uri(baseUrl);
             })
             .AddTransientHttpErrorPolicy(policyBuilder => 
             {
                 return policyBuilder.WaitAndRetryAsync(6, 
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
             });
-            builder.Services.AddTransient<ExchangeRateProvider>();
+            
+            builder.Services.AddSingleton<ExchangeRateProvider>()
+                .AddSingleton<IExchangeRateApiClientFactory, ExchangeRateApiClientFactory>();
 
             var app = builder.Build();
 
@@ -61,7 +63,7 @@ namespace ExchangeRateUpdater
             {
                 using var scope = app.Services.CreateScope();
                 var provider = scope.ServiceProvider.GetRequiredService<ExchangeRateProvider>();
-                var rates = await provider.GetExchangeRatesAsync(currencies);
+                var rates = await provider.GetExchangeRatesAsync(currencies, WellKnownCurrencyCodes.CZK);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
