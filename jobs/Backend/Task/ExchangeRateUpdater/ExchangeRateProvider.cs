@@ -1,7 +1,4 @@
 ﻿using ExchangeRateUpdater.Domain;
-using ExchangeRateUpdater.Infrastructure;
-using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,14 +22,22 @@ namespace ExchangeRateUpdater
 
             var exchangeRateApiClient = exchangeRateApiClientFactory.CreateExchangeRateApiClient(targetCurrencyCode);
 
-            var currentExchangeRates = await exchangeRateApiClient.GetDailyExchangeRatesAsync();
-
-            var currentExchangeRatesByCode = currentExchangeRates.ToDictionary(x => x.CurrencyCode);
+            var apiExchangeRates = await exchangeRateApiClient.GetDailyExchangeRatesAsync();
+            var apiExchangeRatesByCode = apiExchangeRates.ToDictionary(x => x.CurrencyCode);
 
             var targetCurreny = new Currency(targetCurrencyCode);
 
             return currencies
-                .Select(c => new ExchangeRate(c, targetCurreny, currentExchangeRatesByCode.GetValueOrDefault(c.Code)?.Rate ?? default))
+                .DistinctBy(c => c.Code)
+                .Select(c => 
+                {
+                    var apiExchangeRate = apiExchangeRatesByCode.GetValueOrDefault(c.Code);
+                    var value = apiExchangeRate is { Amount: > 0 } 
+                        ? apiExchangeRate.Rate / apiExchangeRate.Amount
+                        : default;
+
+                    return new ExchangeRate(c, targetCurreny, value);
+                })
                 .Where(x => x.Value != default)
                 .ToArray();
         }

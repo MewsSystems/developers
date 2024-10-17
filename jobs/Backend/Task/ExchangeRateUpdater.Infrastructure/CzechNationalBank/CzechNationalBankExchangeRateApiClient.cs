@@ -14,7 +14,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
             {
                 var response = await httpClient.GetFromJsonAsync<CzechNationalBankExchangeRatesResponse>($"exrates/daily?lang={languageCode}");
 
-                return response.Rates.Select(x => new ApiExchangeRate(x.CurrencyCode, x.Rate)).ToArray();
+                return response.Rates.Select(x => new ApiExchangeRate(x.CurrencyCode, x.Rate, x.Amount)).ToArray();
             }
             catch(Exception e)
             {

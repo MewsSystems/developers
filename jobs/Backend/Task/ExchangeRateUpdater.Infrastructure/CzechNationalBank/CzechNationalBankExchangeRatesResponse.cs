@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
     internal class CzechNationalBankExchangeRatesResponse
     {
         [JsonPropertyName("rates")]
-        public ExchangeRate[] Rates { get; set; }
+        public ExchangeRate[] Rates { get; init; } = [];
 
         internal class ExchangeRate
         {
+            [JsonPropertyName("amount")]
+            public int Amount { get; init; }
+
             [JsonPropertyName("currencyCode")]
-            public string CurrencyCode { get; set; }
+            public string CurrencyCode { get; init; } = default!;
 
             [JsonPropertyName("rate")]
-            public decimal Rate { get; set; }
+            public decimal Rate { get; init; }
         }
     }
 }

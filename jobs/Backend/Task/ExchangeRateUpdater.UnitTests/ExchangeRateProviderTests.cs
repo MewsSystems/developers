@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater.UnitTests
             };
             var exchangeRatesProvidedByApi = new ApiExchangeRate[]
             {
-                new("USD", 1.2m), new("EUR", 1.3m)
+                new("USD", 1.2m, 1), new("EUR", 1.3m, 1)
             };
             var apiClientFactoryMock = CreateExchangeApiClientFactoryMock(exchangeRatesProvidedByApi, targetCurrencyCode);               
 
@@ -62,7 +62,7 @@ namespace ExchangeRateUpdater.UnitTests
             };
             var exchangeRatesProvidedByApi = new ApiExchangeRate[]
             {
-                new("USD", 1.2m), new("EUR", 1.3m), new("KES", 1.2m), new("RUB", 1.3m), new("HBC", 1.2m)
+                new("USD", 1.2m, 1), new("EUR", 1.3m, 1), new("KES", 1.2m, 1), new("RUB", 1.3m, 1), new("HBC", 1.2m, 1)
             };
             var apiClientFactoryMock = CreateExchangeApiClientFactoryMock(exchangeRatesProvidedByApi, targetCurrencyCode);           
 
@@ -90,7 +90,7 @@ namespace ExchangeRateUpdater.UnitTests
             };
             var exchangeRatesProvidedByApi = new ApiExchangeRate[]
             {
-                new("USD", 1.2m), new("EUR", 1.3m), new("RUB", 1.3m)
+                new("USD", 1.2m, 1), new("EUR", 1.3m, 1), new("RUB", 1.3m, 1)
             };
             var apiClientFactoryMock = CreateExchangeApiClientFactoryMock(exchangeRatesProvidedByApi, targetCurrencyCode);            
 
@@ -115,7 +115,7 @@ namespace ExchangeRateUpdater.UnitTests
             };
             var exchangeRatesProvidedByApi = new ApiExchangeRate[]
             {
-                new("USD", 0.2m), new("EUR", 1.8m), new("RUB", 5.8m)
+                new("USD", 0.2m, 1), new("EUR", 1.8m, 10), new("RUB", 5.8m, 100)
             };
             var apiClientFactoryMock = CreateExchangeApiClientFactoryMock(exchangeRatesProvidedByApi, targetCurrencyCode);           
 
@@ -128,16 +128,17 @@ namespace ExchangeRateUpdater.UnitTests
             Assert.Equal(3, actualExchangeRates.Count);
             Assert.All(exchangeRatesProvidedByApi, apiRate => 
             {
-                var actualRate = actualExchangeRates.FirstOrDefault(x => x.SourceCurrency.Code == apiRate.CurrencyCode);
-                Assert.Equal(apiRate.Rate, actualRate?.Value);
+                var expectedValue = apiRate.Rate / apiRate.Amount;
+                var actualValue = actualExchangeRates.FirstOrDefault(x => x.SourceCurrency.Code == apiRate.CurrencyCode)?.Value;
+                Assert.Equal(expectedValue, actualValue);
             });                     
         }
-
+        
         private static Mock<IExchangeRateApiClientFactory> CreateExchangeApiClientFactoryMock(
             ApiExchangeRate[] exchangeRates, string targetCurrencyCode)
         {
             var exchangeRateApiClientMock = new Mock<IExchangeRateApiClient>();
-            exchangeRateApiClientMock.Setup(x => x.GetDailyExchangeRatesAsync())
+            exchangeRateApiClientMock.Setup(x => x.GetDailyExchangeRatesAsync(It.IsAny<LanguageCode>()))
                 .ReturnsAsync(exchangeRates);
 
             var apiClientFactoryMock = new Mock<IExchangeRateApiClientFactory>();
