@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider(IExchangeRateApiClientFactory exchangeRateApiClientFactory)
+    public class ExchangeRateProvider(IExchangeRateApiClientFactory exchangeRateApiClientFactory) : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -25,7 +25,7 @@ namespace ExchangeRateUpdater
             var apiExchangeRates = await exchangeRateApiClient.GetDailyExchangeRatesAsync();
             var apiExchangeRatesByCode = apiExchangeRates.ToDictionary(x => x.CurrencyCode);
 
-            var targetCurreny = new Currency(targetCurrencyCode);
+            var targetCurreny = exchangeRateApiClient.Currency;
 
             return currencies
                 .DistinctBy(c => c.Code)

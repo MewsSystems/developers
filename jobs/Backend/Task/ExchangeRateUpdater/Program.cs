@@ -1,17 +1,13 @@
 ﻿using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Extensions;
 using ExchangeRateUpdater.Infrastructure;
-using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
-using Polly.Extensions.Http;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -49,7 +45,7 @@ namespace ExchangeRateUpdater
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
             });
             
-            builder.Services.AddSingleton<ExchangeRateProvider>()
+            builder.Services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
                 .AddSingleton<IExchangeRateApiClientFactory, ExchangeRateApiClientFactory>();
 
             var app = builder.Build();
@@ -62,7 +58,7 @@ namespace ExchangeRateUpdater
             try
             {
                 using var scope = app.Services.CreateScope();
-                var provider = scope.ServiceProvider.GetRequiredService<ExchangeRateProvider>();
+                var provider = scope.ServiceProvider.GetRequiredService<IExchangeRateProvider>();
                 var rates = await provider.GetExchangeRatesAsync(currencies, WellKnownCurrencyCodes.CZK);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

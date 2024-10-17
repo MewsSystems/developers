@@ -8,6 +8,8 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
         HttpClient httpClient, 
         ILogger<CzechNationalBankExchangeRateApiClient> logger) : IExchangeRateApiClient
     {
+        public Currency Currency => new(WellKnownCurrencyCodes.CZK);
+
         public async Task<IReadOnlyList<ApiExchangeRate>> GetDailyExchangeRatesAsync(LanguageCode languageCode = LanguageCode.EN)
         {
             try
@@ -18,7 +20,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
             }
             catch(Exception e)
             {
-                logger.LogError(e, "Failed to get daily exchange rates from bank API");
+                logger.LogError(e, "Failed to get daily exchange rates from Czech National Bank API");
                 throw;
             }            
         }
