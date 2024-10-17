@@ -1,11 +1,6 @@
 ﻿using ExchangeRateUpdater.Domain;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
@@ -13,11 +8,11 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
         HttpClient httpClient, 
         ILogger<CzechNationalBankExchangeRateApiClient> logger) : IExchangeRateApiClient
     {
-        public async Task<IReadOnlyList<ApiExchangeRate>> GetDailyExchangeRatesAsync()
+        public async Task<IReadOnlyList<ApiExchangeRate>> GetDailyExchangeRatesAsync(LanguageCode languageCode = LanguageCode.EN)
         {
             try
             {
-                var response = await httpClient.GetFromJsonAsync<CzechNationalBankExchangeRatesResponse>($"exrates/daily?lang=EN");
+                var response = await httpClient.GetFromJsonAsync<CzechNationalBankExchangeRatesResponse>($"exrates/daily?lang={languageCode}");
 
                 return response.Rates.Select(x => new ApiExchangeRate(x.CurrencyCode, x.Rate)).ToArray();
             }
