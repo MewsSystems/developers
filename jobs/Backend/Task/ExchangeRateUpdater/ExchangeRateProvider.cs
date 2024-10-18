@@ -32,9 +32,9 @@ namespace ExchangeRateUpdater
                 .Select(c => 
                 {
                     var apiExchangeRate = apiExchangeRatesByCode.GetValueOrDefault(c.Code);
-                    var value = apiExchangeRate is { Amount: > 0 } 
-                        ? apiExchangeRate.Rate / apiExchangeRate.Amount
-                        : default;
+                    var value = apiExchangeRate == null 
+                        ? default 
+                        : apiExchangeRate.Rate / apiExchangeRate.Amount;
 
                     return new ExchangeRate(c, targetCurreny, value);
                 })
