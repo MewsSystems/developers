@@ -1,5 +1,7 @@
 ﻿using ExchangeRateUpdater.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ExchangeRateUpdater.Infrastructure
 {
@@ -7,6 +9,8 @@ namespace ExchangeRateUpdater.Infrastructure
 	{
 		public const string TargetCurrency = "CZK";
 		public const string CnbExchangeRatesGetPath = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN";
+		public const int MaxRetries = 3;
+		public const int RequestInterval = 2;
 
 		static IEnumerable<Currency> _currencies = new[]
 		{
@@ -22,5 +26,7 @@ namespace ExchangeRateUpdater.Infrastructure
 		};
 
 		public static IEnumerable<Currency> Currencies => _currencies;
+
+		public static string LoggingPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt");
 	}
 }
