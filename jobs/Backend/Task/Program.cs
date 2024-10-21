@@ -1,43 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Client;
+using ExchangeRateUpdater.Infrastructure;
+using ExchangeRateUpdater.Provider;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var services = new ServiceCollection();
+			var serviceProvider = services.RegisterServices().BuildServiceProvider();
 
-        public static void Main(string[] args)
-        {
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+			var rateProvider = serviceProvider.GetService<IExchangeRateProvider>();
+			var rates = await rateProvider.GetExchangeRatesAsync(Configuration.Currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+			foreach (var rate in rates)
+			{
+				Console.WriteLine(rate.ToString());
+			}
 
             Console.ReadLine();
         }
-    }
+
+        static ServiceCollection RegisterServices(this ServiceCollection services)
+        {
+			services.AddSingleton<IExchangeRateClient, ExchangeRateClient>();
+			services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+			services.AddSingleton<IRetryPolicy, RetryPolicy>();
+			services.AddLogging(builder =>
+			{
+				builder.AddFile(Configuration.LoggingPath);
+				builder.AddConsole();
+				builder.AddDebug();
+			});
+			services.AddHttpClient(Configuration.ExchangeRatesHttpClient, c =>
+			{
+				c.BaseAddress = new Uri(Configuration.CnbExchangeRatesGetPath);
+			});
+
+			return services;
+		}
+	}
 }
