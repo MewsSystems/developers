@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater
 			var serviceProvider = services.RegisterServices().BuildServiceProvider();
 
 			var rateProvider = serviceProvider.GetService<IExchangeRateProvider>();
-			var rates = await rateProvider.GetExchangeRatesAsync(ExchangeRateSettings.Currencies);
+			var rates = await rateProvider.GetExchangeRatesAsync(Configuration.Currencies);
 
 			foreach (var rate in rates)
 			{
@@ -35,13 +35,13 @@ namespace ExchangeRateUpdater
 			services.AddSingleton<IRetryPolicy, RetryPolicy>();
 			services.AddLogging(builder =>
 			{
-				builder.AddFile(ExchangeRateSettings.LoggingPath);
+				builder.AddFile(Configuration.LoggingPath);
 				builder.AddConsole();
 				builder.AddDebug();
 			});
-			services.AddHttpClient("exchangeRates", c =>
+			services.AddHttpClient(Configuration.ExchangeRatesHttpClient, c =>
 			{
-				c.BaseAddress = new Uri(ExchangeRateSettings.CnbExchangeRatesGetPath);
+				c.BaseAddress = new Uri(Configuration.CnbExchangeRatesGetPath);
 			});
 
 			return services;

@@ -47,7 +47,7 @@ namespace ExchangeRateUpdater.Provider
 				return new List<ExchangeRate>();
             }
 
-            var targetCurrency = new Currency(ExchangeRateSettings.TargetCurrency);
+            var targetCurrency = new Currency(Configuration.TargetCurrency);
 
             var currencyCodes = currencies.Select(c => c.Code).ToHashSet();
 

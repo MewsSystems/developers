@@ -24,11 +24,11 @@ namespace ExchangeRateUpdater.Client
         public async Task<IEnumerable<ExchangeRateEntity>> GetExchangeRateEntitiesAsync()
 		{
 			var entities = new List<ExchangeRateEntity>();
-			var client = _clientFactory.CreateClient("exchangeRates");
+			var client = _clientFactory.CreateClient(Configuration.ExchangeRatesHttpClient);
 
-			var response = await _retryPolicy.ExecuteGetRequestWithRetry(client, string.Empty, ExchangeRateSettings.MaxRetries, ExchangeRateSettings.RequestInterval);
+			var response = await _retryPolicy.ExecuteGetRequestWithRetry(client, string.Empty, Configuration.MaxRetries, Configuration.RequestInterval);
 
-			if (response == null || response.StatusCode == System.Net.HttpStatusCode.NotFound)
+			if (response == null || response.StatusCode != System.Net.HttpStatusCode.OK)
 			{
 				return entities;
 			}
@@ -40,7 +40,7 @@ namespace ExchangeRateUpdater.Client
 			catch (Exception ex)
 			{
 				_logger.LogError($"Error while parsing content from Http response: {ex.GetType()} : {ex.Message}");
-				return entities;
+				return new List<ExchangeRateEntity>();
 			}
 			
 			return entities;

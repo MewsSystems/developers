@@ -5,8 +5,9 @@ using System.IO;
 
 namespace ExchangeRateUpdater.Infrastructure
 {
-	public static class ExchangeRateSettings
+	public static class Configuration
 	{
+		public const string ExchangeRatesHttpClient = "exchangeRates";
 		public const string TargetCurrency = "CZK";
 		public const string CnbExchangeRatesGetPath = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN";
 		public const int MaxRetries = 3;
