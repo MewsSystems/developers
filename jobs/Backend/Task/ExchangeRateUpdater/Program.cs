@@ -45,8 +45,8 @@ namespace ExchangeRateUpdater
                     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
             });
             
-            builder.Services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddSingleton<IExchangeRateApiClientFactory, ExchangeRateApiClientFactory>();
+            builder.Services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>()
+                .AddTransient<IExchangeRateApiClientFactory, ExchangeRateApiClientFactory>();
 
             var app = builder.Build();
 
