@@ -1,4 +1,4 @@
-import { infiniteQueryOptions, queryOptions, useInfiniteQuery } from '@tanstack/react-query';
+import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 import { MovieSearchResponse } from '../../types/api.ts';
 import { api } from './lib/api-client.ts';
 import { QueryConfig } from './lib/react-query-config.ts';
@@ -45,15 +45,4 @@ export const useInfiniteMovies = ({ searchParam }: UseMoviesOptions) => {
   });
 };
 
-const getMoviesQueryOptions = (
-  { queryParam }: { queryParam?: string } = {
-    queryParam: '',
-  },
-) => {
-  return queryOptions({
-    queryKey: ['movies', queryParam],
-    queryFn: () => getMovies(queryParam, 1),
-  });
-};
-
-export { getMovies, getMoviesQueryOptions };
+export { getMovies };
