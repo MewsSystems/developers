@@ -1,7 +1,9 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useInfiniteMovies } from '../../api/movies.ts';
 import { useEffect, useState } from 'react';
 import { useElementVisible } from '../../../hooks/useElementVisible.ts';
+import MovieCard from '../../../components/movie-card/index.tsx';
+import MoviesContainer from '../../../components/movies-container/index.tsx';
 
 export const Movies = () => {
   const [searchParams] = useSearchParams();
@@ -28,15 +30,22 @@ export const Movies = () => {
 
   return (
     <>
+      <div>Movies App</div>
       <input onChange={handleSearchInput}></input>
-      {uniqueMovies.map((movie, index) => (
-        <div
-          key={movie?.id.toString()}
-          ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
-        >
-          <Link to={`/movies/${movie?.id}`}>{movie?.title}</Link>
-        </div>
-      ))}
+      <MoviesContainer>
+        {uniqueMovies.map((movie, index) => (
+          <>
+            {!!movie && (
+              <div
+                key={movie.id.toString()}
+                ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
+              >
+                <MovieCard movie={movie}></MovieCard>
+              </div>
+            )}
+          </>
+        ))}
+      </MoviesContainer>
       {moviesQuery.isLoading && <>Loading...</>}
     </>
   );
