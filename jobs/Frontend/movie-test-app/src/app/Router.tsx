@@ -5,7 +5,7 @@ import { Movies } from './routes/Movies/Movies.tsx';
 import App from './App.tsx';
 import { MovieDetails, movieDetailsLoader } from './routes/MovieDetails/MovieDetails.tsx';
 
-export const createAppRouter = (queryClient: QueryClient) =>
+const createAppRouter = (queryClient: QueryClient) =>
   createBrowserRouter([
     {
       path: '/',
