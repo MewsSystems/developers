@@ -1,41 +1,58 @@
-import { queryOptions } from '@tanstack/react-query';
-import { Meta } from '../../types/api.ts';
-import Axios from 'axios';
+import { infiniteQueryOptions, queryOptions, useInfiniteQuery } from '@tanstack/react-query';
+import { MovieSearchResponse } from '../../types/api.ts';
+import { api } from './lib/api-client.ts';
+import { QueryConfig } from './lib/react-query-config.ts';
 
-const apiKey = import.meta.env.VITE_MOVIE_DB_API_KEY;
-const baseUrl = import.meta.env.VITE_MOVIE_DB_BASE_URL;
-const apiVersion = import.meta.env.VITE_MOVIE_DB_API_VERSION;
 const searchEndpoint = import.meta.env.VITE_MOVIE_DB_SEARCH_ENDPOINT;
 
-const api = Axios.create({
-  baseURL: `${baseUrl}/${apiVersion}`,
-});
-
 const getMovies = (
-  queryParam = 'test',
+  queryParam = '',
   pageParam = 1,
 ): Promise<{
-  data: any[];
-  meta: Meta;
+  data: MovieSearchResponse;
 }> => {
   return api.get(`${searchEndpoint}`, {
     params: {
-      api_key: apiKey,
       page: pageParam,
       query: queryParam,
     },
   });
 };
 
+export const getInfiniteMoviesQueryOptions = (queryParam: string) => {
+  return infiniteQueryOptions({
+    queryKey: ['movies', queryParam],
+    queryFn: ({ pageParam = 1 }) => {
+      return getMovies(queryParam, pageParam);
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage?.data?.page === lastPage?.data?.total_pages) return undefined;
+      return lastPage.data.page + 1;
+    },
+    initialPageParam: 1,
+  });
+};
+
+type UseMoviesOptions = {
+  searchParam: string;
+  page?: number;
+  queryConfig?: QueryConfig<typeof getMovies>;
+};
+
+export const useInfiniteMovies = ({ searchParam }: UseMoviesOptions) => {
+  return useInfiniteQuery({
+    ...getInfiniteMoviesQueryOptions(searchParam),
+  });
+};
+
 const getMoviesQueryOptions = (
-  { queryParam, pageParam }: { queryParam?: string; pageParam?: number } = {
+  { queryParam }: { queryParam?: string } = {
     queryParam: '',
-    pageParam: 1,
   },
 ) => {
   return queryOptions({
-    queryKey: ['movies', { queryParam, pageParam }],
-    queryFn: () => getMovies(queryParam, pageParam),
+    queryKey: ['movies', queryParam],
+    queryFn: () => getMovies(queryParam, 1),
   });
 };
 

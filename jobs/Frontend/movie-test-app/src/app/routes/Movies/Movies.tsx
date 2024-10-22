@@ -1,22 +1,25 @@
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
-import { LoaderFunctionArgs } from 'react-router-dom';
-import { getMoviesQueryOptions } from '../../api/movies.ts';
-
-export const moviesLoader =
-  (queryClient: QueryClient) =>
-  async ({ request }: LoaderFunctionArgs) => {
-    const url = new URL(request.url);
-
-    const pageParam = Number(url.searchParams.get('page') || 1);
-    const queryParam = url.searchParams.get('query') ?? '';
-
-    const query = getMoviesQueryOptions({ queryParam, pageParam });
-
-    return queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
-  };
+import { useSearchParams } from 'react-router-dom';
+import { useInfiniteMovies } from '../../api/movies.ts';
+import { useState } from 'react';
 
 export const Movies = () => {
-  const queryClient = useQueryClient();
-  queryClient.prefetchQuery(getMoviesQueryOptions());
-  return <div>Movies</div>;
+  const [searchParams] = useSearchParams();
+  const [userQuery, setUserQuery] = useState<string>(searchParams.get('query') || '');
+
+  const moviesQuery = useInfiniteMovies({ searchParam: userQuery || '' });
+  const movies = moviesQuery.data?.pages.flatMap((page) => page.data.results) || [];
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserQuery(e.target.value);
+  };
+
+  return (
+    <>
+      <input onChange={handleSearchInput}></input>
+      {movies.map((movie) => (
+        <div key={movie.id}>{movie.title}</div>
+      ))}
+      {moviesQuery.isLoading && <>Loading...</>}
+    </>
+  );
 };
