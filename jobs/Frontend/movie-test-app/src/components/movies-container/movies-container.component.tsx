@@ -1,7 +1,7 @@
-import { GridContainer } from './movies-container.styles.tsx';
+import { MoviesGridContainer } from './movies-container.styles.tsx';
 
 const MoviesContainer = ({ children }: { children: React.ReactNode[] }) => {
-  return <GridContainer>{children}</GridContainer>;
+  return <MoviesGridContainer>{children}</MoviesGridContainer>;
 };
 
 export { MoviesContainer };

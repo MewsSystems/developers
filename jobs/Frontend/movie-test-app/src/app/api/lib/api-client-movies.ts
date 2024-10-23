@@ -10,10 +10,10 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   return config;
 }
 
-const api = Axios.create({
+const moviesApiClient = Axios.create({
   baseURL: `${baseUrl}/${apiVersion}`,
 });
 
-api.interceptors.request.use(authRequestInterceptor);
+moviesApiClient.interceptors.request.use(authRequestInterceptor);
 
-export { api };
+export { moviesApiClient };

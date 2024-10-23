@@ -1,22 +1,33 @@
 import { FC } from 'react';
 import { Result } from '../../types/api.ts';
-import { Footer, MovieContainer, Name } from './movie-card.styles.tsx';
-import { Link } from 'react-router-dom';
+import { Footer, MovieCardContainer, MovieImageContainer, Name } from './movie-card.styles.tsx';
+import { useImage } from '../../app/api/images.ts';
+import { useNavigate } from 'react-router-dom';
 
-type ProductCardProps = {
+type MovieCardProps = {
   movie: Result;
 };
 
-const MovieCard: FC<ProductCardProps> = ({ movie }) => {
+const defaultImageSize = 300;
+
+const MovieCard: FC<MovieCardProps> = ({ movie }) => {
   const { title } = movie;
+  const postCardImage = useImage({ imagePath: movie?.poster_path, imageWidth: defaultImageSize });
+  const navigate = useNavigate();
+
+  const handleMovieClick = () => {
+    navigate(`/movies/${movie.id}`);
+  };
 
   return (
-    <MovieContainer>
+    <MovieCardContainer onClick={handleMovieClick}>
+      <MovieImageContainer>
+        <img src={postCardImage.data} alt={title} />
+      </MovieImageContainer>
       <Footer>
-        <Link to={`/movies/${movie?.id}`}>{movie?.title}</Link>
         <Name>{title}</Name>
       </Footer>
-    </MovieContainer>
+    </MovieCardContainer>
   );
 };
 

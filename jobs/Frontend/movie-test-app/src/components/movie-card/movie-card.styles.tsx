@@ -1,14 +1,23 @@
 import styled from 'styled-components';
 
-export const MovieContainer = styled.div`
+export const MovieImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+`;
+
+export const MovieCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  height: 100%;
 
   img {
     width: 100%;
-    height: 95%;
+    height: 90%;
     object-fit: cover;
     margin-bottom: 5px;
   }
@@ -31,34 +40,15 @@ export const MovieContainer = styled.div`
       display: flex;
     }
   }
-
-  @media screen and (max-width: 800px) {
-    width: 40vw;
-
-    button {
-      display: block;
-      opacity: 0.9;
-      min-width: unset;
-      padding: 0 10px;
-    }
-
-    &:hover {
-      .image {
-        opacity: unset;
-      }
-
-      button {
-        opacity: unset;
-      }
-    }
-  }
 `;
 
 export const Footer = styled.div`
   width: 100%;
-  height: 5%;
+  height: 10%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
   font-size: 18px;
 `;
 

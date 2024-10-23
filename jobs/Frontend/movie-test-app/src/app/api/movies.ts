@@ -1,6 +1,6 @@
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 import { MovieSearchResponse } from '../../types/api.ts';
-import { api } from './lib/api-client.ts';
+import { moviesApiClient } from './lib/api-client-movies.ts';
 import { QueryConfig } from './lib/react-query-config.ts';
 
 const searchEndpoint = import.meta.env.VITE_MOVIE_DB_SEARCH_ENDPOINT;
@@ -11,7 +11,7 @@ const getMovies = (
 ): Promise<{
   data: MovieSearchResponse;
 }> => {
-  return api.get(`${searchEndpoint}`, {
+  return moviesApiClient.get(`${searchEndpoint}`, {
     params: {
       page: pageParam,
       query: queryParam,
