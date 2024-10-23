@@ -2,7 +2,7 @@ import { useInfiniteMovies } from '../../api/movies.ts';
 import { useContext, useEffect } from 'react';
 import { useElementVisible } from '../../../hooks/useElementVisible.ts';
 import MovieCard from '../../../components/movie-card/index.tsx';
-import MoviesContainer from '../../../components/movies-container/index.tsx';
+import { MoviesGridContainer } from '../../../components/layout-containers';
 import { GlobalSearchContext } from '../../Provider.tsx';
 
 export const Movies = () => {
@@ -23,7 +23,7 @@ export const Movies = () => {
   }, [isLastElementVisible, moviesQuery]);
 
   return (
-    <MoviesContainer>
+    <MoviesGridContainer>
       {uniqueMovies.map((movie, index) => (
         <div
           key={movie?.id.toString()}
@@ -32,6 +32,6 @@ export const Movies = () => {
           {!!movie && <MovieCard movie={movie}></MovieCard>}
         </div>
       ))}
-    </MoviesContainer>
+    </MoviesGridContainer>
   );
 };

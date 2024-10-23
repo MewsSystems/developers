@@ -1,7 +1,7 @@
 import { imagesApiClient } from './lib/api-client-images.ts';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { QueryConfig } from './lib/react-query-config.ts';
-import { notFoundPosterImages } from '../../assets/base64images/movieImages.ts';
+import { notFoundPosterImages } from '../../assets/base64-images/base64-images.ts';
 
 export const getImage = ({ imagePath, imageWidth }: { imagePath: string; imageWidth: number }): Promise<string> => {
   if (!imagePath) {

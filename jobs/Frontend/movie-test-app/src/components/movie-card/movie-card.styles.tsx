@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ColorsTheme } from '../../assets/colors/theme-colors/colors.ts';
 
 export const MovieImageContainer = styled.div`
   display: flex;
@@ -14,45 +15,38 @@ export const MovieCardContainer = styled.div`
   align-items: center;
   position: relative;
   height: 100%;
+  cursor: pointer;
+  border: 1px solid ${ColorsTheme.primary};
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 3px 3px 10px 0px ${ColorsTheme.secondary};
 
   img {
     width: 100%;
-    height: 90%;
-    object-fit: cover;
-    margin-bottom: 5px;
-  }
-
-  button {
-    width: 80%;
-    opacity: 0.7;
-    position: absolute;
-    top: 255px;
-    display: none;
+    height: 100%;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
   }
 
   &:hover {
     img {
       opacity: 0.8;
     }
-
-    button {
-      opacity: 0.85;
-      display: flex;
-    }
   }
 `;
 
 export const Footer = styled.div`
   width: 100%;
-  height: 10%;
+  height: 4rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
   text-align: center;
-  font-size: 18px;
+  font-size: 1rem;
 `;
 
 export const Name = styled.span`
   width: 90%;
-  margin-bottom: 15px;
+  margin: 1rem;
+  color: ${ColorsTheme.primary};
 `;

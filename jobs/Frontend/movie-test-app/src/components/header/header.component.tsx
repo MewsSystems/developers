@@ -1,5 +1,5 @@
-import { HeaderContainer, LogoContainer } from './header.styles..tsx';
-import { logoImage } from '../../assets/base64images/movieImages.ts';
+import { HeaderContainer, LogoContainer } from './header.styles.tsx';
+import { logoImage } from '../../assets/base64-images/base64-images.ts';
 import FormInput from '../form-input';
 import { useContext } from 'react';
 import { GlobalSearchContext } from '../../app/Provider.tsx';
@@ -14,9 +14,9 @@ const Header = () => {
   return (
     <HeaderContainer>
       <LogoContainer>
-        <img src={logoImage} alt={'logo'} height={50} />
+        <img src={logoImage} alt={'logo'} height={70} />
       </LogoContainer>
-      <FormInput label={'Search Movies'} onChange={handleSearchInput} value={searchQuery} />
+      <FormInput label={'Search Movies'} onChange={handleSearchInput} searchQuery={searchQuery} />
     </HeaderContainer>
   );
 };

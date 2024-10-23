@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
+import { ColorsTheme } from '../../assets/colors/theme-colors/colors.ts';
 
-const subColor = 'grey';
-const mainColor = 'black';
+const mainColor = ColorsTheme.primary;
 
 const shrinkLabelStyles = css`
   top: 1rem;
@@ -10,11 +10,11 @@ const shrinkLabelStyles = css`
 `;
 
 type FormInputLabelProps = {
-  shrink?: boolean;
+  searchquery?: string;
 };
 
 export const FormInputLabel = styled.label<FormInputLabelProps>`
-  color: ${subColor};
+  color: ${mainColor};
   font-size: 16px;
   font-weight: normal;
   position: absolute;
@@ -22,20 +22,20 @@ export const FormInputLabel = styled.label<FormInputLabelProps>`
   left: 0;
   top: 2rem;
   transition: 300ms ease all;
-  ${({ shrink }) => shrink && shrinkLabelStyles};
+  ${({ searchquery }) => !!searchquery && shrinkLabelStyles};
 `;
 
 export const Input = styled.input`
   background: none;
-  background-color: white;
-  color: ${subColor};
+  background-color: ${ColorsTheme.secondary};
+  color: ${mainColor};
   font-size: 18px;
   padding: 10px 10px 10px 5px;
   display: block;
   width: 100%;
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid ${subColor};
+  border-bottom: 1px solid ${mainColor};
   margin: 25px 0;
 
   &:focus {

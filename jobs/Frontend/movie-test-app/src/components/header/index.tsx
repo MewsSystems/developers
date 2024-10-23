@@ -1,3 +1,4 @@
 import Header from './header.component.tsx';
+import { HeaderPlaceholder } from './header.styles.tsx';
 
-export default Header;
+export { Header, HeaderPlaceholder };

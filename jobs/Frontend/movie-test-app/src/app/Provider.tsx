@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { queryConfig } from './api/lib/react-query-config.ts';
 import { createContext } from 'react';
+import Spinner from '../components/spinner';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   return (
-    <React.Suspense fallback={<div> Loading... </div>}>
+    <React.Suspense fallback={<Spinner></Spinner>}>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <QueryClientProvider client={queryClient}>
           <GlobalSearchContext.Provider value={{ searchQuery, setSearchQuery }}>

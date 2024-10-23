@@ -2,23 +2,13 @@ import { InputHTMLAttributes, FC } from 'react';
 
 import { FormInputLabel, Input, Group } from './form-input.styles';
 
-type FormInputProps = { label: string } & InputHTMLAttributes<HTMLInputElement>;
+type FormInputProps = { label: string; searchQuery: string } & InputHTMLAttributes<HTMLInputElement>;
 
-const FormInput: FC<FormInputProps> = ({ label, ...otherProps }) => {
+const FormInput: FC<FormInputProps> = ({ label, searchQuery, ...otherProps }) => {
   return (
     <Group>
       <Input {...otherProps} />
-      {label && (
-        <FormInputLabel
-          shrink={Boolean(
-            otherProps.value &&
-              typeof otherProps.value === 'string' &&
-              otherProps.value.length
-          )}
-        >
-          {label}
-        </FormInputLabel>
-      )}
+      {label && <FormInputLabel searchquery={searchQuery}>{label}</FormInputLabel>}
     </Group>
   );
 };
