@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <LogoContainer>
+      <LogoContainer onClick={() => (window.location.href = '/')}>
         <img src={logoImage} alt={'logo'} height={70} />
       </LogoContainer>
       <FormInput label={'Search Movies'} onChange={handleSearchInput} searchQuery={searchQuery} />

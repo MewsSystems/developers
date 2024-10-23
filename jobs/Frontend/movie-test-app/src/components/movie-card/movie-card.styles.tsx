@@ -47,6 +47,6 @@ export const Footer = styled.div`
 
 export const Name = styled.span`
   width: 90%;
-  margin: 1rem;
+  margin: 0.5rem;
   color: ${ColorsTheme.primary};
 `;

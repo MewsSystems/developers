@@ -15,4 +15,8 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+
+  h4 {
+    margin: 0.3rem;
+  }
 `;

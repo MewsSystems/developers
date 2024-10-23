@@ -10,7 +10,7 @@ export const App = () => {
       <AppProvider>
         <Header />
         <HeaderPlaceholder /> {/* Placeholder for the header */}
-        <AppRouter />
+        <AppRouter></AppRouter>
       </AppProvider>
     </>
   );

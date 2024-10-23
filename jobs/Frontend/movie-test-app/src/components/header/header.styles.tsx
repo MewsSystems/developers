@@ -24,6 +24,7 @@ const LogoContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  cursor: pointer;
 `;
 
 export { HeaderContainer, LogoContainer, HeaderPlaceholder };

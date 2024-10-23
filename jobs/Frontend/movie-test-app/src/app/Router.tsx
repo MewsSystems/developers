@@ -1,9 +1,9 @@
 import { QueryClient, useQueryClient } from '@tanstack/react-query';
 import { LoaderFunctionArgs, RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
 import { useMemo } from 'react';
-import { Movies } from './routes/Movies/Movies.tsx';
+import { MoviesRoute } from './routes/Movies/movies.route.tsx';
 import App from './App.tsx';
-import { MovieDetails, movieDetailsLoader } from './routes/MovieDetails/MovieDetails.tsx';
+import { MovieDetailsRoute, movieDetailsLoader } from './routes/MovieDetails/movie-details.route.tsx';
 
 const createAppRouter = (queryClient: QueryClient) =>
   createBrowserRouter([
@@ -14,11 +14,11 @@ const createAppRouter = (queryClient: QueryClient) =>
     },
     {
       path: '/movies',
-      element: <Movies />,
+      element: <MoviesRoute />,
     },
     {
       path: '/movies/:movieId',
-      element: <MovieDetails />,
+      element: <MovieDetailsRoute />,
       loader: (args: LoaderFunctionArgs) => movieDetailsLoader(queryClient)(args),
     },
   ]);

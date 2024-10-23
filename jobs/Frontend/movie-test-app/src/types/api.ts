@@ -37,7 +37,7 @@ export interface MovieDetailsResponse {
   overview: string;
   popularity: number;
   poster_path: string | null;
-  production_companies: string[];
+  production_companies: any[];
   production_countries: ProductionCountry[];
   release_date: string;
   revenue: number;

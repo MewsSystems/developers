@@ -1,19 +1,5 @@
 import styled from 'styled-components';
 
-const RowCenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-`;
-
-const ColumnCenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
 const MoviesGridContainer = styled.div`
   display: grid;
   height: 100vh;
@@ -36,4 +22,4 @@ const MoviesGridContainer = styled.div`
   }
 `;
 
-export { RowCenteredContainer, ColumnCenteredContainer, MoviesGridContainer };
+export { MoviesGridContainer };
