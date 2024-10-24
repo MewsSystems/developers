@@ -5,6 +5,7 @@ const MoviesGridContainer = styled.div`
   height: 100vh;
   margin: 1rem;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-gap: 1rem;
   transition: all 0.25s ease-in-out;
   color: white;

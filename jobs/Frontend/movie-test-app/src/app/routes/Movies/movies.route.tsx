@@ -2,12 +2,12 @@ import { useInfiniteMovies } from '../../api/movies.ts';
 import { useContext, useEffect } from 'react';
 import { useElementVisible } from '../../../hooks/useElementVisible.ts';
 import MovieCard from '../../../components/movie-card';
-import { GlobalSearchContext } from '../../Provider.tsx';
+import { GlobalContext } from '../../Provider.tsx';
 import { MoviesGridContainer } from './movies.styles.tsx';
 import { Header, HeaderPlaceholder } from '../../../components/header';
 
 export const MoviesRoute = () => {
-  const { searchQuery } = useContext(GlobalSearchContext);
+  const { searchQuery } = useContext(GlobalContext);
   const { visible: isLastElementVisible, setRef } = useElementVisible();
 
   const moviesQuery = useInfiniteMovies({ searchParam: searchQuery || '' });

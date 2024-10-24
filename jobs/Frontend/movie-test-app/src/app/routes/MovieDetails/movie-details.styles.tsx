@@ -1,16 +1,15 @@
 import styled from 'styled-components';
-import { ColorsTheme } from '../../../assets/colors/theme-colors/colors.ts';
 
 const MovieDetailsContainer = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  color: ${ColorsTheme.primary};
+  color: ${(props) => props.theme.primary};
   background: linear-gradient(
     to top,
-    ${ColorsTheme.secondary} 0%,
-    ${ColorsTheme.white}
+    ${(props) => props.theme.secondary} 0%,
+    white 100%
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   height: 100vh;
   white-space: break-spaces;

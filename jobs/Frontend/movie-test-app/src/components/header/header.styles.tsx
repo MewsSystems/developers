@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ColorsTheme } from '../../assets/colors/theme-colors/colors.ts';
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -11,7 +10,7 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   width: 100%;
   top: 0;
-  background-color: ${ColorsTheme.secondary};
+  background-color: ${(props) => props.theme.secondary};
 `;
 
 const HeaderPlaceholder = styled.div`
@@ -22,6 +21,7 @@ const HeaderPlaceholder = styled.div`
 
 const LogoContainer = styled.div`
   cursor: pointer;
+  margin: 0.2rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -35,7 +35,8 @@ const HeaderDivContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 export { HeaderContainer, LogoContainer, ButtonContainer, HeaderPlaceholder, HeaderDivContainer };

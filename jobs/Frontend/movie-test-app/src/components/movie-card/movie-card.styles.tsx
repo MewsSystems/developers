@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ColorsTheme } from '../../assets/colors/theme-colors/colors.ts';
 
 export const MovieImageContainer = styled.div`
   display: flex;
@@ -16,10 +15,10 @@ export const MovieCardContainer = styled.div`
   position: relative;
   height: 100%;
   cursor: pointer;
-  border: 1px solid ${ColorsTheme.primary};
+  border: 1px solid ${(props) => props.theme.primary};
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
-  box-shadow: 3px 3px 10px 0px ${ColorsTheme.secondary};
+  box-shadow: 3px 3px 10px 0px ${(props) => props.theme.secondary};
 
   img {
     width: 100%;
@@ -48,5 +47,5 @@ export const Footer = styled.div`
 export const Name = styled.span`
   width: 90%;
   margin: 0.5rem;
-  color: ${ColorsTheme.primary};
+  color: ${(props) => props.theme.primary};
 `;

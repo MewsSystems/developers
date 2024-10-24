@@ -6,6 +6,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { queryConfig } from './api/lib/react-query-config.ts';
 import { createContext } from 'react';
 import Spinner from '../components/spinner';
+import { theme, ThemeColors } from '../assets/colors/theme/theme.ts';
+import { ThemeProvider } from 'styled-components';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -14,11 +16,15 @@ type AppProviderProps = {
 export type GlobalSearch = {
   searchQuery: string;
   setSearchQuery: (c: string) => void;
+  themeColor: ThemeColors;
+  setThemeColor: (c: ThemeColors) => void;
 };
 
-export const GlobalSearchContext = createContext<GlobalSearch>({
+export const GlobalContext = createContext<GlobalSearch>({
   searchQuery: '',
   setSearchQuery: () => {},
+  themeColor: 'blue',
+  setThemeColor: () => {},
 });
 
 export const AppProvider = ({ children }: AppProviderProps) => {
@@ -30,15 +36,18 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   );
 
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [themeColor, setThemeColor] = React.useState<ThemeColors>('blue');
 
   return (
     <React.Suspense fallback={<Spinner></Spinner>}>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <QueryClientProvider client={queryClient}>
-          <GlobalSearchContext.Provider value={{ searchQuery, setSearchQuery }}>
-            {import.meta.env.DEV && <ReactQueryDevtools />}
-            {children}
-          </GlobalSearchContext.Provider>
+          <GlobalContext.Provider value={{ searchQuery, setSearchQuery, themeColor, setThemeColor }}>
+            <ThemeProvider theme={theme[themeColor]}>
+              {import.meta.env.DEV && <ReactQueryDevtools />}
+              {children}
+            </ThemeProvider>
+          </GlobalContext.Provider>
         </QueryClientProvider>
       </ErrorBoundary>
     </React.Suspense>
