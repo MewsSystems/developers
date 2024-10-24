@@ -24,7 +24,7 @@ const HeaderPlaceholder = styled.div`
 
 const LogoContainer = styled.div`
   cursor: pointer;
-  margin: 0.2rem;
+  margin: 0.2rem 2rem 0.2rem 2rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -43,4 +43,38 @@ const HeaderDivContainer = styled.div`
   color: ${(props) => props.theme.primary};
 `;
 
-export { HeaderContainer, LogoContainer, ButtonContainer, HeaderPlaceholder, HeaderDivContainer };
+const HeaderDivContainerStart = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 0.2rem 0.2rem 0.2rem 0.2rem;
+  justify-content: start;
+  color: ${(props) => props.theme.primary};
+`;
+const HeaderDivContainerEnd = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  color: ${(props) => props.theme.primary};
+`;
+
+const HeaderDivRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  color: ${(props) => props.theme.primary};
+`;
+
+export {
+  HeaderContainer,
+  LogoContainer,
+  ButtonContainer,
+  HeaderPlaceholder,
+  HeaderDivContainer,
+  HeaderDivRowContainer,
+  HeaderDivContainerStart,
+  HeaderDivContainerEnd,
+};

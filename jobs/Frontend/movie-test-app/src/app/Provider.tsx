@@ -13,14 +13,14 @@ type AppProviderProps = {
   children: React.ReactNode;
 };
 
-export type GlobalSearch = {
+export type AppContext = {
   searchQuery: string;
   setSearchQuery: (c: string) => void;
   themeColor: ThemeColors;
   setThemeColor: (c: ThemeColors) => void;
 };
 
-export const GlobalContext = createContext<GlobalSearch>({
+export const GlobalContext = createContext<AppContext>({
   searchQuery: '',
   setSearchQuery: () => {},
   themeColor: 'blue',

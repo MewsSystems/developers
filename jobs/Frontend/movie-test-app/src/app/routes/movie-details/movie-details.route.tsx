@@ -14,7 +14,7 @@ import {
 import { Header, HeaderPlaceholder } from '../../../components/header';
 import useMediaQuery from '../../../hooks/useMediaQuery.ts';
 
-export const movieDetailsLoader =
+const movieDetailsLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
     const movieId = params.movieId as string;
@@ -24,7 +24,7 @@ export const movieDetailsLoader =
     return queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
   };
 
-export const MovieDetailsRoute = () => {
+const MovieDetailsRoute = () => {
   const loaderData = useLoaderData() as { data: MovieDetailsResponse };
   const movieDetails = loaderData.data;
   const backdropImage = useImage({ imagePath: movieDetails?.backdrop_path, imageWidth: 500 });
@@ -91,7 +91,6 @@ export const MovieDetailsRoute = () => {
                   </RowCenteredContainer>
                 )}
                 <RowCenteredContainer>
-                  <h4>Overview: </h4>
                   <div>{movieDetails.overview}</div>
                 </RowCenteredContainer>
               </>
@@ -116,3 +115,5 @@ export const MovieDetailsRoute = () => {
     </>
   );
 };
+
+export { MovieDetailsRoute, movieDetailsLoader };

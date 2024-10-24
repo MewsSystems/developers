@@ -1,4 +1,12 @@
-import { ButtonContainer, HeaderContainer, HeaderDivContainer, LogoContainer } from './header.styles.tsx';
+import {
+  ButtonContainer,
+  HeaderContainer,
+  HeaderDivContainer,
+  HeaderDivContainerEnd,
+  HeaderDivContainerStart,
+  HeaderDivRowContainer,
+  LogoContainer,
+} from './header.styles.tsx';
 import { logo_blue, logo_purple, logo_red, settings_icon } from '../../assets/images';
 import FormInput from '../form-input';
 import { useContext, useMemo, useState } from 'react';
@@ -48,12 +56,12 @@ const Header = () => {
   return (
     <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)}>
       {(hasBackButton || isSettingsOpen || !isMobile) && (
-        <HeaderDivContainer>
+        <HeaderDivContainerStart>
           {isSettingsOpen ? (
-            <HeaderDivContainer>
+            <HeaderDivRowContainer>
               <h4>{!ultraSmall && <>Theme</>} Color: </h4>{' '}
               <Select onChange={handleChangeColorTheme} options={['blue', 'red', 'purple']} />
-            </HeaderDivContainer>
+            </HeaderDivRowContainer>
           ) : (
             <>
               {hasBackButton && (
@@ -63,7 +71,7 @@ const Header = () => {
               )}
             </>
           )}
-        </HeaderDivContainer>
+        </HeaderDivContainerStart>
       )}
       {!isMobile && (
         <HeaderDivContainer>
@@ -72,7 +80,7 @@ const Header = () => {
           </LogoContainer>
         </HeaderDivContainer>
       )}
-      <HeaderDivContainer>
+      <HeaderDivContainerEnd>
         <FormInput
           label={'Search movies'}
           onChange={handleSearchInput}
@@ -82,7 +90,7 @@ const Header = () => {
         <LogoContainer>
           <img src={settings_icon} alt={'settings'} height={25} onClick={() => setIsSettingsOpen(!isSettingsOpen)} />
         </LogoContainer>
-      </HeaderDivContainer>{' '}
+      </HeaderDivContainerEnd>{' '}
     </HeaderContainer>
   );
 };
