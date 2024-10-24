@@ -22,7 +22,7 @@ const StyledLabel = styled.label<FormInputLabelProps>`
   ${({ shrink }) => !!shrink && shrinkLabelStyles};
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ displayFullSearch: boolean }>`
   background: none;
   background-color: ${(props) => props.theme.secondary};
   color: ${(props) => props.theme.primary};
@@ -32,6 +32,9 @@ const StyledInput = styled.input`
   width: 10rem;
   @media screen and (max-width: 800px) {
     width: 8rem;
+  }
+  @media screen and (max-width: 350px) {
+    width: ${(props) => (props.displayFullSearch ? '10rem' : '5rem')};
   }
   border: none;
   border-radius: 0;

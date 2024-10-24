@@ -8,7 +8,7 @@ type MovieCardProps = {
   movie: Result;
 };
 
-const defaultImageSize = 300;
+const defaultImageSize = 400;
 
 const MovieCard: FC<MovieCardProps> = ({ movie }) => {
   const { title } = movie;

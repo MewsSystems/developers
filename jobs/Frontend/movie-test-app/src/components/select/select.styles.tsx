@@ -11,6 +11,9 @@ export const StyledSelect = styled.select`
   @media screen and (max-width: 800px) {
     width: 8rem;
   }
+  @media screen and (max-width: 350px) {
+    width: 5rem;
+  }
   border: none;
   border-radius: 0;
   border-bottom: 1px solid ${(props) => props.theme.primary};

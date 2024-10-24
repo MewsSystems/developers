@@ -12,6 +12,7 @@ import {
   RowCenteredContainer,
 } from './movie-details.styles.tsx';
 import { Header, HeaderPlaceholder } from '../../../components/header';
+import useMediaQuery from '../../../hooks/useMediaQuery.ts';
 
 export const movieDetailsLoader =
   (queryClient: QueryClient) =>
@@ -27,6 +28,8 @@ export const MovieDetailsRoute = () => {
   const loaderData = useLoaderData() as { data: MovieDetailsResponse };
   const movieDetails = loaderData.data;
   const backdropImage = useImage({ imagePath: movieDetails?.backdrop_path, imageWidth: 500 });
+
+  const isUltraLargeScreen = useMediaQuery('(min-width: 1400px)');
 
   return (
     <>
@@ -75,26 +78,40 @@ export const MovieDetailsRoute = () => {
                 <div>${movieDetails.revenue}</div>
               </RowCenteredContainer>
             )}
-            {!!movieDetails.tagline && (
-              <RowCenteredContainer>
-                <h4>Tagline: </h4>
-                <div>{movieDetails.tagline}</div>
-              </RowCenteredContainer>
+            {isUltraLargeScreen && (
+              <>
+                <RowCenteredContainer>
+                  <h4>Production: </h4>
+                  <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>
+                </RowCenteredContainer>
+                {!!movieDetails.tagline && (
+                  <RowCenteredContainer>
+                    <h4>Tagline: </h4>
+                    <div>{movieDetails.tagline}</div>
+                  </RowCenteredContainer>
+                )}
+                <RowCenteredContainer>
+                  <h4>Overview: </h4>
+                  <div>{movieDetails.overview}</div>
+                </RowCenteredContainer>
+              </>
             )}
           </DetailsContainer>
         </MovieDetailGrid>
-        <RowCenteredContainer>
-          <OverviewContainer>
-            <h2>Overview</h2>
-            <p>{movieDetails.overview}</p>
-            {!!movieDetails.production_companies && (
-              <RowCenteredContainer>
-                <h4>Production Companies: </h4>
-                <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>
-              </RowCenteredContainer>
-            )}
-          </OverviewContainer>
-        </RowCenteredContainer>
+        {!isUltraLargeScreen && (
+          <RowCenteredContainer>
+            <OverviewContainer>
+              <h2>Overview</h2>
+              <p>{movieDetails.overview}</p>
+              {!!movieDetails.production_companies && (
+                <RowCenteredContainer>
+                  <h4>Production Companies: </h4>
+                  <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>
+                </RowCenteredContainer>
+              )}
+            </OverviewContainer>
+          </RowCenteredContainer>
+        )}
       </MovieDetailsContainer>
     </>
   );

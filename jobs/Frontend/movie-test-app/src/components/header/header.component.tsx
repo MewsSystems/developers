@@ -8,11 +8,13 @@ import Button from '../button';
 import useMediaQuery from '../../hooks/useMediaQuery.ts';
 import Select from '../select';
 import { ThemeColors } from '../../assets/colors/theme/theme.ts';
+import useDebounce from '../../hooks/useDebouncer.ts';
 
 const Header = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const { searchQuery, setSearchQuery, themeColor, setThemeColor } = useContext(GlobalContext);
+  const [searchValue, setSearchValue] = useState(searchQuery);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,11 +22,16 @@ const Header = () => {
   const isMobile = useMediaQuery('(max-width: 600px)');
   const ultraSmall = useMediaQuery('(max-width: 400px)');
 
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+  const debouncedFunction = useDebounce((newSearchQuery) => {
+    setSearchQuery(newSearchQuery);
     if (location.pathname !== '/movies') {
       navigate('/movies');
     }
+  }, 300);
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+    debouncedFunction(e.target.value);
   };
 
   const handleChangeColorTheme = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,16 +49,19 @@ const Header = () => {
     <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)}>
       {(hasBackButton || isSettingsOpen || !isMobile) && (
         <HeaderDivContainer>
-          {!isSettingsOpen && (
-            <ButtonContainer>
-              {hasBackButton && <Button onClick={() => navigate(-1)}>{'< BACK'}</Button>}
-            </ButtonContainer>
-          )}
-          {isSettingsOpen && (
+          {isSettingsOpen ? (
             <HeaderDivContainer>
               <h4>{!ultraSmall && <>Theme</>} Color: </h4>{' '}
               <Select onChange={handleChangeColorTheme} options={['blue', 'red', 'purple']} />
             </HeaderDivContainer>
+          ) : (
+            <>
+              {hasBackButton && (
+                <ButtonContainer>
+                  <Button onClick={() => navigate(-1)}>{'< BACK'}</Button>
+                </ButtonContainer>
+              )}
+            </>
           )}
         </HeaderDivContainer>
       )}
@@ -63,9 +73,13 @@ const Header = () => {
         </HeaderDivContainer>
       )}
       <HeaderDivContainer>
-        <FormInput label={'Search movies'} onChange={handleSearchInput} value={searchQuery} />
+        <FormInput
+          label={'Search movies'}
+          onChange={handleSearchInput}
+          value={searchValue}
+          displayFullSearch={!(hasBackButton || isSettingsOpen)}
+        />
         <LogoContainer>
-          {' '}
           <img src={settings_icon} alt={'settings'} height={25} onClick={() => setIsSettingsOpen(!isSettingsOpen)} />
         </LogoContainer>
       </HeaderDivContainer>{' '}

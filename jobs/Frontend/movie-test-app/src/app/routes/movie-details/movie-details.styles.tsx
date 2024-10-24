@@ -13,6 +13,11 @@ const MovieDetailsContainer = styled.div`
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   height: 100vh;
   white-space: break-spaces;
+
+  h4 {
+    top: 0;
+    width: 6rem;
+  }
 `;
 
 const ImageContainer = styled.img`
@@ -24,6 +29,12 @@ const ImageContainer = styled.img`
 const OverviewContainer = styled.div`
   width: 60%;
   margin: 1rem;
+  @media screen and (max-width: 800px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 600px) {
+    width: 95%;
+  }
 `;
 
 const DetailsContainer = styled.div`
@@ -37,9 +48,27 @@ const DetailsContainer = styled.div`
 
 const MovieDetailGrid = styled.div`
   display: grid;
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 5fr 5fr;
+  width: 80%;
+  @media screen and (max-width: 1400px) {
+    grid-template-columns: 5fr 3fr;
+    width: 70%;
+  }
   gap: 1rem;
-  width: 60%;
+
+  @media screen and (max-width: 1200px) {
+    grid-template-columns: 1fr;
+    width: 50%;
+  }
+  @media screen and (max-width: 1000px) {
+    width: 60%;
+  }
+  @media screen and (max-width: 800px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 600px) {
+    width: 95%;
+  }
 `;
 const RowCenteredContainer = styled.div`
   display: flex;
