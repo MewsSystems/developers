@@ -30,6 +30,9 @@ const StyledInput = styled.input`
   padding: 10px 10px 10px 5px;
   display: block;
   width: 10rem;
+  @media screen and (max-width: 800px) {
+    width: 8rem;
+  }
   border: none;
   border-radius: 0;
   border-bottom: 1px solid ${(props) => props.theme.primary};
