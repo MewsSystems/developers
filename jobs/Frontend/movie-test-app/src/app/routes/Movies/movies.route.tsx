@@ -1,9 +1,10 @@
 import { useInfiniteMovies } from '../../api/movies.ts';
 import { useContext, useEffect } from 'react';
 import { useElementVisible } from '../../../hooks/useElementVisible.ts';
-import MovieCard from '../../../components/movie-card/index.tsx';
+import MovieCard from '../../../components/movie-card';
 import { GlobalSearchContext } from '../../Provider.tsx';
 import { MoviesGridContainer } from './movies.styles.tsx';
+import { Header, HeaderPlaceholder } from '../../../components/header';
 
 export const MoviesRoute = () => {
   const { searchQuery } = useContext(GlobalSearchContext);
@@ -23,15 +24,19 @@ export const MoviesRoute = () => {
   }, [isLastElementVisible, moviesQuery]);
 
   return (
-    <MoviesGridContainer>
-      {uniqueMovies.map((movie, index) => (
-        <div
-          key={movie?.id.toString()}
-          ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
-        >
-          {!!movie && <MovieCard movie={movie}></MovieCard>}
-        </div>
-      ))}
-    </MoviesGridContainer>
+    <>
+      <Header />
+      <HeaderPlaceholder /> {/* Placeholder for the header */}
+      <MoviesGridContainer>
+        {uniqueMovies.map((movie, index) => (
+          <div
+            key={movie?.id.toString()}
+            ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
+          >
+            {!!movie && <MovieCard movie={movie}></MovieCard>}
+          </div>
+        ))}
+      </MoviesGridContainer>
+    </>
   );
 };

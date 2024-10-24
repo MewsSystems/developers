@@ -4,49 +4,51 @@ import { ColorsTheme } from '../../assets/colors/theme-colors/colors.ts';
 const mainColor = ColorsTheme.primary;
 
 const shrinkLabelStyles = css`
-  top: 1rem;
+  top: 0.5rem;
   font-size: 12px;
   color: ${mainColor};
 `;
 
 type FormInputLabelProps = {
-  searchquery?: string;
+  shrink: string;
 };
 
-export const FormInputLabel = styled.label<FormInputLabelProps>`
+const StyledLabel = styled.label<FormInputLabelProps>`
   color: ${mainColor};
   font-size: 16px;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 0;
+  left: 0.1rem;
   top: 2rem;
   transition: 300ms ease all;
-  ${({ searchquery }) => !!searchquery && shrinkLabelStyles};
+  ${({ shrink }) => !!shrink && shrinkLabelStyles};
 `;
 
-export const Input = styled.input`
+const StyledInput = styled.input`
   background: none;
   background-color: ${ColorsTheme.secondary};
   color: ${mainColor};
   font-size: 18px;
   padding: 10px 10px 10px 5px;
   display: block;
-  width: 100%;
+  width: 10rem;
   border: none;
   border-radius: 0;
   border-bottom: 1px solid ${mainColor};
-  margin: 25px 0;
+  margin: 1rem 0;
 
   &:focus {
     outline: none;
   }
 
-  &:focus ~ ${FormInputLabel} {
+  &:focus ~ ${StyledLabel} {
     ${shrinkLabelStyles};
   }
 `;
 
-export const Group = styled.div`
+const Group = styled.div`
   position: relative;
 `;
+
+export { StyledInput, StyledLabel, Group };

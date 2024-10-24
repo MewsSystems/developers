@@ -1,14 +1,14 @@
 import { InputHTMLAttributes, FC } from 'react';
 
-import { FormInputLabel, Input, Group } from './form-input.styles';
+import { StyledLabel, StyledInput, Group } from './form-input.styles.tsx';
 
-type FormInputProps = { label: string; searchQuery: string } & InputHTMLAttributes<HTMLInputElement>;
+type FormInputProps = { label: string; value: string } & InputHTMLAttributes<HTMLInputElement>;
 
-const FormInput: FC<FormInputProps> = ({ label, searchQuery, ...otherProps }) => {
+const FormInput: FC<FormInputProps> = ({ label, value, ...otherProps }) => {
   return (
     <Group>
-      <Input {...otherProps} />
-      {label && <FormInputLabel searchquery={searchQuery}>{label}</FormInputLabel>}
+      <StyledInput {...otherProps} value={value} />
+      {label && <StyledLabel shrink={value.toString()}>{label}</StyledLabel>}
     </Group>
   );
 };
