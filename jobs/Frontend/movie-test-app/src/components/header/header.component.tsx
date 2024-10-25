@@ -56,7 +56,7 @@ const Header = () => {
   const hasBackButton = location.pathname !== '/movies';
 
   return (
-    <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)}>
+    <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)} data-testid={'header'}>
       {(hasBackButton || isSettingsOpen || !isMobile) && (
         <HeaderDivContainerStart>
           {isSettingsOpen ? (
@@ -66,13 +66,16 @@ const Header = () => {
                 options={['blue', 'red', 'purple']}
                 value={themeColor}
                 label={'Theme Color'}
+                data-testid={'theme-select'}
               />
             </HeaderDivRowContainer>
           ) : (
             <>
               {hasBackButton && (
                 <ButtonContainer>
-                  <Button onClick={() => navigate(-1)}>{'< BACK'}</Button>
+                  <Button onClick={() => navigate(-1)} data-testid={'back-button'}>
+                    {'< BACK'}
+                  </Button>
                 </ButtonContainer>
               )}
             </>
@@ -81,7 +84,7 @@ const Header = () => {
       )}
       {!isMobile && (
         <HeaderDivContainer>
-          <LogoContainer onClick={() => navigate('/movies')}>
+          <LogoContainer onClick={() => navigate('/movies')} data-testid={'logo-image'}>
             <img src={logo_image} alt={'logo'} height={70} />
           </LogoContainer>
         </HeaderDivContainer>
@@ -91,10 +94,11 @@ const Header = () => {
           label={'Search movies'}
           onChange={handleSearchInput}
           value={searchValue}
-          displayFullSearch={!(hasBackButton || isSettingsOpen)}
+          $displayFullSearch={!(hasBackButton || isSettingsOpen)}
+          data-testid={'search-input'}
         />
-        <LogoContainer>
-          <img src={settings_icon} alt={'settings'} height={25} onClick={() => setIsSettingsOpen(!isSettingsOpen)} />
+        <LogoContainer data-testid={'settings-button'} onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
+          <img src={settings_icon} alt={'settings'} height={25} />
         </LogoContainer>
       </HeaderDivContainerEnd>{' '}
     </HeaderContainer>

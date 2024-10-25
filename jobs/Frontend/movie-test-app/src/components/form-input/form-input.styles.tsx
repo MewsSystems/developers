@@ -22,7 +22,11 @@ const StyledLabel = styled.label<FormInputLabelProps>`
   ${({ shrink }) => !!shrink && shrinkLabelStyles};
 `;
 
-const StyledInput = styled.input<{ displayFullSearch: boolean }>`
+type StyledInputProps = {
+  $displayFullSearch: boolean;
+};
+
+const StyledInput = styled.input<StyledInputProps>`
   background: none;
   background-color: ${(props) => props.theme.colors.secondary};
   color: ${(props) => props.theme.colors.primary};
@@ -31,10 +35,10 @@ const StyledInput = styled.input<{ displayFullSearch: boolean }>`
   display: block;
   width: 10rem;
   @media screen and (max-width: ${(props) => props.theme.breakpoints.mobile}) {
-    width: ${(props) => (props.displayFullSearch ? '12rem' : '7rem')};
+    width: ${(props) => (props.$displayFullSearch ? '12rem' : '7rem')};
   }
   @media screen and (max-width: ${(props) => props.theme.breakpoints.smallMobile}) {
-    width: ${(props) => (props.displayFullSearch ? '9rem' : '5rem')};
+    width: ${(props) => (props.$displayFullSearch ? '9rem' : '5rem')};
   }
   border: none;
   border-radius: 0;

@@ -12,7 +12,7 @@ export const MoviesRoute = () => {
   const { visible: isLastElementVisible, setRef } = useElementVisible();
 
   const moviesQuery = useInfiniteMovies({ searchParam: searchQuery || '' });
-  const movies = moviesQuery.data?.pages.flatMap((page) => page.data.results) || [];
+  const movies = moviesQuery.data?.pages?.flatMap((page) => page.data.results) || [];
   //there are some duplicate movies in the response, so we need to filter them out
   const uniqueMovies = Array.from(new Set(movies.map((movie) => movie.id))).map((id) =>
     movies.find((movie) => movie.id === id),
@@ -28,7 +28,7 @@ export const MoviesRoute = () => {
     return <div>Something went wrong</div>;
   }
 
-  if (moviesQuery.isLoading && !movies.length) {
+  if (moviesQuery.isLoading) {
     return <Spinner />;
   }
 
