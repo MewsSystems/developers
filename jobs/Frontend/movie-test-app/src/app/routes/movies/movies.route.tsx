@@ -29,7 +29,7 @@ export const MoviesRoute = () => {
 
   const debouncedFunction = useDebounce((newSearchQuery) => {
     setSearchQuery(newSearchQuery);
-  }, 500);
+  }, 1000);
 
   useEffect(() => {
     if (isLastElementVisible && !moviesQuery.isFetchingNextPage && moviesQuery.hasNextPage) {
