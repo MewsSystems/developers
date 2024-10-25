@@ -5,13 +5,13 @@ import { StyledLabel, StyledInput, Group } from './form-input.styles.tsx';
 type FormInputProps = {
   label: string;
   value: string;
-  $displayFullSearch: boolean;
+  displayfullsearch: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const FormInput: FC<FormInputProps> = ({ label, value, $displayFullSearch, ...otherProps }) => {
+const FormInput: FC<FormInputProps> = ({ label, value, displayfullsearch, ...otherProps }) => {
   return (
     <Group>
-      <StyledInput {...otherProps} value={value} $displayFullSearch={$displayFullSearch} />
+      <StyledInput {...otherProps} value={value} displayfullsearch={displayfullsearch} />
       {label && <StyledLabel shrink={value.toString()}>{label}</StyledLabel>}
     </Group>
   );

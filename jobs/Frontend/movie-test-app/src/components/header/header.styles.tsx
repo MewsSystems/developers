@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const HeaderContainer = styled.div<{ displayFullSearch: boolean }>`
+const HeaderContainer = styled.div<{ displayfullsearch: string }>`
   position: fixed;
   height: 5rem;
   box-shadow: 0px 3px 10px 0px rgba(38, 50, 56, 0.3);
@@ -8,7 +8,7 @@ const HeaderContainer = styled.div<{ displayFullSearch: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   @media screen and (max-width: ${(props) => props.theme.breakpoints.tablet}) {
-    grid-template-columns: ${(props) => (props.displayFullSearch ? '1fr' : '1fr 1fr')};
+    grid-template-columns: ${(props) => (props.displayfullsearch === 'true' ? '1fr' : '1fr 1fr')};
   }
   flex-direction: row;
   width: 100%;

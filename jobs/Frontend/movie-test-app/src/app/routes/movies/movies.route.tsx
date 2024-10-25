@@ -9,6 +9,7 @@ import Spinner from '../../../components/spinner';
 import useDebounce from '../../../hooks/useDebouncer.ts';
 import useMediaQuery from '../../../hooks/useMediaQuery.ts';
 import { useTheme } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export const MoviesRoute = () => {
   const { searchQuery, setSearchQuery } = useContext(GlobalContext);
@@ -24,7 +25,7 @@ export const MoviesRoute = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const debouncedFunction = useDebounce((newSearchQuery) => {
     setSearchQuery(newSearchQuery);
@@ -55,7 +56,7 @@ export const MoviesRoute = () => {
             key={movie?.id.toString()}
             ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
           >
-            {!!movie && <MovieCard movie={movie}></MovieCard>}
+            {!!movie && <MovieCard movie={movie} handleMovieClick={() => navigate(`/movies/${movie.id}`)}></MovieCard>}
           </div>
         ))}
       </MoviesGridContainer>

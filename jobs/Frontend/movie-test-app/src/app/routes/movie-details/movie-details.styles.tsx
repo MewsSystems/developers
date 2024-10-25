@@ -66,10 +66,10 @@ const MovieDetailGrid = styled.div`
 
   @media screen and (max-width: ${(props) => props.theme.breakpoints.desktop}) {
     grid-template-columns: 1fr;
-    width: 50%;
+    width: 40%;
   }
   @media screen and (max-width: ${(props) => props.theme.breakpoints.smallDesktop}) {
-    width: 60%;
+    width: 45%;
   }
   @media screen and (max-width: ${(props) => props.theme.breakpoints.tablet}) {
     width: 80%;

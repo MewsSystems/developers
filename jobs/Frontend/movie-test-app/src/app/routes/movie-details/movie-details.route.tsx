@@ -43,7 +43,7 @@ const MovieDetailsRoute = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
-  const isLargeScreen = useMediaQuery(`(max-width: ${theme.breakpoints.largeDesktop})`);
+  const isLargeScreen = useMediaQuery(`(min-width: ${theme.breakpoints.largeDesktop})`);
 
   const debouncedFunction = useDebounce((newSearchQuery: string) => {
     setSearchQuery(newSearchQuery);
@@ -88,7 +88,7 @@ const MovieDetailsRoute = () => {
                 <div>{movieDetails.vote_average}</div>
               </RowCenteredContainer>
             )}
-            {!!movieDetails.genres && (
+            {!!movieDetails.genres && movieDetails.genres.length > 0 && (
               <RowCenteredContainer>
                 <h4>Genres: </h4>
                 <div>{movieDetails.genres.map((genre) => genre.name).join(', ')}</div>
@@ -114,18 +114,24 @@ const MovieDetailsRoute = () => {
             )}
             {isLargeScreen && (
               <>
-                <RowCenteredContainer>
-                  <h4>Production: </h4>
-                  <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>
-                </RowCenteredContainer>
+                {movieDetails.production_companies && movieDetails.production_companies.length > 0 && (
+                  <RowCenteredContainer>
+                    <h4>Production: </h4>
+                    <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>
+                  </RowCenteredContainer>
+                )}
                 {!!movieDetails.tagline && (
                   <RowCenteredContainer>
                     <h4>Tagline: </h4>
                     <div>{movieDetails.tagline}</div>
                   </RowCenteredContainer>
                 )}
+                <br></br>
+                <div>
+                  <b>Overview</b>
+                </div>
                 <RowCenteredContainer>
-                  <div>{movieDetails.overview}</div>
+                  <p>{movieDetails.overview}</p>
                 </RowCenteredContainer>
               </>
             )}
@@ -136,7 +142,7 @@ const MovieDetailsRoute = () => {
             <OverviewContainer>
               <h2>Overview</h2>
               <p>{movieDetails.overview}</p>
-              {!!movieDetails.production_companies && (
+              {movieDetails.production_companies && movieDetails.production_companies.length > 0 && (
                 <RowCenteredContainer>
                   <h4>Production Companies: </h4>
                   <div>{movieDetails.production_companies.map((company) => company.name).join(', ')}</div>

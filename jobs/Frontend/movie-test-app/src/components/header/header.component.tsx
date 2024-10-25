@@ -53,7 +53,7 @@ const Header: FC<HeaderProps> = ({
   );
 
   return (
-    <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)} data-testid={'header'}>
+    <HeaderContainer displayfullsearch={(!(hasBackButton || isSettingsOpen)).toString()} data-testid={'header'}>
       {(hasBackButton || isSettingsOpen || !isMobile) && (
         <HeaderDivContainerStart>
           {isSettingsOpen ? (
@@ -91,7 +91,7 @@ const Header: FC<HeaderProps> = ({
           label={'Search movies'}
           onChange={handleSearchInput}
           value={searchValue}
-          $displayFullSearch={!(hasBackButton || isSettingsOpen)}
+          displayfullsearch={(!(hasBackButton || isSettingsOpen)).toString()}
           data-testid={'search-input'}
         />
         <LogoContainer data-testid={'settings-button'} onClick={() => setIsSettingsOpen(!isSettingsOpen)}>

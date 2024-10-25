@@ -2,19 +2,18 @@ import { FC } from 'react';
 import { Result } from '../../types/api.ts';
 import { Footer, MovieCardContainer, MovieImageContainer, Name } from './movie-card.styles.tsx';
 import { useImage } from '../../app/api/images.ts';
-import { useNavigate } from 'react-router-dom';
 import Spinner from '../spinner';
 
 type MovieCardProps = {
   movie: Result;
+  handleMovieClick: () => void;
 };
 
 const defaultImageSize = 400;
 
-const MovieCard: FC<MovieCardProps> = ({ movie }) => {
+const MovieCard: FC<MovieCardProps> = ({ movie, handleMovieClick }) => {
   const { title } = movie;
   const postCardImage = useImage({ imagePath: movie?.poster_path, imageWidth: defaultImageSize });
-  const navigate = useNavigate();
 
   if (postCardImage.isLoading) {
     return <Spinner />;
@@ -23,10 +22,6 @@ const MovieCard: FC<MovieCardProps> = ({ movie }) => {
   if (postCardImage.isError) {
     return <div>Something went wrong</div>;
   }
-
-  const handleMovieClick = () => {
-    navigate(`/movies/${movie.id}`);
-  };
 
   return (
     <MovieCardContainer onClick={handleMovieClick}>
