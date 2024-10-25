@@ -9,39 +9,37 @@ import {
 } from './header.styles.tsx';
 import { logo_blue, logo_purple, logo_red, settings_icon } from '../../assets/images';
 import FormInput from '../form-input';
-import { useContext, useMemo, useState } from 'react';
+import { FC, useContext, useMemo, useState } from 'react';
 import { GlobalContext } from '../../app/Provider.tsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+
 import Button from '../button';
-import useMediaQuery from '../../hooks/useMediaQuery.ts';
 import Select from '../select';
 import { ThemeColors } from '../../theme/theme.ts';
-import useDebounce from '../../hooks/useDebouncer.ts';
-import { useTheme } from 'styled-components';
 
-const Header = () => {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+export interface HeaderProps {
+  searchQuery: string;
+  handleUpdateSearchQuery: (query: string) => void;
+  isMobile: boolean;
+  hasBackButton?: boolean;
+  handlePressBackButton?: () => void;
+  handleClickLogo?: () => void;
+}
 
-  const { searchQuery, setSearchQuery, themeColor, setThemeColor } = useContext(GlobalContext);
+const Header: FC<HeaderProps> = ({
+  searchQuery,
+  handleUpdateSearchQuery,
+  isMobile,
+  hasBackButton,
+  handlePressBackButton,
+  handleClickLogo,
+}) => {
+  const { themeColor, setThemeColor } = useContext(GlobalContext);
   const [searchValue, setSearchValue] = useState(searchQuery);
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const theme = useTheme();
-
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
-
-  const debouncedFunction = useDebounce((newSearchQuery) => {
-    setSearchQuery(newSearchQuery);
-    if (location.pathname !== '/movies') {
-      navigate('/movies');
-    }
-  }, 300);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-    debouncedFunction(e.target.value);
+    handleUpdateSearchQuery(e.target.value);
   };
 
   const handleChangeColorTheme = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,7 +51,6 @@ const Header = () => {
     () => (themeColor === 'blue' ? logo_blue : themeColor === 'red' ? logo_red : logo_purple),
     [themeColor],
   );
-  const hasBackButton = location.pathname !== '/movies';
 
   return (
     <HeaderContainer displayFullSearch={!(hasBackButton || isSettingsOpen)} data-testid={'header'}>
@@ -73,7 +70,7 @@ const Header = () => {
             <>
               {hasBackButton && (
                 <ButtonContainer>
-                  <Button onClick={() => navigate(-1)} data-testid={'back-button'}>
+                  <Button onClick={handlePressBackButton} data-testid={'back-button'}>
                     {'< BACK'}
                   </Button>
                 </ButtonContainer>
@@ -84,7 +81,7 @@ const Header = () => {
       )}
       {!isMobile && (
         <HeaderDivContainer>
-          <LogoContainer onClick={() => navigate('/movies')} data-testid={'logo-image'}>
+          <LogoContainer onClick={handleClickLogo} data-testid={'logo-image'}>
             <img src={logo_image} alt={'logo'} height={70} />
           </LogoContainer>
         </HeaderDivContainer>

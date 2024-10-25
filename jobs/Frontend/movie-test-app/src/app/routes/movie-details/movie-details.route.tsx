@@ -14,6 +14,11 @@ import {
 import { Header, HeaderPlaceholder } from '../../../components/header';
 import useMediaQuery from '../../../hooks/useMediaQuery.ts';
 import Spinner from '../../../components/spinner';
+import useDebounce from '../../../hooks/useDebouncer.ts';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from 'styled-components';
+import { useContext } from 'react';
+import { GlobalContext } from '../../Provider.tsx';
 
 const movieDetailsLoader =
   (queryClient: QueryClient) =>
@@ -26,11 +31,24 @@ const movieDetailsLoader =
   };
 
 const MovieDetailsRoute = () => {
+  const { searchQuery, setSearchQuery } = useContext(GlobalContext);
+
   const loaderData = useLoaderData() as { data: MovieDetailsResponse };
   const movieDetails = loaderData.data;
   const backdropImage = useImage({ imagePath: movieDetails?.backdrop_path, imageWidth: 500 });
 
-  const isUltraLargeScreen = useMediaQuery('(min-width: 1400px)');
+  const navigate = useNavigate();
+  const handleBackButton = () => navigate('/movies');
+  const handleClickLogo = () => navigate('/movies');
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
+  const isLargeScreen = useMediaQuery(`(max-width: ${theme.breakpoints.largeDesktop})`);
+
+  const debouncedFunction = useDebounce((newSearchQuery: string) => {
+    setSearchQuery(newSearchQuery);
+    navigate('/movies');
+  }, 300);
 
   if (backdropImage.isLoading) {
     return <Spinner />;
@@ -42,7 +60,14 @@ const MovieDetailsRoute = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        searchQuery={searchQuery}
+        handleUpdateSearchQuery={debouncedFunction}
+        isMobile={isMobile}
+        handleClickLogo={handleClickLogo}
+        hasBackButton
+        handlePressBackButton={handleBackButton}
+      />
       <MovieDetailsContainer>
         <HeaderPlaceholder /> {/* Placeholder for the header */}
         <RowCenteredContainer>
@@ -87,7 +112,7 @@ const MovieDetailsRoute = () => {
                 <div>${movieDetails.revenue}</div>
               </RowCenteredContainer>
             )}
-            {isUltraLargeScreen && (
+            {isLargeScreen && (
               <>
                 <RowCenteredContainer>
                   <h4>Production: </h4>
@@ -106,7 +131,7 @@ const MovieDetailsRoute = () => {
             )}
           </DetailsContainer>
         </MovieDetailGrid>
-        {!isUltraLargeScreen && (
+        {!isLargeScreen && (
           <RowCenteredContainer>
             <OverviewContainer>
               <h2>Overview</h2>

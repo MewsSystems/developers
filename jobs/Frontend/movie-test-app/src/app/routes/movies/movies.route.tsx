@@ -6,9 +6,12 @@ import { GlobalContext } from '../../Provider.tsx';
 import { MoviesGridContainer } from './movies.styles.tsx';
 import { Header, HeaderPlaceholder } from '../../../components/header';
 import Spinner from '../../../components/spinner';
+import useDebounce from '../../../hooks/useDebouncer.ts';
+import useMediaQuery from '../../../hooks/useMediaQuery.ts';
+import { useTheme } from 'styled-components';
 
 export const MoviesRoute = () => {
-  const { searchQuery } = useContext(GlobalContext);
+  const { searchQuery, setSearchQuery } = useContext(GlobalContext);
   const { visible: isLastElementVisible, setRef } = useElementVisible();
 
   const moviesQuery = useInfiniteMovies({ searchParam: searchQuery || '' });
@@ -17,6 +20,15 @@ export const MoviesRoute = () => {
   const uniqueMovies = Array.from(new Set(movies.map((movie) => movie.id))).map((id) =>
     movies.find((movie) => movie.id === id),
   );
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
+
+  //const navigate = useNavigate();
+
+  const debouncedFunction = useDebounce((newSearchQuery) => {
+    setSearchQuery(newSearchQuery);
+  }, 300);
 
   useEffect(() => {
     if (isLastElementVisible && !moviesQuery.isFetchingNextPage && moviesQuery.hasNextPage) {
@@ -34,8 +46,8 @@ export const MoviesRoute = () => {
 
   return (
     <>
-      <Header />
-      <HeaderPlaceholder /> {/* Placeholder for the header */}
+      <Header handleUpdateSearchQuery={debouncedFunction} searchQuery={searchQuery} isMobile={isMobile} />
+      <HeaderPlaceholder /> {/* Placeholder for the header to have the same height*/}
       <MoviesGridContainer>
         {uniqueMovies.map((movie, index) => (
           <div
