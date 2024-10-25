@@ -5,6 +5,7 @@ import MovieCard from '../../../components/movie-card';
 import { GlobalContext } from '../../Provider.tsx';
 import { MoviesGridContainer } from './movies.styles.tsx';
 import { Header, HeaderPlaceholder } from '../../../components/header';
+import Spinner from '../../../components/spinner';
 
 export const MoviesRoute = () => {
   const { searchQuery } = useContext(GlobalContext);
@@ -22,6 +23,14 @@ export const MoviesRoute = () => {
       moviesQuery.fetchNextPage();
     }
   }, [isLastElementVisible, moviesQuery]);
+
+  if (moviesQuery.isError) {
+    return <div>Something went wrong</div>;
+  }
+
+  if (moviesQuery.isLoading && !movies.length) {
+    return <Spinner />;
+  }
 
   return (
     <>

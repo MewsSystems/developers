@@ -13,6 +13,7 @@ import {
 } from './movie-details.styles.tsx';
 import { Header, HeaderPlaceholder } from '../../../components/header';
 import useMediaQuery from '../../../hooks/useMediaQuery.ts';
+import Spinner from '../../../components/spinner';
 
 const movieDetailsLoader =
   (queryClient: QueryClient) =>
@@ -30,6 +31,14 @@ const MovieDetailsRoute = () => {
   const backdropImage = useImage({ imagePath: movieDetails?.backdrop_path, imageWidth: 500 });
 
   const isUltraLargeScreen = useMediaQuery('(min-width: 1400px)');
+
+  if (backdropImage.isLoading) {
+    return <Spinner />;
+  }
+
+  if (backdropImage.isError) {
+    return <div>Something went wrong</div>;
+  }
 
   return (
     <>

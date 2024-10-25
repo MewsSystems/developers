@@ -39,7 +39,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [themeColor, setThemeColor] = React.useState<ThemeColors>('blue');
 
   return (
-    <React.Suspense fallback={<Spinner></Spinner>}>
+    <React.Suspense fallback={<Spinner />}>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <QueryClientProvider client={queryClient}>
           <GlobalContext.Provider value={{ searchQuery, setSearchQuery, themeColor, setThemeColor }}>
