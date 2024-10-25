@@ -15,10 +15,10 @@ export const MovieCardContainer = styled.div`
   position: relative;
   height: 100%;
   cursor: pointer;
-  border: 1px solid ${(props) => props.theme.primary};
+  border: 1px solid ${(props) => props.theme.colors.primary};
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
-  box-shadow: 3px 3px 10px 0px ${(props) => props.theme.secondary};
+  box-shadow: 3px 3px 10px 0px ${(props) => props.theme.colors.secondary};
 
   img {
     width: 100%;
@@ -47,5 +47,5 @@ export const Footer = styled.div`
 export const Name = styled.span`
   width: 90%;
   margin: 0.5rem;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.colors.primary};
 `;

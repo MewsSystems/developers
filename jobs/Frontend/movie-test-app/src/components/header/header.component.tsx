@@ -15,8 +15,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../button';
 import useMediaQuery from '../../hooks/useMediaQuery.ts';
 import Select from '../select';
-import { ThemeColors } from '../../assets/colors/theme/theme.ts';
+import { ThemeColors } from '../../theme/theme.ts';
 import useDebounce from '../../hooks/useDebouncer.ts';
+import { useTheme } from 'styled-components';
 
 const Header = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -27,8 +28,9 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isMobile = useMediaQuery('(max-width: 600px)');
-  const ultraSmall = useMediaQuery('(max-width: 400px)');
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.tablet})`);
 
   const debouncedFunction = useDebounce((newSearchQuery) => {
     setSearchQuery(newSearchQuery);
@@ -59,8 +61,12 @@ const Header = () => {
         <HeaderDivContainerStart>
           {isSettingsOpen ? (
             <HeaderDivRowContainer>
-              <h4>{!ultraSmall && <>Theme</>} Color: </h4>{' '}
-              <Select onChange={handleChangeColorTheme} options={['blue', 'red', 'purple']} />
+              <Select
+                onChange={handleChangeColorTheme}
+                options={['blue', 'red', 'purple']}
+                value={themeColor}
+                label={'Theme Color'}
+              />
             </HeaderDivRowContainer>
           ) : (
             <>

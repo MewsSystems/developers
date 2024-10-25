@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 const shrinkLabelStyles = css`
   top: 0.5rem;
   font-size: 12px;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.colors.primary};
 `;
 
 type FormInputLabelProps = {
@@ -11,7 +11,7 @@ type FormInputLabelProps = {
 };
 
 const StyledLabel = styled.label<FormInputLabelProps>`
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.colors.primary};
   font-size: 16px;
   font-weight: normal;
   position: absolute;
@@ -24,21 +24,21 @@ const StyledLabel = styled.label<FormInputLabelProps>`
 
 const StyledInput = styled.input<{ displayFullSearch: boolean }>`
   background: none;
-  background-color: ${(props) => props.theme.secondary};
-  color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.primary};
   font-size: 18px;
   padding: 10px 10px 10px 5px;
   display: block;
   width: 10rem;
-  @media screen and (max-width: 800px) {
-    width: 8rem;
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    width: ${(props) => (props.displayFullSearch ? '12rem' : '7rem')};
   }
-  @media screen and (max-width: 350px) {
-    width: ${(props) => (props.displayFullSearch ? '10rem' : '5rem')};
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.smallMobile}) {
+    width: ${(props) => (props.displayFullSearch ? '9rem' : '5rem')};
   }
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid ${(props) => props.theme.primary};
+  border-bottom: 1px solid ${(props) => props.theme.colors.primary};
   margin: 1rem 0;
 
   &:focus {

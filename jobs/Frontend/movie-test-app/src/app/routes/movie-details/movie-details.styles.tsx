@@ -5,14 +5,21 @@ const MovieDetailsContainer = styled.div`
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.colors.primary};
   background: linear-gradient(
     to top,
-    ${(props) => props.theme.secondary} 0%,
+    ${({ theme }) => theme.colors.secondary} 0%,
     white 100%
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   height: 100vh;
   white-space: break-spaces;
+
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.tablet}) {
+    height: 100%;
+  }
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.mobile}) {
+    height: 100%;
+  }
 
   h4 {
     top: 0;
@@ -28,11 +35,11 @@ const ImageContainer = styled.img`
 
 const OverviewContainer = styled.div`
   width: 60%;
-  margin: 1rem;
-  @media screen and (max-width: 800px) {
+  margin: 3rem;
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.tablet} {
     width: 80%;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 95%;
   }
 `;
@@ -50,23 +57,23 @@ const MovieDetailGrid = styled.div`
   display: grid;
   grid-template-columns: 5fr 5fr;
   width: 80%;
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.largeDesktop}) {
     grid-template-columns: 5fr 3fr;
     width: 70%;
   }
   gap: 1rem;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.desktop}) {
     grid-template-columns: 1fr;
     width: 50%;
   }
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.smallDesktop}) {
     width: 60%;
   }
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.tablet}) {
     width: 80%;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: ${(props) => props.theme.breakpoints.mobile}) {
     width: 95%;
   }
 `;

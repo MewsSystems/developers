@@ -6,7 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { queryConfig } from './api/lib/react-query-config.ts';
 import { createContext } from 'react';
 import Spinner from '../components/spinner';
-import { theme, ThemeColors } from '../assets/colors/theme/theme.ts';
+import { palette, defaultTheme, ThemeColors } from '../theme/theme.ts';
 import { ThemeProvider } from 'styled-components';
 
 type AppProviderProps = {
@@ -43,7 +43,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <QueryClientProvider client={queryClient}>
           <GlobalContext.Provider value={{ searchQuery, setSearchQuery, themeColor, setThemeColor }}>
-            <ThemeProvider theme={theme[themeColor]}>
+            <ThemeProvider theme={{ ...defaultTheme, colors: { ...palette[themeColor] } }}>
               {import.meta.env.DEV && <ReactQueryDevtools />}
               {children}
             </ThemeProvider>
