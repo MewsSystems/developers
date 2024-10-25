@@ -28,7 +28,7 @@ export const MoviesRoute = () => {
 
   const debouncedFunction = useDebounce((newSearchQuery) => {
     setSearchQuery(newSearchQuery);
-  }, 300);
+  }, 500);
 
   useEffect(() => {
     if (isLastElementVisible && !moviesQuery.isFetchingNextPage && moviesQuery.hasNextPage) {
@@ -48,9 +48,10 @@ export const MoviesRoute = () => {
     <>
       <Header handleUpdateSearchQuery={debouncedFunction} searchQuery={searchQuery} isMobile={isMobile} />
       <HeaderPlaceholder /> {/* Placeholder for the header to have the same height*/}
-      <MoviesGridContainer>
+      <MoviesGridContainer data-testid={'movies-container'}>
         {uniqueMovies.map((movie, index) => (
           <div
+            data-testid={`movie-card-${movie?.id.toString()}`}
             key={movie?.id.toString()}
             ref={(instance) => (index === uniqueMovies.length - 1 ? setRef(instance) : null)}
           >

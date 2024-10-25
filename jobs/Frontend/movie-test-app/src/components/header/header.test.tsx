@@ -21,6 +21,8 @@ describe('Header', () => {
     await userEvent.click(settingsButton);
     const settingsContainer = screen.getByTestId('theme-select');
     expect(settingsContainer).toBeDefined();
+    const searchInput = screen.getByTestId('search-input');
+    expect(searchInput).toBeDefined();
     expect(handleUpdateSearchQuery).not.toHaveBeenCalled();
   });
 
@@ -45,6 +47,9 @@ describe('Header', () => {
     expect(backButton).toBeDefined();
     await userEvent.click(backButton);
     expect(handleBack).toHaveBeenCalled();
+    expect(handleUpdateSearchQuery).not.toHaveBeenCalled();
+    const searchInput = screen.getByTestId('search-input');
+    expect(searchInput).toBeDefined();
     expect(handleUpdateSearchQuery).not.toHaveBeenCalled();
   });
 

@@ -31,6 +31,7 @@ const ImageContainer = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 1rem;
+  max-height: 500px;
 `;
 
 const OverviewContainer = styled.div`

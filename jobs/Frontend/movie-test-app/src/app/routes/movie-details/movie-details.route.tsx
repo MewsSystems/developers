@@ -48,7 +48,7 @@ const MovieDetailsRoute = () => {
   const debouncedFunction = useDebounce((newSearchQuery: string) => {
     setSearchQuery(newSearchQuery);
     navigate('/movies');
-  }, 300);
+  }, 500);
 
   if (backdropImage.isLoading) {
     return <Spinner />;

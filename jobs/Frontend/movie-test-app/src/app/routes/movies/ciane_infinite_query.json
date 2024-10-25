@@ -1,0 +1,164 @@
+{
+  "status": "success",
+  "fetchStatus": "idle",
+  "isPending": false,
+  "isSuccess": true,
+  "isError": false,
+  "isInitialLoading": false,
+  "isLoading": false,
+  "data": {
+    "pages": [
+      {
+        "data": {
+          "page": 1,
+          "results": [
+            {
+              "adult": false,
+              "backdrop_path": null,
+              "genre_ids": [],
+              "id": 1138148,
+              "original_language": "pt",
+              "original_title": "CIANETO",
+              "overview": "",
+              "popularity": 0.083,
+              "poster_path": null,
+              "release_date": "2023-05-03",
+              "title": "CIANETO",
+              "video": false,
+              "vote_average": 0,
+              "vote_count": 0
+            },
+            {
+              "adult": false,
+              "backdrop_path": "/j6jTAXID9G6pcRbW3qCgCmXzl7s.jpg",
+              "genre_ids": [
+                99,
+                80
+              ],
+              "id": 1217392,
+              "original_language": "ml",
+              "original_title": "Curry & Cyanide: The Jolly Joseph Case",
+              "overview": "This true-crime documentary investigates six shocking deaths in the same family and the woman at the center of the unbelievable case: Jolly Joseph.",
+              "popularity": 6.302,
+              "poster_path": "/sdXu8YeDqg1qxEP9LJuTIFBtR5L.jpg",
+              "release_date": "2023-12-22",
+              "title": "Curry & Cyanide: The Jolly Joseph Case",
+              "video": false,
+              "vote_average": 6.8,
+              "vote_count": 27
+            },
+            {
+              "adult": false,
+              "backdrop_path": "/lg694YUsKpqeD5Hgnpwenl4BUsr.jpg",
+              "genre_ids": [
+                80,
+                18,
+                53
+              ],
+              "id": 50889,
+              "original_language": "kn",
+              "original_title": "Cyanide",
+              "overview": "\"Cyanide\" is about the incidents that occurred in the peripheries of Bangalore after the assassins of former Prime Minister Rajiv Gandhi stepped into the city. The story revolves around a helpless couple who fall into the clutches of the gang and are taken hostage.",
+              "popularity": 1.166,
+              "poster_path": "/vtrn1HUPCNZUhrYvz0SGI88SS4J.jpg",
+              "release_date": "2006-01-08",
+              "title": "Cyanide",
+              "video": false,
+              "vote_average": 5,
+              "vote_count": 1
+            }
+          ],
+          "total_pages": 1,
+          "total_results": 3
+        },
+        "status": 200,
+        "statusText": "",
+        "headers": {
+          "access-control-allow-origin": "*",
+          "access-control-expose-headers": "*",
+          "age": "14679",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cache-control": "public, max-age=24618",
+          "content-encoding": "gzip",
+          "content-type": "application/json;charset=utf-8",
+          "date": "Fri, 25 Oct 2024 16:19:37 GMT",
+          "etag": "W/\"5d40bb650257e006b44a32cfb9811e5c\"",
+          "server": "openresty",
+          "vary": "Accept-Encoding,accept-encoding",
+          "via": "1.1 dc0d44cdab5f8e9ba84c61add4fc98c2.cloudfront.net (CloudFront)",
+          "x-amz-cf-id": "xtqkN6_nH6_3jxXaACj3bQtoz_BarY82T1daiC6C5Kuk77lPFupO6A==",
+          "x-amz-cf-pop": "MXP64-C2",
+          "x-cache": "Hit from cloudfront",
+          "x-memc": "MISS, STORE",
+          "x-memc-age": "0",
+          "x-memc-expires": "24618",
+          "x-memc-key": "36383b68919c1bf90ecb886fd95519b9"
+        },
+        "config": {
+          "transitional": {
+            "silentJSONParsing": true,
+            "forcedJSONParsing": true,
+            "clarifyTimeoutError": false
+          },
+          "adapter": [
+            "xhr",
+            "http",
+            "fetch"
+          ],
+          "transformRequest": [
+            null
+          ],
+          "transformResponse": [
+            null
+          ],
+          "timeout": 0,
+          "xsrfCookieName": "XSRF-TOKEN",
+          "xsrfHeaderName": "X-XSRF-TOKEN",
+          "maxContentLength": -1,
+          "maxBodyLength": -1,
+          "env": {},
+          "headers": {
+            "Accept": "application/json, text/plain, */*"
+          },
+          "baseURL": "https://api.themoviedb.org/3",
+          "params": {
+            "page": 1,
+            "query": "ciane",
+            "api_key": "03b8572954325680265531140190fd2a"
+          },
+          "method": "get",
+          "url": "/search/movie"
+        },
+        "request": {}
+      }
+    ],
+    "pageParams": [
+      1
+    ]
+  },
+  "dataUpdatedAt": 1729887829647,
+  "error": null,
+  "errorUpdatedAt": 0,
+  "failureCount": 0,
+  "failureReason": null,
+  "errorUpdateCount": 0,
+  "isFetched": true,
+  "isFetchedAfterMount": true,
+  "isFetching": false,
+  "isRefetching": false,
+  "isLoadingError": false,
+  "isPaused": false,
+  "isPlaceholderData": false,
+  "isRefetchError": false,
+  "isStale": false,
+  "promise": {
+    "status": "rejected",
+    "reason": {}
+  },
+  "hasNextPage": false,
+  "hasPreviousPage": false,
+  "isFetchNextPageError": false,
+  "isFetchingNextPage": false,
+  "isFetchPreviousPageError": false,
+  "isFetchingPreviousPage": false
+}
