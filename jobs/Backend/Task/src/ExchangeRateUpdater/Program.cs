@@ -1,33 +1,79 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.Interfaces;
+using ExchangeRateUpdater.Service;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
+
         private static IEnumerable<Currency> currencies = new[]
         {
-            new Currency("USD"),
-            new Currency("EUR"),
+            //new Currency("USD"),
+            //new Currency("EUR"),
             new Currency("CZK"),
+            //new Currency("JPY"),
+            //new Currency("KES"),
+            //new Currency("RUB"),
+            //new Currency("THB"),
+            //new Currency("TRY"),
+            //new Currency("XYZ")
+            new Currency("AUD"),
+            new Currency("BRL"),
+            new Currency("BGN"),
+            new Currency("CAD"),
+            new Currency("CNY"),
+            new Currency("DKK"),
+            new Currency("EUR"),
+            new Currency("HKD"),
+            new Currency("HUF"),
+            new Currency("ISK"),
+            new Currency("XDR"),
+            new Currency("INR"),
+            new Currency("IDR"),
+            new Currency("ILS"),
             new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
+            new Currency("MYR"),
+            new Currency("MXN"),
+            new Currency("NZD"),
+            new Currency("NOK"),
+            new Currency("PHP"),
+            new Currency("PLN"),
+            new Currency("RON"),
+            new Currency("SGD"),
+            new Currency("ZAR"),
+            new Currency("KRW"),
+            new Currency("SEK"),
+            new Currency("CHF"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("GBP"),
+            new Currency("USD")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var timer = new Stopwatch();
+            timer.Start();
+
+            var serviceProvider = ServicesInstaller.InstallServices();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+                var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                foreach (ExchangeRate rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
@@ -36,7 +82,8 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
+            timer.Stop();
+            Console.WriteLine(timer.ElapsedMilliseconds);
             Console.ReadLine();
         }
     }
