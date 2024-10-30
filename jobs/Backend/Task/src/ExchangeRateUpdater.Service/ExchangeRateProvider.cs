@@ -5,20 +5,21 @@ using ExchangeRateUpdater.Domain.Model.Cnb.Rq;
 using ExchangeRateUpdater.Domain.Model.Cnb.Rs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 namespace ExchangeRateUpdater.Service
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly CnbApiConfig cnbApiConfig;
         private readonly IHttpClientService pollyClient;
+        private readonly CnbApiConfig cnbApiConfig;
         private readonly ILogger<ExchangeRateProvider> logger;
 
         public ExchangeRateProvider(IHttpClientService pollyClient,
                                    IOptions<CnbApiConfig> cnbApiConfig,
                                    ILogger<ExchangeRateProvider> logger)
         {
-            this.cnbApiConfig = cnbApiConfig.Value;
             this.pollyClient = pollyClient;
+            this.cnbApiConfig = cnbApiConfig.Value;
             this.logger = logger;
         }
         /// <summary>
@@ -60,7 +61,6 @@ namespace ExchangeRateUpdater.Service
                     );
                 });
         }
-    
-        
+
     }
 }

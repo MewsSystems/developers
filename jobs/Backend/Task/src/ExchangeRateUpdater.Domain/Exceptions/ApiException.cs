@@ -4,11 +4,9 @@ namespace ExchangeRateUpdater.Domain.Exceptions
 {
     public class ApiException : Exception
     {
-        public HttpStatusCode StatusCode { get; }
-
-        public ApiException(string message, HttpStatusCode statusCode) : base(message)
+        public ApiException(string message) : base(message)
         {
-            StatusCode = statusCode;
+
         }
     }
 }
