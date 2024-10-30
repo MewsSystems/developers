@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Domain.Config;
+using ExchangeRateUpdater.Domain.Exceptions;
 using ExchangeRateUpdater.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -11,37 +12,50 @@ namespace ExchangeRateUpdater.Service
     public class HttpClientService : IHttpClientService
     {
         private readonly PollyConfig config;
+        private readonly IHttpClientFactory httpClientFactory;
         private readonly ILogger<HttpClientService> logger;
 
-        public HttpClientService(IOptions<PollyConfig> config, ILogger<HttpClientService> logger)
+        public HttpClientService(IHttpClientFactory httpClientFactory,
+                                 IOptions<PollyConfig> config,
+                                 ILogger<HttpClientService> logger)
         {
             this.config = config.Value;
+            this.httpClientFactory = httpClientFactory;
             this.logger = logger;
         }
 
-        public async Task<TResult> GetAsync<TResult, TRequest>(string uri, TRequest request)
+        public async Task<TResult> GetAsync<TResult, TRequest>(string httpClientName, string uri, TRequest request)
         {
             if (request != null)
                 uri = GetUriFromModelWithParams(uri, request);
 
+            var retryPolicy = Policy.Handle<HttpRequestException>()
+                                    .OrResult<HttpResponseMessage>(r => r.StatusCode == HttpStatusCode.RequestTimeout)
+                                    .WaitAndRetryAsync(config.RetryCountAttempts,
+                                                       attempt => TimeSpan.FromSeconds(config.SleepRetrySeconds),
+                                                       (result, timeSpan, retryCount) =>
+                                                       {
+                                                           logger.LogWarning($"Request failed with {result.Result.StatusCode}. Waiting {timeSpan} before retry {retryCount}.");
+                                                       });
             try
             {
-                var retryPolicy = Policy.HandleResult<HttpResponseMessage>(r => r.StatusCode == HttpStatusCode.RequestTimeout)
-                        .WaitAndRetryAsync(config.RetryCountAttempts, i => TimeSpan.FromSeconds(config.SleepRetrySeconds));
+                using HttpClient client = httpClientFactory.CreateClient(httpClientName);
+                var response = await retryPolicy.ExecuteAsync(() => client.GetAsync(uri));
+                var responseContent = await response.Content.ReadAsStringAsync();
 
-                using var client = new HttpClient();
+                if (!response.IsSuccessStatusCode || string.IsNullOrEmpty(responseContent))
+                    throw new ApiException($"API call to {httpClientName}-{uri} failed with status {response.StatusCode}. Response: {responseContent}", response.StatusCode);
 
-                var result = await retryPolicy.ExecuteAsync(async () => await client.GetAsync(uri));
-                var response = await result.Content.ReadAsStringAsync();
-
-                if (!result.IsSuccessStatusCode)
-                    throw new Exception($"The http call to: {uri} return a {result.StatusCode} code. Message: {response}. {DateTime.Now}");
-
-                return JsonConvert.DeserializeObject<TResult>(response);
+                return JsonConvert.DeserializeObject<TResult>(responseContent);
             }
-            catch (Exception e)
+            catch (Exception e) when (e is HttpRequestException || e is ApiException)
             {
                 logger.LogError(e.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Unexpected error while calling {httpClientName}-{uri}: {ex.Message}");
                 throw;
             }
         }

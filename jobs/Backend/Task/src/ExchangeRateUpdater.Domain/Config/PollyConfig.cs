@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExchangeRateUpdater.Domain.Config
+﻿namespace ExchangeRateUpdater.Domain.Config
 {
     public class PollyConfig
     {

@@ -3,30 +3,39 @@ using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System.IO;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace ExchangeRateUpdater
 {
     public static class ServicesInstaller
     {
-        public static ServiceProvider InstallServices()
+        public static IHost InstallServices()
         {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json");
+            return Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                })
+                .ConfigureServices((context, services) =>
+                {
+                    services.Configure<CacheConfig>(context.Configuration.GetSection(nameof(CacheConfig)));
+                    services.Configure<CnbApiConfig>(context.Configuration.GetSection(nameof(CnbApiConfig)));
+                    services.Configure<PollyConfig>(context.Configuration.GetSection(nameof(PollyConfig)));
 
-            IConfiguration config = builder.Build();
+                    var cnbApiConfig = new CnbApiConfig();
+                    context.Configuration.Bind(nameof(cnbApiConfig), cnbApiConfig);
 
-            var services = new ServiceCollection();
+                    services.AddHttpClient(cnbApiConfig.ClientName, client =>
+                    {
+                        client.BaseAddress = new Uri(cnbApiConfig.BaseUrl);
+                        client.Timeout = TimeSpan.FromSeconds(cnbApiConfig.TimeOut);
+                    });
 
-            services.Configure<CacheConfig>(config.GetSection(nameof(CacheConfig)));
-            services.Configure<CnbApiConfig>(config.GetSection(nameof(CnbApiConfig)));
-
-            return services.AddLogging()
-                           .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
-                           .AddSingleton<IHttpClientService, HttpClientService>()
-                           .BuildServiceProvider();
+                    services.AddSingleton<IHttpClientService, HttpClientService>();
+                    services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
+                })
+                .Build();
         }
     }
 }

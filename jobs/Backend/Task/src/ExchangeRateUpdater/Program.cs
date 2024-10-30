@@ -1,13 +1,8 @@
 ﻿using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.Interfaces;
-using ExchangeRateUpdater.Service;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,15 +13,7 @@ namespace ExchangeRateUpdater
 
         private static IEnumerable<Currency> currencies = new[]
         {
-            //new Currency("USD"),
-            //new Currency("EUR"),
             new Currency("CZK"),
-            //new Currency("JPY"),
-            //new Currency("KES"),
-            //new Currency("RUB"),
-            //new Currency("THB"),
-            //new Currency("TRY"),
-            //new Currency("XYZ")
             new Currency("AUD"),
             new Currency("BRL"),
             new Currency("BGN"),
@@ -62,14 +49,11 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
-            var timer = new Stopwatch();
-            timer.Start();
-
-            var serviceProvider = ServicesInstaller.InstallServices();
+            var host = ServicesInstaller.InstallServices();
 
             try
             {
-                var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+                var exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
                 var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -82,8 +66,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-            timer.Stop();
-            Console.WriteLine(timer.ElapsedMilliseconds);
             Console.ReadLine();
         }
     }

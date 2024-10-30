@@ -2,6 +2,6 @@
 {
     public interface IHttpClientService
     {
-        Task<TResult> GetAsync<TResult, TRequest>(string uri, TRequest request);
+        Task<TResult> GetAsync<TResult, TRequest>(string httpClientName, string uri, TRequest request);
     }
 }
