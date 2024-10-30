@@ -1,7 +1,9 @@
-﻿namespace ExchangeRateUpdater.Domain.Interfaces
+﻿using ExchangeRateUpdater.Domain.Ack;
+
+namespace ExchangeRateUpdater.Domain.Interfaces
 {
     public interface IHttpClientService
     {
-        Task<TResult> GetAsync<TResult, TRequest>(string httpClientName, string uri, TRequest request);
+        Task<AckEntity<TResult>> GetAsync<TResult>(string httpClientName, string uri);
     }
 }

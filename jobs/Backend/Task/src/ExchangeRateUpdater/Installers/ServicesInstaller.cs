@@ -19,7 +19,6 @@ namespace ExchangeRateUpdater
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services.Configure<CacheConfig>(context.Configuration.GetSection(nameof(CacheConfig)));
                     services.Configure<CnbApiConfig>(context.Configuration.GetSection(nameof(CnbApiConfig)));
                     services.Configure<PollyConfig>(context.Configuration.GetSection(nameof(PollyConfig)));
 

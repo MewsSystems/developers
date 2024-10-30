@@ -11,8 +11,8 @@ namespace ExchangeRateUpdater
     public static class Program
     {
 
-        private static IEnumerable<Currency> currencies = new[]
-        {
+        private static IReadOnlyCollection<Currency> currencies =
+        [
             new Currency("CZK"),
             new Currency("AUD"),
             new Currency("BRL"),
@@ -45,7 +45,7 @@ namespace ExchangeRateUpdater
             new Currency("TRY"),
             new Currency("GBP"),
             new Currency("USD")
-        };
+        ];
 
         public static async Task Main(string[] args)
         {

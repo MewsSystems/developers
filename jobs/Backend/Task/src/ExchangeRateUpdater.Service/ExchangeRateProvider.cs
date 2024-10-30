@@ -1,24 +1,26 @@
 ﻿using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.Ack;
 using ExchangeRateUpdater.Domain.Config;
+using ExchangeRateUpdater.Domain.Helpers;
 using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Domain.Model.Cnb.Rq;
 using ExchangeRateUpdater.Domain.Model.Cnb.Rs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+
 namespace ExchangeRateUpdater.Service
 {
     public class ExchangeRateProvider : IExchangeRateProvider
     {
-        private readonly IHttpClientService pollyClient;
+        private readonly IHttpClientService httpClientService;
         private readonly CnbApiConfig cnbApiConfig;
         private readonly ILogger<ExchangeRateProvider> logger;
 
-        public ExchangeRateProvider(IHttpClientService pollyClient,
+        public ExchangeRateProvider(IHttpClientService httpClientService,
                                    IOptions<CnbApiConfig> cnbApiConfig,
                                    ILogger<ExchangeRateProvider> logger)
         {
-            this.pollyClient = pollyClient;
+            this.httpClientService = httpClientService;
             this.cnbApiConfig = cnbApiConfig.Value;
             this.logger = logger;
         }
@@ -28,31 +30,30 @@ namespace ExchangeRateUpdater.Service
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IReadOnlyCollection<Currency> currencies)
         {
-            if (currencies.Count() <= 1 || !currencies.Any(x=> x.Code == cnbApiConfig.LocalCurrencyIsoCode))
+            if (!IsValidCurrencyRequest(currencies))
             {
                 logger.LogWarning("Not enough currencies has been found on the request.");
                 return Enumerable.Empty<ExchangeRate>();
             }
 
-            var availableRates = await pollyClient.GetAsync<CnbExchangeRatesRsModel, CnbExchangeRatesRqModel>(
-                cnbApiConfig.ClientName,
-                cnbApiConfig.ExchangeRateApiUrl,
-                new CnbExchangeRatesRqModel(cnbApiConfig.PreferredLanguage));
+            var ackAvailableRates = await FetchSourceData();
 
-            if (availableRates == null || !availableRates.Rates.Any())
+            if (!IsResponseValid(ackAvailableRates))
             {
                 logger.LogWarning("No exchange rates retrieved from the source.");
                 return Enumerable.Empty<ExchangeRate>();
             }
 
+            var rates = ackAvailableRates.Entity.Rates.ToList();
+
             return currencies
                 .DistinctBy(x => x.Code)
-                .Where(currency => availableRates.Rates.Any(x => x.CurrencyCode == currency.Code))
+                .Where(currency => rates.Any(x => x.CurrencyCode == currency.Code))
                 .Select(currency =>
                 {
-                    var rateTarget = availableRates.Rates.First(x => x.CurrencyCode == currency.Code);
+                    var rateTarget = rates.First(x => x.CurrencyCode == currency.Code);
                     return new ExchangeRate(
                         currency,
                         new Currency(cnbApiConfig.LocalCurrencyIsoCode),
@@ -60,6 +61,29 @@ namespace ExchangeRateUpdater.Service
                         rateTarget.Rate
                     );
                 });
+        }
+
+        private bool IsValidCurrencyRequest(IEnumerable<Currency> currencies)
+        {
+            return currencies != null && 
+                   currencies.Count() > 1 &&
+                   currencies.Any(x => x.Code == cnbApiConfig.LocalCurrencyIsoCode);
+
+        }
+
+        private bool IsResponseValid(AckEntity<CnbExchangeRatesRsModel> ackAvailableRates) 
+        {
+            return ackAvailableRates?.Entity?.Rates != null &&
+                   ackAvailableRates.Success &&
+                   ackAvailableRates.Entity.Rates.Length > 0;
+        }
+
+        private async Task<AckEntity<CnbExchangeRatesRsModel>> FetchSourceData()
+        {
+            var model = new CnbExchangeRatesRqModel(cnbApiConfig.PreferredLanguage);
+            var uri = UrlHelper.GetUriFromModelWithParams(cnbApiConfig.ExchangeRateApiUrl, model);
+
+            return await httpClientService.GetAsync<CnbExchangeRatesRsModel>(cnbApiConfig.ClientName, uri);
         }
 
     }
