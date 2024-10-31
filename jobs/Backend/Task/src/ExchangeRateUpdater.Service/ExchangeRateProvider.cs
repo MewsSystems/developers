@@ -46,14 +46,14 @@ namespace ExchangeRateUpdater.Service
                 return Enumerable.Empty<ExchangeRate>();
             }
 
-            var rates = ackAvailableRates.Entity.Rates.ToList();
+            var rates = ackAvailableRates.Entity.Rates.ToDictionary(x => x.CurrencyCode);
 
             return currencies
                 .DistinctBy(x => x.Code)
-                .Where(currency => rates.Any(x => x.CurrencyCode == currency.Code))
+                .Where(currency => rates.ContainsKey(currency.Code))
                 .Select(currency =>
                 {
-                    var rateTarget = rates.First(x => x.CurrencyCode == currency.Code);
+                    var rateTarget = rates[currency.Code];
                     return new ExchangeRate(
                         currency,
                         new Currency(cnbApiConfig.LocalCurrencyIsoCode),

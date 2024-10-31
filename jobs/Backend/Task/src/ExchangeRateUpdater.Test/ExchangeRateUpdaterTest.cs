@@ -41,12 +41,10 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetExchangeRates_WithFewCurrencies_ReturnsCorrectExchangeRates()
+        public async Task GetExchangeRates_WhenGivenFewCurrencies_ReturnsExpectedExchangeRate()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("CZK"), new Currency("AUD"),
-            ];
+            var currencies = GenerateCurrencies("CZK", "AUD");
+            const string ExpectedRateOutput = "AUD/CZK=25,55";
 
             MoqHttpClientServiceGetAsyncInstance(new AckEntity<CnbExchangeRatesRsModel>(true, new CnbExchangeRatesRsModel
             {
@@ -64,24 +62,13 @@ namespace ExchangeRateUpdater.Test
             var result = await exchangeRateProvider.GetExchangeRates(currencies);
 
             Assert.Single(result);
-            Assert.Equal("AUD/CZK=25,55", result.Single().ToString());
+            Assert.Equal(ExpectedRateOutput, result.Single().ToString());
         }
 
         [Fact]
-        public async Task GetExchangeRates_WithManyValidInputs_ReturnsCorrectValue()
+        public async Task GetExchangeRates_WhenGivenMultipleValidCurrencies_ReturnsExpectedExchangeRates()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("CZK"),
-                new Currency("ZAR"),
-                new Currency("KRW"),
-                new Currency("SEK"),
-                new Currency("CHF"),
-                new Currency("THB"),
-                new Currency("TRY"),
-                new Currency("GBP"),
-                new Currency("USD")
-            ];
+            var currencies = GenerateCurrencies("CZK", "ZAR", "KRW", "SEK", "CHF", "THB", "TRY", "GBP", "USD");
 
             var responseCurrencies = new List<CnbExchangeRatesRsModel.CnbExchangeRatesRsModelRate> {
                     new()
@@ -152,12 +139,10 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetExchangeRates_WithInvalidCurrencies_ReturnsEmptyList()
+        public async Task GetExchangeRates_WhenGivenInvalidCurrencies_ReturnsEmptyList()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("CZK"), new Currency("XRY"),
-            ];
+
+            var currencies = GenerateCurrencies("CZK", "XRY");
 
             MoqHttpClientServiceGetAsyncInstance(new AckEntity<CnbExchangeRatesRsModel>(true, new CnbExchangeRatesRsModel
             {
@@ -178,20 +163,10 @@ namespace ExchangeRateUpdater.Test
         }
         
         [Fact]
-        public async Task GetExchangeRates_WithoutLocalCurrency_ReturnsEmptyList()
+        public async Task GetExchangeRates_WhenLocalCurrencyIsMissing_ReturnsEmptyList()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("ZAR"),
-                new Currency("KRW"),
-                new Currency("SEK"),
-                new Currency("CHF"),
-                new Currency("THB"),
-                new Currency("TRY"),
-                new Currency("GBP"),
-                new Currency("USD")
-            ];
-
+            var currencies = GenerateCurrencies("ZAR", "KRW", "SEK", "CHF", "THB", "TRY", "GBP", "USD");
+            
             MoqHttpClientServiceGetAsyncInstance(new AckEntity<CnbExchangeRatesRsModel>(true, new CnbExchangeRatesRsModel
             {
                 Rates =
@@ -258,12 +233,9 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetExchangeRates_WhenSourceApiReturnsError_ReturnsEmptyList()
+        public async Task GetExchangeRates_WhenApiResponseIsError_ReturnsEmptyListAndLogsWarning()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("CZK"), new Currency("AUD"),
-            ];
+            var currencies = GenerateCurrencies("CZK", "AUD");
 
             MoqHttpClientServiceGetAsyncInstance(new AckEntity<CnbExchangeRatesRsModel>(false, null, "Error"));
 
@@ -274,12 +246,9 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetExchangeRates_WhenSourceApiNullResponse_ReturnsEmptyList()
+        public async Task GetExchangeRates_WhenApiResponseIsNull_ReturnsEmptyListAndLogsWarning()
         {
-            IReadOnlyCollection<Currency> currencies =
-            [
-                new Currency("CZK"), new Currency("AUD"),
-            ];
+            var currencies = GenerateCurrencies("CZK", "AUD");
 
             MoqHttpClientServiceGetAsyncInstance(null);
 
@@ -308,6 +277,11 @@ namespace ExchangeRateUpdater.Test
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);
+        }
+
+        private static IReadOnlyCollection<Currency> GenerateCurrencies(params string[] currencyCodes)
+        {
+            return currencyCodes.Select(code => new Currency(code)).ToList();
         }
     }
 }

@@ -56,8 +56,9 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetDataAsync_WithInvalidUrl_ReturnsHandledError()
+        public async Task GetAsync_WithEmptyUrl_ReturnsErrorWithMissingDataMessage()
         {
+            const string MissingDataExpectedMessage = "Missing data on API call";
             SetupHttpClientFactoryMock(HttpStatusCode.OK);
 
             var service = new HttpClientService(httpClientFactoryMock.Object, pollyConfigMock, loggerMock.Object);
@@ -74,16 +75,15 @@ namespace ExchangeRateUpdater.Test
                 ItExpr.IsAny<CancellationToken>()
             );
 
-            var message = "Missing data on api call";
-            VerifyLoggerMessage(message, LogLevel.Error);
-            Assert.Equal(message, result.Message);
+            VerifyLoggerMessage(MissingDataExpectedMessage, LogLevel.Error);
+            Assert.Equal(MissingDataExpectedMessage, result.Message);
         }
 
         [Theory]
         [InlineData(HttpStatusCode.NotFound)]
         [InlineData(HttpStatusCode.InternalServerError)]
         [InlineData(HttpStatusCode.BadRequest)]
-        public async Task GetDataAsync_WithDifferentResponseStatusCode_ReturnsHandledError(HttpStatusCode responseCodeMock)
+        public async Task GetAsync_WithErrorStatus_ReturnsFailureAndLogsStatus(HttpStatusCode responseCodeMock)
         {
             SetupHttpClientFactoryMock(responseCodeMock);
 
@@ -112,7 +112,7 @@ namespace ExchangeRateUpdater.Test
         }
 
         [Fact]
-        public async Task GetDataAsync_WithRequestTimeOutAndRetries_ReturnsHandledError()
+        public async Task GetAsync_WithRequestTimeout_ReturnsFailureAfterRetriesAndLogs()
         {
             SetupHttpClientFactoryMock(HttpStatusCode.RequestTimeout);
 

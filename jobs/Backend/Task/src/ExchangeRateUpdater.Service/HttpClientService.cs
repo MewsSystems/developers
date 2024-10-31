@@ -40,7 +40,7 @@ namespace ExchangeRateUpdater.Service
         public async Task<AckEntity<TResult>> GetAsync<TResult>(string httpClientName, string uri)
         {
             if (string.IsNullOrEmpty(httpClientName) || string.IsNullOrEmpty(uri))
-                return LogAndReturnOnError<TResult>("Missing data on api call");
+                return LogAndReturnOnError<TResult>("Missing data on API call");
 
             try
             {
