@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater.Domain.Interfaces
+﻿using ExchangeRateUpdater.Domain.Entities;
+
+namespace ExchangeRateUpdater.Domain.Interfaces
 {
     public interface IExchangeRateProvider
     {

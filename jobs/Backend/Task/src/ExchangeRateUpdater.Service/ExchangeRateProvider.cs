@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.Ack;
 using ExchangeRateUpdater.Domain.Config;
+using ExchangeRateUpdater.Domain.Entities;
 using ExchangeRateUpdater.Domain.Helpers;
 using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Domain.Model.Cnb.Rq;
