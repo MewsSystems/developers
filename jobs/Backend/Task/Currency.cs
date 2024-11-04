@@ -16,5 +16,20 @@
         {
             return Code;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Currency other && Equals(other);
+        }
+
+        private bool Equals(Currency other)
+        {
+            return Code == other.Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return Code != null ? Code.GetHashCode() : 0;
+        }
     }
 }
