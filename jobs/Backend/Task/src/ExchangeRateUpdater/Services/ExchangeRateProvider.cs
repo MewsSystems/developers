@@ -34,7 +34,7 @@ namespace ExchangeRateUpdater.Services
             }
             if (language is not "EN" or "CZ")
             {
-                _logger.LogInformation("The requested language was invalid. Reverting to default value EN.");
+                _logger.LogInformation("The requested language was invalid. Reverting to default value EN");
                 language = "EN";
             }
 
