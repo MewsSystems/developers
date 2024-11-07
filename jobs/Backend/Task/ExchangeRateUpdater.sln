@@ -3,7 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain", "ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj", "{5BD768C0-72AD-4602-9BC4-E15C2AE44470}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B8C5558D-8F54-4933-BEA7-32318BD1A6D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.UnitTests", "ExchangeRateUpdater.Domain.UnitTests\ExchangeRateUpdater.Domain.UnitTests.csproj", "{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.IntegrationTests", "ExchangeRateUpdater.IntegrationTests\ExchangeRateUpdater.IntegrationTests.csproj", "{CCCA8466-E5DE-400B-8370-5873A1673BB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api", "ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj", "{EDB19C69-7883-44DE-BB67-433938F483C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55C28915-56BA-4A51-AE83-7C29966BBF2D}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +26,28 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD768C0-72AD-4602-9BC4-E15C2AE44470}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD768C0-72AD-4602-9BC4-E15C2AE44470}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD768C0-72AD-4602-9BC4-E15C2AE44470}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD768C0-72AD-4602-9BC4-E15C2AE44470}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCA8466-E5DE-400B-8370-5873A1673BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCA8466-E5DE-400B-8370-5873A1673BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCA8466-E5DE-400B-8370-5873A1673BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCA8466-E5DE-400B-8370-5873A1673BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB19C69-7883-44DE-BB67-433938F483C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB19C69-7883-44DE-BB67-433938F483C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB19C69-7883-44DE-BB67-433938F483C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB19C69-7883-44DE-BB67-433938F483C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4A89A68-1DFB-48AE-94E6-F1A46D728D22} = {B8C5558D-8F54-4933-BEA7-32318BD1A6D1}
+		{CCCA8466-E5DE-400B-8370-5873A1673BB5} = {B8C5558D-8F54-4933-BEA7-32318BD1A6D1}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,6 @@
+@ExchangeRate_Api_HostAddress = http://localhost:5250
+
+GET {{ExchangeRate_Api_HostAddress}}/healthcheck
+Accept: application/json
+
+###

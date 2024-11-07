@@ -1,0 +1,8 @@
+﻿services:
+  exchangerateupdater.api:
+    image: exchangerateupdater.api
+    build:
+      context: .
+      dockerfile: ExchangeRateUpdater.Api/Dockerfile
+    ports:
+      - "5250:8080"
