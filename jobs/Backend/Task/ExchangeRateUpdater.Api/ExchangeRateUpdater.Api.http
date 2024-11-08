@@ -1,6 +1,11 @@
 @ExchangeRate_Api_HostAddress = http://localhost:5250
 
-GET {{ExchangeRate_Api_HostAddress}}/healthcheck
+GET {{ExchangeRate_Api_HostAddress}}/healthchecks/api
+Accept: application/json
+
+###
+
+GET {{ExchangeRate_Api_HostAddress}}/exrates/cnb
 Accept: application/json
 
 ###

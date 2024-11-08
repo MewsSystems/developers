@@ -1,19 +1,9 @@
-var builder = WebApplication.CreateSlimBuilder(args);
+using ExchangeRate.Api.Configuration;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var builder = WebApplication.CreateSlimBuilder(args);
+builder.ConfigureServices();
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.MapGet("/healthcheck", () => Results.Ok())
-    .WithOpenApi();
+app.ConfigureApplication();
 
 app.Run();
