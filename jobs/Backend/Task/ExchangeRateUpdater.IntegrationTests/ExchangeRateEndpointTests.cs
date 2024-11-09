@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRate.IntegrationTests;
@@ -19,8 +20,13 @@ public class ExchangeRateEndpointTests : ApiTestBase
         string date, string lang)
     {
         var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
+        var content = await response.Content.ReadFromJsonAsync<IResult>();
 
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(content, Is.Not.Null);
+        });
     }
 
     [Test]
@@ -33,7 +39,10 @@ public class ExchangeRateEndpointTests : ApiTestBase
         var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
         var validationDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-        Assert.NotNull(validationDetails);
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            Assert.That(validationDetails, Is.Not.Null);
+        });
     }
 }
