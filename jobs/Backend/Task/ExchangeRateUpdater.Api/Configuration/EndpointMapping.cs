@@ -6,7 +6,7 @@ public static class EndpointMapping
 {
     public static void MapEndpoints(this WebApplication app)
     {
-        app.MapGroup("healthchecks")
+        app.MapGroup("healthcheck")
             .WithOpenApi()
             .MapHealthCheckEndpoints();
 
