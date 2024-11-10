@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+</Project>
