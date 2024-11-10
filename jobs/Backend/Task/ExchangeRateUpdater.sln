@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B8C5558D-8F54-4933-BEA7-32318BD1A6D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Domain.UnitTests", "ExchangeRateUpdater.Domain.UnitTests\ExchangeRateUpdater.Domain.UnitTests.csproj", "{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.UnitTests", "ExchangeRateUpdater.UnitTests\ExchangeRateUpdater.UnitTests.csproj", "{C4A89A68-1DFB-48AE-94E6-F1A46D728D22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.IntegrationTests", "ExchangeRateUpdater.IntegrationTests\ExchangeRateUpdater.IntegrationTests.csproj", "{CCCA8466-E5DE-400B-8370-5873A1673BB5}"
 EndProject
