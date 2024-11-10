@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,11 +23,8 @@ public class ExchangeRateEndpointTests : ApiTestBase
         var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
         var content = await response.Content.ReadFromJsonAsync<IResult>();
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(content, Is.Not.Null);
-        });
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        content.Should().NotBeNull();
     }
 
     [Test]
@@ -39,10 +37,7 @@ public class ExchangeRateEndpointTests : ApiTestBase
         var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
         var validationDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-            Assert.That(validationDetails, Is.Not.Null);
-        });
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        validationDetails.Should().NotBeNull();
     }
 }
