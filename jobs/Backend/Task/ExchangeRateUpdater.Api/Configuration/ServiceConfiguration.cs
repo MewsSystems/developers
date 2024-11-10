@@ -13,7 +13,8 @@ public static class ServiceConfiguration
             .AddEndpointsApiExplorer()
             .AddSwaggerGen()
             .ConfigureDependencies()
-            .ConfigureResiliencePolicy();
+            .ConfigureResiliencePolicy()
+            .ConfigureErrorHandling();
     }
 
     public static void ConfigureApplication(this WebApplication app)
@@ -26,6 +27,7 @@ public static class ServiceConfiguration
 
         app.UseHttpsRedirection();
         app.MapEndpoints();
+        app.ConfigureExceptionMiddleware();
     }
 
     private static IServiceCollection ConfigureDependencies(this IServiceCollection services)

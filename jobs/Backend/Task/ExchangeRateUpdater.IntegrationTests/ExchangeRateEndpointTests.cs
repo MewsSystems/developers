@@ -52,5 +52,8 @@ public class ExchangeRateEndpointTests : ApiTestBase
         validationDetails.Should().NotBeNull();
         validationDetails.Title.Should().NotBeNullOrEmpty();
         validationDetails.Errors.Should().HaveCountGreaterThan(0);
+        validationDetails.Instance.Should().Be($"GET /{BaseUrl}/");
+        validationDetails.Extensions.Should().ContainKey("requestId").WhoseValue.Should().NotBeNull();
+        validationDetails.Extensions.Should().ContainKey("traceId").WhoseValue.Should().NotBeNull();
     }
 }
