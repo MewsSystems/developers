@@ -1,3 +1,6 @@
+using ExchangeRate.Api.Clients;
+using ExchangeRate.Domain.Providers;
+
 namespace ExchangeRate.Api.Configuration;
 
 public static class ServiceConfiguration
@@ -6,7 +9,9 @@ public static class ServiceConfiguration
     {
         builder.Services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
+            .AddSwaggerGen()
+            .ConfigureDependencies()
+            .ConfigureResiliencePolicy();
     }
 
     public static void ConfigureApplication(this WebApplication app)
@@ -19,5 +24,17 @@ public static class ServiceConfiguration
 
         app.UseHttpsRedirection();
         app.MapEndpoints();
+    }
+
+    private static IServiceCollection ConfigureDependencies(this IServiceCollection services)
+    {
+        return services
+            .RegisterExchangeRateProviders();
+    }
+
+    private static IServiceCollection RegisterExchangeRateProviders(this IServiceCollection services)
+    {
+        return services
+            .AddKeyedTransient<IExchangeRateClient, CzechNationalBankClient>(ExchangeRateProviderType.Cnb);
     }
 }

@@ -7,6 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.Extensions.Http.Resilience"/>
         <PackageReference Include="Swashbuckle.AspNetCore"/>
     </ItemGroup>
 
@@ -19,4 +20,5 @@
     <ItemGroup>
         <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj"/>
     </ItemGroup>
+
 </Project>

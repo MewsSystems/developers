@@ -1,13 +1,16 @@
 using System.Net;
 using System.Net.Http.Json;
+using ExchangeRate.Domain.Providers.CzechNationalBank;
+using ExchangeRate.IntegrationTests.Helpers;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRate.IntegrationTests;
 
 public class ExchangeRateEndpointTests : ApiTestBase
 {
+    private const string BaseUrl = "exrates/cnb";
+
     [SetUp]
     public void Setup()
     {
@@ -20,8 +23,12 @@ public class ExchangeRateEndpointTests : ApiTestBase
     public async Task ExchangeRateEndpoint_GetExchangeRate_ReturnsOkResponse(
         string date, string lang)
     {
-        var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
-        var content = await response.Content.ReadFromJsonAsync<IResult>();
+        var query = QueryBuilder.BuildUriQuery(BaseUrl,
+            ("date", date),
+            ("lang", lang));
+
+        var response = await Client.GetAsync(query);
+        var content = await response.Content.ReadFromJsonAsync<CzechNationalBankProviderResponse>();
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         content.Should().NotBeNull();
@@ -34,7 +41,11 @@ public class ExchangeRateEndpointTests : ApiTestBase
     public async Task ExchangeRateEndpoint_GetExchangeRateWithInvalidParameters_ReturnsBadRequestResponse(
         string date, string lang)
     {
-        var response = await Client.GetAsync($"/exrates/cnb?date={date}&lang={lang}");
+        var query = QueryBuilder.BuildUriQuery(BaseUrl,
+            ("date", date),
+            ("lang", lang));
+
+        var response = await Client.GetAsync(query);
         var validationDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

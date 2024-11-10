@@ -1,11 +1,21 @@
 @ExchangeRate_Api_HostAddress = http://localhost:5250
 
-GET {{ExchangeRate_Api_HostAddress}}/healthchecks/api
+### 200 - No content - API Health check
+
+GET {{ExchangeRate_Api_HostAddress}}/healthcheck/api
 Accept: application/json
 
-###
+### 200 - Valid response - Get today's exchange rates from CNB 
 
 GET {{ExchangeRate_Api_HostAddress}}/exrates/cnb
 Accept: application/json
 
-###
+### 200 - Valid response - Get historic exchange rates from CNB in English
+
+GET {{ExchangeRate_Api_HostAddress}}/exrates/cnb?date=2022-05-17&lang=EN
+Accept: application/json
+
+### 400 - Validation error - Get daily exchange rates from CNB (invalid date & lang)
+
+GET {{ExchangeRate_Api_HostAddress}}/exrates/cnb?date=23019-05-17&lang=ZN
+Accept: application/json
