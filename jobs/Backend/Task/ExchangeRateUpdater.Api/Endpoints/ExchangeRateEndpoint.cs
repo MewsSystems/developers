@@ -1,4 +1,5 @@
 using ExchangeRate.Api.Clients;
+using ExchangeRate.Api.Middleware;
 using ExchangeRate.Domain.Providers;
 using ExchangeRate.Domain.Providers.CzechNationalBank;
 
@@ -17,6 +18,7 @@ public static class ExchangeRateEndpoint
             .ProducesValidationProblem()
             .Produces<CzechNationalBankProviderResponse>()
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .AddEndpointFilter<ValidationFilter<CzechNationalBankProviderRequest>>();
     }
 }

@@ -50,5 +50,7 @@ public class ExchangeRateEndpointTests : ApiTestBase
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         validationDetails.Should().NotBeNull();
+        validationDetails.Title.Should().NotBeNullOrEmpty();
+        validationDetails.Errors.Should().HaveCountGreaterThan(0);
     }
 }

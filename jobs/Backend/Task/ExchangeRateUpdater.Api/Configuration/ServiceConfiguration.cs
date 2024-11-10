@@ -1,5 +1,7 @@
 using ExchangeRate.Api.Clients;
 using ExchangeRate.Domain.Providers;
+using ExchangeRate.Domain.Validators;
+using FluentValidation;
 
 namespace ExchangeRate.Api.Configuration;
 
@@ -29,12 +31,18 @@ public static class ServiceConfiguration
     private static IServiceCollection ConfigureDependencies(this IServiceCollection services)
     {
         return services
-            .RegisterExchangeRateProviders();
+            .RegisterExchangeRateProviders()
+            .RegisterValidators();
     }
 
     private static IServiceCollection RegisterExchangeRateProviders(this IServiceCollection services)
     {
         return services
             .AddKeyedTransient<IExchangeRateClient, CzechNationalBankClient>(ExchangeRateProviderType.Cnb);
+    }
+
+    private static IServiceCollection RegisterValidators(this IServiceCollection services)
+    {
+        return services.AddValidatorsFromAssemblyContaining<CzechNationalBankProviderRequestValidator>();
     }
 }

@@ -2,4 +2,8 @@
     <PropertyGroup>
         <RootNamespace>ExchangeRate.Domain</RootNamespace>
     </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
+    </ItemGroup>
 </Project>

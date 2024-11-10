@@ -12,6 +12,8 @@ public static class EndpointMapping
 
         app.MapGroup("exrates")
             .WithOpenApi()
+            .WithDescription(
+                "Note for the test reviewer: There are limitations in .NET 8 Minimal APIs and Swagger. Certain customization and inference isn't supported around some types of metadata (e.g. description, examples, responses etc.)")
             .MapExchangeRateEndpoints();
     }
 }
