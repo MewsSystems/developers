@@ -2,8 +2,11 @@ using System.Net;
 using ExchangeRate.Api.Clients;
 using ExchangeRate.Domain.Extensions;
 using ExchangeRate.Domain.Providers.CzechNationalBank;
+using ExchangeRate.UnitTests.Extensions;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 
@@ -17,12 +20,15 @@ public class CzechNationalBankClientTests
     {
         _mockHttp = new MockHttpMessageHandler();
         _httpClient = _mockHttp.ToHttpClient();
-        _czechNationalBankClient = new CzechNationalBankClient(_httpClient);
+        _mockLogger = new Mock<ILogger<CzechNationalBankClient>>();
+        _czechNationalBankClient =
+            new CzechNationalBankClient(_httpClient, _mockLogger.Object);
         _baseAddressUri = new Uri("https://api.cnb.cz/cnbapi/exrates/daily");
     }
 
     private MockHttpMessageHandler _mockHttp;
     private HttpClient _httpClient;
+    private Mock<ILogger<CzechNationalBankClient>> _mockLogger;
     private CzechNationalBankClient _czechNationalBankClient;
     private Uri _baseAddressUri;
 
@@ -62,6 +68,9 @@ public class CzechNationalBankClientTests
 
         var providerResponseRate = providerResponseRates.First();
         providerResponseRate.Should().BeEquivalentTo(exchangeRate);
+
+        _mockLogger
+            .VerifyLog(LogLevel.Trace, $"Request to Czech National Bank with query parameters '{requestUri.Query}'");
     }
 
     [Test]
@@ -90,6 +99,9 @@ public class CzechNationalBankClientTests
         var problemResult = (ProblemHttpResult)result;
 
         problemResult.StatusCode.Should().Be((int)statusCode);
+
+        _mockLogger
+            .VerifyLog(LogLevel.Trace, $"Request to Czech National Bank with query parameters '{requestUri.Query}'");
     }
 
     [Test]

@@ -1,4 +1,6 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   exchangerateupdater.api:
     image: exchangerateupdater.api
     build:
@@ -6,3 +8,19 @@
       dockerfile: ExchangeRateUpdater.Api/Dockerfile
     ports:
       - "5250:8080"
+    depends_on:
+      - seq
+  
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: unless-stopped
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - seq-data:/data
+
+volumes:
+  seq-data: 

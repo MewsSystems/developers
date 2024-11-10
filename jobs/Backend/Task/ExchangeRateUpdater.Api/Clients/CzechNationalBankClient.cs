@@ -4,7 +4,7 @@ using ExchangeRate.Domain.Providers.CzechNationalBank;
 
 namespace ExchangeRate.Api.Clients;
 
-public sealed class CzechNationalBankClient(HttpClient httpClient)
+public sealed class CzechNationalBankClient(HttpClient httpClient, ILogger<CzechNationalBankClient> logger)
     : IExchangeRateClient
 {
     public string Name => "Czech National Bank";
@@ -17,18 +17,25 @@ public sealed class CzechNationalBankClient(HttpClient httpClient)
         var requestUri = request.ConstructRequestUri(BaseAddress);
         var httpResponse = await httpClient.GetAsync(requestUri, cancellationToken);
 
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var providerResponse = await httpResponse.Content
-                .ReadFromJsonAsync<CzechNationalBankProviderResponse>(cancellationToken);
+        LogRequestTrace(requestUri);
 
-            return TypedResults.Ok(providerResponse);
-        }
+        if (!httpResponse.IsSuccessStatusCode)
+            return Results.Problem(
+                type: httpResponse.ReasonPhrase,
+                detail: $"Failed with status code {httpResponse.StatusCode}",
+                statusCode: (int)httpResponse.StatusCode
+            );
 
-        return Results.Problem(
-            type: httpResponse.ReasonPhrase,
-            detail: $"Failed with status code {httpResponse.StatusCode}",
-            statusCode: (int)httpResponse.StatusCode
-        );
+        var providerResponse = await httpResponse.Content
+            .ReadFromJsonAsync<CzechNationalBankProviderResponse>(cancellationToken);
+
+        return TypedResults.Ok(providerResponse);
+    }
+
+    private void LogRequestTrace(Uri requestUri)
+    {
+        logger.LogTrace("Request to {ExchangeRateProvider} with query parameters '{QueryParameters}'",
+            Name,
+            requestUri.Query);
     }
 }
