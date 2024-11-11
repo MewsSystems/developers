@@ -8,6 +8,6 @@ The solution has to be buildable, runnable and the test program should output th
 
 Goal is to implement a fully functional provider based on real world public data source of the assigned bank.
 
-To submit your solution, just open a new pull request to this repository.
+To submit your solution, create a Pull Request from a fork.
 
 Please write the code like you would if you needed this to run on production environment and had to take care of it long-term.
