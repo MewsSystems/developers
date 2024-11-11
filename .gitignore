@@ -21,3 +21,7 @@
 node_modules
 bower_components
 npm-debug.log
+
+FileContentIndex/
+v17/
+.vs/
