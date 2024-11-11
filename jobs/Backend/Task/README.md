@@ -31,8 +31,8 @@ Additionally, storing and loading secrets/keys would be facilitated via a secure
 ### Monitoring, alerting and observability
 
 The solution is set up to use OpenTelemetry and Serilog for basic instrumentation, which is then fed
-to [Seq](https://datalust.co/seq) (runs as
-part of the docker container).
+to [Seq](https://datalust.co/seq). Seq runs as part of the docker container and provides
+a [dashboard](http://localhost:5341/#/events).
 
 In a more mature solution, I would instead consider:
 
@@ -116,3 +116,4 @@ response with exchange rates from any of the available/configured providers.
 2. Unit and Integration Test projects are present in the solution. Execute them using your IDE's test runner UI, or by
    running `dotnet test` in the directory where the .sln file is located. Note that it is not necessary for the API to
    be running in order for the integration tests to succeed (the API is automatically spun up in memory).
+3. View traces/metrics in the [Seq Dashboard](http://localhost:5341/#/events)
