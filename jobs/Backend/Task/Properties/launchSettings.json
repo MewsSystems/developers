@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ExchangeRateUpdater": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CnbApiUrl": "https://api.cnb.cz"
+      }
+    }
+  }
+}
