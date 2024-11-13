@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('/public/Poppins-Regular.ttf') format('ttf'),
+    url('/public/Poppins-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: #141414;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  margin: 0px;
+  min-width: 430px;
+  font-family: 'MyCustomFont', sans-serif;
+}
+
+h3 {
+  margin: 5px 0px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 20px 40px;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+}
+
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Apply the 5-column, 4-row layout for desktop screens to fit 20 result per page */
+@media (min-width: 1024px) {
+  .movie-list {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, auto);
+  }
+}
+
+
+.movie-list img:hover {
+  box-shadow: 0 0 0 1px white;
+}
+
+.movie-list img {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.movie-item {
+  text-align: center;
+  cursor: pointer;
+}
+
+.movie-item img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.movie-details img {
+  width: 300px;
+  border-radius: 10px;
+
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s;
+}
+
+.movie-details {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+}
+
+/* For mobile screens */
+@media (max-width: 768px) {
+  .movie-details {
+    flex-direction: column;
+    padding: 40px;
+    gap: 20px;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+#mewslifx-logo {
+  padding: 40px;
+}
+
+.genres-container {
+  padding-top: 10px;
+  display: flex;
+  gap: 5px;
+}

@@ -1,0 +1,11 @@
+.genre-tag {
+	display: inline-block;
+	padding: 5px 15px;
+	margin-right: 10px;
+	background-color: #444;
+	color: #fff;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: bold;
+	white-space: nowrap;
+}
