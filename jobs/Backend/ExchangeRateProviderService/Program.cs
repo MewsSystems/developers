@@ -45,8 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // Use Prometheus metrics middleware
-app.UseMetricServer();
 app.UseHttpMetrics();
+app.UseMetricServer(url: "/metrics");
 
 app.UseHttpsRedirection();
 

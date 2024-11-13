@@ -78,3 +78,26 @@ System.ArgumentNullException: Value cannot be null. (Parameter 'source')
    at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
    at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 40
 2024-11-13 01:11:40.924 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:37:11.945 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:53:17.944 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:57:56.725 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:06.292 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:07.035 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:07.445 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:07.676 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:07.887 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.087 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.238 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.417 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.604 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.791 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:08.932 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:09.089 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:09.289 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:09.437 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 22:58:09.594 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 23:15:44.082 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 23:17:08.363 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 23:21:54.870 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 23:22:40.541 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 23:22:47.234 +01:00 [INF] Filtered exchange rates to 1 items

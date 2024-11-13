@@ -12,7 +12,6 @@ This project demonstrates a microservices architecture using .NET 6. The project
 - .NET 6 SDK
 - Prometheus
 - Serilog
-- 
 
 ## Setup and Configuration
 
