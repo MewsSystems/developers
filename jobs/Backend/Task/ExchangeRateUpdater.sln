@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdater.Tests", "..\ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{FDEE133A-227C-4826-88ED-46E04F4DDDB8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9AC6FD2A-748E-4304-88FE-B1DB1E83CC67}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateRetreivalService", "..\ExchangeRateRetreivalService\ExchangeRateRetreivalService.csproj", "{4D07415A-DA57-4C3A-8925-B3F9E895C1C9}"
 EndProject
@@ -17,9 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateUpdaterModels",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProviderService", "..\ExchangeRateProviderService\ExchangeRateProviderService.csproj", "{E51C4FD2-B47F-4069-AE55-1914118B9D3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateProviderService.Tests", "..\ExchangeRateProvider.Tests\ExchangeRateProviderService.Tests.csproj", "{1EE68CAB-98AD-4864-8C53-C88CCAB1167D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateProviderService.Tests", "..\ExchangeRateProvider.Tests\ExchangeRateProviderService.Tests.csproj", "{1EE68CAB-98AD-4864-8C53-C88CCAB1167D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateRetreivalService.Tests", "..\ExchangeRateRetreivalService.Tests\ExchangeRateRetreivalService.Tests.csproj", "{4235EF8D-2F75-4CF8-BD25-917A74BFEB86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRateRetreivalService.Tests", "..\ExchangeRateRetreivalService.Tests\ExchangeRateRetreivalService.Tests.csproj", "{4235EF8D-2F75-4CF8-BD25-917A74BFEB86}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prometheus", "Prometheus", "{5947C390-13BD-4FB0-A3BD-6D3A17BC0C1F}"
 	ProjectSection(SolutionItems) = preProject
