@@ -1,0 +1,80 @@
+2024-11-13 00:37:47.765 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.InvalidOperationException: An invalid request URI was provided. Either the request URI must be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 21
+2024-11-13 00:37:48.174 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:38:11.108 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.InvalidOperationException: An invalid request URI was provided. Either the request URI must be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 21
+2024-11-13 00:38:37.525 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:39:01.535 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.InvalidOperationException: An invalid request URI was provided. Either the request URI must be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 21
+2024-11-13 00:39:01.614 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:43:19.457 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.InvalidOperationException: An invalid request URI was provided. Either the request URI must be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 21
+2024-11-13 00:43:19.703 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:45:52.272 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.Net.Http.HttpRequestException: Response status code does not indicate success: 500 (Internal Server Error).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 22
+2024-11-13 00:45:52.558 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:47:40.479 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.Net.Http.HttpRequestException: Response status code does not indicate success: 500 (Internal Server Error).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 23
+2024-11-13 00:47:40.682 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 26
+2024-11-13 00:50:04.185 +01:00 [INF] Filtered exchange rates to 1 items
+2024-11-13 01:06:55.130 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.InvalidOperationException: An invalid request URI was provided. Either the request URI must be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.CheckRequestBeforeSend(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at ExchangeRateProviderService.Services.DataRetrievalClient.GetExchangeRatesAsync(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Services\DataRetrievalClient.cs:line 37
+2024-11-13 01:06:55.380 +01:00 [ERR] Error fetching exchange rates from CNB API
+System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+   at System.Linq.ThrowHelper.ThrowArgumentNullException(ExceptionArgument argument)
+   at System.Linq.Enumerable.Count[TSource](IEnumerable`1 source)
+   at ExchangeRateProviderService.Controllers.ExchangeRateProviderController.GetExchangeRates(IEnumerable`1 currencies) in C:\task\jobs\Backend\ExchangeRateProviderService\Controllers\ExchangeRateProviderController.cs:line 40
+2024-11-13 01:11:40.924 +01:00 [INF] Filtered exchange rates to 1 items
