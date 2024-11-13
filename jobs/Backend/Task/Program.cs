@@ -1,32 +1,30 @@
 ﻿using System;
+using Serilog;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRateLogger;
+using ExchangeRateUpdaterConsole.src;
+using ExchangeRateUpdaterModels.Models;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdaterConsole
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        private static IEnumerable<CurrencyModel> currencies = CurrenciesMockModel.GetAllCurrencies().Select(code => new CurrencyModel(code));
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                Logger.Configure();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                ExchangeRateProvider provider = new ExchangeRateProvider();
+                IEnumerable<ExchangeRateModel> rates = await provider.GetExchangeRatesAsync(currencies);
+
+                Log.Information($"Successfully retrieved {rates.Count()} exchange rates:");
+
+
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -34,7 +32,8 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Log.Error(e, "Could not retrieve exchange rates");
+
             }
 
             Console.ReadLine();
