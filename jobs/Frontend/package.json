@@ -1,0 +1,42 @@
+{
+  "name": "movie-search-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "checkts": "tsc --noEmit",
+    "preview": "vite preview",
+    "format": "prettier . --write",
+    "analyze": "vite-bundle-visualizer",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.49.2",
+    "@types/lodash": "^4.17.6",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.24.1",
+    "styled-components": "^6.1.11"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "cypress": "^13.13.0",
+    "fetch-mock": "^10.0.7",
+    "jsdom": "^24.1.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "3.3.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "vitest": "^1.6.0"
+  }
+}
