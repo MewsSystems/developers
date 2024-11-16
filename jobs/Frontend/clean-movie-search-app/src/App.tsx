@@ -1,75 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useCallback } from 'react';
 import { searchMovies } from './api/movieApi';
-import { Movie } from './api/types';
+import { Movie } from './api';
+import { SearchBar } from './components/SearchBar/SearchBar';
+import { MovieList } from './components/MovieList/MovieList';
+import { useSearchDebounce } from './hooks/useSearchDebounce';
+import styled from 'styled-components';
 
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 24px;
+`;
 
 function App() {
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
-  const sampleSearch = 'Cars';
+  const debouncedQuery = useSearchDebounce(query);
 
-  useEffect(() => {
-    const fetchInitialMovies = async () => {
-      try {
-        setLoading(true);
-        const response = await searchMovies(sampleSearch);
-        setMovies(response.results);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleSearch = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      // TODO - Better handle empty search query
+      setMovies([]);
+      return;
+    }
 
-    fetchInitialMovies();
+    try {
+      setLoading(true);
+      setError('');
+      const response = await searchMovies(searchQuery);
+      setMovies(response.results);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred retriving movies');
+      setMovies([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  React.useEffect(() => {
+    handleSearch(debouncedQuery);
+  }, [debouncedQuery, handleSearch]);
+
+  const handleMovieClick = (movieId: number) => {
+    console.log('Id of the selected movie:', movieId);
+    // Navigation to movie details to be introduced
+  };
 
   return (
-    <AppContainer>
-      <h1>MovieDipslayinator 3000</h1>
-      <MovieGrid>
-        {movies.map((movie) => (
-          <MovieCard key={movie.id}>
-            <h3>{movie.title}</h3>
-            {movie.poster_path && (
-              <MoviePoster
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                alt={movie.title}
-              />
-            )}
-          </MovieCard>
-        ))}
-      </MovieGrid>
-    </AppContainer>
+    <Container>
+      <Title>What to watch</Title>
+      <SearchBar value={query} onChange={setQuery}/>
+      {loading && <div>Finding movies...</div>}
+      {error && <div>Error: {error}</div>}
+      {!loading && !error && <MovieList movies={movies} onMovieClick={handleMovieClick} />}
+    </Container>
   );
 }
 
 export default App;
-
-const AppContainer = styled.div`
-  padding: 20px;
-`;
-
-const MovieGrid = styled.div`
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-`;
-
-const MovieCard = styled.div`
-  border: 1px solid black;
-  padding: 10px;
-  background-color: #EEEEEE;
-  border-radius: 8px;
-`;
-
-const MoviePoster = styled.img`
-  width: 100%;
-  height: auto;
-`;
