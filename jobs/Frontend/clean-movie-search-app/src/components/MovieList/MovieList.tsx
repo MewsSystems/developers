@@ -15,7 +15,10 @@ interface MovieListProps {
   onMovieClick: (id: number) => void;
 }
 
-export const MovieList: React.FC<MovieListProps> = ({ movies, onMovieClick }) => (
+export const MovieList: React.FC<MovieListProps> = ({
+  movies,
+  onMovieClick,
+}) => (
   <Grid>
     {movies.map((movie) => (
       <MovieCard key={movie.id} movie={movie} onClick={onMovieClick} />

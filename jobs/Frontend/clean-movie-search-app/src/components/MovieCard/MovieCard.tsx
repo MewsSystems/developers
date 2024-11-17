@@ -89,16 +89,16 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
             alt={movie.title}
           />
         )}
-        <Rating rating={movie.vote_average}>{movie.vote_average.toFixed(1)}</Rating>
+        <Rating rating={movie.vote_average}>
+          {movie.vote_average.toFixed(1)}
+        </Rating>
       </PosterContainer>
       <Content>
         <Title>{movie.title}</Title>
         {isValidDate && (
-          <ReleaseDate>
-            {releaseDate.toLocaleDateString()}
-          </ReleaseDate>
+          <ReleaseDate>{releaseDate.toLocaleDateString()}</ReleaseDate>
         )}
       </Content>
     </Card>
-  )
+  );
 };

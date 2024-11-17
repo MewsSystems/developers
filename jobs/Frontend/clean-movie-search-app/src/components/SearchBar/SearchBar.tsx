@@ -10,13 +10,13 @@ const Input = styled.input`
   max-width: 500px;
   padding: 12px 16px;
   font-size: 16px;
-  border: 2px solid #e1e1e1;
+  border: 2px solid #e0e0e0;
   border-radius: 8px;
   transition: border-color 0.2s;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #42a5f5;
   }
 `;
 

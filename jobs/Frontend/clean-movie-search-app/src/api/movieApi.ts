@@ -8,7 +8,7 @@ export const searchMovies = async (
   page: number = 1
 ): Promise<MovieSearchResponse> => {
   // Introduce a delay of 0.5 second (500 milliseconds) - Kayak style
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   const response = await fetch(
     `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
