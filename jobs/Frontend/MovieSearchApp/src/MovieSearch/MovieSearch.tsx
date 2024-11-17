@@ -4,13 +4,13 @@ import { Pagination, PaginationProps } from "./Pagination";
 import { useDebounce } from "@/components/hooks/useDebounce";
 import { useGetMovies } from "./useGetMovies";
 import { MovieRow, MovieList } from "./MovieList";
-import { ErrorMessage } from "@/components/ui/error-message";
 import { extractYearFromReleaseDate } from "../../utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { MovieDetail } from "@/MovieDetail/MovieDetail";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { keepPreviousData } from "@tanstack/react-query";
+import { Frown } from "lucide-react";
 
 /**
  * Movie search component.
@@ -35,7 +35,15 @@ export const MovieSearch = () => {
           className="h-12"
         />
       </div>
-      {debouncedSearchValue && <MovieSearchContent searchValue={debouncedSearchValue} />}
+      {debouncedSearchValue ? (
+        <div className="pt-16">
+          <MovieSearchContent searchValue={debouncedSearchValue} />
+        </div>
+      ) : (
+        <div className="pt-96 flex justify-center items-center text-2xl color-">
+          Search TheMovieDB for movies!
+        </div>
+      )}
     </section>
   );
 };
@@ -86,7 +94,7 @@ const MovieSearchContent: React.FC<MovieSearchContentProps> = ({ searchValue }) 
   };
 
   return (
-    <div className="pt-16">
+    <>
       <MovieList movies={movies} onTableRowClick={onTableRowClick} />
       <Pagination {...paginationProps} />
       {selectedMovie && (
@@ -99,10 +107,19 @@ const MovieSearchContent: React.FC<MovieSearchContentProps> = ({ searchValue }) 
           </DialogContent>
         </Dialog>
       )}
-    </div>
+    </>
   );
 };
 
 const NoResultsMessage = () => {
   return <div className="h-full flex justify-center items-center">Found 0 movies.</div>;
+};
+
+const ErrorMessage = () => {
+  return (
+    <div className="pt-80 text-2xl flex justify-center items-center">
+      <Frown className="mr-2" />
+      Unexpected error.
+    </div>
+  );
 };

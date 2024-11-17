@@ -14,10 +14,11 @@ describe("MovieSearch", () => {
     cleanup();
   });
 
-  test(`renders a search input`, async () => {
+  test(`renders a search input and a welcome message`, async () => {
     render(<MovieSearch />, { wrapper: TestProviders });
 
     expect(screen.getByRole("textbox", { name: /search movies/i })).toBeVisible();
+    expect(screen.getByText(/Search TheMovieDB for movies!/i)).toBeVisible();
   });
 
   describe(`when user searches for a movie`, () => {

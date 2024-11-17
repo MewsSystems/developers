@@ -55,7 +55,11 @@ export type Movie = Partial<{
   id: number;
 };
 
-const fetchMovie = async (movieId: number): Promise<Movie> => {
+type FetchMovieQueryParams = {
+  movieId: number;
+};
+
+const fetchMovie = async ({ movieId }: FetchMovieQueryParams): Promise<Movie> => {
   const response = await fetch(`${movieDetailsEndpoint}${movieId}?api_key=${apiKey}`);
 
   if (!response.ok) {
@@ -72,5 +76,5 @@ type UseGetMovieProps = QueryOptionsWithoutKeyAndFn<Movies> & {
 export const useGetMovie = ({ movieId }: UseGetMovieProps) =>
   useQuery<Movie>({
     queryKey: ["movies", movieId],
-    queryFn: () => fetchMovie(movieId),
+    queryFn: () => fetchMovie({ movieId }),
   });

@@ -25,19 +25,14 @@ export type Movies = {
   >;
 };
 
-export type FetchMoviesQueryParams = {
+type FetchMoviesQueryParams = {
   title: string;
   page?: number;
 };
 
-/**
- *
- * @param queryParams
- * @returns
- */
-const fetchMovies = async (queryParams: FetchMoviesQueryParams): Promise<Movies> => {
+const fetchMovies = async ({ title, page }: FetchMoviesQueryParams): Promise<Movies> => {
   const response = await fetch(
-    `${moviesUrlEndpoint}?api_key=${apiKey}&query=${encodeURI(queryParams.title)}&page=${queryParams.page}`
+    `${moviesUrlEndpoint}?api_key=${apiKey}&query=${encodeURI(title)}&page=${page}`
   );
 
   if (!response.ok) {

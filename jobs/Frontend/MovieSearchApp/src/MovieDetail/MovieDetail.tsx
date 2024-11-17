@@ -1,9 +1,9 @@
 import { useGetMovie } from "./useGetMovie";
-import { ErrorMessage } from "@/components/ui/error-message";
 import { imagesEndpoint } from "../../config";
 import { extractYearFromReleaseDate } from "../../utils";
 import { LoadingIndicator } from "@/components/ui/loading-indicator";
 import { ImageWithPlaceholder } from "./ImageWithPlaceholder";
+import { Frown } from "lucide-react";
 
 export type MovieDetailProps = {
   movieId: number;
@@ -53,6 +53,15 @@ export const MovieDetail: React.FC<MovieDetailProps> = ({ movieId }) => {
           <p>{movie.overview}</p>
         </div>
       </div>
+    </div>
+  );
+};
+
+export const ErrorMessage = () => {
+  return (
+    <div className="flex justify-center items-center">
+      <Frown className="mr-2" />
+      Unexpected error.
     </div>
   );
 };

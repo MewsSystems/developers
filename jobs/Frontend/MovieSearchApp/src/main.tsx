@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <main className="h-screen p-4">
+      <main className="min-h-screen p-4">
         <MovieSearch />
       </main>
     </QueryClientProvider>

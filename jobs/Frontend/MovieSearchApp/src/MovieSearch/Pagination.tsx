@@ -10,8 +10,8 @@ export type PaginationProps = {
 
 export function Pagination({ page, pageCount, goToPage, isDataLoading }: PaginationProps) {
   return (
-    <div className="flex flex-wrap items-center justify-between mt-4">
-      <div className="font-medium">
+    <div className="flex flex-wrap items-center justify-between py-4">
+      <div className="font-medium py-2">
         Page {page} of {pageCount}
       </div>
       <div className="flex items-center gap-2">

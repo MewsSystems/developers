@@ -35,7 +35,6 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 420px;
   min-height: 100vh;
 }
 
