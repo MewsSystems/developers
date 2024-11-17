@@ -1,15 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Movie } from '../../api';
-import { MovieCard } from '../MovieCard/MovieCard';
+import { MovieCard } from '../';
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 24px;
-  padding: 24px;
+  gap: ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => theme.spacing.xl};
 `;
-
 interface MovieListProps {
   movies: Movie[];
   onMovieClick: (id: number) => void;

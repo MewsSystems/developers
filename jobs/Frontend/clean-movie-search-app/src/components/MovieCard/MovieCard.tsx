@@ -3,15 +3,16 @@ import styled, { css } from 'styled-components';
 import { Movie } from '../../api';
 
 const Card = styled.div`
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   overflow: hidden;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  background: ${({ theme }) => theme.colors.card.background};
+  box-shadow: ${({ theme }) => theme.colors.card.shadow};
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: ${({ theme }) => theme.colors.card.hoverShadow};
   }
 `;
 
@@ -30,36 +31,37 @@ const Poster = styled.img`
 `;
 
 const Content = styled.div`
-  padding: 16px;
+  padding: ${({ theme }) => theme.spacing.md};
 `;
 
 const Title = styled.h3`
-  margin: 0 0 8px 0;
+  margin: 0 0 ${({ theme }) => theme.spacing.sm} 0;
   font-size: 1rem;
   font-weight: 600;
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 const ReleaseDate = styled.p`
   margin: 0;
-  color: #666;
+  color: ${({ theme }) => theme.colors.text.secondary};
   font-size: 0.875rem;
 `;
 
 const Rating = styled.div<{ rating: number }>`
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(0, 0, 0, 0.75);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
+  top: ${({ theme }) => theme.spacing.sm};
+  left: ${({ theme }) => theme.spacing.sm};
+  background: ${({ theme }) => theme.colors.rating.background};
+  color: ${({ theme }) => theme.colors.rating.text};
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
   font-size: 0.875rem;
 
-  ${({ rating }) =>
+  ${({ rating, theme }) =>
     rating >= 7.5 &&
     css`
-      color: gold;
-      border: 2px solid gold;
+      color: ${theme.colors.rating.highRating.text};
+      border: 2px solid ${theme.colors.rating.highRating.border};
     `}
 `;
 

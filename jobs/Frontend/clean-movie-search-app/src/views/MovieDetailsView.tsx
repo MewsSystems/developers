@@ -4,26 +4,35 @@ import { getMovieDetails } from '../api/movieApi';
 import { Movie } from '../api';
 import styled from 'styled-components';
 
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
 const BackButton = styled.button`
-  margin-bottom: 20px;
-  padding: 12px 12px;
-  background-color: #0277bd;
-  color: white;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  background-color: ${({ theme }) => theme.colors.button.background};
+  color: ${({ theme }) => theme.colors.button.text};
   border: none;
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   cursor: pointer;
+  transition: background-color 0.2s;
 
   &:hover {
-    background-color: #01579b;
+    background-color: ${({ theme }) => theme.colors.button.hover};
   }
 `;
 
 const MovieContainer = styled.div`
   display: grid;
   grid-template-columns: 300px 1fr;
-  gap: 24px;
-  padding: 20px;
-  background: white;
+  gap: ${({ theme }) => theme.spacing.xl};
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -31,31 +40,33 @@ const MovieContainer = styled.div`
 
 const PosterImage = styled.img`
   width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  box-shadow: ${({ theme }) => theme.colors.card.shadow};
 `;
 
 const MovieInfo = styled.div`
   h2 {
-    margin: 0 0 16px 0;
+    margin: 0 0 ${({ theme }) => theme.spacing.md} 0;
     font-size: 2rem;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   .rating {
     display: inline-block;
-    background: #0277bd;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    padding: 8px 8px;
+    background: ${({ theme }) => theme.colors.button.background};
+    color: ${({ theme }) => theme.colors.button.text};
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    border-radius: ${({ theme }) => theme.borderRadius.md};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
   }
 
   .release-date {
-    color: #757575;
+    color: ${({ theme }) => theme.colors.text.secondary};
   }
+
   .overview {
     line-height: 1.6;
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 `;
 
@@ -97,9 +108,11 @@ export const MovieDetailsView: React.FC = () => {
 
   return (
     <>
-      <BackButton onClick={() => navigate('/search')}>
-        ← Back to Searching
-      </BackButton>
+      <TopBar>
+        <BackButton onClick={() => navigate('/search')}>
+          ← Back to Searching
+        </BackButton>
+      </TopBar>
       <MovieContainer>
         {movie.poster_path ? (
           <PosterImage

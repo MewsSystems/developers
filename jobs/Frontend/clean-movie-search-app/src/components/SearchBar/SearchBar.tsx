@@ -2,21 +2,44 @@ import React from 'react';
 import styled from 'styled-components';
 
 const SearchContainer = styled.div`
-  margin: 20px 0;
+  margin: ${({ theme }) => `${theme.spacing.lg} 0`};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 const Input = styled.input`
   width: 100%;
   max-width: 500px;
-  padding: 12px 16px;
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.lg}`};
   font-size: 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  transition: border-color 0.2s;
+  border: 2px solid ${({ theme }) => theme.colors.input.border};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background-color: ${({ theme }) => theme.colors.input.background};
+  color: ${({ theme }) => theme.colors.text.primary};
+  transition: border-color 0.2s, background-color 0.3s, color 0.3s;
 
   &:focus {
     outline: none;
-    border-color: #42a5f5;
+    border-color: ${({ theme }) => theme.colors.input.focusBorder};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.text.secondary};
+  }
+`;
+
+const ThemeButton = styled.button`
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
+  background-color: ${({ theme }) => theme.colors.button.background};
+  color: ${({ theme }) => theme.colors.button.text};
+  border: none;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.button.hover};
   }
 `;
 
@@ -30,13 +53,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
   placeholder = 'Search for what to watch next...',
-}) => (
-  <SearchContainer>
-    <Input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-    />
-  </SearchContainer>
-);
+}) => {
+
+  return (
+    <SearchContainer>
+      <Input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+    </SearchContainer>
+  );
+};

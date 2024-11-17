@@ -1,35 +1,36 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SearchBar } from '../components/SearchBar/SearchBar';
-import { MovieList } from '../components/MovieList/MovieList';
+import { SearchBar, MovieList } from '../components';
 import { useSearchDebounce } from '../hooks/useSearchDebounce';
 import { useMovieContext } from '../context/MovieContext';
 import styled from 'styled-components';
 
 const LoadMoreButton = styled.button`
   display: block;
-  margin: 24px auto;
-  padding: 12px 24px;
-  background-color: #007bff;
-  color: white;
+  margin: ${({ theme }) => `${theme.spacing.xl} auto`};
+  padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.xl}`};
+  background-color: ${({ theme }) => theme.colors.button.background};
+  color: ${({ theme }) => theme.colors.button.text};
   border: none;
-  border-radius: 4px;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.2s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: ${({ theme }) => theme.colors.button.hover};
   }
 
   &:disabled {
-    background-color: #cccccc;
+    background-color: ${({ theme }) => theme.colors.text.secondary};
     cursor: not-allowed;
   }
 `;
 
 const LoadingIndicator = styled.div`
   text-align: center;
-  padding: 20px;
+  padding: ${({ theme }) => theme.spacing.lg};
+  color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
 export const SearchView: React.FC = () => {
