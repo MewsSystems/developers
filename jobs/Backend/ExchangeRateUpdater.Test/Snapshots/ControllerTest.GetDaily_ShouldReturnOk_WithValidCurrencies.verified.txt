@@ -1,0 +1,343 @@
+﻿{
+  target: {
+    Value: [
+      {
+        Rate: EUR / CZK = 25,750
+      },
+      {
+        Rate: JPY / CZK = 0,21045
+      },
+      {
+        Rate: RUB / CZK = 0,35668
+      },
+      {
+        Rate: THB / CZK = 0,72534
+      },
+      {
+        Rate: TRY / CZK = 3,806
+      },
+      {
+        Rate: USD / CZK = 23,048
+      }
+    ],
+    StatusCode: 200
+  },
+  httpCall: {
+    Status: Created,
+    Request: {
+      Uri: {
+        Path: https://api.cnb.cz/cnbapi/exrates/daily,
+        Query: {
+          date: 2019-05-17
+        }
+      }
+    },
+    Response: {
+      Status: 200 OK,
+      ContentHeaders: {
+        Content-Type: application/json
+      },
+      ContentStringParsed: {
+        rates: [
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Austrálie,
+            currency: dolar,
+            amount: 1,
+            currencyCode: AUD,
+            rate: 15.858
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Brazílie,
+            currency: real,
+            amount: 1,
+            currencyCode: BRL,
+            rate: 5.686
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Bulharsko,
+            currency: lev,
+            amount: 1,
+            currencyCode: BGN,
+            rate: 13.162
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Čína,
+            currency: žen-min-pi,
+            amount: 1,
+            currencyCode: CNY,
+            rate: 3.334
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Dánsko,
+            currency: koruna,
+            amount: 1,
+            currencyCode: DKK,
+            rate: 3.448
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: EMU,
+            currency: euro,
+            amount: 1,
+            currencyCode: EUR,
+            rate: 25.75
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Filipíny,
+            currency: peso,
+            amount: 100,
+            currencyCode: PHP,
+            rate: 43.71
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Hongkong,
+            currency: dolar,
+            amount: 1,
+            currencyCode: HKD,
+            rate: 2.936
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Chorvatsko,
+            currency: kuna,
+            amount: 1,
+            currencyCode: HRK,
+            rate: 3.466
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Indie,
+            currency: rupie,
+            amount: 100,
+            currencyCode: INR,
+            rate: 32.828
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Indonesie,
+            currency: rupie,
+            amount: 1000,
+            currencyCode: IDR,
+            rate: 1.595
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Island,
+            currency: koruna,
+            amount: 100,
+            currencyCode: ISK,
+            rate: 18.768
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Izrael,
+            currency: nový šekel,
+            amount: 1,
+            currencyCode: ILS,
+            rate: 6.448
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Japonsko,
+            currency: jen,
+            amount: 100,
+            currencyCode: JPY,
+            rate: 21.045
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Jižní Afrika,
+            currency: rand,
+            amount: 1,
+            currencyCode: ZAR,
+            rate: 1.603
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Kanada,
+            currency: dolar,
+            amount: 1,
+            currencyCode: CAD,
+            rate: 17.081
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Korejská republika,
+            currency: won,
+            amount: 100,
+            currencyCode: KRW,
+            rate: 1.929
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Maďarsko,
+            currency: forint,
+            amount: 100,
+            currencyCode: HUF,
+            rate: 7.883
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Malajsie,
+            currency: ringgit,
+            amount: 1,
+            currencyCode: MYR,
+            rate: 5.518
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Mexiko,
+            currency: peso,
+            amount: 1,
+            currencyCode: MXN,
+            rate: 1.201
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: MMF,
+            currency: ZPČ,
+            amount: 1,
+            currencyCode: XDR,
+            rate: 31.851
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Norsko,
+            currency: koruna,
+            amount: 1,
+            currencyCode: NOK,
+            rate: 2.629
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Nový Zéland,
+            currency: dolar,
+            amount: 1,
+            currencyCode: NZD,
+            rate: 15.051
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Polsko,
+            currency: zlotý,
+            amount: 1,
+            currencyCode: PLN,
+            rate: 5.984
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Rumunsko,
+            currency: leu,
+            amount: 1,
+            currencyCode: RON,
+            rate: 5.407
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Rusko,
+            currency: rubl,
+            amount: 100,
+            currencyCode: RUB,
+            rate: 35.668
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Singapur,
+            currency: dolar,
+            amount: 1,
+            currencyCode: SGD,
+            rate: 16.758
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Švédsko,
+            currency: koruna,
+            amount: 1,
+            currencyCode: SEK,
+            rate: 2.392
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Švýcarsko,
+            currency: frank,
+            amount: 1,
+            currencyCode: CHF,
+            rate: 22.819
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Thajsko,
+            currency: baht,
+            amount: 100,
+            currencyCode: THB,
+            rate: 72.534
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Turecko,
+            currency: lira,
+            amount: 1,
+            currencyCode: TRY,
+            rate: 3.806
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: USA,
+            currency: dolar,
+            amount: 1,
+            currencyCode: USD,
+            rate: 23.048
+          },
+          {
+            validFor: 2019-05-17,
+            order: 94,
+            country: Velká Británie,
+            currency: libra,
+            amount: 1,
+            currencyCode: GBP,
+            rate: 29.395
+          }
+        ]
+      }
+    }
+  }
+}
