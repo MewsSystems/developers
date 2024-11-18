@@ -14,7 +14,7 @@ export function Pagination({ page, pageCount, goToPage, isDataLoading }: Paginat
       <div className="font-medium py-2">
         Page {page} of {pageCount}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Button
           variant="outline"
           className="shadow-sm"

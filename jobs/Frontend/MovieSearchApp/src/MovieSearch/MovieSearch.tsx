@@ -23,7 +23,7 @@ export const MovieSearch = () => {
 
   return (
     <>
-      <div className="absolute left-4 right-4 m-auto max-w-4xl">
+      <div className="pb-4">
         <Input
           aria-label="search movies"
           value={searchValue}
@@ -34,11 +34,9 @@ export const MovieSearch = () => {
         />
       </div>
       {debouncedSearchValue ? (
-        <div className="pt-16">
-          <MovieSearchContent searchValue={debouncedSearchValue} />
-        </div>
+        <MovieSearchContent searchValue={debouncedSearchValue} />
       ) : (
-        <div className="pt-96 center-items text-2xl color-">Search TheMovieDB for movies!</div>
+        <div className="center-items text-2xl">Search TheMovieDB for movies!</div>
       )}
     </>
   );
@@ -105,12 +103,12 @@ const MovieSearchContent: React.FC<MovieSearchContentProps> = ({ searchValue }) 
 };
 
 const NoResultsMessage = () => {
-  return <div className="h-full center-items">Found 0 movies.</div>;
+  return <div className="text-2xl center-items">Found 0 movies.</div>;
 };
 
 const ErrorMessage = () => {
   return (
-    <div className="pt-80 text-2xl center-items">
+    <div className="text-2xl center-items">
       <Frown className="mr-2" />
       Ooops, something went wrong.
     </div>

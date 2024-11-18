@@ -7,11 +7,11 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-  <QueryClientProvider client={queryClient}>
-    <main className="min-h-screen p-4">
-      <MovieSearch />
-    </main>
-  </QueryClientProvider>
-  // </StrictMode>
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <main className="flex flex-col min-h-screen p-4 min-w-[500px] max-w-5xl m-auto">
+        <MovieSearch />
+      </main>
+    </QueryClientProvider>
+  </StrictMode>
 );
