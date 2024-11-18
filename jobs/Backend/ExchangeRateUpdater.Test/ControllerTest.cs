@@ -52,9 +52,9 @@ namespace ExchangeRateUpdater.Test
             _verifySettings.IgnoreMembers("Headers");
             _verifySettings.IgnoreMember("messageId");
             _verifySettings.IgnoreMember("happenedAt");
-                _verifySettings.AutoVerify();
             _verifySettings.OnFirstVerify((filePair, receivedText, approvedText) =>
             {
+                _verifySettings.AutoVerify();
                 return Task.CompletedTask;
             });
         }
