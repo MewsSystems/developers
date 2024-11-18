@@ -2,12 +2,15 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Movie } from '../../api';
 
-const Card = styled.div`
+const Card = styled.article`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   overflow: hidden;
   background: ${({ theme }) => theme.colors.card.background};
   box-shadow: ${({ theme }) => theme.colors.card.shadow};
-  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background-color 0.3s;
   cursor: pointer;
 
   &:hover {
@@ -75,7 +78,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
   const isValidDate = !isNaN(releaseDate.getDate());
 
   return (
-    <Card onClick={() => onClick(movie.id)}>
+    <Card onClick={() => onClick(movie.id)} aria-label={`Movie card for ${movie.title}`}> 
       <PosterContainer>
         {movie.poster_path ? (
           <Poster
@@ -91,9 +94,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
             alt={movie.title}
           />
         )}
-        <Rating rating={movie.vote_average}>
-          {movie.vote_average.toFixed(1)}
-        </Rating>
+        {typeof movie.vote_average === 'number' && ( 
+          <Rating rating={movie.vote_average} aria-label={`Rating: ${movie.vote_average.toFixed(1)}`}> 
+            {movie.vote_average.toFixed(1)}
+          </Rating>
+        )}
       </PosterContainer>
       <Content>
         <Title>{movie.title}</Title>

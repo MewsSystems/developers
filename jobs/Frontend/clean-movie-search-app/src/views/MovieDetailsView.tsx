@@ -32,7 +32,7 @@ const MovieContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
   background: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -55,7 +55,8 @@ const MovieInfo = styled.div`
     display: inline-block;
     background: ${({ theme }) => theme.colors.button.background};
     color: ${({ theme }) => theme.colors.button.text};
-    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+    padding: ${({ theme }) => theme.spacing.sm}
+      ${({ theme }) => theme.spacing.md};
     border-radius: ${({ theme }) => theme.borderRadius.md};
     margin-bottom: ${({ theme }) => theme.spacing.md};
   }
@@ -89,7 +90,7 @@ export const MovieDetailsView: React.FC = () => {
         setError(
           err instanceof Error
             ? err.message
-            : 'Sorry, an error occurred while retrieving the movie detail :('
+            : 'Sorry, an error occurred while retrieving the movie details'
         );
       } finally {
         setLoading(false);
@@ -100,7 +101,7 @@ export const MovieDetailsView: React.FC = () => {
   }, [id]);
 
   if (loading) return <div>Loading movie details...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>{error}</div>;
   if (!movie) return <div>Movie not found</div>;
 
   const releaseDate = new Date(movie.release_date);

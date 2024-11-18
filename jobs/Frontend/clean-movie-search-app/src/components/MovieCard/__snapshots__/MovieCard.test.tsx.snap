@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MovieCard matches the snapshot 1`] = `
+<div>
+  <article
+    aria-label="Movie card for Movie Title"
+    class="sc-blHHSb cFyGuL"
+  >
+    <div
+      class="sc-gtLWhw ivqwil"
+    >
+      <img
+        alt="Movie Title"
+        class="sc-egkSDF dZwIUo"
+        loading="lazy"
+        src="https://image.tmdb.org/t/p/w500/poster.jpg"
+      />
+      <div
+        aria-label="Rating: 7.8"
+        class="sc-ghWlax jpWtuz"
+        rating="7.8"
+      >
+        7.8
+      </div>
+    </div>
+    <div
+      class="sc-fAUdSK cDEqUf"
+    >
+      <h3
+        class="sc-dntaoT fhBgiP"
+      >
+        Movie Title
+      </h3>
+      <p
+        class="sc-ivxoEo cffOek"
+      >
+        11/17/2024
+      </p>
+    </div>
+  </article>
+</div>
+`;

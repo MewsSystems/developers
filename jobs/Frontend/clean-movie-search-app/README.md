@@ -1,6 +1,51 @@
-# Getting Started with Create React App
+# Movie Search Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive, clean and simple movie search application built with React and TypeScript that helps users discover and explore films through an intuitive interface.
+
+## Features
+
+- **Dynamic Search**: Dynamic search functionality were the search input automatically starts searching after typing is finished (via Debouncing). 
+- **Results Display**: The results are displayed in a paginated list with an option to load additional batches after a short intentional delay.
+- **Movie Detail**: Displays detailed info about a selected movie, together with the rating and the poster (when available).
+
+## Technical Features
+
+- **Dark theme toggle**: Toggle between dark and light themes, with dark mode as the default for reduced eye strain.
+- **Context-Based Movie Cachingt**: Efficient storage of search results using React Context to minimize API calls.
+- **Debounced Search**: Optimized search implementation that triggers only after users finish typing.
+- **Design System**: Token-based styling architecture enabling consistent and maintainable design updates.
+
+### What is next:
+- Accesibilty can be further improved throught the application, making it more accesible to users with screen readers.
+- More rigorous testing can be introduced to further cover edge cases that might be encountered in production. 
+- Error states can be remimplemented to better inform the user and provide more information in case he contacts the maintainters
+- Protection agains webscrapers could be introduced as to prevent api usage abuse
+- And much more! There are always tiny things you can keep improving :D
+
+### What is next:
+- Accessibility: Expanding screen reader support and keyboard navigation
+- Testing Coverage: Implementation of additional test cases to ensure robust functionality
+- Error Handling: Enhanced error state management with improved user feedback
+- API Protection: Implementation of rate limiting and scraping prevention
+- And much more! There are always tiny things you can keep improving :D
+
+## Installation
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/janescorza/mews-take-home-task.git
+    cd movie-search-app
+    ```
+
+2. Navigate to the frontend directory:
+    ```sh
+    cd jobs/Frontend/clean-movie-search-app
+    ```
+
+3. Install the dependencies:
+    ```sh
+    npm install
+    ```
 
 ## Available Scripts
 
@@ -27,20 +72,4 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

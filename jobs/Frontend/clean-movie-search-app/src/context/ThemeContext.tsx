@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { Theme } from './types';
-import { lightTheme, darkTheme } from './themes';
+import { Theme } from '../theme/types';
+import { lightTheme, darkTheme } from '../theme/themes';
 
 interface ThemeContextType {
   theme: Theme;
@@ -10,7 +10,9 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [theme, setTheme] = useState<Theme>(darkTheme);
 
   const toggleTheme = useCallback(() => {

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SearchView } from './views/SearchView';
 import { MovieDetailsView } from './views/MovieDetailsView';
 import { MovieProvider } from './context/MovieContext';
-import { ThemeProvider } from './theme/ThemeContext';
+import { ThemeProvider } from './context/ThemeContext';
 import styled from 'styled-components';
 import { ThemeToggle } from './components';
 
@@ -11,7 +11,9 @@ const AppContainer = styled.div`
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text.primary};
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 `;
 
 const Container = styled.div`
@@ -38,12 +40,17 @@ function App() {
     <ThemeProvider>
       <MovieProvider>
         <AppContainer>
-          <BrowserRouter>
+          <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+          >
             <Container>
-            <TopBar>
-              <Title>What to watch...</Title>
-              <ThemeToggle />
-            </TopBar>
+              <TopBar>
+                <Title>What to watch...</Title>
+                <ThemeToggle />
+              </TopBar>
               <Routes>
                 <Route path="/search" element={<SearchView />} />
                 <Route path="/movie/:id" element={<MovieDetailsView />} />

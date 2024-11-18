@@ -17,7 +17,10 @@ const Input = styled.input`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   background-color: ${({ theme }) => theme.colors.input.background};
   color: ${({ theme }) => theme.colors.text.primary};
-  transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+  transition:
+    border-color 0.2s,
+    background-color 0.3s,
+    color 0.3s;
 
   &:focus {
     outline: none;
@@ -26,20 +29,6 @@ const Input = styled.input`
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.text.secondary};
-  }
-`;
-
-const ThemeButton = styled.button`
-  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
-  background-color: ${({ theme }) => theme.colors.button.background};
-  color: ${({ theme }) => theme.colors.button.text};
-  border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.button.hover};
   }
 `;
 
@@ -54,7 +43,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onChange,
   placeholder = 'Search for what to watch next...',
 }) => {
-
   return (
     <SearchContainer>
       <Input

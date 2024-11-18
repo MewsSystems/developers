@@ -1,7 +1,7 @@
 // components/ThemeToggle/ThemeToggle.tsx
 import React from 'react';
 import styled from 'styled-components';
-import { useTheme } from '../../theme/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const ToggleButton = styled.button`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
@@ -10,7 +10,9 @@ const ToggleButton = styled.button`
   border: 2px solid ${({ theme }) => theme.colors.button.background};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.button.hover};
@@ -21,9 +23,5 @@ const ToggleButton = styled.button`
 export const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
-  return (
-    <ToggleButton onClick={toggleTheme}>
-      Toggle Theme
-    </ToggleButton>
-  );
+  return <ToggleButton onClick={toggleTheme}>Toggle Theme</ToggleButton>;
 };
