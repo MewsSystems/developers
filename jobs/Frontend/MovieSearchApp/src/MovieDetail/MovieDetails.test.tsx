@@ -23,7 +23,9 @@ describe("MovieDetail", () => {
         isError: false,
       });
 
-      render(<MovieDetail movieId={1} />, { wrapper: TestProviders });
+      render(<MovieDetail movieId={1} movieTitle="Lord of the rings: Two Towers" onClose={() => {}} />, {
+        wrapper: TestProviders,
+      });
 
       expect(await screen.findByText(/Lord of the rings: Two Towers/i)).toBeVisible();
       expect(await screen.findByText(/loading image/i)).toBeDefined();
@@ -35,14 +37,16 @@ describe("MovieDetail", () => {
     });
 
     test(`when genres, production countries, release year or runtime is missing,
-          renders the unknown message`, async () => {
+          renders the unknown message and a movie title`, async () => {
       vi.mocked(useGetMovie, { partial: true }).mockReturnValue({
         isPending: false,
         data: testMovieDataMissing,
         isError: false,
       });
 
-      render(<MovieDetail movieId={1} />, { wrapper: TestProviders });
+      render(<MovieDetail movieId={1} movieTitle="Lord of the rings: Two Towers" onClose={() => {}} />, {
+        wrapper: TestProviders,
+      });
 
       expect(await screen.findByText(/Lord of the rings: Two Towers/i)).toBeVisible();
       expect(await screen.findByText(/Genres unknown/i)).toBeVisible();
@@ -53,29 +57,35 @@ describe("MovieDetail", () => {
   });
 
   test(`When movie data is being fetched,
-   renders "Fetching movie details..." loading message)`, async () => {
+   renders "Fetching movie details..." loading message and a movie title)`, async () => {
     vi.mocked(useGetMovie, { partial: true }).mockReturnValue({
       isPending: true,
       data: undefined,
       isError: false,
     });
 
-    render(<MovieDetail movieId={1} />, { wrapper: TestProviders });
+    render(<MovieDetail movieId={1} movieTitle="Cool movie" onClose={() => {}} />, {
+      wrapper: TestProviders,
+    });
 
+    expect(await screen.findByText(/cool movie/i)).toBeVisible();
     expect(await screen.findByText(/Fetching movie details.../i)).toBeVisible();
   });
 
   test(`When movie data fails to get fetched,
-   renders "Unexpected error" message)`, async () => {
+   renders "Ooops, something went wrong." message and a movie title)`, async () => {
     vi.mocked(useGetMovie, { partial: true }).mockReturnValue({
       isPending: false,
       data: undefined,
       isError: true,
     });
 
-    render(<MovieDetail movieId={1} />, { wrapper: TestProviders });
+    render(<MovieDetail movieId={1} movieTitle="Cool movie" onClose={() => {}} />, {
+      wrapper: TestProviders,
+    });
 
-    expect(await screen.findByText(/Unexpected error/i)).toBeVisible();
+    expect(await screen.findByText(/cool movie/i)).toBeVisible();
+    expect(await screen.findByText(/Ooops, something went wrong./i)).toBeVisible();
   });
 });
 
@@ -93,5 +103,5 @@ const testMovieAllData: Movie = {
 
 const testMovieDataMissing: Movie = {
   id: 1,
-  original_title: "Lord of The Rings: Two Towers",
+  original_title: "Movie",
 };

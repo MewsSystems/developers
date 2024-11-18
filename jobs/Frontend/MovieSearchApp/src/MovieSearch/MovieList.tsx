@@ -2,14 +2,14 @@ import { TableBody, TableRow, TableCell, Table } from "@/components/ui/table";
 
 export type MovieRow = {
   id: number;
-  originalTitle?: string;
+  originalTitle: string;
   originalLanguage?: string;
   releaseDate?: string;
 };
 
 export type MovieListProps = {
   movies: Array<MovieRow>;
-  onTableRowClick: (movieId: number) => void;
+  onTableRowClick: (movieId: number, movieTitle: string) => void;
 };
 
 /**
@@ -17,10 +17,10 @@ export type MovieListProps = {
  */
 export function MovieList({ movies, onTableRowClick }: MovieListProps) {
   return (
-    <Table>
+    <Table title="list of movies">
       <TableBody>
         {movies.map((movie) => (
-          <TableRow key={movie.id} onClick={() => onTableRowClick(movie.id)}>
+          <TableRow key={movie.id} onClick={() => onTableRowClick(movie.id, movie.originalTitle)}>
             <TableCell>{movie.releaseDate}</TableCell>
             <TableCell>{movie.originalLanguage}</TableCell>
             <TableCell className="font-medium">{movie.originalTitle}</TableCell>

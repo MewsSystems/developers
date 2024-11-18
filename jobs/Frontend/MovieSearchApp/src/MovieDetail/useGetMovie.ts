@@ -17,7 +17,6 @@ export type Movie = Partial<{
   homepage: string;
   imdb_id: string;
   original_language: string;
-  original_title: string;
   overview: string;
   popularity: number;
   poster_path: string;
@@ -53,6 +52,7 @@ export type Movie = Partial<{
   vote_count: number;
 }> & {
   id: number;
+  original_title: string;
 };
 
 type FetchMovieQueryParams = {

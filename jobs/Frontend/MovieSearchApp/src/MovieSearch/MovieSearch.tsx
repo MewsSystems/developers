@@ -5,10 +5,7 @@ import { useDebounce } from "@/components/hooks/useDebounce";
 import { useGetMovies } from "./useGetMovies";
 import { MovieRow, MovieList } from "./MovieList";
 import { extractYearFromReleaseDate } from "../../utils";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { MovieDetail } from "@/MovieDetail/MovieDetail";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { keepPreviousData } from "@tanstack/react-query";
 import { Frown } from "lucide-react";
 
@@ -25,7 +22,7 @@ export const MovieSearch = () => {
   const debouncedSearchValue = useDebounce(searchValue);
 
   return (
-    <section className="m-auto max-w-4xl h-full">
+    <>
       <div className="absolute left-4 right-4 m-auto max-w-4xl">
         <Input
           aria-label="search movies"
@@ -33,6 +30,7 @@ export const MovieSearch = () => {
           onChange={(event) => setSearchValue(event.currentTarget.value)}
           placeholder="Search movies..."
           className="h-12"
+          autoFocus
         />
       </div>
       {debouncedSearchValue ? (
@@ -40,11 +38,9 @@ export const MovieSearch = () => {
           <MovieSearchContent searchValue={debouncedSearchValue} />
         </div>
       ) : (
-        <div className="pt-96 flex justify-center items-center text-2xl color-">
-          Search TheMovieDB for movies!
-        </div>
+        <div className="pt-96 center-items text-2xl color-">Search TheMovieDB for movies!</div>
       )}
-    </section>
+    </>
   );
 };
 
@@ -54,7 +50,7 @@ type MovieSearchContentProps = {
 
 const MovieSearchContent: React.FC<MovieSearchContentProps> = ({ searchValue }) => {
   const [page, setPage] = useState<number>(1);
-  const [selectedMovie, setSelectedMovie] = useState<number | undefined>();
+  const [selectedMovie, setSelectedMovie] = useState<{ id: number; title: string } | undefined>();
 
   const { data, isError, isPlaceholderData } = useGetMovies({
     movieTitle: searchValue,
@@ -89,37 +85,34 @@ const MovieSearchContent: React.FC<MovieSearchContentProps> = ({ searchValue }) 
     isDataLoading: isPlaceholderData,
   };
 
-  const onTableRowClick = (movieId: number) => {
-    setSelectedMovie(movieId);
+  const onTableRowClick = (movieId: number, movieTitle: string) => {
+    setSelectedMovie({ id: movieId, title: movieTitle });
   };
 
   return (
     <>
       <MovieList movies={movies} onTableRowClick={onTableRowClick} />
       <Pagination {...paginationProps} />
-      {selectedMovie && (
-        <Dialog open={!!selectedMovie} onOpenChange={() => setSelectedMovie(undefined)}>
-          <DialogContent className="min-h-[425px] min-w-[400px] w-11/12 max-w-[1000px]">
-            <VisuallyHidden>
-              <DialogTitle />
-            </VisuallyHidden>
-            <MovieDetail movieId={selectedMovie} />
-          </DialogContent>
-        </Dialog>
+      {!!selectedMovie && (
+        <MovieDetail
+          movieId={selectedMovie.id}
+          movieTitle={selectedMovie.title}
+          onClose={() => setSelectedMovie(undefined)}
+        />
       )}
     </>
   );
 };
 
 const NoResultsMessage = () => {
-  return <div className="h-full flex justify-center items-center">Found 0 movies.</div>;
+  return <div className="h-full center-items">Found 0 movies.</div>;
 };
 
 const ErrorMessage = () => {
   return (
-    <div className="pt-80 text-2xl flex justify-center items-center">
+    <div className="pt-80 text-2xl center-items">
       <Frown className="mr-2" />
-      Unexpected error.
+      Ooops, something went wrong.
     </div>
   );
 };

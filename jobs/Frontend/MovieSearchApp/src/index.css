@@ -135,8 +135,8 @@ button:focus-visible {
   }
 }
 
-.search-state-indicator {
+.center-items {
   display: flex;
   justify-content: center;
-  padding-top: 250px;
+  align-items: center;
 }

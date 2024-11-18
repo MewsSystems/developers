@@ -12,7 +12,6 @@ export type Movies = {
       backdrop_path: string;
       genre_ids: Array<number>;
       original_language: string;
-      original_title: string;
       overview: string;
       popularity: number;
       poster_path: string;
@@ -21,7 +20,7 @@ export type Movies = {
       video: boolean;
       vote_average: number;
       vote_count: number;
-    }> & { id: number }
+    }> & { id: number; original_title: string }
   >;
 };
 
