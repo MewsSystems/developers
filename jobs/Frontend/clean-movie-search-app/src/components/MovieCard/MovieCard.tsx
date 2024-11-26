@@ -50,7 +50,7 @@ const ReleaseDate = styled.p`
   font-size: 0.875rem;
 `;
 
-const Rating = styled.div<{ rating: number }>`
+const Rating = styled.div<{ $rating: number }>`
   position: absolute;
   top: ${({ theme }) => theme.spacing.sm};
   left: ${({ theme }) => theme.spacing.sm};
@@ -60,8 +60,8 @@ const Rating = styled.div<{ rating: number }>`
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   font-size: 0.875rem;
 
-  ${({ rating, theme }) =>
-    rating >= 7.5 &&
+  ${({ $rating, theme }) =>
+    $rating >= 7.5 &&
     css`
       color: ${theme.colors.rating.highRating.text};
       border: 2px solid ${theme.colors.rating.highRating.border};
@@ -99,7 +99,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
         )}
         {typeof movie.vote_average === 'number' && (
           <Rating
-            rating={movie.vote_average}
+            // use transient props to avoid passing the rating to the DOM
+            $rating={movie.vote_average}
             aria-label={`Rating: ${movie.vote_average.toFixed(1)}`}
           >
             {movie.vote_average.toFixed(1)}
