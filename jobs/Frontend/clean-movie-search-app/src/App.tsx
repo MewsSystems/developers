@@ -15,6 +15,11 @@ const AppContainer = styled.div.attrs({
   transition:
     background-color 0.3s,
     color 0.3s;
+`;
+
+const ContentWrapper = styled.div.attrs({
+  className: 'app-content-wrapper',
+})`
   max-width: 1200px;
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl};
@@ -52,6 +57,7 @@ function App() {
               v7_relativeSplatPath: true,
             }}
           >
+            <ContentWrapper>
             {/* Global top bar with title and theme toggle */}
             <TopBar>
               <Title>What to watch...</Title>
@@ -63,6 +69,7 @@ function App() {
               {/* Redirect to search view if he introduces non matching route */}
               <Route path="/" element={<Navigate to="/search" replace />} />
             </Routes>
+            </ContentWrapper>
           </BrowserRouter>
         </AppContainer>
       </MovieProvider>

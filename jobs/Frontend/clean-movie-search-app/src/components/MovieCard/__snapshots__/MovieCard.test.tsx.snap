@@ -18,7 +18,6 @@ exports[`MovieCard matches the snapshot 1`] = `
       <div
         aria-label="Rating: 7.8"
         class="sc-ghWlax jpWtuz"
-        rating="7.8"
       >
         7.8
       </div>
