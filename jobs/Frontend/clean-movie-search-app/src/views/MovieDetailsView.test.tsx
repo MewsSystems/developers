@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../theme/themes';
@@ -70,7 +66,7 @@ describe('MovieDetailsView', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          /Sorry, an error occurred while retrieving the movie details/i 
+          /Sorry, an error occurred while retrieving the movie details/i
         )
       ).toBeInTheDocument();
     });

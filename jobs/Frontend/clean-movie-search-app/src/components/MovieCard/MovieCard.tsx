@@ -78,7 +78,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
   const isValidDate = !isNaN(releaseDate.getDate());
 
   return (
-    <Card onClick={() => onClick(movie.id)} aria-label={`Movie card for ${movie.title}`}> 
+    <Card
+      onClick={() => onClick(movie.id)}
+      aria-label={`Movie card for ${movie.title}`}
+    >
       <PosterContainer>
         {movie.poster_path ? (
           <Poster
@@ -94,8 +97,11 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onClick }) => {
             alt={movie.title}
           />
         )}
-        {typeof movie.vote_average === 'number' && ( 
-          <Rating rating={movie.vote_average} aria-label={`Rating: ${movie.vote_average.toFixed(1)}`}> 
+        {typeof movie.vote_average === 'number' && (
+          <Rating
+            rating={movie.vote_average}
+            aria-label={`Rating: ${movie.vote_average.toFixed(1)}`}
+          >
             {movie.vote_average.toFixed(1)}
           </Rating>
         )}

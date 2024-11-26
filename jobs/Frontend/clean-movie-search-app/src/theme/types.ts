@@ -1,3 +1,4 @@
+// Interface for the theme object, to define the Theme Context
 export interface Theme {
   name: 'light' | 'dark';
   colors: {

@@ -1,15 +1,38 @@
 import { searchMovies, getMovieDetails } from '../api/movieApi';
 
-describe('movieApi', () => {
+describe('moviesApi', () => {
   const mockMovieResponse = {
+    page: 1,
     results: [
-      { id: 1, title: 'Movie 1' },
-      { id: 2, title: 'Movie 2' },
+      {
+        id: 1,
+        title: 'Movie 1',
+        overview: 'Overview of Movie 1',
+        poster_path: '/poster1.jpg',
+        release_date: '2024-11-01',
+        vote_average: 8.5,
+      },
+      {
+        id: 2,
+        title: 'Movie 2',
+        overview: 'Overview of Movie 2',
+        poster_path: null,
+        release_date: '2024-11-15',
+        vote_average: 7.8,
+      },
     ],
     total_pages: 2,
+    total_results: 2,
   };
 
-  const mockMovieDetails = { id: 1, title: 'Movie 1 Details' };
+  const mockMovieDetails = {
+    id: 1,
+    title: 'Movie 1',
+    overview: 'Detailed overview of Movie 1',
+    poster_path: '/poster1.jpg',
+    release_date: '2024-11-01',
+    vote_average: 8.5,
+  };
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -24,7 +47,8 @@ describe('movieApi', () => {
     await searchMovies('test', 2);
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      'https://api.themoviedb.org/3/search/movie?api_key=03b8572954325680265531140190fd2a&query=test&page=2'
+      'https://api.themoviedb.org/3/search/movie?api_key=03b8572954325680265531140190fd2a&query=test&page=2',
+      expect.any(Object)
     );
   });
 
@@ -40,13 +64,16 @@ describe('movieApi', () => {
   });
 
   it('should handle failed movie search response', async () => {
-    jest.spyOn(global, 'fetch').mockResolvedValueOnce({
-      ok: false,
-    } as Response);
-
-    await expect(searchMovies('test')).rejects.toThrowError(
-      'Failed to fetch movies'
+    const fetchMock = jest.spyOn(global, 'fetch').mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        status: 500,
+      } as Response)
     );
+
+    await expect(searchMovies('test')).rejects.toThrowError('HTTP Error: 500');
+
+    expect(fetchMock).toHaveBeenCalledTimes(4); // 1 initial call + 3 retries
   });
 
   it('should fetch movie details with the correct movie ID', async () => {
@@ -58,7 +85,8 @@ describe('movieApi', () => {
     await getMovieDetails(1);
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      'https://api.themoviedb.org/3/movie/1?api_key=03b8572954325680265531140190fd2a'
+      'https://api.themoviedb.org/3/movie/1?api_key=03b8572954325680265531140190fd2a',
+      expect.any(Object)
     );
   });
 
@@ -76,10 +104,9 @@ describe('movieApi', () => {
   it('should handle failed movie details response', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValueOnce({
       ok: false,
+      status: 404,
     } as Response);
 
-    await expect(getMovieDetails(1)).rejects.toThrowError(
-      'Failed to fetch movie details'
-    );
+    await expect(getMovieDetails(1)).rejects.toThrowError('HTTP Error: 404');
   });
 });

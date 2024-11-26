@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Movie, MovieSearchResponse } from '../api/types';
 import { searchMovies } from '../api/movieApi';
 
+// Context type definition with all the movie list related info and methods
 interface MovieContextType {
   movies: Movie[];
   query: string;

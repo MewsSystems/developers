@@ -3,7 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../../context/ThemeContext';
 
-const ToggleButton = styled.button`
+const ToggleButton = styled.button.attrs({
+  className: 'theme-toggle-button',
+})`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   background-color: transparent;
   color: ${({ theme }) => theme.colors.button.inverseText};
@@ -21,7 +23,7 @@ const ToggleButton = styled.button`
 `;
 
 export const ThemeToggle: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
 
   return <ToggleButton onClick={toggleTheme}>Toggle Theme</ToggleButton>;
 };
