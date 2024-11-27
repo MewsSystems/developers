@@ -1,8 +1,9 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Interfaces;
+using System;
 
 namespace ExchangeRateProvider.Models
 {
-    public class ExchangeDataSourceFactory
+    public class ExchangeDataSourceFactory : IExchangeDataSourceFactory
     {
         /// <summary>
         /// Creates a new instance of the exchange rate data source.
@@ -10,7 +11,7 @@ namespace ExchangeRateProvider.Models
         /// <param name="dataSourceType"></param>
         /// <returns></returns>
         /// <exception cref="NotSupportedException"></exception>
-        public static BaseExchangeDataSource CreateDataSource(ExchangeRateDataSourceType dataSourceType)
+        public BaseExchangeDataSource CreateDataSource(ExchangeRateDataSourceType dataSourceType)
         {
             switch (dataSourceType)
             {

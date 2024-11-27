@@ -1,11 +1,12 @@
 ﻿using ExchangeRateProvider.Models;
+using ExchangeRateUpdater.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ExchangeRateUpdater
 {
-    public class ExchangeRateProvider
+    public class ExchangeRateProvider : IExchangeRateProvider
     {/// <summary>
      /// The data source to fetch exchange rates from.
      /// </summary>

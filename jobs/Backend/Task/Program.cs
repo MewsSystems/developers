@@ -1,4 +1,6 @@
 ﻿using ExchangeRateProvider.Models;
+using ExchangeRateUpdater.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,19 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider(ExchangeDataSourceFactory.CreateDataSource(ExchangeRateDataSourceType.Cnb));
+                var serviceCollection = new ServiceCollection();
+
+                serviceCollection.AddTransient<IExchangeDataSourceFactory, ExchangeDataSourceFactory>();
+                serviceCollection.AddTransient<IExchangeRateProvider>(provider =>
+                {
+                    var factory = provider.GetRequiredService<IExchangeDataSourceFactory>();
+                    return new ExchangeRateProvider(factory.CreateDataSource(ExchangeRateDataSourceType.Cnb));
+
+                });
+
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 
                 var rates = provider.GetExchangeRates(currencies);
 
