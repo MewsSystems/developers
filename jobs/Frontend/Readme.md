@@ -1,50 +1,10 @@
-# React + TypeScript + Vite
+# MEWS Front-End Tech Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Error & Performance Monitoring
 
-Currently, two official plugins are available:
+Monitoring performance and error metrics in web applications is essential for ensuring a great user experience, maintaining reliability, and supporting business goals. It helps diagnose issues, optimize performance, and proactively resolve problems before they impact users. Key metrics like load times, error rates, and crash reports provide actionable insights, enabling scalability, reducing downtime, and enhancing maintainability.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This is where [Sentry](https://sentry.io/welcome/) comes in help and I have configured it to capture errors and performance metrics for the frontend application.
+The configuration is located in the `sentryConfig.ts` file, while alerts for web performance metrics within the tool alerts panel as shown below (the FID metric was used instead of the new INP because somehow Sentry has not updated the selectable alert options yet).
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+![Sentry alerts screenshot](./src/assets/sentry-alerts.png)
