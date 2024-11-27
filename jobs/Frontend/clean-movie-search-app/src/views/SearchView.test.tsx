@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../theme/themes';
 import { SearchView } from './SearchView';
 import { useMovieContext } from '../context/MovieContext';
-import { Movie } from '../api/types';
+import { Movie } from '../api';
 
 jest.mock('../context/MovieContext');
 

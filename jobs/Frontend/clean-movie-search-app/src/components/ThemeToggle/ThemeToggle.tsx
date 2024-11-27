@@ -23,7 +23,7 @@ const ToggleButton = styled.button.attrs({
 `;
 
 export const ThemeToggle: React.FC = () => {
+  // Use the button to toggle the theme provided by the context
   const { toggleTheme } = useTheme();
-
   return <ToggleButton onClick={toggleTheme}>Toggle Theme</ToggleButton>;
 };

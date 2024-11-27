@@ -4,34 +4,34 @@ exports[`MovieCard matches the snapshot 1`] = `
 <div>
   <article
     aria-label="Movie card for Movie Title"
-    class="sc-blHHSb cFyGuL"
+    class="sc-blHHSb cFyGuL movie-card"
   >
     <div
-      class="sc-gtLWhw ivqwil"
+      class="sc-gtLWhw ivqwil poster-container"
     >
       <img
         alt="Movie Title"
-        class="sc-egkSDF dZwIUo"
+        class="sc-egkSDF dZwIUo poster"
         loading="lazy"
         src="https://image.tmdb.org/t/p/w500/poster.jpg"
       />
       <div
         aria-label="Rating: 7.8"
-        class="sc-ghWlax jpWtuz"
+        class="sc-ghWlax jpWtuz rating"
       >
         7.8
       </div>
     </div>
     <div
-      class="sc-fAUdSK cDEqUf"
+      class="sc-fAUdSK cDEqUf content"
     >
       <h3
-        class="sc-dntaoT fhBgiP"
+        class="sc-dntaoT fhBgiP title"
       >
         Movie Title
       </h3>
       <p
-        class="sc-ivxoEo cffOek"
+        class="sc-ivxoEo cffOek release-date"
       >
         11/17/2024
       </p>

@@ -20,11 +20,6 @@ const LoadMoreButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.button.hover};
   }
-
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.text.secondary};
-    cursor: not-allowed;
-  }
 `;
 
 const LoadingIndicator = styled.div`
@@ -48,12 +43,17 @@ export const SearchView: React.FC = () => {
     loadMore,
   } = useMovieContext();
 
+  // Custom hook to debounce the search query
   const debouncedQuery = useSearchDebounce(query);
 
+  // Effect to handle search when debounced query changes
   React.useEffect(() => {
     if (debouncedQuery.trim()) {
+      // We reset page to 1 when a new search is made
       handleSearch(debouncedQuery, 1);
     }
+    // We launch the actual search when the debounced query "changes"
+    // This change occurs after the specified delay in the hoook and the answer is returned
   }, [debouncedQuery, handleSearch]);
 
   const handleMovieClick = (movieId: number) => {
@@ -62,15 +62,16 @@ export const SearchView: React.FC = () => {
 
   return (
     <>
+      {/* Once there is a change to the search query, it updates the context value, which in turn updates the query which triggers the debouncer */}
       <SearchBar value={query} onChange={setQuery} />
       {loading && <LoadingIndicator>Finding movies...</LoadingIndicator>}
       {error && <div>Error: {error}</div>}
       <MovieList movies={movies} onMovieClick={handleMovieClick} />
       {paginationLoading && (
-        <LoadingIndicator>Loading more movies...</LoadingIndicator>
+        <LoadingIndicator>Finding more movies...</LoadingIndicator>
       )}
-      {movies.length > 0 && page < totalPages && (
-        <LoadMoreButton onClick={loadMore} disabled={paginationLoading}>
+      {!paginationLoading && movies.length > 0 && page < totalPages && (
+        <LoadMoreButton onClick={loadMore}>
           Load More Movies
         </LoadMoreButton>
       )}

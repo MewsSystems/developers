@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Movie } from '../../api';
 import { MovieCard } from '../';
 
-const Grid = styled.div`
+const Grid = styled.div.attrs({
+  className: 'movie-grid',
+})`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: ${({ theme }) => theme.spacing.xl};
@@ -19,6 +21,7 @@ export const MovieList: React.FC<MovieListProps> = ({
   onMovieClick,
 }) => (
   <Grid>
+    {/* Mapping over the movies array and render a nice MovieCard for each movie */}
     {movies.map((movie) => (
       <MovieCard key={movie.id} movie={movie} onClick={onMovieClick} />
     ))}

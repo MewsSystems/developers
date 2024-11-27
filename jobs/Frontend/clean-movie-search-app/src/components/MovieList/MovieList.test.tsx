@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme/themes';
 import { MovieList } from './MovieList';
-import { Movie } from '../../api/types';
+import { Movie } from '../../api';
 
 describe('MovieList', () => {
   const mockMovies: Movie[] = [

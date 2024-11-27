@@ -2,7 +2,9 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Movie } from '../../api';
 
-const Card = styled.article`
+const Card = styled.article.attrs({
+  className: 'movie-card',
+})`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   overflow: hidden;
   background: ${({ theme }) => theme.colors.card.background};
@@ -18,13 +20,16 @@ const Card = styled.article`
     box-shadow: ${({ theme }) => theme.colors.card.hoverShadow};
   }
 `;
-
-const PosterContainer = styled.div`
+const PosterContainer = styled.div.attrs({
+  className: 'poster-container',
+})`
   position: relative;
   padding-top: 150%;
 `;
 
-const Poster = styled.img`
+const Poster = styled.img.attrs({
+  className: 'poster',
+})`
   position: absolute;
   top: 0;
   left: 0;
@@ -33,24 +38,33 @@ const Poster = styled.img`
   object-fit: cover;
 `;
 
-const Content = styled.div`
+const Content = styled.div.attrs({
+  className: 'content',
+})`
   padding: ${({ theme }) => theme.spacing.md};
 `;
 
-const Title = styled.h3`
+const Title = styled.h3.attrs({
+  className: 'title',
+})`
   margin: 0 0 ${({ theme }) => theme.spacing.sm} 0;
   font-size: 1rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-const ReleaseDate = styled.p`
+const ReleaseDate = styled.p.attrs({
+  className: 'release-date',
+})`
   margin: 0;
   color: ${({ theme }) => theme.colors.text.secondary};
   font-size: 0.875rem;
 `;
 
-const Rating = styled.div<{ $rating: number }>`
+
+const Rating = styled.div.attrs({
+  className: 'rating',
+})<{ $rating: number }>`
   position: absolute;
   top: ${({ theme }) => theme.spacing.sm};
   left: ${({ theme }) => theme.spacing.sm};

@@ -4,14 +4,18 @@ import { getMovieDetails } from '../api/movieApi';
 import { Movie } from '../api';
 import styled from 'styled-components';
 
-const TopBar = styled.div`
+const TopBar = styled.div.attrs({
+  className: 'top-bar'
+})`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
-const BackButton = styled.button`
+const BackButton = styled.button.attrs({
+  className: 'back-button'
+})`
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.md}`};
   background-color: ${({ theme }) => theme.colors.button.background};
   color: ${({ theme }) => theme.colors.button.text};
@@ -25,7 +29,9 @@ const BackButton = styled.button`
   }
 `;
 
-const MovieContainer = styled.div`
+const MovieContainer = styled.div.attrs({
+  className: 'movie-container'
+})`
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: ${({ theme }) => theme.spacing.xl};
@@ -38,53 +44,72 @@ const MovieContainer = styled.div`
   }
 `;
 
-const PosterImage = styled.img`
+const PosterImage = styled.img.attrs({
+  className: 'poster-image'
+})`
   width: 100%;
   border-radius: ${({ theme }) => theme.borderRadius.md};
   box-shadow: ${({ theme }) => theme.colors.card.shadow};
 `;
 
-const MovieInfo = styled.div`
-  h2 {
-    margin: 0 0 ${({ theme }) => theme.spacing.md} 0;
-    font-size: 2rem;
-    color: ${({ theme }) => theme.colors.text.primary};
-  }
+const MovieInfo = styled.div.attrs({
+  className: 'movie-info'
+})`
+  display: flex;
+  flex-direction: column;
+`;
 
-  .rating {
-    display: inline-block;
-    background: ${({ theme }) => theme.colors.button.background};
-    color: ${({ theme }) => theme.colors.button.text};
-    padding: ${({ theme }) => theme.spacing.sm}
-      ${({ theme }) => theme.spacing.md};
-    border-radius: ${({ theme }) => theme.borderRadius.md};
-    margin-bottom: ${({ theme }) => theme.spacing.md};
-  }
+const MovieTitle = styled.h2`
+  margin: 0 0 ${({ theme }) => theme.spacing.xs} 0;
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
 
-  .release-date {
-    color: ${({ theme }) => theme.colors.text.secondary};
-  }
+const Rating = styled.div`
+  display: inline-block;
+  background: ${({ theme }) => theme.colors.button.background};
+  color: ${({ theme }) => theme.colors.button.text};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  width: fit-content;
+`;
 
-  .overview {
-    line-height: 1.6;
-    color: ${({ theme }) => theme.colors.text.primary};
-  }
+const ReleaseDate = styled.div`
+  color: ${({ theme }) => theme.colors.text.secondary};
+`;
+
+const Overview = styled.p`
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const MovieDetailsView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  // State for the movie details page, not in context because it's not to be "cached"
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchMovie = async () => {
-      if (!id) return;
+      if (!id) {
+        setError('Hey there! Yout are not looking for any particular movie :(');
+        setLoading(false)
+        return;
+      }
+
+      const movieId = parseInt(id, 10);
+      if (isNaN(movieId)) {
+        setError('Hey there! You are looking for an invalid movie ID.');
+        setLoading(false)
+        return;
+      }
 
       try {
         setLoading(true);
-        const movieData = await getMovieDetails(parseInt(id, 10));
+        const movieData = await getMovieDetails(movieId);
         setMovie(movieData);
       } catch (err) {
         setError(
@@ -100,6 +125,7 @@ export const MovieDetailsView: React.FC = () => {
     fetchMovie();
   }, [id]);
 
+  // TODO: better error handling
   if (loading) return <div>Loading movie details...</div>;
   if (error) return <div>{error}</div>;
   if (!movie) return <div>Movie not found</div>;
@@ -122,6 +148,7 @@ export const MovieDetailsView: React.FC = () => {
           />
         ) : (
           <PosterImage
+            // Fallback image in case the movie doesn't have a poster
             src={`https://via.placeholder.com/500x750?text=${encodeURIComponent(
               movie.title
             )}`}
@@ -129,14 +156,14 @@ export const MovieDetailsView: React.FC = () => {
           />
         )}
         <MovieInfo>
-          <h2>{movie.title}</h2>
-          <div className="rating">Rating: {movie.vote_average.toFixed(1)}</div>
+          <MovieTitle>{movie.title}</MovieTitle>
+          <Rating>Rating: {movie.vote_average.toFixed(1)}</Rating>
           {isValidDate && (
-            <div className="release-date">
+            <ReleaseDate>
               Released: {new Date(movie.release_date).toLocaleDateString()}
-            </div>
+            </ReleaseDate>
           )}
-          <p className="overview">{movie.overview}</p>
+          <Overview>{movie.overview}</Overview>
         </MovieInfo>
       </MovieContainer>
     </>

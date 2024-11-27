@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { lightTheme } from '../../theme/themes';
 import { MovieCard } from './MovieCard';
-import { Movie } from '../../api/types';
+import { Movie } from '../../api';
 
 describe('MovieCard', () => {
   const mockMovie: Movie = {

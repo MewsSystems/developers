@@ -32,6 +32,11 @@ const TopBar = styled.div.attrs({
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.md};
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Title = styled.h1.attrs({
@@ -58,17 +63,20 @@ function App() {
             }}
           >
             <ContentWrapper>
-            {/* Global top bar with title and theme toggle */}
-            <TopBar>
-              <Title>What to watch...</Title>
-              <ThemeToggle />
-            </TopBar>
-            <Routes>
-              <Route path="/search" element={<SearchView />} />
-              <Route path="/movie/:id" element={<MovieDetailsView />} />
-              {/* Redirect to search view if he introduces non matching route */}
-              <Route path="/" element={<Navigate to="/search" replace />} />
-            </Routes>
+              {/* Global top bar with title and theme toggle */}
+              <TopBar>
+                <Title>What to watch...</Title>
+                <ThemeToggle />
+              </TopBar>
+              <Routes>
+                <Route path="/search" element={<SearchView />} />
+                <Route path="/movie/:id" element={<MovieDetailsView />} />
+                {/* The route below will not need to exist once I introduce a NotFound page*/}
+                <Route path="/movie/" element={<MovieDetailsView />} />
+                {/* Redirect to search view if he introduces non matching route */}
+                <Route path="/" element={<Navigate to="/search" replace />} />
+                {/* TODO: introduce a NotFoundView */}
+              </Routes>
             </ContentWrapper>
           </BrowserRouter>
         </AppContainer>
