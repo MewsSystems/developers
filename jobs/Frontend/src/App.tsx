@@ -4,8 +4,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
-import "./App.css";
-
 const queryClient = new QueryClient();
 
 function App() {
