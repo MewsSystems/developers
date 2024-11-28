@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import 'primereact/resources/primereact.min.css';
 import 'primeflex/primeflex.css';
 import 'primereact/resources/themes/md-dark-indigo/theme.css';
-
+import 'primeicons/primeicons.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
