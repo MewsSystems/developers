@@ -22,11 +22,11 @@ function MovieDetail() {
         throw new Error("Couldn't retrieve movie id from params");
       }
     }
-  }, []);
+  }, [id, movie]);
 
   return (
     <div className='flex flex m-4 sm:m-8 gap-5 flex-wrap'>
-      <img src={'https://image.tmdb.org/t/p/w400/'+movie?.poster_path} alt={movie.title + " poster"} />
+      <img src={'https://image.tmdb.org/t/p/w300/'+movie?.poster_path} alt={movie?.title + " poster"} />
       <div className='flex flex-column' style={{ maxWidth: '60rem'}}>
         <h1>{movie?.title}</h1>
         <span className='font-italic'>Release date: {movie?.release_date}</span>

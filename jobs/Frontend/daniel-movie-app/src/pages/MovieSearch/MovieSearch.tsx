@@ -46,7 +46,7 @@ function MovieSearch() {
   return (
     <div className='flex flex-column align-items-center'>
       <header>
-        <h1 className="text-7xl font-semibold">THE MOVIE APP</h1>
+        <h1 className="text-7xl font-semibold text-center">THE MOVIE APP</h1>
       </header>
       <div className='flex gap-3 align-items-center'>
         <InputText value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -62,11 +62,12 @@ function MovieSearch() {
         loading={loading}
         selectionMode="single" 
         onSelectionChange={(e) => handleMovieSelected(e.value)}
-        tableStyle={{ minWidth: '50rem' }} 
-        className='mt-5' 
+        scrollable
+        className="mt-5 w-10"
+        style={{maxWidth: "80rem"}}
       >
-        <Column field="title" header="Title"></Column>
-        <Column field="release_date" header="Release date" className='w-3'></Column>
+        <Column field="title" header="Title" className='w-8'></Column>
+        <Column field="release_date" header="Release date" className='w-2'></Column>
       </DataTable>
     </div>
   );
