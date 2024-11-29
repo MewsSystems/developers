@@ -25,8 +25,13 @@ function MovieDetail() {
   }, []);
 
   return (
-    <div className='flex flex-column align-items-center'>
-      DETAILS {movie?.id} {movie?.title}
+    <div className='flex flex m-4 sm:m-8 gap-5 flex-wrap'>
+      <img src={'https://image.tmdb.org/t/p/w400/'+movie?.poster_path} alt={movie.title + " poster"} />
+      <div className='flex flex-column' style={{ maxWidth: '60rem'}}>
+        <h1>{movie?.title}</h1>
+        <span className='font-italic'>Release date: {movie?.release_date}</span>
+        <p className='mt-6'>{movie?.overview}</p>
+       </div>
     </div>
   );
 }
