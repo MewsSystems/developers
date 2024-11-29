@@ -7,7 +7,7 @@ import {
   useNavigationType,
 } from 'react-router-dom'
 
-const sentryDsn: string = import.meta.env.SENTRY_DSN || ''
+const sentryDsn: string = import.meta.env.VITE_SENTRY_DSN || ''
 
 Sentry.init({
   dsn: sentryDsn,
