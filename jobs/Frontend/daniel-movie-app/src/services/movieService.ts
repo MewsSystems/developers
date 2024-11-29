@@ -1,7 +1,7 @@
 import { Movie } from "../models/Movie";
 
-export const fetchMovies = async (searchTerm: string): Promise<any> => {
-  let url = 'https://api.themoviedb.org/3/search/movie?query='+searchTerm+'&page=1&api_key='+process.env.REACT_APP_TMDB_API_KEY;
+export const fetchMovies = async (searchTerm: string, page:number = 1): Promise<any> => {
+  let url = 'https://api.themoviedb.org/3/search/movie?query='+searchTerm+'&page='+page+'&api_key='+process.env.REACT_APP_TMDB_API_KEY;
   const response = await fetch(url, {method: 'GET', headers: {accept: 'application/json'}});
 
   if (!response.ok) {

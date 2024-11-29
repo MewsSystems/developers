@@ -11,7 +11,7 @@ function MovieDetail() {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    // In case we haven't received the Movie object from Home, use id in url params to do API search
+    // In case we haven't received the Movie object from MovieSearch, use id in url params to do API search
     if (!movie) {
       if (id) {
         console.log("Fetching movie details...")
