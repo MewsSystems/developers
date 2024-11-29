@@ -7,4 +7,4 @@ Monitoring performance and error metrics in web applications is essential for en
 This is where [Sentry](https://sentry.io/welcome/) comes in help and I have configured it to capture errors and performance metrics for the frontend application.
 The configuration is located in the `sentryConfig.ts` file, while alerts for web performance metrics within the tool alerts panel as shown below (the deprecated [FID](https://web.dev/articles/fid) metric was used instead of the new [INP](https://web.dev/articles/inp) because somehow Sentry has not updated the selectable alert options yet).
 
-![Sentry alerts screenshot](./src/assets/sentry-alerts.png)
+![Sentry alerts screenshot](./src/assets/images/sentry-alerts.png)
