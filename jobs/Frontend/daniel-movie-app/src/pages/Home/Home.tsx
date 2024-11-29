@@ -4,22 +4,26 @@ import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
-import { searchMovies } from '../../services/movieService';
+import { fetchMovies } from '../../services/movieService';
 import { Movie } from '../../models/Movie';
 
 function Home() {
   // const [searchTerm, setSearchTerm] = useState<string>('');
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Array<Movie>>([]);
   const navigate = useNavigate();
 
   const handleInputChange = (searchTerm: string) => {
     // setSearchTerm(searchTerm);
-    searchMovies(searchTerm)
+    fetchMovies(searchTerm)
       .then(json => {
         console.log(json); 
         setMovies(json?.results);
       })
       .catch(err => console.error('Error fetching movies:', err));
+  };
+
+  const handleMovieSelected = (movie: Movie) => {
+    navigate('/'+movie.id, { state: { movie } })
   };
 
   return (
@@ -35,7 +39,7 @@ function Home() {
         value={movies} 
         paginator rows={10} 
         selectionMode="single" 
-        onSelectionChange={(e) => navigate('/'+(e.value as Movie).id)}
+        onSelectionChange={(e) => handleMovieSelected(e.value)}
         tableStyle={{ minWidth: '50rem' }} 
         className='mt-5' 
       >
