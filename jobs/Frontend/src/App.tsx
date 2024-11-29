@@ -1,18 +1,22 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from './components/header/Header'
+import Home from './pages/Home'
+import MovieDetails from './pages/MovieDetails'
 import Footer from './components/footer/Footer'
-
-const queryClient = new QueryClient()
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Header />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+        </Routes>
+      </Router>
       <Footer />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </>
   )
 }
 
