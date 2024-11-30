@@ -8,14 +8,21 @@ const defaultRequestOptions = {
     'Content-type': 'application/json',
   },
 }
-const defaultPosterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2'
+const basePosterUrl = 'https://image.tmdb.org/t/p/w600_and_h900_bestv2'
+const placeHolderPosterUrl =
+  'https://critics.io/img/movies/poster-placeholder.png'
 
 class MovieClient extends BaseClient {
-  public defaultPosterUrl: string
+  public basePosterUrl: string
 
-  constructor(defaultPosterUrl: string) {
+  constructor(basePosterUrl: string) {
     super(apiUrl, apiKey, defaultRequestOptions)
-    this.defaultPosterUrl = defaultPosterUrl
+    this.basePosterUrl = basePosterUrl
+  }
+
+  buildMoviePosterUrl(relativeUrl: string): string {
+    if (!relativeUrl) return placeHolderPosterUrl
+    return `${this.basePosterUrl}${relativeUrl}`
   }
 
   async getMovies(
@@ -51,10 +58,10 @@ class MovieClient extends BaseClient {
     } catch (err) {
       console.error(err)
       return {
-        message: 'An error has occurred while fetching data',
+        message: `An error has occurred while fetching movie details with movieId: ${movieId}`,
       } as ApiError
     }
   }
 }
 
-export default new MovieClient(defaultPosterUrl)
+export default new MovieClient(basePosterUrl)
