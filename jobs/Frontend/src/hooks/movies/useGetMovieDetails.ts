@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import movieClient from '../../api/movieClient/movieClient'
+import { FullMovieResponse, ApiError } from '../../api/movieClient/types'
 
 export const useGetMovieDetails = (movieId: string) =>
-  useQuery({
-    queryKey: ['getMovieDetails'],
+  useQuery<FullMovieResponse | ApiError, ApiError, FullMovieResponse>({
+    queryKey: ['getMovieDetails', movieId],
     queryFn: () => movieClient.getMovieDetails(movieId),
+    enabled: !!movieId,
   })

@@ -19,7 +19,7 @@ class MovieClient extends BaseClient {
   }
 
   async getMovies(
-    query: string = 'Star Wars',
+    query: string,
     page: number = 1
   ): Promise<ApiResponse<Movie> | ApiError> {
     try {
