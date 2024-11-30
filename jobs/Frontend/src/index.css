@@ -5,13 +5,32 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--primary-brand-color-200);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --primary-brand-color-100: #38364C;
+  --primary-brand-color-200: #1f1d35;
+  --primary-brand-color-300: #1e1c33;
+  --primary-brand-color-400: #06041F;
+
+  --secondary-brand-color-100: #D50C2F;
+
 }
+
+body, p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
