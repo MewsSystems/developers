@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useGetMovieDetails } from '../hooks/movies/useGetMovieDetails'
 import { styled } from 'styled-components'
 import movieClient from '../api/movieClient/movieClient'
