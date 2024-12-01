@@ -34,7 +34,7 @@ export type MovieGenre = {
 
 export type FullMovieResponse = {
   backdrop_path: string
-  budget: 63000000
+  budget: number
   poster_path: string
   genres: MovieGenre[]
   id: string
