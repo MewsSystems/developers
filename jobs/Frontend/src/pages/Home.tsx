@@ -6,20 +6,23 @@ import { useDebounce } from '../hooks/utils/useDebounce'
 import Card from '../components/ui/card/Card'
 import SearchBar from '../components/ui/searchBar/SearchBar'
 import MovieList from '../components/movieList/MovieList'
+import Pagination from '../components/pagination/Pagination'
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [page, setPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
   console.log(debouncedSearchQuery)
 
   const { isLoading, isError, error, data } = useGetMovies(
     debouncedSearchQuery,
-    page
+    currentPage
   )
 
-  const renderMovies = () => {
+  const totalPages = data?.total_pages ? data.total_pages : 1
+
+  function renderMovies() {
     if (isLoading) {
       return (
         <>
@@ -29,10 +32,20 @@ function Home() {
         </>
       )
     }
-
     if (isError) return <div className="error">{error.message}</div>
-
     if (data) return <MovieList movies={data.results} />
+  }
+
+  function renderPagination() {
+    if (data && data.total_pages > 1) {
+      return (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )
+    }
   }
 
   return (
@@ -45,7 +58,9 @@ function Home() {
           autoFocus
         />
       </div>
+      {renderPagination()}
       <section className="home-layout">{renderMovies()}</section>
+      {renderPagination()}
     </StyledHome>
   )
 }
