@@ -59,7 +59,7 @@ function MovieSearch() {
   }, [lazyTableState]);
 
   const handleMovieSelected = (movie: Movie) => {
-    navigate('/'+movie.id, { state: { movie } });
+    navigate('/'+movie.id);
   };
 
   return (

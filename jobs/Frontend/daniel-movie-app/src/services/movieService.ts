@@ -10,7 +10,7 @@ export const fetchMovies = async (searchTerm: string, page:number = 1): Promise<
   return response.json();
 };
 
-export const fetchMovie = async (id: string): Promise<Movie> => {
+export const fetchMovie = async (id: string | undefined): Promise<Movie> => {
   let url = 'https://api.themoviedb.org/3/movie/'+id+'?api_key='+process.env.REACT_APP_TMDB_API_KEY;
   const response = await fetch(url, {method: 'GET', headers: {accept: 'application/json'}});
 
