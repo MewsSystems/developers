@@ -1,4 +1,4 @@
-import { Movie } from '../../api/movieClient/types'
+import { Movie } from '../../api/movieClient/movieClientTypes'
 import MovieCard from '../movieCard/MovieCard'
 
 type MovieListProps = {

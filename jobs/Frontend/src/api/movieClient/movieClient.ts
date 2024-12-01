@@ -1,5 +1,10 @@
 import BaseClient from '../baseClient/baseClient'
-import { ApiError, ApiResponse, FullMovieResponse, Movie } from './types'
+import {
+  ApiError,
+  ApiResponse,
+  FullMovieResponse,
+  Movie,
+} from './movieClientTypes'
 
 const apiUrl = 'https://api.themoviedb.org/3'
 const apiKey: string = import.meta.env.VITE_API_KEY || ''
@@ -37,10 +42,10 @@ class MovieClient extends BaseClient {
       const data: ApiResponse<Movie> = await response.json()
 
       return data
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
       return {
-        message: 'An error has occurred while fetching data',
+        message: 'An error has occurred while fetching movies',
       } as ApiError
     }
   }
@@ -55,8 +60,8 @@ class MovieClient extends BaseClient {
       )
       const data: FullMovieResponse = await response.json()
       return data
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
       return {
         message: `An error has occurred while fetching movie details with movieId: ${movieId}`,
       } as ApiError

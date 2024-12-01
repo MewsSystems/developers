@@ -1,4 +1,4 @@
-import { Movie } from '../../api/movieClient/types'
+import { Movie } from '../../api/movieClient/movieClientTypes'
 import Button from '../ui/button/Button'
 import movieClient from '../../api/movieClient/movieClient'
 import Card from '../ui/card/Card'
