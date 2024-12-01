@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { useDebounce } from '../hooks/utils/useDebounce'
 
 import SearchBar from '../components/ui/searchBar/SearchBar'
-import MovieList from '../components/movieList/MovieList'
-import Pagination from '../components/pagination/Pagination'
+import UpcomingMovies from '../components/upcomingMovies/UpcomingMovies'
+import NowPlayingMovies from '../components/nowPlayingMovies/NowPlayingMovies'
 import SearchedMovies from '../components/searchedMovies/SearchedMovies'
 
 function Home() {
@@ -21,8 +21,8 @@ function Home() {
         />
       </div>
       <SearchedMovies query={debouncedSearchQuery} />
-      <section className="home-layout">{renderMovies()}</section>
-      {renderPagination()}
+      <NowPlayingMovies />
+      <UpcomingMovies />
     </LayoutContainer>
   )
 }

@@ -67,6 +67,42 @@ class MovieClient extends BaseClient {
       } as ApiError
     }
   }
+
+  async getNowPlayingMovies(): Promise<ApiResponse<Movie> | ApiError> {
+    try {
+      const response = await fetch(
+        `${this.apiUrl}/movie/now_playing?api_key=${this.apiKey}`,
+        this.defaultRequestOptions
+      )
+      const data: ApiResponse<Movie> = await response.json()
+      return data
+    } catch (error) {
+      console.error(error)
+      return {
+        message: 'An error has occurred while fetching now playing movies',
+      } as ApiError
+    }
+  }
+
+  async getUpcomingMovies(): Promise<ApiResponse<Movie> | ApiError> {
+    try {
+      const response = await fetch(
+        `${this.apiUrl}/movie/upcoming?api_key=${this.apiKey}`,
+        {
+          headers: {
+            'Content-type': 'application/json',
+          },
+        }
+      )
+      const data: ApiResponse<Movie> = await response.json()
+      return data
+    } catch (error) {
+      console.error(error)
+      return {
+        message: 'An error has occurred while fetching upcoming movies',
+      } as ApiError
+    }
+  }
 }
 
 export default new MovieClient(basePosterUrl)
