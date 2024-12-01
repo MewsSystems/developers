@@ -20,6 +20,7 @@ function MovieSearch() {
   const rowsPerPage = MOVIES_PER_PAGE;
 
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>('');
   const [movies, setMovies] = useState<Array<Movie>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -30,9 +31,9 @@ function MovieSearch() {
   });
 
   useEffect(() => {
-    const debounceSearch = setTimeout(() => { // 0.5s debounce to avoid excesive API calls
+    const debounceInput = setTimeout(() => {
       if (searchTerm.trim() !== "") {
-         // If new, non-empty search term entered, go to first page
+        setDebouncedSearchTerm(searchTerm);
         setLazyTableState((prev) => ({ ...prev, first: 0, page: 0 }));
       } else {
         setMovies([]);
@@ -40,13 +41,12 @@ function MovieSearch() {
       }
     }, 500);
 
-    return () => clearTimeout(debounceSearch);
+    return () => clearTimeout(debounceInput);
   }, [searchTerm]);
 
-  // Lazy pagination handler
   useEffect(() => {
     setLoading(true);
-    fetchMovies(searchTerm.trim(), lazyTableState.page ? lazyTableState.page+1 : 1)
+    fetchMovies(debouncedSearchTerm.trim(), lazyTableState.page ? lazyTableState.page + 1 : 1)
       .then(data => {
         setMovies(data?.results);
         setTotalRecords(data?.total_results);
@@ -56,7 +56,7 @@ function MovieSearch() {
         console.error('Error fetching movies:', err);
         setLoading(false);
       });
-  }, [lazyTableState]);
+  }, [lazyTableState, debouncedSearchTerm]);
 
   const handleMovieSelected = (movie: Movie) => {
     navigate('/'+movie.id);
@@ -68,7 +68,11 @@ function MovieSearch() {
         <h1 className="text-7xl font-semibold text-center">THE MOVIE APP</h1>
       </header>
       <div className='flex gap-3 align-items-center'>
-        <InputText value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        <InputText
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search movies..."
+        />
         <i className='pi pi-search text-2xl text-primary'></i>
       </div>
       <DataTable 
@@ -82,6 +86,7 @@ function MovieSearch() {
         loading={loading}
         selectionMode="single" 
         onSelectionChange={(e) => handleMovieSelected(e.value)}
+        emptyMessage="Nothing found"
         className="mt-5 w-10"
         style={{maxWidth: "80rem"}}
       >
