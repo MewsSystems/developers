@@ -30,13 +30,14 @@ const StyledCard = styled.div`
   gap: 1rem;
   background-color: var(--primary-brand-color-100);
   padding: 0.2rem;
-  border-radius: 1rem;
+  border-radius: 0.8rem;
   height: 400px;
   overflow: hidden;
 `
 
 const CardSkeleton = styled(StyledCard)`
   justify-content: space-between;
+  padding: 0.8rem;
 
   .details {
     flex-grow: 1;
