@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
 import './MovieSearch.css';
+import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useNavigate } from 'react-router-dom';
 import { fetchMovies } from '../../services/movieService';
 import { Movie } from '../../models/Movie';
+
+const MOVIES_PER_PAGE = 20;
 
 interface LazyTableState {
   first: number | undefined;
@@ -15,7 +17,7 @@ interface LazyTableState {
 
 function MovieSearch() {
   const navigate = useNavigate();
-  const rowsPerPage = 10;
+  const rowsPerPage = MOVIES_PER_PAGE;
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [movies, setMovies] = useState<Array<Movie>>([]);
@@ -28,19 +30,36 @@ function MovieSearch() {
   });
 
   useEffect(() => {
-    // Lazy load data
+    const debounceSearch = setTimeout(() => { // 0.5s debounce to avoid excesive API calls
+      if (searchTerm.trim() !== "") {
+         // If new, non-empty search term entered, go to first page
+        setLazyTableState((prev) => ({ ...prev, first: 0, page: 0 }));
+      } else {
+        setMovies([]);
+        setTotalRecords(0);
+      }
+    }, 500);
+
+    return () => clearTimeout(debounceSearch);
+  }, [searchTerm]);
+
+  // Lazy pagination handler
+  useEffect(() => {
     setLoading(true);
-    fetchMovies(searchTerm, lazyTableState.page ? lazyTableState.page+1 : 1)
-      .then(json => {
-        setMovies(json?.results);
-        setTotalRecords(json?.total_results);
+    fetchMovies(searchTerm.trim(), lazyTableState.page ? lazyTableState.page+1 : 1)
+      .then(data => {
+        setMovies(data?.results);
+        setTotalRecords(data?.total_results);
         setLoading(false);
       })
-      .catch(err => console.error('Error fetching movies:', err));
-  }, [lazyTableState, searchTerm]);
+      .catch(err => {
+        console.error('Error fetching movies:', err);
+        setLoading(false);
+      });
+  }, [lazyTableState]);
 
   const handleMovieSelected = (movie: Movie) => {
-    navigate('/'+movie.id, { state: { movie } })
+    navigate('/'+movie.id, { state: { movie } });
   };
 
   return (
@@ -55,14 +74,14 @@ function MovieSearch() {
       <DataTable 
         value={movies} 
         lazy
-        paginator rows={rowsPerPage} 
+        paginator
+        rows={rowsPerPage} 
         first={lazyTableState.first}
         totalRecords={totalRecords} 
         onPage={(e) =>{setLazyTableState(e)}}
         loading={loading}
         selectionMode="single" 
         onSelectionChange={(e) => handleMovieSelected(e.value)}
-        scrollable
         className="mt-5 w-10"
         style={{maxWidth: "80rem"}}
       >

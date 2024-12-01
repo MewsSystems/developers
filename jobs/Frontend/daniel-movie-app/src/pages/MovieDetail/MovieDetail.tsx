@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import './MovieDetail.css';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { fetchMovie } from '../../services/movieService';
@@ -38,7 +38,7 @@ function MovieDetail() {
         <img src={'https://image.tmdb.org/t/p/w300/'+movie?.poster_path} alt={movie?.title + " poster"} />
         <div className='flex flex-column' style={{ maxWidth: '60rem'}}>
           <h1>{movie?.title}</h1>
-          <span className='font-italic'>Release date: {movie?.release_date}</span>
+          <span className='font-italic'>Release date: {movie?.release_date ?? "-"}</span>
           <p className='mt-6'>{movie?.overview}</p>
         </div>
       </div>

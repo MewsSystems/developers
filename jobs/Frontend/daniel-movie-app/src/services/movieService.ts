@@ -15,7 +15,7 @@ export const fetchMovie = async (id: string): Promise<Movie> => {
   const response = await fetch(url, {method: 'GET', headers: {accept: 'application/json'}});
 
   if (!response.ok) {
-    throw new Error("Failed to fetch movie (id:"+id+") detais");
+    throw new Error("Failed to fetch movie details with id: " + id);
   }
   return response.json();
 };
