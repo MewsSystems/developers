@@ -8,7 +8,7 @@ type CardProps = {
 function Card({ children, isSkeleton }: CardProps) {
   if (isSkeleton) {
     return (
-      <CardSkeleton>
+      <CardSkeleton data-testid="card-skeleton">
         <div className="details">
           <CardSkeletonChild style={{ height: '40%' }} />
           <CardSkeletonChild style={{ height: '1%' }} />
