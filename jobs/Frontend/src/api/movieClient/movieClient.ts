@@ -7,7 +7,8 @@ import {
 } from './movieClientTypes'
 
 const apiUrl = 'https://api.themoviedb.org/3'
-const apiKey: string = import.meta.env.VITE_API_KEY || ''
+const apiKey: string =
+  import.meta.env.VITE_API_KEY || '03b8572954325680265531140190fd2a'
 const defaultRequestOptions = {
   headers: {
     'Content-type': 'application/json',
