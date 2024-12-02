@@ -1,40 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExchangeRateUpdater.ExchangeRateProviders;
+using ExchangeRateUpdater.ExchangeRateProviders.CzechNationalBank;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Extensions.Http;
+using System;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static ConfigurationBuilder ConfigureServices(ConfigurationBuilder configurationBuilder)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
+            configurationBuilder.AddJsonFile("appsettings.json");
 
-        public static void Main(string[] args)
+            return configurationBuilder;
+        }
+
+        public static ServiceCollection RegisterServices(ServiceCollection serviceCollection, IConfigurationRoot configuration)
         {
+            serviceCollection.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            serviceCollection.Configure<ExchangeRateUpdaterConfiguration>(configuration.GetSection("configuration"));
+
+            serviceCollection.RegisterCzechNationalBankProvider(configuration, GetHttpRetryPolicy());
+            
+            return serviceCollection;
+        }
+
+        public static IAsyncPolicy<HttpResponseMessage> GetHttpRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(httpResponseMessage => httpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
+                    retryAttempt)));
+        }
+
+        public static async Task Main(string[] args)
+        {
+            var configuration = ConfigureServices(new ConfigurationBuilder()).Build();
+            var serviceProvider = RegisterServices(new ServiceCollection(), configuration).BuildServiceProvider();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var exchangeRateUpdaterConfiguration =
+                    serviceProvider.GetService<IOptions<ExchangeRateUpdaterConfiguration>>().Value;
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+                var getExchangeRatesResult = await exchangeRateProvider.GetExchangeRates(exchangeRateUpdaterConfiguration.CurrencyCodes);
+
+                if (getExchangeRatesResult.HasSucceeded)
                 {
-                    Console.WriteLine(rate.ToString());
+                    var exchangeRates = getExchangeRatesResult.Value.ToArray();
+
+                    Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");
+
+                    foreach (var exchangeRate in exchangeRates)
+                    {
+                        Console.WriteLine(exchangeRate.ToString());
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to retrieve exchange rates: '{getExchangeRatesResult.ErrorMessage}'");
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine($"Could not retrieve exchange rates: '{exception.Message}'.");
             }
 
             Console.ReadLine();
