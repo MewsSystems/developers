@@ -1,0 +1,53 @@
+using ExchangeRateFinder.API.Mappers;
+using ExchangeRateFinder.API.RequestModels;
+using ExchangeRateFinder.API.ViewModels;
+using ExchangeRateUpdater.Application;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ExchangeRateFinder.API.Controllers
+{
+    [ApiController]
+    [Route("api/exchange-rates")]
+    public class ExchangeRateController : ControllerBase
+    {
+        private readonly IExchangeRateService _exchangeRateService;
+        private readonly ICalculatedExchangeRateResponseMapper _calculatedExchangeRateResponseMapper;
+        private readonly ILogger<ExchangeRateController> _logger;
+
+        public ExchangeRateController(
+            IExchangeRateService exchangeRateService,
+            ICalculatedExchangeRateResponseMapper calculatedExchangeRateResponseMapper,
+            ILogger<ExchangeRateController> logger)
+        {
+            _exchangeRateService = exchangeRateService;
+            _calculatedExchangeRateResponseMapper = calculatedExchangeRateResponseMapper;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<CalculatedExchangeRateResponseModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetExchangeRates([FromQuery] ExchangeRateRequestModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var targetCurrencyCodes = request.TargetCurrencyCodes.Split(',');
+                var exchangeRates = await _exchangeRateService.GetExchangeRates(request.SourceCurrencyCode, targetCurrencyCodes);
+                var mappedExchangeRates = exchangeRates.Select(e => _calculatedExchangeRateResponseMapper.Map(e)).ToList();
+
+                return Ok(mappedExchangeRates);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Internal server error: {ex}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    }
+}
