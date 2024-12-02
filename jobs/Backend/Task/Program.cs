@@ -1,6 +1,16 @@
-﻿using System;
+﻿using ExchangeRateUpdater.ExchangeRateAPI;
+using ExchangeRateUpdater.ExchangeRateAPI.CBNClientApi;
+using ExchangeRateUpdater.ExchangeRateAPI.ExchangeRateProvider;
+using ExchangeRateUpdater.ExchangeRateAPI.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Extensions.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +29,32 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddHttpClient<ICBNClientApi, CBNClientApi>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+            })
+            .AddPolicyHandler(
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))));
+
+            builder.Services.AddTransient<IExchangeRateProvider, CBNExchangeRateProvider>();
+            builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            builder.Services.Configure<Settings>(builder.Configuration.GetSection(""));
+
+            var app = builder.Build();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = app.Services.GetRequiredService<IExchangeRateProvider>();
+
+                var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -38,6 +68,30 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        public static WebApplication ConfigureServices(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddHttpClient<ICBNClientApi, CBNClientApi>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+            })
+            .AddPolicyHandler(
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))));
+
+            builder.Services.AddTransient<IExchangeRateProvider, CBNExchangeRateProvider>();
+            builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+
+            builder.Services.Configure<Settings>(builder.Configuration.GetSection(""));
+
+            var app = builder.Build();
+
+            return app;
         }
     }
 }
