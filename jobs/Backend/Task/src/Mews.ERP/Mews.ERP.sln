@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ERP.Api", "Mews.ERP.Api\Mews.ERP.Api.csproj", "{3C53002C-E0FC-40A7-90D1-64B944B6E380}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ERP.AppService", "Mews.ERP.AppService\Mews.ERP.AppService.csproj", "{16832833-0CFF-40DE-A597-C7C40570F7E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ERP.Api.UnitTests", "Mews.ERP.Api.UnitTests\Mews.ERP.Api.UnitTests.csproj", "{7B4574D4-7D54-4D5B-A6D7-8A7FFD8CBBB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mews.ERP.AppService.UnitTests", "Mews.ERP.AppService.UnitTests\Mews.ERP.AppService.UnitTests.csproj", "{AEB7F8D8-58DA-4795-AB1E-98AF7FD598B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C53002C-E0FC-40A7-90D1-64B944B6E380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C53002C-E0FC-40A7-90D1-64B944B6E380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C53002C-E0FC-40A7-90D1-64B944B6E380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C53002C-E0FC-40A7-90D1-64B944B6E380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16832833-0CFF-40DE-A597-C7C40570F7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16832833-0CFF-40DE-A597-C7C40570F7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16832833-0CFF-40DE-A597-C7C40570F7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16832833-0CFF-40DE-A597-C7C40570F7E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B4574D4-7D54-4D5B-A6D7-8A7FFD8CBBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B4574D4-7D54-4D5B-A6D7-8A7FFD8CBBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B4574D4-7D54-4D5B-A6D7-8A7FFD8CBBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B4574D4-7D54-4D5B-A6D7-8A7FFD8CBBB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB7F8D8-58DA-4795-AB1E-98AF7FD598B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB7F8D8-58DA-4795-AB1E-98AF7FD598B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB7F8D8-58DA-4795-AB1E-98AF7FD598B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB7F8D8-58DA-4795-AB1E-98AF7FD598B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

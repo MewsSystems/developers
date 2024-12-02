@@ -1,0 +1,17 @@
+using System.Diagnostics.CodeAnalysis;
+using Mews.ERP.AppService.Features.Fetch.Extensions;
+using Mews.ERP.AppService.Shared.Caching;
+using Mews.ERP.AppService.Shared.Caching.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Mews.ERP.AppService.Features.Startup.Extensions;
+
+[ExcludeFromCodeCoverage]
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection ConfigureStartup(this IServiceCollection serviceCollection) 
+        => serviceCollection
+            .AddMemoryCache()
+            .AddScoped<ICachingWrapper, CachingWrapper>()
+            .AddFetchFeature();
+}
