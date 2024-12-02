@@ -9,7 +9,7 @@ namespace ExchangeRates.Tests
     public class ExchangeRateProviderTests
     {
         /// <summary>
-        /// Asserts that the exchange rate provider returns the expected exchange rates.
+        /// Asserts that the exchange rate provider returns the expected exchange rates
         /// </summary>
         [Fact]
         public void GetExchangeRates_CurrencyExists_ReturnsExpectedRates()
@@ -26,7 +26,7 @@ namespace ExchangeRates.Tests
             var currencies = new List<Currency>
             {
                 new Currency("AUD"),
-                new Currency("BRL"),
+                new Currency("brl"), // This currency exists, but is lowercase
                 new Currency("PHP"),
             };
             var rates = provider.GetExchangeRates(currencies);
@@ -71,11 +71,38 @@ namespace ExchangeRates.Tests
         }
 
         /// <summary>
-        /// Asserts that if there are no currencies requested by the currency parameter
-        /// an empty list is succesfully returned.
+        /// Asserts that if the base currency is requested, all available exchange rates are returned.
         /// </summary>
         [Fact]
-        public void GetExchangeRates_CurrencyParameterIsEmpty_ReturnsEmpty()
+        public void GetExchangeRates_BaseCurrency_ReturnsAllAvailableRates()
+        {
+            // Arrange
+            var httpClient = MockHelper.GetMockClientThatReturnsSuccessfulResponse();
+            var settings = MockHelper.GetMockConfigurationSettings();
+            var logger = Mock.Of<ILogger<CnbExchangeRateProvider>>();
+            var memoryCache = MockHelper.GetMemoryCacheMock();
+
+            var provider = new CnbExchangeRateProvider(httpClient, settings, logger, memoryCache);
+
+            var currencies = new List<Currency>
+            {
+                new Currency("AUD"),
+                new Currency("CZK"), // Base currency
+            };
+            // Act
+            var rates = provider.GetExchangeRates(currencies);
+
+            // Assert
+            Assert.NotNull(rates);
+            Assert.Equal(31, rates.Count()); // All available rates
+            Assert.Contains(rates, r => r.SourceCurrency.Code == "AUD" && r.Value == 15.58m);
+        }
+
+        /// <summary>
+        /// Asserts that if there are no currencies requested by the currency parameter all available exchange rates are retured.
+        /// </summary>
+        [Fact]
+        public void GetExchangeRates_CurrencyParameterIsEmpty_ReturnsAllRates()
         {
             // Arrange
             var httpClient = MockHelper.GetMockClientThatReturnsSuccessfulResponse();
@@ -91,15 +118,15 @@ namespace ExchangeRates.Tests
 
             // Assert
             Assert.NotNull(rates);
-            Assert.Empty(rates);
+            Assert.Equal(31, rates.Count());
         }
 
         /// <summary>
-        /// Asserts that an empty list is returned and an error is logged
+        /// Asserts that an exception is thrown and an error is logged
         /// if an exception is thrown during the request to fetch exchange rates.
         /// </summary>
         [Fact]
-        public void GetExchangeRates_HttpRequestException_ReturnsEmptyAndLogsError()
+        public void GetExchangeRates_HttpRequestException_LogsErrorAndThrowsExceptions()
         {
             // Arrange
             var httpClient = MockHelper.GetMockClientThatReturnsErrorResponse();
@@ -116,7 +143,8 @@ namespace ExchangeRates.Tests
                 new Currency("BRL"),
                 new Currency("PHP"),
             };
-            var rates = provider.GetExchangeRates(currencies);
+
+            Assert.Throws<HttpRequestException>(() => provider.GetExchangeRates(currencies));
 
             // Assert
             loggerMock.Verify(
@@ -127,7 +155,6 @@ namespace ExchangeRates.Tests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
                 Times.Once);
-            Assert.Empty(rates);
         }
     }
 }

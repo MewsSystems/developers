@@ -31,18 +31,11 @@ namespace ExchangeRates.Core.Services
         {
             _logger.LogDebug("Getting exchange rates from CNB.");
 
-            if (!currencies.Any())
-            {
-                // If no currencies are provided, return an empty list
-                _logger.LogDebug("Requested currencies list is empty, returning an empty list.");
-                return Enumerable.Empty<ExchangeRate>();
-            }
-
             try
             {
                 // Use caching to avoid fetching exchange rates from the CNB API too often.
                 // This might not make sense in a console application that runs once, but given the exchange rates update only once a day
-                // it would make sense to cache the exchange rates in a real-world application that receives multiple requests.
+                // it would make sense to cache the exchange rates in a API that receives multiple requests.
                 // The cache duration is set in app configuration so it can be easily changed and is set to 1 minute for demonstration purposes.
                 var cnbExchangeRates = _cache.GetOrCreate("CnbExchangeRates", entry =>
                 {
@@ -70,10 +63,19 @@ namespace ExchangeRates.Core.Services
                     throw new InvalidOperationException("Failed to retrieve exchange rates from cache or CNB API.");
                 }
 
-                // Filter the exchange rates based on the provided currencies parameter and map
-                var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code));
-                var filteredRates = cnbExchangeRates
-                    .Where(rate => currencyCodes.Contains(rate.CurrencyCode))
+                // If the currencies parameter is not empty, filter the exchange rates to only include the requested currencies
+                // unless the base currency is requested, in which case all exchange rates are returned
+                if (currencies.Any()
+                    && !currencies.Any(c => c.Code.Equals(_settings.BaseCurrency, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code.ToUpper()));
+                    cnbExchangeRates = cnbExchangeRates
+                        .Where(rate => currencyCodes.Contains(rate.CurrencyCode.ToUpper()))
+                        .ToList();
+                }
+
+                // Convert the fetched exchange rates to ExchangeRate objects
+                var rates = cnbExchangeRates
                     .Select(rate => new ExchangeRate(
                         new Currency(rate.CurrencyCode),
                         new Currency(_settings.BaseCurrency),
@@ -81,13 +83,12 @@ namespace ExchangeRates.Core.Services
                     ));
 
                 _logger.LogDebug("Successfully fetched and filtered exchange rates.");
-                return filteredRates;
+                return rates;
             }
             catch (Exception ex)
             {
-                // TODO: Add project readme with documentation that exposes the source used
                 _logger.LogError(ex, "An error occurred while fetching exchange rates.");
-                return Enumerable.Empty<ExchangeRate>();
+                throw;
             }
         }
     }
