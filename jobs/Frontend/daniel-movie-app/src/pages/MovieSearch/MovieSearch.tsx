@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { fetchMovies } from '../../services/movieService';
 import { Movie } from '../../models/Movie';
 
