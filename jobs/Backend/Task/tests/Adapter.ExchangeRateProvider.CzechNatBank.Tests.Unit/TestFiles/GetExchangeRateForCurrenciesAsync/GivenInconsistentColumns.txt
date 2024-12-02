@@ -1,0 +1,3 @@
+Currency: USD | Amount: 1
+Date|Rate
+01.01.2023|
