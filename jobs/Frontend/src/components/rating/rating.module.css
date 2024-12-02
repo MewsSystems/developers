@@ -1,0 +1,12 @@
+.wrapper {
+  color: #ddb100;
+  line-height: 1;
+}
+
+.default {
+  font-size: 22px;
+}
+
+.tiny {
+  font-size: 14px;
+}
