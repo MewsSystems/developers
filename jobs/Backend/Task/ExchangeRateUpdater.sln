@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRates.ConsoleTest", "ExchangeRates.ConsoleTest.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core", "ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{2DAD11C4-6610-471F-A0C1-F5192456AD94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRates.Core", "..\ExchangeRate.Core\ExchangeRates.Core.csproj", "{2DAD11C4-6610-471F-A0C1-F5192456AD94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{A64E87E4-AA79-4E57-9E71-856442D20A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRates.Tests", "..\ExchangeRates.Tests\ExchangeRates.Tests.csproj", "{A64E87E4-AA79-4E57-9E71-856442D20A71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Console", "ExchangeRateUpdater.Console\ExchangeRateUpdater.Console.csproj", "{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DAD11C4-6610-471F-A0C1-F5192456AD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2DAD11C4-6610-471F-A0C1-F5192456AD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DAD11C4-6610-471F-A0C1-F5192456AD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{A64E87E4-AA79-4E57-9E71-856442D20A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A64E87E4-AA79-4E57-9E71-856442D20A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A64E87E4-AA79-4E57-9E71-856442D20A71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

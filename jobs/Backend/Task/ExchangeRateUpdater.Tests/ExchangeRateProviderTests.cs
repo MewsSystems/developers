@@ -9,7 +9,7 @@ namespace ExchangeRates.Tests
     public class ExchangeRateProviderTests
     {
         /// <summary>
-        /// Asserts that the exchange rate provider returns the expected exchange rates
+        /// Asserts that the exchange rate provider returns the expected exchange rates.
         /// </summary>
         [Fact]
         public void GetExchangeRates_CurrencyExists_ReturnsExpectedRates()
