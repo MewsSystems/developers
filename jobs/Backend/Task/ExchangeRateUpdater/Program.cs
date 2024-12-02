@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExchangeRateProvider.Contract.API;
+using ExchangeRateProvider.Contract.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,25 +8,16 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        //This would be in config in production
+        private static readonly string apiUrl = "https://localhost:7243/ExchangeRate";
+        private static readonly string apiKey = ""; //Empty as there is not auth for now
 
         public static void Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(apiUrl, apiKey);
+                var rates = provider.GetExchangeRates(ExchageRateProviderApi.GetSupportedCurrencies());
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
