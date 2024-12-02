@@ -1,100 +1,584 @@
-# Mews developers
+# Exchange Rate Reader - CNB   for Mews
 
-Information about development, engineering, **work and life** in [Mews](https://mews.com). If you would like to know more about Mews, what we use, how we work etc, have a look at [About Mews](#about-mews) section. We also have a [Blog](https://developers.mews.com), [Twitter](https://twitter.com/MewsRnD), [Linkedin](https://www.linkedin.com/company/mewsrnd/) and [Facebook](https://www.facebook.com/MewsDevs/) with latest news about events, technical topics and life of devs at Mews.
+This project extracts the file [Daily.txt](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt) from CNB to process inside Salesforce Instance. updating currencies daily, showing the rates at home page for user knowledge. 
 
-Would you like to **meet us**? Hear us talk or check if we're coming to your area? Check out our [Talkbase](https://talkbase.io/company/mewsrnd/events) for the events we organize. Recordings of our past talks can be found on our [YouTube](https://www.youtube.com/channel/UCrepPB-0Yryop41OuQbQR3w/playlists) channel. We are continously looking for talented and experienced people with passion for technology and **lifelong learning**. See the technologies we're working with on our [Stackshare](https://stackshare.io/mews/mews) profile and check out all the [open positions](https://www.mews.com/en/careers?team=technical).
+Warning (this package requires Multi Currency Enabled. and once deployed can't be rolled back.) <br>
+Project on Github: [Exchange Rate Reader](https://github.com/keleoflober/Mews-Currency-Exchange/tree/master)
 
-**You can always reach us at [`tech.cm@mews.com`](mailto:tech.cm@mews.com).**
+## Table of Content
 
-<a name='about-mews'/>
 
-## 📚 About Mews 
+| Element                                                                       | Description                                                                                             |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+|**Apex Classes**                                                        |                                                          |
+|- CurrencyManager                                                           | Contains methods for fetching and upserting org currency rates                                     |
+|- CurrencyManagerService                                                      | RESTful service for currency management operations.                     |
+|- ExchangeRateFileReader                                                    | Handles reading and formatting exchange rate files.                 |
+|- ExchangeRatesPanelController     | Responsible for fetching active currency data from the CurrencyType object to feed the LWC   |
+|**Lightning Web Component**                                                        |                                                         |
+|- exchangeRatesPanel_LWC                                                       | Lightning Web Component for displaying exchange rates.                       |
+|**Flow**                                                        |                                                         |
+|- Upsert_Currencies_Daily                               | Defines a Flow that is scheduled to run daily. This flow uses the CurrencyManager Apex action to upsert currency data                |
+|**Custom Metadata**                                                        |                                                          |
+|- CurrencyExchange           | This metadata is used by ExchangeRateFileReader.cs providing parameters of how the extrantion is handled such as: Index of fields to extract, DecimalPlaces, AllOrNone parameter in the WebService.  |
+|**Custom App**                                                        |                                                         |
+|- Czech National Bank                                                   | Generic App that contains the Home Page where the LWC is shown to the user                      |
+|**Permission set**                                                        |                                                          |
+|- ExchangeRate_Permission_Set                                          | provide access to all components inside this Package                                                            |
+|**Settings**                                                        |                                                          |
+|- Currency                                                          | Currency Settings from the org.                                                        |
 
-> We have revolutionised the way that hotels operate across all departments, through our mobile hotel management platform. We enable hoteliers to free themselves from boring administration (which we help automate) and rather focus on creating real customer experiences. Now live in 65+ countries in 2000+ hotels, we have truly started a revolution.
 
-That's the marketing slogan. A more down-to-earth version of it would be, that we work on a system for hotel employees and their guests. The main goal is to improve the **guest experience**, by giving them possibility to have full control over their stay, possibility to check-in online, manage their profile, checkout and pay online, communicate with the reception etc. In consequence, that decreases workload on the hotel employees, because the guests actually do the work. The second big goal is **opening up** the system via APIs to 3rd party companies and developers, so that they can build interesting applications on top of our system. Or connect it with something else, which was traditionally very difficult in hospitality industry. If you'd like to know more, check this sample [sales-pitch](https://www.facebook.com/MewsSystems/videos/351045845603219/) which explains what we offer to our clients and which problems we solve.
 
-In the following sections, we'll try to answer frequently asked question that we believe a candidate might have when considering application to Mews:
+## Deployment
+* Clone: clone the project and deploy it throught ant-tool or vscode using the [package.xml](https://github.com/keleoflober/Mews-Currency-Exchange/blob/master/manifest/package.xml)
+* Workbench: Deploy throught Workbench using the zip file [ExchangeRatePackage.zip](https://github.com/keleoflober/Mews-Currency-Exchange/blob/master/ExchangeRatePackage.zip)
+* User Access: will provide user access in the submit form if needed.
 
-- [Product](#product) - what we build.
-- [Technology](#technology) - how we build it.
-- [Teamwork](#teamwork) - how do we cooperate.
-- [Job](#job) - offices, working hours, salaries.
-- [Students](#students) - part-time opportunities for students.
-- [Relocation](#relocation) - for non Czech-based candidates.
+## Manual Steps
 
-<a name='product'/>
+* Org Multi-Currency must be enabled  go to Setup > Company Information > Multy Currency checkbox
+* Assign the Permission set to the user(s) to access the components
+* by default flows are deployed deactivated. you will have to activate manually.
 
-### 🏨 Product 
+## Improvement Areas
 
-- **What are the applications you are building?** The biggest part is the system for employees of hotels (receptionists, housekeepers, accountants, revenue managers, essentially everybody). For them, we also have native mobile applications with a subset of the functionality. Then we have web application for guests of the hotels and booking widget that hotels can put to their websites. We also offer hotels a kiosk application that they can put into their lobby and guests can checkin there. The full list of products is visible on our [website](https://www.mews.com/en/products).
-- **What are your plans for the future?** We don't create fixed long term roadmaps. We plan and commit for the upcoming 4 months. And the rest of the roadmap represents rather a list of opportunities or problems we're going to solve most likely. You can check presentation of our CPO about [2021 roadmap](https://www.youtube.com/watch?v=Mr-FhBnouvg).
-- **How do you handle if different hotels want different features?** We have some features that hotels can choose to enable or disable, according to their preferences. However, all of the various features are available to all hotels. Being SaaS, we have only one feature set and single live environment. We have successfully avoided doing any white-labeling or custom development and the bigger we are, the less likely this will ever happen.
-- **Does your system have public APIs?** Yes and it's one of its strengths. We try to take it really seriously and make it as user-friendly as possible for other developers to integrate with us. We also have a dedicated team to help the integration partners and give them advices how to best connect to us. So now, we have over 500 companies consuming our APIs (including ones like Google). You can find out more here: https://mews-systems.gitbook.io/connector-api/
-- **Do you produce any open source code?** Yes, some of the things we have done are now open sourced, but as it takes a lot of time to maintain, we try to be very careful with what we decide to make open. We decided that we'll be open sourcing mainly fiscalization libraries (like EET), because it's annoying having to implement it when some government decides to introduce it. We're also pretty active in the Flutter space when it comes to opensourcing. You can check our public repositories here https://github.com/MewsSystems.
+* App support to DatedConversionRate can be extended to track daily exchange rates history
+* User notifications via Email / Chatter so they are aware of latest changes.
+* Web Services extended support to retrieve the original .txt file from source or JSON at will.
+* 
+#### Files
 
-<a name='technology'/>
+*   Filenames and directory names are `PascalCase`, e.g. `MyFile.cs`.
+*   Where possible the file name should be the same as the name of the main
+    class in the file, e.g. `MyClass.cs`.
+*   In general, prefer one core class per file.
 
-### 👨‍💻 Technology 
+### Organization
 
-- **Which technologies do you use?** Generally, we try to use technology that is familiar to the development community. The benefit of using common technology is that everybody knows it well, and if not, they're able to Google the answers to their own questions. We also try to avoid building in-house solutions, but rather use third party services for responsibilities that are not directly related to our business (e.g. NewRelic for performance monitoring and logging, Sentry for error reporting, SendGrid for mailing). We want to focus on our product. Check our [Stackshare](https://stackshare.io/mews-systems/mews) to see a full list of what we use and check our [Platform documentation](https://www.mews.com/platform-documentation) for philosophy behind our platform and other things like security, disaster recovery, infrastructure etc.
-- **What is the architecture of the backend?** The "executable" is a plain ASP.NET Core application with no extra caveats. We use Entity Framework with code-first approach, and we use Azure DB (a version of MSSQL) as our database. We run the application in Azure using App Services, so we don't need to manage the web servers or virtual machines. In general, there is data layer to access Azure DB, Azure Storage, Cosmos DB and Redis, business layer consisting of various components and a transactional layer (web, API, background jobs). BTW you can check our [Awesome Mews](https://github.com/MewsSystems/awesome-mews) reading list to see what is our philosophy, not only on backend. One speciality is functional programming, which we try to pragmatically use within our codebase, check out [this talk](https://www.youtube.com/watch?v=t20txMT82ws) for more detailed info.
-- **How is frontend structured?** We keep all our apps in one monorepo to share as much code as possible. All the apps are written in TypeScript on the same React-based stack. We've used Redux for remote state but now we are migrating to modern solutions, such as React Query. We are fans of functional programming and apply many of its principles to our code. Some data-heavy screens like reports are rendered on server using Razor templates. In order to have consistent visual style and share code, all our applications are using our [design system](https://mews.design).
-- **How does technology stack for mobile apps look like?** We are early adopters of Flutter – our iOS and Android versions of Mobile Commander were initially written in Swift and Java, but last year we've migrated them to Flutter. You can read more about it [here](https://developers.mews.com/one-year-in-production-with-flutter/). Also, recently we've finished migration to Flutter of another application – Kiosk. It was initially written in Kotlin and was available for Android exclusively, but now, thanks to Flutter, we plan to release it to iOS as well. We use BLoC-inspired architecture with FP principles in mind. All our applications use our [design system](https://mews.design/), and we [open-sourced](https://pub.dev/packages/optimus) its Flutter implementation.
-- **Do you have microservices?** At the moment, no. The idea of having small units that are responsible for a specific task is great, however this architecture style would not match the current needs of our system. But with increasing size of the system and teams, we might evolve there naturally. However at the moment, we see modular monolith as the way for us going forward as we describe in [this blogpost](https://developers.mews.com/are-we-migrating-to-microservices-and-should-you/).
-- **What is your test coverage?** We do not know. We do not measure code coverage, primarily because we do not see it as a crucial parameter. We're trying to optimize the value/effort when it comes to tests, so we've covered majority of the system with end-to-end UI tests, all APIs with integration tests and crucial libraries and components with unit tests and integration tests. We're also working on performance regression tests.
-- **How often do you deploy?** All our applications are delivered continuously which means that when a pull request gets merged, a new version of the application is released to development environment. Daily, we do deploy a snapshot of development environment to staging environment (feature-freeze) and the next day, from staging to production. Long-term, we're moving towards fully continuous delivery to production.
+*   Modifiers occur in the following order: `public protected internal private
+    new abstract virtual override sealed static readonly extern unsafe volatile
+    async`.
+*   Namespace `using` declarations go at the top, before any namespaces. `using`
+    import order is alphabetical, apart from `System` imports which always go
+    first.
+*   Class member ordering:
+    *   Group class members in the following order:
+        *   Nested classes, enums, delegates and events.
+        *   Static, const and readonly fields.
+        *   Fields and properties.
+        *   Constructors and finalizers.
+        *   Methods.
+    *   Within each group, elements should be in the following order:
+        *   Public.
+        *   Internal.
+        *   Protected internal.
+        *   Protected.
+        *   Private.
+    *   Where possible, group interface implementations together.
 
-<a name='teamwork'/>
+### Whitespace rules
 
-### ⛹️ Teamwork 
+Developed from Google Java style.
 
-- **Do you look for any specialists?** Both, specialists and "generic" developers are fine. We try to learn about their individual skills over time. Once we know what they enjoy working on, we try to embrace that and assign projects that each person is interested in. We have enough of a workload for the generic developers, which extends to all layers of our applications including new features and/or fixing bugs. At the moment, we have 15 teams with different responsibilities, so there are options to choose from. As we grow, we start to look for specialists especially in platform teams (infrastructure, security, tooling, design systems).
-- **Which team will I work in?** That's hard to tell in advance. Basically there are two factors that we take into account. First, we look at past experience and preferences of the candidate. Second, we look at our own needs that are based on company strategy. And combine those two inputs to find the best match in one of 15 teams in the following divisions and families (segmented by customers they build products for):
-  - Product
-    - B2B - Applications for hotels and their employees.
-    - B2C - Applications for guests that visit the hotels.
-    - Connectivity - APIs for 3rd party companies that integrate to us and provide services to hotels.
-    - Payments - Online payment solutions used by B2B and B2C applications.
-  - Platform
-    - Backend - Infrastructure, libraries, tooling etc. used by backend developers in other teams.
-    - Frontend - Design system, tools and shared libraries used by frontend developers in other teams.
-    - Data - Data warehouse and infrastructure used by data analysts within the company.
-- **How is your workload structured and prioritized?** We operate on 4-month periods (tertiles). For those periods, we plan product and technical initiatives with investment ratio 2:1. Simply put, for 2 features, we do 1 consolidation. Consolidations are usually issues that originate in tech team like performance improvements, refactoring, elimination of technical debt, migrating to newer technologies. Product initiatives are primarily prioritized by product managers and other stakeholders, technical initiatives by tech leads and other people from tech department. On lower level, teams operate in 2-week sprints where the tech lead, together with the team, distributes the individual tasks. We try to avoid affinity within team to single type of work, e.g. one developer only bugfixing, another only building features.
-- **Which versioning system do you use?** We host our code on GitHub, therefore we use git.
-- **What is your branching workflow?** On backend, it's very similar to [Gitflow](https://nvie.com/posts/a-successful-git-branching-model/). On web and mobile applications, we have only master branch and feature branches, but that's just Gitflow without some branches.
-- **Do you do code reviews?** Yes, for everything. Code review is a crucial part of how we work. We consider this a great practice, which helps the whole team understand what is happening in the system. As a developer, you not only gather feedback on your code (which helps you to improve), but you're also able to spread your knowledge and experience to others. It's also great platform for newcomers and juniors to ask questions and learn. For code-reviews we use GitHub pull requests. Currently, each pull request is reviewed by at least two people, one being senior. Such a diligence requires really optimized code review process, currently our average pull request merge time is around 35 hours.
-- **Do you work with continuous integration?** Once you open a pull request, our CI server (Azure DevOps) picks it up automatically and runs checks against the changes. Unless all checks have passed, you will not be able to merge your pull request.
-- **Do you have any code style rules?** We believe in naming things the right way rather than adding comments. We have our own set of code style rules (99% of .NET FW rules on backend, AirBnb on frontend) that are run during any build. If your code violates any of the rules, no one will be able to build the project. The goal is to have a uniform code style throughout the whole platform. We also create our own analyzers for common mistakes that appear during code-reviews.
-- **How often do you schedule refactoring?** We do not schedule refactoring. We consider it to be an integral part of development work. When implementing a new feature, it is important to verify that all of the team code and architecture quality standards are applied. The fixes and features should all be done properly from the beginning. Refactoring is also being done as part of technical roadmap which happens continuously, parallel to product roadmap.
-- **How do you handle changes in the architecture of the system?** We try to introduce changes gradually while extending the capabilities of our system. For bigger changes, both on backend and frontend, we currently have platform teams whose only responsibility is to improve the system architecture, develop libraries and tools for other teams that are more focused on product. So platform teams prepare everything necessary in advance, so that product teams can adopt it in the upcoming period as part of their technical roadmap.
-- **How many meetings would I have in a day?** That's up to team to decide, in most teams there is a short daily standup meeting. Once in a sprint, there is a grooming and planning meeting of the team (some teams have those merged). On Friday, there is a 30 minute meeting of all people in tech department with latest updates which then continues with 30 minute company-wide call, finishing with 30 minute company-wide question time. Averaging this out, it's like an hour a day. 
-- **What is the company language?** In Prague office, where development is located, around 50% of people are Czech and the rest is mix of many other nationalities. Therefore most of the meetings and communication is held in English.
+*   A maximum of one statement per line.
+*   A maximum of one assignment per statement.
+*   Indentation of 2 spaces, no tabs.
+*   Column limit: 100.
+*   No line break before opening brace.
+*   No line break between closing brace and `else`.
+*   Braces used even when optional.
+*   Space after `if`/`for`/`while` etc., and after commas.
+*   No space after an opening parenthesis or before a closing parenthesis.
+*   No space between a unary operator and its operand. One space between the
+    operator and each operand of all other operators.
+*   Line wrapping developed from Google C++ style guidelines, with minor
+    modifications for compatibility with Microsoft's C# formatting tools:
+    *   In general, line continuations are indented 4 spaces.
+    *   Line breaks with braces (e.g. list initializers, lambdas, object
+        initializers, etc) do not count as continuations.
+    *   For function definitions and calls, if the arguments do not all fit on
+        one line they should be broken up onto multiple lines, with each
+        subsequent line aligned with the first argument. If there is not enough
+        room for this, arguments may instead be placed on subsequent lines with
+        a four space indent. The code example below illustrates this.
 
-<a name='job'/>
+### Example
 
-### 🏢 Job
+```c#
 
-- **What does the office look like?** The office is located at [I.P. Pavlova square, 1789/5](https://www.google.com/maps/place/n%C3%A1m%C4%9Bst%C3%AD+I.+P.+Pavlova+1789%2F5,+120+00+Nov%C3%A9+M%C4%9Bsto/@50.0752762,14.4298992,3a,75y,184.78h,101.94t/data=!3m6!1e1!3m4!1s73pkxL_pvma3Oge6NEn3QQ!2e0!7i13312!8i6656!4m5!3m4!1s0x470b948c0ea2c643:0x3f011e15da2b48b!8m2!3d50.0749916!4d14.4298445), which is great in terms of transport options (metro line C, A, many trams).
-- **Do you pay out special bonuses?** No, we do not. We prefer to pay good salaries transparently and on a regular basis so that you always know what you can count on. You can read more on our approach in a [blogpost](https://developers.mews.com/manage-people-like-a-boss/) by our CTO.
-- **Do you have stock option plan?** Yes, every employee is awarded certain number of depository receipt options (an equivalent of stock option in the Netherlands jurisdiction).
-- **How many years would it take to reach a senior position?** We have a bit of a different understanding of what "senior developer" means. To us, a senior developer takes full responsibility for some part or component of the system and does not need anyone to help them with their tasks or to look over their shoulder. For this reason, we cannot guarantee that you will become a senior developer. It's up to you to determine how quickly you can become that skilled. Furthermore, if you consider yourself to be a senior developer already, it may happen that we will not agree. In our job posts for senior positions, you can find a list of topics. A senior developer should ideally have deeper knowledge with at least some of them. To get better understanding of our competency model, have a look at how we built it [like an RPG game](https://developers.mews.com/how-to-build-career-framework-like-an-rpg/) or even better, check the whole [career ladder open-sourced here](https://github.com/MewsSystems/org/tree/main/tech/career-framework).
-- **Is it possible that a new junior developer would earn a higher salary than me as a senior developer?** No. We try to avoid frustrations about money and keep an eye on the salary of each person individually; we believe it should correspond to their skill level. Therefore, if we desperately needed to hire a junior developer with a salary higher than yours, we would increase all the salaries in the company so that the levels are kept intact. We want to pay salaries that are competitive to the market as we don't want you to leave because of a better salary offer. We don't have open salaries, but try to structure them as if they were.
-- **Can I have a home office?** Yes, with the current world situation we became fully remote company. Post-COVID, we expect most people to adopt hybrid model with a few days in the office focused more on communication and collaboration and a few days at home dedicated to focused uninterrupted work, but still remain remote-first.
-- **What are the working hours?** That really depends on you. Every person has a different rhythm to their life. As long as you accomplish what you have promised to accomplish, it's up to you. Most people are in the office between 11:00 and 17:00. Although there is a lot of flexibility, your working hours should intersect with this time period so that you have opportunities to meet with the team and consult them regarding your work.
+/*Author: Author's Name 
+  Description: this is an example of how the guidelines apply
+  
+  versions: 1.0 TaskID + DD/MM/YYYY + changes applied
+            1.1 TaskID + DD/MM/YYYY + changes to struct
+            2.0 TaskID + DD/MM/YYYY + extended class to support a new feature
+*/
 
-<a name='students'/>
+using System;                                       // `using` goes at the top, outside the
+                                                    // namespace.
 
-### 🎓 Students
+namespace MyNamespace {                             // Namespaces are PascalCase.
+                                                    // Indent after namespace.
+  public interface IMyInterface {                   // Interfaces start with 'I'
+    public int Calculate(float value, float exp);   // Methods are PascalCase
+                                                    // ...and space after comma.
+  }
 
-- **Is it possible to work for Mews while studying?** Yes, we have many students in the team, especially from [MFF CUNI](https://www.mff.cuni.cz/en) and [CTU](https://www.cvut.cz/en). We treat students just like any other employees (part-time), which means they're working on real projects, in product teams with other developers and getting market salary.
-- **Do you provide any support for students?** Because Mews development team was founded by a group of students that met in school and were still studying, we know what it means to both work and study. Therefore we're OK with you having a month break during exam periods, so that you can prepare for the exams. Students also have lot of time flexibility because of their school schedules. And since we have graduates from both of the aforementioned schools in our team, we can also help with the studying.
-- **Can I do a bachelor or master thesis for Mews?** Definitely, we have many ideas that are appropriate either for bachelor or master theses. Just reach out to us and we can discuss the possibilities.
+  public enum MyEnum {                              // Enumerations are PascalCase.
+    Yes,                                            // Enumerators are PascalCase.
+    No,
+  }
 
-<a name='relocation'/>
+  public class MyClass {                            // Classes are PascalCase.
+    public int Foo = 0;                             // Public member variables are
+                                                    // PascalCase.
+    public bool NoCounting = false;                 // Field initializers are encouraged.
+    private class Results {
+      public int NumNegativeResults = 0;
+      public int NumPositiveResults = 0;
+    }
+    private Results results;                       // Private member variables are
+                                                    // camelCase.
+    public static int NumTimesCalled = 0;
+    private const int bar = 100;                   // const does not affect naming
+                                                    // convention.
+    private int[] someTable = {                    // Container initializers use a 2
+      2, 3, 4,                                      // space indent.
+    }
 
-### ✈️ Relocation
+    public MyClass() {
+      results = new Results {
+        NumNegativeResults = 1,                     // Object initializers use a 2 space
+        NumPositiveResults = 1,                     // indent.
+      };
+    }
 
-- **What is the cost of living in Prague?** You can find it and compare with other cities at https://www.numbeo.com/cost-of-living/in/Prague.
-- **How long does it take to relocate?** Unfortunately, it takes a lot of time; usually around 6 months. First, we must submit the job posting announcing your position to the Czech Labour office, where it must be pending publicly for 30 days for potential employees. After that, the paperwork is processed, and both governments have 30-60 days to finish the procedure. Regrettably, these offices like to take their time and therefore, it is difficult to give an exact estimate about how long it takes from start to finish.
-- **Do you offer relocation packages?** Yes, we will support you with the relocation both from the organizational and administrative perspective, but also from the financial perspective.
+    public int CalculateValue(int mulNumber) {      // No line break before opening brace.
+      var resultValue = Foo * mulNumber;            // Local variables are camelCase.
+      NumTimesCalled++;
+      Foo += bar;
+
+      if (!NoCounting) {                            // No space after unary operator and
+                                                    // space after 'if'.
+        if (resultValue < 0) {                      // Braces used even when optional and
+                                                    // spaces around comparison operator.
+          results.NumNegativeResults++;
+        } else if (resultValue > 0) {               // No newline between brace and else.
+          results.NumPositiveResults++;
+        }
+      }
+
+      return resultValue;
+    }
+
+    public void ExpressionBodies() {
+      // For simple lambdas, fit on one line if possible, no brackets or braces required.
+      Func<int, int> increment = x => x + 1;
+
+      // Closing brace aligns with first character on line that includes the opening brace.
+      Func<int, int, long> difference1 = (x, y) => {
+        long diff = (long)x - y;
+        return diff >= 0 ? diff : -diff;
+      };
+
+      // If defining after a continuation line break, indent the whole body.
+      Func<int, int, long> difference2 =
+          (x, y) => {
+            long diff = (long)x - y;
+            return diff >= 0 ? diff : -diff;
+          };
+
+      // Inline lambda arguments also follow these rules. Prefer a leading newline before
+      // groups of arguments if they include lambdas.
+      CallWithDelegate(
+          (x, y) => {
+            long diff = (long)x - y;
+            return diff >= 0 ? diff : -diff;
+          });
+    }
+
+    void DoNothing() {}                             // Empty blocks may be concise.
+
+    // If possible, wrap arguments by aligning newlines with the first argument.
+    void AVeryLongFunctionNameThatCausesLineWrappingProblems(int longArgumentName,
+                                                             int p1, int p2) {}
+
+    // If aligning argument lines with the first argument doesn't fit, or is difficult to
+    // read, wrap all arguments on new lines with a 4 space indent.
+    void AnotherLongFunctionNameThatCausesLineWrappingProblems(
+        int longArgumentName, int longArgumentName2, int longArgumentName3) {}
+
+    void CallingLongFunctionName() {
+      int veryLongArgumentName = 1234;
+      int shortArg = 1;
+      // If possible, wrap arguments by aligning newlines with the first argument.
+      AnotherLongFunctionNameThatCausesLineWrappingProblems(shortArg, shortArg,
+                                                            veryLongArgumentName);
+      // If aligning argument lines with the first argument doesn't fit, or is difficult to
+      // read, wrap all arguments on new lines with a 4 space indent.
+      AnotherLongFunctionNameThatCausesLineWrappingProblems(
+          veryLongArgumentName, veryLongArgumentName, veryLongArgumentName);
+    }
+  }
+}
+```
+## Git Guidelines
+
+This guide intention is to keep git naming convention as consistent as possible
+to quickly identify the type of branch, what could include, how to manage it
+
+
+
+### Branches Structure and Hierarchy
+
+* from big/last to small/first
+	* main > stg > qa > dev > smaller WIP branches
+
+| Naming            |  Definition 												|
+| :---------------: | :--------------:  |
+| `main` 			| Production branch   |
+| `stg`        		| Production like branch to create builds to perform playtests (Staging) |
+| `qa`           	| QA for devs to test new developed features (might be inestable)   |
+| `dev`    			| Development branch all changes from features    |
+
+
+### Branch Naming and Formating 
+
+| Naming            |  Definition 												|
+| :---------------: | :--------------:  |
+| `hotfix`        	| to temporaly fix critial issues  |
+| `fix`           	| when the fix for a bug its final    |
+| `feature`    		| when working on a specific feature / task    |
+| `refactor` 		| for changes on code performance or convenience like readibility, cleaning code etc   |
+| `release` 		| when a release candidate is production ready and requires a Pull Request to main     |
+| `test` 			| for experimental porposes   |
+
+
+### Associate commits with issues 
+
+| Reference           |  Use example 												|
+| :---------------: | :--------------:  |
+| `#xxx`        	| git commit -m "this is my commit message. Ref #xxx"  |
+| `GL-xxx`           	| git commit -m "GL-xxx: this is my commit message"    |
+| `full-URL`    		| git commit -m "this is my commit message. Related to IssueURL-here"|
+
+### Use Example of Branch naming
+
+* feature/sample-awesome-feature
+* hotfix/sample-bug-solving
+  
+### Use Example branch referencing on Commit message
+
+branch name + issue(s) id(s)
+
+* feature/sample-awesome-feature #99
+* hotfix/sample-bug-solving #91 #82 #73
+
+
+### General Naming Rules and Examples
+
+* Lowercase and Hyphen-Separated: Stick to lowercase for branch names and use hyphens to separate words.
+	* Correct ✅: feature/audio-chat or bugfix/wrong-score.
+	* Wrong ❌: Feature/AudioChat
+* Alphanumeric Characters: Use only alphanumeric characters (a-z, 0–9) and hyphens. Avoid punctuation, spaces, underscores, or any non-alphanumeric character.
+	* Correct ✅: feature/audio-chat or bugfix/wrong-score.
+	* Wrong ❌: feature/audio chat, feature/audio_chat
+* No Continuous Hyphens: Avoid continuous hyphens as they can be confusing and hard to read.
+	* Correct ✅: feature/audio-chat
+	* Wrong ❌: feature/audio--chat
+* No Trailing Hyphens: Do not end your branch name with a hyphen. 
+	* Correct ✅: feature/audio-chat
+	* Wrong ❌: feature/audio-chat-
+* Descriptive: Branch names should be descriptive and concise, ideally reflecting the work done on the branch.  
+	* Correct ✅: feature/audio-chat
+	* Wrong ❌: kiran-dev (kiran is the dev name)
+
+
+
+
+
+
+
+## Coding guidelines
+
+### Constants
+
+*   Variables and fields that can be made `const` should always be made `const`.
+*   If `const` isn’t possible, `readonly` can be a suitable alternative.
+*   Prefer named constants to magic numbers.
+
+### IEnumerable vs IList vs IReadOnlyList
+
+*   For inputs use the most restrictive collection type possible, for example
+    `IReadOnlyCollection` / `IReadOnlyList` / `IEnumerable` as inputs to methods
+    when the inputs should be immutable.
+*   For outputs, if passing ownership of the returned container to the owner,
+    prefer `IList` over `IEnumerable`. If not transferring ownership, prefer the
+    most restrictive option.
+
+### Generators vs containers
+
+*   Use your best judgement, bearing in mind:
+    *   Generator code is often less readable than filling in a container.
+    *   Generator code can be more performant if the results are going to be
+        processed lazily, e.g. when not all the results are needed.
+    *   Generator code that is directly turned into a container via `ToList()`
+        will be less performant than filling in a container directly.
+    *   Generator code that is called multiple times will be considerably slower
+        than iterating over a container multiple times.
+
+### Property styles
+
+*   For single line read-only properties, prefer expression body properties
+    (`=>`) when possible.
+*   For everything else, use the older `{ get; set; }` syntax.
+
+### Expression body syntax
+
+For example:
+
+```c#
+int SomeProperty => someProperty
+```
+
+*   Judiciously use expression body syntax in lambdas and properties.
+*   Don’t use on method definitions. This will be reviewed when C# 7 is live,
+    which uses this syntax heavily.
+*   As with methods and other scoped blocks of code, align the closing with the
+    first character of the line that includes the opening brace. See sample code
+    for examples.
+
+### Structs and classes
+
+*   Structs are very different from classes:
+
+    *   Structs are always passed and returned by value.
+    *   Assigning a value to a member of a returned struct doesn’t modify the
+        original - e.g. `transform.position.x = 10` doesn’t set the transform’s
+        position.x to 10; `position` here is a property that returns a `Vector3`
+        by value, so this just sets the x parameter of a copy of the original.
+
+*   Almost always use a class.
+
+*   Consider struct when the type can be treated like other value types - for
+    example, if instances of the type are small and commonly short-lived or are
+    commonly embedded in other objects. Good examples include Vector3,
+    Quaternion and Bounds.
+
+*   Note that this guidance may vary from team to team where, for example,
+    performance issues might force the use of structs.
+
+### Lambdas vs named methods
+
+*   If a lambda is non-trivial (e.g. more than a couple of statements, excluding
+    declarations), or is reused in multiple places, it should probably be a
+    named method.
+
+### Field initializers
+
+*   Field initializers are generally encouraged.
+
+### Extension methods
+
+*   Only use an extension method when the source of the original class is not
+    available, or else when changing the source is not feasible.
+*   Only use an extension method if the functionality being added is a ‘core’
+    general feature that would be appropriate to add to the source of the
+    original class.
+    *   Note - if we have the source to the class being extended, and the
+        maintainer of the original class does not want to add the function,
+        prefer not using an extension method.
+*   Only put extension methods into core libraries that are available
+    everywhere - extensions that are only available in some code will become a
+    readability issue.
+*   Be aware that using extension methods always obfuscates the code, so err on
+    the side of not adding them.
+
+### ref and out
+
+*   Use `out` for returns that are not also inputs.
+*   Place `out` parameters after all other parameters in the method definition.
+*   `ref` should be used rarely, when mutating an input is necessary.
+*   Do not use `ref` as an optimisation for passing structs.
+*   Do not use `ref` to pass a modifiable container into a method. `ref` is only
+    required when the supplied container needs be replaced with an entirely
+    different container instance.
+
+### LINQ
+
+*   In general, prefer single line LINQ calls and imperative code, rather than
+    long chains of LINQ. Mixing imperative code and heavily chained LINQ is
+    often hard to read.
+*   Prefer member extension methods over SQL-style LINQ keywords - e.g. prefer
+    `myList.Where(x)` to `myList where x`.
+*   Avoid `Container.ForEach(...)` for anything longer than a single statement.
+
+### Array vs List
+
+*   In general, prefer `List<>` over arrays for public variables, properties,
+    and return types (keeping in mind the guidance on `IList` / `IEnumerable` /
+    `IReadOnlyList` above).
+*   Prefer `List<>` when the size of the container can change.
+*   Prefer arrays when the size of the container is fixed and known at
+    construction time.
+*   Prefer array for multidimensional arrays.
+*   Note:
+    *   array and `List<>` both represent linear, contiguous containers.
+    *   Similar to C++ arrays vs `std::vector`, arrays are of fixed capacity,
+        whereas `List<>` can be added to.
+    *   In some cases arrays are more performant, but in general `List<>` is
+        more flexible.
+
+### Folders and file locations
+
+*   Be consistent with the project.
+*   Prefer a flat structure where possible.
+
+### Use of tuple as a return type
+
+*   In general, prefer a named class type over `Tuple<>`, particularly when
+    returning complex types.
+
+### Handling strings 
+### String interpolation vs `String.Format()` vs `String.Concat` vs `operator+`
+
+*   In general, use whatever is easiest to read, particularly for logging and
+    assert messages.
+*   Be aware that chained `operator+` concatenations will be slower and cause
+    significant memory churn.
+*   If performance is a concern, `StringBuilder` will be faster for multiple
+    string concatenations.
+
+### implementing using 
+
+*   Generally, don’t alias long typenames with `using`. Often this is a sign
+    that a `Tuple<>` needs to be turned into a class.
+    *   e.g. `using RecordList = List<Tuple<int, float>>` should probably be a
+        named class instead.
+*   Be aware that `using` statements are only file scoped and so of limited use.
+    Type aliases will not be available for external users.
+
+### Object Initializer syntax
+
+For example:
+
+```c#
+var x = new SomeClass {
+  Property1 = value1,
+  Property2 = value2,
+};
+```
+
+*   Object Initializer Syntax is fine for ‘plain old data’ types.
+*   Avoid using this syntax for classes or structs with constructors.
+*   If splitting across multiple lines, indent one block level.
+
+### Namespace naming
+
+*   In general, namespaces should be no more than 2 levels deep.
+*   Don't force file/folder layout to match namespaces.
+*   For shared library/module code, use namespaces. For leaf 'application' code,
+    such as `unity_app`, namespaces are not necessary.
+*   New top-level namespace names must be globally unique and recognizable.
+
+### Default values and null returns for structs
+
+*   Prefer returning a ‘success’ boolean value and a struct `out` value.
+*   Where performance isn't a concern and the resulting code significantly more
+    readable (e.g. chained null conditional operators vs deeply nested if
+    statements) nullable structs are acceptable.
+*   Notes:
+
+    *   Nullable structs are convenient, but reinforce the general ‘null is
+        failure’ pattern Google prefers to avoid. We will investigate a
+        `StatusOr` equivalent in the future, if there is enough demand.
+
+### Removing from containers while iterating
+
+C# (like many other languages) does not provide an obvious mechanism for
+removing items from containers while iterating. There are a couple of options:
+
+*   If all that is required is to remove items that satisfy some condition,
+    `someList.RemoveAll(somePredicate)` is recommended.
+*   If other work needs to be done in the iteration, `RemoveAll` may not be
+    sufficient. A common alternative pattern is to create a new container
+    outside of the loop, insert items to keep in the new container, and swap the
+    original container with the new one at the end of iteration.
+
+### Calling delegates
+
+*   When calling a delegate, use `Invoke()` and use the null conditional
+    operator - e.g. `SomeDelegate?.Invoke()`. This clearly marks the call at the
+    callsite as ‘a delegate that is being called’. The null check is concise and
+    robust against threading race conditions.
+
+### The var keyword
+
+*   Use of `var` is encouraged if it aids readability by avoiding type names
+    that are noisy, obvious, or unimportant.
+*   Encouraged:
+
+    *   When the type is obvious - e.g. `var apple = new Apple();`, or `var
+        request = Factory.Create<HttpRequest>();`
+    *   For transient variables that are only passed directly to other methods -
+        e.g. `var item = GetItem(); ProcessItem(item);`
+
+*   Discouraged:
+
+    *   When working with basic types - e.g. `var success = true;`
+    *   When working with compiler-resolved built-in numeric types - e.g. `var
+        number = 12 * ReturnsFloat();`
+    *   When users would clearly benefit from knowing the type - e.g. `var
+        listOfItems = GetList();`
+
+### Attributes
+
+*   Attributes should appear on the line above the field, property, or method
+    they are associated with, separated from the member by a newline.
+*   Multiple attributes should be separated by newlines. This allows for easier
+    adding and removing of attributes, and ensures each attribute is easy to
+    search for.
+
+### Argument Naming
+
+Derived from the Google C++ style guide.
+
+When the meaning of a function argument is nonobvious, consider one of the
+following remedies:
+
+*   If the argument is a literal constant, and the same constant is used in
+    multiple function calls in a way that tacitly assumes they're the same, use
+    a named constant to make that constraint explicit, and to guarantee that it
+    holds.
+*   Consider changing the function signature to replace a `bool` argument with
+    an `enum` argument. This will make the argument values self-describing.
+*   Replace large or complex nested expressions with named variables.
+*   Consider using
+    [Named Arguments](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/named-and-optional-arguments)
+    to clarify argument meanings at the call site.
+*   For functions that have several configuration options, consider defining a
+    single class or struct to hold all the options and pass an instance of that.
+    This approach has several advantages. Options are referenced by name at the
+    call site, which clarifies their meaning. It also reduces function argument
+    count, which makes function calls easier to read and write. As an added
+    benefit, call sites don't need to be changed when another option is added.
+
+Consider the following example:
+
+```c#
+// Bad - what are these arguments?
+DecimalNumber product = CalculateProduct(values, 7, false, null);
+```
+
+versus:
+
+```c#
+// Good
+ProductOptions options = new ProductOptions();
+options.PrecisionDecimals = 7;
+options.UseCache = CacheUsage.DontUseCache;
+DecimalNumber product = CalculateProduct(values, options, completionDelegate: null);
+```
+
+
