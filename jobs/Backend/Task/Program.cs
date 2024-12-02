@@ -1,8 +1,10 @@
 ﻿using ExchangeRates.ConsoleTestProgram;
 using ExchangeRates.Core.Models.Configuration;
 using ExchangeRates.Core.Services;
+using ExchangeRates.Core.Services.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
@@ -51,11 +53,14 @@ namespace ExchangeRateUpdater
 
             // Register services for dependency injection
             var serviceProvider = new ServiceCollection()
-                .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
-                .AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>()
-                .Services
+                .AddSingleton<IExchangeRateProvider, CnbExchangeRateProvider>()
                 .Configure<ExchangeRateSettings>(configuration.GetSection("ExchangeRateSettings"))
-                .BuildServiceProvider();
+                .AddLogging(configure => configure
+                    .AddConsole() // Log to console for simplicity
+                    .SetMinimumLevel(LogLevel.Warning))
+                .AddMemoryCache()
+                .AddHttpClient<IExchangeRateProvider, CnbExchangeRateProvider>()
+                .Services.BuildServiceProvider();
 
             return serviceProvider;
         }

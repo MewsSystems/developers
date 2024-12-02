@@ -1,10 +1,11 @@
 ﻿using ExchangeRates.Core.Models.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using System.Net;
 
-namespace ExchangeRates.Tests
+namespace ExchangeRates.Tests.Helpers
 {
     internal static class MockHelper
     {
@@ -332,15 +333,37 @@ namespace ExchangeRates.Tests
         }
 
         /// <summary>
-        /// Returns a mock of configuration settings
+        /// Returns a mock of configuration settings.
         /// </summary>
         internal static IOptions<ExchangeRateSettings> GetMockConfigurationSettings()
         {
             return Options.Create(new ExchangeRateSettings
             {
                 CnbApiUrl = "http://fakeurl.com",
-                BaseCurrency = "CZK"
+                BaseCurrency = "CZK",
+                CacheDurationInMinutes = 60
             });
+        }
+
+        /// <summary>
+        /// Returns a mock of IMemoryCache that always returns false when trying to get a value from the cache.
+        /// </summary>
+        /// <returns></returns>
+        internal static IMemoryCache GetMemoryCacheMock()
+        {
+            var memoryCacheMock = new Mock<IMemoryCache>();
+
+            // Set up the memory cache mock
+            object? cacheEntry = null;
+            memoryCacheMock
+                .Setup(m => m.TryGetValue(It.IsAny<object>(), out cacheEntry))
+                .Returns(false);
+
+            memoryCacheMock
+                .Setup(m => m.CreateEntry(It.IsAny<object>()))
+                .Returns(Mock.Of<ICacheEntry>());
+
+            return memoryCacheMock.Object;
         }
     }
 }

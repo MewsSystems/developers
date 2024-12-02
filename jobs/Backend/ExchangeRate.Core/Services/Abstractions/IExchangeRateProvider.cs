@@ -1,6 +1,6 @@
 ﻿using ExchangeRates.Core.Models;
 
-namespace ExchangeRates.Core.Services
+namespace ExchangeRates.Core.Services.Abstractions
 {
     public interface IExchangeRateProvider
     {

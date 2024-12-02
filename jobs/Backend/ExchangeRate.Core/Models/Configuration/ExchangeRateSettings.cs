@@ -7,5 +7,6 @@
     {
         public string CnbApiUrl { get; set; } = string.Empty;
         public string BaseCurrency { get; set; } = string.Empty;
+        public int CacheDurationInMinutes { get; set; }
     }
 }

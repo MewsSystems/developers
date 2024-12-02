@@ -5,7 +5,7 @@ namespace ExchangeRates.ConsoleTestProgram
 {
     internal static class TestData
     {
-        internal static IEnumerable<Currency> Currencies =
+        internal static readonly IEnumerable<Currency> Currencies =
         [
             new Currency("USD"),
             new Currency("EUR"),
