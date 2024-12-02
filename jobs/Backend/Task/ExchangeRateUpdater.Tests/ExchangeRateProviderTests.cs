@@ -1,10 +1,10 @@
-using ExchangeRates.Core.Models;
-using ExchangeRates.Core.Services;
-using ExchangeRates.Tests.Helpers;
+using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Core.Services;
+using ExchangeRateUpdater.Tests.Helpers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace ExchangeRates.Tests
+namespace ExchangeRateUpdater.Tests
 {
     public class ExchangeRateProviderTests
     {

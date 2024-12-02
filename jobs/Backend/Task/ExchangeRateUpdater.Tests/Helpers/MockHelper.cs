@@ -1,11 +1,11 @@
-﻿using ExchangeRates.Core.Models.Configuration;
+﻿using ExchangeRateUpdater.Core.Models.Configuration;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
 using System.Net;
 
-namespace ExchangeRates.Tests.Helpers
+namespace ExchangeRateUpdater.Tests.Helpers
 {
     internal static class MockHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace ExchangeRates.Core.Models.Configuration
+﻿namespace ExchangeRateUpdater.Core.Models.Configuration
 {
     /// <summary>
     /// Application configuration settings

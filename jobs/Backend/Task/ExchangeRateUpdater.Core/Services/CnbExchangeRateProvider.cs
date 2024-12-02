@@ -1,13 +1,13 @@
-﻿using ExchangeRates.Core.Models;
-using ExchangeRates.Core.Models.CnbApiResponse;
-using ExchangeRates.Core.Models.Configuration;
-using ExchangeRates.Core.Services.Abstractions;
+﻿using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Core.Models.CnbApiResponse;
+using ExchangeRateUpdater.Core.Models.Configuration;
+using ExchangeRateUpdater.Core.Services.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
-namespace ExchangeRates.Core.Services
+namespace ExchangeRateUpdater.Core.Services
 {
     public class CnbExchangeRateProvider : IExchangeRateProvider
     {

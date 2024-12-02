@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExchangeRates.Core.Models.CnbApiResponse
+namespace ExchangeRateUpdater.Core.Models.CnbApiResponse
 {
     /// <summary>
     /// Class to describe the response from the CNB API.

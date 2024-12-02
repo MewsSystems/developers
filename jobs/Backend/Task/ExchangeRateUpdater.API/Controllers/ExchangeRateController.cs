@@ -1,5 +1,5 @@
-using ExchangeRates.Core.Models;
-using ExchangeRates.Core.Services.Abstractions;
+using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRateUpdater.API.Controllers

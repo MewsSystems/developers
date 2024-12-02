@@ -1,7 +1,7 @@
-﻿using ExchangeRates.Core.Models;
+﻿using ExchangeRateUpdater.Core.Models;
 using System.Collections.Generic;
 
-namespace ExchangeRates.ConsoleTestProgram
+namespace ExchangeRateUpdater.ConsoleApp
 {
     internal static class TestData
     {

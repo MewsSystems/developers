@@ -1,6 +1,6 @@
-using ExchangeRates.Core.Models.Configuration;
-using ExchangeRates.Core.Services;
-using ExchangeRates.Core.Services.Abstractions;
+using ExchangeRateUpdater.Core.Models.Configuration;
+using ExchangeRateUpdater.Core.Services;
+using ExchangeRateUpdater.Core.Services.Abstractions;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 

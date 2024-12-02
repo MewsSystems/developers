@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{A64E87E4-AA79-4E57-9E71-856442D20A71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Console", "ExchangeRateUpdater.Console\ExchangeRateUpdater.Console.csproj", "{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.ConsoleApp", "ExchangeRateUpdater.Console\ExchangeRateUpdater.ConsoleApp.csproj", "{463CD4A5-80C5-4139-9677-C4C67D8FF2B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.API", "ExchangeRateUpdater.API\ExchangeRateUpdater.API.csproj", "{298FD2C5-8802-4439-981D-0FC54E89BA60}"
 EndProject

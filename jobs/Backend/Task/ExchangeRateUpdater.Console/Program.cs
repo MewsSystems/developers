@@ -1,7 +1,6 @@
-﻿using ExchangeRates.ConsoleTestProgram;
-using ExchangeRates.Core.Models.Configuration;
-using ExchangeRates.Core.Services;
-using ExchangeRates.Core.Services.Abstractions;
+﻿using ExchangeRateUpdater.Core.Models.Configuration;
+using ExchangeRateUpdater.Core.Services;
+using ExchangeRateUpdater.Core.Services.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.ConsoleApp
 {
     public static class Program
     {
