@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CzechNationalBankSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CzechNationalBankSettings.json">
+      <Generator></Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\API.Interfaces\API.Interfaces.csproj" />
+    <ProjectReference Include="..\..\API.Models\API.Models.csproj" />
+    <ProjectReference Include="..\Common\ExchangeRateProviderAttribute\Provider.Attribute.csproj" />
+    <ProjectReference Include="..\Common\ExchangeRateProviderSettings\Provider.Settings.csproj" />
+  </ItemGroup>
+
+</Project>
