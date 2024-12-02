@@ -21,3 +21,7 @@
 node_modules
 bower_components
 npm-debug.log
+/jobs/Backend/Task/Domain/ExchangeRateUpdater.Domain/.vs
+/jobs/Backend/Task/Infrastructure/ExchangeRateUpdater.Infrastructure.ExternalAPIs/.vs
+/jobs/Backend/Task/tests/ExchangeRateUpdater.Infrastructure.ExternalAPIs.UnitTests/.vs
+/jobs/Backend/Task/.vs
