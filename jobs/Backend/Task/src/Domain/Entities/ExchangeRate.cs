@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+﻿using Domain.ValueTypes;
+
+namespace Domain.Entities
 {
     public class ExchangeRate
     {
@@ -17,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
+            return $"{SourceCurrency}/{TargetCurrency}";
         }
     }
 }
