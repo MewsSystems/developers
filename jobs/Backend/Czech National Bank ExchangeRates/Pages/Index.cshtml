@@ -1,0 +1,48 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-6">Czech National Bank Daily Exchange Rates</h1>
+</div>
+
+<div class="text-center">
+    <p>Valid for @Model.DateString.ToString("dd MMM yyyy")</p>
+
+    <table class="currency-table">
+        <thead>
+            <tr>
+                <th class="country">Country</th>
+                <th class="currency-name">Currency</th>
+                <th>Amount</th>
+                <th>Code</th>
+                <th>Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.CNBRates == null || Model.CNBRates.Rates.Count == 0)
+            {
+                <p>No Rates found for the Specified Date </p>
+            }
+            else
+            {
+                @foreach (var rate in Model.CNBRates.Rates)
+                {
+          
+                <tr>
+                        <td>@Html.DisplayFor(_ => rate.Country)</td>
+                        <td>@Html.DisplayFor(_ => rate.Currency)</td>
+                        <td align="right">@Html.DisplayFor(_ => rate.Amount)</td>
+                        <td align="center">@Html.DisplayFor(_ => rate.CurrencyCode)</td>
+                        <td align="right">@Html.DisplayFor(_ => rate.Rate)</td>
+                </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+</div>
