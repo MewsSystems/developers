@@ -1,6 +1,6 @@
 import './MovieDetail.css';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import { fetchMovie } from '../../services/movieService';
 import { Movie } from '../../models/Movie';
 import { Button } from 'primereact/button';
