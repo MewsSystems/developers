@@ -17,7 +17,7 @@ builder.Services
     .Configure<ExchangeRateSettings>(builder.Configuration.GetSection("ExchangeRateSettings"))
     .AddLogging(configure => configure
         .AddConsole() // Log to console for simplicity
-        .SetMinimumLevel(LogLevel.Warning))
+        .SetMinimumLevel(LogLevel.Information))
     .AddMemoryCache()
     .AddHttpClient<IExchangeRateProvider, CnbExchangeRateProvider>();
 

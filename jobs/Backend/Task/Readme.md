@@ -2,7 +2,11 @@
 
 ## Overview
 
-The Exchange Rate Updater is a .NET 8 console application that retrieves exchange rates from the Czech National Bank (CNB) API.
+The Exchange Rate Updater is a .NET 8 console application that retrieves exchange rates from the Czech National Bank (CNB) API. The project is developed as a showcase for the Mews backend assigment task.
+
+## External sources
+
+To get the exchange rates, the application uses the [Czech National Bank (CNB) API](https://api.cnb.cz/cnbapi/swagger-ui.html).
 
 ## Project Structure
 

@@ -59,7 +59,8 @@ namespace ExchangeRateUpdater.Tests
             {
                 new Currency("AUD"),
                 new Currency("BRL"),
-                new Currency("XYZ") // This currency does not exist
+                new Currency("XYZ"), // This currency does not exist
+                new Currency("XYZ123654") // This currency does not exist
             };
             var rates = provider.GetExchangeRates(currencies);
 
