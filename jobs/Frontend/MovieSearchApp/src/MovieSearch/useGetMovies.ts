@@ -31,7 +31,7 @@ type FetchMoviesQueryParams = {
 
 const fetchMovies = async ({ title, page }: FetchMoviesQueryParams): Promise<Movies> => {
   const response = await fetch(
-    `${moviesUrlEndpoint}?api_key=${apiKey}&query=${encodeURI(title)}&page=${page}`
+    `${moviesUrlEndpoint}?api_key=${apiKey}&query=${encodeURIComponent(title)}&page=${page}`
   );
 
   if (!response.ok) {

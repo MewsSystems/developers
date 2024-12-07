@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Input } from "../components/ui/input";
 import { Pagination, PaginationProps } from "./Pagination";
-import { useDebounce } from "@/components/hooks/useDebounce";
 import { useGetMovies } from "./useGetMovies";
 import { MovieRow, MovieList } from "./MovieList";
 import { extractYearFromReleaseDate } from "../../utils";
 import { MovieDetail } from "@/MovieDetail/MovieDetail";
 import { keepPreviousData } from "@tanstack/react-query";
 import { Frown } from "lucide-react";
+import { useDebounceState } from "@/components/hooks/useDebounceState";
 
 /**
  * Movie search component.
@@ -17,9 +17,7 @@ import { Frown } from "lucide-react";
  * When search ends with an error, renders an error message.
  */
 export const MovieSearch = () => {
-  const [searchValue, setSearchValue] = useState<string>("");
-
-  const debouncedSearchValue = useDebounce(searchValue);
+  const [searchValue, debouncedSearchValue, setSearchValue] = useDebounceState("");
 
   return (
     <>

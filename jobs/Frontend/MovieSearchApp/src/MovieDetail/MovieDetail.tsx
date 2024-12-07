@@ -58,6 +58,8 @@ const MovieDetailContent: React.FC<MovieDetailContentProps> = ({ movie }) => {
       <ImageWithPlaceholder
         src={moviePosterUrl}
         alt={`${movie.original_title} poster`}
+        height={375}
+        width={250}
         className="hidden md:block"
         loadingPlaceholder={
           <div className="center-items min-w-[250px]">
