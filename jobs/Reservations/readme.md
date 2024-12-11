@@ -4,11 +4,11 @@ Start by forking [the mews-reservations-int repo](https://github.com/MewsSystems
 following the "Running the App" portion of the readme.
 
 You will be acting as if you were an engineer for one of our product teams at Mews, executing tasks from the `/backlog`.
-You are free to pick up any amount of tasks you can reasonably do in about 90-180 minutes.
+You are free to pick up any amount of tasks you can reasonably do in less than three hours.
 You must indicate which tasks are complete and which are partially complete.
 
 > [!IMPORTANT]
-> You should target completing **three tasks**.
+> Target completing **three tasks**.
 
 Contribute as if you were intending to own and operate this product to serve customers on an ongoing basis on
 a **growing team**, in a fast paced scale up.
