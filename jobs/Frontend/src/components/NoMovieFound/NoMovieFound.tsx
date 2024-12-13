@@ -1,4 +1,4 @@
-// import { Link } from "react-router";
+import { Link } from "react-router";
 import {
   NoSuchMovieContainer,
   NoSuchMovieIcon,
@@ -16,9 +16,9 @@ const NoMovieFound: React.FC<NoMovieFoundProps> = ({
     <NoSuchMovieContainer>
       <NoSuchMovieIcon>😥</NoSuchMovieIcon>
       <NoSuchMovieMessage>{message}</NoSuchMovieMessage>
-      {/* <Link to="/"> */}
-      <BackButton>← Back to Search</BackButton>
-      {/* </Link> */}
+      <Link to="/">
+        <BackButton>← Back to Search</BackButton>
+      </Link>
     </NoSuchMovieContainer>
   );
 };
