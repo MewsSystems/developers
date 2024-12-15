@@ -7,12 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        navyBlue: '#181E4B',
-        turquoise: '#04BFAE',
-        goldenYellow: '#FFC229',
-        salmonPink: '#F36B77',
-        lightGrey: '#EBEBF0',
-        fontGrey: '#84829A',
+        darkDefault: "#121212",       // Base dark background
+        darkSoft: "#1F1F1F",
       },
       fontFamily: {
         body: ['Open Sans', 'sans-serif'],
