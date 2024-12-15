@@ -5,7 +5,11 @@ type FetchState = {
   isLoading: boolean;
   error: Error | null;
 };
-export const useMoviesFetch = (url: string | null) => {
+export const useMoviesFetch = (
+  baseUrl: string,
+  query: string,
+  page: number
+) => {
   const [fetchState, setFetchState] = useState<FetchState>({
     data: null,
     isLoading: false,
@@ -13,8 +17,10 @@ export const useMoviesFetch = (url: string | null) => {
   });
 
   const fetchData = useCallback(async () => {
+    const url = `${baseUrl}&query=${encodeURIComponent(query)}&page=${page}`;
+
     if (!url) {
-      setFetchState({ data: null, isLoading: false, error: null }); 
+      setFetchState({ data: null, isLoading: false, error: null });
       return;
     }
 
@@ -31,7 +37,7 @@ export const useMoviesFetch = (url: string | null) => {
     } catch (error) {
       setFetchState({ data: null, isLoading: false, error: error as Error });
     }
-  }, [url]);
+  }, [baseUrl, query, page]);
 
   useEffect(() => {
     fetchData();
@@ -39,6 +45,7 @@ export const useMoviesFetch = (url: string | null) => {
 
   return {
     data: fetchState.data?.results || [],
+    totalPages: fetchState.data?.total_pages || 1,
     isLoading: fetchState.isLoading,
     error: fetchState.error,
   };

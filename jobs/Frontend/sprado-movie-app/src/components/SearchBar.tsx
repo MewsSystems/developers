@@ -5,7 +5,7 @@ interface SearchBarProps {
   onChange: (query: string) => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+export const SearchBar = ({ value, onChange }: SearchBarProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
