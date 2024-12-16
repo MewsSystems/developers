@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Movie } from "../../types";
 import FallbackPoster from "../../assets/fallback-poster.png";
 import { useFetchMovieDetails } from "../../hooks/useFetchMovieDetails/useFetchMovieDetails";
 

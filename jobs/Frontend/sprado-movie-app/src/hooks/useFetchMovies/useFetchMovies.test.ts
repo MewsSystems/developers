@@ -49,8 +49,6 @@ const mockedMovies: Movie[] = [
   },
 ];
 
-const mockedError = new Error("Failed to fetch movies");
-
 describe("useFetchMovies Hook", () => {
   const originalFetch = global.fetch;
 
@@ -145,16 +143,17 @@ describe("useFetchMovies Hook", () => {
   });
 
   it("handles network errors during fetch", async () => {
-    const baseURL = "https://api.themoviedb.org/3/search/movie?api_key=test_api_key&language=en-US";
+    const baseURL =
+      "https://api.themoviedb.org/3/search/movie?api_key=test_api_key&language=en-US";
     const search = "Interstellar";
     const page = 1;
-  
+
     const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
-  
+
     mockFetch.mockRejectedValueOnce(new Error("Network Error"));
-  
+
     const { result } = renderHook(() => useFetchMovies(baseURL, search, page));
-  
+
     expect(result.current.isLoading).toBe(true);
     expect(result.current.data).toEqual([]);
     expect(result.current.totalPages).toBe(0);
@@ -162,13 +161,12 @@ describe("useFetchMovies Hook", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       `${baseURL}&query=${encodeURIComponent(search)}&page=${page}`
     );
-  
+
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-  
+
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data).toEqual([]);
     expect(result.current.totalPages).toBe(0);
     expect(result.current.error).toEqual(new Error("Network Error"));
   });
-  
 });

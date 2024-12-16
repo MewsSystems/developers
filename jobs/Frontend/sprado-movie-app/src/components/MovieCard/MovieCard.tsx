@@ -23,6 +23,7 @@ export const MovieCard = ({ movie }: { movie: Movie }) => {
       role="button"
       tabIndex={0}
       aria-label={`View details for ${movie.title}`}
+      data-testid="movie-card"
     >
       <img
         src={

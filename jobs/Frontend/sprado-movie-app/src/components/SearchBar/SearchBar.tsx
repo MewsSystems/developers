@@ -20,6 +20,7 @@ export const SearchBar = ({ value, onChange, onReset }: SearchBarProps) => {
   return (
     <div className="flex items-center bg-darkSoft rounded-lg px-6 py-4 shadow-lg max-w-3xl mx-auto">
       <input
+        data-testid="search-input"
         type="text"
         value={value}
         onChange={handleInputChange}

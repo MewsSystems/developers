@@ -53,8 +53,19 @@ export const SearchPage = () => {
       </div>
 
       <div className="max-w-[80%] mx-auto px-6">
-        {isLoading && <p className="text-center text-gray-400">Loading...</p>}
-        {error && <p className="text-center text-red-500">{error.message}</p>}
+        {isLoading && (
+          <p
+            data-testId="loading-indicator"
+            className="text-center text-gray-400"
+          >
+            Loading...
+          </p>
+        )}
+        {error && (
+          <p data-testId="error-indicator" className="text-center text-red-500">
+            {error.message}
+          </p>
+        )}
 
         {!isLoading &&
           !error &&

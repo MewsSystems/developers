@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { SearchPage } from "./SearchPage";
 import { useFetchMovies } from "../../hooks/useFetchMovies/useFetchMovies";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue/useDebouncedValue";
