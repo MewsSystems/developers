@@ -53,7 +53,6 @@ export const theme = {
 			800: "#343a40",
 			900: "#212529",
 		},
-
 		text: {
 			primary: "rgba(0, 0, 0, 0.87)",
 			secondary: "rgba(0, 0, 0, 0.54)",
@@ -61,6 +60,7 @@ export const theme = {
 		},
 		background: {
 			default: "#f8f9fa",
+			dark: "#242424",
 			paper: "#fff",
 		},
 		divider: "rgba(0, 0, 0, 0.12)",
