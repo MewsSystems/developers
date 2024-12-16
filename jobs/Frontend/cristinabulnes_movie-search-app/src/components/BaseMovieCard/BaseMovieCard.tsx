@@ -5,6 +5,7 @@ const Card = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
 	padding: ${({ theme }) => theme.spacing(2)};
 	border: 1px solid ${({ theme }) => theme.palette.grey[300]};
 	border-radius: ${({ theme }) => theme.borderRadius.regular};
@@ -12,8 +13,8 @@ const Card = styled.div`
 	box-shadow: ${({ theme }) => theme.shadows.default};
 `;
 
-const Title = styled.h2`
-	${({ theme }) => theme.typography.h2}
+const Title = styled.h5`
+	${({ theme }) => theme.typography.h5}
 	color: ${({ theme }) => theme.palette.text.primary};
 	text-align: center;
 	margin: ${({ theme }) => theme.spacing(1)} 0
@@ -32,7 +33,8 @@ const Rating = styled.p`
 	margin: 0;
 `;
 
-interface MovieCardProps {
+export interface BaseMovieCardProps {
+	id: string;
 	title: string;
 	posterPath: string | null;
 	releaseDate: string;
@@ -40,13 +42,14 @@ interface MovieCardProps {
 }
 
 const BaseMovieCard = ({
+	id,
 	title,
 	posterPath,
 	releaseDate,
 	rating,
-}: MovieCardProps) => {
+}: BaseMovieCardProps) => {
 	return (
-		<Card>
+		<Card data-testid={`base-movie-card-${id}`}>
 			<Poster
 				posterPath={
 					posterPath && `https://image.tmdb.org/t/p/w300${posterPath}`

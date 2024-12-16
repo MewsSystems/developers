@@ -5,6 +5,7 @@ import { theme } from "../../theme";
 
 describe("MovieCard Component", () => {
 	const mockMovie = {
+		id: "1",
 		title: "Inception",
 		posterPath: "/poster.jpg",
 		releaseDate: "2010-07-16",
@@ -15,6 +16,7 @@ describe("MovieCard Component", () => {
 		render(
 			<ThemeProvider theme={theme}>
 				<BaseMovieCard
+					id={mockMovie.id}
 					title={mockMovie.title}
 					posterPath={mockMovie.posterPath}
 					releaseDate={mockMovie.releaseDate}

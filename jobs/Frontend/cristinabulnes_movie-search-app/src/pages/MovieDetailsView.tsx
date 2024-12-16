@@ -10,12 +10,18 @@ const MovieDetailsView = () => {
 
 	const handleGoBack = () => navigate(-1);
 
-	const { title, posterPath, releaseDate, rating } = mockMovies[0];
+	const {
+		id,
+		title,
+		posterPath,
+		releaseDate,
+		voteAverage: rating,
+	} = mockMovies[0];
 
 	return (
 		<>
 			<div>My movie details component</div>
-			<MovieCard {...{ title, posterPath, releaseDate, rating }} />
+			<MovieCard {...{ id, title, posterPath, releaseDate, rating }} />
 			<Button onClick={handleGoBack}>Go back!</Button>
 		</>
 	);
