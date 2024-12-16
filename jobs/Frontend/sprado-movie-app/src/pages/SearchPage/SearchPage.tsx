@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { MovieList } from "../../components/MovieList/MovieList";
-import { useMoviesFetch } from "../../hooks/useMoviesFetch";
+import { useFetchMovies } from "../../hooks/useFetchMovies";
 import { Pagination } from "../../components/Pagination/Pagination";
 
 export const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const {
     data: movies,
     totalPages,
     isLoading,
     error,
-  } = useMoviesFetch(
+  } = useFetchMovies(
     `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&include_adult=false`,
     search,
     currentPage

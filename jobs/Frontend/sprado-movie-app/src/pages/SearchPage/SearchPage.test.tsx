@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { SearchPage } from "./SearchPage";
-import { useMoviesFetch } from "../../hooks/useMoviesFetch";
+import { useFetchMovies } from "../../hooks/useFetchMovies";
 
 jest.mock("../../hooks/useMoviesFetch");
-const useMoviesFetchMock = useMoviesFetch as jest.Mock;
+const useMoviesFetchMock = useFetchMovies as jest.Mock;
 
 describe("SearchPage", () => {
   it("renders the search page", () => {
