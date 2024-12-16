@@ -3,7 +3,7 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { MovieList } from "../../components/MovieList/MovieList";
 import { useFetchMovies } from "../../hooks/useFetchMovies";
 import { Pagination } from "../../components/Pagination/Pagination";
-import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue/useDebouncedValue";
 
 export const SearchPage = () => {
   const [search, setSearch] = useState("");
