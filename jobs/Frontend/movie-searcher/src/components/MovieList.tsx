@@ -10,12 +10,12 @@ const EmptyMovieList = () => {
 
 export const MovieList = ({ movies }: MovieListProps) => {
   return (
-    <ul className='list-none flex flex-wrap items-center justify-center gap-10'>
+    <ul className='list-none w-full grid grid-cols-[repeat(auto-fit,minmax(200px,_1fr))] gap-10'>
       {movies.length === 0 && <EmptyMovieList />}
       {movies.map((movie: Movie) => {
         return (
-          <li className='flex flex-col items-center max-w-56' key={movie.id}>
-            <h2>{movie.title}</h2>
+          <li className='grid grid-cols-subgrid' key={movie.id}>
+            <h3 className='text-lg'>{movie.title}</h3>
             <img
               className='w-60'
               src={

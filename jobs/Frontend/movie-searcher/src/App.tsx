@@ -1,21 +1,17 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
-import { MovieList } from './components/MovieList';
-import { getMovies } from './services/movieService';
+import { MovieSearcher } from './components/MovieSearcher';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
-  const movies = getMovies();
   return (
     <>
-      <div className='flex flex-col items-center'>
-        <header>
-          <form>
-            <input className='min-w-80' type='text' placeholder='Avengers, Batman, Superman, etc.' />
-          </form>
-        </header>
-        <div>
-          <MovieList movies={movies} />
-        </div>
-      </div>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <MovieSearcher />
+      </QueryClientProvider>
     </>
   );
 }
