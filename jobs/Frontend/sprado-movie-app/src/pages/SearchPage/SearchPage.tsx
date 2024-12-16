@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { SearchBar } from "../components/SearchBar";
-import { MovieList } from "../components/MovieList";
-import { useMoviesFetch } from "../hooks/useMoviesFetch";
-import { Movie } from "../types";
-import { Pagination } from "../components/Pagination";
+import { SearchBar } from "../../components/SearchBar/SearchBar";
+import { MovieList } from "../../components/MovieList/MovieList";
+import { useMoviesFetch } from "../../hooks/useMoviesFetch";
+import { Pagination } from "../../components/Pagination/Pagination";
 
 export const SearchPage = () => {
   const [search, setSearch] = useState("");
@@ -20,8 +18,6 @@ export const SearchPage = () => {
     currentPage
   );
 
-  const navigate = useNavigate();
-
   const handleSearchChange = (query: string) => {
     setSearch(query);
   };
@@ -30,15 +26,11 @@ export const SearchPage = () => {
     setCurrentPage(page);
   };
 
-  const handleMovieClick = (movieId: number) => {
-    navigate(`/movie/${movieId}`);
-  };
-
   return (
     <div className="bg-darkDefault min-h-screen py-12">
       <div className="text-center mb-12">
         <h1 className="text-6xl font-extrabold font-title text-purple-600 leading-tight drop-shadow-lg">
-          Cinematic 🎬
+          Cinematic
         </h1>
         <p className="text-lg text-gray-300 mt-6 max-w-3xl mx-auto leading-relaxed">
           Your gateway to a world of movies and series. Stream, explore, and
@@ -59,7 +51,7 @@ export const SearchPage = () => {
 
         {!isLoading && !error && movies.length > 0 && (
           <>
-            <MovieList movies={movies} onMovieClick={handleMovieClick} />
+            <MovieList movies={movies} />
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

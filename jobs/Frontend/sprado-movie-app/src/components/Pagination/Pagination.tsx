@@ -1,5 +1,5 @@
 import React from "react";
-import { generatePageNumbers } from "../utils/generate-page-numbers";
+import { generatePageNumbers } from "../../utils/pagination-utils/generate-page-numbers";
 
 interface PaginationProps {
   currentPage: number;
@@ -7,11 +7,11 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
+export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
-}) => {
+}: PaginationProps) => {
   const handlePageClick = (page: number | string) => {
     if (typeof page === "number") {
       onPageChange(page);
