@@ -20,7 +20,7 @@ export const MovieDetailPage = () => {
 
   const backdropUrl = movie.backdrop_path
     ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
-    : FallbackPoster;
+    : null;
 
   return (
     <div
@@ -30,6 +30,7 @@ export const MovieDetailPage = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        backgroundColor: backdropUrl ? undefined : "black",
       }}
     >
       <button
