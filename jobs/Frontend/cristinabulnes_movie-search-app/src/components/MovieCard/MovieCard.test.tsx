@@ -1,6 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { customRender, screen, fireEvent } from "../../utils/testUtils";
 import MovieCard from "./MovieCard";
-import { ThemeProvider } from "styled-components";
 import { theme } from "../../theme";
 
 describe("MovieCard", () => {
@@ -14,11 +13,7 @@ describe("MovieCard", () => {
 	};
 
 	test("renders correctly with given props", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MovieCard {...movieProps} />
-			</ThemeProvider>
-		);
+		customRender(<MovieCard {...movieProps} />);
 
 		// Check if the title, poster, release date, and rating are rendered
 		expect(screen.getByText("Test Movie")).toBeInTheDocument();
@@ -35,11 +30,7 @@ describe("MovieCard", () => {
 	});
 
 	test("calls onClick when the card is clicked", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MovieCard {...movieProps} />
-			</ThemeProvider>
-		);
+		customRender(<MovieCard {...movieProps} />);
 
 		const cardContainer = screen.getByRole("button");
 
@@ -51,11 +42,7 @@ describe("MovieCard", () => {
 	});
 
 	test("applies hover effect when hovered", async () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MovieCard {...movieProps} />
-			</ThemeProvider>
-		);
+		customRender(<MovieCard {...movieProps} />);
 
 		const cardContainer = screen.getByRole("button");
 
@@ -67,11 +54,7 @@ describe("MovieCard", () => {
 	});
 
 	test("applies focus effect when focused", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MovieCard {...movieProps} />
-			</ThemeProvider>
-		);
+		customRender(<MovieCard {...movieProps} />);
 
 		const cardContainer = screen.getByRole("button");
 

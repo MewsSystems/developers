@@ -1,9 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import MoviesGrid from "./MoviesGrid";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { customRender, screen, fireEvent } from "../../utils/testUtils";
+import MoviesGrid from "./MoviesGrid";
 import { mockMovies } from "../../__mocks__/mockMovies";
-import { ThemeProvider } from "styled-components";
-import { theme } from "../../theme";
 
 // Mock navigate function (since we're using react-router-dom)
 const mockNavigate = jest.fn();
@@ -15,12 +13,10 @@ jest.mock("react-router-dom", () => ({
 
 describe("MoviesGrid", () => {
 	test("renders a list of MovieCard components", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MemoryRouter>
-					<MoviesGrid movies={mockMovies} />
-				</MemoryRouter>
-			</ThemeProvider>
+		customRender(
+			<MemoryRouter>
+				<MoviesGrid movies={mockMovies} />
+			</MemoryRouter>
 		);
 
 		// Check that MovieCard components are rendered
@@ -33,15 +29,13 @@ describe("MoviesGrid", () => {
 	});
 
 	test("triggers navigation when a MovieCard is clicked", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<MemoryRouter initialEntries={["/"]}>
-					<MoviesGrid movies={mockMovies} />
-					<Routes>
-						<Route path="/movie/:id" element={<div>Movie Details</div>} />
-					</Routes>
-				</MemoryRouter>
-			</ThemeProvider>
+		customRender(
+			<MemoryRouter initialEntries={["/"]}>
+				<MoviesGrid movies={mockMovies} />
+				<Routes>
+					<Route path="/movie/:id" element={<div>Movie Details</div>} />
+				</Routes>
+			</MemoryRouter>
 		);
 
 		// Simulate a click on the first movie

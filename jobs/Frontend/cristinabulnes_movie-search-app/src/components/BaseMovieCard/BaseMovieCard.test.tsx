@@ -1,7 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { ThemeProvider } from "styled-components";
+import { customRender, screen } from "../../utils/testUtils";
 import BaseMovieCard from "./BaseMovieCard";
-import { theme } from "../../theme";
 
 describe("MovieCard Component", () => {
 	const mockMovie = {
@@ -13,16 +11,14 @@ describe("MovieCard Component", () => {
 	};
 
 	it("renders the MovieCard with correct data", () => {
-		render(
-			<ThemeProvider theme={theme}>
-				<BaseMovieCard
-					id={mockMovie.id}
-					title={mockMovie.title}
-					posterPath={mockMovie.posterPath}
-					releaseDate={mockMovie.releaseDate}
-					rating={mockMovie.rating}
-				/>
-			</ThemeProvider>
+		customRender(
+			<BaseMovieCard
+				id={mockMovie.id}
+				title={mockMovie.title}
+				posterPath={mockMovie.posterPath}
+				releaseDate={mockMovie.releaseDate}
+				rating={mockMovie.rating}
+			/>
 		);
 
 		expect(screen.getByText(mockMovie.title)).toBeInTheDocument();
