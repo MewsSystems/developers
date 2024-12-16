@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { MovieList } from "../../components/MovieList/MovieList";
-import { useFetchMovies } from "../../hooks/useFetchMovies";
+import { useFetchMovies } from "../../hooks/useFetchMovies/useFetchMovies";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue/useDebouncedValue";
 
@@ -9,7 +9,7 @@ export const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const debouncedSearch = useDebouncedValue(search, 300);
+  const debouncedSearch = useDebouncedValue(search, 500);
 
   const {
     data: movies,

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { useFetchMovieDetails } from "../../hooks/useFetchMovieDetails";
+import { useFetchMovieDetails } from "../../hooks/useFetchMovieDetails/useFetchMovieDetails";
 import { MovieDetailPage } from "./MovieDetailPage";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 

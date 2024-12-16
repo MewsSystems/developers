@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Movie } from "../types";
+import React, { useState, useEffect } from "react";
+import { Movie } from "../../types";
 
 interface UseMoviesFetchResult {
   data: Movie[];
