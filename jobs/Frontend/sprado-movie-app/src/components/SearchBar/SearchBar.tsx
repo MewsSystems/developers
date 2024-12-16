@@ -3,11 +3,18 @@ import React from "react";
 interface SearchBarProps {
   value: string;
   onChange: (query: string) => void;
+  onReset: () => void;
 }
 
-export const SearchBar = ({ value, onChange }: SearchBarProps) => {
+export const SearchBar = ({ value, onChange, onReset }: SearchBarProps) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      onReset();
+    }
   };
 
   return (
@@ -16,6 +23,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
         type="text"
         value={value}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         placeholder="Search for a movie..."
         className="w-full bg-transparent text-gray-200 placeholder-gray-400 focus:outline-none text-lg"
       />

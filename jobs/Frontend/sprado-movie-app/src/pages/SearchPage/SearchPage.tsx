@@ -39,7 +39,14 @@ export const SearchPage = () => {
         </p>
       </div>
       <div className="max-w-5xl mx-auto px-6 mb-8">
-        <SearchBar value={search} onChange={handleSearchChange} />
+        <SearchBar
+          value={search}
+          onChange={handleSearchChange}
+          onReset={() => {
+            setSearch("");
+            setCurrentPage(1);
+          }}
+        />
       </div>
 
       <div className="max-w-[80%] mx-auto px-6">

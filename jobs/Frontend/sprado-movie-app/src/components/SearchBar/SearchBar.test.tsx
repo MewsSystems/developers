@@ -4,7 +4,7 @@ import { SearchBar } from "./SearchBar";
 
 describe("SearchBar", () => {
   it("renders input field with placeholder", () => {
-    render(<SearchBar value="" onChange={() => {}} />);
+    render(<SearchBar value="" onChange={() => {}} onReset={() => {}} />);
 
     const input = document.querySelector("input");
     expect(input).toBeInTheDocument();
@@ -12,7 +12,7 @@ describe("SearchBar", () => {
   });
 
   it('renders "✕" button when value is not empty', () => {
-    render(<SearchBar value="Batman" onChange={() => {}} />);
+    render(<SearchBar value="Batman" onChange={() => {}} onReset={() => {}} />);
 
     const closeButton = document.querySelector("button");
     expect(closeButton).toBeInTheDocument();
