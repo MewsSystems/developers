@@ -3,10 +3,13 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { MovieList } from "../../components/MovieList/MovieList";
 import { useFetchMovies } from "../../hooks/useFetchMovies";
 import { Pagination } from "../../components/Pagination/Pagination";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 export const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const debouncedSearch = useDebouncedValue(search, 300);
 
   const {
     data: movies,
@@ -15,7 +18,7 @@ export const SearchPage = () => {
     error,
   } = useFetchMovies(
     `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&include_adult=false`,
-    search,
+    debouncedSearch,
     currentPage
   );
 
@@ -53,9 +56,12 @@ export const SearchPage = () => {
         {isLoading && <p className="text-center text-gray-400">Loading...</p>}
         {error && <p className="text-center text-red-500">{error.message}</p>}
 
-        {!isLoading && !error && search.trim() && movies.length === 0 && (
-          <p className="text-center text-gray-400">No movies found.</p>
-        )}
+        {!isLoading &&
+          !error &&
+          debouncedSearch.trim() &&
+          movies.length === 0 && (
+            <p className="text-center text-gray-400">No movies found.</p>
+          )}
 
         {!isLoading && !error && movies.length > 0 && (
           <>
