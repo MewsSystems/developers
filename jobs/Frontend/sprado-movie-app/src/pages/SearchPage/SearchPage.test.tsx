@@ -5,7 +5,7 @@ import { useFetchMovies } from "../../hooks/useFetchMovies/useFetchMovies";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue/useDebouncedValue";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-jest.mock("../../hooks/useFetchMovies");
+jest.mock("../../hooks/useFetchMovies/useFetchMovies");
 
 jest.mock("../../hooks/useDebouncedValue/useDebouncedValue");
 const useMoviesFetchMock = useFetchMovies as jest.Mock;

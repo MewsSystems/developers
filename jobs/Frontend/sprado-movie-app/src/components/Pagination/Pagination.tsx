@@ -29,7 +29,7 @@ export const Pagination = ({
   return (
     <div className="flex justify-center items-center mt-8 space-x-4">
       <button
-        data-testId="prev-page-button"
+        data-testid="prev-page-button"
         onClick={handlePrev}
         disabled={currentPage === 1}
         className={`px-3 py-2 rounded-full ${
@@ -60,7 +60,7 @@ export const Pagination = ({
       ))}
 
       <button
-        data-testId="next-page-button"
+        data-testid="next-page-button"
         onClick={handleNext}
         disabled={currentPage === totalPages}
         className={`px-3 py-2 rounded-full ${

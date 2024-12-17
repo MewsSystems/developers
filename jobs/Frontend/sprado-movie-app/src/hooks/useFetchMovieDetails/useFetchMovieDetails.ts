@@ -7,7 +7,9 @@ interface UseMovieFetchResult {
   error: Error | null;
 }
 
-export const useFetchMovieDetails = (id: string | undefined): UseMovieFetchResult => {
+export const useFetchMovieDetails = (
+  id: string | undefined
+): UseMovieFetchResult => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);

@@ -55,14 +55,14 @@ export const SearchPage = () => {
       <div className="max-w-[80%] mx-auto px-6">
         {isLoading && (
           <p
-            data-testId="loading-indicator"
+            data-testid="loading-indicator"
             className="text-center text-gray-400"
           >
             Loading...
           </p>
         )}
         {error && (
-          <p data-testId="error-indicator" className="text-center text-red-500">
+          <p data-testid="error-indicator" className="text-center text-red-500">
             {error.message}
           </p>
         )}

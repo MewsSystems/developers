@@ -4,7 +4,7 @@ import { useFetchMovieDetails } from "../../hooks/useFetchMovieDetails/useFetchM
 import { MovieDetailPage } from "./MovieDetailPage";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
-jest.mock("../../hooks/useFetchMovieDetails", () => ({
+jest.mock("../../hooks/useFetchMovieDetails/useFetchMovieDetails", () => ({
   useFetchMovieDetails: jest.fn(),
 }));
 

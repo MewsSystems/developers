@@ -18,7 +18,7 @@ export const MovieDetailPage = () => {
     );
 
   const backdropUrl = movie.backdrop_path
-    ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+    ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
     : null;
 
   return (
@@ -47,10 +47,11 @@ export const MovieDetailPage = () => {
               <img
                 src={
                   movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
                     : FallbackPoster
                 }
                 alt={movie.title}
+                loading="lazy"
                 className="rounded-lg shadow-2xl max-w-[300px] md:max-w-full"
               />
             </div>
