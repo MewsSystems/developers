@@ -7,7 +7,7 @@ export const useMoviesInfinite = (search: string) => {
     queryFn: async (pageParam) => await getMovies(search, pageParam.pageParam),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      return lastPage.totalPages < lastPage.page ? undefined : lastPage.page + 1;
+      return lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined;
     },
   });
 };

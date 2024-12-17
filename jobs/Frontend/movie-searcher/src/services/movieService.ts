@@ -1,4 +1,4 @@
-import { MovieReponse as MovieResponse, MovieTmdbApi } from '../ models/movieModel';
+import { MovieDetails, MovieDetailsTmdbApi, MovieResponse as MovieResponse, MovieTmdbApi } from '../ models/movieModel';
 
 export const getMovies = async (search: string, page: number): Promise<MovieResponse> => {
   try {
@@ -16,7 +16,6 @@ export const getMovies = async (search: string, page: number): Promise<MovieResp
       return {
         id: movie.id,
         poster: movie.poster_path,
-        release_date: movie.release_date,
         title: movie.title,
       };
     });
@@ -34,5 +33,27 @@ export const getMovies = async (search: string, page: number): Promise<MovieResp
     page: 0,
     totalPages: 0,
     movies: [],
+  };
+};
+
+export const getMovie = async (movieId: string): Promise<MovieDetails> => {
+  const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+    },
+  });
+
+  const responseJson: MovieDetailsTmdbApi = await response.json();
+  const genres = responseJson.genres.map((genre) => genre.name);
+
+  return {
+    genres,
+    id: responseJson.id,
+    overview: responseJson.overview,
+    poster: responseJson.poster_path,
+    releaseDate: responseJson.release_date,
+    title: responseJson.title,
   };
 };

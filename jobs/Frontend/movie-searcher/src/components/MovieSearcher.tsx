@@ -3,11 +3,15 @@ import { useMoviesInfinite } from '../hooks/useMovies';
 import { useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 
+const EmptyMovieList = () => {
+  return <p>No movies found</p>;
+};
+
 export const MovieSearcher = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 700);
 
-  const { data, fetchNextPage, hasNextPage } = useMoviesInfinite(debouncedSearchTerm);
+  const { data, fetchNextPage, hasNextPage, isPending } = useMoviesInfinite(debouncedSearchTerm);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -27,6 +31,7 @@ export const MovieSearcher = () => {
         </form>
       </header>
       <div className='w-full flex flex-col gap-8'>
+        {!data?.pages[0].movies.length && !isPending && debouncedSearchTerm && <EmptyMovieList />}
         <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
         {hasNextPage && (
           <div>
