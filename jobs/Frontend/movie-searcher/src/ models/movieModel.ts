@@ -1,4 +1,4 @@
-export type MovieApi = {
+export type MovieTmdbApi = {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -20,4 +20,10 @@ export type Movie = {
   poster: string | null;
   release_date: string;
   title: string;
+};
+
+export type MovieReponse = {
+  page: number;
+  totalPages: number;
+  movies: Movie[];
 };

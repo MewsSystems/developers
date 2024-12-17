@@ -1,9 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getMovies } from '../services/movieService';
 
-export const useMovies = (search: string) => {
-  return useQuery({
+export const useMoviesInfinite = (search: string) => {
+  return useInfiniteQuery({
     queryKey: ['movies', search],
-    queryFn: async () => await getMovies(search),
+    queryFn: async (pageParam) => await getMovies(search, pageParam.pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.totalPages < lastPage.page ? undefined : lastPage.page + 1;
+    },
   });
 };

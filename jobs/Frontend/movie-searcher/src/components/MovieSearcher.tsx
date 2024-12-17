@@ -1,5 +1,5 @@
 import { MovieList } from './MovieList';
-import { useMovies } from '../hooks/useMovies';
+import { useMoviesInfinite } from '../hooks/useMovies';
 import { useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 
@@ -7,7 +7,7 @@ export const MovieSearcher = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 700);
 
-  const { data: movies } = useMovies(debouncedSearchTerm);
+  const { data, fetchNextPage, hasNextPage } = useMoviesInfinite(debouncedSearchTerm);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -26,8 +26,13 @@ export const MovieSearcher = () => {
           />
         </form>
       </header>
-      <div className='w-full'>
-        <MovieList movies={movies || []} />
+      <div className='w-full flex flex-col gap-8'>
+        <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
+        {hasNextPage && (
+          <div>
+            <button onClick={() => fetchNextPage()}>Load more</button>
+          </div>
+        )}
       </div>
     </div>
   );
