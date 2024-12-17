@@ -123,7 +123,7 @@ export const theme = {
 		},
 		h6: {
 			fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
-			fontWeight: "500",
+			fontWeight: "700",
 			fontSize: "1.25rem",
 			lineHeight: 1.6,
 		},

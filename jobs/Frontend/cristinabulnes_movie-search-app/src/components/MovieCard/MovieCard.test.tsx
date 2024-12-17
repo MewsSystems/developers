@@ -8,7 +8,7 @@ describe("MovieCard", () => {
 		title: "Test Movie",
 		posterPath: null,
 		releaseDate: "2024-01-01",
-		rating: 8,
+		voteAverage: 8,
 		onClick: jest.fn(),
 	};
 
@@ -17,15 +17,18 @@ describe("MovieCard", () => {
 
 		// Check if the title, poster, release date, and rating are rendered
 		expect(screen.getByText("Test Movie")).toBeInTheDocument();
+		const posterSrc =
+			movieProps.posterPath ||
+			"https://via.placeholder.com/300x450?text=No+Image";
 		expect(screen.getByAltText(`${movieProps.title} Poster`)).toHaveAttribute(
 			"src",
-			"https://via.placeholder.com/300x450?text=No+Image"
+			posterSrc
 		);
 		expect(
 			screen.getByText(`Release Date: ${movieProps.releaseDate}`)
 		).toBeInTheDocument();
 		expect(
-			screen.getByText(`Rating: ${movieProps.rating}/10`)
+			screen.getByText(`Rating: ${movieProps.voteAverage}/10`)
 		).toBeInTheDocument();
 	});
 

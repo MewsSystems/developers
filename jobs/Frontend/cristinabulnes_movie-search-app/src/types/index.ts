@@ -4,11 +4,11 @@ export interface Movie {
 	title: string;
 	posterPath: string | null;
 	releaseDate: string;
-	voteAverage: number;
-	overview: string;
-	genres: Genre[];
-	backdropPath: string | null;
-	runtime: number | null;
+	voteAverage?: number;
+	overview?: string;
+	genres?: Genre[];
+	backdropPath?: string | null;
+	runtime?: number | null;
 }
 
 export interface Genre {

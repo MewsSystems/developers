@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import BaseMovieCard, { BaseMovieCardProps } from "../BaseMovieCard";
+import { Movie } from "../../types";
+import BaseCard from "../BaseCard";
+import Typography from "../Typography";
+import { theme } from "../../theme";
 
 const CardContainer = styled.div`
 	display: flex;
@@ -18,7 +21,7 @@ const CardContainer = styled.div`
 	}
 `;
 
-interface MovieCardProps extends BaseMovieCardProps {
+interface MovieCardProps extends Movie {
 	onClick: () => void;
 }
 
@@ -27,7 +30,7 @@ const MovieCard = ({
 	title,
 	posterPath,
 	releaseDate,
-	rating,
+	voteAverage,
 	onClick,
 }: MovieCardProps) => {
 	return (
@@ -36,14 +39,20 @@ const MovieCard = ({
 			tabIndex={0}
 			role="button"
 			aria-label={`View details of ${title}`}
+			data-testid={`movie-card-${id}`}
 		>
-			<BaseMovieCard
-				id={id}
-				title={title}
-				posterPath={posterPath}
-				releaseDate={releaseDate}
-				rating={rating}
-			/>
+			<BaseCard size={1.5}>
+				<BaseCard.Poster posterPath={posterPath} alt={`${title} Poster`} />
+				<BaseCard.Content>
+					<Typography variant="h5" color={theme.palette.text.primary}>
+						{title}
+					</Typography>
+					<Typography variant="body">Release Date: {releaseDate}</Typography>
+					<Typography variant="subtitle" color={theme.palette.primary.main}>
+						Rating: {voteAverage || 0}/10
+					</Typography>
+				</BaseCard.Content>
+			</BaseCard>
 		</CardContainer>
 	);
 };

@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../components/Button";
-import MovieCard from "../components/BaseMovieCard";
 import { mockMovies } from "../__mocks__/mockMovies";
+import MovieDetailsCard from "../components/MovieDetailsCard";
 
 const MovieDetailsView = () => {
 	const { movieId } = useParams<{ movieId: string }>();
@@ -15,15 +14,21 @@ const MovieDetailsView = () => {
 		title,
 		posterPath,
 		releaseDate,
+		overview,
+		genres,
 		voteAverage: rating,
 	} = mockMovies[0];
 
 	return (
-		<>
-			<div>My movie details component</div>
-			<MovieCard {...{ id, title, posterPath, releaseDate, rating }} />
-			<Button onClick={handleGoBack}>Go back!</Button>
-		</>
+		<MovieDetailsCard
+			title={title}
+			posterPath={posterPath}
+			releaseDate={releaseDate}
+			overview={overview}
+			genres={genres}
+			rating={rating}
+			onGoBack={handleGoBack}
+		/>
 	);
 };
 

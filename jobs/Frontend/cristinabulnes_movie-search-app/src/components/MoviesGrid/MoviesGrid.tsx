@@ -32,7 +32,7 @@ const MoviesGrid = ({ movies }: { movies: Movie[] }) => {
 					title={movie.title}
 					posterPath={movie.posterPath}
 					releaseDate={movie.releaseDate}
-					rating={movie.voteAverage}
+					voteAverage={movie.voteAverage}
 				/>
 			))}
 		</MoviesGridContainer>

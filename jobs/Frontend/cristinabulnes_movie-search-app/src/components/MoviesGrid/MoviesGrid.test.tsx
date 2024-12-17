@@ -21,10 +21,10 @@ describe("MoviesGrid", () => {
 
 		// Check that MovieCard components are rendered
 		expect(
-			screen.getByTestId(`base-movie-card-${mockMovies[0].id}`)
+			screen.getByTestId(`movie-card-${mockMovies[0].id}`)
 		).toBeInTheDocument();
 		expect(
-			screen.getByTestId(`base-movie-card-${mockMovies[1].id}`)
+			screen.getByTestId(`movie-card-${mockMovies[1].id}`)
 		).toBeInTheDocument();
 	});
 
@@ -39,9 +39,7 @@ describe("MoviesGrid", () => {
 		);
 
 		// Simulate a click on the first movie
-		const movieCard1 = screen.getByTestId(
-			`base-movie-card-${mockMovies[0].id}`
-		);
+		const movieCard1 = screen.getByTestId(`movie-card-${mockMovies[0].id}`);
 		fireEvent.click(movieCard1);
 
 		// Check that navigate was called with the correct URL
