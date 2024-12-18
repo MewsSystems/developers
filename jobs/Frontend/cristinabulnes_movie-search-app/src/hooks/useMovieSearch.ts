@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchMovies } from "../services/movieService";
 import { Movie } from "../types";
+import { useDebounce } from "./useDebounce";
 
 export const useMovieSearch = () => {
 	const [movies, setMovies] = useState<Movie[]>([]);
@@ -9,6 +10,8 @@ export const useMovieSearch = () => {
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 	const [query, setQuery] = useState("");
+
+	const debouncedQuery = useDebounce(query, 500);
 
 	// Function to fetch movies
 	const fetchAndSetMovies = useCallback(async (query: string, page: number) => {
@@ -28,24 +31,14 @@ export const useMovieSearch = () => {
 		}
 	}, []);
 
-	// Handle search query changes with debounce
 	useEffect(() => {
-		const debounceTimeout = setTimeout(() => {
-			setPage(1);
-			if (query) {
-				fetchAndSetMovies(query, 1);
-			}
-		}, 500);
-
-		return () => clearTimeout(debounceTimeout);
-	}, [query, fetchAndSetMovies]);
-
-	// Fetch movies when page changes
-	useEffect(() => {
-		if (page > 1) {
-			fetchAndSetMovies(query, page);
+		if (!debouncedQuery) {
+			setMovies([]);
+			setHasMore(false);
+			return;
 		}
-	}, [page, query, fetchAndSetMovies]);
+		fetchAndSetMovies(debouncedQuery, page);
+	}, [debouncedQuery, page, fetchAndSetMovies]);
 
 	const loadMore = useCallback(() => {
 		setPage((prevPage) => prevPage + 1);

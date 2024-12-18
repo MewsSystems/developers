@@ -21,7 +21,7 @@ const SearchMoviesView = () => {
 			{error && <div style={{ color: "red" }}>{error}</div>}
 			{movies.length > 0 && (
 				<>
-					<MoviesGrid movies={movies} />
+					<MoviesGrid movies={movies} loadMore={loadMore} hasMore={hasMore} />
 					{hasMore && <Button onClick={loadMore}>Load More</Button>}
 				</>
 			)}
