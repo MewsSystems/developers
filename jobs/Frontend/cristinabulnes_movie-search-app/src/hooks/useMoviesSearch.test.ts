@@ -1,34 +1,13 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useMovieSearch } from "./useMovieSearch";
 import { fetchMovies } from "../services/movieService";
-import { Movie } from "../types";
+import { mockMovies } from "../__mocks__/mockMovies";
 
 // Mock the service that fetches the movies
 jest.mock("../services/movieService");
 
 describe("useMoviesSearch", () => {
-	let mockMovies: Movie[];
-
 	beforeEach(() => {
-		mockMovies = [
-			{
-				id: "1",
-				title: "Movie 1",
-				posterPath: "",
-				releaseDate: "",
-				voteAverage: 8,
-				overview: "",
-			},
-			{
-				id: "2",
-				title: "Movie 2",
-				posterPath: "",
-				releaseDate: "",
-				voteAverage: 7.5,
-				overview: "",
-			},
-		];
-
 		(fetchMovies as jest.Mock).mockResolvedValue({
 			results: mockMovies,
 			page: 1,
