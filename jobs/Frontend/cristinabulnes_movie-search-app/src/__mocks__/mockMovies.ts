@@ -7,7 +7,6 @@ export const mockMovies = [
 		voteAverage: 8.8,
 		overview:
 			"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-		genres: [{ id: 1, name: "Action" }],
 		backdropPath: null,
 		runtime: null,
 	},
@@ -19,7 +18,7 @@ export const mockMovies = [
 		voteAverage: 8.6,
 		overview:
 			"A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-		genres: [{ id: 1, name: "Action" }],
+
 		backdropPath: null,
 		runtime: null,
 	},
@@ -31,7 +30,7 @@ export const mockMovies = [
 		voteAverage: 8.6,
 		overview:
 			"A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-		genres: [{ id: 18, name: "Drama" }],
+
 		backdropPath: null,
 		runtime: null,
 	},
@@ -43,7 +42,7 @@ export const mockMovies = [
 		voteAverage: 8.8,
 		overview:
 			"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-		genres: [{ id: 18, name: "Drama" }],
+
 		backdropPath: null,
 		runtime: null,
 	},
@@ -55,7 +54,7 @@ export const mockMovies = [
 		voteAverage: 8.6,
 		overview:
 			"A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-		genres: [{ id: 18, name: "Drama" }],
+
 		backdropPath: null,
 		runtime: null,
 	},
@@ -67,8 +66,21 @@ export const mockMovies = [
 		voteAverage: 8.6,
 		overview:
 			"A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-		genres: [{ id: 18, name: "Drama" }],
+
 		backdropPath: null,
 		runtime: null,
 	},
 ];
+
+export const mockMovie = {
+	id: "1",
+	title: "Inception",
+	posterPath: "/poster-path",
+	releaseDate: "2010-07-16",
+	voteAverage: 8.8,
+	overview:
+		"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+	genres: [{ id: 1, name: "Action" }],
+	backdropPath: null,
+	runtime: null,
+};
