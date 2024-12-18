@@ -1,3 +1,4 @@
+import getPosterPath from "../../utils/ui";
 import { customRender, screen } from "../../utils/testUtils";
 import BaseCard from "./BaseCard";
 
@@ -6,7 +7,7 @@ describe("BaseCard Component", () => {
 		footer: "Footer",
 		title: "Title",
 		info: "Info",
-		posterPath: "https://example.com/poster.jpg",
+		posterPath: "/poster.jpg",
 	};
 
 	it("renders the BaseCard with default layout and size", () => {
@@ -34,7 +35,7 @@ describe("BaseCard Component", () => {
 		// Validate poster image
 		expect(screen.getByAltText(`${mockData.title} Poster`)).toHaveAttribute(
 			"src",
-			mockData.posterPath
+			getPosterPath(mockData.posterPath)
 		);
 
 		// Validate layout (Body should have row layout)

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import getPosterPath from "../../utils/ui";
 
 const PosterStyled = styled.img`
 	width: 100%;
@@ -9,14 +10,16 @@ const PosterStyled = styled.img`
 `;
 
 const Poster = ({
+	width = 300,
 	posterPath,
 	alt,
 }: {
+	width?: number;
 	posterPath: string | null;
 	alt: string;
 }) => (
 	<PosterStyled
-		src={posterPath || "https://via.placeholder.com/300x450?text=No+Image"}
+		src={getPosterPath(posterPath, width)}
 		alt={alt}
 		loading="lazy"
 	/>

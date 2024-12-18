@@ -2,17 +2,11 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { customRender } from "../../utils/testUtils";
 import MovieDetailsCard from "./MovieDetailsCard";
+import { mockMovie } from "../../__mocks__/mockMovies";
+import arrayToString from "../../utils/general";
+import getPosterPath from "../../utils/ui";
 
 describe("MovieDetailsCard Component", () => {
-	const mockMovie = {
-		title: "Inception",
-		posterPath: null,
-		releaseDate: "2010-07-16",
-		overview: "A mind-bending thriller.",
-		genres: [{ name: "Action" }, { name: "Sci-Fi" }],
-		rating: 8.8,
-	};
-
 	const mockOnGoBack = jest.fn();
 
 	it("renders all movie details correctly", () => {
@@ -23,7 +17,7 @@ describe("MovieDetailsCard Component", () => {
 				releaseDate={mockMovie.releaseDate}
 				overview={mockMovie.overview}
 				genres={mockMovie.genres}
-				rating={mockMovie.rating}
+				rating={mockMovie.voteAverage}
 				onGoBack={mockOnGoBack}
 			/>
 		);
@@ -35,22 +29,39 @@ describe("MovieDetailsCard Component", () => {
 		expect(
 			screen.getByText(`Release Date: ${mockMovie.releaseDate}`)
 		).toBeInTheDocument();
-
 		// Validate genres
-		expect(screen.getByText("Genres: Action, Sci-Fi")).toBeInTheDocument();
+		const formattedGenres = arrayToString(mockMovie.genres, "name");
+		expect(screen.getByText(`Genres: ${formattedGenres}`)).toBeInTheDocument();
 
 		// Validate overview
 		expect(screen.getByText(mockMovie.overview)).toBeInTheDocument();
 
 		// Validate rating
 		expect(
-			screen.getByText(`Rating: ${mockMovie.rating}/10`)
+			screen.getByText(`Rating: ${mockMovie.voteAverage}/10`)
 		).toBeInTheDocument();
 
 		// Validate poster image
-		const posterSrc =
-			mockMovie.posterPath ||
-			"https://via.placeholder.com/300x450?text=No+Image";
+		const posterSrc = getPosterPath(mockMovie.posterPath);
+		const posterImage = screen.getByAltText(`${mockMovie.title} Poster`);
+		expect(posterImage).toHaveAttribute("src", posterSrc);
+	});
+
+	it("renders default poster image when posterPath is null", () => {
+		customRender(
+			<MovieDetailsCard
+				title={mockMovie.title}
+				posterPath={null}
+				releaseDate={mockMovie.releaseDate}
+				overview={mockMovie.overview}
+				genres={mockMovie.genres}
+				rating={mockMovie.voteAverage}
+				onGoBack={mockOnGoBack}
+			/>
+		);
+
+		// Validate default poster image
+		const posterSrc = getPosterPath(null);
 		const posterImage = screen.getByAltText(`${mockMovie.title} Poster`);
 		expect(posterImage).toHaveAttribute("src", posterSrc);
 	});
@@ -63,7 +74,7 @@ describe("MovieDetailsCard Component", () => {
 				releaseDate={mockMovie.releaseDate}
 				overview={mockMovie.overview}
 				genres={mockMovie.genres}
-				rating={mockMovie.rating}
+				rating={mockMovie.voteAverage}
 				onGoBack={mockOnGoBack}
 			/>
 		);

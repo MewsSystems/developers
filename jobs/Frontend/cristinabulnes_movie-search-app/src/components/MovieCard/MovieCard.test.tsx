@@ -1,6 +1,7 @@
 import { customRender, screen, fireEvent } from "../../utils/testUtils";
 import MovieCard from "./MovieCard";
 import { theme } from "../../theme";
+import getPosterPath from "../../utils/ui";
 
 describe("MovieCard", () => {
 	const movieProps = {
@@ -17,9 +18,7 @@ describe("MovieCard", () => {
 
 		// Check if the title, poster, release date, and rating are rendered
 		expect(screen.getByText("Test Movie")).toBeInTheDocument();
-		const posterSrc =
-			movieProps.posterPath ||
-			"https://via.placeholder.com/300x450?text=No+Image";
+		const posterSrc = getPosterPath(movieProps.posterPath);
 		expect(screen.getByAltText(`${movieProps.title} Poster`)).toHaveAttribute(
 			"src",
 			posterSrc
