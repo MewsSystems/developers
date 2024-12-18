@@ -9,7 +9,7 @@ const EmptyMovieList = () => {
 
 export const MovieSearcher = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 700);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const { data, fetchNextPage, hasNextPage, isPending } = useMoviesInfinite(debouncedSearchTerm);
 
@@ -20,15 +20,14 @@ export const MovieSearcher = () => {
   return (
     <div className='flex flex-col items-center w-full gap-8'>
       <header>
-        <form>
-          <input
-            name='searchInput'
-            onChange={handleSearchChange}
-            className='min-w-80'
-            type='text'
-            placeholder='Avengers, Batman, Superman, etc.'
-          />
-        </form>
+        <input
+          id='searchInput'
+          name='searchInput'
+          onChange={handleSearchChange}
+          className='min-w-80'
+          type='text'
+          placeholder='Avengers, Batman, Superman, etc.'
+        />
       </header>
       <div className='w-full flex flex-col gap-8'>
         {!data?.pages[0].movies.length && !isPending && debouncedSearchTerm && <EmptyMovieList />}
