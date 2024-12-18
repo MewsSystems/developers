@@ -3,37 +3,58 @@ import Input from "../components/Input/Input";
 import MoviesGrid from "../components/MoviesGrid";
 import { fetchMovies } from "../services/movieService";
 import { Movie } from "../types";
+import Button from "../components/Button";
 
 const SearchMoviesView = () => {
 	const inputId = "search-movie-input";
 	const [value, setValue] = useState("");
-	const [movies, setMovies] = useState<Movie[]>();
-	const [loading, setLoading] = useState(false);
+	const [movies, setMovies] = useState<Movie[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
 
-	// Debounce handler for API call
-	const handleSearch = useCallback(async () => {
-		if (!value) return;
+	const handleSearch = useCallback(
+		async (query: string, pageNumber: number) => {
+			try {
+				setIsLoading(true);
+				setError(null);
+				const response = await fetchMovies(query, pageNumber);
 
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await fetchMovies(value, 1);
-			setMovies(response.results);
-		} catch (err: any) {
-			setError(err.message || "Failed to fetch movies.");
-		} finally {
-			setLoading(false);
-		}
-	}, [value]);
+				setMovies((prev) =>
+					pageNumber === 1 ? response.results : [...prev, ...response.results]
+				);
+				setHasMore(response.page < response.total_pages);
+			} catch (err) {
+				setError("Failed to load movies.");
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[]
+	);
 
+	// Debounce input changes
 	useEffect(() => {
 		const debounceTimeout = setTimeout(() => {
-			handleSearch();
+			setPage(1); // Reset to the first page on new search
+			handleSearch(value, 1);
 		}, 500); // Debounce delay of 500ms
 
 		return () => clearTimeout(debounceTimeout);
 	}, [value, handleSearch]);
+
+	// Handle pagination changes
+	useEffect(() => {
+		if (page > 1) {
+			handleSearch(value, page);
+		}
+	}, [page, handleSearch]);
+
+	// Handle "Load More" button click
+	const handleLoadMore = useCallback(() => {
+		setPage((prevPage) => prevPage + 1);
+	}, []);
 
 	return (
 		<>
@@ -45,9 +66,14 @@ const SearchMoviesView = () => {
 				value={value}
 				onChange={(e) => setValue(e.target.value)}
 			/>
-			{loading && <div>Loading...</div>}
+			{isLoading && <div>Loading...</div>}
 			{error && <div style={{ color: "red" }}>{error}</div>}
-			{movies && movies.length > 0 && <MoviesGrid movies={movies} />}
+			{movies.length > 0 && (
+				<>
+					<MoviesGrid movies={movies} />
+					{hasMore && <Button onClick={handleLoadMore}>Load More</Button>}
+				</>
+			)}
 		</>
 	);
 };

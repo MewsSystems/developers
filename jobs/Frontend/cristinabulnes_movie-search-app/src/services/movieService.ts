@@ -3,8 +3,8 @@ import apiClient from "./apiClient";
 import {
 	mapFetchMoviesResponse,
 	mapFetchMovieDetailsResponse,
-	SearchMovieApiResponse,
 	MovieDetailsApiResponse,
+	PaginatedSearchMoviesApiResponse,
 } from "../utils/api/responseMappers";
 
 export const API_ENDPOINTS = {
@@ -12,20 +12,30 @@ export const API_ENDPOINTS = {
 	MOVIE_DETAILS: (id: string) => `/movie/${id}`,
 };
 
+interface SearchMoviesResponse {
+	results: Movie[];
+	page: number;
+	total_pages: number;
+	total_results: number;
+}
+
 // Fetch movies by search query
 export const fetchMovies = async (
 	query: string,
 	page: number
-): Promise<{ results: Movie[] }> => {
+): Promise<SearchMoviesResponse> => {
 	try {
-		const response = await apiClient.get<{ results: SearchMovieApiResponse[] }>(
+		const response = await apiClient.get<PaginatedSearchMoviesApiResponse>(
 			API_ENDPOINTS.SEARCH_MOVIES,
 			{ params: { query, page } }
 		);
 
-		// Use mapper to transform API response
+		// Map results and maintain other pagination fields
 		const transformedMovies = response.data.results.map(mapFetchMoviesResponse);
-		return { results: transformedMovies };
+		return {
+			...response.data,
+			results: transformedMovies,
+		};
 	} catch (error: any) {
 		console.error("Failed to fetch movies:", error);
 		throw new Error(error || "Failed to fetch movies. Please try again.");

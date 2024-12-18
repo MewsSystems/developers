@@ -9,6 +9,13 @@ export interface SearchMovieApiResponse {
 	overview: string;
 }
 
+export interface PaginatedSearchMoviesApiResponse {
+	results: SearchMovieApiResponse[];
+	page: number;
+	total_pages: number;
+	total_results: number;
+}
+
 export interface MovieDetailsApiResponse extends SearchMovieApiResponse {
 	genres: Genre[];
 }
