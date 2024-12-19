@@ -6,8 +6,8 @@ import {
   MovieTmdbApiResponse,
 } from '../ models/movieModel';
 
-const fetchPopularMovies = async (): Promise<MovieTmdbApiResponse> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/movie/popular`, {
+const fetchPopularMovies = async (page: number): Promise<MovieTmdbApiResponse> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/movie/popular?page=${page}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ const fetchPopularMovies = async (): Promise<MovieTmdbApiResponse> => {
   return response.json();
 };
 
-const fetchSearchMovies = async (search: string, page: string): Promise<MovieTmdbApiResponse> => {
+const fetchSearchMovies = async (search: string, page: number): Promise<MovieTmdbApiResponse> => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/search/movie?query=${search}&page=${page}`, {
     method: 'GET',
     headers: {
@@ -34,9 +34,9 @@ export const getMovies = async (search: string, page: number): Promise<MovieResp
     let moviesResponse: MovieTmdbApiResponse;
 
     if (search) {
-      moviesResponse = await fetchSearchMovies(search, page.toString());
+      moviesResponse = await fetchSearchMovies(search, page);
     } else {
-      moviesResponse = await fetchPopularMovies();
+      moviesResponse = await fetchPopularMovies(page);
     }
 
     const movies = moviesResponse.results.map((movie: MovieTmdbApi) => {

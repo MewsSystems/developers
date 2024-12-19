@@ -30,7 +30,7 @@ export const MovieSearcher = () => {
         />
       </header>
       <div className='w-full flex flex-col gap-8'>
-        {!data?.pages[0].movies.length && !isPending && debouncedSearchTerm && <EmptyMovieList />}
+        {!data?.pages[0].movies.length && !isPending && <EmptyMovieList />}
         {!debouncedSearchTerm && <h1>Popular movies</h1>}
         <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
         {hasNextPage && (
