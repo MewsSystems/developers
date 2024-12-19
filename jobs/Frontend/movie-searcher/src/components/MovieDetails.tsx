@@ -12,6 +12,7 @@ export const MovieDetails = () => {
       {movie && (
         <div className='flex flex-col sm:flex-row gap-8'>
           <img
+            className='max-w-80'
             src={movie.poster ? `https://image.tmdb.org/t/p/w300/${movie.poster}` : '/no-image.jpg'}
             alt={movie?.title}
           />

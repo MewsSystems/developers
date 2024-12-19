@@ -1,6 +1,6 @@
 # Movie searcher
 
-Live link: https://developers-nqrpwn9j6-juan-sierras-projects-2885f3b2.vercel.app/
+Live link: https://developers-juan-sierras-projects-2885f3b2.vercel.app/
 
 ## Description
 
