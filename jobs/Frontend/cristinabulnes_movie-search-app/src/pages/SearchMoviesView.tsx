@@ -1,11 +1,42 @@
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { fetchMoviesAsync } from "../redux/thunk/movieSearchThunk";
+import { loadMore, setQuery } from "../redux/slices/movieSearchSlice";
+import { useDebounce } from "../hooks/useDebounce";
 import Input from "../components/Input/Input";
 import MoviesGrid from "../components/MoviesGrid";
-import Button from "../components/Button";
-import { useMovieSearch } from "../hooks/useMovieSearch";
 
 const SearchMoviesView = () => {
-	const { movies, isLoading, error, hasMore, query, setQuery, loadMore } =
-		useMovieSearch();
+	const handleInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			dispatch(setQuery(e.target.value));
+		},
+		[]
+	);
+
+	const dispatch = useDispatch<AppDispatch>();
+	const { movies, isLoading, error, hasMore, query, page } = useSelector(
+		(state: RootState) => state.movieSearch
+	);
+
+	const debouncedQuery = useDebounce(query, 500);
+
+	const fetchMovies = useCallback(async () => {
+		if (debouncedQuery) {
+			dispatch(fetchMoviesAsync({ query: debouncedQuery, page }));
+		}
+	}, [dispatch, debouncedQuery, page]);
+
+	useEffect(() => {
+		if (debouncedQuery) {
+			fetchMovies();
+		}
+	}, [debouncedQuery, page, fetchMovies]);
+
+	const handleLoadMore = () => {
+		dispatch(loadMore());
+	};
 
 	return (
 		<>
@@ -15,18 +46,19 @@ const SearchMoviesView = () => {
 				placeholder="Search for a movie"
 				label="Search for a movie"
 				value={query}
-				onChange={(e) => setQuery(e.target.value)}
+				onChange={handleInputChange}
 			/>
 			{isLoading && <div>Loading...</div>}
 			{error && <div style={{ color: "red" }}>{error}</div>}
 			{movies.length > 0 && (
-				<>
-					<MoviesGrid movies={movies} loadMore={loadMore} hasMore={hasMore} />
-					{hasMore && <Button onClick={loadMore}>Load More</Button>}
-				</>
+				<MoviesGrid
+					movies={movies}
+					loadMore={handleLoadMore}
+					hasMore={hasMore}
+				/>
 			)}
 		</>
 	);
 };
 
-export default SearchMoviesView;
+export default React.memo(SearchMoviesView);

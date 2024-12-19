@@ -12,7 +12,7 @@ export const API_ENDPOINTS = {
 	MOVIE_DETAILS: (id: string) => `/movie/${id}`,
 };
 
-interface SearchMoviesResponse {
+export interface SearchMoviesResponse {
 	results: Movie[];
 	page: number;
 	total_pages: number;

@@ -4,12 +4,13 @@ import {
 	Route,
 	useLocation,
 } from "react-router-dom";
-import "./App.css";
-import SearchMoviesView from "./pages/SearchMoviesView";
+import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./theme";
-import { SearchMovieProvider } from "./contexts/SearchMovieContext";
+import store from "./redux/store";
+import SearchMoviesView from "./pages/SearchMoviesView";
 import MovieDetails from "./pages/MovieDetails";
+import { theme } from "./theme";
+import "./App.css";
 
 const routes = {
 	home: "/",
@@ -45,11 +46,11 @@ const AppRoutes = () => {
 const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
-			<SearchMovieProvider>
+			<Provider store={store}>
 				<Router>
 					<AppRoutes />
 				</Router>
-			</SearchMovieProvider>
+			</Provider>
 		</ThemeProvider>
 	);
 };
