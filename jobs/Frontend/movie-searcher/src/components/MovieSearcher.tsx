@@ -2,8 +2,7 @@ import { MovieList } from './MovieList';
 import { useMoviesInfinite } from '../hooks/useMovies';
 import { useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FaSpinner } from 'react-icons/fa';
 
 export const MovieSearcher = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,10 +26,10 @@ export const MovieSearcher = () => {
           placeholder='Avengers, Batman, Superman, etc.'
         />
       </header>
-      <div className='w-full flex flex-col gap-8'>
+      <div className='w-full flex flex-col gap-8 items-center'>
         {!debouncedSearchTerm && <h1>Popular movies</h1>}
         {isPending ? (
-          <FontAwesomeIcon size='2x' icon={faSpinner} spin />
+          <FaSpinner size='30px' className='animate-spin' />
         ) : (
           <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
         )}
