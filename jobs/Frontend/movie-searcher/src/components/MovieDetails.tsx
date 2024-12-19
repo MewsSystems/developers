@@ -12,7 +12,7 @@ export const MovieDetails = () => {
       {movie && (
         <div className='flex flex-col sm:flex-row gap-8'>
           <img
-            src={movie.poster ? `https://image.tmdb.org/t/p/w300/${movie.poster}` : '/src/assets/images/no-image.png'}
+            src={movie.poster ? `https://image.tmdb.org/t/p/w300/${movie.poster}` : '/no-image.jpg'}
             alt={movie?.title}
           />
           <div className='flex flex-col gap-4 text-start'>
