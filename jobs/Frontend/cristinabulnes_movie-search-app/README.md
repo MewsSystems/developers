@@ -21,6 +21,7 @@ The application implements the search functionality by fetching data from an ext
 - React Router for navigation
 - Axios for making HTTP requests
 - Debounce logic for efficient searching
+- Context API and Redux for global state management (two approaches demonstrated)
 
 ## Development Plan
 
@@ -161,3 +162,78 @@ Key Benefits:
 - Maintains the state of the search results.
 - Prevents unnecessary re-fetching of data when navigating back.
 - Improves overall user experience and performance.
+
+## Project Structure
+
+```graphql
+src/
+├── components/         # Reusable UI components (e.g., MovieCard, MoviesGrid, Input, Button)
+├── contexts/           # Context API logic and providers (e.g., SearchMovieContext)
+├── hooks/              # Custom hooks (e.g., useMovieSearch, useDebounce)
+├── pages/              # Page components for routing (e.g., SearchView, MovieDetailsView)
+├── redux/              # Redux-related logic
+│   ├── slices/         # Redux slices (e.g., movieSearchSlice)
+│   ├── thunk/          # Async thunks for API calls
+│   └── store.ts        # Redux store configuration
+├── services/           # API service functions (e.g., fetchMovies)
+├── theme/              # Theme files
+├── App.tsx             # Application root component
+├── main.tsx            # Entry point for the React application
+└── vite.config.ts      # Vite configuration
+
+```
+
+#### Key Directories
+
+`components/`
+This directory contains reusable, presentational components used across the app, such as:
+
+- MovieCard: Displays movie details in a card format.
+- MoviesGrid: Arranges multiple movie cards in a grid layout.
+- Input: Custom input component for the search bar.
+- Button: Reusable button component for actions like "Load More."
+
+`contexts/`
+Contains the logic for managing global state using Context API.
+
+- SearchMovieContext.tsx: Implements state and functions for managing the search query, movies, and pagination.
+
+`hooks/`
+Custom hooks that encapsulate reusable logic.
+
+- useDebounce.ts: Implements debouncing for efficient API calls.
+- useIntersectionObserver.ts:
+
+To showcase proficiency with both Context API and Redux, as I've implemented these 2 approach, two custom hooks have been created for each state management:
+
+- useMovieSearch (Context API):
+
+  - Manages global state via the Context API using the SearchMovieContext.
+  - Handles the search query, paginated results, and error/loading states.
+  - Implements debounced search functionality with a custom useDebounce hook.
+
+- useMovieSearchRedux (Redux):
+
+  - Uses Redux to manage the global state for the movie search functionality.
+  - Dispatches actions (setQuery, loadMore, etc.) and uses selectors to manage query, pagination, and movie results.
+  - Implements debounced search functionality with a custom useDebounce hook.
+
+You just have to wrap the App with the corresponding provider and use the corresponding hook in the SearchMovieView.ts to use one or the other.
+
+`redux/`
+Holds all Redux-related logic, structured for scalability:
+
+- `slices/`: Contains movieSearchSlice.ts, defining reducers and actions.
+- `thunk/`: Contains asynchronous logic for fetching movies (movieSearchThunk.ts).
+- `store.ts`: Configures the Redux store with middleware and slices.
+
+`services/`
+This directory contains functions for making API calls:
+
+- `movieService.ts`: Implements fetchMovies, an abstraction over Axios for interacting with TheMovieDb API.
+
+`pages/`
+High-level components representing views in the application:
+
+- `SearchMobiesView.tsx`: Displays the movie search input and the results of the search.
+- `MovieDetails.tsx`: Displays detailed information about a selected movie.
