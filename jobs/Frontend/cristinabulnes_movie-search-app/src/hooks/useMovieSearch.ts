@@ -1,15 +1,23 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { fetchMovies } from "../services/movieService";
-import { Movie } from "../types";
 import { useDebounce } from "./useDebounce";
+import { useSearchMovieContext } from "../contexts/SearchMovieContext";
 
 export const useMovieSearch = () => {
-	const [movies, setMovies] = useState<Movie[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [query, setQuery] = useState("");
+	const {
+		movies,
+		setMovies,
+		isLoading,
+		setIsLoading,
+		error,
+		setError,
+		page,
+		setPage,
+		query,
+		setQuery,
+		hasMore,
+		setHasMore,
+	} = useSearchMovieContext();
 
 	const debouncedQuery = useDebounce(query, 500);
 
@@ -45,12 +53,12 @@ export const useMovieSearch = () => {
 	}, []);
 
 	return {
+		query,
+		setQuery,
 		movies,
 		isLoading,
 		error,
 		hasMore,
-		query,
-		setQuery,
 		loadMore,
 	};
 };

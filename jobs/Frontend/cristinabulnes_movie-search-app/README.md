@@ -110,3 +110,40 @@ export default tseslint.config({
 ## Approach
 
 The following features and technical decisions have been made:
+
+### State Management Options
+
+#### Local State Management
+
+For a task like this (creating a movie search application with a search and a detail view) local state management is often sufficient. The state is primarily view-specific:
+
+- Search View:
+
+  - Search query tied to the input field.
+  - Paginated list of movies fetched based on the query.
+  - Loading and error states for API handling.
+
+- Movie Detail View: State for the detailed information about the selected movie.
+
+##### Issue with this approach
+
+While this approach works well for smaller apps, it introduces a limitation: when navigating between views, the local state (the search query and results) is reset.
+You can mitigate this by using React Router State or URL Parameters to preserve the search query. However, the fetch request will indeed be triggered again when revisiting the search view.
+
+#### Global State Management
+
+Using Context API or Redux provides a centralized state that persists across views:
+
+- The search query, movie results, and other states can be globally managed, ensuring the search view restores seamlessly when navigating back.
+- This eliminates redundant API calls, enhances performance, and improves user experience.
+
+##### What’s the Best Approach?
+
+- For a small app, Context API suffices to maintain global state and demonstrate effective state management.
+- For a scalable app, tools like React Query or Redux are more suitable for managing state and caching efficiently.
+
+#### Solution implemented. Showcasing Skills
+
+Although Context API would be sufficient for the requirements of this exercise, I have chosen an approach that allows for a future transition to Redux. Initially, I implemented Context to demonstrate how to manage global state effectively, while keeping in mind how the app could evolve to use Redux. This showcases my proficiency with both Context and Redux, as well as my ability to transition between state management solutions when needed.
+
+Additionally, the API used provides a significant amount of information, which suggests that this application could be scaled in the future. While the current implementation focuses on the specific requirements of the exercise, this approach anticipates the potential for adding more features later.

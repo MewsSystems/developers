@@ -4,6 +4,7 @@ import SearchMoviesView from "./pages/SearchMoviesView";
 import MovieDetailsView from "./pages/MovieDetailsView";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./theme";
+import { SearchMovieProvider } from "./contexts/SearchMovieContext";
 
 const routes = {
 	home: "/",
@@ -13,12 +14,14 @@ const routes = {
 const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
-			<Router>
-				<Routes>
-					<Route path={routes.home} element={<SearchMoviesView />} />
-					<Route path={routes.movieDetails} element={<MovieDetailsView />} />
-				</Routes>
-			</Router>
+			<SearchMovieProvider>
+				<Router>
+					<Routes>
+						<Route path={routes.home} element={<SearchMoviesView />} />
+						<Route path={routes.movieDetails} element={<MovieDetailsView />} />
+					</Routes>
+				</Router>
+			</SearchMovieProvider>
 		</ThemeProvider>
 	);
 };
