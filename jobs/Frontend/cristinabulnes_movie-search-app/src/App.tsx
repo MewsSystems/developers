@@ -32,6 +32,7 @@ const AppRoutes = () => {
 				}
 			>
 				<Route path={routes.home} element={<SearchMoviesView />} />
+				<Route path={routes.movieDetails} element={<MovieDetails />} />
 			</Routes>
 
 			{/* This route will be rendered on top of the page as a modal */}
