@@ -27,7 +27,9 @@ const MoviesGrid = ({ movies, hasMore, loadMore }: MoviesGridProps) => {
 	const lastMovieRef = useRef<HTMLDivElement | null>(null);
 
 	const handleMovieClick = (id: string) => {
-		navigate(`/movie/${id}`);
+		navigate(`/movie/${id}`, {
+			state: { backgroundLocation: location.pathname },
+		});
 	};
 
 	useIntersectionObserver(() => {

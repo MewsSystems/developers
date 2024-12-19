@@ -147,3 +147,17 @@ Using Context API or Redux provides a centralized state that persists across vie
 Although Context API would be sufficient for the requirements of this exercise, I have chosen an approach that allows for a future transition to Redux. Initially, I implemented Context to demonstrate how to manage global state effectively, while keeping in mind how the app could evolve to use Redux. This showcases my proficiency with both Context and Redux, as well as my ability to transition between state management solutions when needed.
 
 Additionally, the API used provides a significant amount of information, which suggests that this application could be scaled in the future. While the current implementation focuses on the specific requirements of the exercise, this approach anticipates the potential for adding more features later.
+
+### Re-rendering Issue When Navigating Back
+
+When navigating to a movie's detail page and returning to the search results, the SearchMoviesView component would re-render, causing the API to re-fetch movie data and resetting the scroll position. This disrupted the user experience and caused redundant network calls.
+
+#### Solution: Switching to a Modal for Movie Details
+
+To address this, the movie detail page was implemented as a modal. This approach allows the SearchMoviesView to remain mounted while displaying movie details in an overlay.
+
+Key Benefits:
+
+- Maintains the state of the search results.
+- Prevents unnecessary re-fetching of data when navigating back.
+- Improves overall user experience and performance.

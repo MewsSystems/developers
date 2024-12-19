@@ -69,7 +69,12 @@ describe("MoviesGrid", () => {
 		fireEvent.click(movieCard1);
 
 		// Check that navigate was called with the correct URL
-		expect(mockNavigate).toHaveBeenCalledWith(`/movie/${mockMovies[0].id}`);
+		expect(mockNavigate).toHaveBeenCalledWith(
+			expect.stringContaining(`/movie/${mockMovies[0].id}`),
+			expect.objectContaining({
+				state: expect.objectContaining({ backgroundLocation: "/" }),
+			})
+		);
 	});
 
 	test("calls loadMore when the last movie is visible", () => {
