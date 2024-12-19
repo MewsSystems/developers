@@ -1,18 +1,45 @@
-import { MovieDetails, MovieDetailsTmdbApi, MovieResponse as MovieResponse, MovieTmdbApi } from '../ models/movieModel';
+import {
+  MovieDetails,
+  MovieDetailsTmdbApi,
+  MovieResponse as MovieResponse,
+  MovieTmdbApi,
+  MovieTmdbApiResponse,
+} from '../ models/movieModel';
+
+const fetchPopularMovies = async (): Promise<MovieTmdbApiResponse> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/movie/popular`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+    },
+  });
+
+  return response.json();
+};
+
+const fetchSearchMovies = async (search: string, page: string): Promise<MovieTmdbApiResponse> => {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/search/movie?query=${search}&page=${page}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
+    },
+  });
+  return response.json();
+};
 
 export const getMovies = async (search: string, page: number): Promise<MovieResponse> => {
   try {
-    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${search}&page=${page}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-      },
-    });
+    let moviesResponse: MovieTmdbApiResponse;
 
-    const responseJson = await response.json();
+    if (search) {
+      moviesResponse = await fetchSearchMovies(search, page.toString());
+    } else {
+      moviesResponse = await fetchPopularMovies();
+    }
 
-    const movies = responseJson.results.map((movie: MovieTmdbApi) => {
+    const movies = moviesResponse.results.map((movie: MovieTmdbApi) => {
       return {
         id: movie.id,
         poster: movie.poster_path,
@@ -21,8 +48,8 @@ export const getMovies = async (search: string, page: number): Promise<MovieResp
     });
 
     return {
-      page: responseJson.page,
-      totalPages: responseJson.total_pages,
+      page: moviesResponse.page,
+      totalPages: moviesResponse.total_pages,
       movies,
     };
   } catch (error) {
@@ -37,7 +64,7 @@ export const getMovies = async (search: string, page: number): Promise<MovieResp
 };
 
 export const getMovie = async (movieId: string): Promise<MovieDetails> => {
-  const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/movie/${movieId}?language=en-US`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

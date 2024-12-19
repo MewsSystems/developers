@@ -15,6 +15,13 @@ export type MovieTmdbApi = {
   vote_count: number;
 };
 
+export type MovieTmdbApiResponse = {
+  page: number;
+  results: MovieTmdbApi[];
+  total_pages: number;
+  total_results: number;
+};
+
 export type MovieDetailsTmdbApi = {
   genres: { id: number; name: string }[];
   id: number;
