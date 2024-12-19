@@ -2,10 +2,8 @@ import { MovieList } from './MovieList';
 import { useMoviesInfinite } from '../hooks/useMovies';
 import { useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-
-const EmptyMovieList = () => {
-  return <p>No movies found</p>;
-};
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 export const MovieSearcher = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,9 +28,12 @@ export const MovieSearcher = () => {
         />
       </header>
       <div className='w-full flex flex-col gap-8'>
-        {!data?.pages[0].movies.length && !isPending && <EmptyMovieList />}
         {!debouncedSearchTerm && <h1>Popular movies</h1>}
-        <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
+        {isPending ? (
+          <FontAwesomeIcon size='2x' icon={faSpinner} spin />
+        ) : (
+          <MovieList movies={data?.pages.flatMap((page) => page.movies) ?? []} />
+        )}
         {hasNextPage && (
           <div>
             <button onClick={() => fetchNextPage()}>Load more</button>

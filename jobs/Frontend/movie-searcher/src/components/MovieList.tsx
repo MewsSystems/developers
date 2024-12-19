@@ -5,8 +5,11 @@ type MovieListProps = {
   movies: Movie[];
 };
 
+const EmptyMovieList = () => {
+  return <p>No movies found</p>;
+};
 export const MovieList = ({ movies }: MovieListProps) => {
-  return (
+  return movies.length ? (
     <ul className='list-none w-full grid grid-cols-[repeat(auto-fit,minmax(200px,_1fr))] gap-10'>
       {movies.map((movie: Movie) => {
         return (
@@ -16,5 +19,7 @@ export const MovieList = ({ movies }: MovieListProps) => {
         );
       })}
     </ul>
+  ) : (
+    <EmptyMovieList />
   );
 };
