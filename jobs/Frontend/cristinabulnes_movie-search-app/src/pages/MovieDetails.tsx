@@ -2,6 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useMovieDetails } from "../hooks/useMovieDetails";
 import MovieDetailsCard from "../components/MovieDetailsCard";
+import Loading from "../components/Loading";
+import ErrorComponent from "../components/Error";
 
 const ModalOverlay = styled.div`
 	position: fixed;
@@ -34,8 +36,8 @@ const MovieDetails = () => {
 
 	const handleGoBack = () => navigate(-1);
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div style={{ color: "red" }}>{error}</div>;
+	if (loading) return <Loading />;
+	if (error) return <ErrorComponent message={error} />;
 	if (!movieDetails) return <div>No movie details available.</div>;
 
 	const {

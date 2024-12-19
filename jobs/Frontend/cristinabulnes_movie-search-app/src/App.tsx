@@ -9,6 +9,7 @@ import { ThemeProvider } from "styled-components";
 import store from "./redux/store";
 import SearchMoviesView from "./pages/SearchMoviesView";
 import MovieDetails from "./pages/MovieDetails";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { theme } from "./theme";
 import "./App.css";
 
@@ -48,7 +49,9 @@ const App = () => {
 		<ThemeProvider theme={theme}>
 			<Provider store={store}>
 				<Router>
-					<AppRoutes />
+					<ErrorBoundary>
+						<AppRoutes />
+					</ErrorBoundary>
 				</Router>
 			</Provider>
 		</ThemeProvider>

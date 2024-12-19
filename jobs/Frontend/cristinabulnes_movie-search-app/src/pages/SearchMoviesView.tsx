@@ -6,6 +6,8 @@ import { loadMore, setQuery } from "../redux/slices/movieSearchSlice";
 import { useDebounce } from "../hooks/useDebounce";
 import Input from "../components/Input/Input";
 import MoviesGrid from "../components/MoviesGrid";
+import Loading from "../components/Loading";
+import ErrorComponent from "../components/Error";
 
 const SearchMoviesView = () => {
 	const handleInputChange = useCallback(
@@ -48,9 +50,9 @@ const SearchMoviesView = () => {
 				value={query}
 				onChange={handleInputChange}
 			/>
-			{isLoading && <div>Loading...</div>}
-			{error && <div style={{ color: "red" }}>{error}</div>}
-			{movies.length > 0 && (
+			{isLoading && <Loading />}
+			{error && <ErrorComponent message={error} />}
+			{!error && !isLoading && movies.length > 0 && (
 				<MoviesGrid
 					movies={movies}
 					loadMore={handleLoadMore}
