@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Cnb.Api.Client;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +25,35 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+
+                var host = Host.CreateDefaultBuilder()
+                    .ConfigureAppConfiguration((context, configBuilder) =>
+                    {
+                        configBuilder.AddEnvironmentVariables();
+                    })
+                    .ConfigureServices((context, services) =>
+                    {
+                        services.AddLogging(log =>
+                        {
+                            log.AddConsole();
+                        });
+
+                        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+                        services.AddHttpClient<ICnbApiClientFactory, CnbApiClientFactory>();
+                        services.AddTransient<ICnbApiClientFactory, CnbApiClientFactory>();
+                        services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+
+                    })
+                    .Build();
+
+                IExchangeRateProvider exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
+
+                var rates = await exchangeRateProvider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
