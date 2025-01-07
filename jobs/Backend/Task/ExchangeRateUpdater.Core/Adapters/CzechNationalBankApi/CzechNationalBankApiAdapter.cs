@@ -27,7 +27,7 @@ internal class CzechNationalBankApiAdapter : IExchangeRateApiAdapter
 	{
 		var path = "cnbapi/exrates/daily";
 
-		if (!_cache.TryGetValue(path, out IEnumerable<ExchangeRate> result))
+		if (!_cache.TryGetValue(path, out ExchangeRate[]? result))
 		{
 			var respone = await _httpClient.GetAsync(path, cancellationToken);
 
@@ -37,7 +37,8 @@ internal class CzechNationalBankApiAdapter : IExchangeRateApiAdapter
 				JsonConvert.DeserializeObject<CzechNationalBankBaseExchangeRate>(
 					await respone.Content.ReadAsStringAsync(cancellationToken));
 
-			result = content?.Rates.Select(x => x.To()) ?? Enumerable.Empty<ExchangeRate>();
+			result = content?.Rates.Select(x => x.To()).ToArray() ?? [];
+			_cache.Set(path, result);
 		}
 		
 		
