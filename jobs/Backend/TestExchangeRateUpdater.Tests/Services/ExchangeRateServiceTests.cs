@@ -6,12 +6,15 @@ namespace TestExchangeRateUpdater.Tests.Services;
 public class ExchangeRateServiceTests
 {
     [Test]
-    public void ExchangeRateService_ShouldBe_InstanceOfExchangeRateService()
+    public void CallingGetExchangeRates_ShouldReturn_ExchangeRatesDTO()
     {
         // Arrange
         var exchangeRateService = new ExchangeRateService();
 
+        // Act
+        var actual = exchangeRateService.GetExchangeRates();
+
         // Assert
-        Assert.That(exchangeRateService, Is.InstanceOf<ExchangeRateService>());
+        Assert.That(actual, Is.InstanceOf<ExchangeRateService>());
     }
 }
