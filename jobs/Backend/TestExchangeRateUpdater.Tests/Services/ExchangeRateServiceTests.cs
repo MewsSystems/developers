@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ExchangeRateUpdater.Services;
 
 namespace TestExchangeRateUpdater.Tests.Services;
 
@@ -16,6 +12,6 @@ public class ExchangeRateServiceTests
         var exchangeRateService = new ExchangeRateService();
 
         // Assert
-        exchangeRateService.Should().BeOfType<ExchangeRateService>();
+        Assert.That(exchangeRateService, Is.InstanceOf<ExchangeRateService>());
     }
 }
