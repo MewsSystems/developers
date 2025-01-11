@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Services;
+﻿using ExchangeRateUpdater.DTOs;
+using ExchangeRateUpdater.Services;
 
 namespace TestExchangeRateUpdater.Tests.Services;
 
@@ -15,6 +16,6 @@ public class ExchangeRateServiceTests
         var actual = exchangeRateService.GetExchangeRates();
 
         // Assert
-        Assert.That(actual, Is.InstanceOf<ExchangeRateService>());
+        Assert.That(actual, Is.InstanceOf<ExchangeRatesDTO>());
     }
 }
