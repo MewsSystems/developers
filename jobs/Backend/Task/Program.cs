@@ -7,6 +7,6 @@ var host = new HostBuilder()
     .ConfigureServices(services =>
     {
         services.AddHttpClient();
-        services.AddTransient<ExchangeRateService>();
+        services.AddTransient<IExchangeRateService, ExchangeRateService>();
     })
     .Build();

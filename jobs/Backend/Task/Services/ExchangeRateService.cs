@@ -5,13 +5,9 @@ using System.Text.Json;
 
 namespace ExchangeRateUpdater.Services;
 
-public class ExchangeRateService
+public class ExchangeRateService: IExchangeRateService
 {
     private IHttpClientFactory _httpClientFactory;
-
-    public ExchangeRateService()
-    {
-    }
 
     public ExchangeRateService(IHttpClientFactory httpClientFactory) 
         => _httpClientFactory = httpClientFactory;
