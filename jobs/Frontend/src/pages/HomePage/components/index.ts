@@ -1,0 +1,1 @@
+export { HomeSearchContent } from './HomeSearchContent'
