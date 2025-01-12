@@ -3,7 +3,6 @@ using ExchangeRateUpdater.Services;
 using Moq;
 using Moq.Protected;
 using System.Net;
-using System.Net.Http;
 
 namespace TestExchangeRateUpdater.Tests.Services;
 

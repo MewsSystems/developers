@@ -1,10 +1,8 @@
 ﻿using ExchangeRateUpdater.DTOs;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Text.Json;
 using System;
 using System.Net.Http.Json;
-using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Services;
 
