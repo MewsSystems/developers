@@ -48,6 +48,7 @@ public class ExchangeRateServiceTests
             {
                 new ()
                 {
+                    Amount = 1,
                     CurrencyCode = "CUR",
                     Rate = 10.00M
                 }

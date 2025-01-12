@@ -25,7 +25,8 @@ public class ExchangeRateProvider : IExchangeRateProvider
             var exchangeRate = exchangeRatesFromService.Rates.FirstOrDefault(rate => rate.CurrencyCode == currency.Code);
             if (exchangeRate != null)
             {
-                exchangeRates.Add(new ExchangeRate(currency, new Currency("CZK"), exchangeRate.Rate));
+                var value = exchangeRate.Rate / exchangeRate.Amount;
+                exchangeRates.Add(new ExchangeRate(currency, new Currency("CZK"), value));
             }
         }
 
