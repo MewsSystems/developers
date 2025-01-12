@@ -10,6 +10,7 @@ namespace TestExchangeRateUpdater.Tests.Services;
 public class ExchangeRateServiceTests
 {
     private ExchangeRateService _exchangeRateService;
+    private Mock<TimeProvider> _timeProviderMock;
 
     [SetUp]
     public void Setup()
@@ -31,7 +32,9 @@ public class ExchangeRateServiceTests
             });
         var httpClient = new HttpClient(handlerMock.Object);
         httpClient.BaseAddress = new Uri("https://baseaddress/");
-        _exchangeRateService = new ExchangeRateService(httpClient);
+        _timeProviderMock = new Mock<TimeProvider>();
+        _timeProviderMock.Setup(x => x.GetUtcNow()).Returns(new DateTime(2025, 1, 11));
+        _exchangeRateService = new ExchangeRateService(httpClient, _timeProviderMock.Object);
 
     }
 
@@ -76,7 +79,7 @@ public class ExchangeRateServiceTests
         var httpClient = new HttpClient(handlerMock.Object);
         httpClient.BaseAddress = new Uri("https://baseaddress/");
 
-        _exchangeRateService = new ExchangeRateService(httpClient);
+        _exchangeRateService = new ExchangeRateService(httpClient, _timeProviderMock.Object);
 
         // Assert
         Assert.Multiple(() =>

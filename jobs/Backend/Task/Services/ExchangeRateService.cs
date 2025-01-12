@@ -8,16 +8,19 @@ namespace ExchangeRateUpdater.Services;
 
 public class ExchangeRateService: IExchangeRateService
 {
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
+    private readonly TimeProvider _timeProvider;
 
-    public ExchangeRateService(HttpClient httpClient)
+    public ExchangeRateService(HttpClient httpClient, TimeProvider timeProvider)
     {
          _httpClient = httpClient;
+        _timeProvider = timeProvider;
     }        
 
     public async Task<ExchangeRatesDTO> GetExchangeRates()
     {
-        var response = await _httpClient.GetAsync("exrates/daily?date=2025-11-01&lang=EN");
+        var todaysDate = _timeProvider.GetUtcNow().ToString("yyyy-MM-dd");
+        var response = await _httpClient.GetAsync($"exrates/daily?date={todaysDate}");
 
         if (!response.IsSuccessStatusCode)
         {

@@ -1,18 +1,34 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
 
 namespace ExchangeRateUpdater;
 
-public class ExchangeRateProvider
+public class ExchangeRateProvider : IExchangeRateProvider
 {
-    /// <summary>
-    /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-    /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-    /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-    /// some of the currencies, ignore them.
-    /// </summary>
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    private readonly IExchangeRateService _exchangeRateService;
+
+    public ExchangeRateProvider(IExchangeRateService exchangeRateService)
     {
-        return Enumerable.Empty<ExchangeRate>();
+        _exchangeRateService = exchangeRateService;
+    }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    {
+        var exchangeRates = new List<ExchangeRate>();
+        var exchangeRatesFromService = await _exchangeRateService.GetExchangeRates();
+
+        foreach (var currency in currencies)
+        {
+            var exchangeRate = exchangeRatesFromService.Rates.FirstOrDefault(rate => rate.CurrencyCode == currency.Code);
+            if (exchangeRate != null)
+            {
+                exchangeRates.Add(new ExchangeRate(currency, new Currency("CZK"), exchangeRate.Rate));
+            }
+        }
+
+        return exchangeRates;
     }
 }
