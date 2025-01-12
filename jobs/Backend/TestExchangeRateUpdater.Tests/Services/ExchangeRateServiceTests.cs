@@ -31,12 +31,8 @@ public class ExchangeRateServiceTests
                 )
             });
         var httpClient = new HttpClient(handlerMock.Object);
-        var httpClientFactory = new Mock<IHttpClientFactory>();
-        httpClientFactory
-            .Setup(_ => _.CreateClient(It.IsAny<string>()))
-            .Returns(httpClient);
-        
-        _exchangeRateService = new ExchangeRateService(httpClientFactory.Object);
+        httpClient.BaseAddress = new Uri("https://baseaddress/");
+        _exchangeRateService = new ExchangeRateService(httpClient);
 
     }
 
@@ -79,12 +75,9 @@ public class ExchangeRateServiceTests
                 StatusCode = HttpStatusCode.BadRequest
             });
         var httpClient = new HttpClient(handlerMock.Object);
-        var httpClientFactory = new Mock<IHttpClientFactory>();
-        httpClientFactory
-            .Setup(_ => _.CreateClient(It.IsAny<string>()))
-            .Returns(httpClient);
+        httpClient.BaseAddress = new Uri("https://baseaddress/");
 
-        _exchangeRateService = new ExchangeRateService(httpClientFactory.Object);
+        _exchangeRateService = new ExchangeRateService(httpClient);
 
         // Assert
         Assert.Multiple(() =>
