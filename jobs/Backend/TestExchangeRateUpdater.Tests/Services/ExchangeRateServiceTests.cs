@@ -1,5 +1,8 @@
 ﻿using ExchangeRateUpdater.DTOs;
 using ExchangeRateUpdater.Services;
+using Moq;
+using Moq.Protected;
+using System.Net;
 
 namespace TestExchangeRateUpdater.Tests.Services;
 
@@ -11,7 +14,29 @@ public class ExchangeRateServiceTests
     [SetUp]
     public void Setup()
     {
-        _exchangeRateService = new ExchangeRateService();
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                It.IsAny<HttpRequestMessage>(),
+                It.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(
+                    "{\"rates\": [{\"validFor\": \"2025-01-11\", \"order\": 1, \"currency\": \"Currency\", \"country\": \"Country\", \"amount\": 1, \"currencyCode\": \"CUR\", \"rate\": 10.00}]}"
+                    )
+            })
+            .Verifiable();
+        var httpClient = new HttpClient(handlerMock.Object);
+        var httpClientFactory = new Mock<IHttpClientFactory>();
+        httpClientFactory
+            .Setup(_ => _.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+        
+        _exchangeRateService = new ExchangeRateService(httpClientFactory.Object);
+
     }
 
     [Test]
@@ -36,7 +61,7 @@ public class ExchangeRateServiceTests
         };
 
         // Act
-        var actual = _exchangeRateService.GetExchangeRates();
+        var actual = _exchangeRateService.GetExchangeRates().Result;
 
         // Assert
         Assert.That(actual.Rates, Is.EqualTo(expected.Rates));
