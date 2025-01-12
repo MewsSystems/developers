@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Services;
 using Moq;
 using Moq.Protected;
 using System.Net;
+using System.Net.Http;
 
 namespace TestExchangeRateUpdater.Tests.Services;
 
@@ -19,16 +20,16 @@ public class ExchangeRateServiceTests
             .Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                It.IsAny<HttpRequestMessage>(),
-                It.IsAny<CancellationToken>())
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(
+                Content = new StringContent
+                (
                     "{\"rates\": [{\"validFor\": \"2025-01-11\", \"order\": 1, \"currency\": \"Currency\", \"country\": \"Country\", \"amount\": 1, \"currencyCode\": \"CUR\", \"rate\": 10.00}]}"
-                    )
-            })
-            .Verifiable();
+                )
+            });
         var httpClient = new HttpClient(handlerMock.Object);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         httpClientFactory
@@ -49,11 +50,6 @@ public class ExchangeRateServiceTests
             {
                 new ()
                 {
-                    ValidFor = "2025-01-11",
-                    Order = 1,
-                    Currency = "Currency",
-                    Country = "Country",
-                    Amount = 1,
                     CurrencyCode = "CUR",
                     Rate = 10.00M
                 }
@@ -65,5 +61,36 @@ public class ExchangeRateServiceTests
 
         // Assert
         Assert.That(actual.Rates, Is.EqualTo(expected.Rates));
+    }
+
+    [Test]
+    public void GetExchangeRates_ShouldThrowException_WhenResponseIsNotSuccessful()
+    {
+        // Arrange
+        var handlerMock = new Mock<HttpMessageHandler>();
+        handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest
+            });
+        var httpClient = new HttpClient(handlerMock.Object);
+        var httpClientFactory = new Mock<IHttpClientFactory>();
+        httpClientFactory
+            .Setup(_ => _.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient);
+
+        _exchangeRateService = new ExchangeRateService(httpClientFactory.Object);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            var exception = Assert.ThrowsAsync<Exception>(() => _exchangeRateService.GetExchangeRates());
+            Assert.That(exception.Message, Is.EqualTo("Failed to get exchange rates. Status code: BadRequest"));
+        });
     }
 }
