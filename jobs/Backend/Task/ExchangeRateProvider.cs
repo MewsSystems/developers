@@ -29,11 +29,13 @@ public class ExchangeRateProvider(
 
         var exchangeRates = response.Rates
             .Where(rate => currencyCodes.Contains(rate.CurrencyCode))
-            .Select(rate => new ExchangeRate(
-                new Currency(rate.CurrencyCode, rate.Currency),
-                targetCurrency,
-                rate.Rate / rate.Amount,
-                rate.ValidFor))
+            .Select(rate => new ExchangeRate
+            {
+                SourceCurrency = new Currency(rate.CurrencyCode, rate.Currency),
+                TargetCurrency = targetCurrency,
+                Value = rate.Rate / rate.Amount,
+                ValidFor = rate.ValidFor
+            })
             .ToList();
 
         if (exchangeRates.Count is 0)

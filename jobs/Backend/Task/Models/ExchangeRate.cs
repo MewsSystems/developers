@@ -2,17 +2,13 @@
 
 namespace ExchangeRateUpdater.Models;
 
-public class ExchangeRate(
-    Currency sourceCurrency, 
-    Currency targetCurrency, 
-    decimal value,
-    DateTime validFor)
+public class ExchangeRate
 {
-    public Currency SourceCurrency { get; } = sourceCurrency;
-
-    public Currency TargetCurrency { get; } = targetCurrency;
-
-    public decimal Value { get; } = value;
-
-    public DateTime ValidFor { get; set; } = validFor;
+    public Currency SourceCurrency { get; init; }
+    
+    public Currency TargetCurrency { get; init; }
+    
+    public decimal Value { get; init; }
+    
+    public DateTime ValidFor { get; init; }
 }

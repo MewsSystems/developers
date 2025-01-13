@@ -104,7 +104,7 @@ namespace ExchangeRateUpdater.Tests.Services
                     ReasonPhrase = "Bad Request"
                 });
 
-            const string loggedErrorMessage = 
+            const string expectedLogMessage = 
                 "Call to https://api.example.com/exrates/daily?date=2024-10-10&lang=EN was unsuccessful (400 - Bad Request)";
 
             // Act
@@ -118,7 +118,7 @@ namespace ExchangeRateUpdater.Tests.Services
                     logger => logger.Log(
                         LogLevel.Error,
                         It.IsAny<EventId>(),
-                        It.Is<It.IsAnyType>((v, t) => v.ToString() == loggedErrorMessage),
+                        It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedLogMessage),
                         null,
                         It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                     Times.Once);

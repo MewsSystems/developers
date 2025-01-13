@@ -49,6 +49,8 @@ public class ExchangeRateProviderTests
         var targetCurrency = new Currency("CZK", "koruna");
         var currencies = new List<Currency> { new Currency("EUR", "Euro") };
 
+        const string expectedLogMessage = "No exchange rates for were found for 13/01/2025";
+
         _exchangeRateServiceMock
             .Setup(service => service.GetExchangeRatesAsync(date, "EN"))
             .ReturnsAsync(new ExchangeRatesResponseModel { Rates = [] });
@@ -61,7 +63,7 @@ public class ExchangeRateProviderTests
             logger => logger.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == "No exchange rates for were found for 13/01/2025"),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedLogMessage),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
             Times.Once);
@@ -114,6 +116,8 @@ public class ExchangeRateProviderTests
             }
         };
 
+        const string expectedLogMessage = "No exchange rates for specified currencies were found for 13/01/2025";
+
         _exchangeRateServiceMock
             .Setup(service => service.GetExchangeRatesAsync(date, "EN"))
             .ReturnsAsync(new ExchangeRatesResponseModel { Rates = rates });
@@ -126,7 +130,7 @@ public class ExchangeRateProviderTests
             logger => logger.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == "No exchange rates for specified currencies were found for 13/01/2025"),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedLogMessage),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
             Times.Once);
@@ -153,7 +157,13 @@ public class ExchangeRateProviderTests
 
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 1.1m, date)
+            new ExchangeRate
+            {
+                SourceCurrency = currencies.First(),
+                TargetCurrency = targetCurrency,
+                Value = 1.1m,
+                ValidFor = date
+            }
         };
 
         _exchangeRateServiceMock
@@ -188,7 +198,13 @@ public class ExchangeRateProviderTests
         
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 0.68m, date)
+            new ExchangeRate
+            {
+                SourceCurrency = currencies.First(), 
+                TargetCurrency = targetCurrency, 
+                Value = 0.68m, 
+                ValidFor = date
+            }
         };
         
         _exchangeRateServiceMock
@@ -237,8 +253,20 @@ public class ExchangeRateProviderTests
 
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 1.1m, date),
-            new ExchangeRate(currencies.Last(), targetCurrency, 1.3m, date)
+            new ExchangeRate
+            {
+                SourceCurrency = currencies.First(), 
+                TargetCurrency = targetCurrency, 
+                Value = 1.1m, 
+                ValidFor = date
+            },
+            new ExchangeRate
+            {
+                SourceCurrency = currencies.Last(), 
+                TargetCurrency = targetCurrency, 
+                Value = 1.3m, 
+                ValidFor = date
+            }
         };
 
         _exchangeRateServiceMock
@@ -283,6 +311,8 @@ public class ExchangeRateProviderTests
             }
         };
 
+        const string expectedLogMessage = "2 exchange rates found for specified currencies";
+
         _exchangeRateServiceMock
             .Setup(service => service.GetExchangeRatesAsync(date, "EN"))
             .ReturnsAsync(new ExchangeRatesResponseModel { Rates = rates });
@@ -295,7 +325,7 @@ public class ExchangeRateProviderTests
             logger => logger.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString() == "2 exchange rates found for specified currencies"),
+                It.Is<It.IsAnyType>((v, t) => v.ToString() == expectedLogMessage),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
             Times.Once);
