@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
@@ -44,23 +45,35 @@ public static class Program
         try
         {
             var date = DateTime.Now;
-                
-            var rates = await provider.GetExchangeRates(Currencies, date);
+            var targetCurrency = new Currency("CZK", "koruna");
 
-            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates for {date.ToShortDateString()}:");
+            var rates = await provider.GetExchangeRates(date, targetCurrency, Currencies);
 
-            Console.WriteLine("{0,-20} | {1,-20} | {2,10}", "Source Currency", "Target Currency", "Rate");
-            Console.WriteLine(new string('-', 60));
-            foreach (var rate in rates)
+            if (rates.Any())
             {
-                Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4}", rate.SourceCurrency, rate.TargetCurrency, rate.Value);
+                Console.WriteLine(
+                    $"Successfully retrieved {rates.Count} exchange rates for {date.ToShortDateString()}:");
+
+                Console.WriteLine("{0,-20} | {1,-20} | {2,10}", "Source Currency", "Target Currency", "Rate");
+                Console.WriteLine(new string('-', 60));
+                foreach (var rate in rates)
+                {
+                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4}", rate.SourceCurrency, rate.TargetCurrency,
+                        rate.Value);
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"No exchange rates for were found for {date.ToShortDateString()}.");
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            Console.WriteLine($"Could not retrieve exchange rates due to an exception: '{e.Message}'.");
         }
 
+        Console.WriteLine("Press any key to exit...");
         Console.ReadLine();
     }
 }

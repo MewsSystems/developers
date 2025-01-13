@@ -4,10 +4,15 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Services;
 
-public class ExchangeRateService(HttpClient httpClient, IConfiguration configuration) : IExchangeRateService
+public class ExchangeRateService(
+    HttpClient httpClient, 
+    IConfiguration configuration,
+    ILogger<ExchangeRateService> logger) 
+    : IExchangeRateService
 {
     private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     private readonly string _baseApiUrl = configuration["BaseApiUrl"] ?? throw new ArgumentNullException(nameof(configuration));
@@ -21,13 +26,24 @@ public class ExchangeRateService(HttpClient httpClient, IConfiguration configura
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-        var response = await _httpClient.GetFromJsonAsync<ExchangeRatesResponseModel>(requestUri);
-        
-        if (response is null)
+        var response = await _httpClient.GetAsync(requestUri);
+
+        if (!response.IsSuccessStatusCode)
         {
-            throw new HttpRequestException("Error fetching exchange rates: Response content is null.");
+            logger.LogError("Call to {requestUri} was unsuccessful ({statusCode} - {phrase})",
+                requestUri, response.StatusCode, response.ReasonPhrase);
+            
+            throw new HttpRequestException("Error fetching exchange rates.");
         }
         
-        return response;
+        var exchangeRatesResponse = await response.Content.ReadFromJsonAsync<ExchangeRatesResponseModel>();
+        
+        if (exchangeRatesResponse is null)
+        {
+            throw new HttpRequestException(
+                "Error fetching exchange rates: Response content is null or response could not be deserialized.");
+        }
+        
+        return exchangeRatesResponse;
     }
 }
