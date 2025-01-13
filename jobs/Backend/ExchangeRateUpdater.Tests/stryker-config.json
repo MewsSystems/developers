@@ -1,0 +1,29 @@
+{
+  "stryker-config": {
+    "concurrency": 10,
+    "mutation-level": "Standard",
+    "language-version": "latest",
+    "additional-timeout": 5000,
+    "mutate": [
+      "**/*"
+    ],
+    "coverage-analysis": "perTest",
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 0
+    },
+    "verbosity": "info",
+    "reporters": [
+      "Progress",
+      "Html"
+    ],
+    "dashboard-url": "https://dashboard.stryker-mutator.io",
+    "test-projects": [],
+    "test-case-filter": "",
+    "ignore-mutations": [],
+    "ignore-methods": [],
+    "report-file-name": "mutation-report",
+    "break-on-initial-test-failure": false
+  }
+}
