@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Domain.ValueObjects;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Application
 {
     public class ExchangeRateProvider
     {
