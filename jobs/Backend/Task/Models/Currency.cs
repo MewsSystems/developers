@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ExchangeRateUpdater.Models;
 
 public class Currency(string code, string name = null)
 {
@@ -12,6 +14,7 @@ public class Currency(string code, string name = null)
     /// </summary>
     public string Name { get; } = name;
 
+    [ExcludeFromCodeCoverage]
     public override string ToString()
     {
         return string.IsNullOrEmpty(Name) ? Code : $"{Code} ({Name})";

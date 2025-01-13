@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater;
 
+[ExcludeFromCodeCoverage]
 public static class Program
 {
     private static readonly IEnumerable<Currency> Currencies =
@@ -58,7 +60,9 @@ public static class Program
                 Console.WriteLine(new string('-', 60));
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4}", rate.SourceCurrency, rate.TargetCurrency,
+                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4}", 
+                        rate.SourceCurrency, 
+                        rate.TargetCurrency,
                         rate.Value);
                 }
             }

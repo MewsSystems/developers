@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Models.API;
 
 namespace ExchangeRateUpdater.Services;
 
 public interface IExchangeRateService
 {
     /// <summary>
-    /// Fetches exchange rate data for a specific date and language.
+    /// Fetches exchange rate data for a specific date and language. Defaults the date to today's date if not provided.
     /// </summary>
     /// <param name="date">The date for which to fetch exchange rates (ISO format: yyyy-MM-dd).</param>
-    /// <param name="language">The language for the response ("EN" or "CZ" (default)).</param>
+    /// <param name="language">The language for the response ("EN" or "CZ").</param>
     /// <returns>An <see cref="ExchangeRatesResponseModel"/> containing the exchange rate data.</returns>
     Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime? date = null, string language = "EN");
 }

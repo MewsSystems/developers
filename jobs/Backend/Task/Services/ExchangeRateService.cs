@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Models.API;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -15,7 +16,7 @@ public class ExchangeRateService(
     : IExchangeRateService
 {
     private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    private readonly string _baseApiUrl = configuration["BaseApiUrl"] ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly string _baseApiUrl = configuration.GetValue<string>("BaseApiUrl") ?? throw new ArgumentNullException(nameof(configuration));
 
     /// <inheritdoc />
     public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime? date = null, string language = "EN")
@@ -31,19 +32,18 @@ public class ExchangeRateService(
         if (!response.IsSuccessStatusCode)
         {
             logger.LogError("Call to {requestUri} was unsuccessful ({statusCode} - {phrase})",
-                requestUri, response.StatusCode, response.ReasonPhrase);
+                requestUri, (int)response.StatusCode, response.ReasonPhrase);
             
             throw new HttpRequestException("Error fetching exchange rates.");
         }
-        
-        var exchangeRatesResponse = await response.Content.ReadFromJsonAsync<ExchangeRatesResponseModel>();
-        
-        if (exchangeRatesResponse is null)
+
+        try
         {
-            throw new HttpRequestException(
-                "Error fetching exchange rates: Response content is null or response could not be deserialized.");
+            return await response.Content.ReadFromJsonAsync<ExchangeRatesResponseModel>();
         }
-        
-        return exchangeRatesResponse;
+        catch (JsonException ex)
+        {
+            throw new HttpRequestException("Error fetching exchange rates: Response content could not be deserialized.", ex);
+        }
     }
 }

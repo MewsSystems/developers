@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater.Models;
+namespace ExchangeRateUpdater.Models.API;
 
 public record ExchangeRatesResponseModel
 {
