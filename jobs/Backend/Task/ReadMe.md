@@ -4,16 +4,16 @@ This project uses **Stryker.NET** for mutation testing to ensure the quality of 
 ## Prerequisites
 - Ensure you have the [.NET SDK](https://dotnet.microsoft.com/download) installed.
 - Install **Stryker.NET** globally using the following command:
-  \\\bash
+  ```
   dotnet tool install -g dotnet-stryker
-  \\\
+  ```
 
 ## Running Stryker.NET
 1. Open a terminal and navigate to the `ExchangeRateUpdater.Tests` directory:
 2. Run Stryker.NET with the following command to start mutation testing and automatically open the result report in your browser:
-   \\\bash
+   ```
    dotnet stryker -o
-   \\\
+   ```
 
    This will:
    - Analyze the test project.
