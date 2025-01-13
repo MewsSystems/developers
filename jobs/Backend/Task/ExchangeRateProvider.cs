@@ -9,12 +9,12 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater;
 
 public class ExchangeRateProvider(
-    IExchangeRateService exchangeRateService, 
+    IExchangeRateService exchangeRateService,
     ILogger<ExchangeRateProvider> logger)
 {
     public async Task<List<ExchangeRate>> GetExchangeRates(
-        DateTime date, 
-        Currency targetCurrency, 
+        DateTime date,
+        Currency targetCurrency,
         IEnumerable<Currency> currencies)
     {
         var response = await exchangeRateService.GetExchangeRatesAsync(date);
@@ -30,9 +30,10 @@ public class ExchangeRateProvider(
         var exchangeRates = response.Rates
             .Where(rate => currencyCodes.Contains(rate.CurrencyCode))
             .Select(rate => new ExchangeRate(
-                new Currency(rate.CurrencyCode, rate.Currency), 
-                targetCurrency, 
-                rate.Rate / rate.Amount))
+                new Currency(rate.CurrencyCode, rate.Currency),
+                targetCurrency,
+                rate.Rate / rate.Amount,
+                rate.ValidFor))
             .ToList();
 
         if (exchangeRates.Count is 0)

@@ -146,13 +146,14 @@ public class ExchangeRateProviderTests
                 CurrencyCode = "EUR",
                 Currency = "Euro",
                 Rate = 1.1m,
-                Amount = 1
+                Amount = 1,
+                ValidFor = date
             }
         };
 
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 1.1m)
+            new ExchangeRate(currencies.First(), targetCurrency, 1.1m, date)
         };
 
         _exchangeRateServiceMock
@@ -180,13 +181,14 @@ public class ExchangeRateProviderTests
                 CurrencyCode = "TRY",
                 Currency = "Turkish Lira",
                 Rate = 68m,
-                Amount = 100
+                Amount = 100,
+                ValidFor = date
             }
         };
         
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 0.68m)
+            new ExchangeRate(currencies.First(), targetCurrency, 0.68m, date)
         };
         
         _exchangeRateServiceMock
@@ -220,21 +222,23 @@ public class ExchangeRateProviderTests
                 CurrencyCode = "EUR",
                 Currency = "Euro",
                 Rate = 1.1m,
-                Amount = 1
+                Amount = 1,
+                ValidFor = date
             },
             new ExchangeRateResponseModel
             {
                 CurrencyCode = "GBP",
                 Currency = "British Pound",
                 Rate = 1.3m,
-                Amount = 1
+                Amount = 1,
+                ValidFor = date
             }
         };
 
         var expected = new List<ExchangeRate>
         {
-            new ExchangeRate(currencies.First(), targetCurrency, 1.1m),
-            new ExchangeRate(currencies.Last(), targetCurrency, 1.3m)
+            new ExchangeRate(currencies.First(), targetCurrency, 1.1m, date),
+            new ExchangeRate(currencies.Last(), targetCurrency, 1.3m, date)
         };
 
         _exchangeRateServiceMock

@@ -56,15 +56,21 @@ public static class Program
                 Console.WriteLine(
                     $"Successfully retrieved {rates.Count} exchange rates for {date.ToShortDateString()}:");
 
-                Console.WriteLine("{0,-20} | {1,-20} | {2,10}", "Source Currency", "Target Currency", "Rate");
-                Console.WriteLine(new string('-', 60));
+                Console.WriteLine("{0,-20} | {1,-20} | {2,10} | {3,10}", 
+                    "Source Currency", "Target Currency", "Rate", "Valid For");
+                
+                Console.WriteLine(new string('-', 70));
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4}", 
+                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4} | {3,10}", 
                         rate.SourceCurrency, 
                         rate.TargetCurrency,
-                        rate.Value);
+                        rate.Value.ToString("F2"),
+                        rate.ValidFor.ToShortDateString());
                 }
+                Console.WriteLine(new string('-', 70));
+
+                Console.WriteLine("*Exchange rates are updated each business day at 2:30 PM Central European Time.");
             }
             else
             {
@@ -77,6 +83,7 @@ public static class Program
             Console.WriteLine($"Could not retrieve exchange rates due to an exception: '{e.Message}'.");
         }
 
+        Console.WriteLine();
         Console.WriteLine("Press any key to exit...");
         Console.ReadLine();
     }
