@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Helpers;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,7 @@ public static class Program
             {
                 services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
                 services.AddSingleton<ExchangeRateProvider>();
+                services.AddSingleton(TimeProvider.System);
             })
             .Build();
 
@@ -46,7 +48,7 @@ public static class Program
 
         try
         {
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             var targetCurrency = new Currency("CZK", "koruna");
 
             var rates = await provider.GetExchangeRates(date, targetCurrency, Currencies);
@@ -71,6 +73,7 @@ public static class Program
                 Console.WriteLine(new string('-', 70));
 
                 Console.WriteLine("*Exchange rates are updated each business day at 2:30 PM Central European Time.");
+                Console.WriteLine(ExchangeRateHelper.GetTimeUntilNextExchangeRateData());
             }
             else
             {

@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using ExchangeRateUpdater.Models.API;
 using ExchangeRateUpdater.Services;
+using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -57,7 +58,7 @@ public class ExchangeRateServiceTests
                     Amount = 1,
                     CurrencyCode = "USD",
                     Rate = 25.5m,
-                    ValidFor = DateTime.Now,
+                    ValidFor = new DateTime(2024,10,10),
                     Currency = "Dollar"
                 }
             ]
@@ -79,13 +80,7 @@ public class ExchangeRateServiceTests
         var result = await _service.GetExchangeRatesAsync();
 
         // Assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Rates, Is.Not.Empty);
-            Assert.That(result.Rates[0].CurrencyCode, Is.EqualTo("USD"));
-            Assert.That(result.Rates[0].Rate, Is.EqualTo(25.5m));
-        });
+        result.Should().BeEquivalentTo(expectedResponse);
     }
 
     [Test]

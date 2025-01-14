@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.Services;
 
 public class ExchangeRateService(
-    HttpClient httpClient, 
+    HttpClient httpClient,
     IConfiguration configuration,
-    ILogger<ExchangeRateService> logger) 
+    ILogger<ExchangeRateService> logger)
     : IExchangeRateService
 {
     private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -21,7 +21,7 @@ public class ExchangeRateService(
     /// <inheritdoc />
     public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime? date = null, string language = "EN")
     {
-        var formattedDate = (date ?? DateTime.Now).ToString("yyyy-MM-dd");
+        var formattedDate = (date ?? DateTime.UtcNow).ToString("yyyy-MM-dd");
         var requestUri = $"{_baseApiUrl}/exrates/daily?date={formattedDate}&lang={language}";
 
         _httpClient.DefaultRequestHeaders.Clear();
@@ -33,7 +33,7 @@ public class ExchangeRateService(
         {
             logger.LogError("Call to {requestUri} was unsuccessful ({statusCode} - {phrase})",
                 requestUri, (int)response.StatusCode, response.ReasonPhrase);
-            
+
             throw new HttpRequestException("Error fetching exchange rates.");
         }
 
