@@ -20,7 +20,22 @@ public class ExchangeRateHelperTests
         // Assert
         Assert.That(result, Is.EqualTo(expected));
     }
+
+    [Test]
+    public void GetTimeUntilNextExchangeRate_ReturnsCorrectTime_WhenExactlyAtUpdateTime()
+    {
+        // Arrange
+        var fakeTimeProvider = new FakeTimeProvider(new DateTime(2023, 10, 10, 14, 31, 0, DateTimeKind.Utc));
+        ExchangeRateHelper.TimeProvider = fakeTimeProvider;
+        const string expected = "Time until next exchange rate update: 24 hours and 0 minutes.";
         
+        // Act
+        var result = ExchangeRateHelper.GetTimeUntilNextExchangeRateData();
+        
+        // Assert
+        Assert.That(result, Is.EqualTo(expected));
+    }
+
     [Test]
     public void GetTimeUntilNextExchangeRate_ReturnsCorrectTime_WhenAfterNextUpdate()
     {
