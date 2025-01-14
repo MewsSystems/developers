@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Application.Contracts.Persistence;
+using ExchangeRateUpdater.Domain.Const;
 using ExchangeRateUpdater.Domain.ValueObjects;
 using ExchangeRateUpdater.Infrastructure.Services.Providers;
 
@@ -17,7 +18,7 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
         {
             var cnbExRates = await _cnbExchangeService.GetExchangeRatesByDateAsync(date, cancellationToken);
             return cnbExRates.Select(x => 
-                new ExchangeRate(new Currency(x.CurrencyCode), new Currency("CZK"), x.Rate / x.Amount));
+                new ExchangeRate(new Currency(x.CurrencyCode), new Currency(ProviderConstants.CnbDefaultCurrency), x.Rate / x.Amount));
         }
     }
 }

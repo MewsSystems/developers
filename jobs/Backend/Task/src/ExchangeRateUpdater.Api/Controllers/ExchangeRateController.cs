@@ -18,6 +18,8 @@ namespace ExchangeRateUpdater.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(typeof(IEnumerable<ExchangeRate>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetExchangeRates(
             [FromQuery] GetExchangeRatesQuery query,

@@ -1,25 +1,33 @@
-﻿using ExchangeRateUpdater.Application.Contracts.Persistence;
-using ExchangeRateUpdater.Domain.ValueObjects;
+﻿using ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates.ProviderStrategies;
+using FluentValidation;
 using MediatR;
 
 namespace ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates
 {
-    public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuery, IEnumerable<ExchangeRate>>
+    public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuery, IEnumerable<GetExchangeRatesQueryResponse>>
     {
-        private readonly ICnbExchangeRateRepository _cnbExchangeRateRepository;
+        private readonly IEnumerable<IExchangeRateProviderStrategy> _providerStrategies;
 
-        public GetExchangeRatesQueryHandler(ICnbExchangeRateRepository cnbExchangeRateRepository)
+        public GetExchangeRatesQueryHandler(IEnumerable<IExchangeRateProviderStrategy> providerStrategies)
         {
-            _cnbExchangeRateRepository = cnbExchangeRateRepository;
+            _providerStrategies = providerStrategies;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> Handle(GetExchangeRatesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<GetExchangeRatesQueryResponse>> Handle(GetExchangeRatesQuery request, CancellationToken cancellationToken)
         {
-            var exRateDate = request.Date ?? DateTime.Today;
+            var providerStrategy = GetMatchingProviderStrategy(request.ProviderCode);
+            return await providerStrategy.GetExchangeRatesAsync(request, cancellationToken);
+        }
 
-            var dateExRates = await _cnbExchangeRateRepository.GetExchangeRatesAsync(exRateDate, cancellationToken);
+        private IExchangeRateProviderStrategy GetMatchingProviderStrategy(string providerCode)
+        {
+            var matchingProviderStrategy = _providerStrategies.FirstOrDefault(x => x.CanHandle(providerCode));
+            if (matchingProviderStrategy is null)
+            {
+                throw new ValidationException($"Provider {providerCode} not supported");
+            }
 
-            return dateExRates.Where(e => request.Currencies.Any(c => c == e.SourceCurrency.Code));
+            return matchingProviderStrategy;
         }
     }
 }

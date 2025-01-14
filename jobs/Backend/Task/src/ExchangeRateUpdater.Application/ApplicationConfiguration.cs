@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Application.Behaviours;
+using ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates.ProviderStrategies;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,23 @@ namespace ExchangeRateUpdater.Application
             services
                 .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>))
                 .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+            services.AddProviderStrategies();
+
+            return services;
+        }
+
+        private static IServiceCollection AddProviderStrategies(this IServiceCollection services)
+        {
+            var providerStrategies = Assembly
+                .GetAssembly(typeof(IExchangeRateProviderStrategy))
+                .GetTypes()
+                .Where(x => x.IsClass && !x.IsAbstract && typeof(IExchangeRateProviderStrategy).IsAssignableFrom(x));
+
+            foreach (var brandStrategy in providerStrategies)
+            {
+                services.AddScoped(typeof(IExchangeRateProviderStrategy), brandStrategy);
+            }
 
             return services;
         }
