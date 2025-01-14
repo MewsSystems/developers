@@ -1,6 +1,7 @@
-﻿using ExchangeRateUpdater;
-using ExchangeRateUpdater.Models;
+﻿using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Providers;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ var host = new HostBuilder()
             });
         services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
         services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IMemoryCache, MemoryCache>();
         services.AddLogging();
     })
     .ConfigureLogging(logging =>
@@ -40,19 +42,44 @@ IEnumerable<Currency> currencies = new[]
     new Currency("XYZ")
 };
 
-try
+while (true)
 {
-    var rates = exchangeRateProvider.GetExchangeRates(currencies).Result;
-
-    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-    foreach (var rate in rates)
+    try
     {
-        Console.WriteLine(rate.ToString());
+        var rates = exchangeRateProvider.GetExchangeRates(currencies);
+
+        if (!rates.Any())
+        {
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("No exchange rates found for the chosen currencies.");
+            Console.WriteLine(string.Empty);
+            Console.WriteLine("Press any key to retry...");
+            Console.ReadKey();
+            Console.Clear();
+            continue;
+        }
+
+        Console.WriteLine(string.Empty);
+        Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+        Console.WriteLine(string.Empty);
+
+        foreach (var rate in rates)
+        {
+            Console.WriteLine(rate.ToString());
+            Console.WriteLine(string.Empty);
+        }
+
+        Console.WriteLine("Press any key to refresh...");
+        Console.ReadKey();
+        Console.Clear();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(string.Empty);
+        Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+        Console.WriteLine(string.Empty);
+        Console.WriteLine("Press any key to retry...");
+        Console.ReadKey();
+        Console.Clear();
     }
 }
-catch (Exception e)
-{
-    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-}
-
-Console.ReadLine();
