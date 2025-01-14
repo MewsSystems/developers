@@ -21,15 +21,15 @@ namespace ExchangeRateUpdater.Application.Behaviours
             var response = await next();
 
             timer.Stop();
-            var timeTakenInSeconds = timer.Elapsed.Seconds;
-            if (timeTakenInSeconds > 3)
+            var timeTakenInMilliseconds = timer.Elapsed.Milliseconds;
+            if (timeTakenInMilliseconds > 3000)
             {
                 logger.LogWarning("[PERFORMANCE] The request {Request} took {TimeTaken}",
-                    typeof(TRequest).Name, timeTakenInSeconds);
+                    typeof(TRequest).Name, timeTakenInMilliseconds);
             }
 
-            logger.LogInformation("[END] Hanlded {Request} with {Respose} processed in {Seconds} seconds",
-                typeof(TRequest).Name, typeof(TResponse).Name, timeTakenInSeconds);
+            logger.LogInformation("[END] Hanlded {Request} with {Respose} processed in {Milliseconds} milliseconds",
+                typeof(TRequest).Name, typeof(TResponse).Name, timeTakenInMilliseconds);
 
             return response;
         }

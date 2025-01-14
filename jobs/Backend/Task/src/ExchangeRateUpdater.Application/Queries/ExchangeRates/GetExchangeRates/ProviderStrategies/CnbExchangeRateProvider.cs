@@ -1,6 +1,9 @@
 ﻿
+using ExchangeRateUpdater.Application.Const;
+using ExchangeRateUpdater.Application.Contracts.Caching;
 using ExchangeRateUpdater.Application.Contracts.Persistence;
 using ExchangeRateUpdater.Domain.Const;
+using ExchangeRateUpdater.Domain.ValueObjects;
 
 namespace ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates.ProviderStrategies
 {
@@ -12,17 +15,27 @@ namespace ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates
         protected override string ProviderCode => ProviderConstants.CnbProviderCode;
 
         private readonly ICnbExchangeRateRepository _cnbExchangeRateRepository;
+        private readonly ICacheService _cache;
 
-        public CnbExchangeRateProvider(ICnbExchangeRateRepository cnbExchangeRateRepository)
+        public CnbExchangeRateProvider(ICnbExchangeRateRepository cnbExchangeRateRepository, ICacheService cache)
         {
             _cnbExchangeRateRepository = cnbExchangeRateRepository;
+            _cache = cache;
         }
 
         public override async Task<IEnumerable<GetExchangeRatesQueryResponse>> GetExchangeRatesAsync(GetExchangeRatesQuery request, CancellationToken cancellationToken)
         {
+            IEnumerable<ExchangeRate> exRates = [];
             var exRateDate = request.Date ?? DateTime.Today;
+           
+            var cacheKey = CacheConstants.ExchangeRateKey(request.ProviderCode, exRateDate);
+            if (!_cache.Exists(cacheKey))
+            {
+                exRates = await _cnbExchangeRateRepository.GetExchangeRatesAsync(exRateDate, cancellationToken);
+                _cache.Add(cacheKey, exRates);
+            }
 
-            var exRates = await _cnbExchangeRateRepository.GetExchangeRatesAsync(exRateDate, cancellationToken);
+            exRates = _cache.Get<IEnumerable<ExchangeRate>>(cacheKey);
 
             var exRatesFilteredByCurrencies = exRates.Where(e => request.Currencies.Any(c => c == e.SourceCurrency.Code));
 
@@ -31,7 +44,8 @@ namespace ExchangeRateUpdater.Application.Queries.ExchangeRates.GetExchangeRates
                 {
                     SourceCurrency = x.SourceCurrency.Code,
                     TargetCurrency = x.TargetCurrency.Code,
-                    Value = x.Value
+                    Value = x.Value,
+                    ValidFor = exRateDate
                 });
         }
     }

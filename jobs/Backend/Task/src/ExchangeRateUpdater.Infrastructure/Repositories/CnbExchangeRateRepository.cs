@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Infrastructure.Repositories
         {
             var cnbExRates = await _cnbExchangeService.GetExchangeRatesByDateAsync(date, cancellationToken);
             return cnbExRates.Select(x => 
-                new ExchangeRate(new Currency(x.CurrencyCode), new Currency(ProviderConstants.CnbDefaultCurrency), x.Rate / x.Amount));
+                new ExchangeRate(new Currency(x.CurrencyCode!), new Currency(ProviderConstants.CnbDefaultCurrency), x.Rate / x.Amount));
         }
     }
 }

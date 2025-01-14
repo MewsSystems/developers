@@ -29,7 +29,7 @@ namespace ExchangeRateUpdater.Application
         private static IServiceCollection AddProviderStrategies(this IServiceCollection services)
         {
             var providerStrategies = Assembly
-                .GetAssembly(typeof(IExchangeRateProviderStrategy))
+                .GetAssembly(typeof(IExchangeRateProviderStrategy))!
                 .GetTypes()
                 .Where(x => x.IsClass && !x.IsAbstract && typeof(IExchangeRateProviderStrategy).IsAssignableFrom(x));
 

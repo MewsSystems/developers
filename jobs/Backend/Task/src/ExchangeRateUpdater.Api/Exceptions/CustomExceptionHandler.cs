@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeRateUpdater.Api.Exceptions
 {
+    /// <summary>
+    /// Class that encapsulates global exception handling
+    /// </summary>
+    /// <param name="logger"></param>
     public class CustomExceptionHandler
         (ILogger<CustomExceptionHandler> logger)
         : IExceptionHandler

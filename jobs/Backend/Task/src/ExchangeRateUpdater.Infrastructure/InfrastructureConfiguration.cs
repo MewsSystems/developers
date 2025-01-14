@@ -1,4 +1,6 @@
-﻿using ExchangeRateUpdater.Application.Contracts.Persistence;
+﻿using ExchangeRateUpdater.Application.Contracts.Caching;
+using ExchangeRateUpdater.Application.Contracts.Persistence;
+using ExchangeRateUpdater.Infrastructure.Caching;
 using ExchangeRateUpdater.Infrastructure.Logging;
 using ExchangeRateUpdater.Infrastructure.Repositories;
 using ExchangeRateUpdater.Infrastructure.Resiliency;
@@ -16,6 +18,9 @@ namespace ExchangeRateUpdater.Infrastructure
         {
             services.AddScoped<ICnbExchangeRateRepository, CnbExchangeRateRepository>();
             services.AddScoped<ICnbExchangeService, CnbExchangeService>();
+
+            services.AddMemoryCache()
+                .AddSingleton<ICacheService, MemoryCacheService>();
 
             return services
                 .AddHttpServices(configuration);
