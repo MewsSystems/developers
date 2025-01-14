@@ -27,8 +27,8 @@ public class ExchangeRateProvider : IExchangeRateProvider
         var exchangeRates = _exchangeRateService.GetExchangeRatesAsync().Result;
 
         var filteredRates = exchangeRates.Rates
-            .Where(e =>
-                currencies.Any(c => c.Code == e.CurrencyCode))
+            .Where(rate =>
+                currencies.Any(currency => currency.Code == rate.CurrencyCode))
             .Select(rate =>
                 new ExchangeRate(new Currency(rate.CurrencyCode), new Currency("CZK"), rate.Rate / rate.Amount));
 
