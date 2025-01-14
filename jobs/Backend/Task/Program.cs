@@ -64,10 +64,10 @@ public static class Program
                 Console.WriteLine(new string('-', 70));
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F4} | {3,10}", 
+                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F2} | {3,10}", 
                         rate.SourceCurrency, 
                         rate.TargetCurrency,
-                        rate.Value.ToString("F2"),
+                        rate.Value,
                         rate.ValidFor.ToShortDateString());
                 }
                 Console.WriteLine(new string('-', 70));
