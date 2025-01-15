@@ -1,6 +1,6 @@
-## Exchange Rate Updater Readme
+# Exchange Rate Updater Readme
 
-# Description
+## Description
 
 This console application provides today's exchange rates for a given set of currencies. Once running, the application will persist until the user closes it.
 
