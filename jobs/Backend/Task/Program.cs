@@ -56,25 +56,7 @@ public static class Program
 
             if (rates.Any())
             {
-                Console.WriteLine(
-                    $"Successfully retrieved {rates.Count} exchange rates for {date.ToShortDateString()}:");
-
-                Console.WriteLine("{0,-20} | {1,-20} | {2,10} | {3,10}", 
-                    "Source Currency", "Target Currency", "Rate", "Valid For");
-                
-                Console.WriteLine(new string('-', 70));
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine("{0,-20} | {1,-20} | {2,10:F2} | {3,10}", 
-                        rate.SourceCurrency, 
-                        rate.TargetCurrency,
-                        rate.Value,
-                        rate.ValidFor.ToShortDateString());
-                }
-                Console.WriteLine(new string('-', 70));
-
-                Console.WriteLine("*Exchange rates are updated each business day at 2:30 PM Central European Time.");
-                Console.WriteLine(ExchangeRateHelper.GetTimeUntilNextExchangeRateData());
+                OutputExchangeRateInformation(rates, date);
             }
             else
             {
@@ -90,5 +72,28 @@ public static class Program
         Console.WriteLine();
         Console.WriteLine("Press any key to exit...");
         Console.ReadLine();
+    }
+
+    private static void OutputExchangeRateInformation(List<ExchangeRate> rates, DateTime date)
+    {
+        Console.WriteLine(
+            $"Successfully retrieved {rates.Count} exchange rates for {date.ToShortDateString()}:");
+
+        Console.WriteLine("{0,-20} | {1,-20} | {2,10} | {3,10}", 
+            "Source Currency", "Target Currency", "Rate", "Valid For");
+                
+        Console.WriteLine(new string('-', 70));
+        foreach (var rate in rates)
+        {
+            Console.WriteLine("{0,-20} | {1,-20} | {2,10:F2} | {3,10}", 
+                rate.SourceCurrency, 
+                rate.TargetCurrency,
+                rate.Value,
+                rate.ValidFor.ToShortDateString());
+        }
+        Console.WriteLine(new string('-', 70));
+
+        Console.WriteLine("*Exchange rates are updated each business day at 2:30 PM Central European Time.");
+        Console.WriteLine(ExchangeRateHelper.GetTimeUntilNextExchangeRateData());
     }
 }
