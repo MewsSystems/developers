@@ -6,18 +6,20 @@ namespace ExchangeRateUpdater.Domain.ValueObjects
     public class Currency : ValueObject
     {
         public const int MaxLenght = 3;
+        public const string IsoCodeRequiredMsg = "Currency ISO code is required";
+        public const string InvalidIsoCodeMsg = "Currency ISO code has 3 characters max lenght";
 
         public Currency(string code)
         {
             // Enforcing domain restrictions
             if (string.IsNullOrWhiteSpace(code))
             {
-                throw new DomainException("Currency ISO code is required");
+                throw new DomainException(IsoCodeRequiredMsg);
             }
 
             if(code.Length > MaxLenght)
             {
-                throw new DomainException("Currency ISO code has 3 characters max lenght");
+                throw new DomainException(InvalidIsoCodeMsg);
             }
 
             Code = code;

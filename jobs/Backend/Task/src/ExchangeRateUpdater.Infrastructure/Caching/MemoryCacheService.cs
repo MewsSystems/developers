@@ -52,7 +52,7 @@ namespace ExchangeRateUpdater.Infrastructure.Caching
         public T Get<T>(string cacheKey)
         {
             _cache.TryGetValue(cacheKey, out T item);
-            return item;
+            return item!;
         }
 
         public T Get<T>(string cacheKey, Func<T> getItemCallback)
@@ -63,7 +63,7 @@ namespace ExchangeRateUpdater.Infrastructure.Caching
                 Add(cacheKey, item);
             }
 
-            return item;
+            return item!;
         }
 
         public void Remove(string cacheKey)
