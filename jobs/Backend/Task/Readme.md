@@ -14,7 +14,7 @@ Rates can be refreshed by pressing any key, and failed requests can be resent by
 
 To run the app, either open the solution in Visual Studio and execute by pressing F5.
 
-Alternatively, navigate to the folder containing the application and execute
+Alternatively, navigate to the folder containing the application and execute:
 
 ```sh
 dotnet build
@@ -24,7 +24,7 @@ dotnet build
 dotnet run
 ```
 
-To run the unit tests
+To run the unit tests:
 
 ```sh
 dotnet test
