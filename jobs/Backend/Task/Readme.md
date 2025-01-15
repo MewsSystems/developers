@@ -17,10 +17,6 @@ To run the app, either open the solution in Visual Studio and execute by pressin
 Alternatively, navigate to the folder containing the application and execute
 
 ```sh
-dotnet restore
-```
-
-```sh
 dotnet build
 ```
 
