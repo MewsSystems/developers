@@ -12,6 +12,7 @@ namespace ExchangeRateUpdater.Services;
 public class ExchangeRateService(
     HttpClient httpClient,
     IConfiguration configuration,
+    TimeProvider timeProvider,
     ILogger<ExchangeRateService> logger)
     : IExchangeRateService
 {
@@ -21,7 +22,7 @@ public class ExchangeRateService(
     /// <inheritdoc />
     public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime? date = null, string language = "EN")
     {
-        var formattedDate = (date ?? DateTime.UtcNow).ToString("yyyy-MM-dd");
+        var formattedDate = (date ?? timeProvider.GetUtcNow().Date).ToString("yyyy-MM-dd");
         var requestUri = $"{_baseApiUrl}/exrates/daily?date={formattedDate}&lang={language}";
 
         _httpClient.DefaultRequestHeaders.Clear();

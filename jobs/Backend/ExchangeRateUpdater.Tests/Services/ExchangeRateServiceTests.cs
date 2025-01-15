@@ -5,6 +5,7 @@ using ExchangeRateUpdater.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Time.Testing;
 using Moq;
 using Moq.Protected;
 
@@ -18,6 +19,7 @@ public class ExchangeRateServiceTests
     private Mock<IConfiguration> _configurationMock;
     private Mock<ILogger<ExchangeRateService>> _loggerMock;
     private ExchangeRateService _service;
+    private FakeTimeProvider _fakeTimeProvider;
 
     [SetUp]
     public void SetUp()
@@ -26,6 +28,7 @@ public class ExchangeRateServiceTests
         _httpClient = new HttpClient(_httpMessageHandlerMock.Object);
         _loggerMock = new Mock<ILogger<ExchangeRateService>>();
         _configurationMock = new Mock<IConfiguration>();
+        _fakeTimeProvider = new FakeTimeProvider();
 
         var inMemoryConfiguration = new Dictionary<string, string>
         {
@@ -36,7 +39,7 @@ public class ExchangeRateServiceTests
             .AddInMemoryCollection(inMemoryConfiguration)
             .Build();
 
-        _service = new ExchangeRateService(_httpClient, configuration, _loggerMock.Object);
+        _service = new ExchangeRateService(_httpClient, configuration, _fakeTimeProvider, _loggerMock.Object);
     }
         
     [TearDown]
@@ -148,7 +151,7 @@ public class ExchangeRateServiceTests
     {
         // Act
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            new ExchangeRateService(null, _configurationMock.Object, _loggerMock.Object));
+            new ExchangeRateService(null, _configurationMock.Object, _fakeTimeProvider, _loggerMock.Object));
 
         // Assert
         Assert.That(exception.ParamName, Is.EqualTo("httpClient"));
@@ -159,7 +162,7 @@ public class ExchangeRateServiceTests
     {
         // Act
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            new ExchangeRateService(_httpClient, null, _loggerMock.Object));
+            new ExchangeRateService(_httpClient, null, _fakeTimeProvider, _loggerMock.Object));
 
         // Assert
         Assert.That(exception.ParamName, Is.EqualTo("configuration"));

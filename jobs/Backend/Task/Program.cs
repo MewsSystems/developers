@@ -45,10 +45,11 @@ public static class Program
             .Build();
 
         var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
+        var timeProvider = host.Services.GetRequiredService<TimeProvider>();
 
         try
         {
-            var date = DateTime.UtcNow;
+            var date = timeProvider.GetUtcNow().Date;
             var targetCurrency = new Currency("CZK", "koruna");
 
             var rates = await provider.GetExchangeRates(date, targetCurrency, Currencies);
