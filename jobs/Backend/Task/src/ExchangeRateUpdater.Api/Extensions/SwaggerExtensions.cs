@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using ExchangeRateUpdater.Api.Authorization;
+using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -26,6 +27,29 @@ namespace ExchangeRateUpdater.Api.Extensions
                         Url = new Uri("https://www.linkedin.com/in/javier-val-lista-ing-software/")
                     }
                 });
+
+                // Api Key
+                options.AddSecurityDefinition("ClientApiKey", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = ApiKeyConstants.ApiKeyHeaderName,
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "ClientApiKey"
+                                }
+                            },
+                            Array.Empty<string>()
+                        }
+                    });
 
                 //Configuring Swagger to use the documentation XML file
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

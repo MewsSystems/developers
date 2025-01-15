@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using ExchangeRateUpdater.Api.Authorization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExchangeRateUpdater.Api
 {
@@ -7,6 +8,9 @@ namespace ExchangeRateUpdater.Api
     {
         public static IServiceCollection AddHostServices(this IServiceCollection services)
         {
+            services
+                .AddTransient<IApiKeyValidation, ApiKeyValidation>();
+
             return services
                 .AddControllers().Services;
         }
