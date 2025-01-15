@@ -15,7 +15,8 @@ var host = new HostBuilder()
             client => 
             {
                 client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
-            });
+            })
+            .AddStandardResilienceHandler();
         services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<IMemoryCache, MemoryCache>();
@@ -46,7 +47,7 @@ while (true)
 {
     try
     {
-        var rates = exchangeRateProvider.GetExchangeRates(currencies);
+        var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
         if (!rates.Any())
         {

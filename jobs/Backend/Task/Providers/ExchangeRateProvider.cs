@@ -22,9 +22,9 @@ public class ExchangeRateProvider : IExchangeRateProvider
     }
 
     /// <inheritdoc />
-    public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var exchangeRates = _exchangeRateService.GetExchangeRatesAsync().Result;
+        var exchangeRates = await _exchangeRateService.GetExchangeRatesAsync();
 
         var filteredRates = exchangeRates.Rates
             .Where(rate =>

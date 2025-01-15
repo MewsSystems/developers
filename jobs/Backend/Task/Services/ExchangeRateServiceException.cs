@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater.Services
+namespace ExchangeRateUpdater.Services;
+
+public class ExchangeRateServiceException : Exception
 {
-    public class ExchangeRateServiceException : Exception
-    {
-        public ExchangeRateServiceException(string message) : base(message) { }
-    }
+    public ExchangeRateServiceException(string message) : base(message) { }
 }
