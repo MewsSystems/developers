@@ -14,16 +14,17 @@ namespace ExchangeRateUpdater.Services
 {
     public class ExchangeRateService(IHttpClientFactory clientFactory, ILogger<ExchangeRateService> logger, IMemoryCache memoryCache): IExchangeRateService
     {
-        public async Task<IEnumerable<ExchangeRateDTO>> GetExchangeRateAsync(string code)
+        public async Task<ExchangeRatesDTO> GetExchangeRateAsync()
         {
-            using var client = clientFactory.CreateClient();
+            using var client = clientFactory.CreateClient("exchange");
+            logger.LogInformation($"Sending GET request for getting exchange rates foon {DateTime.Now:yyyy-MM-dd}");
             var response = await client.GetAsync(client.BaseAddress + $"?date={DateTime.Now:yyyy-MM-dd}");
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError($"Status code: {response.StatusCode}; Failed to fetch rates for {code}");
-                throw new Exception($"Status code: {response.StatusCode}; Failed to fetch rates for {code}");
+                logger.LogError($"Status code: {response.StatusCode}; Failed to fetch rates on {DateTime.Now:yyyy-MM-dd}");
+                throw new Exception($"Status code: {response.StatusCode}; Failed to fetch rates on{DateTime.Now:yyyy-MM-dd}");
             }
-            var result = await response.Content.ReadFromJsonAsync<IEnumerable<ExchangeRateDTO>>();
+            var result = await response.Content.ReadFromJsonAsync<ExchangeRatesDTO>();
             return result;
         }
     }

@@ -24,19 +24,18 @@ namespace ExchangeRateUpdater.Providers
             try
             {
                 _logger.LogInformation("Started fetching exchange rates");
+                var exchangeRates = await exchangeRateService.GetExchangeRateAsync();
                 foreach (var currency in currencies)
                 {
-                    _logger.LogInformation($"Fetching exchange rate for {currency.Code}");
-                    var rates = await exchangeRateService.GetExchangeRateAsync(currency.Code);
-
-                    _logger.LogInformation($"Fetched exchange rate for {currency.Code}");
-                    result.AddRange(rates);
+                    _logger.LogInformation($"Adding exchange rate for {currency.Code}");
+                    result.AddRange(exchangeRates.Rates.Where(e => e.CurrencyCode == currency.Code));
+                    _logger.LogInformation($"Added exchange rate for {currency.Code}");
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new List<ExchangeRateDTO>();
+                return result;
             }
             return result;
         }

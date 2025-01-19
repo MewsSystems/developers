@@ -2,7 +2,7 @@
 {
     public class ExchangeRateProviderSettings
     {
-        public string UrlBaseAPI { get; set; }
-        public string UrlExchangeRate { get; set; }
+        public string? UrlBaseAPI { get; set; }
+        public string? UrlExchangeRate { get; set; }
     }
 }
