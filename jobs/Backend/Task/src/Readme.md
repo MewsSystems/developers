@@ -26,10 +26,13 @@ var host = new HostBuilder().UseSerilog();
 ## How To Run
 Use dotnet run to run the solution
 ## Projects
-### [App](ExchangeRateUpdater.App)
+### [App](ExchangeRateUpdater.App) 
+Main part of the project. Inside of it are [service](ExchangeRateUpdater.App/Services/ExchangeRateService.cs) and [provider](ExchangeRateUpdater.App/Providers/ExchangeRateProvider.cs) alongside their interfaces for the fetching of exchange rates.
 
 ### [Domain](ExchangeRateUpdater.Domain)
+Consists of all supporting classes ExchangeRateUpdater.App requires such as configuration, DTO, model, etc classes.
 ### [Tests](ExchangeRateUpdater.Tests)
+Consits of tests for ExchangeRateUpdater.App service and provider.
 
 ## Configuration
 Configuration is stored in [appsettings.json](ExchangeRateUpdater.App/appsettings.json) file which is parsed inside [settings](ExchangeRateUpdater.Domain/Configurations/ExchangeRateProviderSettings.cs) file. It allows the user to enter the API endpoint where exchange rates can be found. 
@@ -37,5 +40,10 @@ Configuration is stored in [appsettings.json](ExchangeRateUpdater.App/appsetting
 ## Testing
 
 Running dotnet test inside [Tests](ExchangeRateUpdater.Tests/) directory will execute the application tests.
+
+## Possible improvements
+* Caching - Caching could be implemented in Redis instead of in memory caching
+* Docker, CI/CD - Was not required in the task but it is a must have thing in every modern production environment
+* Performance tracing and metrics - Enterprise solutions require tracing of how solution is performing, Grafana could be used for creating easy to read dashboards for tracking. 
 
 
