@@ -1,18 +1,19 @@
 ﻿using ExchangeRateUpdater.Models.Requests;
 using ExchangeRateUpdater.Data.Interfaces;
 using ExchangeRateUpdater.Data.Responses;
-using System.Diagnostics;
 using ExchangeRateUpdater.Business.Interfaces;
 using ExchangeRateUpdater.Models.Models;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Business.Services;
 public class ExchangeRateService : IExchangeRateService
 {
-    private IExchangeRateRepository _exchangeRatesRepository;
-
-    public ExchangeRateService(IExchangeRateRepository exchangeRatesRepository)
+    private readonly IExchangeRateRepository _exchangeRatesRepository;
+    private readonly ILogger<ExchangeRateService> _logger;
+    public ExchangeRateService(IExchangeRateRepository exchangeRatesRepository, ILogger<ExchangeRateService> logger)
     {
         _exchangeRatesRepository = exchangeRatesRepository;
+        _logger = logger;
     }
     public async Task<List<ExchangeRateResultDto>> GetExchangeRates(IEnumerable<ExchangeRateRequest> currencies, DateTime date, CancellationToken cancellationToken)
     {
@@ -26,6 +27,7 @@ public class ExchangeRateService : IExchangeRateService
                             .Any(e => e.ToString() == p.ToString()))
                             .ToList();
 
+        _logger.LogInformation($"{requestedExchangeRates.Count}/{currencies.ToList().Count} exchange rate(s) have been obtained.");
         //Map to a new object that simplifies reading the response
         return requestedExchangeRates.Select(rate => MapToResult(rate)).ToList();
     }

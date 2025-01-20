@@ -22,6 +22,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 var serviceProvider = new ServiceCollection()    
         .AddSingleton<IConfiguration>(new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())

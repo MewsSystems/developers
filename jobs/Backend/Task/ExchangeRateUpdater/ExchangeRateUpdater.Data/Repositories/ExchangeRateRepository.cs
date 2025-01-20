@@ -4,17 +4,20 @@ using ExchangeRateUpdater.Models.Models;
 using Flurl;
 using Flurl.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Data.Repositories;
 public class ExchangeRateRepository : IExchangeRateRepository
 {
     private readonly IConfiguration _configuration;
     private readonly IExchangeRateCacheRepository _cacheRepository;  // Instancia de IMemoryCache
+    private readonly ILogger<ExchangeRateRepository> _logger;
 
-    public ExchangeRateRepository(IConfiguration configuration, IExchangeRateCacheRepository cacheRepository)
+    public ExchangeRateRepository(IConfiguration configuration, IExchangeRateCacheRepository cacheRepository, ILogger<ExchangeRateRepository> logger)
     {
         _configuration = configuration;
         _cacheRepository = cacheRepository;
+        _logger = logger;
     }
     public async Task<List<ExchangeRate>> GetExchangeRatesByDateAsync(DateTime date, CancellationToken cancellationToken)
     {
@@ -32,30 +35,43 @@ public class ExchangeRateRepository : IExchangeRateRepository
             _cacheRepository.SetExchangeRates(exchangeRates);
         }
 
-        var result = exchangeRates.Rates.Select(rate => MapToExchangeRate(rate)).ToList();
+        var result = exchangeRates.Rates.Select(rate => MapToExchangeRate(rate)).ToList();        
 
-        return result; 
+        return result;
     }
 
-    private async Task<ExchangeRatesResponseDto> GetExchangeRates(DateTime date, CancellationToken cancellationToken) 
+    private async Task<ExchangeRatesResponseDto> GetExchangeRates(DateTime date, CancellationToken cancellationToken)
     {
-        ExchangeRatesResponseDto? resul;
+        var resul = new ExchangeRatesResponseDto();
 
-        using (var httpClient = new HttpClient())
+        try
         {
-            if (string.IsNullOrEmpty(_configuration["ExchangeRateUrl"])) throw new ApplicationException("Czech National Bank Url not defined");
-
-            string baseUrl = _configuration["ExchangeRateUrl"];
-
-            resul = await baseUrl
-                .SetQueryParams(new
+            using (var httpClient = new HttpClient())
+            {
+                if (string.IsNullOrEmpty(_configuration["ExchangeRateUrl"])) 
                 {
-                    date = date.ToString("yyyy-MM-dd"),
-                    lang = "EN"
-                })
-                .GetJsonAsync<ExchangeRatesResponseDto>();
+                    _logger.LogError("Czech National Bank Url not defined.");
+                    throw new ApplicationException("Czech National Bank Url not defined.");
+                }
+
+                string baseUrl = _configuration["ExchangeRateUrl"] ;
+
+                resul = await baseUrl
+                    .SetQueryParams(new
+                    {
+                        date = date.ToString("yyyy-MM-dd"),
+                        lang = "EN"
+                    })
+                    .GetJsonAsync<ExchangeRatesResponseDto>();
+            }
+        }
+        catch (FlurlHttpException ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new ApplicationException(ex.Message);
         }
 
+        _logger.LogInformation($"{resul.Rates.Count} exchange rates have been obtained.");
         return resul;
     }
 
