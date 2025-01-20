@@ -9,9 +9,9 @@ namespace ExchangeRateUpdater.Domain.Const
 
     public class MemoryCacheConstants
     {
-        public static string ExchangeRateKey(DateTime? date)
+        public static string ExchangeRateKey(string className, DateTime? date)
         {
-            return $"DATE_{date.GetValueOrDefault().ToString("yyyy-MM-dd")}_KEY";
+            return $"{className}_DATE_{date.GetValueOrDefault().ToString("yyyy-MM-dd")}_KEY";
         }
     }
 }

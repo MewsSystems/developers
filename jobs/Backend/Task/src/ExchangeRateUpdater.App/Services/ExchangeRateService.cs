@@ -18,7 +18,7 @@ namespace ExchangeRateUpdater.Services
     {
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRateAsync()
         {
-            var cacheConstant = MemoryCacheConstants.ExchangeRateKey(DateTime.Now.Date);
+            var cacheConstant = MemoryCacheConstants.ExchangeRateKey(nameof(ExchangeRate) ,DateTime.Now.Date);
             if (_memoryCache.TryGetValue(cacheConstant, out IEnumerable<ExchangeRate> result))
             {
                 _logger.LogInformation("Exchange rates retrieved from cache");

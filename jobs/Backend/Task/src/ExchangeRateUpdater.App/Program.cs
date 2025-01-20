@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
-using ExchangeRateUpdater;
+﻿using ExchangeRateUpdater;
 using ExchangeRateUpdater.Domain.Configurations;
-using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Providers;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Serilog;
 
 
-var basePath = System.IO.Directory.GetCurrentDirectory();
+
 var config = new ConfigurationBuilder()
-    .SetBasePath(basePath)
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
-
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(config)
+            .CreateLogger();
 var host = new HostBuilder()
         .ConfigureServices((services) =>
         {
@@ -34,25 +30,31 @@ var host = new HostBuilder()
         .ConfigurePrimaryHttpMessageHandler(() =>
         {
             return new SocketsHttpHandler()
-                {
-                    PooledConnectionLifetime = TimeSpan.FromMinutes(15)
-                };
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(15)
+            };
         })
         .SetHandlerLifetime(Timeout.InfiniteTimeSpan);
 
-        services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
-        services.AddTransient<IExchangeRateService, ExchangeRateService>();
-        services.AddSingleton<IMemoryCache, MemoryCache>();
+            services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+            services.AddTransient<IExchangeRateService, ExchangeRateService>();
+            services.AddSingleton<IMemoryCache, MemoryCache>();
         })
-        .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(config))
+        .UseSerilog()
         .Build();
          
 var exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
-        
-var rates = await exchangeRateProvider.GetExchangeRatesAsync(TestingData.currencies);
-foreach(var rate in rates)
+
+for (int i = 0; i < 3; i++)
 {
-    Console.WriteLine(rate.ToString());
+    var rates = await exchangeRateProvider.GetExchangeRatesAsync(TestingData.currencies);
+    foreach (var rate in rates)
+    {
+        Console.WriteLine(rate.ToString());
+    }
+    Console.WriteLine("-----------------");
+
 }
+
 
 

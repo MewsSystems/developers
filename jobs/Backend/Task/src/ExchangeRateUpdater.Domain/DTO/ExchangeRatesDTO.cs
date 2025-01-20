@@ -10,6 +10,6 @@ namespace ExchangeRateUpdater.Domain.DTO
     public class ExchangeRatesDTO
     {
         [JsonPropertyName("rates")]
-        public IEnumerable<ExchangeRateDTO> Rates { get; init; }
+        public IEnumerable<ExchangeRateDTO> Rates { get; set; } = new List<ExchangeRateDTO>();
     }
 }
