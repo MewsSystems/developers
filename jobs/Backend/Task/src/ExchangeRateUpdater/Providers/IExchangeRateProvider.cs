@@ -11,6 +11,6 @@ namespace ExchangeRateUpdater.Providers
 {
     public interface IExchangeRateProvider
     {
-        public Task<IEnumerable<ExchangeRateDTO>> GetExchangeRatesAsync(IEnumerable<Currency> currencies);
+        public Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies);
     }
 }

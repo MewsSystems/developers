@@ -10,6 +10,6 @@ namespace ExchangeRateUpdater.Services
 {
     public interface IExchangeRateService
     {
-        public Task<ExchangeRatesDTO> GetExchangeRateAsync();
+        public Task<IEnumerable<ExchangeRate>> GetExchangeRateAsync(); 
     }
 }

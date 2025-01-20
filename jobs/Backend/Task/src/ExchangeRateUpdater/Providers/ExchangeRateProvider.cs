@@ -18,9 +18,9 @@ namespace ExchangeRateUpdater.Providers
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public async Task<IEnumerable<ExchangeRateDTO>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var result = new List<ExchangeRateDTO>();
+            var result = new List<ExchangeRate>();
             try
             {
                 _logger.LogInformation("Started fetching exchange rates");
@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.Providers
                 foreach (var currency in currencies)
                 {
                     _logger.LogInformation($"Adding exchange rate for {currency.Code}");
-                    result.AddRange(exchangeRates.Rates.Where(e => e.CurrencyCode == currency.Code));
+                    result.AddRange(exchangeRates.Where(e => e.TargetCurrency.Code == currency.Code));
                     _logger.LogInformation($"Added exchange rate for {currency.Code}");
                 }
             }
