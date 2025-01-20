@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace ExchangeRateUpdater.Data.Responses
+namespace ExchangeRateUpdater.Data.Responses;
+public class ExchangeRatesResponseDto
 {
-    public class ExchangeRatesResponseDto
-    {
-        [JsonProperty("rates")]
-        public List<ExchangeRateDto> Rates { get; set; }
-    }
+    [JsonProperty("rates")]
+    public List<ExchangeRateDto> Rates { get; set; }
 }

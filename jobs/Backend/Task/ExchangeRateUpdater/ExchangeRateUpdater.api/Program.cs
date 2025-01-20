@@ -6,8 +6,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+builder.Services.AddScoped<IExchangeRateCacheRepository, ExchangeRateCacheRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -20,11 +22,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-var serviceProvider = new ServiceCollection()
-    .AddSingleton<IConfiguration>(new ConfigurationBuilder()
+var serviceProvider = new ServiceCollection()    
+        .AddSingleton<IConfiguration>(new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .Build());
+        .Build()
+        );
+
 
 var app = builder.Build();
 

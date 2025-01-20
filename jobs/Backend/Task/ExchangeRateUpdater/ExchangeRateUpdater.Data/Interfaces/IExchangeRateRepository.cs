@@ -1,10 +1,8 @@
 ﻿
 using ExchangeRateUpdater.Data.Responses;
 
-namespace ExchangeRateUpdater.Data.Interfaces
+namespace ExchangeRateUpdater.Data.Interfaces;
+public interface IExchangeRateRepository
 {
-    public interface IExchangeRateRepository
-    {
-        Task<List<ExchangeRate>> GetExchangeRatesByDateAsync(DateTime date, CancellationToken cancellationToken);
-    }
+    Task<List<ExchangeRate>> GetExchangeRatesByDateAsync(DateTime date, CancellationToken cancellationToken);
 }
