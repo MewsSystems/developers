@@ -13,9 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Serilog;
-using Serilog.Core;
-using Serilog.Extensions.Logging;
+
 
 var basePath = System.IO.Directory.GetCurrentDirectory();
 var config = new ConfigurationBuilder()
