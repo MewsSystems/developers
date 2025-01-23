@@ -1,0 +1,11 @@
+cd jobs/Frontend
+pnpm lint
+cd ../..
+
+cd jobs/Frontend
+pnpm format
+cd ../..
+
+cd jobs/Frontend
+pnpm test
+cd ../..
