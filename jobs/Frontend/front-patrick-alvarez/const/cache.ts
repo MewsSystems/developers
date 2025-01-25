@@ -12,6 +12,7 @@ const cacheConfig = {
     } satisfies QueryClientConfig['defaultOptions'],
     BASE_KEYS: {
         MOVIES: 'movies',
+        MOVIE: 'movie',
     },
 }
 

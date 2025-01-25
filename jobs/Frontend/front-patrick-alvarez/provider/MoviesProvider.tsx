@@ -49,7 +49,11 @@ export const MoviesProvider = ({ children }: PropsWithChildren) => {
 
     return (
         <MoviesContext.Provider
-            value={{ searchTerm, setSearchTerm, moviesInfiniteQuery }}
+            value={{
+                searchTerm,
+                setSearchTerm,
+                moviesInfiniteQuery,
+            }}
         >
             {children}
         </MoviesContext.Provider>

@@ -1,7 +1,16 @@
-export default function MovieDetailPage() {
+import MovieDetail from '@/components/MovieDetail'
+import { MovieDetailProvider } from '@/provider/MovieDetailProvider'
+
+interface Props {
+    params: {
+        id: string
+    }
+}
+
+export default function MovieDetailPage({ params }: Props) {
     return (
-        <div className="h-full">
-            <h1 className="text-2xl font-bold">123</h1>
-        </div>
+        <MovieDetailProvider id={params.id}>
+            <MovieDetail />
+        </MovieDetailProvider>
     )
 }
