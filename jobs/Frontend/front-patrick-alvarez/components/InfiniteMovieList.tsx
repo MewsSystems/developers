@@ -35,10 +35,7 @@ export const InfiniteMovieList = ({
     return (
         <section className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {movies.map((movie, index) => (
-                <MovieCard 
-                    key={`${movie.id}-${index}`} 
-                    movie={movie} 
-                />
+                <MovieCard key={`${movie.id}-${index}`} movie={movie} />
             ))}
             <div ref={observerTarget} className="h-10" />
             {isFetchingNextPage && (

@@ -27,17 +27,17 @@ export default function Home() {
         <main className="flex h-full w-full flex-col items-center gap-y-8">
             <h1 className="text-4xl font-bold">Movie Search</h1>
             <SearchBar handleSearch={handleSearch} />
-            {isLoading ? <MovieListSkeletons /> : 
-                isSuccess && movies.length > 0 ? (
-                    <InfiniteMovieList
-                        movies={movies}
-                        isFetchingNextPage={moviesInfiniteQuery.isFetchingNextPage}
-                        fetchNextPage={moviesInfiniteQuery.fetchNextPage}
-                    />
-                ) : (
-                    <MovieEmptyState />
-                )
-            }
+            {isLoading ? (
+                <MovieListSkeletons />
+            ) : isSuccess && movies.length > 0 ? (
+                <InfiniteMovieList
+                    movies={movies}
+                    isFetchingNextPage={moviesInfiniteQuery.isFetchingNextPage}
+                    fetchNextPage={moviesInfiniteQuery.fetchNextPage}
+                />
+            ) : (
+                <MovieEmptyState />
+            )}
         </main>
     )
 }
