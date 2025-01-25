@@ -1,6 +1,7 @@
 'use client'
-import MovieCard from '@/components/MovieCard'
+import { InfiniteMovieList } from '@/components/InfiniteList'
 import SearchBar from '@/components/SearchBar'
+import config from '@/const'
 import { MoviesContext } from '@/provider/MoviesProvider'
 import { useContext, useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
@@ -9,7 +10,7 @@ export default function Home() {
     const { setSearchTerm, moviesInfiniteQuery } =
         useContext(MoviesContext)
 
-    const { data, isLoading, isSuccess } = moviesInfiniteQuery
+    const { data } = moviesInfiniteQuery
 
     const movies = useMemo(() => data?.pages.flat() || [], [data?.pages])
 
@@ -17,25 +18,19 @@ export default function Home() {
         async (query: string) => {
             setSearchTerm(query)
         },
-        1000,
+        config.SEARCH_TYPING_DEBOUNCE_DELAY,
         { leading: false, trailing: true },
     )
 
     return (
-        <main className="flex h-full flex-col items-center gap-8">
+        <main className="flex h-full w-full flex-col items-center gap-y-8">
             <h1 className="text-4xl font-bold">Movie Search</h1>
             <SearchBar handleSearch={handleSearch} />
-            <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {isLoading ? (
-                    <div>Loading...</div>
-                ) : (
-                    isSuccess && (
-                        movies.map((movie) => (
-                            <MovieCard key={movie.id} movie={movie} />
-                        ))
-                    )
-                )}
-            </section>
+            <InfiniteMovieList
+                movies={movies}
+                isFetchingNextPage={moviesInfiniteQuery.isFetchingNextPage}
+                fetchNextPage={moviesInfiniteQuery.fetchNextPage}
+            />
         </main>
     )
 }
