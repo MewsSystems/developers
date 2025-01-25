@@ -10,4 +10,4 @@ const customJestConfig: Config = {
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 }
 
-export default createJestConfig(customJestConfig) 
+export default createJestConfig(customJestConfig)

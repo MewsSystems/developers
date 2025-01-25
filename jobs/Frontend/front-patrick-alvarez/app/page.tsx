@@ -1,7 +1,7 @@
 'use client'
 import { InfiniteMovieList } from '@/components/InfiniteMovieList'
-import { MovieEmptyState } from '@/components/MovieEmptyState'
 import { MovieListSkeletons } from '@/components/MovieListSkeletons'
+import { MovieSearchEmptyState } from '@/components/MovieSearchEmptyState'
 import SearchBar from '@/components/SearchBar'
 import config from '@/const'
 import { MoviesContext } from '@/provider/MoviesProvider'
@@ -10,10 +10,11 @@ import { useDebouncedCallback } from 'use-debounce'
 
 export default function Home() {
     const { setSearchTerm, moviesInfiniteQuery } = useContext(MoviesContext)
-
     const { data, isLoading, isSuccess } = moviesInfiniteQuery
-
-    const movies = useMemo(() => data?.pages.flat() || [], [data?.pages])
+    const movies = useMemo(
+        () => data?.pages.flatMap((page) => page.results) || [],
+        [data?.pages],
+    )
 
     const handleSearch = useDebouncedCallback(
         async (query: string) => {
@@ -36,7 +37,7 @@ export default function Home() {
                     fetchNextPage={moviesInfiniteQuery.fetchNextPage}
                 />
             ) : (
-                <MovieEmptyState />
+                <MovieSearchEmptyState />
             )}
         </main>
     )

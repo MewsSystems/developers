@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-export const MovieEmptyState = memo(() => {
+export const MovieSearchEmptyState = memo(() => {
     return (
         <div className="flex h-full w-full items-center justify-center">
             <div className="flex flex-col items-center gap-y-4">
@@ -14,4 +14,4 @@ export const MovieEmptyState = memo(() => {
     )
 })
 
-MovieEmptyState.displayName = 'MovieEmptyState'
+MovieSearchEmptyState.displayName = 'MovieSearchEmptyState'

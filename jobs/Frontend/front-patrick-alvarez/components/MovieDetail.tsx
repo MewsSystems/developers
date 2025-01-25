@@ -4,12 +4,13 @@ import { API_IMAGE_BASE_URL } from '@/const/endpoints'
 import MovieDetailContext from '@/provider/MovieDetailProvider'
 import Image from 'next/image'
 import { useContext } from 'react'
+import { MovieDetailEmptyState } from './MovieDetailEmptyState'
 
 const MovieDetail = () => {
     const { movieQuery } = useContext(MovieDetailContext)
     const { data: movie } = movieQuery
 
-    return (
+    return movie ? (
         <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col gap-8 md:flex-row">
                 <div className="w-full md:w-1/3">
@@ -20,6 +21,7 @@ const MovieDetail = () => {
                             width={500}
                             height={750}
                             className="w-full rounded-lg shadow-lg"
+                            priority
                         />
                     ) : (
                         <div className="flex aspect-[2/3] items-center justify-center rounded-lg bg-gray-200">
@@ -44,25 +46,28 @@ const MovieDetail = () => {
                             </p>
                             <p>
                                 <span className="font-semibold">Rating:</span>{' '}
-                                {movie?.vote_average.toFixed(1)}/10
+                                {movie?.vote_average?.toFixed(1) ?? 'N/A'}/10
                             </p>
                         </div>
                         <div>
                             <p>
                                 <span className="font-semibold">Language:</span>{' '}
-                                {movie?.original_language.toUpperCase()}
+                                {movie?.original_language?.toUpperCase() ??
+                                    'N/A'}
                             </p>
                             <p>
                                 <span className="font-semibold">
                                     Popularity:
                                 </span>{' '}
-                                {movie?.popularity.toFixed(0)}
+                                {movie?.popularity?.toFixed(0) ?? 'N/A'}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    ) : (
+        <MovieDetailEmptyState />
     )
 }
 

@@ -41,7 +41,9 @@ describe('MovieCard', () => {
 
     it('renders with correct background image when backdrop_path exists', () => {
         render(<MovieCard movie={mockMovie} />)
-        const movieDiv = screen.getByText('Test Movie').closest('div')?.parentElement
+        const movieDiv = screen
+            .getByText('Test Movie')
+            .closest('div')?.parentElement
         expect(movieDiv).toHaveStyle({
             backgroundImage: `url(https://image.tmdb.org/t/p/w500/test-path.jpg)`,
         })
@@ -50,7 +52,9 @@ describe('MovieCard', () => {
     it('renders with fallback background color when backdrop_path is missing', () => {
         const movieWithoutBackdrop = { ...mockMovie, backdrop_path: '' }
         render(<MovieCard movie={movieWithoutBackdrop} />)
-        const movieDiv = screen.getByText('Test Movie').closest('div')?.parentElement
+        const movieDiv = screen
+            .getByText('Test Movie')
+            .closest('div')?.parentElement
         expect(movieDiv).toHaveStyle({
             backgroundColor: '#1f2937',
         })

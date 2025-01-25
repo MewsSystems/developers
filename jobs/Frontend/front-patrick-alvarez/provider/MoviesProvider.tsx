@@ -11,25 +11,29 @@ import cacheConfig from '@/const/cache'
 import { Movie } from '@/types/Movie'
 import { createContext, PropsWithChildren, useState } from 'react'
 
+interface MovieResponse {
+    results: Movie[]
+    page: number
+    total_pages: number
+    total_results: number
+}
+
 interface MoviesContextValue {
     searchTerm: string | undefined
     setSearchTerm: (query: string) => void
-    moviesInfiniteQuery: UseInfiniteQueryResult<InfiniteData<Movie[]>, Error>
+    moviesInfiniteQuery: UseInfiniteQueryResult<
+        InfiniteData<MovieResponse>,
+        Error
+    >
 }
 
 export const MoviesContext = createContext<MoviesContextValue>({
     searchTerm: undefined,
     setSearchTerm: (searchTerm: string) => {},
-    moviesInfiniteQuery: {
-        data: undefined,
-        isLoading: false,
-        isError: false,
-        fetchNextPage: () =>
-            Promise.resolve(
-                {} as UseInfiniteQueryResult<InfiniteData<Movie[]>, Error>,
-            ),
-        hasNextPage: false,
-    } as UseInfiniteQueryResult<InfiniteData<Movie[]>, Error>,
+    moviesInfiniteQuery: {} as UseInfiniteQueryResult<
+        InfiniteData<MovieResponse>,
+        Error
+    >,
 })
 
 export default MoviesContext
@@ -42,7 +46,7 @@ export const MoviesProvider = ({ children }: PropsWithChildren) => {
         queryFn: ({ pageParam }) =>
             fetchMovies({ page: pageParam, query: searchTerm }),
         getNextPageParam: (lastPage, pages) => {
-            return lastPage.length ? pages.length + 1 : undefined
+            return lastPage.results.length ? pages.length + 1 : undefined
         },
         initialPageParam: 1,
     })

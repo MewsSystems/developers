@@ -8,17 +8,17 @@ interface InfiniteMovieListProps {
     fetchNextPage: () => void
 }
 
-export const InfiniteMovieList = ({
+export const InfiniteMovieList: React.FC<InfiniteMovieListProps> = ({
     movies,
     isFetchingNextPage,
     fetchNextPage,
-}: InfiniteMovieListProps) => {
+}) => {
     const observerTarget = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && !isFetchingNextPage) {
+                if (entries[0].isIntersecting) {
                     fetchNextPage()
                 }
             },
@@ -30,7 +30,7 @@ export const InfiniteMovieList = ({
         }
 
         return () => observer.disconnect()
-    }, [fetchNextPage, isFetchingNextPage])
+    }, [fetchNextPage])
 
     return (
         <section className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

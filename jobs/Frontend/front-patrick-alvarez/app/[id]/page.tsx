@@ -1,16 +1,20 @@
+import { Loading } from '@/components/Loading'
 import MovieDetail from '@/components/MovieDetail'
 import { MovieDetailProvider } from '@/provider/MovieDetailProvider'
+import { Suspense } from 'react'
 
-interface Props {
-    params: {
-        id: string
-    }
-}
+export default async function MovieDetailPage({
+    params,
+}: {
+    params: Promise<{ id: string }>
+}) {
+    const id = (await params).id
 
-export default function MovieDetailPage({ params }: Props) {
     return (
-        <MovieDetailProvider id={params.id}>
-            <MovieDetail />
-        </MovieDetailProvider>
+        <Suspense fallback={<Loading />}>
+            <MovieDetailProvider id={id}>
+                <MovieDetail />
+            </MovieDetailProvider>
+        </Suspense>
     )
 }
