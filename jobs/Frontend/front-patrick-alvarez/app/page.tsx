@@ -1,5 +1,7 @@
 'use client'
-import { InfiniteMovieList } from '@/components/InfiniteList'
+import { InfiniteMovieList } from '@/components/InfiniteMovieList'
+import { MovieEmptyState } from '@/components/MovieEmptyState'
+import { MovieListSkeletons } from '@/components/MovieListSkeletons'
 import SearchBar from '@/components/SearchBar'
 import config from '@/const'
 import { MoviesContext } from '@/provider/MoviesProvider'
@@ -7,10 +9,9 @@ import { useContext, useMemo } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
 export default function Home() {
-    const { setSearchTerm, moviesInfiniteQuery } =
-        useContext(MoviesContext)
+    const { setSearchTerm, moviesInfiniteQuery } = useContext(MoviesContext)
 
-    const { data } = moviesInfiniteQuery
+    const { data, isLoading, isSuccess } = moviesInfiniteQuery
 
     const movies = useMemo(() => data?.pages.flat() || [], [data?.pages])
 
@@ -26,11 +27,17 @@ export default function Home() {
         <main className="flex h-full w-full flex-col items-center gap-y-8">
             <h1 className="text-4xl font-bold">Movie Search</h1>
             <SearchBar handleSearch={handleSearch} />
-            <InfiniteMovieList
-                movies={movies}
-                isFetchingNextPage={moviesInfiniteQuery.isFetchingNextPage}
-                fetchNextPage={moviesInfiniteQuery.fetchNextPage}
-            />
+            {isLoading ? <MovieListSkeletons /> : 
+                isSuccess && movies.length > 0 ? (
+                    <InfiniteMovieList
+                        movies={movies}
+                        isFetchingNextPage={moviesInfiniteQuery.isFetchingNextPage}
+                        fetchNextPage={moviesInfiniteQuery.fetchNextPage}
+                    />
+                ) : (
+                    <MovieEmptyState />
+                )
+            }
         </main>
     )
 }
