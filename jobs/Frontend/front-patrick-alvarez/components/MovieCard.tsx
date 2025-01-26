@@ -14,7 +14,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
     return (
         <Link href={`/${movie.id}`}>
             <div
-                className="relative flex h-48 w-full flex-col items-start justify-end rounded-lg bg-cover bg-center p-4"
+                className="relative flex h-48 w-full flex-col items-start justify-end rounded-lg bg-cover bg-center p-4 transition-transform duration-300 ease-out hover:scale-105"
                 style={{
                     backgroundImage: movie.backdropPath
                         ? `url(${API_IMAGE_BASE_URL}${movie.backdropPath})`
