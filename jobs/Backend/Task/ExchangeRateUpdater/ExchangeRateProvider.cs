@@ -21,7 +21,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async IAsyncEnumerable<ExchangeRate> GetLatestExchangeRates(Currency targetCurrency, IEnumerable<Currency> sourceCurrencies)
         {
-            // This ideally should also be cached (on disk, in Redis, etc.)
+            // This ideally should also be cached in a structure similar to Dictionary<Currency, ExchangeRate>
             var today = DateOnly.FromDateTime(DateTime.Today);
             foreach (var rateSource in _rateSources)
             {

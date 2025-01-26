@@ -30,8 +30,7 @@ public class CzechNationalBankRateSource : IRateSource
         var primaryRates = await GetPrimaryRatesAsync(_httpClient, targetDate);
         var secondaryRates = await GetSecondaryRatesAsync(_httpClient, targetDate);
 
-        // We should also cache primary rates daily, and secondary rates monthly.
-
+        // We should also cache primary rates daily, and secondary rates monthly, and get the values from cache if they exist there.
         return primaryRates.Concat(secondaryRates).ToList();
     }
 
