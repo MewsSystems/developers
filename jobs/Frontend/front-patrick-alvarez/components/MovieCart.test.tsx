@@ -1,21 +1,21 @@
-import { Movie } from '@/types/Movie'
+import Movie from '@/types/Movie'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import MovieCard from './MovieCard'
 
 describe('MovieCard', () => {
-    const mockMovie: Movie = {
+    const mockMovie = new Movie({
         id: 1,
         title: 'Test Movie',
-        backdrop_path: '/test-path.jpg',
-        release_date: '2023-01-01',
+        backdropPath: '/test-path.jpg',
+        releaseDate: '2023-01-01',
         overview: 'Test overview',
-        vote_average: 7.5,
-        poster_path: '/poster-path.jpg',
-        original_language: 'en',
+        voteAverage: 7.5,
+        posterPath: '/poster-path.jpg',
+        originalLanguage: 'en',
         tagline: 'Test tagline',
         popularity: 100,
-    }
+    })
 
     it('renders movie title correctly', () => {
         render(<MovieCard movie={mockMovie} />)
@@ -28,13 +28,13 @@ describe('MovieCard', () => {
     })
 
     it('renders "Untitled" when movie has no title', () => {
-        const movieWithoutTitle = { ...mockMovie, title: '' }
+        const movieWithoutTitle = new Movie({ ...mockMovie, title: '' })
         render(<MovieCard movie={movieWithoutTitle} />)
         expect(screen.getByText('Untitled')).toBeInTheDocument()
     })
 
     it('does not render year when release_date is missing', () => {
-        const movieWithoutDate = { ...mockMovie, release_date: '' }
+        const movieWithoutDate = new Movie({ ...mockMovie, releaseDate: '' })
         render(<MovieCard movie={movieWithoutDate} />)
         expect(screen.queryByText('2023')).not.toBeInTheDocument()
     })
@@ -50,7 +50,7 @@ describe('MovieCard', () => {
     })
 
     it('renders with fallback background color when backdrop_path is missing', () => {
-        const movieWithoutBackdrop = { ...mockMovie, backdrop_path: '' }
+        const movieWithoutBackdrop = new Movie({ ...mockMovie, backdropPath: '' })
         render(<MovieCard movie={movieWithoutBackdrop} />)
         const movieDiv = screen
             .getByText('Test Movie')

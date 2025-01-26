@@ -1,4 +1,4 @@
-import { Movie } from '@/types/Movie'
+import Movie from '@/types/Movie'
 import { useEffect, useRef } from 'react'
 import MovieCard from './MovieCard'
 

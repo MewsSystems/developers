@@ -1,5 +1,5 @@
 import { API_IMAGE_BASE_URL } from '@/const/endpoints'
-import { Movie } from '@/types/Movie'
+import Movie from '@/types/Movie'
 import Link from 'next/link'
 
 interface MovieCardProps {
@@ -7,8 +7,8 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ movie }: MovieCardProps) => {
-    const year = movie.release_date
-        ? new Date(movie.release_date).getFullYear()
+    const year = movie.releaseDate
+        ? new Date(movie.releaseDate).getFullYear()
         : null
 
     return (
@@ -16,10 +16,10 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             <div
                 className="relative flex h-48 w-full flex-col items-start justify-end rounded-lg bg-cover bg-center p-4"
                 style={{
-                    backgroundImage: movie.backdrop_path
-                        ? `url(${API_IMAGE_BASE_URL}${movie.backdrop_path})`
+                    backgroundImage: movie.backdropPath
+                        ? `url(${API_IMAGE_BASE_URL}${movie.backdropPath})`
                         : 'none',
-                    backgroundColor: !movie.backdrop_path
+                    backgroundColor: !movie.backdropPath
                         ? '#1f2937'
                         : undefined,
                 }}

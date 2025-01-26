@@ -1,22 +1,15 @@
 'use client'
+
 import {
     InfiniteData,
     useInfiniteQuery,
     UseInfiniteQueryResult,
 } from '@tanstack/react-query'
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { fetchMovies } from '@/api'
 import cacheConfig from '@/const/cache'
-import { Movie } from '@/types/Movie'
+import { MovieResponse } from '@/types/MovieResponse'
 import { createContext, PropsWithChildren, useState } from 'react'
-
-interface MovieResponse {
-    results: Movie[]
-    page: number
-    total_pages: number
-    total_results: number
-}
 
 interface MoviesContextValue {
     searchTerm: string | undefined
@@ -29,6 +22,7 @@ interface MoviesContextValue {
 
 export const MoviesContext = createContext<MoviesContextValue>({
     searchTerm: undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setSearchTerm: (searchTerm: string) => {},
     moviesInfiniteQuery: {} as UseInfiniteQueryResult<
         InfiniteData<MovieResponse>,
