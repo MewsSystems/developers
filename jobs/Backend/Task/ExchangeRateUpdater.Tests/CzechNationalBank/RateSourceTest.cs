@@ -9,7 +9,7 @@ public class RateSourceTest
     public RateSourceTest()
     {
         var parser = new CzechNationalBankRateParser();
-        _rateSource = new CzechNationalBankRateSource(parser);
+        _rateSource = new CzechNationalBankRateSource(parser, new HttpClient());
     }
 
     [Theory(Skip = "Real external website call.")]
