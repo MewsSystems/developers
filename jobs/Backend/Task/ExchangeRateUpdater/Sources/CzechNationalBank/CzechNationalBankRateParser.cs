@@ -24,8 +24,9 @@ class CzechNationalBankRateParser : ICzechNationalBankRateParser
         // First two lines are current date and header names, we don't need them.
         var rateLines = rates.Split('\n').Skip(2);
 
-        foreach (var line in rateLines)
+        foreach (var rawLine in rateLines)
         {
+            var line = rawLine.Trim();
             if (string.IsNullOrEmpty(line))
             {
                 continue;
