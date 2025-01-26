@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Net.Http;
 using ExchangeRateUpdater.Sources;
+using ExchangeRateUpdater.Sources.CzechNationalBank;
 
 namespace ExchangeRateUpdater
 {
@@ -17,15 +20,18 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("XYZ"),
+            new Currency("AUD")
         };
+        private static IRateSource CzechNationalBankSource = new CzechNationalBankRateSource(new CzechNationalBankRateParser(), new HttpClient());
 
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider([CzechNationalBankSource]);
+                var czkCurrency = new Currency("CZK");
+                var rates = await provider.GetLatestExchangeRates(czkCurrency, currencies).ToListAsync();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
@@ -37,8 +43,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
-            Console.ReadLine();
         }
     }
 }
