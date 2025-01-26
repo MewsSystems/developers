@@ -34,7 +34,7 @@ public class GetDailyExchangeRateQueryHandlerTests
         var query = new GetDailyExchangeRateQuery("XYZ", "en");
         _mockCurrencyData
             .Setup(m => m.GetCurrencyWithCode("XYZ"))
-            .Returns((Currency)null); // Simulate currency not found
+            .Returns((Currency)null);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);

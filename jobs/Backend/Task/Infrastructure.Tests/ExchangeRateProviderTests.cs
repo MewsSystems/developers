@@ -24,7 +24,7 @@ namespace Infrastructure.Tests
             // Set up the configuration mock
             _mockConfig.Setup(x => x.Value).Returns(new CNBConfig
             {
-                BaseURL = "https://google.com",
+                BaseURL = "https://example.com",
                 ExchangeRateURL = "",
                 RefreshTimeHour = 23,
                 RefreshTimeMinute = 30
