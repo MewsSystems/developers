@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "src/ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "tests\ExchangeRateUpdater.Tests.csproj", "{D119C119-00D1-488F-814A-3FDAE33DA08F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A5BF74B-A289-4F8A-B718-490B6957B348}"
+	ProjectSection(SolutionItems) = preProject
+		src\data\currency-codes.json = src\data\currency-codes.json
+		src\data\rates-backup.txt = src\data\rates-backup.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8C512969-C37E-4ADF-8E42-ECCE59AF7B48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +25,16 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D119C119-00D1-488F-814A-3FDAE33DA08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D119C119-00D1-488F-814A-3FDAE33DA08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D119C119-00D1-488F-814A-3FDAE33DA08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D119C119-00D1-488F-814A-3FDAE33DA08F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B2695D6-D24C-4460-A58E-A10F08550CE0} = {3A5BF74B-A289-4F8A-B718-490B6957B348}
+		{D119C119-00D1-488F-814A-3FDAE33DA08F} = {8C512969-C37E-4ADF-8E42-ECCE59AF7B48}
 	EndGlobalSection
 EndGlobal

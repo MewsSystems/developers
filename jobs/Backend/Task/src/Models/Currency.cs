@@ -1,4 +1,6 @@
-﻿namespace ExchangeRateUpdater
+using System;
+
+namespace ExchangeRateUpdater.Models
 {
     public class Currency
     {
@@ -17,4 +19,4 @@
             return Code;
         }
     }
-}
+} 

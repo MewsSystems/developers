@@ -1,0 +1,7 @@
+02 Jan 2025 #1
+Invalid header format
+Australia|dollar|1|AUD|15.145|extra|field
+Brazil|real|invalid|BRL|not_a_number
+Bulgaria|missing|fields
+Denmark|krone|1|DKK
+EMU|euro|1|EUR|25.175 
