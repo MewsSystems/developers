@@ -11,7 +11,6 @@
         }
 
         public Currency SourceCurrency { get; }
-
         public Currency TargetCurrency { get; }
 
         public decimal Rate { get; }
@@ -19,7 +18,7 @@
 
         public override string ToString()
         {
-            return $"{SourceCurrency}/{TargetCurrency}={Rate}";
+            return $"{SourceCurrency}/{TargetCurrency}={Rate} (per {Amount})";
         }
     }
 }
