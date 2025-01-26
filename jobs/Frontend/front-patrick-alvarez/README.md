@@ -1,5 +1,10 @@
 # Frontend Assignment - Patrick Alvarez
 
+See it live at: [https://mews-movies-kappa.vercel.app/](https://mews-movies-kappa.vercel.app/)
+
+![Screenshot](public/images/screenshot.png)
+
+
 ## Requirements
 
 - [x] Create a fork of the repository.
@@ -30,6 +35,17 @@
 - React Testing Library
 - Jest
 - Tailwind CSS
+
+## Key Requested Features
+
+### Debounce Search
+![Debounce Search](public/images/search.gif)
+
+### Infinite Scroll
+![Infinite Scroll](public/images/infinite-scroll.gif)
+
+### Movie Detail
+![Movie Detail](public/images/movie-detail.gif)
 
 ## Getting Started
 
