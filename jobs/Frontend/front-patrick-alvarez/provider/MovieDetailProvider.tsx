@@ -6,7 +6,7 @@ import { fetchMovie } from '@/api'
 import { Loading } from '@/components/Loading'
 import { MovieDetailEmptyState } from '@/components/MovieDetailEmptyState'
 import cacheConfig from '@/const/cache'
-import { Movie } from '@/types/Movie'
+import Movie from '@/types/Movie'
 import { createContext, PropsWithChildren } from 'react'
 
 interface MoviesContextValue {

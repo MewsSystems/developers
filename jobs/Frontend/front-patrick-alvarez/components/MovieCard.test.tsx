@@ -50,7 +50,10 @@ describe('MovieCard', () => {
     })
 
     it('renders with fallback background color when backdrop_path is missing', () => {
-        const movieWithoutBackdrop = new Movie({ ...mockMovie, backdropPath: '' })
+        const movieWithoutBackdrop = new Movie({
+            ...mockMovie,
+            backdropPath: '',
+        })
         render(<MovieCard movie={movieWithoutBackdrop} />)
         const movieDiv = screen
             .getByText('Test Movie')
@@ -75,7 +78,7 @@ describe('MovieCard', () => {
             'transition-transform',
             'duration-300',
             'ease-out',
-            'hover:scale-105'
+            'hover:scale-105',
         )
     })
 })

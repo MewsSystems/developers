@@ -11,7 +11,7 @@ const MovieDetail = () => {
     const { movieQuery } = useContext(MovieDetailContext)
     const { data } = movieQuery
 
-    const movie: Movie = data
+    const movie = data as Movie
 
     return movie ? (
         <div className="container mx-auto px-4 py-8">
