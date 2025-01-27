@@ -11,8 +11,8 @@ namespace ExchangeRateUpdater.Services.CNB
 {
     public class CNBRateParser : IExchangeRateParser
     {
+        private readonly ICurrencyIsoService _currencyIsoService;
         private readonly ILogger<CNBRateParser> _logger;
-        private readonly HashSet<string> _validIsoCodes;
         private static readonly CultureInfo ParsingCulture = CultureInfo.InvariantCulture;
 
         public CNBRateParser(
@@ -24,34 +24,11 @@ namespace ExchangeRateUpdater.Services.CNB
                 throw new ArgumentNullException(nameof(options));
             if (currencyIsoService == null)
                 throw new ArgumentNullException(nameof(currencyIsoService));
-            
+
+            _currencyIsoService = currencyIsoService;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _validIsoCodes = currencyIsoService.GetValidIsoCodes();
         }
 
-        private void ValidateCode(string code)
-        {
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                throw new ArgumentException("Currency code cannot be empty or whitespace.", nameof(code));
-            }
-
-            if (code.Length != 3)
-            {
-                throw new ArgumentException("Currency code must be exactly 3 characters long.", nameof(code));
-            }
-
-            if (!code.All(char.IsLetter))
-            {
-                throw new ArgumentException("Currency code must contain only letters.", nameof(code));
-            }
-
-            var normalizedCode = code.ToUpperInvariant();
-            if (!_validIsoCodes.Contains(normalizedCode))
-            {
-                throw new ArgumentException($"'{normalizedCode}' is not a valid ISO 4217 currency code.", nameof(code));
-            }
-        }
 
         public IEnumerable<(string Code, decimal Amount, decimal Rate)> ParseRates(string data)
         {
@@ -81,7 +58,7 @@ namespace ExchangeRateUpdater.Services.CNB
 
                     try
                     {
-                        ValidateCode(code);
+                        _currencyIsoService.ValidateCode(code);
                     }
                     catch (ArgumentException ex)
                     {

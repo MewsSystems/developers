@@ -20,6 +20,7 @@ namespace ExchangeRateUpdater.Tests.Services
         private readonly Mock<IExchangeRateProvider> _providerMock;
         private readonly Mock<ILogger<ExchangeRateService>> _loggerMock;
         private readonly Mock<IHostApplicationLifetime> _appLifetimeMock;
+        private readonly Mock<ICurrencyIsoService> _currencyIsoServiceMock;
         private readonly ExchangeRateOptions _options;
 
         public ExchangeRateServiceTests()
@@ -27,6 +28,7 @@ namespace ExchangeRateUpdater.Tests.Services
             _providerMock = new Mock<IExchangeRateProvider>();
             _loggerMock = new Mock<ILogger<ExchangeRateService>>();
             _appLifetimeMock = new Mock<IHostApplicationLifetime>();
+            _currencyIsoServiceMock = new Mock<ICurrencyIsoService>();
             _options = new ExchangeRateOptions
             {
                 CurrenciesToWatch = new[] { "USD", "EUR", "GBP" },
@@ -35,6 +37,9 @@ namespace ExchangeRateUpdater.Tests.Services
                 BaseCurrency = "CZK",
                 BackupFilePath = "backup.txt"
             };
+
+            // Setup currency validation
+            _currencyIsoServiceMock.Setup(x => x.ValidateCode(It.IsAny<string>())).Verifiable();
         }
 
         [Fact]
@@ -69,6 +74,9 @@ namespace ExchangeRateUpdater.Tests.Services
             {
                 VerifyLogInformation("Exchange rate: {Rate}", It.Is<object[]>(args => args[0].Equals(rate)));
             }
+
+            // Verificar que se validaron las monedas
+            _currencyIsoServiceMock.Verify(x => x.ValidateCode(It.IsAny<string>()), Times.Exactly(3));
         }
 
         [Fact]
@@ -111,7 +119,8 @@ namespace ExchangeRateUpdater.Tests.Services
                 _providerMock.Object,
                 _loggerMock.Object,
                 optionsMock.Object,
-                _appLifetimeMock.Object);
+                _appLifetimeMock.Object,
+                _currencyIsoServiceMock.Object);
         }
 
         private void VerifyLogInformation(string message, object args)

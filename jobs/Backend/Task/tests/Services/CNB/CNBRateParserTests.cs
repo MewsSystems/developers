@@ -28,6 +28,12 @@ namespace ExchangeRateUpdater.Tests.Services.CNB
             
             _isoServiceMock.Setup(x => x.GetValidIsoCodes())
                 .Returns(_validIsoCodes);
+                
+            _isoServiceMock.Setup(x => x.ValidateCode(It.IsAny<string>()))
+                .Callback<string>(code => {
+                    if (!_validIsoCodes.Contains(code))
+                        throw new ArgumentException($"Invalid currency code: {code}");
+                });
         }
 
         [Fact]

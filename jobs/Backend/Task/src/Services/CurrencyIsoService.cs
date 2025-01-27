@@ -14,6 +14,7 @@ namespace ExchangeRateUpdater.Services
     public interface ICurrencyIsoService
     {
         HashSet<string> GetValidIsoCodes();
+        void ValidateCode(string code);
     }
 
     public class CurrencyIsoService : ICurrencyIsoService
@@ -37,6 +38,31 @@ namespace ExchangeRateUpdater.Services
         public HashSet<string> GetValidIsoCodes()
         {
             return _validIsoCodes;
+        }
+        
+        
+        public void ValidateCode(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                throw new ArgumentException("Currency code cannot be empty or whitespace.", nameof(code));
+            }
+
+            if (code.Length != 3)
+            {
+                throw new ArgumentException("Currency code must be exactly 3 characters long.", nameof(code));
+            }
+
+            if (!code.All(char.IsLetter))
+            {
+                throw new ArgumentException("Currency code must contain only letters.", nameof(code));
+            }
+
+            var normalizedCode = code.ToUpperInvariant();
+            if (!_validIsoCodes.Contains(normalizedCode))
+            {
+                throw new ArgumentException($"'{normalizedCode}' is not a valid ISO 4217 currency code.", nameof(code));
+            }
         }
 
         private HashSet<string> LoadIsoCodes()

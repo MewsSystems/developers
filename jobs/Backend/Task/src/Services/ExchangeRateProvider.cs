@@ -35,14 +35,23 @@ namespace ExchangeRateUpdater.Services
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
+            _logger.LogDebug("Starting method GetExchangeRatesAsync with {CurrencyCount} currencies.", currencies.Count());
+    
             var result = new List<ExchangeRate>();
             var baseCurrency = new Currency(_options.BaseCurrency);
+            _logger.LogDebug("Base currency set to {BaseCurrency}.", baseCurrency.Code);
+
             var missingCurrencies = new List<string>();
 
             foreach (var currency in currencies)
             {
+                _logger.LogDebug("Processing currency: {CurrencyCode}.", currency.Code);
+
                 if (_rates.TryGetValue(currency.Code, out var rateInfo))
                 {
+                    _logger.LogDebug("Exchange rate found for {CurrencyCode}. Rate: {Rate}, Amount: {Amount}.", 
+                        currency.Code, rateInfo.Rate, rateInfo.Amount);
+
                     var exchangeRate = new ExchangeRate(
                         baseCurrency,
                         currency,
@@ -52,6 +61,7 @@ namespace ExchangeRateUpdater.Services
                 }
                 else
                 {
+                    _logger.LogDebug("Exchange rate not found for {CurrencyCode}.", currency.Code);
                     missingCurrencies.Add(currency.Code);
                 }
             }
@@ -61,6 +71,9 @@ namespace ExchangeRateUpdater.Services
                 _logger.LogInformation("Exchange rates not found for the following currencies: {MissingCurrencies}",
                     string.Join(", ", missingCurrencies));
             }
+
+            _logger.LogInformation("Completed method GetExchangeRatesAsync. Processed {ProcessedCount} currencies with {MissingCount} missing rates.",
+                result.Count, missingCurrencies.Count);
 
             return result;
         }
@@ -79,7 +92,7 @@ namespace ExchangeRateUpdater.Services
                     _rates[code] = (amount, rate);
                 }
 
-                _logger.LogInformation("Exchange rates updated successfully");
+                _logger.LogDebug("Exchange rates updated successfully");
             }
             catch (Exception ex)
             {
