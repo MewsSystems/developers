@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExchangeRateUpdater.Sources;
+using ExchangeRateUpdater.RateSources;
 
 namespace ExchangeRateUpdater
 {
     public class ExchangeRateProvider
     {
         private readonly IEnumerable<IRateSource> _rateSources;
-
         public ExchangeRateProvider(IEnumerable<IRateSource> rateSources)
         {
             _rateSources = rateSources;
