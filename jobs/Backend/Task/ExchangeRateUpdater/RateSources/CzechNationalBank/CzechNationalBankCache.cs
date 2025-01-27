@@ -22,5 +22,6 @@ public class CzechNationalBankRatesCache
     {
         var now = _timeProvider.GetUtcNow();
         var targetDateTime = targetDate.ToDateTime(new(0, 0));
+        throw new NotImplementedException();
     }
 }
