@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater.Sources;
+namespace ExchangeRateUpdater.RateSources;
 
 public interface IRateSource
 {

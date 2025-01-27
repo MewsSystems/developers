@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExchangeRateUpdater.Sources.CzechNationalBank;
+namespace ExchangeRateUpdater.RateSources.CzechNationalBank;
 
 public interface ICzechNationalBankRateParser
 {

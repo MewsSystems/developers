@@ -1,6 +1,6 @@
 using System;
 
-namespace ExchangeRateUpdater.Sources.CzechNationalBank;
+namespace ExchangeRateUpdater.RateSources.CzechNationalBank;
 
 public class CzechNationalBankRateParserException : Exception
 {
