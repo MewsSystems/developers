@@ -1,4 +1,6 @@
-using ExchangeRateUpdater.Sources.CzechNationalBank;
+using ExchangeRateUpdater.RateSources.CzechNationalBank;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests.CzechNationalBank;
 
@@ -8,22 +10,26 @@ public class RateSourceTest
 
     public RateSourceTest()
     {
+        var http = new HttpClient();
+        var httpFactory = Substitute.For<IHttpClientFactory>();
+        httpFactory.CreateClient().ReturnsForAnyArgs(http);
         var parser = new CzechNationalBankRateParser();
-        _rateSource = new CzechNationalBankRateSource(parser, new HttpClient());
+        var uriBuilder = new CzechNationalBankRateUriBuilder(Options.Create(TestCommon.SourceOptions));
+        _rateSource = new CzechNationalBankRateSource(parser, uriBuilder, NullCache.Instance, TimeProvider.System, NullLogger<CzechNationalBankRateSource>.Instance, httpFactory);
     }
 
-    [Theory(Skip = "Real external website call.")]
-    [InlineData("2025.01.25", 0, 15.118, 1, "AUD", "CZK")]
-    [InlineData("2025.01.20", 0, 15.161, 1, "AUD", "CZK")]
-    public async Task GivenDate_WhenCallingRealBankWebsite_ShouldReturnCorrectRates(string dateStr, int rateIndex, decimal rate, decimal amount, string sourceCurrency, string targetCurrency)
+    [Theory(Skip = "Real website call")]
+    [InlineData("2025.01.25", 15.118, 1, "AUD", "CZK")] // Primary source
+    [InlineData("2025.01.25", 34.452, 100, "AFN", "CZK")] // Secondary source
+    public async Task GivenDate_WhenCallingRealBankWebsite_ShouldReturnCorrectRates(string dateStr, decimal rate, decimal amount, string sourceCurrency, string targetCurrency)
     {
         var date = DateOnly.Parse(dateStr);
         var rates = await _rateSource.GetRatesAsync(date);
 
         rates.Should().NotBeEmpty();
 
-        var exampleRate = rates[rateIndex];
-        
+        var exampleRate = rates.Single(x => x.SourceCurrency == new Currency(sourceCurrency));
+
         exampleRate.Rate.Should().Be(rate);
         exampleRate.Amount.Should().Be(amount);
         exampleRate.SourceCurrency.Code.Should().Be(sourceCurrency);

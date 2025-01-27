@@ -1,4 +1,4 @@
-using ExchangeRateUpdater.Sources.CzechNationalBank;
+using ExchangeRateUpdater.RateSources.CzechNationalBank;
 
 namespace ExchangeRateUpdater.Tests.CzechNationalBank;
 
