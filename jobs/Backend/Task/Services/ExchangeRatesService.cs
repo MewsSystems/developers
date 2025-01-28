@@ -1,0 +1,40 @@
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace ExchangeRateUpdater.Services;
+
+public class ExchangeRatesService : IExchangeRatesService
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+
+
+    public ExchangeRatesService(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime date)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var formattedDate = date.ToString("yyyy-MM-dd");
+        var url = $"https://api.cnb.cz/cnbapi/exrates/daily?date={formattedDate}&lang=EN";
+
+        var response = await client.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"Failed to get exchange rates: {response.StatusCode}");
+        }
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<ExchangeRatesResponseModel>(content);
+    }
+}
