@@ -8,14 +8,14 @@ namespace ExchangeRateUpdater.RateSources.CzechNationalBank;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCzechNationalBankRateSourceWithAllDependencies(this IServiceCollection services, Action<CzechNationalBankSourceOptions> configureSourceOptions)
+    public static IServiceCollection WithCzechNationalBankRateSource(this IServiceCollection services)
     {
-        services.Configure(configureSourceOptions);
         services.TryAddSingleton<ICzechNationalBankRateParser, CzechNationalBankRateParser>();
         services.TryAddSingleton<ICzechNationalBankRateUriBuilder, CzechNationalBankRateUriBuilder>();
         services.TryAddSingleton<IExchangeRateCache, NullCache>();
         services.TryAddSingleton<CzechRepublicPublicHoliday>((_) => new CzechRepublicPublicHoliday() { UseCachingHolidays = true });
         services.TryAddSingleton<ICzechNationalBankRatesCacheExpirationCalculator, CzechNationalBankRatesCacheExpirationCalculator>();
+        services.TryAddSingleton<TimeProvider>(TimeProvider.System);
         services.AddTransient<IRateSource, CzechNationalBankRateSource>();
 
         services.AddHttpClient<CzechNationalBankRateSource>(opts =>
