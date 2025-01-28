@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOptions<CzechNationalBankSourceOptions>()
         .BindConfiguration("CzechNationalBankOptions");
 
-builder.Services.AddExchangeRateProvider().WithCzechNationalBankRateSource();
+builder.Services.AddExchangeRateProvider().WithCzechNationalBankRateSource(useDefaultUrls: false);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

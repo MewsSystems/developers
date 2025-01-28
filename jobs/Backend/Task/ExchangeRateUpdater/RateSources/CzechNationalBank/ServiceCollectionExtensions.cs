@@ -8,8 +8,17 @@ namespace ExchangeRateUpdater.RateSources.CzechNationalBank;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection WithCzechNationalBankRateSource(this IServiceCollection services)
+    public static IServiceCollection WithCzechNationalBankRateSource(this IServiceCollection services, bool useDefaultUrls = true)
     {
+        if (useDefaultUrls)
+        {
+            services.AddOptions<CzechNationalBankSourceOptions>().Configure(o =>
+            {
+                o.MainDataSourceUrl = new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt");
+                o.SecondaryDataSourceUrl = new Uri("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt");
+            });
+        }
+        
         services.TryAddSingleton<ICzechNationalBankRateParser, CzechNationalBankRateParser>();
         services.TryAddSingleton<ICzechNationalBankRateUriBuilder, CzechNationalBankRateUriBuilder>();
         services.TryAddSingleton<IExchangeRateCache, NullCache>();
