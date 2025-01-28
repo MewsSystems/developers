@@ -1,10 +1,17 @@
+using ExchangeRateUpdater;
+using ExchangeRateUpdater.RateSources.CzechNationalBank;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddOptions<CzechNationalBankSourceOptions>()
+        .BindConfiguration("CzechNationalBankOptions");
 
+builder.Services.AddExchangeRateProvider().WithCzechNationalBankRateSource();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -16,24 +23,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
+app.MapPost("/get-rates", (string targetCurrency, [FromBody] List<string> rates, ExchangeRateProvider provider) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    return provider.GetLatestExchangeRates(new Currency(targetCurrency), rates.Select(x => new Currency(x)));
 })
-.WithName("GetWeatherForecast")
+.WithName("GetRates")
 .WithOpenApi();
 
 app.Run();

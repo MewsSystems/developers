@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "Exch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{13B47612-DB8A-42D9-8D47-32AF3A6DD23E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdate.Api", "ExchangeRateUpdate.Api\ExchangeRateUpdate.Api.csproj", "{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +46,17 @@ Global
 		{13B47612-DB8A-42D9-8D47-32AF3A6DD23E}.Release|x64.Build.0 = Release|Any CPU
 		{13B47612-DB8A-42D9-8D47-32AF3A6DD23E}.Release|x86.ActiveCfg = Release|Any CPU
 		{13B47612-DB8A-42D9-8D47-32AF3A6DD23E}.Release|x86.Build.0 = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|x64.Build.0 = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Debug|x86.Build.0 = Debug|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|x64.ActiveCfg = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|x64.Build.0 = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|x86.ActiveCfg = Release|Any CPU
+		{FEFAEEAD-A854-47A0-9E99-D8EF93A43A73}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

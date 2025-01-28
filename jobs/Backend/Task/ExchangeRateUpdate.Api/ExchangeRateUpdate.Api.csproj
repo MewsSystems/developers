@@ -11,4 +11,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../ExchangeRateUpdater/ExchangeRateUpdater.csproj"/>
+  </ItemGroup>
 </Project>
