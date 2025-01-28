@@ -17,6 +17,7 @@ public class CzechNationalBankRateSource : IRateSource
     private readonly ILogger<CzechNationalBankRateSource> _logger;
     private readonly IExchangeRateCache _cache;
     private readonly ICzechNationalBankRatesCacheExpirationCalculator _cacheExpirationCalculator;
+    private readonly TimeProvider _timeProvider;
 
     public CzechNationalBankRateSource(
         ICzechNationalBankRateParser parser,
@@ -33,11 +34,18 @@ public class CzechNationalBankRateSource : IRateSource
         _logger = logger;
         _cache = cache;
         _cacheExpirationCalculator = cacheExpirationCalculator;
+        _timeProvider = timeProvider;
     }
 
     public string SourceName => "CzechNationalBank";
     public async ValueTask<IReadOnlyList<ExchangeRate>> GetRatesAsync(DateOnly targetDate)
     {
+        var today = DateOnly.FromDateTime(_timeProvider.GetUtcNow().UtcDateTime);
+        if (targetDate > today)
+        {
+            throw new ArgumentException("Can not load rates for the future date.", nameof(targetDate));
+        }
+        
         var httpClient = _httpClientFactory.CreateClient();
         var primaryRatesKey = CzechNationalBankCacheKeyBuilder.PrimaryCacheKey(targetDate);
         var secondaryRatesKey = CzechNationalBankCacheKeyBuilder.SecondaryCacheKey(targetDate);
