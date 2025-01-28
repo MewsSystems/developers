@@ -3,7 +3,13 @@ using PublicHoliday;
 
 namespace ExchangeRateUpdater.RateSources.CzechNationalBank;
 
-public class CzechNationalBankRatesCacheExpirationCalculator
+public interface ICzechNationalBankRatesCacheExpirationCalculator
+{
+    DateTime? GetPrimaryRateExpirationDate(DateOnly targetDate);
+    DateTime? GetSecondaryRateExpirationDate(DateOnly targetDate);
+}
+
+public class CzechNationalBankRatesCacheExpirationCalculator : ICzechNationalBankRatesCacheExpirationCalculator
 {
     static readonly TimeZoneInfo CETTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
     static readonly TimeOnly MainRatesUpdateTime = new TimeOnly(14, 30);
@@ -11,9 +17,9 @@ public class CzechNationalBankRatesCacheExpirationCalculator
     private readonly CzechRepublicPublicHoliday _holidays;
     private readonly TimeProvider _timeProvider;
 
-    public CzechNationalBankRatesCacheExpirationCalculator(TimeProvider timeProvider)
+    public CzechNationalBankRatesCacheExpirationCalculator(TimeProvider timeProvider, CzechRepublicPublicHoliday holiday)
     {
-        _holidays = new CzechRepublicPublicHoliday() { UseCachingHolidays = true };
+        _holidays = holiday;
         _timeProvider = timeProvider;
     }
 
