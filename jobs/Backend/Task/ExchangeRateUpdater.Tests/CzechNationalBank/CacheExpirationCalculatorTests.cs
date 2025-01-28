@@ -1,5 +1,6 @@
 using ExchangeRateUpdater.RateSources.CzechNationalBank;
 using Microsoft.Extensions.Time.Testing;
+using PublicHoliday;
 
 namespace ExchangeRateUpdater.Tests.CzechNationalBank;
 
@@ -11,7 +12,7 @@ public class CacheExpirationCalculatorTests
     public CacheExpirationCalculatorTests()
     {
         _timeProvider = new FakeTimeProvider();
-        _calculator = new CzechNationalBankRatesCacheExpirationCalculator(_timeProvider);
+        _calculator = new CzechNationalBankRatesCacheExpirationCalculator(_timeProvider, new CzechRepublicPublicHoliday());
     }
 
     [Fact]

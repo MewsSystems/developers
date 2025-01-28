@@ -10,7 +10,7 @@ public class CzechNationalBankParserTest
     {
         _parser = new CzechNationalBankRateParser();
     }
-    [Theory]
+    [Theory(Skip = "real website call")]
     [InlineData(0, 15.118, 1, "AUD", "CZK")]
     [InlineData(1, 4.062, 1, "BRL", "CZK")]
     [InlineData(8, 6.137, 100, "HUF", "CZK")]

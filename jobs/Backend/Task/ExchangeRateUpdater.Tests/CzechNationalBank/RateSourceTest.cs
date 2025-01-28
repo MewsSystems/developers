@@ -15,10 +15,17 @@ public class RateSourceTest
         httpFactory.CreateClient().ReturnsForAnyArgs(http);
         var parser = new CzechNationalBankRateParser();
         var uriBuilder = new CzechNationalBankRateUriBuilder(Options.Create(TestCommon.SourceOptions));
-        _rateSource = new CzechNationalBankRateSource(parser, uriBuilder, NullCache.Instance, TimeProvider.System, NullLogger<CzechNationalBankRateSource>.Instance, httpFactory);
+        _rateSource = new CzechNationalBankRateSource(
+            parser,
+            uriBuilder,
+            NullCache.Instance,
+            new CzechNationalBankRatesCacheExpirationCalculator(TimeProvider.System, new()),
+            TimeProvider.System,
+            NullLogger<CzechNationalBankRateSource>.Instance,
+            httpFactory);
     }
 
-    [Theory(Skip = "Real website call")]
+    [Theory]
     [InlineData("2025.01.25", 15.118, 1, "AUD", "CZK")] // Primary source
     [InlineData("2025.01.25", 34.452, 100, "AFN", "CZK")] // Secondary source
     public async Task GivenDate_WhenCallingRealBankWebsite_ShouldReturnCorrectRates(string dateStr, decimal rate, decimal amount, string sourceCurrency, string targetCurrency)
