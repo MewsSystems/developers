@@ -1,3 +1,4 @@
+using ExchangeRateUpdate.Api;
 using ExchangeRateUpdater;
 using ExchangeRateUpdater.RateSources.CzechNationalBank;
 using Microsoft.AspNetCore.Mvc;
@@ -24,16 +25,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapPost("/get-rates", (string targetCurrency, [FromBody] List<string> rates, ExchangeRateProvider provider) =>
+app.MapPost("/load-rates", (ExchangeRateDto dto, ExchangeRateProvider provider) =>
 {
-    return provider.GetLatestExchangeRates(new Currency(targetCurrency), rates.Select(x => new Currency(x)));
+    return provider.GetLatestExchangeRates(new Currency(dto.TargetCurrency), dto.SourceCurrencies.Select(x => new Currency(x)));
 })
-.WithName("GetRates")
+.WithName("LoadRates")
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
