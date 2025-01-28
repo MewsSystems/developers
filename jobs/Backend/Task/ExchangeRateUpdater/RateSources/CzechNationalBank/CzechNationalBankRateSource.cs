@@ -16,12 +16,13 @@ public class CzechNationalBankRateSource : IRateSource
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<CzechNationalBankRateSource> _logger;
     private readonly IExchangeRateCache _cache;
-    private readonly TimeProvider _timeProvider;
+    private readonly ICzechNationalBankRatesCacheExpirationCalculator _cacheExpirationCalculator;
 
     public CzechNationalBankRateSource(
         ICzechNationalBankRateParser parser,
         ICzechNationalBankRateUriBuilder uriBuilder,
         IExchangeRateCache cache,
+        ICzechNationalBankRatesCacheExpirationCalculator cacheExpirationCalculator,
         TimeProvider timeProvider,
         ILogger<CzechNationalBankRateSource> logger,
         IHttpClientFactory httpClientFactory)
@@ -31,17 +32,25 @@ public class CzechNationalBankRateSource : IRateSource
         _uriBuilder = uriBuilder;
         _logger = logger;
         _cache = cache;
-        _timeProvider = timeProvider;
+        _cacheExpirationCalculator = cacheExpirationCalculator;
     }
 
     public string SourceName => "CzechNationalBank";
     public async ValueTask<IReadOnlyList<ExchangeRate>> GetRatesAsync(DateOnly targetDate)
     {
         var httpClient = _httpClientFactory.CreateClient();
-        var primaryRates = await GetPrimaryRatesAsync(httpClient, targetDate);
-        var secondaryRates = await GetSecondaryRatesAsync(httpClient, targetDate);
+        var primaryRatesKey = CzechNationalBankCacheKeyBuilder.PrimaryCacheKey(targetDate);
+        var secondaryRatesKey = CzechNationalBankCacheKeyBuilder.SecondaryCacheKey(targetDate);
 
-        // We should also cache primary rates daily, and secondary rates monthly, and get the values from cache if they exist there.
+        var primaryRates = await _cache.GetOrCreateAsync(
+            primaryRatesKey,
+            async () => await GetPrimaryRatesAsync(httpClient, targetDate),
+            () => _cacheExpirationCalculator.GetPrimaryRateExpirationDate(targetDate));
+        
+        var secondaryRates = await _cache.GetOrCreateAsync(secondaryRatesKey,
+            async () => await GetSecondaryRatesAsync(httpClient, targetDate),
+            () => _cacheExpirationCalculator.GetSecondaryRateExpirationDate(targetDate));
+
         return primaryRates.Concat(secondaryRates).ToList();
     }
 
@@ -49,8 +58,6 @@ public class CzechNationalBankRateSource : IRateSource
     {
         try
         {
-            var primaryRatesKey = $"{SourceName}_primary_{targetDate}";
-
             var uri = _uriBuilder.BuildMainSourceUri(targetDate);
             _logger.LogTrace("Calling CNB api for main source. [Endpoint = {endpoint}]", uri);
             var response = await httpClient.GetAsync(uri);
@@ -58,7 +65,7 @@ public class CzechNationalBankRateSource : IRateSource
             response.EnsureSuccessStatusCode();
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            return await ParseBankResponse(responseStr);
+            return ParseBankResponse(responseStr);
         }
         catch (Exception ex)
         {
@@ -72,15 +79,13 @@ public class CzechNationalBankRateSource : IRateSource
     {
         try
         {
-            var secondaryRatesKey = $"{SourceName}_secondary_{targetDate.Year}_{targetDate.Month}";
-
             var uri = _uriBuilder.BuildSecondarySourceUri(targetDate);
             var response = await httpClient.GetAsync(uri);
 
             response.EnsureSuccessStatusCode();
 
             var responseStr = await response.Content.ReadAsStringAsync();
-            return await ParseBankResponse(responseStr);
+            return ParseBankResponse(responseStr);
         }
         catch (Exception ex)
         {
@@ -89,7 +94,7 @@ public class CzechNationalBankRateSource : IRateSource
         }
     }
 
-    private async Task<IReadOnlyList<ExchangeRate>> ParseBankResponse(string responseStr)
+    private IReadOnlyList<ExchangeRate> ParseBankResponse(string responseStr)
     {
         var parsedResponse = _parser.Parse(responseStr).ToList();
         return parsedResponse;
