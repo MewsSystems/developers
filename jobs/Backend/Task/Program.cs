@@ -2,13 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
-using Microsoft.Extensions.Http;
-using System.Net.Http;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Services;
-using System.Globalization;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Interfaces;
 
 namespace ExchangeRateUpdater;
 
@@ -29,8 +26,6 @@ public static class Program
 
     public static async Task Main(string[] args)
     {
-        DateTime parsedDate;
-
         var services = new ServiceCollection();
         services.AddHttpClient();
         services.AddSingleton<IExchangeRatesService, ExchangeRatesService>();
@@ -38,21 +33,9 @@ public static class Program
         var serviceProvider = services.BuildServiceProvider();
         var exchangeRateService = serviceProvider.GetRequiredService<IExchangeRatesService>();
 
-        Console.WriteLine("Please enter a date in the format YYYY-MM-DD:");
-        string date = Console.ReadLine();
-
-        if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-        {
-            Console.WriteLine($"You entered a valid date: {parsedDate:yyyy-MM-dd}");
-        }
-        else
-        {
-            Console.WriteLine("Invalid date format. Please use YYYY-MM-DD.");
-        }
         try
         {
-            var parsedDate = new DateTime(2025, 1, 27);
-            var exchangeRateResponse = await exchangeRateService.GetExchangeRatesAsync(parsedDate);
+            var exchangeRateResponse = await exchangeRateService.GetExchangeRatesAsync();
 
             Console.WriteLine($"Successfully retrieved {exchangeRateResponse.ExchangeRates.Count} exchange rates:");
             foreach (var rate in exchangeRateResponse.ExchangeRates)

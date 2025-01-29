@@ -1,10 +1,7 @@
 ﻿using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -20,11 +17,10 @@ public class ExchangeRatesService : IExchangeRatesService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime date)
+    public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync()
     {
         var client = _httpClientFactory.CreateClient();
-        var formattedDate = date.ToString("yyyy-MM-dd");
-        var url = $"https://api.cnb.cz/cnbapi/exrates/daily?date={formattedDate}&lang=EN";
+        var url = $"https://api.cnb.cz/cnbapi/exrates/daily";
 
         var response = await client.GetAsync(url);
 

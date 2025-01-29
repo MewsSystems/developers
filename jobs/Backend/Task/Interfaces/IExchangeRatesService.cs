@@ -9,5 +9,5 @@ namespace ExchangeRateUpdater.Interfaces;
 
 public interface IExchangeRatesService
 {
-    Task<ExchangeRatesResponseModel> GetExchangeRatesAsync(DateTime date);
+    Task<ExchangeRatesResponseModel> GetExchangeRatesAsync();
 }
