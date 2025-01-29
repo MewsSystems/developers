@@ -9,9 +9,6 @@ namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRatesModel
 {
-    [JsonPropertyName("amount")]
-    public int Amount { get; set; }
-
     [JsonPropertyName("country")]
     public string Country { get; set; }
 
@@ -21,12 +18,7 @@ public class ExchangeRatesModel
     [JsonPropertyName("currencyCode")]
     public string CurrencyCode { get; set; }
 
-    [JsonPropertyName("order")]
-    public int Order { get; set; }
-
     [JsonPropertyName("rate")]
-    public decimal Rate { get; set; }
+    public double Rate { get; set; }
 
-    [JsonPropertyName("validFor")]
-    public DateTime ValidFor { get; set; }
 }

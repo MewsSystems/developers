@@ -20,7 +20,7 @@ public class ExchangeRatesService : IExchangeRatesService
     public async Task<ExchangeRatesResponseModel> GetExchangeRatesAsync()
     {
         var client = _httpClientFactory.CreateClient();
-        var url = $"https://api.cnb.cz/cnbapi/exrates/daily";
+        var url = $"https://api.cnb.cz/cnbapi/exrates/daily?lang=EN";
 
         var response = await client.GetAsync(url);
 
