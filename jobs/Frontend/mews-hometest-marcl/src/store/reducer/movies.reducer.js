@@ -6,11 +6,14 @@ import {
     GET_MOVIE_DETAILS_SUCCESS,
     GET_MOVIE_DETAILS_FAILURE,
     SET_SEARCH_TEXT,
+    ADD_TO_FAVORITES,
+    REMOVE_FROM_FAVORITES 
   } from '../actions/movies.actions';
   
   const initialState = {
     loading: false,
     movies: [],
+    favorites: JSON.parse(localStorage.getItem('favorites') || '[]'), //I will store favs into localStorage
     movieDetails: null,
     error: null,
     searchText: '',
@@ -117,7 +120,24 @@ const moviesReducer = (state = initialState, action) => {
               ...state,
               searchText: action.searchText,
             };
-          }
+        }
+        case ADD_TO_FAVORITES: {
+            const updatedFavorites = [...state.favorites, action.payload];
+            localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+            return {
+                ...state,
+                favorites: [...state.favorites, action.payload],
+            };
+        }
+        case REMOVE_FROM_FAVORITES: {
+            const filteredFavorites = state.favorites.filter(movie => movie.id !== action.payload.id);
+            localStorage.setItem('favorites', JSON.stringify(filteredFavorites));
+
+            return {
+                ...state,
+                favorites: filteredFavorites 
+            };
+        }
         default:
             return {
                 ...state,

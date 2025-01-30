@@ -53,6 +53,8 @@ This project can be improved with some of the following ideas:
 - Adding further testing
 - Adding the filtering for categories
 - Creating a CD/CI for new features
+- Implement a login / logout method
+- Implement a method to clear LocalStorage (maybe when a logout occurs)
 ... amongst others
 
 

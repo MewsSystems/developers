@@ -7,6 +7,8 @@ export const GET_MOVIE_DETAILS_LOADING = "GET_MOVIE_DETAILS_LOADING";
 export const GET_MOVIE_DETAILS_SUCCESS = "GET_MOVIE_DETAILS_SUCCESS";
 export const GET_MOVIE_DETAILS_FAILURE = "GET_MOVIE_DETAILS_FAILURE";
 export const SET_SEARCH_TEXT = 'SET_SEARCH_TEXT';
+export const ADD_TO_FAVORITES = 'ADD_TO_FAVORITES';
+export const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -78,4 +80,14 @@ export const getMovieDetails = (movieId) => (dispatch) => {
 export const setSearchText = (searchText) => ({
     type: SET_SEARCH_TEXT,
     searchText,
-  });
+});
+
+export const addToFavorites = (movie) => ({
+    type: ADD_TO_FAVORITES,
+    payload: movie,
+});
+
+export const removeFromFavorites = (movie) => ({
+    type: REMOVE_FROM_FAVORITES,
+    payload: movie,
+});
