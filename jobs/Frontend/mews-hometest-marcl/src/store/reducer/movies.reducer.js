@@ -27,7 +27,6 @@ const moviesReducer = (state = initialState, action) => {
             };
         }
         case SEARCH_MOVIES_SUCCESS: {
-            console.log("state.movies: ", state.movies);
             const newMovies = action.data.results;
 
             const uniqueNewMovies = newMovies.filter((newMovie) =>

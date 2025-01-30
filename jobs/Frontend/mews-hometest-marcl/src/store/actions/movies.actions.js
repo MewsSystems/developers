@@ -27,7 +27,6 @@ export const searchMovies = (query, page) => (dispatch) => {
                 });
             });
         } else {
-            console.log("searchMovies: ", data);
             dispatch({ 
                 type: SEARCH_MOVIES_SUCCESS, 
                 data,
