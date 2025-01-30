@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Dispatch } from 'redux';
 
-import { TextField, Box, Paper } from '@mui/material';
+import { TextField, Box, Paper, InputAdornment, IconButton } from '@mui/material';
+import { Clear as ClearIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchText } from '../../store/actions/movies.actions';
 import '../../styles/Search.css';
@@ -27,9 +28,15 @@ const Search: React.FC<SearchBoxProps> = ({ onSearch }) => {
     };
 
     const handleBlur = () => {
-      setIsFocused(false);
+      setTimeout(() => {
+        setIsFocused(false);
+      }, 100); // Added to enable the handleClear before the setIsFocused occurs
     };
 
+    const handleClear = () => {
+      dispatch(setSearchText(''));
+      onSearch('');
+    };
 
     return (
         <Box className="search-container" marginBottom={2}>
@@ -47,7 +54,19 @@ const Search: React.FC<SearchBoxProps> = ({ onSearch }) => {
               fullWidth
               onFocus={handleFocus}
               onBlur={handleBlur}
-              InputProps={{ disableUnderline: true, className:"search-input" }}
+              InputProps={{ 
+                disableUnderline: true, 
+                className:"search-input", 
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {searchText && (
+                      <IconButton onClick={handleClear}>
+                        <ClearIcon />
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+              }}
             />
           </Paper>
         </Box>
