@@ -43,6 +43,38 @@ public class ExchangeRatesServiceTests
         Assert.ThrowsAsync<Exception>(async () => await _exchangeRatesService.GetExchangeRatesAsync());
     }
 
+    [Test]
+    public void GetExchangeRatesAsync_ThrowsJsonException_WhenInvalidJsonResponse()
+    {
+        // Arrange
+        SetUpExchangeRateServiceAndMockClient(HttpStatusCode.OK, "INVALID_JSON");
+
+        // Assert
+        Assert.ThrowsAsync<JsonException>(async () => await _exchangeRatesService.GetExchangeRatesAsync());
+    }
+
+    [Test]
+    public async Task GetExchangeRatesAsync_OutputsCorrectData_WhenCalledAsync()
+    {
+        // Arrange
+        var content = OkResponseCode();
+        SetUpExchangeRateServiceAndMockClient(HttpStatusCode.OK, content);
+
+        // Act
+        var result = await _exchangeRatesService.GetExchangeRatesAsync();
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.IsNotNull(result.ExchangeRates);
+        Assert.IsNotEmpty(result.ExchangeRates);
+
+        var firstRate = result.ExchangeRates.First();
+        Assert.AreEqual("Australia", firstRate.Country);
+        Assert.AreEqual("dollar", firstRate.Currency);
+        Assert.AreEqual("AUD", firstRate.CurrencyCode);
+        Assert.AreEqual(15.038, firstRate.Rate);
+    }
+
     private void SetUpExchangeRateServiceAndMockClient(HttpStatusCode httpStatusCode, string content)
     {
         _handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
@@ -85,16 +117,6 @@ public class ExchangeRatesServiceTests
 
             }
 
-        };
-
-        return JsonSerializer.Serialize(responseData);
-    }
-
-    private string NotFoundResponseCode()
-    {
-        var responseData = new ExchangeRatesResponseModel
-        {
-            ExchangeRates = null
         };
 
         return JsonSerializer.Serialize(responseData);
