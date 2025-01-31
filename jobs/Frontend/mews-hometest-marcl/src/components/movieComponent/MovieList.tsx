@@ -56,7 +56,10 @@ const MovieList: React.FC<MovieListProps> = ({ movies, searchPerformed }) => {
                 {movie.poster_path ? (
                   <CardMedia
                     component="img"
-                    height="500"
+                    sx={{
+                      height: { xs: '300px', sm: '400px', md: '500px' },
+                      objectFit: 'contain',
+                    }}
                     image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                     alt={movie.title}
                   />
@@ -69,7 +72,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, searchPerformed }) => {
                   <Typography variant="h6" gutterBottom>
                     {movie.title}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" sx={{ flexGrow: 1 }}>
+                  <Typography variant="body2" color="textSecondary" sx={{ flexGrow: 1, fontSize: { xs: '0.875rem', sm: '1rem' } }}>
                     {movie.overview}
                   </Typography>
                 </CardContent>
