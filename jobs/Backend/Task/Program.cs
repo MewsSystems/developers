@@ -1,11 +1,44 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    internal class Program
     {
+        private static async Task Main(string[] args)
+        {
+            var services = CreateServices();
+            IApplication app = services.GetRequiredService<IApplication>();
+            await app.Execute();
+        }
+
+        private static ServiceProvider CreateServices()
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+                .AddSingleton<IExchangeRateService, ExchangeRateService>()
+                .AddSingleton<IApplication, Application>()
+                .AddHttpClient()
+                .BuildServiceProvider();
+
+            return serviceProvider;
+        }
+    }
+
+    public interface IApplication
+    {
+        Task Execute();
+    }
+
+    public class Application : IApplication
+    {
+        private IExchangeRateService _exchangeRateService;
+
         private static IEnumerable<Currency> currencies = new[]
         {
             new Currency("USD"),
@@ -19,12 +52,16 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public Application(IExchangeRateService exchangeRateService)
+        {
+            _exchangeRateService = exchangeRateService;
+        }
+
+        public async Task Execute()
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await _exchangeRateService.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
