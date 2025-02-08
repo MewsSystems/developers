@@ -1,0 +1,1 @@
+﻿{"success":true,"data":[{"sourceCurrency":{"code":"USD"},"targetCurrency":{"code":"CZK"},"value":23.048},{"sourceCurrency":{"code":"EUR"},"targetCurrency":{"code":"CZK"},"value":25.75}],"message":""}

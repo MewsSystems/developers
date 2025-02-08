@@ -1,0 +1,1 @@
+﻿{"success":false,"data":null,"message":"Currencies query parameter is required."}
