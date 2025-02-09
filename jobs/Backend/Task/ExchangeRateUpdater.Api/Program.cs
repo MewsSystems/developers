@@ -41,20 +41,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-// var currencies = new[]
-// {
-//     new Currency("USD"),
-//     new Currency("EUR"),
-//     new Currency("CZK"),
-//     new Currency("JPY"),
-//     new Currency("KES"),
-//     new Currency("RUB"),
-//     new Currency("THB"),
-//     new Currency("TRY"),
-//     new Currency("XYZ")
-// };
-
 app.MapGet("/exchange-rates", async (
         [FromServices] ICurrenciesSourceValidator validator,
         [FromQuery] string? currencies,
