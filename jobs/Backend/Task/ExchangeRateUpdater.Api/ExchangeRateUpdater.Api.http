@@ -1,0 +1,15 @@
+@ExchangeRateUpdater.Api_HostAddress = http://localhost:5001
+
+### Get Exchange Rates for Today
+GET {{ExchangeRateUpdater.Api_HostAddress}}/api/ExchangeRate
+Accept: application/json
+
+### Get Exchange Rates for a Specific Date
+# Replace '2024-01-01' with your desired date in yyyy-MM-dd format
+GET {{ExchangeRateUpdater.Api_HostAddress}}/api/ExchangeRate?date=2024-01-01
+Accept: application/json
+
+### Invalid Date Format Example (Should Return Validation Error)
+GET {{ExchangeRateUpdater.Api_HostAddress}}/api/ExchangeRate?date=2024-01-022
+Accept: application/json
+

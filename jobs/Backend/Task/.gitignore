@@ -1,0 +1,42 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider project files
+.idea/
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore compiled DLLs
+*.dll
+*.exe
+
+# Ignore coverage results
+coverage/
+
+# Ignore publish output
+publish/
+
+# Ignore vs folder
+.vs/
+/ExchangeRateUpdater.Api/logs/
