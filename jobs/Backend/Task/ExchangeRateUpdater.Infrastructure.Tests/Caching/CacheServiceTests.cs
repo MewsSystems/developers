@@ -1,4 +1,3 @@
-using ExchangeRateUpdater.Application.Exceptions;
 using ExchangeRateUpdater.Application.Settings;
 using ExchangeRateUpdater.Infrastructure.Caching;
 using Microsoft.Extensions.Caching.Memory;
@@ -77,17 +76,6 @@ public class CacheServiceTests
         // Assert
         Assert.Null(result);
         Assert.False(_realMemoryCache.TryGetValue(cacheKey, out _)); // Ensure it was NOT cached
-    }
-
-    [Fact]
-    public async Task GetOrCreateAsync_ThrowsCacheException_OnFetchFailure()
-    {
-        // Arrange
-        var cacheKey = "testKey";
-
-        // Act & Assert
-        await Assert.ThrowsAsync<CacheException>(async () =>
-            await _cacheService.GetOrCreateAsync<string>(cacheKey, () => throw new Exception("Fetch failure")));
     }
 
     [Fact]

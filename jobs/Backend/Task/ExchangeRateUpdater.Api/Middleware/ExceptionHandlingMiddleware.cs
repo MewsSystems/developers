@@ -1,6 +1,6 @@
-using ExchangeRateUpdater.API.Models;
 using ExchangeRateUpdater.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -37,12 +37,15 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
     {
         var statusCode = GetStatusCode(exception);
 
-        var response = new ApiErrorResponse
+        var response = new ProblemDetails
         {
             Title = GetTitle(exception),
             Status = statusCode,
             Detail = exception.Message,
-            Errors = GetErrors(exception)
+            Extensions = new Dictionary<string, object?>
+            {
+                ["errors"] = GetErrors(exception)
+            }
         };
 
         httpContext.Response.ContentType = "application/json";
@@ -63,7 +66,6 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
             NotFoundException => StatusCodes.Status404NotFound,
             ExternalServiceException => StatusCodes.Status502BadGateway,
             ParsingException => StatusCodes.Status500InternalServerError,
-            CacheException => StatusCodes.Status503ServiceUnavailable,
             _ => StatusCodes.Status500InternalServerError
         };
 

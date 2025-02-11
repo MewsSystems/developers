@@ -79,20 +79,6 @@ public class ExceptionHandlingMiddlewareTests
     }
 
     [Fact]
-    public async Task InvokeAsync_HandlesCacheException_Returns503ServiceUnavailable()
-    {
-        // Arrange
-        var exception = new CacheException("Cache service unavailable.");
-        _nextMock.Setup(n => n(It.IsAny<HttpContext>())).ThrowsAsync(exception);
-
-        // Act
-        await _middleware.InvokeAsync(_httpContext, _nextMock.Object);
-
-        // Assert
-        Assert.Equal(StatusCodes.Status503ServiceUnavailable, _httpContext.Response.StatusCode);
-    }
-
-    [Fact]
     public async Task InvokeAsync_HandlesGenericException_Returns500InternalServerError()
     {
         // Arrange

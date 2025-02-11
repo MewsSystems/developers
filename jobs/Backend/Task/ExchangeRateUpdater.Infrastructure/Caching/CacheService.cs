@@ -1,4 +1,3 @@
-using ExchangeRateUpdater.Application.Exceptions;
 using ExchangeRateUpdater.Application.Settings;
 using ExchangeRateUpdater.Infrastructure.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
@@ -74,9 +73,8 @@ public class CacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error fetching data for cache key: {CacheKey}", cacheKey);
-            fetchTaskSource.SetException(new CacheException($"Failed to fetch data for key: {cacheKey}.", ex));
-            throw new CacheException($"Failed to fetch data for key: {cacheKey}.", ex);
+            fetchTaskSource.SetException(ex);
+            throw;
         }
         finally
         {
