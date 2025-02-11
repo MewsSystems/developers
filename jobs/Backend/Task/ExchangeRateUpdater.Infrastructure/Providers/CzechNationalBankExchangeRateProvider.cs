@@ -47,23 +47,28 @@ public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
 
         var exchangeRates = await _cacheService.GetOrCreateAsync(
             cacheKey,
-            async () =>
-            {
-                _logger.LogInformation("Fetching exchange rates from CNB API for {Date}.", date.ToString("yyyy-MM-dd"));
-
-                var response = await _apiClient.GetExchangeRatesAsync(date, cancellationToken);
-                var exchangeRates = CnbExchangeRateMapper.MapToDomainModel(response);
-
-                if (!exchangeRates.Any())
-                {
-                    _logger.LogWarning("No exchange rates found for {Date}.", date);
-                    throw new NotFoundException("Exchange rate not found.");
-                }
-
-                _logger.LogInformation("Successfully retrieved {Count} exchange rates for {Date}.", exchangeRates.Count(), date);
-                return exchangeRates;
-            });
+            LoadExchangeRates(date, cancellationToken));
 
         return exchangeRates!;
+    }
+
+    private Func<Task<IEnumerable<ExchangeRate>>> LoadExchangeRates(DateTime date, CancellationToken cancellationToken)
+    {
+        return async () =>
+        {
+            _logger.LogInformation("Fetching exchange rates from CNB API for {Date}.", date.ToString("yyyy-MM-dd"));
+
+            var response = await _apiClient.GetExchangeRatesAsync(date, cancellationToken);
+            var exchangeRates = CnbExchangeRateMapper.MapToDomainModel(response);
+
+            if (!exchangeRates.Any())
+            {
+                _logger.LogWarning("No exchange rates found for {Date}.", date);
+                throw new NotFoundException("Exchange rate not found.");
+            }
+
+            _logger.LogInformation("Successfully retrieved {Count} exchange rates for {Date}.", exchangeRates.Count(), date);
+            return exchangeRates;
+        };
     }
 }
