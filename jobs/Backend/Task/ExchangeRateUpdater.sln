@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7FF3C84C-D0B8-4395-B42D-B55FD10D1B87}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Readme.md = Readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api.Tests", "ExchangeRateUpdater.Api.Tests\ExchangeRateUpdater.Api.Tests.csproj", "{DEDE2532-155D-4170-95D6-9EA1A67708D3}"
