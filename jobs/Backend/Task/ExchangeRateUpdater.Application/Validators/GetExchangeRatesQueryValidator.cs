@@ -31,7 +31,7 @@ public class GetExchangeRatesQueryValidator : AbstractValidator<GetExchangeRates
             .Must(currencies => currencies is { Count: <= MaxCurrencyCount })
             .WithMessage($"You can request a maximum of {MaxCurrencyCount} currencies at a time.")
             .Must(currencies => currencies!.All(currency => CurrencyCodeRegex.IsMatch(currency)))
-            .WithMessage("All currencies must be 3-letter uppercase ISO codes (e.g., USD, EUR).")
+            .WithMessage("All currencies must be 3-letter uppercase ISO 4217 codes (e.g., USD, EUR).")
             .When(x => x.Currencies is not null);
     }
 }

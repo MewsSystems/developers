@@ -87,6 +87,6 @@ public class GetExchangeRatesQueryValidatorTests
         var result = _validator.Validate(query);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage.Contains("All currencies must be 3-letter uppercase ISO codes"));
+        Assert.Contains(result.Errors, e => e.ErrorMessage.Contains("All currencies must be 3-letter uppercase ISO 4217 codes"));
     }
 }

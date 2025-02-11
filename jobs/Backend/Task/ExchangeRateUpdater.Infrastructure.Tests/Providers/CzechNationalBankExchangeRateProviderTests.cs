@@ -27,7 +27,7 @@ public class CzechNationalBankExchangeRateProviderTests
     }
 
     [Fact]
-    public async Task GetExchangeRatesAsync_CallsApi_WhenCacheIsEmpty()
+    public async Task GetExchangeRatesAsync_ReturnsExchangeRates_WhenApiReturnsData()
     {
         // Arrange
         var date = new DateTime(2024, 02, 10);
@@ -81,7 +81,7 @@ public class CzechNationalBankExchangeRateProviderTests
             .Returns((string _, Func<Task<IEnumerable<ExchangeRate>>> fetch) => fetch());
 
         // Mock API response as empty
-        var mockApiResponse = new CnbApiResponse { Rates = new List<CnbExchangeRate>() };
+        var mockApiResponse = new CnbApiResponse { Rates = [] };
 
         _apiClientMock
             .Setup(ac => ac.GetExchangeRatesAsync(date, It.IsAny<CancellationToken>()))
@@ -94,4 +94,5 @@ public class CzechNationalBankExchangeRateProviderTests
         // Verify API was called once
         _apiClientMock.Verify(ac => ac.GetExchangeRatesAsync(date, It.IsAny<CancellationToken>()), Times.Once);
     }
+
 }
