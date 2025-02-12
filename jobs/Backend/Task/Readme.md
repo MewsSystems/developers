@@ -1,7 +1,9 @@
 ﻿# Mews Backend Task - Exchange Rate Updater
 
 ## Architecture Overview
-This project follows **Clean Architecture** principles to ensure **scalability, maintainability, and testability**. The architecture is **intentionally overengineered** to demonstrate a **scalable approach** suitable for larger applications.
+**This PR** includes the **exchange rate implementation**, built with **.NET 8**, focusing on **overall robustness** while adhering to **best practices**.
+
+This project follows **Clean Architecture** principles to ensure **scalability, maintainability and testability**. The architecture is **intentionally overengineered** to demonstrate a **scalable approach** suitable for **larger applications**.
 
 ### **Project Structure**
 - `ExchangeRateUpdater.Api` => ASP.NET Core API project (Entry Point)
@@ -24,6 +26,7 @@ This project follows **Clean Architecture** principles to ensure **scalability, 
 - Centralized Exception Handling
 - Logging (Serilog)
 - Documented APIs (Swagger)
+- NSwag for API Client Generation
 - Unit Testing & Integration Testing
 - HTTP Resiliency (retries, circuit breakers)
 - Caching (In-memory)
