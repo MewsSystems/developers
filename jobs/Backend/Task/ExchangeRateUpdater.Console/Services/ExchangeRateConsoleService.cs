@@ -1,5 +1,6 @@
 using ExchangeRateUpdater.Application.Exceptions;
 using ExchangeRateUpdater.Application.Queries;
+using ExchangeRateUpdater.Domain.Constants;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,8 +18,6 @@ namespace ExchangeRateUpdater.ConsoleApp.Services;
 /// </summary>
 public class ExchangeRateConsoleService
 {
-    private const string SourceCurrencyCode = "CZK";
-
     private readonly ISender _sender;
     private readonly ILogger<ExchangeRateConsoleService> _logger;
 
@@ -36,7 +35,7 @@ public class ExchangeRateConsoleService
     /// <summary>
     /// Starts the console application, prompting the user for input and retrieving exchange rates.
     /// </summary>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
@@ -56,7 +55,8 @@ public class ExchangeRateConsoleService
 
             Console.Write("Enter currency codes separated by commas (e.g., USD,EUR) or press Enter for all: ");
             var inputCurrencies = Console.ReadLine()?.Trim();
-            var currencies = inputCurrencies?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            var currencies = inputCurrencies?
+                                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                             .Select(c => c.Trim().ToUpperInvariant())
                                             .ToList();
 
@@ -108,12 +108,12 @@ public class ExchangeRateConsoleService
             var query = new GetExchangeRatesQuery { Currencies = currencies?.ToList(), Date = date };
             var exchangeRatesResponse = await _sender.Send(query, cancellationToken);
 
-            Console.WriteLine($"\n Exchange Rates for {date:yyyy-MM-dd} (Base Currency: {SourceCurrencyCode}):");
+            Console.WriteLine($"\n Exchange Rates for {date:yyyy-MM-dd} (Base Currency: {CurrencyConstants.SourceCurrencyCode}):");
             Console.WriteLine("-----------------------------------------------------");
 
             foreach (var rate in exchangeRatesResponse.ExchangeRates)
             {
-                Console.WriteLine($" {SourceCurrencyCode}/{rate.TargetCurrency} = {rate.Value:F4}");
+                Console.WriteLine(rate.ToString());
             }
 
             if (exchangeRatesResponse.MissingCurrencies != null && exchangeRatesResponse.MissingCurrencies.Any())

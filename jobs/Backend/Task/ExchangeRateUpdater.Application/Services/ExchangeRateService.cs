@@ -55,12 +55,12 @@ public class ExchangeRateService : IExchangeRateService
         HashSet<string> requestedCurrencies = new(currencies, StringComparer.OrdinalIgnoreCase);
 
         // Filter exchange rates for requested currencies
-        var filteredRates = rates.Where(rate => requestedCurrencies.Contains(rate.TargetCurrency.Code)).ToList();
+        var filteredRates = rates
+            .Where(rate => requestedCurrencies.Contains(rate.TargetCurrency.Code));
 
         // Identify missing currencies (requested but not found in API response)
         var missingCurrencies = requestedCurrencies
-            .Where(currency => !filteredRates.Any(rate => rate.TargetCurrency.Code.Equals(currency, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+            .Where(currency => !filteredRates.Any(rate => rate.TargetCurrency.Code.Equals(currency, StringComparison.OrdinalIgnoreCase)));
 
         return new ExchangeRateResponse(filteredRates, date.ToString("yyyy-MM-dd"), missingCurrencies);
     }

@@ -9,26 +9,21 @@ namespace ExchangeRateUpdater.Infrastructure.Tests.Caching;
 
 public class CacheServiceTests
 {
-    private readonly Mock<IMemoryCache> _memoryCacheMock;
     private readonly Mock<ILogger<CacheService>> _loggerMock;
     private readonly Mock<IOptions<CacheSettings>> _cacheSettingsMock;
+    private readonly MemoryCache _memoryCache;
     private readonly CacheService _cacheService;
-    private readonly MemoryCache _realMemoryCache;
-    private readonly CacheSettings _cacheSettings;
 
     public CacheServiceTests()
     {
-        _memoryCacheMock = new Mock<IMemoryCache>();
         _loggerMock = new Mock<ILogger<CacheService>>();
         _cacheSettingsMock = new Mock<IOptions<CacheSettings>>();
-
-        _cacheSettings = new CacheSettings { Duration = 30 }; // Cache duration in minutes
-        _cacheSettingsMock.Setup(cs => cs.Value).Returns(_cacheSettings);
+        _cacheSettingsMock.Setup(cs => cs.Value).Returns(new CacheSettings { Duration = 30 });
 
         // Use a real MemoryCache for proper testing behavior
-        _realMemoryCache = new MemoryCache(new MemoryCacheOptions());
+        _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-        _cacheService = new CacheService(_realMemoryCache, _loggerMock.Object, _cacheSettingsMock.Object);
+        _cacheService = new CacheService(_memoryCache, _loggerMock.Object, _cacheSettingsMock.Object);
     }
 
     [Fact]
@@ -37,7 +32,7 @@ public class CacheServiceTests
         // Arrange
         var cacheKey = "testKey";
         var expectedData = "CachedValue";
-        _realMemoryCache.Set(cacheKey, expectedData);
+        _memoryCache.Set(cacheKey, expectedData);
 
         // Act
         var result = await _cacheService.GetOrCreateAsync(cacheKey, () => Task.FromResult("NewValue"));
@@ -60,7 +55,7 @@ public class CacheServiceTests
         Assert.Equal(expectedData, result);
 
         // Verify that the value was actually stored in the cache
-        Assert.True(_realMemoryCache.TryGetValue(cacheKey, out var cachedValue));
+        Assert.True(_memoryCache.TryGetValue(cacheKey, out var cachedValue));
         Assert.Equal(expectedData, cachedValue);
     }
 
@@ -75,7 +70,7 @@ public class CacheServiceTests
 
         // Assert
         Assert.Null(result);
-        Assert.False(_realMemoryCache.TryGetValue(cacheKey, out _)); // Ensure it was NOT cached
+        Assert.False(_memoryCache.TryGetValue(cacheKey, out _));
     }
 
     [Fact]

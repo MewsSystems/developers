@@ -1,5 +1,6 @@
+using ExchangeRateUpdater.Domain.Constants;
+using ExchangeRateUpdater.Domain.External;
 using ExchangeRateUpdater.Domain.Models;
-using ExchangeRateUpdater.Infrastructure.Providers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,8 +11,6 @@ namespace ExchangeRateUpdater.Infrastructure.Mappers;
 /// </summary>
 public static class CnbExchangeRateMapper
 {
-    private const string SourceCurrencyCode = "CZK";
-
     /// <summary>
     /// Maps the CNB API response to a collection of domain-level exchange rate models.
     /// </summary>
@@ -19,13 +18,13 @@ public static class CnbExchangeRateMapper
     /// <returns>A collection of <see cref="ExchangeRate"/> models.</returns>
     public static IEnumerable<ExchangeRate> MapToDomainModel(CnbApiResponse? cnbApiResponse)
     {
-        if (cnbApiResponse?.Rates == null)
+        if (cnbApiResponse?.Rates is null)
         {
             return [];
         }
 
         return cnbApiResponse.Rates.Select(rate => new ExchangeRate(
-            new Currency(SourceCurrencyCode),
+            new Currency(CurrencyConstants.SourceCurrencyCode),
             new Currency(rate.CurrencyCode),
             rate.Rate / rate.Amount
         ));

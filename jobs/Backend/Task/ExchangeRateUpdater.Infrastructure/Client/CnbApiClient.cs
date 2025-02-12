@@ -1,7 +1,7 @@
 using ExchangeRateUpdater.Application.Exceptions;
 using ExchangeRateUpdater.Application.Settings;
+using ExchangeRateUpdater.Domain.External;
 using ExchangeRateUpdater.Infrastructure.Interfaces;
-using ExchangeRateUpdater.Infrastructure.Providers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,7 +33,7 @@ public class CnbApiClient : ICnbApiClient
     /// </summary>
     /// <param name="httpClient">The HTTP client used to make requests.</param>
     /// <param name="logger">The logger instance for logging API interactions.</param>
-    /// <param name="apiSettings">Configuration settings for the API, including the base URL.</param>
+    /// <param name="apiSettings">Configuration settings for the API.</param>
     public CnbApiClient(HttpClient httpClient, ILogger<CnbApiClient> logger, IOptions<ApiSettings> apiSettings)
     {
         _httpClient = httpClient;
@@ -44,7 +44,7 @@ public class CnbApiClient : ICnbApiClient
     /// <inheritdoc/>
     public async Task<CnbApiResponse?> GetExchangeRatesAsync(DateTime date, CancellationToken cancellationToken = default)
     {
-        var queryParams = new KeyValuePair<string, string>[]
+        var queryParams = new KeyValuePair<string, string?>[]
         {
             new ("date", date.ToString("yyyy-MM-dd")),
             new ("lang", "EN")
@@ -71,7 +71,7 @@ public class CnbApiClient : ICnbApiClient
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "Failed to reach CNB API.");
-            throw new ExternalServiceException("Failed to reach the external API.", ex);
+            throw new ExternalServiceException("Failed to reach the CNB API.", ex);
         }
         catch (JsonException ex)
         {
@@ -86,7 +86,7 @@ public class CnbApiClient : ICnbApiClient
     /// <param name="path">The endpoint path relative to the base URL.</param>
     /// <param name="queryParams">Key-value pairs representing query parameters.</param>
     /// <returns>A <see cref="Uri"/> representing the full request URL.</returns>
-    private Uri BuildUri(string path, KeyValuePair<string, string>[] queryParams)
+    private Uri BuildUri(string path, KeyValuePair<string, string?>[] queryParams)
     {
         var baseUri = new Uri(_apiSettings.BaseUrl);
         var uriBuilder = new UriBuilder(new Uri(baseUri, path))

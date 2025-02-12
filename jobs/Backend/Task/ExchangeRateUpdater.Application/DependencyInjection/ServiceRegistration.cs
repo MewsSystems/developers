@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater.Application.DependencyInjection;
 public static class ServiceRegistration
 {
     /// <summary>
-    /// Registers application-level services, MediatR handlers, validation behaviors, and FluentValidation validators.
+    /// Registers application-level services, MediatR handlers, validation behaviors and FluentValidation validators.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to register dependencies into.</param>
     /// <returns>The updated <see cref="IServiceCollection"/> with the registered services.</returns>

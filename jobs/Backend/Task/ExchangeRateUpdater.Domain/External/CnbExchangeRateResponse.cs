@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater.Infrastructure.Providers;
+namespace ExchangeRateUpdater.Domain.External;
 
 /// <summary>
 /// Represents the response from the CNB exchange rate API.

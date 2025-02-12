@@ -20,15 +20,13 @@ public class CnbApiClientTests
     public CnbApiClientTests()
     {
         _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-        _loggerMock = new Mock<ILogger<CnbApiClient>>();
-        _apiSettingsMock = new Mock<IOptions<ApiSettings>>();
-
-        _apiSettingsMock.Setup(x => x.Value).Returns(new ApiSettings { BaseUrl = "https://api.cnb.cz/" });
-
         _httpClient = new HttpClient(_httpMessageHandlerMock.Object)
         {
             BaseAddress = new Uri("https://api.cnb.cz/")
         };
+        _loggerMock = new Mock<ILogger<CnbApiClient>>();
+        _apiSettingsMock = new Mock<IOptions<ApiSettings>>();
+        _apiSettingsMock.Setup(x => x.Value).Returns(new ApiSettings { BaseUrl = "https://api.cnb.cz/" });
 
         _cnbApiClient = new CnbApiClient(_httpClient, _loggerMock.Object, _apiSettingsMock.Object);
     }
@@ -127,8 +125,10 @@ public class CnbApiClientTests
             .ReturnsAsync(responseMessage);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ParsingException>(
+        var excpetion = await Assert.ThrowsAsync<ParsingException>(
             async () => await _cnbApiClient.GetExchangeRatesAsync(date));
+
+        Assert.Contains("Failed to parse API response", excpetion.Message);
     }
 
     [Fact]
@@ -150,6 +150,6 @@ public class CnbApiClientTests
         var exception = await Assert.ThrowsAsync<ExternalServiceException>(
             async () => await _cnbApiClient.GetExchangeRatesAsync(date));
 
-        Assert.Contains("Failed to reach the external API", exception.Message);
+        Assert.Contains("Failed to reach the CNB API", exception.Message);
     }
 }

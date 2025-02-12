@@ -42,8 +42,8 @@ public sealed class ExchangeRateController : ControllerBase
         Description = "Retrieve exchange rates for a given date. Defaults to today if no date is provided. If no currencies are specified, all available ones are returned."
     )]
     [ProducesResponseType(typeof(ExchangeRateResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status412PreconditionFailed)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ExchangeRateResponse>> GetExchangeRates(
         [FromQuery] GetExchangeRatesQuery query,

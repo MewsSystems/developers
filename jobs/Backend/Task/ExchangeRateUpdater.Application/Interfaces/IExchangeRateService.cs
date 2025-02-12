@@ -21,7 +21,6 @@ public interface IExchangeRateService
     /// </param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A task that represents the asynchronous operation.
     /// The task result contains an <see cref="ExchangeRateResponse"/> object with exchange rates for the given date.
     /// </returns>
     Task<ExchangeRateResponse> GetExchangeRatesAsync(

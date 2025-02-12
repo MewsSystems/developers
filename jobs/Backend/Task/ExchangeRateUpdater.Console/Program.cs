@@ -9,7 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 
-var host = Host.CreateDefaultBuilder()
+var host = Host
+    .CreateDefaultBuilder()
     .ConfigureAppConfiguration((context, config) =>
     {
         var basePath = AppContext.BaseDirectory;

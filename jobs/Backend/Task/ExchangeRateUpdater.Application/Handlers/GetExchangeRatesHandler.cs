@@ -12,10 +12,6 @@ namespace ExchangeRateUpdater.Application.Handlers;
 /// <summary>
 /// Handles exchange rate queries using MediatR.
 /// </summary>
-/// <remarks>
-/// This handler processes requests to fetch exchange rates for a specific date
-/// and optional currencies by delegating the task to the exchange rate service.
-/// </remarks>
 public class GetExchangeRatesQueryHandler : IRequestHandler<GetExchangeRatesQuery, ExchangeRateResponse>
 {
     private readonly IExchangeRateService _exchangeRateService;

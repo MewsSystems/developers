@@ -1,4 +1,4 @@
-using ExchangeRateUpdater.Infrastructure.Providers;
+using ExchangeRateUpdater.Domain.External;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +15,6 @@ public interface ICnbApiClient
     /// </summary>
     /// <param name="date">The date for which exchange rates should be retrieved.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A task representing the asynchronous operation, returning the CNB API response.</returns>
+    /// <returns>The task result contains an <see cref="CnbApiResponse"/> object with the CNB API response.</returns>
     Task<CnbApiResponse?> GetExchangeRatesAsync(DateTime date, CancellationToken cancellationToken = default);
 }

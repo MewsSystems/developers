@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
 
-namespace ExchangeRateUpdater.API.IntegrationTests;
+namespace ExchangeRateUpdater.IntegrationTests;
 
 public class ExchangeRateControllerTests
 {
@@ -26,7 +26,6 @@ public class ExchangeRateControllerTests
         var result = await _apiClient.ExchangeRateAsync(validDate, currencies);
 
         // Assert
-        // Assert
         Assert.NotNull(result);
         Assert.NotEmpty(result.ExchangeRates);
         Assert.Equal(2, result.ExchangeRates.Count);
@@ -47,8 +46,8 @@ public class ExchangeRateControllerTests
         // Assert
         Assert.NotNull(result);
         Assert.NotEmpty(result.ExchangeRates);
-        Assert.Equal(1, result.ExchangeRates.Count);
-        Assert.Equal(1, result.MissingCurrencies.Count);
+        Assert.Single(result.ExchangeRates);
+        Assert.Single(result.MissingCurrencies);
         Assert.Equal("XYZ", result.MissingCurrencies.First());
     }
 
@@ -66,7 +65,6 @@ public class ExchangeRateControllerTests
         // Assert
         Assert.Equal(412, ex.StatusCode);
 
-        // Deserialize error response
         var errorResponse = DeserializeErrorResponse(ex.Response);
         Assert.Equal("Validation Failure", errorResponse.Title);
         Assert.Contains("Date", errorResponse.Errors.Keys);
@@ -87,7 +85,6 @@ public class ExchangeRateControllerTests
         /// Assert
         Assert.Equal(412, ex.StatusCode);
 
-        // Deserialize error response
         var errorResponse = DeserializeErrorResponse(ex.Response);
         Assert.Equal("Validation Failure", errorResponse.Title);
         Assert.Contains("Date", errorResponse.Errors.Keys);
@@ -108,7 +105,6 @@ public class ExchangeRateControllerTests
         // Assert
         Assert.Equal(412, ex.StatusCode);
 
-        // Deserialize error response
         var errorResponse = DeserializeErrorResponse(ex.Response);
         Assert.Equal("Validation Failure", errorResponse.Title);
         Assert.Contains("Currencies", errorResponse.Errors.Keys);
@@ -129,7 +125,6 @@ public class ExchangeRateControllerTests
         // Assert
         Assert.Equal(412, ex.StatusCode);
 
-        // Deserialize error response
         var errorResponse = DeserializeErrorResponse(ex.Response);
         Assert.Equal("Validation Failure", errorResponse.Title);
         Assert.Contains("Currencies", errorResponse.Errors.Keys);

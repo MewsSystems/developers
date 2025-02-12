@@ -17,4 +17,3 @@ Accept: application/json
 ### Invalid Date Format Example (Should Return Validation Error)
 GET {{ExchangeRateUpdater.Api_HostAddress}}/api/ExchangeRate?date=2024-01-022
 Accept: application/json
-

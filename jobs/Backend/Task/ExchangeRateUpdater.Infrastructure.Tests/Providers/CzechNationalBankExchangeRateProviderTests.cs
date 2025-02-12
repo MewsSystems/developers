@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Application.Exceptions;
+using ExchangeRateUpdater.Domain.External;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Infrastructure.Interfaces;
 using ExchangeRateUpdater.Infrastructure.Providers;
@@ -43,10 +44,7 @@ public class CzechNationalBankExchangeRateProviderTests
         // Mock API response
         var mockApiResponse = new CnbApiResponse
         {
-            Rates = new List<CnbExchangeRate>
-            {
-                new CnbExchangeRate { CurrencyCode = "USD", Rate = 25.0m, Amount = 1, ValidFor = date }
-            }
+            Rates = [new CnbExchangeRate { CurrencyCode = "USD", Rate = 25.0m, Amount = 1, ValidFor = date }]
         };
 
         _apiClientMock
@@ -88,8 +86,7 @@ public class CzechNationalBankExchangeRateProviderTests
             .ReturnsAsync(mockApiResponse);
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(async () =>
-            await _provider.GetExchangeRatesAsync(date));
+        await Assert.ThrowsAsync<NotFoundException>(async () => await _provider.GetExchangeRatesAsync(date));
 
         // Verify API was called once
         _apiClientMock.Verify(ac => ac.GetExchangeRatesAsync(date, It.IsAny<CancellationToken>()), Times.Once);

@@ -17,7 +17,6 @@ public interface IExchangeRateProvider
     /// <param name="date">The date for which exchange rates should be retrieved.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
-    /// A task that represents the asynchronous operation.
     /// The task result contains a collection of <see cref="ExchangeRate"/> objects for the given date.
     /// </returns>
     Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(
