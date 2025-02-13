@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExchangeRate.Infrastructure.ExternalServices;
+using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,9 +26,10 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
+                var exchangeService = new ExchangeRatesService();
                 var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                Console.WriteLine(exchangeService.Rates(2));
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());

@@ -13,7 +13,13 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var targetCurrency = currencies.Where(c => c.Code == "XYZ").FirstOrDefault();
+            var rates = new List<ExchangeRate>()
+            {
+                new ExchangeRate(currencies.FirstOrDefault(), targetCurrency, 2),
+                new ExchangeRate(currencies.FirstOrDefault(),targetCurrency, 3),
+            };
+            return rates;
         }
     }
 }
