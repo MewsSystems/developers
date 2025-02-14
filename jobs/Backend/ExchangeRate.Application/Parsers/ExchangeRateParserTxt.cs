@@ -1,25 +1,20 @@
-﻿using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank.Models;
-using System;
-using System.Collections.Generic;
+﻿using ExchangeRate.Application.DTOs;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ExchangeRate.Infrastructure.ExternalServices.Builders
+namespace ExchangeRate.Application.Parsers
 {
-    public class BuildExchangeRates : IBuildExchangeRates
+    public class ExchangeRateParserTxt : IExchangeRateParserTxt
     {
-        List<ExchangeRateBank> IBuildExchangeRates.BuildExchangeRates(string fileTxt)
+        public List<ExchangeRateBankDTO> Parse(string file)
         {
-            var lines = fileTxt.Split('\n').Skip(2);
-            var rates = new List<ExchangeRateBank>();
+            var lines = file.Split('\n').Skip(2);
+            var rates = new List<ExchangeRateBankDTO>();
 
             foreach (var line in lines)
             {
                 var parts = line.Split('|');
                 if (parts.Length < 5) continue;
-                rates.Add(new ExchangeRateBank
+                rates.Add(new ExchangeRateBankDTO
                 {
                     Country = parts[0].Trim(),
                     Currency = parts[1].Trim(),

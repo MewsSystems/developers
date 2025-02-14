@@ -1,9 +1,11 @@
-﻿using ExchangeRate.Infrastructure.ExternalServices.Builders;
+﻿using ExchangeRate.Application.Parsers;
+using ExchangeRate.Application.Services;
 using ExchangeRate.Infrastructure.ExternalServices.Configs;
 using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using System.Reflection;
 
 namespace ExchangeRate.Api.Extensions
 {
@@ -34,8 +36,11 @@ namespace ExchangeRate.Api.Extensions
             configuration.GetSection("InfraConfigs").Bind(infra);
             services.AddSingleton<IInfraConfigs>(infra);
 
-            services.AddScoped<IExchangeRatesService, ExchangeRatesService>();
-            services.AddScoped<IBuildExchangeRates, BuildExchangeRates>();
+            services.AddScoped<ICzechNationalBankService, CzechNationalBankService>();
+            services.AddScoped<IExchangeRateParserTxt, ExchangeRateParserTxt>();
+            services.AddScoped<IExchangeRateParserXml, ExchangeRateParserXml>();
+            services.AddScoped<ExchangeRateParserService>();
+            services.AddScoped<IExchangeRateService, ExchangeRateService>();
         }
 
         private static void ConfigureCors(IServiceCollection services)
@@ -68,6 +73,9 @@ namespace ExchangeRate.Api.Extensions
                     Version = "v1",
                     Description = "Provider based on real world public data source of Czech National Bank",
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                swgOptions.IncludeXmlComments(xmlPath);
             });
 
 
