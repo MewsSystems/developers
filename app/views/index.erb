@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Rates</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+    <h1>Exchange Rates</h1>
+    <form id="exchangeRateForm">
+        <fieldset>
+            <legend>Select Currencies</legend>
+            <label><input type="checkbox" id="all" name="all"> All</label>
+            <label><input type="checkbox" class="currency" name="currencies" value="EUR"> Euro (EUR)</label>
+            <label><input type="checkbox" class="currency" name="currencies" value="USD"> US Dollar (USD)</label>
+            <label><input type="checkbox" class="currency" name="currencies" value="GBP"> British Pound (GBP)</label>
+            <label><input type="checkbox" class="currency" name="currencies" value="JPY"> Japanese Yen (JPY)</label>
+            <label><input type="checkbox" class="currency" name="currencies" value="CHF"> Swiss Franc (CHF)</label>
+        </fieldset>
+        <button type="submit">Get Exchange Rates</button>
+    </form>
+
+    <table id="exchangeRatesTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Currency Code</th>
+                <th>Rate</th>
+                <th>Currency Name</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("exchangeRateForm");
+            const allCheckbox = document.getElementById("all");
+            const currencyCheckboxes = document.querySelectorAll(".currency");
+
+            allCheckbox.addEventListener("change", () => {
+                if (allCheckbox.checked) {
+                    currencyCheckboxes.forEach(checkbox => checkbox.checked = false);
+                }
+            });
+
+            currencyCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", () => {
+                    if (checkbox.checked) {
+                        allCheckbox.checked = false;
+                    }
+                });
+            });
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const source = "CZK";
+                let currencies = [];
+
+                if (!allCheckbox.checked) {
+                    currencyCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            currencies.push(checkbox.value);
+                        }
+                    });
+                }
+
+                let url = `/api/exchange_rates?source=${source}`;
+                if (currencies.length > 0) {
+                    url += `&currencies=${currencies.join(",")}`;
+                }
+
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    updateTable(data.rates);
+                } catch (error) {
+                    console.error("Error fetching exchange rates:", error);
+                }
+            });
+
+            function updateTable(rates) {
+                const table = document.getElementById("exchangeRatesTable");
+                const tbody = table.querySelector("tbody");
+
+                tbody.innerHTML = "";
+
+                Object.values(rates).flat().forEach(rate => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${rate.currency_code}</td>
+                        <td>${rate.rate.toFixed(4)}</td>
+                        <td>${rate.currency}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                table.style.display = "table";
+            }
+        });
+    </script>
+</body>
+</html>

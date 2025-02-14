@@ -1,0 +1,79 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f8f9fa;
+  color: #333;
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px;
+  color: #007bff;
+}
+
+fieldset {
+  border: none;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+legend {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin: 5px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+#exchangeRatesTable {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  display: none;
+}
+
+#exchangeRatesTable th, 
+#exchangeRatesTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+#exchangeRatesTable th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+#exchangeRatesTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
