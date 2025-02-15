@@ -1,5 +1,6 @@
 ﻿using ExchangeRate.Application.DTOs;
-using ExchangeRate.Application.Parsers;
+using ExchangeRate.Application.Parsers.Interfaces;
+using ExchangeRate.Application.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

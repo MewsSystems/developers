@@ -1,4 +1,5 @@
 ﻿using ExchangeRate.Application.DTOs;
+using ExchangeRate.Application.Services.Interfaces;
 using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank;
 using Microsoft.Extensions.Logging;
 

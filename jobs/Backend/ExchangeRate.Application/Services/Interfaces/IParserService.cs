@@ -1,6 +1,6 @@
 using ExchangeRate.Application.DTOs;
 
-namespace ExchangeRate.Application.Services
+namespace ExchangeRate.Application.Services.Interfaces
 {
     public interface IParserService
     {

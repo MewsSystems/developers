@@ -1,5 +1,5 @@
 using ExchangeRate.Application.DTOs;
-using ExchangeRate.Application.Services;
+using ExchangeRate.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 

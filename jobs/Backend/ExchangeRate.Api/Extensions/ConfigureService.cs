@@ -1,5 +1,7 @@
 ﻿using ExchangeRate.Application.Parsers;
+using ExchangeRate.Application.Parsers.Interfaces;
 using ExchangeRate.Application.Services;
+using ExchangeRate.Application.Services.Interfaces;
 using ExchangeRate.Infrastructure.ExternalServices.Configs;
 using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank;
 using Microsoft.AspNetCore.Mvc;

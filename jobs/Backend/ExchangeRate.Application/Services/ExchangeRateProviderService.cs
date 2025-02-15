@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ExchangeRate.Application.DTOs;
+using ExchangeRate.Application.Services.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExchangeRate.Application.Services

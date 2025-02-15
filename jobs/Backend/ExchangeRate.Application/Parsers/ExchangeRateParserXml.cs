@@ -1,4 +1,5 @@
 ﻿using ExchangeRate.Application.DTOs;
+using ExchangeRate.Application.Parsers.Interfaces;
 using System.Globalization;
 using System.Xml.Linq;
 

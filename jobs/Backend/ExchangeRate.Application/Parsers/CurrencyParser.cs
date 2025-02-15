@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ExchangeRate.Application.DTOs;
+using ExchangeRate.Application.Parsers.Interfaces;
 
 namespace ExchangeRate.Application.Services
 {
