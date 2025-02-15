@@ -36,11 +36,13 @@ namespace ExchangeRate.Api.Extensions
             configuration.GetSection("InfraConfigs").Bind(infra);
             services.AddSingleton<IInfraConfigs>(infra);
 
-            services.AddScoped<ICzechNationalBankService, CzechNationalBankService>();
+            services.AddScoped<IParserService, ParserService>();
+            services.AddScoped<ICurrencyParser, CurrencyParser>();
+            services.AddScoped<IExchangeRateService, ExchangeRateService>();
             services.AddScoped<IExchangeRateParserTxt, ExchangeRateParserTxt>();
             services.AddScoped<IExchangeRateParserXml, ExchangeRateParserXml>();
-            services.AddScoped<ExchangeRateParserService>();
-            services.AddScoped<IExchangeRateService, ExchangeRateService>();
+            services.AddScoped<ICzechNationalBankService, CzechNationalBankService>();
+            
         }
 
         private static void ConfigureCors(IServiceCollection services)

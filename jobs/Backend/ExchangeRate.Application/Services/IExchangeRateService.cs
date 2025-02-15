@@ -4,7 +4,7 @@ namespace ExchangeRate.Application.Services
 {
     public interface IExchangeRateService
     {
-        Task<List<ExchangeRateBankDTO>> GetDailyExchangeRates();
-        Task<List<ExchangeRateBankDTO>> GetExchangeRatesByDay(DateTime date);
+        Task<ExchangeRatesDTO> GetDailyExchangeRates();
+        Task<ExchangeRatesDTO> GetExchangeRatesByDay(DateTime date);
     }
 }

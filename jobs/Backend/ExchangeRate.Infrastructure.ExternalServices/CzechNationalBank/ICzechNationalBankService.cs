@@ -8,8 +8,7 @@ namespace ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank
 {
     public interface ICzechNationalBankService
     {
-        string Rates(int rates);
-        Task<string> GetExchangeRatesByDay(DateTime date);
-        Task<string> GetDailyExchangeRates();
+        Task<string?> GetExchangeRatesByDay(DateTime date);
+        Task<string?> GetDailyExchangeRates();
     }
 }
