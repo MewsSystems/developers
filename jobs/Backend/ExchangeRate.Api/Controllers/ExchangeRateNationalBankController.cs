@@ -1,4 +1,4 @@
-using ExchangeRate.Api.Controllers.Models;
+using ExchangeRate.Application.DTOs;
 using ExchangeRate.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
@@ -14,17 +14,17 @@ namespace ExchangeRate.Api.Controllers
     {
 
         private readonly ILogger<ExchangeRateNationalBankController> _logger;
-        private readonly IExchangeRateService _exchangeRateService;
+        private readonly IExchangeRateProviderService _rateProviderService;
 
         /// <summary>
         /// ExchangeRates controller contructor
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="exchangeRateService"></param>
-        public ExchangeRateNationalBankController(ILogger<ExchangeRateNationalBankController> logger, IExchangeRateService exchangeRateService)
+        /// <param name="rateProviderService"></param>
+        public ExchangeRateNationalBankController(ILogger<ExchangeRateNationalBankController> logger, IExchangeRateProviderService rateProviderService)
         {
             _logger = logger;
-            _exchangeRateService = exchangeRateService;
+            _rateProviderService = rateProviderService;
         }
 
 
@@ -32,35 +32,37 @@ namespace ExchangeRate.Api.Controllers
         /// Retrieves exchange rates for a specific date.
         /// </summary>
         /// <param name="date">Date in format dd-MM-yyyy.</param>
+        /// <param name="currency">Currency Code to be fetch</param>
         [HttpGet("date")]
-        [ProducesResponseType(typeof(ExchangeRateBank), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dictionary<string, ExchangeRateProviderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByDate([FromQuery] string date)
+        public async Task<IActionResult> GetByDate([FromQuery] string date, string currency)
         {
             if (!DateTime.TryParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
             {
                 return BadRequest("Invalid date format. Use dd-MM-yyyy.");
             }
-
-            var rates = await _exchangeRateService.GetExchangeRatesByDay(dateTime);
-            return Ok(rates);
+            
+            var provider = await _rateProviderService.GetExchangeRatesByDate(dateTime, new CurrencyDTO(currency));
+            return Ok(provider);
         }
 
         /// <summary>
         /// Retrieves exchange rates for the day.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ExchangeRateBank), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ExchangeRateProviderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDailyRates()
         {
 
-            var rates = await _exchangeRateService.GetDailyExchangeRates();
-            return Ok(rates);
+            var provider = await _rateProviderService.GetExchangeRates();
+            return Ok(provider);
         }
+
     }
 }

@@ -42,6 +42,7 @@ namespace ExchangeRate.Api.Extensions
             services.AddScoped<IExchangeRateParserTxt, ExchangeRateParserTxt>();
             services.AddScoped<IExchangeRateParserXml, ExchangeRateParserXml>();
             services.AddScoped<ICzechNationalBankService, CzechNationalBankService>();
+            services.AddScoped<IExchangeRateProviderService, ExchangeRateProviderService>();
             
         }
 

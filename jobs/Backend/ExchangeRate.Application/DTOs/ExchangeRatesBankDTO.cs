@@ -1,8 +1,8 @@
 namespace ExchangeRate.Application.DTOs
 {
-    public class ExchangeRatesDTO
+    public class ExchangeRatesBankDTO
     {
-        public ExchangeRatesDTO(List<ExchangeRateBankDTO> exchangeRates, List<CurrencyDTO> currencies)
+        public ExchangeRatesBankDTO(List<ExchangeRateBankDTO> exchangeRates, List<CurrencyDTO> currencies)
     {
         ExchangeRates = exchangeRates ?? new List<ExchangeRateBankDTO>();
         Currencies = currencies ?? new List<CurrencyDTO>();

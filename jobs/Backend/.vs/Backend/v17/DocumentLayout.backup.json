@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{27524010-FA7E-4334-863E-9019AF01CA23}|ExchangeRate.Infrastructure.ExternalServices\\ExchangeRate.Infrastructure.ExternalServices.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.infrastructure.externalservices\\czechnationalbank\\czechnationalbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27524010-FA7E-4334-863E-9019AF01CA23}|ExchangeRate.Infrastructure.ExternalServices\\ExchangeRate.Infrastructure.ExternalServices.csproj|solutionrelative:exchangerate.infrastructure.externalservices\\czechnationalbank\\czechnationalbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F56BDC0C-15C7-4B15-9E36-DC52FECE1CE7}|ExchangeRate.Api\\ExchangeRate.Api.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.api\\controllers\\exchangeratenationalbankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F56BDC0C-15C7-4B15-9E36-DC52FECE1CE7}|ExchangeRate.Api\\ExchangeRate.Api.csproj|solutionrelative:exchangerate.api\\controllers\\exchangeratenationalbankcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\services\\iexchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|solutionrelative:exchangerate.application\\services\\iexchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|solutionrelative:exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\dtos\\currencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|solutionrelative:exchangerate.application\\dtos\\currencydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27524010-FA7E-4334-863E-9019AF01CA23}|ExchangeRate.Infrastructure.ExternalServices\\ExchangeRate.Infrastructure.ExternalServices.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.infrastructure.externalservices\\czechnationalbank\\czechnationalbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27524010-FA7E-4334-863E-9019AF01CA23}|ExchangeRate.Infrastructure.ExternalServices\\ExchangeRate.Infrastructure.ExternalServices.csproj|solutionrelative:exchangerate.infrastructure.externalservices\\czechnationalbank\\czechnationalbankservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\services\\exchangerateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,33 +50,72 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "IExchangeRateProviderService.cs",
+              "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\IExchangeRateProviderService.cs",
+              "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\IExchangeRateProviderService.cs",
+              "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\IExchangeRateProviderService.cs",
+              "RelativeToolTip": "ExchangeRate.Application\\Services\\IExchangeRateProviderService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T10:59:44.424Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CurrencyDTO.cs",
+              "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\DTOs\\CurrencyDTO.cs",
+              "RelativeDocumentMoniker": "ExchangeRate.Application\\DTOs\\CurrencyDTO.cs",
+              "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\DTOs\\CurrencyDTO.cs",
+              "RelativeToolTip": "ExchangeRate.Application\\DTOs\\CurrencyDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T10:58:34.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ExchangeRateProviderService.cs",
+              "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
+              "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
+              "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
+              "RelativeToolTip": "ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T10:56:05.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "CzechNationalBankService.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Infrastructure.ExternalServices\\CzechNationalBank\\CzechNationalBankService.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Infrastructure.ExternalServices\\CzechNationalBank\\CzechNationalBankService.cs",
               "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Infrastructure.ExternalServices\\CzechNationalBank\\CzechNationalBankService.cs",
               "RelativeToolTip": "ExchangeRate.Infrastructure.ExternalServices\\CzechNationalBank\\CzechNationalBankService.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwCsAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwCgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T09:11:51.27Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ExchangeRateNationalBankController.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Api\\Controllers\\ExchangeRateNationalBankController.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Api\\Controllers\\ExchangeRateNationalBankController.cs",
               "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Api\\Controllers\\ExchangeRateNationalBankController.cs",
               "RelativeToolTip": "ExchangeRate.Api\\Controllers\\ExchangeRateNationalBankController.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAgwDUAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAACUAAAAAAAAAAAAgwDsAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-15T09:09:44.42Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "IParserService.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\IParserService.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\IParserService.cs",
@@ -72,12 +123,11 @@
               "RelativeToolTip": "ExchangeRate.Application\\Services\\IParserService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T09:06:04.385Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-15T09:06:04.385Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "ExchangeRateService.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\ExchangeRateService.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\ExchangeRateService.cs",
@@ -85,8 +135,7 @@
               "RelativeToolTip": "ExchangeRate.Application\\Services\\ExchangeRateService.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAABXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-15T09:05:31.081Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-15T09:05:31.081Z"
             }
           ]
         }

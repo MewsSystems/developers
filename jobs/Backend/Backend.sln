@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Application", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Infrastructure.ExternalServices", "ExchangeRate.Infrastructure.ExternalServices\ExchangeRate.Infrastructure.ExternalServices.csproj", "{27524010-FA7E-4334-863E-9019AF01CA23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "Task\ExchangeRateUpdater.csproj", "{F2B499D4-E125-49A0-AF33-3E26E92C4721}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
