@@ -5,6 +5,7 @@ namespace ExchangeRate.Application.Services.Interfaces
     public interface IExchangeRateService
     {
         Task<ExchangeRatesBankDTO> GetDailyExchangeRates();
-        Task<ExchangeRatesBankDTO> GetExchangeRatesByDay(DateTime date);
+        Task<ExchangeRatesBankDTO> GetExchangeRatesByDate(DateTime date);
+        CurrenciesBankDTO GetCurrenciesBank(ExchangeRatesBankDTO rates);
     }
 }

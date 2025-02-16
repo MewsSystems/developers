@@ -1,4 +1,5 @@
-﻿using ExchangeRate.Application.Parsers;
+﻿using ExchangeRate.Api.Mappers;
+using ExchangeRate.Application.Parsers;
 using ExchangeRate.Application.Parsers.Interfaces;
 using ExchangeRate.Application.Services;
 using ExchangeRate.Application.Services.Interfaces;
@@ -25,6 +26,7 @@ namespace ExchangeRate.Api.Extensions
             });
 
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAutoMapper(typeof(MappingModelProfile));
 
             ConfigureSwagger(builder.Services);
 

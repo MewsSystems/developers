@@ -44,7 +44,6 @@ namespace ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank
                 urlBank.Append(_configs.BaseUrl);
                 urlBank.Append("/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml");
                 string? data = await client.GetStringAsync(urlBank.ToString());
-
                 return data;
             }
             catch (Exception ex)

@@ -22,13 +22,17 @@ namespace ExchangeRate.Application.Services
 
         public async Task<ExchangeRatesBankDTO> GetDailyExchangeRates()
         {
-
             return await GetExchangeRatesAsync( () => _cnbService.GetDailyExchangeRates(), _parserService.ExchangeRateParseXml);
         }
 
-        public async Task<ExchangeRatesBankDTO> GetExchangeRatesByDay(DateTime date)
+        public async Task<ExchangeRatesBankDTO> GetExchangeRatesByDate(DateTime date)
         {
             return await GetExchangeRatesAsync(() => _cnbService.GetExchangeRatesByDay(date), _parserService.ExchangeRateParseText);
+        }
+        public CurrenciesBankDTO GetCurrenciesBank(ExchangeRatesBankDTO rates)
+        {
+            var currencies = _parserService.CurrencyParse(rates.ExchangeRates);
+            return new CurrenciesBankDTO(currencies);
         }
 
         private async Task<ExchangeRatesBankDTO> GetExchangeRatesAsync(Func<Task<string?>> getExchangeRates, Func<string, List<ExchangeRateBankDTO>> parseRates)
@@ -42,8 +46,7 @@ namespace ExchangeRate.Application.Services
                 }
 
                 var rateList = parseRates(data);
-                var currencyList = _parserService.CurrencyParse(rateList);
-                return new ExchangeRatesBankDTO(rateList, currencyList);
+                return new ExchangeRatesBankDTO(rateList);
             }
             catch (Exception ex)
             {
@@ -51,6 +54,7 @@ namespace ExchangeRate.Application.Services
                 throw;
             }
         }
+
         
     }
 }
