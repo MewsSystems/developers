@@ -42,6 +42,7 @@ namespace ExchangeRate.Application.Services
                 string? data = await getExchangeRates();
                 if(string.IsNullOrWhiteSpace(data))
                 {
+                    _logger.LogError("Exchange rate data is empty or null");
                     throw new InvalidOperationException("Exchange rate data is empty or null");
                 }
 

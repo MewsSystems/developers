@@ -1,7 +1,9 @@
 ﻿namespace ExchangeRate.Api.Validators
 {
     using System.ComponentModel.DataAnnotations;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class NotNullAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)

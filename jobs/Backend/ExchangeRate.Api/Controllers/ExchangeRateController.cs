@@ -1,6 +1,7 @@
 using AutoMapper;
 using ExchangeRate.Api.Controllers.Models;
 using ExchangeRate.Api.Models;
+using ExchangeRate.Api.Validators;
 using ExchangeRate.Application.DTOs;
 using ExchangeRate.Application.Exceptions;
 using ExchangeRate.Application.Services.Interfaces;
@@ -38,7 +39,7 @@ namespace ExchangeRate.Api.Controllers
         }
 
         /// <summary>
-        /// Retrieves exchange rates for the day.
+        /// Retrieves exchange rates for the current day.
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ExchangeRatesResultModel), StatusCodes.Status200OK)]
@@ -64,9 +65,9 @@ namespace ExchangeRate.Api.Controllers
                 });
             }
         }
-        
+
         /// <summary>
-        /// Retrieves exchange rates for a defined date.
+        /// Retrieves exchange rates for a specific date.
         /// </summary>
         /// <param name="date">Date in format dd-MM-yyyy.</param>
         /// <param name="currency">Currency Code to be fetch ex: "USD".</param>
@@ -75,36 +76,44 @@ namespace ExchangeRate.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByDay([FromQuery] string date, string currency)
+        public async Task<IActionResult> GetByDay(
+            [FromQuery, ValidateDateFormat] string date,
+            [FromQuery, ValidateCurrency] string currency)
         {
-            if (!DateTime.TryParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Bad Request",
-                    Detail = "Invalid date format. Use dd-MM-yyyy.",
-                    Status = StatusCodes.Status500InternalServerError
-                });
-            }
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                DateTime.TryParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime);
                 var provider = await _rateProviderService.GetExchangeRatesByDate(dateTime, new CurrencyDTO(currency.ToUpper()));
                 var result = _mapper.Map<ExchangeRatesResultModel>(provider);
                 return Ok(_mapper.Map<ExchangeRatesResultModel>(result));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is KeyNotFoundException || ex is ArgumentNullException)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Not Found",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            catch (Exception)
             {
                 return StatusCode(500, new ProblemDetails
                 {
                     Title = "Bad Request",
                     Detail = "Something went wrong!",
-                    Status = StatusCodes.Status500InternalServerError
+                    Status = StatusCodes.Status400BadRequest
                 });
             }
         }
 
         /// <summary>
-        /// For the date defined retrieves exchange rates for a two specific codes.
+        /// Retrieves exchange rates for two specific codes for a specific date.
         /// </summary>
         /// <param name="exchangeRate">Exchange Rate to be retrieved.</param>
         /// <returns>Dictionary containing exchange rates</returns>
@@ -124,15 +133,17 @@ namespace ExchangeRate.Api.Controllers
 
                 var mapped = _mapper.Map<ExchangeRatesDTO>(exchangeRate);
                 var result = _mapper.Map<ExchangeRatesResultModel>(await _rateProviderService.GetExchangeRatesByDate(mapped));
-                if (result == null)
-                    return NotFound(new ProblemDetails
-                    {
-                        Title = "Not Found",
-                        Detail = "Source Currency not found. Try another currency.",
-                        Status = StatusCodes.Status404NotFound
-                    });
 
                 return Ok(result);
+            }
+            catch (Exception ex) when (ex is KeyNotFoundException || ex is ArgumentNullException)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Not Found",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status404NotFound
+                });
             }
             catch (Exception ex)
             {
@@ -140,12 +151,12 @@ namespace ExchangeRate.Api.Controllers
                 {
                     Title = "Bad Request",
                     Detail = "Something went wrong!",
-                    Status = StatusCodes.Status500InternalServerError
+                    Status = StatusCodes.Status400BadRequest // fix this
                 });
             }
         }
         /// <summary>
-        /// For a defined date retrieves exchange rates for a list of currencies against CZK.
+        /// Retrieves exchange rates for a list of currencies against CZK.
         /// </summary>
         /// <param name="currencyList">Currency Code List to be retrieved</param>
         /// <returns>Dictionary containing exchange rates</returns>
@@ -171,7 +182,7 @@ namespace ExchangeRate.Api.Controllers
                 {
                     Title = "Bad Request",
                     Detail = ex.Message,
-                    Status = StatusCodes.Status500InternalServerError
+                    Status = StatusCodes.Status400BadRequest
                 });
             }
             catch (Exception ex)

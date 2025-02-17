@@ -9,10 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ExchangeRate.Application.Services
 {
     /// <summary>
-    /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-    /// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-    /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-    /// some of the currencies, ignore them.
+    /// Provide the exchange rates
     /// </summary>
     public class ExchangeRateProviderService : IExchangeRateProviderService
     {
@@ -27,31 +24,26 @@ namespace ExchangeRate.Application.Services
             try
             {
                 var exchangeRates = await _exchangeRateService.GetExchangeRatesByDate(date);
+                ValidateCurrency(target, exchangeRates);
                 var rates = exchangeRates.ExchangeRates;
-
                 return MapExchangeRate(rates, target);
             }
             catch (Exception)
             {
                 throw;
             }
-
-
-
         }
         public async Task<ExchangeRateProviderResultDTO?> GetExchangeRatesByDate(ExchangeRatesDTO currency)
         {
             if (currency.SourceCurrency!.Code != "CZK")
             {
-                return null;
+                throw new KeyNotFoundException("Source Currency not found. Try another currency.");
             }
-
+            
             var exchangeRates = await _exchangeRateService.GetExchangeRatesByDate(currency.Date);
-
+            ValidateCurrency(currency.TargetCurrency!, exchangeRates);
             var rates = exchangeRates.ExchangeRates;
-
             return MapExchangeRate(rates, currency.TargetCurrency!);
-
         }
 
         public async Task<ExchangeRateProviderResultDTO> GetExchangeRates()
@@ -70,7 +62,7 @@ namespace ExchangeRate.Application.Services
             var missingCurrencies = currencies
                 .Where(c => !bankCurrencies.Any(bc => bc.Code == c.Code))
                 .Select(c => c.Code)
-                .ToList(); ;
+                .ToList();
 
             if (missingCurrencies.Any())
             {
@@ -123,6 +115,19 @@ namespace ExchangeRate.Application.Services
                 .ToDictionary(x => x.Key, x => x.Value);
 
             return new ExchangeRateProviderResultDTO(exchangeRateProviderDTOs);
+        }
+
+        private void ValidateCurrency(CurrencyDTO target, ExchangeRatesBankDTO exchangeRates)
+        {
+            if(exchangeRates.ExchangeRates == null || !exchangeRates.ExchangeRates.Any())
+            {
+                throw new ArgumentNullException("No Exchange rates");
+            }
+            var bankCurrencies = _exchangeRateService.GetCurrenciesBank(exchangeRates).ToList();
+            if (!bankCurrencies.Any( bc => bc.Code == target.Code))
+            {
+                throw new KeyNotFoundException($"Currency {target.Code} not found. Try another currency.");
+            }
         }
 
     }
