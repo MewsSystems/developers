@@ -145,7 +145,7 @@ namespace ExchangeRate.Api.Controllers
                     Status = StatusCodes.Status404NotFound
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new ProblemDetails
                 {
@@ -185,7 +185,7 @@ namespace ExchangeRate.Api.Controllers
                     Status = StatusCodes.Status400BadRequest
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new ProblemDetails
                 {

@@ -69,6 +69,8 @@ namespace ExchangeRate.UnitTest.Services
             // Act & Assert
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 () => _ratesProviderService.GetExchangeRatesByDate(date, currency));
+            
+            Assert.Equal(expectedExceptionMessage, exception.Message);
         }
 
         [Fact]

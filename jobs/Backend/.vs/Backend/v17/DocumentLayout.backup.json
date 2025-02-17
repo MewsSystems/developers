@@ -7,12 +7,16 @@
       "RelativeMoniker": "D:0:0:{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}|ExchangeRate.UnitTest\\ExchangeRate.UnitTest.csproj|solutionrelative:exchangerate.unittest\\services\\exchangerateprovidertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|solutionrelative:exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}|ExchangeRate.UnitTest\\ExchangeRate.UnitTest.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.unittest\\services\\exchangerateservicetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}|ExchangeRate.UnitTest\\ExchangeRate.UnitTest.csproj|solutionrelative:exchangerate.unittest\\services\\exchangerateservicetest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F56BDC0C-15C7-4B15-9E36-DC52FECE1CE7}|ExchangeRate.Api\\ExchangeRate.Api.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.api\\controllers\\exchangeratecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F56BDC0C-15C7-4B15-9E36-DC52FECE1CE7}|ExchangeRate.Api\\ExchangeRate.Api.csproj|solutionrelative:exchangerate.api\\controllers\\exchangeratecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BE5444D-FA67-4C88-B46F-1CBEF2999776}|ExchangeRate.Application\\ExchangeRate.Application.csproj|solutionrelative:exchangerate.application\\services\\exchangerateproviderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F56BDC0C-15C7-4B15-9E36-DC52FECE1CE7}|ExchangeRate.Api\\ExchangeRate.Api.csproj|c:\\users\\mathe\\onedrive\\documentos\\projetos\\developers\\jobs\\backend\\exchangerate.api\\validators\\notnullattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,13 +50,26 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ExchangeRateServiceTest.cs",
+              "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.UnitTest\\Services\\ExchangeRateServiceTest.cs",
+              "RelativeDocumentMoniker": "ExchangeRate.UnitTest\\Services\\ExchangeRateServiceTest.cs",
+              "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.UnitTest\\Services\\ExchangeRateServiceTest.cs",
+              "RelativeToolTip": "ExchangeRate.UnitTest\\Services\\ExchangeRateServiceTest.cs",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAUwG4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-17T19:06:20.524Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "ExchangeRateProviderTest.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.UnitTest\\Services\\ExchangeRateProviderTest.cs",
               "RelativeDocumentMoniker": "ExchangeRate.UnitTest\\Services\\ExchangeRateProviderTest.cs",
               "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.UnitTest\\Services\\ExchangeRateProviderTest.cs",
               "RelativeToolTip": "ExchangeRate.UnitTest\\Services\\ExchangeRateProviderTest.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAywCUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFkAAAAAAAAAAADwv2MAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-17T13:31:04.564Z",
               "EditorCaption": ""
@@ -65,27 +82,27 @@
               "RelativeDocumentMoniker": "ExchangeRate.Api\\Controllers\\ExchangeRateController.cs",
               "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Api\\Controllers\\ExchangeRateController.cs",
               "RelativeToolTip": "ExchangeRate.Api\\Controllers\\ExchangeRateController.cs",
-              "ViewState": "AgIAAF8AAAAAAAAAAAAwwGwAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAwwGwAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-17T12:50:02.25Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "ExchangeRateProviderService.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
               "ToolTip": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
               "RelativeToolTip": "ExchangeRate.Application\\Services\\ExchangeRateProviderService.cs",
-              "ViewState": "AgIAAG4AAAAAAAAAAAAuwBoAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAEwBwAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-17T12:28:25.394Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "NotNullAttribute.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Api\\Validators\\NotNullAttribute.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Api\\Validators\\NotNullAttribute.cs",
@@ -97,7 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "IExchangeRateService.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Services\\Interfaces\\IExchangeRateService.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Application\\Services\\Interfaces\\IExchangeRateService.cs",
@@ -109,7 +126,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "CurrencyNotFoundException.cs",
               "DocumentMoniker": "C:\\Users\\mathe\\OneDrive\\Documentos\\Projetos\\developers\\jobs\\Backend\\ExchangeRate.Application\\Exceptions\\CurrencyNotFoundException.cs",
               "RelativeDocumentMoniker": "ExchangeRate.Application\\Exceptions\\CurrencyNotFoundException.cs",
