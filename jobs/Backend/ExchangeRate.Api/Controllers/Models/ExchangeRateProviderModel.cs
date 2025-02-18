@@ -1,6 +1,7 @@
 ﻿using ExchangeRate.Api.Models;
 using ExchangeRate.Application.DTOs;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace ExchangeRate.Api.Controllers.Models
 {
@@ -12,12 +13,14 @@ namespace ExchangeRate.Api.Controllers.Models
         /// <summary>
         /// The currency that is being converted from.
         /// </summary>
-        public CurrencyModel? SourceCurrency { get; }
+        [JsonIgnore]
+        public CurrencyModel? SourceCurrency { get; set; }
 
         /// <summary>
         /// The currency that is being converted to.
         /// </summary>
-        public CurrencyModel? TargetCurrency { get; }
+        [JsonIgnore]
+        public CurrencyModel? TargetCurrency { get; set;}
 
         /// <summary>
         /// The amount to be converted.
@@ -28,5 +31,12 @@ namespace ExchangeRate.Api.Controllers.Models
         /// The exchange rate value.
         /// </summary>
         public decimal Value { get; set; }
+
+        public override string ToString()
+        {
+            return $"{SourceCurrency?.Code}/{TargetCurrency?.Code} = {Value}";
+        }
+        public string Display => ToString();
+
     }
 }

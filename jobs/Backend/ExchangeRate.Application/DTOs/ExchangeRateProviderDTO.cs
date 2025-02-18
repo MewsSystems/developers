@@ -14,12 +14,15 @@ namespace ExchangeRate.Application.DTOs
         }
 
         public CurrencyDTO SourceCurrency { get; }
-
         public CurrencyDTO TargetCurrency { get; }
-
         public int Amount { get; }
-
         public decimal Value { get; }
+
+         public override string ToString()
+        {
+            return $"{SourceCurrency?.Code}/{TargetCurrency?.Code}= {Value}";
+        }
+        public string Display => ToString();
 
     }
 
