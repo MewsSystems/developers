@@ -44,7 +44,6 @@ namespace ExchangeRate.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ExchangeRatesResultModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
@@ -74,7 +73,6 @@ namespace ExchangeRate.Api.Controllers
         [HttpGet("date")]
         [ProducesResponseType(typeof(Dictionary<string, ExchangeRateProviderModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByDay(
             [FromQuery, ValidateDateFormat] string date,
@@ -120,7 +118,6 @@ namespace ExchangeRate.Api.Controllers
         [HttpPost("currency")]
         [ProducesResponseType(typeof(Dictionary<string, ExchangeRateProviderModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetExchangeRate([FromBody] ExchangeRateModel exchangeRate)
         {
@@ -163,7 +160,6 @@ namespace ExchangeRate.Api.Controllers
         [HttpPost("currencies")]
         [ProducesResponseType(typeof(ExchangeRatesResultModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByDayCurrencies([FromBody] CurrenciesModel currencyList)
         {
