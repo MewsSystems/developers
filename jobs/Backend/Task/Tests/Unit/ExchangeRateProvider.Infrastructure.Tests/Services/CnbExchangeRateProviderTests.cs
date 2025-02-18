@@ -4,7 +4,7 @@ using System.Net;
 using System.Text.Json;
 using Domain.Entities;
 using Domain.Options;
-using Infrasctucture.Clients;
+using Infrasctructure.Clients;
 using ExchangeRateProvider.Infrastructure.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Caching.Memory;
@@ -80,7 +80,7 @@ public class CnbExchangeRateProviderTests
             });
 
         // Act
-        var result = await _provider.GetExchangeRatesAsync();
+        var result = (await _provider.GetExchangeRatesAsync()).ToList();
 
         // Assert
         result.Should().HaveCount(2);

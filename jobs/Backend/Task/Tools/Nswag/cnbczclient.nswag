@@ -89,7 +89,7 @@
       "serviceHost": null,
       "serviceSchemes": null,
 	  "namespace": "ExchangeRateProvider.Infrasctructure.Clients",
-      "output": "../../Source/ExchangeRateProvider.Infrasctucture/Clients/CnbCz/Client.Generated.cs",
+      "output": "../../Source/ExchangeRateProvider.Infrasctructure/Clients/CnbCz/Client.Generated.cs",
       "newLineBehavior": "Auto"
     }
   }

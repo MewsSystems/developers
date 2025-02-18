@@ -51,20 +51,7 @@ public class ExchangeRateControllerTests
         response.Rates.Should().HaveCount(2);
         response.CurrenciesNotResolved.Should().BeEmpty();
     }
-
-    [Test]
-    public async Task GetExchangeRates_ShouldReturnBadRequest_WhenRequestIsNull()
-    {
-        // Act
-        var result = await _controller.GetExchangeRates(null!);
-
-        // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        var badRequest = result as BadRequestObjectResult;
-        badRequest!.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
-        badRequest.Value.Should().Be("Currencies list cannot be empty.");
-    }
-
+    
     [Test]
     public async Task GetExchangeRates_ShouldReturnBadRequest_WhenCurrenciesListIsEmpty()
     {

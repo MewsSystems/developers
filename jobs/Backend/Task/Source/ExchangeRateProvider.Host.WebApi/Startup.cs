@@ -3,7 +3,7 @@ namespace ExchangeRateProvider.Host.WebApi;
 using Application.Interfaces;
 using Application.Services;
 using Domain.Options;
-using Infrasctucture.Clients;
+using Infrasctructure.Clients;
 using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;

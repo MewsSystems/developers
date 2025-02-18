@@ -25,7 +25,7 @@ public class ExchangeRateController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<IActionResult> GetExchangeRates([FromBody] GetExchangeRatesRequest currencies)
     {
-        if (currencies == null || !currencies.Items.Any())
+        if (!currencies.Items.Any())
         {
             return BadRequest("Currencies list cannot be empty.");
         }

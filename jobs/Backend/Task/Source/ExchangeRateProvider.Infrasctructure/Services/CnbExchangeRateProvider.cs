@@ -3,7 +3,7 @@ namespace ExchangeRateProvider.Infrastructure.Services;
 using Application.Interfaces;
 using Domain.Entities;
 using Domain.Options;
-using Infrasctucture.Clients;
+using Infrasctructure.Clients;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
