@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using ExchangeRate.Infrastructure.ExternalServices.Configs;
+using ExchangeRate.CrossCutting.Configurations;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank

@@ -53,13 +53,17 @@ namespace ExchangeRate.Application.Services
             return MapExchangeRates(exchangeRates, currencies);
         }
 
-        public async Task<ExchangeRateProviderResultDTO> GetExchangeRates(CurrenciesDTO currenciesDTO)
+        public async Task<ExchangeRateProviderResultDTO> GetExchangeRates(CurrenciesDTO currencies)
         {
             var exchangeRates = await _exchangeRateService.GetDailyExchangeRates();
             var bankCurrencies = _exchangeRateService.GetCurrenciesBank(exchangeRates).ToList();
-            var currencies = currenciesDTO.CurrencyCodes.Where(c => c != null).ToList();
+            
+            var currencyList = currencies.CurrencyCodes
+                .Where(c => c != null)
+                .DistinctBy(c => c.Code)
+                .ToList();
 
-            var missingCurrencies = currencies
+            var missingCurrencies = currencyList
                 .Where(c => !bankCurrencies.Any(bc => bc.Code == c.Code))
                 .Select(c => c.Code)
                 .ToList();
@@ -69,7 +73,7 @@ namespace ExchangeRate.Application.Services
                 throw new CurrencyNotFoundException(missingCurrencies);
             }
 
-            return MapExchangeRates(exchangeRates, currencies);
+            return MapExchangeRates(exchangeRates, currencyList);
         }
 
         private ExchangeRateProviderResultDTO MapExchangeRates(ExchangeRatesBankDTO? exchangeRates, IEnumerable<CurrencyDTO> currencies)

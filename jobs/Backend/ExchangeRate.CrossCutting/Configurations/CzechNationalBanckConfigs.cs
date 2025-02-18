@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExchangeRate.Infrastructure.ExternalServices.Configs
+namespace ExchangeRate.CrossCutting.Configurations
 {
     public class CzechNationalBanckConfigs
     {

@@ -55,7 +55,7 @@ namespace ExchangeRate.Api.Controllers
                 return Ok(result);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new ProblemDetails
                 {
@@ -72,7 +72,7 @@ namespace ExchangeRate.Api.Controllers
         /// <param name="date">Date in format dd-MM-yyyy.</param>
         /// <param name="currency">Currency Code to be fetch ex: "USD".</param>
         [HttpGet("date")]
-        [ProducesResponseType(typeof(ExchangeRatesResultModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dictionary<string, ExchangeRateProviderModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -90,7 +90,7 @@ namespace ExchangeRate.Api.Controllers
                 DateTime.TryParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime);
                 var provider = await _rateProviderService.GetExchangeRatesByDate(dateTime, new CurrencyDTO(currency.ToUpper()));
                 var result = _mapper.Map<ExchangeRatesResultModel>(provider);
-                return Ok(_mapper.Map<ExchangeRatesResultModel>(result));
+                return Ok(_mapper.Map<ExchangeRatesResultModel>(result).Results);
             }
             catch (Exception ex) when (ex is KeyNotFoundException || ex is ArgumentNullException)
             {
@@ -118,7 +118,7 @@ namespace ExchangeRate.Api.Controllers
         /// <param name="exchangeRate">Exchange Rate to be retrieved.</param>
         /// <returns>Dictionary containing exchange rates</returns>
         [HttpPost("currency")]
-        [ProducesResponseType(typeof(ExchangeRatesResultModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Dictionary<string, ExchangeRateProviderModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -134,7 +134,7 @@ namespace ExchangeRate.Api.Controllers
                 var mapped = _mapper.Map<ExchangeRatesDTO>(exchangeRate);
                 var result = _mapper.Map<ExchangeRatesResultModel>(await _rateProviderService.GetExchangeRatesByDate(mapped));
 
-                return Ok(result);
+                return Ok(result.Results);
             }
             catch (Exception ex) when (ex is KeyNotFoundException || ex is ArgumentNullException)
             {

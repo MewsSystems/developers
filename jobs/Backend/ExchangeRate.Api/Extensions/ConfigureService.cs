@@ -3,7 +3,7 @@ using ExchangeRate.Application.Parsers;
 using ExchangeRate.Application.Parsers.Interfaces;
 using ExchangeRate.Application.Services;
 using ExchangeRate.Application.Services.Interfaces;
-using ExchangeRate.Infrastructure.ExternalServices.Configs;
+using ExchangeRate.CrossCutting.Configurations;
 using ExchangeRate.Infrastructure.ExternalServices.CzechNationalBank;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -38,6 +38,7 @@ namespace ExchangeRate.Api.Extensions
         {
             IInfraConfigs infra = new InfraConfigs();
             configuration.GetSection("InfraConfigs").Bind(infra);
+
             services.AddSingleton<IInfraConfigs>(infra);
 
             services.AddScoped<IParserService, ParserService>();

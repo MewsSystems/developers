@@ -36,7 +36,7 @@ namespace ExchangeRate.UnitTest.Services
                 new ExchangeRateBankDTO { Country = "United States", Currency = "Dollar", Amount = 1, Code = "USD", Rate = 23.45m }
             };
 
-            _cnbService.GetDailyExchangeRates().Returns(Task.FromResult(expectedData));
+            _cnbService.GetDailyExchangeRates()!.Returns(Task.FromResult(expectedData));
             _parserService.ExchangeRateParseXml(expectedData).Returns(expectedRates);
 
             // Act

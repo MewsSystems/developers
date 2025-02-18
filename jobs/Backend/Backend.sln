@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.UnitTest", "ExchangeRate.UnitTest\ExchangeRate.UnitTest.csproj", "{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRate.CrossCutting", "ExchangeRate.CrossCutting\ExchangeRate.CrossCutting.csproj", "{40A14588-F584-462B-B7E4-A6D4C0F0FA33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E97BBDD-D2F4-4D7B-B9F7-DDEF7B0182DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40A14588-F584-462B-B7E4-A6D4C0F0FA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40A14588-F584-462B-B7E4-A6D4C0F0FA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40A14588-F584-462B-B7E4-A6D4C0F0FA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40A14588-F584-462B-B7E4-A6D4C0F0FA33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
