@@ -21,12 +21,14 @@ public class ExchangeRateProvider(ICnbProvider cnbProvider)
         }
 
         CnbExchangeResponseEntity cnbExchangeResponseEntity = await cnbProvider.GetLatestExchangeInformation();
+        
+        HashSet<string> currencyCodes = new HashSet<string>(
+            currencies.Distinct().Select(c => c.Code),
+            StringComparer.CurrentCultureIgnoreCase);
 
         return cnbExchangeResponseEntity.Rates
-            .Where(cnbExchangeRateDto => currencies
-                .Any(currency =>
-                    currency.Code.Equals(cnbExchangeRateDto.CurrencyCode, StringComparison.CurrentCultureIgnoreCase)))
-            .Select(cnbExchangeRateDto => cnbExchangeRateDto.ToExchangeRate())
+            .Where(rate => currencyCodes.Contains(rate.CurrencyCode))
+            .Select(rate => rate.ToExchangeRate())
             .ToList();
     }
 }
