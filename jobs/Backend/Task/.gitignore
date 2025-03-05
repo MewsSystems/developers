@@ -1,0 +1,74 @@
+# OS-specific system files
+.DS_Store
+Thumbs.db
+
+# Visual Studio & Rider settings
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.sln.docstates
+*.VC.db
+
+# Build and temporary folders
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+logs/
+TestResults/
+*.log
+*.tmp
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+*.cache
+*.pid
+
+# Debug & Release outputs
+[Dd]ebug*/
+[Rr]elease*/
+
+# NuGet package management
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+*.snupkg
+
+# Publishing & Deployment
+*.publishsettings
+*.azurePubxml
+*.azurePubxml.user
+app.publish/
+*.db-journal
+
+# Sensitive configuration files
+secrets.json
+*.config
+*.env
+*.key
+*.pem
+appsettings.Development.json
+appsettings.Local.json
+
+# Entity Framework Migrations
+Migrations/
+
+# Resharper & JetBrains Rider files
+_ReSharper.Caches/
+*.DotSettings.user
+
+# Coverage & Test results
+*.coverage
+*.coveragexml
+*.trx
+.coverage/
+test-output/
+test-results/
+
+# Temporary files (lock, logs, temp caches)
+*.lock
+*.log
+*.swp
