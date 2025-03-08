@@ -17,7 +17,12 @@ export const MovieSchema = z.object({
   vote_count: z.number(),
 })
 
-export const MovieListSchema = z.array(MovieSchema)
+export const MovieDiscoverySchema = z.object({
+  page: z.number(),
+  results: z.array(MovieSchema),
+  total_pages: z.number(),
+  total_results: z.number(),
+})
 
 export type Movie = z.infer<typeof MovieSchema>
-export type MovieList = z.infer<typeof MovieListSchema>
+export type MovieDiscovery = z.infer<typeof MovieDiscoverySchema>

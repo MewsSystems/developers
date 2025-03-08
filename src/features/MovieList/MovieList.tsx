@@ -1,14 +1,26 @@
+import { Skeleton } from '@/components/ui/skeleton'
 import { useMovies } from '../../hooks/useMovies'
+import { MovieCard } from './MovieCard'
 
 export const MovieList = () => {
-  const { data, error, isLoading } = useMovies()
+  const { data, error, isError, isPending } = useMovies()
 
-  console.log(data, error, isLoading)
+  console.log(data, error)
+
+  if (isError) {
+    throw error
+  }
+
+  if (isPending) {
+    return <Skeleton className="h-96" />
+  }
 
   return (
     <div>
       <h1>Movie List</h1>
-      <ul>HI MOVIES</ul>
+      {data.results.map((movie) => (
+        <MovieCard key={movie.id} movie={movie} />
+      ))}
     </div>
   )
 }
