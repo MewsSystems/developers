@@ -1,13 +1,5 @@
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from '@/config/query'
-import { MovieList } from '@/features/MovieList/MovieList'
+import { MovieSearch } from '@/features/MovieSearch/MovieSearch'
 
 export const Home = () => {
-  return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <MovieList />
-      </QueryClientProvider>
-    </>
-  )
+  return <MovieSearch />
 }
