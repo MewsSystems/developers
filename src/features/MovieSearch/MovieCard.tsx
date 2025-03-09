@@ -10,7 +10,7 @@ import { Star, Calendar, Film } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { type Movie } from '@/schemas/movie'
-import { formatDate, getGenres } from '@/utils'
+import { formatDate, getGenres } from '@/lib/utils'
 
 type Props = {
   movie: Movie
