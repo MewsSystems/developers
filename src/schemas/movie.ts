@@ -7,10 +7,10 @@ export const MovieSchema = z.object({
   id: z.number(),
   original_language: z.string(),
   original_title: z.string(),
-  overview: z.string(),
-  popularity: z.number(),
-  poster_path: z.string(),
-  release_date: z.string(),
+  overview: z.string().nullable(),
+  popularity: z.number().nullable(),
+  poster_path: z.string().nullable(),
+  release_date: z.string().nullable(),
   title: z.string(),
   video: z.boolean(),
   vote_average: z.number(),
@@ -19,7 +19,7 @@ export const MovieSchema = z.object({
 
 export const MovieDiscoverySchema = z.object({
   page: z.number(),
-  results: z.array(MovieSchema),
+  results: z.array(MovieSchema).nullable(),
   total_pages: z.number(),
   total_results: z.number(),
 })

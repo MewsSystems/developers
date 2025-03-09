@@ -1,3 +1,3 @@
 export const movieKeys = {
-  all: ['movies'] as const,
+  searchResult: ['movies'] as const,
 } as const
