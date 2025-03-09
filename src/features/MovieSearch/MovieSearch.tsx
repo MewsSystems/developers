@@ -5,12 +5,13 @@ import { Input } from '@/components/ui/input'
 import { SearchResult } from './SearchResult'
 import { useState } from 'react'
 import { Pagination } from './Pagination'
-import { useNavigate, useSearch } from '@tanstack/react-router' // Import TanStack Router hooks
+import { useNavigate, useSearch } from '@tanstack/react-router'
 import { SEARCH_DEBOUNCE_DELAY } from '@/lib/utils'
+import { ROUTES } from '@/lib/constants'
 
 export const MovieSearch = () => {
   const navigate = useNavigate()
-  const searchParameters = useSearch({ from: '/' })
+  const searchParameters = useSearch({ from: ROUTES.HOME })
 
   const [searchValue, setSearchValue] = useState(searchParameters.search ?? '')
   const [page, setPage] = useState(Number(searchParameters.page ?? 1))
@@ -29,12 +30,15 @@ export const MovieSearch = () => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
-    navigate({ to: '/', search: { ...searchParameters, page: newPage } })
+    navigate({
+      to: ROUTES.HOME,
+      search: { ...searchParameters, page: newPage },
+    })
   }
 
   const handleSearchValueChange = (value: string) => {
     setSearchValue(value)
-    navigate({ to: '/', search: { search: value, page: 1 } })
+    navigate({ to: ROUTES.HOME, search: { search: value, page: 1 } })
   }
 
   if (isError) {
@@ -68,7 +72,7 @@ export const MovieSearch = () => {
           {data?.results.length > 0 && (
             <Pagination
               page={page}
-              setPage={handlePageChange} // Use handlePageChange here
+              setPage={handlePageChange}
               totalPages={data.total_pages}
             />
           )}

@@ -1,8 +1,8 @@
-import { Movie } from '@/schemas/movie'
+import { MovieResult } from '@/schemas/movie'
 import { MovieCard } from './MovieCard'
 
 type Props = {
-  movies: Movie[] | null
+  movies: MovieResult[] | null
 }
 
 export const SearchResult = ({ movies }: Props) => {

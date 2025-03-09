@@ -12,44 +12,33 @@ import {
   Home,
 } from 'lucide-react'
 import { MovieDetail } from '@/schemas/movieDetail'
-import { IMAGE_BASE_URL } from '@/lib/utils'
+import { formatDate, getRatingColor, IMAGE_BASE_URL } from '@/lib/utils'
+import { MoviePoster } from '@/components/MoviePoster'
 
 type Props = {
   movie: MovieDetail
 }
 
 export const MovieDetailCard = ({ movie }: Props) => {
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'Unknown'
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  }
+  const ratingColorClass = getRatingColor(movie.vote_average)
 
   return (
     <Card className="flex flex-col md:flex-row items-start gap-6 p-4 shadow-lg">
       <div className="flex flex-col gap-4 items-center self-center md:self-start w-full md:w-auto">
-        {movie.poster_path ? (
-          <img
-            src={`${IMAGE_BASE_URL}w500${movie.poster_path}`}
-            alt={movie.title}
-            className="w-64 rounded-lg shadow-md"
-          />
-        ) : (
-          <div className="w-64 h-96 bg-gray-300 rounded-lg flex items-center justify-center">
-            <Film size={48} className="text-gray-400" />
-          </div>
-        )}
+        <MoviePoster
+          posterPath={movie.poster_path}
+          alt={movie.title}
+          className="w-64 rounded-lg shadow-md"
+          isDetailView
+        />
 
         <div className="flex flex-col gap-2 w-full">
           <div className="flex items-center gap-2">
             <Star className="w-5 h-5 text-yellow-500" />
-            <span className="text-lg font-medium">
-              {movie.vote_average.toFixed(1)} ({movie.vote_count} votes)
+            <span className={`text-lg font-medium ${ratingColorClass}`}>
+              {movie.vote_average.toFixed(1)}
             </span>
+            <span>({movie.vote_count} votes)</span>
           </div>
 
           {movie.runtime && (
@@ -79,13 +68,13 @@ export const MovieDetailCard = ({ movie }: Props) => {
         )}
 
         <p className="text-gray-700">
-          {movie.overview || 'No description available.'}
+          {movie.overview ?? 'No description available.'}
         </p>
 
         {movie.belongs_to_collection && (
           <div className="bg-blue-50 p-3 rounded-md border border-blue-200">
             <h3 className="font-semibold">
-              Part of the {movie.belongs_to_collection.name} Collection
+              Part of the {movie.belongs_to_collection.name}
             </h3>
           </div>
         )}

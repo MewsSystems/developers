@@ -5,8 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('cs', {
+export const formatDate = (dateString: string | null) => {
+  if (!dateString) return 'Unknown'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('cs', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -49,4 +51,19 @@ export const getGenres = (genreIds: number[]): string => {
 
 export const raiseError = (message: string): never => {
   throw new Error(message)
+}
+
+export const getRatingColor = (rating: number): string => {
+  switch (true) {
+    case rating === 0:
+      return 'text-gray-500'
+    case rating > 0 && rating < 5:
+      return 'text-red-600'
+    case rating < 6.5:
+      return 'text-orange-600'
+    case rating < 8:
+      return 'text-yellow-600'
+    default:
+      return 'text-green-600'
+  }
 }
