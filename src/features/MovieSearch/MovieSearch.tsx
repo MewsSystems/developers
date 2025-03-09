@@ -1,9 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import { useMovies } from '@/hooks/useMovies'
-import { MovieCard } from './MovieCard'
 import { useDebounceValue } from 'usehooks-ts'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
+import { SearchResult } from './SearchResult'
 
 const SEARCH_DEBOUNCE_DELAY = 500
 
@@ -15,7 +15,7 @@ export const MovieSearch = () => {
   )
   const { data, error, isError, isPending } = useMovies(debouncedSearchValue, 1)
 
-  console.log(data, error)
+  const isFirstSearch = debouncedSearchValue.trim().length === 0
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value)
@@ -25,28 +25,30 @@ export const MovieSearch = () => {
     throw error
   }
 
-  if (isPending) {
-    return <Skeleton className="h-96" />
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Movie Search</h1>
-      <Input
-        value={searchValue}
-        onChange={handleSearchChange}
-        type="text"
-        placeholder="Search movie"
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {data.results && data.results.length > 0 ? (
-          data.results.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))
-        ) : (
-          <div className="text-center text-2xl font-bold">No results found</div>
-        )}
-      </div>
+    <div className="w-full mx-auto px-4 py-8 min-h-screen">
+      <header className="mb-8 flex flex-col items-center">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          TMDB Movie Search
+        </h1>
+        <Input
+          value={searchValue}
+          onChange={handleSearchChange}
+          type="text"
+          placeholder="Search movie"
+          autoFocus
+          className="w-2/3"
+        />
+      </header>
+      {isPending ? (
+        <Skeleton className="h-96" />
+      ) : isFirstSearch ? (
+        <div className="flex justify-center items-center mt-8 text-center text-xl text-gray-600">
+          Enter a movie title to search
+        </div>
+      ) : (
+        <SearchResult movies={data?.results} />
+      )}
     </div>
   )
 }

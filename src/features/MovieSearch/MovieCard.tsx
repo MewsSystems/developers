@@ -20,7 +20,7 @@ const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 export const MovieCard = ({ movie }: Props) => {
   return (
-    <Card key={movie.id} className="overflow-hidden flex flex-col h-full">
+    <Card key={movie.id} className="overflow-hidden flex flex-col h-full pt-0">
       <div className="h-64 relative overflow-hidden">
         {movie.poster_path ? (
           <img
