@@ -7,12 +7,12 @@ import {
 } from '@/components/ui/card'
 import { Star, Calendar, Film } from 'lucide-react'
 
-import { type Movie } from '@/schemas/movie'
+import { type MovieResult } from '@/schemas/movie'
 import { formatDate, getGenres } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'
 
 type Props = {
-  movie: Movie
+  movie: MovieResult
 }
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
@@ -55,10 +55,12 @@ export const MovieCard = ({ movie }: Props) => {
       </CardHeader>
 
       <CardContent className="flex-grow">
-        <p className="text-sm text-gray-500 mb-2 flex items-center gap-1">
-          <Calendar className="h-4 w-4" />
-          {formatDate(movie.release_date)}
-        </p>
+        {movie.release_date && (
+          <p className="text-sm text-gray-500 mb-2 flex items-center gap-1">
+            <Calendar className="h-4 w-4" />
+            {formatDate(movie.release_date)}
+          </p>
+        )}
         <p className="text-xs text-gray-400 mb-3">
           {getGenres(movie.genre_ids)}
         </p>

@@ -13,6 +13,8 @@ export const formatDate = (dateString: string): string => {
   })
 }
 
+export const SEARCH_DEBOUNCE_DELAY = 500
+
 const GENRES = {
   28: 'Action',
   12: 'Adventure',

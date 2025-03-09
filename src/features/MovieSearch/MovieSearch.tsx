@@ -5,22 +5,37 @@ import { Input } from '@/components/ui/input'
 import { SearchResult } from './SearchResult'
 import { useState } from 'react'
 import { Pagination } from './Pagination'
-
-const SEARCH_DEBOUNCE_DELAY = 500
+import { useNavigate, useSearch } from '@tanstack/react-router' // Import TanStack Router hooks
+import { SEARCH_DEBOUNCE_DELAY } from '@/lib/utils'
 
 export const MovieSearch = () => {
-  const [searchValue, setSearchValue] = useState('')
-  const [page, setPage] = useState(1)
+  const navigate = useNavigate()
+  const searchParameters = useSearch({ from: '/' })
+
+  const [searchValue, setSearchValue] = useState(searchParameters.search ?? '')
+  const [page, setPage] = useState(Number(searchParameters.page ?? 1))
+
   const [debouncedSearchValue] = useDebounceValue(
     searchValue,
     SEARCH_DEBOUNCE_DELAY,
   )
+
   const { data, error, isError, isPending } = useMovies(
     debouncedSearchValue,
     page,
   )
 
   const isFirstSearch = debouncedSearchValue.trim().length === 0
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    navigate({ to: '/', search: { ...searchParameters, page: newPage } })
+  }
+
+  const handleSearchValueChange = (value: string) => {
+    setSearchValue(value)
+    navigate({ to: '/', search: { search: value, page: 1 } })
+  }
 
   if (isError) {
     throw error
@@ -34,7 +49,7 @@ export const MovieSearch = () => {
         </h1>
         <Input
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e) => handleSearchValueChange(e.target.value)}
           type="text"
           placeholder="Search movie"
           autoFocus
@@ -52,7 +67,7 @@ export const MovieSearch = () => {
           <SearchResult movies={data?.results} />
           <Pagination
             page={page}
-            setPage={setPage}
+            setPage={handlePageChange} // Use handlePageChange here
             totalPages={data.total_pages}
           />
         </>
