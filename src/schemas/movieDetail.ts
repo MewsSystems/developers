@@ -23,10 +23,17 @@ const spokenLanguageSchema = z.object({
   name: z.string(),
 })
 
+const belongsToCollectionSchema = z.object({
+  backdrop_path: z.string().nullable(),
+  id: z.number().default(0),
+  name: z.string(),
+  poster_path: z.string().nullable(),
+})
+
 export const MovieDetailSchema = z.object({
   adult: z.boolean().default(true),
   backdrop_path: z.string().nullable(),
-  belongs_to_collection: z.string().nullable(),
+  belongs_to_collection: belongsToCollectionSchema.nullable(),
   budget: z.number().default(0),
   genres: z.array(genreSchema),
   homepage: z.string().nullable(),
