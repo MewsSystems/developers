@@ -42,3 +42,7 @@ export const getGenres = (genreIds: number[]): string => {
     .filter(Boolean)
     .join(', ')
 }
+
+export const raiseError = (message: string): never => {
+  throw new Error(message)
+}

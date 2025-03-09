@@ -4,13 +4,12 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from '@/components/ui/card'
 import { Star, Calendar, Film } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
 import { type Movie } from '@/schemas/movie'
 import { formatDate, getGenres } from '@/lib/utils'
+import { useNavigate } from '@tanstack/react-router'
 
 type Props = {
   movie: Movie
@@ -19,8 +18,17 @@ type Props = {
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 export const MovieCard = ({ movie }: Props) => {
+  const navigate = useNavigate()
+  const goToMovieDetail = () =>
+    navigate({
+      to: `/movie/${movie.id}`,
+    })
   return (
-    <Card key={movie.id} className="overflow-hidden flex flex-col h-full pt-0">
+    <Card
+      key={movie.id}
+      className="overflow-hidden flex flex-col h-full pt-0 cursor-pointer"
+      onClick={goToMovieDetail}
+    >
       <div className="h-64 relative overflow-hidden">
         {movie.poster_path ? (
           <img
@@ -57,15 +65,15 @@ export const MovieCard = ({ movie }: Props) => {
         <p className="text-sm line-clamp-3">{movie.overview}</p>
       </CardContent>
 
-      <CardFooter className="pt-0">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => alert(`View details for ${movie.title}`)}
-        >
-          View Details
-        </Button>
-      </CardFooter>
+      {/* <CardFooter className="pt-0">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => alert(`View details for ${movie.title}`)}
+          >
+            View Details
+          </Button>
+        </CardFooter> */}
     </Card>
   )
 }

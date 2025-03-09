@@ -22,9 +22,6 @@ export const MovieSearch = () => {
 
   const isFirstSearch = debouncedSearchValue.trim().length === 0
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value)
-  }
   if (isError) {
     throw error
   }
@@ -37,7 +34,7 @@ export const MovieSearch = () => {
         </h1>
         <Input
           value={searchValue}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchValue(e.target.value)}
           type="text"
           placeholder="Search movie"
           autoFocus
