@@ -2,25 +2,29 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useMovies } from '@/hooks/useMovies'
 import { useDebounceValue } from 'usehooks-ts'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
 import { SearchResult } from './SearchResult'
+import { useState } from 'react'
+import { Pagination } from './Pagination'
 
 const SEARCH_DEBOUNCE_DELAY = 500
 
 export const MovieSearch = () => {
   const [searchValue, setSearchValue] = useState('')
+  const [page, setPage] = useState(1)
   const [debouncedSearchValue] = useDebounceValue(
     searchValue,
     SEARCH_DEBOUNCE_DELAY,
   )
-  const { data, error, isError, isPending } = useMovies(debouncedSearchValue, 1)
+  const { data, error, isError, isPending } = useMovies(
+    debouncedSearchValue,
+    page,
+  )
 
   const isFirstSearch = debouncedSearchValue.trim().length === 0
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value)
   }
-
   if (isError) {
     throw error
   }
@@ -47,7 +51,14 @@ export const MovieSearch = () => {
           Enter a movie title to search
         </div>
       ) : (
-        <SearchResult movies={data?.results} />
+        <>
+          <SearchResult movies={data?.results} />
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={data.total_pages}
+          />
+        </>
       )}
     </div>
   )
