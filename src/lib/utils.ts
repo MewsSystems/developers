@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('cs', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -14,6 +14,8 @@ export const formatDate = (dateString: string): string => {
 }
 
 export const SEARCH_DEBOUNCE_DELAY = 500
+
+export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/'
 
 const GENRES = {
   28: 'Action',

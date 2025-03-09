@@ -3,6 +3,7 @@ import { raiseError } from '@/lib/utils'
 import { useParams } from '@tanstack/react-router'
 import { MovieDetailCard } from '@/features/MovieDetail/MovieDetailCard'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Layout } from '@/components/Layout'
 
 export function MovieDetail() {
   const { id } = useParams({ from: '/movie/$id' })
@@ -13,13 +14,13 @@ export function MovieDetail() {
   if (isError) throw error
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <Layout>
       {isPending ? (
         <Skeleton className="h-96" />
       ) : (
         <MovieDetailCard movie={movie} />
       )}
-    </div>
+    </Layout>
   )
 }
 

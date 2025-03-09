@@ -8,14 +8,12 @@ import {
 import { Star, Calendar, Film } from 'lucide-react'
 
 import { type MovieResult } from '@/schemas/movie'
-import { formatDate, getGenres } from '@/lib/utils'
+import { formatDate, getGenres, IMAGE_BASE_URL } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'
 
 type Props = {
   movie: MovieResult
 }
-
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
 export const MovieCard = ({ movie }: Props) => {
   const navigate = useNavigate()
@@ -32,7 +30,7 @@ export const MovieCard = ({ movie }: Props) => {
       <div className="h-64 relative overflow-hidden">
         {movie.poster_path ? (
           <img
-            src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+            src={`${IMAGE_BASE_URL}w500${movie.poster_path}`}
             alt={movie.title}
             className="w-full h-full object-cover transition-transform hover:scale-105"
           />

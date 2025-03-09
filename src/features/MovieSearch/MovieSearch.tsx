@@ -65,11 +65,13 @@ export const MovieSearch = () => {
       ) : (
         <>
           <SearchResult movies={data?.results} />
-          <Pagination
-            page={page}
-            setPage={handlePageChange} // Use handlePageChange here
-            totalPages={data.total_pages}
-          />
+          {data?.results.length > 0 && (
+            <Pagination
+              page={page}
+              setPage={handlePageChange} // Use handlePageChange here
+              totalPages={data.total_pages}
+            />
+          )}
         </>
       )}
     </div>
