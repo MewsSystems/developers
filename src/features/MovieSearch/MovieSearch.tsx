@@ -15,12 +15,10 @@ export const MovieSearch = () => {
 
   const [searchValue, setSearchValue] = useState(searchParameters.search ?? '')
   const [page, setPage] = useState(Number(searchParameters.page ?? 1))
-
   const [debouncedSearchValue] = useDebounceValue(
     searchValue,
     SEARCH_DEBOUNCE_DELAY,
   )
-
   const { data, error, isError, isPending } = useMovies(
     debouncedSearchValue,
     page,
@@ -38,6 +36,7 @@ export const MovieSearch = () => {
 
   const handleSearchValueChange = (value: string) => {
     setSearchValue(value)
+    setPage(1)
     navigate({ to: ROUTES.HOME, search: { search: value, page: 1 } })
   }
 
