@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatDate = (dateString: string | null) => {
+export const formatDate = (dateString: string | null | undefined) => {
   if (!dateString) return 'Unknown'
   const date = new Date(dateString)
   return date.toLocaleDateString('cs', {
@@ -60,7 +60,7 @@ export const getRatingColor = (rating: number): string => {
     case rating > 0 && rating < 5:
       return 'text-red-600'
     case rating < 6.5:
-      return 'text-orange-600'
+      return 'text-orange-500'
     case rating < 8:
       return 'text-yellow-600'
     default:

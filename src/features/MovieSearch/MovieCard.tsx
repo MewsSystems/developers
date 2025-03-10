@@ -58,9 +58,12 @@ export const MovieCard = ({ movie }: Props) => {
           <Calendar className="h-4 w-4" />
           {formatDate(movie.release_date)}
         </p>
-        <p className="text-xs text-gray-400 mb-3">
-          {getGenres(movie.genre_ids)}
-        </p>
+        {movie.genre_ids && movie.genre_ids.length > 0 && (
+          <p className="text-xs text-gray-400 mb-3">
+            {getGenres(movie.genre_ids)}
+          </p>
+        )}
+
         <p className="text-sm line-clamp-3">{movie.overview}</p>
       </CardContent>
     </Card>

@@ -7,7 +7,7 @@ const genreSchema = z.object({
 
 const productionCompanySchema = z.object({
   id: z.number().default(0),
-  logo_path: z.string().nullable(),
+  logo_path: z.string().nullish(),
   name: z.string(),
   origin_country: z.string(),
 })
@@ -24,34 +24,34 @@ const spokenLanguageSchema = z.object({
 })
 
 const belongsToCollectionSchema = z.object({
-  backdrop_path: z.string().nullable(),
+  backdrop_path: z.string().nullish(),
   id: z.number().default(0),
   name: z.string(),
-  poster_path: z.string().nullable(),
+  poster_path: z.string().nullish(),
 })
 
 export const MovieDetailSchema = z.object({
   adult: z.boolean().default(true),
-  backdrop_path: z.string().nullable(),
-  belongs_to_collection: belongsToCollectionSchema.nullable(),
+  backdrop_path: z.string().nullish(),
+  belongs_to_collection: belongsToCollectionSchema.nullish(),
   budget: z.number().default(0),
   genres: z.array(genreSchema),
-  homepage: z.string().nullable(),
+  homepage: z.string().nullish(),
   id: z.number().default(0),
-  imdb_id: z.string().nullable(),
+  imdb_id: z.string().nullish(),
   original_language: z.string(),
   original_title: z.string(),
-  overview: z.string().nullable(),
+  overview: z.string().nullish(),
   popularity: z.number().default(0),
-  poster_path: z.string().nullable(),
+  poster_path: z.string().nullish(),
   production_companies: z.array(productionCompanySchema),
   production_countries: z.array(productionCountrySchema),
-  release_date: z.string().nullable(),
+  release_date: z.string().nullish(),
   revenue: z.number().default(0),
-  runtime: z.number().nullable(),
+  runtime: z.number().nullish(),
   spoken_languages: z.array(spokenLanguageSchema),
-  status: z.string().nullable(),
-  tagline: z.string().nullable(),
+  status: z.string().nullish(),
+  tagline: z.string().nullish(),
   title: z.string(),
   video: z.boolean().default(true),
   vote_average: z.number().default(0),

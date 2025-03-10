@@ -44,6 +44,33 @@ export const MovieSearch = () => {
     throw error
   }
 
+  const renderContent = () => {
+    if (isPending) {
+      return <Skeleton className="h-96" />
+    }
+
+    if (isFirstSearch) {
+      return (
+        <div className="flex justify-center items-center mt-8 text-center text-xl text-gray-600">
+          Enter a movie title to search
+        </div>
+      )
+    }
+
+    return (
+      <>
+        <SearchResult movies={data?.results} />
+        {data?.results.length > 0 && (
+          <Pagination
+            page={page}
+            setPage={handlePageChange}
+            totalPages={data.total_pages}
+          />
+        )}
+      </>
+    )
+  }
+
   return (
     <div className="w-full mx-auto px-4 py-8 min-h-screen">
       <header className="mb-8 flex flex-col items-center">
@@ -59,24 +86,7 @@ export const MovieSearch = () => {
           className="w-2/3"
         />
       </header>
-      {isPending ? (
-        <Skeleton className="h-96" />
-      ) : isFirstSearch ? (
-        <div className="flex justify-center items-center mt-8 text-center text-xl text-gray-600">
-          Enter a movie title to search
-        </div>
-      ) : (
-        <>
-          <SearchResult movies={data?.results} />
-          {data?.results.length > 0 && (
-            <Pagination
-              page={page}
-              setPage={handlePageChange}
-              totalPages={data.total_pages}
-            />
-          )}
-        </>
-      )}
+      {renderContent()}
     </div>
   )
 }

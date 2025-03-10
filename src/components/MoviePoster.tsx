@@ -2,7 +2,7 @@ import { IMAGE_BASE_URL } from '@/lib/utils'
 import { Film } from 'lucide-react'
 
 type Props = {
-  posterPath: string | null
+  posterPath: string | null | undefined
   alt: string
   className?: string
   isDetailView?: boolean
