@@ -48,7 +48,7 @@ export const MovieCard = ({ movie }: Props) => {
             {movie.vote_average.toFixed(1)}
           </span>
           <span className="text-gray-400 text-xs">
-            ({movie.vote_count} votes)
+            ({movie.vote_count} {movie.vote_count === 1 ? 'vote' : 'votes'})
           </span>
         </CardDescription>
       </CardHeader>

@@ -7,41 +7,43 @@ type Props = {
   setPage: (newPage: number) => void
 }
 
+const MAX_VISIBLE_PAGES = 5
+
 export const Pagination = ({ page, setPage, totalPages }: Props) => {
   const getVisiblePages = () => {
-    const pages = []
+    const visiblePages = []
     if (totalPages <= 1) return []
 
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
+    if (totalPages <= MAX_VISIBLE_PAGES) {
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+        visiblePages.push(pageNumber)
       }
-      return pages
+      return visiblePages
     }
 
-    pages.push(1)
+    visiblePages.push(1)
 
     if (page > 3) {
-      pages.push('...')
+      visiblePages.push('…')
     }
 
-    const middlePages = []
+    const middlePageNumbers = []
     for (
-      let i = Math.max(2, page - 1);
-      i <= Math.min(totalPages - 1, page + 1);
-      i++
+      let pageNumber = Math.max(2, page - 1);
+      pageNumber <= Math.min(totalPages - 1, page + 1);
+      pageNumber++
     ) {
-      middlePages.push(i)
+      middlePageNumbers.push(pageNumber)
     }
-    pages.push(...middlePages)
+    visiblePages.push(...middlePageNumbers)
 
     if (page < totalPages - 2) {
-      pages.push('...')
+      visiblePages.push('…')
     }
 
-    pages.push(totalPages)
+    visiblePages.push(totalPages)
 
-    return pages
+    return visiblePages
   }
 
   const visiblePages = getVisiblePages()
@@ -69,7 +71,7 @@ export const Pagination = ({ page, setPage, totalPages }: Props) => {
           </Button>
         ) : (
           <span key={index} className="px-2">
-            ...
+            {pageNum}
           </span>
         ),
       )}

@@ -24,7 +24,7 @@ export const MovieSearch = () => {
     page,
   )
 
-  const isFirstSearch = debouncedSearchValue.trim().length === 0
+  const noSearchValue = debouncedSearchValue.trim().length === 0
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -49,7 +49,7 @@ export const MovieSearch = () => {
       return <Skeleton className="h-96" />
     }
 
-    if (isFirstSearch) {
+    if (noSearchValue) {
       return (
         <div className="flex justify-center items-center mt-8 text-center text-xl text-gray-600">
           Enter a movie title to search
@@ -59,8 +59,8 @@ export const MovieSearch = () => {
 
     return (
       <>
-        <SearchResult movies={data?.results} />
-        {data?.results.length > 0 && (
+        <SearchResult movies={data.results} />
+        {data.results.length > 0 && (
           <Pagination
             page={page}
             setPage={handlePageChange}
@@ -84,6 +84,7 @@ export const MovieSearch = () => {
           placeholder="Search movie"
           autoFocus
           className="w-2/3"
+          aria-label="Search movie"
         />
       </header>
       {renderContent()}

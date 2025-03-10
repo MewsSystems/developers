@@ -38,7 +38,9 @@ export const MovieDetailCard = ({ movie }: Props) => {
             <span className={`text-lg font-medium ${ratingColorClass}`}>
               {movie.vote_average.toFixed(1)}
             </span>
-            <span>({movie.vote_count} votes)</span>
+            <span>
+              ({movie.vote_count} {movie.vote_count === 1 ? 'vote' : 'votes'})
+            </span>
           </div>
 
           {movie.runtime && (
@@ -185,7 +187,7 @@ export const MovieDetailCard = ({ movie }: Props) => {
           </Badge>
         )}
 
-        {movie.status && movie.status !== 'Released' && (
+        {movie.status && (
           <Badge variant="outline" className="self-start">
             Status: {movie.status}
           </Badge>
