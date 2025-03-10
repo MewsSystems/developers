@@ -1,0 +1,29 @@
+/* CSS  */
+.moviesList:has(li:hover) li:not(:hover) {
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+@media screen and (min-width: 640px) {
+  .moviesList {
+    max-height: 70vh;
+    height: 70vh;
+    overflow-y: scroll;
+  }
+
+  .moviesList::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .moviesList::-webkit-scrollbar-track {
+    background: rgb(55 65 81);
+  }
+
+  .moviesList::-webkit-scrollbar-thumb {
+    background: rgb(207, 207, 207);
+  }
+
+  .moviesList::-webkit-scrollbar-thumb:hover {
+    background: white;
+  }
+}
