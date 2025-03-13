@@ -3,11 +3,13 @@ import { useMovies } from '@/hooks/useMovies'
 import { useDebounceValue } from 'usehooks-ts'
 import { Input } from '@/components/ui/input'
 import { SearchResult } from './SearchResult'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Pagination } from './Pagination'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { SEARCH_DEBOUNCE_DELAY } from '@/lib/utils'
 import { ROUTES } from '@/lib/constants'
+import { queryClient } from '@/config/query'
+import { getMovieDetail } from '@/hooks/useMovieDetail'
 
 export const MovieSearch = () => {
   const navigate = useNavigate()
@@ -25,6 +27,20 @@ export const MovieSearch = () => {
   )
 
   const noSearchValue = debouncedSearchValue.trim().length === 0
+
+  useEffect(() => {
+    if (!data?.results || data.results.length === 0) return
+
+    // Prefetch details for each movie in the search results
+    data.results.forEach((movie) => {
+      queryClient.prefetchQuery({
+        queryKey: ['movie', movie.id],
+        queryFn: () => getMovieDetail(movie.id.toString()),
+        staleTime: 10 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
+      })
+    })
+  }, [data])
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)

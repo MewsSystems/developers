@@ -4,7 +4,7 @@ import { api } from '@/api/index'
 import { movieKeys } from '@/api/queryKeys'
 import { MovieDetail, MovieDetailSchema } from '@/schemas/movieDetail'
 
-const getMovieDetail = async (movieId: string) => {
+export const getMovieDetail = async (movieId: string) => {
   const response = await api.get(`movie/${movieId}`)
   const data = await response.json()
   console.log(data)
