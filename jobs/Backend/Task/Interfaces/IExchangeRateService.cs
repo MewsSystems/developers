@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExchangeRateUpdater.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,4 +9,5 @@ namespace ExchangeRateUpdater.Interfaces;
 
 public interface IExchangeRateService
 {
+    Task<ExchangeRateListDto> GetExchangeRateListAsync();
 }

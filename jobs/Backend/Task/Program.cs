@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,6 +25,18 @@ namespace ExchangeRateUpdater
 
         public static void Main(string[] args)
         {
+            var host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
+                    {
+                        client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");  //TODO: WILL NEED TO MOVE TO APPSETTINGS ONCE CREATED
+                    });
+
+                    services.AddScoped<IExchangeRateService, ExchangeRateService>();
+                })
+                .Build();
+
             try
             {
                 var provider = new ExchangeRateProvider();
