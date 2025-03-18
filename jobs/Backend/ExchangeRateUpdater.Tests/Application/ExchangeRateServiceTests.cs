@@ -1,13 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.Interfaces;
+using Moq;
 
 namespace ExchangeRateUpdater.Tests.Application
 {
-    class ExchangeRateServiceTests
+    public class ExchangeRateServiceTests
     {
-        // TODO: test caching
+        [Fact]
+        public async Task GetExchangeRatesAsync_DelegatesToProvider_AndReturnsResult()
+        {
+            // Arrange
+            var mockProvider = new Mock<IExchangeRateProvider>();
+            var sampleRates = new List<ExchangeRate>
+            {
+                new ExchangeRate(new Currency("CZK"), new Currency("USD"), 23.5m)
+            };
+            mockProvider.Setup(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()))
+                        .ReturnsAsync(sampleRates);
+
+            var service = new ExchangeRateService(mockProvider.Object);
+            var currencies = new List<Currency> { new Currency("USD") };
+
+            // Act
+            var result = await service.GetExchangeRatesAsync(currencies);
+
+            // Assert
+            Assert.Single(result);
+            Assert.Equal("USD", result.First().TargetCurrency.Code);
+            mockProvider.Verify(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetExchangeRatesAsync_EmptyCurrencyList_ReturnsEmptyResult()
+        {
+            // Arrange
+            var mockProvider = new Mock<IExchangeRateProvider>();
+            mockProvider.Setup(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()))
+                        .ReturnsAsync(new List<ExchangeRate>());
+
+            var service = new ExchangeRateService(mockProvider.Object);
+            var currencies = new List<Currency>();
+
+            // Act
+            var result = await service.GetExchangeRatesAsync(currencies);
+
+            // Assert
+            Assert.Empty(result);
+            mockProvider.Verify(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()), Times.Once);
+        }
+
     }
 }

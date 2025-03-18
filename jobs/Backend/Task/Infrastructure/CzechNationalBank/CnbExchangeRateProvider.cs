@@ -92,6 +92,12 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
                 }                
             }
 
+            if (currencies == null)
+            {
+                _logger.LogWarning("Currencies is null");
+                return Enumerable.Empty<ExchangeRate>();
+            }
+
             var requestedCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 
             var filteredRates = rates.Where(rate => requestedCodes.Contains(rate.TargetCurrency.Code));
