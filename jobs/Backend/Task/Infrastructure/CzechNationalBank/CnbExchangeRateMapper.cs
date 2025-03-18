@@ -12,17 +12,14 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
         /// Maps the CNB response DTO to a list of ExchangeRate objects.
         /// </summary>
         /// <param name="response">The deserialized CNB response.</param>
-        /// <param name="requestedCurrencies">The requested currencies.</param>
         /// <returns>A list of ExchangeRate objects.</returns>
-        public static IEnumerable<ExchangeRate> Map(CnbExchangeRateResponse response, IEnumerable<Currency> requestedCurrencies)
+        public static IEnumerable<ExchangeRate> Map(CnbExchangeRateResponse response)
         {
-            var requestedCodes = new HashSet<string>(requestedCurrencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
-
             return response.Rates
-                .Where(rate => requestedCodes.Contains(rate.CurrencyCode))
                 .Select(rate =>
                 {
                     decimal normalizedRate = rate.Rate / rate.Amount;
+                    DateTime validFor = DateTime.Parse(rate.ValidFor).Date;
                     return new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), normalizedRate); // TODO: hardcode CZK?
                 });
         }

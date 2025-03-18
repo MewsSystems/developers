@@ -1,7 +1,7 @@
 using System.Net;
 using Xunit;
 
-namespace ExchangeRateUpdater.Tests
+namespace ExchangeRateUpdater.Tests.Infrastructure.CzechNationalBank
 {
     public class CnbExchangeRateProviderTests
     {

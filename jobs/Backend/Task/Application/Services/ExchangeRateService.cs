@@ -19,12 +19,7 @@ namespace ExchangeRateUpdater.Application.Services
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            if (currencies == null || !currencies.Any())
-                throw new ArgumentException("No currencies provided."); // TODO: implement better error handling
-
             return await _provider.GetExchangeRatesAsync(currencies);
-
-            // TODO: cache results
         }
     }
 }

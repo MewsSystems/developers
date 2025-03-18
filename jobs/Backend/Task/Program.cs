@@ -3,10 +3,12 @@ using ExchangeRateUpdater.Application.Services;
 using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
@@ -30,7 +32,15 @@ namespace ExchangeRateUpdater
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient<IExchangeRateProvider, CnbExchangeRateProvider>();
+            services.AddMemoryCache();
+            services.AddHttpClient();
+            services.AddScoped<IExchangeRateProvider>(sp =>
+            {
+                var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient();
+                var memoryCache = sp.GetRequiredService<IMemoryCache>();
+                TimeSpan cacheDuration = TimeSpan.FromHours(24);
+                return new CnbExchangeRateProvider(httpClient, memoryCache, cacheDuration);
+            });
             services.AddScoped<IExchangeRateService, ExchangeRateService>();
 
             var serviceProvider = services.BuildServiceProvider();
