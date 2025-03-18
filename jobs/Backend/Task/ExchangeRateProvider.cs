@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
 
-public class ExchangeRateProvider
+public class ExchangeRateProvider : IExchangeRateProvider
 {
     private readonly IExchangeRateService _exchangeRateService;
     private readonly ILogger<ExchangeRateProvider> _logger;
