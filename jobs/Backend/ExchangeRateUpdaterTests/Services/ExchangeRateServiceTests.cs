@@ -2,6 +2,7 @@
 using ExchangeRateUpdater.Services;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
@@ -22,6 +23,7 @@ public class ExchangeRateServiceTests
     private Mock<TimeProvider> _timeProviderMock;
     private Mock<HttpMessageHandler> _handlerMock;
     private HttpClient _httpClient;
+    private MemoryCache _cache;
 
     [SetUp]
     public void Setup()
@@ -33,13 +35,15 @@ public class ExchangeRateServiceTests
         };
         _loggerMock = new Mock<ILogger<ExchangeRateService>>();
         _timeProviderMock = new Mock<TimeProvider>();
-        _exchangeRateService = new ExchangeRateService(_httpClient, _loggerMock.Object, _timeProviderMock.Object);
+        _cache = new MemoryCache(new MemoryCacheOptions());
+        _exchangeRateService = new ExchangeRateService(_httpClient, _loggerMock.Object, _timeProviderMock.Object, _cache);
     }
 
     [TearDown]
     public void TearDown()
     {
         _httpClient.Dispose();
+        _cache.Dispose();
     }
 
     [Test]
@@ -69,6 +73,11 @@ public class ExchangeRateServiceTests
         result.Rates.Should().NotBeNull();
         result.Rates.Should().HaveCount(1);
         result.Rates.Should().Contain(rate => rate.ValidFor == "2025-02-20" && rate.Order == 1 && rate.Currency == "Currency" && rate.Country == "Country" && rate.Amount == 1 && rate.CurrencyCode == "CUR" && rate.Rate == 15.852m);
+
+        // Verify cache was used
+        var cacheKey = $"ExchangeRates_{utcNow:yyyy-MM-dd}";
+        _cache.TryGetValue(cacheKey, out ExchangeRateListDto cachedRates);
+        cachedRates.Should().BeEquivalentTo(result);
     }
 
     [Test]
@@ -101,5 +110,88 @@ public class ExchangeRateServiceTests
                 It.IsAny<Exception>(),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
             Times.AtLeastOnce);
+    }
+
+    [Test]
+    public async Task GetExchangeRateListAsync_ShouldReturnCachedData_WhenAvailable()
+    {
+        // Arrange
+        var utcNow = new DateTimeOffset(2024, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(utcNow);
+
+        var cachedRates = new ExchangeRateListDto
+        {
+            Rates = new List<ExchangeRateDto>
+            {
+                new ExchangeRateDto { ValidFor = "2025-02-20", Order = 1, Currency = "Currency", Country = "Country", Amount = 1, CurrencyCode = "CUR", Rate = 15.852m }
+            }
+        };
+
+        var cacheKey = $"ExchangeRates_{utcNow:yyyy-MM-dd}";
+        _cache.Set(cacheKey, cachedRates);
+
+        // Act
+        var result = await _exchangeRateService.GetExchangeRateListAsync();
+
+        // Assert
+        result.Should().BeEquivalentTo(cachedRates);
+        _handlerMock.Protected().Verify("SendAsync", Times.Never(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+    }
+
+    [Test]
+    public async Task GetExchangeRateListAsync_ShouldFetchAndCacheData_WhenCacheMiss()
+    {
+        // Arrange
+        _handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("{\"rates\": [{\"validFor\": \"2025-02-20\", \"order\": 1, \"currency\": \"Currency\", \"country\": \"Country\", \"amount\": 1, \"currencyCode\": \"CUR\", \"rate\": 15.852}]}")
+            });
+
+        var utcNow = new DateTimeOffset(2024, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(utcNow);
+
+        // Act
+        var result = await _exchangeRateService.GetExchangeRateListAsync();
+
+        // Assert
+        result.Should().NotBeNull();
+        var cacheKey = $"ExchangeRates_{utcNow:yyyy-MM-dd}";
+        _cache.TryGetValue(cacheKey, out ExchangeRateListDto cachedRates);
+        cachedRates.Should().BeEquivalentTo(result);
+    }
+
+    [Test]
+    public async Task GetExchangeRateListAsync_ShouldCacheData_WhenApiCallIsSuccessful()
+    {
+        // Arrange
+        _handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("{\"rates\": [{\"validFor\": \"2025-02-20\", \"order\": 1, \"currency\": \"Currency\", \"country\": \"Country\", \"amount\": 1, \"currencyCode\": \"CUR\", \"rate\": 15.852}]}")
+            });
+
+        var utcNow = new DateTimeOffset(2024, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(utcNow);
+
+        // Act
+        await _exchangeRateService.GetExchangeRateListAsync();
+
+        // Assert
+        var cacheKey = $"ExchangeRates_{utcNow:yyyy-MM-dd}";
+        _cache.TryGetValue(cacheKey, out ExchangeRateListDto cachedRates);
+        cachedRates.Should().NotBeNull();
     }
 }
