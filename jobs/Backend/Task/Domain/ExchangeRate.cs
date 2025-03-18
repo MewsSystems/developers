@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Domain
 {
     public class ExchangeRate
     {
@@ -8,7 +8,7 @@
             TargetCurrency = targetCurrency;
             Value = value;
         }
-
+        // TODO: add summaries
         public Currency SourceCurrency { get; }
 
         public Currency TargetCurrency { get; }

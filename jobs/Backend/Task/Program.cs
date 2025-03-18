@@ -1,6 +1,13 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Application.Interfaces;
+using ExchangeRateUpdater.Application.Services;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.Interfaces;
+using ExchangeRateUpdater.Infrastructure.CzechNationalBank;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,12 +26,20 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient<IExchangeRateProvider, CnbExchangeRateProvider>();
+            services.AddScoped<IExchangeRateService, ExchangeRateService>();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var exchangeRateService = serviceProvider.GetRequiredService<IExchangeRateService>();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await exchangeRateService.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
