@@ -37,23 +37,23 @@ namespace ExchangeRateUpdater
                 })
                 .Build();
 
-            try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+            //try
+            //{
+            //    var provider = new ExchangeRateProvider();
+            //    var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+            //    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            //    foreach (var rate in rates)
+            //    {
+            //        Console.WriteLine(rate.ToString());
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            //}
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }
