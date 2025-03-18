@@ -2,14 +2,14 @@
 using ExchangeRateUpdater.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Retry;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Diagnostics;
+
 
 namespace ExchangeRateUpdater.Services;
 
@@ -19,6 +19,10 @@ public class ExchangeRateService : IExchangeRateService
     private readonly ILogger<ExchangeRateService> _logger;
     private readonly TimeProvider _timeProvider;
     private readonly IMemoryCache _cache;
+    private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
+
+
+    private static readonly ActivitySource ActivitySource = new("ExchangeRateService");
 
     public ExchangeRateService(IHttpClientFactory httpClientFactory, ILogger<ExchangeRateService> logger, TimeProvider timeProvider, IMemoryCache cache)
     {
@@ -26,11 +30,26 @@ public class ExchangeRateService : IExchangeRateService
         _logger = logger;
         _timeProvider = timeProvider;
         _cache = cache;
+
+        _retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .WaitAndRetryAsync(3, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(new Random().Next(0, 100)),
+                (outcome, timeSpan, retryCount, context) =>
+                {
+                    using var retryActivity = ActivitySource.StartActivity("PollyRetry");
+                    retryActivity?.SetTag("retry.count", retryCount);
+                    retryActivity?.SetTag("retry.waitTime", timeSpan.TotalSeconds);
+                    retryActivity?.SetTag("retry.exception", outcome.Exception?.Message ?? outcome.Result.StatusCode.ToString());
+
+                    _logger.LogWarning($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to {outcome.Exception?.Message ?? outcome.Result.StatusCode.ToString()}");
+                });
     }
 
     public async Task<ExchangeRateListDto> GetExchangeRateListAsync()
     {
-        var cacheKey = $"ExchangeRates_{_timeProvider.GetUtcNow():yyyy-MM-dd}"; 
+        var cacheKey = $"ExchangeRates_{_timeProvider.GetUtcNow():yyyy-MM-dd}";
 
         if (_cache.TryGetValue(cacheKey, out ExchangeRateListDto cachedRates))
         {
@@ -40,7 +59,12 @@ public class ExchangeRateService : IExchangeRateService
 
         try
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"exrates/daily?date={_timeProvider.GetUtcNow():yyyy-MM-dd}");
+            using var activity = ActivitySource.StartActivity("GetExchangeRates");
+
+            HttpResponseMessage response = await _retryPolicy.ExecuteAsync(() =>
+                _httpClient.GetAsync($"exrates/daily?date={_timeProvider.GetUtcNow():yyyy-MM-dd}")
+            );
+
             response.EnsureSuccessStatusCode();
 
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -48,10 +72,8 @@ public class ExchangeRateService : IExchangeRateService
 
             if (exchangeRates != null)
             {
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-                _cache.Set(cacheKey, exchangeRates, cacheEntryOptions); 
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                _cache.Set(cacheKey, exchangeRates, cacheEntryOptions);
                 _logger.LogInformation("Exchange rates fetched from API and cached.");
                 return exchangeRates;
             }
@@ -61,21 +83,10 @@ public class ExchangeRateService : IExchangeRateService
                 return null;
             }
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"HTTP request error: {ex.Message}");
-            return null;
-        }
-        catch (JsonException ex)
-        {
-            _logger.LogError($"JSON deserialization error: {ex.Message}");
-            return null;
-        }
         catch (Exception ex)
         {
             _logger.LogError($"General error: {ex.Message}");
-            return null;
+            throw;
         }
-
     }
 }

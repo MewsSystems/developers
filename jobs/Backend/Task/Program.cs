@@ -40,8 +40,7 @@ public static class Program
                 services.AddHttpClient(nameof(ExchangeRateService), client =>
                 {
                     client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/"); // Replace with the actual API URL
-                })
-                .AddPolicyHandler(GetRetryPolicy()); ;
+                });
 
                 services.AddScoped<IExchangeRateService, ExchangeRateService>();
                 services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
@@ -95,19 +94,5 @@ public static class Program
         }
 
         Console.ReadLine();
-    }
-
-
-    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-    {
-        return HttpPolicyExtensions
-            .HandleTransientHttpError() 
-            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-            .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (result, timeSpan, retryCount, context) =>
-                {
-                    Console.WriteLine($"Retry {retryCount} for {result.Result?.RequestMessage?.RequestUri}");
-                });
     }
 }

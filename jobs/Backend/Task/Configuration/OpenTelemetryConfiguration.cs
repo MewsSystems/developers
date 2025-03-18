@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Configuration;
 
@@ -19,8 +15,17 @@ public static class OpenTelemetryConfiguration
                 .AddService(serviceName: "ExchangeRateUpdater"))
             .WithTracing(tracing =>
             {
-                tracing.AddHttpClientInstrumentation();
-                tracing.AddConsoleExporter();
+                tracing
+                   .AddSource("ExchangeRateService")
+                   .AddHttpClientInstrumentation()
+                   .AddAspNetCoreInstrumentation()
+                   .AddConsoleExporter();
+            })
+            .WithMetrics(metrics =>
+             {
+                metrics
+                .AddMeter("ExchangeRateService")
+                .AddConsoleExporter();
             })
             .WithLogging(logging =>
             {
