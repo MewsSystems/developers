@@ -3,8 +3,6 @@ using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-using System.Linq;
 
 namespace ExchangeRateUpdater.Application.Services
 {

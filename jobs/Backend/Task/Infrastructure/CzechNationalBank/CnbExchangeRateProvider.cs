@@ -2,6 +2,7 @@
 using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Infrastructure.CzechNationalBank.DTOs;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,19 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
         private readonly TimeSpan _cacheDuration;
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly ILogger<CnbExchangeRateProvider> _logger;
 
-        public CnbExchangeRateProvider(HttpClient httpClient, IMemoryCache cache, TimeSpan cacheDuration)
+        public CnbExchangeRateProvider(
+            HttpClient httpClient,
+            IMemoryCache cache,
+            TimeSpan cacheDuration,
+            ILogger<CnbExchangeRateProvider> logger)
         {
             _cache = cache;
             _cacheDuration = cacheDuration;
             _httpClient = httpClient;
+            _logger = logger;
+
             _jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -40,40 +48,70 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 
             string cacheKey = $"ExchangeRates_{todayDate:yyyyMMdd}";
 
+            _logger.LogInformation("Fetching exchange rates for {Count} currencies at {Time}",
+                currencies?.Count() ?? 0, todayDate);
+
             if (_cache.TryGetValue(cacheKey, out IEnumerable<ExchangeRate> cachedRates))
             {
+                _logger.LogInformation("Cache hit for key {CacheKey}", cacheKey);
                 rates = cachedRates;
             }
 
             else
             {
-                var CnbExchangeRateResponse = await FetchExchangeRatesAsync();
+                _logger.LogInformation("Cache miss for key {CacheKey}. Calling CNB API...", cacheKey);
 
-                rates = CnbExchangeRateMapper.Map(CnbExchangeRateResponse);
-
-                if (rates.Any() && rates != null)
+                try
                 {
-                    DateTime validFor = DateTime.Parse(CnbExchangeRateResponse.Rates.First().ValidFor).Date;
+                    var CnbExchangeRateResponse = await FetchExchangeRatesAsync();
 
-                    string newCacheKey = $"ExchangeRates_{validFor:yyyyMMdd}";
+                    rates = CnbExchangeRateMapper.Map(CnbExchangeRateResponse);
 
-                    _cache.Set(newCacheKey, rates, _cacheDuration);
+                    if (rates.Any() && rates != null)
+                    {
+                        DateTime validFor = DateTime.Parse(CnbExchangeRateResponse.Rates.First().ValidFor).Date;
+
+                        string newCacheKey = $"ExchangeRates_{validFor:yyyyMMdd}";
+
+                        _logger.LogInformation("Caching exchange rates under key {CacheKey} for {Duration} hours",
+                            newCacheKey, _cacheDuration.TotalHours);
+
+                        _cache.Set(newCacheKey, rates, _cacheDuration);
+
+                        _logger.LogInformation("Caching successful");
+                    }
+                    else
+                    {
+                        _logger.LogWarning("CNB API returned no exchange rates.");
+                    }
                 }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error fetching or mapping exchange rates from CNB API.");
+                    throw;
+                }                
             }
 
             var requestedCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 
-            return rates.Where(rate => requestedCodes.Contains(rate.TargetCurrency.Code));
+            var filteredRates = rates.Where(rate => requestedCodes.Contains(rate.TargetCurrency.Code));
+
+            _logger.LogInformation("Returning {Count} filtered exchange rates", filteredRates.Count());
+
+            return filteredRates;
         }
 
         private async Task<CnbExchangeRateResponse> FetchExchangeRatesAsync()
         {
             string apiUrl = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN"; //TODO: move to some config file
 
+            _logger.LogDebug("Making request to CNB API at {Url}", apiUrl);
+
             HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
             if (!response.IsSuccessStatusCode)
             {
+                _logger.LogWarning("CNB API request to {Url} failed with status code {StatusCode}", apiUrl, response.StatusCode);
                 throw new HttpRequestException($"Request to {apiUrl} failed with status code {response.StatusCode}");
             }
 
