@@ -35,15 +35,15 @@ namespace ExchangeRateUpdater.Tests.Infrastructure.CzechNationalBank
 
             // Assert
             Assert.Equal(2, results.Count);
-            var jpyRate = results.FirstOrDefault(r => r.TargetCurrency.Code.Equals("JPY", StringComparison.OrdinalIgnoreCase));
+            var jpyRate = results.FirstOrDefault(r => r.SourceCurrency.Code.Equals("JPY", StringComparison.OrdinalIgnoreCase));
             Assert.NotNull(jpyRate);
             Assert.Equal(0.1543m, jpyRate.Value);
-            Assert.Equal("CZK", jpyRate.SourceCurrency.Code);
+            Assert.Equal("CZK", jpyRate.TargetCurrency.Code);
 
-            var usdRate = results.FirstOrDefault(r => r.TargetCurrency.Code.Equals("USD", StringComparison.OrdinalIgnoreCase));
+            var usdRate = results.FirstOrDefault(r => r.SourceCurrency.Code.Equals("USD", StringComparison.OrdinalIgnoreCase));
             Assert.NotNull(usdRate);
             Assert.Equal(23.50m, usdRate.Value);
-            Assert.Equal("CZK", usdRate.SourceCurrency.Code);
+            Assert.Equal("CZK", usdRate.TargetCurrency.Code);
         }
 
         [Fact]

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.DTOs
+﻿namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.DTOs
 {
     /// <summary>
     /// Represents a single exchange rate entry from the Czech National Bank API.
@@ -17,7 +11,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank.DTOs
         public string ValidFor { get; set; }
 
         /// <summary>
-        /// TODO: what is this?
+        /// The order number
         /// </summary>
         public int Order { get; set; }
 

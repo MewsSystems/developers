@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ExchangeRateUpdater.Domain
+﻿namespace ExchangeRateUpdater.Domain
 {
     /// <summary>
     /// Represents an exchange rate between two currencies.

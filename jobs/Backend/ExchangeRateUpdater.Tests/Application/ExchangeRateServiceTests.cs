@@ -14,7 +14,7 @@ namespace ExchangeRateUpdater.Tests.Application
             var mockProvider = new Mock<IExchangeRateProvider>();
             var sampleRates = new List<ExchangeRate>
             {
-                new ExchangeRate(new Currency("CZK"), new Currency("USD"), 23.5m)
+                new ExchangeRate(new Currency("USD"), new Currency("CZK"), 23.5m)
             };
             mockProvider.Setup(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()))
                         .ReturnsAsync(sampleRates);
@@ -27,7 +27,7 @@ namespace ExchangeRateUpdater.Tests.Application
 
             // Assert
             Assert.Single(result);
-            Assert.Equal("USD", result.First().TargetCurrency.Code);
+            Assert.Equal("USD", result.First().SourceCurrency.Code);
             mockProvider.Verify(p => p.GetExchangeRatesAsync(It.IsAny<IEnumerable<Currency>>()), Times.Once);
         }
 

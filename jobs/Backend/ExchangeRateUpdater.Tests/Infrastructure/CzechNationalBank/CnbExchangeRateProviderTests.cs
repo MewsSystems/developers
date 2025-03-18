@@ -77,8 +77,8 @@ namespace ExchangeRateUpdater.Tests.Infrastructure.CzechNationalBank
 
             // Assert
             Assert.Equal(2, result.Count());
-            Assert.Contains(result, r => r.TargetCurrency.Code == "USD" && Math.Abs(r.Value - 23.5m) < 0.001m);
-            Assert.Contains(result, r => r.TargetCurrency.Code == "JPY" && Math.Abs(r.Value - 15.43m) < 0.001m);
+            Assert.Contains(result, r => r.SourceCurrency.Code == "USD" && Math.Abs(r.Value - 23.5m) < 0.001m);
+            Assert.Contains(result, r => r.SourceCurrency.Code == "JPY" && Math.Abs(r.Value - 15.43m) < 0.001m);
             handlerMock.Protected().Verify("SendAsync", Times.Once(),
                                            ItExpr.IsAny<HttpRequestMessage>(),
                                            ItExpr.IsAny<CancellationToken>());

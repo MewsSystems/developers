@@ -14,6 +14,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 {
     public class CnbExchangeRateProvider : IExchangeRateProvider
     {
+        private const string ApiUrl = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN";
         private readonly IMemoryCache _cache;
         private readonly TimeSpan _cacheDuration;
         private readonly HttpClient _httpClient;
@@ -100,7 +101,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 
             var requestedCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 
-            var filteredRates = rates.Where(rate => requestedCodes.Contains(rate.TargetCurrency.Code));
+            var filteredRates = rates.Where(rate => requestedCodes.Contains(rate.SourceCurrency.Code));
 
             _logger.LogInformation("Returning {Count} filtered exchange rates", filteredRates.Count());
 
@@ -109,16 +110,14 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
 
         private async Task<CnbExchangeRateResponse> FetchExchangeRatesAsync()
         {
-            string apiUrl = "https://api.cnb.cz/cnbapi/exrates/daily?lang=EN"; //TODO: move to some config file
+            _logger.LogDebug("Making request to CNB API at {Url}", ApiUrl);
 
-            _logger.LogDebug("Making request to CNB API at {Url}", apiUrl);
-
-            HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+            HttpResponseMessage response = await _httpClient.GetAsync(ApiUrl);
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("CNB API request to {Url} failed with status code {StatusCode}", apiUrl, response.StatusCode);
-                throw new HttpRequestException($"Request to {apiUrl} failed with status code {response.StatusCode}");
+                _logger.LogWarning("CNB API request to {Url} failed with status code {StatusCode}", ApiUrl, response.StatusCode);
+                throw new HttpRequestException($"Request to {ApiUrl} failed with status code {response.StatusCode}");
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();

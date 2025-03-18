@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater.Infrastructure.CzechNationalBank
                 {
                     decimal normalizedRate = rate.Rate / rate.Amount;
                     DateTime validFor = DateTime.Parse(rate.ValidFor).Date;
-                    return new ExchangeRate(new Currency("CZK"), new Currency(rate.CurrencyCode), normalizedRate); // TODO: hardcode CZK?
+                    return new ExchangeRate(new Currency(rate.CurrencyCode), new Currency("CZK"), normalizedRate);
                 });
         }
     }
