@@ -1,12 +1,19 @@
 ﻿using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly.Extensions.Http;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 
 namespace ExchangeRateUpdater;
 
@@ -25,18 +32,24 @@ public static class Program
         new Currency("XYZ")
     };
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
+                services.AddHttpClient(nameof(ExchangeRateService), client =>
                 {
-                    client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");  //TODO: WILL NEED TO MOVE TO APPSETTINGS ONCE CREATED
-                });
+                    client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/"); // Replace with the actual API URL
+                })
+                .AddPolicyHandler(GetRetryPolicy()); ;
 
                 services.AddScoped<IExchangeRateService, ExchangeRateService>();
                 services.AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
+                services.AddSingleton(TimeProvider.System);
+                services.AddSingleton<IMemoryCache, MemoryCache>();
+
+                services.AddHealthChecks()
+                        .AddCheck<ExchangeRateHealthCheck>("ExchangeRateAPI");
 
                 OpenTelemetryConfiguration.ConfigureOpenTelemetry(services);
                 services.AddLogging(loggingBuilder =>
@@ -49,26 +62,52 @@ public static class Program
                     });
                 });
             })
-            .Build();
+              .ConfigureWebHostDefaults(webBuilder =>
+              {
+                  webBuilder.Configure(app =>
+                  {
+                      app.UseRouting();
+
+                      app.UseEndpoints(endpoints =>
+                      {
+                          endpoints.ConfigureHealthCheckEndpoint();
+
+                      });
+                  });
+              })
+              .Build();
+
+        var exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
+
+        try
+        {
+            var rates = await  exchangeRateProvider.GetExchangeRates(currencies);
+
+            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            foreach (var rate in rates)
+            {
+                Console.WriteLine(rate.ToString());
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+        }
+
+        Console.ReadLine();
+    }
 
 
-        
-        //try
-        //{
-        //    var provider = new ExchangeRateProvider();
-        //    var rates = provider.GetExchangeRates(currencies);
-
-        //    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-        //    foreach (var rate in rates)
-        //    {
-        //        Console.WriteLine(rate.ToString());
-        //    }
-        //}
-        //catch (Exception e)
-        //{
-        //    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-        //}
-
-        //Console.ReadLine();
+    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+    {
+        return HttpPolicyExtensions
+            .HandleTransientHttpError() 
+            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            .WaitAndRetryAsync(3, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                (result, timeSpan, retryCount, context) =>
+                {
+                    Console.WriteLine($"Retry {retryCount} for {result.Result?.RequestMessage?.RequestUri}");
+                });
     }
 }

@@ -20,9 +20,9 @@ public class ExchangeRateService : IExchangeRateService
     private readonly TimeProvider _timeProvider;
     private readonly IMemoryCache _cache;
 
-    public ExchangeRateService(HttpClient httpClient, ILogger<ExchangeRateService> logger, TimeProvider timeProvider, IMemoryCache cache)
+    public ExchangeRateService(IHttpClientFactory httpClientFactory, ILogger<ExchangeRateService> logger, TimeProvider timeProvider, IMemoryCache cache)
     {
-        _httpClient = httpClient;
+        _httpClient = httpClientFactory.CreateClient(nameof(ExchangeRateService));
         _logger = logger;
         _timeProvider = timeProvider;
         _cache = cache;
@@ -40,7 +40,7 @@ public class ExchangeRateService : IExchangeRateService
 
         try
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"cnapi/exrates/daily?date={_timeProvider.GetUtcNow():yyyy-MM-dd}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"exrates/daily?date={_timeProvider.GetUtcNow():yyyy-MM-dd}");
             response.EnsureSuccessStatusCode();
 
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -49,9 +49,9 @@ public class ExchangeRateService : IExchangeRateService
             if (exchangeRates != null)
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); // Set cache expiration time
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
-                _cache.Set(cacheKey, exchangeRates, cacheEntryOptions); // Set the cache here
+                _cache.Set(cacheKey, exchangeRates, cacheEntryOptions); 
                 _logger.LogInformation("Exchange rates fetched from API and cached.");
                 return exchangeRates;
             }
