@@ -19,6 +19,8 @@ public class ExchangeRateDto
     public string CurrencyCode { get; set; }
     [JsonPropertyName("order")]
     public int Order { get; set; }
-    [JsonPropertyName("counntry")]
+    [JsonPropertyName("country")]
     public string Country { get; set; }
+    [JsonPropertyName("validFor")]
+    public string ValidFor { get; set; }
 }
