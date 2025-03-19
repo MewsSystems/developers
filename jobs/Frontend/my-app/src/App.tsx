@@ -1,9 +1,10 @@
 import './App.css';
+import { MovieSearch } from './pages/MovieSearch';
 
 function App() {
   return (
     <>
-      <h1>Hello world</h1>
+      <MovieSearch></MovieSearch>
     </>
   );
 }
