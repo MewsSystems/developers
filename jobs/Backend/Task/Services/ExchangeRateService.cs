@@ -15,6 +15,11 @@ namespace ExchangeRateUpdater.Services;
 
 public class ExchangeRateService : IExchangeRateService
 {
+    /// <summary>
+    ///  This service is  responsible for fetching exchange rate data from an api.cnb.cz/cnbapi/ API.
+    ///It also implements resilience strategies using Polly for retries and caching mechanisms to reduce API calls.
+    /// </summary>
+
     private readonly HttpClient _httpClient;
     private readonly ILogger<ExchangeRateService> _logger;
     private readonly TimeProvider _timeProvider;

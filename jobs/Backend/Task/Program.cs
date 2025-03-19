@@ -39,7 +39,7 @@ public static class Program
             {
                 services.AddHttpClient(nameof(ExchangeRateService), client =>
                 {
-                    client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/"); // Replace with the actual API URL
+                    client.BaseAddress = new Uri("https://api.cnb.cz/cnbapi/");
                 });
 
                 services.AddScoped<IExchangeRateService, ExchangeRateService>();

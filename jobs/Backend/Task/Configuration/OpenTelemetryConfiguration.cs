@@ -8,6 +8,11 @@ namespace ExchangeRateUpdater.Configuration;
 
 public static class OpenTelemetryConfiguration
 {
+    /// <summary>
+    /// This extension method is used for configuring OpenTelemetry tracing, metrics, and logging.
+    /// It ensures distributed tracing and observability across the application.
+    /// </summary>
+
     public static void ConfigureOpenTelemetry(IServiceCollection services)
     {
         services.AddOpenTelemetry()
