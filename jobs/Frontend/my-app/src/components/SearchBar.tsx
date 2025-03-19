@@ -1,7 +1,16 @@
+// import { useState } from 'react';
+
 export const SearchBar = () => {
+  //   const [query, setQuery] = useState('');
   return (
     <>
-      <input type="text" placeholder="Enter movie name" />
+      <label>
+        <input
+          type="text"
+          placeholder="Enter movie name"
+          //   onChange={(e) => setQuery(e.target.value)}
+        />
+      </label>
     </>
   );
 };
