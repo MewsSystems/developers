@@ -6,6 +6,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
+using Polly;
+using Polly.Retry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,8 @@ public class ExchangeRateServiceTests
     private Mock<HttpMessageHandler> _handlerMock;
     private HttpClient _httpClient;
     private MemoryCache _cache;
+    private Mock<IHttpClientFactory> _httpClientFactoryMock;
+    private AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
 
     [SetUp]
     public void Setup()
@@ -36,7 +40,22 @@ public class ExchangeRateServiceTests
         _loggerMock = new Mock<ILogger<ExchangeRateService>>();
         _timeProviderMock = new Mock<TimeProvider>();
         _cache = new MemoryCache(new MemoryCacheOptions());
-        _exchangeRateService = new ExchangeRateService(_httpClient, _loggerMock.Object, _timeProviderMock.Object, _cache);
+        _httpClientFactoryMock = new Mock<IHttpClientFactory>();
+
+        _httpClientFactoryMock.Setup(factory => factory.CreateClient(nameof(ExchangeRateService)))
+            .Returns(_httpClient);
+
+        _retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+            .WaitAndRetryAsync(3, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + TimeSpan.FromMilliseconds(new Random().Next(0, 100)),
+                (outcome, timeSpan, retryCount, context) =>
+                {
+                    _loggerMock.Object.LogWarning($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to {outcome.Exception?.Message ?? outcome.Result.StatusCode.ToString()}");
+                });
+        _exchangeRateService = new ExchangeRateService(_httpClientFactoryMock.Object,
+              _loggerMock.Object, _timeProviderMock.Object, _cache);
     }
 
     [TearDown]
@@ -98,10 +117,10 @@ public class ExchangeRateServiceTests
         var utcNow = new DateTimeOffset(2024, 1, 15, 12, 0, 0, TimeSpan.Zero);
         _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(utcNow);
 
-        // Act
-        await _exchangeRateService.GetExchangeRateListAsync();
+        // Act & Assert
+        await FluentActions.Awaiting(() => _exchangeRateService.GetExchangeRateListAsync())
+            .Should().ThrowAsync<HttpRequestException>();
 
-        // Assert
         _loggerMock.Verify(
             x => x.Log(
                 LogLevel.Error,
@@ -193,5 +212,47 @@ public class ExchangeRateServiceTests
         var cacheKey = $"ExchangeRates_{utcNow:yyyy-MM-dd}";
         _cache.TryGetValue(cacheKey, out ExchangeRateListDto cachedRates);
         cachedRates.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task GetExchangeRateListAsync_ShouldRetry_WhenApiFails()
+    {
+        var retryCount = 0;
+        _handlerMock
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(() =>
+            {
+                retryCount++;
+                return retryCount < 3
+                    ? new HttpResponseMessage { StatusCode = HttpStatusCode.InternalServerError }
+                    : new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent("{\"rates\": [{\"validFor\": \"2025-02-20\", \"order\": 1, \"currency\": \"Currency\", \"country\": \"Country\", \"amount\": 1, \"currencyCode\": \"CUR\", \"rate\": 15.852}]}")
+                    };
+            });
+
+        var utcNow = new DateTimeOffset(2024, 1, 15, 12, 0, 0, TimeSpan.Zero);
+        _timeProviderMock.Setup(tp => tp.GetUtcNow()).Returns(utcNow);
+
+        // Act
+        var result = await _exchangeRateService.GetExchangeRateListAsync();
+
+        // Assert
+        result.Should().NotBeNull();
+        retryCount.Should().Be(3);
+        _loggerMock.Verify(
+            x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+            Times.Exactly(2)
+        );
     }
 }
