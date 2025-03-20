@@ -1,7 +1,10 @@
 import './App.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { MovieSearch } from './pages/MovieSearch';
 import { MovieDetailPage } from './pages/MovieDetailPage';
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -15,7 +18,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
