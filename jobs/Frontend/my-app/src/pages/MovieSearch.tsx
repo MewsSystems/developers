@@ -1,7 +1,7 @@
 import { PageSectionContainer } from '../components/PageSectionContainer';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
-import { SearchResultCard } from '../components/SearchResultCard';
+import { MovieCard } from '../components/MovieCard';
 import { ShowMoreCards } from '../components/ShowMoreCards';
 
 export const MovieSearch = () => {
@@ -12,7 +12,7 @@ export const MovieSearch = () => {
         <SearchBar />
       </PageSectionContainer>
       <PageSectionContainer>
-        <SearchResultCard />
+        <MovieCard />
       </PageSectionContainer>
       <ShowMoreCards />
       <Pagination />
