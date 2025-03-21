@@ -1,10 +1,18 @@
-import { PageSectionContainer } from '../components/PageSectionContainer';
+import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
 import { MovieCard } from '../components/MovieCard';
 import { ShowMoreCards } from '../components/ShowMoreCards';
 import { useQuery } from '@tanstack/react-query';
 import { fetchData } from '../search-api';
+
+interface Movie {
+  id: number;
+  title: string;
+  release_date: string;
+  vote_average: string;
+  poster_path: string;
+}
 
 export const MovieSearch = () => {
   const { data: movies, isLoading } = useQuery({
@@ -17,15 +25,23 @@ export const MovieSearch = () => {
   }
   return (
     <div>
-      <PageSectionContainer>
+      <PageSection>
         <h1>Movie Search</h1>
         <SearchBar />
-      </PageSectionContainer>
-      <PageSectionContainer>
-        {movies.results?.map((movie) => {
-          return <MovieCard key={movie.id} />;
+      </PageSection>
+      <PageSection direction="row">
+        {movies.results?.map((movie: Movie) => {
+          return (
+            <MovieCard
+              key={movie.id}
+              poster={movie.poster_path}
+              name={movie.title}
+              rating={movie.vote_average}
+              release_date={movie.release_date}
+            />
+          );
         })}
-      </PageSectionContainer>
+      </PageSection>
       <ShowMoreCards />
       <Pagination />
     </div>
