@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
@@ -16,15 +16,28 @@ interface Movie {
 }
 
 export const MovieSearch = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setPage(1);
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   const {
     data: movies,
     isLoading,
     isError,
   } = useQuery({
-    queryFn: () => fetchMovies('potter', page * 10 - 10),
-    queryKey: ['movies', page],
+    queryFn: () => fetchMovies(debouncedSearchQuery, page * 10 - 10),
+    queryKey: ['movies', debouncedSearchQuery, page],
+    enabled: !!debouncedSearchQuery,
     keepPreviousData: true,
   });
 
@@ -40,7 +53,7 @@ export const MovieSearch = () => {
     <div>
       <PageSection>
         <h1>Movie Search</h1>
-        <SearchBar />
+        <SearchBar onSearchChange={setSearchQuery} />
       </PageSection>
       <PageSection direction="row">
         {movies?.movieArray.map((movie: Movie) => {
