@@ -23,7 +23,7 @@ export const MovieSearch = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryFn: () => fetchMovies('potter', page),
+    queryFn: () => fetchMovies('potter', page * 10 - 10),
     queryKey: ['movies', page],
     keepPreviousData: true,
   });
