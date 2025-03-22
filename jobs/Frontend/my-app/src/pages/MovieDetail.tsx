@@ -28,7 +28,11 @@ export const MovieDetail = () => {
   if (isLoading) return <div>Loading movie details...</div>;
   if (isError) return <div>Error loading movie details!</div>;
 
-  console.log(fetchMovieDetails(671));
+  // console.log(fetchMovieDetails(671));
+  const releaseYear = movie?.release_date
+    ? new Date(movie.release_date).getFullYear()
+    : 'Unknown';
+
   return (
     <>
       <PageSection>
@@ -45,7 +49,7 @@ export const MovieDetail = () => {
         />
         <div>
           <h1>
-            {movie.title} ({movie.release_date})
+            {movie.title} ({releaseYear})
           </h1>
           <p>
             {movie?.genres.map((genre: Genre) => {
