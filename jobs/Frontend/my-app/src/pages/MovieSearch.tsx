@@ -43,7 +43,7 @@ export const MovieSearch = () => {
         <SearchBar />
       </PageSection>
       <PageSection direction="row">
-        {movies?.map((movie: Movie) => {
+        {movies?.movieArray.map((movie: Movie) => {
           return (
             <MovieCard
               key={movie.id}
@@ -57,7 +57,11 @@ export const MovieSearch = () => {
       </PageSection>
       <PageSection>
         <ShowMoreCards />
-        <Pagination currentPage={page} onPageChange={setPage} />
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          totalPages={movies.totalPages}
+        />
       </PageSection>
     </div>
   );
