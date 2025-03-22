@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import fallback_image from './../assets/image-load-failed.svg';
+import { Link } from 'react-router-dom';
 
 const StyledMovieCard = styled.div`
   display: flex;
@@ -34,6 +35,7 @@ interface MovieCardProps {
   name: string;
   rating: string;
   release_date: string;
+  to: string;
 }
 
 export const MovieCard = ({
@@ -41,15 +43,20 @@ export const MovieCard = ({
   name,
   rating,
   release_date,
+  to,
 }: MovieCardProps) => {
   return (
     <StyledMovieCard>
-      <StyledMovieCardPoster
-        src={
-          poster ? `https://image.tmdb.org/t/p/w200/${poster}` : fallback_image
-        }
-        alt="Movie poster"
-      />
+      <Link to={to}>
+        <StyledMovieCardPoster
+          src={
+            poster
+              ? `https://image.tmdb.org/t/p/w200/${poster}`
+              : fallback_image
+          }
+          alt="Movie poster"
+        />
+      </Link>
       <StyledMovieCardTitle>{name}</StyledMovieCardTitle>
       <StyledMovieCardPlainText>{rating}</StyledMovieCardPlainText>
       <StyledMovieCardPlainText>{release_date}</StyledMovieCardPlainText>

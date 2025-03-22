@@ -38,7 +38,6 @@ export const MovieSearch = () => {
     queryFn: () => fetchMovies(debouncedSearchQuery, page * 10 - 10),
     queryKey: ['movies', debouncedSearchQuery, page],
     enabled: !!debouncedSearchQuery,
-    keepPreviousData: true,
   });
 
   // console.log(movies);
@@ -63,6 +62,7 @@ export const MovieSearch = () => {
                   name={movie.title}
                   rating={movie.vote_average}
                   release_date={movie.release_date}
+                  to={`/movie-detail/${movie.id}`}
                 />
               );
             })}

@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <MovieSearch />,
   },
   {
-    path: '/movie-detail', //add variable for movie name
+    path: '/movie-detail/:movieId',
     element: <MovieDetail />,
   },
 ]);
