@@ -5,7 +5,7 @@ import { SearchBar } from '../components/SearchBar';
 import { MovieCard } from '../components/MovieCard';
 import { ShowMoreCards } from '../components/ShowMoreCards';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovies } from '../search-api';
+import { fetchMovies, MoviesData } from '../search-api';
 
 interface Movie {
   id: number;
@@ -34,20 +34,14 @@ export const MovieSearch = () => {
     data: movies,
     isLoading,
     isError,
-  } = useQuery({
+  } = useQuery<MoviesData>({
     queryFn: () => fetchMovies(debouncedSearchQuery, page * 10 - 10),
     queryKey: ['movies', debouncedSearchQuery, page],
     enabled: !!debouncedSearchQuery,
     keepPreviousData: true,
   });
 
-  console.log(movies);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError || !movies) return <div>Error loading movies!</div>;
+  // console.log(movies);
 
   return (
     <div>
@@ -55,27 +49,35 @@ export const MovieSearch = () => {
         <h1>Movie Search</h1>
         <SearchBar onSearchChange={setSearchQuery} />
       </PageSection>
-      <PageSection direction="row">
-        {movies?.movieArray.map((movie: Movie) => {
-          return (
-            <MovieCard
-              key={movie.id}
-              poster={movie.poster_path}
-              name={movie.title}
-              rating={movie.vote_average}
-              release_date={movie.release_date}
+
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>Error loading movies!</div>}
+      {movies && (
+        <>
+          <PageSection direction="row">
+            {movies?.movieArray.map((movie: Movie) => {
+              return (
+                <MovieCard
+                  key={movie.id}
+                  poster={movie.poster_path}
+                  name={movie.title}
+                  rating={movie.vote_average}
+                  release_date={movie.release_date}
+                />
+              );
+            })}
+          </PageSection>
+
+          <PageSection>
+            <ShowMoreCards />
+            <Pagination
+              currentPage={page}
+              onPageChange={setPage}
+              totalPages={movies.totalPages}
             />
-          );
-        })}
-      </PageSection>
-      <PageSection>
-        <ShowMoreCards />
-        <Pagination
-          currentPage={page}
-          onPageChange={setPage}
-          totalPages={movies.totalPages}
-        />
-      </PageSection>
+          </PageSection>
+        </>
+      )}
     </div>
   );
 };
