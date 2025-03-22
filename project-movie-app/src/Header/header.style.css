@@ -1,0 +1,27 @@
+/* header */
+
+.header {
+    background-color: #1c1c1c;
+    padding: 20px 20px 20px 30px;
+}
+
+@media screen and (min-width: 600px) {
+    .header {
+        padding-left: 80px;
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    .header {
+        padding-left: 90px;
+    }
+}
+
+.header__logo {
+    width: 130px;
+    cursor: pointer;
+}
+
+.header__image {
+    width: 100%;
+}
