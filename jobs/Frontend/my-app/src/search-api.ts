@@ -1,7 +1,7 @@
 //authentication for API
 const tmdbApiKey = '03b8572954325680265531140190fd2a';
 
-export const fetchData = async (movieKeyword: string) => {
+export const fetchMovies = async (movieKeyword: string, page: number) => {
   const response = await fetch(
     `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&query=${movieKeyword}`
   );

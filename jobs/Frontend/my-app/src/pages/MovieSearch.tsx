@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
 import { MovieCard } from '../components/MovieCard';
 import { ShowMoreCards } from '../components/ShowMoreCards';
 import { useQuery } from '@tanstack/react-query';
-import { fetchData } from '../search-api';
+import { fetchMovies } from '../search-api';
 
 interface Movie {
   id: number;
@@ -15,14 +16,18 @@ interface Movie {
 }
 
 export const MovieSearch = () => {
+  const [page, setPage] = useState(1);
+
   const { data: movies, isLoading } = useQuery({
-    queryFn: () => fetchData('potter'),
-    queryKey: ['movies'],
+    queryFn: () => fetchMovies('potter', page),
+    queryKey: ['movies', page],
+    keepPreviousData: true,
   });
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div>
       <PageSection>
@@ -42,8 +47,10 @@ export const MovieSearch = () => {
           );
         })}
       </PageSection>
-      <ShowMoreCards />
-      <Pagination />
+      <PageSection>
+        <ShowMoreCards />
+        <Pagination />
+      </PageSection>
     </div>
   );
 };
