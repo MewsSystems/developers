@@ -45,6 +45,14 @@ export const MovieCard = ({
   release_date,
   to,
 }: MovieCardProps) => {
+  const formattedReleaseDate = release_date
+    ? new Date(release_date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : 'Unknown';
+
   return (
     <StyledMovieCard>
       <Link to={to}>
@@ -59,7 +67,9 @@ export const MovieCard = ({
       </Link>
       <StyledMovieCardTitle>{name}</StyledMovieCardTitle>
       <StyledMovieCardPlainText>{rating}</StyledMovieCardPlainText>
-      <StyledMovieCardPlainText>{release_date}</StyledMovieCardPlainText>
+      <StyledMovieCardPlainText>
+        {formattedReleaseDate}
+      </StyledMovieCardPlainText>
     </StyledMovieCard>
   );
 };
