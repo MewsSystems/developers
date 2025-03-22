@@ -36,7 +36,11 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <StyledPagination>
-      <PaginationButton direction="Previous" onClick={handlePrevious} />
+      <PaginationButton
+        direction="Previous"
+        onClick={handlePrevious}
+        disabled={currentPage === 1}
+      />
       <StyledPageNumber>{currentPage}</StyledPageNumber>
       <PaginationButton
         direction="Next"

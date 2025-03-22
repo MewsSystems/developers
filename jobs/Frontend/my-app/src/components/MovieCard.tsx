@@ -8,12 +8,15 @@ const StyledMovieCard = styled.div`
   width: 100%;
   padding: 1rem;
   align-items: center;
+  align-self: baseline;
   font-size: 0.875rem;
 `;
 
 const StyledMovieCardPoster = styled.img`
   border-radius: 10px;
   max-width: 150px;
+  height: 225px;
+  width: auto;
 `;
 
 const StyledMovieCardPlainText = styled.p`
