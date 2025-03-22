@@ -18,15 +18,23 @@ interface Movie {
 export const MovieSearch = () => {
   const [page, setPage] = useState(1);
 
-  const { data: movies, isLoading } = useQuery({
+  const {
+    data: movies,
+    isLoading,
+    isError,
+  } = useQuery({
     queryFn: () => fetchMovies('potter', page),
     queryKey: ['movies', page],
     keepPreviousData: true,
   });
 
+  console.log(movies);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  if (isError || !movies) return <div>Error loading movies!</div>;
 
   return (
     <div>
@@ -35,7 +43,7 @@ export const MovieSearch = () => {
         <SearchBar />
       </PageSection>
       <PageSection direction="row">
-        {movies.results?.map((movie: Movie) => {
+        {movies?.map((movie: Movie) => {
           return (
             <MovieCard
               key={movie.id}
@@ -49,7 +57,7 @@ export const MovieSearch = () => {
       </PageSection>
       <PageSection>
         <ShowMoreCards />
-        <Pagination />
+        <Pagination currentPage={page} onPageChange={setPage} />
       </PageSection>
     </div>
   );
