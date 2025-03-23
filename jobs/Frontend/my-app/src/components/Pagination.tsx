@@ -9,6 +9,7 @@ const StyledPagination = styled.div`
 
 const StyledPageNumber = styled.p`
   font-weight: 700;
+  margin-block: auto;
 `;
 
 interface PaginationProps {
