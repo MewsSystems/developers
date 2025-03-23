@@ -1,29 +1,33 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 const StyledSearchBar = styled.input`
   max-width: 100%;
-  width: 50vw;
+  width: 90vw;
+  padding-left: 0.5rem;
+  padding-block: 0.25rem;
   border: 1px solid lightgrey;
   border-radius: 10px;
+  transition: all 0.3s ease-in-out;
 
   &[type='text']:hover,
   &[type='text']:focus {
-    border-color: #007bff;
+    border-color: none;
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 5px rgba(192, 38, 211, 0.5);
+  }
+
+  @media (min-width: 600px) {
+    width: 50vw;
   }
 `;
 
 interface SearchBarProps {
+  value: string;
   onSearchChange: (query: string) => void;
 }
 
-export const SearchBar = ({ onSearchChange }: SearchBarProps) => {
-  const [query, setQuery] = useState('');
-
+export const SearchBar = ({ value, onSearchChange }: SearchBarProps) => {
   const handleChange = (value: string) => {
-    setQuery(value);
     onSearchChange(value);
   };
   return (
@@ -32,7 +36,7 @@ export const SearchBar = ({ onSearchChange }: SearchBarProps) => {
         <StyledSearchBar
           type="text"
           placeholder="Enter movie name or a keyword"
-          value={query}
+          value={value}
           onChange={(e) => handleChange(e.target.value)}
         />
       </label>

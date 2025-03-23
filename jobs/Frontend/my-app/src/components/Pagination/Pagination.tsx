@@ -7,8 +7,9 @@ const StyledPagination = styled.div`
   gap: 1.5rem;
 `;
 
-const StyledPageNumber = styled.span`
+const StyledPageNumber = styled.p`
   font-weight: 700;
+  margin-block: auto;
 `;
 
 interface PaginationProps {
