@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const StyledSearchBar = styled.input`
   max-width: 100%;
   width: 90vw;
+  padding-left: 0.5rem;
+  padding-block: 0.25rem;
   border: 1px solid lightgrey;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
