@@ -3,7 +3,7 @@ import styled from 'styled-components';
 type PageSectionProps = {
   children?: React.ReactNode;
   direction?: 'row' | 'column';
-  backgroundColor?: 'none' | '#e0e0e0';
+  $backgroundcolor?: 'none' | '#e0e0e0';
 };
 
 const StyledPageSection = styled.div<PageSectionProps>`
@@ -12,20 +12,23 @@ const StyledPageSection = styled.div<PageSectionProps>`
   flex-wrap: wrap;
   gap: 2rem;
   max-width: 1250px;
-  padding: 2rem;
+  padding: 1rem;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${(props) => props.backgroundColor || 'none'};
+  background-color: ${(props) => props.$backgroundcolor || 'none'};
 `;
 
 export const PageSection = ({
   children,
   direction,
-  backgroundColor,
+  $backgroundcolor,
 }: PageSectionProps) => {
   return (
-    <StyledPageSection direction={direction} backgroundColor={backgroundColor}>
+    <StyledPageSection
+      direction={direction}
+      $backgroundcolor={$backgroundcolor}
+    >
       {children}
     </StyledPageSection>
   );

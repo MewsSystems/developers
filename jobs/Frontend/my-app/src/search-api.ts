@@ -32,11 +32,9 @@ export const fetchMovies = async (movieKeyword: string, offset: number) => {
 
   const moviesData: MoviesData = {
     movieArray: data.results.slice(indexInPage, indexInPage + 10),
-
     totalPages: Math.ceil(data.total_results / 10),
   };
 
-  console.log(moviesData);
   return moviesData;
 };
 
@@ -57,7 +55,6 @@ export const fetchPopularMovies = async (offset: number) => {
 
   const popularMoviesData: MoviesData = {
     movieArray: data.results.slice(indexInPage, indexInPage + 10),
-
     totalPages: Math.ceil(data.total_results / 10),
   };
 

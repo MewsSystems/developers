@@ -115,7 +115,7 @@ export const MovieDetail = () => {
       <PageSection>
         <StyledLink to="/">← Back to search</StyledLink>
       </PageSection>
-      <PageSection direction="row" backgroundColor="#e0e0e0">
+      <PageSection direction="row" $backgroundcolor="#e0e0e0">
         <StyledMoviePoster
           src={
             movie.poster_path

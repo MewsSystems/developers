@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PageSection } from '../components/PageSection';
-import { Pagination } from '../components/Pagination';
+import { Pagination } from '../components/Pagination/Pagination';
 import { SearchBar } from '../components/SearchBar';
 import { MovieCard } from '../components/MovieCard';
 import { useState, useEffect } from 'react';
