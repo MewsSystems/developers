@@ -11,7 +11,7 @@ import {
   Movie,
   MoviesData,
 } from '../search-api';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 export const StyledH1 = styled.h1`
   margin-left: 0.5rem;
@@ -41,13 +41,22 @@ export const MovieSearch = () => {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleReset = () => {
-    setSearchQuery('');
-    setDebouncedSearchQuery('');
-    setPage(1);
-    navigate('/');
-  };
+  useEffect(() => {
+    // Check the URL for query parameters
+    const params = new URLSearchParams(location.search);
+    const query = params.get('searchQuery');
+    const pageParam = params.get('page');
+
+    if (query) {
+      setSearchQuery(query);
+      setDebouncedSearchQuery(query);
+    }
+    if (pageParam) {
+      setPage(Number(pageParam));
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -57,6 +66,14 @@ export const MovieSearch = () => {
 
     return () => clearTimeout(handler);
   }, [searchQuery]);
+
+  // Update the URL when searchQuery or page changes
+  useEffect(() => {
+    const queryParams = new URLSearchParams();
+    if (searchQuery) queryParams.set('searchQuery', searchQuery);
+    queryParams.set('page', page.toString());
+    navigate(`?${queryParams.toString()}`, { replace: true });
+  }, [searchQuery, page, navigate]);
 
   // Search movies query
   const {
@@ -84,11 +101,18 @@ export const MovieSearch = () => {
   const isError = debouncedSearchQuery ? isMoviesError : isPopularError;
   const movieList = debouncedSearchQuery ? movies : popularMovies;
 
+  const handleReset = () => {
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
+    setPage(1);
+    navigate('/');
+  };
+
   return (
     <div>
       <PageSection>
-        <Link to={'/'}>
-          <StyledH1 onClick={handleReset}>Movie Search</StyledH1>
+        <Link to={'/'} onClick={handleReset}>
+          <StyledH1>Movie Search</StyledH1>
         </Link>
         <SearchBar onSearchChange={setSearchQuery} value={searchQuery} />
       </PageSection>
