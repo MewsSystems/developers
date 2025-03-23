@@ -10,7 +10,6 @@ const StyledMovieCard = styled.div`
   padding: 1rem;
   align-items: center;
   align-self: baseline;
-  font-size: 0.875rem;
 `;
 
 const StyledMovieCardPoster = styled.img`
@@ -27,11 +26,13 @@ const StyledMovieCardPoster = styled.img`
 const StyledMovieCardPlainText = styled.p`
   width: 100%;
   margin: 0;
+  font-size: 0.75rem;
   text-wrap: pretty;
 `;
 
 const StyledMovieCardTitle = styled(StyledMovieCardPlainText)`
   font-weight: 700;
+  font-size: 0.875rem;
 `;
 
 interface MovieCardProps {

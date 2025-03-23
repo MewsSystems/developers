@@ -1,10 +1,43 @@
+import styled from 'styled-components';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMovieDetails } from '../search-api';
 import { PageSection } from '../components/PageSection';
 import fallback_image from './../assets/image-load-failed.svg';
 
-// console.log(fetchMovieDetails(50));
+const StyledLink = styled(Link)`
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #141414;
+  &:hover,
+  &:focus {
+    color: #141414;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(to right, #f43f5e, #c026d3, #4d5b9e);
+    transition: all 0.3s ease-in-out;
+  }
+
+  &:hover::before {
+    width: 100%;
+  }
+`;
+
+const StyledMoviePoster = styled.img`
+  border-radius: 10px;
+`;
+
 interface Genre {
   id: number;
   name: string;
@@ -12,7 +45,6 @@ interface Genre {
 
 export const MovieDetail = () => {
   const { movieId } = useParams<{ movieId: string }>();
-
   const numericMovieId = Number(movieId);
 
   const {
@@ -28,7 +60,6 @@ export const MovieDetail = () => {
   if (isLoading) return <div>Loading movie details...</div>;
   if (isError) return <div>Error loading movie details!</div>;
 
-  // console.log(fetchMovieDetails(671));
   const releaseYear = movie?.release_date
     ? new Date(movie.release_date).getFullYear()
     : 'Unknown';
@@ -36,10 +67,10 @@ export const MovieDetail = () => {
   return (
     <>
       <PageSection>
-        <Link to="/">⬅️ Back to search</Link>
+        <StyledLink to="/">← Back to search</StyledLink>
       </PageSection>
-      <PageSection>
-        <img
+      <PageSection direction="row" backgroundColor="#4d5b9e">
+        <StyledMoviePoster
           src={
             movie.poster_path
               ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`

@@ -13,7 +13,7 @@ import {
 } from '../search-api';
 import { Link, useNavigate } from 'react-router-dom';
 
-const StyledH1 = styled.h1`
+export const StyledH1 = styled.h1`
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   position: relative;

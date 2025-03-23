@@ -5,12 +5,13 @@ const StyledSearchBar = styled.input`
   width: 50vw;
   border: 1px solid lightgrey;
   border-radius: 10px;
+  transition: all 0.3s ease-in-out;
 
   &[type='text']:hover,
   &[type='text']:focus {
-    border-color: #007bff;
+    border-color: none;
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 5px rgba(192, 38, 211, 0.5);
   }
 `;
 
