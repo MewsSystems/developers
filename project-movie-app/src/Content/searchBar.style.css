@@ -1,0 +1,24 @@
+/* search bar */
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.search-bar label {
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.search-bar input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+}
