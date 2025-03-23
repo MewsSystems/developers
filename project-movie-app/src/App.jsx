@@ -3,6 +3,11 @@ import "./Header/header.style.css"
 import { SearchBar } from './Content/SearchBar'
 import "./Content/SearchBar.style.css"
 import { CardContainer } from './Content/CardContainer'
+import "./Content/cardContainer.style.css"
+import { Button } from './Button/Button'
+import "./Button/button.style.css"
+import { Footer } from './Footer/Footer'
+import "./Footer/footer.style.css"
 
 export const App = () => {
 
@@ -14,8 +19,10 @@ export const App = () => {
             <h2>Popular Movies</h2>
             <SearchBar/>
             <CardContainer/>
+            <Button/>
           </div>
         </main>
+      <Footer/>
     </>
   )
 }
