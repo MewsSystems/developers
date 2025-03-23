@@ -14,7 +14,7 @@ const StyledSearchBar = styled.input`
     box-shadow: 0 0 5px rgba(192, 38, 211, 0.5);
   }
 
-  @media (mmin-width: 600px) {
+  @media (min-width: 600px) {
     width: 50vw;
   }
 `;
