@@ -13,11 +13,15 @@ import {
 } from '../search-api';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-export const StyledH1 = styled.h1`
+const StyledH1 = styled.h1`
+  --f-h1: clamp(2rem, 1.6rem + 2vw, 3.2rem);
+
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   position: relative;
   display: inline-block;
+  font-size: var(--f-h1);
+  line-height: var(--f-h1) * 1.2;
   color: #141414;
 
   &::before {

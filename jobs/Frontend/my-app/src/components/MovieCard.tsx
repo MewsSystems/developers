@@ -7,7 +7,6 @@ const StyledMovieCard = styled.div`
   flex-flow: column nowrap;
   max-width: 200px;
   width: 100%;
-  padding: 1rem;
   align-items: center;
   align-self: baseline;
 `;
@@ -27,7 +26,6 @@ const StyledMovieCardPlainText = styled.p`
   width: 100%;
   margin: 0;
   font-size: 0.75rem;
-  text-wrap: pretty;
 `;
 
 const StyledMovieCardTitle = styled(StyledMovieCardPlainText)`

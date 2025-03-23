@@ -6,16 +6,17 @@ import { PageSection } from '../components/PageSection';
 import fallback_image from './../assets/image-load-failed.svg';
 
 const StyledLink = styled(Link)`
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  --primary-color: #141414;
+
+  margin-inline: 0.5rem;
   position: relative;
   display: inline-block;
   font-weight: 700;
   font-size: 1.125rem;
-  color: #141414;
+  color: var(--primary-color);
   &:hover,
   &:focus {
-    color: #141414;
+    color: var(--primary-color);
   }
 
   &::before {
@@ -37,6 +38,51 @@ const StyledLink = styled(Link)`
 const StyledMoviePoster = styled.img`
   border-radius: 10px;
 `;
+
+const StyledMovieInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 50%;
+  text-align: left;
+`;
+
+const StyledMovieInfoHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const StyledMovieTitle = styled.h1`
+  --f-h1: clamp(2rem, 1.6rem + 2vw, 3.2rem);
+  font-size: var(--f-h1);
+  line-height: var(--f-h1) * 1.2;
+`;
+
+const StyledMovieData = styled(StyledMovieInfoHeader)`
+  font-size: 0.8125rem;
+`;
+
+const StyledMovieYearOfRelease = styled.span`
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.5833rem + 0.8333vw, 2.25rem);
+  opacity: 0.6;
+`;
+
+const StyledMovieGenreWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+`;
+
+const StyledMovieGenre = styled.span`
+  background-color: white;
+  padding: 0.25rem;
+  border-radius: 10px;
+`;
+
+const StyledMovieCopy = styled(StyledMovieInfoHeader)``;
 
 interface Genre {
   id: number;
@@ -69,7 +115,7 @@ export const MovieDetail = () => {
       <PageSection>
         <StyledLink to="/">← Back to search</StyledLink>
       </PageSection>
-      <PageSection direction="row" backgroundColor="#4d5b9e">
+      <PageSection direction="row" backgroundColor="#e0e0e0">
         <StyledMoviePoster
           src={
             movie.poster_path
@@ -78,25 +124,41 @@ export const MovieDetail = () => {
           }
           alt="Movie poster"
         />
-        <div>
-          <h1>
-            {movie.title} ({releaseYear})
-          </h1>
-          <p>
-            {movie?.genres.map((genre: Genre) => {
-              return <span key={genre.name}>{genre.name}</span>;
-            })}
-          </p>
-        </div>
-        <div>
-          <p>{movie.vote_average}</p>
-          <p>{`${movie.runtime} min`}</p>
-        </div>
-        <div>
-          <p>{movie.tagline}</p>
-          <h2>Overview</h2>
-          <p>{movie.overview}</p>
-        </div>
+        <StyledMovieInfo>
+          <StyledMovieInfoHeader>
+            <StyledMovieTitle>
+              {movie.title}{' '}
+              <StyledMovieYearOfRelease>
+                ({releaseYear})
+              </StyledMovieYearOfRelease>
+            </StyledMovieTitle>
+            <StyledMovieGenreWrapper>
+              {movie?.genres.map((genre: Genre) => {
+                return (
+                  <StyledMovieGenre key={genre.name}>
+                    {genre.name}
+                  </StyledMovieGenre>
+                );
+              })}
+            </StyledMovieGenreWrapper>
+          </StyledMovieInfoHeader>
+          <StyledMovieData>
+            <p>
+              <strong>Average rating: </strong>
+              {movie.vote_average}
+            </p>
+            <p>
+              <strong>Runtime:</strong> {`${movie.runtime} min`}
+            </p>
+          </StyledMovieData>
+          <StyledMovieCopy>
+            <p>
+              <em>{movie.tagline}</em>
+            </p>
+            <h2>Overview</h2>
+            <p>{movie.overview}</p>
+          </StyledMovieCopy>
+        </StyledMovieInfo>
       </PageSection>
     </>
   );
