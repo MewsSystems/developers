@@ -37,7 +37,7 @@ export const MovieSearch = () => {
   } = useQuery<MoviesData>({
     queryFn: () => fetchMovies(debouncedSearchQuery, page * 10 - 10),
     queryKey: ['movies', debouncedSearchQuery, page],
-    enabled: !!debouncedSearchQuery, // Only runs when searchQuery is present
+    enabled: !!debouncedSearchQuery,
   });
 
   // Popular movies query
@@ -48,7 +48,7 @@ export const MovieSearch = () => {
   } = useQuery<MoviesData>({
     queryFn: () => fetchPopularMovies(page * 10 - 10),
     queryKey: ['popularMovies', page],
-    enabled: !debouncedSearchQuery, // Runs only when there is NO search query
+    enabled: !debouncedSearchQuery,
   });
 
   const isLoading = debouncedSearchQuery ? isMoviesLoading : isPopularLoading;
