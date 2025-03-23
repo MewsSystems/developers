@@ -1,32 +1,23 @@
 import "./cardContainer.style.css"
 import { Card } from "./Card"
-import { BASE_API_URL, API_KEY } from "../constants/API.constants"
 import { useState } from "react"
 import { useEffect } from "react"
+import { getFormattedMovies } from "../constants/getFormattedMovies"
 
-export const CardContainer = () => {
+export const CardContainer = ({page = 1}) => {
     const [items, setItems] = useState([])
 
     useEffect(()=> {
-        const fetchPaginatedMovies = async () => {
-            try {
-                const reqMovies = await fetch(`${BASE_API_URL}/movie/popular?api_key=${API_KEY}&page=1`)
-                const movies = await reqMovies.json()
-
-                setItems(movies.results)
-            }
-            catch (error) {
-                console.error("Error fetching popular movies:", error)
-            }
-        }
-        fetchPaginatedMovies()
+        getFormattedMovies(page).then((data) => {
+            setItems(data)
+        })
     },[])
 
     return (
         <div className="card-container">
             {items
                 .map((item) => (
-                <Card posterPath={item.poster_path} title={item.original_title}/>
+                <Card key={item.id} posterPath={item.posterPath} title={item.title}/>
                 ))
             }
         </div>
