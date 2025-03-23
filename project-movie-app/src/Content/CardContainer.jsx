@@ -4,20 +4,26 @@ import { useState } from "react"
 import { useEffect } from "react"
 import { getFormattedMovies } from "../constants/getFormattedMovies"
 
-export const CardContainer = ({page = 1}) => {
+export const CardContainer = ({page}) => {
     const [items, setItems] = useState([])
 
     useEffect(()=> {
         getFormattedMovies(page).then((data) => {
-            setItems(data)
+            if (page === 1) {
+                setItems(data) // first load
+            }
+            else {
+                setItems((prev) => 
+                    [...prev, ...data]); // pagination
+            }
         })
-    },[])
+    },[page])
 
     return (
         <div className="card-container">
             {items
-                .map((item) => (
-                <Card key={item.id} posterPath={item.posterPath} title={item.title}/>
+                .map((item, index) => (
+                <Card key={`${item.id}-${page}-${index}`} posterPath={item.posterPath} title={item.title}/>
                 ))
             }
         </div>
