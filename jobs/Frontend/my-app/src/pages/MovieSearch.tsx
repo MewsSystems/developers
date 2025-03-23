@@ -48,24 +48,27 @@ export const MovieSearch = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Check the URL for query parameters
-    const params = new URLSearchParams(location.search);
-    const query = params.get('searchQuery');
-    const pageParam = params.get('page');
+    const handler = setTimeout(() => {
+      // Check the URL for query parameters
+      const params = new URLSearchParams(location.search);
+      const query = params.get('searchQuery');
+      const pageParam = params.get('page');
 
-    if (query) {
-      setSearchQuery(query);
-      setDebouncedSearchQuery(query);
-    }
-    if (pageParam) {
-      setPage(Number(pageParam));
-    }
+      if (query) {
+        setSearchQuery(query);
+        setDebouncedSearchQuery(query);
+      }
+      if (pageParam) {
+        setPage(Number(pageParam));
+      }
+    }, 500);
+
+    return () => clearTimeout(handler);
   }, [location.search]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
-      setPage(1);
     }, 500);
 
     return () => clearTimeout(handler);

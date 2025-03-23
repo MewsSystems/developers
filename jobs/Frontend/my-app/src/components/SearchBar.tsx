@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const StyledSearchBar = styled.input`
   max-width: 100%;
-  width: 50vw;
+  width: 90vw;
   border: 1px solid lightgrey;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
@@ -12,6 +12,10 @@ const StyledSearchBar = styled.input`
     border-color: none;
     outline: none;
     box-shadow: 0 0 5px rgba(192, 38, 211, 0.5);
+  }
+
+  @media (mmin-width: 600px) {
+    width: 50vw;
   }
 `;
 
