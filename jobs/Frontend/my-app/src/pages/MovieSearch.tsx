@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react';
 import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
 import { MovieCard } from '../components/MovieCard';
-import { ShowMoreCards } from '../components/ShowMoreCards';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovies, MoviesData, fetchPopularMovies } from '../search-api';
-
-interface Movie {
-  id: number;
-  title: string;
-  release_date: string;
-  vote_average: string;
-  poster_path: string;
-}
+import {
+  fetchPopularMovies,
+  fetchMovies,
+  Movie,
+  MoviesData,
+} from '../search-api';
 
 export const MovieSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,7 +77,6 @@ export const MovieSearch = () => {
           </PageSection>
 
           <PageSection>
-            <ShowMoreCards />
             <Pagination
               currentPage={page}
               onPageChange={setPage}

@@ -22,7 +22,7 @@ export const MovieDetail = () => {
   } = useQuery({
     queryKey: ['movieDetails', numericMovieId],
     queryFn: () => fetchMovieDetails(numericMovieId),
-    enabled: !!movieId, // Don't run the query if no movieId
+    enabled: !!movieId,
   });
 
   if (isLoading) return <div>Loading movie details...</div>;
