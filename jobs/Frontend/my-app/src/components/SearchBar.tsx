@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 const StyledSearchBar = styled.input`
@@ -16,14 +15,12 @@ const StyledSearchBar = styled.input`
 `;
 
 interface SearchBarProps {
+  value: string;
   onSearchChange: (query: string) => void;
 }
 
-export const SearchBar = ({ onSearchChange }: SearchBarProps) => {
-  const [query, setQuery] = useState('');
-
+export const SearchBar = ({ value, onSearchChange }: SearchBarProps) => {
   const handleChange = (value: string) => {
-    setQuery(value);
     onSearchChange(value);
   };
   return (
@@ -32,7 +29,7 @@ export const SearchBar = ({ onSearchChange }: SearchBarProps) => {
         <StyledSearchBar
           type="text"
           placeholder="Enter movie name or a keyword"
-          value={query}
+          value={value}
           onChange={(e) => handleChange(e.target.value)}
         />
       </label>

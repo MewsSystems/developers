@@ -18,6 +18,10 @@ const StyledMovieCardPoster = styled.img`
   max-width: 150px;
   height: 225px;
   width: auto;
+  transition: all 0.3s ease-out;
+  &:hover {
+    transform: scale3d(1.04, 1.04, 1.04);
+  }
 `;
 
 const StyledMovieCardPlainText = styled.p`

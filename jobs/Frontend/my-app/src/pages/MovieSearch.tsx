@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination';
 import { SearchBar } from '../components/SearchBar';
@@ -10,11 +11,43 @@ import {
   Movie,
   MoviesData,
 } from '../search-api';
+import { Link, useNavigate } from 'react-router-dom';
+
+const StyledH1 = styled.h1`
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  position: relative;
+  display: inline-block;
+  color: #141414;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(to right, #f43f5e, #c026d3, #4d5b9e);
+    transition: all 0.3s ease;
+  }
+
+  &:hover::before {
+    width: 100%;
+  }
+`;
 
 export const MovieSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+
+  const handleReset = () => {
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
+    setPage(1);
+    navigate('/');
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -54,8 +87,10 @@ export const MovieSearch = () => {
   return (
     <div>
       <PageSection>
-        <h1>Movie Search</h1>
-        <SearchBar onSearchChange={setSearchQuery} />
+        <Link to={'/'}>
+          <StyledH1 onClick={handleReset}>Movie Search</StyledH1>
+        </Link>
+        <SearchBar onSearchChange={setSearchQuery} value={searchQuery} />
       </PageSection>
 
       {isLoading && <div>Loading...</div>}
