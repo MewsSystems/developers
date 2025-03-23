@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
 #root {
+  display: flex;
+  flex-direction: column;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;

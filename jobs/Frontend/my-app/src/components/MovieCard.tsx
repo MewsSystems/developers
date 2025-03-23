@@ -63,6 +63,9 @@ export const MovieCard = ({
               : fallback_image
           }
           alt="Movie poster"
+          style={{
+            opacity: poster ? 1 : 0.2,
+          }}
         />
       </Link>
       <StyledMovieCardTitle>{name}</StyledMovieCardTitle>
