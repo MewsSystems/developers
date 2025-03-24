@@ -6,14 +6,18 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5003:5000"
+      - "8080:5000"
+      - "8443:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
       - Redis__ConnectionString=redis:6379
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
     depends_on:
       redis:
         condition: service_healthy
+      jaeger:
+        condition: service_started
     networks:
       - exchange-rate-network
 
@@ -32,9 +36,28 @@ services:
     networks:
       - exchange-rate-network
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"  # UI
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+      - "14250:14250"  # Jaeger agent
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+      - JAEGER_AGENT_HOST=jaeger
+      - SPAN_STORAGE_TYPE=memory
+      - LOG_LEVEL=debug
+    volumes:
+      - jaeger_data:/var/lib/jaeger
+    networks:
+      - exchange-rate-network
+
 networks:
   exchange-rate-network:
     driver: bridge
 
 volumes:
-  redis_data: 
+  redis_data:
+  jaeger_data: 

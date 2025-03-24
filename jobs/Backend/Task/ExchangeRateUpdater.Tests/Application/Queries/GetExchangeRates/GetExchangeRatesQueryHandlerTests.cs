@@ -1,5 +1,5 @@
 using ExchangeRateUpdater.Application.Common;
-using ExchangeRateUpdater.Application.ExchangeRates.GetExchangeRates;
+using ExchangeRateUpdater.Application.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Core.Models;
 using FluentAssertions;
 using Moq;

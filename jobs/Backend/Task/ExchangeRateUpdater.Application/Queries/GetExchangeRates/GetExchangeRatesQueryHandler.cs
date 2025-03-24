@@ -3,7 +3,7 @@ using ExchangeRateUpdater.Application.Common;
 using MediatR;
 using System.Collections.Generic;
 
-namespace ExchangeRateUpdater.Application.ExchangeRates.GetExchangeRates;
+namespace ExchangeRateUpdater.Application.Queries.GetExchangeRates;
 
 public class GetExchangeRatesQueryHandler(IExchangeRateProvider exchangeRateProvider)
     : IRequestHandler<GetExchangeRatesQuery, IList<ExchangeRate>>
