@@ -13,6 +13,10 @@ services:
       - ASPNETCORE_URLS=http://+:5000
       - Redis__ConnectionString=redis:6379
       - ASPNETCORE_METRICS_PROMETHEUS_PORT=9090
+      - JwtSettings__Key=your-super-secret-key-with-minimum-16-characters
+      - JwtSettings__Issuer=exchange-rate-api
+      - JwtSettings__Audience=exchange-rate-clients
+      - JwtSettings__ExpiryInMinutes=60
     depends_on:
       redis:
         condition: service_healthy

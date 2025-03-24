@@ -1,7 +1,10 @@
 using System.Diagnostics.Metrics;
+using System.Text;
 using ExchangeRateUpdater.Api.Validators;
 using ExchangeRateUpdater.Application.Queries.GetExchangeRates;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 
@@ -52,6 +55,28 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMediatr(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetExchangeRatesQuery).Assembly));
+
+        return services;
+    }
+    
+    public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services, JwtSettings jwtSettings)
+    {
+        services.AddAuthorization();
+        
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+                };
+            });
 
         return services;
     }
