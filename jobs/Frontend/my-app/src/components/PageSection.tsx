@@ -8,6 +8,7 @@ type PageSectionProps = {
 
 const StyledPageSection = styled.div<PageSectionProps>`
   display: flex;
+  flex-grow: 1;
   flex-direction: ${(props) => props.direction || 'column'};
   flex-wrap: wrap;
   gap: 2rem;
