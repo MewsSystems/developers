@@ -12,11 +12,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
       - Redis__ConnectionString=redis:6379
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - ASPNETCORE_METRICS_PROMETHEUS_PORT=9090
     depends_on:
       redis:
         condition: service_healthy
-      jaeger:
+      prometheus:
         condition: service_started
     networks:
       - exchange-rate-network
@@ -36,21 +36,33 @@ services:
     networks:
       - exchange-rate-network
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
+  prometheus:
+    image: prom/prometheus:latest
     ports:
-      - "16686:16686"  # UI
-      - "4317:4317"    # OTLP gRPC
-      - "4318:4318"    # OTLP HTTP
-      - "14250:14250"  # Jaeger agent
-    environment:
-      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
-      - COLLECTOR_OTLP_ENABLED=true
-      - JAEGER_AGENT_HOST=jaeger
-      - SPAN_STORAGE_TYPE=memory
-      - LOG_LEVEL=debug
+      - "9090:9090"
     volumes:
-      - jaeger_data:/var/lib/jaeger
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - exchange-rate-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
     networks:
       - exchange-rate-network
 
@@ -60,4 +72,5 @@ networks:
 
 volumes:
   redis_data:
-  jaeger_data: 
+  prometheus_data:
+  grafana_data: 

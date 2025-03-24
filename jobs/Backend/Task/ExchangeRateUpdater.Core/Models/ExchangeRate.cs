@@ -14,4 +14,4 @@ public class ExchangeRate(Currency sourceCurrency, Currency targetCurrency, deci
     {
         return $"{SourceCurrency}/{TargetCurrency}={Value}";
     }
-} 
+}

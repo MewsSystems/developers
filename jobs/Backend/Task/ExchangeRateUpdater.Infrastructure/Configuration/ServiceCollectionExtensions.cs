@@ -3,9 +3,9 @@ using ExchangeRateUpdater.Infrastructure.CnbApi;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 
-namespace ExchangeRateUpdater.Infrastructure;
+namespace ExchangeRateUpdater.Infrastructure.Configuration;
 
-public static class DependencyInjection
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {

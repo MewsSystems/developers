@@ -11,4 +11,4 @@ public class Currency(string code)
     {
         return Code;
     }
-} 
+}
