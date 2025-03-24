@@ -9,12 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configure Redis output caching
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString") ?? "localhost:6379";
+
 builder.Services.AddOutputCache()
-                .AddStackExchangeRedisCache(x =>
-                {
-                    x.InstanceName = "ExchangeRateUpdater";
-                    x.Configuration = "localhost:6379";
-                });
+    .AddStackExchangeRedisCache(x =>
+    {
+        x.InstanceName = "ExchangeRateUpdater";
+        x.Configuration = redisConnectionString;
+    });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetExchangeRatesQuery).Assembly));
 
