@@ -1,6 +1,4 @@
-@ExchangeRateUpdater.Api_HostAddress = http://localhost:5003
+@ExchangeRateUpdater_Api_HostAddress = http://localhost:5003
 
-GET {{ExchangeRateUpdater.Api_HostAddress}}/exchange-rates/
+GET {{ExchangeRateUpdater_Api_HostAddress}}/exchange-rates/
 Accept: application/json
-
-###

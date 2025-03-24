@@ -2,11 +2,19 @@ using ExchangeRateUpdater.Application.ExchangeRates.GetExchangeRates;
 using ExchangeRateUpdater.Infrastructure;
 using MediatR;
 using ExchangeRateUpdater.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddOutputCache()
+                .AddStackExchangeRedisCache(x =>
+                {
+                    x.InstanceName = "ExchangeRateUpdater";
+                    x.Configuration = "localhost:6379";
+                });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetExchangeRatesQuery).Assembly));
 
@@ -21,11 +29,21 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseOutputCache();
 
-app.MapPost("/exchange-rates", async (GetExchangeRatesRequest request, IMediator mediator) =>
+app.MapGet("/exchange-rates", async (
+    [FromQuery] string[] currencyCodes,
+    [FromQuery] DateTime? date,
+    IMediator mediator) =>
 {
     try
     {
+        var request = new GetExchangeRatesRequest
+        {
+            CurrencyCodes = currencyCodes,
+            Date = date ?? DateTime.UtcNow
+        };
+
         var query = new GetExchangeRatesQuery(request.ToCurrencies(), request.Date);
         var rates = await mediator.Send(query);
         
@@ -45,6 +63,7 @@ app.MapPost("/exchange-rates", async (GetExchangeRatesRequest request, IMediator
         );
     }
 })
+.CacheOutput(x => x.Expire(TimeSpan.FromMinutes(5)))
 .WithName("GetExchangeRates")
 .WithOpenApi();
 
