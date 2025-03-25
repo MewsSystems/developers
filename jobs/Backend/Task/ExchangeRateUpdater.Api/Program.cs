@@ -71,6 +71,8 @@ app.MapGet("/exchange-rates", async(
     .WithName("GetExchangeRates")
     .WithOpenApi();
 
+// TODO: Add endpoints for future business needs (e.g., time series generation, etc.)
+
 app.MapPost("/cache/purge", async (
     IOutputCacheStore cache,
     CancellationToken cancellationToken) =>
