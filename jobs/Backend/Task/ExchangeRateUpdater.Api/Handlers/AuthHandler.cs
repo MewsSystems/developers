@@ -13,9 +13,10 @@ public static class AuthHandler
     public static async Task<IResult> GenerateToken(
         ClientCredentials credentials,
         JwtSettings jwtSettings,
-        IValidator<ClientCredentials> validator)
+        IValidator<ClientCredentials> validator,
+        CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(credentials);
+        var validationResult = await validator.ValidateAsync(credentials, cancellationToken);
         if (!validationResult.IsValid)
         {
             return Results.BadRequest(new
@@ -30,7 +31,8 @@ public static class AuthHandler
         }
 
         // Hardcoded check for demo purposes
-        if (credentials.ClientId != "exchange-rate-client" || credentials.ClientSecret != "your-super-secret-key")
+        if (credentials is not { ClientId: "exchange-rate-client" or "exchange-rate-admin", 
+                ClientSecret: "your-super-secret-key" })
         {
             return Results.Unauthorized();
         }
@@ -42,7 +44,8 @@ public static class AuthHandler
         {
             new Claim(JwtRegisteredClaimNames.Sub, credentials.ClientId),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
+            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+            new Claim(ClaimTypes.Role, credentials.ClientId == "exchange-rate-admin" ? "Admin" : "User")
         };
 
         var token = new JwtSecurityToken(

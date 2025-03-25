@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, string applicationName)
     {
+        // TODO: Add more thorough OpenTelemetry instrumentation (HTTP client, runtime metrics, etc.)
         services.AddOpenTelemetry()
             .WithMetrics(metrics =>
             {
@@ -30,7 +31,10 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
-    public static IServiceCollection AddDistributedRedisCache(this IServiceCollection services, string applicationName, string redisConnectionString)
+    public static IServiceCollection AddDistributedRedisCache(
+        this IServiceCollection services, 
+        string applicationName, 
+        string redisConnectionString)
     {
         services.AddOutputCache()
             .AddStackExchangeRedisCache(x =>
@@ -56,7 +60,9 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
-    public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services, JwtSettings jwtSettings)
+    public static IServiceCollection AddJwtBearerAuthentication(
+        this IServiceCollection services, 
+        JwtSettings jwtSettings)
     {
         services.AddAuthorization();
         

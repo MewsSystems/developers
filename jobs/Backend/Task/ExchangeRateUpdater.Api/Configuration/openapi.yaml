@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  title: Exchange Rate Updater API
+  version: 1.0.0
+  description: |
+    API for retrieving exchange rates and managing cache.
+    
+    This API provides endpoints to:
+    - Authenticate clients using JWT tokens
+    - Retrieve exchange rates for specified currencies
+    - Manage the exchange rates cache (admin only)
+    
+    The exchange rates are fetched from the Czech National Bank (CNB) API.
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: /
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: Endpoints for managing authentication
+  - name: Exchange Rates
+    description: Endpoints for retrieving exchange rates
+  - name: Cache Management
+    description: Endpoints for managing the exchange rates cache
+
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.
+
+  schemas:
+    ClientCredentials:
+      type: object
+      required:
+        - clientId
+        - clientSecret
+      properties:
+        clientId:
+          type: string
+          description: Client ID for authentication
+          example: exchange-rate-client
+        clientSecret:
+          type: string
+          description: Client secret for authentication
+          format: password
+          example: your-super-secret-key
+
+    ExchangeRate:
+      type: object
+      required:
+        - currencyCode
+        - rate
+        - date
+      properties:
+        currencyCode:
+          type: string
+          description: Three-letter currency code (e.g., USD, EUR)
+          example: USD
+        rate:
+          type: number
+          description: Exchange rate value
+          example: 23.45
+        date:
+          type: string
+          format: date-time
+          description: Date when the rate was recorded
+          example: "2024-03-25T10:00:00Z"
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the operation was successful
+          example: false
+        errors:
+          type: array
+          description: List of validation errors
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Name of the field with error
+                example: currencyCodes
+              message:
+                type: string
+                description: Error message
+                example: "At least one currency code is required"
+
+paths:
+  /token:
+    post:
+      tags:
+        - Authentication
+      summary: Generate JWT token
+      description: |
+        Generates a JWT token for API authentication.
+        
+        The token will be valid for 60 minutes by default.
+        Different client IDs may have different roles:
+        - exchange-rate-client: Regular user access
+        - exchange-rate-admin: Admin access with additional privileges
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCredentials'
+            example:
+              clientId: exchange-rate-client
+              clientSecret: your-super-secret-key
+      responses:
+        '200':
+          description: Successfully generated token
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - token
+                  - expiresIn
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                    description: JWT token for API authentication
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  expiresIn:
+                    type: integer
+                    description: Token validity period in minutes
+                    example: 60
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid client credentials
+
+  /exchange-rates:
+    get:
+      tags:
+        - Exchange Rates
+      summary: Get exchange rates for specified currencies
+      description: |
+        Retrieves exchange rates for the provided currency codes.
+        
+        If no date is specified, returns the latest available rates.
+        Rates are cached for 5 minutes to improve performance.
+      security:
+        - Bearer: []
+      parameters:
+        - name: currencyCodes
+          in: query
+          required: true
+          description: Array of currency codes to get exchange rates for (e.g., USD, EUR)
+          schema:
+            type: array
+            items:
+              type: string
+          example: ["USD", "EUR"]
+        - name: date
+          in: query
+          required: false
+          description: Optional date to get historical exchange rates. If not provided, returns the latest available rates.
+          schema:
+            type: string
+            format: date-time
+          example: "2024-03-25T10:00:00Z"
+      responses:
+        '200':
+          description: Successfully retrieved exchange rates
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - count
+                  - rates
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    description: Number of exchange rates returned
+                    example: 2
+                  rates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExchangeRate'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '404':
+          description: Exchange rates not found for the specified parameters
+
+  /cache/purge:
+    post:
+      tags:
+        - Cache Management
+      summary: Purge exchange rates cache
+      description: |
+        Purges the cached exchange rates data.
+        
+        This endpoint requires admin role and will invalidate all cached exchange rates,
+        forcing the next request to fetch fresh data from the CNB API.
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Cache successfully purged
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - message
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Cache purged successfully"
+        '401':
+          description: Unauthorized - Invalid or missing token
+        '403':
+          description: Forbidden - Admin role required 

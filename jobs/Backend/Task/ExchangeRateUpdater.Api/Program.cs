@@ -5,6 +5,9 @@ using ExchangeRateUpdater.Infrastructure.Configuration;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+
+// TODO: Integrate Serilog (or similar) for logging and configure OpenTelemetry sink
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +28,17 @@ builder.Services.AddDistributedRedisCache(builder.Environment.ApplicationName, r
 builder.Services.AddValidators();
 builder.Services.AddMediatr();
 builder.Services.AddInfrastructure();
+
 builder.Services.AddJwtBearerAuthentication(jwtSettings);
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminAccess", policy => policy.RequireRole("Admin"));
+    });
 
 var app = builder.Build();
+
+// TODO: Populate Swagger or use configuration/openapi.yaml to generate Postman collection
+// TODO: From .NET 9 onwards, refer to https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,8 +53,9 @@ app.UseAuthorization();
 
 app.MapPost("/token", async (
     [FromBody] ClientCredentials credentials,
-    [FromServices] IValidator<ClientCredentials> validator) => 
-    await AuthHandler.GenerateToken(credentials, jwtSettings, validator))
+    [FromServices] IValidator<ClientCredentials> validator,
+    CancellationToken cancellationToken) => 
+    await AuthHandler.GenerateToken(credentials, jwtSettings, validator, cancellationToken))
     .WithName("GenerateToken")
     .WithOpenApi();
 
@@ -51,11 +63,20 @@ app.MapGet("/exchange-rates", async(
     [FromQuery] string[] currencyCodes,
     [FromQuery] DateTime? date,
     [FromServices] IMediator mediator,
-    [FromServices] IValidator<GetExchangeRatesRequest> validator) => 
-    await ExchangeRatesHandler.GetExchangeRates(currencyCodes, date, mediator, validator))
-    .CacheOutput(x => x.Expire(TimeSpan.FromMinutes(5)))
+    [FromServices] IValidator<GetExchangeRatesRequest> validator,
+    CancellationToken cancellationToken) => 
+    await ExchangeRatesHandler.GetExchangeRates(currencyCodes, date, mediator, validator, cancellationToken))
+    .CacheOutput(x => x.Expire(TimeSpan.FromMinutes(5)).Tag("exchange-rates"))
     .RequireAuthorization()
     .WithName("GetExchangeRates")
+    .WithOpenApi();
+
+app.MapPost("/cache/purge", async (
+    IOutputCacheStore cache,
+    CancellationToken cancellationToken) =>
+    await CacheHandler.PurgeCache(cache, cancellationToken))
+    .RequireAuthorization("AdminAccess")
+    .WithName("PurgeCache")
     .WithOpenApi();
 
 app.Run();

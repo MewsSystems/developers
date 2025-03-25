@@ -14,7 +14,8 @@ public static class ExchangeRatesHandler
         [FromQuery] string[] currencyCodes,
         [FromQuery] DateTime? date,
         IMediator mediator,
-        IValidator<GetExchangeRatesRequest> validator)
+        IValidator<GetExchangeRatesRequest> validator,
+        CancellationToken cancellationToken)
     {
         var request = new GetExchangeRatesRequest
         {
@@ -22,7 +23,7 @@ public static class ExchangeRatesHandler
             Date = date ?? DateTime.UtcNow
         };
 
-        var validationResult = await validator.ValidateAsync(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
         
         if (!validationResult.IsValid)
         {
@@ -39,7 +40,7 @@ public static class ExchangeRatesHandler
 
         try
         {
-            var rates = await GetExchangeRates(request, mediator);
+            var rates = await GetExchangeRates(request, mediator, cancellationToken);
             rates.CaptureExchangeRates();
             
             return Results.Ok(new
@@ -61,10 +62,11 @@ public static class ExchangeRatesHandler
 
     private static async Task<List<ExchangeRate>> GetExchangeRates(
         GetExchangeRatesRequest request,
-        IMediator mediator)
+        IMediator mediator,
+        CancellationToken cancellationToken)
     {
         var query = new GetExchangeRatesQuery(request.ToCurrencies(), request.Date);
-        return (await mediator.Send(query)).ToList();
+        return (await mediator.Send(query, cancellationToken)).ToList();
     }
     
     private static void CaptureExchangeRates(this List<ExchangeRate> rates)

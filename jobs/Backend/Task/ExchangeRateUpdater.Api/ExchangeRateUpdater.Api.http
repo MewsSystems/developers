@@ -1,4 +1,26 @@
-@ExchangeRateUpdater_Api_HostAddress = http://localhost:5003
+### Get token
+# @name login
+POST {{host}}/token
+Content-Type: application/json
 
-GET {{ExchangeRateUpdater_Api_HostAddress}}/exchange-rates/
+{
+    "clientId": "exchange-rate-client",
+    "clientSecret": "your-super-secret-key"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+### Get all exchange rates
+GET {{host}}/exchange-rates
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get exchange rates for specific currencies
+GET {{host}}/exchange-rates?currencyCodes=USD&currencyCodes=EUR
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get exchange rates for specific currencies and date
+GET {{host}}/exchange-rates?currencyCodes=USD&currencyCodes=EUR&date=2025-01-01
+Authorization: Bearer {{token}}
 Accept: application/json

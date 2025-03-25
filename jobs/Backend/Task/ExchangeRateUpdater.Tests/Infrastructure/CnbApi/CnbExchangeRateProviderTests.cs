@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Tests.Infrastructure.CnbApi;
 
+// TODO: Consider FluentAssertions licensing for commercial use
+
 public class CnbExchangeRateProviderTests
 {
     private readonly Mock<ICnbApi> _cnbApiMock;

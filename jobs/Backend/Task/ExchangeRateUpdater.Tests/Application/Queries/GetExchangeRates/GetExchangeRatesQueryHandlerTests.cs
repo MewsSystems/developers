@@ -5,7 +5,9 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ExchangeRateUpdater.Tests.Application.ExchangeRates.GetExchangeRates;
+namespace ExchangeRateUpdater.Tests.Application.Queries.GetExchangeRates;
+
+// TODO: Consider FluentAssertions licensing for commercial use
 
 public class GetExchangeRatesQueryHandlerTests
 {
