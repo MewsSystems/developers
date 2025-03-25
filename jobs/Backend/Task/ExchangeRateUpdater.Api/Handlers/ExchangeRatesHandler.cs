@@ -1,4 +1,4 @@
-using ExchangeRateUpdater.Api.Metrics;
+using ExchangeRateUpdater.Api.Configuration;
 using ExchangeRateUpdater.Api.Models;
 using ExchangeRateUpdater.Application.Queries.GetExchangeRates;
 using ExchangeRateUpdater.Core.Models;
@@ -40,8 +40,7 @@ public static class ExchangeRatesHandler
         try
         {
             var rates = await GetExchangeRates(request, mediator);
-            
-            SharedMetrics.ExchangeRatesCounter.Add(rates.Count);
+            rates.CaptureExchangeRates();
             
             return Results.Ok(new
             {
@@ -60,11 +59,16 @@ public static class ExchangeRatesHandler
         }
     }
 
-    private static async Task<IList<ExchangeRate>> GetExchangeRates(
+    private static async Task<List<ExchangeRate>> GetExchangeRates(
         GetExchangeRatesRequest request,
         IMediator mediator)
     {
         var query = new GetExchangeRatesQuery(request.ToCurrencies(), request.Date);
-        return await mediator.Send(query);
+        return (await mediator.Send(query)).ToList();
     }
+    
+    private static void CaptureExchangeRates(this List<ExchangeRate> rates)
+        => rates.ForEach(rate =>
+            Telemetry.ExchangeRatesCount.Add(1, [new(Telemetry.Currency, rate.TargetCurrency)])
+        );
 }

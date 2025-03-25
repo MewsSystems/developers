@@ -35,10 +35,7 @@ app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPrometheusScrapingEndpoint();
-
 app.MapGet("/exchange-rates", ExchangeRatesHandler.GetExchangeRates)
-    .RequireAuthorization()
     .CacheOutput(x => x.Expire(TimeSpan.FromMinutes(5)))
     .WithName("GetExchangeRates")
     .WithOpenApi();

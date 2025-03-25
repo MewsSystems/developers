@@ -1,10 +1,10 @@
-using System.Diagnostics.Metrics;
 using System.Text;
 using ExchangeRateUpdater.Api.Validators;
 using ExchangeRateUpdater.Application.Queries.GetExchangeRates;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 
@@ -14,21 +14,18 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, string applicationName)
     {
-        var exchangeRatesMeter = new Meter("ExchangeRatesHandler", "1.0.0");
-        
-        var otel = services.AddOpenTelemetry();
-
-        otel.ConfigureResource(resource => resource
-            .AddService(serviceName: applicationName));
-
-        otel.WithMetrics(metrics => metrics
-            .AddAspNetCoreInstrumentation()
-            .AddMeter(exchangeRatesMeter.Name)
-            .AddMeter("Microsoft.AspNetCore.Hosting")
-            .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
-            .AddMeter("System.Net.Http")
-            .AddMeter("System.Net.NameResolution")
-            .AddPrometheusExporter());
+        services.AddOpenTelemetry()
+            .WithMetrics(metrics =>
+            {
+                metrics
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("ExchangeRateUpdater.Api"))
+                    .AddMeter("ExchangeRateMetrics")
+                    .AddOtlpExporter(opt =>
+                    {
+                        opt.Endpoint = new Uri("http://otel-collector:4317");
+                        opt.Protocol = OtlpExportProtocol.Grpc;
+                    });
+            });
 
         return services;
     }

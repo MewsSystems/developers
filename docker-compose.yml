@@ -22,6 +22,8 @@ services:
         condition: service_healthy
       prometheus:
         condition: service_started
+      otel-collector:
+        condition: service_started
     networks:
       - exchange-rate-network
 
@@ -39,6 +41,18 @@ services:
       retries: 3
     networks:
       - exchange-rate-network
+    
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+    command: ["--config=/etc/otel-collector-config.yml"]
+    ports:
+      - "4317:4317"   # gRPC
+      - "4318:4318"   # HTTP
+      - "8889:8889"   # Prometheus scrape port (if configured)
+    networks:
+      - exchange-rate-network
 
   prometheus:
     image: prom/prometheus:latest
@@ -54,6 +68,8 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     networks:
       - exchange-rate-network
+    depends_on:
+      - otel-collector
 
   grafana:
     image: grafana/grafana:latest

@@ -1,0 +1,46 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  batch:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 4000
+    spike_limit_mib: 800
+  attributes:
+    actions:
+      - key: environment
+        value: production
+        action: insert
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: "demo"
+    send_timestamps: true
+    metric_expiration: 180m
+    resource_to_telemetry_conversion:
+      enabled: true
+  debug:
+    verbosity: detailed
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  telemetry:
+    logs:
+      level: "debug"
+  extensions: [health_check, pprof, zpages]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, attributes]
+      exporters: [prometheus, debug]
