@@ -23,6 +23,20 @@ bower_components
 npm-debug.log
 
 # Application settings
-**/appsettings.json
-**/appsettings.*.json
-!**/appsettings.Example.json
+appsettings.*.json
+
+# VS Code files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea
