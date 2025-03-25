@@ -121,10 +121,15 @@ strong {
 
 .movie-detail button {
     margin-left: 0;
+
 }
 
 @media screen and (min-width: 600px) {
     .movie-detail button {
         margin: 0 auto;
     }
+}
+
+a {
+    text-decoration: none;
 }

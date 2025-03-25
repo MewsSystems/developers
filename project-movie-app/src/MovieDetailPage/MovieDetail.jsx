@@ -1,5 +1,6 @@
 import { Button } from "../Button/Button"
 import "./moviedetail.style.css"
+import { Link } from "react-router"
 
 export const MovieDetail = () => {
 
@@ -31,7 +32,9 @@ export const MovieDetail = () => {
                 <h2>Movie overview</h2>
                 <p>Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.</p>
             </div>
-            <Button label="Back to movies"/>
+            <Link to = "/">
+                <Button label="Back to movies"/>
+            </Link>
         </section>
     )
 }
