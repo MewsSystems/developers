@@ -1,6 +1,10 @@
 using ExchangeRateUpdater.Api.Configuration;
 using ExchangeRateUpdater.Api.Handlers;
+using ExchangeRateUpdater.Api.Models;
 using ExchangeRateUpdater.Infrastructure.Configuration;
+using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +40,21 @@ app.UseOutputCache();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/exchange-rates", ExchangeRatesHandler.GetExchangeRates)
+app.MapPost("/token", async (
+    [FromBody] ClientCredentials credentials,
+    [FromServices] IValidator<ClientCredentials> validator) => 
+    await AuthHandler.GenerateToken(credentials, jwtSettings, validator))
+    .WithName("GenerateToken")
+    .WithOpenApi();
+
+app.MapGet("/exchange-rates", async(
+    [FromQuery] string[] currencyCodes,
+    [FromQuery] DateTime? date,
+    [FromServices] IMediator mediator,
+    [FromServices] IValidator<GetExchangeRatesRequest> validator) => 
+    await ExchangeRatesHandler.GetExchangeRates(currencyCodes, date, mediator, validator))
     .CacheOutput(x => x.Expire(TimeSpan.FromMinutes(5)))
+    .RequireAuthorization()
     .WithName("GetExchangeRates")
     .WithOpenApi();
 

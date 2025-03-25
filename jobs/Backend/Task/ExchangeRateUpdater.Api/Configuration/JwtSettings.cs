@@ -2,8 +2,8 @@ namespace ExchangeRateUpdater.Api.Configuration;
 
 public record JwtSettings
 {
-    public string Key { get; init; } = string.Empty;
-    public string Issuer { get; init; } = string.Empty;
-    public string Audience { get; init; } = string.Empty;
-    public int ExpiryInMinutes { get; init; }
+    public required string Key { get; init; }
+    public required string Issuer { get; init; }
+    public required string Audience { get; init; }
+    public required int ExpiryInMinutes { get; init; }
 }

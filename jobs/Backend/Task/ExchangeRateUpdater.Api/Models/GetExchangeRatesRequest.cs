@@ -2,7 +2,7 @@ using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Api.Models;
 
-public class GetExchangeRatesRequest
+public record GetExchangeRatesRequest
 {
     public IEnumerable<string> CurrencyCodes { get; init; } = Array.Empty<string>();
     public DateTime? Date { get; init; }
