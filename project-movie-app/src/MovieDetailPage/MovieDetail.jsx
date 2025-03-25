@@ -1,8 +1,19 @@
 import { Button } from "../Button/Button"
 import "./moviedetail.style.css"
 import { Link } from "react-router"
+import { useParams } from "react-router"
+import { fetchMovieID } from "../constants/fetchMovieID"
+import { useEffect } from "react"
 
 export const MovieDetail = () => {
+
+    const { title } = useParams()
+
+    const id = title.split("-")[0]
+
+    useEffect(() => {
+        fetchMovieID(id)
+    },[])
 
     return (
         <section className="movie-detail">
