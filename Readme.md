@@ -49,10 +49,14 @@ Movie Searcher is a web application that allows users to search for movies using
 
 3. Set up environment variables:
    Create a .env.local file in the root of your project and add:
+
    ```bash
    TMDB_URL="https://api.themoviedb.org/3"
    TMDB_API_KEY= Your_tmdb_api_key
+   NEXT_PUBLIC_TMDB_IMAGE_URL="https://image.tmdb.org/t/p/w600_and_h900_face/"
+
    ```
+
 4. Run project:
    ```bash
       pnpm run dev
