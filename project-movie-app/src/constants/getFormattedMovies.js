@@ -7,7 +7,7 @@ export const getFormattedMovies = async (page) => {
     return movies.map((movie) => (
         {
             id: movie.id,
-            title: movie.original_title,
+            title: movie.title,
             posterPath: movie.poster_path,
         }
     ))
