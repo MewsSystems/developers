@@ -1,6 +1,6 @@
 import "./button.style.css";
 
-export const Button = ({ label = "Show more", handleLoadMore}) => {
+export const Button = ({ label, handleLoadMore}) => {
 
     return (
         <button 
