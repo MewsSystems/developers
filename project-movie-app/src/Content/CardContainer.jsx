@@ -23,7 +23,7 @@ export const CardContainer = ({page}) => {
         <div className="card-container">
             {items
                 .map((item, index) => (
-                <Card key={`${item.id}-${page}-${index}`} posterPath={item.posterPath} title={item.title}/>
+                <Card key={`${item.id}-${page}-${index}`} posterPath={item.posterPath} title={item.title} id={item.id}/>
                 ))
             }
         </div>
