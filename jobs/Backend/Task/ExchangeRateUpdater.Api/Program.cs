@@ -10,10 +10,11 @@ builder.Services
     .AddSwaggerGen()
     .AddAuthorization();
 
-var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString") ?? "localhost:6379";
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString") 
+    ?? throw new InvalidOperationException("Redis:ConnectionString is required");
 
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>() ??
-                  throw new InvalidOperationException("JwtSettings not found");
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>() 
+    ?? throw new InvalidOperationException("JwtSettings configuration is required");
 
 builder.Services.AddOpenTelemetry(builder.Environment.ApplicationName);
 builder.Services.AddDistributedRedisCache(builder.Environment.ApplicationName, redisConnectionString);

@@ -7,16 +7,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:5000"
-      - "8443:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
-      - Redis__ConnectionString=redis:6379
-      - ASPNETCORE_METRICS_PROMETHEUS_PORT=9090
-      - JwtSettings__Key=your-super-secret-key-with-minimum-16-characters
-      - JwtSettings__Issuer=exchange-rate-api
-      - JwtSettings__Audience=exchange-rate-clients
-      - JwtSettings__ExpiryInMinutes=60
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS:-http://+:5000}
+      - Redis__ConnectionString=${REDIS_CONNECTION_STRING:-redis:6379}
+      - JwtSettings__Key=${JWT_KEY:-your-super-secret-key-with-minimum-16-characters}
+      - JwtSettings__Issuer=${JWT_ISSUER:-exchange-rate-api}
+      - JwtSettings__Audience=${JWT_AUDIENCE:-exchange-rate-clients}
+      - JwtSettings__ExpiryInMinutes=${JWT_EXPIRY_MINUTES:-60}
     depends_on:
       redis:
         condition: service_healthy
