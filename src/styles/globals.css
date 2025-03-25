@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Background */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 92%;
+
+  /* Card and UI elements */
+  --card: 0 0% 17%;
+  --card-foreground: 0 0% 92%;
+
+  /* Popover */
+  --popover: 0 0% 17%;
+  --popover-foreground: 0 0% 92%;
+
+  /* Primary - Electric Blue */
+  --primary: 196 100% 47%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary - Crisp Yellow */
+  --secondary: 48 100% 50%;
+  --secondary-foreground: 0 0% 0%;
+
+  /* Muted elements */
+  --muted: 0 0% 17%;
+  --muted-foreground: 0 0% 69%;
+
+  /* Accent - Teal (complementary to blue) */
+  --accent: 180 100% 40%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Destructive - Rich Red */
+  --destructive: 0 100% 65%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders and inputs */
+  --border: 0 0% 17%;
+  --input: 0 0% 17%;
+  --ring: 196 100% 47%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  /* Background */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 92%;
+
+  /* Card and UI elements */
+  --card: 0 0% 17%;
+  --card-foreground: 0 0% 92%;
+
+  /* Popover */
+  --popover: 0 0% 17%;
+  --popover-foreground: 0 0% 92%;
+
+  /* Primary - Electric Blue */
+  --primary: 196 100% 47%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Secondary - Crisp Yellow */
+  --secondary: 48 100% 50%;
+  --secondary-foreground: 0 0% 0%;
+
+  /* Muted elements */
+  --muted: 0 0% 17%;
+  --muted-foreground: 0 0% 69%;
+
+  /* Accent - Teal (complementary to blue) */
+  --accent: 180 100% 40%;
+  --accent-foreground: 0 0% 100%;
+
+  /* Destructive - Rich Red */
+  --destructive: 0 100% 65%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders and inputs */
+  --border: 0 0% 17%;
+  --input: 0 0% 17%;
+  --ring: 196 100% 47%;
+}
+
+body {
+  background: #000000;
+  color: #eaeaea;
+  min-height: 100vh;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.glassmorphism {
+  @apply bg-[#2C2C2C]/80 backdrop-blur-md border border-[#2C2C2C];
+}
+
+.card-glassmorphism {
+  @apply bg-[#2C2C2C]/80 backdrop-blur-md border border-[#2C2C2C];
+}
+
+.gradient-text {
+  @apply bg-gradient-to-r from-primary via-primary to-accent text-transparent bg-clip-text;
+}
+
+.gradient-button {
+  @apply bg-primary hover:bg-primary/90 text-primary-foreground;
+}
+
+.accent-button {
+  @apply bg-accent hover:bg-accent/90 text-accent-foreground;
+}
+
+.secondary-button {
+  @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+}
+
+.destructive-button {
+  @apply bg-destructive hover:bg-destructive/90 text-destructive-foreground;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
