@@ -6,7 +6,6 @@ export const fetchMovieID = async (id) => {
     try {
         const reqMovie = await fetch(`${BASE_API_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`)
         const movie = await reqMovie.json()
-        console.log(movie)
 
         return movie
     }
