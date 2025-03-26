@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/Input";
 import { useMovies } from "@/hooks/useMovieSearch";
 import { useSearchParams } from "react-router";
 import { useDebounce } from "@/hooks/useDebounce";
