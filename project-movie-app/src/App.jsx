@@ -25,28 +25,23 @@ export const App = () => {
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
-        return
-    }
-    getSearchResult(searchTerm).then((data) => {
-      setItems(data)
-    })
-  },[searchTerm])
 
-  
-  useEffect(()=> {
-    if (searchTerm.trim() !== "") {
-      return
+      getFormattedMovies(page).then((data) => {
+        setItems((prev) => (page === 1 ? data : [...prev, ...data]));
+      });
+
+    } else {
+
+      getSearchResult(searchTerm, page).then((data) => {
+        setItems((prev) => (page === 1 ? data : [...prev, ...data]));
+      });
     }
-    getFormattedMovies(page).then((data) => {
-        if (page === 1) {
-            setItems(data) // first load
-        }
-        else {
-            setItems((prev) => 
-                [...prev, ...data]); // pagination
-        }
-    })
-  },[page])
+  }, [searchTerm, page]);
+
+  useEffect(() => {
+    setPage(1);
+    setItems([]);
+  }, [searchTerm]);
 
   return (
     <>
