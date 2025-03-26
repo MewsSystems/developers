@@ -1,6 +1,6 @@
 import { fetchSearchResults } from "./fetchSearchResults"
 
-export const getSearchResult = async (searchTerm, page) => {
+export const getSearchedMovies = async (searchTerm, page) => {
 
     const movies = await fetchSearchResults(searchTerm, page)
 

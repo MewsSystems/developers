@@ -1,6 +1,6 @@
 import { fetchPaginatedMovies } from "./fetchPaginatedMovies"
 
-export const getFormattedMovies = async (page) => {
+export const getPopularMovies = async (page) => {
 
     const movies = await fetchPaginatedMovies(page)
 

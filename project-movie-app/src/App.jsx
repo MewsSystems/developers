@@ -10,8 +10,8 @@ import { Footer } from './Footer/Footer'
 import "./Footer/footer.style.css"
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { getFormattedMovies } from './constants/getFormattedMovies'
-import { getSearchResult } from './constants/getSearchResults'
+import { getPopularMovies } from './constants/getPopularMovies'
+import { getSearchedMovies } from './constants/getSearchedMovies'
 
 export const App = () => {
 
@@ -35,13 +35,13 @@ export const App = () => {
   useEffect(() => {
     if (debouncedSearchTerm.trim() === "") {
 
-      getFormattedMovies(page).then((data) => {
+      getPopularMovies(page).then((data) => {
         setItems((prev) => (page === 1 ? data : [...prev, ...data]));
       });
 
     } else {
 
-      getSearchResult(debouncedSearchTerm, page).then((data) => {
+      getSearchedMovies(debouncedSearchTerm, page).then((data) => {
         setItems((prev) => (page === 1 ? data : [...prev, ...data]));
       });
     }
