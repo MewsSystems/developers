@@ -3,6 +3,11 @@
 .header {
     background-color: #1c1c1c;
     padding: 20px 20px 20px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 @media screen and (min-width: 600px) {

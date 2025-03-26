@@ -7,9 +7,9 @@ export const Header = () => {
     return (
         <header className="header">
             <div className="header__logo">
-                <Link to = "/">
+                <a href = "/">
                     <img className="header__image" src={logo} alt="movie app logo" />
-                </Link>
+                </a>
             </div>
         </header>
     )

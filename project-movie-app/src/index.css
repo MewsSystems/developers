@@ -22,18 +22,18 @@ body {
 main {
   min-height: calc(100vh - (79.45px + 58.5px));
   /* min-heigt: calc(100vh - (header + footer)) */
-  padding: 40px 30px 60px 30px;
+  padding: 111.1px 30px 60px 30px;
 }
 
 @media screen and (min-width: 600px) {
   main {
-      padding: 40px 80px 60px 80px;
+      padding: 111.1px 80px 60px 80px;
   }
 }
 
 @media screen and (min-width: 1100px) {
   main {
-      padding: 40px 90px 60px 90px;
+      padding: 111.1px 90px 60px 90px;
   }
 }
 
