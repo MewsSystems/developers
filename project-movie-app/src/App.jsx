@@ -18,13 +18,22 @@ export const App = () => {
   const [page, setPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
   const [items, setItems] = useState([])
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
 
   const handleLoadMore = () => {
       setPage((prev) => prev + 1)
   }
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    const timeout = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); // waits 500ms
+  
+    return () => clearTimeout(timeout); // clear if typing continues
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (debouncedSearchTerm.trim() === "") {
 
       getFormattedMovies(page).then((data) => {
         setItems((prev) => (page === 1 ? data : [...prev, ...data]));
@@ -32,16 +41,16 @@ export const App = () => {
 
     } else {
 
-      getSearchResult(searchTerm, page).then((data) => {
+      getSearchResult(debouncedSearchTerm, page).then((data) => {
         setItems((prev) => (page === 1 ? data : [...prev, ...data]));
       });
     }
-  }, [searchTerm, page]);
+  }, [debouncedSearchTerm, page]);
 
   useEffect(() => {
     setPage(1);
     setItems([]);
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <>
