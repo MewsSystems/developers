@@ -4,14 +4,15 @@ import { useSearchParams } from "react-router";
 import { useDebounce } from "@/hooks/useDebounce";
 import MovieCard from "@/components/MovieCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
+import ErrorAlert from "@/components/ErrorAlert";
 
 const MovieSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get('search') ?? '';
   const page = Number(searchParams.get('page') ?? '1');
   const debouncedQuery = useDebounce(search, 500);
-  const { data, isLoading, isError } = useMovies(debouncedQuery, page);
+  const { data, isLoading, isError, error } = useMovies(debouncedQuery, page);
 
   const handlePageChange = (page: number) => {
     setSearchParams({ search, page: page.toString() });
@@ -36,7 +37,7 @@ const MovieSearchPage = () => {
         </div>
       )}
 
-      {isError && <p>Oh no, there was an unexpected error.</p>}
+      {isError && <ErrorAlert error={error} />}
 
       {data && (
         data.totalResults > 0 ? (
@@ -46,7 +47,7 @@ const MovieSearchPage = () => {
             ))}
           </div>
         ) : (
-          <p>No results found</p>
+          <p>No movies found. Try a different search.</p>
         )
       )}
       {search.length > 0 && data && data.totalResults > 0 && (

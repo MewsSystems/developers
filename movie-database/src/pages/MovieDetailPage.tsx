@@ -1,12 +1,13 @@
 import { useMovieDetail } from "@/hooks/useMovieDetail";
 import Tag from "@/components/ui/Tag";
 import { useParams } from "react-router";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/Skeleton";
 import YearAndRating from "@/components/YearAndRating";
+import ErrorAlert from "@/components/ErrorAlert";
 
 const MovieDetailPage = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useMovieDetail(Number(id));
+  const { data, isLoading, isError, error } = useMovieDetail(Number(id));
 
   const loadingSkeleton = (
     <div className="flex gap-8 w-2/3 mx-auto justify-center">
@@ -22,7 +23,7 @@ const MovieDetailPage = () => {
   return (
     <>
       {isLoading && loadingSkeleton}
-      {isError && <div>Error</div>}
+      {isError && <ErrorAlert error={error} />}
       {data && (
         <>
           <div className="flex flex-col md:flex-row mx-auto gap-8 w-2/3 h-1/2">

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "../api/base";
+import { apiFetch, ErrorReason } from "../api/base";
 import { movieSchema, Movie } from "@/api/schemas/movieSchema";
 
 const fetchMovieDetail = async (id: number) => {
@@ -8,7 +8,7 @@ const fetchMovieDetail = async (id: number) => {
 };
 
 export const useMovieDetail = (id: number) => {
-  return useQuery<Movie>({
+  return useQuery<Movie, ErrorReason>({
     queryKey: ["movieDetail", id],
     queryFn: () => fetchMovieDetail(id),
   });
