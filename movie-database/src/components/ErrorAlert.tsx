@@ -1,5 +1,5 @@
 import { ErrorReason } from '@/api/base';
-import { AlertDescription, AlertTitle } from './ui/alert';
+import { AlertDescription, AlertTitle } from './ui/Alert';
 import { AlertCircle } from 'lucide-react';
 
 interface Props {

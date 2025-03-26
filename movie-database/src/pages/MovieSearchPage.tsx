@@ -6,7 +6,7 @@ import MovieCard from "@/components/MovieCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import { Skeleton } from "@/components/ui/Skeleton";
 import ErrorAlert from "@/components/ErrorAlert";
-import { AlertDescription } from "@/components/ui/alert";
+import { AlertDescription } from "@/components/ui/Alert";
 
 const MovieSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,7 +27,7 @@ const MovieSearchPage = () => {
     <div className="flex flex-col items-center gap-4 w-full">
       <Input
         value={search}
-        onChange={(e) => handleQueryChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleQueryChange(e.target.value)}
       />
 
       {isLoading && (
