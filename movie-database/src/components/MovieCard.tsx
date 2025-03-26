@@ -1,5 +1,6 @@
 import { MovieResult } from "@/api/schemas/movieSchema";
 import { NavLink } from "react-router";
+import YearAndRating from "./YearAndRating";
 
 interface Props {
   movie: MovieResult;
@@ -8,12 +9,20 @@ interface Props {
 const MovieCard = ({ movie }: Props) => {
   return (
     <NavLink to={`/movie/${movie.id}`}>
-      <div className="shadow-md p-4 rounded-lg bg-amber-300">
-        <div className="font-bold">{movie.title}</div>
-        <div>{movie.year}</div>
-        <div>{movie.overview}</div>
-        <div>{movie.voteAverage}</div>
-        <img src={movie.image} alt={movie.title} />
+      <div className="rounded-lg border border-foreground/10 hover:ring-2 ring-foreground/20 h-80">
+        <div className="rounded-lg rounded-b-none overflow-hidden relative w-full h-40">
+          <img className="absolute w-full h-full object-cover"
+            src={movie.image}
+            alt={movie.title} />
+          <div className="absolute bottom-0 w-full h-2/3 bg-gradient-to-t from-background to-transparent" />
+        </div>
+        <div className="p-4 mt-2">
+          <div className="font-bold text-md line-clamp-1">{movie.title}</div>
+          <YearAndRating year={movie.year} rating={movie.voteAverage} ratingCount={movie.voteCount} />
+          <p className="mt-4 text-foreground/80 line-clamp-2">
+            {movie.overview}
+          </p>
+        </div>
       </div>
     </NavLink>
   );

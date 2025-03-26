@@ -4,13 +4,14 @@ import { useSearchParams } from "react-router";
 import { useDebounce } from "@/hooks/useDebounce";
 import MovieCard from "@/components/MovieCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MovieSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get('search') ?? '';
   const page = Number(searchParams.get('page') ?? '1');
   const debouncedQuery = useDebounce(search, 500);
-  const { data, isLoading } = useMovies(debouncedQuery, page);
+  const { data, isLoading, isError } = useMovies(debouncedQuery, page);
 
   const handlePageChange = (page: number) => {
     setSearchParams({ search, page: page.toString() });
@@ -21,22 +22,40 @@ const MovieSearchPage = () => {
   };
 
   return (
-    <>
-      <Input value={search} onChange={(e) => handleQueryChange(e.target.value)} />
+    <div className="flex flex-col gap-4">
+      <Input
+        value={search}
+        onChange={(e) => handleQueryChange(e.target.value)}
+      />
 
-      {isLoading && <p>Loading...</p>}
-
-      {data && (
-        <div className="max-h-80 overflow-y-auto">
-          {data.results.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
+      {isLoading && (
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-80 w-full" />
           ))}
         </div>
       )}
-      {search.length > 0 && data && (
-        <PaginationWrapper currentPage={page} handlePageChange={handlePageChange} totalPages={data.totalPages} />
+
+      {isError && <p>Oh no, there was an unexpected error.</p>}
+
+      {data && (
+        data.totalResults > 0 ? (
+          <div className="max-h-[70vh] overflow-y-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {data.results.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        ) : (
+          <p>No results found</p>
+        )
       )}
-    </>
+      {search.length > 0 && data && data.totalResults > 0 && (
+        <PaginationWrapper
+          currentPage={page}
+          handlePageChange={handlePageChange}
+          totalPages={data.totalPages} />
+      )}
+    </div>
   );
 };
 
