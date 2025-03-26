@@ -1,6 +1,6 @@
 import { Header } from './Header/Header'
 import "./Header/header.style.css"
-import { SearchBar } from './Content/SearchBar'
+import { SearchBar } from "./Content/SearchBar"
 import "./Content/SearchBar.style.css"
 import { CardContainer } from './Content/CardContainer'
 import "./Content/cardContainer.style.css"
