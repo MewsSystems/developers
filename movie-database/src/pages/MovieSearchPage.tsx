@@ -6,6 +6,7 @@ import MovieCard from "@/components/MovieCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import { Skeleton } from "@/components/ui/Skeleton";
 import ErrorAlert from "@/components/ErrorAlert";
+import { AlertDescription } from "@/components/ui/alert";
 
 const MovieSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +24,7 @@ const MovieSearchPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col items-center gap-4 w-full">
       <Input
         value={search}
         onChange={(e) => handleQueryChange(e.target.value)}
@@ -47,7 +48,9 @@ const MovieSearchPage = () => {
             ))}
           </div>
         ) : (
-          <p>No movies found. Try a different search.</p>
+          <AlertDescription>
+            No movies found. Try a different search.
+          </AlertDescription>
         )
       )}
       {search.length > 0 && data && data.totalResults > 0 && (

@@ -1,4 +1,6 @@
 import { ErrorReason } from '@/api/base';
+import { AlertDescription, AlertTitle } from './ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 interface Props {
   error: ErrorReason | null;
@@ -9,38 +11,44 @@ const ErrorAlert = ({ error }: Props) => {
     return null;
   }
 
-  const renderError = () => {
+  const generateErrorMessage = (): string => {
     switch (error) {
       case 'not found': {
-        return <div>We couldn't find what you're looking for. Try searching for a different movie. If the issue persists, please reach out.</div>;
+        return "We couldn't find what you're looking for. Try searching for a different movie. If the issue persists, please contact support.";
       }
       case 'unauthorized': {
-        return <div>Oops! Something went wrong on our end. Please try again later.</div>;
+        return "Something went wrong on our end. Please try again later.";
       }
       case 'forbidden': {
-        return <div>Access is restricted. If the issue persists, please contact support.</div>;
+        return "Access is restricted. If the issue persists, please contact support.";
       }
       case 'unreachable': {
-        return <div>We're having trouble connecting to the server. Please try again later.</div>;
+        return "We're having trouble connecting to the server. Please try again later.";
       }
       case 'unknown': {
-        return <div>An unexpected error occurred. Please try again or contact support.</div>;
+        return "An unexpected error occurred. Please try again or contact support.";
       }
       case 'network': {
-        return <div>It looks like you're offline. Check your connection and try again.</div>;
+        return "It looks like you're offline. Check your connection and try again.";
       }
       case 'invalid-response': {
-        return <div>It looks like the received data is invalid. Please try again later or contact support.</div>;
+        return "It looks like the received data is invalid. Please try again later or contact support.";
       }
       default: {
-        return <div>Something went wrong. Please refresh the page and try again.</div>;
+        return "Something went wrong. Please refresh the page and try again.";
       }
     }
   };
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      {renderError()}
+    <div className="flex flex-col items-center">
+      <div className='flex items-center gap-4'>
+        <AlertCircle className="text-destructive h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+      </div>
+      <AlertDescription>
+        {generateErrorMessage()}
+      </AlertDescription>
     </div>
   );
 

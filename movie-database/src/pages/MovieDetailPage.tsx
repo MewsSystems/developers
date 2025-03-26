@@ -25,28 +25,29 @@ const MovieDetailPage = () => {
       {isLoading && loadingSkeleton}
       {isError && <ErrorAlert error={error} />}
       {data && (
-        <>
-          <div className="flex flex-col md:flex-row mx-auto gap-8 w-2/3 h-1/2">
-            <div className="rounded-xl overflow-hidden relative w-full md:max-w-md h-40 md:h-full">
-              <img className="absolute inset-0 w-full h-full object-cover" src={data.image} alt={data.title} />
+        <div className="flex flex-col items-center md:flex-row md:items-start gap-8 md:w-2/3">
+          <div className="flex flex-col gap-4 md:order-1">
+            <div>
+              <h2 className="mb-2">{data.title}</h2>
+              <YearAndRating size="lg" rating={data.voteAverage} ratingCount={data.voteCount} year={data.year} />
+              <div className="text-foreground-secondary mt-2">
+                Origin: {data.originCountries.join(', ')}
+              </div>
             </div>
-            <div className="flex flex-col gap-4">
-              <div>
-                <h2>{data.title}</h2>
-                <YearAndRating size="lg" rating={data.voteAverage} ratingCount={data.voteCount} year={data.year} />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {data.genres.map((genre) => (
-                  <Tag key={genre.id}>{genre.name}</Tag>
-                ))}
-              </div>
-              <div>
-                <h3>Overview</h3>
-                <p className="text-justify">{data.overview}</p>
-              </div>
+            <div className="flex flex-wrap items-center gap-2">
+              {data.genres.map((genre) => (
+                <Tag key={genre.id}>{genre.name}</Tag>
+              ))}
+            </div>
+            <div>
+              <h3>Overview</h3>
+              <p className="text-justify">{data.overview}</p>
             </div>
           </div>
-        </>
+          <div className="w-1/2 sm:w-1/3 shrink-0 max-w-lg">
+            <img className="w-full rounded-xl" src={data.image} alt={data.title} />
+          </div>
+        </div>
       )}
     </>
   );
