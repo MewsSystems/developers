@@ -1,7 +1,6 @@
 import { BASE_API_URL, API_KEY } from "./API.constants"
 import { MovieApiItem, MovieApiResponse } from "../types/movie"
 
-
 export const fetchPaginatedMovies = async (page: number): Promise<MovieApiItem[]> => {
 
     try {
