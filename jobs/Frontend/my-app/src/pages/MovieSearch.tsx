@@ -126,8 +126,11 @@ export const MovieSearch = () => {
 
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error loading movies!</div>}
+      {movieList && movieList.movieArray.length === 0 && (
+        <div>No movies found.</div>
+      )}
 
-      {movieList && (
+      {movieList && movieList.movieArray.length > 0 && (
         <>
           <PageSection direction="row">
             {movieList.movieArray.map((movie: Movie) => (
