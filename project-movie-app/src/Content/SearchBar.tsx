@@ -1,10 +1,6 @@
 import "./searchBar.style.css"
 import React from "react"
-
-type SearchBarProps = {
-    searchTerm: string;
-    setSearchTerm: (value: string) => void;
-}
+import { SearchBarProps } from "../types/searchBar"
 
 export const SearchBar: React.FC<SearchBarProps> = ({searchTerm, setSearchTerm}) => {
 
