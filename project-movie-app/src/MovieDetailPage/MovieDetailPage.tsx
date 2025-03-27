@@ -2,7 +2,7 @@ import { Header } from "../Header/Header"
 import { Footer } from "../Footer/Footer"
 import { MovieDetail } from "./MovieDetail"
 
-export const MovieDetailPage = () => {
+export const MovieDetailPage: React.FC = () => {
 
     return (
         <>

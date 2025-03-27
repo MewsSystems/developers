@@ -12,15 +12,16 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { getPopularMovies } from './constants/getPopularMovies'
 import { getSearchedMovies } from './constants/getSearchedMovies'
+import { MovieCard } from './types/movie'
 
 export const App = () => {
 
-  const [page, setPage] = useState(1)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [items, setItems] = useState([])
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
+  const [page, setPage] = useState<number>(1)
+  const [searchTerm, setSearchTerm] = useState<string>("")
+  const [items, setItems] = useState<MovieCard[]>([])
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("")
 
-  const handleLoadMore = () => {
+  const handleLoadMore = (): void  => {
       setPage((prev) => prev + 1)
   }
 
