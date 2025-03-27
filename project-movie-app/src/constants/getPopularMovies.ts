@@ -1,8 +1,9 @@
 import { fetchPaginatedMovies } from "./fetchPaginatedMovies"
+import { MovieCard, MovieApiItem } from "../types/movie"
 
-export const getPopularMovies = async (page) => {
+export const getPopularMovies = async (page: number): Promise<MovieCard[]> => {
 
-    const movies = await fetchPaginatedMovies(page)
+    const movies: MovieApiItem[]  = await fetchPaginatedMovies(page)
 
     return movies.map((movie) => (
         {
