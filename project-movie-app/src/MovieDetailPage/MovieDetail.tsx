@@ -5,20 +5,23 @@ import { useParams } from "react-router"
 import { useEffect } from "react"
 import { useState } from "react"
 import { getFormattedMovieID } from "../constants/getFormattedMovieID"
+import { MovieDetailInfo } from "../types/movieDetail"
 
 export const MovieDetail = () => {
 
-    const [movie, setMovie] = useState({})
+    const [movie, setMovie] = useState<MovieDetailInfo | null>(null);
 
-    const { title } = useParams()
+    const { title } = useParams<{ title: string }>()
 
-    const id = title.split("-")[0]
+    const id = Number(title?.split("-")[0])
 
     useEffect(() => {
         getFormattedMovieID(id).then((data) => {
             setMovie(data)
         })
     },[])
+
+    if (!movie) return <p>Loading...</p>;
 
     return (
         <section className="movie-detail">

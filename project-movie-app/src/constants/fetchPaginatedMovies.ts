@@ -1,10 +1,11 @@
-import { BASE_API_URL, API_KEY } from "../constants/API.constants"
+import { BASE_API_URL, API_KEY } from "./API.constants"
+import { MovieApiItem, MovieApiResponse } from "../types/movie"
 
-export const fetchPaginatedMovies = async (page) => {
+export const fetchPaginatedMovies = async (page: number): Promise<MovieApiItem[]> => {
 
     try {
         const reqMovies = await fetch(`${BASE_API_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`)
-        const movies = await reqMovies.json()
+        const movies: MovieApiResponse = await reqMovies.json()
 
         return movies.results
     }

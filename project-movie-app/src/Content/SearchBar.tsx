@@ -1,6 +1,8 @@
 import "./searchBar.style.css"
+import React from "react"
+import { SearchBarProps } from "../types/searchBar"
 
-export const SearchBar = ({searchTerm, setSearchTerm}) => {
+export const SearchBar: React.FC<SearchBarProps> = ({searchTerm, setSearchTerm}) => {
 
     return (
         <div className="search-bar">
@@ -10,7 +12,9 @@ export const SearchBar = ({searchTerm, setSearchTerm}) => {
                 id="search"
                 placeholder="Type to search..."
                 value={searchTerm}
-                onChange={(event) => {setSearchTerm(event.target.value)}}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setSearchTerm(event.target.value)
+                }}
             />
         </div>
     )

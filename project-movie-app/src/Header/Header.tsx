@@ -1,8 +1,7 @@
 import "./header.style.css"
 import logo from "./assets/logo-movie-app.svg"
-import { Link } from "react-router"
 
-export const Header = () => {
+export const Header: React.FC = () => {
 
     return (
         <header className="header">
