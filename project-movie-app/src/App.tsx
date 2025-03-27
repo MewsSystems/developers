@@ -1,13 +1,8 @@
 import { Header } from './Header/Header'
-import "./Header/header.style.css"
 import { SearchBar } from "./Content/SearchBar"
-import "./Content/SearchBar.style.css"
 import { CardContainer } from './Content/CardContainer'
-import "./Content/cardContainer.style.css"
 import { Button } from './Button/Button'
-import "./Button/button.style.css"
 import { Footer } from './Footer/Footer'
-import "./Footer/footer.style.css"
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { getPopularMovies } from './constants/getPopularMovies'
