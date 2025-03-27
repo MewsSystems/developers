@@ -1,5 +1,5 @@
 import { Button } from "../Button/Button"
-import "./moviedetail.style.css"
+import "./movieDetail.style.css"
 import { Link } from "react-router"
 import { useParams } from "react-router"
 import { useEffect } from "react"
