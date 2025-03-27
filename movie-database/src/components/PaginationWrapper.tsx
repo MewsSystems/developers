@@ -1,4 +1,12 @@
-import { Pagination as PaginationSetup, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/Pagination';
+import clsx from 'clsx';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious
+} from './ui/Pagination';
 
 interface Props {
   currentPage: number;
@@ -6,7 +14,7 @@ interface Props {
   handlePageChange: (page: number) => void;
 }
 
-interface PaginationSetup {
+interface PaginationConfig {
   visibleRange: number[];
   firstPageVisible: boolean;
   lastPageVisible: boolean;
@@ -14,11 +22,11 @@ interface PaginationSetup {
   backEllipsisVisible: boolean;
 }
 
-const MAX_PAGES = 3;
+const MAX_VISIBLE_PAGES = 3;
 
 const PaginationWrapper = ({ currentPage, handlePageChange, totalPages }: Props) => {
-  const getPaginationSetup = (): PaginationSetup => {
-    const defaultSetup = {
+  const getPaginationConfig = (): PaginationConfig => {
+    const defaultConfig: PaginationConfig = {
       visibleRange: Array.from({ length: totalPages }, (_, i) => i + 1),
       firstPageVisible: false,
       lastPageVisible: false,
@@ -26,80 +34,81 @@ const PaginationWrapper = ({ currentPage, handlePageChange, totalPages }: Props)
       backEllipsisVisible: false,
     };
 
-    if (totalPages <= MAX_PAGES) {
-      return defaultSetup;
+    if (totalPages <= MAX_VISIBLE_PAGES) {
+      return { ...defaultConfig, };
     }
-    if (currentPage < MAX_PAGES) {
-      return {
-        ...defaultSetup,
-        visibleRange: defaultSetup.visibleRange.slice(0, MAX_PAGES),
-        backEllipsisVisible: currentPage + 1 < totalPages,
-        lastPageVisible: true,
-      };
+
+    let startPage = Math.max(currentPage - 1, 1);
+    const endPage = Math.min(startPage + MAX_VISIBLE_PAGES - 1, totalPages);
+
+    if (endPage === totalPages) {
+      startPage = Math.max(totalPages - MAX_VISIBLE_PAGES + 1, 1);
     }
-    if (currentPage >= totalPages - 2) {
-      return {
-        ...defaultSetup,
-        visibleRange: defaultSetup.visibleRange.slice(currentPage - 3, currentPage + 1),
-        firstPageVisible: true,
-        lastPageVisible: false,
-        frontEllipsisVisible: currentPage - 1 > 1,
-        backEllipsisVisible: currentPage + 2 < totalPages,
-      };
-    }
+
     return {
-      visibleRange: defaultSetup.visibleRange.slice(currentPage - 2, currentPage + 1),
-      firstPageVisible: true,
-      lastPageVisible: true,
-      frontEllipsisVisible: currentPage - 1 > 2,
-      backEllipsisVisible: currentPage + 2 < totalPages,
+      visibleRange: Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i),
+      firstPageVisible: startPage > 1,
+      lastPageVisible: endPage < totalPages,
+      frontEllipsisVisible: startPage > 2,
+      backEllipsisVisible: endPage < totalPages - 1,
     };
   };
 
-  const { visibleRange, firstPageVisible, lastPageVisible, frontEllipsisVisible, backEllipsisVisible } = getPaginationSetup();
+  const { visibleRange, firstPageVisible, lastPageVisible, frontEllipsisVisible, backEllipsisVisible } = getPaginationConfig();
 
   return (
-    <PaginationSetup>
+    <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} />
+          <PaginationPrevious
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={clsx({ "pointer-events-none opacity-50": currentPage === 1 })} />
         </PaginationItem>
 
         {firstPageVisible && (
-          <PaginationItem key={1}>
+          <PaginationItem>
             <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
           </PaginationItem>
         )}
 
         {frontEllipsisVisible && (
-          <PaginationItem key={0}>
-            <PaginationLink>...</PaginationLink>
+          <PaginationItem>
+            <PaginationLink className='pointer-events-none'>...</PaginationLink>
           </PaginationItem>
         )}
 
         {visibleRange.map((page) => (
           <PaginationItem key={page}>
-            <PaginationLink isActive={page === currentPage} onClick={() => handlePageChange(page)}>{page}</PaginationLink>
+            <PaginationLink
+              isActive={page === currentPage}
+              onClick={() => handlePageChange(page)}
+            >
+              {page}
+            </PaginationLink>
           </PaginationItem>
         ))}
 
         {backEllipsisVisible && (
-          <PaginationItem key={4}>
-            <PaginationLink>...</PaginationLink>
+          <PaginationItem>
+            <PaginationLink className='pointer-events-none'>...</PaginationLink>
           </PaginationItem>
         )}
 
         {lastPageVisible && (
-          <PaginationItem key={totalPages}>
-            <PaginationLink onClick={() => handlePageChange(totalPages)}>{totalPages}</PaginationLink>
+          <PaginationItem>
+            <PaginationLink onClick={() => handlePageChange(totalPages)}>{totalPages}
+            </PaginationLink>
           </PaginationItem>
         )}
 
         <PaginationItem>
-          <PaginationNext onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} />
+          <PaginationNext
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={clsx({ "pointer-events-none opacity-50": currentPage === totalPages })}
+          />
         </PaginationItem>
       </PaginationContent>
-    </PaginationSetup >
+    </Pagination>
   );
 };
 

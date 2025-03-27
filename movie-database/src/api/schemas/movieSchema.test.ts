@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { movieSchema, movieResultSchema, movieResultsListSchema } from '../movieSchema';
+import { movieSchema, movieResultSchema, movieResultsListSchema } from './movieSchema';
 import fallbackImage from "@/assets/poster-fallback.webp";
 
 describe('Movie schemas parsing and validations', () => {

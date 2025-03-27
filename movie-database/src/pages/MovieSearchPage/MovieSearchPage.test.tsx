@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
 import { userEvent } from "@testing-library/user-event";
-import { useMovies } from "@/hooks/useMovieSearch";
-import MovieSearchPage from "../MovieSearchPage";
+import { useMovieResultsList } from "@/hooks/queries/useMovieResultsList";
+import MovieSearchPage from "../MovieSearchPage/MovieSearchPage";
 import { expect, describe } from "vitest";
 import { ErrorReason } from "@/api/base";
 import { MovieResultsList } from "@/api/schemas/movieSchema";
@@ -52,8 +52,8 @@ const mockMovieSearchResults: MovieResultsList = {
   totalResults: 2
 };
 
-vi.mock("@/hooks/useMovieSearch", () => ({
-  useMovies: vi.fn((): BaseQueryResult<MovieResultsList> => ({
+vi.mock("@/hooks/queries/useMovieResultsList", () => ({
+  useMovieResultsList: vi.fn((): BaseQueryResult<MovieResultsList> => ({
     data: mockMovieSearchResults,
     isLoading: false,
     isError: false,
@@ -89,7 +89,7 @@ describe("MovieSearchPage", () => {
   });
 
   it("shows loading skeletons when fetching movies", async () => {
-    vi.mocked(useMovies).mockReturnValue({
+    vi.mocked(useMovieResultsList).mockReturnValue({
       data: undefined,
       isLoading: true,
       isError: false,
@@ -102,7 +102,7 @@ describe("MovieSearchPage", () => {
   });
 
   it("displays error screen when there's an error", async () => {
-    vi.mocked(useMovies).mockReturnValue({
+    vi.mocked(useMovieResultsList).mockReturnValue({
       data: undefined,
       isLoading: true,
       isError: true,

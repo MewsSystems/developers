@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/Input";
-import { useMovies } from "@/hooks/useMovieSearch";
+import { useMovieResultsList } from "@/hooks/queries/useMovieResultsList";
 import { useSearchParams } from "react-router";
 import { useDebounce } from "@/hooks/useDebounce";
-import MovieCard from "@/components/MovieCard";
+import MovieCard from "@/pages/MoviePage/components/MovieCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import { Skeleton } from "@/components/ui/Skeleton";
 import ErrorAlert from "@/components/ErrorAlert";
@@ -13,7 +13,7 @@ const MovieSearchPage = () => {
   const search = searchParams.get('search') ?? '';
   const page = Number(searchParams.get('page') ?? '1');
   const debouncedQuery = useDebounce(search, 500);
-  const { data, isLoading, isError, error } = useMovies(debouncedQuery, page);
+  const { data, isLoading, isError, error } = useMovieResultsList(debouncedQuery, page);
 
   const handlePageChange = (page: number) => {
     setSearchParams({ search, page: page.toString() });
@@ -33,7 +33,7 @@ const MovieSearchPage = () => {
       {isLoading && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-80 w-full" />
+            <Skeleton key={i} className="h-80 w-80" />
           ))}
         </div>
       )}
@@ -53,6 +53,7 @@ const MovieSearchPage = () => {
           </AlertDescription>
         )
       )}
+
       {search.length > 0 && data && data.totalResults > 0 && (
         <PaginationWrapper
           currentPage={page}

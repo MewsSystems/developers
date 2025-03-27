@@ -51,7 +51,6 @@ const ErrorAlert = ({ error }: Props) => {
       </AlertDescription>
     </div>
   );
-
 };
 
 export default ErrorAlert;
