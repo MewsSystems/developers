@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 const BASE_URL = 'https://api.themoviedb.org/3/';
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+const API_TOKEN = import.meta.env.VITE_API_TOKEN as string;
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -23,7 +23,7 @@ export type ErrorReason =
   | 'timeout';
 
 export const throwError = (reason: ErrorReason): never => {
-  throw reason;
+  throw Error(reason);
 };
 
 export const apiFetch = async <T>(url: string, options: AxiosRequestConfig = {}): Promise<T> => {

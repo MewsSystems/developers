@@ -54,7 +54,8 @@ const PaginationWrapper = ({ currentPage, handlePageChange, totalPages }: Props)
     };
   };
 
-  const { visibleRange, firstPageVisible, lastPageVisible, frontEllipsisVisible, backEllipsisVisible } = getPaginationConfig();
+  const { visibleRange, firstPageVisible, lastPageVisible,
+    frontEllipsisVisible, backEllipsisVisible } = getPaginationConfig();
 
   return (
     <Pagination>

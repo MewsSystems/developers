@@ -88,26 +88,26 @@ describe("MovieSearchPage", () => {
     expect(await screen.findByText("Test Movie 2")).toBeInTheDocument();
   });
 
-  it("shows loading skeletons when fetching movies", async () => {
+  it("shows loading skeletons when fetching movies", () => {
     vi.mocked(useMovieResultsList).mockReturnValue({
       data: undefined,
       isLoading: true,
       isError: false,
       error: null,
-    } as any);
+    } as never);
 
     renderWithProviders();
 
     expect(screen.getAllByTestId("skeleton")).toHaveLength(4);
   });
 
-  it("displays error screen when there's an error", async () => {
+  it("displays error screen when there's an error", () => {
     vi.mocked(useMovieResultsList).mockReturnValue({
       data: undefined,
       isLoading: true,
       isError: true,
       error: 'unreachable',
-    } as any);
+    } as never);
 
     renderWithProviders();
 

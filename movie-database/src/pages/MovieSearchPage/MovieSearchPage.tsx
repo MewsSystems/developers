@@ -32,8 +32,8 @@ const MovieSearchPage = () => {
 
       {isLoading && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-80 w-80" />
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 w-90" />
           ))}
         </div>
       )}
