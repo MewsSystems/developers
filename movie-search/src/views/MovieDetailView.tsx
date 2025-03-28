@@ -2,6 +2,7 @@ import {useParams} from "react-router-dom"
 import {useMovieDetails} from "../api/useMovieDetails.ts"
 import styled from "styled-components"
 import {formatDate} from "../utils/formatDate.ts"
+import {getPosterSrc} from "../utils/getPosterSrc.ts";
 
 export const MovieDetailView = () => {
     const {id} = useParams()
@@ -13,18 +14,19 @@ export const MovieDetailView = () => {
 
     return (
         <Container>
-            <Poster src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>
+            <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title}/>
             <InfoContainer>
                 <Title>
-                    {movie.title} <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>
+                    {movie.title}
+                    {movie.vote_average > 0 && <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>}
                 </Title>
-                <Genres>
+                {movie.genres.length !== 0 && <Genres>
                     {movie.genres.map((genre) => (
                         <Genre key={genre.id}>{genre.name}</Genre>
                     ))}
-                </Genres>
+                </Genres>}
                 <Overview>{movie.overview}</Overview>
-                <p>⏳ <strong>Runtime:</strong> {movie.runtime} min</p>
+                {movie.runtime > 0 && <p>⏳ <strong>Runtime:</strong> {movie.runtime} min</p>}
                 {movie.production_countries.length !== 0 &&
                     <p>🌎 <strong>Origin:</strong> {movie.production_countries[0].name}</p>}
                 <p>📅 <strong>Release Date:</strong> {formatDate(movie.release_date)}</p>
@@ -40,7 +42,12 @@ const Container = styled.div`
     max-width: 1170px;
 
     display: flex;
+    flex-direction: column-reverse;
     gap: 20px;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+    }
 `
 
 const Poster = styled.img`
@@ -60,7 +67,9 @@ const Title = styled.h1`
 
 const Rating = styled.span`
     padding: 5px 10px;
+    margin-left: 8px;
 
+    display: inline-block;
     font-weight: bold;
 
     background: #ffcc0045;

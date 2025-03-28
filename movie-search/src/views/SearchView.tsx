@@ -2,6 +2,7 @@ import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
+import {getPosterSrc} from "../utils/getPosterSrc.ts";
 
 export const SearchView = () => {
     const [query, setQuery] = useState(() => sessionStorage.getItem("movieQuery") || "");
@@ -25,7 +26,7 @@ export const SearchView = () => {
                     page?.results?.map((movie) => (
                         <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
                             <MoviePoster
-                                src={movie.poster_path !== null ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/poster-placeholder.jpg'}
+                                src={getPosterSrc(movie.poster_path)}
                                 alt={movie.title}/>
                             <MovieTitleWrapper>
                                 <MovieTitle>{movie.title}</MovieTitle>
