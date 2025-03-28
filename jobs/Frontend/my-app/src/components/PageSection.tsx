@@ -9,7 +9,7 @@ type PageSectionProps = {
 const StyledPageSection = styled.div<PageSectionProps>`
   display: flex;
   flex-grow: 1;
-  flex-direction: ${(props) => props.direction || 'column'};
+  flex-direction: ${({ direction }) => direction || 'column'};
   flex-wrap: wrap;
   gap: 2rem;
   max-width: 1250px;
@@ -17,7 +17,7 @@ const StyledPageSection = styled.div<PageSectionProps>`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${(props) => props.$backgroundcolor || 'none'};
+  background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'none'};
 `;
 
 export const PageSection = ({
