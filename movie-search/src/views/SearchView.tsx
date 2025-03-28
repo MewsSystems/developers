@@ -4,7 +4,7 @@ import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 
 export const SearchView = () => {
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState(() => sessionStorage.getItem("movieQuery") || "");
     const {data, fetchNextPage, hasNextPage} = useMovies(query);
     const navigate = useNavigate();
 
@@ -14,7 +14,11 @@ export const SearchView = () => {
                 type="text"
                 placeholder="Search movies..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                    const value = e.target.value
+                    setQuery(value)
+                    sessionStorage.setItem("movieQuery", value)
+                }}
             />
             <MovieList>
                 {data?.pages.flatMap((page) =>
