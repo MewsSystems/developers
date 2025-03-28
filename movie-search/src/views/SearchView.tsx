@@ -6,8 +6,11 @@ import {getPosterSrc} from "../utils/getPosterSrc.ts";
 
 export const SearchView = () => {
     const [query, setQuery] = useState(() => sessionStorage.getItem("movieQuery") || "");
-    const {data, fetchNextPage, hasNextPage} = useMovies(query);
+    const {data, fetchNextPage, hasNextPage, isError, error} = useMovies(query);
     const navigate = useNavigate();
+
+    const movies = data?.pages.flatMap((page) => page?.results) || [];
+    const noResults = query.length >= 3 && movies.length === 0;
 
     return (
         <Container>
@@ -21,22 +24,22 @@ export const SearchView = () => {
                     sessionStorage.setItem("movieQuery", value)
                 }}
             />
+            {isError && <ErrorMessage>❌ Error: {error.message}</ErrorMessage>}
+            {noResults && <NoResultsText>😞 No movies found for "{query}".</NoResultsText>}
             <MovieList>
-                {data?.pages.flatMap((page) =>
-                    page?.results?.map((movie) => (
-                        <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
-                            <MoviePoster
-                                src={getPosterSrc(movie.poster_path)}
-                                alt={movie.title}/>
-                            <MovieTitleWrapper>
-                                <MovieTitle>{movie.title}</MovieTitle>
-                                {movie.release_date !== '' &&
-                                    <MovieYear>({movie.release_date?.split("-")[0]})</MovieYear>
-                                }
-                            </MovieTitleWrapper>
-                        </MovieItem>
-                    ))
-                )}
+                {movies.map((movie) => (
+                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
+                        <MoviePoster
+                            src={getPosterSrc(movie.poster_path)}
+                            alt={movie.title}/>
+                        <MovieTitleWrapper>
+                            <MovieTitle>{movie.title}</MovieTitle>
+                            {movie.release_date !== '' &&
+                                <MovieYear>({movie.release_date?.split("-")[0]})</MovieYear>
+                            }
+                        </MovieTitleWrapper>
+                    </MovieItem>
+                ))}
             </MovieList>
             {hasNextPage &&
                 <ButtonWrapper><LoadMoreButton onClick={() => fetchNextPage()}>Load
@@ -76,6 +79,17 @@ const SearchInput = styled.input`
         color: #aaa;
         font-style: italic;
     }
+`
+
+const ErrorMessage = styled.p`
+    color: red;
+    font-weight: bold;
+    text-align: center;
+`
+
+const NoResultsText = styled.p`
+    text-align: center;
+    font-size: 18px;
 `
 
 const MovieList = styled.div`
