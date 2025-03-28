@@ -56,7 +56,7 @@ const StyledMovieInfoHeader = styled.div`
 const StyledMovieTitle = styled.h1`
   --f-h1: clamp(2rem, 1.6rem + 2vw, 3.2rem);
   font-size: var(--f-h1);
-  line-height: var(--f-h1) * 1.2;
+  line-height: calc(var(--f-h1) * 1.2);
 `;
 
 const StyledMovieData = styled(StyledMovieInfoHeader)`

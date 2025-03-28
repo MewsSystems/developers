@@ -21,7 +21,7 @@ const StyledH1 = styled.h1`
   position: relative;
   display: inline-block;
   font-size: var(--f-h1);
-  line-height: var(--f-h1) * 1.2;
+  line-height: calc(var(--f-h1) * 1.2);
   color: #141414;
 
   &::before {
