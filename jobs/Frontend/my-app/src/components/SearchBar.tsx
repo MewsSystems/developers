@@ -38,6 +38,7 @@ export const SearchBar = ({ value, onSearchChange }: SearchBarProps) => {
           placeholder="Enter movie name or a keyword"
           value={value}
           onChange={(e) => handleChange(e.target.value)}
+          aria-label="Search bar"
         />
       </label>
     </>
