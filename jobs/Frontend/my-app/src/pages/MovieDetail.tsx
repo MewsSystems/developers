@@ -113,7 +113,9 @@ export const MovieDetail = () => {
   return (
     <>
       <PageSection>
-        <StyledLink to="/">← Back to search</StyledLink>
+        <StyledLink to="/" aria-label="Back to search">
+          ← Back to search
+        </StyledLink>
       </PageSection>
       <PageSection direction="row" $backgroundcolor="#e0e0e0">
         <StyledMoviePoster
