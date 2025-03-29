@@ -28,7 +28,9 @@ const StyledMovieCardPlainText = styled.p`
   font-size: 0.75rem;
 `;
 
-const StyledMovieCardTitle = styled(StyledMovieCardPlainText)`
+const StyledMovieCardTitle = styled(StyledMovieCardPlainText).attrs({
+  as: 'h2',
+})`
   font-weight: 700;
   font-size: 0.875rem;
 `;
