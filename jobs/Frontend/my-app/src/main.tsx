@@ -14,12 +14,13 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <MovieSearch />,
-    errorElement: <NotFoundPage />,
+    // errorElement: <NotFoundPage />,
   },
   {
     path: '/movie-detail/:movieId',
     element: <MovieDetail />,
   },
+  { path: '*', element: <NotFoundPage /> },
 ]);
 
 createRoot(document.getElementById('root')!).render(

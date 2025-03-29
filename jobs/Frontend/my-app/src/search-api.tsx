@@ -69,9 +69,8 @@ export const fetchMovieDetails = async (movieId: number) => {
 
   const details = await response.json();
 
-  console.log(response);
   if (!response.ok) {
-    throw new Response('Network response was not ok');
+    throw new Error('Network response was not ok');
   }
 
   return details;

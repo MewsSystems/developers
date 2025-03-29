@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetails } from '../search-api';
+import { fetchMovieDetails } from '../search-api.tsx';
 import { PageSection } from '../components/PageSection';
 import fallback_image from './../assets/image-load-failed.svg';
+import { NotFoundPage } from './NotFoundPage';
 
 const StyledLink = styled(Link)`
   --primary-color: #141414;
@@ -104,7 +105,8 @@ export const MovieDetail = () => {
   });
 
   if (isLoading) return <div>Loading movie details...</div>;
-  if (isError) return <div>Error loading movie details!</div>;
+  // if (isError) return <div>Error loading movie details!</div>;
+  if (isError) return <NotFoundPage />;
 
   const releaseYear = movie?.release_date
     ? new Date(movie.release_date).getFullYear()

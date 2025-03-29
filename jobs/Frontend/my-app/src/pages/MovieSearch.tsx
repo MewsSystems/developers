@@ -10,7 +10,7 @@ import {
   fetchMovies,
   Movie,
   MoviesData,
-} from '../search-api';
+} from '../search-api.tsx';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const StyledH1 = styled.h1`
@@ -41,8 +41,7 @@ const StyledH1 = styled.h1`
 `;
 
 export const MovieSearch = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,11 +50,10 @@ export const MovieSearch = () => {
     const handler = setTimeout(() => {
       // Check the URL for query parameters
       const params = new URLSearchParams(location.search);
-      const query = params.get('searchQuery');
+      const query = params.get('debouncedSearchQuery');
       const pageParam = params.get('page');
 
       if (query) {
-        setSearchQuery(query);
         setDebouncedSearchQuery(query);
       }
       if (pageParam) {
@@ -66,21 +64,14 @@ export const MovieSearch = () => {
     return () => clearTimeout(handler);
   }, [location.search]);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [searchQuery]);
-
   // Update the URL when searchQuery or page changes
   useEffect(() => {
     const queryParams = new URLSearchParams();
-    if (searchQuery) queryParams.set('searchQuery', searchQuery);
+    if (debouncedSearchQuery)
+      queryParams.set('debouncedSearchQuery', debouncedSearchQuery);
     queryParams.set('page', page.toString());
     navigate(`?${queryParams.toString()}`, { replace: true });
-  }, [searchQuery, page, navigate]);
+  }, [debouncedSearchQuery, page, navigate]);
 
   // Search movies query
   const {
@@ -109,7 +100,6 @@ export const MovieSearch = () => {
   const movieList = debouncedSearchQuery ? movies : popularMovies;
 
   const handleReset = () => {
-    setSearchQuery('');
     setDebouncedSearchQuery('');
     setPage(1);
     navigate('/');
@@ -121,7 +111,10 @@ export const MovieSearch = () => {
         <Link to={'/'} onClick={handleReset}>
           <StyledH1>Movie Search</StyledH1>
         </Link>
-        <SearchBar onSearchChange={setSearchQuery} value={searchQuery} />
+        <SearchBar
+          onSearchChange={setDebouncedSearchQuery}
+          value={debouncedSearchQuery}
+        />
       </PageSection>
 
       {isLoading && <div>Loading...</div>}

@@ -65,7 +65,7 @@ export const MovieCard = ({
               ? `https://image.tmdb.org/t/p/w200/${poster}`
               : fallback_image
           }
-          alt="Movie poster"
+          alt={`Movie poster for ${name}`}
           style={{
             opacity: poster ? 1 : 0.2,
           }}

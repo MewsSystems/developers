@@ -8,7 +8,7 @@ NEW README
 2. ROUTING AND STATE MANAGEMENT
 
 -
--
+- Debounce Implementation: refactored.
 - All props were used in their destructured version except for he pagination element when props were ineeded within styled-components. This is now corrected.
 
 3. API AND BACKEDN PRACTICES
@@ -29,4 +29,4 @@ NEW README
 6. HTML AND ACCESSIBILITY
 
 - Semantic Structure
-- Alt Text:
+- Alt Text: fixed, each poster now has a unique alt.
