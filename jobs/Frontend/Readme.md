@@ -28,5 +28,5 @@ NEW README
 
 6. HTML AND ACCESSIBILITY
 
-- Semantic Structure
+- Semantic Structure:
 - Alt Text: fixed, each poster now has a unique alt.

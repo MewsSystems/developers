@@ -5,6 +5,13 @@ const StyledButton = styled.button`
   border: none;
   background-color: #f9f9f9;
   transition: all 0.3s ease-out;
+  &:disabled {
+    cursor: default;
+    &:hover,
+    &:focus {
+      background-color: #f9f9f9;
+    }
+  }
   &:hover,
   &:focus {
     background-color: #e0e0e0;
