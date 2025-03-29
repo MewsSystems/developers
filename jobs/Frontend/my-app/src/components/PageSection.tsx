@@ -3,21 +3,20 @@ import styled from 'styled-components';
 type PageSectionProps = {
   children?: React.ReactNode;
   direction?: 'row' | 'column';
-  $backgroundcolor?: 'none' | '#e0e0e0';
+  $backgroundcolor?: 'unset' | '#e0e0e0';
 };
 
 const StyledPageSection = styled.div<PageSectionProps>`
   display: flex;
-  flex-grow: 1;
   flex-direction: ${({ direction }) => direction || 'column'};
   flex-wrap: wrap;
   gap: 2rem;
   max-width: 1250px;
-  padding: 1rem;
+  padding: 2rem 1rem;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'none'};
+  background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'unset'};
 `;
 
 export const PageSection = ({

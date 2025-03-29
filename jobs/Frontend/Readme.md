@@ -3,7 +3,7 @@ NEW README
 1. ATTENTION TO DETAIL
 
 - README and Project Metadata customized.
-- Both movie titles and navigation buttons follow the recommended color contrast ratios. The Previous/Next buttons only have a lower contrast ratio on purpose when the user is at the first or the last page or the selection to signal that there are no more pages to go to in that direction.
+- Both movie titles and navigation buttons follow the recommended color contrast ratios. The Previous/Next buttons only have a lower contrast ratio on purpose when the user is at the first or the last page or the selection to signal that there are no more pages to go to in that direction. I also disable cursor change and hover effect when trying to click on disabled buttons.
 
 2. ROUTING AND STATE MANAGEMENT
 
@@ -28,5 +28,5 @@ NEW README
 
 6. HTML AND ACCESSIBILITY
 
-- Semantic Structure:
+- Semantic Structure: labels added, buttons and links were already used according to their purpose, title levels corrected.
 - Alt Text: fixed, each poster now has a unique alt.
