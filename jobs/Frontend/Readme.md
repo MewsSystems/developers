@@ -1,16 +1,32 @@
-# Mews frontend developer task
+NEW README
 
-You should start with creating a fork of the repository. When you're finished with the task, you should create a pull request.
+1. ATTENTION TO DETAIL
 
-Your task will be to create a simple movie search application. The application will have 2 views - search and movie detail. The search view is the default view, and should contain search input and display paginated list of found movies with a way to load additional batch. Search should start automatically after typing into the input is finished - there is no need for a search button. Clicking on a movie gets you to the movie detail view where detailed information about the movie should be listed. 
+- README and Project Metadata customized.
+- Both movie titles and navigation buttons follow the recommended color contrast ratios. The Previous/Next buttons only have a lower contrast ratio on purpose when the user is at the first or the last page or the selection to signal that there are no more pages to go to in that direction.
 
-To retrieve information about movies, use [TheMovieDb API](https://developers.themoviedb.org/3/getting-started/introduction). You can use our api key to authorize requests:
-```
-03b8572954325680265531140190fd2a
-```
+2. ROUTING AND STATE MANAGEMENT
 
-## Required technologies
+-
+-
+- All props were used in their destructured version except for he pagination element when props were ineeded within styled-components. This is now corrected.
 
-To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
-We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
-The use of any additional library is allowed and up to you.
+3. API AND BACKEDN PRACTICES
+
+- API Key Security:
+- Error Handling
+
+4. TYPE USAGE
+
+-
+
+5. CSS AND STYLING
+
+-
+-
+- CSS Accuracy: the calc function has been corrected and I installed an extension for styled-components into my VSC to help pinpoint these types of syntax errors.
+
+6. HTML AND ACCESSIBILITY
+
+- Semantic Structure
+- Alt Text:
