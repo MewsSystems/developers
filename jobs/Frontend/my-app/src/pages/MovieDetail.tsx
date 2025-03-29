@@ -126,7 +126,7 @@ export const MovieDetail = () => {
               ? `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
               : fallback_image
           }
-          alt="Movie poster"
+          alt={`Movie poster for ${movie.title}`}
         />
         <StyledMovieInfo>
           <StyledMovieInfoHeader>
