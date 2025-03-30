@@ -3,11 +3,10 @@ import styled from 'styled-components';
 const StyledSearchBar = styled.input`
   max-width: 100%;
   width: 90vw;
-  padding-left: 0.5rem;
-  padding-block: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border: 1px solid lightgrey;
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out;
+  border-radius: var(--br-rounded);
+  transition: var(--transition-prim);
 
   &[type='text']:hover,
   &[type='text']:focus {
@@ -38,6 +37,7 @@ export const SearchBar = ({ value, onSearchChange }: SearchBarProps) => {
           placeholder="Enter movie name or a keyword"
           value={value}
           onChange={(e) => handleChange(e.target.value)}
+          aria-label="Search bar"
         />
       </label>
     </>
