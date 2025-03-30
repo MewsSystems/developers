@@ -30,3 +30,7 @@ NEW README
 
 - Semantic Structure: labels added, buttons and links were already used according to their purpose, title levels corrected.
 - Alt Text: fixed, each poster now has a unique alt.
+
+FINAL COMMENTS:
+
+- The detail page could be further decomposed into separat elements for better navigation through the code, but in such a small project, I find this unneccessary and counterproductive. Same could be said about the API calls.

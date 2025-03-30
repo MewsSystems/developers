@@ -4,8 +4,8 @@ import './index.css';
 import './main.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { MovieSearch } from './pages/MovieSearch';
-import { MovieDetail } from './pages/MovieDetail';
+import { MovieSearchPage } from './pages/MovieSearchPage';
+import { MovieDetailPage } from './pages/MovieDetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 const queryClient = new QueryClient();
@@ -13,12 +13,12 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MovieSearch />,
+    element: <MovieSearchPage />,
     errorElement: <NotFoundPage />,
   },
   {
     path: '/movie-detail/:movieId',
-    element: <MovieDetail />,
+    element: <MovieDetailPage />,
   },
 ]);
 

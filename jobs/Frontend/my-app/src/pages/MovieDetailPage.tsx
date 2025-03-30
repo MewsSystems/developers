@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMovieDetails } from '../search-api.tsx';
-import { PageSection } from '../components/PageSection';
+import { PageSection } from '../components/PageSection.tsx';
 import fallback_image from './../assets/image-load-failed.svg';
-import { NotFoundPage } from './NotFoundPage';
+import { NotFoundPage } from './NotFoundPage.tsx';
 
 const StyledColumn = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ interface Genre {
   name: string;
 }
 
-export const MovieDetail = () => {
+export const MovieDetailPage = () => {
   const { movieId } = useParams<{ movieId: string }>();
   const numericMovieId = Number(movieId);
 

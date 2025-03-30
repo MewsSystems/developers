@@ -1,7 +1,7 @@
-import { PageSection } from '../components/PageSection';
-import { Pagination } from '../components/Pagination/Pagination';
-import { SearchBar } from '../components/SearchBar';
-import { MovieCard } from '../components/MovieCard';
+import { PageSection } from '../components/PageSection.tsx';
+import { Pagination } from '../components/Pagination/Pagination.tsx';
+import { SearchBar } from '../components/SearchBar.tsx';
+import { MovieCard } from '../components/MovieCard.tsx';
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -13,7 +13,7 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import { Link, useNavigate } from 'react-router-dom';
 
-export const MovieSearch = () => {
+export const MovieSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams('');
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');

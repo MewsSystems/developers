@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const BackButton = () => {
+export const BackToHPButton = () => {
   return (
     <Link
       className="gradient-hover f-link-md"
