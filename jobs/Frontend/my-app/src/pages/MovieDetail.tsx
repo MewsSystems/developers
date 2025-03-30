@@ -105,7 +105,6 @@ export const MovieDetail = () => {
   });
 
   if (isLoading) return <div>Loading movie details...</div>;
-  // if (isError) return <div>Error loading movie details!</div>;
   if (isError) return <NotFoundPage />;
 
   const releaseYear = movie?.release_date

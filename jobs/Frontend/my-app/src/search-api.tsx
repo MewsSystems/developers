@@ -66,11 +66,10 @@ export const fetchMovieDetails = async (movieId: number) => {
     `https://api.themoviedb.org/3/movie/${movieId}?api_key=${tmdbApiKey}`
   );
 
-  const details = await response.json();
-
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
+  const details = await response.json();
 
   return details;
 };
