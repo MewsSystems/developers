@@ -42,10 +42,10 @@ const StyledH1 = styled.h1`
 `;
 
 export const MovieSearch = () => {
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams('');
+  const [query, setQuery] = useState(searchParams.get('query') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams('');
   const navigate = useNavigate();
   const location = useLocation();
 
