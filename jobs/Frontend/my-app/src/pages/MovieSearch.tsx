@@ -11,6 +11,7 @@ import {
   Movie,
   MoviesData,
 } from '../search-api.tsx';
+import { useSearchParams } from 'react-router-dom';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const StyledH1 = styled.h1`
@@ -42,46 +43,23 @@ const StyledH1 = styled.h1`
 
 export const MovieSearch = () => {
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams('');
   const navigate = useNavigate();
   const location = useLocation();
 
-  //Defers API call until user stops typing
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      const params = new URLSearchParams(location.search);
-      const query = params.get('query');
-      const pageParam = params.get('page');
-
-      if (query) {
-        setQuery(query);
-      }
-      if (pageParam) {
-        setPage(Number(pageParam));
-      }
-    }, 500);
-
-    return () => clearTimeout(handler);
-  }, [location.search]);
-
   // Update the URL when searchQuery or page changes
   useEffect(() => {
-    const queryParams = new URLSearchParams();
-    if (query) queryParams.set('query', query);
-    queryParams.set('page', page.toString());
-    navigate(`?${queryParams.toString()}`, { replace: true });
-  }, [query, page, navigate]);
+    setSearchParams({ query: query });
+  }, [query, setSearchParams]);
 
-  // Search movies query
-  const {
-    data: movies,
-    isLoading: isMoviesLoading,
-    isError: isMoviesError,
-  } = useQuery<MoviesData>({
-    queryFn: () => fetchMovies(query, page * 10 - 10),
-    queryKey: ['movies', query, page],
-    enabled: !!query,
-  });
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [query]);
 
   // Popular movies query
   const {
@@ -91,12 +69,23 @@ export const MovieSearch = () => {
   } = useQuery<MoviesData>({
     queryFn: () => fetchPopularMovies(page * 10 - 10),
     queryKey: ['popularMovies', page],
-    enabled: !query,
+    enabled: !debouncedQuery,
   });
 
-  const isLoading = query ? isMoviesLoading : isPopularLoading;
-  const isError = query ? isMoviesError : isPopularError;
-  const movieList = query ? movies : popularMovies;
+  // Search movies query
+  const {
+    data: movies,
+    isLoading: isMoviesLoading,
+    isError: isMoviesError,
+  } = useQuery<MoviesData>({
+    queryFn: () => fetchMovies(debouncedQuery, page * 10 - 10),
+    queryKey: ['movies', debouncedQuery, page],
+    enabled: !!debouncedQuery,
+  });
+
+  const isLoading = debouncedQuery ? isMoviesLoading : isPopularLoading;
+  const isError = debouncedQuery ? isMoviesError : isPopularError;
+  const movieList = debouncedQuery ? movies : popularMovies;
 
   const handleReset = () => {
     setQuery('');
