@@ -25,6 +25,7 @@ export const MovieSearchPage = () => {
     setSearchParams({ query: query, page: page.toString() });
   }, [query, page, setSearchParams]);
 
+  //Debounce
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
@@ -54,6 +55,7 @@ export const MovieSearchPage = () => {
     enabled: !!debouncedQuery,
   });
 
+  //Page reset
   const handleReset = () => {
     setQuery('');
     setPage(1);
