@@ -45,14 +45,14 @@ export const MovieSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams('');
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(Number(searchParams.get('page') || 1));
   const navigate = useNavigate();
   const location = useLocation();
 
   // Update the URL when searchQuery or page changes
   useEffect(() => {
-    setSearchParams({ query: query });
-  }, [query, setSearchParams]);
+    setSearchParams({ query: query, page: page.toString() });
+  }, [query, page, setSearchParams]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
