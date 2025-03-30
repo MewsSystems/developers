@@ -1,54 +1,36 @@
-# React + TypeScript + Vite
+BELOW IS A LIST OF IMPROVEMENTS MADE BASED ON FEEDBACK BY A MORE SENIOR DEVELOPER:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. ATTENTION TO DETAIL
 
-Currently, two official plugins are available:
+- README and Project Metadata: README and Project Metadata customized.
+- UI & UX Readability: Both movie titles and navigation buttons follow the recommended color contrast ratios. The Previous/Next buttons only have a lower contrast ratio on purpose when the user is at the first or the last page or the selection to signal that there are no more pages to go to in that direction. I also disable cursor change and hover effect when trying to click on disabled buttons.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. ROUTING AND STATE MANAGEMENT
 
-## Expanding the ESLint configuration
+- Routing Functionality: Page and query hooks refactored, users can now share links to their search without the URL params reseting on render.
+- Debounce Implementation: Refactored.
+- Component Props: All props were used in their destructured version except for he pagination element when props were ineeded within styled-components. This is now corrected.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. API AND BACKEDN PRACTICES
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+- API Key Security: API is now loaded from a hidden .env file. Ideally, it would be stored on backend.
+- Error Handling: Homepage now shows an error page when incorrect URL is entered, same with the movie deatil page.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+4. TYPE USAGE
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+- Depth of Types: I did not use any advanced types, but am grateful for the suggestion to learn more about using TS in dynamic API responses and form handling.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+5. CSS AND STYLING
+
+- Global Configuration: Created global variables and styles.
+- Redundant Styling: Refactored styled-components.
+- CSS Accuracy: The calc function has been corrected and I installed an extension for styled-components into my VSC to help pinpoint these types of syntax errors.
+
+6. HTML AND ACCESSIBILITY
+
+- Semantic Structure: Labels added, buttons and links were already used according to their purpose, title levels corrected.
+- Alt Text: Fixed, each poster now has a unique alt.
+
+FINAL COMMENTS:
+
+- The detail page could be further decomposed into separat elements for better navigation through the code, but in such a small project, I find this unneccessary and counterproductive. Same could be said about the API calls, which are all currently in the same folder.
