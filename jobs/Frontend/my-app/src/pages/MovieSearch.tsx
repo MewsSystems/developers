@@ -12,7 +12,7 @@ import {
   MoviesData,
 } from '../search-api.tsx';
 import { useSearchParams } from 'react-router-dom';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StyledH1 = styled.h1`
   --f-h1: clamp(2rem, 1.6rem + 2vw, 3.2rem);
@@ -47,7 +47,6 @@ export const MovieSearch = () => {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [page, setPage] = useState(Number(searchParams.get('page') || 1));
   const navigate = useNavigate();
-  const location = useLocation();
 
   // Update the URL when searchQuery or page changes
   useEffect(() => {
