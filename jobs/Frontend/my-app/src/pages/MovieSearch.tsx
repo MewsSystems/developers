@@ -82,15 +82,15 @@ export const MovieSearch = () => {
     enabled: !!debouncedQuery,
   });
 
-  const isLoading = debouncedQuery ? isMoviesLoading : isPopularLoading;
-  const isError = debouncedQuery ? isMoviesError : isPopularError;
-  const movieList = debouncedQuery ? movies : popularMovies;
-
   const handleReset = () => {
     setQuery('');
     setPage(1);
     navigate('/');
   };
+
+  const isLoading = debouncedQuery ? isMoviesLoading : isPopularLoading;
+  const isError = debouncedQuery ? isMoviesError : isPopularError;
+  const movieList = debouncedQuery ? movies : popularMovies;
 
   return (
     <div>

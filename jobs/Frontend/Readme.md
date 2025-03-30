@@ -7,7 +7,7 @@ NEW README
 
 2. ROUTING AND STATE MANAGEMENT
 
--
+- Routing Functionality: page and query hooks refactored, users can now share links to their search without the URL params reseting on render.
 - Debounce Implementation: refactored.
 - All props were used in their destructured version except for he pagination element when props were ineeded within styled-components. This is now corrected.
 
