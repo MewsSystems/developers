@@ -1,6 +1,5 @@
 //authentication for API
-//the key would usually be handled through .env on the backend, but for the purposes of this fronend task, I hardcoded it in
-const tmdbApiKey = '03b8572954325680265531140190fd2a';
+const tmdbApiKey = import.meta.env.VITE_TMDB_API_KEY;
 
 export interface Movie {
   id: number;

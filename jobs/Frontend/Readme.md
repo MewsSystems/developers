@@ -13,8 +13,8 @@ NEW README
 
 3. API AND BACKEDN PRACTICES
 
-- API Key Security:
-- Error Handling
+- API Key Security: API is now loaded from a hidden .env file. Ideally, it would be stored on backend.
+- !Error Handling: homepage now shows an error page when incorrect URL is entered
 
 4. TYPE USAGE
 
