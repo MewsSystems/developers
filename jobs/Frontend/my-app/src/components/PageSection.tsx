@@ -11,11 +11,11 @@ const StyledPageSection = styled.div<PageSectionProps>`
   flex-direction: ${({ direction }) => direction || 'column'};
   flex-wrap: wrap;
   gap: 2rem;
-  max-width: 1250px;
+  max-width: 90vw;
   padding: 2rem 1rem;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: var(--br-rounded);
   background-color: ${({ $backgroundcolor }) => $backgroundcolor || 'unset'};
 `;
 

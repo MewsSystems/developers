@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { PageSection } from '../components/PageSection';
 import { Pagination } from '../components/Pagination/Pagination';
 import { SearchBar } from '../components/SearchBar';
@@ -13,33 +12,6 @@ import {
 } from '../search-api.tsx';
 import { useSearchParams } from 'react-router-dom';
 import { Link, useNavigate } from 'react-router-dom';
-
-const StyledH1 = styled.h1`
-  --f-h1: clamp(2rem, 1.6rem + 2vw, 3.2rem);
-
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  position: relative;
-  display: inline-block;
-  font-size: var(--f-h1);
-  line-height: calc(var(--f-h1) * 1.2);
-  color: #141414;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 0;
-    background: linear-gradient(to right, #f43f5e, #c026d3, #4d5b9e);
-    transition: all 0.3s ease;
-  }
-
-  &:hover::before {
-    width: 100%;
-  }
-`;
 
 export const MovieSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams('');
@@ -96,7 +68,7 @@ export const MovieSearch = () => {
     <div>
       <PageSection>
         <Link to={'/'} onClick={handleReset}>
-          <StyledH1>Movie Search</StyledH1>
+          <h1 className="gradient-hover">Movie Search</h1>
         </Link>
         <SearchBar onSearchChange={setQuery} value={query} />
       </PageSection>

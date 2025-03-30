@@ -12,27 +12,13 @@ const StyledMovieCard = styled.div`
 `;
 
 const StyledMovieCardPoster = styled.img`
-  border-radius: 10px;
   max-width: 150px;
   height: 225px;
   width: auto;
-  transition: all 0.3s ease-out;
+  transition: var(--transition-prim);
   &:hover {
     transform: scale3d(1.04, 1.04, 1.04);
   }
-`;
-
-const StyledMovieCardPlainText = styled.p`
-  width: 100%;
-  margin: 0;
-  font-size: 0.75rem;
-`;
-
-const StyledMovieCardTitle = styled(StyledMovieCardPlainText).attrs({
-  as: 'h2',
-})`
-  font-weight: 700;
-  font-size: 0.875rem;
 `;
 
 interface MovieCardProps {
@@ -73,11 +59,11 @@ export const MovieCard = ({
           }}
         />
       </Link>
-      <StyledMovieCardTitle>{name}</StyledMovieCardTitle>
-      <StyledMovieCardPlainText>{rating}</StyledMovieCardPlainText>
-      <StyledMovieCardPlainText>
-        {formattedReleaseDate}
-      </StyledMovieCardPlainText>
+      <h2 className="f-h3">{name}</h2>
+      <div className="f-p2">
+        <p>{rating}</p>
+        <p>{formattedReleaseDate}</p>
+      </div>
     </StyledMovieCard>
   );
 };

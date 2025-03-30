@@ -1,11 +1,12 @@
 import { BackButton } from '../components/BackButton';
 import { NotFoundMessage } from '../components/NotFoundMessage';
+import { PageSection } from '../components/PageSection';
 
 export const NotFoundPage = () => {
   return (
-    <>
-      <NotFoundMessage />
+    <PageSection>
       <BackButton />
-    </>
+      <NotFoundMessage />
+    </PageSection>
   );
 };

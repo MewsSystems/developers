@@ -3,18 +3,18 @@ import styled from 'styled-components';
 const StyledButton = styled.button`
   min-width: 100px;
   border: none;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease-out;
+  background-color: var(--c-neutral);
+  transition: var(--transition-prim);
   &:disabled {
     cursor: default;
     &:hover,
     &:focus {
-      background-color: #f9f9f9;
+      background-color: var(--c-neutral);
     }
   }
   &:hover,
   &:focus {
-    background-color: #e0e0e0;
+    background-color: var(--c-neutral-hover);
   }
 `;
 
