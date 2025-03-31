@@ -1,0 +1,64 @@
+# Exchange Rate Service Configuration
+# This file provides the configuration for the exchange rate service.
+# You can copy this file to exchange_rates.yml and modify it for your needs.
+
+# Provider to use for exchange rates
+provider: cnb
+
+# Configuration for the specific provider
+provider_config:
+  # Czech National Bank (CNB) configuration
+  base_url: https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt
+  base_currency: CZK
+  publication_hour: 14
+  publication_minute: 30
+  publication_timezone: '+01:00'
+
+# Alternative providers (uncomment to use)
+# --------------------------------------
+
+# European Central Bank (ECB)
+# provider: ecb
+# provider_config:
+#   base_url: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+#   base_currency: EUR
+#   publication_hour: 16
+#   publication_minute: 0
+#   publication_timezone: '+01:00'
+#   # Optional: Explicitly set the content type (otherwise auto-detected)
+#   # content_type: application/xml
+
+# Configuration for the cache
+cache:
+  # Enable caching (true/false)
+  enabled: true
+  
+  # Default time-to-live for cached data in seconds
+  # This is used as a fallback when provider-specific TTL cannot be determined
+  default_ttl: 3600
+  
+  # Cache storage type (memory, redis, file)
+  storage: memory
+
+# Environment-specific overrides can be added as follows:
+# development:
+#   provider: cnb
+#   cache:
+#     enabled: false
+#
+# test:
+#   provider: mock
+#   cache:
+#     enabled: false
+#
+# production:
+#   provider: cnb
+#   cache:
+#     storage: redis
+#     redis_url: <%= ENV['REDIS_URL'] %>
+
+# Note: Environment variables can override these settings:
+# - EXCHANGE_RATE_PROVIDER: sets the provider type
+# - EXCHANGE_RATE_BASE_URL: sets the provider's base URL
+# - EXCHANGE_RATE_BASE_CURRENCY: sets the provider's base currency
+# - EXCHANGE_RATE_PROVIDER_*: sets provider-specific parameters 
