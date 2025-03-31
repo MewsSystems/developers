@@ -1,0 +1,42 @@
+{
+    "date": "2025-03-26",
+    "order": 60,
+    "bank": "CNB",
+    "rates": [
+        {
+            "country": "Australia",
+            "currency": "dollar",
+            "amount": 1,
+            "code": "AUD",
+            "rate": 14.602
+        },
+        {
+            "country": "EMU",
+            "currency": "euro",
+            "amount": 1,
+            "code": "EUR",
+            "rate": 24.930
+        },
+        {
+            "country": "Japan",
+            "currency": "yen",
+            "amount": 100,
+            "code": "JPY",
+            "rate": 15.376
+        },
+        {
+            "country": "Hungary",
+            "currency": "forint",
+            "amount": 100,
+            "code": "HUF",
+            "rate": 6.152
+        },
+        {
+            "country": "USA",
+            "currency": "dollar",
+            "amount": 1,
+            "code": "USD",
+            "rate": 23.117
+        }
+    ]
+}

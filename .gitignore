@@ -1,8 +1,6 @@
-!.gitkeep
-!.gitignore
-!*.dll
-[Oo]bj
-[Bb]in
+# Combined .gitignore file
+
+# General ignores
 *.user
 *.suo
 *.[Cc]ache
@@ -17,7 +15,76 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
+[Oo]bj
+[Bb]in
 
-node_modules
+# Node.js
+node_modules/
 bower_components
 npm-debug.log
+yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Rails specific
+*.rbc
+capybara-*.html
+.rspec
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/db/*.sqlite3-[0-9]*
+/public/system
+/coverage/
+/spec/tmp
+*.orig
+rerun.txt
+pickle-email-*.html
+
+# Logfiles and tempfiles
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Environment
+.env
+.env*.local
+config/initializers/secret_token.rb
+config/master.key
+config/secrets.yml
+
+# Environment normalization
+/.bundle
+/vendor/bundle
+
+# Ruby version managers
+.rvmrc
+.ruby-version
+.ruby-gemset
+
+# Bower
+/vendor/assets/bower_components
+*.bowerrc
+bower.json
+
+# Other Rails ignores
+.powenv
+.byebug_history
+/public/packs
+/public/packs-test
+/public/assets
+/storage/*
+!/storage/.keep
+/public/uploads
+/config/master.key
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Keep files
+!.gitkeep
+!.gitignore
+!*.dll

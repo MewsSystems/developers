@@ -1,0 +1,28 @@
+default: &default
+  provider: CNB
+  base_currency: CZK
+  providers:
+    CNB:
+      # Text format endpoint (default)
+      base_url: "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt"
+      content_type: "text/plain"
+      
+      # Alternative XML format (commented out)
+      # base_url: "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml"
+      # content_type: "application/xml"
+      
+      # Alternative JSON API (commented out)
+      # base_url: "https://api.cnb.cz/cnbapi/exrates/daily"
+      # content_type: "application/json"
+      
+      base_currency: CZK
+      publication_hour: 14
+      publication_minute: 30
+      publication_timezone: "+01:00"  # CET
+
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default 
