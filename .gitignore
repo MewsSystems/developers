@@ -45,6 +45,14 @@ pickle-email-*.html
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+/tmp/cache/*
+/tmp/sockets/*
+/tmp/storage/*
+/tmp/miniprofiler/*
+/tmp/*.txt
 
 # Environment
 .env
