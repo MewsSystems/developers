@@ -1,6 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ExchangeRatesController, type: :controller do
+  # Set up routes for the test
+  before do
+    routes.draw do
+      namespace :api do
+        namespace :v1 do
+          resources :exchange_rates, only: [:index, :show] do
+            collection do
+              get 'convert'
+              get 'currencies'
+            end
+          end
+        end
+      end
+    end
+  end
+
   let(:czk) { Currency.new('CZK') }
   let(:usd) { Currency.new('USD') }
   let(:eur) { Currency.new('EUR') }

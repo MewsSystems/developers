@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   # Debug routes for development only
   if Rails.env.development?
-    get '/debug/redis', to: 'health#redis_debug'
+    namespace :debug do
+      get '/redis', to: 'redis#index'
+    end
   end
 end

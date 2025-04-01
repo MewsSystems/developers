@@ -2,38 +2,8 @@ class HealthController < ApplicationController
   # Health check endpoint
   # Used for container health checks and monitoring
   def index
-    status = { status: 'ok', time: Time.now.iso8601 }
-
-    # Get Redis repository for metrics
-    begin
-      repository = Rails.application.services&.get(:repository)
-
-      # Add repository metrics if available (for Redis repository)
-      if repository.respond_to?(:health_metrics)
-        metrics = repository.health_metrics
-        status[:redis] = metrics[:redis_connected] ? 'connected' : 'disconnected'
-        status[:cache] = {
-          size: metrics[:cache_size],
-          hit_ratio: metrics[:cache_hit_ratio].round(2),
-          hits: metrics[:cache_hits],
-          misses: metrics[:cache_misses]
-        }
-        status[:errors] = {
-          count: metrics[:error_count],
-          fallback_active: metrics[:fallback_size] > 0
-        }
-      else
-        # Fallback to basic Redis check
-        redis_config = Rails.application.config.redis || {}
-        redis = Redis.new(redis_config)
-        redis.ping  # This will raise an exception if Redis is not available
-        status[:redis] = 'connected'
-      end
-    rescue => e
-      status[:redis] = 'disconnected'
-      status[:error] = e.message if Rails.env.development?
-    end
-
+    health_service = HealthService.new
+    status = health_service.check_health
     render json: status
   end
 

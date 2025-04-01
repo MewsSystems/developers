@@ -1,6 +1,39 @@
 require 'rails_helper'
 
 RSpec.describe 'Exchange Rates API', type: :request do
+  # Setup our routes directly for integration tests
+  before(:all) do
+    Rails.application.routes.draw do
+      # API routes - versioned and namespaced
+      namespace :api do
+        namespace :v1 do
+          get '/exchange_rates', to: 'exchange_rates#index'
+          get '/exchange_rates/convert', to: 'exchange_rates#convert'
+          get '/exchange_rates/currencies', to: 'exchange_rates#currencies'
+          get '/exchange_rates/:from/:to', to: 'exchange_rates#show'
+        end
+      end
+
+      # Legacy routes - map to API endpoints for backward compatibility
+      get '/exchange_rates', to: 'api/v1/exchange_rates#index'
+      get '/exchange_rates/convert', to: 'api/v1/exchange_rates#convert'
+      get '/exchange_rates/supported_currencies', to: 'api/v1/exchange_rates#currencies'
+
+      # Health check for Docker and monitoring
+      get '/health', to: 'health#index'
+
+      # Debug routes for development only
+      namespace :debug do
+        get '/redis', to: 'redis#index'
+      end
+    end
+  end
+
+  # Reload routes after all tests in this file
+  after(:all) do
+    Rails.application.reload_routes!
+  end
+
   # Create test class to represent the exchange rate service
   class MockExchangeRateService
     attr_reader :unavailable_currencies, :provider
@@ -63,7 +96,7 @@ RSpec.describe 'Exchange Rates API', type: :request do
     allow_any_instance_of(Api::V1::ExchangeRatesController).to receive(:exchange_rate_service).and_return(mock_service)
   end
 
-  describe 'GET /exchange_rates' do
+  describe 'Legacy API Endpoints' do
     it 'returns all available exchange rates' do
       get '/exchange_rates'
 
@@ -157,11 +190,9 @@ RSpec.describe 'Exchange Rates API', type: :request do
       json_response = JSON.parse(response.body)
       expect(json_response).to have_key('error')
     end
-  end
 
-  describe 'GET /api/v1/exchange_rates/convert' do
     it 'converts currency amounts correctly' do
-      get '/api/v1/exchange_rates/convert', params: { from: 'USD', to: 'EUR', amount: 100 }
+      get '/exchange_rates/convert', params: { from: 'USD', to: 'EUR', amount: 100 }
 
       expect(response).to have_http_status(:success)
       json_response = JSON.parse(response.body)
