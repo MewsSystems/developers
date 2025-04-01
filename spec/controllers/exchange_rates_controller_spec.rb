@@ -6,7 +6,7 @@ RSpec.describe Api::V1::ExchangeRatesController, type: :controller do
     routes.draw do
       namespace :api do
         namespace :v1 do
-          resources :exchange_rates, only: [:index, :show] do
+          resources :exchange_rates, only: %i[index show] do
             collection do
               get 'convert'
               get 'currencies'
@@ -15,6 +15,17 @@ RSpec.describe Api::V1::ExchangeRatesController, type: :controller do
         end
       end
     end
+    allow(controller).to receive(:exchange_rate_service).and_return(service)
+    allow(service).to receive(:provider).and_return(provider)
+    allow(provider).to receive(:metadata).and_return({
+      source_name: "Czech National Bank (CNB)",
+      base_currency: "CZK",
+      supported_currencies: ['USD', 'EUR', 'JPY']
+    })
+    allow(provider).to receive(:supported_currencies).and_return(['USD', 'EUR', 'JPY'])
+
+    # Default to no unavailable currencies
+    allow(service).to receive(:unavailable_currencies).and_return({})
   end
 
   let(:czk) { Currency.new('CZK') }
@@ -30,20 +41,6 @@ RSpec.describe Api::V1::ExchangeRatesController, type: :controller do
 
   let(:service) { instance_double('RateService') }
   let(:provider) { instance_double('CNBProvider') }
-
-  before do
-    allow(controller).to receive(:exchange_rate_service).and_return(service)
-    allow(service).to receive(:provider).and_return(provider)
-    allow(provider).to receive(:metadata).and_return({
-      source_name: "Czech National Bank (CNB)",
-      base_currency: "CZK",
-      supported_currencies: ['USD', 'EUR', 'JPY']
-    })
-    allow(provider).to receive(:supported_currencies).and_return(['USD', 'EUR', 'JPY'])
-
-    # Default to no unavailable currencies
-    allow(service).to receive(:unavailable_currencies).and_return({})
-  end
 
   describe 'GET #index' do
     it 'returns all exchange rates when no currencies parameter' do

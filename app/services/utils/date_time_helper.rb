@@ -184,7 +184,7 @@ module Utils
     # @param default_ttl [Integer] Default TTL if calculation fails
     # @return [Integer] TTL in seconds
     def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.now,
-                                                default_ttl = 3600)
+                                                  default_ttl = 3600)
       next_pub = PublicationTimeHelper.calculate_next_publication(update_frequency, publication_time, current_time)
       # If next publication time exists, use time until then (min 60 seconds)
       # Otherwise fall back to default
@@ -202,7 +202,7 @@ module Utils
       }
     end
   end
-  
+
   # Module to handle fetching date determination based on metadata
   module FetchDateHelper
     # Determine the appropriate date to fetch rates for based on metadata
@@ -275,7 +275,8 @@ module Utils
       PublicationTimeHelper.publication_time_for_date(date, hour, minute, timezone)
     end
 
-    def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.now, default_ttl = 3600)
+    def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.now,
+                                                  default_ttl = 3600)
       CacheTTLHelper.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time, default_ttl)
     end
 

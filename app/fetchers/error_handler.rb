@@ -35,4 +35,4 @@ module Fetchers
       end
     end
   end
-end 
+end

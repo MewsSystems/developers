@@ -1,25 +1,23 @@
 module ProviderOperations
   extend ActiveSupport::Concern
-  
+
   # Centralized error handling for provider operations
   # @param provider_name [String] Name of the provider
   # @param operation_name [String] Name of the operation being performed
   # @yield Block to execute with error handling
   # @return [Object] Result of the block
   # @raise [ExchangeRateErrors::Error] If an error occurs
-  def perform_provider_operation(provider_name, operation_name)
-    Utils::ProviderHelper.with_provider_error_handling(provider_name, operation_name) do
-      yield
-    end
+  def perform_provider_operation(provider_name, operation_name, &)
+    Utils::ProviderHelper.with_provider_error_handling(provider_name, operation_name, &)
   end
-  
+
   # Get the list of currency codes supported by this provider
   # @param rates [Array<ExchangeRate>] Exchange rates
   # @return [Array<String>] List of supported currency codes
   def extract_supported_currencies(rates)
     Utils::CurrencyHelper.extract_currency_codes(rates)
   end
-  
+
   # Check if a specific currency is supported by this provider
   # For backward compatibility, this method can be called with either:
   # - One argument: the currency code (using the instance @supported_currencies)
@@ -38,9 +36,10 @@ module ProviderOperations
       currencies = arg1
       code = arg2
     end
-    
+
     return false unless code
+
     code = code.to_s.strip.upcase
     currencies.include?(code)
   end
-end 
+end

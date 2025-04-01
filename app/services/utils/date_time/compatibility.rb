@@ -11,19 +11,19 @@ module Utils
       DateTime::TimeConstructor.create_with_components(year, month, day, hour, min, sec, timezone)
     end
 
-    def self.next_business_day(time, working_days_only = true)
-      DateTime::BusinessDayCalculator.next_business_day(time, working_days_only)
+    def self.next_business_day(time, working_days_only: true)
+      DateTime::BusinessDayCalculator.next_business_day(time, working_days_only: working_days_only)
     end
 
-    def self.previous_business_day(date, working_days_only = true)
-      DateTime::BusinessDayCalculator.previous_business_day(date, working_days_only)
+    def self.previous_business_day(date, working_days_only: true)
+      DateTime::BusinessDayCalculator.previous_business_day(date, working_days_only: working_days_only)
     end
 
-    def self.adjust_for_working_days(time, working_days_only = true)
-      DateTime::BusinessDayCalculator.adjust_for_working_days(time, working_days_only)
+    def self.adjust_for_working_days(time, working_days_only: true)
+      DateTime::BusinessDayCalculator.adjust_for_working_days(time, working_days_only: working_days_only)
     end
 
-    def self.calculate_next_publication(update_frequency, publication_time, current_time = Time.now)
+    def self.calculate_next_publication(update_frequency, publication_time, current_time = Time.zone.now)
       DateTime::PublicationScheduler.calculate_next_publication(update_frequency, publication_time, current_time)
     end
 
@@ -39,16 +39,18 @@ module Utils
       DateTime::PublicationScheduler.publication_time_for_date(date, hour, minute, timezone)
     end
 
-    def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.now, default_ttl = 3600)
-      DateTime::CacheTTLCalculator.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time, default_ttl)
+    def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.zone.now,
+                                                  default_ttl = 3600)
+      DateTime::CacheTTLCalculator.calculate_ttl_until_next_publication(update_frequency, publication_time,
+                                                                        current_time, default_ttl)
     end
 
-    def self.get_default_ttls
-      DateTime::CacheTTLCalculator.get_default_ttls
+    def self.default_ttls
+      DateTime::CacheTTLCalculator.default_ttls
     end
 
     def self.determine_fetch_date(metadata)
       DateTime::FetchDateDeterminator.determine_fetch_date(metadata)
     end
   end
-end 
+end

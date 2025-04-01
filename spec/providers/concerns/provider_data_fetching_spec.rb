@@ -18,9 +18,9 @@ RSpec.describe ProviderDataFetching do
     context "with content type available" do
       it "uses the content type to select adapter" do
         allow(AdapterFactory).to receive(:for_content_type).and_return(adapter)
-        
+
         result = provider.parse_data_with_adapter(response, content_type, file_extension, provider_name, base_currency)
-        
+
         expect(result).to eq(rates)
         expect(AdapterFactory).to have_received(:for_content_type).with(provider_name, content_type)
         expect(adapter).to have_received(:parse).with("test data", base_currency)
@@ -29,12 +29,12 @@ RSpec.describe ProviderDataFetching do
 
     context "with file extension available" do
       let(:response) { { data: "test data" } }
-      
+
       it "uses the file extension to select adapter when content type is not available" do
         allow(AdapterFactory).to receive(:for_file_extension).and_return(adapter)
-        
+
         result = provider.parse_data_with_adapter(response, nil, file_extension, provider_name, base_currency)
-        
+
         expect(result).to eq(rates)
         expect(AdapterFactory).to have_received(:for_file_extension).with(provider_name, file_extension)
         expect(adapter).to have_received(:parse).with("test data", base_currency)
@@ -43,12 +43,12 @@ RSpec.describe ProviderDataFetching do
 
     context "with neither content type nor file extension available" do
       let(:response) { { data: "test data" } }
-      
+
       it "auto-detects adapter from content" do
         allow(AdapterFactory).to receive(:for_content).and_return(adapter)
-        
+
         result = provider.parse_data_with_adapter(response, nil, nil, provider_name, base_currency)
-        
+
         expect(result).to eq(rates)
         expect(AdapterFactory).to have_received(:for_content).with(provider_name, "test data")
         expect(adapter).to have_received(:parse).with("test data", base_currency)
@@ -57,12 +57,12 @@ RSpec.describe ProviderDataFetching do
 
     context "with content type in response" do
       let(:response) { { data: "test data", content_type: "text/xml" } }
-      
+
       it "prefers content type from response" do
         allow(AdapterFactory).to receive(:for_content_type).and_return(adapter)
-        
+
         result = provider.parse_data_with_adapter(response, content_type, file_extension, provider_name, base_currency)
-        
+
         expect(result).to eq(rates)
         expect(AdapterFactory).to have_received(:for_content_type).with(provider_name, "text/xml")
         expect(adapter).to have_received(:parse).with("test data", base_currency)
@@ -78,9 +78,9 @@ RSpec.describe ProviderDataFetching do
 
     it "calls HttpFetcher.fetch with the correct parameters" do
       allow(HttpFetcher).to receive(:fetch).and_return(response)
-      
-      result = provider.fetch_http_data(url, headers, retries, provider_name)
-      
+
+      result = provider.fetch_http_data(url, provider_name, headers, retries)
+
       expect(result).to eq(response)
       expect(HttpFetcher).to have_received(:fetch).with(url, headers, retries, provider_name)
     end
@@ -91,13 +91,13 @@ RSpec.describe ProviderDataFetching do
         include ProviderDataFetching
       end
       test_object = Object.new.extend(TestDataFetching)
-      
+
       allow(HttpFetcher).to receive(:fetch).and_return(response)
-      
-      result = test_object.fetch_http_data(url, {}, 3, nil)
-      
+
+      result = test_object.fetch_http_data(url, nil)
+
       expect(result).to eq(response)
       expect(HttpFetcher).to have_received(:fetch).with(url, {}, 3, nil)
     end
   end
-end 
+end

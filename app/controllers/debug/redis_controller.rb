@@ -6,8 +6,8 @@ module Debug
 
       redis_service = Debug::RedisService.new
       result = redis_service.test_operations
-      
+
       render json: result
     end
   end
-end 
+end

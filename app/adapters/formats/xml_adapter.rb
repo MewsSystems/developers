@@ -6,7 +6,7 @@ class XmlAdapter < BaseAdapter
   CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::XML_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Adapters::Utilities::ContentTypeDetector.is_xml_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.xml_content_type?(content_type)
   end
 
   def supports_content?(content)

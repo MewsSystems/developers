@@ -18,33 +18,32 @@ class RepositoryHealthService
 
   def add_repository_health(status)
     # Get Redis repository for metrics
-    begin
-      repository = Rails.application.services&.get(:repository)
 
-      # Add repository metrics if available (for Redis repository)
-      if repository.respond_to?(:health_metrics)
-        metrics = repository.health_metrics
-        status[:redis] = metrics[:redis_connected] ? 'connected' : 'disconnected'
-        status[:cache] = {
-          size: metrics[:cache_size],
-          hit_ratio: metrics[:cache_hit_ratio].round(2),
-          hits: metrics[:cache_hits],
-          misses: metrics[:cache_misses]
-        }
-        status[:errors] = {
-          count: metrics[:error_count],
-          fallback_active: metrics[:fallback_size] > 0
-        }
-      else
-        # Fallback to basic Redis check
-        redis_config = Rails.application.config.redis || {}
-        redis = Redis.new(redis_config)
-        redis.ping  # This will raise an exception if Redis is not available
-        status[:redis] = 'connected'
-      end
-    rescue => e
-      status[:redis] = 'disconnected'
-      status[:error] = e.message if Rails.env.development?
+    repository = Rails.application.services&.get(:repository)
+
+    # Add repository metrics if available (for Redis repository)
+    if repository.respond_to?(:health_metrics)
+      metrics = repository.health_metrics
+      status[:redis] = metrics[:redis_connected] ? 'connected' : 'disconnected'
+      status[:cache] = {
+        size: metrics[:cache_size],
+        hit_ratio: metrics[:cache_hit_ratio].round(2),
+        hits: metrics[:cache_hits],
+        misses: metrics[:cache_misses]
+      }
+      status[:errors] = {
+        count: metrics[:error_count],
+        fallback_active: metrics[:fallback_size].positive?
+      }
+    else
+      # Fallback to basic Redis check
+      redis_config = Rails.application.config.redis || {}
+      redis = Redis.new(redis_config)
+      redis.ping # This will raise an exception if Redis is not available
+      status[:redis] = 'connected'
     end
+  rescue StandardError => e
+    status[:redis] = 'disconnected'
+    status[:error] = e.message if Rails.env.development?
   end
-end 
+end

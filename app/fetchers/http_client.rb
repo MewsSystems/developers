@@ -22,14 +22,14 @@ module Fetchers
     private
 
     def fetch_http(uri)
-      fetch_with_protocol(uri, false)
+      fetch_with_protocol(uri, use_ssl: false)
     end
 
     def fetch_https(uri)
-      fetch_with_protocol(uri, true)
+      fetch_with_protocol(uri, use_ssl: true)
     end
 
-    def fetch_with_protocol(uri, use_ssl = false)
+    def fetch_with_protocol(uri, use_ssl: false)
       http_args = [uri.host, uri.port]
       http_args << { use_ssl: true } if use_ssl
 
@@ -43,7 +43,7 @@ module Fetchers
         add_headers(request, @options[:headers])
 
         response = http.request(request)
-        
+
         if response.is_a?(Net::HTTPRedirection)
           handle_redirect(response, uri)
         else
@@ -63,15 +63,13 @@ module Fetchers
     def handle_redirect(response, uri)
       redirect_count = @options[:redirects].to_i
 
-      if redirect_count >= 5
-        raise ExchangeRateErrors::NetworkError.new("Too many redirects")
-      end
+      raise ExchangeRateErrors::NetworkError, "Too many redirects" if redirect_count >= 5
 
       location = response['location']
       new_uri = URI.parse(location.start_with?('/') ? "#{uri.scheme}://#{uri.host}#{location}" : location)
-      
+
       @options[:redirects] = redirect_count + 1
       fetch_response(new_uri)
     end
   end
-end 
+end

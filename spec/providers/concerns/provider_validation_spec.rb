@@ -12,8 +12,8 @@ RSpec.describe ProviderValidation do
     context "with valid rates" do
       let(:rates) do
         [
-          instance_double("ExchangeRate", from: double(code: base_currency), to: double(code: "EUR")),
-          instance_double("ExchangeRate", from: double(code: base_currency), to: double(code: "GBP"))
+          instance_double(ExchangeRate, from: double(code: base_currency), to: double(code: "EUR")),
+          instance_double(ExchangeRate, from: double(code: base_currency), to: double(code: "GBP"))
         ]
       end
 
@@ -30,24 +30,24 @@ RSpec.describe ProviderValidation do
 
     context "with empty rates" do
       it "raises ValidationError" do
-        expect {
+        expect do
           provider.validate_rates([], base_currency, provider_name)
-        }.to raise_error(ExchangeRateErrors::ValidationError, /No exchange rates found/)
+        end.to raise_error(ExchangeRateErrors::ValidationError, /No exchange rates found/)
       end
     end
 
     context "with incorrect base currency" do
       let(:rates) do
         [
-          instance_double("ExchangeRate", from: double(code: "EUR"), to: double(code: "USD")),
-          instance_double("ExchangeRate", from: double(code: base_currency), to: double(code: "GBP"))
+          instance_double(ExchangeRate, from: double(code: "EUR"), to: double(code: "USD")),
+          instance_double(ExchangeRate, from: double(code: base_currency), to: double(code: "GBP"))
         ]
       end
 
       it "raises ValidationError" do
-        expect {
+        expect do
           provider.validate_rates(rates, base_currency, provider_name)
-        }.to raise_error(ExchangeRateErrors::ValidationError, /Unexpected base currency/)
+        end.to raise_error(ExchangeRateErrors::ValidationError, /Unexpected base currency/)
       end
     end
   end
@@ -56,27 +56,27 @@ RSpec.describe ProviderValidation do
     # Create a simple test implementation directly including the concern to avoid method visibility issues
     module TestValidation
       include ProviderValidation
-      
+
       def test_raise_error(message, provider_name, context = {})
         raise_validation_error(message, provider_name, context)
       end
     end
-    
+
     let(:test_validator) { Object.new.extend(TestValidation) }
-    
+
     it "raises ValidationError with the correct parameters" do
       message = "Test validation error"
       context = { test: "value" }
-      
+
       allow(ExchangeRateErrors::ValidationError).to receive(:new).and_call_original
-      
-      expect {
+
+      expect do
         test_validator.test_raise_error(message, provider_name, context)
-      }.to raise_error(ExchangeRateErrors::ValidationError, message)
-      
+      end.to raise_error(ExchangeRateErrors::ValidationError, message)
+
       expect(ExchangeRateErrors::ValidationError).to have_received(:new).with(
         message, nil, provider_name, context
       )
     end
   end
-end 
+end

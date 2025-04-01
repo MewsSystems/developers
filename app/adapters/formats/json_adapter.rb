@@ -6,7 +6,7 @@ class JsonAdapter < BaseAdapter
   CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::JSON_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Adapters::Utilities::ContentTypeDetector.is_json_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.json_content_type?(content_type)
   end
 
   def supports_content?(content)

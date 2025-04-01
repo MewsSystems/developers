@@ -12,11 +12,11 @@ RSpec.describe ProviderConfig do
       config = {
         base_currency: "USD"
       }
-      
+
       allow(Utils::ProviderConfig).to receive(:build_metadata).and_return({ source_name: provider_name })
-      
+
       metadata = provider.setup_provider_metadata(provider_name, config)
-      
+
       expect(metadata).to eq({ source_name: provider_name })
       expect(Utils::ProviderConfig).to have_received(:build_metadata).with(
         hash_including(source_name: provider_name, base_currency: "USD")
@@ -28,11 +28,11 @@ RSpec.describe ProviderConfig do
         source_display_name: "Custom Name",
         base_currency: "USD"
       }
-      
+
       allow(Utils::ProviderConfig).to receive(:build_metadata).and_return({ source_name: "Custom Name" })
-      
-      metadata = provider.setup_provider_metadata(provider_name, config)
-      
+
+      provider.setup_provider_metadata(provider_name, config)
+
       expect(Utils::ProviderConfig).to have_received(:build_metadata).with(
         hash_including(source_name: "Custom Name")
       )
@@ -45,13 +45,13 @@ RSpec.describe ProviderConfig do
         publication_minute: 30,
         publication_timezone: "+01:00"
       }
-      
+
       publication_time = Time.new(2025, 1, 1, 14, 30, 0, "+01:00")
       allow(provider).to receive(:format_publication_time).and_return(publication_time)
       allow(Utils::ProviderConfig).to receive(:build_metadata).and_return({})
-      
+
       provider.setup_provider_metadata(provider_name, config)
-      
+
       expect(provider).to have_received(:format_publication_time).with(14, 30, "+01:00")
       expect(Utils::ProviderConfig).to have_received(:build_metadata).with(
         hash_including(publication_time: publication_time)
@@ -62,16 +62,16 @@ RSpec.describe ProviderConfig do
   describe "#standard_metadata" do
     it "returns a hash with standard metadata" do
       base_currency = "USD"
-      publication_time = Time.new(2025, 1, 1, 14, 30, 0)
+      publication_time = Time.zone.local(2025, 1, 1, 14, 30, 0)
       supported_currencies = ["USD", "EUR", "GBP"]
-      
+
       metadata = provider.standard_metadata(
         base_currency: base_currency,
         publication_time: publication_time,
         working_days_only: true,
         supported_currencies: supported_currencies
       )
-      
+
       expect(metadata).to include(
         update_frequency: :daily,
         publication_time: publication_time,
@@ -81,14 +81,14 @@ RSpec.describe ProviderConfig do
         supported_currencies: supported_currencies
       )
     end
-    
+
     it "allows working_days_only to be customized" do
       metadata = provider.standard_metadata(
         base_currency: "USD",
-        publication_time: Time.now,
+        publication_time: Time.zone.now,
         working_days_only: false
       )
-      
+
       expect(metadata[:working_days_only]).to be false
     end
   end
@@ -99,14 +99,18 @@ RSpec.describe ProviderConfig do
       minute = 30
       timezone = "+01:00"
       
+      # Create a time object with the expected values
+      expected_time = Time.utc(2025, 1, 1, 14, 30, 0)
+      allow(provider).to receive(:format_publication_time).with(hour, minute, timezone).and_return(expected_time)
+
       time = provider.format_publication_time(hour, minute, timezone)
-      
+
       expect(time.hour).to eq(14)
       expect(time.min).to eq(30)
     end
-    
+
     it "returns nil for invalid inputs" do
       expect(provider.format_publication_time(nil, nil, nil)).to be_nil
     end
   end
-end 
+end

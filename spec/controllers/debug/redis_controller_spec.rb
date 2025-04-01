@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Debug::RedisController, type: :controller do
+RSpec.describe Debug::RedisController do
   describe 'GET #index' do
     # Set up routes for the test
     before do
@@ -9,6 +9,8 @@ RSpec.describe Debug::RedisController, type: :controller do
           get 'redis' => 'redis#index'
         end
       end
+      allow(Debug::RedisService).to receive(:new).and_return(redis_service)
+      allow(redis_service).to receive(:test_operations).and_return(test_data)
     end
 
     let(:redis_service) { instance_double(Debug::RedisService) }
@@ -24,11 +26,6 @@ RSpec.describe Debug::RedisController, type: :controller do
       }
     end
 
-    before do
-      allow(Debug::RedisService).to receive(:new).and_return(redis_service)
-      allow(redis_service).to receive(:test_operations).and_return(test_data)
-    end
-
     context 'in development environment' do
       before do
         allow(Rails.env).to receive(:development?).and_return(true)
@@ -37,9 +34,9 @@ RSpec.describe Debug::RedisController, type: :controller do
       it 'returns Redis debug data from the service' do
         get :index
         expect(response).to have_http_status(:success)
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
         expect(json_response['repository_class']).to eq('RedisRepository')
-        expect(json_response['test_results']['save_successful']).to eq(true)
+        expect(json_response['test_results']['save_successful']).to be(true)
       end
     end
 
@@ -54,4 +51,4 @@ RSpec.describe Debug::RedisController, type: :controller do
       end
     end
   end
-end 
+end

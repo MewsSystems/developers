@@ -1,6 +1,6 @@
 module ProviderDataFetching
   extend ActiveSupport::Concern
-  
+
   # Parse data into exchange rates using appropriate adapter
   # @param response [Hash] Response data with content type and raw data
   # @param content_type [String] Content type to use if not in response
@@ -25,14 +25,14 @@ module ProviderDataFetching
     # Parse the data
     adapter.parse(response[:data], base_currency)
   end
-  
+
   # Fetch data from a URL using HTTP
   # @param url [String] URL to fetch data from
+  # @param provider_name [String] Provider name for error messages
   # @param headers [Hash] HTTP headers to send
   # @param retries [Integer] Number of retries
-  # @param provider_name [String] Provider name for error messages
   # @return [Hash] Response with data and content type
-  def fetch_http_data(url, headers = {}, retries = 3, provider_name)
+  def fetch_http_data(url, provider_name, headers = {}, retries = 3)
     HttpFetcher.fetch(url, headers, retries, provider_name)
   end
-end 
+end

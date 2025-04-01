@@ -12,20 +12,18 @@ class RateServiceFactory
   def self.create(provider, repository, cache_strategy = nil)
     # Validate provider
     ProviderValidator.validate(provider)
-    
+
     # Get provider name
     provider_name = Utils::ProviderHelper.provider_name_without_suffix(provider)
-    
+
     # Create cache strategy if not provided
-    unless cache_strategy
-      cache_strategy = DefaultCacheStrategy.new(provider, repository)
-    end
-    
+    cache_strategy ||= DefaultCacheStrategy.new(provider, repository)
+
     # Create specialized services
     rate_fetcher = RateFetcherService.new(provider, repository, cache_strategy, provider_name)
     currency_validator = CurrencyValidatorService.new(provider, provider_name)
     rate_calculator = RateCalculatorService.new(provider)
-    
+
     # Create and return the main service
     RateService.new(
       provider,
@@ -35,4 +33,4 @@ class RateServiceFactory
       provider_name
     )
   end
-end 
+end

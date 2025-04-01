@@ -7,17 +7,16 @@ module RedisSupport
     DEFAULT_POOL_SIZE = 5
     DEFAULT_TIMEOUT = 5.0
 
-    attr_reader :errors
-    attr_writer :errors
+    attr_accessor :errors
 
     def initialize(redis = nil, pool_size: DEFAULT_POOL_SIZE)
       @redis = redis || create_redis_pool(pool_size)
       @errors = 0
     end
 
-    def with_redis
+    def with_redis(&)
       if @redis.is_a?(ConnectionPool)
-        @redis.with { |conn| yield conn }
+        @redis.with(&)
       else
         yield @redis
       end
@@ -52,11 +51,11 @@ module RedisSupport
           host: redis_config[:host] || ENV['REDIS_HOST'] || 'localhost',
           port: redis_config[:port] || ENV['REDIS_PORT'] || 6379,
           db: redis_config[:db] || ENV['REDIS_DB'] || 0,
-          password: redis_config[:password] || ENV['REDIS_PASSWORD'],
+          password: redis_config[:password] || ENV.fetch('REDIS_PASSWORD', nil),
           timeout: DEFAULT_TIMEOUT,
           reconnect_attempts: 3
         )
       end
     end
   end
-end 
+end

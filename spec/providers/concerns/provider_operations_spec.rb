@@ -15,9 +15,9 @@ RSpec.describe ProviderOperations do
 
     it "calls Utils::ProviderHelper.with_provider_error_handling" do
       allow(Utils::ProviderHelper).to receive(:with_provider_error_handling).and_yield
-      
+
       provider.perform_provider_operation(provider_name, "test operation") { 42 }
-      
+
       expect(Utils::ProviderHelper).to have_received(:with_provider_error_handling).with(
         provider_name, "test operation"
       )
@@ -26,10 +26,10 @@ RSpec.describe ProviderOperations do
     it "propagates errors from the helper" do
       error = RuntimeError.new("Test error")
       allow(Utils::ProviderHelper).to receive(:with_provider_error_handling).and_raise(error)
-      
-      expect {
+
+      expect do
         provider.perform_provider_operation(provider_name, "test operation") { 42 }
-      }.to raise_error(RuntimeError, "Test error")
+      end.to raise_error(RuntimeError, "Test error")
     end
   end
 
@@ -37,9 +37,9 @@ RSpec.describe ProviderOperations do
     it "calls Utils::CurrencyHelper.extract_currency_codes" do
       rates = [double, double]
       allow(Utils::CurrencyHelper).to receive(:extract_currency_codes).and_return(["USD", "EUR"])
-      
+
       result = provider.extract_supported_currencies(rates)
-      
+
       expect(result).to eq(["USD", "EUR"])
       expect(Utils::CurrencyHelper).to have_received(:extract_currency_codes).with(rates)
     end
@@ -95,4 +95,4 @@ RSpec.describe ProviderOperations do
       end
     end
   end
-end 
+end

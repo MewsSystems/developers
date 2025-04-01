@@ -16,14 +16,12 @@ module Fetchers
       begin
         yield
       rescue OpenURI::HTTPError, SocketError, Timeout::Error, Net::OpenTimeout, Net::ReadTimeout => e
-        if should_retry?(e, retries)
-          retries += 1
-          sleep(delay)
-          delay *= 2 # Exponential backoff
-          retry
-        else
-          raise
-        end
+        raise unless should_retry?(e, retries)
+
+        retries += 1
+        sleep(delay)
+        delay *= 2 # Exponential backoff
+        retry
       end
     end
 
@@ -31,17 +29,17 @@ module Fetchers
 
     def should_retry?(error, retry_count)
       return false if retry_count >= @max_retries
-      
+
       # HTTP errors need to be checked for status code
       if error.is_a?(OpenURI::HTTPError)
         status = error.io.status.first.to_i
         return retryable_status?(status)
       end
-      
+
       # Connection and timeout errors are always retryable
-      error.is_a?(SocketError) || 
-        error.is_a?(Timeout::Error) || 
-        error.is_a?(Net::OpenTimeout) || 
+      error.is_a?(SocketError) ||
+        error.is_a?(Timeout::Error) ||
+        error.is_a?(Net::OpenTimeout) ||
         error.is_a?(Net::ReadTimeout)
     end
 
@@ -50,4 +48,4 @@ module Fetchers
       status == 408 || status == 429 || (status >= 500 && status < 600)
     end
   end
-end 
+end

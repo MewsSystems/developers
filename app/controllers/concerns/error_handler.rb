@@ -40,13 +40,12 @@ module ErrorHandler
   # @param is_exchange_rate_error [Boolean] Whether this is an ExchangeRateError
   # @return [Hash] Standardized error response
   def build_error_response(error, status_code, is_exchange_rate_error: false)
-    if is_exchange_rate_error
-      error_type = error.class.name.demodulize
-      error_message = error.message
-    else
-      error_type = "InternalServerError"
-      error_message = error.message
-    end
+    error_type = if is_exchange_rate_error
+                   error.class.name.demodulize
+                 else
+                   "InternalServerError"
+                 end
+    error_message = error.message
 
     error_response = {
       error: {
@@ -72,21 +71,19 @@ module ErrorHandler
     return if Rails.env.production?
 
     # Add backtrace for standard errors
-    if !is_exchange_rate_error
+    unless is_exchange_rate_error
       error_hash[:backtrace] = error.backtrace.first(5) if error.backtrace
       return
     end
 
     # Add provider and original error for ExchangeRateErrors
-    if error.respond_to?(:provider) && error.provider.present?
-      error_hash[:provider] = error.provider
-    end
+    error_hash[:provider] = error.provider if error.respond_to?(:provider) && error.provider.present?
 
-    if error.respond_to?(:original_error) && error.original_error.present?
-      error_hash[:original_error] = {
-        type: error.original_error.class.name,
-        message: error.original_error.message
-      }
-    end
+    return unless error.respond_to?(:original_error) && error.original_error.present?
+
+    error_hash[:original_error] = {
+      type: error.original_error.class.name,
+      message: error.original_error.message
+    }
   end
-end 
+end

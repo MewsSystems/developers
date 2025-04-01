@@ -9,19 +9,17 @@ require_relative 'redis/cache_metrics'
 class RedisExchangeRateRepository < ExchangeRateRepository
   # Default TTL for cached rates (1 day in seconds)
   DEFAULT_TTL = 86400
-  
+
   # Delegating accessors for test compatibility
   def cache_hits
     @metrics.hits
   end
-  
+
   def cache_misses
     @metrics.misses
   end
-  
-  def errors
-    @connection.errors
-  end
+
+  delegate :errors, to: :@connection
 
   # For testing: allow setting metrics directly
   def instance_variable_set(name, value)
@@ -37,7 +35,8 @@ class RedisExchangeRateRepository < ExchangeRateRepository
     end
   end
 
-  def initialize(redis = nil, ttl: DEFAULT_TTL, prefix: 'exchange_rates', pool_size: RedisSupport::ConnectionManager::DEFAULT_POOL_SIZE)
+  def initialize(redis = nil, ttl: DEFAULT_TTL, prefix: 'exchange_rates',
+                 pool_size: RedisSupport::ConnectionManager::DEFAULT_POOL_SIZE)
     super()
     @connection = RedisSupport::ConnectionManager.new(redis, pool_size: pool_size)
     @serializer = RedisSupport::ExchangeRateSerializer.new

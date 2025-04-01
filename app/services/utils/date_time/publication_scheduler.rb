@@ -9,7 +9,7 @@ module Utils
       # @param publication_time [Time] Base publication time
       # @param current_time [Time] Current time
       # @return [Time] Next publication time
-      def self.calculate_next_publication(update_frequency, publication_time, current_time = Time.now)
+      def self.calculate_next_publication(update_frequency, publication_time, current_time = Time.zone.now)
         return nil unless publication_time
 
         case update_frequency
@@ -45,12 +45,11 @@ module Utils
         else
           # Today's publication has passed, get next day's
           next_day = current_time + 86400 # add 1 day in seconds
-          next_day_pub = TimeConstructor.create_with_components(
+          TimeConstructor.create_with_components(
             next_day.year, next_day.month, next_day.day,
             publ_hour, publ_min, 0, publ_tz
           )
 
-          next_day_pub
         end
       end
 
@@ -84,4 +83,4 @@ module Utils
       end
     end
   end
-end 
+end

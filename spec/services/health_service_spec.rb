@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe HealthService do
   describe '#check_health' do
     let(:service) { described_class.new }
-    let(:repository) { instance_double('Repository') }
+    let(:repository) { double('Repository') }
 
     context 'with a repository that supports health metrics' do
       let(:metrics) do
@@ -26,19 +26,19 @@ RSpec.describe HealthService do
 
       it 'returns health status with repository metrics' do
         result = service.check_health
-        
+
         expect(result[:status]).to eq('ok')
         expect(result[:time]).to be_present
         expect(result[:redis]).to eq('connected')
         expect(result[:cache][:size]).to eq(100)
         expect(result[:cache][:hit_ratio]).to eq(0.75)
         expect(result[:errors][:count]).to eq(5)
-        expect(result[:errors][:fallback_active]).to eq(false)
+        expect(result[:errors][:fallback_active]).to be(false)
       end
     end
 
     context 'with a repository that does not support health metrics' do
-      let(:redis) { instance_double('Redis') }
+      let(:redis) { instance_double(Redis) }
 
       before do
         allow(Rails.application.services).to receive(:get).with(:repository).and_return(repository)
@@ -50,7 +50,7 @@ RSpec.describe HealthService do
 
       it 'uses basic Redis ping check' do
         result = service.check_health
-        
+
         expect(result[:status]).to eq('ok')
         expect(result[:redis]).to eq('connected')
         expect(result).not_to have_key(:cache)
@@ -65,7 +65,7 @@ RSpec.describe HealthService do
 
       it 'reports Redis as disconnected' do
         result = service.check_health
-        
+
         expect(result[:status]).to eq('ok')
         expect(result[:redis]).to eq('disconnected')
       end
@@ -73,9 +73,9 @@ RSpec.describe HealthService do
       it 'includes error message in development' do
         allow(Rails.env).to receive(:development?).and_return(true)
         result = service.check_health
-        
+
         expect(result[:error]).to eq('Connection error')
       end
     end
   end
-end 
+end

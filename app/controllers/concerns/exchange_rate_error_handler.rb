@@ -36,4 +36,4 @@ module ExchangeRateErrorHandler
       :internal_server_error # 500
     end
   end
-end 
+end

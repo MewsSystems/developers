@@ -11,13 +11,13 @@ require_relative '../../app/adapters/registry/adapter_registry'
 
 RSpec.describe AdapterFactory do
   # Reset registry singleton before each test
-  before(:each) do
+  before do
     Adapters::AdapterRegistry.reset
     described_class.initialize_registry
     # Reset the additional providers array
     described_class.instance_variable_set(:@additional_providers, [])
   end
-  
+
   describe ".for_content_type" do
     it "returns a CnbTextAdapter for text/plain content type" do
       adapter = described_class.for_content_type('CNB', 'text/plain')
@@ -140,44 +140,46 @@ RSpec.describe AdapterFactory do
         expect(Adapters::Services::AdapterCreator).to receive(:for_file_extension).with('CNB', 'xml').and_call_original
         described_class.for_file_extension('CNB', 'xml')
       end
-      
+
       it 'initializes registry before adapter creation' do
         # Create a registry that doesn't know about our provider
         Adapters::AdapterRegistry.reset
         registry = Adapters::AdapterRegistry.instance
-        
+
         # Check that our provider is not supported
         expect(registry.provider_supported?('TestNewProvider')).to be false
-        
+
         # Spy on initialize_registry
         allow(described_class).to receive(:initialize_registry).and_call_original
-        
+
         # This will fail but we don't care
         begin
           described_class.for_file_extension('TestNewProvider', 'xml')
         rescue BaseAdapter::UnsupportedFormatError
           # Expected
         end
-        
+
         # Verify initialize_registry was called
         expect(described_class).to have_received(:initialize_registry)
       end
     end
-    
+
     describe '.for_content_type' do
       it 'delegates to AdapterCreator.for_content_type' do
-        expect(Adapters::Services::AdapterCreator).to receive(:for_content_type).with('CNB', 'application/xml').and_call_original
+        expect(Adapters::Services::AdapterCreator).to receive(:for_content_type).with('CNB',
+                                                                                      'application/xml').and_call_original
         described_class.for_content_type('CNB', 'application/xml')
       end
     end
-    
+
     describe '.for_content' do
       it 'delegates to AdapterCreator.for_content' do
-        expect(Adapters::Services::AdapterCreator).to receive(:for_content).with('CNB', 'content', 'xml').and_call_original
+        expect(Adapters::Services::AdapterCreator).to receive(:for_content).with('CNB', 'content',
+                                                                                 'xml').and_call_original
         described_class.for_content('CNB', 'content', 'xml')
       end
     end
-    
+
     describe '.available_adapters' do
       it 'returns adapters from the registry' do
         adapters = [JsonAdapter, XmlAdapter, TxtAdapter]
@@ -185,16 +187,16 @@ RSpec.describe AdapterFactory do
         expect(described_class.available_adapters).to eq(adapters)
       end
     end
-    
+
     describe '.register_provider' do
       it 'registers a provider with the registry' do
         expect {
           described_class.register_provider('NewTestProvider')
-        }.to change { 
+        }.to change {
           Adapters::AdapterRegistry.instance.supported_providers.include?('NewTestProvider')
         }.from(false).to(true)
       end
-      
+
       it 'adds the provider to additional_providers' do
         expect {
           described_class.register_provider('AnotherProvider')
@@ -203,25 +205,25 @@ RSpec.describe AdapterFactory do
         }.from(false).to(true)
       end
     end
-    
+
     describe '.register_provider_adapter' do
       it 'registers a provider adapter with the registry' do
         provider = 'TestCustomProvider'
         format = 'custom'
         adapter_class = JsonAdapter
-        
+
         described_class.register_provider_adapter(provider, format, adapter_class)
-        
+
         registry = Adapters::AdapterRegistry.instance
         expect(registry.provider_adapter(provider, format)).to eq(adapter_class)
       end
     end
-    
+
     describe '.supported_providers' do
       it 'returns both default and additional providers' do
         # Add a new provider
         described_class.register_provider('NewDynamicProvider')
-        
+
         # Verify it's in the supported providers list
         expect(described_class.supported_providers).to include('CNB', 'Test', 'ECB', 'NewDynamicProvider')
       end

@@ -9,7 +9,7 @@ module Utils
       # @return [Date] The date to fetch rates for
       def self.determine_fetch_date(metadata)
         today = Date.today
-        now = Time.now
+        now = Time.zone.now
 
         # Use default logic if metadata is missing
         return today unless metadata
@@ -20,19 +20,15 @@ module Utils
 
         # For update frequencies more frequent than daily, we always use today's date
         # as the repository will handle data versioning based on date+time
-        unless update_frequency == :daily
-          return today
-        end
+        return today unless update_frequency == :daily
 
         # For daily updates, check if today's data should be available yet
-        if publication_time
-          # If current time is before today's publication time, use previous business day
-          if now < publication_time
-            # Go to previous day (and if working days only, ensure it's a working day)
-            previous_date = BusinessDayCalculator.previous_business_day(today, working_days_only)
+        # If current time is before today's publication time, use previous business day
+        if publication_time && (now < publication_time)
+          # Go to previous day (and if working days only, ensure it's a working day)
+          previous_date = BusinessDayCalculator.previous_business_day(today, working_days_only)
 
-            return previous_date
-          end
+          return previous_date
         end
 
         # Default: use today's date
@@ -40,4 +36,4 @@ module Utils
       end
     end
   end
-end 
+end

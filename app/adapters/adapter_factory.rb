@@ -15,16 +15,16 @@ require_relative 'services/adapter_creator'
 class AdapterFactory
   # List of supported providers
   DEFAULT_PROVIDERS = ['CNB', 'Test', 'ECB'].freeze
-  
+
   class << self
     # Keep track of added providers
     attr_reader :additional_providers
-    
+
     def supported_providers
       DEFAULT_PROVIDERS + additional_providers
     end
   end
-  
+
   # Initialize additional providers
   @additional_providers = []
 
@@ -88,14 +88,14 @@ class AdapterFactory
     register_provider(provider_name)
     Adapters::AdapterRegistry.instance.register_provider_adapter(provider_name, format, adapter_class)
   end
-  
+
   private
-  
+
   # Ensure the registry is initialized
   def self.ensure_registry_initialized
     initialize_registry unless Adapters::AdapterRegistry.instance.supported_providers.any?
   end
-  
+
   # Ensure a provider is registered
   def self.ensure_provider_registered(provider_name)
     registry = Adapters::AdapterRegistry.instance

@@ -5,7 +5,7 @@ RSpec.describe ProviderCache do
   include_examples "a provider concern"
 
   let(:provider) { TestProvider.new(update_frequency: :hourly) }
-  let(:current_time) { Time.new(2025, 3, 26, 10, 0, 0) }
+  let(:current_time) { Time.zone.local(2025, 3, 26, 10, 0, 0) }
 
   describe "#cache_ttl" do
     context "with realtime updates" do
@@ -14,7 +14,7 @@ RSpec.describe ProviderCache do
       it "returns a short TTL (30 seconds)" do
         ttl_defaults = { realtime: 30 }
         allow(Utils::DateTimeHelper).to receive(:get_default_ttls).and_return(ttl_defaults)
-        
+
         expect(provider.cache_ttl(metadata)).to eq(30)
       end
     end
@@ -25,7 +25,7 @@ RSpec.describe ProviderCache do
       it "returns a short TTL (30 seconds)" do
         ttl_defaults = { minute: 30 }
         allow(Utils::DateTimeHelper).to receive(:get_default_ttls).and_return(ttl_defaults)
-        
+
         expect(provider.cache_ttl(metadata)).to eq(30)
       end
     end
@@ -36,25 +36,24 @@ RSpec.describe ProviderCache do
       it "returns a TTL of 15 minutes" do
         ttl_defaults = { hourly: 15 * 60 }
         allow(Utils::DateTimeHelper).to receive(:get_default_ttls).and_return(ttl_defaults)
-        
+
         expect(provider.cache_ttl(metadata)).to eq(15 * 60)
       end
     end
 
     context "with daily updates and publication time" do
-      let(:publication_time) { Time.new(2025, 3, 26, 14, 30, 0) }
-      let(:metadata) { 
-        { 
+      let(:publication_time) { Time.zone.local(2025, 3, 26, 14, 30, 0) }
+      let(:metadata) do
+        {
           update_frequency: :daily,
           publication_time: publication_time
-        } 
-      }
+        }
+      end
 
       it "calculates TTL until next publication" do
         ttl_defaults = { daily: 24 * 60 * 60 }
-        allow(Utils::DateTimeHelper).to receive(:get_default_ttls).and_return(ttl_defaults)
-        allow(Utils::DateTimeHelper).to receive(:calculate_ttl_until_next_publication).and_return(4 * 60 * 60) # 4 hours
-        
+        allow(Utils::DateTimeHelper).to receive_messages(get_default_ttls: ttl_defaults, calculate_ttl_until_next_publication: 4 * 60 * 60) # 4 hours
+
         expect(provider.cache_ttl(metadata, current_time)).to eq(4 * 60 * 60)
         expect(Utils::DateTimeHelper).to have_received(:calculate_ttl_until_next_publication).with(
           :daily, publication_time, current_time, 24 * 60 * 60
@@ -72,7 +71,7 @@ RSpec.describe ProviderCache do
         include ProviderCache
       end
       test_object = Object.new.extend(TestCacheFresh)
-      
+
       expect(test_object.cache_fresh?(nil, ttl, current_time)).to be false
     end
 
@@ -83,9 +82,9 @@ RSpec.describe ProviderCache do
           include ProviderCache
         end
         test_object = Object.new.extend(TestCacheFresh)
-        
+
         # 5 minutes ago
-        cached_at = current_time - 5 * 60
+        cached_at = current_time - (5 * 60)
         expect(test_object.cache_fresh?(cached_at, ttl, current_time)).to be true
       end
     end
@@ -97,9 +96,9 @@ RSpec.describe ProviderCache do
           include ProviderCache
         end
         test_object = Object.new.extend(TestCacheFresh)
-        
+
         # 20 minutes ago
-        cached_at = current_time - 20 * 60
+        cached_at = current_time - (20 * 60)
         expect(test_object.cache_fresh?(cached_at, ttl, current_time)).to be false
       end
     end
@@ -122,4 +121,4 @@ RSpec.describe ProviderCache do
       expect(provider).to have_received(:log_message).with(/Test error/, :warn, "TestProvider")
     end
   end
-end 
+end

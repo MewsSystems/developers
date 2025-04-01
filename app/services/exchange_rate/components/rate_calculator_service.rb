@@ -11,8 +11,8 @@ class RateCalculatorService
   # @return [ExchangeRate, nil] Exchange rate or nil if not possible
   def calculate_rate(rates, from_currency, to_currency)
     find_direct_rate(rates, from_currency, to_currency) ||
-    calculate_inverse_rate(rates, from_currency, to_currency) ||
-    calculate_cross_rate(rates, from_currency, to_currency)
+      calculate_inverse_rate(rates, from_currency, to_currency) ||
+      calculate_cross_rate(rates, from_currency, to_currency)
   end
 
   private
@@ -23,9 +23,9 @@ class RateCalculatorService
   # @param to_currency [String] To currency code
   # @return [ExchangeRate, nil] Direct exchange rate or nil if not found
   def find_direct_rate(rates, from_currency, to_currency)
-    rates.find { |rate|
+    rates.find do |rate|
       rate.from.code == from_currency && rate.to.code == to_currency
-    }
+    end
   end
 
   # Calculate inverse exchange rate between two currencies
@@ -34,9 +34,9 @@ class RateCalculatorService
   # @param to_currency [String] To currency code
   # @return [ExchangeRate, nil] Inverse exchange rate or nil if not possible
   def calculate_inverse_rate(rates, from_currency, to_currency)
-    inverse_rate = rates.find { |rate|
+    inverse_rate = rates.find do |rate|
       rate.from.code == to_currency && rate.to.code == from_currency
-    }
+    end
 
     return nil unless inverse_rate
 
@@ -58,13 +58,13 @@ class RateCalculatorService
     base_currency = @provider.metadata[:base_currency]
 
     # Find rates to convert via base currency
-    from_to_base = rates.find { |rate|
+    from_to_base = rates.find do |rate|
       rate.from.code == base_currency && rate.to.code == from_currency
-    }
+    end
 
-    base_to_to = rates.find { |rate|
+    base_to_to = rates.find do |rate|
       rate.from.code == base_currency && rate.to.code == to_currency
-    }
+    end
 
     return nil unless from_to_base && base_to_to
 
@@ -78,4 +78,4 @@ class RateCalculatorService
       date: base_to_to.date
     )
   end
-end 
+end

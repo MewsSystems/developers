@@ -12,7 +12,7 @@ class ProviderValidator
         nil, nil, { provider_class: provider.class.name }
       )
     end
-    
+
     provider
   end
-end 
+end

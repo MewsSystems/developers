@@ -98,13 +98,14 @@ class BaseProvider
 
     # Merge basic metadata with provider-specific metadata
     @metadata.merge(standard_metadata(
-      base_currency: @base_currency,
-      publication_time: publication_time_for_date(Date.today, @publication_hour, @publication_minute, @publication_timezone),
-      working_days_only: true,
-      supported_currencies: fetch_supported_currencies
-    ))
+                      base_currency: @base_currency,
+                      publication_time: publication_time_for_date(Date.today, @publication_hour, @publication_minute,
+                                                                  @publication_timezone),
+                      working_days_only: true,
+                      supported_currencies: fetch_supported_currencies
+                    ))
   end
-  
+
   # Get the list of currency codes supported by this provider
   def fetch_supported_currencies
     # If we already have a cached list of supported currencies, use it
@@ -121,7 +122,7 @@ class BaseProvider
   def supported_currencies
     @supported_currencies || fetch_supported_currencies
   end
-  
+
   # For backward compatibility with tests
   # Check if cached data is still fresh
   # @param cached_at [Time] When the data was cached
@@ -129,15 +130,15 @@ class BaseProvider
   # @return [Boolean] Whether the cache is still fresh
   def cache_fresh?(cached_at, current_time = Time.now)
     return false unless cached_at
-    
+
     # Calculate TTL based on metadata if available
     ttl = if respond_to?(:metadata) && metadata
-            ttl = cache_ttl(metadata)
+            cache_ttl(metadata)
           else
             # Default TTL (15 minutes)
             15 * 60
           end
-          
+
     elapsed_time = current_time.to_i - cached_at.to_i
     elapsed_time < ttl
   end

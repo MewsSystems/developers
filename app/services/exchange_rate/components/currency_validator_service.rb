@@ -21,32 +21,30 @@ class CurrencyValidatorService
     begin
       normalized_currencies = Utils::CurrencyHelper.normalize_codes(currencies)
     rescue Utils::CurrencyHelper::InvalidCurrencyCodeError => e
-      raise ExchangeRateErrors::ValidationError.new(e.message)
+      raise ExchangeRateErrors::ValidationError, e.message
     end
 
     # Check if provider supports the base currency conversion
     supported_currencies = @provider.supported_currencies
 
     # If provider doesn't list supported currencies, extract from rates
-    if supported_currencies.nil? || supported_currencies.empty?
-      supported_currencies = Utils::CurrencyHelper.extract_currency_codes(available_rates)
-    end
+    supported_currencies = Utils::CurrencyHelper.extract_currency_codes(available_rates) if supported_currencies.blank?
 
     # Find unsupported currencies
     unsupported = normalized_currencies.reject do |code|
       supported_currencies.include?(code)
     end
 
-    if unsupported.any?
-      raise ExchangeRateErrors::CurrencyNotSupportedError.new(
-        "Currencies not supported by #{@provider_name}: #{unsupported.join(', ')}",
-        nil, @provider_name,
-        {
-          unsupported: unsupported,
-          supported: supported_currencies
-        }
-      )
-    end
+    return unless unsupported.any?
+
+    raise ExchangeRateErrors::CurrencyNotSupportedError.new(
+      "Currencies not supported by #{@provider_name}: #{unsupported.join(', ')}",
+      nil, @provider_name,
+      {
+        unsupported: unsupported,
+        supported: supported_currencies
+      }
+    )
   end
 
   # Check if any requested currencies are not available from the current provider
@@ -54,7 +52,7 @@ class CurrencyValidatorService
   # @param requested_currencies [Array<String>] Requested currency codes
   # @param available_rates [Array<ExchangeRate>] Available rates
   def check_currency_availability(requested_currencies, available_rates)
-    available_codes = available_rates.map { |rate| rate.to.code }.to_set
+    available_codes = available_rates.to_set { |rate| rate.to.code }
 
     # Find currencies that are now unavailable
     unavailable_now = requested_currencies.reject do |code|
@@ -85,11 +83,9 @@ class CurrencyValidatorService
   # @param code [String] Currency code to normalize
   # @return [String] Normalized currency code
   def normalize_currency_code(code)
-    begin
-      Utils::CurrencyHelper.normalize_code(code)
-    rescue Utils::CurrencyHelper::InvalidCurrencyCodeError => e
-      raise ExchangeRateErrors::ValidationError.new(e.message)
-    end
+    Utils::CurrencyHelper.normalize_code(code)
+  rescue Utils::CurrencyHelper::InvalidCurrencyCodeError => e
+    raise ExchangeRateErrors::ValidationError, e.message
   end
 
   # Raise a standardized error when no exchange rate is available
@@ -110,4 +106,4 @@ class CurrencyValidatorService
   def unavailable_currencies
     @unavailable_currencies.dup.freeze
   end
-end 
+end

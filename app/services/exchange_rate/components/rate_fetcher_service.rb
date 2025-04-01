@@ -7,7 +7,7 @@ class RateFetcherService
     @provider_name = provider_name
   end
 
-  def fetch_rates(force_refresh = false)
+  def fetch_rates(force_refresh: false)
     # Get appropriate date from cache strategy
     fetch_date = @cache_strategy.determine_fetch_date
 
@@ -22,7 +22,7 @@ class RateFetcherService
 
         # Save to repository
         @repository.save_for(fetch_date, rates)
-      rescue => e
+      rescue StandardError => e
         # Let the cache strategy handle the error
         # It might provide stale data or re-raise the error
         rates = @cache_strategy.handle_fetch_error(e, fetch_date)
@@ -31,4 +31,4 @@ class RateFetcherService
 
     rates
   end
-end 
+end

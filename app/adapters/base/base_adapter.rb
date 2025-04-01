@@ -63,7 +63,7 @@ class BaseAdapter
   protected
 
   # Helper methods for subclasses
-  
+
   # Ensure UTF-8 encoding
   def ensure_utf8_encoding(data, source_encoding = 'UTF-8')
     begin
@@ -109,7 +109,7 @@ class BaseAdapter
   def parse_amount(amount_str, currency_code = nil)
     Adapters::Utilities::DataValidator.validate_amount(amount_str, currency_code || 'unknown', @provider_name)
   end
-  
+
   # Parse rate value from string (for backward compatibility)
   # @param rate_str [String] Rate as string
   # @param currency_code [String] Currency code

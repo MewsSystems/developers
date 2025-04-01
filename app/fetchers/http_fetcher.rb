@@ -10,11 +10,12 @@ module Fetchers
   class HttpFetcher
     # Fetch data from a URL with retry logic
     # @param url [String] URL to fetch data from
-    # @param options [Hash] Additional options for the request
+    # @param headers [Hash] HTTP headers for the request
     # @param max_retries [Integer] Maximum number of retries
     # @param provider [String] Provider name for error reporting
     # @return [Hash] Hash with :data and :content_type
-    def self.fetch(url, options = {}, max_retries = HttpFetcherConstants::MAX_RETRIES, provider = nil)
+    def self.fetch(url, headers = {}, max_retries = HttpFetcherConstants::MAX_RETRIES, provider = nil)
+      options = { headers: headers }
       client = HttpClient.new(options)
       retry_handler = RetryHandler.new(max_retries, HttpFetcherConstants::RETRY_DELAY)
       error_handler = ErrorHandler.new(provider)

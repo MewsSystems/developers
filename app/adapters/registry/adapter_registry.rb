@@ -3,16 +3,16 @@ require_relative '../../errors/exchange_rate_errors'
 module Adapters
   class AdapterRegistry
     # Singleton instance
-    @@instance = nil
+    @instance = nil
 
     # Get the singleton instance
     def self.instance
-      @@instance ||= new
+      @instance ||= new
     end
 
     # Reset registry (mainly for testing)
     def self.reset
-      @@instance = new
+      @instance = new
     end
 
     def initialize
@@ -70,6 +70,7 @@ module Adapters
     # @return [Class, nil] Adapter class or nil if not found
     def provider_adapter(provider, format)
       return nil unless @provider_adapters[provider]
+
       @provider_adapters[provider][format]
     end
 
@@ -85,6 +86,7 @@ module Adapters
     # @return [Array<String>] List of supported formats
     def provider_formats(provider)
       return [] unless @provider_adapters[provider]
+
       @provider_adapters[provider].keys
     end
 
@@ -105,9 +107,9 @@ module Adapters
     # @param provider_name [String] Provider name
     # @raise [BaseAdapter::UnsupportedFormatError] If the provider is not supported
     def validate_provider_support(provider_name)
-      unless provider_supported?(provider_name)
-        raise BaseAdapter::UnsupportedFormatError.new("No adapter available for provider #{provider_name}")
-      end
+      return if provider_supported?(provider_name)
+
+      raise BaseAdapter::UnsupportedFormatError, "No adapter available for provider #{provider_name}"
     end
   end
-end 
+end

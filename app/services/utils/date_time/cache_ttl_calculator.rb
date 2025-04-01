@@ -10,8 +10,8 @@ module Utils
       # @param current_time [Time] Current time
       # @param default_ttl [Integer] Default TTL if calculation fails
       # @return [Integer] TTL in seconds
-      def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.now,
-                                                  default_ttl = 3600)
+      def self.calculate_ttl_until_next_publication(update_frequency, publication_time, current_time = Time.zone.now,
+                                                    default_ttl = 3600)
         next_pub = PublicationScheduler.calculate_next_publication(update_frequency, publication_time, current_time)
         # If next publication time exists, use time until then (min 60 seconds)
         # Otherwise fall back to default
@@ -20,7 +20,7 @@ module Utils
 
       # Get default TTL values by update frequency
       # @return [Hash] Default TTL values in seconds
-      def self.get_default_ttls
+      def self.default_ttls
         {
           realtime: 30,     # 30 seconds
           minute: 30,       # 30 seconds
@@ -30,4 +30,4 @@ module Utils
       end
     end
   end
-end 
+end

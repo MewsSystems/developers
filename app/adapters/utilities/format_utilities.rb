@@ -4,9 +4,9 @@ module Adapters
     # Use Utils::FormatHelper instead.
     module FormatUtilities
       # This module is deprecated. Please use Utils::FormatHelper instead.
-      def self.method_missing(method_name, *args, &block)
+      def self.method_missing(method_name, *, &)
         if Utils::FormatHelper.respond_to?(method_name)
-          Utils::FormatHelper.send(method_name, *args, &block)
+          Utils::FormatHelper.send(method_name, *, &)
         else
           super
         end

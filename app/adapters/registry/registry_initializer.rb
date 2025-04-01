@@ -14,15 +14,13 @@ module Adapters
       # @param providers [Array<String>] List of providers to register
       def self.initialize_registry(providers)
         registry = Adapters::AdapterRegistry.instance
-        
+
         register_standard_adapters(registry)
         register_provider_adapters(registry)
         register_extension_mappings(registry)
         register_providers(registry, providers)
       end
-      
-      private
-      
+
       # Register standard adapters in order of preference
       # @param registry [AdapterRegistry] Registry instance
       def self.register_standard_adapters(registry)
@@ -30,7 +28,7 @@ module Adapters
         registry.register_standard_adapter(XmlAdapter)
         registry.register_standard_adapter(TxtAdapter)
       end
-      
+
       # Register provider-specific adapters
       # @param registry [AdapterRegistry] Registry instance
       def self.register_provider_adapters(registry)
@@ -41,7 +39,7 @@ module Adapters
         registry.register_provider_adapter('CNB', 'text', Adapters::Strategies::CnbTextAdapter)
         registry.register_provider_adapter('CNB', 'csv', Adapters::Strategies::CnbTextAdapter)
       end
-      
+
       # Register file extension to adapter mappings
       # @param registry [AdapterRegistry] Registry instance
       def self.register_extension_mappings(registry)
@@ -51,7 +49,7 @@ module Adapters
         registry.register_extension_adapter('text', TxtAdapter)
         registry.register_extension_adapter('csv', TxtAdapter)
       end
-      
+
       # Register supported providers
       # @param registry [AdapterRegistry] Registry instance
       # @param providers [Array<String>] List of providers to register
@@ -60,4 +58,4 @@ module Adapters
       end
     end
   end
-end 
+end

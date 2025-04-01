@@ -11,7 +11,7 @@ module Adapters
       # @return [Float] Parsed rate value
       # @raise [ExchangeRateErrors::ValidationError] If rate is invalid
       def self.validate_rate(rate_str, currency_code, provider_name)
-        rate_str = rate_str.gsub(',', '.')  # Replace comma with dot for decimal separator
+        rate_str = rate_str.tr(',', '.') # Replace comma with dot for decimal separator
         begin
           rate = Float(rate_str)
           if rate <= 0
@@ -28,7 +28,7 @@ module Adapters
           )
         end
       end
-      
+
       # Validate amount value
       # @param amount_str [String] Amount as string
       # @param currency_code [String] Currency code for error message
@@ -36,22 +36,20 @@ module Adapters
       # @return [Integer] Parsed amount value
       # @raise [ExchangeRateErrors::ValidationError] If amount is invalid
       def self.validate_amount(amount_str, currency_code, provider_name)
-        begin
-          amount = Integer(amount_str)
-          if amount <= 0
-            raise ExchangeRateErrors::ValidationError.new(
-              "Invalid non-positive amount '#{amount_str}' for currency #{currency_code}",
-              nil, provider_name, { currency: currency_code, amount: amount_str }
-            )
-          end
-          amount
-        rescue ArgumentError => e
+        amount = Integer(amount_str)
+        if amount <= 0
           raise ExchangeRateErrors::ValidationError.new(
-            "Invalid amount format '#{amount_str}' for currency #{currency_code}",
-            e, provider_name, { currency: currency_code, amount: amount_str }
+            "Invalid non-positive amount '#{amount_str}' for currency #{currency_code}",
+            nil, provider_name, { currency: currency_code, amount: amount_str }
           )
         end
+        amount
+      rescue ArgumentError => e
+        raise ExchangeRateErrors::ValidationError.new(
+          "Invalid amount format '#{amount_str}' for currency #{currency_code}",
+          e, provider_name, { currency: currency_code, amount: amount_str }
+        )
       end
     end
   end
-end 
+end

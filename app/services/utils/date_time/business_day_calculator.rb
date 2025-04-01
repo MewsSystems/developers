@@ -8,15 +8,15 @@ module Utils
       # @param time [Time, Date] The base time
       # @param working_days_only [Boolean] Whether to adjust for weekends
       # @return [Time, Date] The adjusted time
-      def self.next_business_day(time, working_days_only = true)
+      def self.next_business_day(time, working_days_only: true)
         return time unless working_days_only
 
         # Handle Date objects specifically
         if time.is_a?(Date)
           date = time
           # Skip weekends
-          date = date + 2 if date.saturday? # Saturday to Monday
-          date = date + 1 if date.sunday?   # Sunday to Monday
+          date += 2 if date.saturday? # Saturday to Monday
+          date += 1 if date.sunday?   # Sunday to Monday
           return date
         end
 
@@ -53,7 +53,7 @@ module Utils
       # @param date [Date] The base date
       # @param working_days_only [Boolean] Whether to adjust for weekends
       # @return [Date] The previous business day
-      def self.previous_business_day(date, working_days_only = true)
+      def self.previous_business_day(date, working_days_only: true)
         return date - 1 unless working_days_only
 
         prev_date = date - 1
@@ -69,9 +69,9 @@ module Utils
       # @param time [Time] The time to adjust
       # @param working_days_only [Boolean] Whether to adjust for weekends
       # @return [Time] Adjusted time
-      def self.adjust_for_working_days(time, working_days_only = true)
-        working_days_only ? next_business_day(time, working_days_only) : time
+      def self.adjust_for_working_days(time, working_days_only: true)
+        working_days_only ? next_business_day(time, working_days_only: working_days_only) : time
       end
     end
   end
-end 
+end

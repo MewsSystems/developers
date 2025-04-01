@@ -1,8 +1,7 @@
 module RedisSupport
   # Tracks cache metrics
   class CacheMetrics
-    attr_reader :hits, :misses, :errors
-    attr_writer :hits, :misses, :errors
+    attr_accessor :hits, :misses, :errors
 
     def initialize
       @hits = 0
@@ -24,7 +23,7 @@ module RedisSupport
 
     def hit_ratio
       total = @hits + @misses
-      total > 0 ? (@hits.to_f / total) : 0
+      total.positive? ? (@hits.to_f / total) : 0
     end
   end
-end 
+end

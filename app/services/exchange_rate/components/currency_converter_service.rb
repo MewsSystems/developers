@@ -37,4 +37,4 @@ class CurrencyConverterService
       date: rate.date
     }
   end
-end 
+end

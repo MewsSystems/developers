@@ -5,7 +5,7 @@ class TxtAdapter < BaseAdapter
   CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::TXT_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Adapters::Utilities::ContentTypeDetector.is_txt_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.txt_content_type?(content_type)
   end
 
   def supports_content?(content)

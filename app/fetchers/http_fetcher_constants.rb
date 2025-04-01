@@ -5,4 +5,4 @@ module Fetchers
     RETRY_DELAY = 1 # seconds
     DEFAULT_TIMEOUT = 10 # seconds
   end
-end 
+end

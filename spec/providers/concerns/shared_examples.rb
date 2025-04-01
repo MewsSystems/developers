@@ -13,9 +13,9 @@ class TestProvider < BaseProvider
     @test_metadata = metadata
 
     # Ensure publication time is set for hourly/minute tests
-    if metadata[:update_frequency] == :hourly || metadata[:update_frequency] == :minute
-      @test_metadata[:publication_time] ||= Time.new(2025, 3, 26, 14, 30, 0)
-    end
+    return unless %i[hourly minute].include?(metadata[:update_frequency])
+
+    @test_metadata[:publication_time] ||= Time.zone.local(2025, 3, 26, 14, 30, 0)
   end
 
   def fetch_rates
@@ -31,4 +31,4 @@ RSpec.shared_examples "a provider concern" do
   it "is included in BaseProvider" do
     expect(BaseProvider.included_modules).to include(described_class)
   end
-end 
+end
