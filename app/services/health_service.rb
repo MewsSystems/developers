@@ -1,6 +1,15 @@
 class HealthService
   def check_health
     status = { status: 'ok', time: Time.now.iso8601 }
+    repository_health = RepositoryHealthService.new.check_repository_health
+    status.merge!(repository_health)
+    status
+  end
+end
+
+class RepositoryHealthService
+  def check_repository_health
+    status = {}
     add_repository_health(status)
     status
   end
