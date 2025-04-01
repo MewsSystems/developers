@@ -1,13 +1,13 @@
 class ExchangeRateTestConfig
   class << self
     attr_accessor :provider_type
-    
+
     # Get the provider type to use for tests
     # Can be controlled via ENV var or defaults to mock provider
     def provider_type
       @provider_type ||= ENV['EXCHANGE_RATE_TEST_PROVIDER'] || 'mock'
     end
-    
+
     # Get provider configuration for the selected provider
     def provider_config
       case provider_type
@@ -42,7 +42,7 @@ class ExchangeRateTestConfig
         }
       end
     end
-    
+
     # Create a provider instance for tests
     def create_provider
       case provider_type
@@ -56,49 +56,49 @@ class ExchangeRateTestConfig
         MockProvider.new(provider_config)
       end
     end
-    
+
     # Create a repository instance for tests
     def create_repository
       MockRepository.new
     end
-    
+
     # Create a cache strategy for tests
     def create_cache_strategy(provider, repository)
       MockCacheStrategy.new(provider, repository)
     end
-    
+
     # Create a service instance for tests
     def create_service
       provider = create_provider
       repository = create_repository
       cache_strategy = create_cache_strategy(provider, repository)
-      
+
       RateService.new(provider, repository, cache_strategy)
     end
-    
+
     # Create a service with pre-populated mock data
     def create_service_with_data(sample_rates = nil)
       provider = create_provider
       repository = create_repository
       cache_strategy = create_cache_strategy(provider, repository)
-      
+
       if provider.is_a?(MockProvider) && sample_rates
         provider.set_rates(sample_rates)
       end
-      
+
       RateService.new(provider, repository, cache_strategy)
     end
-    
+
     # Reset test configuration
     def reset
       @provider_type = nil
     end
-    
+
     # Use a specific provider for a test block
     def with_provider(type, &block)
       original_type = @provider_type
       @provider_type = type
-      
+
       begin
         yield
       ensure
@@ -106,4 +106,4 @@ class ExchangeRateTestConfig
       end
     end
   end
-end 
+end

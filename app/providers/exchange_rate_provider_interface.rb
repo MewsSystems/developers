@@ -4,7 +4,7 @@ module ExchangeRateProviderInterface
   def fetch_rates
     raise NotImplementedError, "Providers must implement #fetch_rates"
   end
-  
+
   # Return provider metadata
   # @return [Hash] Provider metadata with keys:
   #   - update_frequency: How often rates are updated (:daily, :hourly, :minute, :realtime)
@@ -17,10 +17,10 @@ module ExchangeRateProviderInterface
   def metadata
     raise NotImplementedError, "Providers must implement #metadata"
   end
-  
+
   # Get supported currencies
   # @return [Array<String>] List of supported currency codes
   def supported_currencies
     raise NotImplementedError, "Providers must implement #supported_currencies"
   end
-end 
+end

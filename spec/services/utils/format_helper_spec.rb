@@ -135,4 +135,4 @@ RSpec.describe Utils::FormatHelper do
       end
     end
   end
-end 
+end

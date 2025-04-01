@@ -7,12 +7,12 @@ RSpec.describe CnbAdapter do
 
   it "parses the CNB TXT data into ExchangeRate objects" do
     rates = CnbAdapter.parse(sample_data, base_currency)
-    
+
     # Check a few currencies from the sample data
     usd_rate = rates.find { |r| r.to.code == 'USD' }
     eur_rate = rates.find { |r| r.to.code == 'EUR' }
     jpy_rate = rates.find { |r| r.to.code == 'JPY' }
-    
+
     expect(usd_rate).not_to be_nil
     expect(usd_rate.from.code).to eq 'CZK'
     expect(usd_rate.to.code).to eq 'USD'
@@ -30,15 +30,15 @@ RSpec.describe CnbAdapter do
 
   it "correctly handles different amount values" do
     rates = CnbAdapter.parse(sample_data, base_currency)
-    
+
     # Check currencies with amount > 1
     huf_rate = rates.find { |r| r.to.code == 'HUF' }
     idr_rate = rates.find { |r| r.to.code == 'IDR' }
-    
+
     expect(huf_rate).not_to be_nil
     # 100 HUF = 6.152 CZK -> 1 HUF = 0.06152 CZK
     expect(huf_rate.rate).to be_within(0.0001).of(0.06152)
-    
+
     expect(idr_rate).not_to be_nil
     # 1000 IDR = 1.459 CZK -> 1 IDR = 0.001459 CZK
     expect(idr_rate.rate).to be_within(0.00001).of(0.001459)
@@ -46,7 +46,7 @@ RSpec.describe CnbAdapter do
 
   it "reuses Currency objects for identical codes" do
     rates = CnbAdapter.parse(sample_data, base_currency)
-    
+
     # All rates should have the same 'from' currency instance
     from_currencies = rates.map(&:from).uniq
     expect(from_currencies.size).to eq 1
@@ -76,4 +76,4 @@ RSpec.describe CnbAdapter do
     bad_data = "26.03.2025 #60\nCountry|Currency|Amount|Code|Rate\nAustralia|dollar|1|AUD|abc" # non-numeric rate
     expect { CnbAdapter.parse(bad_data, base_currency) }.to raise_error(CnbAdapter::ParseError)
   end
-end 
+end

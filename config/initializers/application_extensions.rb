@@ -6,4 +6,4 @@ module RailsApplicationServices
 end
 
 # Extend the Rails application with our services method
-Rails.application.singleton_class.prepend RailsApplicationServices 
+Rails.application.singleton_class.prepend RailsApplicationServices

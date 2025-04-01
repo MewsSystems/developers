@@ -12,4 +12,4 @@ if defined?(ActiveSupport::TestCase) && ActiveSupport::TestCase.respond_to?(:fix
       end
     end
   end
-end 
+end

@@ -9,7 +9,7 @@ class ECBProvider < BaseProvider
   # Default configuration will be applied through BaseProvider
 
   private
-  
+
   # Provider-specific validation for ECB rates
   # @param rates [Array<ExchangeRate>] Exchange rates
   # @raise [ExchangeRateErrors::ValidationError] If rates are invalid
@@ -23,4 +23,4 @@ class ECBProvider < BaseProvider
       )
     end
   end
-end 
+end

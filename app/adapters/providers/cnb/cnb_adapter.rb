@@ -25,4 +25,4 @@ class CnbAdapter
       raise ParseError, "Error parsing CNB data: #{e.message}"
     end
   end
-end 
+end

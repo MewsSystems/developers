@@ -63,12 +63,12 @@ RSpec.describe Utils::DateTimeHelper do
 
   describe '.determine_fetch_date' do
     let(:today) { Date.today }
-    
+
     it 'returns today for non-daily updates' do
       metadata = { update_frequency: :hourly }
       expect(described_class.determine_fetch_date(metadata)).to eq(today)
     end
-    
+
     it 'returns today for daily updates if publication time has passed' do
       now = Time.now
       metadata = {
@@ -76,10 +76,10 @@ RSpec.describe Utils::DateTimeHelper do
         publication_time: Time.new(now.year, now.month, now.day, now.hour - 1, 0, 0),
         working_days_only: true
       }
-      
+
       expect(described_class.determine_fetch_date(metadata)).to eq(today)
     end
-    
+
     it 'returns previous business day for daily updates if publication time has not passed' do
       now = Time.now
       metadata = {
@@ -87,9 +87,9 @@ RSpec.describe Utils::DateTimeHelper do
         publication_time: Time.new(now.year, now.month, now.day, now.hour + 1, 0, 0),
         working_days_only: true
       }
-      
+
       previous_date = described_class.previous_business_day(today, true)
       expect(described_class.determine_fetch_date(metadata)).to eq(previous_date)
     end
   end
-end 
+end

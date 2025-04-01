@@ -8,19 +8,19 @@ class ExchangeRateMockProvider < BaseProvider
   def initialize(config = {})
     # Store mock rates before calling super (which will call setup_metadata)
     @mock_rates = config['rates'] || default_rates
-    
+
     # Add base_url to config for tests if not present
     test_config = config.dup
     test_config['base_url'] ||= 'https://mock-exchange.example.com/api'
-    
+
     # Initialize parent
     super(test_config)
   end
-  
+
   # Override to set provider-specific metadata
   def setup_metadata
     @update_frequency = @config[:update_frequency]&.to_sym || :daily
-    
+
     @metadata = {
       source_name: "Mock Exchange Provider",
       base_currency: @base_currency,
@@ -31,20 +31,20 @@ class ExchangeRateMockProvider < BaseProvider
       supported_currencies: @mock_rates ? @mock_rates.keys : []
     }
   end
-  
+
   # Override to implement mock fetch data
   def fetch_data
     # Mock data doesn't need to be fetched
     { data: @mock_rates, format: :mock }
   end
-  
+
   # Override to implement mock parsing
   def parse_data(response)
     # Convert mock rates to ExchangeRate objects
     rates = []
-    
+
     base = Currency.new(@base_currency)
-    
+
     @mock_rates.each do |code, rate_value|
       target = Currency.new(code)
       rates << ExchangeRate.new(
@@ -54,12 +54,12 @@ class ExchangeRateMockProvider < BaseProvider
         date: Date.today
       )
     end
-    
+
     rates
   end
-  
+
   private
-  
+
   # Default exchange rates for testing
   def default_rates
     {
@@ -83,4 +83,4 @@ RSpec.configure do |config|
       end
     end
   end
-end 
+end

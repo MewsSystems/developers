@@ -20,7 +20,7 @@ module ECBTestHelpers
 </gesmes:Envelope>
     XML
   end
-  
+
   def create_sample_ecb_rates
     [
       ExchangeRate.new(from: Currency.new('EUR'), to: Currency.new('USD'), rate: 1.0832),
@@ -29,4 +29,4 @@ module ECBTestHelpers
       ExchangeRate.new(from: Currency.new('EUR'), to: Currency.new('GBP'), rate: 0.8864)
     ]
   end
-end 
+end

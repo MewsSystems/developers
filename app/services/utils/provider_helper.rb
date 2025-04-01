@@ -23,7 +23,7 @@ module Utils
           raise ExchangeRateErrors::ValidationError.new(e.message)
         end
       end
-      
+
       # Centralized error handling for provider operations
       # @param provider_name [String] Name of the provider
       # @param operation [String] Name of the operation being performed
@@ -43,7 +43,7 @@ module Utils
                     else
                       "Error #{operation} from #{provider_name}: #{e.message}"
                     end
-                    
+
           raise ExchangeRateErrors::ParseError.new(
             message,
             e.original_error, provider_name
@@ -54,7 +54,7 @@ module Utils
         rescue => e
           # Map other errors to appropriate ExchangeRateErrors
           error_class = error_class_for_exception(e)
-          
+
           # Format the error message based on provider, operation and format
           message = if legacy_format && provider_name == "CNB" && operation == "fetching data"
                       "Failed to fetch data from CNB: #{e.message}"
@@ -63,14 +63,14 @@ module Utils
                     else
                       "Error #{operation} from #{provider_name}: #{e.message}"
                     end
-          
+
           raise error_class.new(
             message,
             e, provider_name
           )
         end
       end
-      
+
       # Map standard exceptions to appropriate ExchangeRateErrors
       # @param exception [Exception] The exception to map
       # @return [Class] The ExchangeRateErrors class to use
@@ -91,7 +91,7 @@ module Utils
         end
       end
 
-      # Handle HTTP client exceptions 
+      # Handle HTTP client exceptions
       # @param exception [Exception] The HTTP client exception
       # @return [Class] The appropriate ExchangeRateErrors class
       def handle_http_client_exception(exception)
@@ -111,4 +111,4 @@ module Utils
       end
     end
   end
-end 
+end

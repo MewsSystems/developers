@@ -28,17 +28,17 @@ module Utils
     def self.configure(provider_name, config = {}, overrides = {})
       defaults = PROVIDER_DEFAULTS[provider_name] || {}
       required_fields = overrides[:required_fields] || defaults[:required_fields] || []
-      
+
       # Merge defaults, then apply any overrides
       result = defaults.merge(config)
       result.merge!(overrides.reject { |k, _| k == :required_fields })
-      
+
       # Validate required fields
       validate_required_fields(provider_name, result, required_fields)
-      
+
       result
     end
-    
+
     # Validate that required configuration fields are present
     # @param provider_name [String] The provider name (for error messages)
     # @param config [Hash] The provider configuration
@@ -46,7 +46,7 @@ module Utils
     # @raise [ExchangeRateErrors::InvalidConfigurationError] If required fields are missing
     def self.validate_required_fields(provider_name, config, required_fields)
       missing_fields = required_fields.select { |field| config[field].nil? }
-      
+
       if missing_fields.any?
         raise ExchangeRateErrors::InvalidConfigurationError.new(
           "#{provider_name} requires these configuration fields: #{missing_fields.join(', ')}",
@@ -54,7 +54,7 @@ module Utils
         )
       end
     end
-    
+
     # Build standard provider metadata
     # @param options [Hash] Metadata options
     # @return [Hash] Standardized metadata hash
@@ -66,4 +66,4 @@ module Utils
       }
     end
   end
-end 
+end

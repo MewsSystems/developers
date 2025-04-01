@@ -21,20 +21,20 @@ RSpec.describe RateService do
       allow(p).to receive(:supported_currencies).and_return(['USD', 'EUR', 'JPY', 'GBP'])
     end
   end
-  
+
   let(:repository) { instance_double("ExchangeRateRepository") }
   let(:cache_strategy) { instance_double("CacheStrategy") }
   let(:service) { RateService.new(provider, repository, cache_strategy) }
-  
+
   let(:today) { Date.new(2025, 3, 26) } # Wednesday
   let(:yesterday) { Date.new(2025, 3, 25) } # Tuesday
   let(:friday) { Date.new(2025, 3, 21) } # Previous Friday
-  
+
   let(:czk) { Currency.new('CZK') }
   let(:usd) { Currency.new('USD') }
   let(:eur) { Currency.new('EUR') }
   let(:jpy) { Currency.new('JPY') }
-  
+
   let(:rates) do
     [
       ExchangeRate.new(from: czk, to: usd, rate: 23.117),
@@ -71,7 +71,7 @@ RSpec.describe RateService do
       it "fetches rates from provider" do
         expect(provider).to receive(:fetch_rates).and_return(rates)
         expect(repository).to receive(:save_for).with(today, rates)
-        
+
         result = service.get_rates
         expect(result).to eq(rates)
       end
@@ -120,13 +120,13 @@ RSpec.describe RateService do
     it "tracks unavailable currencies" do
       # Allow method to run
       allow(service).to receive(:check_currency_availability).and_call_original
-      
+
       # Request unavailable currency
       service.get_rates(['GBP'])
-      
+
       # Check tracking
       unavailable = service.unavailable_currencies
       expect(unavailable.keys).to include('GBP')
     end
   end
-end 
+end

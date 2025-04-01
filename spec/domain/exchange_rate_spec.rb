@@ -33,4 +33,4 @@ RSpec.describe ExchangeRate do
     rate = ExchangeRate.new(from: czk, to: usd, rate: 22.0)
     expect(rate.to_h).to eq({ from: 'CZK', to: 'USD', rate: 22.0 })
   end
-end 
+end

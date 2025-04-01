@@ -12,7 +12,7 @@ class ExchangeRate
   def inverse
     raise 'Inverse rate calculation is not allowed'
   end
-  
+
   def to_h
     {
       from: from.code,
@@ -20,4 +20,4 @@ class ExchangeRate
       rate: rate
     }
   end
-end 
+end

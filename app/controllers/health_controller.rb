@@ -7,9 +7,9 @@ class HealthController < ApplicationController
     # Get Redis repository for metrics
     begin
       repository = Rails.application.services&.get(:repository)
-      
+
       # Add repository metrics if available (for Redis repository)
-      if repository.respond_to?(:health_metrics) 
+      if repository.respond_to?(:health_metrics)
         metrics = repository.health_metrics
         status[:redis] = metrics[:redis_connected] ? 'connected' : 'disconnected'
         status[:cache] = {
@@ -40,26 +40,26 @@ class HealthController < ApplicationController
   # Debug endpoint for Redis testing (development only)
   def redis_debug
     return head :forbidden unless Rails.env.development?
-    
+
     repository = Rails.application.services&.get(:repository)
-    
+
     # Test Redis operations
     test_date = Date.today
     test_rate = ExchangeRate.new(from: 'USD', to: 'EUR', rate: 0.93, date: test_date)
-    
+
     # Save a test rate
     repository.save_for(test_date, [test_rate])
-    
+
     # Fetch the rate back
     fetched = repository.fetch_for(test_date)
-    
+
     # Test cache miss by clearing and fetching again
     repository.clear(test_date)
     repository.fetch_for(test_date)
-    
+
     # Get all metrics
     metrics = repository.health_metrics
-    
+
     render json: {
       repository_class: repository.class.name,
       metrics: metrics,
@@ -70,4 +70,4 @@ class HealthController < ApplicationController
       }
     }
   end
-end 
+end

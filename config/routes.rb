@@ -16,9 +16,9 @@ Rails.application.routes.draw do
 
   # Health check for Docker and monitoring
   get '/health', to: 'health#index'
-  
+
   # Debug routes for development only
   if Rails.env.development?
     get '/debug/redis', to: 'health#redis_debug'
   end
-end 
+end

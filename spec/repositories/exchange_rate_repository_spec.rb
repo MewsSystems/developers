@@ -12,4 +12,4 @@ RSpec.describe ExchangeRateRepository do
   it "raises NotImplementedError for save_for" do
     expect { repo.save_for(date, rates) }.to raise_error(NotImplementedError)
   end
-end 
+end

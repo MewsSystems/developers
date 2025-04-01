@@ -1,0 +1,90 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rspec
+
+plugins:
+  - rubocop-rails
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+  SuggestExtensions: false
+
+# Layout
+Layout/LineLength:
+  Max: 120
+
+Layout/TrailingWhitespace:
+  Enabled: true
+
+# Metrics
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/ModuleLength:
+  Max: 150
+
+# Style
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: percent
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+
+# Bundler
+Bundler/OrderedGems:
+  Enabled: true
+
+# RSpec
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 4
+
+# Disable problematic RSpec/Capybara cops
+RSpec/Capybara:
+  Enabled: false
+
+Capybara:
+  Enabled: false
+
+FactoryBot:
+  Enabled: false
+
+RSpecRails:
+  Enabled: false
+
+RSpec/PredicateMatcher:
+  Enabled: false
+
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false 

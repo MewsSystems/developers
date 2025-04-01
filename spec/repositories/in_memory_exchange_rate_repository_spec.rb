@@ -20,20 +20,20 @@ RSpec.describe InMemoryExchangeRateRepository do
 
   it "keeps rates separate for different dates" do
     tomorrow_rates = [ExchangeRate.new(from: czk, to: usd, rate: 23.5)]
-    
+
     repo.save_for(today, rates)
     repo.save_for(tomorrow, tomorrow_rates)
-    
+
     expect(repo.fetch_for(today)).to eq(rates)
     expect(repo.fetch_for(tomorrow)).to eq(tomorrow_rates)
   end
 
   it "overwrites rates when saving to the same date" do
     new_rates = [ExchangeRate.new(from: czk, to: usd, rate: 24.0)]
-    
+
     repo.save_for(today, rates)
     repo.save_for(today, new_rates)
-    
+
     expect(repo.fetch_for(today)).to eq(new_rates)
   end
-end 
+end

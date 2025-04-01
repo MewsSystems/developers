@@ -18,18 +18,18 @@ Rails.application.config.after_initialize do
     port: ENV['REDIS_PORT'] || 6379,
     db: ENV['REDIS_DB'] || 0
   }
-  
+
   # Add password if provided
   redis_config[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD'].present?
-  
+
   # Use Redis URL if provided (overrides other settings)
   if ENV['REDIS_URL'].present?
     redis_config = { url: ENV['REDIS_URL'] }
   end
-  
+
   # Store the configuration
   Rails.application.config.redis = redis_config
-  
+
   # Test Redis connection
   begin
     redis = Redis.new(redis_config)
@@ -39,4 +39,4 @@ Rails.application.config.after_initialize do
     Rails.logger.warn "WARNING: Could not connect to Redis: #{e.message}"
     Rails.logger.warn "The application will function, but exchange rates will not be persisted"
   end
-end 
+end

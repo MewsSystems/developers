@@ -8,25 +8,25 @@ require_relative '../../services/utils/format_helper'
 class BaseAdapter
   include ExchangeRateAdapterInterface
   include LoggingHelper
-  
+
   # For backward compatibility
   class ParseError < StandardError; end
   class UnsupportedFormatError < StandardError; end
-  
+
   def initialize(provider_name)
     @provider_name = provider_name
   end
-  
+
   # Default implementation always returns false - subclasses should override
   def supports_content_type?(content_type)
     false
   end
-  
+
   # Default implementation always returns false - subclasses should override
   def supports_content?(content)
     false
   end
-  
+
   # Parse the data and convert it to domain ExchangeRate objects
   # @param data [String] Raw data from the provider
   # @param base_currency_code [String] The code of the base currency (e.g., 'CZK')
@@ -40,9 +40,9 @@ class BaseAdapter
       raise e
     rescue ParseError, UnsupportedFormatError => e
       # Convert legacy errors to new error classes
-      error_class = e.is_a?(ParseError) ? 
+      error_class = e.is_a?(ParseError) ?
         ExchangeRateErrors::ParseError : ExchangeRateErrors::UnsupportedFormatError
-      
+
       raise error_class.new(e.message, e, @provider_name)
     rescue => e
       # Convert unexpected errors to ParseError
@@ -51,7 +51,7 @@ class BaseAdapter
       )
     end
   end
-  
+
   # Implement this method in subclasses to do the actual parsing
   # @param data [String] Raw data from the provider
   # @param base_currency_code [String] The code of the base currency
@@ -59,9 +59,9 @@ class BaseAdapter
   def perform_parse(data, base_currency_code)
     raise NotImplementedError, "Subclasses must implement perform_parse"
   end
-  
+
   protected
-  
+
   # Delegate to utility functions
   def ensure_utf8_encoding(data, source_encoding = 'UTF-8')
     begin
@@ -70,23 +70,23 @@ class BaseAdapter
       raise ExchangeRateErrors::ParseError.new(e.message, e, @provider_name)
     end
   end
-  
+
   def extract_date(date_str)
     Utils::FormatHelper.extract_date(date_str) || Date.today
   end
-  
+
   def standardize_currency_code(code)
     Utils::FormatHelper.standardize_currency_code(code)
   end
-  
+
   def parse_rate_value(value)
     Utils::FormatHelper.parse_rate_value(value)
   end
-  
+
   def parse_amount(amount_str, currency_code = nil)
     Utils::FormatHelper.parse_amount(amount_str, currency_code)
   end
-  
+
   # Create a domain Currency object
   # @param code [String] Currency code
   # @param name [String] Optional currency name
@@ -94,7 +94,7 @@ class BaseAdapter
   def create_currency(code, name = nil)
     Currency.new(code, name)
   end
-  
+
   # Create an exchange rate object from component parts
   # @param base_currency [String] Base currency code
   # @param target_currency [String] Target currency code
@@ -105,10 +105,10 @@ class BaseAdapter
   def create_exchange_rate(base_currency, target_currency, rate, amount = 1, date = Date.today)
     from = Currency.new(base_currency)
     to = Currency.new(target_currency)
-    
+
     # Normalize the rate based on amount (e.g., if rate is for 100 units, divide by 100)
     normalized_rate = amount.is_a?(Numeric) ? rate / amount.to_f : rate
-    
+
     ExchangeRate.new(
       from: from,
       to: to,
@@ -116,7 +116,7 @@ class BaseAdapter
       date: date.is_a?(Date) ? date : Date.today
     )
   end
-  
+
   # Validate that the rate value is valid
   # @param rate_str [String] Rate as string
   # @return [Float] Parsed rate value
@@ -128,7 +128,7 @@ class BaseAdapter
     end
     rate
   end
-  
+
   # Ensure data is provided
   # @param data [String] Data to validate
   # @raise [ParseError] If data is missing or empty
@@ -140,7 +140,7 @@ class BaseAdapter
       )
     end
   end
-  
+
   # Log an error
   # @param message [String] Error message
   # @param level [Symbol] Log level
@@ -158,7 +158,7 @@ class BaseAdapter
       warn("[#{level.to_s.upcase}] #{message}")
     end
   end
-  
+
   # Parse rate value from various formats to float
   # @param rate_str [String] Rate as string
   # @param currency_code [String] Currency code for error message
@@ -181,7 +181,7 @@ class BaseAdapter
       )
     end
   end
-  
+
   # Validate that the amount value is valid
   # @param amount_str [String] Amount as string
   # @param currency_code [String] Currency code for error message
@@ -203,4 +203,4 @@ class BaseAdapter
       )
     end
   end
-end 
+end

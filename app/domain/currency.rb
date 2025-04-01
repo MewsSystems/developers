@@ -21,4 +21,4 @@ class Currency
   alias eql? ==
   def hash = code.hash
   def to_s = code
-end 
+end

@@ -8,7 +8,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
   DEFAULT_TTL = 86400
   DEFAULT_POOL_SIZE = 5
   DEFAULT_TIMEOUT = 5.0
-  
+
   # Stats for monitoring
   attr_reader :cache_hits, :cache_misses, :errors
 
@@ -44,13 +44,13 @@ class RedisExchangeRateRepository < ExchangeRateRepository
         return result
       end
     end
-    
+
     # Fallback to in-memory cache if Redis failed or data not found
     if @fallback_cache[date]
       @cache_hits += 1
       return @fallback_cache[date]
     end
-    
+
     @cache_misses += 1
     nil
   end
@@ -62,21 +62,21 @@ class RedisExchangeRateRepository < ExchangeRateRepository
   def save_for(date, rates)
     serialized_data = serialize_rates(rates)
     metadata = { cached_at: Time.now.to_s }
-    
+
     with_redis_error_handling do
       with_redis do |redis|
         # Store rates data
         redis.setex(key_for(date), @ttl, serialized_data)
-        
+
         # Store metadata
         redis.setex(metadata_key_for(date), @ttl, metadata.to_json)
       end
     end
-    
+
     # Always update fallback cache
     @fallback_cache[date] = rates
     @fallback_metadata[date] = metadata
-    
+
     rates
   end
 
@@ -88,7 +88,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
       data = with_redis { |redis| redis.get(metadata_key_for(date)) }
       return JSON.parse(data, symbolize_names: true) if data
     end
-    
+
     # Fallback to in-memory cache
     @fallback_metadata[date]
   end
@@ -107,7 +107,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
     with_redis_error_handling do
       with_redis { |redis| redis.del(key_for(date), metadata_key_for(date)) }
     end
-    
+
     # Always clear fallback cache
     @fallback_cache.delete(date)
     @fallback_metadata.delete(date)
@@ -121,7 +121,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
         redis.del(*keys) unless keys.empty?
       end
     end
-    
+
     # Always clear fallback cache
     @fallback_cache.clear
     @fallback_metadata.clear
@@ -134,7 +134,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
     with_redis_error_handling do
       return with_redis { |redis| redis.exists?(key_for(date)) }
     end
-    
+
     # Fallback to in-memory cache if Redis failed
     @fallback_cache.key?(date)
   end
@@ -146,17 +146,17 @@ class RedisExchangeRateRepository < ExchangeRateRepository
       keys = with_redis { |redis| redis.keys("#{@prefix}:rates:*") }
       return keys.map { |key| extract_date_from_key(key) }.compact
     end
-    
+
     # Fallback to in-memory cache if Redis failed
     @fallback_cache.keys
   end
-  
+
   # Health metrics for monitoring
   # @return [Hash] Hash of health metrics
   def health_metrics
     cache_total = @cache_hits + @cache_misses
     hit_ratio = cache_total > 0 ? (@cache_hits.to_f / cache_total) : 0
-    
+
     {
       redis_connected: redis_connected?,
       cache_size: cached_dates.size,
@@ -167,7 +167,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
       fallback_size: @fallback_cache.size
     }
   end
-  
+
   # Check if Redis is connected
   # @return [Boolean] Whether Redis is connected
   def redis_connected?
@@ -177,7 +177,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
   end
 
   private
-  
+
   # Execute a block with Redis error handling
   # @param return_on_error [Boolean] What to return if an error occurs
   # @yield Block to execute
@@ -189,14 +189,14 @@ class RedisExchangeRateRepository < ExchangeRateRepository
     log_redis_error(e)
     return_on_error
   end
-  
+
   # Log Redis errors with context
   # @param error [Exception] Error to log
   def log_redis_error(error)
     Rails.logger.error("Redis error in #{self.class.name}: #{error.class} - #{error.message}")
     Rails.logger.error(error.backtrace.join("\n")) if Rails.env.development?
   end
-  
+
   # Execute a block with a Redis connection
   # @yield [Redis] Redis connection
   # @return [Object] Result of the block
@@ -213,7 +213,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
   # @return [ConnectionPool] Redis connection pool
   def create_redis_pool(pool_size)
     redis_config = Rails.application.config.redis || {}
-    
+
     ConnectionPool.new(size: pool_size, timeout: DEFAULT_TIMEOUT) do
       Redis.new(
         host: redis_config[:host] || ENV['REDIS_HOST'] || 'localhost',
@@ -260,7 +260,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
         date: rate.date.to_s
       }
     end
-    
+
     MessagePack.pack(rates_data)
   end
 
@@ -275,7 +275,7 @@ class RedisExchangeRateRepository < ExchangeRateRepository
       # Attempt to parse as JSON (for backward compatibility)
       rates_data = JSON.parse(data, symbolize_names: true)
     end
-    
+
     rates_data.map do |rate_data|
       ExchangeRate.new(
         from: rate_data[:from],
@@ -285,4 +285,4 @@ class RedisExchangeRateRepository < ExchangeRateRepository
       )
     end
   end
-end 
+end

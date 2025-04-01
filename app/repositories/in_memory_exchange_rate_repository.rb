@@ -13,4 +13,4 @@ class InMemoryExchangeRateRepository < ExchangeRateRepository
     @metadata[date] = { cached_at: Time.now }
     rates
   end
-end 
+end

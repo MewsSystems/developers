@@ -14,16 +14,16 @@ class CNBProvider < BaseProvider
     # Use legacy error message format with provider_error_handler instead of perform_provider_operation
     Utils::ProviderHelper.provider_error_handler("CNB", "fetching data") do
       response = HttpFetcher.fetch(@url, {}, 3, "CNB")
-      
+
       # Add content type from configuration if not detected
       response[:content_type] ||= @content_type
-      
+
       response
     end
   end
-  
+
   private
-  
+
   # Provider-specific validation for CNB rates
   # @param rates [Array<ExchangeRate>] Exchange rates
   # @raise [ExchangeRateErrors::ValidationError] If rates are invalid
@@ -31,4 +31,4 @@ class CNBProvider < BaseProvider
     # Add any CNB-specific validation here if needed
     # Currently no CNB-specific validations
   end
-end 
+end

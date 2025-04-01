@@ -401,4 +401,32 @@ bundle exec rspec
 
 ```bash
 COVERAGE=true bundle exec rspec
+```
+
+### Code Style with RuboCop
+
+This project uses RuboCop to enforce consistent code style across the codebase. RuboCop configuration is specified in `.rubocop.yml`.
+
+To run RuboCop:
+
+```bash
+bundle exec rubocop
+```
+
+To automatically fix simple issues:
+
+```bash
+bundle exec rubocop -a
+```
+
+For safe auto-corrections only:
+
+```bash
+bundle exec rubocop --safe-auto-correct
+```
+
+To see only a specific cop's offenses:
+
+```bash
+bundle exec rubocop --only Style/StringLiterals
 ``` 

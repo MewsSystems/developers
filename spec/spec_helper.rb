@@ -57,35 +57,35 @@ RSpec.configure do |config|
 
   # Include test helpers
   config.include ExchangeRateTestHelper
-  
+
   # Disable real HTTP connections in tests
   WebMock.disable_net_connect!(allow_localhost: true)
-  
+
   # Setup
   config.before(:each) do
     # Reset test configuration before each test
     ExchangeRateTestConfig.reset
-    
+
     # Reset WebMock
     WebMock.reset!
-    
+
     # Stub common HTTP requests
     stub_request(:get, /www.cnb.cz/).
       to_return(status: 200, body: sample_cnb_text_data, headers: { 'Content-Type' => 'text/plain' })
-    
+
     stub_request(:get, /api.cnb.cz/).
       to_return(status: 200, body: sample_cnb_json_data, headers: { 'Content-Type' => 'application/json' })
-    
+
     stub_request(:get, /www.ecb.europa.eu/).
       to_return(status: 200, body: sample_ecb_xml_data, headers: { 'Content-Type' => 'application/xml' })
-    
+
     stub_request(:get, /example.com\/rates\.xml/).
       to_return(status: 200, body: sample_ecb_xml_data, headers: { 'Content-Type' => 'application/xml' })
-    
+
     stub_request(:get, /example.com\/rates$/).
       to_return(status: 200, body: sample_cnb_text_data, headers: { 'Content-Type' => 'text/plain' })
   end
-  
+
   # Expose methods for switching providers during tests
   config.extend Module.new {
     def with_provider(provider)
@@ -95,9 +95,9 @@ RSpec.configure do |config|
             example.run
           end
         end
-        
+
         yield
       end
     end
   }
-end 
+end

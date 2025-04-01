@@ -1,1 +1,1 @@
-Rails.configuration.settings = YAML.load_file(Rails.root.join("config/settings.yml"), aliases: true)[Rails.env] 
+Rails.configuration.settings = YAML.load_file(Rails.root.join("config/settings.yml"), aliases: true)[Rails.env]

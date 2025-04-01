@@ -24,4 +24,4 @@ RSpec.describe Currency do
     cur = Currency.new('JPY', 'Japanese Yen')
     expect(cur.to_s).to eq 'JPY'
   end
-end 
+end

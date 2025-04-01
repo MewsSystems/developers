@@ -7,7 +7,7 @@ module ExchangeRateTestHelper
     'JPY' => 0.19,
     'AUD' => 15.7
   }.freeze
-  
+
   # Create sample exchange rates for the given base currency
   # @param base_currency [String] Base currency code
   # @param date [Date] Date for the rates
@@ -22,7 +22,7 @@ module ExchangeRateTestHelper
       )
     end
   end
-  
+
   # Create sample ECB exchange rates (inverse of normal rates)
   # @param base_currency [String] Base currency code (usually EUR)
   # @param date [Date] Date for the rates
@@ -43,7 +43,7 @@ module ExchangeRateTestHelper
       )
     end
   end
-  
+
   # Sample CNB TXT format data
   def sample_cnb_txt_data(date = Date.today)
     formatted_date = date.strftime("%d.%m.%Y")
@@ -57,7 +57,7 @@ module ExchangeRateTestHelper
       USA|dollar|1|USD|21.500
     TXT
   end
-  
+
   # Sample ECB XML format data
   def sample_ecb_xml_data(date = Date.today)
     formatted_date = date.strftime("%Y-%m-%d")
@@ -80,19 +80,19 @@ module ExchangeRateTestHelper
       </gesmes:Envelope>
     XML
   end
-  
+
   # Sample provider JSON format data
   def sample_json_data(base_currency = 'CZK', date = Date.today)
     formatted_date = date.strftime("%Y-%m-%d")
     rates = base_currency == 'CZK' ? SAMPLE_RATES : create_sample_ecb_rates.map { |r| [r.to.code, r.rate] }.to_h
-    
+
     {
       date: formatted_date,
       base: base_currency,
       rates: rates
     }.to_json
   end
-  
+
   # Create HTTP response mock
   def mock_http_response(body, content_type, status = 200)
     {
@@ -103,13 +103,20 @@ module ExchangeRateTestHelper
       last_modified: Time.now.httpdate
     }
   end
-  
+
   # Sample CNB text data
   def sample_cnb_text_data(date = Date.today)
     formatted_date = date.strftime("%d.%m.%Y")
-    "#{formatted_date} #1\nCountry|Currency|Amount|Code|Rate\nAustralia|dollar|1|AUD|15.376\nCanada|dollar|1|CAD|18.798\nEuro|euro|1|EUR|26.760\nGreat Britain|pound|1|GBP|31.566\nJapan|yen|100|JPY|19.379\nUSA|dollar|1|USD|24.975"
+    "#{formatted_date} #1\n" \
+      "Country|Currency|Amount|Code|Rate\n" \
+      "Australia|dollar|1|AUD|15.376\n" \
+      "Canada|dollar|1|CAD|18.798\n" \
+      "Euro|euro|1|EUR|26.760\n" \
+      "Great Britain|pound|1|GBP|31.566\n" \
+      "Japan|yen|100|JPY|19.379\n" \
+      "USA|dollar|1|USD|24.975"
   end
-  
+
   # Sample CNB json data
   def sample_cnb_json_data(base_currency = 'CZK', date = Date.today)
     formatted_date = date.strftime("%Y-%m-%d")
@@ -126,4 +133,4 @@ module ExchangeRateTestHelper
       ]
     }.to_json
   end
-end 
+end
