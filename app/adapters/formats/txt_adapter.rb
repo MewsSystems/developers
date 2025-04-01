@@ -1,18 +1,18 @@
 require_relative '../base/base_adapter'
-require_relative '../../services/utils/format_helper'
+require_relative '../utilities/content_type_detector'
 
 class TxtAdapter < BaseAdapter
-  CONTENT_TYPES = Utils::FormatHelper::ContentTypeDetection::TXT_CONTENT_TYPES
+  CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::TXT_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Utils::FormatHelper::ContentTypeDetection.is_txt_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.is_txt_content_type?(content_type)
   end
 
   def supports_content?(content)
-    # If it's not XML or JSON, it's probably text
-    !Utils::FormatHelper::ContentTypeDetection.looks_like_xml?(content) &&
-    !Utils::FormatHelper::ContentTypeDetection.looks_like_json?(content) &&
-    content && !content.to_s.strip.empty?
+    # Accept text if it's not XML or JSON
+    !Adapters::Utilities::ContentTypeDetector.looks_like_xml?(content) &&
+    !Adapters::Utilities::ContentTypeDetector.looks_like_json?(content) &&
+    content.is_a?(String)
   end
 
   # Parse CNB-style TXT format data

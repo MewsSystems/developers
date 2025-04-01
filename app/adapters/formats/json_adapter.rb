@@ -1,16 +1,16 @@
 require 'json'
 require_relative '../base/base_adapter'
-require_relative '../../services/utils/format_helper'
+require_relative '../utilities/content_type_detector'
 
 class JsonAdapter < BaseAdapter
-  CONTENT_TYPES = Utils::FormatHelper::ContentTypeDetection::JSON_CONTENT_TYPES
+  CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::JSON_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Utils::FormatHelper::ContentTypeDetection.is_json_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.is_json_content_type?(content_type)
   end
 
   def supports_content?(content)
-    Utils::FormatHelper::ContentTypeDetection.looks_like_json?(content)
+    Adapters::Utilities::ContentTypeDetector.looks_like_json?(content)
   end
 
   # Parse JSON exchange rate data

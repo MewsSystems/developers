@@ -1,6 +1,24 @@
 module Adapters
   module Utilities
+    # This module has been deprecated.
+    # Use Utils::FormatHelper instead.
     module FormatUtilities
+      # This module is deprecated. Please use Utils::FormatHelper instead.
+      def self.method_missing(method_name, *args, &block)
+        if Utils::FormatHelper.respond_to?(method_name)
+          Utils::FormatHelper.send(method_name, *args, &block)
+        else
+          super
+        end
+      end
+
+      def self.respond_to_missing?(method_name, include_private = false)
+        Utils::FormatHelper.respond_to?(method_name) || super
+      end
+
+      # Forward the ContentTypeDetection module
+      ContentTypeDetection = Utils::FormatHelper::ContentTypeDetection
+
       # Extract date from a string in various formats
       # @param date_str [String] String to extract date from
       # @return [Date, nil] Extracted date or nil if not found
@@ -61,71 +79,6 @@ module Adapters
           data.encode('UTF-8', source_encoding)
         rescue Encoding::UndefinedConversionError, Encoding::InvalidByteSequenceError => e
           raise "Encoding conversion error: #{e.message}"
-        end
-      end
-
-      # Content type detection helpers
-      module ContentTypeDetection
-        XML_CONTENT_TYPES = [
-          'text/xml',
-          'application/xml',
-          'application/xhtml+xml'
-        ].freeze
-
-        JSON_CONTENT_TYPES = [
-          'application/json',
-          'text/json'
-        ].freeze
-
-        TXT_CONTENT_TYPES = [
-          'text/plain',
-          'text/txt',
-          'application/txt',
-          'text/csv'
-        ].freeze
-
-        def self.is_xml_content_type?(content_type)
-          return false unless content_type
-          XML_CONTENT_TYPES.any? { |type| content_type.to_s.downcase.include?(type) }
-        end
-
-        def self.is_json_content_type?(content_type)
-          return false unless content_type
-          JSON_CONTENT_TYPES.any? { |type| content_type.to_s.downcase.include?(type) }
-        end
-
-        def self.is_txt_content_type?(content_type)
-          return false unless content_type
-          TXT_CONTENT_TYPES.any? { |type| content_type.to_s.downcase.include?(type) }
-        end
-
-        def self.looks_like_xml?(content)
-          return false unless content
-          content = content.to_s.strip
-          content.start_with?('<?xml') || content.match?(/<[a-zA-Z][^>]*>/)
-        end
-
-        def self.looks_like_json?(content)
-          return false unless content
-          content = content.to_s.strip
-          return true if content.start_with?('{') && content.end_with?('}')
-          return true if content.start_with?('[') && content.end_with?(']')
-
-          # Try to parse as JSON as a final check
-          begin
-            require 'json'
-            JSON.parse(content)
-            return true
-          rescue
-            return false
-          end
-        end
-
-        def self.looks_like_txt?(content)
-          return false unless content
-
-          # If it's not XML or JSON, it's probably text
-          !looks_like_xml?(content) && !looks_like_json?(content)
         end
       end
     end

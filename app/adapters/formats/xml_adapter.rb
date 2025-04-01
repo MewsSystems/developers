@@ -1,16 +1,16 @@
 require 'nokogiri'
 require_relative '../base/base_adapter'
-require_relative '../../services/utils/format_helper'
+require_relative '../utilities/content_type_detector'
 
 class XmlAdapter < BaseAdapter
-  CONTENT_TYPES = Utils::FormatHelper::ContentTypeDetection::XML_CONTENT_TYPES
+  CONTENT_TYPES = Adapters::Utilities::ContentTypeDetector::XML_CONTENT_TYPES
 
   def supports_content_type?(content_type)
-    Utils::FormatHelper::ContentTypeDetection.is_xml_content_type?(content_type)
+    Adapters::Utilities::ContentTypeDetector.is_xml_content_type?(content_type)
   end
 
   def supports_content?(content)
-    Utils::FormatHelper::ContentTypeDetection.looks_like_xml?(content)
+    Adapters::Utilities::ContentTypeDetector.looks_like_xml?(content)
   end
 
   # Parse XML exchange rate data
