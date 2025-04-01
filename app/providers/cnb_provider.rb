@@ -13,7 +13,7 @@ class CNBProvider < BaseProvider
   def fetch_data
     # Use legacy error message format with provider_error_handler instead of perform_provider_operation
     Utils::ProviderHelper.provider_error_handler("CNB", "fetching data") do
-      response = HttpFetcher.fetch(@url, {}, 3, "CNB")
+      response = fetch_http_data(@url, {}, 3, "CNB")
 
       # Add content type from configuration if not detected
       response[:content_type] ||= @content_type
