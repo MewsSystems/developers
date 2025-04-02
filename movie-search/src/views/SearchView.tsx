@@ -1,11 +1,11 @@
-import {useState} from "react"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useSearchParams} from "react-router-dom"
 import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 
 export const SearchView = () => {
-    const [query, setQuery] = useState(() => sessionStorage.getItem("movieQuery") || "");
+    const [searchParams, setSearchParams] = useSearchParams("");
+    const query = searchParams.get("query") || ""
     const {data, fetchNextPage, hasNextPage, isError, error} = useMovies(query);
     const navigate = useNavigate();
 
@@ -20,8 +20,7 @@ export const SearchView = () => {
                 value={query}
                 onChange={(e) => {
                     const value = e.target.value
-                    setQuery(value)
-                    sessionStorage.setItem("movieQuery", value)
+                    setSearchParams({query: value})
                 }}
             />
             {isError && <ErrorMessage>❌ Error: {error.message}</ErrorMessage>}
