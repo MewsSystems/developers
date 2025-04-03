@@ -34,7 +34,7 @@ export const MovieDetailView = () => {
                 {movie.runtime > 0 && <p>⏳ <strong>Runtime:</strong> {movie.runtime} min</p>}
                 {movie.production_countries.length !== 0 &&
                     <p>🌎 <strong>Origin:</strong> {movie.production_countries[0].name}</p>}
-                <p>📅 <strong>Release Date:</strong> {formatDate(movie.release_date)}</p>
+                {movie.release_date && <p>📅 <strong>Release Date:</strong> {formatDate(movie.release_date)}</p>}
             </InfoContainer>
         </Container>
     )
