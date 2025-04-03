@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace ExchangeRateUpdater
 {
@@ -13,7 +14,19 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var exchangeRatesSource = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+
+            var client = new HttpClient();
+
+            var response = client.GetAsync(exchangeRatesSource).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
+
+            var allExchangeRates = ExchangeRateParser.Parse(result);
+
+            var ratesForCurrencies = allExchangeRates
+                .Where(rate => currencies.Contains(rate.SourceCurrency) && currencies.Contains(rate.TargetCurrency));
+
+            return ratesForCurrencies;
         }
     }
 }
