@@ -3,13 +3,14 @@ import {useMovieDetails} from "../api/useMovieDetails.ts"
 import styled from "styled-components"
 import {formatDate} from "../utils/formatDate.ts"
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
+import {PageNotFound} from "./PageNotFound.tsx";
 
 export const MovieDetailView = () => {
     const {id} = useParams()
     const {data: movie, isLoading, error} = useMovieDetails(Number(id))
 
     if (isLoading) return <p>Loading...</p>
-    if (error) return <p>Error loading movie details</p>
+    if (error) return <PageNotFound/>
     if (!movie) return <p>Movie not found</p>
 
     return (
