@@ -52,7 +52,7 @@ public class Program
     {
         var serviceCollection = new ServiceCollection();
 
-        // Add logging to log to the console
+        // Log to console
         serviceCollection.AddLogging(configure => configure.AddConsole());
 
         serviceCollection
