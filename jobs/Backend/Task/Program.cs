@@ -25,7 +25,7 @@ public class Program
         // DI setup
         var serviceProvider = ConfigureServices();
 
-        var exchangeRateProvider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
+        var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
 
         var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
@@ -56,7 +56,7 @@ public class Program
         serviceCollection.AddLogging(configure => configure.AddConsole());
 
         serviceCollection
-            .AddSingleton<ExchangeRateProvider>()
+            .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
             .AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
             {
                 client.Timeout = TimeSpan.FromSeconds(30); // 30 sec timeout

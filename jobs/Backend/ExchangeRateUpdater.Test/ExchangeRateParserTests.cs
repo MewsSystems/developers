@@ -16,7 +16,7 @@ public class ExchangeRateParserTests
                 Hungary|forint|100|HUF|6.219
                 ";
 
-        var result = ExchangeRateParser.Parse(input);
+        var result = ExchangeRateParser.Parse(input).ToList();
 
         result.Should().HaveCount(4);
         result[0].SourceCurrency.Code.Should().Be("CZK");

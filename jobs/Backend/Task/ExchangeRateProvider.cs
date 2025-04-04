@@ -1,17 +1,21 @@
-﻿namespace ExchangeRateUpdater;
+﻿using Microsoft.Extensions.Logging;
 
-public class ExchangeRateProvider
+namespace ExchangeRateUpdater;
+
+public class ExchangeRateProvider : IExchangeRateProvider
 {
     private const int CacheDurationInHours = 1;
     private DateTime _cacheExpiration;
     private IEnumerable<ExchangeRate> _cachedExchangeRates = Enumerable.Empty<ExchangeRate>();
 
     private readonly IExchangeRateService _exchangeRateService;
+    private readonly ILogger<ExchangeRateProvider> _logger;
 
-    public ExchangeRateProvider(IExchangeRateService exchangeRateService)
+    public ExchangeRateProvider(IExchangeRateService exchangeRateService, ILogger<ExchangeRateProvider> logger)
     {
         _exchangeRateService = exchangeRateService;
         _cacheExpiration = DateTime.MinValue;
+        _logger = logger;
     }
 
     /// <summary>
@@ -24,9 +28,19 @@ public class ExchangeRateProvider
     {
         if (DateTime.UtcNow > _cacheExpiration)
         {
-            var result = await _exchangeRateService.GetExchangeRatesData();
+            try
+            {
+                var result = await _exchangeRateService.GetExchangeRatesData();
 
-            _cachedExchangeRates = ExchangeRateParser.Parse(result ?? string.Empty);
+                _cachedExchangeRates = ExchangeRateParser.Parse(result ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving exchange rates: {ex.Message}");
+
+                return Enumerable.Empty<ExchangeRate>();
+            }
+
             _cacheExpiration = DateTime.UtcNow.AddHours(CacheDurationInHours);
         }
 

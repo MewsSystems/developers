@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace ExchangeRateUpdater.Tests;
@@ -12,7 +13,7 @@ public class ExchangeRateProviderTests
     public ExchangeRateProviderTests()
     {
         _mockExchangeRateService = new Mock<IExchangeRateService>();
-        _exchangeRateProvider = new ExchangeRateProvider(_mockExchangeRateService.Object);
+        _exchangeRateProvider = new ExchangeRateProvider(_mockExchangeRateService.Object, new Mock<ILogger<ExchangeRateProvider>>().Object);
 
         _currencies = new List<Currency>
             {

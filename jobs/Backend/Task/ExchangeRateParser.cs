@@ -4,8 +4,9 @@ namespace ExchangeRateUpdater;
 
 public class ExchangeRateParser
 {
-    public static List<ExchangeRate> Parse(string data)
+    public static IEnumerable<ExchangeRate> Parse(string data)
     {
+
         var lines = data.Trim().Split('\n');
         var currencyLines = lines.Skip(2); // skip headers
 
