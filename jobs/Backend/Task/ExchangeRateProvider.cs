@@ -2,11 +2,13 @@
 
 public class ExchangeRateProvider
 {
-    private readonly ExchangeRateService _exchangeRateService;
-    private IEnumerable<ExchangeRate> _cachedExchangeRates;
+    private const int CacheDurationInHours = 1;
     private DateTime _cacheExpiration;
+    private IEnumerable<ExchangeRate> _cachedExchangeRates = Enumerable.Empty<ExchangeRate>();
 
-    public ExchangeRateProvider(ExchangeRateService exchangeRateService)
+    private readonly IExchangeRateService _exchangeRateService;
+
+    public ExchangeRateProvider(IExchangeRateService exchangeRateService)
     {
         _exchangeRateService = exchangeRateService;
         _cacheExpiration = DateTime.MinValue;
@@ -20,16 +22,15 @@ public class ExchangeRateProvider
     /// </summary>
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        if (_cachedExchangeRates != null && DateTime.UtcNow < _cacheExpiration)
+        if (DateTime.UtcNow > _cacheExpiration)
         {
-            return _cachedExchangeRates.Where(rate => currencies.Contains(rate.SourceCurrency) && currencies.Contains(rate.TargetCurrency));
+            var result = await _exchangeRateService.GetExchangeRatesData();
+
+            _cachedExchangeRates = ExchangeRateParser.Parse(result ?? string.Empty);
+            _cacheExpiration = DateTime.UtcNow.AddHours(CacheDurationInHours);
         }
 
-        var exchangeRatesSource = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
-        var result = await _exchangeRateService.GetExchangeRatesData(exchangeRatesSource);
-        _cachedExchangeRates = ExchangeRateParser.Parse(result);
-        _cacheExpiration = DateTime.UtcNow.AddHours(1);
-
-        return _cachedExchangeRates.Where(rate => currencies.Contains(rate.SourceCurrency) && currencies.Contains(rate.TargetCurrency));
+        return _cachedExchangeRates
+            .Where(rate => currencies.Contains(rate.SourceCurrency) && currencies.Contains(rate.TargetCurrency));
     }
 }

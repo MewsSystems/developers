@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace ExchangeRateUpdater;
 
-public static class Program
+public class Program
 {
     private static readonly IEnumerable<Currency> currencies = new[]
     {
@@ -24,11 +27,14 @@ public static class Program
 
         var exchangeRateProvider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
 
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
         try
         {
             var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());
@@ -36,19 +42,27 @@ public static class Program
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+            logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
         }
 
         Console.ReadLine();
     }
 
-    private static ServiceProvider ConfigureServices()
+    private static IServiceProvider ConfigureServices()
     {
         var serviceCollection = new ServiceCollection();
 
+        // Add logging to log to the console
+        serviceCollection.AddLogging(configure => configure.AddConsole());
+
         serviceCollection
             .AddSingleton<ExchangeRateProvider>()
-            .AddHttpClient<ExchangeRateService>();
+            .AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(30); // 30 sec timeout
+            })
+            .AddPolicyHandler(HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt)));
 
         return serviceCollection.BuildServiceProvider();
     }
