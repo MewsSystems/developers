@@ -33,18 +33,3 @@ public class ExchangeRateProvider
         return _cachedExchangeRates.Where(rate => currencies.Contains(rate.SourceCurrency) && currencies.Contains(rate.TargetCurrency));
     }
 }
-
-public class ExchangeRateService
-{
-    private readonly HttpClient _httpClient;
-
-    public ExchangeRateService()
-    {
-        _httpClient = new HttpClient();
-    }
-
-    public async Task<string> GetExchangeRatesData(string url)
-    {
-        return await _httpClient.GetStringAsync(url);
-    }
-}

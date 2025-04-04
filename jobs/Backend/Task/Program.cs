@@ -19,17 +19,14 @@ public static class Program
 
     public static async Task Main(string[] args)
     {
-        // Set up Dependency Injection
-        var serviceProvider = new ServiceCollection()
-            .AddSingleton<ExchangeRateService>()
-            .AddSingleton<ExchangeRateProvider>()
-            .BuildServiceProvider();
+        // DI setup
+        var serviceProvider = ConfigureServices();
 
-        var provider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
+        var exchangeRateProvider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
 
         try
         {
-            var rates = await provider.GetExchangeRates(currencies);
+            var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
@@ -43,5 +40,16 @@ public static class Program
         }
 
         Console.ReadLine();
+    }
+
+    private static ServiceProvider ConfigureServices()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection
+            .AddSingleton<ExchangeRateProvider>()
+            .AddHttpClient<ExchangeRateService>();
+
+        return serviceCollection.BuildServiceProvider();
     }
 }
