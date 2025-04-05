@@ -18,7 +18,7 @@ BELOW IS A LIST OF IMPROVEMENTS MADE BASED ON FEEDBACK BY A MORE SENIOR DEVELOPE
 
 4. TYPE USAGE
 
-- Depth of Types: I did not use any advanced types, but am grateful for the suggestion to learn more about using TS in dynamic API responses and form handling.
+- Depth of Types: I did not use any advanced types, but will be aiming to learn more about using TS in dynamic API responses and form handling.
 
 5. CSS AND STYLING
 
