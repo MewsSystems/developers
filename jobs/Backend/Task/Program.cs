@@ -27,7 +27,6 @@ public static class Program
         IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
-
         
         var services = new ServiceCollection();
         

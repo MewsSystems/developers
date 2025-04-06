@@ -30,15 +30,12 @@ public class ExchangeRateProvider : IExchangeRateProvider
     
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        currencies = currencies.ToList();
         if (!currencies.Any())
             return Enumerable.Empty<ExchangeRate>();
         
         var dailyExchangeRates = await GetDailyExchanges();
-        dailyExchangeRates = dailyExchangeRates.ToList();
         
         var monthlyExchanges = await GetMonthlyExchanges();
-        monthlyExchanges = monthlyExchanges.ToList();
         
         var exchangeRates = new List<ExchangeRate>(dailyExchangeRates);
         
@@ -119,10 +116,8 @@ public class ExchangeRateProvider : IExchangeRateProvider
 
     private IEnumerable<ExchangeRate> GetSelectedExchangeRates(IEnumerable<Currency> currencies, IEnumerable<ExchangeRate> exchanges)
     {
-        var exchangeList = exchanges.ToList();
-
         return currencies.Select(currency => 
-                exchangeList.FirstOrDefault(exchange => exchange.SourceCurrency.Code == currency.Code))
+                exchanges.FirstOrDefault(exchange => exchange.SourceCurrency.Code == currency.Code))
             .Where(exchange => exchange != null)
             .ToList();
     }
