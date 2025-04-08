@@ -4,62 +4,56 @@ using System.IO;
 using System;
 using System.Net.Http;
 using System.Globalization;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.Json.Nodes;
 
 namespace ExchangeRateUpdater
 {
 	public class ExchangeRateProvider
 	{
-		/// <summary>
-		/// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
-		/// by the source, do not return calculated exchange rates. E.g. if the source contains "CZK/USD" but not "USD/CZK",
-		/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
-		/// some of the currencies, ignore them.
-		/// </summary>
-
-		static private string OpenFile(string path)
+		private static async Task<string> FetchRates()
 		{
-			if (File.Exists(path) == false)
+			using HttpClient client = new HttpClient();
+			string today = DateTime.Today.ToString("yyyy-MM-dd");
+			string url = "https://api.cnb.cz/cnbapi/exrates/daily?date=" + today;
+
+			try
 			{
-				throw new Exception("invalid file: file does not exist");
+				HttpResponseMessage response = await client.GetAsync(url);
+				if (response.IsSuccessStatusCode == false)
+				{
+					throw new Exception($"Response code {response.StatusCode}");
+				}
+				return await response.Content.ReadAsStringAsync();
 			}
-			string content = File.ReadAllText(path);
-			return content;
+			catch (Exception ex)
+			{
+				throw new Exception($"error while fetching rates: {ex.Message}");
+			}
 		}
-		static IEnumerable<ExchangeRate> parseContent(string content)
+
+		private static IEnumerable<ExchangeRate> ParseRates(string rawJson)
 		{
 			var rates = new List<ExchangeRate>();
-			string[] entries = content.Split('\n');
 
-			if (entries.Length <= 1)
+			try
 			{
-				throw new Exception("invalid rate syntax: less than 2 entries");
-			}
+				using JsonDocument json = JsonDocument.Parse(rawJson);
+				IEnumerable<JsonElement> ratesArray = json.RootElement.GetProperty("rates").EnumerateArray();
 
-			string[] header = entries[0].Split('|');
-			string[] body = entries[1].Split('|');
-
-			if (header.Length != body.Length)
-			{
-				throw new Exception("invalid rate syntax: header length is not equal to body length");
-			}
-			for (int i = 1; i < body.Length; i++)
-			{
-				try
+				foreach (JsonElement rate in ratesArray)
 				{
-					string[] splitHeader = header[i].Split(' '); // splitHeader[0] = Currency | splitHeader[1] = count
-					if (splitHeader.Length != 2)
-						throw new Exception($"\" {header[i]} \" contains more than 1 space");
+					string code = rate.GetProperty("currencyCode").GetString();
+					decimal totalRate = (decimal)(rate.GetProperty("rate").GetDouble() * rate.GetProperty("amount").GetInt64());
 
-					string sourceCurrency = "CZK";
-					string targetCurrency = splitHeader[1];
-					decimal rate = (decimal)float.Parse(splitHeader[0]) * (decimal)float.Parse(body[i]); // convert to decimal later because decimal.Parse keeps breaking :))
-
-					rates.Add(new ExchangeRate(sourceCurrency, targetCurrency, rate));
+					rates.Add(new ExchangeRate("CZK", code, totalRate));
 				}
-				catch (Exception e)
-				{
-					throw new Exception($"invalid rate syntax @ \" {header[i]} ~ {body[i]}\"\n {e.Message}");
-				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception($"error while parsing rates: {ex.Message}");
 			}
 			return rates;
 		}
@@ -68,14 +62,15 @@ namespace ExchangeRateUpdater
 		{
 			try
 			{
-				string content = OpenFile("rates.txt");
-				IEnumerable<ExchangeRate> rates = parseContent(content);
+				var rawJson = FetchRates();
+				rawJson.Wait();
+				IEnumerable<ExchangeRate> rates = ParseRates(rawJson.Result);
 				return rates;
 
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-				Console.Error.WriteLine(e);
+				Console.Error.WriteLine(ex);
 			}
 			return Enumerable.Empty<ExchangeRate>();
 		}
