@@ -23,7 +23,7 @@ namespace ExchangeRateUpdater
 			foreach (string line in lines){
 				string[] parts = line.Split('|');
 				if (parts.Length == 5 && parts[3].Length == 3){
-					if (currencies.Select(c => c.Code).Contains(parts[3])){
+					if (currencies.FirstOrDefault(c => c.Code == parts[3]) != null){
 						Currency sourceCurrency = new Currency(parts[3]);
 						int sourceAmount = int.Parse(parts[2]);
 						decimal targetRate = decimal.Parse(parts[4]);
