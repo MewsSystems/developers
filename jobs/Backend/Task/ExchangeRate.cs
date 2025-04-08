@@ -2,26 +2,24 @@
 {
     public class ExchangeRate
     {
-        public ExchangeRate(Currency SourceCurrency, decimal sourceAmount, decimal targetValue)
-        {
-            SourceCurrency = sourceCurrency;
-            TargetCurrency = "CZK";
-            sourceAmount = sourceAmount;
-            targetValue = targetValue;
+        public ExchangeRate(Currency sourceCurrency, int sourceAmount, decimal targetRate){
+            this.sourceCurrency = sourceCurrency;
+            this.sourceAmount = sourceAmount;
+            this.targetCurrency = new Currency("CZK");
+            this.targetRate = targetRate;
         }
 
-        public Currency SourceCurrency { get; }
+        public Currency sourceCurrency { get; }
 
-        public Currency TargetCurrency { get; }
+        public Currency targetCurrency { get; }
 
-        public decimal sourceAmount { get; }
+        public int sourceAmount { get; }
 
-        public decimal targetValue { get; }
+        public decimal targetRate { get; }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             //handle Currency("XYZ") here?
-            return $"{SourceCurrency}/{TargetCurrency}={sourceAmount}/{targetValue}";
+            return $"{sourceCurrency}/{targetCurrency}={sourceAmount}/{targetRate}";
         }
     }
 }
