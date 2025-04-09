@@ -1,0 +1,22 @@
+{
+  "rates": [
+    {
+      "validFor": "2025-04-08",
+      "order": 69,
+      "country": "Austr�lie",
+      "currency": "dolar",
+      "amount": 1,
+      "currencyCode": "AUD",
+      "rate": 13.899
+    },
+    {
+      "validFor": "2025-04-08",
+      "order": 69,
+      "country": "Braz�lie",
+      "currency": "real",
+      "amount": 1,
+      "currencyCode": "BRL",
+      "rate": 3.909
+    }
+  ]
+}

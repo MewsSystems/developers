@@ -1,0 +1,7 @@
+.vs
+obj
+TestResults
+ExchangeRateProviderService/obj
+ExchangeRateProviderService/bin
+ExchangeRateProviderService.UnitTests/obj
+ExchangeRateProviderService.UnitTests/bin

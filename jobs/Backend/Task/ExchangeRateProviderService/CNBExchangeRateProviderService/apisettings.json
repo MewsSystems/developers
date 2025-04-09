@@ -1,0 +1,7 @@
+{
+  "ApiClientOptions": {
+    "Scheme": "https",
+    "Host": "api.cnb.cz",
+    "DailyRatesEndpoint": "cnbapi/exrates/daily"
+  }
+}
