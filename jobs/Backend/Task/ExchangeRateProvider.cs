@@ -31,41 +31,42 @@ namespace ExchangeRateUpdater
 			_httpClient = new HttpClient();
 		}
 
-		private static List<ExchangeRate> GetRateFromInputFile(string content, IEnumerable<Currency> currencies, List<ExchangeRate> exchangeRates)
+		private static List<ExchangeRate> GetRateFromInputFile(string content, IEnumerable<Currency> currencies)
 		{
 			if (string.IsNullOrEmpty(content))
 				throw new ArgumentException("Content cannot be null or empty.", nameof(content));
+			if (currencies == null)
+				throw new ArgumentNullException(nameof(currencies), "Currencies cannot be null.");
 
+			var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code));
+			var exchangeRates = new List<ExchangeRate>();
 			string[] lines = content.Split('\n');
 			foreach (string line in lines)
 			{
 				string[] parts = line.Split('|');
 				if (parts.Length == 5 && parts[3].Length == 3)
 				{
-					if (currencies.FirstOrDefault(c => c.Code == parts[3]) != null)
+					if (currencyCodes.Contains(parts[3]))
 					{
-						int sourceAmount;
-						decimal targetRate;
-						if (!int.TryParse(parts[2], out sourceAmount) || !decimal.TryParse(parts[4], out targetRate))
+						if (int.TryParse(parts[2], out int sourceAmount) && decimal.TryParse(parts[4], out decimal targetRate))
 						{
-							continue;
+							var sourceCurrency = new Currency(parts[3]);
+							var exchangeRate = new ExchangeRate(sourceCurrency, sourceAmount, targetRate);
+							exchangeRates.Add(exchangeRate);
 						}
-						var sourceCurrency = new Currency(parts[3]);
-						var exchangeRate = new ExchangeRate(sourceCurrency, sourceAmount, targetRate);
-						exchangeRates.Add(exchangeRate);
 					}
 				}
 			}
 			return exchangeRates;
 		}
 
-		private async Task<List<ExchangeRate>> FetchAndProcessRatesAsync(string url, IEnumerable<Currency> currencies, List<ExchangeRate> exchangeRates)
+		private async Task<List<ExchangeRate>> FetchAndProcessRatesAsync(string url, IEnumerable<Currency> currencies)
 		{
 			HttpResponseMessage response = await _httpClient.GetAsync(url);
 			if (response.IsSuccessStatusCode)
 			{
 				string content = await response.Content.ReadAsStringAsync();
-				return GetRateFromInputFile(content, currencies, exchangeRates);
+				return GetRateFromInputFile(content, currencies);
 			}
 			else
 			{
@@ -77,11 +78,13 @@ namespace ExchangeRateUpdater
 		{
 			if (currencies == null || !currencies.Any())
 				return Enumerable.Empty<ExchangeRate>().ToList();
-			var exchangeRates = new List<ExchangeRate>();
-			exchangeRates = await FetchAndProcessRatesAsync(_CommonCurrenciesUrl, currencies, exchangeRates);
-			if (currencies.Count() == exchangeRates.Count)
-				return exchangeRates;
-			exchangeRates = await FetchAndProcessRatesAsync(_OtherCurrenciesUrl, currencies, exchangeRates);
+
+			var exchangeRates = await FetchAndProcessRatesAsync(_CommonCurrenciesUrl, currencies);
+			if (currencies.Count() > exchangeRates.Count)
+			{
+				var additionalRates = await FetchAndProcessRatesAsync(_OtherCurrenciesUrl, currencies);
+				exchangeRates.AddRange(additionalRates);
+			}
 			return exchangeRates;
 		}
 	}
