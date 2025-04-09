@@ -19,7 +19,7 @@ namespace ExchangeRateUpdater
 			new Currency("XYZ")
 		};
 
-		public static async Task Main(string[] args)
+		public static async Task Main()
 		{
 			try
 			{
