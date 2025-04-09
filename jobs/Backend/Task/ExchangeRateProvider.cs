@@ -14,6 +14,14 @@ namespace ExchangeRateUpdater
 		/// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
 		/// some of the currencies, ignore them.
 		/// </summary>
+
+		private readonly HttpClient	_httpClient;
+
+		public ExchangeRateProvider()
+		{
+			_httpClient = new HttpClient();
+		}
+
 		private static List<ExchangeRate> GetRateFromInputFile(string content, IEnumerable<Currency> currencies, List<ExchangeRate> exchangeRates)
 		{
 			if (exchangeRates == null)
@@ -29,15 +37,33 @@ namespace ExchangeRateUpdater
 				{
 					if (currencies.FirstOrDefault(c => c.Code == parts[3]) != null)
 					{
+						int sourceAmount;
+						decimal targetRate;
+						if (!int.TryParse(parts[2], out sourceAmount) || !decimal.TryParse(parts[4], out targetRate))
+						{
+							continue;
+						}
 						var sourceCurrency = new Currency(parts[3]);
-						int sourceAmount = int.Parse(parts[2]);
-						decimal targetRate = decimal.Parse(parts[4]);
 						var exchangeRate = new ExchangeRate(sourceCurrency, sourceAmount, targetRate);
 						exchangeRates.Add(exchangeRate);
 					}
 				}
 			}
 			return exchangeRates;
+		}
+
+		private async Task<List<ExchangeRate>> FetchAndProcessRatesAsync(string url, IEnumerable<Currency> currencies, List<ExchangeRate> exchangeRates)
+		{
+			HttpResponseMessage response = await _httpClient.GetAsync(url);
+			if (response.IsSuccessStatusCode)
+			{
+				string content = await response.Content.ReadAsStringAsync();
+				return GetRateFromInputFile(content, currencies, exchangeRates);
+			}
+			else
+			{
+				throw new Exception($"Failed to retrieve data from {url}");
+			}
 		}
 
 		public async Task<List<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
@@ -47,25 +73,10 @@ namespace ExchangeRateUpdater
 			var exchangeRates = new List<ExchangeRate>();
 			string sourceCommonCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
 			string sourceOtherCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt";
-			var httpClient = new HttpClient();
-			HttpResponseMessage response = await httpClient.GetAsync(sourceCommonCurrencies);
-			if (response.IsSuccessStatusCode)
-			{
-				string content = await response.Content.ReadAsStringAsync();
-				exchangeRates = GetRateFromInputFile(content, currencies, exchangeRates);
-			}
-			else
-				throw new Exception($"Failed to retrieve data from {sourceCommonCurrencies}");
-			if (currencies.Count() == exchangeRates.Count())
+			exchangeRates = await FetchAndProcessRatesAsync(sourceCommonCurrencies, currencies, exchangeRates);
+			if (currencies.Count() == exchangeRates.Count)
 				return exchangeRates;
-			response = await httpClient.GetAsync(sourceOtherCurrencies);
-			if (response.IsSuccessStatusCode)
-			{
-				string content = await response.Content.ReadAsStringAsync();
-				exchangeRates = GetRateFromInputFile(content, currencies, exchangeRates);
-			}
-			else
-				throw new Exception($"Failed to retrieve data from {sourceOtherCurrencies}");
+			exchangeRates = await FetchAndProcessRatesAsync(sourceOtherCurrencies, currencies, exchangeRates);
 			return exchangeRates;
 		}
 	}

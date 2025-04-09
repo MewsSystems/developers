@@ -6,7 +6,7 @@
 		{
 			this.sourceCurrency = sourceCurrency;
 			this.sourceAmount = sourceAmount;
-			this.targetCurrency = new Currency("CZK");
+			targetCurrency = new Currency("CZK");
 			this.targetRate = targetRate;
 		}
 
