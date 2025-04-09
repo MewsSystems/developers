@@ -1,1 +1,5 @@
-﻿USD | EUR | RUB
+﻿USD, EUR, JPY, GBP, CHF
+CAD, AUD, CNY, SEK, NZD
+DKK, NOK, PLN, HUF, INR
+BRL, ZAR, MXN, SGD
+JunkValue, Test
