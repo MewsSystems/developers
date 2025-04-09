@@ -25,6 +25,7 @@ namespace ExchangeRateUpdater
 			string commonCurrenciesUrl;
 			string otherCurrenciesUrl;
 
+			// Get the exchange rate source URLs from the configuration file
 			try
 			{
 				var configuration = new ConfigurationBuilder()
@@ -40,7 +41,7 @@ namespace ExchangeRateUpdater
 				return;
 			}
 
-
+			// Execute the exchange rate provider and retrieve the exchange rates
 			try
 			{
 				var provider = new ExchangeRateProvider(commonCurrenciesUrl, otherCurrenciesUrl);
