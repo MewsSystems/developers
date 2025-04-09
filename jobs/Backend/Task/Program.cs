@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -19,14 +19,14 @@ namespace ExchangeRateUpdater
 			new Currency("XYZ")
 		};
 
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			try
 			{
 				var provider = new ExchangeRateProvider();
-				var rates = provider.GetExchangeRates(currencies);
+				var rates = await provider.GetExchangeRates(currencies);
 
-				Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+				Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
 				foreach (var rate in rates)
 				{
 					Console.WriteLine(rate.ToString());
@@ -36,7 +36,6 @@ namespace ExchangeRateUpdater
 			{
 				Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
 			}
-			return;
 		}
 	}
 }

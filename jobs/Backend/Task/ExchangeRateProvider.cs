@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
@@ -39,7 +40,7 @@ namespace ExchangeRateUpdater
 			return exchangeRates;
 		}
 
-		public List<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+		public async Task<List<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
 		{
 			if (currencies == null || !currencies.Any())
 				return Enumerable.Empty<ExchangeRate>().ToList();
@@ -47,20 +48,20 @@ namespace ExchangeRateUpdater
 			string sourceCommonCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
 			string sourceOtherCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt";
 			using HttpClient httpClient = new HttpClient();
-			HttpResponseMessage response = httpClient.GetAsync(sourceCommonCurrencies).Result;
+			HttpResponseMessage response = await httpClient.GetAsync(sourceCommonCurrencies);
 			if (response.IsSuccessStatusCode)
 			{
-				string content = response.Content.ReadAsStringAsync().Result;
+				string content = await response.Content.ReadAsStringAsync();
 				exchangeRates = GetRateFromInputFile(content, currencies, exchangeRates);
 			}
 			else
 				throw new Exception($"Failed to retrieve data from {sourceCommonCurrencies}");
 			if (currencies.Count() == exchangeRates.Count())
 				return exchangeRates;
-			response = httpClient.GetAsync(sourceOtherCurrencies).Result;
+			response = await httpClient.GetAsync(sourceOtherCurrencies);
 			if (response.IsSuccessStatusCode)
 			{
-				string content = response.Content.ReadAsStringAsync().Result;
+				string content = await response.Content.ReadAsStringAsync();
 				exchangeRates = GetRateFromInputFile(content, currencies, exchangeRates);
 			}
 			else
