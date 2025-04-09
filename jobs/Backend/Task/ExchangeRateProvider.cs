@@ -29,10 +29,10 @@ namespace ExchangeRateUpdater
 				{
 					if (currencies.FirstOrDefault(c => c.Code == parts[3]) != null)
 					{
-						Currency sourceCurrency = new Currency(parts[3]);
+						var sourceCurrency = new Currency(parts[3]);
 						int sourceAmount = int.Parse(parts[2]);
 						decimal targetRate = decimal.Parse(parts[4]);
-						ExchangeRate exchangeRate = new ExchangeRate(sourceCurrency, sourceAmount, targetRate);
+						var exchangeRate = new ExchangeRate(sourceCurrency, sourceAmount, targetRate);
 						exchangeRates.Add(exchangeRate);
 					}
 				}
@@ -44,10 +44,10 @@ namespace ExchangeRateUpdater
 		{
 			if (currencies == null || !currencies.Any())
 				return Enumerable.Empty<ExchangeRate>().ToList();
-			List<ExchangeRate> exchangeRates = new List<ExchangeRate>();
+			var exchangeRates = new List<ExchangeRate>();
 			string sourceCommonCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
 			string sourceOtherCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt";
-			using HttpClient httpClient = new HttpClient();
+			var httpClient = new HttpClient();
 			HttpResponseMessage response = await httpClient.GetAsync(sourceCommonCurrencies);
 			if (response.IsSuccessStatusCode)
 			{
