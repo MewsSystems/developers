@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.IO;
-using System;
 using System.Net.Http;
-using System.Globalization;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Reflection.Metadata.Ecma335;
-using System.Text.Json.Nodes;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
 {
@@ -34,7 +30,8 @@ namespace ExchangeRateUpdater
 			}
 		}
 
-		private static void checkMissedCurrencies(Dictionary<Currency, bool> currencies)
+		// checks for any currencies that could not be found and prints a warning
+		private static void CheckMissedCurrencies(Dictionary<Currency, bool> currencies)
 		{
 			foreach (var currency in currencies)
 			{
@@ -47,10 +44,9 @@ namespace ExchangeRateUpdater
 
 		private static IEnumerable<ExchangeRate> ParseRates(string rawJson, Dictionary<Currency, bool> currencies)
 		{
-			var rates = new List<ExchangeRate>();
-
 			try
 			{
+				var rates = new List<ExchangeRate>();
 				using JsonDocument json = JsonDocument.Parse(rawJson);
 				IEnumerable<JsonElement> ratesArray = json.RootElement.GetProperty("rates").EnumerateArray();
 
@@ -65,12 +61,12 @@ namespace ExchangeRateUpdater
 					rates.Add(new ExchangeRate(sourceCurrency, targetCurrency, totalRate));
 					currencies[targetCurrency] = true;
 				}
+				return rates;
 			}
 			catch (Exception ex)
 			{
 				throw new Exception($"error while parsing rates: '{ex.Message}'");
 			}
-			return rates;
 		}
 
 		public IEnumerable<ExchangeRate> GetExchangeRates(Dictionary<Currency, bool> currencies)
@@ -78,7 +74,7 @@ namespace ExchangeRateUpdater
 			var rawJson = FetchRates();
 			rawJson.Wait();
 			IEnumerable<ExchangeRate> rates = ParseRates(rawJson.Result, currencies);
-			checkMissedCurrencies(currencies);
+			CheckMissedCurrencies(currencies);
 			return rates;
 		}
 	}

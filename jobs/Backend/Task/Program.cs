@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static Dictionary<Currency, bool> getCurrencies(string path)
+        private static Dictionary<Currency, bool> GetCurrencies(string path)
         {
             var currencies = new Dictionary<Currency, bool>();
             if (File.Exists(path) == false)
@@ -25,10 +25,11 @@ namespace ExchangeRateUpdater
 
 		public static void Main(string[] args)
         {
-            try
+			try
             {
-                var provider = new ExchangeRateProvider();
-                var currencies = getCurrencies("currencies.txt");
+				string filePath = args.Length < 1 ? "currencies.txt" : args[0];
+				var provider = new ExchangeRateProvider();
+                var currencies = GetCurrencies(filePath);
 				var rates = provider.GetExchangeRates(currencies);
 
 				Tools.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:", ConsoleColor.Green);
