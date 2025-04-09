@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater
 {
@@ -21,9 +22,28 @@ namespace ExchangeRateUpdater
 
 		public static async Task Main()
 		{
+			string commonCurrenciesUrl;
+			string otherCurrenciesUrl;
+
 			try
 			{
-				var provider = new ExchangeRateProvider();
+				var configuration = new ConfigurationBuilder()
+					.AddJsonFile("appsettings.json")
+					.Build();
+
+				commonCurrenciesUrl = configuration["ExchangeRateSources:CommonCurrencies"];
+				otherCurrenciesUrl = configuration["ExchangeRateSources:OtherCurrencies"];
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine($"Could not read configuration: '{e.Message}'.");
+				return;
+			}
+
+
+			try
+			{
+				var provider = new ExchangeRateProvider(commonCurrenciesUrl, otherCurrenciesUrl);
 				var rates = await provider.GetExchangeRates(currencies);
 
 				Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");

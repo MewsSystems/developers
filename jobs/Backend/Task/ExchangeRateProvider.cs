@@ -15,17 +15,24 @@ namespace ExchangeRateUpdater
 		/// some of the currencies, ignore them.
 		/// </summary>
 
-		private readonly HttpClient	_httpClient;
+		private readonly HttpClient _httpClient;
+		private readonly string _CommonCurrenciesUrl;
+		private readonly string _OtherCurrenciesUrl;
 
-		public ExchangeRateProvider()
+		public ExchangeRateProvider(string commonCurrenciesUrl, string otherCurrenciesUrl)
 		{
+			if (string.IsNullOrEmpty(commonCurrenciesUrl))
+				throw new ArgumentException("Common currencies URL cannot be null or empty.", nameof(commonCurrenciesUrl));
+			if (string.IsNullOrEmpty(otherCurrenciesUrl))
+				throw new ArgumentException("Other currencies URL cannot be null or empty.", nameof(otherCurrenciesUrl));
+
+			_CommonCurrenciesUrl = commonCurrenciesUrl;
+			_OtherCurrenciesUrl = otherCurrenciesUrl;
 			_httpClient = new HttpClient();
 		}
 
 		private static List<ExchangeRate> GetRateFromInputFile(string content, IEnumerable<Currency> currencies, List<ExchangeRate> exchangeRates)
 		{
-			if (exchangeRates == null)
-				throw new ArgumentNullException(nameof(exchangeRates));
 			if (string.IsNullOrEmpty(content))
 				throw new ArgumentException("Content cannot be null or empty.", nameof(content));
 
@@ -71,12 +78,10 @@ namespace ExchangeRateUpdater
 			if (currencies == null || !currencies.Any())
 				return Enumerable.Empty<ExchangeRate>().ToList();
 			var exchangeRates = new List<ExchangeRate>();
-			string sourceCommonCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
-			string sourceOtherCurrencies = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/fx-rates-of-other-currencies/fx-rates-of-other-currencies/fx_rates.txt";
-			exchangeRates = await FetchAndProcessRatesAsync(sourceCommonCurrencies, currencies, exchangeRates);
+			exchangeRates = await FetchAndProcessRatesAsync(_CommonCurrenciesUrl, currencies, exchangeRates);
 			if (currencies.Count() == exchangeRates.Count)
 				return exchangeRates;
-			exchangeRates = await FetchAndProcessRatesAsync(sourceOtherCurrencies, currencies, exchangeRates);
+			exchangeRates = await FetchAndProcessRatesAsync(_OtherCurrenciesUrl, currencies, exchangeRates);
 			return exchangeRates;
 		}
 	}
