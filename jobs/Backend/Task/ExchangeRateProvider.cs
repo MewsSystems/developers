@@ -30,11 +30,22 @@ namespace ExchangeRateUpdater
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"error while fetching rates: {ex.Message}");
+				throw new Exception($"error while fetching rates: '{ex.Message}'");
 			}
 		}
 
-		private static IEnumerable<ExchangeRate> ParseRates(string rawJson)
+		private static void checkMissedCurrencies(Dictionary<Currency, bool> currencies)
+		{
+			foreach (var currency in currencies)
+			{
+				if (currency.Value == false)
+				{
+					Tools.WriteLine($"WARNING: could not fetch \"{currency.Key.ToString()}\"", ConsoleColor.Yellow);
+				}
+			}
+		}
+
+		private static IEnumerable<ExchangeRate> ParseRates(string rawJson, Dictionary<Currency, bool> currencies)
 		{
 			var rates = new List<ExchangeRate>();
 
@@ -45,34 +56,30 @@ namespace ExchangeRateUpdater
 
 				foreach (JsonElement rate in ratesArray)
 				{
-					string code = rate.GetProperty("currencyCode").GetString();
+					Currency targetCurrency = new Currency(rate.GetProperty("currencyCode").GetString());
+					if (currencies.Keys.Contains(targetCurrency) == false)
+						continue;
+					Currency sourceCurrency = new Currency("CZK");
 					decimal totalRate = (decimal)(rate.GetProperty("rate").GetDouble() * rate.GetProperty("amount").GetInt64());
 
-					rates.Add(new ExchangeRate("CZK", code, totalRate));
+					rates.Add(new ExchangeRate(sourceCurrency, targetCurrency, totalRate));
+					currencies[targetCurrency] = true;
 				}
 			}
 			catch (Exception ex)
 			{
-				throw new Exception($"error while parsing rates: {ex.Message}");
+				throw new Exception($"error while parsing rates: '{ex.Message}'");
 			}
 			return rates;
 		}
 
-		public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+		public IEnumerable<ExchangeRate> GetExchangeRates(Dictionary<Currency, bool> currencies)
 		{
-			try
-			{
-				var rawJson = FetchRates();
-				rawJson.Wait();
-				IEnumerable<ExchangeRate> rates = ParseRates(rawJson.Result);
-				return rates;
-
-			}
-			catch (Exception ex)
-			{
-				Console.Error.WriteLine(ex);
-			}
-			return Enumerable.Empty<ExchangeRate>();
+			var rawJson = FetchRates();
+			rawJson.Wait();
+			IEnumerable<ExchangeRate> rates = ParseRates(rawJson.Result, currencies);
+			checkMissedCurrencies(currencies);
+			return rates;
 		}
 	}
 }

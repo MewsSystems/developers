@@ -16,5 +16,17 @@
 		{
 			return Code;
 		}
+
+		// overload required to make IEnumerable::Contains() work
+		public override bool Equals(object obj)
+		{
+			return obj is Currency other && this.Code == other.Code;
+		}
+
+		// overload required to make IEnumerable::Contains() work
+		public override int GetHashCode()
+		{
+			return Code.GetHashCode();
+		}
 	}
 }

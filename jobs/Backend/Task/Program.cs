@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,27 +7,31 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static Dictionary<Currency, bool> getCurrencies(string path)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var currencies = new Dictionary<Currency, bool>();
+            if (File.Exists(path) == false)
+            {
+                throw new FileNotFoundException($"cannot find \"{path}\"");
+            }
+			string content = File.ReadAllText(path);
+			foreach (string currency in content.Split(new char[] {' ', ',', '|', '\n', '\t'}, StringSplitOptions.RemoveEmptyEntries))
+            {
+				currencies.Add(new Currency(currency), false);
+			}
+			Tools.WriteLine($"Successfully read {currencies.Count()} currencies from \"{path}\"", ConsoleColor.Green);
+			return currencies;
+		}
 
-        public static void Main(string[] args)
+		public static void Main(string[] args)
         {
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var currencies = getCurrencies("currencies.txt");
+				var rates = provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+				Tools.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:", ConsoleColor.Green);
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -34,9 +39,8 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Tools.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.", ConsoleColor.Red);
             }
-
             Console.ReadLine();
         }
     }
