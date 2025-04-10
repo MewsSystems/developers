@@ -17,7 +17,7 @@
 
 ## Overview
 
-This console application retrieves foreign exchange rates from the Czech National Bank (CNB) based on the date and selected currencies. It uses an extensible and testable design with dependency injection, caching, and custom HTTP handling. Cache is configured to expire at 14:30 every working day when rates are updated by CNB.
+This console application retrieves foreign exchange rates from the Czech National Bank (CNB) based on the date and selected currencies. It uses an extensible and testable design with dependency injection, caching, and custom HTTP handling. Cache is configured to expire at 14:30 every working day when rates are updated by CNB as stated [here](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/).
 
 ---
 
