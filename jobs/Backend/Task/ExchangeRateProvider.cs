@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater
             {
                 using (HttpClient httpClient = new())
                 {
-                    CancellationTokenSource cts = new CancellationTokenSource(5000);
+                    CancellationTokenSource cts = new CancellationTokenSource(ErpPlatform.DefaultTimeoutMs);
                     HttpResponseMessage response = await httpClient.GetAsync(ErpPlatform.BaseUrl, cts.Token);
 
                     response.EnsureSuccessStatusCode();
