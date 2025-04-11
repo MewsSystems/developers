@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Light.otf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-LightItalic.otf') format('truetype');
+	font-weight: 300;
+	font-style: italic;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Regular.otf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Italic.otf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Medium.otf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-MediumItalic.otf') format('truetype');
+	font-weight: 500;
+	font-style: italic;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Bold.otf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-BoldItalic.otf') format('truetype');
+	font-weight: 700;
+	font-style: italic;
+  }
+  
+  @font-face {
+	font-family: 'Satoshi';
+	src: url('./assets/fonts/Satoshi-Black.otf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+  }
+
+  @theme{
+	--font-satoshi: Satoshi, "sans-serif"; 
+  }
+
+  @keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+}
+
+.movie-text-hover {
+  animation: none;
+}
+
+.group:hover .movie-text-hover {
+  animation: marquee 10s linear infinite;
+}
