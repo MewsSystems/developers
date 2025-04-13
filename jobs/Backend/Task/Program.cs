@@ -1,5 +1,8 @@
 ﻿using ExchangeRateUpdater.Core;
-using ExchangeRateUpdater.Providers;
+using ExchangeRateUpdater.Core.Http;
+using ExchangeRateUpdater.Infrastructure.Http;
+using ExchangeRateUpdater.Infrastructure.Providers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +27,17 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
+            var services = new ServiceCollection();
+
+            services.AddHttpClient<IHttpClient, DefaultHttpClient>();
+            services.AddTransient<IExchangeRateProvider, CnbExchangeRateProvider>();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
             try
             {
-                IExchangeRateProvider provider = new CnbExchangeRateProvider();
                 var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
