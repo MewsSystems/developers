@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Core;
+using ExchangeRateUpdater.Providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                IExchangeRateProvider provider = new CnbExchangeRateProvider();
                 var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Common.Constants;
+using ExchangeRateUpdater.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,9 +10,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Providers
 {
-    public class ExchangeRateProvider
+    public class CnbExchangeRateProvider : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -29,7 +30,7 @@ namespace ExchangeRateUpdater
                 using (HttpClient httpClient = new())
                 {
                     CancellationTokenSource cts = new CancellationTokenSource(ErpPlatform.DefaultTimeoutMs);
-                    HttpResponseMessage response = await httpClient.GetAsync(ErpPlatform.BaseUrl, cts.Token);
+                    HttpResponseMessage response = await httpClient.GetAsync(ErpPlatform.CnbEndpoint, cts.Token);
 
                     response.EnsureSuccessStatusCode();
 
@@ -49,7 +50,7 @@ namespace ExchangeRateUpdater
                             if (!currencyFilter.Contains(targetCode))
                                 continue;
 
-                            var sourceCurrency = new Currency(ErpPlatform.DefaultSourceCurrency);
+                            var sourceCurrency = new Currency(ErpPlatform.CnbSourceCurrency);
                             var targetCurrency = new Currency(targetCode);
                             var amount = int.Parse(columns[2]);
                             var value = decimal.Parse(columns[4], CultureInfo.InvariantCulture);
