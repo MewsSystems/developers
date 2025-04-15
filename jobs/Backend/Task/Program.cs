@@ -4,10 +4,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Application;
 using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.DTOs;
 using ExchangeRateUpdater.Domain.Options;
 using ExchangeRateUpdater.Domain.Validators;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Infrastructure.Mappers;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,15 +44,15 @@ namespace ExchangeRateUpdater
                     
                     services.AddHttpClient();
                     
-                    services.AddSingleton<IExchangeRateValidator, ExchangeRateValidator>();
-                    services.AddSingleton<IExchangeRateMapper, ExchangeRateMapper>();
+                    services.AddTransient<IValidator<CnbRateDto>, CnbRateDtoValidator>();
+                    services.AddSingleton<IExchangeRateMapper, CnbExchangeRateMapper>();
                     
                     services.AddTransient<IExchangeRateProvider>(sp =>
                     {
                         var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                         var httpClient = httpClientFactory.CreateClient();
                         var options = sp.GetRequiredService<IOptions<ExchangeRateProviderOptions>>();
-                        var validator = sp.GetRequiredService<IExchangeRateValidator>();
+                        var validator = sp.GetRequiredService<IValidator<CnbRateDto>>();
                         var mapper = sp.GetRequiredService<IExchangeRateMapper>();
                         return new CzechNationalBankExchangeRateProvider(httpClient, validator, mapper, options);
                     });

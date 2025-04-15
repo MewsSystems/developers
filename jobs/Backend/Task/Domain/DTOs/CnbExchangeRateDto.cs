@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater.Domain.DTOs;
 
-public class ExchangeRateDto
+public class CnbExchangeRateDto
 {
     [JsonPropertyName("validFor")]
     public string ValidFor { get; set; }

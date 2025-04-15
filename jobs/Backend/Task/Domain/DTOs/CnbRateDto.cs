@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater.Domain.DTOs;
 
-public class RateDto
+public class CnbRateDto
 {
     [JsonPropertyName("rates")]
-    public List<ExchangeRateDto> ExchangeRateDtos { get; set; }
+    public List<CnbExchangeRateDto> ExchangeRateDtos { get; set; }
 }
