@@ -1,23 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Domain.DTOs;
+using ExchangeRateUpdater.Domain.Options;
+using ExchangeRateUpdater.Domain.Validators;
+using ExchangeRateUpdater.Infrastructure.Mappers;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure
 {
     public interface IExchangeRateProvider
     {
-        IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
     }
+
     public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
     {
         private readonly HttpClient _httpClient;
-        private readonly string _baseUrl;
+        private readonly IExchangeRateValidator _validator;
+        private readonly IExchangeRateMapper _mapper;
+        private readonly IOptions<ExchangeRateProviderOptions> _options;
 
-        public CzechNationalBankExchangeRateProvider(HttpClient httpClient, string baseUrl)
+        public CzechNationalBankExchangeRateProvider(HttpClient httpClient, IExchangeRateValidator validator, IExchangeRateMapper mapper, IOptions<ExchangeRateProviderOptions> options)
         {
             _httpClient = httpClient;
-            _baseUrl = baseUrl;
+            _validator = validator;
+            _mapper = mapper;
+            _options = options;
         }
 
         /// <summary>
@@ -26,9 +39,26 @@ namespace ExchangeRateUpdater.Infrastructure
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
-        public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var requestUrl = $"{_options.Value.BaseUrl}?date={currentDate}";
+
+            var data = await _httpClient.GetStringAsync(requestUrl);
+            var jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var response = JsonSerializer.Deserialize<RateDto>(data, jsonSerializerOptions);
+
+            var validationErrors = _validator.Validate(response);
+            if (validationErrors.Any())
+            {
+                throw new Exception("Data validation failed: " + string.Join(", ", validationErrors));
+            }
+
+            var exchangeRates = _mapper.Map(response);
+            
+            return exchangeRates.Where(er =>
+                currencies.Any(currency =>
+                    string.Equals(currency.Code, er.TargetCurrency.Code, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }
