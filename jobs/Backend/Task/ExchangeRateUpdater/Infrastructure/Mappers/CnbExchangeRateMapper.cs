@@ -12,7 +12,7 @@ namespace ExchangeRateUpdater.Infrastructure.Mappers;
 
 public interface IExchangeRateMapper
 {
-    IEnumerable<ExchangeRate> Map(CnbRateDto cNbRateDto);
+    IEnumerable<ExchangeRate> Map(CnbRateDto rateDto);
 }
 public class CnbExchangeRateMapper : IExchangeRateMapper
 {
@@ -25,14 +25,14 @@ public class CnbExchangeRateMapper : IExchangeRateMapper
         _baseCurrency = baseCurrency.Value.BaseCurrency;
     }
 
-    public IEnumerable<ExchangeRate> Map(CnbRateDto cNbRateDto)
+    public IEnumerable<ExchangeRate> Map(CnbRateDto rateDto)
     {
-        if (cNbRateDto == null)
-            throw new ArgumentNullException(nameof(cNbRateDto));
+        if (rateDto == null)
+            throw new ArgumentNullException(nameof(rateDto));
 
-        LogIfExchangeRatesOutdated(cNbRateDto);
+        LogIfExchangeRatesOutdated(rateDto);
 
-       return cNbRateDto.ExchangeRateDtos.Select(dto =>
+       return rateDto.ExchangeRateDtos.Select(dto =>
             new ExchangeRate(
                 new Currency(_baseCurrency),
                 new Currency(dto.CurrencyCode),
@@ -41,16 +41,16 @@ public class CnbExchangeRateMapper : IExchangeRateMapper
         ).ToList();
     }
     
-    private void LogIfExchangeRatesOutdated(CnbRateDto cNbRateDto)
+    private void LogIfExchangeRatesOutdated(CnbRateDto rateDto)
     {
         var today = DateTime.Today;
         var outdatedCurrencies = new List<string>();
 
-        var validForDate = cNbRateDto.ExchangeRateDtos
+        var validForDate = rateDto.ExchangeRateDtos
             .Select(x => x.ValidFor)
             .FirstOrDefault();
 
-        foreach (var dto in cNbRateDto.ExchangeRateDtos)
+        foreach (var dto in rateDto.ExchangeRateDtos)
         {
             if (DateTime.TryParseExact(dto.ValidFor, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate))
             {

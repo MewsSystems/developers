@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Application;
-using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.DTOs;
 using ExchangeRateUpdater.Domain.Options;
 using ExchangeRateUpdater.Domain.Validators;
@@ -40,6 +38,7 @@ namespace ExchangeRateUpdater
                     services.AddOptions<CurrencyOptions>()
                         .Bind(configuration.GetSection("CurrencyOptions"))
                         .Validate(options => options.Currencies != null && options.Currencies.Length > 0, "Currencies list cannot be empty")
+                        .Validate(options => !string.IsNullOrWhiteSpace(options.BaseCurrency), "BaseCurrency must be provided in CurrencyOptions configuration.")
                         .ValidateOnStart();
                     
                     services.AddHttpClient();

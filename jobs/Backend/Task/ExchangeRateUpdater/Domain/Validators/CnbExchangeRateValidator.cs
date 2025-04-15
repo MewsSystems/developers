@@ -12,20 +12,20 @@ public class CnbExchangeRateValidator : AbstractValidator<CnbExchangeRateDto>
     
     public CnbExchangeRateValidator()
     {
-        RuleFor(cnbExchangeRateDto => cnbExchangeRateDto.CurrencyCode)
-            .NotEmpty().WithMessage(entry => $"Missing currency code for {entry.Country} currency");
+        RuleFor(dto => dto.CurrencyCode)
+            .NotEmpty().WithMessage(dto => $"Missing currency code for {dto.Country} currency");
 
-        RuleFor(cnbExchangeRateDto => cnbExchangeRateDto.Amount)
-            .GreaterThan(0).WithMessage(cnbExchangeRateDto => $"Invalid amount for currency {cnbExchangeRateDto.CurrencyCode}.");
+        RuleFor(dto => dto.Amount)
+            .GreaterThan(0).WithMessage(dto => $"Invalid amount for currency {dto.CurrencyCode}.");
         
-        RuleFor(cnbExchangeRateDto => cnbExchangeRateDto.Rate)
-            .GreaterThan(0).WithMessage(cnbExchangeRateDto => $"Invalid rate for currency {cnbExchangeRateDto.CurrencyCode}.");
+        RuleFor(dto => dto.Rate)
+            .GreaterThan(0).WithMessage(dto => $"Invalid rate for currency {dto.CurrencyCode}.");
         
-        RuleFor(entry => entry.ValidFor)
-            .NotEmpty().WithMessage(entry => $"Missing validFor date for currency {entry.CurrencyCode}.")
-            .Must(BeValidDate).WithMessage(x => $"Invalid date format for currency {x.CurrencyCode}. Expected format: {DateFormat}.")
-            .Must(BeNotInFuture).WithMessage(x => $"The validFor date for currency {x.CurrencyCode} is in the future.")
-            .Must(BeNotOlderThanTolerance).WithMessage(x => $"The validFor date for currency {x.CurrencyCode} is older than {AllowedToleranceDays} days.");
+        RuleFor(dto => dto.ValidFor)
+            .NotEmpty().WithMessage(dto => $"Missing validFor date for currency {dto.CurrencyCode}.")
+            .Must(BeValidDate).WithMessage(dto => $"Invalid date format for currency {dto.CurrencyCode}. Expected format: {DateFormat}.")
+            .Must(BeNotInFuture).WithMessage(dto => $"The validFor date for currency {dto.CurrencyCode} is in the future.")
+            .Must(BeNotOlderThanTolerance).WithMessage(dto => $"The validFor date for currency {dto.CurrencyCode} is older than {AllowedToleranceDays} days.");
     }
     
     private bool BeValidDate(string validFor)

@@ -19,9 +19,9 @@ public class ExchangeRateUpdaterService : IExchangeRateUpdaterService
 {
     private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly IEnumerable<Currency> _currencies;
-    private readonly ILogger<IExchangeRateUpdaterService> _logger;
+    private readonly ILogger<ExchangeRateUpdaterService> _logger;
 
-    public ExchangeRateUpdaterService(IExchangeRateProvider exchangeRateProvider, IOptions<CurrencyOptions> currencyOptions, ILogger<IExchangeRateUpdaterService> logger)
+    public ExchangeRateUpdaterService(IExchangeRateProvider exchangeRateProvider, IOptions<CurrencyOptions> currencyOptions, ILogger<ExchangeRateUpdaterService> logger)
     {
         _exchangeRateProvider = exchangeRateProvider;
         _logger = logger;
@@ -33,11 +33,12 @@ public class ExchangeRateUpdaterService : IExchangeRateUpdaterService
         try
         {
             var rates = await _exchangeRateProvider.GetExchangeRates(_currencies);
-            _logger.LogInformation($"Successfully retrieved {rates.Count()} exchange rates:");
-            foreach (var rate in rates)
-            {
-                _logger.LogInformation(rate.ToString());
-            }
+            var rateMessages = string.Join(Environment.NewLine, rates.Select(r => r.ToString()));
+            _logger.LogInformation(
+                "Successfully retrieved {Count} exchange rates:{NewLine}{Rates}",
+                rates.Count(),
+                Environment.NewLine,
+                rateMessages);
         }
         catch (Exception ex)
         {

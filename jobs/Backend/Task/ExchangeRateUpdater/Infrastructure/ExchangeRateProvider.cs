@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ExchangeRateUpdater.Domain;
 using ExchangeRateUpdater.Domain.DTOs;
 using ExchangeRateUpdater.Domain.Options;
-using ExchangeRateUpdater.Domain.Validators;
 using ExchangeRateUpdater.Infrastructure.Mappers;
 using FluentValidation;
 using Microsoft.Extensions.Options;
@@ -43,7 +42,7 @@ namespace ExchangeRateUpdater.Infrastructure
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+            var currentDate = DateTime.Today.ToString("yyyy-MM-dd");
             var requestUrl = $"{_options.Value.BaseUrl}?date={currentDate}";
 
             var data = await _httpClient.GetStringAsync(requestUrl);
