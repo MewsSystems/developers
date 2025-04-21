@@ -22,3 +22,12 @@ A modern movie search app built with React, TypeScript, and the TMDb API.
 - React Router
 - TMDb API
 - CSS for styling
+
+## 🔐 Environment Variables
+
+To run the project locally:
+
+- copy the provided `.env.example` file and rename it to `.env`:
+`cp .env.example .env`
+
+- The file already includes the TMDb API key required for development
