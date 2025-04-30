@@ -1,0 +1,42 @@
+@ExchangeRateProviderAPI_PaolaRojas_HostAddress = http://localhost:5156
+
+### Valid Request: Get exchange rate for USD and EUR
+POST https://localhost:5001/api/ExchangeRates/exchange_rates
+X-API-KEY: jH93f7Zk9Vt1@Xy!nP4qLm#Bv8eW2^tR6kUd$Aa0Gh
+Content-Type: application/json
+
+{
+  "currencies": ["USD", "EUR"]
+}
+
+###
+
+### Unauthorized Request: Missing API key
+POST https://localhost:5001/api/ExchangeRates/exchange_rates
+Content-Type: application/json
+
+{
+  "currencies": ["USD"]
+}
+
+###
+
+### No Matching Currency
+POST https://localhost:5001/api/ExchangeRates/exchange_rates
+X-API-KEY: jH93f7Zk9Vt1@Xy!nP4qLm#Bv8eW2^tR6kUd$Aa0Gh
+Content-Type: application/json
+
+{
+  "currencies": ["XYZ"]
+}
+
+###
+
+### Empty Currency List
+POST https://localhost:5001/api/ExchangeRates/exchange_rates
+X-API-KEY: jH93f7Zk9Vt1@Xy!nP4qLm#Bv8eW2^tR6kUd$Aa0Gh
+Content-Type: application/json
+
+{
+  "currencies": []
+}
