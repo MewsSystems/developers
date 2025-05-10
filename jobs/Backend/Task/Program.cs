@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Configuration;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +26,11 @@ public static class Program
     {
         try
         {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
             var provider = new ExchangeRateProvider();
             var rates = await ExchangeRateProvider.GetExchangeRatesAsync(currencies);
 
