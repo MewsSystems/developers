@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater;
@@ -33,6 +34,22 @@ public static class Program
 
             var provider = new ExchangeRateProvider();
             var rates = await ExchangeRateProvider.GetExchangeRatesAsync(currencies);
+
+            // Bind CnbApiSettings from configuration
+            var cnbApiSettings = config.GetSection("CnbApiSettings").Get<CnbApiSettings>();
+            if (string.IsNullOrWhiteSpace(cnbApiSettings.BaseAddress) ||
+                string.IsNullOrWhiteSpace(cnbApiSettings.Endpoint) ||
+                string.IsNullOrWhiteSpace(cnbApiSettings.BaseCurrency))
+            {
+                throw new InvalidOperationException("One or more required configuration settings are missing.");
+            }
+
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(cnbApiSettings.BaseAddress),
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+            var cnbProvider = new CnbApiExchangeRateDataProvider(httpClient, cnbApiSettings);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
