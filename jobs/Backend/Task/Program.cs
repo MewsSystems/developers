@@ -32,9 +32,6 @@ public static class Program
                 .AddEnvironmentVariables()
                 .Build();
 
-            var provider = new ExchangeRateProvider();
-            var rates = await ExchangeRateProvider.GetExchangeRatesAsync(currencies);
-
             // Bind CnbApiSettings from configuration
             var cnbApiSettings = config.GetSection("CnbApiSettings").Get<CnbApiSettings>();
             if (string.IsNullOrWhiteSpace(cnbApiSettings.BaseAddress) ||
@@ -44,12 +41,17 @@ public static class Program
                 throw new InvalidOperationException("One or more required configuration settings are missing.");
             }
 
+            // Create HttpClient and CnbApiExchangeRateDataProvider
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(cnbApiSettings.BaseAddress),
                 Timeout = TimeSpan.FromSeconds(30)
             };
-            var cnbProvider = new CnbApiExchangeRateDataProvider(httpClient, cnbApiSettings);
+            var exchangeRateDataProvider = new CnbApiExchangeRateDataProvider(httpClient, cnbApiSettings);
+
+            // Create ExchangeRateProvider and fetch exchange rates
+            var provider = new ExchangeRateProvider(exchangeRateDataProvider);
+            var rates = await provider.GetExchangeRatesAsync(currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
             foreach (var rate in rates)
