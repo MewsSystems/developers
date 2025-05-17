@@ -34,7 +34,7 @@ namespace ExchangeRateUpdater
                 var host = Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(config =>
                 {
-                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile("appsettings.json");
                 })
                 .ConfigureLogging((context, loggingBuilder) =>
                 {
