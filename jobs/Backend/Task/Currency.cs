@@ -1,16 +1,20 @@
-﻿namespace ExchangeRateUpdater
+﻿using System;
+
+namespace ExchangeRateUpdater
 {
-    public class Currency
+    public record Currency
     {
+        public string Code { get; }
+
         public Currency(string code)
         {
-            Code = code;
-        }
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                throw new ArgumentException("Currency code cannot be null or empty.", nameof(code));
+            }
 
-        /// <summary>
-        /// Three-letter ISO 4217 code of the currency.
-        /// </summary>
-        public string Code { get; }
+            Code = code.Trim().ToUpperInvariant();
+        }
 
         public override string ToString()
         {
