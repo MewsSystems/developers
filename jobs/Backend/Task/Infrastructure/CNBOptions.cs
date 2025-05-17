@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Infrastructure
 {
-    internal record CNBOptions(string BaseUrl);
+    internal record CNBOptions
+    {
+        public string BaseUrl { get; set; }
+    }
 }
