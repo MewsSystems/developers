@@ -11,6 +11,7 @@ namespace ExchangeRateUpdater.Infrastructure.Registry
         public static IServiceCollection AddExchangeRateUpdater(this IServiceCollection services, IConfiguration config)
             => services
                 .AddCNBOptions(config)
+                .AddSingleton<IExchangeRateParser, CNBExchangeRateParser>()
                 .AddSingleton<IExchangeRateProvider, CNBExchangeRateProvider>()
                 .AddHttpClient<IExchangeRateProvider, CNBExchangeRateProvider>((serviceProvider, client) =>
                 {
