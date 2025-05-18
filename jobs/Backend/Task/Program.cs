@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.Infrastructure.Registry;
+using ExchangeRateUpdater.Domain;
+using ExchangeRateUpdater.Infrastructure.CNB.Registry;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,17 +42,18 @@ namespace ExchangeRateUpdater
                     // We should probably use a more advanced logging provider, but for the sake of simplicity
                     // we will use the console logger.
                     loggingBuilder.AddConsole();
-                    // Read logging settings from appsettings.json
                     loggingBuilder.AddConfiguration(context.Configuration.GetSection("Logging"));
                 })
                 .ConfigureServices((context, services) =>
                 {
-
-                    services.AddExchangeRateUpdater(context.Configuration);
+                    services
+                    .AddCNBInfrastructure(context.Configuration)
+                    .AddObservabilityInfrastructure()
+                    .AddSingleton<ExchangeRateProvider>();
                 })
                 .Build();
 
-                var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
+                var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
                 var rates = await provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
