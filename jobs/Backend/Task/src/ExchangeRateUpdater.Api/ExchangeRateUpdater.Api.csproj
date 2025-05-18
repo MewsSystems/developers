@@ -5,20 +5,34 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Http" Version="8.1.0"/>
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0"/>
+        <PackageReference Include="MediatR" Version="12.5.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.5"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
+        <Folder Include="Controllers\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj"/>
+        <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

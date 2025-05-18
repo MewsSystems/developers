@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-ExchangeRateUpdater.Tests-2d605dd9-2501-4017-9b99-e13d2cfe10cc</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Integration\"/>
+        <Folder Include="Unit\"/>
+    </ItemGroup>
+</Project>

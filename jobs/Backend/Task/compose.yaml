@@ -1,7 +1,0 @@
-﻿services:
-  exchangerateupdater.api:
-    image: exchangerateupdater.api
-    build:
-      context: .
-      dockerfile: src/ExchangeRateUpdater.Api/Dockerfile
-

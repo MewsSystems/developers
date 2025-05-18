@@ -6,13 +6,12 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api", "src\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj", "{C514F03C-253E-4099-ABEA-E9A729C81BDC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7104460C-5FFD-4459-A806-6A850353C270}"
-	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core", "src\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{6BF721B1-D50C-457A-A28B-6B50A99DCC07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Infrastructure", "src\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj", "{A6E32382-DAA1-4CE2-8552-45E835689D1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "test\ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{701317C6-4CF6-4C69-AC91-00F91BCFB46E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +35,10 @@ Global
 		{A6E32382-DAA1-4CE2-8552-45E835689D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6E32382-DAA1-4CE2-8552-45E835689D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6E32382-DAA1-4CE2-8552-45E835689D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{701317C6-4CF6-4C69-AC91-00F91BCFB46E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{701317C6-4CF6-4C69-AC91-00F91BCFB46E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{701317C6-4CF6-4C69-AC91-00F91BCFB46E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{701317C6-4CF6-4C69-AC91-00F91BCFB46E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

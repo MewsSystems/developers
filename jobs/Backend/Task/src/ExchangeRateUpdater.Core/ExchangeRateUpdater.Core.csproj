@@ -7,9 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Common\" />
-      <Folder Include="Features\ExchangeRates\V1\" />
-      <Folder Include="Interfaces\" />
+        <Folder Include="Common\"/>
+        <Folder Include="Features\ExchangeRates\V1\"/>
+        <Folder Include="Interfaces\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.5.0"/>
+        <PackageReference Include="NodaTime" Version="3.2.2"/>
+        <PackageReference Include="PublicHoliday" Version="3.3.0"/>
+        <PackageReference Include="FluentValidation" Version="11.9.0"/>
     </ItemGroup>
 
 </Project>

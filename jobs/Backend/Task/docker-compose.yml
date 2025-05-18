@@ -1,0 +1,37 @@
+services:
+  #  api:
+  #    build:
+  #      context: .
+  #      dockerfile: src/ExchangeRateUpdater.Api/Dockerfile
+  #    ports:
+  #      - "5000:80"
+  #      - "5001:443"
+  #    environment:
+  #      - ASPNETCORE_ENVIRONMENT=Development
+  #      - Redis__Configuration=redis:6379,connectTimeout=3000,syncTimeout=3000
+  #    depends_on:
+  #      redis:
+  #        condition: service_healthy
+  #    networks:
+  #      - exchange-rate-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    networks:
+      - exchange-rate-network
+
+networks:
+  exchange-rate-network:
+    driver: bridge
+
+volumes:
+  redis-data: 
