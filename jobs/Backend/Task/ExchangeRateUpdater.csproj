@@ -27,4 +27,9 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="ExchangeRateUpdaterTests" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />		
+	</ItemGroup>
+
 </Project>
