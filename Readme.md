@@ -1,4 +1,4 @@
-# Exchange Rate Parser
+# Exchange Rate Provider
 
 A simple .NET application which fetches daily foreign exchange rates from the Czech National Bank (CNB), parses the raw data, and filters it by a specified list of currencies.
 
