@@ -10,7 +10,7 @@ namespace ExchangeRateUpdater.Infrastructure.Logging;
 
 public static class LoggingConfiguration
 {
-    public static IHostBuilder ConfigureLogging(this IHostBuilder builder)
+    public static IHostBuilder ConfigureSerilogLogging(this IHostBuilder builder)
     {
         return builder.UseSerilog((context,
             loggerConfig) =>

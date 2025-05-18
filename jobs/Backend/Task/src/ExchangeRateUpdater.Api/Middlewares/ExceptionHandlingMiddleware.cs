@@ -4,12 +4,21 @@ using FluentValidation;
 
 namespace ExchangeRateUpdater.Api.Middlewares;
 
+/// <summary>
+/// Middleware for handling unhandled exceptions and converting them to appropriate HTTP responses
+/// </summary>
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
     private readonly IHostEnvironment _environment;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExceptionHandlingMiddleware"/> class.
+    /// </summary>
+    /// <param name="next">The next middleware in the pipeline</param>
+    /// <param name="logger">The logger instance for logging exceptions</param>
+    /// <param name="environment">The hosting environment</param>
     public ExceptionHandlingMiddleware(
         RequestDelegate next,
         ILogger<ExceptionHandlingMiddleware> logger,
@@ -20,6 +29,11 @@ public class ExceptionHandlingMiddleware
         _environment = environment;
     }
 
+    /// <summary>
+    /// Processes the HTTP request and handles any unhandled exceptions
+    /// </summary>
+    /// <param name="context">The HTTP context for the request</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
     public async Task InvokeAsync(HttpContext context)
     {
         try

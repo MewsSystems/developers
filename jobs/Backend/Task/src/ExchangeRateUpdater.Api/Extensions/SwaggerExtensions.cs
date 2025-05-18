@@ -5,8 +5,16 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace ExchangeRateUpdater.Api.Extensions;
 
+/// <summary>
+/// Extension methods for configuring Swagger/OpenAPI documentation
+/// </summary>
 public static class SwaggerExtensions
 {
+    /// <summary>
+    /// Adds Swagger documentation services to the application
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <returns>The service collection for chaining</returns>
     public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
@@ -41,6 +49,11 @@ public static class SwaggerExtensions
         return services;
     }
 
+    /// <summary>
+    /// Configures the Swagger UI and JSON endpoints
+    /// </summary>
+    /// <param name="app">The application builder instance</param>
+    /// <returns>The application builder instance for chaining</returns>
     public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
     {
         app.UseSwagger();
@@ -55,9 +68,16 @@ public static class SwaggerExtensions
     }
 }
 
-// Custom operation filter for API versioning
+/// <summary>
+/// Operation filter for applying API versioning information to Swagger documentation
+/// </summary>
 public class SwaggerDefaultValues : IOperationFilter
 {
+    /// <summary>
+    /// Applies API versioning information to the OpenAPI operation
+    /// </summary>
+    /// <param name="operation">The OpenAPI operation</param>
+    /// <param name="context">The operation filter context</param>
     public void Apply(OpenApiOperation operation,
         OperationFilterContext context)
     {
@@ -78,9 +98,16 @@ public class SwaggerDefaultValues : IOperationFilter
     }
 }
 
-// Custom operation filter for examples
+/// <summary>
+/// Operation filter for adding request and response examples to Swagger documentation
+/// </summary>
 public class ExamplesOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// Adds example values to the OpenAPI operation
+    /// </summary>
+    /// <param name="operation">The OpenAPI operation</param>
+    /// <param name="context">The operation filter context</param>
     public void Apply(OpenApiOperation operation,
         OperationFilterContext context)
     {

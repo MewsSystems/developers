@@ -18,6 +18,11 @@ public class ExchangeRateController : ControllerBase
     private readonly IMediator _mediator;
     private readonly ILogger<ExchangeRateController> _logger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExchangeRateController"/> class.
+    /// </summary>
+    /// <param name="mediator">The mediator instance for handling CQRS requests</param>
+    /// <param name="logger">The logger instance for logging controller operations</param>
     public ExchangeRateController(IMediator mediator,
         ILogger<ExchangeRateController> logger)
     {
