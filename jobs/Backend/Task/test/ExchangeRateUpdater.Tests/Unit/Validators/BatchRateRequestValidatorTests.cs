@@ -71,7 +71,7 @@ public class BatchRateRequestValidatorTests
     public void IsIso4217CurrencyCode_ValidatesCorrectly(string? codeString, bool expectedResult)
     {
         // Act
-        var result = BatchRateRequestValidator.IsIso4217CurrencyCode(codeString);
+        var result = BatchRateRequestValidator.IsIso4217CurrencyCode(codeString!);
 
         // Assert
         result.Should().Be(expectedResult);

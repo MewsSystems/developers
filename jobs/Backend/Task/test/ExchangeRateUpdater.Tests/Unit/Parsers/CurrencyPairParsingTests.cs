@@ -40,7 +40,7 @@ public class CurrencyPairParsingTests
     public void ParseCurrencyPair_InvalidPairString_DetectedAsInvalid(string? invalidPairString)
     {
         // Act & Assert
-        BatchRateRequestValidator.BeIso4217Pair(invalidPairString).Should().BeFalse();
+        BatchRateRequestValidator.BeIso4217Pair(invalidPairString!).Should().BeFalse();
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class CurrencyPairParsingTests
     public void IsIso4217CurrencyCode_ValidatesCorrectly(string? codeString, bool expectedResult)
     {
         // Act
-        var result = BatchRateRequestValidator.IsIso4217CurrencyCode(codeString);
+        var result = BatchRateRequestValidator.IsIso4217CurrencyCode(codeString!);
 
         // Assert
         result.Should().Be(expectedResult);

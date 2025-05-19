@@ -48,7 +48,7 @@ public class GetExchangeRateQueryValidatorTests
     public void BeValidIso4217CurrencyCode_ValidatesCorrectly(string? codeString, bool expectedResult)
     {
         // Act
-        var result = GetExchangeRateQueryValidator.BeValidIso4217CurrencyCode(codeString);
+        var result = GetExchangeRateQueryValidator.BeValidIso4217CurrencyCode(codeString!);
 
         // Assert
         result.Should().Be(expectedResult);

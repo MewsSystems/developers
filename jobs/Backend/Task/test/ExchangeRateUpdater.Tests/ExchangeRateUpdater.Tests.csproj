@@ -24,7 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Integration\"/>
         <Folder Include="Unit\"/>
     </ItemGroup>
 
