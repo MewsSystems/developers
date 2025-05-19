@@ -1,18 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-ExchangeRateUpdater.Tests-2d605dd9-2501-4017-9b99-e13d2cfe10cc</UserSecretsId>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5"/>
+        <PackageReference Include="FluentAssertions" Version="[7.2.0]" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+        <PackageReference Include="Moq" Version="[4.18.4]" />
+        <PackageReference Include="NodaTime" Version="3.2.2" />
+        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Integration\"/>
         <Folder Include="Unit\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
+        <ProjectReference Include="..\..\src\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

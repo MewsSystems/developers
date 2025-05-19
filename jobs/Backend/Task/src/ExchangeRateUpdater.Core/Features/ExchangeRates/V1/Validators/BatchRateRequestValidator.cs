@@ -22,7 +22,10 @@ public class BatchRateRequestValidator : AbstractValidator<BatchRateRequest>
             WithMessage("At least one currency pair must be specified");
     }
 
-    private static bool BeIso8601Date(string? date)
+    /// <summary>
+    /// Validates if a string is in ISO-8601 date format (yyyy-MM-dd)
+    /// </summary>
+    public static bool BeIso8601Date(string? date)
     {
         if (string.IsNullOrWhiteSpace(date))
             return true;
@@ -31,7 +34,10 @@ public class BatchRateRequestValidator : AbstractValidator<BatchRateRequest>
         return parseResult.Success;
     }
 
-    private static bool BeIso4217Pair(string pair)
+    /// <summary>
+    /// Validates if a string is in the format of a valid ISO-4217 currency pair (XXX/YYY)
+    /// </summary>
+    public static bool BeIso4217Pair(string pair)
     {
         if (string.IsNullOrWhiteSpace(pair))
             return false;
@@ -43,7 +49,10 @@ public class BatchRateRequestValidator : AbstractValidator<BatchRateRequest>
         return IsIso4217CurrencyCode(parts[0]) && IsIso4217CurrencyCode(parts[1]);
     }
 
-    private static bool IsIso4217CurrencyCode(string code)
+    /// <summary>
+    /// Validates if a string is a valid ISO-4217 currency code (3 uppercase letters)
+    /// </summary>
+    public static bool IsIso4217CurrencyCode(string code)
     {
         // Simple validation: ISO 4217 codes are 3 uppercase letters
         return !string.IsNullOrWhiteSpace(code) &&

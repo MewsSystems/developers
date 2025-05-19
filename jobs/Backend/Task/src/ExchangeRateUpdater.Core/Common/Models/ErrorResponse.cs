@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Models;
+namespace ExchangeRateUpdater.Core.Common.Models;
 
 /// <summary>
 /// Standard error response format

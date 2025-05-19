@@ -25,7 +25,10 @@ public class GetExchangeRateQueryValidator : AbstractValidator<GetExchangeRateQu
             WithMessage("Date must be ISO-8601 (yyyy-MM-dd)");
     }
 
-    private static bool BeIso8601DateOrNull(string? date)
+    /// <summary>
+    /// Validates if a string is a valid ISO-8601 date or null/empty
+    /// </summary>
+    public static bool BeIso8601DateOrNull(string? date)
     {
         if (string.IsNullOrWhiteSpace(date))
             return true;
@@ -34,7 +37,10 @@ public class GetExchangeRateQueryValidator : AbstractValidator<GetExchangeRateQu
         return parseResult.Success;
     }
 
-    private static bool BeValidIso4217CurrencyCode(string code)
+    /// <summary>
+    /// Validates if a string is a valid ISO-4217 currency code (3 uppercase letters)
+    /// </summary>
+    public static bool BeValidIso4217CurrencyCode(string code)
     {
         // Simple validation: ISO 4217 codes are 3 uppercase letters
         return !string.IsNullOrWhiteSpace(code) &&

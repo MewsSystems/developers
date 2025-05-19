@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using ExchangeRateUpdater.Core.Common.Models;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Models;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Queries;
 using MediatR;

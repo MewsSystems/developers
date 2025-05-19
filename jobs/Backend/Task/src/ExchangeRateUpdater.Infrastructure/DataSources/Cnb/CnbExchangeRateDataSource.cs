@@ -75,14 +75,20 @@ public class CnbExchangeRateDataSource : IExchangeRateDataSource
         }
     }
 
-    private string GetCnbApiUrl(LocalDate date)
+    /// <summary>
+    /// Gets the CNB API URL for the specified date
+    /// </summary>
+    public string GetCnbApiUrl(LocalDate date)
     {
         // CNB API uses dd.MM.yyyy format for the date parameter
         var dateString = date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
         return $"{_options.CnbApiBaseUrl.TrimEnd('/')}/daily.txt?date={dateString}";
     }
 
-    private ExchangeRateData ParseCnbData(string content,
+    /// <summary>
+    /// Parses CNB data response into an ExchangeRateData object
+    /// </summary>
+    public ExchangeRateData ParseCnbData(string content,
         LocalDate date)
     {
         var rates = new List<CurrencyRate>();
@@ -122,10 +128,7 @@ public class CnbExchangeRateDataSource : IExchangeRateDataSource
                     CultureInfo.InvariantCulture);
                 var currencyCode = parts[3].
                     Trim();
-                var rate = decimal.Parse(parts[4].
-                        Trim().
-                        Replace(",", "."),
-                    CultureInfo.InvariantCulture);
+                var rate = ParseDecimalWithEitherSeparator(parts[4].Trim());
 
                 rates.Add(new CurrencyRate
                 {
@@ -149,5 +152,15 @@ public class CnbExchangeRateDataSource : IExchangeRateDataSource
             PublishedDate = date,
             Rates = rates
         };
+    }
+    
+    /// <summary>
+    /// Parses a decimal value allowing either period or comma as decimal separator
+    /// </summary>
+    public static decimal ParseDecimalWithEitherSeparator(string value)
+    {
+        // Replace comma with period to handle different decimal separators
+        var normalizedValue = value.Replace(",", ".");
+        return decimal.Parse(normalizedValue, CultureInfo.InvariantCulture);
     }
 }

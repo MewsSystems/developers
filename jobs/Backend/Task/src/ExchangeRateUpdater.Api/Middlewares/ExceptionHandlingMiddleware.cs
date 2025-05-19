@@ -1,4 +1,5 @@
 using System.Text.Json;
+using ExchangeRateUpdater.Core.Common.Models;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Models;
 using FluentValidation;
 
