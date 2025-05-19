@@ -2,7 +2,6 @@ using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Models;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Validators;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using NodaTime.Text;
 using Xunit;
 
 namespace ExchangeRateUpdater.Tests.Unit.Validators;

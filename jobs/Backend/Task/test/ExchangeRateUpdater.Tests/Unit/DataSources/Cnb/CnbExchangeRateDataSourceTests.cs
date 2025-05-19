@@ -1,5 +1,3 @@
-using System.Globalization;
-using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Infrastructure.Configuration;
 using ExchangeRateUpdater.Infrastructure.DataSources.Cnb;
 using FluentAssertions;

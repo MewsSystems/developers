@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Core.Common;
+using ExchangeRateUpdater.Core.Common.Models;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Models;
 using ExchangeRateUpdater.Core.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -94,14 +95,14 @@ public class CnbExchangeRateService : IExchangeRateService
                     sourceCurrency,
                     targetCurrency,
                     targetDate);
-                throw new InvalidOperationException($"Rate not found for currency pair {sourceCurrency}/{targetCurrency} on date {targetDate}");
+                throw new NotFoundException($"Rate not found for currency pair {sourceCurrency}/{targetCurrency} on date {targetDate}");
             }
 
             // For any other case (CZK as source or cross-currency), per requirements we don't calculate inverses
             _logger.LogWarning("Exchange rate not available for pair {SourceCurrency}/{TargetCurrency} as CNB only provides rates with CZK as target",
                 sourceCurrency,
                 targetCurrency);
-            throw new InvalidOperationException(
+            throw new NotFoundException(
                 $"Exchange rate not available directly from CNB for pair {sourceCurrency}/{targetCurrency}. " +
                 $"Only rates with CZK as the target currency (e.g., USD/CZK) are provided by CNB.");
         }

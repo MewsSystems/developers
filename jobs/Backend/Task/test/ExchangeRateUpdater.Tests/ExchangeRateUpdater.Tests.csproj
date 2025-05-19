@@ -4,14 +4,18 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="[7.2.0]" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
         <PackageReference Include="Moq" Version="[4.18.4]" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
+        <PackageReference Include="Testcontainers" Version="4.4.0" />
+        <PackageReference Include="Testcontainers.Redis" Version="4.4.0" />
         <PackageReference Include="xunit" Version="2.9.3" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj" />
         <ProjectReference Include="..\..\src\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
         <ProjectReference Include="..\..\src\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
     </ItemGroup>

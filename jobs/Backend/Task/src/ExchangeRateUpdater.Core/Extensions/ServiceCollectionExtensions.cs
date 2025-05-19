@@ -1,6 +1,5 @@
 using ExchangeRateUpdater.Core.Common.Behaviors;
 using ExchangeRateUpdater.Core.Features.ExchangeRates.V1.Queries;
-using ExchangeRateUpdater.Core.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
