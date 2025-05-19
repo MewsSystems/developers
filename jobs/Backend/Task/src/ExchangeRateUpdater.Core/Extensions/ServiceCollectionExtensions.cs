@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
         {
             cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(GetExchangeRateQuery).Assembly);
-            
+
             // Add validation behavior to pipeline
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         });
@@ -38,4 +38,4 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-} 
+}

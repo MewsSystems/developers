@@ -5,7 +5,6 @@ using ExchangeRateUpdater.Core.Extensions;
 using ExchangeRateUpdater.Infrastructure.Extensions;
 using ExchangeRateUpdater.Infrastructure.Logging;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +29,8 @@ builder.Services.AddApiVersioning(options =>
         options.ApiVersionReader = ApiVersionReader.Combine(
             new UrlSegmentApiVersionReader(),
             new HeaderApiVersionReader("X-Api-Version"));
-    })
-    .AddApiExplorer(options =>
+    }).
+    AddApiExplorer(options =>
     {
         options.GroupNameFormat = "'v'VVV";
         options.SubstituteApiVersionInUrl = true;
@@ -41,17 +40,14 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddSwaggerDocumentation();
 
 // Health Checks
-builder.Services.AddHealthChecks()
-    .AddCheck<RedisHealthCheck>("redis_health_check", tags: new[] { "ready" })
-    .AddCheck<CnbApiHealthCheck>("cnb_api_health_check", tags: new[] { "ready" });
+builder.Services.AddHealthChecks().
+    AddCheck<RedisHealthCheck>("redis_health_check", tags: new[] { "ready" }).
+    AddCheck<CnbApiHealthCheck>("cnb_api_health_check", tags: new[] { "ready" });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwaggerDocumentation();
-}
+if (app.Environment.IsDevelopment()) app.UseSwaggerDocumentation();
 
 app.UseHttpsRedirection();
 
@@ -59,7 +55,12 @@ app.UseHttpsRedirection();
 app.UseGlobalExceptionHandler();
 
 // Health check endpoints
-app.MapHealthChecks("/health"); // Basic health check
+app.MapHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        Predicate = check => !check.Tags.Contains("ready")
+    }); // Basic health check
+
 app.MapHealthChecks("/health/ready",
     new HealthCheckOptions
     {
@@ -68,5 +69,4 @@ app.MapHealthChecks("/health/ready",
 
 app.MapControllers();
 
-Log.Information("Application starting up");
 app.Run();
