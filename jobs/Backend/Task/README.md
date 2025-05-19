@@ -1,6 +1,7 @@
 # Exchange Rate Updater API
 
 A .NET API for retrieving currency exchange rates from the Czech National Bank (CNB).
+The program for testing the currencies defined in the original repository runs on the startup of `Program.cs` in the **development** environment.
 
 ## Features
 
@@ -29,18 +30,13 @@ The solution follows clean architecture principles:
 ### Using Docker Compose
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd ExchangeRateUpdater
-
 # Start the API and Redis
 docker-compose up --build
 ```
 
 The API will be available at:
 
-- HTTP: http://localhost:5000
-- HTTPS: https://localhost:5001
+- HTTP: http://localhost:8080
 
 ### Development Setup
 
@@ -151,3 +147,14 @@ The API includes health check endpoints:
 - Rates are valid for the current working day and, where relevant, the following Saturday, Sunday, or public holiday.
 - CNB API access example: https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt?date=16.05.2025
 - Date format for the CNB API is dd.MM.yyyy 
+
+## Production Readiness
+To be production ready the following needs to be added:
+
+- Use Azure Key Vault or similar for managing secrets in production
+- Enable HTTPS with valid SSL certificates
+- Configure proper network security groups and firewall rules
+- Set up monitoring and alerting (Grafana, SlACK)
+- Implement rate limiting for API endpoints 
+- Add a deployment pipeline (GitHub Actions, Azure DevOps)
+- Deploy to a cloud service (Azure App Service, AWS Lambda, Kubernetes)

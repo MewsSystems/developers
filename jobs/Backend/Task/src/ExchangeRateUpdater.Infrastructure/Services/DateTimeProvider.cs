@@ -11,6 +11,7 @@ public class DateTimeProvider : IDateTimeProvider
     private readonly IClock _clock;
     private readonly CzechRepublicPublicHoliday _czechHolidays;
     private readonly ExchangeRateServiceOptions _options;
+    private readonly DateTimeZone _pragueZone;
 
     public DateTimeProvider(IClock clock,
         IOptions<ExchangeRateServiceOptions> options)
@@ -18,20 +19,21 @@ public class DateTimeProvider : IDateTimeProvider
         _clock = clock;
         _czechHolidays = new CzechRepublicPublicHoliday();
         _options = options.Value;
+        _pragueZone = DateTimeZoneProviders.Tzdb["Europe/Prague"];
     }
 
     public LocalDate GetCurrentDate()
     {
-        return _clock.GetCurrentInstant().
-            InUtc().
-            LocalDateTime.Date;
+        return _clock.GetCurrentInstant()
+            .InZone(_pragueZone)
+            .LocalDateTime.Date;
     }
 
     public LocalDateTime GetCurrentDateTime()
     {
-        return _clock.GetCurrentInstant().
-            InUtc().
-            LocalDateTime;
+        return _clock.GetCurrentInstant()
+            .InZone(_pragueZone)
+            .LocalDateTime;
     }
 
     public bool IsWorkingDay(LocalDate date)
