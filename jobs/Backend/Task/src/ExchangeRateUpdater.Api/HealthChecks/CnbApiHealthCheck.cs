@@ -1,6 +1,5 @@
 using ExchangeRateUpdater.Core.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NodaTime;
 
 namespace ExchangeRateUpdater.Api.HealthChecks;
 
@@ -40,30 +39,14 @@ public class CnbApiHealthCheck : IHealthCheck
     {
         try
         {
-            // First try to get the last workday
             var today = _dateTimeProvider.GetCurrentDate();
-            var lastWorkingDay = _dateTimeProvider.GetLastWorkingDay(today);
 
-            // Check if CNB API is accessible for the last working day
-            var isAvailable = await _dataSource.IsDataAvailableForDateAsync(lastWorkingDay, cancellationToken);
+            var isAvailable = await _dataSource.IsDataAvailableForDateAsync(today, cancellationToken);
 
-            if (isAvailable) return HealthCheckResult.Healthy($"CNB API is accessible (checked for working day: {lastWorkingDay})");
+            if (isAvailable)
+                return HealthCheckResult.Healthy($"CNB API is accessible (checked for date: {today})");
 
-            // If no result for last workday, try with previous workdays up to 5 days back
-            for (var i = 1; i <= 5; i++)
-            {
-                var previousWorkingDay = _dateTimeProvider.GetLastWorkingDay(lastWorkingDay.Minus(Period.FromDays(1)));
-
-                if (previousWorkingDay == lastWorkingDay)
-                    break; // No more working days to check
-
-                lastWorkingDay = previousWorkingDay;
-                isAvailable = await _dataSource.IsDataAvailableForDateAsync(lastWorkingDay, cancellationToken);
-
-                if (isAvailable) return HealthCheckResult.Healthy($"CNB API is accessible (checked for previous working day: {lastWorkingDay})");
-            }
-
-            return HealthCheckResult.Degraded("CNB API returned no data for recent working days");
+            return HealthCheckResult.Degraded($"CNB API returned no data for date: {today}");
         }
         catch (Exception ex)
         {

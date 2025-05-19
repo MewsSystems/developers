@@ -106,19 +106,20 @@ public class RedisCacheService : ICacheService
     private DateTimeOffset GetCacheExpirationDate(LocalDate date)
     {
         var currentDate = _dateTimeProvider.GetCurrentDate();
-        var currentTime = _dateTimeProvider.GetCurrentDateTime().
-            TimeOfDay;
+        var currentDateTime = _dateTimeProvider.GetCurrentDateTime();
+        var currentTime = currentDateTime.TimeOfDay;
         var publicationTime = new LocalTime(_options.PublicationHour, _options.PublicationMinute);
 
         // For today's date
         if (date == currentDate)
+        {
             // If before publication time, cache until today's publication time
             if (currentTime < publicationTime)
             {
                 var todayPublication = currentDate.At(publicationTime);
-                return new DateTimeOffset(todayPublication.ToDateTimeUnspecified().
-                    ToUniversalTime());
+                return new DateTimeOffset(todayPublication.ToDateTimeUnspecified().ToUniversalTime());
             }
+        }
 
         // For all other cases (including today after publication),
         // cache until the next business day's publication time
@@ -126,8 +127,18 @@ public class RedisCacheService : ICacheService
         var expirationDate = nextBusinessDay.At(publicationTime);
 
         // Convert to DateTimeOffset for cache expiration
-        var dateTimeOffset = expirationDate.ToDateTimeUnspecified().
-            ToUniversalTime();
-        return new DateTimeOffset(dateTimeOffset);
+        var dateTimeOffset = expirationDate.ToDateTimeUnspecified().ToUniversalTime();
+        var expirationOffset = new DateTimeOffset(dateTimeOffset);
+
+        // Safety check - ensure we don't return a past date
+        var now = DateTimeOffset.UtcNow;
+        if (expirationOffset <= now)
+        {
+            // If expiration is in the past, set it to some time in the future
+            // Use a fallback expiration of current time + CacheExpirationMinutes
+            return now.AddMinutes(_options.CacheExpirationMinutes);
+        }
+
+        return expirationOffset;
     }
 }
