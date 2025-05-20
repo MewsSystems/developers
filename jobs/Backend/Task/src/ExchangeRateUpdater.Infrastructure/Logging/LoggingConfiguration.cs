@@ -4,7 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Display;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.Grafana.Loki;
 
 namespace ExchangeRateUpdater.Infrastructure.Logging;
 
@@ -30,6 +32,7 @@ public static class LoggingConfiguration
         string? applicationName = null)
     {
         var logFilePath = configuration["Serilog:LogFilePath"];
+        var lokiUrl = configuration["Serilog:LokiUrl"] ?? "http://localhost:3100";
 
         // Base configuration
         loggerConfig.ReadFrom.Configuration(configuration).
@@ -51,6 +54,19 @@ public static class LoggingConfiguration
                     logFilePath,
                     rollingInterval: RollingInterval.Day,
                     shared: true);
+
+            // Add Loki sink for development
+            loggerConfig.WriteTo.GrafanaLoki(
+                lokiUrl,
+                labels: new[]
+                {
+                    new LokiLabel { Key = "app", Value = applicationName ?? "ExchangeRateUpdater" },
+                    new LokiLabel { Key = "environment", Value = environmentName }
+                },
+                propertiesAsLabels: new[] { "Level", "Environment", "Application" },
+                batchPostingLimit: 100,
+                period: TimeSpan.FromSeconds(2),
+                textFormatter: new MessageTemplateTextFormatter("[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"));
         }
         // Configure for production (JSON-formatted)
         else
@@ -67,6 +83,19 @@ public static class LoggingConfiguration
                     logFilePath,
                     rollingInterval: RollingInterval.Day,
                     shared: true);
+
+            // Add Loki sink for production
+            loggerConfig.WriteTo.GrafanaLoki(
+                lokiUrl,
+                labels: new[]
+                {
+                    new LokiLabel { Key = "app", Value = applicationName ?? "ExchangeRateUpdater" },
+                    new LokiLabel { Key = "environment", Value = environmentName }
+                },
+                propertiesAsLabels: new[] { "Level", "Environment", "Application" },
+                batchPostingLimit: 100,
+                period: TimeSpan.FromSeconds(2),
+                textFormatter: new JsonFormatter(renderMessage: true));
         }
     }
 }
