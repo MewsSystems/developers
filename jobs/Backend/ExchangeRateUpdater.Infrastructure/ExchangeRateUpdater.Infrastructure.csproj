@@ -5,5 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
+  </ItemGroup>
 </Project>
