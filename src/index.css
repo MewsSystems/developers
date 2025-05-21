@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+  color: #1f1f1f;
+  line-height: 1.5;
+  text-align: left;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
