@@ -17,7 +17,7 @@ export const useService = <T>(serviceFunction: () => Promise<T>, options: UseSer
       const result = await serviceFunction();
       setData(result);
     } catch (err) {
-      setError(err);
+      setError(err as any);
     } finally {
       setLoading(false);
     }
