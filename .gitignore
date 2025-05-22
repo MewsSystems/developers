@@ -53,3 +53,8 @@ dist-ssr
 node_modules
 bower_components
 npm-debug.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
