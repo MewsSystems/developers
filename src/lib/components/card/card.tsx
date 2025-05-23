@@ -1,46 +1,74 @@
 import React from 'react';
-import {
-  StyledCard,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardImage,
-  CardImageContainer,
-  CardTitle,
-  CardDescription
-} from './card-styled';
+import styled from 'styled-components';
 
-interface CardProps {
+export interface CardProps {
   children: React.ReactNode;
-  variant?: 'default' | 'movie' | 'profile';
+  onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
-interface CardComposition {
-  Header: React.FC<{ children: React.ReactNode }>;
-  Body: React.FC<{ children: React.ReactNode }>;
-  Footer: React.FC<{ children: React.ReactNode }>;
-  Image: React.FC<{ src: string; alt: string }>;
-  Title: React.FC<{ children: React.ReactNode }>;
-  Description: React.FC<{ children: React.ReactNode }>;
-}
+const CardContainer = styled.div`
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
 
-const Card: React.FC<CardProps> & CardComposition = ({ children, variant = 'default' }) => {
+  &:hover {
+    transform: translateY(-4px);
+  }
+`;
+
+const CardImage = styled.img`
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+`;
+
+const CardBody = styled.div`
+  padding: 1rem;
+`;
+
+const CardTitle = styled.h3`
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+`;
+
+const CardDescription = styled.p`
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const CardFooter = styled.div`
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  color: #666;
+  font-size: 0.875rem;
+`;
+
+export const Card: React.FC<CardProps> & {
+  Image: typeof CardImage;
+  Body: typeof CardBody;
+  Title: typeof CardTitle;
+  Description: typeof CardDescription;
+  Footer: typeof CardFooter;
+} = ({ children, onClick, style }) => {
   return (
-    <StyledCard variant={variant}>
+    <CardContainer onClick={onClick} style={style}>
       {children}
-    </StyledCard>
+    </CardContainer>
   );
 };
 
-Card.Header = ({ children }) => <CardHeader>{children}</CardHeader>;
-Card.Body = ({ children }) => <CardBody>{children}</CardBody>;
-Card.Footer = ({ children }) => <CardFooter>{children}</CardFooter>;
-Card.Image = ({ src, alt }) => (
-  <CardImageContainer>
-    <CardImage src={src} alt={alt} />
-  </CardImageContainer>
-);
-Card.Title = ({ children }) => <CardTitle>{children}</CardTitle>;
-Card.Description = ({ children }) => <CardDescription>{children}</CardDescription>;
-
-export { Card };
+Card.Image = CardImage;
+Card.Body = CardBody;
+Card.Title = CardTitle;
+Card.Description = CardDescription;
+Card.Footer = CardFooter;
