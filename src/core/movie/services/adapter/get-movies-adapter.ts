@@ -1,14 +1,19 @@
-import { Movie } from "../types/movie";
+import { Movie } from "../../../../../src/core/movie/services/types/movie";
 
 export const getMoviesAdapter = (movies: any[]): Movie[] => {
     return movies.map((movie) => ({
         id: movie.id,
-        title: movie.title,
+        title: movie.original_title,
         overview: movie.overview,
         popularity: movie.popularity,
-        poster_path: movie.poster_path,
-        release_date: movie.release_date,
+        posterPath: movie.poster_path,
+        releaseDate: movie.release_date,
         video: movie.video,
-        language: movie.language,
+        voteAverage: movie.vote_average,
+        voteCount: movie.vote_count,
+        backdropPath: movie.backdrop_path,
+        runtime: movie.runtime,
+        genreIds: movie.genre_ids,
+        language: movie.original_language,
     }));
 };
