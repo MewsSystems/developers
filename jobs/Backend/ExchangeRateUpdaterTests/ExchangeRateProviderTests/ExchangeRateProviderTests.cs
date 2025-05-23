@@ -1,5 +1,6 @@
-﻿using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater;
+﻿using ExchangeRateUpdater;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
 using Moq;
 using Xunit;
 

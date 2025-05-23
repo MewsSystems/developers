@@ -1,11 +1,11 @@
-﻿using Xunit;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Caching.Memory;
+﻿using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace ExchangeRateUpdaterTests.ProviderServiceTests
 {

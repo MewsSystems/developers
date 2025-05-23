@@ -1,10 +1,10 @@
 ﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
-using Microsoft.Extensions.Configuration;
-using ExchangeRateUpdater.Services;
 
 namespace ExchangeRateUpdaterTests.StartupTests
 {
@@ -38,14 +38,14 @@ namespace ExchangeRateUpdaterTests.StartupTests
         public void ConfigureServices_Throws_WhenUrlsAreMissing()
         {
             var config = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string?>()) 
+                .AddInMemoryCollection(new Dictionary<string, string?>())
                 .Build();
 
             var services = new ServiceCollection();
             services.Configure<CzechBankSettings>(config.GetSection("CzechBankSettings"));
             services.AddMemoryCache();
             services.AddLogging();
-            services.AddHttpClient(); 
+            services.AddHttpClient();
             services.AddTransient<IExchangeRateProviderService, ExchangeRateProviderService>();
 
             var provider = services.BuildServiceProvider();

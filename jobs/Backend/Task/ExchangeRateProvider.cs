@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
 
 namespace ExchangeRateUpdater
 {
@@ -9,7 +10,7 @@ namespace ExchangeRateUpdater
     {
         private readonly IExchangeRateProviderService _service;
 
-        public ExchangeRateProvider(IExchangeRateProviderService service) 
+        public ExchangeRateProvider(IExchangeRateProviderService service)
         {
             _service = service;
         }

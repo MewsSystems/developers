@@ -45,7 +45,7 @@ namespace ExchangeRateUpdater.Services
             }
 
             try
-            { 
+            {
                 _logger.LogInformation("Getting exchange rates from Czech National Bank txt source");
 
                 var exchangeRates = new List<ExchangeRate>();
