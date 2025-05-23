@@ -4,14 +4,29 @@ import { getMoviesAdapter } from '../adapter/get-movies-adapter';
 import { getMovieDetailsAdapter } from '../adapter/get-movie-adapter';
 import { Movie } from '../types/movie';
 
+interface MovieResponse {
+  results: Movie[];
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
+
+interface MoviesDataList {
+  movies: Movie[];
+  totalPages: number;
+}
+
 const movieApi: RestClient = createApiClient();
 
-const isValidMoviesResponse = (data: unknown): data is { results: any[] } => {
+const isValidMoviesResponse = (data: unknown): data is MovieResponse => {
   return (
     typeof data === 'object' &&
     data !== null &&
     'results' in data &&
-    Array.isArray((data as any).results)
+    Array.isArray((data as any).results) &&
+    'page' in data &&
+    'total_pages' in data &&
+    'total_results' in data
   );
 }
 
@@ -24,26 +39,40 @@ const isValidMovieResponse = (data: unknown): data is { id: number } => {
   );
 }
 
-export const getMovies = async (): Promise<Movie[]> => {
+export const getMovies = async (page: number = 1): Promise<MoviesDataList> => {
   try {
-    const response = await movieApi.get({ url: '/movie/popular' });
+    const response = await movieApi.get({ 
+      url: `/movie/popular?page=${page}` 
+    });
+    
     if (!isValidMoviesResponse(response)) {
       throw new Error('Invalid movies response');
     }
-    return getMoviesAdapter(response.results);
+    
+    return {
+      movies: getMoviesAdapter(response.results),
+      totalPages: response.total_pages
+    };
   } catch (error) {
     console.error('Error fetching movies:', error);
     throw error;
   }
-};
+};  
 
-export const searchMovies = async (query: string): Promise<Movie[]> => {
+export const searchMovies = async (query: string, page: number = 1): Promise<MoviesDataList> => {
   try {
-    const response = await movieApi.get({ url: `/search/movie?query=${encodeURIComponent(query)}` });
+    const response = await movieApi.get({ 
+      url: `/search/movie?query=${encodeURIComponent(query)}&page=${page}` 
+    });
+    
     if (!isValidMoviesResponse(response)) {
       throw new Error('Invalid search response');
     }
-    return getMoviesAdapter(response.results);
+    
+    return {
+      movies: getMoviesAdapter(response.results),
+      totalPages: response.total_pages
+    };
   } catch (error) {
     console.error('Error searching movies:', error);
     throw error;
