@@ -11,8 +11,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.6.0",
+    "react-router-dom": "^7.6.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
