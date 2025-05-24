@@ -5,6 +5,9 @@ import { Card } from "@app/lib/components/card/card";
 import { Search } from "@app/lib/components/search/search";
 import { Pagination } from "@app/lib/components/pagination/pagination";
 import { useState } from 'react';
+import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/skeleton-cards-list';
+import { ErrorComponent } from '@core/error/components/error-component';
+
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -35,13 +38,16 @@ export const Home: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  console.log(error);
+  
+
   return (
     <>
       <Search onSearch={setSearchQuery} />
       {error ? (
-        <div>Error: {error}</div>
+        <ErrorComponent code={error.code} message={error.message} />
       ) : loading ? (
-        <div>Loading...</div>
+        <MovieCardsSkeleton />
       ) : !movies?.length ? (
         <h3>No movies found</h3>
       ) : (

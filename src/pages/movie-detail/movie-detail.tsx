@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getMovie } from '@movie/services/api/movie-api'
 import { useService } from '@app/lib/useService';
+import { ErrorComponent } from '@core/error/components/error-component';
 
 const Container = styled.div`
   padding: 2rem;
@@ -74,7 +75,8 @@ export const MovieDetail: React.FC = () => {
   const { data: movie, loading, error } = useService(() => getMovie(Number(id)));
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <ErrorComponent code={error.code} message={error.message} />;
+
   if (!movie) return <div>Movie not found</div>;
   
 
