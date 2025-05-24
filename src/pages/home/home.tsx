@@ -1,15 +1,15 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMovies, searchMovies } from "@movie/services/api/movie-api";
 import { useService } from "@app/lib/useService";
 import { Card } from "@app/lib/components/card/card";
 import { Search } from "@app/lib/components/search/search";
 import { Pagination } from "@app/lib/components/pagination/pagination";
+import { useState } from 'react';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   
   const { data: popularMoviesData, loading: popularLoading, error: popularError } = useService(
     () => getMovies(currentPage),
