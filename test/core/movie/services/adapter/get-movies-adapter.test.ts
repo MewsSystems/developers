@@ -1,72 +1,39 @@
-import { getMoviesAdapter } from "@core/movie/services/adapter/get-movies-adapter";
+import { describe, it, expect } from 'vitest';
+import { getMoviesAdapter } from '@core/movie/services/adapter/get-movies-adapter';
+import { mockMoviesListResponseByTMDB } from '@test/mocks/movie/movies-list-mock';
 
 describe('getMoviesAdapter', () => {
-  const mockMoviesResponse = [
-    {
-      id: 123,
-      original_title: 'Test Movie 1',
-      overview: 'Test overview 1',
-      popularity: 100,
-      poster_path: '/test-poster-1.jpg',
-      release_date: '2024-01-01',
-      video: false,
-      vote_average: 8.5,
-      vote_count: 1000,
-      backdrop_path: '/test-backdrop-1.jpg',
-      runtime: 120,
-      genre_ids: [1, 2, 3],
-      original_language: 'en'
-    },
-    {
-      id: 456,
-      original_title: 'Test Movie 2',
-      overview: 'Test overview 2',
-      popularity: 200,
-      poster_path: '/test-poster-2.jpg',
-      release_date: '2024-01-02',
-      video: true,
-      vote_average: 7.5,
-      vote_count: 500,
-      backdrop_path: '/test-backdrop-2.jpg',
-      runtime: 90,
-      genre_ids: [4, 5],
-      original_language: 'es'
-    }
-  ];
-
   it('should transform array of API responses to Movie array', () => {
-    const result = getMoviesAdapter(mockMoviesResponse);
+    const result = getMoviesAdapter(mockMoviesListResponseByTMDB.results);
 
     expect(result).toEqual([
       {
         id: 123,
         title: 'Test Movie 1',
         overview: 'Test overview 1',
-        popularity: 100,
         posterPath: '/test-poster-1.jpg',
         releaseDate: '2024-01-01',
-        video: false,
         voteAverage: 8.5,
         voteCount: 1000,
+        popularity: 100,
         backdropPath: '/test-backdrop-1.jpg',
-        runtime: 120,
-        genreIds: [1, 2, 3],
-        language: 'en'
+        language: 'en',
+        video: false,
+        runtime: 120
       },
       {
         id: 456,
         title: 'Test Movie 2',
         overview: 'Test overview 2',
-        popularity: 200,
         posterPath: '/test-poster-2.jpg',
         releaseDate: '2024-01-02',
-        video: true,
         voteAverage: 7.5,
         voteCount: 500,
+        popularity: 50,
         backdropPath: '/test-backdrop-2.jpg',
-        runtime: 90,
-        genreIds: [4, 5],
-        language: 'es'
+        language: 'es',
+        video: false,
+        runtime: 90
       }
     ]);
   });
@@ -78,35 +45,110 @@ describe('getMoviesAdapter', () => {
 
   it('should handle missing optional fields', () => {
     const partialResponse = [{
-      id: 123,
-      original_title: 'Test Movie',
-      overview: 'Test overview',
-      popularity: 100,
-      poster_path: '/test-poster.jpg',
-      release_date: '2024-01-01',
-      video: false,
-      vote_average: 8.5,
-      vote_count: 1000,
-      backdrop_path: null,
-      original_language: 'en'
+      ...mockMoviesListResponseByTMDB.results[0],
+      overview: undefined,
+      poster_path: undefined,
+      backdrop_path: undefined,
+      runtime: undefined
     }];
 
     const result = getMoviesAdapter(partialResponse);
 
     expect(result).toEqual([{
       id: 123,
-      title: 'Test Movie',
-      overview: 'Test overview',
-      popularity: 100,
-      posterPath: '/test-poster.jpg',
+      title: 'Test Movie 1',
+      overview: null,
+      posterPath: null,
       releaseDate: '2024-01-01',
-      video: false,
       voteAverage: 8.5,
       voteCount: 1000,
+      popularity: 100,
       backdropPath: null,
       language: 'en',
-      runtime: undefined,
-      genreIds: undefined
+      video: false,
+      runtime: null
+    }]);
+  });
+
+  it('should handle null values in movie objects', () => {
+    const responseWithNulls = [{
+      ...mockMoviesListResponseByTMDB.results[0],
+      overview: null,
+      poster_path: null,
+      backdrop_path: null,
+      runtime: null
+    }];
+
+    const result = getMoviesAdapter(responseWithNulls);
+
+    expect(result).toEqual([{
+      id: 123,
+      title: 'Test Movie 1',
+      overview: null,
+      posterPath: null,
+      releaseDate: '2024-01-01',
+      voteAverage: 8.5,
+      voteCount: 1000,
+      popularity: 100,
+      backdropPath: null,
+      language: 'en',
+      video: false,
+      runtime: null
+    }]);
+  });
+
+  it('should handle extra fields in the response', () => {
+    const responseWithExtraFields = [{
+      ...mockMoviesListResponseByTMDB.results[0],
+      extra_field: 'extra value',
+    }];
+
+    const result = getMoviesAdapter(responseWithExtraFields);
+
+    expect(result).toEqual([{
+      id: 123,
+      title: 'Test Movie 1',
+      overview: 'Test overview 1',
+      posterPath: '/test-poster-1.jpg',
+      releaseDate: '2024-01-01',
+      voteAverage: 8.5,
+      voteCount: 1000,
+      popularity: 100,
+      backdropPath: '/test-backdrop-1.jpg',
+      language: 'en',
+      video: false,
+      runtime: 120
+    }]);
+  });
+
+  it('should handle minimal valid data', () => {
+    const minimalResponse = [{
+      ...mockMoviesListResponseByTMDB.results[0],
+      overview: undefined,
+      poster_path: undefined,
+      release_date: undefined,
+      vote_average: undefined,
+      vote_count: undefined,
+      popularity: undefined,
+      backdrop_path: undefined,
+      runtime: undefined
+    }];
+
+    const result = getMoviesAdapter(minimalResponse);
+
+    expect(result).toEqual([{
+      id: 123,
+      title: 'Test Movie 1',
+      overview: null,
+      posterPath: null,
+      releaseDate: null,
+      voteAverage: null,
+      voteCount: null,
+      popularity: null,
+      backdropPath: null,
+      language: 'en',
+      video: false,
+      runtime: null
     }]);
   });
 }); 
