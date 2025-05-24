@@ -1,4 +1,4 @@
-import { Movie } from "../types/movie";
+import { Movie } from "../../types/movie";
 
 export const getMoviesAdapter = (movies: any[]): Movie[] => {
     return movies.map((movie) => ({

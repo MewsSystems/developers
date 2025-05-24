@@ -2,7 +2,7 @@ import { createApiClient } from '@services/FetchRestClient';
 import { RestClient } from '@services/types/rest-api';
 import { getMoviesAdapter } from '../adapter/get-movies-adapter';
 import { getMovieDetailsAdapter } from '../adapter/get-movie-adapter';
-import { Movie } from '../types/movie';
+import { Movie } from '../../types/movie';
 
 interface MovieResponse {
   results: Movie[];
