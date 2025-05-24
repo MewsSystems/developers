@@ -1,6 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useDebouncedValue } from '../../useDebouncedValue';
+import { useEffect, useState } from 'react';
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -35,11 +35,11 @@ export const Search: React.FC<SearchProps> = ({
   onSearch, 
   placeholder = 'Search movies...' 
 }) => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useState('');
   const debouncedValue = useDebouncedValue(value, 500);
   
 
-  React.useEffect(() => {
+  useEffect(() => {
     onSearch(debouncedValue);
   }, [debouncedValue, onSearch]);
 
