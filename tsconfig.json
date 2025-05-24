@@ -21,7 +21,8 @@
       "@services/*": ["src/services/*"],
       "@movie/*": ["src/core/movie/*"],
       "@pages/*": ["src/pages/*"],
-      "@app/*": ["src/*"]
+      "@app/*": ["src/*"],
+      "@test/*": ["test/*"]
     }
   },
   "include": ["src", "test/**/*.ts"]

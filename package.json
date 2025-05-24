@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",
@@ -38,6 +38,7 @@
     "globals": "^15.15.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.4.3",
     "ts-jest": "^29.3.4",
     "typescript": "~5.7.3",

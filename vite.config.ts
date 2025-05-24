@@ -12,7 +12,8 @@ export default defineConfig({
       '@services': path.resolve(__dirname, './src/services'),
       '@movie': path.resolve(__dirname, './src/core/movie'),
       '@pages': path.resolve(__dirname, './src/pages'),
-      '@app': path.resolve(__dirname, './src')
+      '@app': path.resolve(__dirname, './src'),
+      '@test': path.resolve(__dirname, './test')
     }
   }
 })
