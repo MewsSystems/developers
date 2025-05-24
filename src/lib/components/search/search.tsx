@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useDebouncedValue } from '../../useDebouncedValue';
+import { useDebouncedValue } from '@app/lib/useDebouncedValue';
 import { useEffect, useState } from 'react';
 
 const SearchContainer = styled.div`
