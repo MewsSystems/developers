@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getMovies, searchMovies } from "@movie/services/api/movie-api";
 import { useService } from "@app/lib/useService";
 import { Card } from "@app/lib/components/card/card";
@@ -8,11 +8,11 @@ import { useState } from 'react';
 import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/skeleton-cards-list';
 import { ErrorComponent } from '@core/error/components/error-component';
 
-
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = Number(searchParams.get('page')) || 1;
   
   const { data: popularMoviesData, loading: popularLoading, error: popularError } = useService(
     () => getMovies(currentPage),
@@ -34,12 +34,9 @@ export const Home: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setSearchParams({ page: page.toString() });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  console.log(error);
-  
 
   return (
     <>
