@@ -1,7 +1,6 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getMovieDetails } from '@movie/services/api/movie-api'
+import { getMovie } from '@movie/services/api/movie-api'
 import { useService } from '@app/lib/useService';
 
 const Container = styled.div`
@@ -72,7 +71,7 @@ const Rating = styled.div`
 export const MovieDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: movie, loading, error } = useService(() => getMovieDetails(Number(id)));
+  const { data: movie, loading, error } = useService(() => getMovie(Number(id)));
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

@@ -79,7 +79,7 @@ export const searchMovies = async (query: string, page: number = 1): Promise<Mov
   }
 };
 
-export const getMovieDetails = async (movieId: number): Promise<Movie | null> => {
+export const getMovie = async (movieId: number): Promise<Movie | null> => {
   try {
     const response = await movieApi.get({ url: `/movie/${movieId}` });
     if (!isValidMovieResponse(response)) {

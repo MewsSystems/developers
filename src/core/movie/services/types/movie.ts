@@ -8,8 +8,7 @@ export interface Movie {
     voteCount: number;
     popularity: number;
     backdropPath: string | null;
-    genreIds: number[];
     language: string;
     video: boolean;
-    runtime?: number;
+    runtime: number;
 }
