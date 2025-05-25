@@ -22,7 +22,7 @@ const SkeletonBase = styled.div`
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(to bottom, #1a1a1a, #2d2d2d);
+  background: linear-gradient(to bottom, #2d2d2d, #3d3d3d);
   padding: 2rem;
 `;
 
@@ -36,10 +36,11 @@ const MovieGrid = styled.div`
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(40, 40, 40, 0.7);
   padding: 2rem;
   border-radius: 12px;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Poster = styled(SkeletonBase)`

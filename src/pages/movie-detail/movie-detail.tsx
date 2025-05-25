@@ -22,7 +22,7 @@ const BackdropContainer = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -55,7 +55,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  opacity: 0.4;
+  opacity: 0.8;
   transition: opacity 0.3s ease;
 
   &:hover {
@@ -67,10 +67,11 @@ const MovieGrid = styled.div`
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(40, 40, 40, 0.7);
   padding: 2rem;
   border-radius: 12px;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Poster = styled.img`
@@ -93,8 +94,9 @@ const Title = styled.h1`
 `;
 
 const ReleaseDate = styled.p`
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  font-size: 1.1rem;
 `;
 
 const Overview = styled.p`
@@ -108,7 +110,7 @@ const Rating = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.1rem;
 `;
 
