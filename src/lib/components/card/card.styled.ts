@@ -8,7 +8,16 @@ export const CardContainer = styled.div`
   width: 170px;
   display: flex;
   flex-direction: column;
-  overflow: hidden
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid #e3e3e3;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const CardImageContainer = styled.div`
@@ -18,13 +27,13 @@ export const CardImageContainer = styled.div`
 `;
 
 export const CardBody = styled.div`
-    padding: 4px 6px;
-    white-space: normal;
-    display: flex;
-    text-overflow: ellipsis
-    flex-wrap: wrap;
-    gap: 2px;
-    flex: 1;
+  padding: 4px 6px;
+  white-space: normal;
+  display: flex;
+  text-overflow: ellipsis;
+  flex-wrap: wrap;
+  gap: 2px;
+  flex: 1;
 `;
 
 export const CardTitle = styled.h3`
@@ -36,6 +45,11 @@ export const CardTitle = styled.h3`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  transition: color 0.3s ease;
+
+  ${CardContainer}:hover & {
+    color: #007bff;
+  }
 `;
 
 export const CardFooter = styled.div`
@@ -56,4 +70,5 @@ export const ScoreWrapper = styled.span<{ size: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
 `;
