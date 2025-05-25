@@ -1,13 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
-import { Home } from './pages/home/home';
-import { MovieDetail } from './pages/movie-detail/movie-detail';
+import { Suspense } from 'react';
+import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/cards-skeleton-list';
+import { routes } from './router/router';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/movie/:id" element={<MovieDetail />} />
-    </Routes>
+    <Suspense fallback={<MovieCardsSkeleton />}>
+      <Routes>
+        {routes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={route.element}
+          />
+        ))}
+      </Routes>
+    </Suspense>
   );
 }
 
