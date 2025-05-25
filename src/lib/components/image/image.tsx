@@ -1,19 +1,9 @@
 
-import styled from 'styled-components';
 import fallbackImage from './fallback-image.png';
 import { ReactNode } from 'react';
+import { StyledImg } from './image.styled';
 
-interface ImgPropsStyleTypes {
-  $objectFit?: ImgProps['objectFit'];
-}
-
-export const StyledImg = styled.img<ImgPropsStyleTypes>`
-  width: 100%;
-  height: 100%;
-  object-fit: ${(props: ImgPropsStyleTypes) => props?.$objectFit ?? 'cover'};
-`;
-
-interface ImgProps {
+export interface ImgProps {
   src: string;
   loading?: 'eager' | 'lazy';
   alt: string;

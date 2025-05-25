@@ -45,7 +45,6 @@ export const UserScore: React.FC<UserScoreProps> = ({
         r={radius}
         cx={size / 2}
         cy={size / 2}
-        style={{ transition: 'stroke-dashoffset 0.3s ease' }}
       />
       <text
         x="50%"

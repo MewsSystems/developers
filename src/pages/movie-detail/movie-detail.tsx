@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getMovie } from '@movie/services/api/movie-api'
-import { useService } from '@app/lib/useService';
+import { useService } from '@app/lib/use-service';
 import { ErrorComponent } from '@core/error/components/error-component';
 
 const Container = styled.div`
