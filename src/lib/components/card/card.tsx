@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 export interface CardProps {
@@ -11,53 +10,58 @@ const CardContainer = styled.div`
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
+  height: 300px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
 `;
 
-const CardImage = styled.img`
+const Image = styled.img`
   width: 100%;
-  height: 400px;
-  object-fit: cover;
+  height: 200px;
+`;
+
+const CardImageContainer = styled.div`
+  width: 100%;
+  height: 200px;
 `;
 
 const CardBody = styled.div`
-  padding: 1rem;
+    padding: 10px;
+    position: relative;
+    white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    flex: 1;
 `;
 
 const CardTitle = styled.h3`
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #333;
-`;
-
-const CardDescription = styled.p`
-  margin: 0.5rem 0;
-  color: #666;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-weight: 700
 `;
 
 const CardFooter = styled.div`
-  padding: 1rem;
-  border-top: 1px solid #eee;
+  padding: 10px;
   color: #666;
   font-size: 0.875rem;
+  margin-top: auto;
 `;
+
+const CardImage = ({ src, alt }: any) => {
+  return (
+    <CardImageContainer>
+      <Image src={src} alt={alt} />
+    </CardImageContainer>
+  );
+};
 
 export const Card: React.FC<CardProps> & {
   Image: typeof CardImage;
   Body: typeof CardBody;
   Title: typeof CardTitle;
-  Description: typeof CardDescription;
   Footer: typeof CardFooter;
 } = ({ children, onClick, style }) => {
   return (
@@ -70,5 +74,4 @@ export const Card: React.FC<CardProps> & {
 Card.Image = CardImage;
 Card.Body = CardBody;
 Card.Title = CardTitle;
-Card.Description = CardDescription;
 Card.Footer = CardFooter;

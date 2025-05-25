@@ -6,10 +6,13 @@ const SearchContainer = styled.div`
   width: 100%;
   max-width: 600px;
   margin: 0 auto 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 `;
 
 const SearchInput = styled.input`
-  width: 100%;
+  flex: 1;
   padding: 1rem;
   font-size: 1.1rem;
   border: 2px solid #eee;
@@ -23,6 +26,26 @@ const SearchInput = styled.input`
 
   &::placeholder {
     color: #999;
+  }
+`;
+
+const ResetButton = styled.button`
+  padding: 1rem;
+  background: #f8f9fa;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+  }
+
+  &:active {
+    background: #dee2e6;
   }
 `;
 
@@ -43,6 +66,11 @@ export const Search: React.FC<SearchProps> = ({
     onSearch(debouncedValue);
   }, [debouncedValue, onSearch]);
 
+  const handleReset = () => {
+    setValue('');
+    onSearch('');
+  };
+
   return (
     <SearchContainer>
       <SearchInput
@@ -51,6 +79,11 @@ export const Search: React.FC<SearchProps> = ({
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
       />
+      {value && (
+        <ResetButton onClick={handleReset}>
+          Reset
+        </ResetButton>
+      )}
     </SearchContainer>
   );
 }; 

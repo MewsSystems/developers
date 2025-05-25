@@ -7,6 +7,34 @@ import { Pagination } from "@app/lib/components/pagination/pagination";
 import { useState } from 'react';
 import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/skeleton-cards-list';
 import { ErrorComponent } from '@core/error/components/error-component';
+import styled from 'styled-components';
+
+const ResetButton = styled.button`
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+
+  &:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+`;
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -38,8 +66,17 @@ export const Home: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleReset = () => {
+    setSearchQuery('');
+    setSearchParams({});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
+      <ResetButton onClick={handleReset}>
+        Home
+      </ResetButton>
       <Search onSearch={setSearchQuery} />
       {error ? (
         <ErrorComponent code={error.code} message={error.message} />
@@ -52,8 +89,9 @@ export const Home: React.FC = () => {
           <div style={{ padding: '2rem' }}>
             <div style={{ 
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '2rem'
+              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+              gap: '2rem',
+              placeItems: 'center'
             }}>
               {movies.map((movie) => (
                 <Card 
@@ -62,12 +100,16 @@ export const Home: React.FC = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <Card.Image 
-                    src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`} 
-                    alt={movie.title}
+                     src={`https://image.tmdb.org/t/p/w220_and_h330_face${movie.posterPath}`}
+                     srcSet={`
+                       https://image.tmdb.org/t/p/w220_and_h330_face${movie.posterPath} 1x,
+                       https://image.tmdb.org/t/p/w440_and_h660_face${movie.posterPath} 2x
+                     `}
+                     alt={movie.title}
+                     loading="lazy"
                   />
                   <Card.Body>
                     <Card.Title>{movie.title}</Card.Title>
-                    <Card.Description>{movie.overview}</Card.Description>
                   </Card.Body>
                   <Card.Footer>
                     <small>Release Date: {movie.releaseDate}</small>
