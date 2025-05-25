@@ -5,9 +5,10 @@ import { Card } from "@app/lib/components/card/card";
 import { Search } from "@app/lib/components/search/search";
 import { Pagination } from "@app/lib/components/pagination/pagination";
 import { useState } from 'react';
-import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/skeleton-cards-list';
+import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/cards-skeleton-list';
 import { ErrorComponent } from '@core/error/components/error-component';
 import styled from 'styled-components';
+import { scrollToTop } from '@app/utils/scroll-top';
 
 const ResetButton = styled.button`
   position: fixed;
@@ -36,10 +37,11 @@ const ResetButton = styled.button`
   }
 `;
 
+
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const currentPage = Number(searchParams.get('page')) || 1;
   
   const { data: popularMoviesData, loading: popularLoading, error: popularError } = useService(
@@ -63,13 +65,12 @@ export const Home: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: page.toString() });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
   };
 
   const handleReset = () => {
-    setSearchQuery('');
     setSearchParams({});
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTop();
   };
 
   return (
@@ -97,16 +98,12 @@ export const Home: React.FC = () => {
                 <Card 
                   key={movie.id}
                   onClick={() => handleMovieClick(movie.id)}
-                  style={{ cursor: 'pointer' }}
                 >
                   <Card.Image 
                      src={`https://image.tmdb.org/t/p/w220_and_h330_face${movie.posterPath}`}
-                     srcSet={`
-                       https://image.tmdb.org/t/p/w220_and_h330_face${movie.posterPath} 1x,
-                       https://image.tmdb.org/t/p/w440_and_h660_face${movie.posterPath} 2x
-                     `}
                      alt={movie.title}
                      loading="lazy"
+                     score={Math.floor(movie.voteAverage * 10)}
                   />
                   <Card.Body>
                     <Card.Title>{movie.title}</Card.Title>
