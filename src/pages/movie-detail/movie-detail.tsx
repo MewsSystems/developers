@@ -4,6 +4,7 @@ import { getMovie } from '@movie/services/api/movie-api'
 import { useService } from '@app/lib/use-service';
 import { ErrorComponent } from '@core/error/components/error-component';
 import { Img } from '@app/lib/components/image/image';
+import { MovieDetailSkeleton } from '@app/lib/components/skeleton-movie-detail/skeleton-movie-detail';
 
 const BackdropContainer = styled.div`
   position: fixed;
@@ -116,7 +117,7 @@ export const MovieDetail: React.FC = () => {
   const navigate = useNavigate();
   const { data: movie, loading, error } = useService(() => getMovie(Number(id)));
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <MovieDetailSkeleton />;
   if (error) return <ErrorComponent code={error.code} message={error.message} />;
   if (!movie) return <div>Movie not found</div>;
 
