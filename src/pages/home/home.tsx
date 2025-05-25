@@ -10,11 +10,20 @@ import { scrollToTop } from '@app/utils/scroll-top';
 import { NavSection } from './components/nav-section';
 import { ContentWrapper, StickyContainer, MoviesContainer, MoviesGrid } from './home.styled';
 
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w220_and_h330_face';
+const DEFAULT_PAGE = 1;
+
+const calculateScore = (voteAverage: number): number => Math.floor(voteAverage * 10);
+
+const getMovieImageUrl = (posterPath: string): string => `${TMDB_IMAGE_BASE_URL}${posterPath}`;
+
+const shouldShowPagination = (totalPages?: number): boolean => Boolean(totalPages && totalPages > 1);
+
 export const Home: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams.get('page')) || DEFAULT_PAGE;
   
   const { data: popularMoviesData, loading: popularLoading, error: popularError } = useService(
     () => getMovies(currentPage),
@@ -62,10 +71,10 @@ export const Home: React.FC = () => {
                     onClick={() => handleMovieClick(movie.id)}
                   >
                     <Card.Image 
-                       src={`https://image.tmdb.org/t/p/w220_and_h330_face${movie.posterPath}`}
+                       src={getMovieImageUrl(movie.posterPath)}
                        alt={movie.title}
                        loading="lazy"
-                       score={Math.floor(movie.voteAverage * 10)}
+                       score={calculateScore(movie.voteAverage)}
                     />
                     <Card.Body>
                       <Card.Title>{movie.title}</Card.Title>
@@ -77,13 +86,13 @@ export const Home: React.FC = () => {
                 ))}
               </MoviesGrid>
             </MoviesContainer>
-            {totalPages && totalPages > 1 && (
+            {shouldShowPagination(totalPages) && totalPages ? (
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
               />
-            )}
+            ) : null}
           </>
         )}
       </ContentWrapper>
