@@ -1,6 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using ExchangeRateUpdater.Configuration;
+using Microsoft.Extensions.Caching.Memory;
+using System.Text.RegularExpressions;
+using ExchangeRateUpdater.Common.Constants;
+using ExchangeRateUpdater.ExchangeRate.Providers;
+using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater
 {
@@ -19,25 +27,81 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            // Setup DI
+            var services = new ServiceCollection();
+            var startup = new Startup();
+            startup.ConfigureServices(services);
+            var provider = services.BuildServiceProvider();
+
+            var exchangeRateProvider = provider.GetRequiredService<IExchangeRateService>();
+            var memoryCache = provider.GetRequiredService<IMemoryCache>();
+
+            // Show initial rates for default currencies
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                Console.WriteLine("Fetching exchange rates for default currencies:");
+                var initialRates = await exchangeRateProvider.GetExchangeRateAsync(currencies.ToList());
+                foreach (var rate in initialRates)
                 {
                     Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Console.WriteLine($"\nCould not retrieve initial exchange rates: '{e.Message}'.");
             }
 
-            Console.ReadLine();
+            // User interaction loop
+            while (true)
+            {
+                Console.Write("\nEnter currency codes (comma separated), or type 'clear' to clear cache: ");
+                var input = Console.ReadLine();
+
+                // Do not exit on empty input, just prompt again
+                if (string.IsNullOrWhiteSpace(input))
+                    continue;
+
+                if (input.Trim().Equals("clear", StringComparison.OrdinalIgnoreCase))
+                {
+                    memoryCache.Remove(AppConstants.DailyRatesCacheKey);
+                    memoryCache.Remove(AppConstants.MonthlyRatesCacheKey);
+                    Console.WriteLine("Cache cleared.");
+                    continue;
+                }
+
+                var codes = input.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                 .Select(code => code.ToUpperInvariant())
+                                 .ToList();
+
+                // ISO 4217 format: exactly 3 uppercase letters
+                var iso4217Regex = new Regex("^[A-Z]{3}$");
+                var invalidCodes = codes.Where(code => !iso4217Regex.IsMatch(code)).ToList();
+
+                if (invalidCodes.Any())
+                {
+                    Console.WriteLine($"Invalid ISO 4217 currency codes: {string.Join(", ", invalidCodes)}");
+                    continue;
+                }
+
+                var currencyObjects = codes.Select(code => new Currency(code)).ToList();
+
+                try
+                {
+                    var rates = await exchangeRateProvider.GetExchangeRateAsync(currencyObjects);
+                    Console.WriteLine($"\nSuccessfully retrieved {rates.Count} exchange rates:");
+                    foreach (var rate in rates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"\nCould not retrieve exchange rates: '{e.Message}'.");
+                }
+            }
         }
+
     }
 }
