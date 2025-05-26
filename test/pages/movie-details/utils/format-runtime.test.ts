@@ -1,4 +1,4 @@
-import { formatRuntime } from '../../src/utils/format-runtime';
+import { formatRuntime } from '../../../../src/pages/movie-detail/utils/format-runtime';
 
 describe('formatRuntime', () => {
   it('should format runtime with hours and minutes', () => {
@@ -17,7 +17,7 @@ describe('formatRuntime', () => {
   });
 
   it('should handle exact hours', () => {
-    expect(formatRuntime(60)).toBe('1h 0m');
+    expect(formatRuntime(60)).toBe('1h 0m');  
     expect(formatRuntime(120)).toBe('2h 0m');
     expect(formatRuntime(180)).toBe('3h 0m');
   });

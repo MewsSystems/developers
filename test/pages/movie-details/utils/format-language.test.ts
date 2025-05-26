@@ -1,4 +1,4 @@
-import { formatLanguage } from '../../src/utils/format-language';
+import { formatLanguage } from '../../../../src/pages/movie-detail/utils/format-language';
 
 describe('formatLanguage', () => {
   it('should convert language code to uppercase', () => {

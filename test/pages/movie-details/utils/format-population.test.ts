@@ -1,4 +1,4 @@
-import { formatPopularity } from '../../src/utils/format-population';
+import { formatPopularity } from '../../../../src/pages/movie-detail/utils/format-population';
 
 describe('formatPopularity', () => {
   it('should format popularity with one decimal place', () => {

@@ -1,8 +1,8 @@
 import { Movie } from '@movie/types/movie';
 import { Poster, MovieInfo, Title, Overview, DetailItem, MovieDetailsContainer, Rating, ReleaseDate } from './movie-content.styled';
-import { formatLanguage } from '@app/utils/format-language';
-import { formatPopularity } from '@app/utils/format-population';
-import { formatRuntime } from '@app/utils/format-runtime';
+import { formatLanguage } from '@pages/movie-detail/utils/format-language';
+import { formatPopularity } from '@pages/movie-detail/utils/format-population';
+import { formatRuntime } from '@pages/movie-detail/utils/format-runtime';
 
 
 interface MovieContentProps {
