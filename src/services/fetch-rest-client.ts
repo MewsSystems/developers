@@ -1,5 +1,5 @@
 import { RestClient, RestClientGetParams, RestClientPostParams } from "./types/rest-api";
-import { API_CONFIG } from "./api.config";
+import { API_CONFIG } from "./api-config";
 
 
 class FetchRestClient implements RestClient {

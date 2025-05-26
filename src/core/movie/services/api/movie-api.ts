@@ -1,4 +1,4 @@
-import { createApiClient } from '@services/FetchRestClient';
+import { createApiClient } from '@services/fetch-rest-client';
 import { RestClient } from '@services/types/rest-api';
 import { getMoviesAdapter } from '../adapter/get-movies-adapter';
 import { getMovieDetailsAdapter } from '../adapter/get-movie-adapter';

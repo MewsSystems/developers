@@ -9,15 +9,13 @@ import { ErrorComponent } from '@core/error/components/error-component';
 import { scrollToTop } from '@app/utils/scroll-top';
 import { NavSection } from './components/nav-section';
 import { ContentWrapper, StickyContainer, MoviesContainer, MoviesGrid } from './home.styled';
+import { shouldShowPagination } from './utils/should-show-pagination';
+import { getMovieImageUrl } from './utils/get-movie-image-url';
+import { Movie } from '@core/movie/types/movie';
+import { calculateScore } from './utils/calculate-score';
 
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w220_and_h330_face';
 const DEFAULT_PAGE = 1;
-
-const calculateScore = (voteAverage: number): number => Math.floor(voteAverage * 10);
-
-const getMovieImageUrl = (posterPath: string): string => `${TMDB_IMAGE_BASE_URL}${posterPath}`;
-
-const shouldShowPagination = (totalPages?: number): boolean => Boolean(totalPages && totalPages > 1);
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -65,13 +63,13 @@ export const Home = () => {
           <>
             <MoviesContainer>
               <MoviesGrid>
-                {movies.map((movie) => (
+                {movies.map((movie: Movie) => (
                   <Card 
                     key={movie.id}
                     onClick={() => handleMovieClick(movie.id)}
                   >
                     <Card.Image 
-                       src={getMovieImageUrl(movie.posterPath)}
+                       src={getMovieImageUrl(TMDB_IMAGE_BASE_URL, movie)}
                        alt={movie.title}
                        score={calculateScore(movie.voteAverage)}
                     />
@@ -85,7 +83,7 @@ export const Home = () => {
                 ))}
               </MoviesGrid>
             </MoviesContainer>
-            {shouldShowPagination(totalPages) && totalPages ? (
+            {totalPages && shouldShowPagination(totalPages) ? (
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
