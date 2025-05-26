@@ -13,7 +13,7 @@ export const MovieDetail: React.FC = () => {
 
   if (loading) return <MovieDetailSkeleton />;
   if (error) return <ErrorComponent code={error.code} message={error.message} />;
-  if (!movie) return <div>Movie not found</div>;
+  if (!movie) return <>Movie not found</>;
 
   return (
     <>
