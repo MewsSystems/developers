@@ -34,15 +34,16 @@ export const MovieDetailsContainer = styled.div`
 `;
 
 export const DetailItem = styled.span`
+  width: fit-content;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
   color: #fff;
-  display: inline-block;
 `;
 
 export const ReleaseDate = styled.p`
+  width: fit-content;
   color: #fff;
   font-size: 1rem;
   margin: 0;
