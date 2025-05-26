@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getMovie } from '@movie/services/api/movie-api'
 import { useService } from '@app/lib/use-service';
 import { ErrorComponent } from '@core/error/components/error-component';
@@ -9,7 +9,16 @@ import { MovieContent } from './components/movie-content/movie-content';
 export const MovieDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: movie, loading, error } = useService(() => getMovie(Number(id)));
+
+  const handleBack = () => {
+    if (location.key !== 'default') {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
 
   if (loading) return <MovieDetailSkeleton />;
   if (error) return <ErrorComponent code={error.code} message={error.message} />;
@@ -25,7 +34,7 @@ export const MovieDetail: React.FC = () => {
         />
       </BackdropContainer>
       <Container>
-        <BackButton onClick={() => navigate(-1)}>
+        <BackButton onClick={handleBack}>
           ← Back to Movies
         </BackButton>
         <MovieGrid>
