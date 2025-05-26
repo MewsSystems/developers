@@ -19,7 +19,7 @@ const getMovieImageUrl = (posterPath: string): string => `${TMDB_IMAGE_BASE_URL}
 
 const shouldShowPagination = (totalPages?: number): boolean => Boolean(totalPages && totalPages > 1);
 
-export const Home: React.FC = () => {
+export const Home = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -73,7 +73,6 @@ export const Home: React.FC = () => {
                     <Card.Image 
                        src={getMovieImageUrl(movie.posterPath)}
                        alt={movie.title}
-                       loading="lazy"
                        score={calculateScore(movie.voteAverage)}
                     />
                     <Card.Body>
