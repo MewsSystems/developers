@@ -6,7 +6,7 @@ import { MovieDetailSkeleton } from '@app/lib/components/skeleton-movie-detail/s
 import { BackdropContainer, BackdropImage, Container, BackButton, MovieGrid } from './movie-detail.styled';
 import { MovieContent } from './components/movie-content/movie-content';
 
-export const MovieDetail: React.FC = () => {
+export const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
