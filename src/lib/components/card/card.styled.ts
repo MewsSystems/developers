@@ -70,5 +70,5 @@ export const ScoreWrapper = styled.span<{ size: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 1;
 `;
