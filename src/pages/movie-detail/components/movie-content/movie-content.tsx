@@ -1,12 +1,15 @@
 import { Movie } from '@movie/types/movie';
-import { Poster, MovieInfo, Title, Overview } from './movie-content.styled';
-import { MovieDetails } from '../movie-details/movie-details';
+import { Poster, MovieInfo, Title, Overview, DetailItem, MovieDetailsContainer, Rating, ReleaseDate } from './movie-content.styled';
+import { formatLanguage } from '@app/utils/format-language';
+import { formatPopularity } from '@app/utils/format-population';
+import { formatRuntime } from '@app/utils/format-runtime';
+
 
 interface MovieContentProps {
   movie: Movie;
 }
 
-export const MovieContent: React.FC<MovieContentProps> = ({ movie }) => {
+export const MovieContent = ({ movie }: MovieContentProps) => {
   return (
     <>
       <Poster 
@@ -15,7 +18,25 @@ export const MovieContent: React.FC<MovieContentProps> = ({ movie }) => {
       />
       <MovieInfo>
         <Title>{movie.title}</Title>
-        <MovieDetails movie={movie} />
+        <MovieDetailsContainer>
+      {movie.language && (
+        <DetailItem>
+          {formatLanguage(movie.language)}
+        </DetailItem>
+      )}
+      {movie.runtime && (
+        <DetailItem>
+          {formatRuntime(movie.runtime)}
+        </DetailItem>
+      )}
+      <DetailItem>
+        Popularity: {formatPopularity(movie.popularity)}
+      </DetailItem>
+      <ReleaseDate>Release Date: {movie.releaseDate}</ReleaseDate>
+      <Rating>
+        Rating: {movie.voteAverage.toFixed(1)}/10
+      </Rating>
+    </MovieDetailsContainer>
         <Overview>{movie.overview}</Overview>
       </MovieInfo>
     </>
