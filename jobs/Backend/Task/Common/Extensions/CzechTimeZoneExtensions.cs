@@ -22,16 +22,6 @@ namespace ExchangeRateUpdater.Common.Extensions
             return nextUpdate.ToUniversalTime();
         }
 
-        // public static DateTimeOffset GetNextMonthUpdateUtc(DateTimeOffset? now = null)
-        // {
-        //     var czechTimeZone = GetCzechTimeZone();
-        //     var nowCzech = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, czechTimeZone);
-        //     var nextMonth = nowCzech.Month == 12
-        //         ? new DateTimeOffset(nowCzech.Year + 1, 1, 1, 0, 0, 0, nowCzech.Offset)
-        //         : new DateTimeOffset(nowCzech.Year, nowCzech.Month + 1, 1, 0, 0, 0, nowCzech.Offset);
-        //     return nextMonth.ToUniversalTime();
-        // }
-
         public static DateTimeOffset GetNextMonthUpdateUtc(DateTimeOffset? now = null)
         {
             var czechTz = GetCzechTimeZone();

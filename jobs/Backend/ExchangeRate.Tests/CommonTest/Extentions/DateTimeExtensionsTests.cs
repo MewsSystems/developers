@@ -1,7 +1,3 @@
-using System;
-using Xunit;
-using ExchangeRateUpdater.Common.Extensions;
-
 namespace ExchangeRate.Tests.CommonTest.Extensions
 {
     public class DateTimeExtensionsTests

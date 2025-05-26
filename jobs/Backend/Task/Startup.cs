@@ -13,6 +13,7 @@ using ExchangeRateUpdater.Common.Extensions;
 using ExchangeRateUpdater.Common.Constants;
 using ExchangeRateUpdater.ExchangeRate.Providers;
 using ExchangeRateUpdater.Configuration;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
@@ -92,10 +93,15 @@ namespace ExchangeRateUpdater
 
         private static void ConfigureLogging(IServiceCollection services)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("logs/app-.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             services.AddLogging(logging =>
             {
                 logging.ClearProviders();
-                logging.AddConsole();
+                logging.AddSerilog();
             });
         }
     }

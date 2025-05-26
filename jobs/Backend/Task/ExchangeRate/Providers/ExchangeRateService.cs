@@ -15,15 +15,12 @@ using ExchangeRateUpdater.Models;
 namespace ExchangeRateUpdater.ExchangeRate.Providers
 {
     public class ExchangeRateService(
-        ICzechApiClient czechApiClient,
-        ILogger<ExchangeRateService> logger,
-        [FromKeyedServices(AppConstants.DailyRatesKeyedService)] ICnbRatesCache dailyRatesCache,
-        [FromKeyedServices(AppConstants.MonthlyRatesKeyedService)] ICnbRatesCache monthlyRatesCache) : IExchangeRateService
+        ICzechApiClient _czechApiClient,
+        ILogger<ExchangeRateService> _logger,
+        [FromKeyedServices(AppConstants.DailyRatesKeyedService)] ICnbRatesCache _dailyRatesCache,
+        [FromKeyedServices(AppConstants.MonthlyRatesKeyedService)] ICnbRatesCache _monthlyRatesCache
+    ) : IExchangeRateService
     {
-        private readonly ICzechApiClient _czechApiClient = czechApiClient;
-        private readonly ILogger<ExchangeRateService> _logger = logger;
-        private readonly ICnbRatesCache _dailyRatesCache = dailyRatesCache;
-        private readonly ICnbRatesCache _monthlyRatesCache = monthlyRatesCache;
         private const string DailyRatesJsonUrl = "/exrates/daily?lang=EN";
         private const string MonthlyRatesJsonUrl = "/fxrates/daily-month?lang=EN&yearMonth={0}";
         private static readonly Currency CZK = new("CZK");
@@ -69,7 +66,7 @@ namespace ExchangeRateUpdater.ExchangeRate.Providers
             {
                 return await _dailyRatesCache.GetOrCreateAsync(async () =>
                 {
-                    _logger.LogInformation("Fetching daily exchange rates from CNB JSON API...");
+                    _logger.LogInformation("Fetching daily exchange rates from Exchange rates API.");
                     var rawJson = await _czechApiClient.GetAsync(DailyRatesJsonUrl);
                     return ParseRates(rawJson);
                 });
@@ -88,14 +85,14 @@ namespace ExchangeRateUpdater.ExchangeRate.Providers
             {
                 return await _monthlyRatesCache.GetOrCreateAsync(async () =>
                 {
-                    _logger.LogInformation("Fetching monthly exchange rates from CNB JSON API for {YearMonth}...", yearMonth);
+                    _logger.LogInformation("Fetching monthly  exchange rates of other countries for {YearMonth}", yearMonth);
                     var rawJson = await _czechApiClient.GetAsync(string.Format(MonthlyRatesJsonUrl, yearMonth));
                     return ParseRates(rawJson);
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to get monthly exchange rates from cache or API for {YearMonth}.", yearMonth);
+                _logger.LogError(ex, "Failed to get monthly exchange rates of other countries for {YearMonth}", yearMonth);
                 throw;
             }
         }

@@ -1,15 +1,10 @@
-using System;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.HttpClients;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using Xunit;
 
 namespace ExchangeRate.Tests.HttpClients
 {
@@ -106,7 +101,7 @@ namespace ExchangeRate.Tests.HttpClients
         {
             // Arrange
             var options = Options.Create(new CzechApiSettings { BaseUrl = "https://api.cnb.cz" });
-            var loggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<CzechApiClient>>();
+            var loggerMock = new Mock<ILogger<CzechApiClient>>();
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new CzechApiClient(null, options, loggerMock.Object));
@@ -117,7 +112,7 @@ namespace ExchangeRate.Tests.HttpClients
         {
             // Arrange
             var httpClient = new HttpClient();
-            var loggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<CzechApiClient>>();
+            var loggerMock = new Mock<ILogger<CzechApiClient>>();
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new CzechApiClient(httpClient, null, loggerMock.Object));

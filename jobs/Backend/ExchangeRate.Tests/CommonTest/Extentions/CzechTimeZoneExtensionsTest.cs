@@ -1,6 +1,4 @@
-using System;
 using System.Runtime.InteropServices;
-using Xunit;
 using ExchangeRateUpdater.Common.Extensions;
 
 namespace ExchangeRate.Tests.Common.Extensions

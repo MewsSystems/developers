@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ExchangeRateUpdater.Infrastructure.Cache;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace ExchangeRate.Tests.Infrastructure.Cache
 {

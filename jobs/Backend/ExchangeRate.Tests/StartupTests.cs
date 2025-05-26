@@ -1,10 +1,8 @@
-using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ExchangeRateUpdater.HttpClients;
-using System.Linq;
 using ExchangeRateUpdater.Infrastructure.Cache;
 using ExchangeRateUpdater.Common.Constants;
 using ExchangeRateUpdater.ExchangeRate.Providers;
