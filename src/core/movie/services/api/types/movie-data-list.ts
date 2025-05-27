@@ -1,6 +1,6 @@
-import { Movie } from "@core/movie/types/movie";
+import { Movie } from '@core/movie/types/movie';
 
 export interface MoviesDataList {
-    movies: Movie[];
-    totalPages: number;
-  }
+  movies: Movie[];
+  totalPages: number;
+}

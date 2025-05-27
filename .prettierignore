@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build output
+dist
+build
+
+# Coverage directory
+coverage
+
+# Cache
+.cache
+.eslintcache
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Editor directories and files
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw? 

@@ -53,4 +53,4 @@ export const Rating = styled.p`
   color: #fff;
   font-size: 1rem;
   margin: 0;
-`; 
+`;

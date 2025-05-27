@@ -1,9 +1,9 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getMovies } from "@core/movie/services/api/get-movies";
-import { searchMovies } from "@core/movie/services/api/search-movies";
-import { useService } from "@app/lib/use-service";
-import { Card } from "@app/lib/components/card/card";
-import { Pagination } from "@app/lib/components/pagination/pagination";
+import { getMovies } from '@core/movie/services/api/get-movies';
+import { searchMovies } from '@core/movie/services/api/search-movies';
+import { useService } from '@app/lib/use-service';
+import { Card } from '@app/lib/components/card/card';
+import { Pagination } from '@app/lib/components/pagination/pagination';
 import { useState } from 'react';
 import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/cards-skeleton-list';
 import { ErrorComponent } from '@core/error/components/error-component';
@@ -23,14 +23,22 @@ export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const currentPage = Number(searchParams.get('page')) || DEFAULT_PAGE;
-  
-  const { data: popularMoviesData, loading: popularLoading, error: popularError } = useService(
-    () => getMovies(currentPage),
-    { dependencies: [currentPage] }
-  );
 
-  const { data: searchResultsData, loading: searchLoading, error: searchError } = useService(
-    () => searchQuery ? searchMovies(searchQuery, currentPage) : Promise.resolve({ movies: [], totalPages: 0 }),
+  const {
+    data: popularMoviesData,
+    loading: popularLoading,
+    error: popularError,
+  } = useService(() => getMovies(currentPage), { dependencies: [currentPage] });
+
+  const {
+    data: searchResultsData,
+    loading: searchLoading,
+    error: searchError,
+  } = useService(
+    () =>
+      searchQuery
+        ? searchMovies(searchQuery, currentPage)
+        : Promise.resolve({ movies: [], totalPages: 0 }),
     { dependencies: [searchQuery, currentPage] }
   );
 
@@ -65,14 +73,11 @@ export const Home = () => {
             <MoviesContainer>
               <MoviesGrid>
                 {movies.map((movie: Movie) => (
-                  <Card 
-                    key={movie.id}
-                    onClick={() => handleMovieClick(movie.id)}
-                  >
-                    <Card.Image 
-                       src={getMovieImageUrl(TMDB_IMAGE_BASE_URL, movie)}
-                       alt={movie.title}
-                       score={calculateScore(movie.voteAverage)}
+                  <Card key={movie.id} onClick={() => handleMovieClick(movie.id)}>
+                    <Card.Image
+                      src={getMovieImageUrl(TMDB_IMAGE_BASE_URL, movie)}
+                      alt={movie.title}
+                      score={calculateScore(movie.voteAverage)}
                     />
                     <Card.Body>
                       <Card.Title>{movie.title}</Card.Title>
@@ -96,4 +101,4 @@ export const Home = () => {
       </ContentWrapper>
     </>
   );
-}; 
+};

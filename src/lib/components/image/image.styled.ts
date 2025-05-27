@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { ImgProps } from "./image";
+import styled from 'styled-components';
+import { ImgProps } from './image';
 
 interface ImgPropsStyleTypes {
-    $objectFit?: ImgProps['objectFit'];
-  }
+  $objectFit?: ImgProps['objectFit'];
+}
 
 export const StyledImg = styled.img<ImgPropsStyleTypes>`
   width: 100%;

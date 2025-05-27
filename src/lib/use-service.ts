@@ -1,11 +1,14 @@
-import { ErrorContent } from "@core/error/types/error";
-import { useState, useEffect, useCallback } from "react";
+import { ErrorContent } from '@core/error/types/error';
+import { useState, useEffect, useCallback } from 'react';
 
 interface UseServiceOptions {
   dependencies?: any[];
 }
 
-export const useService = <T>(serviceFunction: () => Promise<T>, options: UseServiceOptions = {}) => {
+export const useService = <T>(
+  serviceFunction: () => Promise<T>,
+  options: UseServiceOptions = {}
+) => {
   const { dependencies = [] } = options;
 
   const [data, setData] = useState<T | null>(null);
@@ -19,7 +22,7 @@ export const useService = <T>(serviceFunction: () => Promise<T>, options: UseSer
       setData(result);
     } catch (err) {
       const error = err as ErrorContent;
-      setError({ code: error?.code ?? "Unknown", message: error?.message ?? "Unknown error" });
+      setError({ code: error?.code ?? 'Unknown', message: error?.message ?? 'Unknown error' });
     } finally {
       setLoading(false);
     }

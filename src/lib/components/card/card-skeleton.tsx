@@ -62,4 +62,4 @@ export const CardSkeleton = () => {
       <FooterSkeleton />
     </CardSkeletonContainer>
   );
-}; 
+};

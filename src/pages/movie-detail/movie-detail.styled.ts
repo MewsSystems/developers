@@ -1,5 +1,5 @@
-import { Img } from "@app/lib/components/image/image";
-import styled from "styled-components";
+import { Img } from '@app/lib/components/image/image';
+import styled from 'styled-components';
 
 export const BackdropContainer = styled.div`
   position: fixed;

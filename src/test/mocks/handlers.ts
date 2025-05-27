@@ -23,8 +23,8 @@ export const handlers = [
       runtime: 120,
       genres: [
         { id: 1, name: 'Action' },
-        { id: 2, name: 'Drama' }
-      ]
+        { id: 2, name: 'Drama' },
+      ],
     });
   }),
 
@@ -47,11 +47,11 @@ export const handlers = [
           original_language: 'en',
           original_title: 'Test Movie',
           popularity: 100,
-          video: false
-        }
+          video: false,
+        },
       ],
       total_pages: 1,
-      total_results: 1
+      total_results: 1,
     });
   }),
 
@@ -74,11 +74,11 @@ export const handlers = [
           original_language: 'en',
           original_title: 'Test Movie',
           popularity: 100,
-          video: false
-        }
+          video: false,
+        },
       ],
       total_pages: 1,
-      total_results: 1
+      total_results: 1,
     });
-  })
-]; 
+  }),
+];

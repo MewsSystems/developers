@@ -25,23 +25,17 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <PaginationContainer>
-      <PageButton
-        onClick={handlePrevious}
-        disabled={currentPage === 1}
-      >
+      <PageButton onClick={handlePrevious} disabled={currentPage === 1}>
         Previous
       </PageButton>
-      
+
       <PageInfo>
         Page {currentPage} of {totalPages}
       </PageInfo>
 
-      <PageButton
-        onClick={handleNext}
-        disabled={currentPage === totalPages}
-      >
+      <PageButton onClick={handleNext} disabled={currentPage === totalPages}>
         Next
       </PageButton>
     </PaginationContainer>
   );
-}; 
+};

@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from 'styled-components';
 
 const Container = styled.section`
   min-height: 40vh;
@@ -43,7 +42,6 @@ interface ErrorPageProps {
 }
 
 export const ErrorComponent = ({ code, message }: ErrorPageProps) => {
-
   return (
     <Container role="alert" aria-live="assertive">
       <Icon>🚨</Icon>

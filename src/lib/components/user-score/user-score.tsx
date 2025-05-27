@@ -8,13 +8,9 @@ const scoreColors = {
   green: '#21d07a',
   yellow: '#d2d531',
   red: '#db2360',
-}
+};
 
-export const UserScore: React.FC<UserScoreProps> = ({
-  percent,
-  size = 36,
-  strokeWidth = 4,
-}) => {
+export const UserScore: React.FC<UserScoreProps> = ({ percent, size = 36, strokeWidth = 4 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - percent / 100);
@@ -22,7 +18,7 @@ export const UserScore: React.FC<UserScoreProps> = ({
   const getColor = (p: number) => {
     if (p >= 70) return scoreColors.green;
     if (p >= 40) return scoreColors.yellow;
-    return scoreColors.red;              
+    return scoreColors.red;
   };
 
   return (

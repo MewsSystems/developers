@@ -1,4 +1,3 @@
-
 import fallbackImage from './fallback-image.png';
 import { ReactNode } from 'react';
 import { StyledImg } from './image.styled';

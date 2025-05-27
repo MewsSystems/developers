@@ -1,13 +1,12 @@
-import { RestClient, RestClientGetParams } from "./types/rest-api";
-import { API_CONFIG } from "./api-config";
-
+import { RestClient, RestClientGetParams } from './types/rest-api';
+import { API_CONFIG } from './api-config';
 
 class FetchRestClient implements RestClient {
   private readonly defaultOptions: RequestInit;
 
   constructor(private readonly host: string) {
     this.defaultOptions = {
-      headers: API_CONFIG.headers
+      headers: API_CONFIG.headers,
     };
   }
 
@@ -21,8 +20,8 @@ class FetchRestClient implements RestClient {
       ...options,
       headers: {
         ...this.defaultOptions.headers,
-        ...options?.headers
-      }
+        ...options?.headers,
+      },
     };
   }
 

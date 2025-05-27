@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StickyContainer = styled.div`
   position: fixed;
@@ -21,7 +21,7 @@ export const StickyContainer = styled.div`
 
 export const ContentWrapper = styled.div`
   margin-top: 80px;
-  
+
   @media (max-width: 768px) {
     margin-top: 60px;
   }

@@ -9,6 +9,6 @@ export const API_CONFIG = {
   baseUrl: API_URL,
   headers: {
     accept: 'application/json',
-    Authorization: `Bearer ${API_KEY}`
-  }
-} as const; 
+    Authorization: `Bearer ${API_KEY}`,
+  },
+} as const;

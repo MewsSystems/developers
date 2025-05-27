@@ -3,7 +3,13 @@ import { getMovie } from '@core/movie/services/api/get-movie';
 import { useService } from '@app/lib/use-service';
 import { ErrorComponent } from '@core/error/components/error-component';
 import { MovieDetailSkeleton } from '@app/lib/components/skeleton-movie-detail/skeleton-movie-detail';
-import { BackdropContainer, BackdropImage, Container, BackButton, MovieGrid } from './movie-detail.styled';
+import {
+  BackdropContainer,
+  BackdropImage,
+  Container,
+  BackButton,
+  MovieGrid,
+} from './movie-detail.styled';
 import { MovieContent } from './components/movie-content/movie-content';
 
 export const MovieDetail = () => {
@@ -27,20 +33,18 @@ export const MovieDetail = () => {
   return (
     <>
       <BackdropContainer>
-        <BackdropImage 
-          src={`https://image.tmdb.org/t/p/original${movie.backdropPath}`} 
+        <BackdropImage
+          src={`https://image.tmdb.org/t/p/original${movie.backdropPath}`}
           alt={`${movie.title} backdrop`}
           objectFit="cover"
         />
       </BackdropContainer>
       <Container>
-        <BackButton onClick={handleBack}>
-          ← Back to Movies
-        </BackButton>
+        <BackButton onClick={handleBack}>← Back to Movies</BackButton>
         <MovieGrid>
           <MovieContent movie={movie} />
         </MovieGrid>
       </Container>
     </>
   );
-}; 
+};

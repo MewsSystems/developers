@@ -1,1 +1,2 @@
-export const shouldShowPagination = (totalPages: number): boolean => Boolean(totalPages && totalPages > 1);
+export const shouldShowPagination = (totalPages: number): boolean =>
+  Boolean(totalPages && totalPages > 1);

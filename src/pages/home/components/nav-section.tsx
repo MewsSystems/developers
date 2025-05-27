@@ -1,5 +1,5 @@
-import { Search } from "@app/lib/components/search/search"
-import styled from "styled-components";
+import { Search } from '@app/lib/components/search/search';
+import styled from 'styled-components';
 
 interface NavSectionProps {
   setSearchQuery: (query: string) => void;
@@ -11,7 +11,7 @@ const SearchContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
-`
+`;
 
 const SearchWrapper = styled.div`
   flex: 1;
@@ -24,16 +24,15 @@ const SearchWrapper = styled.div`
 `;
 
 export const NavSection: React.FC<NavSectionProps> = ({ setSearchQuery }) => {
-
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
   return (
     <SearchWrapper>
-    <SearchContainer>
+      <SearchContainer>
         <Search onSearch={handleSearch} />
-    </SearchContainer>
+      </SearchContainer>
     </SearchWrapper>
   );
 };
