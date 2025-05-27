@@ -1,4 +1,4 @@
-import { RestClient, RestClientGetParams, RestClientPostParams } from "./types/rest-api";
+import { RestClient, RestClientGetParams } from "./types/rest-api";
 import { API_CONFIG } from "./api-config";
 
 
@@ -37,18 +37,6 @@ class FetchRestClient implements RestClient {
     const response = await fetch(
       this.buildUrl(url),
       this.mergeOptions({ ...options, method: 'GET' })
-    );
-    return this.handleResponse<ResType>(response);
-  }
-
-  async post<ResType>({ url, body, options }: RestClientPostParams): Promise<ResType> {
-    const response = await fetch(
-      this.buildUrl(url),
-      this.mergeOptions({
-        ...options,
-        method: 'POST',
-        body
-      })
     );
     return this.handleResponse<ResType>(response);
   }

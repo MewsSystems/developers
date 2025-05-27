@@ -1,5 +1,6 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getMovies, searchMovies } from "@movie/services/api/movie-api";
+import { getMovies } from "@core/movie/services/api/get-movies";
+import { searchMovies } from "@core/movie/services/api/search-movies";
 import { useService } from "@app/lib/use-service";
 import { Card } from "@app/lib/components/card/card";
 import { Pagination } from "@app/lib/components/pagination/pagination";
