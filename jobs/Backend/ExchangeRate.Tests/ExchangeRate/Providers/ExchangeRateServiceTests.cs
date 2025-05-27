@@ -110,6 +110,65 @@ namespace ExchangeRate.Tests.ExchangeRate.Providers
         }
 
         [Fact]
+        public async Task GetExchangeRateAsync_From_OtherCountries_Monthly_IfNotFoundInDaily()
+        {
+            // Arrange
+            var currencies = new List<Currency> { new Currency("USD") };
+             var fakeJson = "{\"rates\":[{\"currencyCode\":\"USD\",\"rate\":25.0,\"amount\":1}]}";
+            _apiClientMock.Setup(c => c.GetAsync(It.IsAny<string>()))
+                .ReturnsAsync(fakeJson);
+
+            var dailyRates = new Dictionary<string, decimal>();
+
+            _dailyCacheMock.Setup(c => c.GetOrCreateAsync(It.IsAny<Func<Task<Dictionary<string, decimal>>>>()))
+                .ReturnsAsync(dailyRates);
+            _monthlyCacheMock
+                .Setup(c => c.GetOrCreateAsync(It.IsAny<Func<Task<Dictionary<string, decimal>>>>()))
+                .Returns<Func<Task<Dictionary<string, decimal>>>>(factory => factory());
+            // Act
+            var result = await _service.GetExchangeRateAsync(currencies);
+
+            // Assert
+             Assert.Equal("USD", result[0].SourceCurrency.Code);
+            _loggerMock.Verify(
+                x => x.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fetching monthly  exchange rates")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+         [Fact]
+        public async Task When_Daily_And_Monthly_Returns_Nothing()
+        {
+            // Arrange
+            var currencies = new List<Currency> { new Currency("USD") };
+        
+            var rates = new Dictionary<string, decimal>();
+
+            _dailyCacheMock.Setup(c => c.GetOrCreateAsync(It.IsAny<Func<Task<Dictionary<string, decimal>>>>()))
+                .ReturnsAsync(rates);
+            _monthlyCacheMock
+                .Setup(c => c.GetOrCreateAsync(It.IsAny<Func<Task<Dictionary<string, decimal>>>>()))
+                 .ReturnsAsync(rates);
+            // Act
+            var result = await _service.GetExchangeRateAsync(currencies);
+
+            // Assert
+            Assert.Empty(result);
+            _loggerMock.Verify(
+                x => x.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Currency USD not found in CNB daily or monthly data")),
+                    null,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                Times.Once);
+        }
+
+        [Fact]
         public async Task GetExchangeRateAsync_ReturnsEmptyList_IfNoCurrencies()
         {
             // Arrange
@@ -152,7 +211,7 @@ namespace ExchangeRate.Tests.ExchangeRate.Providers
                 x => x.Log(
                     LogLevel.Information,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fetching daily exchange rates from CNB JSON API...")),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fetching daily exchange rates from Exchange rates API.")),
                     null,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);

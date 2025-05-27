@@ -30,10 +30,9 @@ namespace ExchangeRateUpdater.ExchangeRate.Providers
             try
             {
                 var dailyRates = await GetDailyRatesAsync();
-                var monthlyRates = await GetMonthlyRatesAsync();
-
                 var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
                 var result = new List<Models.ExchangeRate>();
+                var missingCodes = new List<string>();
 
                 foreach (var code in currencyCodes)
                 {
@@ -41,15 +40,28 @@ namespace ExchangeRateUpdater.ExchangeRate.Providers
                     {
                         result.Add(new Models.ExchangeRate(new Currency(code), CZK, value));
                     }
-                    else if (monthlyRates.TryGetValue(code, out var mValue))
-                    {
-                        result.Add(new Models.ExchangeRate(new Currency(code), CZK, mValue));
-                    }
                     else
                     {
-                        _logger.LogWarning("Currency {CurrencyCode} not found in CNB daily or monthly data.", code);
+                        missingCodes.Add(code);
                     }
                 }
+
+                if (missingCodes.Any())
+                {
+                    var monthlyRates = await GetMonthlyRatesAsync();
+                    foreach (var code in missingCodes)
+                    {
+                        if (monthlyRates.TryGetValue(code, out var mValue))
+                        {
+                            result.Add(new Models.ExchangeRate(new Currency(code), CZK, mValue));
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Currency {CurrencyCode} not found in CNB daily or monthly data.", code);
+                        }
+                    }
+                }
+
                 _logger.LogInformation("Returning {Count} exchange rates.", result.Count);
                 return result;
             }
