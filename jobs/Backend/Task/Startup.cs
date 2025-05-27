@@ -94,7 +94,7 @@ namespace ExchangeRateUpdater
         private static void ConfigureLogging(IServiceCollection services)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
+                //.WriteTo.Console()
                 .WriteTo.File("logs/app-.log", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 

@@ -41,21 +41,35 @@ namespace ExchangeRateUpdater
             // Show initial rates for default currencies
             try
             {
-                Console.WriteLine("Fetching exchange rates for default currencies:");
+                Console.WriteLine("Fetching exchange rates for default currencies...");
                 var initialRates = await exchangeRateProvider.GetExchangeRateAsync(currencies.ToList());
-                foreach (var rate in initialRates)
+                if (initialRates == null || initialRates.Count == 0)
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine("Sorry, we couldn't retrieve any exchange rates at this time. Please try again later.");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\nSuccessfully retrieved {initialRates.Count} exchange rates:");
+
+                    foreach (var rate in initialRates)
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine($"\nCould not retrieve initial exchange rates: '{e.Message}'.");
+               
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.WriteLine("\nSorry, something went wrong while fetching exchange rates. Please try again later.");
+               Console.ResetColor();
             }
 
             // User interaction loop
             while (true)
             {
+                Console.ResetColor();
                 Console.Write("\nEnter currency codes (comma separated), or type 'clear' to clear cache: ");
                 var input = Console.ReadLine();
 
@@ -81,6 +95,7 @@ namespace ExchangeRateUpdater
 
                 if (invalidCodes.Any())
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Invalid ISO 4217 currency codes: {string.Join(", ", invalidCodes)}");
                     continue;
                 }
@@ -90,15 +105,28 @@ namespace ExchangeRateUpdater
                 try
                 {
                     var rates = await exchangeRateProvider.GetExchangeRateAsync(currencyObjects);
-                    Console.WriteLine($"\nSuccessfully retrieved {rates.Count} exchange rates:");
-                    foreach (var rate in rates)
+                    if (rates == null || rates.Count == 0)
                     {
-                        Console.WriteLine(rate.ToString());
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Sorry, we couldn't find exchange rates for your request.");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"\nSuccessfully retrieved {rates.Count} exchange rates:");
+                        foreach (var rate in rates)
+                        {
+                            Console.WriteLine(rate.ToString());
+                        }
+                        Console.ResetColor();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine($"\nCould not retrieve exchange rates: '{e.Message}'.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nSorry, something went wrong while fetching exchange rates. Please try again later.");
+                    Console.ResetColor();
                 }
             }
         }

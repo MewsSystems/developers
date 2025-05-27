@@ -74,39 +74,23 @@ namespace ExchangeRateUpdater.ExchangeRate.Providers
 
         private async Task<Dictionary<string, decimal>> GetDailyRatesAsync()
         {
-            try
-            {
                 return await _dailyRatesCache.GetOrCreateAsync(async () =>
                 {
                     _logger.LogInformation("Fetching daily exchange rates from Exchange rates API.");
                     var rawJson = await _czechApiClient.GetAsync(DailyRatesJsonUrl);
                     return ParseRates(rawJson);
                 });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get daily exchange rates from cache or API.");
-                throw;
-            }
         }
 
         private async Task<Dictionary<string, decimal>> GetMonthlyRatesAsync()
         {
             var yearMonth = DateTimeExtensions.GetPreviousYearMonthUtc();
-            try
-            {
                 return await _monthlyRatesCache.GetOrCreateAsync(async () =>
                 {
                     _logger.LogInformation("Fetching monthly  exchange rates of other countries for {YearMonth}", yearMonth);
                     var rawJson = await _czechApiClient.GetAsync(string.Format(MonthlyRatesJsonUrl, yearMonth));
                     return ParseRates(rawJson);
                 });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to get monthly exchange rates of other countries for {YearMonth}", yearMonth);
-                throw;
-            }
         }
 
         private Dictionary<string, decimal> ParseRates(string rawJson)

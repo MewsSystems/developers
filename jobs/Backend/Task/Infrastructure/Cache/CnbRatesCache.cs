@@ -37,9 +37,8 @@ namespace ExchangeRateUpdater.Infrastructure.Cache
                 _logger.LogInformation("Cached new value for key {CacheKey}", _cacheKey);
                 return value;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "Error occurred while fetching or caching data for key {CacheKey}", _cacheKey);
                 throw;
             }
         }

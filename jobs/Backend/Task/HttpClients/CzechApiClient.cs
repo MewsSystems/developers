@@ -22,25 +22,12 @@ namespace ExchangeRateUpdater.HttpClients
 
         public async Task<string> GetAsync(string relativeUrl)
         {
-            try
-            {
-                var url = $"{_baseApiUrl}{relativeUrl}";
-                _logger.LogInformation("Sending GET request to {Url}", url);
-                var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                _logger.LogInformation("Received successful response from {Url}", url);
-                return await response.Content.ReadAsStringAsync();
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "HTTP request failed for {RelativeUrl}", relativeUrl);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error during GET request for {RelativeUrl}", relativeUrl);
-                throw;
-            }
+            var url = $"{_baseApiUrl}{relativeUrl}";
+            _logger.LogInformation("Sending GET request to {Url}", url);
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            _logger.LogInformation("Received successful response from {Url}", url);
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }
