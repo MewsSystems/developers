@@ -1,4 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import { keyframes } from 'styled-components';
+
+import styled from 'styled-components';
 
 const shimmer = keyframes`
   0% {
@@ -16,7 +18,7 @@ const SkeletonBase = styled.div`
   border-radius: 4px;
 `;
 
-const CardSkeletonContainer = styled.div`
+export const CardSkeletonContainer = styled.div`
   height: 380px;
   width: 170px;
   background: white;
@@ -27,12 +29,12 @@ const CardSkeletonContainer = styled.div`
   overflow: hidden;
 `;
 
-const ImageSkeleton = styled(SkeletonBase)`
+export const ImageSkeleton = styled(SkeletonBase)`
   width: 100%;
   height: 250px;
 `;
 
-const BodySkeleton = styled.div`
+export const BodySkeleton = styled.div`
   padding: 4px 6px;
   flex: 1;
   display: flex;
@@ -40,26 +42,14 @@ const BodySkeleton = styled.div`
   gap: 8px;
 `;
 
-const TitleSkeleton = styled(SkeletonBase)`
+export const TitleSkeleton = styled(SkeletonBase)`
   height: 20px;
   width: 90%;
   margin-top: 20px;
 `;
 
-const FooterSkeleton = styled(SkeletonBase)`
+export const FooterSkeleton = styled(SkeletonBase)`
   height: 16px;
   width: 80%;
   margin: 0 6px 6px;
 `;
-
-export const CardSkeleton = () => {
-  return (
-    <CardSkeletonContainer>
-      <ImageSkeleton />
-      <BodySkeleton>
-        <TitleSkeleton />
-      </BodySkeleton>
-      <FooterSkeleton />
-    </CardSkeletonContainer>
-  );
-};

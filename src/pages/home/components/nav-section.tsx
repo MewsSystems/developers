@@ -23,7 +23,7 @@ const SearchWrapper = styled.div`
   }
 `;
 
-export const NavSection: React.FC<NavSectionProps> = ({ setSearchQuery }) => {
+export const NavSection = ({ setSearchQuery }: NavSectionProps) => {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };

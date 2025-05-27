@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { CardBody, CardContainer, CardFooter, CardTitle } from './card.styled';
-import { CardImage } from './card-image';
+import { CardImage } from './card-image/card-image';
 
 export interface CardProps {
   children: React.ReactNode;

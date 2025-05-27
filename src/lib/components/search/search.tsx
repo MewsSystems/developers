@@ -7,7 +7,7 @@ interface SearchProps {
   placeholder?: string;
 }
 
-export const Search: React.FC<SearchProps> = ({ onSearch, placeholder = 'Search movies...' }) => {
+export const Search = ({ onSearch, placeholder = 'Search movies...' }: SearchProps) => {
   const [value, setValue] = useState('');
   const debouncedValue = useDebouncedValue(value, 500);
 

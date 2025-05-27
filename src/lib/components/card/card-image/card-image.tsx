@@ -1,6 +1,6 @@
-import { UserScore } from '../user-score/user-score';
-import { Img } from '../image/image';
-import { CardImageContainer, ScoreWrapper } from './card.styled';
+import { UserScore } from '../../user-score/user-score';
+import { Img } from '../../image/image';
+import { CardImageContainer, ScoreWrapper } from '../card.styled';
 
 interface CardImageProps {
   src: string;

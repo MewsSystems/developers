@@ -10,7 +10,7 @@ const scoreColors = {
   red: '#db2360',
 };
 
-export const UserScore: React.FC<UserScoreProps> = ({ percent, size = 36, strokeWidth = 4 }) => {
+export const UserScore = ({ percent, size = 36, strokeWidth = 4 }: UserScoreProps) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - percent / 100);
