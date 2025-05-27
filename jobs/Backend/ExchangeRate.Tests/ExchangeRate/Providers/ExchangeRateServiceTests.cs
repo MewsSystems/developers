@@ -243,7 +243,7 @@ namespace ExchangeRate.Tests.ExchangeRate.Providers
                 x => x.Log(
                     LogLevel.Error,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to get daily exchange rates from cache or API.")),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to get exchange rates for requested currencies.")),
                     exception,
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Once);

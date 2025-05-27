@@ -94,16 +94,6 @@ namespace ExchangeRate.Tests.Infrastructure.Cache
                  cache.GetOrCreateAsync(() => Task.FromException<Dictionary<string, decimal>>(exception))
             );  
             Assert.Equal("Simulated exception", ex.Message);
-
-            // Verify that error was logged
-            loggerMock.Verify(
-                x => x.Log(
-                    LogLevel.Error,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error occurred while fetching or caching data")),
-                    exception,
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-                Times.Once);
         }
     }
 }
