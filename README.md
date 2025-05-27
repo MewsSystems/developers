@@ -54,6 +54,8 @@ Each route (page) manages its own responsibilities. Local components live here u
 - **Image fallback** added to the `<img>` tag to handle broken posters
 - **Basic error handling** for feedback on failures (UI-level message)
 - **End-to-end testing** using **Playwright** to simulate real user flows
+- **Lazy Routes**
+- **404 page**
 
 ---
 
