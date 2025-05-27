@@ -5,6 +5,9 @@ const Home = lazy(() => import('../pages/home/home').then((module) => ({ default
 const MovieDetail = lazy(() =>
   import('../pages/movie-detail/movie-detail').then((module) => ({ default: module.MovieDetail }))
 );
+const NotFound = lazy(() =>
+  import('../pages/not-found/not-found').then((module) => ({ default: module.NotFound }))
+);
 
 export const routes: RouteObject[] = [
   {
@@ -14,5 +17,9 @@ export const routes: RouteObject[] = [
   {
     path: '/movie/:id',
     element: <MovieDetail />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ];
