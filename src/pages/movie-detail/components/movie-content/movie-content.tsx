@@ -16,11 +16,12 @@ import { formatRuntime } from '@pages/movie-detail/utils/format-runtime';
 interface MovieContentProps {
   movie: Movie;
 }
+const posterUrl = 'https://image.tmdb.org/t/p/w500';
 
 export const MovieContent = ({ movie }: MovieContentProps) => {
   return (
     <>
-      <Poster src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`} alt={movie.title} />
+      <Poster src={`${posterUrl}${movie.posterPath}`} alt={movie.title} />
       <MovieInfo>
         <Title>{movie.title}</Title>
         <MovieDetailsContainer>
