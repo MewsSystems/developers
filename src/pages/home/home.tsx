@@ -22,18 +22,10 @@ export const Home = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const currentPage = Number(searchParams.get('page')) || DEFAULT_PAGE;
+  const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || DEFAULT_PAGE);
   const previousSearchQuery = useRef(searchQuery);
   const hasSearchQueryChanged = searchQuery !== previousSearchQuery.current;
-
-
-  useEffect(() => {
-    if (hasSearchQueryChanged) {
-      setSearchParams({ page: DEFAULT_PAGE.toString() });
-      previousSearchQuery.current = searchQuery;
-    }
-  }, [searchQuery, setSearchParams]);
-
+  
   const {
     data: popularMoviesData,
     loading: popularLoading,
@@ -47,10 +39,19 @@ export const Home = () => {
   } = useService(
     () =>
       searchQuery
-        ? searchMovies(searchQuery, currentPage)
+        ? searchMovies(searchQuery, searchQuery !== previousSearchQuery.current ? DEFAULT_PAGE : currentPage)
         : Promise.resolve({ movies: [], totalPages: 0 }),
     { dependencies: [searchQuery, currentPage] }
   );
+
+
+  useEffect(() => {
+    if (hasSearchQueryChanged) {
+      setSearchParams({ page: DEFAULT_PAGE.toString() });
+      previousSearchQuery.current = searchQuery;
+      setCurrentPage(DEFAULT_PAGE);
+    }
+  }, [searchQuery, setSearchParams]);
 
   const movies = searchQuery ? searchResultsData?.movies : popularMoviesData?.movies;
   const totalPages = searchQuery ? searchResultsData?.totalPages : popularMoviesData?.totalPages;
@@ -63,6 +64,7 @@ export const Home = () => {
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: page.toString() });
+    setCurrentPage(page);
     scrollToTop();
   };
 
