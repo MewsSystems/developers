@@ -11,7 +11,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "test:e2e": "playwright test",
+    "test:e2e": "npx playwright test",
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.4.3",
     "prettier": "^3.5.3",
     "typescript": "~5.7.3",
