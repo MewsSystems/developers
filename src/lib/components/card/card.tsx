@@ -9,7 +9,11 @@ export interface CardProps {
 }
 
 export const Card = ({ children, onClick, ariaLabel }: CardProps): ReactNode => {
-  return <CardContainer aria-label={`View details of ${ariaLabel}`} onClick={onClick}>{children}</CardContainer>;
+  return (
+    <CardContainer aria-label={`View details of ${ariaLabel}`} onClick={onClick}>
+      {children}
+    </CardContainer>
+  );
 };
 
 Card.Image = CardImage;

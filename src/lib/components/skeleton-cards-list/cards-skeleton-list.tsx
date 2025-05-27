@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { CardSkeleton } from '../card-skeleton/card-skeleton';
 
-
 const SkeletonContainer = styled.div`
   padding: 2rem;
   display: grid;

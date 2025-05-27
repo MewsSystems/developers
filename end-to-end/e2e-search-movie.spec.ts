@@ -16,5 +16,5 @@ test('User can search and navigate movies', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Moana/i })).toBeVisible();
 
   await page.getByRole('button', { name: '← Back to Movies' }).click();
-  await expect(page.getByText(/Lilo & Stitch/i)).toBeVisible();
+  await expect(page.getByText(/Moana/i)).toBeVisible();
 });

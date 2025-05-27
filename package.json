@@ -11,7 +11,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "test:e2e": "playwright test --headed",
+    "test:e2e": "playwright test",
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
