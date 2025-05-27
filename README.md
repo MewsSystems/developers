@@ -73,6 +73,10 @@ VITE_TMDB_API_KEY=your_api_key_here
 
 ---
 
+## ⚠️ **Important:**  
+To run the end-to-end tests locally, you must start the application first:  
+- Run `pnpm dev` in a separate terminal before executing any Playwright tests.
+
 ### 📌 Limitations & To-Do
 
 ## Search query is not persisted in the URL
