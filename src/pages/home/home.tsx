@@ -22,10 +22,12 @@ export const Home = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(Number(searchParams.get('page')) || DEFAULT_PAGE);
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(searchParams.get('page')) || DEFAULT_PAGE
+  );
   const previousSearchQuery = useRef(searchQuery);
   const hasSearchQueryChanged = searchQuery !== previousSearchQuery.current;
-  
+
   const {
     data: popularMoviesData,
     loading: popularLoading,
@@ -39,11 +41,10 @@ export const Home = () => {
   } = useService(
     () =>
       searchQuery
-        ? searchMovies(searchQuery, searchQuery !== previousSearchQuery.current ? DEFAULT_PAGE : currentPage)
+        ? searchMovies(searchQuery, hasSearchQueryChanged ? DEFAULT_PAGE : currentPage)
         : Promise.resolve({ movies: [], totalPages: 0 }),
     { dependencies: [searchQuery, currentPage] }
   );
-
 
   useEffect(() => {
     if (hasSearchQueryChanged) {
@@ -85,7 +86,11 @@ export const Home = () => {
             <MoviesContainer>
               <MoviesGrid>
                 {movies.map((movie: Movie) => (
-                  <Card key={movie.id} onClick={() => handleMovieClick(movie.id)} ariaLabel={movie.title}>
+                  <Card
+                    key={movie.id}
+                    onClick={() => handleMovieClick(movie.id)}
+                    ariaLabel={movie.title}
+                  >
                     <Card.Image
                       src={getMovieImageUrl(TMDB_IMAGE_BASE_URL, movie)}
                       alt={movie.title}
