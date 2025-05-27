@@ -12,11 +12,12 @@ import {
 import { formatLanguage } from '@pages/movie-detail/utils/format-language';
 import { formatPopularity } from '@pages/movie-detail/utils/format-population';
 import { formatRuntime } from '@pages/movie-detail/utils/format-runtime';
+import { IMAGE_BASE_URL } from '@app/const/image-base-url';
 
 interface MovieContentProps {
   movie: Movie;
 }
-const posterUrl = 'https://image.tmdb.org/t/p/w500';
+const posterUrl = `${IMAGE_BASE_URL}/w500`;
 
 export const MovieContent = ({ movie }: MovieContentProps) => {
   return (

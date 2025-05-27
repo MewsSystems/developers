@@ -11,6 +11,7 @@ import {
   MovieGrid,
 } from './movie-detail.styled';
 import { MovieContent } from './components/movie-content/movie-content';
+import { IMAGE_BASE_URL } from '@app/const/image-base-url';
 
 export const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +35,7 @@ export const MovieDetail = () => {
     <>
       <BackdropContainer>
         <BackdropImage
-          src={`https://image.tmdb.org/t/p/original${movie.backdropPath}`}
+          src={`${IMAGE_BASE_URL}/original${movie.backdropPath}`}
           alt={`${movie.title} backdrop`}
           objectFit="cover"
         />

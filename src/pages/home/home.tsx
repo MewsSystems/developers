@@ -14,8 +14,9 @@ import { shouldShowPagination } from './utils/should-show-pagination';
 import { getMovieImageUrl } from './utils/get-movie-image-url';
 import { Movie } from '@core/movie/types/movie';
 import { calculateScore } from './utils/calculate-score';
+import { IMAGE_BASE_URL } from '@app/const/image-base-url';
 
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w220_and_h330_face';
+const TMDB_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/w220_and_h330_face`;
 const DEFAULT_PAGE = 1;
 
 export const Home = () => {
