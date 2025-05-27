@@ -10,7 +10,9 @@
     "prepare": "husky install",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "test:e2e": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@types/react-router-dom": "^5.3.3",

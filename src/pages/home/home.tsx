@@ -4,9 +4,9 @@ import { searchMovies } from '@core/movie/services/api/search-movies';
 import { useService } from '@app/lib/use-service';
 import { Card } from '@app/lib/components/card/card';
 import { Pagination } from '@app/lib/components/pagination/pagination';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MovieCardsSkeleton } from '@app/lib/components/skeleton-cards-list/cards-skeleton-list';
-import { ErrorComponent } from '@core/error/components/error-component';
+import { ErrorComponent } from '@app/lib/components/error-component/error-component';
 import { scrollToTop } from '@app/utils/scroll-top';
 import { NavSection } from './components/nav-section';
 import { ContentWrapper, StickyContainer, MoviesContainer, MoviesGrid } from './home.styled';
@@ -23,6 +23,16 @@ export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const currentPage = Number(searchParams.get('page')) || DEFAULT_PAGE;
+  const previousSearchQuery = useRef(searchQuery);
+  const hasSearchQueryChanged = searchQuery !== previousSearchQuery.current;
+
+
+  useEffect(() => {
+    if (hasSearchQueryChanged) {
+      setSearchParams({ page: DEFAULT_PAGE.toString() });
+      previousSearchQuery.current = searchQuery;
+    }
+  }, [searchQuery, setSearchParams]);
 
   const {
     data: popularMoviesData,
@@ -73,7 +83,7 @@ export const Home = () => {
             <MoviesContainer>
               <MoviesGrid>
                 {movies.map((movie: Movie) => (
-                  <Card key={movie.id} onClick={() => handleMovieClick(movie.id)}>
+                  <Card key={movie.id} onClick={() => handleMovieClick(movie.id)} ariaLabel={movie.title}>
                     <Card.Image
                       src={getMovieImageUrl(TMDB_IMAGE_BASE_URL, movie)}
                       alt={movie.title}

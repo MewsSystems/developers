@@ -7,4 +7,5 @@ body {
   text-align: left;
   box-sizing: border-box;
   word-wrap: break-word;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
 }

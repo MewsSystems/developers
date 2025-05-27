@@ -9,7 +9,7 @@ interface SearchProps {
 
 export const Search = ({ onSearch, placeholder = 'Search movies...' }: SearchProps) => {
   const [value, setValue] = useState('');
-  const debouncedValue = useDebouncedValue(value, 500);
+  const debouncedValue = useDebouncedValue(value, 300);
 
   useEffect(() => {
     onSearch(debouncedValue);
@@ -21,6 +21,7 @@ export const Search = ({ onSearch, placeholder = 'Search movies...' }: SearchPro
       value={value}
       onChange={(e) => setValue(e.target.value)}
       placeholder={placeholder}
+      aria-label="Search movies"
     />
   );
 };

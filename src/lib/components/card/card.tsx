@@ -5,10 +5,11 @@ import { CardImage } from './card-image/card-image';
 export interface CardProps {
   children: React.ReactNode;
   onClick?: () => void;
+  ariaLabel?: string;
 }
 
-export const Card = ({ children, onClick }: CardProps): ReactNode => {
-  return <CardContainer onClick={onClick}>{children}</CardContainer>;
+export const Card = ({ children, onClick, ariaLabel }: CardProps): ReactNode => {
+  return <CardContainer aria-label={`View details of ${ariaLabel}`} onClick={onClick}>{children}</CardContainer>;
 };
 
 Card.Image = CardImage;

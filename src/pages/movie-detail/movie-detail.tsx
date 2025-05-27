@@ -1,7 +1,7 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getMovie } from '@core/movie/services/api/get-movie';
 import { useService } from '@app/lib/use-service';
-import { ErrorComponent } from '@core/error/components/error-component';
+import { ErrorComponent } from '@app/lib/components/error-component/error-component';
 import { MovieDetailSkeleton } from '@app/lib/components/skeleton-movie-detail/skeleton-movie-detail';
 import {
   BackdropContainer,
