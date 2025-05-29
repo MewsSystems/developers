@@ -17,7 +17,7 @@ export const MovieCoverSkeleton = styled.div`
   width: 100%;
   aspect-ratio: 2/3;
   background-color: #e8e8e8;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   overflow: hidden;
   animation: ${pulse} 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
@@ -35,17 +35,18 @@ export const MovieCoverSkeleton = styled.div`
 `;
 
 export const MovieTitle = styled.div`
-  width: 60%;
-  height: 16px;
-  margin: 12px 0 8px;
+  width: 80%;
+  height: 20px;
+  margin: 12px 12px 8px;
   background-color: #e8e8e8;
   border-radius: 4px;
   animation: ${pulse} 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 `;
 
 export const MovieDescription = styled.div`
-  width: 100%;
-  height: 16px;
+  width: 90%;
+  height: 32px;
+  margin: 0 12px 12px;
   background-color: #e8e8e8;
   border-radius: 4px;
   animation: ${pulse} 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -55,6 +56,10 @@ export const MovieCard = styled.div`
   background: white;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const SkeletonGrid = styled.div`
@@ -62,6 +67,7 @@ export const SkeletonGrid = styled.div`
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   margin: 24px 0;
+  width: 100%;
 
   @media (max-width: 1400px) {
     grid-template-columns: repeat(4, 1fr);
