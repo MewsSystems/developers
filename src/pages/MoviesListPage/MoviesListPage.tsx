@@ -5,7 +5,7 @@ import {useDebounce} from '../../hooks/useDebounce.ts';
 import {usePagination} from '../../hooks/usePagination.ts';
 import {useSearchInput} from '../../hooks/useSearchInput.ts';
 import {fetchMoviesList} from '../../api/fetchMoviesList.ts';
-import {LoadingSkeleton} from './components/LoadingSkeleton/LoadingSkeleton.tsx';
+import {LoadingCameraAnimation} from './components/LoadingCameraAnimation/LoadingCameraAnimation.tsx';
 import {NothingFoundState} from './components/EmptySearchResult/NothingFoundState.tsx';
 import {EmptyInitialState} from './components/EmptyInitialState/EmptyInitialState.tsx';
 import {MovieCard} from './components/MovieCard/MovieCard.tsx';
@@ -116,7 +116,7 @@ export default function MoviesListPage() {
       </Header>
 
       <Content>
-        {isLoading && <LoadingSkeleton />}
+        {isLoading && <LoadingCameraAnimation />}
         {shouldShowInitialEmptyState && <EmptyInitialState />}
         {hasEmptySearchResults && <NothingFoundState />}
 
@@ -133,7 +133,6 @@ export default function MoviesListPage() {
             ))}
           </MoviesGrid>
         )}
-
         <Pagination currentPage={page} totalPages={totalPagesCount} onPageChange={onPageChange} />
       </Content>
     </Container>
