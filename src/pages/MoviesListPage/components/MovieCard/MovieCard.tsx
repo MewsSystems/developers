@@ -1,6 +1,8 @@
 import type {Movie} from '../../../../api/types.ts';
 import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled.tsx';
 import {MovieCover} from './components/MovieCover.tsx';
+import {PathByPageType} from '../../../../navigation/constants.ts';
+import {generatePath} from 'react-router-dom';
 
 type MovieCardProps = {
   movie: Movie;
@@ -14,11 +16,12 @@ export const MovieCard = ({movie, searchParams, searchQuery, currentPage}: Movie
 
   const releaseYear = release_date ? new Date(release_date).getFullYear() : 'N/A';
   const rating = vote_average ? Math.round(vote_average * 10) / 10 : 0;
-  const navigateToUrl = `/movies/${id}?${searchParams.toString()}`;
+  const path = generatePath(PathByPageType.MovieDetailsPage, {id: String(id)});
+  const movieDetailsPageUrl = `${path}?${String(searchParams)}`;
 
   return (
     <StyledLink
-      to={navigateToUrl}
+      to={movieDetailsPageUrl}
       state={{
         from: '/',
         search: searchQuery,
@@ -32,7 +35,7 @@ export const MovieCard = ({movie, searchParams, searchQuery, currentPage}: Movie
           <Overview>{overview}</Overview>
           <MetaInfo>
             <span>{releaseYear}</span>
-            <Rating rating={rating}>{rating}</Rating>
+            <Rating $rating={rating}>{rating}</Rating>
           </MetaInfo>
         </Content>
       </Card>

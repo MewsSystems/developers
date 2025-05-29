@@ -1,6 +1,6 @@
 import {ChevronLeft} from './icons/ChevronLeft.tsx';
 import {ChevronRight} from './icons/ChevronRight.tsx';
-import {PageButton, PageInfo, PaginationWrapper} from './Pagination.styled.tsx';
+import {NavigationButton, PageInfo, PaginationWrapper} from './Pagination.styled.tsx';
 
 type PaginationProps = {
   currentPage: number;
@@ -16,21 +16,25 @@ export const Pagination = ({currentPage, totalPages, onPageChange}: PaginationPr
 
   return (
     <PaginationWrapper>
-      <PageButton onClick={() => onPageChange(1)} disabled={isFirstPage} isIconOnly>
+      <NavigationButton onClick={() => onPageChange(1)} disabled={isFirstPage} $isCompact>
         <ChevronLeft />
-      </PageButton>
-      <PageButton onClick={() => onPageChange(currentPage - 1)} disabled={isFirstPage}>
+      </NavigationButton>
+      <NavigationButton onClick={() => onPageChange(currentPage - 1)} disabled={isFirstPage}>
         Previous
-      </PageButton>
+      </NavigationButton>
       <PageInfo>
         Page {currentPage} of {totalPages}
       </PageInfo>
-      <PageButton onClick={() => onPageChange(currentPage + 1)} disabled={isLastPage}>
+      <NavigationButton onClick={() => onPageChange(currentPage + 1)} disabled={isLastPage}>
         Next
-      </PageButton>
-      <PageButton onClick={() => onPageChange(totalPages)} disabled={isLastPage} isIconOnly>
+      </NavigationButton>
+      <NavigationButton
+        onClick={() => onPageChange(totalPages)}
+        disabled={isLastPage}
+        $isCompact
+      >
         <ChevronRight />
-      </PageButton>
+      </NavigationButton>
     </PaginationWrapper>
   );
 };

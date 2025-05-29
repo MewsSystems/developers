@@ -110,14 +110,27 @@ export const MetaInfo = styled.div`
   margin-top: auto;
 `;
 
-export const Rating = styled.span<{rating: number}>`
+export const Rating = styled.span<{$rating: number}>`
   display: flex;
   align-items: center;
   gap: 4px;
-  color: ${({rating}) => (rating >= 7 ? '#059669' : rating >= 5 ? '#d97706' : '#dc2626')};
+  color: ${({$rating}) => ($rating >= 7 ? '#059669' : $rating >= 5 ? '#d97706' : '#dc2626')};
   font-weight: 500;
 
   &::after {
     content: '★';
   }
+`;
+
+export const RatingBadge = styled.div<{$rating: number}>`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: ${({$rating}) =>
+    $rating >= 7 ? '#059669' : $rating >= 5 ? '#d97706' : '#dc2626'};
 `;

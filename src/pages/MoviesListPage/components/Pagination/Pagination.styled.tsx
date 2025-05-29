@@ -8,8 +8,8 @@ export const PaginationWrapper = styled.div`
   padding: 16px 0 24px;
 `;
 
-export const PageButton = styled.button<{disabled?: boolean; isIconOnly?: boolean}>`
-  padding: ${({isIconOnly}) => (isIconOnly ? '8px' : '8px 12px')};
+export const NavigationButton = styled.button<{$isCompact?: boolean}>`
+  padding: ${({$isCompact}) => ($isCompact ? '8px' : '8px 12px')};
   font-size: 14px;
   font-weight: 500;
   color: ${({disabled}) => (disabled ? '#9ca3af' : '#374151')};
@@ -21,7 +21,7 @@ export const PageButton = styled.button<{disabled?: boolean; isIconOnly?: boolea
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: ${({isIconOnly}) => (isIconOnly ? '36px' : '80px')};
+  min-width: ${({$isCompact}) => ($isCompact ? '36px' : '80px')};
 
   &:not(:disabled):hover {
     background-color: #f9fafb;
