@@ -1,8 +1,9 @@
-import {Suspense} from 'react';
+import {Suspense, lazy} from 'react';
 import {BrowserRouter} from 'react-router-dom';
-import AppRoutes from './navigation/AppRoutes.tsx';
 import {LoadingSpinner} from './components/LoadingSpinner';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+const AppRoutes = lazy(() => import('./navigation/AppRoutes.tsx'));
 
 export default function App() {
   const queryClient = new QueryClient();
