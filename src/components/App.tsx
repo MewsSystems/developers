@@ -2,12 +2,12 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {Suspense, lazy} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-const MoviesListPage = lazy(() => import('./MoviesListPage.tsx'));
+const MoviesListPage = lazy(() => import('./MoviesListPage/MoviesListPage.tsx'));
 const MovieDetailsPage = lazy(() => import('./MovieDetailsPage.tsx'));
 
 const queryClient = new QueryClient();
 
-const App = () => {
+export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -23,4 +23,3 @@ const App = () => {
 };
 
 App.displayName = 'AppWrapper';
-export default App;

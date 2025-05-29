@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {Link, useParams, useSearchParams} from 'react-router-dom';
 import {fetchMovieDetails} from '../api/fetchMovieDetails.ts';
 
-const MovieDetailsPage = () => {
+export default function MovieDetailsPage() {
   const {id} = useParams<{id: string}>();
   const [searchParams] = useSearchParams();
 
@@ -15,9 +15,9 @@ const MovieDetailsPage = () => {
     enabled: Boolean(id),
   });
 
-  // TODO create a Skeleton for loading state
+  // TODO create a LoadingSkeleton for loading state
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>LOADING MOVIE DETAILS</div>;
   }
 
   if (!movie) {
@@ -36,7 +36,6 @@ const MovieDetailsPage = () => {
       )}
     </div>
   );
-};
+}
 
 MovieDetailsPage.displayName = 'MovieDetailsPage';
-export default MovieDetailsPage;

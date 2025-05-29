@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.28.4",
+    "@types/styled-components": "^5.1.34",
+    "axios": "^1.6.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^6.22.3",
-    "@tanstack/react-query": "^5.28.4",
-    "axios": "^1.6.8"
+    "styled-components": "^6.1.18"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
