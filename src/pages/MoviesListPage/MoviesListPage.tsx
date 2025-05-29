@@ -19,18 +19,24 @@ import {
   SearchContainer,
   SearchInput,
   SearchWarning,
+  ClearButton,
 } from './MoviesListPage.styled.tsx';
 
 export default function MoviesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const {page, onPageChange} = usePagination();
-  const {searchUrlParam, onSearchInputChange} = useSearchInput();
+  const {searchUrlParam, onSearchInputChange, clearSearch} = useSearchInput();
   const debouncedSearchQuery = useDebounce(searchUrlParam);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     searchInputRef.current?.focus();
   }, []);
+
+  const onClearClick = () => {
+    clearSearch();
+    searchInputRef.current?.focus();
+  };
 
   /*
     "MAX_USER_INPUT_SEARCH_LENGTH" search query has been limited to 100 chars since most movie titles
@@ -105,6 +111,24 @@ export default function MoviesListPage() {
             placeholder="Start typing..."
             maxLength={MAX_USER_INPUT_SEARCH_LENGTH}
           />
+          {searchUrlParam && (
+            <ClearButton onClick={onClearClick} type="button" aria-label="Clear search">
+              Clear
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </ClearButton>
+          )}
           {searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD && (
             <SearchWarning isError={charactersLeft === 0}>
               {charactersLeft === 0

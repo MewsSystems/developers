@@ -4,6 +4,7 @@ import {useSearchParams} from 'react-router-dom';
 interface UseMovieSearchReturn {
   searchUrlParam: string;
   onSearchInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  clearSearch: () => void;
 }
 
 export const useSearchInput = (): UseMovieSearchReturn => {
@@ -19,12 +20,17 @@ export const useSearchInput = (): UseMovieSearchReturn => {
       setSearchParams(newParams);
     } else {
       // If search is empty, clean up the URL by removing all query params
-      setSearchParams(new URLSearchParams());
+      setSearchParams({});
     }
+  };
+
+  const clearSearch = () => {
+    setSearchParams({});
   };
 
   return {
     searchUrlParam,
     onSearchInputChange,
+    clearSearch,
   };
 };
