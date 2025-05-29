@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {Link, useParams, useSearchParams} from 'react-router-dom';
-import {fetchMovieDetails} from '../api/fetchMovieDetails.ts';
+import {fetchMovieDetails} from '../../api/fetchMovieDetails.ts';
 
 export default function MovieDetailsPage() {
   const {id} = useParams<{id: string}>();
@@ -20,6 +20,7 @@ export default function MovieDetailsPage() {
     return <div>LOADING MOVIE DETAILS</div>;
   }
 
+  // TODO create a MovieNotFound component
   if (!movie) {
     return <div>Movie not found</div>;
   }

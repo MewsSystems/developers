@@ -1,0 +1,43 @@
+import type {Movie} from '../../../../api/types.ts';
+import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled.tsx';
+import {MovieCover} from './components/MovieCover.tsx';
+
+type MovieCardProps = {
+  movie: Movie;
+  searchParams: URLSearchParams;
+  searchQuery: string;
+  currentPage: number;
+};
+
+export const MovieCard = ({movie, searchParams, searchQuery, currentPage}: MovieCardProps) => {
+  const {release_date, title, id, vote_average, poster_path, overview} = movie;
+
+  const releaseYear = release_date ? new Date(release_date).getFullYear() : 'N/A';
+  const rating = vote_average ? Math.round(vote_average * 10) / 10 : 0;
+  const navigateToUrl = `/movies/${id}?${searchParams.toString()}`;
+
+  return (
+    <StyledLink
+      to={navigateToUrl}
+      state={{
+        from: '/',
+        search: searchQuery,
+        page: currentPage,
+      }}
+    >
+      <Card>
+        <MovieCover poster_path={poster_path} title={title} />
+        <Content>
+          <Title>{title}</Title>
+          <Overview>{overview}</Overview>
+          <MetaInfo>
+            <span>{releaseYear}</span>
+            <Rating rating={rating}>{rating}</Rating>
+          </MetaInfo>
+        </Content>
+      </Card>
+    </StyledLink>
+  );
+};
+
+MovieCard.displayName = 'MovieCard';
