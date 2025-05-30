@@ -1,22 +1,22 @@
 import {useSearchParams} from 'react-router-dom';
 
-interface UsePaginationReturn {
+type UsePaginationReturn = {
   page: number;
   setPage: (page: number) => void;
   onPageChange: (page: number) => void;
-}
+};
 
 export function usePagination(): UsePaginationReturn {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const [urlSearchParam, setUrlSearchParam] = useSearchParams();
+  const currentPage = Number(urlSearchParam.get('page')) || 1;
 
   const setPage = (newPage: number) => {
-    searchParams.set('page', newPage.toString());
-    setSearchParams(searchParams);
+    urlSearchParam.set('page', newPage.toString());
+    setUrlSearchParam(urlSearchParam);
   };
 
   const onPageChange = (targetPageNumber: number) => {
-    const currentUrlSearchQuery = new URLSearchParams(searchParams);
+    const currentUrlSearchQuery = new URLSearchParams(urlSearchParam);
 
     if (targetPageNumber > 1) {
       currentUrlSearchQuery.set('page', targetPageNumber.toString());
@@ -24,7 +24,7 @@ export function usePagination(): UsePaginationReturn {
       currentUrlSearchQuery.delete('page');
     }
 
-    setSearchParams(currentUrlSearchQuery);
+    setUrlSearchParam(currentUrlSearchQuery);
     setPage(targetPageNumber);
   };
 

@@ -1,7 +1,7 @@
 import {Container, Content, Message, Title} from './EmptyInitialState.styled.tsx';
-import {EmptyStateIcon} from './icons/EmtpyStateIcon.tsx';
+import EmptyStateIcon from './icons/EmtpyStateIcon.tsx';
 
-export const EmptyInitialState = () => {
+export default function EmptyInitialState() {
   return (
     <Container>
       <EmptyStateIcon />
@@ -11,6 +11,6 @@ export const EmptyInitialState = () => {
       </Content>
     </Container>
   );
-};
+}
 
 EmptyInitialState.displayName = 'EmptyInitialState';

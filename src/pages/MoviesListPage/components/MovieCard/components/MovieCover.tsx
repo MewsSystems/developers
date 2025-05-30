@@ -7,7 +7,7 @@ import {
 
 type MovieCoverProps = {poster_path: string | null; title: string};
 
-export const MovieCover = ({poster_path, title}: MovieCoverProps) => {
+export default function MovieCover({poster_path, title}: MovieCoverProps) {
   const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
   return (
@@ -21,4 +21,4 @@ export const MovieCover = ({poster_path, title}: MovieCoverProps) => {
       )}
     </PosterContainer>
   );
-};
+}

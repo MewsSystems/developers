@@ -1,6 +1,6 @@
 import {Icon} from '../NothingFoundState.styled.tsx';
 
-export const NothingFoundIcon = () => {
+export default function NothingFoundIcon() {
   return (
     <Icon
       width="120"
@@ -18,4 +18,4 @@ export const NothingFoundIcon = () => {
       <path d="M16 16c-.5-1.5-1.79-3-4-3s-3.5 1.5-4 3" />
     </Icon>
   );
-};
+}

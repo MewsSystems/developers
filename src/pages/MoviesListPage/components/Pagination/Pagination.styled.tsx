@@ -29,7 +29,7 @@ export const NavigationButton = styled.button<{$isCompact?: boolean}>`
   }
 `;
 
-export const PageInfo = styled.span`
+export const CurrentPage = styled.span`
   color: #4b5563;
   font-size: 14px;
   margin: 0 4px;

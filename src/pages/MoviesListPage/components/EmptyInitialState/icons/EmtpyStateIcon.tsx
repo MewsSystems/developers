@@ -1,6 +1,6 @@
 import {Icon} from '../EmptyInitialState.styled.tsx';
 
-export const EmptyStateIcon = () => {
+export default function EmptyStateIcon() {
   return (
     <Icon
       width="120"
@@ -20,6 +20,6 @@ export const EmptyStateIcon = () => {
       <path d="M19 4L17 8" />
     </Icon>
   );
-};
+}
 
 EmptyStateIcon.displayName = 'EmptyStateIcon';

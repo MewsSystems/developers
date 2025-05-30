@@ -5,15 +5,10 @@ import {
   FilmTape,
 } from './LoadingCameraAnimation.styled.tsx';
 
-export const LoadingCameraAnimation = () => {
+export default function LoadingCameraAnimation() {
   return (
     <LoadingContainer>
-      <CameraBody
-        viewBox="0 0 200 200"
-        fill="none"
-        stroke="#555"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <CameraBody viewBox="0 0 200 200" fill="none" stroke="#555">
         <rect x="40" y="60" width="120" height="80" rx="8" strokeWidth="2" />
         <rect x="35" y="70" width="8" height="60" rx="2" strokeWidth="1.5" />
         <path d="M160 100 L175 90 V110 L160 100" strokeWidth="1.5" />
@@ -41,6 +36,6 @@ export const LoadingCameraAnimation = () => {
       </CameraBody>
     </LoadingContainer>
   );
-};
+}
 
 LoadingCameraAnimation.displayName = 'LoadingCameraAnimation';

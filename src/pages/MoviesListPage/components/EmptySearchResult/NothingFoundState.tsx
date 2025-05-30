@@ -1,7 +1,7 @@
 import {Container, Content, Message, Title} from './NothingFoundState.styled.tsx';
-import {NothingFoundIcon} from './icons/NothingFoundIcon.tsx';
+import NothingFoundIcon from './icons/NothingFoundIcon.tsx';
 
-export const NothingFoundState = () => {
+export default function NothingFoundState() {
   return (
     <Container>
       <NothingFoundIcon />
@@ -11,6 +11,6 @@ export const NothingFoundState = () => {
       </Content>
     </Container>
   );
-};
+}
 
 NothingFoundState.displayName = 'NothingFoundState';

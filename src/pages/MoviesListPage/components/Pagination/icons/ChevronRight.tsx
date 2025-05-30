@@ -5,10 +5,9 @@ const StyledSvg = styled.svg`
   height: 16px;
 `;
 
-export const ChevronRight = () => {
+export default function ChevronRight() {
   return (
     <StyledSvg
-      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -19,6 +18,6 @@ export const ChevronRight = () => {
       <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
     </StyledSvg>
   );
-};
+}
 
 ChevronRight.displayName = 'ChevronRight';

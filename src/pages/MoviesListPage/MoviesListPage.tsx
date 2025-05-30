@@ -5,11 +5,11 @@ import {useDebounce} from '../../hooks/useDebounce.ts';
 import {usePagination} from '../../hooks/usePagination.ts';
 import {useSearchInput} from '../../hooks/useSearchInput.ts';
 import {fetchMoviesList} from '../../api/fetchMoviesList.ts';
-import {LoadingCameraAnimation} from './components/LoadingCameraAnimation/LoadingCameraAnimation.tsx';
-import {NothingFoundState} from './components/EmptySearchResult/NothingFoundState.tsx';
-import {EmptyInitialState} from './components/EmptyInitialState/EmptyInitialState.tsx';
-import {MovieCard} from './components/MovieCard/MovieCard.tsx';
-import {Pagination} from './components/Pagination/Pagination.tsx';
+import LoadingCameraAnimation from './components/LoadingCameraAnimation/LoadingCameraAnimation.tsx';
+import NothingFoundState from './components/EmptySearchResult/NothingFoundState.tsx';
+import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState.tsx';
+import MovieCard from './components/MovieCard/MovieCard.tsx';
+import Pagination from './components/Pagination/Pagination.tsx';
 import type {MovieSearchResponse} from '../../api/types';
 import {
   Container,
@@ -114,12 +114,7 @@ export default function MoviesListPage() {
           {searchUrlParam && (
             <ClearButton onClick={onClearClick} type="button" aria-label="Clear search">
               Clear
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -157,6 +152,7 @@ export default function MoviesListPage() {
             ))}
           </MoviesGrid>
         )}
+
         <Pagination currentPage={page} totalPages={totalPagesCount} onPageChange={onPageChange} />
       </Content>
     </Container>
