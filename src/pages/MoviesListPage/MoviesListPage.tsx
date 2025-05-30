@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useEffect, useRef} from 'react';
+import {useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from '../../hooks/useDebounce.ts';
 import {usePagination} from '../../hooks/usePagination.ts';
@@ -16,42 +16,25 @@ import {
   Content,
   Header,
   MoviesGrid,
-  SearchContainer,
-  SearchInput,
-  SearchWarning,
-  ClearButton,
+  LoadingOverlay,
+  MoviesContainer,
 } from './MoviesListPage.styled.tsx';
+import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput.tsx';
 
 export default function MoviesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const {page, onPageChange} = usePagination();
-  const {searchUrlParam, onSearchInputChange, clearSearch} = useSearchInput();
+  const {searchUrlParam} = useSearchInput();
   const debouncedSearchQuery = useDebounce(searchUrlParam);
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    searchInputRef.current?.focus();
-  }, []);
-
-  const onClearClick = () => {
-    clearSearch();
-    searchInputRef.current?.focus();
-  };
-
-  /*
-    "MAX_USER_INPUT_SEARCH_LENGTH" search query has been limited to 100 chars since most movie titles
-    are well under this length. This helps to prevent abusing the API.
-  */
-  const MAX_USER_INPUT_SEARCH_LENGTH = 100;
   const FIVE_MINUTES = 5 * 60 * 1000;
-  const SEARCH_INPUT_WARNING_THRESHOLD = 90;
 
   /*
     1. staleTime: avoid re-fetching the same search results for 5 minutes — treat them as fresh during this time.
     2. gcTime: keep the cached results in memory for 10 minutes after they're no longer used. Could be increased
     since movie data doesn't change frequently
   */
-  const {data, isLoading} = useQuery<MovieSearchResponse>({
+  const {data, isLoading, isFetching} = useQuery<MovieSearchResponse>({
     queryKey: ['movies', debouncedSearchQuery, page],
     queryFn: () => fetchMoviesList(debouncedSearchQuery, page),
     enabled:
@@ -59,16 +42,21 @@ export default function MoviesListPage() {
       debouncedSearchQuery.length <= MAX_USER_INPUT_SEARCH_LENGTH,
     staleTime: FIVE_MINUTES,
     gcTime: FIVE_MINUTES * 2,
+    placeholderData: (previousData) => {
+      if (!debouncedSearchQuery) {
+        return undefined;
+      }
+
+      return previousData;
+    },
   });
 
-  const {total_pages: totalPagesCount = 0, results: movies = []} = data || {};
-
-  const charactersLeft = MAX_USER_INPUT_SEARCH_LENGTH - searchUrlParam.length;
+  const {total_pages = 0, results = []} = data || {};
   const shouldShowInitialEmptyState = !isLoading && !debouncedSearchQuery;
 
   const hasEmptySearchResults =
     !isLoading &&
-    movies.length === 0 &&
+    results.length === 0 &&
     debouncedSearchQuery &&
     debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH;
 
@@ -88,60 +76,36 @@ export default function MoviesListPage() {
     const currentPageUrlQueryParam = searchParams.get('page');
 
     // Add "&page=1" only if the total pages count > 1 and the user is not already on a page
-    if (totalPagesCount > 1 && !currentPageUrlQueryParam) {
+    if (total_pages > 1 && !currentPageUrlQueryParam) {
       newParams.set('page', '1');
       setSearchParams(newParams);
     }
     // Remove "&page=X" URL param if there's only one page
-    else if (totalPagesCount <= 1 && currentPageUrlQueryParam) {
+    else if (total_pages <= 1 && currentPageUrlQueryParam) {
       newParams.delete('page');
       setSearchParams(newParams);
     }
-  }, [data, debouncedSearchQuery, searchParams, setSearchParams, totalPagesCount]);
+  }, [data, debouncedSearchQuery, searchParams, setSearchParams, total_pages]);
 
   return (
     <Container>
       <Header>
-        <SearchContainer>
-          <SearchInput
-            ref={searchInputRef}
-            type="text"
-            value={searchUrlParam}
-            onChange={onSearchInputChange}
-            placeholder="Start typing..."
-            maxLength={MAX_USER_INPUT_SEARCH_LENGTH}
-          />
-          {searchUrlParam && (
-            <ClearButton onClick={onClearClick} type="button" aria-label="Clear search">
-              Clear
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </ClearButton>
-          )}
-          {searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD && (
-            <SearchWarning isError={charactersLeft === 0}>
-              {charactersLeft === 0
-                ? "You've reached the limit of 100 characters."
-                : `${charactersLeft} characters remaining`}
-            </SearchWarning>
-          )}
-        </SearchContainer>
+        <SearchBar />
       </Header>
 
       <Content>
-        {isLoading && <LoadingCameraAnimation />}
         {shouldShowInitialEmptyState && <EmptyInitialState />}
         {hasEmptySearchResults && <NothingFoundState />}
 
-        {!isLoading && movies.length > 0 && (
+        <MoviesContainer>
+          {isFetching && !hasEmptySearchResults && (
+            <LoadingOverlay>
+              <LoadingCameraAnimation />
+            </LoadingOverlay>
+          )}
+
           <MoviesGrid>
-            {movies.map((movie) => (
+            {results.map((movie) => (
               <MovieCard
                 key={movie.id}
                 movie={movie}
@@ -151,9 +115,9 @@ export default function MoviesListPage() {
               />
             ))}
           </MoviesGrid>
-        )}
+        </MoviesContainer>
 
-        <Pagination currentPage={page} totalPages={totalPagesCount} onPageChange={onPageChange} />
+        <Pagination currentPage={page} totalPages={total_pages} onPageChange={onPageChange} />
       </Content>
     </Container>
   );

@@ -20,11 +20,9 @@ const fadeInOut = keyframes`
 
 export const LoadingContainer = styled.div`
   width: 100%;
-  min-height: calc(100vh - 200px); /* Account for header and padding */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
 `;
 
 export const CameraBody = styled.svg`

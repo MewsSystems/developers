@@ -25,7 +25,6 @@ export const SearchContainer = styled.div`
 
 export const SearchInput = styled.input`
   width: 100%;
-  /* Increased padding-right to have room for text "Clear X" */
   padding: 10px 80px 10px 16px;
   font-size: 15px;
   color: #5a5d63;
@@ -40,7 +39,7 @@ export const SearchInput = styled.input`
   }
 
   &::placeholder {
-    color: #9ca3af; /* Lighter gray for placeholder */
+    color: #9ca3af;
   }
 `;
 
@@ -87,9 +86,27 @@ export const Content = styled.div`
   width: 100%;
 `;
 
+export const MoviesContainer = styled.div`
+  position: relative;
+`;
+
 export const MoviesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
+`;
+
+export const LoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
 `;
