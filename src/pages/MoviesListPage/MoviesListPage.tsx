@@ -58,26 +58,26 @@ export default function MoviesListPage() {
     if (!data) {
       // If there's no data and no search query, remove the "page" query parameter from the URL
       if (!debouncedSearchQuery && searchParams.has('page')) {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('page');
-        setSearchParams(newParams);
+        const currentUrlSearchParams = new URLSearchParams(searchParams);
+        currentUrlSearchParams.delete('page');
+        setSearchParams(currentUrlSearchParams);
       }
 
       return;
     }
 
-    const newParams = new URLSearchParams(searchParams);
+    const currentUrlSearchParams = new URLSearchParams(searchParams);
     const currentPageUrlQueryParam = searchParams.get('page');
 
     // Add "&page=1" only if the total pages count > 1 and the user is not already on a page
     if (total_pages > 1 && !currentPageUrlQueryParam) {
-      newParams.set('page', '1');
-      setSearchParams(newParams);
+      currentUrlSearchParams.set('page', '1');
+      setSearchParams(currentUrlSearchParams);
     }
     // Remove "&page=X" URL param if there's only one page
     else if (total_pages <= 1 && currentPageUrlQueryParam) {
-      newParams.delete('page');
-      setSearchParams(newParams);
+      currentUrlSearchParams.delete('page');
+      setSearchParams(currentUrlSearchParams);
     }
   }, [data, debouncedSearchQuery, searchParams, setSearchParams, total_pages]);
 
@@ -88,7 +88,7 @@ export default function MoviesListPage() {
       </Header>
 
       <Content>
-        {isLoading && (
+        {isLoading && !isFetching && (
           <LoadingOverlay>
             <PopcornLoader />
           </LoadingOverlay>
@@ -97,7 +97,7 @@ export default function MoviesListPage() {
         {hasEmptySearchResults && <NothingFoundState />}
 
         <MoviesContainer>
-          {isFetching && !hasEmptySearchResults && (
+          {isFetching && !isLoading && !hasEmptySearchResults && (
             <LoadingOverlay>
               <PopcornLoader />
             </LoadingOverlay>
