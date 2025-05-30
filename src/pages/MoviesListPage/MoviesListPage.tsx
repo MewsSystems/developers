@@ -5,7 +5,7 @@ import {useDebounce} from '../../hooks/useDebounce';
 import {usePagination} from '../../hooks/usePagination';
 import {useSearchInput} from '../../hooks/useSearchInput';
 import {fetchMoviesList} from '../../api/fetchMoviesList';
-import LoadingCameraAnimation from './components/LoadingCameraAnimation/LoadingCameraAnimation';
+import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
 import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
 import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
 import MovieCard from './components/MovieCard/MovieCard';
@@ -42,13 +42,7 @@ export default function MoviesListPage() {
       debouncedSearchQuery.length <= MAX_USER_INPUT_SEARCH_LENGTH,
     staleTime: FIVE_MINUTES,
     gcTime: FIVE_MINUTES * 2,
-    placeholderData: (previousData) => {
-      if (!debouncedSearchQuery) {
-        return undefined;
-      }
-
-      return previousData;
-    },
+    placeholderData: (previousItems) => (debouncedSearchQuery ? previousItems : undefined),
   });
 
   const {total_pages = 0, results = []} = data || {};
@@ -94,13 +88,18 @@ export default function MoviesListPage() {
       </Header>
 
       <Content>
+        {isLoading && (
+          <LoadingOverlay>
+            <PopcornLoader />
+          </LoadingOverlay>
+        )}
         {shouldShowInitialEmptyState && <EmptyInitialState />}
         {hasEmptySearchResults && <NothingFoundState />}
 
         <MoviesContainer>
           {isFetching && !hasEmptySearchResults && (
             <LoadingOverlay>
-              <LoadingCameraAnimation />
+              <PopcornLoader />
             </LoadingOverlay>
           )}
 

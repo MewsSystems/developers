@@ -22,6 +22,8 @@ export const Content = styled.div`
   max-width: 1600px;
   margin: 72px auto 0;
   width: 100%;
+  min-height: calc(100vh - 72px);
+  position: relative;
 `;
 
 export const MoviesContainer = styled.div`
@@ -37,10 +39,7 @@ export const MoviesGrid = styled.div`
 
 export const LoadingOverlay = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;

@@ -1,7 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
 import {fetchMovieDetails} from '../../api/fetchMovieDetails';
-import LoadingCameraAnimation from '../MoviesListPage/components/LoadingCameraAnimation/LoadingCameraAnimation';
+import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
 import {
   Content,
   MetadataInfo,
@@ -14,9 +14,11 @@ import {
   PosterContainer,
   Rating,
   Title,
+  LoadingOverlay,
 } from './MovieDetailsPage.styled';
 import MovieCover from '../common/MovieCover/MovieCover';
 import GoBackLink from './components/GoBackLink/GoBackLink';
+import {format} from 'date-fns';
 
 export default function MovieDetailsPage() {
   const {id} = useParams<{id: string}>();
@@ -29,11 +31,15 @@ export default function MovieDetailsPage() {
   if (isLoading) {
     return (
       <MovieDetailsPageContainer>
-        <LoadingCameraAnimation />
+        <GoBackLink />
+        <LoadingOverlay>
+          <PopcornLoader />
+        </LoadingOverlay>
       </MovieDetailsPageContainer>
     );
   }
 
+  // TODO handle it properly with a NotFound component
   if (!movie) {
     return (
       <MovieDetailsPageContainer>
@@ -42,12 +48,6 @@ export default function MovieDetailsPage() {
       </MovieDetailsPageContainer>
     );
   }
-
-  const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
 
   return (
     <MovieDetailsPageContainer>
@@ -65,7 +65,7 @@ export default function MovieDetailsPage() {
 
             <MetadataItem>
               <MetadataLabel>Release Date</MetadataLabel>
-              <MetadataValue>{formattedDate}</MetadataValue>
+              <MetadataValue>{format(movie.release_date, 'dd MMM yyyy')}</MetadataValue>
             </MetadataItem>
 
             {movie.runtime && (

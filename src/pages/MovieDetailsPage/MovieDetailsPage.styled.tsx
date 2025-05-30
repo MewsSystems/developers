@@ -8,17 +8,14 @@ export const MovieDetailsPageContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  position: relative;
 `;
 
 export const Content = styled.div`
   display: grid;
-  grid-template-columns: minmax(300px, 2fr) 3fr;
+  grid-template-columns: minmax(300px, 1fr) 2fr;
   gap: 48px;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+  margin-top: 24px;
 `;
 
 export const PosterContainer = styled.div`
@@ -78,17 +75,12 @@ export const MetadataLabel = styled.span`
 export const MetadataValue = styled.span`
   font-size: 16px;
   color: #111827;
-  font-weight: 500;
 `;
 
-export const Rating = styled.div<{$rating: number}>`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 16px;
+export const Rating = styled.span<{$rating: number}>`
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 500;
   color: ${({$rating}) => {
     if ($rating >= 7) return '#059669';
     if ($rating >= 5) return '#d97706';
@@ -99,4 +91,15 @@ export const Rating = styled.div<{$rating: number}>`
     if ($rating >= 5) return '#fffbeb';
     return '#fef2f2';
   }};
+`;
+
+export const LoadingOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
 `;
