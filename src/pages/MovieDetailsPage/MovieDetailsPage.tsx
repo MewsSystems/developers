@@ -15,6 +15,7 @@ import {
   Rating,
   Title,
   LoadingOverlay,
+  NotFoundMessageContainer,
 } from './MovieDetailsPage.styled';
 import MovieCover from '../common/MovieCover/MovieCover';
 import GoBackLink from './components/GoBackLink/GoBackLink';
@@ -39,12 +40,13 @@ export default function MovieDetailsPage() {
     );
   }
 
-  // TODO handle it properly with a NotFound component
   if (!movie) {
     return (
       <MovieDetailsPageContainer>
-        <Title>Movie not found</Title>
         <GoBackLink />
+        <NotFoundMessageContainer>
+          <Title>Movie not found :(</Title>
+        </NotFoundMessageContainer>
       </MovieDetailsPageContainer>
     );
   }
@@ -88,7 +90,7 @@ export default function MovieDetailsPage() {
           {movie.tagline && (
             <MetadataItem>
               <MetadataLabel>Tagline</MetadataLabel>
-              <MetadataValue>"{movie.tagline}"</MetadataValue>
+              <MetadataValue>{movie.tagline}</MetadataValue>
             </MetadataItem>
           )}
         </MovieInfo>

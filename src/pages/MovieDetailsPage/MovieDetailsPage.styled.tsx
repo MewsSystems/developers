@@ -16,6 +16,16 @@ export const Content = styled.div`
   grid-template-columns: minmax(300px, 1fr) 2fr;
   gap: 48px;
   margin-top: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(250px, 1fr) 2fr;
+    gap: 32px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 `;
 
 export const PosterContainer = styled.div`
@@ -27,6 +37,11 @@ export const PosterContainer = styled.div`
     0 2px 4px -2px rgb(0 0 0 / 0.1);
   aspect-ratio: 2/3;
   background: #f3f4f6;
+
+  @media (max-width: 768px) {
+    max-width: 300px;
+    margin: 0 auto;
+  }
 
   img {
     width: 100%;
@@ -46,6 +61,11 @@ export const Title = styled.h1`
   font-weight: 600;
   color: #111827;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    text-align: center;
+  }
 `;
 
 export const Overview = styled.p`
@@ -59,12 +79,21 @@ export const MetadataInfo = styled.div`
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    gap: 16px;
+  }
 `;
 
 export const MetadataItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  @media (max-width: 768px) {
+    align-items: center;
+  }
 `;
 
 export const MetadataLabel = styled.span`
@@ -102,4 +131,14 @@ export const LoadingOverlay = styled.div`
   justify-content: center;
   z-index: 100;
   backdrop-filter: blur(5px);
+`;
+
+export const NotFoundMessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  text-align: center;
+  padding: 0 24px;
 `;
