@@ -1,41 +1,99 @@
 import {useQuery} from '@tanstack/react-query';
-import {Link, useParams, useSearchParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {fetchMovieDetails} from '../../api/fetchMovieDetails';
+import LoadingCameraAnimation from '../MoviesListPage/components/LoadingCameraAnimation/LoadingCameraAnimation';
+import {
+  Content,
+  MetadataInfo,
+  MetadataItem,
+  MetadataLabel,
+  MetadataValue,
+  MovieDetailsPageContainer,
+  MovieInfo,
+  Overview,
+  PosterContainer,
+  Rating,
+  Title,
+} from './MovieDetailsPage.styled';
+import MovieCover from '../common/MovieCover/MovieCover.tsx';
+import GoBackLink from './components/GoBackLink/GoBackLink';
 
 export default function MovieDetailsPage() {
   const {id} = useParams<{id: string}>();
-  const [searchParams] = useSearchParams();
-
-  // Create a URL with the current search params for the back link
-  const backToSearchUrl = `/?${searchParams.toString()}`;
-
   const {data: movie, isLoading} = useQuery({
     queryKey: ['movie', id],
     queryFn: () => fetchMovieDetails(id!),
     enabled: Boolean(id),
   });
 
-  // TODO create a LoadingSkeleton for loading state
   if (isLoading) {
-    return <div>LOADING MOVIE DETAILS</div>;
+    return (
+      <MovieDetailsPageContainer>
+        <LoadingCameraAnimation />
+      </MovieDetailsPageContainer>
+    );
   }
 
-  // TODO create a MovieNotFound component
   if (!movie) {
-    return <div>Movie not found</div>;
+    return (
+      <MovieDetailsPageContainer>
+        <Title>Movie not found</Title>
+        <GoBackLink />
+      </MovieDetailsPageContainer>
+    );
   }
+
+  const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div>
-      <Link to={backToSearchUrl}>Back to search</Link>
-      <h1>{movie.title}</h1>
-      <p>{movie.overview}</p>
-      <p>Release date: {movie.release_date}</p>
-      <p>Rating: {movie.vote_average}</p>
-      {movie.poster_path && (
-        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-      )}
-    </div>
+    <MovieDetailsPageContainer>
+      <GoBackLink />
+      <Content>
+        <PosterContainer>
+          <MovieCover poster_path={movie.poster_path} title={movie.title} />
+        </PosterContainer>
+
+        <MovieInfo>
+          <Title>{movie.title}</Title>
+
+          <MetadataInfo>
+            <Rating $rating={movie.vote_average}>★ {movie.vote_average.toFixed(1)}</Rating>
+
+            <MetadataItem>
+              <MetadataLabel>Release Date</MetadataLabel>
+              <MetadataValue>{formattedDate}</MetadataValue>
+            </MetadataItem>
+
+            {movie.runtime && (
+              <MetadataItem>
+                <MetadataLabel>Runtime</MetadataLabel>
+                <MetadataValue>{movie.runtime} minutes</MetadataValue>
+              </MetadataItem>
+            )}
+
+            {movie.genres && movie.genres.length > 0 && (
+              <MetadataItem>
+                <MetadataLabel>Genres</MetadataLabel>
+                <MetadataValue>{movie.genres.map((genre) => genre.name).join(', ')}</MetadataValue>
+              </MetadataItem>
+            )}
+          </MetadataInfo>
+
+          <Overview>{movie.overview}</Overview>
+
+          {movie.tagline && (
+            <MetadataItem>
+              <MetadataLabel>Tagline</MetadataLabel>
+              <MetadataValue>"{movie.tagline}"</MetadataValue>
+            </MetadataItem>
+          )}
+        </MovieInfo>
+      </Content>
+    </MovieDetailsPageContainer>
   );
 }
 

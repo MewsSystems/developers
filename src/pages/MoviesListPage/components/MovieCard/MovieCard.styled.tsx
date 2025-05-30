@@ -1,8 +1,11 @@
-import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import styled from 'styled-components';
 
 export const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
   height: 100%;
+  display: block;
 `;
 
 export const Card = styled.div`
@@ -11,23 +14,20 @@ export const Card = styled.div`
   height: 100%;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition:
-    transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: transform 0.2s ease-in-out;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 `;
 
 export const PosterContainer = styled.div`
+  position: relative;
   width: 100%;
   height: 150px;
-  background-color: #e5e7eb;
-  position: relative;
+  background: #f3f4f6;
 `;
 
 export const PosterImage = styled.img`
@@ -40,50 +40,22 @@ export const PosterPlaceholder = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    45deg,
-    #e5e7eb 25%,
-    #d1d5db 25%,
-    #d1d5db 50%,
-    #e5e7eb 50%,
-    #e5e7eb 75%,
-    #d1d5db 75%
-  );
-  background-size: 20px 20px;
-  color: #6b7280;
-`;
-
-export const PlaceholderIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 8px;
-  border: 2px solid currentColor;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &::before {
-    content: '🎬';
-    font-size: 20px;
-  }
 `;
 
 export const Content = styled.div`
-  padding: 12px;
+  padding: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
 `;
 
-export const Title = styled.h3`
+export const Title = styled.h2`
+  margin: 0 0 8px;
   font-size: 16px;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -91,13 +63,14 @@ export const Title = styled.h3`
 `;
 
 export const Overview = styled.p`
+  margin: 0 0 16px;
   font-size: 14px;
   color: #6b7280;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 8px;
+  line-height: 1.5;
   flex: 1;
 `;
 
@@ -105,32 +78,23 @@ export const MetaInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  color: #4b5563;
+  color: #6b7280;
+  font-size: 14px;
   margin-top: auto;
 `;
 
 export const Rating = styled.span<{$rating: number}>`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: ${({$rating}) => ($rating >= 7 ? '#059669' : $rating >= 5 ? '#d97706' : '#dc2626')};
-  font-weight: 500;
-
-  &::after {
-    content: '★';
-  }
-`;
-
-export const RatingBadge = styled.div<{$rating: number}>`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 4px 8px;
+  padding: 2px 8px;
   border-radius: 4px;
-  font-size: 14px;
   font-weight: 500;
-  color: white;
-  background-color: ${({$rating}) =>
-    $rating >= 7 ? '#059669' : $rating >= 5 ? '#d97706' : '#dc2626'};
+  color: ${({$rating}) => {
+    if ($rating >= 7) return '#059669';
+    if ($rating >= 5) return '#d97706';
+    return '#dc2626';
+  }};
+  background: ${({$rating}) => {
+    if ($rating >= 7) return '#ecfdf5';
+    if ($rating >= 5) return '#fffbeb';
+    return '#fef2f2';
+  }};
 `;

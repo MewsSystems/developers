@@ -5,6 +5,12 @@ export type Movie = {
   poster_path: string | null;
   release_date: string;
   vote_average: number;
+  runtime: number;
+  tagline: string;
+  genres: {
+    id: number;
+    name: string;
+  }[];
 };
 
 export type MovieSearchResponse = {

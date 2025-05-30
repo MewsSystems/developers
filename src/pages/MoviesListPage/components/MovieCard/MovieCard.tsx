@@ -1,6 +1,6 @@
 import type {Movie} from '../../../../api/types';
 import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled';
-import MovieCover from './components/MovieCover';
+import MovieCover from '../../../common/MovieCover/MovieCover.tsx';
 import {PathByPageType} from '../../../../routes/constants';
 import {generatePath} from 'react-router-dom';
 
@@ -29,13 +29,13 @@ export default function MovieCard({movie, searchParams, searchQuery, currentPage
       }}
     >
       <Card>
-        <MovieCover poster_path={poster_path} title={title} />
+        <MovieCover poster_path={poster_path} title={title} isMinimized />
         <Content>
           <Title>{title}</Title>
           <Overview>{overview}</Overview>
           <MetaInfo>
             <span>{releaseYear}</span>
-            <Rating $rating={rating}>{rating}</Rating>
+            <Rating $rating={rating}>★ {rating}</Rating>
           </MetaInfo>
         </Content>
       </Card>
