@@ -3,13 +3,13 @@ import {BrowserRouter} from 'react-router-dom';
 import {LoadingSpinner} from './components/LoadingSpinner';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
-const AppRoutes = lazy(() => import('./navigation/AppRoutes.tsx'));
+const AppRoutes = lazy(() => import('../routes/AppRoutes'));
 
 export default function App() {
   const queryClient = new QueryClient();
 
   return (
-    // pass the "future" prop to suppress warnings from React Router about upcoming changes in v7 in the dev console
+    // pass the "future" prop to suppress warnings in the browser console from React Router about upcoming changes in v7
     <BrowserRouter future={{v7_startTransition: true, v7_relativeSplatPath: true}}>
       <Suspense fallback={<LoadingSpinner />}>
         <QueryClientProvider client={queryClient}>

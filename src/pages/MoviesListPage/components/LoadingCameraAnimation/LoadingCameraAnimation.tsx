@@ -1,9 +1,4 @@
-import {
-  LoadingContainer,
-  CameraBody,
-  SmallReel,
-  FilmTape,
-} from './LoadingCameraAnimation.styled.tsx';
+import {LoadingContainer, CameraBody, SmallReel, FilmTape} from './LoadingCameraAnimation.styled';
 
 export default function LoadingCameraAnimation() {
   return (

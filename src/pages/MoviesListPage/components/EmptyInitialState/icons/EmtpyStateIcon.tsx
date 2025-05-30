@@ -1,4 +1,4 @@
-import {Icon} from '../EmptyInitialState.styled.tsx';
+import {Icon} from '../EmptyInitialState.styled';
 
 export default function EmptyStateIcon() {
   return (

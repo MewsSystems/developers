@@ -1,5 +1,13 @@
 import styled, {keyframes} from 'styled-components';
 
+export function LoadingSpinner() {
+  return (
+    <LoadingOverlay>
+      <Spinner />
+    </LoadingOverlay>
+  );
+}
+
 const LoadingOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -9,7 +17,7 @@ const LoadingOverlay = styled.div`
   align-items: center;
 `;
 
-const spin = keyframes`
+const spinEffect = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 `;
@@ -20,13 +28,7 @@ const Spinner = styled.div`
   border: 4px solid #e5e7eb;
   border-top-color: #3b82f6;
   border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
+  animation: ${spinEffect} 1s linear infinite;
 `;
 
-export function LoadingSpinner() {
-  return (
-    <LoadingOverlay>
-      <Spinner />
-    </LoadingOverlay>
-  );
-} 
+LoadingSpinner.displayName = 'LoadingSpinner';

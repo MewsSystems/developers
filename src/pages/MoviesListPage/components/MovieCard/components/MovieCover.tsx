@@ -3,13 +3,12 @@ import {
   PosterContainer,
   PosterImage,
   PosterPlaceholder,
-} from '../MovieCard.styled.tsx';
+} from '../MovieCard.styled';
+import {IMAGE_BASE_URL} from '../../../../../api/constants';
 
 type MovieCoverProps = {poster_path: string | null; title: string};
 
 export default function MovieCover({poster_path, title}: MovieCoverProps) {
-  const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-
   return (
     <PosterContainer>
       {poster_path ? (

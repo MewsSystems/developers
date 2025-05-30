@@ -3,9 +3,9 @@ import {
   SearchContainer,
   SearchInput,
   SearchWarning,
-} from '../../MoviesListPage.styled.tsx';
+} from '../../MoviesListPage.styled';
 import {useEffect, useRef} from 'react';
-import {useSearchInput} from '../../../../hooks/useSearchInput.ts';
+import {useSearchInput} from '../../../../hooks/useSearchInput';
 
 /*
   "MAX_USER_INPUT_SEARCH_LENGTH" search query has been limited to 100 chars since most movie titles
@@ -39,6 +39,7 @@ export default function SearchBar() {
         placeholder="Start typing..."
         maxLength={MAX_USER_INPUT_SEARCH_LENGTH}
       />
+
       {searchUrlParam && (
         <ClearButton onClick={onClearClick} type="button" aria-label="Clear search">
           Clear
@@ -52,6 +53,7 @@ export default function SearchBar() {
           </svg>
         </ClearButton>
       )}
+
       {searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD && (
         <SearchWarning isError={charactersLeft === 0}>
           {charactersLeft === 0

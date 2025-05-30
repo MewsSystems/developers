@@ -1,15 +1,15 @@
 import {useQuery} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {useDebounce} from '../../hooks/useDebounce.ts';
-import {usePagination} from '../../hooks/usePagination.ts';
-import {useSearchInput} from '../../hooks/useSearchInput.ts';
-import {fetchMoviesList} from '../../api/fetchMoviesList.ts';
-import LoadingCameraAnimation from './components/LoadingCameraAnimation/LoadingCameraAnimation.tsx';
-import NothingFoundState from './components/EmptySearchResult/NothingFoundState.tsx';
-import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState.tsx';
-import MovieCard from './components/MovieCard/MovieCard.tsx';
-import Pagination from './components/Pagination/Pagination.tsx';
+import {useDebounce} from '../../hooks/useDebounce';
+import {usePagination} from '../../hooks/usePagination';
+import {useSearchInput} from '../../hooks/useSearchInput';
+import {fetchMoviesList} from '../../api/fetchMoviesList';
+import LoadingCameraAnimation from './components/LoadingCameraAnimation/LoadingCameraAnimation';
+import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
+import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
+import MovieCard from './components/MovieCard/MovieCard';
+import Pagination from './components/Pagination/Pagination';
 import type {MovieSearchResponse} from '../../api/types';
 import {
   Container,
@@ -18,8 +18,8 @@ import {
   MoviesGrid,
   LoadingOverlay,
   MoviesContainer,
-} from './MoviesListPage.styled.tsx';
-import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput.tsx';
+} from './MoviesListPage.styled';
+import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
 
 export default function MoviesListPage() {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,7 +1,7 @@
-import type {Movie} from '../../../../api/types.ts';
-import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled.tsx';
-import MovieCover from './components/MovieCover.tsx';
-import {PathByPageType} from '../../../../navigation/constants.ts';
+import type {Movie} from '../../../../api/types';
+import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled';
+import MovieCover from './components/MovieCover';
+import {PathByPageType} from '../../../../routes/constants';
 import {generatePath} from 'react-router-dom';
 
 type MovieCardProps = {

@@ -1,5 +1,5 @@
-import type {MovieSearchResponse} from './types.ts';
-import {movieApiService} from './movieApiService.ts';
+import type {MovieSearchResponse} from './types';
+import {movieApiService} from './movieApiService';
 
 export const fetchMoviesList = async (
   query: string,

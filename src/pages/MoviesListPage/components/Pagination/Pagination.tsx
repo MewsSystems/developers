@@ -1,6 +1,6 @@
-import ChevronLeft from './icons/ChevronLeft.tsx';
-import ChevronRight from './icons/ChevronRight.tsx';
-import {CurrentPage, NavigationButton, PaginationWrapper} from './Pagination.styled.tsx';
+import ChevronLeft from './icons/ChevronLeft';
+import ChevronRight from './icons/ChevronRight';
+import {CurrentPage, NavigationButton, PaginationWrapper} from './Pagination.styled';
 
 type PaginationProps = {
   currentPage: number;

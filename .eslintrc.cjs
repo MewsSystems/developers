@@ -8,13 +8,22 @@ module.exports = {
         'eslint:recommended',
         'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended', // enables prettier integration
+        'plugin:prettier/recommended',
     ],
     rules: {
         'prettier/prettier': ['error'],
-        // optional:
-        'react/react-in-jsx-scope': 'off', // for React 17+
+        'react/react-in-jsx-scope': 'off',
         'simple-import-sort/imports': 'error',
         'simple-import-sort/exports': 'error',
+        '@typescript-eslint/no-require-imports': 'error',
+        '@typescript-eslint/consistent-type-imports': ['error', {
+            prefer: 'type-imports',
+            disallowTypeAnnotations: false,
+        }],
     },
+    settings: {
+        react: {
+            version: 'detect'
+        }
+    }
 };

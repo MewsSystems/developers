@@ -1,5 +1,5 @@
-import {Container, Content, Message, Title} from './EmptyInitialState.styled.tsx';
-import EmptyStateIcon from './icons/EmtpyStateIcon.tsx';
+import {Container, Content, Message, Title} from './EmptyInitialState.styled';
+import EmptyStateIcon from './icons/EmtpyStateIcon';
 
 export default function EmptyInitialState() {
   return (

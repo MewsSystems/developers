@@ -1,4 +1,4 @@
-import {Icon} from '../NothingFoundState.styled.tsx';
+import {Icon} from '../NothingFoundState.styled';
 
 export default function NothingFoundIcon() {
   return (

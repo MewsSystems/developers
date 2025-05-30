@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {Link, useParams, useSearchParams} from 'react-router-dom';
-import {fetchMovieDetails} from '../../api/fetchMovieDetails.ts';
+import {fetchMovieDetails} from '../../api/fetchMovieDetails';
 
 export default function MovieDetailsPage() {
   const {id} = useParams<{id: string}>();
