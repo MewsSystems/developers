@@ -15,7 +15,7 @@ import {
   Rating,
   Title,
 } from './MovieDetailsPage.styled';
-import MovieCover from '../common/MovieCover/MovieCover.tsx';
+import MovieCover from '../common/MovieCover/MovieCover';
 import GoBackLink from './components/GoBackLink/GoBackLink';
 
 export default function MovieDetailsPage() {

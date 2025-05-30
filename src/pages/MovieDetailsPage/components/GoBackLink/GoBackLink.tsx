@@ -1,5 +1,5 @@
 import {useSearchParams} from 'react-router-dom';
-import {BackLink} from './GoBackLink.styled.tsx';
+import {BackLink} from './GoBackLink.styled';
 
 export default function GoBackLink() {
   const [searchParams] = useSearchParams();

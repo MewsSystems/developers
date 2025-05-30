@@ -1,6 +1,6 @@
 import type {Movie} from '../../../../api/types';
 import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './MovieCard.styled';
-import MovieCover from '../../../common/MovieCover/MovieCover.tsx';
+import MovieCover from '../../../common/MovieCover/MovieCover';
 import {PathByPageType} from '../../../../routes/constants';
 import {generatePath} from 'react-router-dom';
 
