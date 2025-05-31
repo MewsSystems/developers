@@ -28,9 +28,12 @@ export const SearchView = () => {
             <MovieList>
                 {movies.map((movie) => (
                     <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
-                        <MoviePoster
-                            src={getPosterSrc(movie.poster_path)}
-                            alt={movie.title}/>
+                        <picture>
+                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
+                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
+                            <MoviePoster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+                        </picture>
+
                         <MovieTitleWrapper>
                             <MovieTitle>{movie.title}</MovieTitle>
                             {movie.release_date !== '' &&

@@ -15,7 +15,11 @@ export const MovieDetailView = () => {
 
     return (
         <Container>
-            <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title}/>
+            <picture>
+                <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
+                <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
+                <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+            </picture>
             <InfoContainer>
                 <Title>
                     {movie.title}
