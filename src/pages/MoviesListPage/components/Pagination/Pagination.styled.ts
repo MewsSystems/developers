@@ -1,36 +1,48 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
+
+type NavigationButtonProps = {
+  $active?: boolean;
+};
 
 export const PaginationWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 16px 0 24px;
+  margin: 24px 0;
 `;
 
-export const NavigationButton = styled.button<{$isCompact?: boolean}>`
-  padding: ${({$isCompact}) => ($isCompact ? '8px' : '8px 12px')};
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({disabled}) => (disabled ? '#9ca3af' : '#374151')};
-  background-color: ${({disabled}) => (disabled ? '#f3f4f6' : '#ffffff')};
-  border: 1px solid ${({disabled}) => (disabled ? '#e5e7eb' : '#d1d5db')};
+export const NavigationButton = styled.button<NavigationButtonProps>`
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  cursor: ${({disabled}) => (disabled ? 'not-allowed' : 'pointer')};
-  transition: all 0.2s ease;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: ${({$isCompact}) => ($isCompact ? '36px' : '80px')};
 
-  &:not(:disabled):hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
+  &:hover:not(:disabled) {
+    background: #e2e8f0;
   }
-`;
 
-export const CurrentPage = styled.span`
-  color: #4b5563;
-  font-size: 14px;
-  margin: 0 4px;
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  ${(props) =>
+    props.$active &&
+    css`
+      background: #0396a3;
+      color: white;
+      border-color: #0396a3;
+
+      &:hover {
+        background: #475569;
+      }
+    `}
 `;

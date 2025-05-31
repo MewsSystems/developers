@@ -1,4 +1,5 @@
-import {CurrentPage, NavigationButton, PaginationWrapper} from './Pagination.styled';
+import {NavigationButton, PaginationWrapper} from './Pagination.styled';
+import {useGetPages} from './hooks/useGetPages';
 
 type PaginationProps = {
   currentPage: number;
@@ -7,6 +8,8 @@ type PaginationProps = {
 };
 
 export default function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+  const pages = useGetPages({currentPage, totalPages});
+
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
@@ -14,20 +17,23 @@ export default function Pagination({currentPage, totalPages, onPageChange}: Pagi
 
   return (
     <PaginationWrapper>
-      <NavigationButton onClick={() => onPageChange(1)} disabled={isFirstPage} $isCompact>
-        {'<<'}
-      </NavigationButton>
       <NavigationButton onClick={() => onPageChange(currentPage - 1)} disabled={isFirstPage}>
-        Previous
+        {'<'}
       </NavigationButton>
-      <CurrentPage>
-        Page {currentPage} of {totalPages}
-      </CurrentPage>
+
+      {pages.map((pageNumber) => (
+        <NavigationButton
+          key={pageNumber}
+          onClick={() => onPageChange(pageNumber)}
+          disabled={pageNumber === currentPage}
+          $active={pageNumber === currentPage}
+        >
+          {pageNumber}
+        </NavigationButton>
+      ))}
+
       <NavigationButton onClick={() => onPageChange(currentPage + 1)} disabled={isLastPage}>
-        Next
-      </NavigationButton>
-      <NavigationButton onClick={() => onPageChange(totalPages)} disabled={isLastPage} $isCompact>
-        {'>>'}
+        {'>'}
       </NavigationButton>
     </PaginationWrapper>
   );
