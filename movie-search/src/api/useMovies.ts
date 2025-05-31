@@ -11,6 +11,5 @@ export const useMovies = (query: string) => {
             if (lastPage.page >= lastPage.total_pages) return undefined
             return lastPage.page + 1
         },
-        enabled: query.length >= 3,
     })
 }

@@ -2,15 +2,19 @@ import {useNavigate, useSearchParams} from "react-router-dom"
 import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
+import {useDebouncedValue} from "../utils/useDebouncedValue.tsx";
 
 export const SearchView = () => {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams("");
     const query = searchParams.get("query") || ""
-    const {data, fetchNextPage, hasNextPage, isError, error} = useMovies(query);
-    const navigate = useNavigate();
+    const debouncedQuery = useDebouncedValue(query)
+
+    const {data, fetchNextPage, hasNextPage, isError, error, isFetching} = useMovies(debouncedQuery);
 
     const movies = data?.pages.flatMap((page) => page?.results) || [];
-    const noResults = query.length >= 3 && movies.length === 0;
+    const isQuery = debouncedQuery !== ""
+    const noResults = isQuery && !isFetching && movies.length === 0;
 
     return (
         <Container>
@@ -43,7 +47,7 @@ export const SearchView = () => {
                     </MovieItem>
                 ))}
             </MovieList>
-            {hasNextPage &&
+            {hasNextPage && isQuery &&
                 <ButtonWrapper><LoadMoreButton onClick={() => fetchNextPage()}>Load
                     more</LoadMoreButton></ButtonWrapper>}
         </Container>
