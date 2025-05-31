@@ -1,0 +1,31 @@
+import {useNavigate} from 'react-router-dom';
+import type {FallbackProps} from 'react-error-boundary';
+import {
+  Button,
+  ButtonGroup,
+  ErrorContainer,
+  ErrorMessage,
+  ErrorTitle,
+} from './ErrorFallback.styled';
+
+export default function ErrorFallback({error, resetErrorBoundary}: FallbackProps) {
+  const navigate = useNavigate();
+
+  const onReset = () => {
+    resetErrorBoundary();
+    navigate('/');
+  };
+
+  return (
+    <ErrorContainer>
+      <ErrorTitle>Oops! Something went wrong</ErrorTitle>
+      <ErrorMessage>
+        {error.message || 'An unexpected error occurred. Please try again later.'}
+      </ErrorMessage>
+      <ButtonGroup>
+        <Button onClick={onReset}>Go to Homepage</Button>
+        <Button onClick={() => window.location.reload()}>Reload Page</Button>
+      </ButtonGroup>
+    </ErrorContainer>
+  );
+}
