@@ -1,5 +1,5 @@
 import {Container, Content, Message, Title} from './EmptyInitialState.styled';
-import EmptyStateIcon from './icons/EmtpyStateIcon';
+import EmptyStateIcon from './icons/EmptyStateIcon';
 
 export default function EmptyInitialState() {
   return (

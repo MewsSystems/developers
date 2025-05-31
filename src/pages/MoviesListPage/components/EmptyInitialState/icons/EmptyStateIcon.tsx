@@ -22,4 +22,4 @@ export default function EmptyStateIcon() {
   );
 }
 
-EmptyStateIcon.displayName = 'EmptyStateIcon';
+EmptyStateIcon.displayName = 'EmptyStateIcon'; 

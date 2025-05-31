@@ -1,10 +1,10 @@
 import {LoadingContainer} from './PopcornLoader.styled.tsx';
-import PopcornIcon from './PopcornIcon.tsx';
+import popcornIcon from './popcorn.svg';
 
 export default function PopcornLoader() {
   return (
     <LoadingContainer>
-      <PopcornIcon />
+      <img src={popcornIcon} alt="Loading..." width={150} height={150} />
     </LoadingContainer>
   );
 }
