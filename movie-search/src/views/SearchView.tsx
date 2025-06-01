@@ -47,7 +47,7 @@ export const SearchView = () => {
                     </MovieItem>
                 ))}
             </MovieList>
-            {hasNextPage && isQuery &&
+            {hasNextPage &&
                 <ButtonWrapper><LoadMoreButton onClick={() => fetchNextPage()}>Load
                     more</LoadMoreButton></ButtonWrapper>}
         </Container>
