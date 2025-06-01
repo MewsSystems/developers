@@ -38,7 +38,25 @@ internal class CzechNationalBankCachedClient : ICzechNationalBankClient
         var dateParameter = $"{date:yyyy-MM}";
         var endpoint = $"{_options.ForexRatesEndpoint}?yearMonth={dateParameter}";
         var cacheKey = $"{CacheKey}ForeignRates{dateParameter}";
-        return await GetCachedValueOrCallApi(endpoint, date, cacheKey, ct);
+        var response = await GetCachedValueOrCallApi(endpoint, date, cacheKey, ct);
+        if (response.Rates.Count != 0)
+        {
+            return response;
+        }
+
+        if (ct.IsCancellationRequested)
+        {
+            _logger.LogDebug("Operation cancelled, returning empty response");
+            return CzkExchangeRateResponse.Empty;
+        }
+
+        // This endpoint can return an empty response if there are no rate available yet for this month
+        var previousMonth = date.AddMonths(-1);
+        var previousMonthParameter = $"{previousMonth:yyyy-MM}";
+        var previousMonthEndpoint = $"{_options.ForexRatesEndpoint}?yearMonth={previousMonthParameter}";
+        var previousMonthCacheKey = $"{CacheKey}ForeignRates{previousMonthParameter}";
+        _logger.LogInformation("No foreign exchange rates found for date {Date} at endpoint {Endpoint}. Retrying with previous month {NewDate}.", date, endpoint, previousMonth);
+        return await GetCachedValueOrCallApi(previousMonthEndpoint, previousMonth, previousMonthCacheKey, ct);
     }
 
     private async Task<CzkExchangeRateResponse> GetCachedValueOrCallApi(string endpoint, DateOnly date, string cacheKey, CancellationToken ct)
