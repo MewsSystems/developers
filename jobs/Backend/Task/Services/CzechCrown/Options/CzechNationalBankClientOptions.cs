@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Services.Options;
+namespace Services.CzechCrown.Options;
 
 internal class CzechNationalBankClientOptions
 {

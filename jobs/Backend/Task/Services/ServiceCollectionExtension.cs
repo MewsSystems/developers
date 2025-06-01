@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Services.CzechCrown;
-using Services.Options;
+using Services.CzechCrown.Options;
 
 namespace Services;
 

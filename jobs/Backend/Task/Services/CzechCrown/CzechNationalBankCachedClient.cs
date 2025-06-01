@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services.CzechCrown.Models;
-using Services.Options;
+using Services.CzechCrown.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -17,7 +17,7 @@ internal class CzechNationalBankCachedClient : ICzechNationalBankClient
 
     private const string CacheKey = nameof(CzechNationalBankCachedClient);
 
-    public CzechNationalBankCachedClient(HttpClient httpClient, IDistributedCache distributedCache, IOptions<CzechNationalBankClientOptions> options, ILogger<ICzechNationalBankClient> logger)
+    public CzechNationalBankCachedClient(HttpClient httpClient, IDistributedCache distributedCache, IOptions<CzechNationalBankClientOptions> options, ILogger<CzechNationalBankCachedClient> logger)
     {
         _httpClient = httpClient;
         _distributedCache = distributedCache;

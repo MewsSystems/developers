@@ -60,24 +60,24 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
     private List<ExchangeRate> GetRatesFromClientResponse(IEnumerable<Currency> currencies, CzkExchangeRateResponse clientResponse, DateOnly date)
     {
         List<ExchangeRate> czechCrownExchangeRates = [];
-        foreach (var currency in currencies)
+        foreach (var currencyCode in currencies.Select(c => c.Code))
         {
-            var rate = clientResponse.Rates.Where(r => string.Equals(r.CurrencyCode, currency.Code, StringComparison.OrdinalIgnoreCase))
+            var rate = clientResponse.Rates.Where(r => string.Equals(r.CurrencyCode, currencyCode, StringComparison.OrdinalIgnoreCase))
                 .MaxBy(r => r.ValidFor);
             if (rate == null)
             {
-                _logger.LogDebug("Currency {Currency} not found in response", currency.Code);
+                _logger.LogDebug("Currency {Currency} not found in response", currencyCode);
                 continue;
             }
 
             if (rate.ValidFor != date || rate.ValidFor > date)
             {
-                _logger.LogWarning("Rate for {Currency} is not for the requested date {Date}, using latest available rate (from {RateDate})", currency.Code, date, rate.ValidFor);
+                _logger.LogWarning("Rate for {Currency} is not for the requested date {Date}, using latest available rate (from {RateDate})", currencyCode, date, rate.ValidFor);
             }
 
             var rateValue = rate.Rate / rate.Amount;
-            _logger.LogDebug("Found exchange rate of {Date} for {Currency}: {RateValue}", rate.ValidFor, currency.Code, rateValue);
-            czechCrownExchangeRates.Add(new ExchangeRate(new Currency(currency.Code), Currency.Czk, rateValue));
+            _logger.LogDebug("Found exchange rate of {Date} for {Currency}: {RateValue}", rate.ValidFor, currencyCode, rateValue);
+            czechCrownExchangeRates.Add(new ExchangeRate(new Currency(currencyCode), Currency.Czk, rateValue));
         }
         return czechCrownExchangeRates;
     }
