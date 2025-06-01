@@ -18,12 +18,8 @@ public static class ServiceCollectionExtension
         {
             client.BaseAddress = new Uri(configuration.GetSection(CzechNationalBankClientOptions.CzechNationalBankClient).GetValue<string>("BaseUrl")!);
         })
-        .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(
-            [
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(5),
-                TimeSpan.FromSeconds(10)
-            ]));
+        .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync([TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10)]))
+        .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
         // For demonstration purpose, only one implementation of IExchangeRateProvider is registered
         // If multiple providers are needed, one possibility is to use keyed dependency services
