@@ -29,6 +29,17 @@ public class CzechCrownRateProviderShould
         };
 
     [Fact]
+    public async Task Should_ReturnEmptyList_WhenNoCurrenciesProvided()
+    {
+        var (provider, client) = Setup();
+
+        var response = await provider.GetExchangeRates([]);
+        response.Should().BeEmpty();
+        A.CallTo(() => client.GetExchangeRates(A<DateOnly>.Ignored, A<CancellationToken>.Ignored)).MustNotHaveHappened();
+        A.CallTo(() => client.GetOtherExchangeRates(A<DateOnly>.Ignored, A<CancellationToken>.Ignored)).MustNotHaveHappened();
+    }
+
+    [Fact]
     public async Task Should_CallOnlyExchangeRateEndpoint_IfResultIsFound()
     {
         var (provider, client) = Setup();
@@ -78,7 +89,6 @@ public class CzechCrownRateProviderShould
         response[0].Value.Should().Be(8m);
     }
 
-
     [Theory]
     [InlineData("EUR", "USD", "HKD")]
     [InlineData("USD", "EUR")]
@@ -94,6 +104,21 @@ public class CzechCrownRateProviderShould
 
         response.Should().HaveCount(currencies.Length);
         response.Should().BeInAscendingOrder(r => r.SourceCurrency.Code);
+    }
+
+    [Fact]
+    public async Task Should_ReturnEmptyList_WhenCancellationIsRequested()
+    {
+        var (provider, client) = Setup();
+
+        var cts = new CancellationTokenSource();
+        // Simulate cancellation after primary call
+        A.CallTo(() => client.GetExchangeRates(A<DateOnly>.Ignored, A<CancellationToken>.Ignored))
+            .Invokes(cts.Cancel)
+            .Returns(_defaultPrimaryRates);
+
+        var response = await provider.GetExchangeRates([new Currency("USD"), new Currency("AOA")], cts.Token);
+        response.Should().BeEmpty();
     }
 
     private (CzechCrownRateProvider provider, ICzechNationalBankClient client) Setup()

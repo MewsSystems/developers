@@ -28,6 +28,12 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
         _logger.LogInformation("Getting exchange rates for {CurrencyCount} currencies (after deduplication)", currencyList.Count);
         _logger.LogDebug("Getting exchange rates for {Currencies}", string.Join(", ", currencyList.Select(c => c.Code)));
 
+        if (currencyList.Count == 0)
+        {
+            _logger.LogInformation("No currencies provided, returning empty list");
+            return [];
+        }
+
         var clientResponse = await _czechNationalBankClient.GetExchangeRates(executionDate, ct);
         var primaryResults = GetRatesFromClientResponse(currencyList, clientResponse, executionDate);
 
