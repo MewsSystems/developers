@@ -1,6 +1,5 @@
 import {IMAGE_BASE_URL} from '../../api/movieApi/constants';
-import {getImageUrl} from './getImageUrl';
-import type {ImageSize} from './types';
+import {getImageUrl, type ImageSize} from '../getImageUrl';
 
 describe('getImageUrl', () => {
   const testPath = '/test-image.jpg';

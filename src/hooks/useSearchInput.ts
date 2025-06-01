@@ -1,6 +1,6 @@
 import type {ChangeEvent} from 'react';
 import {useSearchParams} from 'react-router-dom';
-import {updateUrlParams} from '../utils/updateUrlParams/updateUrlParams';
+import {updateUrlParams} from '../utils/updateUrlParams';
 
 export const useSearchInput = () => {
   const [searchParams, setSearchParams] = useSearchParams();

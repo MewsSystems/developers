@@ -1,4 +1,4 @@
-import {updateUrlParams} from './updateUrlParams';
+import {updateUrlParams} from '../updateUrlParams';
 
 describe('updateUrlParams', () => {
   it('should add new parameter when value is provided', () => {

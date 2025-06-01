@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {API_STATUS_MESSAGE, MOVIE_API_BASE_URL} from '../../api/movieApi/constants.ts';
+import {API_STATUS_MESSAGE, MOVIE_API_BASE_URL} from '../../api/movieApi/constants';
 
 test.describe('API errors', () => {
   test('should display the "Resource not found" error message', async ({page}) => {
