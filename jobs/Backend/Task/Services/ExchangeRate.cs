@@ -15,10 +15,7 @@ public class ExchangeRate : IComparable<ExchangeRate>
 
     public decimal Value { get; }
 
-    public override string ToString()
-    {
-        return $"{SourceCurrency}/{TargetCurrency}={Value}";
-    }
+    public override string ToString() => $"{SourceCurrency}/{TargetCurrency}={Value}";
 
     public int CompareTo(ExchangeRate? other)
     {

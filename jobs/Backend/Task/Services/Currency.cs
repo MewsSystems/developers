@@ -6,7 +6,22 @@ public class Currency : IComparable<Currency>, IEquatable<Currency>
 
     public Currency(string code)
     {
-        Code = code;
+        // Basic validation for the currency code
+        // A more robust way would be to use System.Globalization.RegionInfo.ISOCurrencySymbol from all cultures.
+        // This requires a different implementation, such as a static hash set of known currencies.
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            throw new ArgumentException("Currency code cannot be null or empty", nameof(code));
+        }
+        if (code.Length != 3)
+        {
+            throw new ArgumentException("Currency code must be exactly 3 characters", nameof(code));
+        }
+        if (!code.All(char.IsLetter))
+        {
+            throw new ArgumentException("Currency code must contain only letters", nameof(code));
+        }
+        Code = code.ToUpperInvariant();
     }
 
     /// <summary>
@@ -14,10 +29,7 @@ public class Currency : IComparable<Currency>, IEquatable<Currency>
     /// </summary>
     public string Code { get; }
 
-    public override string ToString()
-    {
-        return Code;
-    }
+    public override string ToString() => Code;
 
     public int CompareTo(Currency? other)
     {
@@ -45,13 +57,7 @@ public class Currency : IComparable<Currency>, IEquatable<Currency>
         return Code == other.Code;
     }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is Currency other && Equals(other);
-    }
+    public override bool Equals(object? obj) => obj is Currency other && Equals(other);
 
-    public override int GetHashCode()
-    {
-        return Code.GetHashCode();
-    }
+    public override int GetHashCode() => Code.GetHashCode();
 }

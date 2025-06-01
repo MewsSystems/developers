@@ -131,6 +131,23 @@ public class CzechCrownRateProviderShould
         return (provider, client);
     }
 
+    [Fact]
+    public async Task Should_HandleDuplicateCurrencies()
+    {
+        var (provider, _) = Setup();
+
+        var response = (await provider.GetExchangeRates([
+            new Currency("USD"),
+            new Currency("USD"),
+            new Currency("EUR"),
+            new Currency("AWG"),
+            new Currency("AWG")
+        ])).ToList();
+
+        response.Should().HaveCount(3);
+        response.Should().OnlyHaveUniqueItems(r => r.SourceCurrency.Code);
+    }
+
     private static void AssertExchangeRates(IList<ExchangeRate> response, params (string currencyCode, decimal value)[] expectedRates)
     {
         response.Should().HaveCount(expectedRates.Length);
