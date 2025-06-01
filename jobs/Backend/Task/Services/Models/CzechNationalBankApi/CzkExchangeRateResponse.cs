@@ -4,6 +4,8 @@ namespace Services.Models.CzechNationalBankApi;
 
 public class CzkExchangeRateResponse
 {
+    public static readonly CzkExchangeRateResponse Empty = new();
+
     [JsonPropertyName("rates")]
     public List<RateResponse> Rates { get; init; } = [];
 }
@@ -20,6 +22,6 @@ public class RateResponse
     public decimal Rate { get; init; }
 
     [JsonPropertyName("validFor")]
-    public DateTime ValidFor { get; init; }
+    public DateOnly ValidFor { get; init; }
 }
 
