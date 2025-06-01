@@ -13,14 +13,7 @@ import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState'
 import MovieCard from './components/MovieCard/MovieCard';
 import Pagination from './components/Pagination/Pagination';
 import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
-import {
-  Container,
-  Content,
-  Header,
-  MoviesGrid,
-  LoadingOverlay,
-  MoviesContainer,
-} from './MoviesListPage.styled';
+import {Container, Content, Header, MoviesGrid, LoadingOverlay, MoviesContainer} from './styled';
 import type {MovieSearchResponse} from '../../api/movieApi/types';
 import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
 

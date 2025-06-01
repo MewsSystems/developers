@@ -6,7 +6,7 @@ type UsePaginationReturn = {
   onPageChange: (page: number) => void;
 };
 
-export function usePagination(): UsePaginationReturn {
+export const usePagination = (): UsePaginationReturn => {
   const [urlSearchParam, setUrlSearchParam] = useSearchParams();
   const currentPage = Number(urlSearchParam.get('page')) || 1;
 
@@ -33,4 +33,4 @@ export function usePagination(): UsePaginationReturn {
     setPage,
     onPageChange,
   };
-}
+};

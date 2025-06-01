@@ -1,4 +1,4 @@
-import {Icon} from '../NothingFoundState.styled';
+import {Icon} from '../styled';
 
 export default function NothingFoundIcon() {
   return (
@@ -18,4 +18,6 @@ export default function NothingFoundIcon() {
       <path d="M16 16c-.5-1.5-1.79-3-4-3s-3.5 1.5-4 3" />
     </Icon>
   );
-} 
+}
+
+NothingFoundIcon.displayName = 'NothingFoundIcon';

@@ -1,4 +1,4 @@
-import {NavigationButton, PaginationWrapper} from './Pagination.styled';
+import {NavigationButton, PaginationWrapper} from './styled';
 import {useGetPages} from './hooks/useGetPages';
 
 type PaginationProps = {

@@ -1,4 +1,4 @@
-import {Container, Content, Message, Title} from './NothingFoundState.styled';
+import {Container, Content, Message, Title} from './styled';
 import NothingFoundIcon from './icons/NothingFoundIcon';
 
 export default function NothingFoundState() {

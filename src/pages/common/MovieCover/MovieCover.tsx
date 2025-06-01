@@ -4,7 +4,7 @@ import {
   MovieCoverContainer,
   PlaceholderContainer,
   PlaceholderIcon,
-} from './MovieCover.styled';
+} from './styled';
 
 type MovieCoverProps = {
   poster_path: string | null;
@@ -25,3 +25,5 @@ export default function MovieCover({poster_path, title, isMinimized = false}: Mo
     </MovieCoverContainer>
   );
 }
+
+MovieCover.displayName = 'MovieCover';

@@ -1,4 +1,4 @@
-import {LoadingOverlay, Spinner} from './Loader.styled.ts';
+import {LoadingOverlay, Spinner} from './styled';
 
 export default function Loader() {
   return (

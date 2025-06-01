@@ -1,6 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {useSearchInput} from '../../../../hooks/useSearchInput';
-import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './SearchInput.styled';
+import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled';
 
 /*
   "MAX_USER_INPUT_SEARCH_LENGTH" search query has been limited to 100 chars since most movie titles

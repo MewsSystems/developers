@@ -1,13 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import type {FallbackProps} from 'react-error-boundary';
-import {
-  Button,
-  ButtonGroup,
-  ErrorContainer,
-  ErrorMessage,
-  ErrorTitle,
-} from './ErrorBoundaryFallback.styled';
-import {PageType, PathByPageType} from '../../../routes/constants.ts';
+import {Button, ButtonGroup, ErrorContainer, ErrorMessage, ErrorTitle} from './styled';
+import {PageType, PathByPageType} from '../../../routes/constants';
 
 export default function ErrorBoundaryFallback({error, resetErrorBoundary}: FallbackProps) {
   const navigate = useNavigate();

@@ -18,7 +18,7 @@ import {
   Rating,
   Title,
   LoadingOverlay,
-} from './MovieDetailsPage.styled';
+} from './styled';
 import MovieCover from '../common/MovieCover/MovieCover';
 import GoBackLink from './components/GoBackLink/GoBackLink';
 import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
