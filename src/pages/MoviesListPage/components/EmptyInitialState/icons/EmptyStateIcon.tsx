@@ -1,4 +1,4 @@
-import {Icon} from '../EmptyInitialState.styled';
+import {Icon} from '../styled';
 
 export default function EmptyStateIcon() {
   return (
@@ -22,4 +22,4 @@ export default function EmptyStateIcon() {
   );
 }
 
-EmptyStateIcon.displayName = 'EmptyStateIcon'; 
+EmptyStateIcon.displayName = 'EmptyStateIcon';
