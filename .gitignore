@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
+.vscode
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 package-lock.json
 .env.local
+playwright-report
+test-results

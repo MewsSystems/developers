@@ -7,9 +7,15 @@ const config = {
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testMatch: [
-    "**/_tests_/**/*.spec.[jt]s?(x)",
-    "**/__tests__/**/*.spec.[jt]s?(x)",
-    "**/?(*.)+(spec|test).[jt]s?(x)"
+    "**/src/**/_tests_/**/*.spec.[jt]s?(x)",
+    "**/src/**/__tests__/**/*.spec.[jt]s?(x)"
+  ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/tests/e2e/",
+    "/_tests_/e2e/",
+    "/__tests__/e2e/",
+    "\\.e2e\\.spec\\.[jt]s?(x)$"
   ],
 };
 
