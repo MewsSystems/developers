@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Services.Models.CzechNationalBankApi;
+namespace Services.CzechCrown.Models;
 
 public class CzkExchangeRateResponse
 {

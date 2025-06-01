@@ -1,7 +1,8 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
-using Services.Models.CzechNationalBankApi;
+using Services.CzechCrown;
+using Services.CzechCrown.Models;
 
 namespace Services.Test;
 
