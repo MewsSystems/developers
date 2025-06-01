@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Services;
 using Serilog;
+using Services;
+using System;
+using System.Linq;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services
     })
     .AddServices(builder.Configuration);
 
-    using var host = builder.Build();
+using var host = builder.Build();
 
 using var scope = host.Services.CreateScope();
 var currencies = args.Select(arg => arg.Trim())

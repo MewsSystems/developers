@@ -53,7 +53,7 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
 
         _logger.LogInformation("Execution complete");
         _logger.LogDebug("Found {ResultCount} exchange rates in total for {CurrencyCount} requested currencies", results.Count(), currencyList.Count);
-        
+
         return results;
     }
 

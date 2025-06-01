@@ -1,10 +1,10 @@
-﻿using System.Net.Http.Json;
-using System.Text.Json;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Services.CzechCrown.Models;
 using Services.Options;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Services.CzechCrown;
 
