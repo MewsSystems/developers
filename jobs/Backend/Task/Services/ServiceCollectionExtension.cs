@@ -25,6 +25,8 @@ public static class ServiceCollectionExtension
                 TimeSpan.FromSeconds(10)
             ]));
 
+        // For demonstration purpose, only one implementation of IExchangeRateProvider is registered
+        // If multiple providers are needed, one possibility is to use keyed dependency services
         services.AddScoped<IExchangeRateProvider, CzechCrownRateProvider>();
 
         return services;
