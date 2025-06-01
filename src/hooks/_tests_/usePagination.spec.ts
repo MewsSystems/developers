@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react';
 import {useSearchParams} from 'react-router-dom';
-import {usePagination} from './usePagination';
+import {usePagination} from '../usePagination';
 import type {SetURLSearchParams} from '../types';
 
 jest.mock('react-router-dom', () => ({

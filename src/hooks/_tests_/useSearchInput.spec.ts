@@ -1,6 +1,6 @@
 import {renderHook, act} from '@testing-library/react';
 import {useSearchParams} from 'react-router-dom';
-import {useSearchInput} from './useSearchInput';
+import {useSearchInput} from '../useSearchInput';
 import type {ChangeEvent} from 'react';
 import type {SetURLSearchParams} from '../types';
 
