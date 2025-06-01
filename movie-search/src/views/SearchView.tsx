@@ -102,13 +102,22 @@ const MovieList = styled.div`
     margin-bottom: 20px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
     gap: 16px;
+    justify-content: center;
+    
+    @media (max-width: 768px) {  
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 `
 
 const MovieItem = styled.div`
     padding: 10px;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
     border-radius: 8px;
     border: 1px solid #ccc;
     cursor: pointer;
@@ -119,7 +128,7 @@ const MovieItem = styled.div`
 `
 
 const MoviePoster = styled.img`
-    width: 100%;
+    width: auto;
     height: 300px;
     object-fit: cover;
 `
