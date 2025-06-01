@@ -92,7 +92,7 @@ public class CzechCrownRateProviderShould
         var response = (await provider.GetExchangeRates(parameters)).ToList();
 
         response.Should().HaveCount(currencies.Length);
-        response.Should().BeInAscendingOrder(r => r.TargetCurrency.Code);
+        response.Should().BeInAscendingOrder(r => r.SourceCurrency.Code);
     }
 
     private (CzechCrownRateProvider provider, ICzechNationalBankClient client) Setup()
@@ -111,11 +111,11 @@ public class CzechCrownRateProviderShould
 
         response.Should().AllSatisfy(r =>
         {
-            r.SourceCurrency.Code.Should().Be("CZK");
+            r.TargetCurrency.Code.Should().Be("CZK");
         });
         foreach (var (currencyCode, value) in expectedRates)
         {
-            response.Should().Contain(r => r.Value == value && r.TargetCurrency.Code == currencyCode);
+            response.Should().Contain(r => r.Value == value && r.SourceCurrency.Code == currencyCode);
         }
     }
 }

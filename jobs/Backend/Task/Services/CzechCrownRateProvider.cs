@@ -39,7 +39,7 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
         _logger.LogDebug("Getting exchange rates for {Currencies}", string.Join(", ", currencyList.Select(c => c.Code)));
 
         var clientResponse = await _czechNationalBankClient.GetExchangeRates(executionDate, ct);
-        var primaryResults = FindInResponse(currencyList, clientResponse, executionDate);
+        var primaryResults = GetRatesFromClientResponse(currencyList, clientResponse, executionDate);
 
         if (primaryResults.Count == currencyList.Count)
         {
@@ -54,10 +54,10 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
             return [];
         }
 
-        var remainingCurrencies = currencyList.Except(primaryResults.Select(r => r.TargetCurrency)).ToList();
+        var remainingCurrencies = currencyList.Except(primaryResults.Select(r => r.SourceCurrency)).ToList();
 
         var secondaryClientResponse = await _czechNationalBankClient.GetOtherExchangeRates(executionDate, ct);
-        var secondaryResults = FindInResponse(remainingCurrencies, secondaryClientResponse, executionDate);
+        var secondaryResults = GetRatesFromClientResponse(remainingCurrencies, secondaryClientResponse, executionDate);
 
         var results = primaryResults.Concat(secondaryResults).Order();
 
@@ -67,7 +67,7 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
         return results;
     }
 
-    private List<ExchangeRate> FindInResponse(IEnumerable<Currency> currencies, CzkExchangeRateResponse clientResponse, DateOnly date)
+    private List<ExchangeRate> GetRatesFromClientResponse(IEnumerable<Currency> currencies, CzkExchangeRateResponse clientResponse, DateOnly date)
     {
         List<ExchangeRate> czechCrownExchangeRates = [];
         foreach (var currency in currencies)
@@ -80,14 +80,14 @@ internal class CzechCrownRateProvider : IExchangeRateProvider
                 continue;
             }
 
-            if (rate.ValidFor != date)
+            if (rate.ValidFor != date || rate.ValidFor > date)
             {
                 _logger.LogWarning("Rate for {Currency} is not for the requested date {Date}, using latest available rate (from {RateDate})", currency.Code, date, rate.ValidFor);
             }
 
             var rateValue = rate.Rate / rate.Amount;
             _logger.LogDebug("Found exchange rate of {Date} for {Currency}: {RateValue}", rate.ValidFor, currency.Code, rateValue);
-            czechCrownExchangeRates.Add(new ExchangeRate(Currency.Czk, new Currency(currency.Code), rateValue));
+            czechCrownExchangeRates.Add(new ExchangeRate(new Currency(currency.Code), Currency.Czk, rateValue));
         }
         return czechCrownExchangeRates;
     }

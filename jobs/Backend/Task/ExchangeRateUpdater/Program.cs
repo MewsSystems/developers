@@ -30,6 +30,7 @@ var currencies = new[]
     new Currency("RUB"),
     new Currency("THB"),
     new Currency("TRY"),
+    new Currency("HUF"),
     new Currency("XYZ")
 };
 
