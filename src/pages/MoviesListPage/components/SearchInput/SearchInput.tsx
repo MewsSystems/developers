@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useMemo, useCallback, memo} from 'react';
 import {useSearchInput} from '../../../../hooks/useSearchInput';
 import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled';
 
@@ -7,8 +7,9 @@ import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled
   are well under this length. This helps to prevent abusing the API.
 */
 export const MAX_USER_INPUT_SEARCH_LENGTH = 100;
+const SEARCH_INPUT_WARNING_THRESHOLD = 90;
 
-export default function SearchBar() {
+function SearchBar() {
   const {searchUrlParam, onSearchInputChange, clearSearch} = useSearchInput();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -16,13 +17,27 @@ export default function SearchBar() {
     searchInputRef.current?.focus();
   }, []);
 
-  const onClearClick = () => {
+  const onClearClick = useCallback(() => {
     clearSearch();
     searchInputRef.current?.focus();
-  };
+  }, [clearSearch]);
 
-  const SEARCH_INPUT_WARNING_THRESHOLD = 90;
-  const charactersLeft = MAX_USER_INPUT_SEARCH_LENGTH - searchUrlParam.length;
+  const charactersLeft = useMemo(
+    () => MAX_USER_INPUT_SEARCH_LENGTH - searchUrlParam.length,
+    [searchUrlParam.length],
+  );
+
+  const shouldShowWarningMessage = useMemo(
+    () => searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD,
+    [searchUrlParam.length],
+  );
+
+  const warningMessage = useMemo(() => {
+    if (charactersLeft === 0) {
+      return "You've reached the limit of 100 characters.";
+    }
+    return `${charactersLeft} characters remaining`;
+  }, [charactersLeft]);
 
   return (
     <SearchContainer>
@@ -49,15 +64,13 @@ export default function SearchBar() {
         </ClearButton>
       )}
 
-      {searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD && (
-        <SearchWarning isError={charactersLeft === 0}>
-          {charactersLeft === 0
-            ? "You've reached the limit of 100 characters."
-            : `${charactersLeft} characters remaining`}
-        </SearchWarning>
+      {shouldShowWarningMessage && (
+        <SearchWarning isError={charactersLeft === 0}>{warningMessage}</SearchWarning>
       )}
     </SearchContainer>
   );
 }
 
 SearchBar.displayName = 'SearchBar';
+
+export default memo(SearchBar);

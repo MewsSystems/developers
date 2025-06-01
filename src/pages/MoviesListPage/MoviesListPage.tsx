@@ -1,5 +1,5 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useEffect} from 'react';
+import {useEffect, useMemo, useCallback, memo} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from '../../hooks/useDebounce';
 import {usePagination} from '../../hooks/usePagination';
@@ -17,14 +17,14 @@ import {Container, Content, Header, MoviesGrid, LoadingOverlay, MoviesContainer}
 import type {MovieSearchResponse} from '../../api/movieApi/types';
 import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
 
-export default function MoviesListPage() {
+const FIVE_MINUTES = 5 * 60 * 1000;
+
+function MoviesListPage() {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const {page, onPageChange} = usePagination();
   const {searchUrlParam} = useSearchInput();
   const debouncedSearchQuery = useDebounce(searchUrlParam);
-
-  const FIVE_MINUTES = 5 * 60 * 1000;
 
   const {data, error, isLoading, isFetching} = useQuery<
     MovieSearchResponse,
@@ -41,13 +41,24 @@ export default function MoviesListPage() {
   });
 
   const {total_pages = 0, results = []} = data || {};
-  const shouldShowInitialEmptyState = !isLoading && !debouncedSearchQuery;
 
-  const hasEmptySearchResults =
-    !isLoading &&
-    results.length === 0 &&
-    debouncedSearchQuery &&
-    debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH;
+  const shouldShowInitialEmptyState = useMemo(
+    () => !isLoading && !debouncedSearchQuery,
+    [isLoading, debouncedSearchQuery],
+  );
+
+  const hasEmptySearchResults = useMemo(
+    () =>
+      !isLoading &&
+      results.length === 0 &&
+      debouncedSearchQuery &&
+      debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH,
+    [isLoading, results.length, debouncedSearchQuery],
+  );
+
+  const onReset = useCallback(() => {
+    queryClient.clear();
+  }, [queryClient]);
 
   useEffect(() => {
     if (!data) {
@@ -80,9 +91,7 @@ export default function MoviesListPage() {
     return (
       <ApiErrorScreen
         errorMessage={getErrorFallbackMessage({status: error.status, message: error.message})}
-        onReset={() => {
-          queryClient.clear();
-        }}
+        onReset={onReset}
       />
     );
   }
@@ -129,3 +138,5 @@ export default function MoviesListPage() {
 }
 
 MoviesListPage.displayName = 'MoviesListPage';
+
+export default memo(MoviesListPage);

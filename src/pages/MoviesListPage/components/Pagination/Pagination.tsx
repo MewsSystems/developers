@@ -1,3 +1,4 @@
+import {useCallback, useMemo, memo} from 'react';
 import {NavigationButton, PaginationWrapper} from './styled';
 import {useGetPages} from './hooks/useGetPages';
 
@@ -7,24 +8,39 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-export default function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
   const pages = useGetPages({currentPage, totalPages});
 
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
+  const isFirstPage = useMemo(() => currentPage === 1, [currentPage]);
+  const isLastPage = useMemo(() => currentPage === totalPages, [currentPage, totalPages]);
+
+  const onPrevClick = useCallback(() => {
+    onPageChange(currentPage - 1);
+  }, [currentPage, onPageChange]);
+
+  const onNextClick = useCallback(() => {
+    onPageChange(currentPage + 1);
+  }, [currentPage, onPageChange]);
+
+  const onPageNumberClick = useCallback(
+    (pageNumber: number) => {
+      onPageChange(pageNumber);
+    },
+    [onPageChange],
+  );
 
   if (totalPages <= 1) return null;
 
   return (
     <PaginationWrapper>
-      <NavigationButton onClick={() => onPageChange(currentPage - 1)} disabled={isFirstPage}>
+      <NavigationButton onClick={onPrevClick} disabled={isFirstPage}>
         {'<'}
       </NavigationButton>
 
       {pages.map((pageNumber) => (
         <NavigationButton
           key={pageNumber}
-          onClick={() => onPageChange(pageNumber)}
+          onClick={() => onPageNumberClick(pageNumber)}
           disabled={pageNumber === currentPage}
           $active={pageNumber === currentPage}
         >
@@ -32,7 +48,7 @@ export default function Pagination({currentPage, totalPages, onPageChange}: Pagi
         </NavigationButton>
       ))}
 
-      <NavigationButton onClick={() => onPageChange(currentPage + 1)} disabled={isLastPage}>
+      <NavigationButton onClick={onNextClick} disabled={isLastPage}>
         {'>'}
       </NavigationButton>
     </PaginationWrapper>
@@ -40,3 +56,5 @@ export default function Pagination({currentPage, totalPages, onPageChange}: Pagi
 }
 
 Pagination.displayName = 'Pagination';
+
+export default memo(Pagination);
