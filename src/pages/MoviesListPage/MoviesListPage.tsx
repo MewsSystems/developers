@@ -1,16 +1,18 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from '../../hooks/useDebounce';
 import {usePagination} from '../../hooks/usePagination';
 import {useSearchInput} from '../../hooks/useSearchInput';
-import {fetchMoviesList} from '../../api/fetchMoviesList';
+import {fetchMoviesList} from '../../api/movieApi/fetchMoviesList.ts';
+import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
+import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
 import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
 import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
 import MovieCard from './components/MovieCard/MovieCard';
 import Pagination from './components/Pagination/Pagination';
-import type {MovieSearchResponse} from '../../api/types';
+import type {ApiErrorResponseDetails, MovieSearchResponse} from '../../api/movieApi/types';
 import {
   Container,
   Content,
@@ -22,6 +24,7 @@ import {
 import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
 
 export default function MoviesListPage() {
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const {page, onPageChange} = usePagination();
   const {searchUrlParam} = useSearchInput();
@@ -29,12 +32,10 @@ export default function MoviesListPage() {
 
   const FIVE_MINUTES = 5 * 60 * 1000;
 
-  /*
-    1. staleTime: avoid re-fetching the same search results for 5 minutes — treat them as fresh during this time.
-    2. gcTime: keep the cached results in memory for 10 minutes after they're no longer used. Could be increased
-    since movie data doesn't change frequently
-  */
-  const {data, isLoading, isFetching} = useQuery<MovieSearchResponse>({
+  const {data, error, isLoading, isFetching} = useQuery<
+    MovieSearchResponse,
+    ApiErrorResponseDetails
+  >({
     queryKey: ['movies', debouncedSearchQuery, page],
     queryFn: () => fetchMoviesList(debouncedSearchQuery, page),
     enabled:
@@ -80,6 +81,17 @@ export default function MoviesListPage() {
       setSearchParams(currentUrlSearchParams);
     }
   }, [data, debouncedSearchQuery, searchParams, setSearchParams, total_pages]);
+
+  if (error) {
+    return (
+      <ApiErrorScreen
+        errorMessage={getErrorFallbackMessage(error.status, error.message)}
+        onReset={() => {
+          queryClient.clear();
+        }}
+      />
+    );
+  }
 
   return (
     <Container>

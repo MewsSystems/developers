@@ -1,4 +1,4 @@
-import {IMAGE_BASE_URL} from '../../../api/constants';
+import {IMAGE_BASE_URL} from '../../../api/movieApi/constants';
 import {
   MovieCoverImage,
   MovieCoverContainer,

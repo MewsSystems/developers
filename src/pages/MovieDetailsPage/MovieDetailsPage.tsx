@@ -1,6 +1,9 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useParams} from 'react-router-dom';
-import {fetchMovieDetails} from '../../api/fetchMovieDetails';
+import {format} from 'date-fns';
+import {fetchMovieDetails} from '../../api/movieApi/fetchMovieDetails';
+import type {ApiErrorResponseDetails, Movie} from '../../api/movieApi/types';
+import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
 import {
   Content,
@@ -15,15 +18,20 @@ import {
   Rating,
   Title,
   LoadingOverlay,
-  NotFoundMessageContainer,
 } from './MovieDetailsPage.styled';
 import MovieCover from '../common/MovieCover/MovieCover';
 import GoBackLink from './components/GoBackLink/GoBackLink';
-import {format} from 'date-fns';
+import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage.ts';
+import {API_STATUS_MESSAGE, ERRORS_BY_HTTP_STATUS} from '../../api/movieApi/constants';
 
 export default function MovieDetailsPage() {
+  const queryClient = useQueryClient();
   const {id} = useParams<{id: string}>();
-  const {data: movie, isLoading} = useQuery({
+  const {
+    data: movie,
+    error,
+    isLoading,
+  } = useQuery<Movie, ApiErrorResponseDetails>({
     queryKey: ['movie', id],
     queryFn: () => fetchMovieDetails(id!),
     enabled: Boolean(id),
@@ -40,14 +48,18 @@ export default function MovieDetailsPage() {
     );
   }
 
-  if (!movie) {
+  if (!movie || error) {
     return (
-      <MovieDetailsPageContainer>
-        <GoBackLink />
-        <NotFoundMessageContainer>
-          <Title>Movie not found :(</Title>
-        </NotFoundMessageContainer>
-      </MovieDetailsPageContainer>
+      <ApiErrorScreen
+        errorMessage={
+          error
+            ? getErrorFallbackMessage(error.status, error.message)
+            : ERRORS_BY_HTTP_STATUS[404][API_STATUS_MESSAGE.RESOURCE_NOT_FOUND]
+        }
+        onReset={() => {
+          queryClient.clear();
+        }}
+      />
     );
   }
 
@@ -80,7 +92,9 @@ export default function MovieDetailsPage() {
             {movie.genres && movie.genres.length > 0 && (
               <MetadataItem>
                 <MetadataLabel>Genres</MetadataLabel>
-                <MetadataValue>{movie.genres.map((genre) => genre.name).join(', ')}</MetadataValue>
+                <MetadataValue>
+                  {movie.genres.map((genre: {name: string}) => genre.name).join(', ')}
+                </MetadataValue>
               </MetadataItem>
             )}
           </MetadataInfo>

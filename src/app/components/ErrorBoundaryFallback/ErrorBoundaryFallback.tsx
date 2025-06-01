@@ -6,14 +6,15 @@ import {
   ErrorContainer,
   ErrorMessage,
   ErrorTitle,
-} from './ErrorFallback.styled';
+} from './ErrorBoundaryFallback.styled';
+import {PageType, PathByPageType} from '../../../routes/constants.ts';
 
-export default function ErrorFallback({error, resetErrorBoundary}: FallbackProps) {
+export default function ErrorBoundaryFallback({error, resetErrorBoundary}: FallbackProps) {
   const navigate = useNavigate();
 
   const onReset = () => {
     resetErrorBoundary();
-    navigate('/');
+    navigate(PathByPageType[PageType.MoviesListPage]);
   };
 
   return (
