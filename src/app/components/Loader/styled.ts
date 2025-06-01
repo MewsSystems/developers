@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {spinEffect} from './animations.ts';
+import {spinEffect} from './animations';
 
 export const LoadingOverlay = styled.div`
   position: fixed;

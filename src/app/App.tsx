@@ -2,7 +2,7 @@ import {Suspense, lazy} from 'react';
 import {ErrorBoundary} from 'react-error-boundary';
 import {BrowserRouter} from 'react-router-dom';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import ErrorBoundaryFallback from './components/ErrorBoundaryFallback/ErrorBoundaryFallback.tsx';
+import ErrorBoundaryFallback from './components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 import Loader from './components/Loader/Loader';
 
 const AppRoutes = lazy(() => import('../routes/AppRoutes'));

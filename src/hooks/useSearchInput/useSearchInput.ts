@@ -1,5 +1,6 @@
 import type {ChangeEvent} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import {updateUrlParams} from '../../utils/updateUrlParams/updateUrlParams';
 
 export const useSearchInput = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -7,19 +8,19 @@ export const useSearchInput = () => {
 
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const userSearchInputValue = e.target.value;
+    const newParams = updateUrlParams({
+      params: searchParams,
+      key: 'search',
+      value: userSearchInputValue || null,
+    });
 
-    if (userSearchInputValue) {
-      const newParams = new URLSearchParams();
-      newParams.set('search', userSearchInputValue);
-      setSearchParams(newParams);
-    } else {
-      setSearchParams({});
-    }
+    setSearchParams(newParams);
   };
 
   return {
     searchUrlParam,
     onSearchInputChange,
-    clearSearch: () => setSearchParams({}),
+    clearSearch: () =>
+      setSearchParams(updateUrlParams({params: searchParams, key: 'search', value: null})),
   };
 };

@@ -1,5 +1,5 @@
 export const MOVIE_API_BASE_URL = 'https://api.themoviedb.org/3';
-export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
 export const API_STATUS_MESSAGE = {
   INVALID_API_KEY: 'Invalid API key: You must be granted a valid key.',

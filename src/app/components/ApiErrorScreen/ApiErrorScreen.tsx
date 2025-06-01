@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
-import {PageType, PathByPageType} from '../../../routes/constants.ts';
-import {Button, Container, ErrorIcon, Message, Title} from './styled.ts';
+import {PageType, PathByPageType} from '../../../routes/constants';
+import {Button, Container, ErrorIcon, Message, Title} from './styled';
 
 type ErrorScreenProps = {
   errorMessage: string;

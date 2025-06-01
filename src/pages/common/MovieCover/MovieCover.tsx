@@ -1,10 +1,10 @@
-import {IMAGE_BASE_URL} from '../../../api/movieApi/constants';
 import {
   MovieCoverImage,
   MovieCoverContainer,
   PlaceholderContainer,
   PlaceholderIcon,
 } from './styled';
+import {getImageUrl} from '../../../utils/getImageUrl/getImageUrl';
 
 type MovieCoverProps = {
   poster_path: string | null;
@@ -13,10 +13,12 @@ type MovieCoverProps = {
 };
 
 export default function MovieCover({poster_path, title, isMinimized = false}: MovieCoverProps) {
+  const imageUrl = getImageUrl(poster_path);
+
   return (
     <MovieCoverContainer $isMinimized={isMinimized}>
       {poster_path ? (
-        <MovieCoverImage src={`${IMAGE_BASE_URL}${poster_path}`} alt={`${title} poster`} />
+        <MovieCoverImage src={imageUrl!} alt={`${title} poster`} />
       ) : (
         <PlaceholderContainer>
           <PlaceholderIcon />

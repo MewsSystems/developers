@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import {useSearchInput} from '../../../../hooks/useSearchInput';
+import {useSearchInput} from '../../../../hooks/useSearchInput/useSearchInput';
 import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled';
 
 /*
