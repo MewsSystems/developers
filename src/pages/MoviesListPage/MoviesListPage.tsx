@@ -4,7 +4,7 @@ import {useSearchParams} from 'react-router-dom';
 import {useDebounce} from '../../hooks/useDebounce';
 import {usePagination} from '../../hooks/usePagination';
 import {useSearchInput} from '../../hooks/useSearchInput';
-import {fetchMoviesList} from '../../api/movieApi/fetchMoviesList.ts';
+import {fetchMoviesList} from '../../api/movieApi/endpoints/fetchMoviesList';
 import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
 import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
@@ -12,7 +12,7 @@ import NothingFoundState from './components/EmptySearchResult/NothingFoundState'
 import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
 import MovieCard from './components/MovieCard/MovieCard';
 import Pagination from './components/Pagination/Pagination';
-import type {ApiErrorResponseDetails, MovieSearchResponse} from '../../api/movieApi/types';
+import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
 import {
   Container,
   Content,
@@ -21,7 +21,8 @@ import {
   LoadingOverlay,
   MoviesContainer,
 } from './MoviesListPage.styled';
-import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
+import type {MovieSearchResponse} from '../../api/movieApi/types';
+import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
 
 export default function MoviesListPage() {
   const queryClient = useQueryClient();
@@ -85,7 +86,7 @@ export default function MoviesListPage() {
   if (error) {
     return (
       <ApiErrorScreen
-        errorMessage={getErrorFallbackMessage(error.status, error.message)}
+        errorMessage={getErrorFallbackMessage({status: error.status, message: error.message})}
         onReset={() => {
           queryClient.clear();
         }}

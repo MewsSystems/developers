@@ -1,5 +1,5 @@
-import type {MovieSearchResponse} from './types';
-import {movieApiService} from './movieApiService';
+import type {MovieSearchResponse} from '../types';
+import {client} from '../client';
 import type {AxiosError} from 'axios';
 
 export const fetchMoviesList = async (
@@ -8,7 +8,7 @@ export const fetchMoviesList = async (
 ): Promise<MovieSearchResponse> => {
   try {
     return (
-      await movieApiService.get('/search/movie', {
+      await client.get('/search/movie', {
         params: {
           query,
           page,

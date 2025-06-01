@@ -1,5 +1,3 @@
-import type {ERRORS_BY_HTTP_STATUS} from './constants';
-
 export type Movie = {
   id: number;
   title: string;
@@ -20,12 +18,4 @@ export type MovieSearchResponse = {
   results: Movie[];
   total_pages: number;
   total_results: number;
-};
-
-export type ErrorStatus = keyof typeof ERRORS_BY_HTTP_STATUS;
-export type ErrorMessages<T extends ErrorStatus> = keyof (typeof ERRORS_BY_HTTP_STATUS)[T];
-
-export type ApiErrorResponseDetails = {
-  status: number;
-  message: string;
 };

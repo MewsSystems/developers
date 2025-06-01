@@ -1,5 +1,5 @@
 import {ERRORS_BY_HTTP_STATUS} from '../constants';
-import type {ApiErrorResponseDetails, ErrorMessages, ErrorStatus} from '../types';
+import type {ApiErrorResponseDetails, ErrorMessages, ErrorStatus} from './types';
 
 export const getErrorFallbackMessage = ({status, message}: ApiErrorResponseDetails): string => {
   if (status in ERRORS_BY_HTTP_STATUS) {
