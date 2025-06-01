@@ -8,6 +8,7 @@ using Serilog;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services
+    // Only for demonstration purposes, production would use a proper cache implementation: Redis, SQL Server, etc.
     .AddDistributedMemoryCache()
     .AddLogging(loggingBuilder =>
     {
@@ -18,32 +19,19 @@ builder.Services
     })
     .AddServices(builder.Configuration);
 
-using var host = builder.Build();
+    using var host = builder.Build();
 
-var currencies = new[]
+using var scope = host.Services.CreateScope();
+var currencies = args.Select(arg => arg.Trim())
+    .Where(arg => !string.IsNullOrWhiteSpace(arg))
+    .Select(arg => new Currency(arg))
+    .ToList();
+
+var provider = scope.ServiceProvider.GetService<IExchangeRateProvider>();
+var rates = await provider.GetExchangeRates(currencies);
+
+Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+foreach (var rate in rates)
 {
-    new Currency("USD"),
-    new Currency("EUR"),
-    new Currency("CZK"),
-    new Currency("JPY"),
-    new Currency("KES"),
-    new Currency("RUB"),
-    new Currency("THB"),
-    new Currency("TRY"),
-    new Currency("HUF"),
-    new Currency("XYZ")
-};
-
-using (var scope = host.Services.CreateScope())
-{
-    var provider = scope.ServiceProvider.GetService<IExchangeRateProvider>();
-    var rates = await provider.GetExchangeRates(currencies);
-
-    Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-    foreach (var rate in rates)
-    {
-        Console.WriteLine(rate.ToString());
-    }
+    Console.WriteLine(rate.ToString());
 }
-
-await host.RunAsync();
