@@ -26,7 +26,6 @@ A C# 13 console application targeting .NET 9 that fetches and displays exchange 
 ### Prerequisites
 
 - .NET 9 SDK
-- Visual Studio 2022 or VS Code
 
 ### Configuration
 
@@ -39,6 +38,7 @@ The application is configured via `appsettings.json`, or `appsettings.Developmen
 3. Run the application with currency codes as arguments:
 
 ```bash
+cd ./ExchangeRateUpdater
 dotnet run USD EUR JPY GBP
 ```
 
