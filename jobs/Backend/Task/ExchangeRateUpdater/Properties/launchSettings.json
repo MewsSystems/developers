@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ExchangeRateUpdater": {
+      "commandName": "Project",
+      "commandLineArgs": "USD EUR CZK JPY KES RUB THB TRY HUF XYZ",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
