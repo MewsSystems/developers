@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import {bounceAndRotate} from './animations';
 
 export const LoadingContainer = styled.div`

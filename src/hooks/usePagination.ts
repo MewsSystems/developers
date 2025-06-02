@@ -1,4 +1,5 @@
 import {useSearchParams} from 'react-router-dom';
+
 import {updateUrlParams} from '../utils/updateUrlParams';
 
 type UsePaginationReturnType = {

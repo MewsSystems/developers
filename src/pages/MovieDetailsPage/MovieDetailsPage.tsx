@@ -1,12 +1,19 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useParams} from 'react-router-dom';
 import {format} from 'date-fns';
+import {useParams} from 'react-router-dom';
+
+import {API_STATUS_MESSAGE, ERRORS_BY_HTTP_STATUS} from '../../api/movieApi/constants';
 import {fetchMovieDetails} from '../../api/movieApi/endpoints/fetchMovieDetails';
+import type {Movie} from '../../api/movieApi/types';
+import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
 import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
 import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
+import MovieCover from '../common/MovieCover/MovieCover';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
+import GoBackLink from './components/GoBackLink/GoBackLink';
 import {
   Content,
+  LoadingOverlay,
   MetadataInfo,
   MetadataItem,
   MetadataLabel,
@@ -17,13 +24,7 @@ import {
   PosterContainer,
   Rating,
   Title,
-  LoadingOverlay,
 } from './styled';
-import MovieCover from '../common/MovieCover/MovieCover';
-import GoBackLink from './components/GoBackLink/GoBackLink';
-import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
-import {API_STATUS_MESSAGE, ERRORS_BY_HTTP_STATUS} from '../../api/movieApi/constants';
-import type {Movie} from '../../api/movieApi/types';
 
 export default function MovieDetailsPage() {
   const queryClient = useQueryClient();

@@ -1,21 +1,22 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useEffect, useMemo, useCallback, memo} from 'react';
+import {memo, useCallback, useEffect, useMemo} from 'react';
 import {useSearchParams} from 'react-router-dom';
+
+import {fetchMoviesList} from '../../api/movieApi/endpoints/fetchMoviesList';
+import type {MovieSearchResponse} from '../../api/movieApi/types';
+import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
+import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
+import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
 import {useDebounce} from '../../hooks/useDebounce';
 import {usePagination} from '../../hooks/usePagination';
 import {useSearchInput} from '../../hooks/useSearchInput';
-import {fetchMoviesList} from '../../api/movieApi/endpoints/fetchMoviesList';
-import {getErrorFallbackMessage} from '../../api/movieApi/utils/getErrorFallbackMessage';
-import ApiErrorScreen from '../../app/components/ApiErrorScreen/ApiErrorScreen';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
-import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
 import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
+import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
 import MovieCard from './components/MovieCard/MovieCard';
 import Pagination from './components/Pagination/Pagination';
 import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
-import {Container, Content, Header, MoviesGrid, LoadingOverlay, MoviesContainer} from './styled';
-import type {MovieSearchResponse} from '../../api/movieApi/types';
-import type {ApiErrorResponseDetails} from '../../api/movieApi/utils/types';
+import {Container, Content, Header, LoadingOverlay, MoviesContainer, MoviesGrid} from './styled';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 

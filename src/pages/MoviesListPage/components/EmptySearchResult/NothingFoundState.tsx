@@ -1,5 +1,5 @@
-import {Container, Content, Message, Title} from './styled';
 import NothingFoundIcon from './icons/NothingFoundIcon';
+import {Container, Content, Message, Title} from './styled';
 
 export default function NothingFoundState() {
   return (
@@ -7,7 +7,7 @@ export default function NothingFoundState() {
       <NothingFoundIcon />
       <Content>
         <Title>Oops...</Title>
-        <Message>We couldn't find any movies matching your search criteria.</Message>
+        <Message>We could not find any movies matching your search criteria.</Message>
       </Content>
     </Container>
   );

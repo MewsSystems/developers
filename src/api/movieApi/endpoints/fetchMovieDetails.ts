@@ -1,6 +1,7 @@
-import type {Movie} from '../types';
-import {client} from '../client';
 import type {AxiosError} from 'axios';
+
+import {client} from '../client';
+import type {Movie} from '../types';
 
 export const fetchMovieDetails = async (movieId: string): Promise<Movie> => {
   try {

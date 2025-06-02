@@ -17,6 +17,22 @@ const config = {
     "/__tests__/e2e/",
     "\\.e2e\\.spec\\.[jt]s?(x)$"
   ],
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json'
+    }]
+  },
+  watchman: true,
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname'
+  ],
+  watchPathIgnorePatterns: [
+    'node_modules',
+    '.git',
+    'dist',
+    'coverage'
+  ]
 };
 
 export default config; 

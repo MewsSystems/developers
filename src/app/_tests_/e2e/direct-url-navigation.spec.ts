@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
 const SEARCH_INPUT_PLACEHOLDER = 'Start typing to discover';
 

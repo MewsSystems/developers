@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import {MOVIE_API_BASE_URL} from './constants';
 
 export const client = axios.create({

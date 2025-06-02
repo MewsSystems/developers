@@ -1,5 +1,5 @@
-import {LoadingContainer} from './styled';
 import popcornIcon from './popcorn.svg';
+import {LoadingContainer} from './styled';
 
 export default function PopcornLoader() {
   return (

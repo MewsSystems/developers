@@ -1,9 +1,10 @@
-import {useMemo, memo} from 'react';
-import type {Movie} from '../../../../api/movieApi/types';
-import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './styled';
-import MovieCover from '../../../common/MovieCover/MovieCover';
-import {PathByPageType} from '../../../../routes/constants';
+import {memo, useMemo} from 'react';
 import {generatePath} from 'react-router-dom';
+
+import type {Movie} from '../../../../api/movieApi/types';
+import {PathByPageType} from '../../../../routes/constants';
+import MovieCover from '../../../common/MovieCover/MovieCover';
+import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './styled';
 
 type MovieCardProps = {
   movie: Movie;

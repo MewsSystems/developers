@@ -6,11 +6,21 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 3,
   workers: 3,
-  reporter: 'html',
+  reporter: [
+    [
+      'html',
+      {
+        open: 'never',
+        outputFolder: './src/app/_tests_/e2e/playwright-report',
+      },
+    ],
+  ],
+  outputDir: './src/app/_tests_/e2e/test-results',
   timeout: 45000,
   use: {
     baseURL: 'http://localhost:5173',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {
@@ -19,7 +29,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run start:app',
+    command: 'yarn start:app',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

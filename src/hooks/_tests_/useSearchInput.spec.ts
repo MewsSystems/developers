@@ -1,8 +1,9 @@
-import {renderHook, act} from '@testing-library/react';
-import {useSearchParams} from 'react-router-dom';
-import {useSearchInput} from '../useSearchInput';
+import {act, renderHook} from '@testing-library/react';
 import type {ChangeEvent} from 'react';
+import {useSearchParams} from 'react-router-dom';
+
 import type {SetURLSearchParams} from '../types';
+import {useSearchInput} from '../useSearchInput';
 
 jest.mock('react-router-dom', () => ({
   useSearchParams: jest.fn(),

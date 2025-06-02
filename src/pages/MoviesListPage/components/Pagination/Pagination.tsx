@@ -1,6 +1,7 @@
-import {useCallback, useMemo, memo} from 'react';
-import {NavigationButton, PaginationWrapper} from './styled';
+import {memo, useCallback, useMemo} from 'react';
+
 import {useGetPages} from './hooks/useGetPages';
+import {NavigationButton, PaginationWrapper} from './styled';
 
 type PaginationProps = {
   currentPage: number;

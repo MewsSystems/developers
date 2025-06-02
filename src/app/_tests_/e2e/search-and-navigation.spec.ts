@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
 const SEARCH_INPUT_PLACEHOLDER = 'Start typing to discover';
 
@@ -70,7 +70,7 @@ test.describe('Search and navigation', () => {
     await page.waitForSelector('[role="progressbar"]', {state: 'hidden'});
 
     await expect(
-      page.getByText("We couldn't find any movies matching your search criteria."),
+      page.getByText('We could not find any movies matching your search criteria.'),
     ).toBeVisible();
   });
 });

@@ -1,6 +1,7 @@
-import type {MovieSearchResponse} from '../types';
-import {client} from '../client';
 import type {AxiosError} from 'axios';
+
+import {client} from '../client';
+import type {MovieSearchResponse} from '../types';
 
 export const fetchMoviesList = async (
   query: string,

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import {spinEffect} from './animations';
 
 export const LoadingOverlay = styled.div`

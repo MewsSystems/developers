@@ -1,7 +1,8 @@
-import {renderHook, act} from '@testing-library/react';
+import {act, renderHook} from '@testing-library/react';
 import {useSearchParams} from 'react-router-dom';
-import {usePagination} from '../usePagination';
+
 import type {SetURLSearchParams} from '../types';
+import {usePagination} from '../usePagination';
 
 jest.mock('react-router-dom', () => ({
   useSearchParams: jest.fn(),

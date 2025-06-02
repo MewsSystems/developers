@@ -1,10 +1,10 @@
+import {getImageUrl} from '../../../utils/getImageUrl';
 import {
-  MovieCoverImage,
   MovieCoverContainer,
+  MovieCoverImage,
   PlaceholderContainer,
   PlaceholderIcon,
 } from './styled';
-import {getImageUrl} from '../../../utils/getImageUrl';
 
 type MovieCoverProps = {
   poster_path: string | null;
