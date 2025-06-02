@@ -120,9 +120,10 @@ src/
 ## 🧩 Key Features
 
 - Movie search with debounced input
-- Movie details view with rich information
 - Error handling with Error Boundaries
-- Loading states and error messages
+- Error states for API failures
+- Empty state for no results
+- Empty initial state
 - Responsive design
 - Type-safe API integration
 - Comprehensive test coverage
