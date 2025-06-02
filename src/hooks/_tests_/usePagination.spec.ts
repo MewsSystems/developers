@@ -1,6 +1,5 @@
 import {act, renderHook} from '@testing-library/react';
 import {useSearchParams} from 'react-router-dom';
-
 import type {SetURLSearchParams} from '../types';
 import {usePagination} from '../usePagination';
 

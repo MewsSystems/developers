@@ -1,7 +1,6 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {format} from 'date-fns';
 import {useParams} from 'react-router-dom';
-
 import {API_STATUS_MESSAGE, ERRORS_BY_HTTP_STATUS} from '../../api/movieApi/constants';
 import {fetchMovieDetails} from '../../api/movieApi/endpoints/fetchMovieDetails';
 import type {Movie} from '../../api/movieApi/types';

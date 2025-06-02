@@ -1,6 +1,5 @@
 import {lazy} from 'react';
 import {Route, Routes} from 'react-router-dom';
-
 import {PageType, PathByPageType} from './constants';
 
 const MoviesListPage = lazy(() => import('../pages/MoviesListPage/MoviesListPage'));

@@ -1,6 +1,5 @@
 import {memo, useMemo} from 'react';
 import {generatePath} from 'react-router-dom';
-
 import type {Movie} from '../../../../api/movieApi/types';
 import {PathByPageType} from '../../../../routes/constants';
 import MovieCover from '../../../common/MovieCover/MovieCover';

@@ -1,5 +1,4 @@
 import {memo, useCallback, useEffect, useMemo, useRef} from 'react';
-
 import {useSearchInput} from '../../../../hooks/useSearchInput';
 import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled';
 

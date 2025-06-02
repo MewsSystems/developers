@@ -1,5 +1,4 @@
 import type {AxiosError} from 'axios';
-
 import {client} from '../client';
 import type {Movie} from '../types';
 

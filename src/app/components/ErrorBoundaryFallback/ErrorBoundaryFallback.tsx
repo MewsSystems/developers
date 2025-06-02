@@ -1,6 +1,5 @@
 import type {FallbackProps} from 'react-error-boundary';
 import {useNavigate} from 'react-router-dom';
-
 import {PageType, PathByPageType} from '../../../routes/constants';
 import {Button, ButtonGroup, ErrorContainer, ErrorMessage, ErrorTitle} from './styled';
 

@@ -14,7 +14,7 @@
                 "sourceType": "module",
                 "project": "./tsconfig.app.json"
             },
-            "plugins": ["react", "@typescript-eslint", "prettier", "simple-import-sort"],
+            "plugins": ["react", "@typescript-eslint", "prettier"],
             "extends": [
                 "eslint:recommended",
                 "plugin:react/recommended",
@@ -24,13 +24,15 @@
             "rules": {
                 "prettier/prettier": ["error"],
                 "react/react-in-jsx-scope": "off",
-                "simple-import-sort/imports": "error",
-                "simple-import-sort/exports": "error",
                 "@typescript-eslint/no-require-imports": "error",
                 "@typescript-eslint/consistent-type-imports": ["error", {
                     "prefer": "type-imports",
                     "disallowTypeAnnotations": false
-                }]
+                }],
+                "padding-line-between-statements": [
+                    "error",
+                    { "blankLine": "never", "prev": "import", "next": "import" }
+                ]
             }
         },
         {

@@ -1,5 +1,4 @@
 import {memo, useCallback, useMemo} from 'react';
-
 import {useGetPages} from './hooks/useGetPages';
 import {NavigationButton, PaginationWrapper} from './styled';
 
