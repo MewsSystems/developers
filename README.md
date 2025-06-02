@@ -78,11 +78,17 @@ src/
 
 ## 🎣 Custom Hooks
 
-1. **useDebounce** - Generic hook for delaying value updates, perfect for preventing excessive API calls. Configurable delay with TypeScript support.
-
-2. **usePagination** - Manages pagination state and navigation. Provides page controls, boundary checks, and URL synchronization. Used in the movies list for seamless page navigation.
-
-3. **useSearchInput** - Combines input state management with debouncing. Handles search term updates, provides loading states, and synchronizes with URL parameters. Used in the movie search functionality.
+- **useDebounce**
+  - generic hook for delaying value updates
+  - perfect for preventing excessive API calls
+  - easy customizable
+- **usePagination**
+  - manages pagination state and navigation
+  - provides page controls, boundary checks, and URL synchronization
+  - used in <MoviesListPage /> for seamless page navigation
+- **useSearchInput**
+  - combines input state management with debouncing
+  - synchronizes with URL params
 
 ## 🚦 Getting Started
 
@@ -126,7 +132,7 @@ src/
   - Code splitting by route
   - Suspense boundaries for loading states
 
-## 🔍 Error Handling
+## ⚠️ Error Handling
 
 The app includes comprehensive error handling:
 - API error states (401, 404, 500)
