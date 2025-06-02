@@ -1,6 +1,6 @@
 # Movie Explorer App
 
-A React app for exploring movies using The Movie Database (TMDB) API with clean, minimalistic and responsive design.
+A React app for exploring movies using [The Movie Database (TMDB) API](https://developer.themoviedb.org/) with clean, minimalistic and responsive design.
 
 ## 🚀 Tech Stack
 
