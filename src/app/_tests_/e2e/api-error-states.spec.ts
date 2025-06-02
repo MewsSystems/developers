@@ -1,85 +1,108 @@
 import {expect, test} from '@playwright/test';
-import {API_STATUS_MESSAGE, MOVIE_API_BASE_URL} from '../../../api/movieApi/constants';
+import {
+  API_STATUS_MESSAGE,
+  ERRORS_BY_HTTP_STATUS,
+  MOVIE_API_BASE_URL,
+} from '../../../api/movieApi/constants';
+import {mockApiResponse} from '../utils/mockApiResponse';
 
 const MOVIE_ID = '603';
 const API_PATH = `/movie/${MOVIE_ID}`;
-const API_URL = `${MOVIE_API_BASE_URL}${API_PATH}*`;
 
 test.describe('API errors', () => {
-  test('should display the "Resource not found" error message', async ({page}) => {
-    await page.route(API_URL, async (route) => {
-      await route.fulfill({
+  test.describe('<MovieDetailsPage />', () => {
+    test('should display the "Resource not found" error message', async ({page}) => {
+      await mockApiResponse({
+        page,
+        url: API_PATH,
         status: 404,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          success: false,
-          status_code: 34,
-          status_message: API_STATUS_MESSAGE.RESOURCE_NOT_FOUND,
-        }),
+        statusCode: 34,
+        statusMessage: API_STATUS_MESSAGE.RESOURCE_NOT_FOUND,
       });
+
+      const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}${API_PATH}*`);
+      await page.goto(API_PATH);
+      await apiResponsePromise;
+
+      await expect(
+        page.getByText(ERRORS_BY_HTTP_STATUS[404][API_STATUS_MESSAGE.RESOURCE_NOT_FOUND]),
+      ).toBeVisible({
+        timeout: 10_000,
+      });
+      await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
+
+      await page.getByRole('button', {name: 'Go to Homepage'}).click();
+      await expect(page).toHaveURL('/');
     });
-
-    const apiResponsePromise = page.waitForResponse(API_URL);
-    await page.goto(API_PATH);
-    await apiResponsePromise;
-
-    await expect(page.getByText("We couldn't find what you're looking for.")).toBeVisible({
-      timeout: 10000,
-    });
-    await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
-
-    await page.getByRole('button', {name: 'Go to Homepage'}).click();
-    await expect(page).toHaveURL('/');
-  });
-  test('should display the "Invalid movie ID provided." error message', async ({page}) => {
-    await page.route(API_URL, async (route) => {
-      await route.fulfill({
+    test('should display the "Invalid movie ID provided." error message', async ({page}) => {
+      await mockApiResponse({
+        page,
+        url: API_PATH,
         status: 500,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          success: false,
-          status_code: 44,
-          status_message: API_STATUS_MESSAGE.INVALID_ID,
-        }),
+        statusCode: 44,
+        statusMessage: API_STATUS_MESSAGE.INVALID_ID,
       });
+
+      const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}${API_PATH}*`);
+      await page.goto(API_PATH);
+      await apiResponsePromise;
+
+      await expect(
+        page.getByText(ERRORS_BY_HTTP_STATUS[500][API_STATUS_MESSAGE.INVALID_ID]),
+      ).toBeVisible({timeout: 10_000});
+      await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
+
+      await page.getByRole('button', {name: 'Go to Homepage'}).click();
+      await expect(page).toHaveURL('/');
     });
+    test('should display the "Invalid API key" error message', async ({page}) => {
+      const SEARCH_API_PATH = '/search/movie';
 
-    const apiResponsePromise = page.waitForResponse(API_URL);
-    await page.goto(API_PATH);
-    await apiResponsePromise;
-
-    await expect(page.getByText('Invalid movie ID provided.')).toBeVisible({timeout: 10000});
-    await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
-
-    await page.getByRole('button', {name: 'Go to Homepage'}).click();
-    await expect(page).toHaveURL('/');
-  });
-  test('should display the "Invalid API key" error message', async ({page}) => {
-    const SEARCH_API_PATH = '/search/movie*';
-    const SEARCH_API_URL = `${MOVIE_API_BASE_URL}${SEARCH_API_PATH}`;
-
-    await page.route(SEARCH_API_URL, async (route) => {
-      await route.fulfill({
+      await mockApiResponse({
+        page,
+        url: SEARCH_API_PATH,
         status: 401,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          success: false,
-          status_code: 7,
-          status_message: API_STATUS_MESSAGE.INVALID_API_KEY,
-        }),
+        statusCode: 7,
+        statusMessage: API_STATUS_MESSAGE.INVALID_API_KEY,
       });
+
+      const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}${SEARCH_API_PATH}*`);
+      await page.goto('/?search=Matrix');
+      await apiResponsePromise;
+
+      await expect(
+        page.getByText(ERRORS_BY_HTTP_STATUS[401][API_STATUS_MESSAGE.INVALID_API_KEY]),
+      ).toBeVisible({timeout: 10_000});
+      await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
+
+      await page.getByRole('button', {name: 'Go to Homepage'}).click();
+      await expect(page).toHaveURL('/');
     });
+  });
+  test.describe('<MoviesListPage />', () => {
+    test('should display the "Invalid API key" error message on direct URL navigation', async ({
+      page,
+    }) => {
+      const SEARCH_API_PATH = '/search/movie';
 
-    const apiResponsePromise = page.waitForResponse(SEARCH_API_URL);
-    await page.goto('/?search=Matrix');
-    await apiResponsePromise;
+      await mockApiResponse({
+        page,
+        url: SEARCH_API_PATH,
+        status: 401,
+        statusCode: 7,
+        statusMessage: API_STATUS_MESSAGE.INVALID_API_KEY,
+      });
 
-    await expect(
-      page.getByText('Your API key is invalid. Please check your configuration.'),
-    ).toBeVisible({timeout: 10000});
-    await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
+      await page.goto('/?search=Matrix');
+      await page.waitForResponse(`${MOVIE_API_BASE_URL}${SEARCH_API_PATH}*`);
 
-    await page.getByRole('button', {name: 'Go to Homepage'}).click();
-    await expect(page).toHaveURL('/');
+      await expect(
+        page.getByText(ERRORS_BY_HTTP_STATUS[401][API_STATUS_MESSAGE.INVALID_API_KEY]),
+      ).toBeVisible({timeout: 10_000});
+      await expect(page.getByRole('button', {name: 'Go to Homepage'})).toBeVisible();
+
+      await page.getByRole('button', {name: 'Go to Homepage'}).click();
+      await expect(page).toHaveURL('/');
+    });
   });
 });
