@@ -1,9 +1,13 @@
 import {expect, test} from '@playwright/test';
 import {API_STATUS_MESSAGE, MOVIE_API_BASE_URL} from '../../../api/movieApi/constants';
 
+const MOVIE_ID = '603';
+const API_PATH = `/movie/${MOVIE_ID}`;
+const API_URL = `${MOVIE_API_BASE_URL}${API_PATH}*`;
+
 test.describe('API errors', () => {
   test('should display the "Resource not found" error message', async ({page}) => {
-    await page.route(`${MOVIE_API_BASE_URL}/movie/603*`, async (route) => {
+    await page.route(API_URL, async (route) => {
       await route.fulfill({
         status: 404,
         contentType: 'application/json',
@@ -15,8 +19,8 @@ test.describe('API errors', () => {
       });
     });
 
-    const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}/movie/603*`);
-    await page.goto('/movies/603');
+    const apiResponsePromise = page.waitForResponse(API_URL);
+    await page.goto(API_PATH);
     await apiResponsePromise;
 
     await expect(page.getByText("We couldn't find what you're looking for.")).toBeVisible({
@@ -28,7 +32,7 @@ test.describe('API errors', () => {
     await expect(page).toHaveURL('/');
   });
   test('should display the "Invalid movie ID provided." error message', async ({page}) => {
-    await page.route(`${MOVIE_API_BASE_URL}/movie/603*`, async (route) => {
+    await page.route(API_URL, async (route) => {
       await route.fulfill({
         status: 500,
         contentType: 'application/json',
@@ -40,8 +44,8 @@ test.describe('API errors', () => {
       });
     });
 
-    const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}/movie/603*`);
-    await page.goto('/movies/603');
+    const apiResponsePromise = page.waitForResponse(API_URL);
+    await page.goto(API_PATH);
     await apiResponsePromise;
 
     await expect(page.getByText('Invalid movie ID provided.')).toBeVisible({timeout: 10000});
@@ -51,7 +55,10 @@ test.describe('API errors', () => {
     await expect(page).toHaveURL('/');
   });
   test('should display the "Invalid API key" error message', async ({page}) => {
-    await page.route(`${MOVIE_API_BASE_URL}/search/movie*`, async (route) => {
+    const SEARCH_API_PATH = '/search/movie*';
+    const SEARCH_API_URL = `${MOVIE_API_BASE_URL}${SEARCH_API_PATH}`;
+
+    await page.route(SEARCH_API_URL, async (route) => {
       await route.fulfill({
         status: 401,
         contentType: 'application/json',
@@ -63,7 +70,7 @@ test.describe('API errors', () => {
       });
     });
 
-    const apiResponsePromise = page.waitForResponse(`${MOVIE_API_BASE_URL}/search/movie*`);
+    const apiResponsePromise = page.waitForResponse(SEARCH_API_URL);
     await page.goto('/?search=Matrix');
     await apiResponsePromise;
 

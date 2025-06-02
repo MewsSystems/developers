@@ -5,5 +5,5 @@ export const PageType = {
 
 export const PathByPageType = {
   [PageType.MoviesListPage]: '/',
-  [PageType.MovieDetailsPage]: '/movies/:id',
+  [PageType.MovieDetailsPage]: '/movie/:id',
 } as const;

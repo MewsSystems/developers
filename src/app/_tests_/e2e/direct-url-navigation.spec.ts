@@ -1,10 +1,12 @@
 import {expect, test} from '@playwright/test';
 
 const SEARCH_INPUT_PLACEHOLDER = 'Start typing to discover';
+const MOVIE_PATH = '/movie/603';
+const SEARCH_QUERY = '?search=Matrix&page=2';
 
 test.describe('Direct URL Navigation', () => {
   test('loads search results page with query parameters', async ({page}) => {
-    await page.goto('/?search=Matrix&page=2');
+    await page.goto(`/${SEARCH_QUERY}`);
 
     const searchInput = page.getByPlaceholder(SEARCH_INPUT_PLACEHOLDER);
     await expect(searchInput).toHaveValue('Matrix');
@@ -18,7 +20,7 @@ test.describe('Direct URL Navigation', () => {
     expect(titles.some((title) => title?.toLowerCase().includes('matrix'))).toBeTruthy();
   });
   test('loads movie details page with movie ID', async ({page}) => {
-    await page.goto('/movies/603');
+    await page.goto(MOVIE_PATH);
     await page.waitForSelector('h1');
 
     const title = await page.locator('h1').first().textContent();
@@ -29,11 +31,11 @@ test.describe('Direct URL Navigation', () => {
     await expect(page.getByText('★')).toBeVisible();
   });
   test('preserves search state when navigating back from details', async ({page}) => {
-    await page.goto('/movies/603?search=Matrix&page=2');
+    await page.goto(`${MOVIE_PATH}${SEARCH_QUERY}`);
     await page.waitForSelector('h1');
     await page.getByText('Back to search').click();
 
-    await expect(page).toHaveURL('/?search=Matrix&page=2');
+    await expect(page).toHaveURL(`/${SEARCH_QUERY}`);
     const searchInput = page.getByPlaceholder(SEARCH_INPUT_PLACEHOLDER);
     await expect(searchInput).toHaveValue('Matrix');
 
