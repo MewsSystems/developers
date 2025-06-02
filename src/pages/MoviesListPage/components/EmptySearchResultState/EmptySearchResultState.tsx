@@ -1,7 +1,7 @@
 import NothingFoundIcon from './icons/NothingFoundIcon';
 import {Container, Content, Message, Title} from './styled';
 
-export default function NothingFoundState() {
+export default function EmptySearchResultState() {
   return (
     <Container>
       <NothingFoundIcon />
@@ -13,4 +13,4 @@ export default function NothingFoundState() {
   );
 }
 
-NothingFoundState.displayName = 'NothingFoundState';
+EmptySearchResultState.displayName = 'EmptySearchResultState';

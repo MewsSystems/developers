@@ -11,7 +11,7 @@ import {usePagination} from '../../hooks/usePagination';
 import {useSearchInput} from '../../hooks/useSearchInput';
 import PopcornLoader from '../common/PopcornLoader/PopcornLoader';
 import EmptyInitialState from './components/EmptyInitialState/EmptyInitialState';
-import NothingFoundState from './components/EmptySearchResult/NothingFoundState';
+import EmptySearchResultState from './components/EmptySearchResultState/EmptySearchResultState.tsx';
 import MovieCard from './components/MovieCard/MovieCard';
 import Pagination from './components/Pagination/Pagination';
 import SearchBar, {MAX_USER_INPUT_SEARCH_LENGTH} from './components/SearchInput/SearchInput';
@@ -109,7 +109,7 @@ function MoviesListPage() {
           </LoadingOverlay>
         )}
         {shouldShowInitialEmptyState && <EmptyInitialState />}
-        {hasEmptySearchResults && <NothingFoundState />}
+        {hasEmptySearchResults && <EmptySearchResultState />}
 
         <MoviesContainer>
           {isFetching && !isLoading && !hasEmptySearchResults && (
