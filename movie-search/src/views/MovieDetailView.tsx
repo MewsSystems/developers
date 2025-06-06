@@ -5,14 +5,14 @@ import {formatDate} from "../utils/formatDate.ts"
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {PageNotFound} from "./PageNotFound.tsx";
 import {breakpoints, colors, fontSizes, layout, radii, spacing} from "../styles/designTokens.ts";
+import {Loading, LoadingWrapper} from "../components/Loading.tsx";
 
 export const MovieDetailView = () => {
     const {id} = useParams()
     const {data: movie, isLoading, error} = useMovieDetails(Number(id))
 
-    if (isLoading) return <p>Loading...</p>
-    if (error) return <PageNotFound/>
-    if (!movie) return <p>Movie not found</p>
+    if (isLoading) return <LoadingWrapper><Loading/></LoadingWrapper>
+    if (!movie || error) return <PageNotFound/>
 
     const movieScore = movie.vote_average.toFixed(1)
 
