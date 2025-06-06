@@ -9,9 +9,9 @@ BELOW IS A LIST OF IMPROVEMENTS MADE BASED ON FEEDBACK BY A MORE SENIOR DEVELOPE
 
 - Routing Functionality: Page and query hooks refactored, users can now share links to their search without the URL params reseting on render.
 - Debounce Implementation: Refactored.
-- Component Props: All props were used in their destructured version except for he pagination element when props were ineeded within styled-components. This is now corrected.
+- Component Props: All props were used in their destructured version except for he pagination element when props were needed within styled-components. This is now corrected.
 
-3. API AND BACKEDN PRACTICES
+3. API AND BACKEND PRACTICES
 
 - API Key Security: API is now loaded from a hidden .env file. Ideally, it would be stored on backend.
 - Error Handling: Homepage now shows an error page when incorrect URL is entered, same with the movie deatil page.
@@ -33,4 +33,4 @@ BELOW IS A LIST OF IMPROVEMENTS MADE BASED ON FEEDBACK BY A MORE SENIOR DEVELOPE
 
 FINAL COMMENTS:
 
-- The detail page could be further decomposed into separat elements for better navigation through the code, but in such a small project, I find this unneccessary and counterproductive. Same could be said about the API calls, which are all currently in the same folder.
+- The detail page could be further decomposed into separate elements for better navigation through the code, but in such a small project, I find this unneccessary and counterproductive. Same could be said about the API calls, which are all currently in the same folder.
