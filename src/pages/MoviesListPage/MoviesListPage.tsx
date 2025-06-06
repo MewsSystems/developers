@@ -28,7 +28,7 @@ export default function MoviesListPage() {
 
   const currentPageData = useMoviesList(debouncedSearchQuery, currentPage);
 
-  const displayMovies = currentPage === 1 ? movies : currentPageData.movies;
+  const moviesToDisplay = currentPage === 1 ? movies : currentPageData.movies;
   const displayError = currentPage === 1 ? error : currentPageData.error;
   const isPageLoading = currentPage === 1 ? isLoading : currentPageData.isLoading;
   const isPageFetching = currentPage === 1 ? isFetching : currentPageData.isFetching;
@@ -36,7 +36,7 @@ export default function MoviesListPage() {
   const shouldShowInitialEmptyState = !isPageLoading && !debouncedSearchQuery;
   const hasEmptySearchResults =
     !isPageLoading &&
-    displayMovies.length === 0 &&
+    moviesToDisplay.length === 0 &&
     debouncedSearchQuery &&
     debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH;
 
@@ -75,7 +75,7 @@ export default function MoviesListPage() {
           )}
 
           <MoviesGrid>
-            {displayMovies.map((movie) => (
+            {moviesToDisplay.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
           </MoviesGrid>

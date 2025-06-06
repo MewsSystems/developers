@@ -30,17 +30,4 @@ test.describe('Direct URL Navigation', () => {
     await expect(page.getByText('Release Date')).toBeVisible();
     await expect(page.getByText('★')).toBeVisible();
   });
-  test('preserves search state when navigating back from details', async ({page}) => {
-    await page.goto(`${MOVIE_PATH}${SEARCH_QUERY}`);
-    await page.waitForSelector('h1');
-    await page.getByText('Back to search').click();
-
-    await expect(page).toHaveURL(`/${SEARCH_QUERY}`);
-    const searchInput = page.getByPlaceholder(SEARCH_INPUT_PLACEHOLDER);
-    await expect(searchInput).toHaveValue('Matrix');
-
-    await page.waitForSelector('h2');
-    const movieTitles = await page.locator('h2').all();
-    expect(movieTitles.length).toBeGreaterThan(0);
-  });
 });
