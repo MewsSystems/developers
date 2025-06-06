@@ -14,8 +14,10 @@ export const MovieDetailView = () => {
     if (error) return <PageNotFound/>
     if (!movie) return <p>Movie not found</p>
 
+    const movieScore = movie.vote_average.toFixed(1)
+
     return (
-        <Container>
+        <Container role="region" aria-labelledby="movie-title">
             <picture>
                 <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
                 <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
@@ -24,18 +26,28 @@ export const MovieDetailView = () => {
             <InfoContainer>
                 <Title>
                     {movie.title}
-                    {movie.vote_average > 0 && <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>}
+                    {movie.vote_average > 0 &&
+                        <Rating aria-label={`Rating: ${movieScore} out of 10`}>⭐ {movieScore}</Rating>}
                 </Title>
-                {movie.genres.length !== 0 && <Genres>
+                {movie.genres.length !== 0 && <Genres role="list" aria-label="Genres">
                     {movie.genres.map((genre) => (
-                        <Genre key={genre.id}>{genre.name}</Genre>
+                        <Genre role="listitem" key={genre.id}>{genre.name}</Genre>
                     ))}
                 </Genres>}
                 <Overview>{movie.overview}</Overview>
-                {movie.runtime > 0 && <p>⏳ <strong>Runtime:</strong> {movie.runtime} min</p>}
+                {movie.runtime > 0 &&
+                    <p><span role="img" aria-label="Runtime">⏳</span>
+                        <strong>Runtime:</strong> {movie.runtime} min
+                    </p>}
                 {movie.production_countries.length !== 0 &&
-                    <p>🌎 <strong>Origin:</strong> {movie.production_countries[0].name}</p>}
-                {movie.release_date && <p>📅 <strong>Release Date:</strong> {formatDate(movie.release_date)}</p>}
+                    <p><span role="img" aria-label="Country of origin">🌎</span>
+                        <strong>Origin:</strong> {movie.production_countries[0].name}
+                    </p>}
+                {movie.release_date && <p>
+                    <span role="img" aria-label="Release date">📅</span>
+                    <strong>Release Date:
+                    </strong> {formatDate(movie.release_date)}
+                </p>}
             </InfoContainer>
         </Container>
     )

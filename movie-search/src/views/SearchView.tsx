@@ -18,8 +18,12 @@ export const SearchView = () => {
     const noResults = isQuery && !isFetching && movies.length === 0;
 
     return (
-        <Container>
+        <Container role="region" aria-labelledby="movie-search-heading">
+            <h2 id="movie-search-heading" className="sr-only">Search and browse movies</h2>
+
+            <label htmlFor="movie-search" className="sr-only">Search for movies</label>
             <SearchInput
+                id="movie-search"
                 type="text"
                 placeholder="Search movies..."
                 value={query}
@@ -28,15 +32,25 @@ export const SearchView = () => {
                     setSearchParams({query: value})
                 }}
             />
-            {isError && <ErrorMessage>❌ Error: {error.message}</ErrorMessage>}
-            {noResults && <NoResultsText>😞 No movies found for "{query}".</NoResultsText>}
-            <MovieList>
+            {isError && <ErrorMessage id="error-message" role="alert">
+                <span role="img" aria-label="Error">❌</span> Error: {error.message}
+            </ErrorMessage>}
+            {noResults && <NoResultsText id="no-results-message" role="status">
+                <span role="img" aria-label="Sad face">😞</span> No movies found for "{query}".</NoResultsText>}
+            <MovieList role="list" aria-label="Search results">
                 {movies.map((movie) => (
-                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
+                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)} tabIndex={0}
+                               aria-label={`View details for ${movie.title}`}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter' || e.key === ' ') {
+                                       navigate(`/movie/${movie.id}`);
+                                   }
+                               }}>
                         <picture>
-                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
-                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
-                            <MoviePoster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
+                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
+                            <MoviePoster src={getPosterSrc(movie.poster_path)}
+                                         alt={movie.title || "Placeholder Poster"}/>
                         </picture>
 
                         <MovieTitleWrapper>
@@ -49,8 +63,11 @@ export const SearchView = () => {
                 ))}
             </MovieList>
             {hasNextPage &&
-                <ButtonWrapper><LoadMoreButton onClick={() => fetchNextPage()}>Load
-                    more</LoadMoreButton></ButtonWrapper>}
+                <ButtonWrapper>
+                    <LoadMoreButton onClick={() => fetchNextPage()} aria-label="Load more movies">
+                        Load more
+                    </LoadMoreButton>
+                </ButtonWrapper>}
         </Container>
     )
 }
@@ -84,7 +101,7 @@ const SearchInput = styled.input`
     }
 
     &::placeholder {
-        color:  ${colors.textLight};
+        color: ${colors.textLight};
         font-style: italic;
     }
 `
@@ -111,8 +128,8 @@ const MovieList = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
     gap: ${spacing.lg};
     justify-content: center;
-    
-    @media (max-width: 768px) {  
+
+    @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 `
@@ -144,7 +161,7 @@ const MoviePoster = styled.img`
 
 const MovieTitleWrapper = styled.div`
     margin-top: ${spacing.sm};
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -165,7 +182,7 @@ const MovieYear = styled.span`
 
 const ButtonWrapper = styled.div`
     margin-top: ${spacing.xl};
-    
+
     display: flex;
     justify-content: center;
 `

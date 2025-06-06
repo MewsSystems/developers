@@ -4,11 +4,13 @@ import {colors, fontSizes, radii, spacing} from "../styles/designTokens.ts";
 
 export const PageNotFound = () => {
     return (
-        <NotFoundWrapper>
-            <Heading>404</Heading>
-            <SubHeading>Page Not Found</SubHeading>
-            <StyledLink to="/">Go Back Home</StyledLink>
-        </NotFoundWrapper>
+        <main role="main" aria-labelledby="not-found-title">
+            <NotFoundWrapper>
+                <Heading id="not-found-title" role="heading">404</Heading>
+                <SubHeading>Page Not Found</SubHeading>
+                <StyledLink to="/" role="link" aria-label="Go back to the homepage">Go Back Home</StyledLink>
+            </NotFoundWrapper>
+        </main>
     );
 };
 
