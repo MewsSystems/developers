@@ -1,4 +1,4 @@
-import {generatePath} from 'react-router-dom';
+import {generatePath, useLocation} from 'react-router-dom';
 import type {Movie} from '../../../../api/movieApi/types';
 import {PathByPageType} from '../../../../routes/constants';
 import MovieCover from '../../../common/MovieCover/MovieCover';
@@ -6,12 +6,11 @@ import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './st
 
 type MovieCardProps = {
   movie: Movie;
-  searchQuery: string;
-  currentPage: number;
 };
 
-export default function MovieCard({movie, searchQuery, currentPage}: MovieCardProps) {
+export default function MovieCard({movie}: MovieCardProps) {
   const {release_date, title, id, vote_average, poster_path, overview} = movie;
+  const location = useLocation();
 
   const releaseYear = release_date ? new Date(release_date).getFullYear() : 'N/A';
   const rating = vote_average ? Math.round(vote_average * 10) / 10 : 0;
@@ -24,9 +23,7 @@ export default function MovieCard({movie, searchQuery, currentPage}: MovieCardPr
     <StyledLink
       to={movieDetailsPageUrl}
       state={{
-        from: '/',
-        search: searchQuery,
-        page: currentPage,
+        previousPath: location.pathname + location.search,
       }}
     >
       <Card>
