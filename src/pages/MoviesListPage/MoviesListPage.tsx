@@ -1,5 +1,5 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {memo, useCallback, useEffect, useMemo} from 'react';
+import {memo, useEffect, useMemo} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {fetchMoviesList} from '../../api/movieApi/endpoints/fetchMoviesList';
 import type {MovieSearchResponse} from '../../api/movieApi/types';
@@ -56,9 +56,11 @@ function MoviesListPage() {
     [isLoading, results.length, debouncedSearchQuery],
   );
 
-  const onReset = useCallback(() => {
-    queryClient.clear();
-  }, [queryClient]);
+  const onReset = () =>
+    queryClient.removeQueries({
+      queryKey: ['movies', debouncedSearchQuery, page],
+      exact: true,
+    });
 
   useEffect(() => {
     if (!data) {

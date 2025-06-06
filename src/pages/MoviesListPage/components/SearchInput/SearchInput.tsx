@@ -45,7 +45,7 @@ function SearchBar() {
         ref={searchInputRef}
         type="text"
         value={searchUrlParam}
-        onChange={onSearchInputChange}
+        onChange={({target: {value}}) => onSearchInputChange(value)}
         placeholder="Start typing to discover"
         maxLength={MAX_USER_INPUT_SEARCH_LENGTH}
       />

@@ -10,13 +10,24 @@ const AppRoutes = lazy(() => import('../routes/AppRoutes'));
 export default function App() {
   const queryClient = new QueryClient();
 
+  const clearRelevantQueries = (queryClient: QueryClient) => {
+    queryClient.removeQueries({
+      predicate: (query) => {
+        if (!query.isActive()) return false;
+
+        const queryKey = query.queryKey[0];
+        return ['movie', 'movies'].includes(queryKey as string);
+      },
+    });
+  };
+
   return (
     // pass the "future" prop to suppress warnings in the browser console from React Router about upcoming changes in v7
     <BrowserRouter future={{v7_startTransition: true, v7_relativeSplatPath: true}}>
       <ErrorBoundary
         FallbackComponent={ErrorBoundaryFallback}
         onReset={() => {
-          queryClient.clear();
+          clearRelevantQueries(queryClient);
         }}
       >
         <Suspense fallback={<Loader />}>

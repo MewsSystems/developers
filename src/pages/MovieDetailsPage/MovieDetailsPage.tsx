@@ -58,7 +58,9 @@ export default function MovieDetailsPage() {
             : ERRORS_BY_HTTP_STATUS[404][API_STATUS_MESSAGE.RESOURCE_NOT_FOUND]
         }
         onReset={() => {
-          queryClient.clear();
+          queryClient.removeQueries({
+            queryKey: ['movie', id],
+          });
         }}
       />
     );
