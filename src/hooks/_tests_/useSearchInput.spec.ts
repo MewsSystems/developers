@@ -1,5 +1,4 @@
 import {act, renderHook} from '@testing-library/react';
-import type {ChangeEvent} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import type {SetURLSearchParams} from '../types';
 import {useSearchInput} from '../useSearchInput';
@@ -64,9 +63,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: 'new search'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('new search');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -77,9 +74,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: ''},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -95,9 +90,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: 'new search'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('new search');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -148,9 +141,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: '   '},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('   ');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -161,9 +152,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: '!@#$%^&*()'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('!@#$%^&*()');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -175,9 +164,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: longString},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange(longString);
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -188,9 +175,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: null as unknown as string},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -201,9 +186,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: undefined as unknown as string},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('');
       });
 
       const updatedParams = mockSetSearchParams.mock.calls[0][0];
@@ -216,17 +199,13 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: 'first'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('first');
       });
 
       expect(mockSetSearchParams.mock.calls[0][0].get('search')).toBe('first');
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: 'second'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('second');
       });
 
       expect(mockSetSearchParams.mock.calls[1][0].get('search')).toBe('second');
@@ -236,9 +215,7 @@ describe('useSearchInput', () => {
       const {result} = renderHook(() => useSearchInput());
 
       act(() => {
-        result.current.onSearchInputChange({
-          target: {value: 'test'},
-        } as ChangeEvent<HTMLInputElement>);
+        result.current.onSearchInputChange('test');
       });
 
       expect(mockSetSearchParams.mock.calls[0][0].get('search')).toBe('test');
