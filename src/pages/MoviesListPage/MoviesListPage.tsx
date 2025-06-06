@@ -1,5 +1,5 @@
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {memo, useEffect, useMemo} from 'react';
+import {useEffect} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {fetchMoviesList} from '../../api/movieApi/endpoints/fetchMoviesList';
 import type {MovieSearchResponse} from '../../api/movieApi/types';
@@ -19,7 +19,7 @@ import {Container, Content, Header, LoadingOverlay, MoviesContainer, MoviesGrid}
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-function MoviesListPage() {
+export default function MoviesListPage() {
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const {page, onPageChange} = usePagination();
@@ -42,19 +42,13 @@ function MoviesListPage() {
 
   const {total_pages = 0, results = []} = data || {};
 
-  const shouldShowInitialEmptyState = useMemo(
-    () => !isLoading && !debouncedSearchQuery,
-    [isLoading, debouncedSearchQuery],
-  );
+  const shouldShowInitialEmptyState = !isLoading && !debouncedSearchQuery;
 
-  const hasEmptySearchResults = useMemo(
-    () =>
-      !isLoading &&
-      results.length === 0 &&
-      debouncedSearchQuery &&
-      debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH,
-    [isLoading, results.length, debouncedSearchQuery],
-  );
+  const hasEmptySearchResults =
+    !isLoading &&
+    results.length === 0 &&
+    debouncedSearchQuery &&
+    debouncedSearchQuery.length !== MAX_USER_INPUT_SEARCH_LENGTH;
 
   const onReset = () =>
     queryClient.removeQueries({
@@ -139,5 +133,3 @@ function MoviesListPage() {
 }
 
 MoviesListPage.displayName = 'MoviesListPage';
-
-export default memo(MoviesListPage);

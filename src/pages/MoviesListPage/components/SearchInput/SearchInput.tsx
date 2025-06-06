@@ -1,4 +1,4 @@
-import {memo, useCallback, useEffect, useMemo, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {useSearchInput} from '../../../../hooks/useSearchInput';
 import {ClearButton, SearchContainer, SearchInput, SearchWarning} from './styled';
 
@@ -17,27 +17,17 @@ function SearchBar() {
     searchInputRef.current?.focus();
   }, []);
 
-  const onClearClick = useCallback(() => {
+  const onClearClick = () => {
     clearSearch();
     searchInputRef.current?.focus();
-  }, [clearSearch]);
+  };
 
-  const charactersLeft = useMemo(
-    () => MAX_USER_INPUT_SEARCH_LENGTH - searchUrlParam.length,
-    [searchUrlParam.length],
-  );
-
-  const shouldShowWarningMessage = useMemo(
-    () => searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD,
-    [searchUrlParam.length],
-  );
-
-  const warningMessage = useMemo(() => {
-    if (charactersLeft === 0) {
-      return "You've reached the limit of 100 characters.";
-    }
-    return `${charactersLeft} characters remaining`;
-  }, [charactersLeft]);
+  const charactersLeft = MAX_USER_INPUT_SEARCH_LENGTH - searchUrlParam.length;
+  const shouldShowWarningMessage = searchUrlParam.length >= SEARCH_INPUT_WARNING_THRESHOLD;
+  const warningMessage =
+    charactersLeft === 0
+      ? "You've reached the limit of 100 characters."
+      : `${charactersLeft} characters remaining`;
 
   return (
     <SearchContainer>
@@ -73,4 +63,4 @@ function SearchBar() {
 
 SearchBar.displayName = 'SearchBar';
 
-export default memo(SearchBar);
+export default SearchBar;
