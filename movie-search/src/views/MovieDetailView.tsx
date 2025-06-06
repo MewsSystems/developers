@@ -4,6 +4,7 @@ import styled from "styled-components"
 import {formatDate} from "../utils/formatDate.ts"
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {PageNotFound} from "./PageNotFound.tsx";
+import {breakpoints, colors, fontSizes, layout, radii, spacing} from "../styles/designTokens.ts";
 
 export const MovieDetailView = () => {
     const {id} = useParams()
@@ -16,9 +17,9 @@ export const MovieDetailView = () => {
     return (
         <Container>
             <picture>
-                <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
-                <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
-                <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+                <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
+                <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
+                <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"}/>
             </picture>
             <InfoContainer>
                 <Title>
@@ -41,57 +42,61 @@ export const MovieDetailView = () => {
 }
 
 const Container = styled.div`
-    padding: 20px;
+    padding: ${spacing.lg};
     margin: auto;
 
-    max-width: 1170px;
+    max-width: ${layout.containerWidth};
 
     display: flex;
     flex-direction: column-reverse;
-    gap: 20px;
+    gap: ${spacing.lg};
 
-    @media (min-width: 768px) {
+    @media (min-width: ${breakpoints.tablet}) {
         flex-direction: row;
     }
 `
 
 const Poster = styled.img`
     width: 300px;
-    border-radius: 10px;
+    border-radius: ${radii.lg};
 `
 
 const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: ${spacing.xl};
 `
 
 const Title = styled.h1`
-    font-size: 24px;
+    font-size: ${fontSizes.xl};
+    font-weight: 700;
+    color: ${colors.text};
 `
 
 const Rating = styled.span`
-    padding: 5px 10px;
-    margin-left: 8px;
+    padding: ${spacing.xs} ${spacing.md};
+    margin-left: ${spacing.sm};
 
     display: inline-block;
-    font-weight: bold;
+    font-weight: 600;
 
     background: #ffcc0045;
-    border-radius: 5px;
+    border-radius: ${radii.sm}
 `
 
 const Genres = styled.div`
     display: flex;
-    gap: 10px;
+    gap: ${spacing.sm};
 `
 
 const Genre = styled.span`
-    padding: 5px 10px;
+    padding: ${spacing.xs} ${spacing.md};
     background: #4444441a;
-    border-radius: 5px;
+    border-radius: ${radii.md};
 `
 
 const Overview = styled.p`
     line-height: 1.6;
+    color: ${colors.textMuted};
+    font-size: ${fontSizes.base};
 `

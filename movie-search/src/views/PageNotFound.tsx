@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {colors, fontSizes, radii, spacing} from "../styles/designTokens.ts";
 
 export const PageNotFound = () => {
     return (
@@ -12,39 +13,46 @@ export const PageNotFound = () => {
 };
 
 const NotFoundWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f8f9fa;
-  text-align: center;
-  color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh;
+    background-color: ${colors.background};
+    text-align: center;
+    color: ${colors.text};
 `;
 
 const Heading = styled.h1`
-  font-size: 6rem;
-  margin: 0;
-  color: #ff6b6b;
+    font-size: 6rem;
+    margin: 0;
+    color: ${colors.error};
 `;
 
 const SubHeading = styled.h2`
-  font-size: 2rem;
-  margin: 10px 0;
+    font-size: ${fontSizes.xl};
+    margin: ${spacing.xs} 0;
 `;
 
 const StyledLink = styled(Link)`
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  color: white;
-  background-color: #000;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: ${spacing.lg};
+    padding: ${spacing.sm} ${spacing.lg};
 
-  &:hover {
-    background-color: #000000d4;
-  }
+    font-size: ${fontSizes.lg};
+    color: ${colors.background};
+    background-color: ${colors.primary};
+    text-decoration: none;
+    border-radius: ${radii.sm};
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #000000d4;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px ${colors.focus};
+    }
 `;

@@ -3,6 +3,7 @@ import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {useDebouncedValue} from "../utils/useDebouncedValue.tsx";
+import {colors, fontSizes, layout, radii, shadows, spacing} from "../styles/designTokens.ts";
 
 export const SearchView = () => {
     const navigate = useNavigate();
@@ -56,54 +57,59 @@ export const SearchView = () => {
 
 const Container = styled.div`
     margin: 0 auto;
-    padding: 20px;
+    padding: ${spacing.xl};
 
-    max-width: 1170px;
+    max-width: ${layout.containerWidth};
 `
 
 const SearchInput = styled.input`
-    padding: 12px 16px;
+    padding: ${spacing.sm} ${spacing.md};
     width: 100%;
 
-    color: #333;
-    font-size: 16px;
+    color: ${colors.text};
+    font-size: ${fontSizes.base};
 
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
+    border: 2px solid ${colors.border};
+    border-radius: ${radii.md};
+    background: ${colors.background};
     outline: none;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: ${shadows.input};
+    transition: border 0.2s ease, box-shadow 0.2s ease;
 
-    margin: 0 auto 32px;
+    margin: 0 auto ${spacing.xl};
 
     &:focus {
-        box-shadow: 0 0 10px rgba(74, 144, 226, 0.4);
+        border-color: ${colors.primary};
+        box-shadow: ${shadows.focus};
     }
 
     &::placeholder {
-        color: #aaa;
+        color:  ${colors.textLight};
         font-style: italic;
     }
 `
 
 const ErrorMessage = styled.p`
-    color: red;
-    font-weight: bold;
+    color: ${colors.error};
+    font-weight: 600;
+    font-size: ${fontSizes.sm};
     text-align: center;
+    margin-top: ${spacing.sm};
 `
 
 const NoResultsText = styled.p`
+    font-size: ${fontSizes.lg};
+    color: ${colors.textMuted};
     text-align: center;
-    font-size: 18px;
+    margin: ${spacing.lg} 0;
 `
 
 const MovieList = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: ${spacing.lg};
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
-    gap: 16px;
+    gap: ${spacing.lg};
     justify-content: center;
     
     @media (max-width: 768px) {  
@@ -112,28 +118,33 @@ const MovieList = styled.div`
 `
 
 const MovieItem = styled.div`
-    padding: 10px;
+    padding: ${spacing.sm};
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    border-radius: 8px;
-    border: 1px solid #ccc;
+
+    border: 1px solid ${colors.borderDark};
+    border-radius: ${radii.md};
+    background: ${colors.background};
     cursor: pointer;
+    transition: background 0.2s ease;
 
     &:hover {
-        background: #f0f0f0;
+        background: ${colors.backgroundAlt};
     }
 `
 
 const MoviePoster = styled.img`
-    width: auto;
+    width: 100%;
     height: 300px;
     object-fit: cover;
+    border-radius: ${radii.sm};
 `
 
 const MovieTitleWrapper = styled.div`
+    margin-top: ${spacing.sm};
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -141,32 +152,42 @@ const MovieTitleWrapper = styled.div`
 `
 
 const MovieTitle = styled.p`
-    font-size: 16px;
+    font-size: ${fontSizes.base};
     font-weight: 600;
 
     text-align: center;
 `
 
 const MovieYear = styled.span`
-    color: #aaa;
-    font-size: 14px;
+    font-size: ${fontSizes.sm};
+    color: ${colors.textLight};
 `
 
 const ButtonWrapper = styled.div`
+    margin-top: ${spacing.xl};
+    
     display: flex;
     justify-content: center;
 `
 
 const LoadMoreButton = styled.button`
-    padding: 12px 28px;
+    padding: ${spacing.sm} ${spacing['2xl']};
 
-    color: white;
+    color: ${colors.background};
     font-weight: 600;
 
-    border-radius: 4px;
-    background: #000;
+    border-radius: ${radii.sm};
+    background: ${colors.primary};
+
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
 
     &:hover {
-        box-shadow: 0 0 12px rgba(74, 144, 226, 0.4);
+        box-shadow: ${shadows.hover};
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: ${shadows.focus};
     }
 `
