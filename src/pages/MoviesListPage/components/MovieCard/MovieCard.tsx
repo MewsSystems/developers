@@ -1,4 +1,3 @@
-import {memo, useMemo} from 'react';
 import {generatePath} from 'react-router-dom';
 import type {Movie} from '../../../../api/movieApi/types';
 import {PathByPageType} from '../../../../routes/constants';
@@ -7,28 +6,19 @@ import {Card, Content, MetaInfo, Overview, Rating, StyledLink, Title} from './st
 
 type MovieCardProps = {
   movie: Movie;
-  searchParams: URLSearchParams;
   searchQuery: string;
   currentPage: number;
 };
 
-function MovieCard({movie, searchParams, searchQuery, currentPage}: MovieCardProps) {
+export default function MovieCard({movie, searchQuery, currentPage}: MovieCardProps) {
   const {release_date, title, id, vote_average, poster_path, overview} = movie;
 
-  const releaseYear = useMemo(
-    () => (release_date ? new Date(release_date).getFullYear() : 'N/A'),
-    [release_date],
-  );
+  const releaseYear = release_date ? new Date(release_date).getFullYear() : 'N/A';
+  const rating = vote_average ? Math.round(vote_average * 10) / 10 : 0;
 
-  const rating = useMemo(
-    () => (vote_average ? Math.round(vote_average * 10) / 10 : 0),
-    [vote_average],
-  );
-
-  const movieDetailsPageUrl = useMemo(() => {
-    const path = generatePath(PathByPageType.MovieDetailsPage, {id: String(id)});
-    return `${path}?${String(searchParams)}`;
-  }, [id, searchParams]);
+  const movieDetailsPageUrl = generatePath(PathByPageType.MovieDetailsPage, {
+    id: String(id),
+  });
 
   return (
     <StyledLink
@@ -55,5 +45,3 @@ function MovieCard({movie, searchParams, searchQuery, currentPage}: MovieCardPro
 }
 
 MovieCard.displayName = 'MovieCard';
-
-export default memo(MovieCard);

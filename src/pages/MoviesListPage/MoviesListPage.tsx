@@ -125,7 +125,6 @@ function MoviesListPage() {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                searchParams={searchParams}
                 searchQuery={searchUrlParam}
                 currentPage={page}
               />
