@@ -3,7 +3,6 @@ import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {useDebouncedValue} from "../utils/useDebouncedValue.tsx";
-import {colors, fontSizes, layout, radii, shadows, spacing} from "../styles/designTokens.ts";
 
 export const SearchView = () => {
     const navigate = useNavigate();
@@ -74,59 +73,59 @@ export const SearchView = () => {
 
 const Container = styled.div`
     margin: 0 auto;
-    padding: ${spacing.xl};
+    padding: ${({ theme }) => theme.spacing.xl};
 
-    max-width: ${layout.containerWidth};
+    max-width: ${({ theme }) => theme.layout.containerWidth};
 `
 
 const SearchInput = styled.input`
-    padding: ${spacing.sm} ${spacing.md};
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
     width: 100%;
 
-    color: ${colors.text};
-    font-size: ${fontSizes.base};
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.fontSizes.base};
 
-    border: 2px solid ${colors.border};
-    border-radius: ${radii.md};
-    background: ${colors.background};
+    border: 2px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
     outline: none;
-    box-shadow: ${shadows.input};
+    box-shadow: ${({ theme }) => theme.shadows.input};
     transition: border 0.2s ease, box-shadow 0.2s ease;
 
-    margin: 0 auto ${spacing.xl};
+    margin: 0 auto ${({ theme }) => theme.spacing.xl};
 
     &:focus {
-        border-color: ${colors.primary};
-        box-shadow: ${shadows.focus};
+        border-color: ${({ theme }) => theme.colors.primary};
+        box-shadow: ${({ theme }) => theme.shadows.focus};
     }
 
     &::placeholder {
-        color: ${colors.textLight};
+        color: ${({ theme }) => theme.colors.textLight};
         font-style: italic;
     }
 `
 
 const ErrorMessage = styled.p`
-    color: ${colors.error};
+    color: ${({ theme }) => theme.colors.error};
     font-weight: 600;
-    font-size: ${fontSizes.sm};
+    font-size: ${({ theme }) => theme.fontSizes.sm};
     text-align: center;
-    margin-top: ${spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.sm};
 `
 
 const NoResultsText = styled.p`
-    font-size: ${fontSizes.lg};
-    color: ${colors.textMuted};
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    color: ${({ theme }) => theme.colors.textMuted};
     text-align: center;
-    margin: ${spacing.lg} 0;
+    margin: ${({ theme }) => theme.spacing.lg} 0;
 `
 
 const MovieList = styled.div`
-    margin-bottom: ${spacing.lg};
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
-    gap: ${spacing.lg};
+    gap: ${({ theme }) => theme.spacing.lg};
     justify-content: center;
 
     @media (max-width: 768px) {
@@ -135,20 +134,20 @@ const MovieList = styled.div`
 `
 
 const MovieItem = styled.div`
-    padding: ${spacing.sm};
+    padding: ${({ theme }) => theme.spacing.sm};
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    border: 1px solid ${colors.borderDark};
-    border-radius: ${radii.md};
-    background: ${colors.background};
+    border: 1px solid ${({ theme }) => theme.colors.borderDark};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
     cursor: pointer;
     transition: background 0.2s ease;
 
     &:hover {
-        background: ${colors.backgroundAlt};
+        background: ${({ theme }) => theme.colors.backgroundAlt};
     }
 `
 
@@ -156,11 +155,11 @@ const MoviePoster = styled.img`
     width: 100%;
     height: 300px;
     object-fit: cover;
-    border-radius: ${radii.sm};
+    border-radius: ${({ theme }) => theme.radii.sm};
 `
 
 const MovieTitleWrapper = styled.div`
-    margin-top: ${spacing.sm};
+    margin-top: ${({ theme }) => theme.spacing.sm};
 
     display: flex;
     flex-direction: column;
@@ -169,42 +168,42 @@ const MovieTitleWrapper = styled.div`
 `
 
 const MovieTitle = styled.p`
-    font-size: ${fontSizes.base};
+    font-size: ${({ theme }) => theme.fontSizes.base};
     font-weight: 600;
 
     text-align: center;
 `
 
 const MovieYear = styled.span`
-    font-size: ${fontSizes.sm};
-    color: ${colors.textLight};
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    color: ${({ theme }) => theme.colors.textLight};
 `
 
 const ButtonWrapper = styled.div`
-    margin-top: ${spacing.xl};
+    margin-top: ${({ theme }) => theme.spacing.xl};
 
     display: flex;
     justify-content: center;
 `
 
 const LoadMoreButton = styled.button`
-    padding: ${spacing.sm} ${spacing['2xl']};
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing['2xl']};
 
-    color: ${colors.background};
+    color: ${({ theme }) => theme.colors.background};
     font-weight: 600;
 
-    border-radius: ${radii.sm};
-    background: ${colors.primary};
+    border-radius: ${({ theme }) => theme.radii.sm};
+    background: ${({ theme }) => theme.colors.primary};
 
     cursor: pointer;
     transition: box-shadow 0.2s ease;
 
     &:hover {
-        box-shadow: ${shadows.hover};
+        box-shadow: ${({ theme }) => theme.shadows.hover};
     }
 
     &:focus {
         outline: none;
-        box-shadow: ${shadows.focus};
+        box-shadow: ${({ theme }) => theme.shadows.focus};
     }
 `

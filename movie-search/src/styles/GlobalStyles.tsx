@@ -30,7 +30,8 @@ export const GlobalStyles = createGlobalStyle`
     body {
         font-family: 'Inter', sans-serif;
         line-height: 1.5;
-        color: #333;
+        color: ${({ theme }) => theme.colors.text};
+        background-color: ${({ theme }) => theme.colors.background};
     }
 
     img {
