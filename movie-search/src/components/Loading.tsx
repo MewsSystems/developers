@@ -1,4 +1,3 @@
-import {colors, spacing} from "../styles/designTokens.ts";
 import {keyframes, styled} from "styled-components";
 
 export const Loading = () => {
@@ -32,7 +31,7 @@ export const Loading = () => {
 }
 
 export const LoadingWrapper = styled.div`
-    padding: ${spacing["2xl"]} ${spacing.lg};
+    padding: ${({ theme }) => theme.spacing["2xl"]} ${({ theme }) => theme.spacing.lg};
 
     height: 100vh;
     
@@ -70,7 +69,7 @@ const travel = keyframes`
 
 const Car = styled.rect`
     fill: none;
-    stroke: ${colors.primary};
+    stroke: ${({ theme }) => theme.colors.primary};
     stroke-dasharray: 25, 75;
     stroke-dashoffset: 0;
     animation: ${travel} 2s linear infinite;
@@ -80,7 +79,7 @@ const Car = styled.rect`
 
 const Track = styled.rect`
     fill: none;
-    stroke: ${colors.primary};
+    stroke: ${({ theme }) => theme.colors.primary};
     opacity: 0;
     transition: stroke 0.5s ease;
 `

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {colors, fontSizes, radii, spacing} from "../styles/designTokens.ts";
 
 export const PageNotFound = () => {
     return (
@@ -21,32 +20,32 @@ const NotFoundWrapper = styled.div`
     justify-content: center;
 
     height: 100vh;
-    background-color: ${colors.background};
+    background-color: ${({ theme }) => theme.colors.background};
     text-align: center;
-    color: ${colors.text};
+    color: ${({ theme }) => theme.colors.text};
 `;
 
 const Heading = styled.h1`
     font-size: 6rem;
     margin: 0;
-    color: ${colors.error};
+    color: ${({ theme }) => theme.colors.error};
 `;
 
 const SubHeading = styled.h2`
-    font-size: ${fontSizes.xl};
-    margin: ${spacing.xs} 0;
+    font-size: ${({ theme }) => theme.fontSizes.xl};
+    margin: ${({ theme }) => theme.spacing.xs} 0;
 `;
 
 const StyledLink = styled(Link)`
     display: inline-block;
-    margin-top: ${spacing.lg};
-    padding: ${spacing.sm} ${spacing.lg};
+    margin-top: ${({ theme }) => theme.spacing.lg};
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
 
-    font-size: ${fontSizes.lg};
-    color: ${colors.background};
-    background-color: ${colors.primary};
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    color: ${({ theme }) => theme.colors.background};
+    background-color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
-    border-radius: ${radii.sm};
+    border-radius: ${({ theme }) => theme.radii.sm};
     transition: background-color 0.3s ease;
 
     &:hover {
@@ -55,6 +54,6 @@ const StyledLink = styled(Link)`
 
     &:focus {
         outline: none;
-        box-shadow: 0 0 0 3px ${colors.focus};
+        box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.focus};
     }
 `;

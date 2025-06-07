@@ -4,7 +4,6 @@ import styled from "styled-components"
 import {formatDate} from "../utils/formatDate.ts"
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {PageNotFound} from "./PageNotFound.tsx";
-import {breakpoints, colors, fontSizes, layout, radii, spacing} from "../styles/designTokens.ts";
 import {Loading, LoadingWrapper} from "../components/Loading.tsx";
 
 export const MovieDetailView = () => {
@@ -54,61 +53,61 @@ export const MovieDetailView = () => {
 }
 
 const Container = styled.div`
-    padding: ${spacing.lg};
+    padding: ${({theme}) => theme.spacing.lg};
     margin: auto;
 
-    max-width: ${layout.containerWidth};
+    max-width: ${({theme}) => theme.layout.containerWidth};
 
     display: flex;
     flex-direction: column-reverse;
-    gap: ${spacing.lg};
+    gap: ${({theme}) => theme.spacing.lg};
 
-    @media (min-width: ${breakpoints.tablet}) {
+    @media (min-width: ${({theme}) => theme.breakpoints.tablet}) {
         flex-direction: row;
     }
 `
 
 const Poster = styled.img`
     width: 300px;
-    border-radius: ${radii.lg};
+    border-radius: ${({theme}) => theme.radii.lg};
 `
 
 const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: ${spacing.xl};
+    gap: ${({theme}) => theme.spacing.xl};
 `
 
 const Title = styled.h1`
-    font-size: ${fontSizes.xl};
+    font-size: ${({theme}) => theme.fontSizes.xl};
     font-weight: 700;
-    color: ${colors.text};
+    color: ${({theme}) => theme.colors.text};
 `
 
 const Rating = styled.span`
-    padding: ${spacing.xs} ${spacing.md};
-    margin-left: ${spacing.sm};
+    padding: ${({theme}) => theme.spacing.xs} ${({theme}) => theme.spacing.md};
+    margin-left: ${({theme}) => theme.spacing.sm};
 
     display: inline-block;
     font-weight: 600;
 
-    background: #ffcc0045;
-    border-radius: ${radii.sm}
+    background: ${({theme}) => theme.colors.transparentYellow};
+    border-radius: ${({theme}) => theme.radii.sm}
 `
 
 const Genres = styled.div`
     display: flex;
-    gap: ${spacing.sm};
+    gap: ${({theme}) => theme.spacing.sm};
 `
 
 const Genre = styled.span`
-    padding: ${spacing.xs} ${spacing.md};
-    background: #4444441a;
-    border-radius: ${radii.md};
+    padding: ${({theme}) => theme.spacing.xs} ${({theme}) => theme.spacing.md};
+    background: ${({theme}) => theme.colors.transparentBackground};
+    border-radius: ${({theme}) => theme.radii.md};
 `
 
 const Overview = styled.p`
     line-height: 1.6;
-    color: ${colors.textMuted};
-    font-size: ${fontSizes.base};
+    color: ${({theme}) => theme.colors.textMuted};
+    font-size: ${({theme}) => theme.fontSizes.base};
 `
