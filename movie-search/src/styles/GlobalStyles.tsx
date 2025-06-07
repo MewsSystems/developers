@@ -30,7 +30,8 @@ export const GlobalStyles = createGlobalStyle`
     body {
         font-family: 'Inter', sans-serif;
         line-height: 1.5;
-        color: #333;
+        color: ${({ theme }) => theme.colors.text};
+        background-color: ${({ theme }) => theme.colors.background};
     }
 
     img {
@@ -39,5 +40,16 @@ export const GlobalStyles = createGlobalStyle`
 
     :focus {
         outline: none;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 `

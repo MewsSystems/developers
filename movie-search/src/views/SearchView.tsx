@@ -17,8 +17,12 @@ export const SearchView = () => {
     const noResults = isQuery && !isFetching && movies.length === 0;
 
     return (
-        <Container>
+        <Container role="region" aria-labelledby="movie-search-heading">
+            <h2 id="movie-search-heading" className="sr-only">Search and browse movies</h2>
+
+            <label htmlFor="movie-search" className="sr-only">Search for movies</label>
             <SearchInput
+                id="movie-search"
                 type="text"
                 placeholder="Search movies..."
                 value={query}
@@ -27,15 +31,25 @@ export const SearchView = () => {
                     setSearchParams({query: value})
                 }}
             />
-            {isError && <ErrorMessage>❌ Error: {error.message}</ErrorMessage>}
-            {noResults && <NoResultsText>😞 No movies found for "{query}".</NoResultsText>}
-            <MovieList>
+            {isError && <ErrorMessage id="error-message" role="alert">
+                <span role="img" aria-label="Error">❌</span> Error: {error.message}
+            </ErrorMessage>}
+            {noResults && <NoResultsText id="no-results-message" role="status">
+                <span role="img" aria-label="Sad face">😞</span> No movies found for "{query}".</NoResultsText>}
+            <MovieList role="list" aria-label="Search results">
                 {movies.map((movie) => (
-                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)}>
+                    <MovieItem key={movie.id} onClick={() => navigate(`/movie/${movie.id}`)} tabIndex={0}
+                               aria-label={`View details for ${movie.title}`}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter' || e.key === ' ') {
+                                       navigate(`/movie/${movie.id}`);
+                                   }
+                               }}>
                         <picture>
-                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
-                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
-                            <MoviePoster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+                            <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
+                            <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
+                            <MoviePoster src={getPosterSrc(movie.poster_path)}
+                                         alt={movie.title || "Placeholder Poster"}/>
                         </picture>
 
                         <MovieTitleWrapper>
@@ -48,92 +62,105 @@ export const SearchView = () => {
                 ))}
             </MovieList>
             {hasNextPage &&
-                <ButtonWrapper><LoadMoreButton onClick={() => fetchNextPage()}>Load
-                    more</LoadMoreButton></ButtonWrapper>}
+                <ButtonWrapper>
+                    <LoadMoreButton onClick={() => fetchNextPage()} aria-label="Load more movies">
+                        Load more
+                    </LoadMoreButton>
+                </ButtonWrapper>}
         </Container>
     )
 }
 
 const Container = styled.div`
     margin: 0 auto;
-    padding: 20px;
+    padding: ${({ theme }) => theme.spacing.xl};
 
-    max-width: 1170px;
+    max-width: ${({ theme }) => theme.layout.containerWidth};
 `
 
 const SearchInput = styled.input`
-    padding: 12px 16px;
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
     width: 100%;
 
-    color: #333;
-    font-size: 16px;
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.fontSizes.base};
 
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
+    border: 2px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
     outline: none;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.input};
+    transition: border 0.2s ease, box-shadow 0.2s ease;
 
-    margin: 0 auto 32px;
+    margin: 0 auto ${({ theme }) => theme.spacing.xl};
 
     &:focus {
-        box-shadow: 0 0 10px rgba(74, 144, 226, 0.4);
+        border-color: ${({ theme }) => theme.colors.primary};
+        box-shadow: ${({ theme }) => theme.shadows.focus};
     }
 
     &::placeholder {
-        color: #aaa;
+        color: ${({ theme }) => theme.colors.textLight};
         font-style: italic;
     }
 `
 
 const ErrorMessage = styled.p`
-    color: red;
-    font-weight: bold;
+    color: ${({ theme }) => theme.colors.error};
+    font-weight: 600;
+    font-size: ${({ theme }) => theme.fontSizes.sm};
     text-align: center;
+    margin-top: ${({ theme }) => theme.spacing.sm};
 `
 
 const NoResultsText = styled.p`
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    color: ${({ theme }) => theme.colors.textMuted};
     text-align: center;
-    font-size: 18px;
+    margin: ${({ theme }) => theme.spacing.lg} 0;
 `
 
 const MovieList = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
-    gap: 16px;
+    gap: ${({ theme }) => theme.spacing.lg};
     justify-content: center;
-    
-    @media (max-width: 768px) {  
+
+    @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 `
 
 const MovieItem = styled.div`
-    padding: 10px;
+    padding: ${({ theme }) => theme.spacing.sm};
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    border-radius: 8px;
-    border: 1px solid #ccc;
+
+    border: 1px solid ${({ theme }) => theme.colors.borderDark};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.background};
     cursor: pointer;
+    transition: background 0.2s ease;
 
     &:hover {
-        background: #f0f0f0;
+        background: ${({ theme }) => theme.colors.backgroundAlt};
     }
 `
 
 const MoviePoster = styled.img`
-    width: auto;
+    width: 100%;
     height: 300px;
     object-fit: cover;
+    border-radius: ${({ theme }) => theme.radii.sm};
 `
 
 const MovieTitleWrapper = styled.div`
+    margin-top: ${({ theme }) => theme.spacing.sm};
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -141,32 +168,42 @@ const MovieTitleWrapper = styled.div`
 `
 
 const MovieTitle = styled.p`
-    font-size: 16px;
+    font-size: ${({ theme }) => theme.fontSizes.base};
     font-weight: 600;
 
     text-align: center;
 `
 
 const MovieYear = styled.span`
-    color: #aaa;
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    color: ${({ theme }) => theme.colors.textLight};
 `
 
 const ButtonWrapper = styled.div`
+    margin-top: ${({ theme }) => theme.spacing.xl};
+
     display: flex;
     justify-content: center;
 `
 
 const LoadMoreButton = styled.button`
-    padding: 12px 28px;
+    padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing['2xl']};
 
-    color: white;
+    color: ${({ theme }) => theme.colors.background};
     font-weight: 600;
 
-    border-radius: 4px;
-    background: #000;
+    border-radius: ${({ theme }) => theme.radii.sm};
+    background: ${({ theme }) => theme.colors.primary};
+
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
 
     &:hover {
-        box-shadow: 0 0 12px rgba(74, 144, 226, 0.4);
+        box-shadow: ${({ theme }) => theme.shadows.hover};
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: ${({ theme }) => theme.shadows.focus};
     }
 `

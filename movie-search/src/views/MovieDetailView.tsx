@@ -4,94 +4,110 @@ import styled from "styled-components"
 import {formatDate} from "../utils/formatDate.ts"
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {PageNotFound} from "./PageNotFound.tsx";
+import {Loading, LoadingWrapper} from "../components/Loading.tsx";
 
 export const MovieDetailView = () => {
     const {id} = useParams()
     const {data: movie, isLoading, error} = useMovieDetails(Number(id))
 
-    if (isLoading) return <p>Loading...</p>
-    if (error) return <PageNotFound/>
-    if (!movie) return <p>Movie not found</p>
+    if (isLoading) return <LoadingWrapper><Loading/></LoadingWrapper>
+    if (!movie || error) return <PageNotFound/>
+
+    const movieScore = movie.vote_average.toFixed(1)
 
     return (
-        <Container>
+        <Container role="region" aria-labelledby="movie-title">
             <picture>
-                <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp" />
-                <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg" />
-                <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"} />
+                <source srcSet={getPosterSrc(movie.poster_path, "webp")} type="image/webp"/>
+                <source srcSet={getPosterSrc(movie.poster_path, "jpg")} type="image/jpeg"/>
+                <Poster src={getPosterSrc(movie.poster_path)} alt={movie.title || "Placeholder Poster"}/>
             </picture>
             <InfoContainer>
                 <Title>
                     {movie.title}
-                    {movie.vote_average > 0 && <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>}
+                    {movie.vote_average > 0 &&
+                        <Rating aria-label={`Rating: ${movieScore} out of 10`}>⭐ {movieScore}</Rating>}
                 </Title>
-                {movie.genres.length !== 0 && <Genres>
+                {movie.genres.length !== 0 && <Genres role="list" aria-label="Genres">
                     {movie.genres.map((genre) => (
-                        <Genre key={genre.id}>{genre.name}</Genre>
+                        <Genre role="listitem" key={genre.id}>{genre.name}</Genre>
                     ))}
                 </Genres>}
                 <Overview>{movie.overview}</Overview>
-                {movie.runtime > 0 && <p>⏳ <strong>Runtime:</strong> {movie.runtime} min</p>}
+                {movie.runtime > 0 &&
+                    <p><span role="img" aria-label="Runtime">⏳</span>
+                        <strong>Runtime:</strong> {movie.runtime} min
+                    </p>}
                 {movie.production_countries.length !== 0 &&
-                    <p>🌎 <strong>Origin:</strong> {movie.production_countries[0].name}</p>}
-                {movie.release_date && <p>📅 <strong>Release Date:</strong> {formatDate(movie.release_date)}</p>}
+                    <p><span role="img" aria-label="Country of origin">🌎</span>
+                        <strong>Origin:</strong> {movie.production_countries[0].name}
+                    </p>}
+                {movie.release_date && <p>
+                    <span role="img" aria-label="Release date">📅</span>
+                    <strong>Release Date:
+                    </strong> {formatDate(movie.release_date)}
+                </p>}
             </InfoContainer>
         </Container>
     )
 }
 
 const Container = styled.div`
-    padding: 20px;
+    padding: ${({theme}) => theme.spacing.lg};
     margin: auto;
 
-    max-width: 1170px;
+    max-width: ${({theme}) => theme.layout.containerWidth};
 
     display: flex;
     flex-direction: column-reverse;
-    gap: 20px;
+    gap: ${({theme}) => theme.spacing.lg};
 
-    @media (min-width: 768px) {
+    @media (min-width: ${({theme}) => theme.breakpoints.tablet}) {
         flex-direction: row;
     }
 `
 
 const Poster = styled.img`
     width: 300px;
-    border-radius: 10px;
+    border-radius: ${({theme}) => theme.radii.lg};
 `
 
 const InfoContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: ${({theme}) => theme.spacing.xl};
 `
 
 const Title = styled.h1`
-    font-size: 24px;
+    font-size: ${({theme}) => theme.fontSizes.xl};
+    font-weight: 700;
+    color: ${({theme}) => theme.colors.text};
 `
 
 const Rating = styled.span`
-    padding: 5px 10px;
-    margin-left: 8px;
+    padding: ${({theme}) => theme.spacing.xs} ${({theme}) => theme.spacing.md};
+    margin-left: ${({theme}) => theme.spacing.sm};
 
     display: inline-block;
-    font-weight: bold;
+    font-weight: 600;
 
-    background: #ffcc0045;
-    border-radius: 5px;
+    background: ${({theme}) => theme.colors.transparentYellow};
+    border-radius: ${({theme}) => theme.radii.sm}
 `
 
 const Genres = styled.div`
     display: flex;
-    gap: 10px;
+    gap: ${({theme}) => theme.spacing.sm};
 `
 
 const Genre = styled.span`
-    padding: 5px 10px;
-    background: #4444441a;
-    border-radius: 5px;
+    padding: ${({theme}) => theme.spacing.xs} ${({theme}) => theme.spacing.md};
+    background: ${({theme}) => theme.colors.transparentBackground};
+    border-radius: ${({theme}) => theme.radii.md};
 `
 
 const Overview = styled.p`
     line-height: 1.6;
+    color: ${({theme}) => theme.colors.textMuted};
+    font-size: ${({theme}) => theme.fontSizes.base};
 `
