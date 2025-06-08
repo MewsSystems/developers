@@ -2,7 +2,7 @@ import {useNavigate, useSearchParams} from "react-router-dom"
 import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
-import {useDebouncedValue} from "../utils/useDebouncedValue.tsx";
+import {useDebouncedValue} from "../hooks/useDebouncedValue.tsx";
 
 export const SearchView = () => {
     const navigate = useNavigate();
