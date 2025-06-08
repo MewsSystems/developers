@@ -4,6 +4,7 @@ import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
 import {useDebouncedValue} from "../hooks/useDebouncedValue.tsx";
 
+
 export const SearchView = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams("");
