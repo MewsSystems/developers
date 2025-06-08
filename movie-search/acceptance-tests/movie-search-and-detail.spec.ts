@@ -11,6 +11,10 @@ test.describe('Movie search and details', () => {
         await searchInput.fill(query);
     }
 
+    async function getLsTheme(page: Page) {
+        return await page.evaluate(() => localStorage.getItem('preferred-theme'))
+    }
+
     test('displays search results and loads more', async ({page}) => {
         await searchForMovie(page, 'mickey');
 
@@ -34,9 +38,9 @@ test.describe('Movie search and details', () => {
         await expect(page.getByText('Science Fiction')).toBeVisible();
         await expect(page.getByText('Comedy')).toBeVisible();
         await expect(page.getByText('Adventure')).toBeVisible();
-        await expect(page.getByText('⏳ Runtime: 137 min')).toBeVisible();
-        await expect(page.getByText('🌎 Origin: United States of America')).toBeVisible();
-        await expect(page.getByText('📅 Release Date: 28. 2. 2025')).toBeVisible();
+        await expect(page.getByText('Runtime: 137 min')).toBeVisible();
+        await expect(page.getByText('Origin: United States of America')).toBeVisible();
+        await expect(page.getByText('Release Date: 28. 2. 2025')).toBeVisible();
 
         await expect(page.getByRole('img', {name: 'Mickey 17'})).toBeVisible();
     });
@@ -45,5 +49,23 @@ test.describe('Movie search and details', () => {
         await searchForMovie(page, 'mewmew');
 
         await expect(page.getByText('😞 No movies found for "mewmew".')).toBeVisible();
+    });
+
+    test('toggles theme on search view and movie detail', async ({page}) => {
+        const html = page.locator('html');
+        await expect(html).toHaveAttribute('data-theme', 'light');
+        expect(await getLsTheme(page)).toBe('light');
+
+        await page.getByRole('button', {name: 'Switch to dark mode'}).click();
+        await expect(html).toHaveAttribute('data-theme', 'dark');
+        expect(await getLsTheme(page)).toBe('dark');
+
+        const firstMovie = page.locator('div[role="list"] > div').first();
+        await expect(firstMovie).toBeVisible();
+        await firstMovie.click();
+
+        await page.getByRole('button', { name: 'Switch to light mode' }).click();
+        await expect(html).toHaveAttribute('data-theme', 'light');
+        expect(await getLsTheme(page)).toBe('light');
     });
 });

@@ -2,7 +2,8 @@ import {useNavigate, useSearchParams} from "react-router-dom"
 import styled from "styled-components"
 import {useMovies} from "../api/useMovies.ts";
 import {getPosterSrc} from "../utils/getPosterSrc.ts";
-import {useDebouncedValue} from "../utils/useDebouncedValue.tsx";
+import {useDebouncedValue} from "../hooks/useDebouncedValue.tsx";
+
 
 export const SearchView = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const SearchView = () => {
         <Container role="region" aria-labelledby="movie-search-heading">
             <h2 id="movie-search-heading" className="sr-only">Search and browse movies</h2>
 
-            <label htmlFor="movie-search" className="sr-only">Search for movies</label>
+            <label htmlFor="movie-search" className="sr-only">Search movies</label>
             <SearchInput
                 id="movie-search"
                 type="text"
