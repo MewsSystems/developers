@@ -1,4 +1,4 @@
-import { Header } from './Header/Header'
+import { Header } from './Header'
 import { SearchBar } from "./Content/SearchBar"
 import { CardContainer } from './Content/CardContainer'
 import { Button } from './Button/Button'

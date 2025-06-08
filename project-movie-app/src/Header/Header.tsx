@@ -1,15 +1,13 @@
-import "./header.style.css"
 import logo from "./assets/logo-movie-app.svg"
+import { HeaderWrapper, LogoWrapper, LogoImage } from "./style"
 
 export const Header: React.FC = () => {
 
     return (
-        <header className="header">
-            <div className="header__logo">
-                <a href = "/">
-                    <img className="header__image" src={logo} alt="movie app logo" />
-                </a>
-            </div>
-        </header>
+        <HeaderWrapper role="banner">
+                <LogoWrapper href="/">
+                    <LogoImage src={logo} alt="Movie App" />
+                </LogoWrapper>
+        </HeaderWrapper>
     )
 }
