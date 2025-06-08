@@ -4,7 +4,7 @@ import { Link } from "react-router"
 import { useParams } from "react-router"
 import { useEffect } from "react"
 import { useState } from "react"
-import { getFormattedMovieID } from "../constants/getFormattedMovieID"
+import { getFormattedMovieID } from "../API/getFormattedMovieID"
 import { MovieDetailInfo } from "../types/movieDetail"
 
 export const MovieDetail = () => {

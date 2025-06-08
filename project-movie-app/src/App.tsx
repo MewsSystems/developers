@@ -5,8 +5,8 @@ import { Button } from './Button/Button'
 import { Footer } from './Footer/Footer'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { getPopularMovies } from './constants/getPopularMovies'
-import { getSearchedMovies } from './constants/getSearchedMovies'
+import { getPopularMovies } from './API/getPopularMovies'
+import { getSearchedMovies } from './API/getSearchedMovies'
 import { MovieCard } from './types/movie'
 
 export const App = () => {
