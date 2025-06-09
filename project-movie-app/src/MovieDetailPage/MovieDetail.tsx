@@ -1,4 +1,4 @@
-import { Button } from "../Button/Button"
+import { Button } from "../Button"
 import "./movieDetail.style.css"
 import { Link } from "react-router"
 import { useParams } from "react-router"

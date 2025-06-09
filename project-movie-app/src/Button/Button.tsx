@@ -1,19 +1,15 @@
-import "./button.style.css";
 import React from "react";
-
-type ButtonProps = {
-    label: string;
-    handleLoadMore?: () => void; // optional function with no arguments and no return
-};
+import { ButtonProps } from "./types";
+import { StyledButton } from "./style";
 
 export const Button: React.FC<ButtonProps> = ({ label, handleLoadMore}) => {
 
     return (
-        <button 
+        <StyledButton 
             className="button"
             onClick={handleLoadMore}
         >
             {label}
-        </button>
+        </StyledButton>
     )
 }
