@@ -1,5 +1,5 @@
 import "./cardContainer.style.css"
-import { Card } from "./Card"
+import { Card } from "./Card/Card"
 import { MovieCardContainerProps } from "../types/movie"
 
 export const CardContainer: React.FC<MovieCardContainerProps> = ({page, items}) => {
