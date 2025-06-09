@@ -18,7 +18,7 @@ export const StyledButton = styled.button`
         background-color: #f6121d;
     }
 
-    &:focus-visible {
+    &:focus {
         outline: 2px solid white; /* Add visible focus for accessibility */
         outline-offset: 4px;
     }

@@ -1,13 +1,13 @@
-import "./searchBar.style.css"
 import React from "react"
-import { SearchBarProps } from "../types/searchBar"
+import { SearchBarProps } from "./types"
+import { SearchBarWrapper, Label, Input } from "./style"
 
 export const SearchBar: React.FC<SearchBarProps> = ({searchTerm, setSearchTerm}) => {
 
     return (
-        <div className="search-bar">
-            <label htmlFor="search">Search movie:</label>
-            <input 
+        <SearchBarWrapper>
+            <Label htmlFor="search">Search movie:</Label>
+            <Input 
                 type="text"
                 id="search"
                 placeholder="Type to search..."
@@ -16,6 +16,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({searchTerm, setSearchTerm})
                     setSearchTerm(event.target.value)
                 }}
             />
-        </div>
+        </SearchBarWrapper>
     )
 }
