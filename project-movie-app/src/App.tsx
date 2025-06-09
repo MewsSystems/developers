@@ -2,7 +2,7 @@ import { Header } from './Header'
 import { SearchBar } from "./Content/SearchBar"
 import { CardContainer } from './Content/CardContainer'
 import { Button } from './Button/Button'
-import { Footer } from './Footer/Footer'
+import { Footer } from "./Footer"
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { getPopularMovies } from './API/getPopularMovies'
