@@ -1,0 +1,65 @@
+{
+	"name": "@repo/ui",
+	"version": "0.1.0",
+	"private": true,
+	"sideEffects": [
+		"**/*.css"
+	],
+	"files": [
+		"dist"
+	],
+	"exports": {
+		"./components/atoms/Input": "./src/components/atoms/Input/index.ts",
+		"./components/atoms/Loader": "./src/components/atoms/Loader/index.ts",
+		"./components/atoms/Text": "./src/components/atoms/Text/index.ts",
+		"./components/atoms/Title": "./src/components/atoms/Title/index.ts",
+		"./components/layouts/Container": "./src/components/layouts/Container/index.ts",
+		"./components/molecules/Alert": "./src/components/molecules/Alert/index.ts",
+		"./components/molecules/Field": "./src/components/molecules/Field/index.ts",
+		"./components/organisms/DataGrid": "./src/components/organisms/DataGrid/index.ts",
+		"./components/organisms/Form": "./src/components/organisms/Form/index.ts",
+		"./components/organisms/Header": "./src/components/organisms/Header/index.ts",
+		"./styles.css": "./dist/index.css"
+	},
+	"scripts": {
+		"browsers": "pnpm exec playwright install",
+		"build": "npx @tailwindcss/cli -i ./src/styles.css -o ./dist/index.css",
+		"check-types": "tsc --noEmit",
+		"dev": "npx @tailwindcss/cli -i ./src/styles.css -o ./dist/index.css --watch",
+		"lint:css": "stylelint src/*.css",
+		"lint:js": "eslint src --max-warnings 0",
+		"show-report": "pnpm exec playwright show-report playwright/report",
+		"test": "bash scripts/test.sh"
+	},
+	"dependencies": {
+		"@repo/assets": "workspace:*",
+		"ag-grid-community": "^33.3.0",
+		"ag-grid-react": "^33.3.0",
+		"next": "^15.3.2",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-hook-form": "^7.56.4",
+		"tailwind-merge": "^3.3.0"
+	},
+	"devDependencies": {
+		"@playwright/experimental-ct-react": "^1.52.0",
+		"@repo/eslint-config": "workspace:*",
+		"@repo/stylelint-config": "workspace:*",
+		"@repo/tailwind-config": "workspace:*",
+		"@repo/testing": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@storybook/react": "^8.6.14",
+		"@tailwindcss/cli": "^4.1.7",
+		"@tailwindcss/postcss": "^4.1.7",
+		"@types/node": "^22.15.19",
+		"@types/react": "^19.1.4",
+		"@types/react-dom": "^19.1.5",
+		"dotenv": "^16.5.0",
+		"postcss": "^8.5.3",
+		"stylelint": "^16.19.1",
+		"stylelint-config-standard": "^38.0.0",
+		"stylelint-order": "^7.0.0",
+		"tailwindcss": "^4.1.7",
+		"typescript": "^5.8.3"
+	}
+}

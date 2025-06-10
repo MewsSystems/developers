@@ -1,0 +1,21 @@
+{
+	"extends": "@repo/typescript-config/react-library.json",
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"baseUrl": ".",
+		"paths": {
+			"@ui/*": [
+				"src/*"
+			],
+		}
+	},
+	"include": [
+		"."
+	],
+	"exclude": [
+		"build",
+		"dist",
+		"node_modules"
+	]
+}

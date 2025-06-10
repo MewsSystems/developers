@@ -1,0 +1,180 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/Typography.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+<Meta
+	title="Design tokens/Typography"
+	parameters={{ status: { type: 'draft' } }}
+/>
+
+# Typography
+
+## Font family
+
+Utilities for controlling the font family. Accessed via the class `font-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Primary</td>
+			<td className="font-primary">Inter, sans-serif</td>
+		</tr>
+	</tbody>
+</table>
+
+## Font size
+
+Utilities for controlling the font size. Accessed via the class `text-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/3">Key</th>
+			<th className="w-1/3">Max value (Scale 1.333)</th>
+			<th className="w-1/3">Min value (Scale 1.2)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>xs</td>
+			<td className="leading-none text-[12.38px]">12.38px</td>
+			<td className="leading-none text-[12.50px]">12.50px</td>
+		</tr>
+		<tr>
+			<td>sm</td>
+			<td className="leading-none text-[16.50px]">16.50px</td>
+			<td className="leading-none text-[15px]">15px</td>
+		</tr>
+		<tr>
+			<td>md</td>
+			<td className="leading-none text-[22px]">22px</td>
+			<td className="leading-none text-[18px]">18px</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td className="leading-none text-[29.33px]">29.33px</td>
+			<td className="leading-none text-[21.60px]">21.60px</td>
+		</tr>
+		<tr>
+			<td>xl</td>
+			<td className="leading-none text-[39.09px]">39.09px</td>
+			<td className="leading-none text-[25.92px]">25.92px</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td className="leading-none text-[52.11px]">52.11px</td>
+			<td className="leading-none text-[31.10px]">31.10px</td>
+		</tr>
+		<tr>
+			<td>3xl</td>
+			<td className="leading-none text-[69.46px]">69.46px</td>
+			<td className="leading-none text-[37.32px]">37.32px</td>
+		</tr>
+		<tr>
+			<td>4xl</td>
+			<td className="leading-none text-[92.59px]">92.59px</td>
+			<td className="leading-none text-[44.79px]">44.79px</td>
+		</tr>
+		<tr>
+			<td>5xl</td>
+			<td className="leading-none text-[123.43px]">123.43px</td>
+			<td className="leading-none text-[53.75px]">53.75px</td>
+		</tr>
+	</tbody>
+</table>
+
+<strong>NB:</strong> See <a href="https://utopia.fyi/type/calculator/" rel="external noopener noreferrer" target="_blank" title="Visit https://typescale.com">Utopia</a>
+by James Gilyead and Trys Mudford for more information.
+
+## Font weight
+
+Utilities for controlling the font weight. Accessed via the class `font-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>thin</td>
+			<td className="font-thin">100</td>
+		</tr>
+		<tr>
+			<td>extralight</td>
+			<td className="font-extralight">200</td>
+		</tr>
+		<tr>
+			<td>light</td>
+			<td className="font-light">300</td>
+		</tr>
+		<tr>
+			<td>normal</td>
+			<td className="font-normal">400</td>
+		</tr>
+		<tr>
+			<td>medium</td>
+			<td className="font-medium">500</td>
+		</tr>
+		<tr>
+			<td>semibold</td>
+			<td className="font-semibold">600</td>
+		</tr>
+		<tr>
+			<td>bold</td>
+			<td className="font-bold">700</td>
+		</tr>
+		<tr>
+			<td>extrabold</td>
+			<td className="font-extrabold">800</td>
+		</tr>
+		<tr>
+			<td>black</td>
+			<td className="font-black">900</td>
+		</tr>
+	</tbody>
+</table>
+
+## Leading
+
+Utilities for controlling the leading. Accessed via the class `leading-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>none</td>
+			<td className="leading-none">1</td>
+		</tr>
+		<tr>
+			<td>tight</td>
+			<td className="leading-tight">1.125</td>
+		</tr>
+		<tr>
+			<td>snug</td>
+			<td className="leading-snug">1.25</td>
+		</tr>
+		<tr>
+			<td>normal</td>
+			<td className="leading-normal">1.5</td>
+		</tr>
+	</tbody>
+</table>

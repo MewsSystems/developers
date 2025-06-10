@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import '@repo/tailwind-config/theme.css';
+
+@layer components {
+	.panel {
+		@apply p-md rounded-xl bg-white;
+	}
+}

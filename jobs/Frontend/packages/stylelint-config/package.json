@@ -1,0 +1,14 @@
+{
+	"name": "@repo/stylelint-config",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		"./base": "./base.js"
+	},
+	"devDependencies": {
+		"stylelint": "^16.19.1",
+		"stylelint-config-standard": "^38.0.0",
+		"stylelint-order": "^7.0.0"
+	}
+}

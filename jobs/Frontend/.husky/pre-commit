@@ -1,0 +1,10 @@
+#!/bin/sh
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "master" ]; then
+  echo "Commits to the master branch are not allowed."
+  exit 1
+fi
+
+npx lint-staged --config .lintstagedrc.js

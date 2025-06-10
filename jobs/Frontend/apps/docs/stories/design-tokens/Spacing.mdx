@@ -1,0 +1,343 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/Spacing.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+import Bar from '../../components/Bar';
+
+<Meta
+	title="Design tokens/Spacing"
+	parameters={{ status: { type: 'draft' } }}
+/>
+
+# Spacing
+
+## Gap
+
+Utilities for controlling gutters between flexbox and grid items. Accessed via the class `gap{-x|-y}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/3">Key</th>
+			<th className="w-1/3">Max value</th>
+			<th className="w-1/3">Min value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>2xs</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xs</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>sm</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>md</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xl</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td>
+				<Bar width={256} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<strong>NB:</strong> See <a href="https://utopia.fyi/space/calculator/" rel="external noopener noreferrer" target="_blank" title="Visit https://typescale.com">Utopia</a>
+by James Gilyead and Trys Mudford for more information.
+
+## Margin
+
+Utilities for controlling margin. Accessed via the class `m{t|r|b|l}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/3">Key</th>
+			<th className="w-1/3">Max value</th>
+			<th className="w-1/3">Min value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>2xs</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xs</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>sm</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>md</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xl</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td>
+				<Bar width={256} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<strong>NB:</strong> See <a href="https://utopia.fyi/space/calculator/" rel="external noopener noreferrer" target="_blank" title="Visit https://typescale.com">Utopia</a>
+by James Gilyead and Trys Mudford for more information.
+
+## Padding
+
+Utilities for controlling padding. Accessed via the class `p{t|r|b|l}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>2xs</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xs</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>sm</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>md</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xl</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td>
+				<Bar width={256} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<strong>NB:</strong> See <a href="https://utopia.fyi/space/calculator/" rel="external noopener noreferrer" target="_blank" title="Visit https://typescale.com">Utopia</a>
+by James Gilyead and Trys Mudford for more information.
+
+## Space between
+
+Utilities for controlling the space between children. Accessed via the class `space-{x|y}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>2xs</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xs</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={4} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>sm</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={8} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>md</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={16} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={32} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>xl</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={64} variant="spacing" />
+			</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td>
+				<Bar width={256} variant="spacing" />
+			</td>
+			<td>
+				<Bar width={128} variant="spacing" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<strong>NB:</strong> See <a href="https://utopia.fyi/space/calculator/" rel="external noopener noreferrer" target="_blank" title="Visit https://typescale.com">Utopia</a>
+by James Gilyead and Trys Mudford for more information.

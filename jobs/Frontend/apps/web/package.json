@@ -1,0 +1,47 @@
+{
+	"name": "web",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build": "next build",
+		"check-types": "tsc --noEmit",
+		"dev": "next dev --port 3000",
+		"lint:css": "stylelint app/*.css",
+		"lint:js": "next lint --max-warnings 0",
+		"start": "next start",
+		"show-report": "pnpm exec playwright show-report playwright/report",
+		"test": "pnpm exec playwright test -c playwright.config.ts",
+		"test:ui-mode": "pnpm exec playwright test -c playwright.config.ts --ui"
+	},
+	"dependencies": {
+		"@hookform/resolvers": "^5.0.1",
+		"@repo/ui": "workspace:*",
+		"@tanstack/react-query": "^5.76.1",
+		"next": "^15.3.2",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-hook-form": "^7.56.4",
+		"tailwind-merge": "^3.3.0",
+		"yup": "^1.6.1"
+	},
+	"devDependencies": {
+		"@next/eslint-plugin-next": "^15.3.2",
+		"@playwright/test": "^1.52.0",
+		"@repo/eslint-config": "workspace:*",
+		"@repo/stylelint-config": "workspace:*",
+		"@repo/tailwind-config": "workspace:*",
+		"@repo/testing": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@tailwindcss/postcss": "^4.1.7",
+		"@tanstack/react-query-devtools": "^5.76.1",
+		"@types/node": "^22.15.19",
+		"@types/react": "^19.1.4",
+		"@types/react-dom": "^19.1.5",
+		"dotenv": "^16.5.0",
+		"postcss": "^8.5.3",
+		"stylelint-config-standard": "^38.0.0",
+		"stylelint-order": "^7.0.0",
+		"tailwindcss": "^4.1.7",
+		"typescript": "^5.8.3"
+	}
+}

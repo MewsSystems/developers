@@ -1,0 +1,42 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/HighLightedText.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+import { twJoin } from 'tailwind-merge';
+
+<Meta title="Design tokens/Highlighted text" parameters={{ status: { type: 'draft' } }} />
+
+# Highlighted text
+
+Styling for active text selection.
+
+<div
+	className={twJoin(
+		'gap-x-md',
+		'grid',
+		'grid-cols-2',
+		'items-center'
+	)}
+>
+	<div className="bg-primary-500">
+		<span className="text-black">Active text selection</span>
+	</div>
+	<table className="w-full">
+		<thead>
+			<tr>
+				<th className="w-1/2">selection:bg-</th>
+				<th className="w-1/2">selection:text-</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>primary-500</td>
+				<td>black</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

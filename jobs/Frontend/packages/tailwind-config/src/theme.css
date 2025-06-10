@@ -1,0 +1,171 @@
+@theme {
+	--animate-stretch: stretch 1.2s infinite ease-in-out;
+
+	/* stylelint-disable custom-property-empty-line-before */
+	--breakpoint-*: initial;
+	--breakpoint-xs: 23.438rem;
+	--breakpoint-sm: 24.375rem;
+	--breakpoint-md: 26.75rem;
+	--breakpoint-lg: 48rem;
+	--breakpoint-xl: 64rem;
+	--breakpoint-2xl: 80rem;
+
+	--color-*: initial;
+	--color-primary: #ff5a65;
+	--color-secondary: #172135;
+	--color-black: #000000;
+	--color-white: #ffffff;
+	--color-grey-50: #fafafa;
+	--color-grey-100: #f5f5f5;
+	--color-grey-200: #e5e5e5;
+	--color-grey-300: #d4d4d4;
+	--color-grey-400: #a3a3a3;
+	--color-grey-500: #737373;
+	--color-grey-600: #525252;
+	--color-grey-700: #404040;
+	--color-grey-800: #262626;
+	--color-grey-900: #171717;
+	--color-grey-950: #0a0a0a;
+	--color-error-50: #fef2f2;
+	--color-error-500: #ef4444;
+	--color-error-950: #450a0a;
+	--color-info-50: #eff6ff;
+	--color-info-500: #3b82f6;
+	--color-info-950: #172554;
+	--color-success-50: #f0fdf4;
+	--color-success-500: #22c55e;
+	--color-success-950: #052e16;
+	--color-warning-50: #fffbeb;
+	--color-warning-500: #f59e0b;
+	--color-warning-950: #451a03;
+
+	--font-*: initial;
+	--font-primary: 'Inter', sans-serif;
+
+	--grid-template-columns-1-11: calc((1 / 12) * 100%) calc((11 / 12) * 100%);
+	--grid-template-columns-2-10: calc((2 / 12) * 100%) calc((10 / 12) * 100%);
+	--grid-template-columns-3-9: calc((3 / 12) * 100%) calc((9 / 12) * 100%);
+	--grid-template-columns-4-8: calc((4 / 12) * 100%) calc((8 / 12) * 100%);
+	--grid-template-columns-5-7: calc((5 / 12) * 100%) calc((7 / 12) * 100%);
+	--grid-template-columns-7-5: calc((7 / 12) * 100%) calc((5 / 12) * 100%);
+	--grid-template-columns-8-4: calc((8 / 12) * 100%) calc((4 / 12) * 100%);
+	--grid-template-columns-9-3: calc((9 / 12) * 100%) calc((3 / 12) * 100%);
+	--grid-template-columns-10-2: calc((10 / 12) * 100%) calc((2 / 12) * 100%);
+	--grid-template-columns-11-1: calc((11 / 12) * 100%) calc((1 / 12) * 100%);
+
+	--leading-*: initial;
+	--leading-none: 1;
+	--leading-tight: 1.125;
+	--leading-snug: 1.25;
+	--leading-normal: 1.5;
+
+	--size-xs: 1rem;
+	--size-sm: clamp(1rem, 0.7928rem + 0.884vw, 1.5rem);
+	--size-md: clamp(1.5rem, 1.2928rem + 0.884vw, 2rem);
+	--size-lg: clamp(2rem, 1.5856rem + 1.768vw, 3rem);
+	--size-xl: clamp(3rem, 2.5856rem + 1.768vw, 4rem);
+
+	--spacing-2xs: 0.25rem;
+	--spacing-xs: clamp(0.25rem, 0.1464rem + 0.442vw, 0.5rem);
+	--spacing-sm: clamp(0.5rem, 0.2928rem + 0.884vw, 1rem);
+	--spacing-md: clamp(1rem, 0.5856rem + 1.768vw, 2rem);
+	--spacing-lg: clamp(2rem, 1.1713rem + 3.5359vw, 4rem);
+	--spacing-xl: clamp(4rem, 2.3425rem + 7.0718vw, 8rem);
+	--spacing-2xl: clamp(8rem, 4.6851rem + 14.1436vw, 16rem);
+
+	--text-*: initial;
+	--text-xs: clamp(0.7738rem, 0.7706rem + 0.0133vw, 0.7813rem);
+	--text-xs--line-height: var(--leading-normal);
+	--text-sm: clamp(0.9375rem, 0.8987rem + 0.1657vw, 1.0313rem);
+	--text-sm--line-height: var(--leading-normal);
+	--text-md: clamp(1.125rem, 1.0214rem + 0.442vw, 1.375rem);
+	--text-md--line-height: var(--leading-normal);
+	--text-lg: clamp(1.35rem, 1.1498rem + 0.8541vw, 1.8331rem);
+	--text-lg--line-height: var(--leading-normal);
+	--text-xl: clamp(1.62rem, 1.2789rem + 1.4552vw, 2.4431rem);
+	--text-xl--line-height: var(--leading-snug);
+	--text-2xl: clamp(1.9438rem, 1.4255rem + 2.211vw, 3.1944rem);
+	--text-2xl--line-height: var(--leading-snug);
+	--text-3xl: clamp(2.3325rem, 1.5001rem + 3.5514vw, 4.3412rem);
+	--text-3xl--line-height: var(--leading-tight);
+	--text-4xl: clamp(2.7994rem, 1.5615rem + 5.2818vw, 5.7869rem);
+	--text-4xl--line-height: var(--leading-tight);
+	--text-5xl: clamp(3.3594rem, 1.5548rem + 7.6994vw, 7.7144rem);
+	--text-5xl--line-height: var(--leading-tight);
+
+	@keyframes stretch {
+		0%,
+		40%,
+		100% {
+			transform: scaleY(0.45);
+		}
+
+		20% {
+			transform: scaleY(1);
+		}
+	}
+	/* stylelint-enable custom-property-empty-line-before */
+}
+
+@layer components {
+	/* :root {} */
+
+	/* .dark {} */
+
+	body {
+		scrollbar-color: var(--color-white) var(--color-black);
+	}
+
+	summary::-webkit-details-marker,
+	summary::marker {
+		content: '';
+		display: none;
+	}
+
+	:disabled {
+		opacity: 0.25;
+		pointer-events: none;
+	}
+
+	.link-underline {
+		text-decoration-line: underline;
+		text-decoration-thickness: 0.125rem;
+		text-underline-offset: 0.5rem;
+
+		&:hover {
+			text-decoration-line: none;
+		}
+	}
+
+	.link-no-underline {
+		text-decoration-line: none;
+		text-decoration-thickness: 0.125rem;
+		text-underline-offset: 0.5rem;
+
+		&:hover {
+			text-decoration-line: underline;
+		}
+	}
+}
+
+@layer utilities {
+	.reverse > *:first-child {
+		order: 2;
+	}
+
+	.reverse > *:last-child {
+		order: 1;
+	}
+}
+
+@custom-variant before-and-after {
+	&::after,
+	&::before {
+		@slot;
+	}
+}
+
+@utility animation-delay-* {
+	animation-delay: --value([ *]);
+	animation-delay: calc(--value(integer) * 1ms);
+}

@@ -1,0 +1,28 @@
+{
+	"name": "@repo/tailwind-config",
+	"version": "0.1.0",
+	"private": true,
+	"sideEffects": [
+		"**/*.css"
+	],
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": "./tailwind.config.ts",
+		"./theme.css": "./src/theme.css"
+	},
+	"scripts": {
+		"lint:css": "stylelint src/*.css"
+	},
+	"devDependencies": {
+		"@repo/stylelint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@tailwindcss/postcss": "^4.1.7",
+		"postcss": "^8.5.3",
+		"stylelint-config-standard": "^38.0.0",
+		"stylelint-order": "^7.0.0",
+		"tailwindcss": "^4.1.7",
+		"typescript": "^5.8.3"
+	}
+}

@@ -1,0 +1,33 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/components/Introduction.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+import Contents from '../../components/Contents'
+
+<Meta title="Components/Introduction" parameters={{ status: { type: 'draft' } }} />
+
+# Components
+
+### Contents
+
+<Contents
+	items={[
+		{
+			label: 'Atoms',
+			path: '/?path=/docs/components-atoms-introduction--docs',
+		},
+		{
+			label: 'Molecules',
+			path: '/?path=/docs/components-molecules-introduction--docs',
+		},
+		{
+			label: 'Organisms',
+			path: '/?path=/docs/components-organisms-introduction--docs',
+		},
+	]}
+/>
