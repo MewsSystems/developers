@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { getFormattedMovieID } from "../API/getFormattedMovieID"
 import { MovieDetailInfo } from "../types/movieDetail"
-import { MovieDetailContent } from "./MovieDetailContent.tsx"
+import { MovieDetailContent } from "./MovieDetailContent"
 import { Header } from "../Header"
 import { Footer } from "../Footer"
 
