@@ -1,0 +1,107 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/Borders.stories.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+import Bar from '../../components/Bar';
+
+<Meta
+	title="Design tokens/Borders"
+	parameters={{ status: { type: 'draft' } }}
+/>
+
+# Borders
+
+# Border radius
+
+Utilities for controlling border radius. Accessed via the class `rounded-{t|r|b|l}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>none</td>
+			<td>
+				<Bar label="0" size="none" variant="borderRadius" />
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<Bar label="4px" variant="borderRadius" />
+			</td>
+		</tr>
+		<tr>
+			<td>lg</td>
+			<td>
+				<Bar label="8px" size="lg" variant="borderRadius" />
+			</td>
+		</tr>
+		<tr>
+			<td>2xl</td>
+			<td>
+				<Bar label="16px" size="2xl" variant="borderRadius" />
+			</td>
+		</tr>
+		<tr>
+			<td>full</td>
+			<td>
+				<Bar label="9999px" size="full" variant="borderRadius" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+## Border width
+
+Utilities for controlling border width. Accessed via the class `border-{t|r|b|l}-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>0</td>
+			<td>
+				<Bar height={0} variant="borderWidth" />
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<Bar height={1} variant="borderWidth" />
+			</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>
+				<Bar height={2} variant="borderWidth" />
+			</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>
+				<Bar height={4} variant="borderWidth" />
+			</td>
+		</tr>
+		<tr>
+			<td>8</td>
+			<td>
+				<Bar height={8} variant="borderWidth" />
+			</td>
+		</tr>
+	</tbody>
+</table>

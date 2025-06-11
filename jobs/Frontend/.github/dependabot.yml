@@ -1,0 +1,8 @@
+version: 2
+updates:
+
+  # Maintain dependencies for pnpm
+  - package-ecosystem: 'pnpm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'

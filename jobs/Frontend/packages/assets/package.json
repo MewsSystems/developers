@@ -1,0 +1,23 @@
+{
+	"name": "@repo/assets",
+	"version": "0.1.0",
+	"private": true,
+	"sideEffects": false,
+	"files": [
+		"dist"
+	],
+	"exports": {
+		"./icons": "./dist/icons/rounded/index.ts"
+	},
+	"scripts": {
+		"build": "npx @svgr/cli -- src",
+		"check-types": "tsc --noEmit",
+		"dev": "npx @svgr/cli -- src"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"@svgr/cli": "^8.1.0",
+		"@types/react": "^19.1.4",
+		"typescript": "^5.8.3"
+	}
+}

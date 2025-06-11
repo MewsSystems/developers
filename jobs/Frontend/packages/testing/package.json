@@ -1,0 +1,30 @@
+{
+	"name": "@repo/testing",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		"./components": "./src/components/index.ts",
+		"./components/config": "./src/components/playwright-ct.config.ts",
+		"./e2e": "./src/e2e/index.ts",
+		"./e2e/config": "./src/e2e/playwright.config.mjs",
+		"./lib/constants": "./src/lib/constants.ts"
+	},
+	"scripts": {
+		"check-types": "tsc --noEmit",
+		"lint:js": "eslint src --max-warnings 0"
+	},
+	"dependencies": {
+		"react": "19.1.0"
+	},
+	"devDependencies": {
+		"@playwright/experimental-ct-react": "^1.52.0",
+		"@playwright/test": "^1.52.0",
+		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "^22.15.19",
+		"dotenv": "^16.5.0",
+		"typescript": "^5.8.3"
+	}
+}

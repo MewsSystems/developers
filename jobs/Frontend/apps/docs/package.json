@@ -1,0 +1,50 @@
+{
+	"name": "docs",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "storybook dev -p 6006 --ci",
+		"build": "storybook build",
+		"lint:css": "stylelint stories/*.css",
+		"lint:js": "eslint . --max-warnings 0",
+		"serve": "serve storybook-static",
+		"tunnel": "ngrok start storybook"
+	},
+	"dependencies": {
+		"@repo/assets": "workspace:*",
+		"@repo/ui": "workspace:*",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"tailwind-merge": "^3.3.0"
+	},
+	"devDependencies": {
+		"@repo/eslint-config": "workspace:*",
+		"@repo/stylelint-config": "workspace:*",
+		"@repo/tailwind-config": "workspace:*",
+		"@repo/testing": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@etchteam/storybook-addon-status": "^5.0.0",
+		"@storybook/addon-a11y": "^8.6.14",
+		"@storybook/addon-essentials": "^8.6.14",
+		"@storybook/addon-interactions": "^8.6.14",
+		"@storybook/addon-links": "^8.6.14",
+		"@storybook/addon-themes": "^8.6.14",
+		"@storybook/blocks": "^8.6.14",
+		"@storybook/nextjs": "^8.6.14",
+		"@storybook/react": "^8.6.14",
+		"@tailwindcss/postcss": "^4.1.7",
+		"@types/node": "^22.15.19",
+		"@types/react": "^19.1.4",
+		"eslint": "^9.27.0",
+		"postcss": "^8.5.3",
+		"serve": "^14.2.4",
+		"storybook": "^8.6.14",
+		"storybook-addon-pseudo-states": "^4.0.4",
+		"storybook-mobile-addon": "3.1.1",
+		"stylelint-config-standard": "^38.0.0",
+		"stylelint-order": "^7.0.0",
+		"tailwindcss": "^4.1.7",
+		"typescript": "^5.8.3"
+	}
+}

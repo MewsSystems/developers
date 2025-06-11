@@ -1,0 +1,76 @@
+name: Code Quality
+
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: read
+
+    outputs:
+      # apps
+      web: ${{ steps.changes.outputs.web }}
+      # packages
+      ui: ${{ steps.changes.outputs.ui }}
+
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'apps/web/**'
+            ui:
+              - 'packages/ui/**'
+
+  # apps
+  web:
+    needs: [changes, ui]
+
+    if: ${{ needs.changes.outputs.web == 'true' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: './.github/shared/setup'
+
+      - name: Lint CSS
+        run: cd apps/web && pnpm run lint:css
+
+      - name: Lint JS
+        run: cd apps/web && pnpm run lint:js
+
+  # packages
+  ui:
+    needs: changes
+
+    if: ${{ needs.changes.outputs.ui == 'true' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: './.github/shared/setup'
+
+      - name: Lint CSS
+        run: cd packages/ui && pnpm run lint:css
+
+      - name: Lint JS
+        run: cd packages/ui && pnpm run lint:js
+
+      - name: Test components
+        run: cd packages/ui && pnpm exec playwright install --with-deps
+      - run: cd packages/ui && pnpm exec playwright test -c playwright.config.ts
+        env:
+          CI: ${{ secrets.CI }}

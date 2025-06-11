@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import '@repo/tailwind-config/theme.css';
+
+@theme {
+	--color-strapless-primary: #00ffcc;
+	--color-strapless-secondary: #5c598a;
+
+	--color-storybook-blue: #029cfd;
+	--color-storybook-grey: #26557326;
+	--color-storybook-pink: #ff4785;
+}

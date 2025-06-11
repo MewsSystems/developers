@@ -1,0 +1,111 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/Statuses.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+ |
+ | Some description...
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Statuses" parameters={{ status: { type: 'draft' } }} />
+
+<style>
+	{`
+		.badge {
+			align-self: center;
+			border-radius: 0.25em;
+			color: #000000;
+			font-size: 11px;
+			font-weight: 700;
+			line-height: 20px;
+			padding: 0 0.5em;
+			text-decoration: none;
+			text-transform: uppercase;
+			user-select: none;
+		}
+
+		.badge-b {
+			background-color: #1ea7fd;
+		}
+
+		.badge-g {
+			background-color: #19CF86;
+		}
+
+		.badge-r {
+			background-color: #ED734A;
+		}
+
+		.badge-w {
+			background-color: #E81C4F;
+		}
+	`}
+</style>
+
+# Statuses
+
+Components and Docs have been given statuses reflecting their state of completion. These statuses are:
+
+## Components
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Badge</th>
+			<th className="w-1/2">Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<span className="badge badge-b">backlog</span>
+			</td>
+			<td>Backlog</td>
+		</tr>
+		<tr>
+			<td>
+				<span className="badge badge-w">WIP</span>
+			</td>
+			<td>Work in progress</td>
+		</tr>
+		<tr>
+			<td>
+				<span className="badge badge-r">RC</span>
+			</td>
+			<td>Release candidate</td>
+		</tr>
+		<tr>
+			<td>
+				<span className="badge badge-g">GA</span>
+			</td>
+			<td>General access</td>
+		</tr>
+	</tbody>
+</table>
+
+## Docs
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Badge</th>
+			<th className="w-1/2">Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<span className="badge badge-w">Draft</span>
+			</td>
+			<td>Draft</td>
+		</tr>
+		<tr>
+			<td>
+				<span className="badge badge-g">Published</span>
+			</td>
+			<td>Published</td>
+		</tr>
+	</tbody>
+</table>

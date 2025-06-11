@@ -1,0 +1,44 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/Introduction.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+ |
+ | Some description...
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" parameters={{ status: { type: 'draft' } }} />
+
+<style>
+	{`
+		.sbdocs-content {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.sbdocs-content div {
+			margin-top: auto !important;
+		}
+	`}
+</style>
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th>Tokens</th>
+			<th>Components</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<a href="/?path=/docs/design-tokens-colours--docs">Browse tokens</a>
+			</td>
+			<td>
+				<a href="/?path=/docs/components-atoms-introduction--docs">Browse components</a>
+			</td>
+		</tr>
+	</tbody>
+</table>

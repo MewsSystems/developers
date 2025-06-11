@@ -1,0 +1,151 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/Layout.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { Meta } from '@storybook/blocks';
+
+import Grid from '../../components/Grid';
+
+<Meta title="Design tokens/Layout" parameters={{ status: { type: 'draft' } }} />
+
+## Display
+
+Utilities for controlling the display and improving accessibility with screen
+readers.
+
+<table className="w-full">
+	<thead>
+	<tr>
+		<th className="w-1/2">Class</th>
+		<th className="w-1/2">Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>sr-only</td>
+		<td>Hide elements visually but not from screen readers</td>
+	</tr>
+	<tr>
+		<td>not-sr-only</td>
+		<td>Make elements visible to both users and screen readers</td>
+	</tr>
+	</tbody>
+</table>
+
+## Grid
+
+Utilities for specifying column width in a 2 column grid layout. Accessed via
+the class `grid-cols-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-2/12">Key</th>
+			<th className="w-10/12">Output</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1-11</td>
+			<td>
+				<Grid layout="grid-cols-1-11" />
+			</td>
+		</tr>
+		<tr>
+			<td>2-10</td>
+			<td>
+				<Grid layout="grid-cols-2-10" />
+			</td>
+		</tr>
+		<tr>
+			<td>3-9</td>
+			<td>
+				<Grid layout="grid-cols-3-9" />
+			</td>
+		</tr>
+		<tr>
+			<td>4-8</td>
+			<td>
+				<Grid layout="grid-cols-4-8" />
+			</td>
+		</tr>
+		<tr>
+			<td>5-7</td>
+			<td>
+				<Grid layout="grid-cols-5-7" />
+			</td>
+		</tr>
+		<tr>
+			<td>7-5</td>
+			<td>
+				<Grid layout="grid-cols-7-5" />
+			</td>
+		</tr>
+		<tr>
+			<td>8-4</td>
+			<td>
+				<Grid layout="grid-cols-8-4" />
+			</td>
+		</tr>
+		<tr>
+			<td>9-3</td>
+			<td>
+				<Grid layout="grid-cols-9-3" />
+			</td>
+		</tr>
+		<tr>
+			<td>10-2</td>
+			<td>
+				<Grid layout="grid-cols-10-2" />
+			</td>
+		</tr>
+		<tr>
+			<td>11-1</td>
+			<td>
+				<Grid layout="grid-cols-11-1" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+## Layers
+
+Utilities for controlling the stack order. Accessed via the class `z-{key}`.
+
+<table className="w-full">
+	<thead>
+		<tr>
+			<th className="w-1/2">Key</th>
+			<th className="w-1/2">Value</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>0</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td>10</td>
+			<td>10</td>
+		</tr>
+		<tr>
+			<td>20</td>
+			<td>20</td>
+		</tr>
+		<tr>
+			<td>30</td>
+			<td>30</td>
+		</tr>
+		<tr>
+			<td>40</td>
+			<td>40</td>
+		</tr>
+		<tr>
+			<td>50</td>
+			<td>50</td>
+		</tr>
+	</tbody>
+</table>

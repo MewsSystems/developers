@@ -1,0 +1,124 @@
+{/*
+ |-----------------------------------------------------------------------------
+ | stories/design-tokens/Colours.mdx
+ | v1.0.0
+ |-----------------------------------------------------------------------------
+*/}
+
+import { ColorItem, ColorPalette, Meta } from '@storybook/blocks';
+
+<Meta
+	title="Design tokens/Colours"
+	parameters={{ status: { type: 'draft' } }}
+/>
+
+# Colours
+
+Utilities for controlling colours. Accessed via the class
+`{bg|border|fill|text}-{name}-{id}`.
+
+## Brand colours
+
+These colours are defined in the brand guidelines. Primary colours are most
+frequently used across the UI and imparts a distinct identity strengthening
+brand awareness. Secondary colours highlight or complement the primary colour
+and should be used sparingly to make the UI elements stand out.
+
+<ColorPalette>
+	<ColorItem
+		subtitle=""
+		title="primary"
+		colors={{
+			'': '#ff5a65',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="secondary"
+		colors={{
+			'': '#172135',
+		}}
+	/>
+</ColorPalette>
+
+## Neutral colours
+
+These colours include shades of grey, all the way from white to black and are
+used for backgrounds and text, forming the majority of the UI.
+
+<ColorPalette>
+	<ColorItem
+		subtitle=""
+		title="black"
+		colors={{
+			'': '#000000',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="grey"
+		colors={{
+			50: '#fafafa',
+			100: '#f5f5f5',
+			200: '#e5e5e5',
+			300: '#d4d4d4',
+			400: '#a3a3a3',
+			500: '#737373',
+			600: '#525252',
+			700: '#404040',
+			800: '#262626',
+			900: '#171717',
+			950: '#0a0a0a',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="white"
+		colors={{
+			'': '#ffffff',
+		}}
+	/>
+</ColorPalette>
+
+## Semantic colours
+
+These colours communicate purpose and help users convey messages.
+
+<ColorPalette>
+	<ColorItem
+		subtitle=""
+		title="success"
+		colors={{
+			50: '#f0fdf4',
+			500: '#22c55e',
+			950: '#052e16',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="warning"
+		colors={{
+			50: '#fffbeb',
+			500: '#f59e0b',
+			950: '#451a03',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="error"
+		colors={{
+			50: '#fef2f2',
+			500: '#ef4444',
+			950: '#450a0a',
+		}}
+	/>
+	<ColorItem
+		subtitle=""
+		title="info"
+		colors={{
+			50: '#eff6ff',
+			500: '#3b82f6',
+			950: '#172554',
+		}}
+	/>
+</ColorPalette>

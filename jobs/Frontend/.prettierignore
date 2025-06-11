@@ -1,0 +1,19 @@
+#------------------------------------------------------------------------------
+# .prettierignore
+# v1.0.0
+#------------------------------------------------------------------------------
+#
+# See https://prettier.io/docs/en/ignore.html for more about ignoring files.
+
+.github
+.husky
+.idea
+.next
+.turbo
+.vscode
+.gitignore
+.npmrc
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+README.md
