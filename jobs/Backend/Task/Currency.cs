@@ -4,7 +4,7 @@
     {
         public Currency(string code)
         {
-            Code = code;
+            Code = code.ToUpperInvariant();
         }
 
         /// <summary>
