@@ -1,0 +1,41 @@
+{
+    "name": "front-patrick-alvarez",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "test": "jest",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@tanstack/react-query": "^5.64.2",
+        "clsx": "^2.1.1",
+        "next": "15.1.6",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "use-debounce": "^10.0.4"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3",
+        "@testing-library/dom": "^10.4.0",
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.2.0",
+        "@types/jest": "^29.5.14",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "15.1.6",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
+        "postcss": "^8",
+        "prettier": "^3.4.2",
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "tailwindcss": "^3.4.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5"
+    }
+}
