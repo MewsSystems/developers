@@ -1,4 +1,4 @@
-import { createSlug } from "../../utils/createSlug"
+import { createSlug } from "../../../utils/createSlug"
 import { CardLink, PosterImage } from "./style"
 import { MovieCard } from "./types"
 

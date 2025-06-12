@@ -1,6 +1,6 @@
 import { Header } from './Header'
-import { SearchBar } from "./Content/SearchBar/SearchBar"
-import { CardContainer } from './Content/CardContainer'
+import { SearchBar } from "./HomePage/HomepageContent/SearchBar/SearchBar"
+import { CardContainer } from './HomePage/HomepageContent/CardContainer'
 import { Button } from './Button'
 import { Footer } from "./Footer"
 import { useState } from 'react'
