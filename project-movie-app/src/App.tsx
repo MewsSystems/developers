@@ -4,7 +4,7 @@ import { getPopularMovies } from './API/getPopularMovies'
 import { getSearchedMovies } from './API/getSearchedMovies'
 import { MovieCard } from './types/movie'
 import { HomePage } from './HomePage'
-import { GlobalStyle } from './styles/global'
+import { GlobalStyle } from './styles/GlobalStyle'
 
 export const App = () => {
 

@@ -6,7 +6,8 @@ import { MovieDetailInfo } from "../types/movieDetail"
 import { MovieDetailContent } from "./MovieDetailContent"
 import { Header } from "../Header"
 import { Footer } from "../Footer"
-import { GlobalStyle } from "../styles/global"
+import { GlobalStyle } from "../styles/GlobalStyle"
+import { Main } from "../styles/Main"
 
 export const MovieDetailPage: React.FC = () => {
 
@@ -28,9 +29,9 @@ export const MovieDetailPage: React.FC = () => {
         <>
             <GlobalStyle/>
             <Header/>
-            <main>
+            <Main>
                 <MovieDetailContent movie={movie}/>
-            </main>
+            </Main>
             <Footer/>
         </>
     )

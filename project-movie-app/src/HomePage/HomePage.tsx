@@ -4,7 +4,8 @@ import { CardContainer } from "./HomepageContent/CardContainer"
 import { Button } from "../Button"
 import { Footer } from "../Footer"
 import { HomePageProps } from "./types"
-import { ButtonWrapper, Heading, Main } from "./style"
+import { ButtonWrapper, Heading} from "./style"
+import { Main } from "../styles/Main"
 
 export const HomePage: React.FC<HomePageProps> = ({searchTerm, setSearchTerm, page, items, handleLoadMore}) => {
 
