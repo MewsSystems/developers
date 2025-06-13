@@ -1,13 +1,9 @@
-import { Header } from './Header'
-import { SearchBar } from "./HomePage/HomepageContent/SearchBar/SearchBar"
-import { CardContainer } from './HomePage/HomepageContent/CardContainer'
-import { Button } from './Button'
-import { Footer } from "./Footer"
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { getPopularMovies } from './API/getPopularMovies'
 import { getSearchedMovies } from './API/getSearchedMovies'
 import { MovieCard } from './types/movie'
+import { HomePage } from './HomePage'
 
 export const App = () => {
 
@@ -49,17 +45,6 @@ export const App = () => {
   }, [debouncedSearchTerm]);
 
   return (
-    <>
-      <Header/>
-        <main>
-          <div className="app__container">
-            <h2>Popular Movies</h2>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
-            <CardContainer page={page} items={items}/>
-            <Button label="Show more" handleLoadMore={handleLoadMore}/>
-          </div>
-        </main>
-      <Footer/>
-    </>
+      <HomePage searchTerm={searchTerm} setSearchTerm={setSearchTerm} page={page} items={items} handleLoadMore={handleLoadMore}/>
   )
 }
