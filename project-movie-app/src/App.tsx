@@ -4,6 +4,7 @@ import { getPopularMovies } from './API/getPopularMovies'
 import { getSearchedMovies } from './API/getSearchedMovies'
 import { MovieCard } from './types/movie'
 import { HomePage } from './HomePage'
+import { GlobalStyle } from './styles/global'
 
 export const App = () => {
 
@@ -45,6 +46,9 @@ export const App = () => {
   }, [debouncedSearchTerm]);
 
   return (
-      <HomePage searchTerm={searchTerm} setSearchTerm={setSearchTerm} page={page} items={items} handleLoadMore={handleLoadMore}/>
+      <>
+        <GlobalStyle/>
+        <HomePage searchTerm={searchTerm} setSearchTerm={setSearchTerm} page={page} items={items} handleLoadMore={handleLoadMore}/>
+      </>
   )
 }

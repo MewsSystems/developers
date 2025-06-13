@@ -6,6 +6,7 @@ import { MovieDetailInfo } from "../types/movieDetail"
 import { MovieDetailContent } from "./MovieDetailContent"
 import { Header } from "../Header"
 import { Footer } from "../Footer"
+import { GlobalStyle } from "../styles/global"
 
 export const MovieDetailPage: React.FC = () => {
 
@@ -25,6 +26,7 @@ export const MovieDetailPage: React.FC = () => {
 
     return (
         <>
+            <GlobalStyle/>
             <Header/>
             <main>
                 <MovieDetailContent movie={movie}/>
