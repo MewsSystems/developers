@@ -23,8 +23,6 @@ A modern movie search app built with React, TypeScript, and the TMDb API.
 - TMDb API
 - CSS for styling
 
----
-
 ## 🔐 Environment Variables
 
 To run the project locally:
