@@ -1,9 +1,10 @@
 import './App.css';
+import { RoutesConfig } from './routes';
 
 function App() {
   return (
     <>
-      <h1>Starting project...</h1>
+      <RoutesConfig />
     </>
   );
 }
