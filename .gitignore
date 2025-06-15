@@ -17,6 +17,7 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
+jobs/Backend/Task/.vs
 
 node_modules
 bower_components
