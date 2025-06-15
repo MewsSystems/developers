@@ -13,8 +13,9 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
@@ -30,9 +31,9 @@
     ]
   },
   "include": [
-    "src/",
-    "jest.setup.ts",
+    "src",
     "**/*.test.ts",
+    "**/*.tsx",
     "vite-env.d.ts"
   ]
 }

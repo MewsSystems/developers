@@ -4,7 +4,7 @@ import { DetailsMoviePage, ListMoviePage } from './pages';
 const RoutesConfig = () => (
   <Routes>
     <Route path="/" element={<ListMoviePage />} />
-    <Route path="/details/:id" element={<DetailsMoviePage />} />
+    <Route path="/details/:movieId" element={<DetailsMoviePage />} />
   </Routes>
 );
 

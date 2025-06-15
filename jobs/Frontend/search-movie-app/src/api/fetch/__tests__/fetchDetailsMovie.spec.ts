@@ -1,9 +1,11 @@
+import { vi, describe, it, expect } from 'vitest';
 import { fetchDetailsMovie } from '../fetchDetailsMovie';
 import { instance } from '../../instance';
 import type { MovieDetails } from '../../types';
-import { MOCKED_AXIOS_ERROR, MOCKED_DETAILS_MOVIE } from '../../constants';
+import { MOCKED_AXIOS_ERROR } from '../../constants';
+import { MOCKED_DETAILS_MOVIE } from '../../../constants/mocks';
 
-jest.mock('../../instance');
+vi.mock('../../instance');
 
 const mockedInstance = instance as jest.Mocked<typeof instance>;
 

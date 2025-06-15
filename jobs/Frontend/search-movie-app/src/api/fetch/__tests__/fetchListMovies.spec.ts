@@ -1,9 +1,10 @@
+import { vi, describe, it, expect } from 'vitest';
 import { fetchListMovies } from '../fetchListMovies';
 import { instance } from '../../instance';
 import type { ListMoviesParams, ListMoviesResponse } from '../../types';
 import { MOCKED_AXIOS_ERROR, MOCKED_LIST_MOVIES } from '../../constants';
 
-jest.mock('../../instance');
+vi.mock('../../instance');
 
 const mockedInstance = instance as jest.Mocked<typeof instance>;
 
