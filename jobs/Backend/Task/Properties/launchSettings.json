@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExchangeRateUpdater": {
+      "commandName": "Project",
+      "commandLineArgs": "EUR USD AAA"
+    }
+  }
+}
