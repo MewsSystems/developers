@@ -14,23 +14,30 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        //private static IEnumerable<Currency> currencies = new[]
+        //{
+        //    new Currency("USD"),
+        //    new Currency("EUR"),
+        //    new Currency("CZK"),
+        //    new Currency("JPY"),
+        //    new Currency("KES"),
+        //    new Currency("RUB"),
+        //    new Currency("THB"),
+        //    new Currency("TRY"),
+        //    new Currency("XYZ")
+        //};
 
         public static async Task Main(string[] args)
         {
+            var currencies = new List<Currency>();
+
             try
             {
+                foreach(var arg in args)
+                {
+                    currencies.Add(new Currency(arg));
+                }
+
                 var builder = new ConfigurationBuilder();
 
                 IConfiguration config;
