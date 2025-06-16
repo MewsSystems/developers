@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -17,6 +19,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@storybook/addon-a11y": "^8.6.14",
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@types/styled-components": "^5.1.34",
@@ -25,7 +30,14 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "recast": "^0.23.11",
+    "storybook": "^8.6.14",
     "typescript": "^5.8.2",
     "vite": "^6.2.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }
