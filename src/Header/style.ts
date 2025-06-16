@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import { colors } from "../tokens/colors";
 
 export const HeaderWrapper = styled.header`
-    background-color: #1c1c1c;
+    background-color: ${colors.bgSecondary};
     padding: 20px 20px 20px 30px;
     position: fixed;
     top: 0;

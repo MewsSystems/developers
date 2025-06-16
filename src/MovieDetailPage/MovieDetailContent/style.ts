@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router";
+import { fontSizes } from "../../tokens/fontSizes";
+import { colors } from "../../tokens/colors";
 
 export const Wrapper = styled.section`
     margin: 0 auto;
@@ -7,19 +9,19 @@ export const Wrapper = styled.section`
 `
 
 export const Title = styled.h1`
-    font-size: 30px;
+    font-size: ${fontSizes.lg};
     margin: 0 0 10px 0;
     text-align: left;
 
     @media screen and (min-width: 600px) {
         text-align: center;
-        font-size: 40px
+        font-size: ${fontSizes.xlg}
     }
 `
 
 export const Tagline = styled.p`
-    font-size: 19px;
-    color: #bcb8b8;
+    font-size: ${fontSizes.sm};
+    color: ${colors.tagline};
     margin: 0 0 25px 0;
     text-align: left;
 
@@ -73,7 +75,7 @@ export const MovieDetailItem = styled.p`
 `
 
 export const MovieLink = styled.a`
-    color: #e50914;
+    color: ${colors.btnPrimary};
     text-decoration: none;
     font-weight: bold;
 
@@ -86,12 +88,12 @@ export const MovieOverview = styled.section`
 `
 
 export const MovieOverviewHeader = styled.h2`
-    font-size: 25px;
+    font-size: ${fontSizes.md};
     margin-bottom: 20px;
     text-align: left;
 
     @media screen and (min-width: 600px) {
-        font-size: 30px;
+        font-size: ${fontSizes.lg};
         text-align: center;
     }
 `

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { colors } from "../tokens/colors";
 
 export const GlobalStyle = createGlobalStyle`
     html {
@@ -10,8 +11,8 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     body {
-        background-color: #000;
-        color: white;
+        background-color: ${colors.bgPrimary};
+        color: ${colors.textPrimary};
         font-family: 'Roboto', sans-serif;
         font-weight: 300;
         margin: 0;
