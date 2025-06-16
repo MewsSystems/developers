@@ -23,11 +23,15 @@ A modern movie search app built with React, TypeScript, and the TMDb API.
 - TMDb API
 - CSS for styling
 
+---
+
 ## 🔐 Environment Variables
 
-To run the project locally:
+To configure the environment variables for this app, follow these steps:
 
-- copy the provided `.env.example` file and rename it to `.env`:
+1. Copy the example environment file to create your own local `.env` file:
 `cp .env.example .env`
 
-- The file already includes the TMDb API key required for development
+2. Open the newly created `.env` file and replace the placeholder value for the TMDb API key with your own key.
+
+3. If you do not have a TMDb API key, you can request one by emailing me at `borka34@gmail.com`, and I will provide you with mine.
