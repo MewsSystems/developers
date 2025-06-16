@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { colors } from "../tokens/colors";
 
 export const StyledButton = styled.button`
     display: block;
-    background-color: #e50914;
+    background-color: ${colors.btnPrimary};
     color: white;
     border: none;
     padding: 12px 24px;
@@ -13,7 +14,7 @@ export const StyledButton = styled.button`
 
     &:hover {
         transform: scale(1.03);
-        background-color: #f6121d;
+        background-color: ${colors.btnSecondary};
     }
 
     &:focus-visible {
