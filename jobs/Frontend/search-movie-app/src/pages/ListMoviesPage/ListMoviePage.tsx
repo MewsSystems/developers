@@ -1,23 +1,42 @@
 import { useNavigate } from 'react-router';
 import { useGetListMovies } from '../../hooks';
+import { CardMovie, SearchMovie, CardSkeleton, WrapperListMovies } from './components';
+import { listMoviesAdapter } from '../../adapters/listMoviesAdapter';
+import { Button, Wrapper } from '../../components';
+import { useInputSearchMovie } from '../../store/inputSearchMovieStore';
 
 const ListMoviePage = () => {
   const navigate = useNavigate();
-  const { data: listMovies, isLoading } = useGetListMovies({ query: 'Fast', page: 2 });
+  const inputSearchMovie = useInputSearchMovie(state => state.inputSearchMovie);
+  const { data, isLoading } = useGetListMovies({ query: inputSearchMovie, page: 2 });
+  const setInputSearchMovie = useInputSearchMovie(state => state.setInputSearchMovie);
+  const listMovies = data && listMoviesAdapter(data);
 
-  const handleOnClick = (id: number): void => {
+  const handleOnClickCard = (id: number): void => {
     navigate(`details/${id}`);
   };
 
-  return listMovies?.results.length && !isLoading ? (
+  const handleOnClickShowMoreButton = (): void => {
+    console.log('handleOnClickShowMoreButton');
+  };
+
+  return listMovies?.listMovies.length && !isLoading ? (
     <>
-      {listMovies?.results.map(movie => (
-        <div onClick={() => handleOnClick(movie.id)} key={movie.id}>
-          <p>Title: {movie.title}</p>
-          <p>Overview: {movie.overview}</p>
-          <p>Release date: {movie.release_date}</p>
-        </div>
-      ))}
+      <Wrapper>
+        <SearchMovie value={inputSearchMovie} onChange={setInputSearchMovie} />
+      </Wrapper>
+      <WrapperListMovies>
+        {isLoading
+          ? Array.from({ length: 20 }).map((_, i) => <CardSkeleton key={i} />)
+          : listMovies?.listMovies.map(movie => (
+              <CardMovie
+                data={movie}
+                handleOnClick={() => handleOnClickCard(movie.id)}
+                key={movie.id}
+              ></CardMovie>
+            ))}
+      </WrapperListMovies>
+      <Button onClick={handleOnClickShowMoreButton}>Show more</Button>
     </>
   ) : null;
 };

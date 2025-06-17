@@ -1,9 +1,9 @@
 import { vi, describe, it, expect } from 'vitest';
 import { fetchDetailsMovie } from '../fetchDetailsMovie';
 import { instance } from '../../instance';
-import type { MovieDetails } from '../../types';
 import { MOCKED_AXIOS_ERROR } from '../../constants';
-import { MOCKED_DETAILS_MOVIE } from '../../../constants/mocks';
+import { MOCKED_DETAILS_MOVIE } from '../../../constants';
+import type { MovieDetails } from '../../../types/movieTypes';
 
 vi.mock('../../instance');
 

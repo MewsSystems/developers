@@ -1,5 +1,5 @@
+import type { MovieDetails } from '../../types/movieTypes';
 import { instance } from '../instance';
-import type { MovieDetails } from '../types';
 import { handleAxiosError } from '../utils/handleAxiosError';
 
 const fetchDetailsMovie = async (movieId: string): Promise<MovieDetails> => {

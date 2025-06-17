@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { useGetDetailsMovie } from '../useGetDetailsMovie';
 import { fetchDetailsMovie } from '../../api/fetch';
 import { QueryClientWrapper } from '../../utils/testUtils/QueryClientWrapper';
-import { MOCKED_DETAILS_MOVIE } from '../../constants/mocks';
+import { MOCKED_DETAILS_MOVIE } from '../../constants';
 
 vi.mock('../../api/fetch');
 
