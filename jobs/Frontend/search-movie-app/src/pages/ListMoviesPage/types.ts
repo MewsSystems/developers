@@ -1,9 +1,9 @@
 export type CardMovieProps = {
   data: {
-    imageURL: string;
+    imageURL: string | null;
     title: string;
     voteAverage: number;
-    releaseDate: string;
+    releaseDate: string | null;
     isAdult: boolean;
     voteTotalCount: number;
   };

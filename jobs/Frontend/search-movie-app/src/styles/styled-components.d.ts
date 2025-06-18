@@ -6,11 +6,13 @@ declare module 'styled-components' {
       background: string;
       surface: string;
       primary: string;
+      disabled: string;
       hoverPrimary: string;
       hoverSurface: string;
       error: string;
       onPrimary: string;
       onSurface: string;
+      onDisabled: string;
     };
   }
 }

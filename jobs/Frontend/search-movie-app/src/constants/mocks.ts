@@ -56,4 +56,46 @@ const MOCKED_DETAILS_MOVIE = {
   vote_count: 353,
 };
 
-export { MOCKED_DETAILS_MOVIE };
+const MOCKED_LIST_MOVIES = {
+  page: 2,
+  results: [
+    {
+      adult: false,
+      backdrop_path: '/uTz92k0CfZpn1p3xRmPbgt7MQTz.jpg',
+      genre_ids: [35],
+      id: 13342,
+      original_language: 'en',
+      original_title: 'Fast Times at Ridgemont High',
+      overview:
+        'Based on the real-life adventures chronicled by Cameron Crowe, Fast Times follows a group of high school students growing up in Southern California. Stacy Hamilton and Mark Ratner are looking for a love interest, and are helped along by their older classmates, Linda Barrett and Mike Damone, respectively. At the center of the film is Jeff Spicoli, a perpetually stoned surfer who faces-off with the resolute Mr. Hand—a man convinced that everyone is on dope.',
+      popularity: 3.1891,
+      poster_path: '/s1DA8H7qwoOcAEhow2rCzuQtpuO.jpg',
+      release_date: '1982-08-13',
+      title: 'Fast Times at Ridgemont High',
+      video: false,
+      vote_average: 6.799,
+      vote_count: 1284,
+    },
+    {
+      adult: false,
+      backdrop_path: null,
+      genre_ids: [35],
+      id: 264862,
+      original_language: 'de',
+      original_title: 'Der Kurpfuscher und seine fixen Töchter',
+      overview:
+        'Arriving in an alpine village a crook is mistaken for a recently deceased doctor and decides to impersonate him. Three girls stranded in the same village are sheltered by the "doctor" and naked German hilarity inevitably ensues.',
+      popularity: 0.3278,
+      poster_path: '/i9q89Ie6b1ZTZVQJ7SkHr4HkAB6.jpg',
+      release_date: '1980-08-15',
+      title: 'The Quack and His Fast Daughters',
+      video: false,
+      vote_average: 4.6,
+      vote_count: 5,
+    },
+  ],
+  total_pages: 39,
+  total_results: 765,
+};
+
+export { MOCKED_DETAILS_MOVIE, MOCKED_LIST_MOVIES };

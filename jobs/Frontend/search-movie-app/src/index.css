@@ -1,0 +1,17 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+#root {
+  width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: start;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}

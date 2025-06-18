@@ -7,7 +7,7 @@ import {
 } from './CardSkeleton.styles';
 
 export const CardSkeleton = () => (
-  <SkeletonCard>
+  <SkeletonCard data-testid="card-skeleton">
     <SkeletonImage />
     <SkeletonTitle />
     <SkeletonBottomInfo>

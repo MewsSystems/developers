@@ -21,8 +21,13 @@ export const CardMovie: React.FC<CardMovieProps> = ({ data, handleOnClick }) => 
   const { type, vote } = parseVoteAverage(voteAverage);
 
   return (
-    <StyledCardMovieContainer>
-      <StyledCardMovieContent role="button" onClick={handleOnClick} tabIndex={0}>
+    <StyledCardMovieContainer
+      role="button"
+      onClick={handleOnClick}
+      tabIndex={0}
+      data-testid="card-movie"
+    >
+      <StyledCardMovieContent>
         <StyledCardMovieImage
           src={imageURL ? getImageURL(imageURL) : noImageAvailable}
           alt={title}

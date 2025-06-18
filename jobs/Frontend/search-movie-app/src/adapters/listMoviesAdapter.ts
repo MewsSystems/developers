@@ -1,8 +1,7 @@
-import type { ListMoviesResponse } from '../api/types';
-import type { ListMovie } from '../types/movieTypes';
+import type { ListMovie, Movie } from '../types/movieTypes';
 
-const listMoviesAdapter = (listMoviesData: ListMoviesResponse) => {
-  const listMovies: ListMovie[] = listMoviesData.results.map(movie => {
+const listMoviesAdapter = (listMoviesData: Movie[]): ListMovie[] => {
+  const listMovies: ListMovie[] = listMoviesData.map(movie => {
     return {
       isAdult: movie.adult,
       id: movie.id,
@@ -13,12 +12,7 @@ const listMoviesAdapter = (listMoviesData: ListMoviesResponse) => {
       voteTotalCount: movie.vote_count,
     };
   });
-  return {
-    page: listMoviesData.page,
-    totalPages: listMoviesData.total_pages,
-    totalMovieList: listMoviesData.total_results,
-    listMovies: listMovies,
-  };
+  return listMovies;
 };
 
 export { listMoviesAdapter };

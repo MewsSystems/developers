@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
 export const StyledButton = styled.button`
+  min-width: 120px;
   background-color: ${({ theme }) => theme.colors.primary};
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.disabled};
+    color: ${({ theme }) => theme.colors.onDisabled};
+    cursor: not-allowed;
+  }
   border-radius: 24px;
   border-style: none;
   box-shadow:
@@ -25,6 +31,13 @@ export const StyledButton = styled.button`
   }
   &:hover {
     background-color: ${({ theme }) => theme.colors.hoverPrimary};
-    color: ${({ theme }) => theme.colors.onPrimary};
+    &:disabled {
+      background-color: ${({ theme }) => theme.colors.disabled};
+      color: ${({ theme }) => theme.colors.onDisabled};
+    }
+    &:disabled:hover {
+      background-color: ${({ theme }) => theme.colors.disabled};
+      cursor: not-allowed;
+    }
   }
 `;

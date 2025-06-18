@@ -28,7 +28,6 @@ describe('useGetDetailsMovie hook', () => {
       wrapper: QueryClientWrapper,
     });
 
-    // Wait for the query to succeed
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(MOCKED_DETAILS_MOVIE);

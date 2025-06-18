@@ -7,7 +7,6 @@ const getVoteType = (props: { $type?: string }) => {
 };
 
 export const StyledCardMovieContainer = styled.div`
-  position: relative;
   width: 250px;
   height: 380px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -31,18 +30,18 @@ export const StyledCardMovieContainer = styled.div`
 `;
 
 export const StyledCardMovieContent = styled.div`
-  background-size: cover;
-  background-position: center;
   overflow: hidden;
   width: 250px;
   height: 360px;
   justify-content: flex-end;
   align-content: flex-start;
   border-radius: 8px 8px 0 0;
+  display: flex;
+  position: relative;
 `;
 export const StyledCardMovieImage = styled.img`
-  width: 250px;
-  height: 360px;
+  width: 100%;
+  height: 100%;
 `;
 
 export const StyledTitle = styled.h3`
@@ -60,9 +59,9 @@ export const StyledInfoBottom = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: absolute;
   font-size: 0.9rem;
-  padding: 10px;
+  width: 100%;
 `;
 
 export const StyledVote = styled.div`
@@ -75,6 +74,7 @@ export const StyledVote = styled.div`
   color: ${({ theme }) => theme.colors.onSurface};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   font-weight: 500;
+  margin: 10px;
 `;
 
 export const StyledVoteNumber = styled.a<{ $type: string }>`
@@ -91,6 +91,7 @@ export const StyledReleaseDate = styled.div`
   color: ${({ theme }) => theme.colors.onPrimary};
   align-items: center;
   font-weight: 500;
+  margin: 10px;
 `;
 
 export const StyledAdultBadge = styled.div`

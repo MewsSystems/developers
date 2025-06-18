@@ -1,4 +1,9 @@
-import { StyledSearchMovieInput } from './SearchMovie.styles';
+import { MdHighlightOff } from 'react-icons/md';
+import {
+  StyledSearchMovieInput,
+  StyledSearchMovieInputCleanButton,
+  StyledSearchMovieInputContainer,
+} from './SearchMovie.styles';
 
 export const SearchMovie = ({
   value,
@@ -6,4 +11,16 @@ export const SearchMovie = ({
 }: {
   value: string;
   onChange: (value: string) => void;
-}) => <StyledSearchMovieInput value={value} onChange={e => onChange(e.target.value)} />;
+}) => (
+  <StyledSearchMovieInputContainer>
+    <StyledSearchMovieInput value={value} onChange={e => onChange(e.target.value)} />
+    {value && (
+      <StyledSearchMovieInputCleanButton
+        onClick={() => onChange('')}
+        data-testid="clean-input-search-button"
+      >
+        <MdHighlightOff />
+      </StyledSearchMovieInputCleanButton>
+    )}
+  </StyledSearchMovieInputContainer>
+);

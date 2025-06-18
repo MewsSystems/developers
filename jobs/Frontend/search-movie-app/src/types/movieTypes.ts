@@ -30,7 +30,7 @@ type SpokenLanguage = {
 
 export type Movie = {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
   genre_ids: number[];
   id: number;
   original_language: string;
@@ -38,7 +38,7 @@ export type Movie = {
   overview: string;
   popularity: number;
   poster_path: string;
-  release_date: string;
+  release_date: string | null;
   title: string;
   video: boolean;
   vote_average: number;
@@ -77,8 +77,8 @@ export type MovieDetails = {
 export type ListMovie = {
   isAdult: boolean;
   id: number;
-  imageURL: string;
-  releaseDate: string;
+  imageURL: string | null;
+  releaseDate: string | null;
   title: string;
   voteAverage: number;
   voteTotalCount: number;
