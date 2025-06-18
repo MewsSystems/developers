@@ -5,6 +5,8 @@ const StyledHeaderWrapper = styled.div`
   width: 100%;
   align-items: center;
   justify-content: space-between;
+  text-align: center;
+  gap: 10px;
 `;
 const StyledHeaderText = styled.p`
   font-size: 4.5rem;

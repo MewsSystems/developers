@@ -5,6 +5,7 @@ import {
   StyledSearchMovieInputContainer,
 } from './SearchMovie.styles';
 import { CLEAN_INPUT_SEARCH_BUTTON_TEST_ID } from '../../../../constants';
+import { SEARCH_MOVIE_INPUT_PLACEHOLDER } from '../../../../constants/texts';
 
 export const SearchMovie = ({
   value,
@@ -17,7 +18,7 @@ export const SearchMovie = ({
     <StyledSearchMovieInput
       value={value}
       onChange={e => onChange(e.target.value)}
-      placeholder="Type to start searching..."
+      placeholder={SEARCH_MOVIE_INPUT_PLACEHOLDER}
     />
     {value && (
       <StyledSearchMovieInputCleanButton

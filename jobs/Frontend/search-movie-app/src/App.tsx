@@ -6,6 +6,7 @@ import { GlobalStyle } from './styles/Globalstyle';
 import { Header } from './components';
 import { useThemeStore } from './store/themeStore';
 import { LIGHT_THEME } from './constants';
+import { ScrollToTop } from './components/ScrollToTop/ScrollToTop';
 
 function App() {
   const theme = useThemeStore(state => state.theme);
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
+      <ScrollToTop />
       <GlobalStyle />
       <Header />
       <RoutesConfig />
