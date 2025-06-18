@@ -1,0 +1,1 @@
+export { CardMovie } from './CardMovie';
