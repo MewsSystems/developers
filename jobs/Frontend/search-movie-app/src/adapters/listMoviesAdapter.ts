@@ -1,6 +1,6 @@
 import type { ListMovie, Movie } from '../types/movieTypes';
 
-const listMoviesAdapter = (listMoviesData: Movie[]): ListMovie[] => {
+export const listMoviesAdapter = (listMoviesData: Movie[]): ListMovie[] => {
   const listMovies: ListMovie[] = listMoviesData.map(movie => {
     return {
       isAdult: movie.adult,
@@ -14,5 +14,3 @@ const listMoviesAdapter = (listMoviesData: Movie[]): ListMovie[] => {
   });
   return listMovies;
 };
-
-export { listMoviesAdapter };

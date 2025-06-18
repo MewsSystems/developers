@@ -1,26 +1,22 @@
 import { vi, describe, it, expect } from 'vitest';
-import { fetchListMovies } from '../fetchListMovies';
 import { instance } from '../../instance';
-import type { ListMoviesParams, ListMoviesResponse } from '../../types';
 import { MOCKED_AXIOS_ERROR } from '../../constants';
 import { MOCKED_LIST_MOVIES } from '../../../constants';
+import { fetchPopularMovies } from '../fetchPopularMovies';
+import type { ListMoviesResponse } from '../../types';
 
 vi.mock('../../instance');
 
 const mockedInstance = instance as jest.Mocked<typeof instance>;
 
-describe('Verify positive and negative scenarios for fetchListMovies', () => {
+describe('Verify positive and negative scenarios for fetchPopularMovies', () => {
   const mockResponse: ListMoviesResponse = MOCKED_LIST_MOVIES;
 
-  it('should fetch movies with correct params and return data', async () => {
+  it('should fetch popular movies and return data', async () => {
     mockedInstance.get.mockResolvedValueOnce({ data: mockResponse });
 
-    const params: ListMoviesParams = { query: 'test', page: 1 };
-    const result = await fetchListMovies(params);
+    const result = await fetchPopularMovies();
 
-    expect(instance.get).toHaveBeenCalledWith('/search/movie', {
-      params: { query: 'test', page: 1 },
-    });
     expect(result).toEqual(mockResponse);
   });
 
@@ -32,12 +28,9 @@ describe('Verify positive and negative scenarios for fetchListMovies', () => {
     } = MOCKED_AXIOS_ERROR;
     mockedInstance.get.mockRejectedValueOnce(MOCKED_AXIOS_ERROR);
 
-    await expect(fetchListMovies({ query: 'fail' })).rejects.toEqual({
+    await expect(fetchPopularMovies()).rejects.toEqual({
       status: status_code,
       message: status_message,
-    });
-    expect(instance.get).toHaveBeenCalledWith('/search/movie', {
-      params: { query: 'fail', page: 1 },
     });
   });
 
@@ -45,11 +38,8 @@ describe('Verify positive and negative scenarios for fetchListMovies', () => {
     const error = new Error('Network error');
     mockedInstance.get.mockRejectedValueOnce(error);
 
-    await expect(fetchListMovies({ query: 'fail' })).rejects.toEqual({
+    await expect(fetchPopularMovies()).rejects.toEqual({
       message: 'Network error',
-    });
-    expect(instance.get).toHaveBeenCalledWith('/search/movie', {
-      params: { query: 'fail', page: 1 },
     });
   });
 });

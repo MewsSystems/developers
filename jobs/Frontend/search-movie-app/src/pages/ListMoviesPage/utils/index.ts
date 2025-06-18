@@ -1,2 +1,2 @@
-export * from './parseReleaseDate';
-export * from './parseVoteAverage';
+export { parseReleaseDate } from './parseReleaseDate';
+export { parseVoteAverage } from './parseVoteAverage';

@@ -4,17 +4,19 @@ import { vi } from 'vitest';
 import { ThemeProvider } from 'styled-components';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useGetListMovies } from '../../../hooks';
-import { listMoviesAdapter } from '../../../adapters/listMoviesAdapter';
-import { ListMoviePage } from '../ListMoviePage';
-import { lightTheme } from '../../../styles/themes';
-import { MOCK_LIST_MOVIES_ONE_ITEM, MOCK_LIST_MOVIES_TWO_ITEMS } from '../constants';
-import { QueryClientWrapper } from '../../../utils/testUtils/QueryClientWrapper';
-import { useInputSearchMovie } from '../../../store/inputSearchMovieStore';
 import { DetailsMoviePage } from '../../DetailsMoviePage/DetailsMoviePage';
+import { ListMoviePage } from '../ListMoviePage';
+import { useGetListMovies, useGetPopularMovies } from '../../../hooks';
+import { listMoviesAdapter } from '../../../adapters/listMoviesAdapter';
+import { useInputSearchMovie } from '../../../store/inputSearchMovieStore';
+import { QueryClientWrapper } from '../../../utils/testUtils/QueryClientWrapper';
+import { MOCK_LIST_MOVIES_ONE_ITEM, MOCK_LIST_MOVIES_TWO_ITEMS } from '../constants';
+import { lightTheme } from '../../../styles/themes';
+import type { ListMovie } from '../../../types/movieTypes';
 
 vi.mock('../../../store/inputSearchMovieStore');
 vi.mock('../../../hooks/useGetListMovies');
+vi.mock('../../../hooks/useGetPopularMovies');
 vi.mock('../../../api/fetch/fetchListMovies');
 vi.mock('../../../adapters/listMoviesAdapter', () => ({
   listMoviesAdapter: vi.fn(),
@@ -24,6 +26,7 @@ type MockUseGetListMoviesParams = {
   hasNextPage: boolean;
   isLoading: boolean;
   isFetchingNextPage: boolean;
+  results: ListMovie[];
 };
 
 const routes = [
@@ -61,8 +64,27 @@ const mockUseGetListMovies = ({
   hasNextPage,
   isLoading,
   isFetchingNextPage,
+  results,
 }: MockUseGetListMoviesParams) => {
   return (useGetListMovies as any).mockReturnValue({
+    data: {
+      pages: [
+        {
+          page: 1,
+          results,
+          total_pages: 2,
+        },
+      ],
+    },
+    hasNextPage,
+    fetchNextPage: vi.fn(),
+    isLoading,
+    isFetchingNextPage,
+  });
+};
+
+const mockUseGetPopularMovies = () => {
+  return (useGetPopularMovies as any).mockReturnValue({
     data: {
       pages: [
         {
@@ -72,10 +94,7 @@ const mockUseGetListMovies = ({
         },
       ],
     },
-    hasNextPage,
-    fetchNextPage: vi.fn(),
-    isLoading,
-    isFetchingNextPage,
+    isLoading: false,
   });
 };
 
@@ -89,8 +108,9 @@ describe('ListMoviePage', () => {
       hasNextPage: true,
       isLoading: false,
       isFetchingNextPage: true,
+      results: MOCK_LIST_MOVIES_ONE_ITEM,
     });
-
+    mockUseGetPopularMovies();
     (listMoviesAdapter as any).mockReturnValue(MOCK_LIST_MOVIES_ONE_ITEM);
   });
 
@@ -99,6 +119,7 @@ describe('ListMoviePage', () => {
       hasNextPage: false,
       isLoading: true,
       isFetchingNextPage: false,
+      results: MOCK_LIST_MOVIES_ONE_ITEM,
     });
     renderListMovies();
 
@@ -123,6 +144,7 @@ describe('ListMoviePage', () => {
       hasNextPage: false,
       isLoading: false,
       isFetchingNextPage: false,
+      results: MOCK_LIST_MOVIES_ONE_ITEM,
     });
 
     renderListMovies();
@@ -158,6 +180,21 @@ describe('ListMoviePage', () => {
     const showMorebutton = screen.getByTestId('spinner');
 
     expect(showMorebutton).toBeInTheDocument();
+  });
+  it('show a message if no movies are retrieved from the filter', async () => {
+    mockUseGetListMovies({
+      hasNextPage: false,
+      isLoading: false,
+      isFetchingNextPage: false,
+      results: [],
+    });
+    (listMoviesAdapter as any).mockReturnValue([]);
+
+    renderListMovies();
+
+    const noMoviesFound = await screen.findByTestId('no-movies-found');
+
+    expect(noMoviesFound).toBeInTheDocument();
   });
 
   it('show clean input search button if input search value exists', async () => {

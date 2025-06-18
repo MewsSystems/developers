@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import type { ErrorApiResponse } from '../types';
 
-const handleAxiosError = (error: unknown) => {
+export const handleAxiosError = (error: unknown) => {
   if (axios.isAxiosError(error) && error.response) {
     const axiosError = error as AxiosError;
     const errorApiResponse = axiosError.response?.data as ErrorApiResponse;
@@ -19,5 +19,3 @@ const handleAxiosError = (error: unknown) => {
     };
   }
 };
-
-export { handleAxiosError };

@@ -17,29 +17,38 @@ const SkeletonBlock = styled.div`
   border-radius: 4px;
 `;
 
-export const SkeletonCard = styled(StyledCardMovieContainer)`
+const SkeletonCard = styled(StyledCardMovieContainer)`
   background-color: ${({ theme }) => theme.colors.surface};
 `;
 
-export const SkeletonImage = styled(SkeletonBlock)`
+const SkeletonImage = styled(SkeletonBlock)`
   width: 250px;
   height: 360px;
   border-radius: 8px 8px 0 0;
 `;
 
-export const SkeletonTitle = styled(SkeletonBlock)`
+const SkeletonTitle = styled(SkeletonBlock)`
   height: 20px;
   width: 80%;
   margin: 8px;
 `;
 
-export const SkeletonBottomInfo = styled.div`
+const SkeletonBottomInfo = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px;
 `;
 
-export const SkeletonText = styled(SkeletonBlock)`
+const SkeletonText = styled(SkeletonBlock)`
   height: 16px;
   width: 30%;
 `;
+
+export {
+  SkeletonBlock,
+  SkeletonBottomInfo,
+  SkeletonCard,
+  SkeletonImage,
+  SkeletonText,
+  SkeletonTitle,
+};

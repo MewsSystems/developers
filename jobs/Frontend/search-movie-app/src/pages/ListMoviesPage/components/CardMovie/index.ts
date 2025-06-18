@@ -1,1 +1,1 @@
-export * from './CardMovie';
+export { CardMovie } from './CardMovie';

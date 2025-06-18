@@ -1,3 +1,3 @@
-export * from './Button/Button';
-export * from './Header/Header';
-export * from './Wrapper/Wrapper';
+export { Button } from './Button/Button';
+export { Header } from './Header/Header';
+export { Wrapper } from './Wrapper/Wrapper';

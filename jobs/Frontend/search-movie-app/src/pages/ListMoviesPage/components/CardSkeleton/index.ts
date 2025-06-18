@@ -1,1 +1,1 @@
-export * from './CardSkeleton';
+export { CardSkeleton } from './CardSkeleton';

@@ -1,4 +1,4 @@
-export const lightTheme = {
+const lightTheme = {
   colors: {
     background: '#f5f5f5',
     surface: '#ffffff',
@@ -13,7 +13,7 @@ export const lightTheme = {
   },
 };
 
-export const darkTheme = {
+const darkTheme = {
   colors: {
     background: '#121212',
     surface: '#3f3f3f',
@@ -27,3 +27,5 @@ export const darkTheme = {
     onDisabled: '#9E9E9E',
   },
 };
+
+export { darkTheme, lightTheme };

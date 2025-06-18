@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
-export const StyledHeaderWrapper = styled.div`
+const StyledHeaderWrapper = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
   position: relative;
 `;
-export const StyledHeaderText = styled.h1`
+const StyledHeaderText = styled.h1`
   display: flex;
   margin: 0;
 `;
-export const StyledToggle = styled.button`
+const StyledToggle = styled.button`
   display: flex;
   background-color: transparent;
   color: ${({ theme }) => theme.colors.primary};
@@ -26,3 +26,5 @@ export const StyledToggle = styled.button`
   position: absolute;
   right: 0;
 `;
+
+export { StyledHeaderWrapper, StyledHeaderText, StyledToggle };

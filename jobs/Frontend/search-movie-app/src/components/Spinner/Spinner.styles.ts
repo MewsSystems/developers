@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledSpinner = styled.div`
+const StyledSpinner = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -52,9 +52,11 @@ export const StyledSpinner = styled.div`
     }
   }
 `;
-export const StyledSpinnerWrapper = styled.div`
+const StyledSpinnerWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
 `;
+
+export { StyledSpinner, StyledSpinnerWrapper };

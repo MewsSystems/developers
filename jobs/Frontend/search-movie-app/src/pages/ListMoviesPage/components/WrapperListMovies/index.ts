@@ -1,1 +1,1 @@
-export * from './WrapperListMovies';
+export { WrapperListMovies } from './WrapperListMovies';

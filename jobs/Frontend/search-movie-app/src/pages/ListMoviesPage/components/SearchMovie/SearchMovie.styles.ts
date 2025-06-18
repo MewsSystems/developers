@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledSearchMovieInput = styled.input`
+const StyledSearchMovieInput = styled.input`
   width: 300px;
   padding: 10px 16px;
   font-size: 16px;
@@ -21,7 +21,7 @@ export const StyledSearchMovieInput = styled.input`
   }
 `;
 
-export const StyledSearchMovieInputCleanButton = styled.button`
+const StyledSearchMovieInputCleanButton = styled.button`
   background-color: transparent;
   color: ${({ theme }) => theme.colors.primary};
   border: none;
@@ -32,8 +32,14 @@ export const StyledSearchMovieInputCleanButton = styled.button`
   cursor: pointer;
 `;
 
-export const StyledSearchMovieInputContainer = styled.div`
+const StyledSearchMovieInputContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+
+export {
+  StyledSearchMovieInput,
+  StyledSearchMovieInputCleanButton,
+  StyledSearchMovieInputContainer,
+};

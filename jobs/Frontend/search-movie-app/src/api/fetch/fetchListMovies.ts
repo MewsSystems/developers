@@ -2,7 +2,7 @@ import { instance } from '../instance';
 import type { ListMoviesParams, ListMoviesResponse } from '../types';
 import { handleAxiosError } from '../utils/handleAxiosError';
 
-const fetchListMovies = async ({
+export const fetchListMovies = async ({
   query,
   page = 1,
 }: ListMoviesParams): Promise<ListMoviesResponse> => {
@@ -18,5 +18,3 @@ const fetchListMovies = async ({
     return handleAxiosError(error);
   }
 };
-
-export { fetchListMovies };

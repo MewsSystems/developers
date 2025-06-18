@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
     body {    
         background-color: ${({ theme }) => theme.colors.background};
         color: ${({ theme }) => theme.colors.onSurface};
@@ -9,7 +9,6 @@ const GlobalStyle = createGlobalStyle`
         display: flex;
         place-items: center;
         min-width: 320px;
-        min-height: 100vh;
         font-synthesis: none;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
@@ -19,5 +18,3 @@ const GlobalStyle = createGlobalStyle`
         padding: 2rem;
         text-align: center;
     }`;
-
-export { GlobalStyle };

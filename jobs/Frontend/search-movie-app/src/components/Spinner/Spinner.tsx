@@ -1,11 +1,9 @@
 import { StyledSpinner, StyledSpinnerWrapper } from './Spinner.styles';
 
-const Spinner = () => {
+export const Spinner = () => {
   return (
     <StyledSpinnerWrapper data-testid="spinner">
       <StyledSpinner />
     </StyledSpinnerWrapper>
   );
 };
-
-export { Spinner };

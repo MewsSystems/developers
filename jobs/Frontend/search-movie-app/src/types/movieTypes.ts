@@ -28,7 +28,7 @@ type SpokenLanguage = {
   name: string;
 };
 
-export type Movie = {
+type Movie = {
   adult: boolean;
   backdrop_path: string | null;
   genre_ids: number[];
@@ -45,7 +45,7 @@ export type Movie = {
   vote_count: number;
 };
 
-export type MovieDetails = {
+type MovieDetails = {
   adult: boolean;
   backdrop_path: string;
   belongs_to_collection: BelongsToCollection | null;
@@ -74,7 +74,7 @@ export type MovieDetails = {
   vote_count: number;
 };
 
-export type ListMovie = {
+type ListMovie = {
   isAdult: boolean;
   id: number;
   imageURL: string | null;
@@ -83,3 +83,5 @@ export type ListMovie = {
   voteAverage: number;
   voteTotalCount: number;
 };
+
+export type { MovieDetails, Movie, ListMovie };

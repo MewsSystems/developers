@@ -6,7 +6,7 @@ const getVoteType = (props: { $type?: string }) => {
   return '#388E3C';
 };
 
-export const StyledCardMovieContainer = styled.div`
+const StyledCardMovieContainer = styled.div`
   width: 250px;
   height: 380px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -29,7 +29,7 @@ export const StyledCardMovieContainer = styled.div`
   }
 `;
 
-export const StyledCardMovieContent = styled.div`
+const StyledCardMovieContent = styled.div`
   overflow: hidden;
   width: 250px;
   height: 360px;
@@ -39,12 +39,12 @@ export const StyledCardMovieContent = styled.div`
   display: flex;
   position: relative;
 `;
-export const StyledCardMovieImage = styled.img`
+const StyledCardMovieImage = styled.img`
   width: 100%;
   height: 100%;
 `;
 
-export const StyledTitle = styled.h3`
+const StyledTitle = styled.h3`
   margin: 0;
   font-size: 1.2rem;
   background: ${({ theme }) => theme.colors.surface};
@@ -55,7 +55,7 @@ export const StyledTitle = styled.h3`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 `;
 
-export const StyledInfoBottom = styled.div`
+const StyledInfoBottom = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,7 +64,7 @@ export const StyledInfoBottom = styled.div`
   width: 100%;
 `;
 
-export const StyledVote = styled.div`
+const StyledVote = styled.div`
   display: flex;
   background: ${({ theme }) => theme.colors.surface};
   padding: 2px 6px;
@@ -77,12 +77,12 @@ export const StyledVote = styled.div`
   margin: 10px;
 `;
 
-export const StyledVoteNumber = styled.a<{ $type: string }>`
+const StyledVoteNumber = styled.a<{ $type: string }>`
   color: ${props => getVoteType(props)};
   margin-right: 5px;
 `;
 
-export const StyledReleaseDate = styled.div`
+const StyledReleaseDate = styled.div`
   display: flex;
   background: ${({ theme }) => theme.colors.primary};
   padding: 2px 6px;
@@ -94,8 +94,20 @@ export const StyledReleaseDate = styled.div`
   margin: 10px;
 `;
 
-export const StyledAdultBadge = styled.div`
+const StyledAdultBadge = styled.div`
   display: flex;
   color: rgb(161, 72, 72);
   font-size: 2.5rem;
 `;
+
+export {
+  StyledAdultBadge,
+  StyledCardMovieContainer,
+  StyledCardMovieContent,
+  StyledCardMovieImage,
+  StyledInfoBottom,
+  StyledReleaseDate,
+  StyledTitle,
+  StyledVote,
+  StyledVoteNumber,
+};

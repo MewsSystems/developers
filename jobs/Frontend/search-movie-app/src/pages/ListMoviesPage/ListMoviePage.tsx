@@ -1,11 +1,18 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router';
-import { CardMovie, SearchMovie, CardSkeleton, WrapperListMovies } from './components';
+import {
+  CardMovie,
+  SearchMovie,
+  CardSkeleton,
+  WrapperListMovies,
+  NoMoviesFound,
+} from './components';
 import { listMoviesAdapter } from '../../adapters/listMoviesAdapter';
 import { Button, Wrapper } from '../../components';
 import { useInputSearchMovie } from '../../store/inputSearchMovieStore';
 import { useGetListMovies } from '../../hooks/useGetListMovies';
 import { Spinner } from '../../components/Spinner/Spinner';
+import { useGetPopularMovies } from '../../hooks/useGetPopularMovies';
 
 const MemorizedSearchMovie = memo(
   ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
@@ -13,15 +20,17 @@ const MemorizedSearchMovie = memo(
   }
 );
 
-const ListMoviePage = () => {
+export const ListMoviePage = () => {
   const navigate = useNavigate();
   const inputSearchMovie = useInputSearchMovie(state => state.inputSearchMovie);
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useGetListMovies({
     query: inputSearchMovie,
   });
+  const { data: popularMovies, isLoading: isLoadingPopularMovies } = useGetPopularMovies();
   const setInputSearchMovie = useInputSearchMovie(state => state.setInputSearchMovie);
   const allMovies = data?.pages.flatMap(page => page.results) ?? [];
-  const listMovies = listMoviesAdapter(allMovies);
+  const listMovies =
+    popularMovies && listMoviesAdapter(!inputSearchMovie ? popularMovies?.results : allMovies);
   const handleOnClickCard = (id: number): void => {
     navigate(`/details/${id}`);
   };
@@ -35,8 +44,13 @@ const ListMoviePage = () => {
       <Wrapper>
         <MemorizedSearchMovie value={inputSearchMovie} onChange={setInputSearchMovie} />
       </Wrapper>
-
-      {!isLoading ? (
+      {isLoading || isLoadingPopularMovies ? (
+        <WrapperListMovies>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <CardSkeleton key={i} data-testid="card-skeleton" />
+          ))}
+        </WrapperListMovies>
+      ) : listMovies?.length ? (
         <>
           <WrapperListMovies>
             {listMovies.map(movie => (
@@ -58,14 +72,8 @@ const ListMoviePage = () => {
           ) : null}
         </>
       ) : (
-        <WrapperListMovies>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <CardSkeleton key={i} data-testid="card-skeleton" />
-          ))}
-        </WrapperListMovies>
+        <NoMoviesFound />
       )}
     </>
   );
 };
-
-export { ListMoviePage };

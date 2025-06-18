@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useGetDetailsMovie } from '../../hooks';
 
-const DetailsMoviePage = () => {
+export const DetailsMoviePage = () => {
   const { movieId } = useParams();
   const { data: detailsMovie, isLoading } = useGetDetailsMovie(movieId || '');
 
@@ -13,5 +13,3 @@ const DetailsMoviePage = () => {
     </div>
   ) : null;
 };
-
-export { DetailsMoviePage };

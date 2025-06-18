@@ -4,10 +4,8 @@ const getRatingCategory = (voteFormatted: number): 'low' | 'medium' | 'high' => 
   return 'high';
 };
 
-const parseVoteAverage = (voteAverage: number): { vote: number; type: string } => {
+export const parseVoteAverage = (voteAverage: number): { vote: number; type: string } => {
   const voteFormatted = parseFloat(voteAverage.toFixed(2));
 
   return { vote: voteFormatted, type: getRatingCategory(voteFormatted) };
 };
-
-export { parseVoteAverage };

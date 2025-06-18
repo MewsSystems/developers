@@ -1,4 +1,5 @@
 import { fetchDetailsMovie } from './fetchDetailsMovie';
 import { fetchListMovies } from './fetchListMovies';
+import { fetchPopularMovies } from './fetchPopularMovies';
 
-export { fetchDetailsMovie, fetchListMovies };
+export { fetchDetailsMovie, fetchListMovies, fetchPopularMovies };
