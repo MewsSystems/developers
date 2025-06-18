@@ -7,7 +7,7 @@
 #root {
   width: 1500px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 5rem;
   text-align: start;
   display: flex;
   justify-content: flex-start;
@@ -26,10 +26,14 @@
   justify-content: flex-start;
 }
 
-.mr-4 {
-  margin-right: 4;
+.mr-6 {
+  margin-right: 6px;
 }
 
 .w-100 {
   width: 100%;
+}
+
+.gap-15 {
+  gap: 15px;
 }

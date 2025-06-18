@@ -9,7 +9,7 @@ export const Vote = ({ voteAverage, voteTotalCount }: VoteParams) => {
   return (
     <StyledVote>
       <StyledVoteNumber>
-        <FaStar className="mr-4" />
+        <FaStar className="mr-6" />
         {vote}
       </StyledVoteNumber>
       {`(${voteTotalCount})`}

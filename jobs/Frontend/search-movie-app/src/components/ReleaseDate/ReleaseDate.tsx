@@ -5,7 +5,7 @@ import { parseReleaseDate } from '../../utils';
 export const ReleaseDate = ({ releaseDate }: { releaseDate: string }) => {
   return (
     <StyledReleaseDate>
-      <FaCalendarAlt className="mr-4" />
+      <FaCalendarAlt className="mr-6" />
       {parseReleaseDate(releaseDate)}
     </StyledReleaseDate>
   );

@@ -10,7 +10,6 @@ const StyledVote = styled.div`
   color: ${({ theme }) => theme.colors.onPrimary};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   font-weight: 500;
-  margin: 10px;
 `;
 
 const StyledVoteNumber = styled.a`

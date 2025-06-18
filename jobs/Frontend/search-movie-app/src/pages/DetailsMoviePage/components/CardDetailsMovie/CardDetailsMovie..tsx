@@ -50,7 +50,7 @@ export const CardDetailsMovie: React.FC<CardDetailsMovieProps> = ({ data }) => {
           ))}
         </StyledCardMovieDetailsGenreWrapper>
         <StyledCardMovieDetailsOverview>{overview}</StyledCardMovieDetailsOverview>
-        <div className="flex align-center- justify-start">
+        <div className="flex align-center justify-start gap-15">
           <Vote voteAverage={voteAverage} voteTotalCount={voteTotalCount} />
           {releaseDate && <ReleaseDate releaseDate={releaseDate} />}
           {isAdult && <AdultBadge />}

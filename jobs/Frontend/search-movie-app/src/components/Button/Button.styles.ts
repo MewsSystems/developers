@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledButton = styled.button`
   min-width: 120px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.secondary};
   &:disabled {
     background-color: ${({ theme }) => theme.colors.disabled};
     color: ${({ theme }) => theme.colors.onDisabled};
@@ -11,7 +11,7 @@ export const StyledButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 24px;
+  border-radius: 8px;
   gap: 5px;
   border-style: none;
   box-shadow:
@@ -30,10 +30,10 @@ export const StyledButton = styled.button`
     transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   &:focus {
     outline: none;
-    border: 2px solid ${({ theme }) => theme.colors.hoverPrimary};
+    border: 2px solid ${({ theme }) => theme.colors.hoverSecondary};
   }
   &:hover {
-    background-color: ${({ theme }) => theme.colors.hoverPrimary};
+    background-color: ${({ theme }) => theme.colors.hoverSecondary};
     &:disabled {
       background-color: ${({ theme }) => theme.colors.disabled};
       color: ${({ theme }) => theme.colors.onDisabled};
@@ -42,5 +42,9 @@ export const StyledButton = styled.button`
       background-color: ${({ theme }) => theme.colors.disabled};
       cursor: not-allowed;
     }
+  }
+  @media (max-width: 991px) {
+    min-width: 60px;
+    height: 32px;
   }
 `;

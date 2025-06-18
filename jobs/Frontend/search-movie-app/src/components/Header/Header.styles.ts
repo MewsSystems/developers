@@ -13,17 +13,20 @@ const StyledHeaderText = styled.p`
   @media (max-width: 991px) {
     font-size: 3em;
   }
+  @media (max-width: 797px) {
+    font-size: 2rem;
+  }
 `;
 const StyledToggle = styled.button`
   display: flex;
   background-color: transparent;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.secondary};
   font-size: 30px;
   border: none;
   cursor: pointer;
   transition: transform 200ms ease-in-out;
   &:hover {
-    color: ${({ theme }) => theme.colors.hoverPrimary};
+    color: ${({ theme }) => theme.colors.hoverSecondary};
     transform: scale(1.1);
   }
 `;

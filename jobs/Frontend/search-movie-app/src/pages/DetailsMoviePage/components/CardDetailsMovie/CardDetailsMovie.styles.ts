@@ -61,7 +61,7 @@ const StyledCardMovieDetailsTagline = styled.p`
   }
 `;
 
-const StyledCardMovieImageWrapper = styled.p`
+const StyledCardMovieImageWrapper = styled.div`
   @media (max-width: 991px) {
     width: 100%;
   }

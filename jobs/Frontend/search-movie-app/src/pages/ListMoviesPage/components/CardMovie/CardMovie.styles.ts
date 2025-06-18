@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const StyledCardMovieContainer = styled.div`
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
   height: 380px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   color: ${({ theme }) => theme.colors.onPrimary};
@@ -25,7 +26,7 @@ const StyledCardMovieContainer = styled.div`
 
 const StyledCardMovieContent = styled.div`
   overflow: hidden;
-  width: 250px;
+  width: 100%;
   height: 360px;
   justify-content: flex-end;
   align-content: flex-start;
@@ -43,6 +44,7 @@ const StyledTitle = styled.h3`
   max-width: 100%;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-align: center;
 `;
 
 const StyledInfoBottom = styled.div`
@@ -52,6 +54,8 @@ const StyledInfoBottom = styled.div`
   position: absolute;
   font-size: 0.9rem;
   width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
 `;
 
 export { StyledCardMovieContainer, StyledCardMovieContent, StyledInfoBottom, StyledTitle };

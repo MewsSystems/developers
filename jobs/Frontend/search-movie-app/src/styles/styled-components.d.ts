@@ -6,8 +6,10 @@ declare module 'styled-components' {
       background: string;
       surface: string;
       primary: string;
+      secondary: string;
       disabled: string;
       hoverPrimary: string;
+      hoverSecondary: string;
       hoverSurface: string;
       error: string;
       onPrimary: string;
