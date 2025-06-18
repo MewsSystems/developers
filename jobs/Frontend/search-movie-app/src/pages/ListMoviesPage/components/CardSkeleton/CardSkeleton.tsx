@@ -1,3 +1,4 @@
+import { CARD_LIST_MOVIES_SKELETON_TEST_ID } from '../../../../constants';
 import {
   SkeletonBottomInfo,
   SkeletonCard,
@@ -7,7 +8,7 @@ import {
 } from './CardSkeleton.styles';
 
 export const CardSkeleton = () => (
-  <SkeletonCard data-testid="card-skeleton">
+  <SkeletonCard data-testid={CARD_LIST_MOVIES_SKELETON_TEST_ID}>
     <SkeletonImage />
     <SkeletonTitle />
     <SkeletonBottomInfo>

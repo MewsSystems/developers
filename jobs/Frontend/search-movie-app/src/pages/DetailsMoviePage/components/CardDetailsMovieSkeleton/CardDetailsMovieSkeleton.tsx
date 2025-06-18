@@ -1,3 +1,4 @@
+import { CARD_DETAILS_MOVIE_SKELETON_TEST_ID } from '../../../../constants';
 import {
   SkeletonCardDetailsMovie,
   SkeletonContentDetailsMovie,
@@ -11,7 +12,7 @@ import {
 
 export const CardDetailsMovieSkeleton = () => {
   return (
-    <SkeletonCardDetailsMovie data-testid="card-details-movie-skeleton">
+    <SkeletonCardDetailsMovie data-testid={CARD_DETAILS_MOVIE_SKELETON_TEST_ID}>
       <div className="flex">
         <SkeletonImageDetailsMovie />
       </div>

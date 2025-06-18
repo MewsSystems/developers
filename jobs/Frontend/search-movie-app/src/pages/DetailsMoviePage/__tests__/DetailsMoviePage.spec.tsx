@@ -8,7 +8,11 @@ import { useGetDetailsMovie } from '../../../hooks';
 import { QueryClientWrapper } from '../../../utils/testUtils/QueryClientWrapper';
 import { lightTheme } from '../../../styles/themes';
 import { detailsMovieAdapter } from '../../../adapters/detailsMovieAdapter';
-import { MOCKED_DETAILS_MOVIE } from '../../../constants';
+import {
+  CARD_DETAILS_MOVIE_SKELETON_TEST_ID,
+  GO_BACK_BUTTON_TEST_ID,
+  MOCKED_DETAILS_MOVIE,
+} from '../../../constants';
 import { MOCK_DETAILS_MOVIE } from '../constants';
 import { Header } from '../../../components';
 import userEvent from '@testing-library/user-event';
@@ -69,7 +73,7 @@ describe('DetailsMoviePage', () => {
     mockUseGetDetailsMovie({ isLoading: true });
     renderDetailsMovie();
 
-    expect(screen.getByTestId('card-details-movie-skeleton')).toBeInTheDocument();
+    expect(screen.getByTestId(CARD_DETAILS_MOVIE_SKELETON_TEST_ID)).toBeInTheDocument();
   });
 
   it('renders details movie when data is available', async () => {
@@ -83,7 +87,7 @@ describe('DetailsMoviePage', () => {
     mockUseGetDetailsMovie({ isLoading: false });
     renderDetailsMovie();
 
-    const goBackButton = screen.getByTestId('go-back-button');
+    const goBackButton = screen.getByTestId(GO_BACK_BUTTON_TEST_ID);
 
     expect(goBackButton).toBeInTheDocument();
 

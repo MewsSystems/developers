@@ -10,6 +10,7 @@ import {
 } from './Header.styles';
 import { useThemeStore } from '../../store/themeStore';
 import { Button } from '../';
+import { GO_BACK_BUTTON_TEST_ID } from '../../constants';
 
 export const Header = () => {
   const toggleTheme = useThemeStore(state => state.toggleTheme);
@@ -25,7 +26,7 @@ export const Header = () => {
     <StyledHeaderWrapper>
       <StyledGoBackButtonWrapper>
         {pathname.includes('/details/') && (
-          <Button onClick={handleGoBackClick} data-testid="go-back-button">
+          <Button onClick={handleGoBackClick} data-testid={GO_BACK_BUTTON_TEST_ID}>
             <StyledGoBackButtonContent>
               <MdOutlineKeyboardReturn fontSize={25} />
               <StyledGoBackButtonText>Return to search</StyledGoBackButtonText>

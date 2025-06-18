@@ -13,6 +13,14 @@ import { QueryClientWrapper } from '../../../utils/testUtils/QueryClientWrapper'
 import { MOCK_LIST_MOVIES_ONE_ITEM, MOCK_LIST_MOVIES_TWO_ITEMS } from '../constants';
 import { lightTheme } from '../../../styles/themes';
 import type { ListMovie } from '../../../types';
+import {
+  CARD_LIST_MOVIE_TEST_ID,
+  CARD_LIST_MOVIES_SKELETON_TEST_ID,
+  CLEAN_INPUT_SEARCH_BUTTON_TEST_ID,
+  NO_MOVIES_FOUND_TEST_ID,
+  SHOW_MORE_BUTTON_TEST_ID,
+  SPINNER_TEST_ID,
+} from '../../../constants';
 
 vi.mock('../../../store/inputSearchMovieStore');
 vi.mock('../../../hooks/useGetListMovies');
@@ -124,7 +132,7 @@ describe('ListMoviePage', () => {
     });
     renderListMovies();
 
-    expect(screen.getAllByTestId('card-skeleton')).toHaveLength(8);
+    expect(screen.getAllByTestId(CARD_LIST_MOVIES_SKELETON_TEST_ID)).toHaveLength(8);
   });
 
   it('renders list movies when data is available', async () => {
@@ -137,7 +145,7 @@ describe('ListMoviePage', () => {
     renderListMovies();
 
     expect(await screen.findByText('Batman')).toBeInTheDocument();
-    expect(screen.queryByTestId('show-more-button')).toBeInTheDocument();
+    expect(screen.queryByTestId(SHOW_MORE_BUTTON_TEST_ID)).toBeInTheDocument();
   });
 
   it('not display the "Show more" button if the hasNextPage is false', async () => {
@@ -151,14 +159,14 @@ describe('ListMoviePage', () => {
     renderListMovies();
 
     expect(await screen.findByText('Batman')).toBeInTheDocument();
-    expect(screen.queryByTestId('show-more-button')).not.toBeInTheDocument();
+    expect(screen.queryByTestId(SHOW_MORE_BUTTON_TEST_ID)).not.toBeInTheDocument();
   });
 
   it('updates the list movies when the "show more" button is clicked', async () => {
     renderListMovies();
 
     await waitFor(() => {
-      const showMorebutton = screen.getByTestId('show-more-button');
+      const showMorebutton = screen.getByTestId(SHOW_MORE_BUTTON_TEST_ID);
       expect(showMorebutton).toBeInTheDocument();
       userEvent.click(showMorebutton);
     });
@@ -173,12 +181,12 @@ describe('ListMoviePage', () => {
     renderListMovies();
 
     await waitFor(() => {
-      const showMorebutton = screen.getByTestId('show-more-button');
+      const showMorebutton = screen.getByTestId(SHOW_MORE_BUTTON_TEST_ID);
       expect(showMorebutton).toBeInTheDocument();
       userEvent.click(showMorebutton);
     });
 
-    const showMorebutton = screen.getByTestId('spinner');
+    const showMorebutton = screen.getByTestId(SPINNER_TEST_ID);
 
     expect(showMorebutton).toBeInTheDocument();
   });
@@ -193,7 +201,7 @@ describe('ListMoviePage', () => {
 
     renderListMovies();
 
-    const noMoviesFound = await screen.findByTestId('no-movies-found');
+    const noMoviesFound = await screen.findByTestId(NO_MOVIES_FOUND_TEST_ID);
 
     expect(noMoviesFound).toBeInTheDocument();
   });
@@ -201,7 +209,7 @@ describe('ListMoviePage', () => {
   it('show clean input search button if input search value exists', async () => {
     renderListMovies();
 
-    const cleanInputSearchButton = screen.getByTestId('clean-input-search-button');
+    const cleanInputSearchButton = screen.getByTestId(CLEAN_INPUT_SEARCH_BUTTON_TEST_ID);
 
     expect(cleanInputSearchButton).toBeInTheDocument();
   });
@@ -212,7 +220,7 @@ describe('ListMoviePage', () => {
 
     renderListMovies();
 
-    const cleanInputSearchButton = screen.queryByTestId('clean-input-search-button');
+    const cleanInputSearchButton = screen.queryByTestId(CLEAN_INPUT_SEARCH_BUTTON_TEST_ID);
 
     expect(cleanInputSearchButton).not.toBeInTheDocument();
   });
@@ -220,7 +228,7 @@ describe('ListMoviePage', () => {
   it('navigates to details movie page when a card movie is clicked', async () => {
     renderListMovies();
 
-    const movieCard = screen.getByTestId('card-movie');
+    const movieCard = screen.getByTestId(CARD_LIST_MOVIE_TEST_ID);
 
     expect(movieCard).toBeInTheDocument();
 

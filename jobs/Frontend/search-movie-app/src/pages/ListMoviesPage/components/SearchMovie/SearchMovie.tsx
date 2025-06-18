@@ -4,6 +4,7 @@ import {
   StyledSearchMovieInputCleanButton,
   StyledSearchMovieInputContainer,
 } from './SearchMovie.styles';
+import { CLEAN_INPUT_SEARCH_BUTTON_TEST_ID } from '../../../../constants';
 
 export const SearchMovie = ({
   value,
@@ -13,11 +14,15 @@ export const SearchMovie = ({
   onChange: (value: string) => void;
 }) => (
   <StyledSearchMovieInputContainer>
-    <StyledSearchMovieInput value={value} onChange={e => onChange(e.target.value)} />
+    <StyledSearchMovieInput
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder="Type to start searching..."
+    />
     {value && (
       <StyledSearchMovieInputCleanButton
         onClick={() => onChange('')}
-        data-testid="clean-input-search-button"
+        data-testid={CLEAN_INPUT_SEARCH_BUTTON_TEST_ID}
       >
         <MdHighlightOff />
       </StyledSearchMovieInputCleanButton>
