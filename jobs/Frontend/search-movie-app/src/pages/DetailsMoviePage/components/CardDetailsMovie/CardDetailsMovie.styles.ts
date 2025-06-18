@@ -24,6 +24,7 @@ const StyledCardMovieDetailsContent = styled.div`
   display: flex;
   flex-direction: column;
   flex: 2;
+  width: 100%;
 `;
 
 const StyledCardMovieDetailsOverview = styled.p``;
@@ -31,13 +32,14 @@ const StyledCardMovieDetailsGenreWrapper = styled.div`
   display: flex;
   gap: 15px;
   padding: 10px 0px;
+  flex-wrap: wrap;
 `;
 const StyledCardMovieDetailsGenreItem = styled.div`
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.onPrimary};
   border-radius: 8px;
   padding: 4px 15px;
-  height: 30px;
+  max-height: 45px;
   min-width: 80px;
   display: flex;
   align-items: center;
