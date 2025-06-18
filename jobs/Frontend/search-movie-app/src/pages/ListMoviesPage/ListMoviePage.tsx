@@ -23,9 +23,8 @@ const MemorizedSearchMovie = memo(
 export const ListMoviePage = () => {
   const navigate = useNavigate();
   const inputSearchMovie = useInputSearchMovie(state => state.inputSearchMovie);
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } = useGetListMovies({
-    query: inputSearchMovie,
-  });
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage, inputSearchDebounced } =
+    useGetListMovies();
   const { data: popularMovies, isLoading: isLoadingPopularMovies } = useGetPopularMovies();
   const setInputSearchMovie = useInputSearchMovie(state => state.setInputSearchMovie);
   const allMovies = data?.pages.flatMap(page => page.results) ?? [];
@@ -72,7 +71,7 @@ export const ListMoviePage = () => {
           ) : null}
         </>
       ) : (
-        <NoMoviesFound />
+        inputSearchDebounced && <NoMoviesFound />
       )}
     </>
   );

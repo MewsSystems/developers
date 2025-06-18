@@ -1,19 +1,26 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchListMovies } from '../api/fetch';
+import { useInputSearchMovie } from '../store/inputSearchMovieStore';
+import { useDebounce } from './useDebounce';
 
-const useGetListMovies = ({ query }: { query: string }) => {
+const useGetListMovies = () => {
+  const inputSearchMovie = useInputSearchMovie(state => state.inputSearchMovie);
+  const inputSearchDebounced = useDebounce(inputSearchMovie, 300);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ['listMoviess', query],
-    queryFn: ({ pageParam = 1 }) => fetchListMovies({ query, page: pageParam }),
+    queryKey: ['listMovies', inputSearchDebounced],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchListMovies({ query: inputSearchDebounced, page: pageParam }),
     getNextPageParam: lastPage => {
       if (lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
       }
       return undefined;
     },
+    enabled: !!inputSearchDebounced,
     initialPageParam: 1,
   });
-  return { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading };
+  return { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, inputSearchDebounced };
 };
 
 export { useGetListMovies };

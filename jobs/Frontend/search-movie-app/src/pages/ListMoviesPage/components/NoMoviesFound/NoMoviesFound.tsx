@@ -14,7 +14,7 @@ export const NoMoviesFound = () => {
         <StyledNoMoviesFoundImage src={resultNotFound} alt="Result not found" loading="lazy" />
         <StyledNoMoviesFoundtitle>Result not found</StyledNoMoviesFoundtitle>
         <StyledNoMoviesFoundSubtitle>
-          We couln't find what you're looking for
+          We couln't find the movie you're looking for
         </StyledNoMoviesFoundSubtitle>
       </StyledNoMoviesFoundTextcontainer>
     </Wrapper>
