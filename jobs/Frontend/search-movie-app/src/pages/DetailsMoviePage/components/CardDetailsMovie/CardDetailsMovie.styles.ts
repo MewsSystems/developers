@@ -12,7 +12,7 @@ const StyledCardMovieDetailsWrapper = styled.div`
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.surface};
 
-  @media (max-width: 991px) {
+  @media (max-width: 794px) {
     flex-direction: column;
   }
 `;
@@ -62,7 +62,8 @@ const StyledCardMovieDetailsTagline = styled.p`
 `;
 
 const StyledCardMovieImageWrapper = styled.div`
-  @media (max-width: 991px) {
+  width: 300px;
+  @media (max-width: 797px) {
     width: 100%;
   }
 `;
