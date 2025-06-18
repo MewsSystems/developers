@@ -1,4 +1,4 @@
-import type { Movie } from '../types/movieTypes';
+import type { Movie } from '../types';
 
 type ListMoviesResponse = {
   page: number;

@@ -8,11 +8,11 @@ import { DetailsMoviePage } from '../../DetailsMoviePage/DetailsMoviePage';
 import { ListMoviePage } from '../ListMoviePage';
 import { useGetListMovies, useGetPopularMovies } from '../../../hooks';
 import { listMoviesAdapter } from '../../../adapters/listMoviesAdapter';
-import { useInputSearchMovie } from '../../../store/inputSearchMovieStore';
+import { useInputSearchMovie } from '../../../store';
 import { QueryClientWrapper } from '../../../utils/testUtils/QueryClientWrapper';
 import { MOCK_LIST_MOVIES_ONE_ITEM, MOCK_LIST_MOVIES_TWO_ITEMS } from '../constants';
 import { lightTheme } from '../../../styles/themes';
-import type { ListMovie } from '../../../types/movieTypes';
+import type { ListMovie } from '../../../types';
 
 vi.mock('../../../store/inputSearchMovieStore');
 vi.mock('../../../hooks/useGetListMovies');
@@ -80,6 +80,7 @@ const mockUseGetListMovies = ({
     fetchNextPage: vi.fn(),
     isLoading,
     isFetchingNextPage,
+    inputSearchDebounced: 'man',
   });
 };
 

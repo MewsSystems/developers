@@ -9,8 +9,9 @@ const useGetListMovies = () => {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['listMovies', inputSearchDebounced],
-    queryFn: ({ pageParam = 1 }) =>
-      fetchListMovies({ query: inputSearchDebounced, page: pageParam }),
+    queryFn: ({ pageParam = 1 }) => {
+      return fetchListMovies({ query: inputSearchDebounced, page: pageParam });
+    },
     getNextPageParam: lastPage => {
       if (lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;

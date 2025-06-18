@@ -84,4 +84,11 @@ type ListMovie = {
   voteTotalCount: number;
 };
 
+export interface DetailsMovie extends ListMovie {
+  genres: Genre[];
+  tagline: string;
+  overview: string;
+  mobileImageURL: string;
+}
+
 export type { MovieDetails, Movie, ListMovie };

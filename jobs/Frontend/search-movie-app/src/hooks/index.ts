@@ -1,5 +1,7 @@
 import { useGetListMovies } from './useGetListMovies';
-import { useGetDetailsMovie } from './useGetDetailsMovie';
 import { useGetPopularMovies } from './useGetPopularMovies';
+import { useGetDetailsMovie } from './useGetDetailsMovie';
+import { useDebounce } from './useDebounce';
+import { useIsMobile } from './useIsMobile';
 
-export { useGetListMovies, useGetDetailsMovie, useGetPopularMovies };
+export { useGetListMovies, useGetDetailsMovie, useGetPopularMovies, useDebounce, useIsMobile };

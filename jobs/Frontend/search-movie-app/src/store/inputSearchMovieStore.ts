@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { InputSearchMovieState } from '../types/storeTypes';
+import type { InputSearchMovieState } from '../types';
 
 export const useInputSearchMovie = create<InputSearchMovieState>(set => ({
   inputSearchMovie: '',

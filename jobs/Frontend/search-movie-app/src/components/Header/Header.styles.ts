@@ -4,12 +4,15 @@ const StyledHeaderWrapper = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: center;
-  position: relative;
+  justify-content: space-between;
 `;
-const StyledHeaderText = styled.h1`
+const StyledHeaderText = styled.p`
+  font-size: 4.5rem;
   display: flex;
   margin: 0;
+  @media (max-width: 991px) {
+    font-size: 3em;
+  }
 `;
 const StyledToggle = styled.button`
   display: flex;
@@ -23,8 +26,29 @@ const StyledToggle = styled.button`
     color: ${({ theme }) => theme.colors.hoverPrimary};
     transform: scale(1.1);
   }
-  position: absolute;
-  right: 0;
+`;
+const StyledGoBackButtonContent = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+`;
+const StyledGoBackButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+const StyledGoBackButtonText = styled.p`
+  @media (max-width: 991px) {
+    display: none;
+  }
 `;
 
-export { StyledHeaderWrapper, StyledHeaderText, StyledToggle };
+export {
+  StyledHeaderWrapper,
+  StyledHeaderText,
+  StyledToggle,
+  StyledGoBackButtonContent,
+  StyledGoBackButtonText,
+  StyledGoBackButtonWrapper,
+};

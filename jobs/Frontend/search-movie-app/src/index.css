@@ -14,3 +14,22 @@
   align-items: center;
   flex-direction: column;
 }
+
+.flex {
+  display: flex;
+}
+.align-center {
+  align-items: center;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.mr-4 {
+  margin-right: 4;
+}
+
+.w-100 {
+  width: 100%;
+}

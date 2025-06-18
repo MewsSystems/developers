@@ -1,4 +1,4 @@
-import type { MovieDetails } from '../../types/movieTypes';
+import type { MovieDetails } from '../../types';
 import { instance } from '../instance';
 import { handleAxiosError } from '../utils/handleAxiosError';
 

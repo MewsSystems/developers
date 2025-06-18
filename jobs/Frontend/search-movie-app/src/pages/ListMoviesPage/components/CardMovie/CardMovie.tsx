@@ -1,24 +1,15 @@
-import { FaStar, FaCalendarAlt } from 'react-icons/fa';
-import { TbRating18Plus } from 'react-icons/tb';
 import {
-  StyledAdultBadge,
   StyledCardMovieContainer,
   StyledCardMovieContent,
-  StyledCardMovieImage,
   StyledInfoBottom,
-  StyledReleaseDate,
   StyledTitle,
-  StyledVote,
-  StyledVoteNumber,
 } from './CardMovie.styles';
-import { getImageURL } from '../../../../utils/getImageURL';
-import noImageAvailable from '../../../../assets/No_Image_Available.jpg';
-import { parseReleaseDate, parseVoteAverage } from '../../utils';
-import type { CardMovieProps } from '../../types';
+import { AdultBadge, Image, Vote, ReleaseDate } from '../../../../components';
+import { FILE_SIZE_LIST_MOVIES } from '../../constants';
+import type { CardMovieProps } from '../../../types';
 
 export const CardMovie: React.FC<CardMovieProps> = ({ data, handleOnClick }) => {
   const { imageURL, isAdult, releaseDate, title, voteAverage, voteTotalCount } = data;
-  const { type, vote } = parseVoteAverage(voteAverage);
 
   return (
     <StyledCardMovieContainer
@@ -28,32 +19,13 @@ export const CardMovie: React.FC<CardMovieProps> = ({ data, handleOnClick }) => 
       data-testid="card-movie"
     >
       <StyledCardMovieContent>
-        <StyledCardMovieImage
-          src={imageURL ? getImageURL(imageURL) : noImageAvailable}
-          alt={title}
-          loading="lazy"
-        />
+        <Image fileSize={FILE_SIZE_LIST_MOVIES} imageURL={imageURL} title={title} />
         <StyledInfoBottom>
           {voteTotalCount ? (
-            <StyledVote>
-              <StyledVoteNumber $type={type}>
-                <FaStar style={{ marginRight: 4 }} />
-                {vote}
-              </StyledVoteNumber>
-              {`(${voteTotalCount})`}
-            </StyledVote>
+            <Vote voteAverage={voteAverage} voteTotalCount={voteTotalCount} />
           ) : null}
-          {isAdult && (
-            <StyledAdultBadge title="+18">
-              <TbRating18Plus />
-            </StyledAdultBadge>
-          )}
-          {releaseDate && (
-            <StyledReleaseDate>
-              <FaCalendarAlt style={{ marginRight: 4 }} />
-              {parseReleaseDate(releaseDate)}
-            </StyledReleaseDate>
-          )}
+          {isAdult && <AdultBadge />}
+          {releaseDate && <ReleaseDate releaseDate={releaseDate} />}
         </StyledInfoBottom>
       </StyledCardMovieContent>
       <StyledTitle>{title}</StyledTitle>

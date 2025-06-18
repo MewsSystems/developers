@@ -3,7 +3,7 @@ import { fetchDetailsMovie } from '../fetchDetailsMovie';
 import { instance } from '../../instance';
 import { MOCKED_AXIOS_ERROR } from '../../constants';
 import { MOCKED_DETAILS_MOVIE } from '../../../constants';
-import type { MovieDetails } from '../../../types/movieTypes';
+import type { MovieDetails } from '../../../types';
 
 vi.mock('../../instance');
 

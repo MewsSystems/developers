@@ -2,10 +2,10 @@ const lightTheme = {
   colors: {
     background: '#f5f5f5',
     surface: '#ffffff',
-    primary: '#00695C',
+    primary: '#ce606e',
     disabled: '#EEEEEE',
     error: '#B00020',
-    hoverPrimary: '#00796c',
+    hoverPrimary: '#c6525b',
     hoverSurface: '#f5f5f5',
     onPrimary: '#ffffff',
     onSurface: '#000000',
@@ -16,11 +16,11 @@ const lightTheme = {
 const darkTheme = {
   colors: {
     background: '#121212',
-    surface: '#3f3f3f',
-    primary: '#4DB6AC',
+    surface: '#1e1e1e',
+    primary: '#b64d57',
     disabled: '#EEEEEE',
     error: '#CF6679',
-    hoverPrimary: '#26a699',
+    hoverPrimary: '#a14752',
     hoverSurface: '#727272',
     onPrimary: '#000000',
     onSurface: '#ffffff',

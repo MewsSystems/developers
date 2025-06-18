@@ -8,7 +8,11 @@ export const StyledButton = styled.button`
     color: ${({ theme }) => theme.colors.onDisabled};
     cursor: not-allowed;
   }
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 24px;
+  gap: 5px;
   border-style: none;
   box-shadow:
     rgba(0, 0, 0, 0.2) 0 3px 5px -1px,
@@ -17,8 +21,7 @@ export const StyledButton = styled.button`
   color: ${({ theme }) => theme.colors.onPrimary};
   cursor: pointer;
   height: 48px;
-  justify-content: center;
-  padding: 2px 24px;
+  padding: 2px 12px;
   text-align: center;
   transition:
     box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),

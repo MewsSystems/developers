@@ -1,4 +1,4 @@
-import type { ListMovie, Movie } from '../types/movieTypes';
+import type { ListMovie, Movie } from '../types';
 
 export const listMoviesAdapter = (listMoviesData: Movie[]): ListMovie[] => {
   const listMovies: ListMovie[] = listMoviesData.map(movie => {

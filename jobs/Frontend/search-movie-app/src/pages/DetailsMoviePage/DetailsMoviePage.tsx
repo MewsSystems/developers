@@ -1,15 +1,17 @@
 import { useParams } from 'react-router';
+import { CardDetailsMovie, CardDetailsMovieSkeleton } from './components';
 import { useGetDetailsMovie } from '../../hooks';
+import { detailsMovieAdapter } from '../../adapters/detailsMovieAdapter';
 
 export const DetailsMoviePage = () => {
   const { movieId } = useParams();
-  const { data: detailsMovie, isLoading } = useGetDetailsMovie(movieId || '');
+  const { data, isLoading } = useGetDetailsMovie(movieId || '');
+
+  const detailsMovie = data && detailsMovieAdapter(data);
 
   return detailsMovie && !isLoading ? (
-    <div>
-      <p>Title: {detailsMovie.title}</p>
-      <p>Overview: {detailsMovie.overview}</p>
-      <p>Release date: {detailsMovie.release_date}</p>
-    </div>
-  ) : null;
+    <CardDetailsMovie data={detailsMovie} />
+  ) : (
+    <CardDetailsMovieSkeleton />
+  );
 };

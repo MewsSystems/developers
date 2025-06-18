@@ -8,11 +8,9 @@ import {
   NoMoviesFound,
 } from './components';
 import { listMoviesAdapter } from '../../adapters/listMoviesAdapter';
-import { Button, Wrapper } from '../../components';
+import { Button, Wrapper, Spinner } from '../../components';
 import { useInputSearchMovie } from '../../store/inputSearchMovieStore';
-import { useGetListMovies } from '../../hooks/useGetListMovies';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { useGetPopularMovies } from '../../hooks/useGetPopularMovies';
+import { useGetListMovies, useGetPopularMovies } from '../../hooks';
 
 const MemorizedSearchMovie = memo(
   ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
