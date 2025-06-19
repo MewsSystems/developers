@@ -25,6 +25,7 @@ const SkeletonImageDetailsMovie = styled(SkeletonBlock)`
   flex: 1;
   height: 600px;
   border-radius: 8px 8px 0 0;
+  width: 350px;
 `;
 
 const SkeletonTitleDetailsMovie = styled(SkeletonBlock)`
