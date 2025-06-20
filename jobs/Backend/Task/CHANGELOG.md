@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Integration Test testing entire flow with mocked Http Responses
 - The `CHANGELOG` file itself
 - `Deployment.md` and `Dockerfile` for deployment steps
+- Detailed `README` file
 
 ### Fixed
 - Single Responsibility Principle was being violated by the `ExchangeRateProviderService`
@@ -20,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Unit tests which were failing from the new `ExchangeRateProvider` implementation
 - csproj organisation and using .net 9 packages on a project with target of .net 6
 - `appsettings` to folow the removal of `HttpServiceSettings`
+- Use Dependency Injection on `Program.cs`
+- Spelling mistake in test file name
+- Git ignore the publish folder
 
 ### Removed
 - `HttpServiceSettings`; moved into the `CzechBankSettings`
