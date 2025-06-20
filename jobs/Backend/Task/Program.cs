@@ -36,11 +36,10 @@ namespace ExchangeRateUpdater
             // Get services
             var logger = host.Services.GetRequiredService<ILoggerFactory>()
                              .CreateLogger("Main");
-            var providerservice = host.Services.GetRequiredService<IExchangeRateProviderService>();
 
             try
             {
-                var provider = new ExchangeRateProvider(providerservice);
+                var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
                 var rates = provider.GetExchangeRatesAsync(currencies).Result;
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");

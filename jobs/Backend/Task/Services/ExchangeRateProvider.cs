@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
@@ -11,7 +12,7 @@ namespace ExchangeRateUpdater.Services
 
         public ExchangeRateProvider(IExchangeRateProviderService service)
         {
-            _service = service;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         /// <summary>

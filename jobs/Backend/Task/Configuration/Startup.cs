@@ -27,6 +27,7 @@ namespace ExchangeRateUpdater.Configuration
         {
             // Bind configurations
             services.Configure<CzechBankSettings>(Configuration.GetSection("CzechBankSettings"));
+            services.AddSingleton<ExchangeRateProvider>();
 
 
             // Add dependencies
