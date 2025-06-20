@@ -1,42 +1,32 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.HttpClients;
+using ExchangeRateUpdater.Parsers;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Polly.Extensions.Http;
 using Polly;
-using ExchangeRateUpdater.Parsers;
-using ExchangeRateUpdater.HttpClients;
 
-namespace ExchangeRateUpdater.Configuration
+namespace ExchangeRateUpdaterTests.StartupTests
 {
-    public class Startup
+    public class StartupForTest : Startup
     {
-        public IConfiguration Configuration { get; }
+        public new IConfiguration Configuration { get; }
 
-        public Startup()
+        public StartupForTest(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false);
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public new void ConfigureServices(IServiceCollection services)
         {
-            // Bind configurations
             services.Configure<CzechBankSettings>(Configuration.GetSection("CzechBankSettings"));
 
-
-            // Add dependencies
             services.AddMemoryCache();
+            services.AddSingleton<IExchangeRateParser>(sp =>
+                new CzechNationalBankTextRateParser(5, sp.GetRequiredService<ILogger<CzechNationalBankTextRateParser>>()));
 
-            // Register the parser
-            services.AddSingleton<IExchangeRateParser>(sp => new CzechNationalBankTextRateParser(5,
-            sp.GetRequiredService<ILogger<CzechNationalBankTextRateParser>>()));
-            
-            // === Add resilient HTTP clients with Polly ===
             services.AddHttpClient<DailyExchangeRateFetcher>()
                 .ConfigureHttpClient((provider, client) =>
                 {
@@ -46,14 +36,10 @@ namespace ExchangeRateUpdater.Configuration
                 .AddPolicyHandler((provider, request) =>
                 {
                     var settings = provider.GetRequiredService<IOptions<CzechBankSettings>>().Value;
-
-                    return HttpPolicyExtensions
+                    return Polly.Extensions.Http.HttpPolicyExtensions
                         .HandleTransientHttpError()
-                        .WaitAndRetryAsync(
-                            retryCount: settings.RetryCount,
-                            sleepDurationProvider: retryAttempt =>
-                                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
-                        );
+                        .WaitAndRetryAsync(settings.RetryCount,
+                            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
                 });
 
             services.AddHttpClient<OtherCurrencyExchangeRateFetcher>()
@@ -65,24 +51,16 @@ namespace ExchangeRateUpdater.Configuration
                 .AddPolicyHandler((provider, request) =>
                 {
                     var settings = provider.GetRequiredService<IOptions<CzechBankSettings>>().Value;
-
-                    return HttpPolicyExtensions
+                    return Polly.Extensions.Http.HttpPolicyExtensions
                         .HandleTransientHttpError()
-                        .WaitAndRetryAsync(
-                            retryCount: settings.RetryCount,
-                            sleepDurationProvider: retryAttempt =>
-                                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
-                        );
+                        .WaitAndRetryAsync(settings.RetryCount,
+                            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
                 });
 
-            // Register fetchers
             services.AddSingleton<IExhangeRateFetcher, DailyExchangeRateFetcher>();
             services.AddSingleton<IExhangeRateFetcher, OtherCurrencyExchangeRateFetcher>();
-
-            // Register main provider
             services.AddSingleton<IExchangeRateProviderService, ExchangeRateProviderService>();
 
-            // Add logging
             services.AddLogging(logging =>
             {
                 logging.ClearProviders();

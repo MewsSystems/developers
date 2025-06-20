@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Services;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Services
 {
     public class ExchangeRateProvider
     {

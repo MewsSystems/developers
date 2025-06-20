@@ -1,81 +1,80 @@
 ﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.HttpClients;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Parsers;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Moq;
 using RichardSzalay.MockHttp;
 using Xunit;
 
-namespace ExchangeRateUpdaterTests.ProviderServiceTests
+namespace ExchangeRateUpdater.Tests
 {
     public class ExchangeRateProviderServiceTests
     {
-        private const string DailySample =
-            "Country|Currency|Amount|Code|Rate\n" +
-            "Date 20.05.2025 #123\n" +
-            "United States|dollar|1|USD|22,345\n";
-
-        private const string OtherSample =
-            "Country|Currency|Amount|Code|Rate|Source\n" +
-            "Date 20.05.2025 #456\n" +
-            "Switzerland|franc|1|CHF|25,123|SNB\n";
-
         [Fact]
-        public async Task GetExchangeRatesAsync_ReturnsCombinedRates()
+        public async Task GetExchangeRateAsync_ReturnsRates_FromMultipleFetchers()
         {
-            var provider = CreateProvider(DailySample, OtherSample);
+            // Arrange
+            var provider = CreateProviderWithError(dailyFails: false, otherFails: false);
 
-            var currencies = new List<Currency>
+            var currencies = new[]
             {
                 new Currency("USD"),
                 new Currency("CHF")
             };
 
-            var result = await provider.GetExchangeRateAsync(currencies);
+            // Act
+            var rates = await provider.GetExchangeRateAsync(currencies);
 
-            Assert.Equal(2, result.Count);
-            Assert.Contains(result, r => r.TargetCurrency.Code == "USD");
-            Assert.Contains(result, r => r.TargetCurrency.Code == "CHF");
+            // Assert
+            Assert.NotEmpty(rates);
+            Assert.Contains(rates, r => r.TargetCurrency.Code == "USD");
+            Assert.Contains(rates, r => r.TargetCurrency.Code == "CHF");
         }
 
         [Fact]
-        public async Task GetExchangeRatesAsync_FallsBackToCache_WhenDailyFails()
+        public async Task GetExchangeRateAsync_FallbackToCache_WhenFetchFails()
         {
+            // Arrange
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
+            var provider = CreateProviderWithError(dailyFails: false, otherFails: false, memoryCache);
 
-            var provider = CreateProvider(
-                dailyRatesResponse:
-                    "Country|Currency|Amount|Code|Rate\nDate\nUnited States|dollar|1|USD|22,345\n",
-                otherRatesResponse:
-                    "Country|Currency|Amount|Code|Rate|Source\nDate\nSwitzerland|franc|1|CHF|25,123|SNB\n",
-                memoryCache: memoryCache);
+            var currencies = new[] { new Currency("USD") };
 
-            var requested = new[] { new Currency("USD"), new Currency("CHF") };
-            var firstResult = await provider.GetExchangeRateAsync(requested);
-            Assert.Equal(2, firstResult.Count); // fills cache 1st time
+            // Prime the cache
+            var initial = await provider.GetExchangeRateAsync(currencies);
+            Assert.NotEmpty(initial);
 
-            // Fail http call
+            // Now simulate both fetchers failing
             var providerWithFailure = CreateProviderWithError(
                 dailyFails: true,
                 otherFails: true,
-                memoryCache: memoryCache // use the same cache
-            );
+                memoryCache);
 
-            var fallbackResult = await providerWithFailure.GetExchangeRateAsync(requested);
+            // Act
+            var fallbackResult = await providerWithFailure.GetExchangeRateAsync(currencies);
 
-            Assert.Equal(2, fallbackResult.Count); // cache fallback works
+            // Assert
+            Assert.NotEmpty(fallbackResult);
+            Assert.Equal(initial.Count, fallbackResult.Count); // cache fallback works
         }
 
         [Fact]
-        public async Task GetExchangeRatesAsync_Throws_WhenBothSourcesFailAndNoCache()
+        public async Task GetExchangeRateAsync_Throws_WhenNoCacheAndAllFetchersFail()
         {
+            // Arrange
             var provider = CreateProviderWithError(dailyFails: true, otherFails: true);
 
             var requested = new[] { new Currency("USD") };
 
-            await Assert.ThrowsAsync<ApplicationException>(() =>
-                provider.GetExchangeRateAsync(requested));
+            // Act & Assert
+            await Assert.ThrowsAsync<ApplicationException>(async() =>
+            {
+                await provider.GetExchangeRateAsync(requested);
+            });
         }
 
         private ExchangeRateProviderService CreateProviderWithError(bool dailyFails, bool otherFails, IMemoryCache memoryCache = null)
@@ -93,41 +92,32 @@ namespace ExchangeRateUpdaterTests.ProviderServiceTests
                 mockHttp.When("https://mock-other").Respond("text/plain", "Country|Currency|Amount|Code|Rate|Source\nDate\nSwitzerland|franc|1|CHF|25,123|SNB\n");
 
             var httpClient = mockHttp.ToHttpClient();
-            var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<ExchangeRateProviderService>();
-            var options = Options.Create(new CzechBankSettings
-            {
-                DailyRatesUrl = "https://mock-daily",
-                OtherCurrencyRatesUrl = "https://mock-other"
-            });
 
-            return new ExchangeRateProviderService(httpClient, logger, options, memoryCache ?? new MemoryCache(new MemoryCacheOptions()));
-        }
+            var mockDailyLogger = new Mock<ILogger<DailyExchangeRateFetcher>>();
+            var mockOtherLogger = new Mock<ILogger<OtherCurrencyExchangeRateFetcher>>();
 
+            var dailyFetcher = new DailyExchangeRateFetcher(
+                httpClient,
+                Options.Create(new CzechBankSettings { DailyRatesUrl = "https://mock-daily" }), mockDailyLogger.Object);
 
-        private ExchangeRateProviderService CreateProvider(string dailyRatesResponse, string otherRatesResponse, IMemoryCache memoryCache = null)
-        {
-            var mockHttp = new MockHttpMessageHandler();
+            var otherFetcher = new OtherCurrencyExchangeRateFetcher(
+                httpClient,
+                Options.Create(new CzechBankSettings { OtherCurrencyRatesUrl = "https://mock-other" }), mockOtherLogger.Object);
 
-            mockHttp.When("https://mock-daily")
-                    .Respond("text/plain", dailyRatesResponse);
+            var fetchers = new List<IExhangeRateFetcher> { dailyFetcher, otherFetcher };
 
-            mockHttp.When("https://mock-other")
-                    .Respond("text/plain", otherRatesResponse);
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddDebug());
+            var parserLogger = loggerFactory.CreateLogger<CzechNationalBankTextRateParser>();
+            var parser = new CzechNationalBankTextRateParser(5, parserLogger);
 
-            var httpClient = mockHttp.ToHttpClient();
+            var providerLogger = loggerFactory.CreateLogger<ExchangeRateProviderService>();
 
-            var logger = LoggerFactory.Create(builder => builder.AddConsole())
-                                      .CreateLogger<ExchangeRateProviderService>();
-
-
-            var options = Options.Create(new CzechBankSettings
-            {
-                DailyRatesUrl = "https://mock-daily",
-                OtherCurrencyRatesUrl = "https://mock-other"
-            });
-
-
-            return new ExchangeRateProviderService(httpClient, logger, options, memoryCache ?? new MemoryCache(new MemoryCacheOptions()));
+            return new ExchangeRateProviderService(
+                fetchers,
+                parser,
+                memoryCache ?? new MemoryCache(new MemoryCacheOptions()),
+                providerLogger
+            );
         }
     }
 }
