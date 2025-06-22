@@ -3,9 +3,11 @@ import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { LoadingSpinner } from "../components/LoadingSpinner"
 import { MovieGrid } from "../components/MovieGrid"
+import { Pagination } from "../components/Pagination"
 import { SearchInput } from "../components/SearchInput"
 import { useDebounce } from "../hooks/useDebounce"
 import { useMovieSearch, usePopularMovies } from "../hooks/useMovies"
+import { usePagination } from "../hooks/usePagination"
 
 const Container = styled.div`
   max-width: 1200px;
@@ -31,26 +33,61 @@ const SectionTitle = styled.h2`
   text-align: center;
 `
 
+const ResultsInfo = styled.p`
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+`
+
 export const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const debouncedQuery = useDebounce(searchQuery, 500)
 
-  const { data: popularData, isLoading: popularLoading, error: popularError } = usePopularMovies()
+  const [popularPage, setPopularPage] = useState(1)
+  const [searchPage, setSearchPage] = useState(1)
+
+  const {
+    data: popularData,
+    isLoading: popularLoading,
+    error: popularError,
+  } = usePopularMovies(popularPage)
 
   const {
     data: searchData,
     isLoading: searchLoading,
     error: searchError,
-  } = useMovieSearch(debouncedQuery)
+  } = useMovieSearch(debouncedQuery, searchPage)
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
+    setSearchPage(1)
   }
 
   const isSearching = !!debouncedQuery.trim()
   const data = isSearching ? searchData : popularData
   const isLoading = isSearching ? searchLoading : popularLoading
   const error = isSearching ? searchError : popularError
+
+  const totalPages = data?.total_pages || 0
+  const currentPage = isSearching ? searchPage : popularPage
+
+  const handlePageChange = (page: number) => {
+    if (isSearching) {
+      setSearchPage(page)
+    } else {
+      setPopularPage(page)
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  const pagination = usePagination({
+    totalPages,
+    currentPage,
+    maxVisiblePages: 3,
+    onPageChange: handlePageChange,
+  })
 
   return (
     <Container>
@@ -81,7 +118,19 @@ export const SearchPage = () => {
           <SectionTitle>
             {isSearching ? `Search Results for "${debouncedQuery}"` : "Popular Movies"}
           </SectionTitle>
+
+          {data.total_results && (
+            <ResultsInfo>
+              {isSearching
+                ? `Found ${data.total_results.toLocaleString()} movies`
+                : `${data.total_results.toLocaleString()} popular movies`}
+              {totalPages > 1 && ` • Page ${currentPage} of ${totalPages}`}
+            </ResultsInfo>
+          )}
+
           <MovieGrid movies={data.results} />
+
+          {totalPages > 1 && <Pagination {...pagination} />}
         </>
       )}
 
