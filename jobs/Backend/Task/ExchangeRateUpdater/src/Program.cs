@@ -31,13 +31,9 @@ namespace ExchangeRateUpdater
             {
                 using var host = CreateHostBuilder(args).Build();
 
-                // Get the exchange rate provider from the service provider
                 var exchangeRateProvider = host.Services.GetRequiredService<IExchangeRateProvider>();
-
-                // Get the logger
                 var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
-                // Get the list of currencies to query (can be overridden via command line)
                 var currencies = args.Length > 0
                     ? args.Select(c => new Currency(c.Trim().ToUpper()))
                     : DefaultCurrencies;
