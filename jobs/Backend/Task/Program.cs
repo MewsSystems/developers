@@ -1,32 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static Dictionary<Currency, bool> GetCurrencies(string path)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
-        {
-            try
+            var currencies = new Dictionary<Currency, bool>();
+            if (File.Exists(path) == false)
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                throw new FileNotFoundException($"cannot find \"{path}\"");
+            }
+			string content = File.ReadAllText(path);
+			foreach (string currency in content.Split(new char[] {' ', ',', '|', '\n', '\t'}, StringSplitOptions.RemoveEmptyEntries))
+            {
+				currencies.Add(new Currency(currency), false);
+			}
+			Tools.WriteLine($"Successfully read {currencies.Count()} currencies from \"{path}\"", ConsoleColor.Green);
+			return currencies;
+		}
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+		public static void Main(string[] args)
+        {
+			try
+            {
+				string filePath = args.Length < 1 ? "currencies.txt" : args[0];
+				var provider = new ExchangeRateProvider();
+                var currencies = GetCurrencies(filePath);
+				var rates = provider.GetExchangeRates(currencies);
+
+				Tools.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:", ConsoleColor.Green);
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -34,9 +40,8 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                Tools.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.", ConsoleColor.Red);
             }
-
             Console.ReadLine();
         }
     }
