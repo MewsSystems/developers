@@ -10,7 +10,7 @@ const paramsSchema = z.object({
 
 export async function GET(
   _req: NextRequest,
-  context: { params: { movieId: string } }
+  context: { params: Promise<{ movieId: string }> }
 ): Promise<NextResponse<APIResponse<MovieDetailResponse>>> {
   const params = await context.params;
 
