@@ -23,7 +23,7 @@ namespace ExchangeRateUpdater.Infrastructure.Http
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _options = options.Value ?? throw new ArgumentNullException(nameof(options));
 
             _httpClient.BaseAddress = new Uri(_options.BaseUrl);
             _httpClient.Timeout = TimeSpan.FromSeconds(_options.RequestTimeoutSeconds);
@@ -43,7 +43,7 @@ namespace ExchangeRateUpdater.Infrastructure.Http
                 {
                     _logger.LogDebug("Attempting to retrieve exchange rates from CNB API.");
                     using var response = await _httpClient.GetAsync(_options.ExchangeRatesEndpoint);
-                    response.EnsureSuccessStatusCode(); ;
+                    response.EnsureSuccessStatusCode();
 
                     var content = await response.Content.ReadAsStringAsync();
                     _logger.LogDebug("Successfully retrieved exchange rates from CNB API.");
@@ -66,7 +66,7 @@ namespace ExchangeRateUpdater.Infrastructure.Http
                 .WaitAndRetryAsync(_options.MaxRetries, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                 onRetry: (exception, delay, retryCount, _) =>
                 {
-                    var ex = exception.Exception ?? new Exception(exception?.ToString() ?? "Unknown error");
+                    var ex = exception.Exception ?? new Exception(exception.ToString() ?? "Unknown error");
                     _logger.LogWarning(ex, "Retry {RetryCount} for request due to: {ExceptionMessage}. Waiting {Delay} before next attempt.",
                         retryCount, ex.Message, delay);
                 });
@@ -81,7 +81,7 @@ namespace ExchangeRateUpdater.Infrastructure.Http
                     durationOfBreak: TimeSpan.FromSeconds(_options.CircuitBreakerDurationOfBreakSeconds),
                     onBreak: (exception, breakDelay) =>
                     {
-                        var ex = exception.Exception ?? new Exception(exception?.ToString() ?? "Unknown error");
+                        var ex = exception.Exception ?? new Exception(exception.ToString() ?? "Unknown error");
                         _logger.LogWarning(
                             ex,
                             "Circuit breaker opened for {BreakDelay} seconds",
@@ -108,7 +108,7 @@ namespace ExchangeRateUpdater.Infrastructure.Http
                     fallbackValue: string.Empty,
                     onFallbackAsync: async (outcome) =>
                     {
-                        var ex = outcome.Exception ?? new Exception(outcome?.ToString() ?? "Unknown error");
+                        var ex = outcome.Exception ?? new Exception(outcome.ToString() ?? "Unknown error");
                         _logger.LogWarning(ex, "Fallback triggered due to error");
                         await Task.CompletedTask;
                     });

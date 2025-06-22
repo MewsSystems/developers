@@ -24,20 +24,18 @@ namespace ExchangeRateUpdater.Common
                 .Select(d => new
                 {
                     Delimiter = d,
-                    // Find the most common count of this delimiter, ignoring lines where it doesn't appear.
                     MostCommonGroup = sampleLines.GroupBy(l => l.Count(c => c == d))
-                                                 .Where(g => g.Key > 0) // Only consider lines with at least one delimiter
-                                                 .OrderByDescending(g => g.Count()) // Order by number of lines in group
-                                                 .ThenByDescending(g => g.Key) // Then by number of delimiters
+                                                 .Where(g => g.Key > 0) 
+                                                 .OrderByDescending(g => g.Count()) 
+                                                 .ThenByDescending(g => g.Key) 
                                                  .Select(g => new { DelimiterCount = g.Key, LineCount = g.Count() })
                                                  .FirstOrDefault()
                 })
                 .Where(info => info.MostCommonGroup != null && info.MostCommonGroup.LineCount > 1)
-                .OrderByDescending(info => info?.MostCommonGroup?.LineCount)
-                .ThenByDescending(info => info?.MostCommonGroup?.DelimiterCount)
+                .OrderByDescending(info => info.MostCommonGroup?.LineCount)
+                .ThenByDescending(info => info.MostCommonGroup?.DelimiterCount)
                 .FirstOrDefault();
-
-            // Return the detected delimiter, or fallback to the pipe character which is expected for CNB.
+            
             return delimiterInfo?.Delimiter ?? ',';
         }
 
@@ -49,7 +47,6 @@ namespace ExchangeRateUpdater.Common
         /// <returns>The index of the header row, or -1 if not found.</returns>
         public static int FindHeaderRowIndex(IReadOnlyList<string> lines, char delimiter)
         {
-            // The header is the first line that contains the delimiter.
             for (int i = 0; i < lines.Count; i++)
             {
                 if (lines[i].Contains(delimiter))

@@ -5,13 +5,20 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.Services
 {
     /// <summary>
-    /// Default implementation of the exchange rate provider.
+    /// Provides a mechanism for retrieving exchange rates for a given set of currencies.
+    /// This is the default implementation of <see cref="IExchangeRateProvider"/> and relies on an <see cref="ICnbExchangeRateRepository"/> to fetch the data.
     /// </summary>
     public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly ICnbExchangeRateRepository _cnbExchangeRateRepository;
         private readonly ILogger<ExchangeRateProvider> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExchangeRateProvider"/> class.
+        /// </summary>
+        /// <param name="exchangeRateRepository">The repository for accessing CNB exchange rate data.</param>
+        /// <param name="logger">The logger for logging information and errors.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="exchangeRateRepository"/> or <paramref name="logger"/> is null.</exception>
         public ExchangeRateProvider(
             ICnbExchangeRateRepository exchangeRateRepository,
             ILogger<ExchangeRateProvider> logger)
@@ -19,8 +26,18 @@ namespace ExchangeRateUpdater.Services
             _cnbExchangeRateRepository = exchangeRateRepository ?? throw new ArgumentNullException(nameof(exchangeRateRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
-        /// <inheritdoc />
+        
+        
+        /// <summary>
+        /// Asynchronously retrieves exchange rates for a specified list of currencies.
+        /// </summary>
+        /// <param name="currencies">An enumerable collection of <see cref="Currency"/> objects for which to retrieve exchange rates.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The task result contains an enumerable collection of <see cref="ExchangeRate"/>
+        /// for the requested currencies. Returns an empty collection if the input <paramref name="currencies"/> is empty.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="currencies"/> collection is null.</exception>
+        /// <exception cref="Exception">Rethrows exceptions from the underlying repository on failure.</exception>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
             if (currencies == null)

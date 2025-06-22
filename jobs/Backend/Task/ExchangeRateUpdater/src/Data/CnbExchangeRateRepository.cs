@@ -1,9 +1,7 @@
 using ExchangeRateUpdater.Core.Interfaces;
 using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Infrastructure.Http;
 using ExchangeRateUpdater.Common;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Data;
 
@@ -55,12 +53,6 @@ public class CnbExchangeRateRepository : ICnbExchangeRateRepository
     /// <exception cref="HttpRequestException"></exception>
     public async Task<IEnumerable<ExchangeRate>> GetSpecificExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
-        if (currencies == null || !currencies.Any())
-        {
-            _logger.LogWarning("No currencies provided for exchange rate retrieval.");
-            return Enumerable.Empty<ExchangeRate>();
-        }
-
         try
         {
             _logger.LogInformation("Retrieving specific exchange rates from CNB API for currencies: {Currencies}", string.Join(", ", currencies));

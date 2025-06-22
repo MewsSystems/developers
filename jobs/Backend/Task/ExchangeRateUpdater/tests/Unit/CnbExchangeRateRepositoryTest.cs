@@ -2,7 +2,6 @@ using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Data;
-using ExchangeRateUpdater.Infrastructure.Http;
 using ExchangeRateUpdater.Core.Interfaces;
 
 namespace ExchangeRateUpdater.Tests.Unit
@@ -28,8 +27,7 @@ Country|Currency|Amount|Code|Rate
 Australia|dollar|1|AUD|15.426
 Brazil|real|1|BRL|4.274
 Canada|dollar|1|CAD|17.009";
-
-
+            
             _mockApiClient
                 .Setup(client => client.GetLatestExchangeRatesAsync())
                 .ReturnsAsync(fakeApiResponse);
@@ -50,7 +48,6 @@ Canada|dollar|1|CAD|17.009";
         [Fact]
         public async Task GetExchangeRatesAsync_WithEmptyString_ThrowsHttpRequestException()
         {
-
             var fakeApiResponse = string.Empty;
 
             _mockApiClient

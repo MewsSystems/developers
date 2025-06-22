@@ -1,9 +1,7 @@
 using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
-using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Infrastructure.Http;
-using ExchangeRateUpdater.Core.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests.Integration
@@ -20,8 +18,7 @@ namespace ExchangeRateUpdater.Tests.Integration
             var mockLogger = new Mock<ILogger<CnbApiClient>>();
 
             var apiClient = new CnbApiClient(httpClient, mockLogger.Object, options);
-
-
+            
             var result = await apiClient.GetLatestExchangeRatesAsync();
 
             Assert.NotNull(result);

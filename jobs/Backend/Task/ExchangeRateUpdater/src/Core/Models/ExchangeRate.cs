@@ -15,7 +15,7 @@
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the value is less than or equal to zero.</exception>
         public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
         {
-            if (string.IsNullOrWhiteSpace(sourceCurrency?.Code) || string.IsNullOrWhiteSpace(targetCurrency?.Code))
+            if (string.IsNullOrWhiteSpace(sourceCurrency.Code) || string.IsNullOrWhiteSpace(targetCurrency.Code))
             {
                 throw new ArgumentException("Source and target currencies cannot be null or empty.");
             }
