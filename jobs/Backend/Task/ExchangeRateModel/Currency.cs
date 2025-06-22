@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+namespace ExchangeRateModel
 {
     public class Currency
     {
@@ -15,6 +15,13 @@
         public override string ToString()
         {
             return Code;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if(obj == null || obj.GetType() != typeof(Currency))
+                return false;
+            return Code == ((Currency)obj).Code;
         }
     }
 }
