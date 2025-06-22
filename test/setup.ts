@@ -1,3 +1,5 @@
+process.env.MOVIE_DB_ACCESS_TOKEN = 'test-token';
+
 import '@testing-library/jest-dom';
 import { server } from './server';
 
