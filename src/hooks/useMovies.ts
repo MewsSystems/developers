@@ -22,7 +22,7 @@ export const useMovieDetails = (id: number) => {
   return useQuery({
     queryKey: ["movies", "detail", id],
     queryFn: () => movieService.getMovieById(id),
-    enabled: !!id,
+    enabled: id > 0 && !Number.isNaN(id),
     staleTime: 10 * 60 * 1000,
   })
 }

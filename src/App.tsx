@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { Route, Routes } from "react-router"
 import { ThemeProvider } from "styled-components"
 import { MovieDetailPage } from "./pages/MovieDetailPage"
+import { NotFoundPage } from "./pages/NotFoundPage"
 import { SearchPage } from "./pages/SearchPage"
 import { GlobalStyles } from "./styles/GlobalStyles"
 import { theme } from "./styles/theme"
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SearchPage />} />
           <Route path="/movie/:id" element={<MovieDetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
       </ThemeProvider>

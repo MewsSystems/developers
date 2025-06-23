@@ -139,7 +139,7 @@ const ProductionCompany = styled.span`
 
 export const MovieDetailPage = () => {
   const { id } = useParams<{ id: string }>()
-  const movieId = id ? parseInt(id, 10) : 0
+  const movieId = Number(id) || 0
 
   const { data: movie, isLoading, error } = useMovieDetails(movieId)
 
@@ -156,6 +156,10 @@ export const MovieDetailPage = () => {
     const hours = Math.floor(minutes / 60)
     const mins = minutes % 60
     return `${hours}h ${mins}m`
+  }
+
+  const formatNumber = (num: number) => {
+    return num.toLocaleString("en-US")
   }
 
   if (isLoading) {
@@ -195,7 +199,7 @@ export const MovieDetailPage = () => {
             <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>
             <span>{getYear(movie.release_date)}</span>
             {movie.runtime && <span>{formatRuntime(movie.runtime)}</span>}
-            <span>{movie.vote_count} votes</span>
+            <span>{formatNumber(movie.vote_count)} votes</span>
           </MetaInfo>
 
           {movie.genres && movie.genres.length > 0 && (

@@ -9,7 +9,7 @@ const PaginationContainer = styled.div`
   margin: ${({ theme }) => theme.spacing.xl} 0;
   flex-wrap: wrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     gap: ${({ theme }) => theme.spacing.xs};
   }
 `
@@ -48,7 +48,7 @@ const PaginationButton = styled.button<{ $isActive?: boolean }>`
     transform: translateY(0);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     min-width: 32px;
     height: 32px;
     font-size: ${({ theme }) => theme.fontSizes.xs};
@@ -61,7 +61,7 @@ const PageInfo = styled.span`
   color: ${({ theme }) => theme.colors.textSecondary};
   white-space: nowrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: ${({ theme }) => theme.fontSizes.xs};
     margin: 0 ${({ theme }) => theme.spacing.sm};
   }
@@ -92,16 +92,24 @@ export const Pagination = ({
 
   return (
     <PaginationContainer>
-      <PaginationButton onClick={goToFirst} disabled={!canGoPrevious}>
+      <PaginationButton onClick={goToFirst} disabled={!canGoPrevious} aria-label="Go to first page">
         ««
       </PaginationButton>
 
-      <PaginationButton onClick={goToPrevious} disabled={!canGoPrevious}>
+      <PaginationButton
+        onClick={goToPrevious}
+        disabled={!canGoPrevious}
+        aria-label="Go to previous page"
+      >
         ‹
       </PaginationButton>
 
       {visiblePages[0] > 1 && (
-        <PaginationButton onClick={() => goToPage(1)} $isActive={currentPage === 1}>
+        <PaginationButton
+          onClick={() => goToPage(1)}
+          $isActive={currentPage === 1}
+          aria-label="Go to page 1"
+        >
           1
         </PaginationButton>
       )}
@@ -113,6 +121,8 @@ export const Pagination = ({
           key={page}
           onClick={() => goToPage(page)}
           $isActive={currentPage === page}
+          aria-label={`Go to page ${page}`}
+          aria-current={currentPage === page ? "page" : undefined}
         >
           {page}
         </PaginationButton>
@@ -124,16 +134,17 @@ export const Pagination = ({
         <PaginationButton
           onClick={() => goToPage(totalPages)}
           $isActive={currentPage === totalPages}
+          aria-label={`Go to page ${totalPages}`}
         >
           {totalPages}
         </PaginationButton>
       )}
 
-      <PaginationButton onClick={goToNext} disabled={!canGoNext}>
+      <PaginationButton onClick={goToNext} disabled={!canGoNext} aria-label="Go to next page">
         ›
       </PaginationButton>
 
-      <PaginationButton onClick={goToLast} disabled={!canGoNext}>
+      <PaginationButton onClick={goToLast} disabled={!canGoNext} aria-label="Go to last page">
         »»
       </PaginationButton>
 

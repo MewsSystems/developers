@@ -1,4 +1,4 @@
-import type { Movie, MovieListResponse, MovieSearchResponse } from "../types/movie"
+import type { MovieDetails, MovieListResponse, MovieSearchResponse } from "../types/movie"
 import { ApiError, api } from "./api"
 
 export class MovieServiceError extends Error {
@@ -22,6 +22,9 @@ export const movieService = {
       if (error instanceof ApiError) {
         if (error.code === "NOT_FOUND") {
           throw new MovieServiceError("No popular movies found for this page", error)
+        }
+        if (error.code === "NETWORK_ERROR") {
+          throw new MovieServiceError("Failed to fetch popular movies", error)
         }
         throw error
       }
@@ -50,6 +53,9 @@ export const movieService = {
             total_results: 0,
           }
         }
+        if (error.code === "NETWORK_ERROR") {
+          throw new MovieServiceError(`Failed to search for movies with query: "${query}"`, error)
+        }
         throw error
       }
 
@@ -64,18 +70,21 @@ export const movieService = {
     }
   },
 
-  getMovieById: async (id: number): Promise<Movie> => {
+  getMovieById: async (id: number): Promise<MovieDetails> => {
     try {
       if (!id || id <= 0) {
         throw new MovieServiceError("Invalid movie ID provided")
       }
 
-      const response = await api.get<Movie>(`/movie/${id}`)
+      const response = await api.get<MovieDetails>(`/movie/${id}`)
       return response.data
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.code === "NOT_FOUND") {
           throw new MovieServiceError(`Movie with ID ${id} not found`, error)
+        }
+        if (error.code === "NETWORK_ERROR") {
+          throw new MovieServiceError(`Failed to fetch movie with ID: ${id}`, error)
         }
         throw error
       }
