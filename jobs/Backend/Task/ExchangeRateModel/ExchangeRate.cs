@@ -12,6 +12,7 @@ namespace ExchangeRateModel
             SourceCurrency = sourceCurrency;
             TargetCurrency = targetCurrency;
             Value = value;
+            Date = date;
         }
 
         public Currency SourceCurrency { get; }

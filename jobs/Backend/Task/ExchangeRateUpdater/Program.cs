@@ -6,7 +6,9 @@ using ExchangeRateService.Cache;
 using ExchangeRateService.Client;
 using ExchangeRateService.Provider;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Refit;
+using Serilog;
 
 namespace ExchangeRateUpdater
 {
@@ -16,13 +18,11 @@ namespace ExchangeRateUpdater
         {
             new Currency("USD"),
             new Currency("EUR"),
-            new Currency("CZK"),
             new Currency("JPY"),
             new Currency("KES"),
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
         };
 
         public async static Task Main(string[] args)
@@ -30,7 +30,16 @@ namespace ExchangeRateUpdater
 
             var services = new ServiceCollection();
             
-            services.AddLogging();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Minute)
+                .CreateLogger();
+            
+            services.AddLogging(b =>
+            {
+                b.ClearProviders();
+                b.AddSerilog(Log.Logger);
+            });
             
             services.AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>();
             services.AddTransient<IExchangeRateCache, InMemmoryERCache>();
@@ -43,7 +52,7 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = sp.GetRequiredService<IExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies, DateTime.Now);
+                var rates = await provider.GetExchangeRates(currencies, DateTime.Now.AddMonths(-1));
 
                 Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
@@ -55,6 +64,8 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
+            
+            await Log.CloseAndFlushAsync();
 
             // Console.ReadLine();
         }

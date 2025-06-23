@@ -16,4 +16,6 @@ public interface IExchangeRateCache
     /// <returns></returns>
     Task<ExchangeRate?> TryGetExchangeRate(ExchangeRate exchangeRate);
     
+    Task<IList<ExchangeRate>> TryGetExchangeRates(IList<ExchangeRate> exchangeRates);
+    
 }

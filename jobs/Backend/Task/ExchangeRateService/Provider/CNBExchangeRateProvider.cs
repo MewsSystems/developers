@@ -1,7 +1,9 @@
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
 using ExchangeRateService.Client;
+using ExchangeRateService.Client.Model.CNB;
 using Microsoft.Extensions.Logging;
+using Refit;
 
 namespace ExchangeRateService.Provider;
 
@@ -31,17 +33,11 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
             _logger.LogDebug($"Returning a cached value {cached}");
             return cached;
         }
-        
-        var requestResponse = await _client.GetDailyRates(date);
 
-        if (!requestResponse.IsSuccessful || requestResponse.Content != null)
-        {
-            _logger.LogError($"Error {requestResponse.StatusCode} while retrieving daily rates for {date}: {requestResponse.Error?.Message}.");
-            throw new Exception("Bad request");
-        }
+        var exchangeRate = await GetExchangeRatesData([sourceCurrency], date);
 
-        var res = requestResponse.Content!.Rates
-            .FirstOrDefault(r => r.CurrencyCode == sourceCurrency.Code);
+        var res = exchangeRate
+            .FirstOrDefault(r => r.SourceCurrency.Code == sourceCurrency.Code);
 
         if (res == null)
         {
@@ -49,36 +45,68 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
             throw new Exception("No exchange rate for the currency");
         }
 
-        var result = new ExchangeRate(sourceCurrency, _targetCurrency, res.Rate, date);
-        await _cache.AddExchangeRate(result);
+        var result = new ExchangeRate(sourceCurrency, _targetCurrency, res.Value, date);
         
         return result;
-
     }
 
     public async Task<IList<ExchangeRate>> GetExchangeRates(IList<Currency> currencies, DateTime date)
     {
-        var result = new List<ExchangeRate>();
+        _logger.LogInformation($"Getting exchange rates for {currencies.Count} currencies and {date:yyyy-MM-dd}");
+        var wantedRates = currencies
+            .ToList().ConvertAll(c => new ExchangeRate(c, _targetCurrency, date));
+        var resultRates = await _cache.TryGetExchangeRates(wantedRates);
 
-        foreach (var currency in currencies)
+        if (resultRates.Count == currencies.Count)
         {
-            var exchangeRate = await _cache.TryGetExchangeRate(new ExchangeRate(currency, _targetCurrency, date));
-            
-            if(exchangeRate != null)
-                result.Add(exchangeRate);
+            _logger.LogInformation("Returning cached exchange rates");
+            return resultRates;
         }
         
-        var requestResponse = await _client.GetDailyRates(date);
-
-        if (!requestResponse.IsSuccessful || requestResponse.Content == null)
-            throw new Exception("Bad request");
+        var exchangeRates = await GetExchangeRatesData(currencies, date);
         
-        var res = requestResponse.Content!.Rates
-            .Where(r => currencies.Contains(new Currency(r.CurrencyCode)))
-            .ToList()
-            .ConvertAll(r => new ExchangeRate(new Currency(r.CurrencyCode), _targetCurrency, r.Rate, date));
+        var obtainedRates = exchangeRates
+            .Where(r => resultRates.All(cached => cached.ExchangeRateName() != r.ExchangeRateName()) &&
+                        currencies.Contains(r.SourceCurrency)).ToList();
 
+        var res = resultRates.Concat(obtainedRates).ToList();
+
+        _logger.LogInformation($"Returning {res.Count} exchange rates");
+        
         return res;
+    }
+
+    private async Task<IList<ExchangeRate>> GetExchangeRatesData(IList<Currency> currencies, DateTime date)
+    {
+        
+        var exratesDaily = _client.GetExratesDailyRates(date);
+        var fxRatesDailyMonth = _client.GetFXRatesDailyMonthRates(date);
+
+        var allRates = new List<ExchangeRateBody>();
+        
+        try
+        {
+            await Task.WhenAll(exratesDaily, fxRatesDailyMonth);
+            
+            allRates = exratesDaily.Result.Rates.Concat(fxRatesDailyMonth.Result.Rates).ToList();
+        }
+        catch (ApiException ex) // non 2xx response
+        {
+            _logger.LogInformation(ex, $"Error occured getting daily rates: {ex.ReasonPhrase}");
+            throw new Exception($"Error occured getting daily rates: {ex.ReasonPhrase}", ex);
+        }
+        catch (HttpRequestException ex) // network error
+        {
+            _logger.LogWarning($"Can't connect to the server {ex.HttpRequestError}");
+            throw new Exception($"Can't connect to the server {ex.HttpRequestError}", ex);
+        }
+        
+        var exchangeRates = allRates
+            .ConvertAll(r => new ExchangeRate(new Currency(r.CurrencyCode), _targetCurrency, r.Rate, date));
+        
+        await _cache.AddExchangeRates(exchangeRates);
+        
+        return exchangeRates;
     }
     
 }
