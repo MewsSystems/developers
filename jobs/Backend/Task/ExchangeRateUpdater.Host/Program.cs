@@ -1,6 +1,7 @@
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Service;
 using ExchangeRateUpdater.Api;
+using ExchangeRateUpdater.Presentation.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,14 +18,8 @@ builder.Services.AddServiceLayer();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
 
