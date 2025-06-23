@@ -1,43 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public class Program
 {
-    public static class Program
+    private static readonly IEnumerable<Currency> currencies = new[]
     {
-        private static IEnumerable<Currency> currencies = new[]
+        new Currency("USD"),
+        new Currency("EUR"),
+        new Currency("CZK"),
+        new Currency("JPY"),
+        new Currency("KES"),
+        new Currency("RUB"),
+        new Currency("THB"),
+        new Currency("TRY"),
+        new Currency("XYZ")
+    };
+
+    public static async Task Main(string[] args)
+    {
+        // DI setup
+        var serviceProvider = ConfigureServices();
+
+        var exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
+        try
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
-        public static void Main(string[] args)
-        {
-            try
+            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+
+            foreach (var rate in rates)
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+                Console.WriteLine(rate.ToString());
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
         }
+        catch (Exception e)
+        {
+            logger.LogError($"Could not retrieve exchange rates: '{e.Message}'.");
+        }
+
+        Console.ReadLine();
+    }
+
+    private static IServiceProvider ConfigureServices()
+    {
+        var serviceCollection = new ServiceCollection();
+
+        // Log to console
+        serviceCollection.AddLogging(configure => configure.AddConsole());
+
+        serviceCollection
+            .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+            .AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
+            {
+                client.Timeout = TimeSpan.FromSeconds(30); // 30 sec timeout
+            })
+            .AddPolicyHandler(HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt)));
+
+        return serviceCollection.BuildServiceProvider();
     }
 }
