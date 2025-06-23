@@ -1,0 +1,8 @@
+02 Jan 2025 #1
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|15.145
+Australia|dollar|2|AUD|30.290
+EMU|euro|1|EUR|25.175
+EMU|euro|100|EUR|2517.500
+USA|dollar|1|USD|24.398
+USA|dollar|1|USD|24.500 
