@@ -1,9 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Api", "..\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj", "{DCDAB5C4-4732-3825-01F9-A245CF86BB0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core", "..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{7E421596-7FD9-45F2-3453-33E7B1E77C34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "..\ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{EDB506AC-4A74-A541-E73A-38A377868331}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +26,23 @@ Global
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDAB5C4-4732-3825-01F9-A245CF86BB0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDAB5C4-4732-3825-01F9-A245CF86BB0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDAB5C4-4732-3825-01F9-A245CF86BB0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDAB5C4-4732-3825-01F9-A245CF86BB0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E421596-7FD9-45F2-3453-33E7B1E77C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E421596-7FD9-45F2-3453-33E7B1E77C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E421596-7FD9-45F2-3453-33E7B1E77C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E421596-7FD9-45F2-3453-33E7B1E77C34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB506AC-4A74-A541-E73A-38A377868331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB506AC-4A74-A541-E73A-38A377868331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB506AC-4A74-A541-E73A-38A377868331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB506AC-4A74-A541-E73A-38A377868331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BB7635F-870B-42B9-A73C-FB318D995E5C}
 	EndGlobalSection
 EndGlobal
