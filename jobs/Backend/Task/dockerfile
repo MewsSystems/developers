@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+WORKDIR /app
+
+ARG BUILDCONFIG=Release
+ARG VERSION=1.0.0
+
+COPY ["./src/ExchangeRateUpdater/ExchangeRateUpdater.csproj", "./src/ExchangeRateUpdater/"]
+COPY ["nuget.config", "./src/"]
+
+RUN dotnet restore "./src/ExchangeRateUpdater/ExchangeRateUpdater.csproj" --configfile ./src/nuget.config
+
+COPY . .
+WORKDIR "./src/ExchangeRateUpdater/"
+RUN dotnet publish -c ${BUILDCONFIG} -o out /p:Version=${VERSION}
+
+FROM mcr.microsoft.com/dotnet/runtime:6.0-alpine AS runtime
+WORKDIR /app
+COPY --from=build /app/src/ExchangeRateUpdater/out ./
+ENTRYPOINT ["dotnet", "ExchangeRateUpdater.dll"]
