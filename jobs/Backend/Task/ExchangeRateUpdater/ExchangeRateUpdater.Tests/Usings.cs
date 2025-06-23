@@ -1,0 +1,9 @@
+﻿global using Moq;
+global using ExchangeRateUpdater.Business.Interfaces;
+global using ExchangeRateUpdater.Controllers;
+global using ExchangeRateUpdater.Models.Models;
+global using ExchangeRateUpdater.Data.Responses;
+global using ExchangeRateUpdater.Models.Requests;
+global using Microsoft.AspNetCore.Mvc;
+global using ExchangeRateUpdater.Data.Interfaces;
+global using ExchangeRateUpdater.Business.Services;

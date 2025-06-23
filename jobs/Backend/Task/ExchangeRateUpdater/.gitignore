@@ -1,0 +1,49 @@
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuración de Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.sln.docstates
+
+# Carpetas de compilación y temporales
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug*/
+[Rr]elease*/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+*.log
+*.tmp
+
+# Archivos de paquetes y dependencias
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Archivos de publicación
+*.publishsettings
+*.azurePubxml
+*.azurePubxml.user
+
+# Configuración de IDEs
+.idea/
+.vscode/
+
+# Archivos de pruebas
+TestResults/
+*.trx
+*.coverage
+
+# Archivos sensibles
+*.config
+*.env
+*.key
+*.pem
