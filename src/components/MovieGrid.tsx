@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import type { Movie } from "../types/movie"
 import { MovieCard } from "./MovieCard"
-import { MovieCardSkeleton } from "./SkeletonCard"
+import { MovieCardSkeleton } from "./MovieCardSkeleton"
 
 const Grid = styled.div`
   display: grid;

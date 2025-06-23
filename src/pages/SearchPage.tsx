@@ -1,7 +1,6 @@
 import { useState } from "react"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
-import { LoadingSpinner } from "../components/LoadingSpinner"
 import { MovieGrid } from "../components/MovieGrid"
 import { Pagination } from "../components/Pagination"
 import { SearchInput } from "../components/SearchInput"

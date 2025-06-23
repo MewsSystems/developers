@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
-import { LoadingSpinner } from "../components/LoadingSpinner"
+import { MovieDetailSkeleton } from "../components/MovieDetailSkeleton"
 import { ROUTES } from "../constants/routes"
 import { useMovieDetails } from "../hooks/useMovies"
 
@@ -164,11 +164,7 @@ export const MovieDetailPage = () => {
   }
 
   if (isLoading) {
-    return (
-      <Container>
-        <LoadingSpinner text="Loading movie details..." />
-      </Container>
-    )
+    return <MovieDetailSkeleton />
   }
 
   if (error || !movie) {
