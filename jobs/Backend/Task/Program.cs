@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater
 {
@@ -22,9 +23,10 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
+            RateProviderConfiguration rateProviderConfig = GetRateProviderConfiguration();
             try
             {
-                var provider = new ExchangeRateProvider();
+                var provider = new ExchangeRateProvider(rateProviderConfig);
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -36,9 +38,29 @@ namespace ExchangeRateUpdater
             catch (Exception e)
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                if (e is TypeInitializationException && e.InnerException != null)
+                {
+                    Console.WriteLine($"Inner exception: {e.InnerException.Message}");
+                    Console.WriteLine(e.InnerException.StackTrace);
+                }
             }
 
             Console.ReadLine();
+        }
+
+        private static RateProviderConfiguration GetRateProviderConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                            .Build();
+
+            var rateProviderConfig = new RateProviderConfiguration
+            {
+                Url = configuration["ApiConfiguration:Url"],
+                BaseCurrency = configuration["ApiConfiguration:BaseCurrency"]
+            };
+
+            return rateProviderConfig;
         }
     }
 }
