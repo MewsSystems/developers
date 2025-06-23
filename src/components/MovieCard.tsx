@@ -2,6 +2,7 @@ import { Link } from "react-router"
 import styled from "styled-components"
 import { buildMovieDetailRoute } from "../constants/routes"
 import type { Movie } from "../types/movie"
+import { getImageUrl, getYear } from "../utils/movieUtils"
 
 const Card = styled(Link)`
   background-color: ${({ theme }) => theme.colors.surface};
@@ -92,15 +93,6 @@ interface MovieCardProps {
 }
 
 export const MovieCard = ({ movie }: MovieCardProps) => {
-  const getImageUrl = (path: string | null) => {
-    if (!path) return null
-    return `https://image.tmdb.org/t/p/w500${path}`
-  }
-
-  const getYear = (releaseDate: string) => {
-    return new Date(releaseDate).getFullYear()
-  }
-
   return (
     <Card to={buildMovieDetailRoute(movie.id)}>
       <PosterContainer>

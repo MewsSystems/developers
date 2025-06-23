@@ -4,6 +4,7 @@ import { ErrorMessage } from "../components/ErrorMessage"
 import { MovieDetailSkeleton } from "../components/MovieDetailSkeleton"
 import { ROUTES } from "../constants/routes"
 import { useMovieDetails } from "../hooks/useMovies"
+import { formatNumber, formatRuntime, getImageUrl, getYear } from "../utils/movieUtils"
 
 const Container = styled.div`
   max-width: 1200px;
@@ -143,25 +144,6 @@ export const MovieDetailPage = () => {
   const movieId = Number(id) || 0
 
   const { data: movie, isLoading, error } = useMovieDetails(movieId)
-
-  const getImageUrl = (path: string | null) => {
-    if (!path) return null
-    return `https://image.tmdb.org/t/p/w500${path}`
-  }
-
-  const getYear = (releaseDate: string) => {
-    return new Date(releaseDate).getFullYear()
-  }
-
-  const formatRuntime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return `${hours}h ${mins}m`
-  }
-
-  const formatNumber = (num: number) => {
-    return num.toLocaleString("en-US")
-  }
 
   if (isLoading) {
     return <MovieDetailSkeleton />
