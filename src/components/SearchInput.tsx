@@ -23,6 +23,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primary}25;
   }
 `
 
@@ -49,8 +50,10 @@ export const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) 
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        aria-label="Search for movies"
+        role="searchbox"
       />
-      <SearchIcon>🔍</SearchIcon>
+      <SearchIcon aria-hidden="true">🔍</SearchIcon>
     </InputContainer>
   )
 }

@@ -187,7 +187,7 @@ export const MovieDetailPage = () => {
       <MovieHeader>
         <PosterContainer>
           {movie.poster_path ? (
-            <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} />
+            <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />
           ) : (
             <PosterPlaceholder>🎬</PosterPlaceholder>
           )}

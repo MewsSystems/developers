@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import type { Movie } from "../types/movie"
 import { MovieCard } from "./MovieCard"
+import { MovieCardSkeleton } from "./SkeletonCard"
 
 const Grid = styled.div`
   display: grid;
@@ -10,10 +11,26 @@ const Grid = styled.div`
 `
 
 interface MovieGridProps {
-  movies: Movie[]
+  movies?: Movie[]
+  isLoading?: boolean
+  skeletonCount?: number
 }
 
-export const MovieGrid = ({ movies }: MovieGridProps) => {
+export const MovieGrid = ({ movies, isLoading = false, skeletonCount = 8 }: MovieGridProps) => {
+  if (isLoading) {
+    return (
+      <Grid>
+        {Array.from({ length: skeletonCount }, () => (
+          <MovieCardSkeleton key={crypto.randomUUID()} />
+        ))}
+      </Grid>
+    )
+  }
+
+  if (!movies || movies.length === 0) {
+    return null
+  }
+
   return (
     <Grid>
       {movies.map((movie) => (

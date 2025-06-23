@@ -101,8 +101,6 @@ export const SearchPage = () => {
         />
       </SearchSection>
 
-      {isLoading && <LoadingSpinner />}
-
       {error && (
         <ErrorMessage
           message={
@@ -113,7 +111,14 @@ export const SearchPage = () => {
         />
       )}
 
-      {data && data.results.length > 0 && (
+      {isLoading && (
+        <>
+          <SectionTitle>{isSearching ? "Searching..." : "Loading Popular Movies..."}</SectionTitle>
+          <MovieGrid isLoading={true} />
+        </>
+      )}
+
+      {data && data.results.length > 0 && !isLoading && (
         <>
           <SectionTitle>
             {isSearching ? `Search Results for "${debouncedQuery}"` : "Popular Movies"}
