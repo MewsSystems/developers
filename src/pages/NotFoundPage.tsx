@@ -1,5 +1,6 @@
 import { Link } from "react-router"
 import styled from "styled-components"
+import { ROUTES } from "../constants/routes"
 
 const NotFoundContainer = styled.div`
   display: flex;
@@ -67,7 +68,7 @@ export const NotFoundPage = () => {
         Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you
         entered the wrong URL.
       </NotFoundMessage>
-      <BackButton to="/">← Back to Movie Search</BackButton>
+      <BackButton to={ROUTES.HOME}>← Back to Movie Search</BackButton>
     </NotFoundContainer>
   )
 }

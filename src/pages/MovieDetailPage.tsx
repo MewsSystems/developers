@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { LoadingSpinner } from "../components/LoadingSpinner"
+import { ROUTES } from "../constants/routes"
 import { useMovieDetails } from "../hooks/useMovies"
 
 const Container = styled.div`
@@ -173,7 +174,7 @@ export const MovieDetailPage = () => {
   if (error || !movie) {
     return (
       <Container>
-        <BackButton to="/">← Back to Search</BackButton>
+        <BackButton to={ROUTES.HOME}>← Back to Search</BackButton>
         <ErrorMessage message="Failed to load movie details. Please try again." />
       </Container>
     )
@@ -181,7 +182,7 @@ export const MovieDetailPage = () => {
 
   return (
     <Container>
-      <BackButton to="/">← Back to Search</BackButton>
+      <BackButton to={ROUTES.HOME}>← Back to Search</BackButton>
 
       <MovieHeader>
         <PosterContainer>

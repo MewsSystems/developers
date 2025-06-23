@@ -1,5 +1,6 @@
 import { Link } from "react-router"
 import styled from "styled-components"
+import { buildMovieDetailRoute } from "../constants/routes"
 import type { Movie } from "../types/movie"
 
 const Card = styled(Link)`
@@ -101,7 +102,7 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
   }
 
   return (
-    <Card to={`/movie/${movie.id}`}>
+    <Card to={buildMovieDetailRoute(movie.id)}>
       <PosterContainer>
         {movie.poster_path ? (
           <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />
