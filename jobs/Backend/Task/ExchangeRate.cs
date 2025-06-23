@@ -1,23 +1,26 @@
 ﻿namespace ExchangeRateUpdater
 {
-    public class ExchangeRate
-    {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
-        {
-            SourceCurrency = sourceCurrency;
-            TargetCurrency = targetCurrency;
-            Value = value;
-        }
+	public class ExchangeRate
+	{
+		public ExchangeRate(Currency sourceCurrency, int sourceAmount, decimal targetRate)
+		{
+			this.sourceCurrency = sourceCurrency;
+			this.sourceAmount = sourceAmount;
+			targetCurrency = new Currency("CZK");
+			this.targetRate = targetRate;
+		}
 
-        public Currency SourceCurrency { get; }
+		public Currency sourceCurrency { get; }
 
-        public Currency TargetCurrency { get; }
+		public Currency targetCurrency { get; }
 
-        public decimal Value { get; }
+		public int sourceAmount { get; }
 
-        public override string ToString()
-        {
-            return $"{SourceCurrency}/{TargetCurrency}={Value}";
-        }
-    }
+		public decimal targetRate { get; }
+
+		public override string ToString()
+		{
+			return $"{sourceCurrency}/{targetCurrency} = {sourceAmount}/{targetRate}";
+		}
+	}
 }
