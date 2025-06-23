@@ -26,10 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Domain\ExchangeRateUpdater.Domain.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Host\ExchangeRateUpdater.Host.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
-    <ProjectReference Include="..\Task\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj" />
-    <ProjectReference Include="..\Task\ExchangeRateUpdater.Host\ExchangeRateUpdater.Host.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

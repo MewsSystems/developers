@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Api\ExchangeRateUpdater.Api.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj" />
+    <ProjectReference Include="..\ExchangeRateUpdater.Service\ExchangeRateUpdater.Service.csproj" />
   </ItemGroup>
 
 </Project>
