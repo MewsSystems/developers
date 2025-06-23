@@ -1,0 +1,33 @@
+26.03.2025 #60
+Country|Currency|Amount|Code|Rate
+Australia|dollar|1|AUD|14.602
+Brazil|real|1|BRL|4.536
+Bulgaria|lev|1|BGN|12.729
+Canada|dollar|1|CAD|16.989
+China|renminbi|1|CNY|3.197
+Denmark|krone|1|DKK|3.351
+EMU|euro|1|EUR|24.930
+Hong Kong|dollar|1|HKD|2.954
+Hungary|forint|100|HUF|6.152
+Iceland|krona|100|ISK|16.500
+IMF|SDR|1|XDR|30.772
+India|rupee|100|INR|27.718
+Indonesia|rupiah|1000|IDR|1.459
+Israel|new shekel|1|ILS|6.381
+Japan|yen|100|JPY|15.376
+Malaysia|ringgit|1|MYR|4.935
+Mexico|peso|1|MXN|1.366
+New Zealand|dollar|1|NZD|13.932
+Norway|krone|1|NOK|2.177
+Philippines|peso|100|PHP|41.019
+Poland|zloty|1|PLN|5.865
+Romania|leu|1|RON|5.019
+Singapore|dollar|1|SGD|17.246
+South Africa|rand|1|ZAR|1.255
+South Korea|won|100|KRW|1.708
+Sweden|krona|1|SEK|2.174
+Switzerland|franc|1|CHF|26.117
+Thailand|baht|100|THB|65.000
+Turkey|lira|100|TRY|72.262
+United Kingdom|pound|1|GBP|29.178
+USA|dollar|1|USD|23.117 
