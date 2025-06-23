@@ -4,6 +4,8 @@ using System.Linq;
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
 using ExchangeRateService.Client;
+using ExchangeRateService.Client.Interfaces;
+using ExchangeRateService.Client.Interfaces.CNB;
 using ExchangeRateService.Provider;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,11 +44,13 @@ namespace ExchangeRateUpdater
             });
             
             services.AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>();
-            services.AddTransient<IExchangeRateCache, InMemmoryERCache>();
+            services.AddSingleton<IExchangeRateCache, InMemmoryERCache>();
             
-            services.AddRefitClient<ICNBRefitClient>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://api.cnb.cz"));
+            // services.AddRefitClient<ICNBRefitClient>()
+                // .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://api.cnb.cz"));
             
+            services.AddTransient<ICNBClient, CNBClient>();
+                
             var sp = services.BuildServiceProvider();
             
             try
