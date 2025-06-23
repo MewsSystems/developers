@@ -1,0 +1,4 @@
+{
+  "ruby.rubocop.executePath": "bundle",
+  "ruby.rubocop.onSave": true
+}
