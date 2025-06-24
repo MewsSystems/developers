@@ -5,34 +5,23 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater
 {
-    public class RateProviderConfiguration
-    {
-        public string Url { get; set; }
-        public string BaseCurrency { get; set; }
-    }
 
-    public class ExchangeRateProvider
+    public partial class ExchangeRateProvider : IExchangeRateProvider
     {
         private static readonly HttpClient HttpClient = new HttpClient();
         private readonly string _apiUrl;
         private readonly Currency _baseCurrency;
 
-        public static RateProviderConfiguration GetConfiguration(IConfiguration configuration)
+        public ExchangeRateProvider(IRateProviderConfiguration config)
         {
-            var url = configuration["ApiConfiguration:Url"];
-            var baseCurrency = configuration["ApiConfiguration:BaseCurrency"];
+            if (config == null) 
+            { 
+                throw new ArgumentNullException(nameof(config)); 
+            }
 
-            return new RateProviderConfiguration { Url = url, BaseCurrency = baseCurrency };
-        }
-
-        public ExchangeRateProvider(RateProviderConfiguration config)
-        {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
             _apiUrl = config.Url;
             _baseCurrency = new Currency(config.BaseCurrency);
         }
@@ -60,24 +49,6 @@ namespace ExchangeRateUpdater
                 rates.Add(new ExchangeRate(currency, _baseCurrency, rate.Rate / rate.Amount));
             }
             return rates;
-        }
-
-        private class Response
-        {
-            [JsonPropertyName("rates")]
-            public List<RateDto> Rates { get; set; }
-        }
-
-        private class RateDto
-        {
-            [JsonPropertyName("currencyCode")]
-            public string CurrencyCode { get; set; }
-
-            [JsonPropertyName("amount")]
-            public int Amount { get; set; }
-
-            [JsonPropertyName("rate")]
-            public decimal Rate { get; set; }
         }
     }
 }

@@ -23,10 +23,10 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
-            RateProviderConfiguration rateProviderConfig = GetRateProviderConfiguration();
+            
             try
             {
-                var provider = new ExchangeRateProvider(rateProviderConfig);
+                var provider = new ExchangeRateProvider(GetRateProviderConfiguration());
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -48,7 +48,7 @@ namespace ExchangeRateUpdater
             Console.ReadLine();
         }
 
-        private static RateProviderConfiguration GetRateProviderConfiguration()
+        private static IRateProviderConfiguration GetRateProviderConfiguration()
         {
             var configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
