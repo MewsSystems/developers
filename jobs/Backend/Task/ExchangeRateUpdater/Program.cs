@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateError;
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
 using ExchangeRateService.CNB.Client;
@@ -26,9 +27,8 @@ namespace ExchangeRateUpdater
             new Currency("TRY"),
         };
 
-        public static async Task Main(string[] args)
+        public static ServiceProvider CreateServiceProvider()
         {
-
             var services = new ServiceCollection();
             
             Log.Logger = new LoggerConfiguration()
@@ -43,34 +43,60 @@ namespace ExchangeRateUpdater
             });
             
             services.AddTransient<IExchangeRateProvider, CNBExchangeRateProvider>();
-            services.AddSingleton<IExchangeRateCache, InMemmoryERCache>();
-            
-            // services.AddRefitClient<ICNBRefitClient>()
-                // .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://api.cnb.cz"));
+            services.AddSingleton<IExchangeRateCache, InMemoryERCache>();
             
             services.AddTransient<ICNBClient, CNBClient>();
                 
             var sp = services.BuildServiceProvider();
-            
-            try
-            {
-                var provider = sp.GetRequiredService<IExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies, DateTime.Now.AddMonths(-1));
+            return sp;
+        }
+        
+        public static async Task Main(string[] args)
+        {
+            var sp = CreateServiceProvider();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
-                foreach (var rate in rates)
+            do
+            {
+                Console.Write("Select currency: ");
+                string? currency = Console.ReadLine();
+                if (currency == "exit")
+                    break;
+                if (string.IsNullOrEmpty(currency) || currency.Length != 3)
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine("Invalid currency input");
+                    continue;
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-            
-            await Log.CloseAndFlushAsync();
+                Console.Write("Select date in format yyyy-MM-dd: ");
+                string? date = Console.ReadLine();
+                if (string.IsNullOrEmpty(date) || date.Length != 10)
+                {
+                    Console.WriteLine("Invalid date format");
+                    continue;
+                }
 
-            // Console.ReadLine();
+                try
+                {
+                    DateTime dateTime = DateTime.Parse(date);
+
+                    var provider = sp.GetRequiredService<IExchangeRateProvider>();
+                    var rate = await provider.GetExchangeRate(new Currency(currency), dateTime);
+
+                    Console.WriteLine($"Successfully retrieved exchange rate:");
+                    Console.WriteLine(rate);
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"Couldn't parse date: {ex.Message}");
+                }
+                catch (ExchangeRateException e)
+                {
+                    Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
+                }
+            } while (true);
+
+            await Log.CloseAndFlushAsync();
+            Console.WriteLine("Thank you for using ExchangeRateUpdater.");
+            
         }
     }
 }

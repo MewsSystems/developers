@@ -27,13 +27,13 @@ public interface IExchangeRateCache
     /// </summary>
     /// <param name="exchangeRate">A specific exchange rate without its value</param>
     /// <returns></returns>
-    Task<ExchangeRate?> TryGetExchangeRate(ExchangeRate exchangeRate);
+    Task<bool> TryGetExchangeRate(ExchangeRate exchangeRate, out ExchangeRate? outExchangeRate);
     
     /// <summary>
     /// Tries to get the cached exchange rate values for specified exchanges
     /// </summary>
     /// <param name="exchangeRates">A list of specific exchange rates without its value</param>
     /// <returns></returns>
-    Task<IList<ExchangeRate>> TryGetExchangeRates(IList<ExchangeRate> exchangeRates);
+    Task<IList<ExchangeRate>> GetExchangeRates(IList<ExchangeRate> exchangeRates);
     
 }

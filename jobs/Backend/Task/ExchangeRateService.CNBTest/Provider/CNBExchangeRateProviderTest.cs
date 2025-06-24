@@ -1,3 +1,4 @@
+using ExchangeRateError;
 using ExchangeRateService.Cache;
 using ExchangeRateService.CNB.Client.Interfaces;
 using ExchangeRateService.CNB.Provider;
@@ -44,8 +45,8 @@ public class CNBExchangeRateProviderTest
         var mockCache = new Mock<IExchangeRateCache>();
         var mockClient = new Mock<ICNBClient>();
         
-        mockCache.Setup(s => s.TryGetExchangeRate(It.IsAny<ExchangeRate>()))
-            .ReturnsAsync(_testExchangeRate1);
+        mockCache.Setup(s => s.TryGetExchangeRate(It.IsAny<ExchangeRate>(), out _testExchangeRate1!))
+            .ReturnsAsync(true);
         
         mockClient.Setup(s => s.TargetCurrency).Returns(_testCZKCurrency);
         
@@ -65,10 +66,10 @@ public class CNBExchangeRateProviderTest
         var logger = NullLogger<CNBExchangeRateProvider>.Instance;
         var mockCache = new Mock<IExchangeRateCache>();
         var mockClient = new Mock<ICNBClient>();
-        
-        mockCache.SetupSequence(s => s.TryGetExchangeRate(It.IsAny<ExchangeRate>()))
-            .ReturnsAsync((ExchangeRate?)null)
-            .ReturnsAsync(_testExchangeRate1);
+
+        mockCache.SetupSequence(s => s.TryGetExchangeRate(It.IsAny<ExchangeRate>(), out _testExchangeRate1!))
+            .ReturnsAsync(false)
+            .ReturnsAsync(true);
         
         mockClient.Setup(s => s.TargetCurrency).Returns(_testCZKCurrency);
         mockClient.Setup(s => s.GetExchangeRates(It.IsAny<IList<Currency>>(), It.IsAny<DateTime>()))
@@ -100,7 +101,7 @@ public class CNBExchangeRateProviderTest
         
         var provider = new CNBExchangeRateProvider(logger, mockClient.Object, mockCache.Object);
         
-        Assert.ThrowsAsync<Exception>(async () => await provider.GetExchangeRate(_testUSDCurrency, _time));
+        Assert.ThrowsAsync<ExchangeRateException>(async () => await provider.GetExchangeRate(_testUSDCurrency, _time));
     }
 
     

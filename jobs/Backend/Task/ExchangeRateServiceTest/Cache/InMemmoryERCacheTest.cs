@@ -2,17 +2,17 @@ using ExchangeRateService.Cache;
 
 namespace ExchangeRateServiceTest.Cache;
 
-public class InMemmoryERCacheTest
+public class InMemoryERCacheTest
 {
     
     private readonly ExchangeRate _testExchangeRate1 = new (new Currency("EUR"), new Currency("USD"), 0, DateTime.Now);
     private readonly ExchangeRate _testExchangeRate2 = new (new Currency("EUR"), new Currency("USD"), 0, DateTime.Now.AddDays(-1));
-    private InMemmoryERCache _cache;
+    private InMemoryERCache _cache;
     [SetUp]
     public void Setup()
     {
-        var logger = NullLogger<InMemmoryERCache>.Instance;
-        _cache = new InMemmoryERCache(logger);
+        var logger = NullLogger<InMemoryERCache>.Instance;
+        _cache = new InMemoryERCache(logger);
     }
     
     [Test]
@@ -38,9 +38,9 @@ public class InMemmoryERCacheTest
     [Test]
     public async Task EmptyTryGetExchangeRate()
     {
-        Assert.IsNull(await _cache.TryGetExchangeRate(_testExchangeRate1));
-        Assert.IsNull(await _cache.TryGetExchangeRate(_testExchangeRate1));
-        Assert.IsNull(await _cache.TryGetExchangeRate(_testExchangeRate2));
+        Assert.IsFalse(await _cache.TryGetExchangeRate(_testExchangeRate1, out var _));
+        Assert.IsFalse(await _cache.TryGetExchangeRate(_testExchangeRate1, out var _));
+        Assert.IsFalse(await _cache.TryGetExchangeRate(_testExchangeRate2, out var _));
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class InMemmoryERCacheTest
     {
         Assert.DoesNotThrowAsync(() => _cache.AddExchangeRate(_testExchangeRate1));
         
-        Assert.IsNull(await _cache.TryGetExchangeRate(_testExchangeRate2));
+        Assert.IsFalse(await _cache.TryGetExchangeRate(_testExchangeRate2, out var _));
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class InMemmoryERCacheTest
     {
         Assert.DoesNotThrowAsync(() => _cache.AddExchangeRate(_testExchangeRate1));
         
-        Assert.IsNotNull(await _cache.TryGetExchangeRate(_testExchangeRate1));
+        Assert.IsTrue(await _cache.TryGetExchangeRate(_testExchangeRate1, out var _));
     }
     
 }

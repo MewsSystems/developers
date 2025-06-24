@@ -5,16 +5,19 @@ using ExchangeRateModel;
 
 namespace ExchangeRateService.Cache;
 
-public class InMemmoryERCache : IExchangeRateCache
+/// <summary>
+/// Implements IExchangeRateCache with in memory management
+/// </summary>
+public class InMemoryERCache : IExchangeRateCache
 {
 
-    private readonly ILogger<InMemmoryERCache> _logger;
+    private readonly ILogger<InMemoryERCache> _logger;
     /// <summary>
     /// Access like [exchange rate currencies][date of the value] = exchange rate value for the current day
     /// </summary>
     private Dictionary<string, Dictionary<string, ExchangeRate>> _cache;
     
-    public InMemmoryERCache(ILogger<InMemmoryERCache> logger)
+    public InMemoryERCache(ILogger<InMemoryERCache> logger)
     {
         _logger = logger;
         _cache = new();
@@ -37,13 +40,14 @@ public class InMemmoryERCache : IExchangeRateCache
         return Task.CompletedTask;
     }
 
-    public Task<ExchangeRate?> TryGetExchangeRate(ExchangeRate exchangeRate)
+    public Task<bool> TryGetExchangeRate(ExchangeRate exchangeRate, out ExchangeRate outExchangeRate)
     {
+        outExchangeRate = default;
         _logger.LogDebug($"Getting exchange rate for {exchangeRate.ExchangeRateName()} from cache");
         if (!_cache.TryGetValue(exchangeRate.ExchangeRateName(), out var currencyRates))
         {
             _logger.LogDebug("Exchange rate not found");
-            return Task.FromResult<ExchangeRate?>(null);
+            return Task.FromResult(false);
         }
 
         _logger.LogDebug($"Getting exchange rate for {exchangeRate.ExchangeRateName()} and {exchangeRate.Date:yyyy-MM-dd}");
@@ -51,22 +55,21 @@ public class InMemmoryERCache : IExchangeRateCache
         if (!currencyRates.TryGetValue(exchangeRate.Date.ToString("yyyy-MM-dd"), out var currencyRate))
         {
             _logger.LogDebug("Cache miss");
-            return Task.FromResult<ExchangeRate?>(null);
+            return Task.FromResult(false);
         }
         _logger.LogDebug("Cache hit!");
-        return Task.FromResult<ExchangeRate?>(currencyRate);
+        outExchangeRate = currencyRate;
+        return Task.FromResult(true);
     }
 
-    public async Task<IList<ExchangeRate>> TryGetExchangeRates(IList<ExchangeRate> exchangeRates)
+    public async Task<IList<ExchangeRate>> GetExchangeRates(IList<ExchangeRate> exchangeRates)
     {
         _logger.LogDebug("Getting exchange rates from cache");
         var result = new List<ExchangeRate>();
         
         foreach (var rate in exchangeRates)
         {
-            var exchangeRate = await TryGetExchangeRate(rate);
-            
-            if(exchangeRate != null)
+            if(await TryGetExchangeRate(rate, out var exchangeRate))
                 result.Add(exchangeRate);
         }
         _logger.LogDebug("Returning exchange rates from cache");
