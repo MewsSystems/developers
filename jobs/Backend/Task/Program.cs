@@ -50,9 +50,7 @@ namespace ExchangeRateUpdater
 
         private static IRateProviderConfiguration GetRateProviderConfiguration()
         {
-            var configuration = new ConfigurationBuilder()
-                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                            .Build();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
             var rateProviderConfig = new RateProviderConfiguration
             {
