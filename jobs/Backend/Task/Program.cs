@@ -60,6 +60,12 @@ namespace ExchangeRateUpdater
                 BaseCurrency = configuration["ApiConfiguration:BaseCurrency"]
             };
 
+            if (string.IsNullOrWhiteSpace(rateProviderConfig.Url))
+                throw new Exception("ApiConfiguration:Url is not set in appsettings.json");
+
+            if (string.IsNullOrWhiteSpace(rateProviderConfig.BaseCurrency))
+                throw new Exception("ApiConfiguration:BaseCurrency is not set in appsettings.json");
+
             return rateProviderConfig;
         }
     }

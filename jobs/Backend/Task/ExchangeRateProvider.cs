@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater
 {
@@ -16,20 +18,14 @@ namespace ExchangeRateUpdater
     public class ExchangeRateProvider
     {
         private static readonly HttpClient HttpClient = new HttpClient();
-        private readonly string _cnbUrl;
-        private readonly Currency _czk;
+        private readonly string _apiUrl;
+        private readonly Currency _baseCurrency;
 
-        public static RateProviderConfiguration GetConfiguration(Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public static RateProviderConfiguration GetConfiguration(IConfiguration configuration)
         {
             var url = configuration["ApiConfiguration:Url"];
             var baseCurrency = configuration["ApiConfiguration:BaseCurrency"];
 
-            if (string.IsNullOrWhiteSpace(url))
-                throw new Exception("ApiConfiguration:Url is not set in appsettings.json");
-
-            if (string.IsNullOrWhiteSpace(baseCurrency))
-                throw new Exception("ApiConfiguration:BaseCurrency is not set in appsettings.json");
-            
             return new RateProviderConfiguration { Url = url, BaseCurrency = baseCurrency };
         }
 
@@ -37,8 +33,8 @@ namespace ExchangeRateUpdater
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
-            _cnbUrl = config.Url;
-            _czk = new Currency(config.BaseCurrency);
+            _apiUrl = config.Url;
+            _baseCurrency = new Currency(config.BaseCurrency);
         }
 
         /// <summary>
@@ -49,11 +45,10 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var response = await HttpClient.GetStringAsync(_cnbUrl);
+            var cnbResponse = await HttpClient.GetFromJsonAsync<Response>(_apiUrl);
             var rates = new List<ExchangeRate>();
             var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 
-            var cnbResponse = JsonConvert.DeserializeObject<Response>(response);
             if (cnbResponse?.Rates == null)
                 return rates;
 
@@ -62,25 +57,27 @@ namespace ExchangeRateUpdater
                 if (!currencyCodes.Contains(rate.CurrencyCode))
                     continue;
                 var currency = new Currency(rate.CurrencyCode);
-                rates.Add(new ExchangeRate(currency, _czk, rate.ExchangeRateValue / rate.Amount));
+                rates.Add(new ExchangeRate(currency, _baseCurrency, rate.Rate / rate.Amount));
             }
             return rates;
         }
 
         private class Response
         {
-            [JsonProperty("rates")]
-            public List<Rate> Rates { get; set; }
+            [JsonPropertyName("rates")]
+            public List<RateDto> Rates { get; set; }
         }
 
-        private class Rate
+        private class RateDto
         {
-            [JsonProperty("currencyCode")]
+            [JsonPropertyName("currencyCode")]
             public string CurrencyCode { get; set; }
-            [JsonProperty("amount")]
+
+            [JsonPropertyName("amount")]
             public int Amount { get; set; }
-            [JsonProperty("rate")]
-            public decimal ExchangeRateValue { get; set; }
+
+            [JsonPropertyName("rate")]
+            public decimal Rate { get; set; }
         }
     }
 }
