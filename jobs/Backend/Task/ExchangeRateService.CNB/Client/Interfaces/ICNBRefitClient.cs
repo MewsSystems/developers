@@ -1,7 +1,7 @@
-using ExchangeRateService.Client.Model.CNB;
+using ExchangeRateService.CNB.Client.Model;
 using Refit;
 
-namespace ExchangeRateService.Client.Interfaces.CNB;
+namespace ExchangeRateService.CNB.Client.Interfaces;
 
 /// <summary>
 /// Represents a rest api interface of the CNB API

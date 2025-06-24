@@ -1,4 +1,4 @@
-namespace ExchangeRateService.Client.Model.CNB;
+namespace ExchangeRateService.CNB.Client.Model;
 
 public class ExratesDailyResponse
 {

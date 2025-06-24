@@ -1,11 +1,10 @@
 using ExchangeRateModel;
-using ExchangeRateService.Client.Interfaces;
-using ExchangeRateService.Client.Interfaces.CNB;
-using ExchangeRateService.Client.Model.CNB;
+using ExchangeRateService.CNB.Client.Interfaces;
+using ExchangeRateService.CNB.Client.Model;
 using Microsoft.Extensions.Logging;
 using Refit;
 
-namespace ExchangeRateService.Client;
+namespace ExchangeRateService.CNB.Client;
 
 public class CNBClient : ICNBClient
 {
@@ -25,7 +24,9 @@ public class CNBClient : ICNBClient
         _logger.LogInformation("Getting exchange rates");
         
         var exratesDaily = _client.GetExratesDailyRates(date);
-        var fxRatesDailyMonth = _client.GetFXRatesDailyMonthRates(date);
+        // -1 month, because for the specified month,
+        // the fx rate is set at the end of the previous month
+        var fxRatesDailyMonth = _client.GetFXRatesDailyMonthRates(date.AddMonths(-1));
 
         var allRates = new List<ExchangeRateBody>();
         

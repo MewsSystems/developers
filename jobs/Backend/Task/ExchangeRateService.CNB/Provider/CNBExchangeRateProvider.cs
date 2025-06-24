@@ -1,13 +1,11 @@
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
-using ExchangeRateService.Client;
-using ExchangeRateService.Client.Interfaces;
-using ExchangeRateService.Client.Interfaces.CNB;
-using ExchangeRateService.Client.Model.CNB;
+using ExchangeRateService.CNB.Client.Interfaces;
+using ExchangeRateService.Provider;
 using Microsoft.Extensions.Logging;
 using Refit;
 
-namespace ExchangeRateService.Provider;
+namespace ExchangeRateService.CNB.Provider;
 
 public class CNBExchangeRateProvider : IExchangeRateProvider
 {
@@ -46,10 +44,8 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
             _logger.LogDebug($"Doesn't contain exchange rate for the currency {sourceCurrency}");
             throw new Exception("No exchange rate for the currency");
         }
-
-        var result = new ExchangeRate(sourceCurrency, _client.TargetCurrency, res.Value, date);
         
-        return result;
+        return res;
     }
 
     public async Task<IList<ExchangeRate>> GetExchangeRates(IList<Currency> currencies, DateTime date)

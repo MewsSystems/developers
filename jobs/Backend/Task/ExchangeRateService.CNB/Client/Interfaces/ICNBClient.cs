@@ -1,6 +1,7 @@
 using ExchangeRateModel;
+using ExchangeRateService.Client.Interfaces;
 
-namespace ExchangeRateService.Client.Interfaces.CNB;
+namespace ExchangeRateService.CNB.Client.Interfaces ;
 
 /// <summary>
 /// Represents a CNB client

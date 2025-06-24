@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ExchangeRateModel\ExchangeRateModel.csproj" />
+      <ProjectReference Include="..\ExchangeRateService.CNB\ExchangeRateService.CNB.csproj" />
       <ProjectReference Include="..\ExchangeRateService\ExchangeRateService.csproj" />
     </ItemGroup>
 

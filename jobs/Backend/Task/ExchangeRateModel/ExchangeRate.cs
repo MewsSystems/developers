@@ -30,5 +30,18 @@ namespace ExchangeRateModel
         {
             return $"{SourceCurrency}/{TargetCurrency}={Value}";
         }
+
+        public override bool Equals(object? obj)
+        {
+            if(obj == null || obj.GetType() != typeof(ExchangeRate))
+                return false;
+            var otherRate = (ExchangeRate)obj;
+            return SourceCurrency.Equals(otherRate.SourceCurrency) &&
+                   TargetCurrency.Equals(otherRate.TargetCurrency) &&
+                   Value == otherRate.Value &&
+                   Date.Year == otherRate.Date.Year &&
+                   Date.Month == otherRate.Date.Month &&
+                   Date.Day == otherRate.Date.Day;
+        }
     }
 }

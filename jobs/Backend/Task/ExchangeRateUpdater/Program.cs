@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
-using ExchangeRateService.Client;
-using ExchangeRateService.Client.Interfaces;
-using ExchangeRateService.Client.Interfaces.CNB;
+using ExchangeRateService.CNB.Client;
+using ExchangeRateService.CNB.Client.Interfaces;
+using ExchangeRateService.CNB.Provider;
 using ExchangeRateService.Provider;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Refit;
 using Serilog;
 
 namespace ExchangeRateUpdater
@@ -27,7 +26,7 @@ namespace ExchangeRateUpdater
             new Currency("TRY"),
         };
 
-        public async static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             var services = new ServiceCollection();
