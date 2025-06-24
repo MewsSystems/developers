@@ -15,7 +15,7 @@ namespace ExchangeRateUpdater
         private readonly string _apiUrl;
         private readonly Currency _baseCurrency;
 
-        public ExchangeRateProvider(IRateProviderConfiguration config)
+        public ExchangeRateProvider(IExchangeRateProviderConfiguration config)
         {
             if (config == null) 
             { 
@@ -34,17 +34,23 @@ namespace ExchangeRateUpdater
         /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
         {
-            var cnbResponse = await HttpClient.GetFromJsonAsync<Response>(_apiUrl);
+            var apiResponse = await HttpClient.GetFromJsonAsync<ApiResponse>(_apiUrl);
+
             var rates = new List<ExchangeRate>();
             var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 
-            if (cnbResponse?.Rates == null)
-                return rates;
+            if (apiResponse?.Rates == null)
+            { 
+                return rates; 
+            }
 
-            foreach (var rate in cnbResponse.Rates)
+            foreach (var rate in apiResponse.Rates)
             {
                 if (!currencyCodes.Contains(rate.CurrencyCode))
+                {
                     continue;
+                }
+
                 var currency = new Currency(rate.CurrencyCode);
                 rates.Add(new ExchangeRate(currency, _baseCurrency, rate.Rate / rate.Amount));
             }

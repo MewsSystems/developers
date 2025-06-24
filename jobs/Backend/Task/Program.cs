@@ -48,11 +48,11 @@ namespace ExchangeRateUpdater
             Console.ReadLine();
         }
 
-        private static IRateProviderConfiguration GetRateProviderConfiguration()
+        private static IExchangeRateProviderConfiguration GetRateProviderConfiguration()
         {
             var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            var rateProviderConfig = new RateProviderConfiguration
+            var rateProviderConfig = new ExchangeRateProviderConfiguration
             {
                 Url = configuration["ApiConfiguration:Url"],
                 BaseCurrency = configuration["ApiConfiguration:BaseCurrency"]

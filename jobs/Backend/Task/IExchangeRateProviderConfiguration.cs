@@ -1,6 +1,6 @@
 ﻿namespace ExchangeRateUpdater
 {
-    public interface IRateProviderConfiguration
+    public interface IExchangeRateProviderConfiguration
     {
         string BaseCurrency { get; set; }
         string Url { get; set; }

@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace ExchangeRateUpdater
 {
-    public class Response
+    public class ApiResponse
     {
         [JsonPropertyName("rates")]
-        public List<RateDto> Rates { get; set; }
+        public IEnumerable<RateDto> Rates { get; set; }
     }
 }
