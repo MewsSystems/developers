@@ -154,10 +154,10 @@ export const MovieDetailPage = () => {
 
   useEffect(() => {
     const state = location.state as { scrollToTop?: boolean } | null
-    if (state?.scrollToTop) {
+    if (state?.scrollToTop && !isLoading && movie) {
       window.scrollTo({ top: 0, behavior: "smooth" })
     }
-  }, [location.state])
+  }, [location.state, isLoading, movie])
 
   const handleBackClick = () => {
     navigate(-1)
