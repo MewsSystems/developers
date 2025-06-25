@@ -39,4 +39,4 @@ dotnet test
 ```
 
 There are some unit tests testing the main functionality of this application.
-Also there is a E2E test for provider, so we can check how the components work together.
+Also, there is a E2E test for provider, so we can check how the components work together.
