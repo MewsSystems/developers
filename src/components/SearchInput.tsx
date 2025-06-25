@@ -1,4 +1,4 @@
-import { Search } from "lucide-react"
+import { Search, X } from "lucide-react"
 import styled from "styled-components"
 
 const InputContainer = styled.div`
@@ -10,6 +10,7 @@ const InputContainer = styled.div`
 const Input = styled.input`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  padding-right: ${({ theme }) => theme.spacing.xl};
   font-size: ${({ theme }) => theme.fontSizes.lg};
   background-color: ${({ theme }) => theme.colors.surface};
   border: 2px solid ${({ theme }) => theme.colors.border};
@@ -28,13 +29,40 @@ const Input = styled.input`
   }
 `
 
-const SearchIcon = styled.div`
+const IconContainer = styled.div`
   position: absolute;
   right: ${({ theme }) => theme.spacing.lg};
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`
+
+const SearchIcon = styled.div`
   color: ${({ theme }) => theme.colors.textMuted};
   pointer-events: none;
+  transition: color 0.2s ease;
+
+  ${Input}:focus + ${IconContainer} & {
+    color: ${({ theme }) => theme.colors.text};
+  }
+`
+
+const ClearIcon = styled.button`
+  color: ${({ theme }) => theme.colors.textMuted};
+  cursor: pointer;
+  padding: 2px;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.border};
+  }
 `
 
 interface SearchInputProps {
@@ -44,6 +72,10 @@ interface SearchInputProps {
 }
 
 export const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
+  const handleClear = () => {
+    onChange("")
+  }
+
   return (
     <InputContainer>
       <Input
@@ -54,9 +86,16 @@ export const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) 
         aria-label="Search for movies"
         role="searchbox"
       />
-      <SearchIcon aria-hidden="true">
-        <Search size={20} />
-      </SearchIcon>
+      <IconContainer>
+        {value && (
+          <ClearIcon onClick={handleClear} aria-label="Clear search" type="button">
+            <X size={16} />
+          </ClearIcon>
+        )}
+        <SearchIcon aria-hidden="true">
+          <Search size={20} />
+        </SearchIcon>
+      </IconContainer>
     </InputContainer>
   )
 }
