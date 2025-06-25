@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router"
 
 export interface UseSearchStateReturn {
@@ -31,28 +31,25 @@ export const useSearchState = (): UseSearchStateReturn => {
     setSearchParams(params, { replace: true })
   }, [searchQuery, searchPage, popularPage, setSearchParams])
 
-  const setSearchQuery = useCallback(
-    (query: string) => {
-      setSearchQueryState(query)
-      if (query.trim() !== searchQuery.trim()) {
-        setSearchPageState(1)
-      }
-    },
-    [searchQuery]
-  )
+  const setSearchQuery = (query: string) => {
+    setSearchQueryState(query)
+    if (query.trim() !== searchQuery.trim()) {
+      setSearchPageState(1)
+    }
+  }
 
-  const setSearchPage = useCallback((page: number) => {
+  const setSearchPage = (page: number) => {
     setSearchPageState(page)
-  }, [])
+  }
 
-  const setPopularPage = useCallback((page: number) => {
+  const setPopularPage = (page: number) => {
     setPopularPageState(page)
-  }, [])
+  }
 
-  const resetSearch = useCallback(() => {
+  const resetSearch = () => {
     setSearchQueryState("")
     setSearchPageState(1)
-  }, [])
+  }
 
   return {
     searchQuery,

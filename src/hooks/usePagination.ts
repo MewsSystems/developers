@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useState } from "react"
 
 export interface UsePaginationProps {
   totalPages: number
@@ -31,31 +31,28 @@ export const usePagination = ({
   const isControlled = controlledCurrentPage !== undefined
   const currentPage = isControlled ? controlledCurrentPage : internalCurrentPage
 
-  const goToPage = useCallback(
-    (page: number) => {
-      if (page >= 1 && page <= totalPages) {
-        if (isControlled) {
-          onPageChange?.(page)
-        } else {
-          setInternalCurrentPage(page)
-        }
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      if (isControlled) {
+        onPageChange?.(page)
+      } else {
+        setInternalCurrentPage(page)
       }
-    },
-    [totalPages, isControlled, onPageChange]
-  )
+    }
+  }
 
-  const goToPrevious = useCallback(() => {
+  const goToPrevious = () => {
     goToPage(currentPage - 1)
-  }, [currentPage, goToPage])
+  }
 
-  const goToNext = useCallback(() => {
+  const goToNext = () => {
     goToPage(currentPage + 1)
-  }, [currentPage, goToPage])
+  }
 
   const canGoPrevious = currentPage > 1
   const canGoNext = currentPage < totalPages
 
-  const visiblePages = useMemo(() => {
+  const getVisiblePages = () => {
     if (totalPages <= maxVisiblePages) {
       return Array.from({ length: totalPages }, (_, i) => i + 1)
     }
@@ -69,7 +66,9 @@ export const usePagination = ({
     }
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-  }, [currentPage, totalPages, maxVisiblePages])
+  }
+
+  const visiblePages = getVisiblePages()
 
   return {
     currentPage,
