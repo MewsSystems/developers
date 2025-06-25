@@ -23,14 +23,24 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
-            
             try
             {
-                var provider = new ExchangeRateProvider(GetRateProviderConfiguration());
-                var rates = await provider.GetExchangeRatesAsync(currencies);
+                var provider = new CnbExchangeRateProvider(GetRateProviderConfiguration());
+                var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                // Explicitly specify the type argument for GetExchangeRatesAsync<T>
+                var rates = await provider.GetExchangeRatesAsync<CnbApiResponse>(currencies);
+                var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
+
+                // Print CNB results as returned
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from CNB:");
                 foreach (var rate in rates)
+                {
+                    Console.WriteLine(rate.ToString());
+                }
+                // Print ExchangeRate-API results: invert value and order by currencies
+                Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from CNB:");
+                foreach (var rate in rates2)
                 {
                     Console.WriteLine(rate.ToString());
                 }
@@ -63,6 +73,25 @@ namespace ExchangeRateUpdater
 
             if (string.IsNullOrWhiteSpace(rateProviderConfig.BaseCurrency))
                 throw new Exception("ApiConfiguration:BaseCurrency is not set in appsettings.json");
+
+            return rateProviderConfig;
+        }
+
+        private static IExchangeRateProviderConfiguration GetExchangeRateApiProviderConfiguration()
+        {
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+            var rateProviderConfig = new ExchangeRateProviderConfiguration
+            {
+                Url = configuration["ApiConfiguration:Url2"] + configuration["ApiConfiguration:BaseCurrency2"],
+                BaseCurrency = configuration["ApiConfiguration:BaseCurrency2"]
+            };
+
+            if (string.IsNullOrWhiteSpace(rateProviderConfig.Url))
+                throw new Exception("ApiConfiguration:Url2 is not set in appsettings.json");
+
+            if (string.IsNullOrWhiteSpace(rateProviderConfig.BaseCurrency))
+                throw new Exception("ApiConfiguration:BaseCurrency2 is not set in appsettings.json");
 
             return rateProviderConfig;
         }

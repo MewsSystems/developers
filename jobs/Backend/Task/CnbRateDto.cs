@@ -2,7 +2,7 @@
 
 namespace ExchangeRateUpdater
 {
-    public class RateDto 
+    public class CnbRateDto
     {
         [JsonPropertyName("currencyCode")]
         public string CurrencyCode { get; set; }
