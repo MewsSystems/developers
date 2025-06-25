@@ -42,7 +42,9 @@ public class CNBClient : ICNBClient
             foreach (var rate in fxRatesDailyMonth.Result.Rates)
             {
                 var obtainedDate = DateTime.Parse(rate.ValidFor);
-                rate.ValidFor = new DateTime(obtainedDate.Year, obtainedDate.Month + 1, 1).ToString("yyyy-MM-dd");
+                rate.ValidFor = new DateTime(obtainedDate.Year, obtainedDate.Month, 1)
+                    .AddMonths(1)
+                    .ToString("yyyy-MM-dd");
             }
 
             allRates = exratesDaily.Result.Rates.Concat(fxRatesDailyMonth.Result.Rates).ToList();

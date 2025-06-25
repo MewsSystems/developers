@@ -4,7 +4,6 @@ using ExchangeRateService.Cache;
 using ExchangeRateService.CNB.Client.Interfaces;
 using ExchangeRateService.Provider;
 using Microsoft.Extensions.Logging;
-using Refit;
 
 namespace ExchangeRateService.CNB.Provider;
 
@@ -79,6 +78,11 @@ public class CNBExchangeRateProvider : IExchangeRateProvider
         return res;
     }
 
+    /// <summary>
+    /// This will create exchange rates between the actual date of the rate and the desired day we want to know the rate
+    /// </summary>
+    /// <param name="exchangeRates"></param>
+    /// <param name="date"></param>
     private async Task CacheRates(IList<ExchangeRate> exchangeRates, DateTime date)
     {
 

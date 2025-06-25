@@ -1,4 +1,3 @@
-using ExchangeRateModel;
 using ExchangeRateService.Client.Interfaces;
 
 namespace ExchangeRateService.CNB.Client.Interfaces ;

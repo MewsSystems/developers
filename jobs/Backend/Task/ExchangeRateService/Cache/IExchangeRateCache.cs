@@ -27,7 +27,7 @@ public interface IExchangeRateCache
     /// </summary>
     /// <param name="exchangeRate">A specific exchange rate without its value</param>
     /// <returns></returns>
-    Task<bool> TryGetExchangeRate(ExchangeRate exchangeRate, out ExchangeRate? outExchangeRate);
+    Task<bool> TryGetExchangeRate(ExchangeRate exchangeRate, out ExchangeRate outExchangeRate);
     
     /// <summary>
     /// Tries to get the cached exchange rate values for specified exchanges

@@ -9,7 +9,6 @@ public class CNBExchangeRateProviderE2ETest
 {
     
     private static readonly Currency EURCurrency = new Currency("EUR");
-    private static readonly Currency USDCurrency = new Currency("USD");
     private static readonly Currency CZKCurrency = new Currency("CZK");
     private static readonly Currency BBDCurrency = new Currency("BBD");
     private static readonly DateTime Date = DateTime.Parse("2025-06-01");
@@ -60,10 +59,12 @@ public class CNBExchangeRateProviderE2ETest
     {
         var BBDToCZKRate = new ExchangeRate(BBDCurrency, CZKCurrency, 0, Date);
         var BBDToCZKRateOld = new ExchangeRate(BBDCurrency, CZKCurrency, 0, Date.AddDays(-1));
+        var EURToCZKRateOld = new ExchangeRate(EURCurrency, CZKCurrency, 0, Date.AddDays(-1));
         
         var result = await _provider.GetExchangeRate(EURCurrency, Date);
         
         Assert.IsTrue(await _cache.TryGetExchangeRate(_EURToCZKRate, out var cacheHit));
+        Assert.IsTrue(await _cache.TryGetExchangeRate(EURToCZKRateOld, out var cacheHitOld));
         Assert.IsTrue(await _cache.TryGetExchangeRate(BBDToCZKRate, out var bbdHit));
         Assert.IsFalse(await _cache.TryGetExchangeRate(BBDToCZKRateOld, out var _));
         
@@ -72,6 +73,7 @@ public class CNBExchangeRateProviderE2ETest
 
         Assert.NotNull(cacheHit);
         Assert.NotNull(bbdHit);
+        Assert.NotNull(cacheHitOld);
 
     }
 

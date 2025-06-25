@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ExchangeRateError;
+﻿using ExchangeRateError;
 using ExchangeRateModel;
 using ExchangeRateService.Cache;
 using ExchangeRateService.CNB.Client;
@@ -81,8 +78,7 @@ namespace ExchangeRateUpdater
                     var provider = sp.GetRequiredService<IExchangeRateProvider>();
                     var rate = await provider.GetExchangeRate(new Currency(currency), dateTime);
 
-                    Console.WriteLine($"Successfully retrieved exchange rate:");
-                    Console.WriteLine(rate);
+                    Console.WriteLine($"Successfully retrieved exchange rate: {rate}");
                 }
                 catch (FormatException ex)
                 {

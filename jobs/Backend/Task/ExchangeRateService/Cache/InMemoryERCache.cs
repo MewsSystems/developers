@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 using ExchangeRateModel;
 
@@ -42,7 +41,7 @@ public class InMemoryERCache : IExchangeRateCache
 
     public Task<bool> TryGetExchangeRate(ExchangeRate exchangeRate, out ExchangeRate outExchangeRate)
     {
-        outExchangeRate = default;
+        outExchangeRate = new ExchangeRate(exchangeRate.SourceCurrency, exchangeRate.TargetCurrency, exchangeRate.Date);
         _logger.LogDebug($"Getting exchange rate for {exchangeRate.ExchangeRateName()} from cache");
         if (!_cache.TryGetValue(exchangeRate.ExchangeRateName(), out var currencyRates))
         {
