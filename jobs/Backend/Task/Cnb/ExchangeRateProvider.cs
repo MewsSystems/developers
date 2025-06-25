@@ -1,5 +1,4 @@
 ﻿using ExchangeRateUpdater.ExchangeRateApi;
-using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,14 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Cnb
 {
-
     public class ExchangeRateProvider : ExchangeRateProviderBase
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public ExchangeRateProvider(IExchangeRateProviderConfiguration config, HttpClient httpClient = null) : base(config, httpClient) { }
+        protected static new readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public ExchangeRateProvider(
+            IExchangeRateProviderConfiguration config,
+            HttpClient httpClient = null)
+            : base(config, httpClient) { }
 
         protected override async Task<CnbApiResponse> FetchRawDataAsync<CnbApiResponse>()
         {
@@ -37,19 +39,16 @@ namespace ExchangeRateUpdater.Cnb
                 var apiResponse = rawData as CnbApiResponse;
                 var rates = new List<ExchangeRate>();
                 var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
-
                 if (apiResponse?.Rates == null)
                 { 
                     return rates; 
                 }
-
                 foreach (var rate in apiResponse.Rates)
                 {
                     if (!currencyCodes.Contains(rate.CurrencyCode))
                     {
                         continue;
                     }
-
                     var currency = new Currency(rate.CurrencyCode);
                     int amount = rate.Amount;
                     rates.Add(new ExchangeRate(currency, _baseCurrency, rate.Rate / amount));

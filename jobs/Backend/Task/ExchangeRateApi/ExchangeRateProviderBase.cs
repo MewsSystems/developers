@@ -4,7 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
 using NLog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace ExchangeRateUpdater.ExchangeRateApi
 {
@@ -13,9 +15,11 @@ namespace ExchangeRateUpdater.ExchangeRateApi
         protected readonly HttpClient HttpClient;
         protected readonly string _apiUrl;
         protected readonly Currency _baseCurrency;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected static readonly NLog.Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected ExchangeRateProviderBase(IExchangeRateProviderConfiguration config, HttpClient httpClient = null)
+        protected ExchangeRateProviderBase(
+            IExchangeRateProviderConfiguration config,
+            HttpClient httpClient = null)
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));

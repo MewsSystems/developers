@@ -29,10 +29,11 @@ namespace ExchangeRateUpdater
             // Ensure NLog is initialized and test logging
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info("Application started. NLog is working.");
+
             try
             {
                 var provider = new ExchangeRateProvider(GetRateProviderConfiguration());
-                var rates = await provider.GetExchangeRatesAsync<Cnb.CnbApiResponse>(currencies);
+                var rates = await provider.GetExchangeRatesAsync<CnbApiResponse>(currencies);
 
                 // Print CNB results as returned
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from CNB:");
