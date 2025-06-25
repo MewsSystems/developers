@@ -82,8 +82,6 @@ export const Pagination = ({
   goToPage,
   goToPrevious,
   goToNext,
-  goToFirst,
-  goToLast,
 }: UsePaginationReturn) => {
   if (totalPages <= 1) return null
 
@@ -92,10 +90,6 @@ export const Pagination = ({
 
   return (
     <PaginationContainer>
-      <PaginationButton onClick={goToFirst} disabled={!canGoPrevious} aria-label="Go to first page">
-        ««
-      </PaginationButton>
-
       <PaginationButton
         onClick={goToPrevious}
         disabled={!canGoPrevious}
@@ -142,10 +136,6 @@ export const Pagination = ({
 
       <PaginationButton onClick={goToNext} disabled={!canGoNext} aria-label="Go to next page">
         ›
-      </PaginationButton>
-
-      <PaginationButton onClick={goToLast} disabled={!canGoNext} aria-label="Go to last page">
-        »»
       </PaginationButton>
 
       <PageInfo>

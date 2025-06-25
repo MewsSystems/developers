@@ -63,12 +63,14 @@ export const SearchPage = () => {
     setSearchPage(1)
   }
 
+  const TMDB_MAX_PAGES = 500
+
   const isSearching = !!debouncedQuery.trim()
   const data = isSearching ? searchData : popularData
   const isLoading = isSearching ? searchLoading : popularLoading
   const error = isSearching ? searchError : popularError
 
-  const totalPages = data?.total_pages || 0
+  const totalPages = Math.min(data?.total_pages || 0, TMDB_MAX_PAGES)
   const currentPage = isSearching ? searchPage : popularPage
 
   const handlePageChange = (page: number) => {

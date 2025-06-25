@@ -17,8 +17,6 @@ export interface UsePaginationReturn {
   goToPage: (page: number) => void
   goToPrevious: () => void
   goToNext: () => void
-  goToFirst: () => void
-  goToLast: () => void
 }
 
 export const usePagination = ({
@@ -54,14 +52,6 @@ export const usePagination = ({
     goToPage(currentPage + 1)
   }, [currentPage, goToPage])
 
-  const goToFirst = useCallback(() => {
-    goToPage(1)
-  }, [goToPage])
-
-  const goToLast = useCallback(() => {
-    goToPage(totalPages)
-  }, [goToPage, totalPages])
-
   const canGoPrevious = currentPage > 1
   const canGoNext = currentPage < totalPages
 
@@ -90,7 +80,5 @@ export const usePagination = ({
     goToPage,
     goToPrevious,
     goToNext,
-    goToFirst,
-    goToLast,
   }
 }
