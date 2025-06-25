@@ -238,24 +238,7 @@ This application integrates with [The Movie Database (TMDb) API](https://develop
 
 The project includes a comprehensive CI/CD pipeline that automatically runs both unit tests and end-to-end tests.
 
-### GitHub Actions Workflow
-
-The CI pipeline is defined in `.github/workflows/ci.yml` and includes:
-
-- **Unit Tests Job (`unit-tests`)**: 
-  - Runs linting and type checks with BiomeJS
-  - Executes unit tests with Vitest
-  - Builds the project to ensure compilation
-
-- **E2E Tests Job (`cypress-tests`)**:
-  - Runs after unit tests pass
-  - Starts development server with MSW enabled
-  - Executes Cypress end-to-end tests
-  - Caches Cypress binary for faster subsequent runs
-
-### Triggered On
-- Push to `master` or `main` branches
-- Pull requests targeting `master` or `main` branches
+The CI pipeline is defined in `.github/workflows/ci.yml`
 
 ### Environment Configuration
 - Uses **Node.js 22.x** for consistent testing environment
