@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ExchangeRateUpdater.Cnb;
 using ExchangeRateUpdater.ExchangeRateApi;
 using Microsoft.Extensions.Configuration;
+using NLog;
 
 namespace ExchangeRateUpdater
 {
@@ -25,6 +26,9 @@ namespace ExchangeRateUpdater
 
         public static async Task Main(string[] args)
         {
+            // Ensure NLog is initialized and test logging
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info("Application started. NLog is working.");
             try
             {
                 var provider = new ExchangeRateProvider(GetRateProviderConfiguration());

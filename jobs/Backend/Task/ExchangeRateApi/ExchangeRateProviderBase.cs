@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Net.Http.Json;
+using NLog;
 
 namespace ExchangeRateUpdater.ExchangeRateApi
 {
@@ -12,6 +13,7 @@ namespace ExchangeRateUpdater.ExchangeRateApi
         protected static readonly HttpClient HttpClient = new HttpClient();
         protected readonly string _apiUrl;
         protected readonly Currency _baseCurrency;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         protected ExchangeRateProviderBase(IExchangeRateProviderConfiguration config)
         {
@@ -23,8 +25,16 @@ namespace ExchangeRateUpdater.ExchangeRateApi
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync<T>(IEnumerable<Currency> currencies)
         {
-            var response = await FetchRawDataAsync<T>();
-            return MapToExchangeRates(response, currencies);
+            try
+            {
+                var response = await FetchRawDataAsync<T>();
+                return MapToExchangeRates(response, currencies);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error in GetExchangeRatesAsync");
+                throw;
+            }
         }
 
         protected abstract Task<T> FetchRawDataAsync<T>();
