@@ -26,41 +26,82 @@ const SkeletonCard = styled.div`
   background-color: ${({ theme }) => theme.colors.surface};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  height: 180px;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: column;
+    height: auto;
+  }
 `
 
 const SkeletonPoster = styled(SkeletonBase)`
-  aspect-ratio: 2/3;
-  width: 100%;
+  flex-shrink: 0;
+  width: 120px;
+  height: 100%;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2/3;
+  }
 `
 
 const SkeletonContent = styled.div`
   padding: ${({ theme }) => theme.spacing.md};
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.xs};
+  flex: 1;
+  min-width: 0;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    gap: ${({ theme }) => theme.spacing.sm};
+  }
 `
 
 const SkeletonTitle = styled(SkeletonBase)`
-  height: 24px;
+  height: 20px;
   width: 80%;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    height: 24px;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+  }
 `
 
 const SkeletonOverview = styled(SkeletonBase)`
-  height: 16px;
+  height: 14px;
   width: 100%;
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    height: 16px;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
 `
 
 const SkeletonOverviewShort = styled(SkeletonBase)`
-  height: 16px;
+  height: 14px;
   width: 70%;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  flex: 1;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    height: 16px;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+    flex: none;
+  }
 `
 
 const SkeletonInfo = styled(SkeletonBase)`
-  height: 14px;
+  height: 12px;
   width: 60%;
+  margin-top: auto;
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    height: 14px;
+    margin-top: 0;
+  }
 `
 
 export const MovieCardSkeleton = () => {
