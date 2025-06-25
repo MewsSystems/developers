@@ -1,3 +1,4 @@
+import { Film } from "lucide-react"
 import { Link } from "react-router"
 import styled from "styled-components"
 import { ROUTES } from "../constants/routes"
@@ -56,12 +57,15 @@ const BackButton = styled(Link)`
 const MovieIcon = styled.span`
   font-size: 4rem;
   margin-bottom: 1rem;
+  color: ${({ theme }) => theme.colors.primary};
 `
 
 export const NotFoundPage = () => {
   return (
     <NotFoundContainer>
-      <MovieIcon>🎬</MovieIcon>
+      <MovieIcon>
+        <Film size={64} />
+      </MovieIcon>
       <NotFoundTitle>404</NotFoundTitle>
       <NotFoundSubtitle>Page Not Found</NotFoundSubtitle>
       <NotFoundMessage>

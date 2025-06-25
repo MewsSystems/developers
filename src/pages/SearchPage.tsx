@@ -1,3 +1,4 @@
+import { Film } from "lucide-react"
 import { useState } from "react"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
@@ -19,6 +20,10 @@ const Title = styled.h1`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   text-align: center;
   color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md};
 `
 
 const SearchSection = styled.div`
@@ -92,7 +97,10 @@ export const SearchPage = () => {
 
   return (
     <Container>
-      <Title>🎬 Movie Search</Title>
+      <Title>
+        <Film size={32} />
+        Movie Search
+      </Title>
 
       <SearchSection>
         <SearchInput

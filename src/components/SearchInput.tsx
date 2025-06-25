@@ -1,3 +1,4 @@
+import { Search } from "lucide-react"
 import styled from "styled-components"
 
 const InputContainer = styled.div`
@@ -53,7 +54,9 @@ export const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) 
         aria-label="Search for movies"
         role="searchbox"
       />
-      <SearchIcon aria-hidden="true">🔍</SearchIcon>
+      <SearchIcon aria-hidden="true">
+        <Search size={20} />
+      </SearchIcon>
     </InputContainer>
   )
 }

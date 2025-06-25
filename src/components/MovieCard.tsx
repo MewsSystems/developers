@@ -1,3 +1,4 @@
+import { Film, Star } from "lucide-react"
 import { Link } from "react-router"
 import styled from "styled-components"
 import { buildMovieDetailRoute } from "../constants/routes"
@@ -84,6 +85,9 @@ const MovieInfo = styled.div`
 const Rating = styled.span`
   color: ${({ theme }) => theme.colors.primary};
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `
 
 const Year = styled.span``
@@ -99,7 +103,9 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
         {movie.poster_path ? (
           <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />
         ) : (
-          <PosterPlaceholder>🎬</PosterPlaceholder>
+          <PosterPlaceholder>
+            <Film size={48} />
+          </PosterPlaceholder>
         )}
       </PosterContainer>
 
@@ -107,7 +113,10 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
         <Title>{movie.title}</Title>
         {movie.overview && <Overview>{movie.overview}</Overview>}
         <MovieInfo>
-          <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>
+          <Rating>
+            <Star size={16} fill="currentColor" />
+            {movie.vote_average.toFixed(1)}
+          </Rating>
           <Year>{getYear(movie.release_date)}</Year>
         </MovieInfo>
       </CardContent>

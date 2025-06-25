@@ -1,3 +1,4 @@
+import { Film, Star } from "lucide-react"
 import { Link, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
@@ -90,6 +91,9 @@ const MetaInfo = styled.div`
 const Rating = styled.span`
   color: ${({ theme }) => theme.colors.primary};
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `
 
 const Overview = styled.p`
@@ -167,7 +171,9 @@ export const MovieDetailPage = () => {
           {movie.poster_path ? (
             <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />
           ) : (
-            <PosterPlaceholder>🎬</PosterPlaceholder>
+            <PosterPlaceholder>
+              <Film size={64} />
+            </PosterPlaceholder>
           )}
         </PosterContainer>
 
@@ -175,7 +181,10 @@ export const MovieDetailPage = () => {
           <Title>{movie.title}</Title>
 
           <MetaInfo>
-            <Rating>⭐ {movie.vote_average.toFixed(1)}</Rating>
+            <Rating>
+              <Star size={20} fill="currentColor" />
+              {movie.vote_average.toFixed(1)}
+            </Rating>
             <span>{getYear(movie.release_date)}</span>
             {movie.runtime && <span>{formatRuntime(movie.runtime)}</span>}
             <span>{formatNumber(movie.vote_count)} votes</span>

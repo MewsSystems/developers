@@ -1,3 +1,4 @@
+import { AlertTriangle } from "lucide-react"
 import styled from "styled-components"
 
 const ErrorContainer = styled.div`
@@ -32,7 +33,9 @@ interface ErrorMessageProps {
 export const ErrorMessage = ({ message }: ErrorMessageProps) => {
   return (
     <ErrorContainer>
-      <ErrorIcon>⚠️</ErrorIcon>
+      <ErrorIcon>
+        <AlertTriangle size={24} />
+      </ErrorIcon>
       <ErrorText>{message}</ErrorText>
     </ErrorContainer>
   )
