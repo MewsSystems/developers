@@ -144,7 +144,7 @@ interface MovieCardProps {
 
 export const MovieCard = ({ movie }: MovieCardProps) => {
   return (
-    <Card to={buildMovieDetailRoute(movie.id)}>
+    <Card to={buildMovieDetailRoute(movie.id)} data-testid="movie-card">
       <PosterContainer>
         {movie.poster_path ? (
           <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />
@@ -159,7 +159,7 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
         <Title>{movie.title}</Title>
         {movie.overview && <Overview>{movie.overview}</Overview>}
         <MovieInfo>
-          <Rating>
+          <Rating data-testid="movie-rating">
             <Star size={14} fill="currentColor" />
             {movie.vote_average.toFixed(1)}
           </Rating>

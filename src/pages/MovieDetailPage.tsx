@@ -192,7 +192,7 @@ export const MovieDetailPage = () => {
           <Title>{movie.title}</Title>
 
           <MetaInfo>
-            <Rating>
+            <Rating data-testid="movie-rating">
               <Star size={20} fill="currentColor" />
               {movie.vote_average.toFixed(1)}
             </Rating>

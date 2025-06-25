@@ -89,7 +89,7 @@ export const Pagination = ({
   const showLastEllipsis = visiblePages[visiblePages.length - 1] < totalPages - 1
 
   return (
-    <PaginationContainer>
+    <PaginationContainer data-testid="pagination">
       <PaginationButton
         onClick={goToPrevious}
         disabled={!canGoPrevious}
@@ -117,6 +117,7 @@ export const Pagination = ({
           $isActive={currentPage === page}
           aria-label={`Go to page ${page}`}
           aria-current={currentPage === page ? "page" : undefined}
+          data-testid={`pagination-page-${page}`}
         >
           {page}
         </PaginationButton>
