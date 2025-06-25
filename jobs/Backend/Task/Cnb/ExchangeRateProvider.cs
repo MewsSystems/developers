@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExchangeRateUpdater.ExchangeRateApi;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,24 +7,24 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Cnb
 {
 
-    public class CnbExchangeRateProvider : ExchangeRateProviderBase
+    public class ExchangeRateProvider : ExchangeRateProviderBase
     {
-        public CnbExchangeRateProvider(IExchangeRateProviderConfiguration config) : base(config) { }
+        public ExchangeRateProvider(IExchangeRateProviderConfiguration config) : base(config) { }
 
         protected override async Task<T> FetchRawDataAsync<T>()
         {
-            if (typeof(T) != typeof(CnbApiResponse))
-                throw new NotSupportedException($"Type {typeof(T)} is not supported by {nameof(CnbExchangeRateProvider)}");
-            var result = await HttpClient.GetFromJsonAsync<CnbApiResponse>(_apiUrl);
+            if (typeof(T) != typeof(ApiResponse))
+                throw new NotSupportedException($"Type {typeof(T)} is not supported by {nameof(ExchangeRateProvider)}");
+            var result = await HttpClient.GetFromJsonAsync<ApiResponse>(_apiUrl);
             return (T)(object)result;
         }
 
         protected override IEnumerable<ExchangeRate> MapToExchangeRates<T>(T rawData, IEnumerable<Currency> currencies)
         {
-            var apiResponse = rawData as CnbApiResponse;
+            var apiResponse = rawData as ApiResponse;
             var rates = new List<ExchangeRate>();
             var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 

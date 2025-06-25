@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Cnb;
+using ExchangeRateUpdater.ExchangeRateApi;
 using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater
@@ -25,11 +27,11 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new CnbExchangeRateProvider(GetRateProviderConfiguration());
+                var provider = new ExchangeRateProvider(GetRateProviderConfiguration());
                 var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
 
                 // Explicitly specify the type argument for GetExchangeRatesAsync<T>
-                var rates = await provider.GetExchangeRatesAsync<CnbApiResponse>(currencies);
+                var rates = await provider.GetExchangeRatesAsync<Cnb.ApiResponse>(currencies);
                 var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
 
                 // Print CNB results as returned
@@ -38,8 +40,8 @@ namespace ExchangeRateUpdater
                 {
                     Console.WriteLine(rate.ToString());
                 }
-                // Print ExchangeRate-API results: invert value and order by currencies
-                Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from CNB:");
+                // Print ExchangeRate-API results as returned
+                Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
                 foreach (var rate in rates2)
                 {
                     Console.WriteLine(rate.ToString());

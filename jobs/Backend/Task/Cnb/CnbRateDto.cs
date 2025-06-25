@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Cnb
 {
     public class CnbRateDto
     {

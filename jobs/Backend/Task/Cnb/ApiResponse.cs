@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Cnb
 {
-    public class CnbApiResponse
+    public class ApiResponse
     {
         [JsonPropertyName("rates")]
         public List<CnbRateDto> Rates { get; set; }

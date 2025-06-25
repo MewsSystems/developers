@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Net.Http.Json;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.ExchangeRateApi
 {
     public abstract class ExchangeRateProviderBase : IExchangeRateProvider
     {
