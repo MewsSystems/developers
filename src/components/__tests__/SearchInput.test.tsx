@@ -4,10 +4,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { theme } from "../../styles/theme"
 import { SearchInput } from "../SearchInput"
 
+const mockOnChange = vi.fn()
+
 const renderSearchInput = (props = {}) => {
   const defaultProps = {
     value: "",
-    onChange: vi.fn(),
+    onChange: mockOnChange,
     placeholder: "Search for movies...",
   }
 
@@ -41,7 +43,7 @@ describe("SearchInput", () => {
     const input = screen.getByPlaceholderText("Search for movies...")
     fireEvent.change(input, { target: { value: "Test Movie" } })
 
-    expect(vi.fn()).toHaveBeenCalledWith("Test Movie")
+    expect(mockOnChange).toHaveBeenCalledWith("Test Movie")
   })
 
   it("renders search icon", () => {
