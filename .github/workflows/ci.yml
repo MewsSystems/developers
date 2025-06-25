@@ -67,14 +67,10 @@ jobs:
     - name: Install Cypress binary
       run: pnpm exec cypress install
 
-    - name: Build project
-      run: pnpm build
-
     - name: Run Cypress tests
       uses: cypress-io/github-action@v6
       with:
-        start: pnpm preview
-        wait-on: 'http://localhost:4173'
-        command: pnpm cypress:ci
+        start: pnpm dev
+        command: pnpm cypress:run
       env:
         VITE_ENABLE_MSW: 'true'

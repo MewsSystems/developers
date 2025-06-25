@@ -17,7 +17,6 @@
     "test:coverage": "vitest run --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "cypress:ci": "cypress run --config baseUrl=http://localhost:4173",
     "prepare": "husky"
   },
   "dependencies": {
