@@ -14,7 +14,7 @@ namespace ExchangeRateUpdater.Cnb
     public class ExchangeRateProvider : ExchangeRateProviderBase
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        public ExchangeRateProvider(IExchangeRateProviderConfiguration config) : base(config) { }
+        public ExchangeRateProvider(IExchangeRateProviderConfiguration config, HttpClient httpClient = null) : base(config, httpClient) { }
 
         protected override async Task<T> FetchRawDataAsync<T>()
         {

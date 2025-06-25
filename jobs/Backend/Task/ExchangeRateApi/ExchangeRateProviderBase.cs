@@ -10,17 +10,18 @@ namespace ExchangeRateUpdater.ExchangeRateApi
 {
     public abstract class ExchangeRateProviderBase : IExchangeRateProvider
     {
-        protected static readonly HttpClient HttpClient = new HttpClient();
+        protected readonly HttpClient HttpClient;
         protected readonly string _apiUrl;
         protected readonly Currency _baseCurrency;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected ExchangeRateProviderBase(IExchangeRateProviderConfiguration config)
+        protected ExchangeRateProviderBase(IExchangeRateProviderConfiguration config, HttpClient httpClient = null)
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
             _apiUrl = config.Url;
             _baseCurrency = new Currency(config.BaseCurrency);
+            HttpClient = httpClient ?? new HttpClient();
         }
 
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync<T>(IEnumerable<Currency> currencies)
