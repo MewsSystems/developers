@@ -1,5 +1,4 @@
 import { Film } from "lucide-react"
-import { useState } from "react"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { MovieGrid } from "../components/MovieGrid"
@@ -8,6 +7,7 @@ import { SearchInput } from "../components/SearchInput"
 import { useDebounce } from "../hooks/useDebounce"
 import { useMovieSearch, usePopularMovies } from "../hooks/useMovies"
 import { usePagination } from "../hooks/usePagination"
+import { useSearchState } from "../hooks/useSearchState"
 
 const Container = styled.div`
   max-width: 1200px;
@@ -45,11 +45,16 @@ const ResultsInfo = styled.p`
 `
 
 export const SearchPage = () => {
-  const [searchQuery, setSearchQuery] = useState("")
-  const debouncedQuery = useDebounce(searchQuery, 500)
+  const {
+    searchQuery,
+    searchPage,
+    popularPage,
+    setSearchQuery: setSearchQueryState,
+    setSearchPage,
+    setPopularPage,
+  } = useSearchState()
 
-  const [popularPage, setPopularPage] = useState(1)
-  const [searchPage, setSearchPage] = useState(1)
+  const debouncedQuery = useDebounce(searchQuery, 500)
 
   const {
     data: popularData,
@@ -64,8 +69,7 @@ export const SearchPage = () => {
   } = useMovieSearch(debouncedQuery, searchPage)
 
   const handleSearchChange = (query: string) => {
-    setSearchQuery(query)
-    setSearchPage(1)
+    setSearchQueryState(query)
   }
 
   const TMDB_MAX_PAGES = 500

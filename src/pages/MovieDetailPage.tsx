@@ -1,9 +1,8 @@
 import { ArrowLeft, Film, Star } from "lucide-react"
-import { Link, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { MovieDetailSkeleton } from "../components/MovieDetailSkeleton"
-import { ROUTES } from "../constants/routes"
 import { useMovieDetails } from "../hooks/useMovies"
 import { formatNumber, formatRuntime, getImageUrl, getYear } from "../utils/movieUtils"
 
@@ -13,7 +12,7 @@ const Container = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
 `
 
-const BackButton = styled(Link)`
+const BackButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
@@ -21,7 +20,8 @@ const BackButton = styled(Link)`
   background-color: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   border-radius: ${({ theme }) => theme.borderRadius.base};
-  text-decoration: none;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  cursor: pointer;
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   transition: background-color 0.2s ease;
 
@@ -145,9 +145,14 @@ const ProductionCompany = styled.span`
 
 export const MovieDetailPage = () => {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const movieId = Number(id) || 0
 
   const { data: movie, isLoading, error } = useMovieDetails(movieId)
+
+  const handleBackClick = () => {
+    navigate(-1)
+  }
 
   if (isLoading) {
     return <MovieDetailSkeleton />
@@ -156,7 +161,7 @@ export const MovieDetailPage = () => {
   if (error || !movie) {
     return (
       <Container>
-        <BackButton to={ROUTES.HOME}>
+        <BackButton onClick={handleBackClick}>
           <ArrowLeft size={16} />
           Back to Search
         </BackButton>
@@ -167,7 +172,7 @@ export const MovieDetailPage = () => {
 
   return (
     <Container>
-      <BackButton to={ROUTES.HOME}>
+      <BackButton onClick={handleBackClick}>
         <ArrowLeft size={16} />
         Back to Search
       </BackButton>

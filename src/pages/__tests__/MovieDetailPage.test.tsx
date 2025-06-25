@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider, type UseQueryResult } from "@tanstack/react-query"
-import { render, screen } from "@testing-library/react"
-import { MemoryRouter, Route, Routes } from "react-router"
+import { fireEvent, render, screen } from "@testing-library/react"
+import { MemoryRouter, Route, Routes, useNavigate } from "react-router"
 import { ThemeProvider } from "styled-components"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { useMovieDetails } from "../../hooks/useMovies"
@@ -10,6 +10,13 @@ import type { MovieDetails } from "../../types/movie"
 import { MovieDetailPage } from "../MovieDetailPage"
 
 vi.mock("../../hooks/useMovies")
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual("react-router")
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  }
+})
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -44,9 +51,12 @@ const TestWrapper = ({
 
 describe("MovieDetailPage", () => {
   const mockUseMovieDetails = vi.mocked(useMovieDetails)
+  const mockNavigate = vi.fn()
+  const mockUseNavigate = vi.mocked(useNavigate)
 
   beforeEach(() => {
     vi.clearAllMocks()
+    mockUseNavigate.mockReturnValue(mockNavigate)
   })
 
   it("displays loading spinner while fetching movie details", () => {
@@ -179,7 +189,7 @@ describe("MovieDetailPage", () => {
     expect(screen.queryByText(/\d+h \d+m/)).not.toBeInTheDocument()
   })
 
-  it("displays back button with correct link", () => {
+  it("displays back button and handles click correctly", () => {
     mockUseMovieDetails.mockReturnValue({
       data: mockMovieDetails,
       isLoading: false,
@@ -192,9 +202,11 @@ describe("MovieDetailPage", () => {
       </TestWrapper>
     )
 
-    const backButton = screen.getByRole("link", { name: /back to search/i })
+    const backButton = screen.getByRole("button", { name: /back to search/i })
     expect(backButton).toBeInTheDocument()
-    expect(backButton).toHaveAttribute("href", "/")
+
+    fireEvent.click(backButton)
+    expect(mockNavigate).toHaveBeenCalledWith(-1)
   })
 
   it("displays error message when there is an error", () => {
@@ -211,7 +223,7 @@ describe("MovieDetailPage", () => {
     )
 
     expect(screen.getByText("Failed to load movie details. Please try again.")).toBeInTheDocument()
-    const backButton = screen.getByRole("link", { name: /back to search/i })
+    const backButton = screen.getByRole("button", { name: /back to search/i })
     expect(backButton).toBeInTheDocument()
   })
 
