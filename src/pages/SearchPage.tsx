@@ -1,4 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { Film } from "lucide-react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { MovieGrid } from "../components/MovieGrid"
@@ -8,6 +10,7 @@ import { useDebounce } from "../hooks/useDebounce"
 import { useMovieSearch, usePopularMovies } from "../hooks/useMovies"
 import { usePagination } from "../hooks/usePagination"
 import { useSearchState } from "../hooks/useSearchState"
+import { movieService } from "../services/movieService"
 
 const Container = styled.div`
   max-width: 1200px;
@@ -45,6 +48,8 @@ const ResultsInfo = styled.p`
 `
 
 export const SearchPage = () => {
+  const queryClient = useQueryClient()
+
   const {
     searchQuery,
     searchPage,
@@ -60,12 +65,14 @@ export const SearchPage = () => {
     data: popularData,
     isLoading: popularLoading,
     error: popularError,
+    isPlaceholderData: popularIsPlaceholderData,
   } = usePopularMovies(popularPage)
 
   const {
     data: searchData,
     isLoading: searchLoading,
     error: searchError,
+    isPlaceholderData: searchIsPlaceholderData,
   } = useMovieSearch(debouncedQuery, searchPage)
 
   const handleSearchChange = (query: string) => {
@@ -78,9 +85,30 @@ export const SearchPage = () => {
   const data = isSearching ? searchData : popularData
   const isLoading = isSearching ? searchLoading : popularLoading
   const error = isSearching ? searchError : popularError
+  const isPlaceholderData = isSearching ? searchIsPlaceholderData : popularIsPlaceholderData
 
   const totalPages = Math.min(data?.total_pages || 0, TMDB_MAX_PAGES)
   const currentPage = isSearching ? searchPage : popularPage
+
+  useEffect(() => {
+    if (!isPlaceholderData && data && currentPage < totalPages) {
+      const nextPage = currentPage + 1
+
+      if (isSearching) {
+        queryClient.prefetchQuery({
+          queryKey: ["movies", "search", debouncedQuery, nextPage],
+          queryFn: () => movieService.searchMovies(debouncedQuery, nextPage),
+          staleTime: 5 * 60 * 1000,
+        })
+      } else {
+        queryClient.prefetchQuery({
+          queryKey: ["movies", "popular", nextPage],
+          queryFn: () => movieService.getPopularMovies(nextPage),
+          staleTime: 10 * 60 * 1000,
+        })
+      }
+    }
+  }, [data, isPlaceholderData, currentPage, totalPages, isSearching, debouncedQuery, queryClient])
 
   const handlePageChange = (page: number) => {
     if (isSearching) {

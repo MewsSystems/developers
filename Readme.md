@@ -2,6 +2,8 @@
 
 This application provides an intuitive interface to search for movies and view detailed information using The Movie Database (TMDb) API.
 
+The app is deployed on Netlify: https://tmdb-mews.netlify.app
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -208,7 +210,6 @@ This application integrates with [The Movie Database (TMDb) API](https://develop
 
 ### React Query Implementation
 - **Caching**: Intelligent caching of API responses
-- **Background Updates**: Automatic data refreshing
 - **Error Boundaries**: Graceful error handling
 - **Loading States**: Built-in loading state management
 
