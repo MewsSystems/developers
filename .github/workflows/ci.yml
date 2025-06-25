@@ -74,6 +74,8 @@ jobs:
       uses: cypress-io/github-action@v6
       with:
         start: pnpm preview
+        wait-on: 'http://localhost:4173'
         command: pnpm e2e
+        config: baseUrl=http://localhost:4173
       env:
         VITE_ENABLE_MSW: 'true'
