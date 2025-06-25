@@ -65,7 +65,7 @@ jobs:
       run: pnpm install --no-frozen-lockfile
 
     - name: Install Cypress binary
-      run: pnpm execcypress install
+      run: pnpm exec cypress install
 
     - name: Build project
       run: pnpm build
