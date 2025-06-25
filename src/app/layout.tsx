@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <header className="h-20 flex items-center justify-start bg-cyan-200 text-cyan-900 text-2xl font-bold px-6">
                 Search for Movies
               </header>
-              <main className="bg-cyan-50 flex-1 p-6 flex flex-col">{children}</main>
+              <main className="bg-cyan-50 flex-1 p-2 flex flex-col sm:p-6">{children}</main>
             </div>
           </div>
         </ReactQueryProvider>

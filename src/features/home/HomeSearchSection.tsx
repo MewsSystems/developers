@@ -12,6 +12,7 @@ import { ErrorMessage } from '@/components/ErrorMessage';
 import { MovieSearchResponse } from '@/types/api';
 import { DebouncedInput } from '@/components/DebouncedInput';
 import { moviesQueryKey } from '@/lib/queryKeys';
+import { MovieListSkeleton } from '@/components/MovieListSkeleton';
 
 export function HomeSearchSection() {
   const { replace } = useRouter();
@@ -27,18 +28,19 @@ export function HomeSearchSection() {
   const queryKey = moviesQueryKey(search, page);
   const staleTime = Number(process.env.NEXT_PUBLIC_CLIENT_SIDE_SEARCH_REVALIDATE_TIME || 0) * 1000;
 
-  const { data, isPending, isFetching, isError, isSuccess } = useQuery<MovieSearchResponse>({
-    queryKey,
-    queryFn: () => fetchMoviesClient(search, pageParam),
-    staleTime,
-    enabled: !!search,
-  });
+  const lastDataRef = useRef<MovieSearchResponse | null>(null);
 
-  const lastTotalPagesRef = useRef<number>(data?.total_pages ?? 0);
+  const { data, isPending, isFetching, isLoading, isError, isSuccess } =
+    useQuery<MovieSearchResponse>({
+      queryKey,
+      queryFn: () => fetchMoviesClient(search, page),
+      staleTime,
+      enabled: !!search,
+    });
 
   useEffect(() => {
-    if (data?.total_pages) {
-      lastTotalPagesRef.current = data.total_pages;
+    if (isSuccess && data) {
+      lastDataRef.current = data;
     }
   }, [isSuccess, data]);
 
@@ -67,8 +69,8 @@ export function HomeSearchSection() {
     setPage(1);
   };
 
-  const movies = data?.results ?? [];
-  const totalPages = data?.total_pages ?? lastTotalPagesRef.current;
+  const movies = data?.results ?? lastDataRef.current?.results ?? [];
+  const totalPages = data?.total_pages ?? lastDataRef.current?.total_pages ?? 0;
   const currentPage = page;
 
   return (
@@ -93,13 +95,13 @@ export function HomeSearchSection() {
         <div className="min-h-[24px] mt-1" aria-live="polite" aria-atomic="true">
           {isError ? (
             <ErrorMessage message="There was a problem fetching your search results" />
-          ) : !isFetching && data?.results?.length === 0 ? (
+          ) : search && !isFetching && movies.length === 0 ? (
             <p className="text-stone-800">No results match your search</p>
           ) : null}
         </div>
       </div>
 
-      {totalPages > 1 && (isFetching || movies.length > 0) && (
+      {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -109,17 +111,21 @@ export function HomeSearchSection() {
       )}
 
       <div className="flex flex-col gap-2" role="region" aria-live="polite" aria-atomic="true">
-        {movies.map((movie) => (
-          <MovieListItem
-            key={movie.id}
-            movie={movie}
-            search={search}
-            page={page > 1 ? page : undefined}
-          />
-        ))}
+        {isLoading && !lastDataRef.current ? (
+          <MovieListSkeleton itemNumber={20} />
+        ) : (
+          movies.map((movie) => (
+            <MovieListItem
+              key={movie.id}
+              movie={movie}
+              search={search}
+              page={page > 1 ? page : undefined}
+            />
+          ))
+        )}
       </div>
 
-      {totalPages > 1 && (isFetching || movies.length > 0) && (
+      {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

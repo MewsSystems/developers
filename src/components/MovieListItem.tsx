@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TMDBMovie } from '@/types/tmdb';
 import { createMovieSlug } from '@/lib/slug';
+import { formatDate, formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
 
 interface Props {
   movie: TMDBMovie & {
@@ -16,15 +17,17 @@ export function MovieListItem({ movie, search, page }: Props) {
   const slug = createMovieSlug(movie.id, movie.original_title);
 
   return (
-    <div className="flex gap-4 bg-white rounded-lg">
-      <div className="w-[154px] h-[231px] bg-stone-100 flex items-center justify-center">
+    <div className="flex gap-4 bg-white rounded-xl p-3 h-[255px] border border-cyan-200">
+      <div
+        className={`w-[154px] flex justify-center ${movie.poster_url.default ? 'items-start' : 'bg-stone-100 items-center h-[231px] rounded-md'}`}
+      >
         {movie.poster_url.default ? (
           <Image
             src={movie.poster_url.default}
-            alt={movie.title}
+            alt={formatPostImageAlt(movie.title)}
             width={154}
             height={231}
-            className="object-cover"
+            className="rounded-md w-[154px] h-auto max-h-[231px] object-contain"
           />
         ) : (
           <AiOutlineFileImage className="text-stone-400 text-4xl" />
@@ -40,7 +43,7 @@ export function MovieListItem({ movie, search, page }: Props) {
                 ...(page ? { page } : {}),
               },
             }}
-            className="text-lg font-semibold text-blue-700 hover:underline"
+            className="text-lg font-semibold text-purple-800 hover:underline"
           >
             {movie.title}
           </Link>
@@ -48,11 +51,15 @@ export function MovieListItem({ movie, search, page }: Props) {
         {movie.original_title !== movie.title && (
           <p className="text-stone-400 text-sm">{movie.original_title}</p>
         )}
+        <p className="text-stone-500 text-sm mt-1">Date: {formatDate(movie.release_date)}</p>
         <p className="text-stone-500 text-sm mt-1">
-          {new Date(movie.release_date).toLocaleDateString('en-GB')} –{' '}
-          {Math.round(movie.vote_average * 10)}%
+          Score: {formatVoteFromSearch(movie.vote_average)}
         </p>
-        <p className="mt-2 text-stone-700 text-sm">{movie.overview}</p>
+        {movie.overview && (
+          <p className="hidden mt-2 text-stone-700 text-sm sm:line-clamp-4 sm:display md:line-clamp-6">
+            {movie.overview}
+          </p>
+        )}
       </div>
     </div>
   );

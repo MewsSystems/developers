@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { MovieDetailResponse } from '@/types/api';
 import { ChipList } from '@/components/ChipList';
-import { formatDate, formatVote } from '@/lib/format';
+import { formatDate, formatPostImageAlt, formatRuntime, formatVote } from '@/lib/format';
 
 interface Props {
   movie: MovieDetailResponse;
@@ -9,13 +9,13 @@ interface Props {
 
 export function MovieDetailsView({ movie }: Props) {
   return (
-    <div className="bg-white p-6 rounded-xl shadow space-y-6">
+    <div className="bg-white p-4 rounded-xl shadow space-y-6 sm:p-6">
       <div className="flex flex-col sm:flex-row gap-6">
         {movie.poster_url.default && (
           <div className="flex justify-center">
             <Image
               src={movie.poster_url.default}
-              alt={`Poster for ${movie.title ?? 'movie'}`}
+              alt={formatPostImageAlt(movie.title)}
               width={342}
               height={513}
               className="rounded-md"
@@ -28,12 +28,12 @@ export function MovieDetailsView({ movie }: Props) {
           <h2 className="text-2xl font-bold">{movie.title}</h2>
           <h3 className="text-lg italic text-stone-600">{movie.original_title}</h3>
 
-          {movie.tagline && <p className="text-purple-700 italic">{movie.tagline}</p>}
+          {movie.tagline && <p className="text-cyan-900 italic">{movie.tagline}</p>}
 
           <p>Release Date: {formatDate(movie.release_date)}</p>
           <p>Rating: {formatVote(movie.vote_average * 10)}</p>
           <p>Status: {movie.status}</p>
-          <p>Runtime: {movie.runtime} mins</p>
+          <p>Runtime: {formatRuntime(movie.runtime)}</p>
 
           {movie.spoken_languages.length > 0 && (
             <p>Language: {movie.spoken_languages[0].english_name}</p>
