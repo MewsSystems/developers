@@ -7,7 +7,7 @@ on:
     branches: [ master, main ]
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
     - name: Run unit tests
       run: pnpm test:run
 
-  e2e:
+  cypress-tests:
     runs-on: ubuntu-latest
     needs: test
 
