@@ -4,21 +4,6 @@ This application provides an intuitive interface to search for movies and view d
 
 The app is deployed on Netlify: https://tmdb-mews.netlify.app
 
-## 📸 Screenshots
-
-### Search Page
-![Search Page](./docs/images/search-page.png)
-*Main search interface with popular movies and real-time search*
-
-### Movie Detail Page
-![Movie Detail](./docs/images/movie-detail.png)
-*Detailed movie information with ratings, genres, and production details*
-
-### Mobile Responsive
-<img src="./docs/images/mobile-view.png" alt="Mobile View" width="300">
-
-*Fully responsive design optimized for mobile devices*
-
 ## 🚀 Quick Start
 
 ### Prerequisites
