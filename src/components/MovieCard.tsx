@@ -144,7 +144,11 @@ interface MovieCardProps {
 
 export const MovieCard = ({ movie }: MovieCardProps) => {
   return (
-    <Card to={buildMovieDetailRoute(movie.id)} data-testid="movie-card">
+    <Card
+      to={buildMovieDetailRoute(movie.id)}
+      state={{ scrollToTop: true }}
+      data-testid="movie-card"
+    >
       <PosterContainer>
         {movie.poster_path ? (
           <Poster src={getImageUrl(movie.poster_path) || ""} alt={movie.title} loading="lazy" />

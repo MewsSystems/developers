@@ -1,5 +1,6 @@
 import { ArrowLeft, Film, Star } from "lucide-react"
-import { useNavigate, useParams } from "react-router"
+import { useEffect } from "react"
+import { useLocation, useNavigate, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
 import { MovieDetailSkeleton } from "../components/MovieDetailSkeleton"
@@ -146,9 +147,17 @@ const ProductionCompany = styled.span`
 export const MovieDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const movieId = Number(id) || 0
 
   const { data: movie, isLoading, error } = useMovieDetails(movieId)
+
+  useEffect(() => {
+    const state = location.state as { scrollToTop?: boolean } | null
+    if (state?.scrollToTop) {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+  }, [location.state])
 
   const handleBackClick = () => {
     navigate(-1)

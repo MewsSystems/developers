@@ -169,8 +169,6 @@ pnpm test:coverage # Generate test coverage report
 ```bash
 pnpm cypress:open # Open Cypress test runner
 pnpm cypress:run  # Run Cypress tests headlessly
-pnpm cypress:ci   # Run Cypress tests for CI (with production baseUrl)
-pnpm e2e          # Alias for cypress:run
 ```
 
 ### Code Quality
