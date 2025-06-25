@@ -8,7 +8,7 @@ The app is deployed on Netlify: https://tmdb-mews.netlify.app
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 22+ (look at `.nvmrc` for the exact version)
 - pnpm (recommended) or npm/yarn
 
 ### Installation & Setup
