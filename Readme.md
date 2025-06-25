@@ -94,43 +94,55 @@ The app is deployed on Netlify: https://tmdb-mews.netlify.app
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── __tests__/      # Component tests
-│   ├── ErrorMessage.tsx
-│   ├── MovieCard.tsx
-│   ├── MovieGrid.tsx
-│   ├── Pagination.tsx
-│   └── SearchInput.tsx
-├── constants/          # Application constants
-│   ├── errors.ts       # Error messages and codes
-│   └── routes.ts       # Route definitions
-├── hooks/              # Custom React hooks
-│   ├── __tests__/      # Hook tests
-│   ├── useDebounce.ts
-│   ├── useMovies.ts
-│   ├── usePagination.ts
-│   └── useSearchState.ts
-├── lib/                # External library configurations
-│   └── api.ts          # Axios configuration
-├── pages/              # Page components
-│   ├── MovieDetailPage.tsx
-│   ├── NotFoundPage.tsx
-│   └── SearchPage.tsx
-├── services/           # API service layer
-│   └── movieService.ts # TMDb API integration
-├── styles/             # Global styles and theming
-│   ├── GlobalStyles.ts
-│   ├── theme.ts
-│   └── styled.d.ts
-├── test/               # Test configuration and mocks
-│   ├── mocks/          # MSW handlers and fixtures
-│   └── setup.ts        # Test setup
-├── types/              # TypeScript type definitions
-│   ├── movie.ts        # Movie-related types
-│   └── env.d.ts        # Environment types
-├── utils/              # Utility functions
-│   └── movieUtils.ts   # Movie-related utilities
-└── main.tsx            # Application entry point
+├── components/             # Reusable UI components
+│   ├── MovieCard/         # Example: Individual movie card component
+│   │   ├── MovieCard.tsx
+│   │   ├── MovieCard.styles.ts
+│   │   ├── MovieCard.test.tsx
+│   │   └── index.ts
+│   ├── SearchInput/       # Debounced search input
+│   ├── Pagination/        # Pagination component
+│   ├── MovieGrid/         # Movie grid layout
+│   └── ...               # Other UI components
+├── constants/             # Application constants
+│   ├── errors.ts         # Error messages and codes
+│   └── routes.ts         # Route definitions
+├── hooks/                # Custom React hooks
+│   ├── __tests__/        # Hook tests
+│   ├── useDebounce.ts    # Input debounce hook
+│   ├── useMovies.ts      # Movie management hook
+│   ├── usePagination.ts  # Pagination state hook
+│   └── useSearchState.ts # Search state hook
+├── lib/                  # External library configurations
+│   ├── __tests__/       # External library tests
+│   └── api.ts           # Axios configuration
+├── pages/               # Page components
+│   ├── SearchPage/      # Example: Main search page
+│   │   ├── SearchPage.tsx
+│   │   ├── SearchPage.styles.ts
+│   │   ├── SearchPage.test.tsx
+│   │   └── index.ts
+│   ├── MovieDetailPage/ # Movie detail page
+│   ├── NotFoundPage/    # 404 page
+│   └── ...             # Other pages
+├── services/            # API service layer
+│   ├── __tests__/       # API service layer tests
+│   └── movieService.ts  # TMDb API integration
+├── styles/              # Global styles and theming
+│   ├── GlobalStyles.ts  # Global application styles
+│   ├── theme.ts         # Theme configuration
+│   └── styled.d.ts      # Styled-components type definitions
+├── test/                # Test configuration and mocks
+│   ├── mocks/           # MSW handlers and fixtures
+│   └── setup.ts         # Test setup configuration
+├── types/               # TypeScript type definitions
+│   ├── movie.ts         # Movie-related types
+│   └── env.d.ts         # Environment variable types
+├── utils/               # Utility functions
+│   ├── __tests__/       # Utility functions tests
+│   └── movieUtils.ts    # Movie-related utilities
+├── main.tsx             # Application entry point
+└── vite-env.d.ts        # Vite types
 ```
 
 ## 🎬 Application Flow
@@ -182,7 +194,6 @@ pnpm check        # Run all quality checks
 ## 🔌 API Integration
 
 This application integrates with [The Movie Database (TMDb) API](https://developer.themoviedb.org/docs/getting-started) to fetch movie data:
-
 
 ### Endpoints Used
 - `GET /movie/popular` - Fetch popular movies
@@ -255,7 +266,7 @@ The CI pipeline is defined in `.github/workflows/ci.yml` and includes:
 - **Breakpoints**: Mobile-first responsive design
 
 ### Styling Architecture
-- **Co-located Styles**: Styled components are kept within the same files as their React components rather than being split into separate style files. This decision was made to maintain better component cohesion, improve developer experience by keeping related code together, and reduce the overhead of managing multiple files for simple component styling. This approach works well for this application's scope and complexity.
+- **Co-located Styles**: Styled components are kept in separate files alongside their React components to maintain better component cohesion, improve developer experience by keeping related code together, and facilitate maintenance. This approach works well for this application's scope and complexity.
 
 ### Bundle Analysis
 ```bash
@@ -285,5 +296,3 @@ This project is part of a technical assessment and is for demonstration purposes
 - [Vite Documentation](https://vitejs.dev/)
 
 ---
-
-**Built with ❤️ using React, TypeScript, and modern web technologies**
