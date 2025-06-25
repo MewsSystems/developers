@@ -169,6 +169,7 @@ pnpm test:coverage # Generate test coverage report
 ```bash
 pnpm cypress:open # Open Cypress test runner
 pnpm cypress:run  # Run Cypress tests headlessly
+pnpm cypress:ci   # Run Cypress tests for CI (with production baseUrl)
 pnpm e2e          # Alias for cypress:run
 ```
 
@@ -221,9 +222,31 @@ This application integrates with [The Movie Database (TMDb) API](https://develop
 
 ## 🔄 CI/CD
 
-The project is configured to run tests and deploy to Netlify using GitHub Actions.
+The project includes a comprehensive CI/CD pipeline that automatically runs both unit tests and end-to-end tests.
 
-The CI/CD pipeline is defined in the `.github/workflows/ci.yml` file.
+### GitHub Actions Workflow
+
+The CI pipeline is defined in `.github/workflows/ci.yml` and includes:
+
+- **Unit Tests Job (`unit-tests`)**: 
+  - Runs linting and type checks with BiomeJS
+  - Executes unit tests with Vitest
+  - Builds the project to ensure compilation
+
+- **E2E Tests Job (`cypress-tests`)**:
+  - Runs after unit tests pass
+  - Starts development server with MSW enabled
+  - Executes Cypress end-to-end tests
+  - Caches Cypress binary for faster subsequent runs
+
+### Triggered On
+- Push to `master` or `main` branches
+- Pull requests targeting `master` or `main` branches
+
+### Environment Configuration
+- Uses **Node.js 22.x** for consistent testing environment
+- Uses **pnpm** for package management with caching
+- Enables **MSW (Mock Service Worker)** for reliable API mocking in tests
 
 ## 🎨 Design System
 
