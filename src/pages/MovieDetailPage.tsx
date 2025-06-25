@@ -1,4 +1,4 @@
-import { Film, Star } from "lucide-react"
+import { ArrowLeft, Film, Star } from "lucide-react"
 import { Link, useParams } from "react-router"
 import styled from "styled-components"
 import { ErrorMessage } from "../components/ErrorMessage"
@@ -156,7 +156,10 @@ export const MovieDetailPage = () => {
   if (error || !movie) {
     return (
       <Container>
-        <BackButton to={ROUTES.HOME}>← Back to Search</BackButton>
+        <BackButton to={ROUTES.HOME}>
+          <ArrowLeft size={16} />
+          Back to Search
+        </BackButton>
         <ErrorMessage message="Failed to load movie details. Please try again." />
       </Container>
     )
@@ -164,7 +167,10 @@ export const MovieDetailPage = () => {
 
   return (
     <Container>
-      <BackButton to={ROUTES.HOME}>← Back to Search</BackButton>
+      <BackButton to={ROUTES.HOME}>
+        <ArrowLeft size={16} />
+        Back to Search
+      </BackButton>
 
       <MovieHeader>
         <PosterContainer>

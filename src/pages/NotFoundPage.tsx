@@ -1,4 +1,4 @@
-import { Film } from "lucide-react"
+import { ArrowLeft, Film } from "lucide-react"
 import { Link } from "react-router"
 import styled from "styled-components"
 import { ROUTES } from "../constants/routes"
@@ -72,7 +72,10 @@ export const NotFoundPage = () => {
         Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you
         entered the wrong URL.
       </NotFoundMessage>
-      <BackButton to={ROUTES.HOME}>← Back to Movie Search</BackButton>
+      <BackButton to={ROUTES.HOME}>
+        <ArrowLeft size={16} />
+        Back to Movie Search
+      </BackButton>
     </NotFoundContainer>
   )
 }
