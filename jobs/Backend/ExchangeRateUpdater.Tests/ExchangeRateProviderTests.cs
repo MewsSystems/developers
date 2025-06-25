@@ -20,7 +20,7 @@ namespace ExchangeRateUpdater.Tests
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = JsonContent.Create(new ApiResponse { Rates = new List<CnbRateDto> { new CnbRateDto { CurrencyCode = "USD", Amount = 1, Rate = 25.0m } } })
+                Content = JsonContent.Create(new CnbApiResponse { Rates = new List<CnbRateDto> { new CnbRateDto { CurrencyCode = "USD", Amount = 1, Rate = 25.0m } } })
             };
             var handler = new Mock<HttpMessageHandler>();
             handler.Protected()
@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater.Tests
                 .ReturnsAsync(response);
 
             var provider = CreateProvider(handler.Object);
-            var result = await provider.GetExchangeRatesAsync<ApiResponse>(new[] { new Currency("USD") });
+            var result = await provider.GetExchangeRatesAsync<CnbApiResponse>(new[] { new Currency("USD") });
             Assert.Single(result);
             Assert.Equal("USD", result.First().SourceCurrency.Code);
         }
@@ -49,7 +49,7 @@ namespace ExchangeRateUpdater.Tests
             var provider = CreateProvider(handler.Object);
             
             await Assert.ThrowsAsync<HttpRequestException>(async () =>
-                await provider.GetExchangeRatesAsync<ApiResponse>(new[] { new Currency("USD") })
+                await provider.GetExchangeRatesAsync<CnbApiResponse>(new[] { new Currency("USD") })
             );
         }
 

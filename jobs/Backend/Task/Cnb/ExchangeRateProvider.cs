@@ -16,14 +16,12 @@ namespace ExchangeRateUpdater.Cnb
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public ExchangeRateProvider(IExchangeRateProviderConfiguration config, HttpClient httpClient = null) : base(config, httpClient) { }
 
-        protected override async Task<T> FetchRawDataAsync<T>()
+        protected override async Task<CnbApiResponse> FetchRawDataAsync<CnbApiResponse>()
         {
             try
             {
-                if (typeof(T) != typeof(ApiResponse))
-                    throw new NotSupportedException($"Type {typeof(T)} is not supported by {nameof(ExchangeRateProvider)}");
-                var result = await HttpClient.GetFromJsonAsync<ApiResponse>(_apiUrl);
-                return (T)(object)result;
+                var result = await HttpClient.GetFromJsonAsync<CnbApiResponse>(_apiUrl);
+                return result;
             }
             catch (Exception ex)
             {
@@ -36,7 +34,7 @@ namespace ExchangeRateUpdater.Cnb
         {
             try
             {
-                var apiResponse = rawData as ApiResponse;
+                var apiResponse = rawData as CnbApiResponse;
                 var rates = new List<ExchangeRate>();
                 var currencyCodes = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
 

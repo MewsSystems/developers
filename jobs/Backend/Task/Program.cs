@@ -32,11 +32,7 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider(GetRateProviderConfiguration());
-                var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
-
-                // Explicitly specify the type argument for GetExchangeRatesAsync<T>
-                var rates = await provider.GetExchangeRatesAsync<Cnb.ApiResponse>(currencies);
-                var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
+                var rates = await provider.GetExchangeRatesAsync<Cnb.CnbApiResponse>(currencies);
 
                 // Print CNB results as returned
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from CNB:");
@@ -44,12 +40,19 @@ namespace ExchangeRateUpdater
                 {
                     Console.WriteLine(rate.ToString());
                 }
-                // Print ExchangeRate-API results as returned
-                Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
-                foreach (var rate in rates2)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
+
+                #region Another Source of Exchange Rates
+                    //var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
+                    //var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
+
+                    //// Print ExchangeRate-API results as returned
+                    //Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
+                    //foreach (var rate in rates2)
+                    //{
+                    //    Console.WriteLine(rate.ToString());
+                    //}
+                #endregion
+
             }
             catch (Exception e)
             {
