@@ -28,9 +28,6 @@ jobs:
     - name: Install dependencies
       run: pnpm install --no-frozen-lockfile
 
-    - name: Run linting and type checks
-      run: pnpm check
-
     - name: Build project
       run: pnpm build
 

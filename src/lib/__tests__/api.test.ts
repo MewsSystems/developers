@@ -95,7 +95,7 @@ describe("api", () => {
 
       try {
         await api.get("/test")
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw
       }
 
