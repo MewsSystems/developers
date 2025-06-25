@@ -33,7 +33,7 @@ describe("App", () => {
     render(<TestWrapper />)
 
     await waitFor(() => {
-      expect(screen.getByText("Movie Search")).toBeInTheDocument()
+      expect(screen.getByText("TMDB Movie Search")).toBeInTheDocument()
     })
     expect(screen.getByPlaceholderText("Search for movies...")).toBeInTheDocument()
   })
