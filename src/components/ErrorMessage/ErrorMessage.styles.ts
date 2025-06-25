@@ -15,6 +15,7 @@ export const ErrorContainer = styled.div`
 `
 
 export const ErrorIcon = styled.span`
+  display: flex;
   font-size: ${({ theme }) => theme.fontSizes.xl};
   margin-right: ${({ theme }) => theme.spacing.md};
   color: ${({ theme }) => theme.colors.error};

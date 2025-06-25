@@ -50,6 +50,7 @@ export const SearchPage = () => {
   const data = isSearching ? searchData : popularData
   const isLoading = isSearching ? searchLoading : popularLoading
   const error = isSearching ? searchError : popularError
+  console.log("🚀 ~ SearchPage ~ error:", error)
   const isPlaceholderData = isSearching ? searchIsPlaceholderData : popularIsPlaceholderData
 
   const totalPages = Math.min(data?.total_pages || 0, TMDB_MAX_PAGES)
