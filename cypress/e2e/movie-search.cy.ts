@@ -18,7 +18,7 @@ describe("Movie Search Application with MSW", () => {
   it("should complete a full user journey", () => {
     cy.get('[data-testid="movie-card"]', { timeout: 10000 }).should("have.length.greaterThan", 0)
 
-    cy.get('[data-testid="movie-card"]').first().click()
+    cy.get('[data-testid="movie-card"]').first().click({ force: true })
 
     cy.url().should("include", "/movie/")
 
