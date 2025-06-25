@@ -1,14 +1,14 @@
 import { HttpResponse, http } from "msw"
 import { afterEach, describe, expect, it } from "vitest"
-import { ApiError } from "../../lib/api"
+import { ApiError } from "@/lib/api"
 import {
   mockEmptySearchResponse,
   mockMovieBase,
   mockMovieDetails,
   mockPopularMoviesResponse,
   mockSearchMoviesResponse,
-} from "../../test/mocks/movieFixtures"
-import { server } from "../../test/mocks/server"
+} from "@/test/mocks/movieFixtures"
+import { server } from "@/test/mocks/server"
 import { MovieServiceError, movieService } from "../movieService"
 
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL

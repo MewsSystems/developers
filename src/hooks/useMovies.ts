@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { movieService } from "../services/movieService"
+import { movieService } from "@/services/movieService"
 
 export const usePopularMovies = (page = 1) => {
   return useQuery({

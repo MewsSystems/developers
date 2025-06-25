@@ -1,6 +1,6 @@
-import { ERROR_CODES, ERROR_MESSAGES } from "../constants/errors"
-import { ApiError, api } from "../lib/api"
-import type { MovieDetails, MovieListResponse, MovieSearchResponse } from "../types/movie"
+import { ERROR_CODES, ERROR_MESSAGES } from "@/constants/errors"
+import { ApiError, api } from "@/lib/api"
+import type { MovieDetails, MovieListResponse, MovieSearchResponse } from "@/types/movie"
 
 export class MovieServiceError extends Error {
   originalError?: Error

@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router"
 import { describe, expect, it, vi } from "vitest"
-import App from "./App"
-import { mockMovieDetails, mockPopularMoviesResponse } from "./test/mocks/movieFixtures"
+import App from "@/App"
+import { mockMovieDetails, mockPopularMoviesResponse } from "@/test/mocks/movieFixtures"
 
-vi.mock("./hooks/useMovies", () => ({
+vi.mock("@/hooks/useMovies", () => ({
   usePopularMovies: vi.fn(() => ({
     data: mockPopularMoviesResponse,
     isLoading: false,
