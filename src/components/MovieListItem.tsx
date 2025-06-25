@@ -8,9 +8,11 @@ interface Props {
   movie: TMDBMovie & {
     poster_url: { default: string | null };
   };
+  search: string;
+  page?: number;
 }
 
-export function MovieListItem({ movie }: Props) {
+export function MovieListItem({ movie, search, page }: Props) {
   const slug = createMovieSlug(movie.id, movie.original_title);
 
   return (
@@ -31,7 +33,13 @@ export function MovieListItem({ movie }: Props) {
       <div className="flex-1">
         <h3>
           <Link
-            href={`/movies/${slug}`}
+            href={{
+              pathname: `/movies/${slug}`,
+              query: {
+                search,
+                ...(page ? { page } : {}),
+              },
+            }}
             className="text-lg font-semibold text-blue-700 hover:underline"
           >
             {movie.title}

@@ -27,7 +27,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
 
   return (
     <nav aria-label="Pagination" className="flex gap-2 mt-4 flex-wrap justify-between items-center">
-      <div className="w-16 flex justify-start">
+      <div className="w-4 flex justify-start">
         {currentPage > 1 && (
           <button
             onClick={createPageHandler(currentPage - 1)}

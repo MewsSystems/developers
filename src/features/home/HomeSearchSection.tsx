@@ -110,7 +110,12 @@ export function HomeSearchSection() {
 
       <div className="flex flex-col gap-2" role="region" aria-live="polite" aria-atomic="true">
         {movies.map((movie) => (
-          <MovieListItem key={movie.id} movie={movie} />
+          <MovieListItem
+            key={movie.id}
+            movie={movie}
+            search={search}
+            page={page > 1 ? page : undefined}
+          />
         ))}
       </div>
 
