@@ -1,5 +1,6 @@
+import { ERROR_CODES, ERROR_MESSAGES } from "../constants/errors"
+import { ApiError, api } from "../lib/api"
 import type { MovieDetails, MovieListResponse, MovieSearchResponse } from "../types/movie"
-import { ApiError, api } from "./api"
 
 export class MovieServiceError extends Error {
   originalError?: Error
@@ -20,23 +21,23 @@ export const movieService = {
       return response.data
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.code === "NOT_FOUND") {
-          throw new MovieServiceError("No popular movies found for this page", error)
+        if (error.code === ERROR_CODES.NOT_FOUND) {
+          throw new MovieServiceError(ERROR_MESSAGES.POPULAR_MOVIES_NOT_FOUND, error)
         }
-        if (error.code === "NETWORK_ERROR") {
-          throw new MovieServiceError("Failed to fetch popular movies", error)
+        if (error.code === ERROR_CODES.NETWORK_ERROR) {
+          throw new MovieServiceError(ERROR_MESSAGES.POPULAR_MOVIES_FETCH_FAILED, error)
         }
         throw error
       }
 
-      throw new MovieServiceError("Failed to fetch popular movies", error as Error)
+      throw new MovieServiceError(ERROR_MESSAGES.POPULAR_MOVIES_FETCH_FAILED, error as Error)
     }
   },
 
   searchMovies: async (query: string, page = 1): Promise<MovieSearchResponse> => {
     try {
       if (!query || query.trim().length === 0) {
-        throw new MovieServiceError("Search query cannot be empty")
+        throw new MovieServiceError(ERROR_MESSAGES.SEARCH_QUERY_EMPTY)
       }
 
       const response = await api.get<MovieSearchResponse>("/search/movie", {
@@ -45,7 +46,7 @@ export const movieService = {
       return response.data
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.code === "NOT_FOUND") {
+        if (error.code === ERROR_CODES.NOT_FOUND) {
           return {
             page: 1,
             results: [],
@@ -53,8 +54,8 @@ export const movieService = {
             total_results: 0,
           }
         }
-        if (error.code === "NETWORK_ERROR") {
-          throw new MovieServiceError(`Failed to search for movies with query: "${query}"`, error)
+        if (error.code === ERROR_CODES.NETWORK_ERROR) {
+          throw new MovieServiceError(ERROR_MESSAGES.MOVIE_SEARCH_FAILED(query), error)
         }
         throw error
       }
@@ -63,28 +64,25 @@ export const movieService = {
         throw error
       }
 
-      throw new MovieServiceError(
-        `Failed to search for movies with query: "${query}"`,
-        error as Error
-      )
+      throw new MovieServiceError(ERROR_MESSAGES.MOVIE_SEARCH_FAILED(query), error as Error)
     }
   },
 
   getMovieById: async (id: number): Promise<MovieDetails> => {
     try {
       if (!id || id <= 0) {
-        throw new MovieServiceError("Invalid movie ID provided")
+        throw new MovieServiceError(ERROR_MESSAGES.INVALID_MOVIE_ID)
       }
 
       const response = await api.get<MovieDetails>(`/movie/${id}`)
       return response.data
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.code === "NOT_FOUND") {
-          throw new MovieServiceError(`Movie with ID ${id} not found`, error)
+        if (error.code === ERROR_CODES.NOT_FOUND) {
+          throw new MovieServiceError(ERROR_MESSAGES.MOVIE_NOT_FOUND(id), error)
         }
-        if (error.code === "NETWORK_ERROR") {
-          throw new MovieServiceError(`Failed to fetch movie with ID: ${id}`, error)
+        if (error.code === ERROR_CODES.NETWORK_ERROR) {
+          throw new MovieServiceError(ERROR_MESSAGES.MOVIE_FETCH_FAILED(id), error)
         }
         throw error
       }
@@ -93,7 +91,7 @@ export const movieService = {
         throw error
       }
 
-      throw new MovieServiceError(`Failed to fetch movie with ID: ${id}`, error as Error)
+      throw new MovieServiceError(ERROR_MESSAGES.MOVIE_FETCH_FAILED(id), error as Error)
     }
   },
 }

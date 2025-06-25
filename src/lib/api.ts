@@ -1,16 +1,8 @@
 import axios from "axios"
+import { type ApiErrorCode, ERROR_CODES, ERROR_MESSAGES } from "../constants/errors"
 
 const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL || "https://api.themoviedb.org/3"
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "mock-api-key"
-
-type ApiErrorCode =
-  | "AUTH_ERROR"
-  | "FORBIDDEN"
-  | "NOT_FOUND"
-  | "RATE_LIMIT"
-  | "SERVER_ERROR"
-  | "NETWORK_ERROR"
-  | "UNKNOWN_ERROR"
 
 export class ApiError extends Error {
   status: number
@@ -61,38 +53,38 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
-          throw new ApiError(
-            "Authentication failed. Please check your API key.",
-            status,
-            "AUTH_ERROR"
-          )
+          throw new ApiError(ERROR_MESSAGES.AUTH_FAILED, status, ERROR_CODES.AUTH_ERROR)
 
         case 403:
-          throw new ApiError("Access forbidden. Insufficient permissions.", status, "FORBIDDEN")
+          throw new ApiError(ERROR_MESSAGES.ACCESS_FORBIDDEN, status, ERROR_CODES.FORBIDDEN)
 
         case 404:
-          throw new ApiError(data?.status_message || "Resource not found", status, "NOT_FOUND")
+          throw new ApiError(
+            data?.status_message || ERROR_MESSAGES.RESOURCE_NOT_FOUND,
+            status,
+            ERROR_CODES.NOT_FOUND
+          )
 
         case 429:
-          throw new ApiError("Too many requests. Please try again later.", status, "RATE_LIMIT")
+          throw new ApiError(ERROR_MESSAGES.RATE_LIMIT_EXCEEDED, status, ERROR_CODES.RATE_LIMIT)
 
         case 500:
         case 502:
         case 503:
         case 504:
-          throw new ApiError("Server error. Please try again later.", status, "SERVER_ERROR")
+          throw new ApiError(ERROR_MESSAGES.SERVER_ERROR, status, ERROR_CODES.SERVER_ERROR)
 
         default:
           throw new ApiError(
-            data?.status_message || "An unexpected error occurred",
+            data?.status_message || ERROR_MESSAGES.UNEXPECTED_ERROR,
             status,
-            "UNKNOWN_ERROR"
+            ERROR_CODES.UNKNOWN_ERROR
           )
       }
     } else if (error.request) {
-      throw new ApiError("Network error. Please check your connection.", 0, "NETWORK_ERROR")
+      throw new ApiError(ERROR_MESSAGES.NETWORK_ERROR, 0, ERROR_CODES.NETWORK_ERROR)
     } else {
-      throw new ApiError("An unexpected error occurred", 0, "UNKNOWN_ERROR")
+      throw new ApiError(ERROR_MESSAGES.UNEXPECTED_ERROR, 0, ERROR_CODES.UNKNOWN_ERROR)
     }
   }
 )
