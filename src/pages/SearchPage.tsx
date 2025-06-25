@@ -103,7 +103,7 @@ export const SearchPage = () => {
     <Container>
       <Title>
         <Film size={32} />
-        Movie Search
+        TMDB Movie Search
       </Title>
 
       <SearchSection>

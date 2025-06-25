@@ -39,7 +39,7 @@ describe("SearchPage", () => {
       </TestWrapper>
     )
 
-    expect(screen.getByRole("heading", { name: /movie search/i })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /tmdb movie search/i })).toBeInTheDocument()
 
     expect(screen.getByPlaceholderText(/search for movies/i)).toBeInTheDocument()
   })
