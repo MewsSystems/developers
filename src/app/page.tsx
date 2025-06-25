@@ -1,10 +1,29 @@
-export default function HomePage() {
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { fetchMovies } from '@/lib/fetchMovies';
+import { HomeSearchSection } from '@/features/home/HomeSearchSection';
+import { getQueryClient } from '@/lib/getQueryClient';
+import { moviesQueryKey } from '@/lib/queryKeys';
+
+interface HomePageProps {
+  searchParams: Promise<Record<string, string | undefined>>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const { search = '', page = '1' } = await searchParams;
+  const parsedPage = parseInt(page, 10);
+
+  const queryClient = getQueryClient();
+
+  if (search) {
+    await queryClient.prefetchQuery({
+      queryKey: moviesQueryKey(search, parsedPage),
+      queryFn: () => fetchMovies(search, parsedPage),
+    });
+  }
+
   return (
-    <section className="space-y-4">
-      <h1 className="text-stone-800 text-xl font-bold">Welcome to Movie Search</h1>
-      <p className="text-stone-600">
-        Use the search box to find your favorite movies. Results will appear below.
-      </p>
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <HomeSearchSection />
+    </HydrationBoundary>
   );
 }

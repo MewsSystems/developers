@@ -31,7 +31,7 @@ describe('GET /api/movies/[movieId]', () => {
     );
 
     const req = new NextRequest(new URL('http://localhost/api/movies/21193'));
-    const res = await GET(req, { params: { movieId: validMovieId } });
+    const res = await GET(req, { params: Promise.resolve({ movieId: validMovieId }) });
     const json = await res.json();
 
     expect(res.status).toBe(200);
@@ -42,7 +42,7 @@ describe('GET /api/movies/[movieId]', () => {
 
   it('returns 400 if movieId is missing', async () => {
     const req = new NextRequest(new URL('http://localhost/api/movies/'));
-    const res = await GET(req, { params: {} as unknown as { movieId: string } });
+    const res = await GET(req, { params: Promise.resolve({} as unknown as { movieId: string }) });
     const json = await res.json();
 
     expect(res.status).toBe(400);
@@ -51,7 +51,7 @@ describe('GET /api/movies/[movieId]', () => {
 
   it('returns 400 if movieId is invalid', async () => {
     const req = new NextRequest(new URL('http://localhost/api/movies/invalid'));
-    const res = await GET(req, { params: { movieId: invalidMovieId } });
+    const res = await GET(req, { params: Promise.resolve({ movieId: invalidMovieId }) });
     const json = await res.json();
 
     expect(res.status).toBe(400);
@@ -69,7 +69,7 @@ describe('GET /api/movies/[movieId]', () => {
     );
 
     const req = new NextRequest(new URL('http://localhost/api/movies/21193'));
-    const res = await GET(req, { params: { movieId: validMovieId } });
+    const res = await GET(req, { params: Promise.resolve({ movieId: validMovieId }) });
     const json = await res.json();
 
     expect(res.status).toBe(500);
@@ -87,7 +87,7 @@ describe('GET /api/movies/[movieId]', () => {
     );
 
     const req = new NextRequest(new URL('http://localhost/api/movies/21193'));
-    const res = await GET(req, { params: { movieId: validMovieId } });
+    const res = await GET(req, { params: Promise.resolve({ movieId: validMovieId }) });
     const json = await res.json();
 
     expect(res.status).toBe(500);
