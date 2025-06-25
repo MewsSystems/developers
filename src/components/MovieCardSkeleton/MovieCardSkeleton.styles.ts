@@ -1,13 +1,4 @@
-import styled, { keyframes } from "styled-components"
-
-const shimmer = keyframes`
-  0% {
-    background-position: -468px 0;
-  }
-  100% {
-    background-position: 468px 0;
-  }
-`
+import styled from "styled-components"
 
 export const SkeletonBase = styled.div`
   background: linear-gradient(
@@ -18,7 +9,7 @@ export const SkeletonBase = styled.div`
     ${({ theme }) => theme.colors.surface} 100%
   );
   background-size: 800px 104px;
-  animation: ${shimmer} 1.5s linear infinite;
+  animation: ${({ theme }) => theme.animations.shimmer} 1.5s linear infinite;
   border-radius: ${({ theme }) => theme.borderRadius.base};
 `
 
