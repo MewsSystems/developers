@@ -219,6 +219,12 @@ This application integrates with [The Movie Database (TMDb) API](https://develop
 - **usePagination**: Pagination state management
 - **useSearchState**: Search input and results state
 
+## 🔄 CI/CD
+
+The project is configured to run tests and deploy to Netlify using GitHub Actions.
+
+The CI/CD pipeline is defined in the `.github/workflows/ci.yml` file.
+
 ## 🎨 Design System
 
 ### Theme Configuration
