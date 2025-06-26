@@ -43,15 +43,15 @@ namespace ExchangeRateUpdater
                 }
 
                 #region Another Source of Exchange Rates
-                    //var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
-                    //var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
+                //var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
+                //var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
 
-                    //// Print ExchangeRate-API results as returned
-                    //Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
-                    //foreach (var rate in rates2)
-                    //{
-                    //    Console.WriteLine(rate.ToString());
-                    //}
+                //// Print ExchangeRate-API results as returned
+                //Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
+                //foreach (var rate in rates2)
+                //{
+                //    Console.WriteLine(rate.ToString());
+                //}
                 #endregion
 
             }
