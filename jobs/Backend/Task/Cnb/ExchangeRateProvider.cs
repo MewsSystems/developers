@@ -1,5 +1,4 @@
-﻿using ExchangeRateUpdater.ExchangeRateApi;
-using NLog;
+﻿using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +19,13 @@ namespace ExchangeRateUpdater.Cnb
 
         protected override async Task<CnbApiResponse> FetchRawDataAsync<CnbApiResponse>()
         {
-            try
+            var apiResult = await GetApiDataAsync<CnbApiResponse>(_apiUrl);
+            if (!apiResult.Success)
             {
-                var result = await HttpClient.GetFromJsonAsync<CnbApiResponse>(_apiUrl);
-                return result;
+                Logger.Error($"API Error: {apiResult.Error}");
+                throw new Exception($"API Error: {apiResult.Error?.ErrorCode} - {apiResult.Error?.Description}");
             }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "Error fetching raw data in FetchRawDataAsync");
-                throw;
-            }
+            return apiResult.Data;
         }
 
         protected override IEnumerable<ExchangeRate> MapToExchangeRates<T>(T rawData, IEnumerable<Currency> currencies)
