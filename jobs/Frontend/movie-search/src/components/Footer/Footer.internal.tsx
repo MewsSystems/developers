@@ -11,6 +11,6 @@ export const StyledFooter = styled.footer`
   justify-content: center;
   font-size: 0.7rem;
   font-family: inherit;
-  color: #5a342c;
+  color: #333;
   filter: drop-shadow(0.1rem -1.4rem 3.7rem #fff);
 `;
