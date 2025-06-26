@@ -1,7 +1,7 @@
 'use client';
 
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 
 interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   currentPage: number;
@@ -17,13 +17,20 @@ const getPageRange = (currentPage: number, totalPages: number): number[] => {
 };
 
 export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: PaginationProps) {
+  const [page, setPage] = useState(currentPage);
+
+  useEffect(() => {
+    setPage(currentPage);
+  }, [currentPage]);
+
   const createPageHandler: (page: number) => MouseEventHandler<HTMLButtonElement> =
     (page) => (e) => {
       e.preventDefault();
       onPageChange(page);
+      setPage(page);
     };
 
-  const pageRange = getPageRange(currentPage, totalPages);
+  const pageRange = getPageRange(page, totalPages);
 
   return (
     <nav
@@ -32,9 +39,9 @@ export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: P
       {...rest}
     >
       <div className="w-4 flex justify-start">
-        {currentPage > 1 && (
+        {page > 1 && (
           <button
-            onClick={createPageHandler(currentPage - 1)}
+            onClick={createPageHandler(page - 1)}
             className="text-purple-800 hover:underline focus:underline cursor-pointer"
             aria-label="Previous page"
           >
@@ -45,9 +52,9 @@ export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: P
 
       <div className="flex gap-1 items-center">
         {pageRange.map((p) =>
-          p === currentPage ? (
+          p === page ? (
             <button
-              key={p}
+              key={`${currentPage}-${p}`}
               aria-current="page"
               disabled
               tabIndex={-1}
@@ -57,7 +64,7 @@ export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: P
             </button>
           ) : (
             <button
-              key={p}
+              key={`${currentPage}-${p}`}
               onClick={createPageHandler(p)}
               aria-label={`Page ${p}`}
               className="px-2 py-1 rounded transition text-purple-800 hover:underline focus:underline cursor-pointer"
@@ -82,9 +89,9 @@ export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: P
       </div>
 
       <div className="w-4 flex justify-end">
-        {currentPage < totalPages && (
+        {page < totalPages && (
           <button
-            onClick={createPageHandler(currentPage + 1)}
+            onClick={createPageHandler(page + 1)}
             className="text-purple-800 hover:underline focus:underline cursor-pointer"
             aria-label="Next page"
           >

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-import { fetchMoviesClient } from '@/lib/fetchMoviesClient';
+import { fetchMoviesClient } from '@/lib/fetch/fetchMoviesClient';
 import { LoadingIndicator } from '@/components/LoadingIndicator';
 import { MovieListItem } from '@/components/MovieListItem';
 import { Pagination } from '@/components/Pagination';

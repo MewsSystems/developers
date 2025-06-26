@@ -73,7 +73,7 @@ describe('GET /api/movies/[movieId]', () => {
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json).toEqual({ error: 'unable to get movies' });
+    expect(json).toEqual({ error: 'unable to get movie' });
   });
 
   it('returns 500 if configuration fetch fails', async () => {
@@ -91,6 +91,6 @@ describe('GET /api/movies/[movieId]', () => {
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json).toEqual({ error: 'unable to get movies' });
+    expect(json).toEqual({ error: 'unable to get movie' });
   });
 });

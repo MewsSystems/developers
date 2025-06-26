@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetailsClient } from '@/lib/fetchMovieDetailsClient';
+import { fetchMovieDetailsClient } from '@/lib/fetch/fetchMovieDetailsClient';
 import { movieDetailQueryKey } from '@/lib/queryKeys';
 import { BackToSearchLink } from '@/components/BackToSearchLink';
 import { MovieDetailResponse } from '@/types/api';

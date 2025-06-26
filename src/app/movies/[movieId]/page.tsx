@@ -1,7 +1,7 @@
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { z } from 'zod';
 import { getQueryClient } from '@/lib/getQueryClient';
-import { fetchMovieDetails } from '@/lib/fetchMovieDetails';
+import { fetchMovieDetails } from '@/lib/fetch/fetchMovieDetails';
 import MovieDetailsSection from '@/features/movies/MovieDetailsSection';
 import { movieDetailQueryKey } from '@/lib/queryKeys';
 

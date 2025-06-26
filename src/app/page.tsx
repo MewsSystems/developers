@@ -1,5 +1,5 @@
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
-import { fetchMovies } from '@/lib/fetchMovies';
+import { fetchMovies } from '@/lib/fetch/fetchMovies';
 import { HomeSearchSection } from '@/features/home/HomeSearchSection';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { moviesQueryKey } from '@/lib/queryKeys';
