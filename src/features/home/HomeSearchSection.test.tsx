@@ -6,23 +6,11 @@ import { http, HttpResponse } from 'msw';
 import { server } from '@/test/server';
 import { createTestQueryClient } from '@/test/utils';
 
-vi.mock('next/navigation', () => {
-  const searchParams = new URLSearchParams();
-
-  return {
-    useSearchParams: () => searchParams,
-    useRouter: () => ({
-      replace: vi.fn(),
-    }),
-    usePathname: () => '/',
-  };
-});
-
-function renderWithClient() {
+function renderWithClient(initialSearch = '', initialPage = 1) {
   const queryClient = createTestQueryClient();
   render(
     <QueryClientProvider client={queryClient}>
-      <HomeSearchSection />
+      <HomeSearchSection initialSearch={initialSearch} initialPage={initialPage} />
     </QueryClientProvider>
   );
 }
@@ -52,7 +40,9 @@ function setupPaginatedMock(totalPages: number) {
 }
 
 async function triggerSearch(query: string) {
-  await userEvent.type(screen.getByPlaceholderText(/Search movies.../i), query);
+  const input = screen.getByPlaceholderText(/Search movies.../i);
+  await userEvent.clear(input);
+  await userEvent.type(input, query);
   await waitFor(() => {
     expect(screen.getByText(`Movie Page 1`)).toBeInTheDocument();
   });
@@ -93,7 +83,9 @@ describe('HomeSearchSection', () => {
 
     renderWithClient();
 
-    await userEvent.type(screen.getByPlaceholderText(/Search movies.../i), 'matrix');
+    const input = screen.getByPlaceholderText(/Search movies.../i);
+    await userEvent.clear(input);
+    await userEvent.type(input, 'matrix');
 
     expect(await screen.findByRole('status')).toBeInTheDocument();
 
@@ -107,7 +99,9 @@ describe('HomeSearchSection', () => {
 
     renderWithClient();
 
-    await userEvent.type(screen.getByPlaceholderText(/Search movies.../i), 'nothing');
+    const input = screen.getByPlaceholderText(/Search movies.../i);
+    await userEvent.clear(input);
+    await userEvent.type(input, 'nothing');
 
     await waitFor(() => {
       expect(screen.getByText(/No results match your search/i)).toBeInTheDocument();
@@ -130,7 +124,9 @@ describe('HomeSearchSection', () => {
 
     renderWithClient();
 
-    await userEvent.type(screen.getByPlaceholderText(/Search movies.../i), 'fail');
+    const input = screen.getByPlaceholderText(/Search movies.../i);
+    await userEvent.clear(input);
+    await userEvent.type(input, 'fail');
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(

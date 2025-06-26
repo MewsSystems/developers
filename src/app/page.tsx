@@ -23,7 +23,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <HomeSearchSection />
+      <HomeSearchSection initialSearch={search} initialPage={parsedPage} />
     </HydrationBoundary>
   );
 }

@@ -33,6 +33,12 @@ NEXT_PUBLIC_CLIENT_SIDE_MOVIE_REVALIDATE_TIME=3600
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
+The project uses npm. Run the follow to get set up.
+
+```
+npm i
+```
+
 ### Production build of the app
 
 To see the app running optimally you can do a production build of the app and see that working locally.
@@ -43,6 +49,8 @@ npm run start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+I would advise testing with the production build and using an incognito browser window.
 
 ### Local development run
 
@@ -178,11 +186,12 @@ I had limited time so here are a few other things I would look at..
 - Storybook for individual components - this would actually make working on the components a breeze.
 - Better display for small screens - I would love to put more time into this, I think the search page could be optimised quite nicely for smaller screens
   - You could even add additional image sizes to the api endpoint and use different image sizes for different media queries
-- Optimise our endpoints but reducing the payload size - that is currently data we send to the frontend that isn't used
-- It's not the prettiest web app (I'm not really a designer) again with a bit more time it would be good to put a bit more polish on it terms of looks
+- Optimise our endpoints but reducing the payload size - there is currently data we send to the frontend that isn't used
+- It's not the prettiest web app (I'm not really a designer) again with a bit more time it would be good to put more polish on it terms of looks
 - Add husky to get checks running on push
 - Start to move the components into their own folders and using barrel files. The folders would contain tests, storybook files and other sub-components
 - There is still some opportunity for code reuse in the endpoints and some of the components (such as MovieListItem and MovieDetailsView)
+- Set up a pipeline using github actions and establish a live environment
 
 ### What I would have done differently 
 

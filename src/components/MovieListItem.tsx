@@ -17,9 +17,13 @@ export function MovieListItem({ movie, search, page }: Props) {
   const slug = createMovieSlug(movie.id, movie.original_title);
 
   return (
-    <div className="flex gap-4 bg-white rounded-xl p-3 h-[255px] border border-cyan-200">
+    <div className="flex gap-4 bg-white rounded-xl p-3 min-h-[255px] border border-cyan-200">
       <div
-        className={`w-[154px] flex justify-center ${movie.poster_url.default ? 'items-start' : 'bg-stone-100 items-center h-[231px] rounded-md'}`}
+        className={`w-[154px] h-[231px] flex justify-center rounded-md ${
+          movie.poster_url.default
+            ? 'items-start'
+            : 'border border-cyan-100 bg-stone-100 items-center'
+        }`}
       >
         {movie.poster_url.default ? (
           <Image
@@ -27,12 +31,13 @@ export function MovieListItem({ movie, search, page }: Props) {
             alt={formatPostImageAlt(movie.title)}
             width={154}
             height={231}
-            className="rounded-md w-[154px] h-auto max-h-[231px] object-contain"
+            className="border border-cyan-500 rounded-md object-contain"
           />
         ) : (
           <AiOutlineFileImage className="text-stone-400 text-4xl" />
         )}
       </div>
+
       <div className="flex-1">
         <h3>
           <Link

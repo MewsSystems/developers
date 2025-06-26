@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { fetchTMDB } from '@/lib/tmdb';
 import type { TMDBSearchResponse, TMDBMovie } from '@/types/tmdb';
 import type { APIResponse, MovieSearchResponse } from '@/types/api';
-import { enrichWithPosterUrl, getTMDBImageConfig } from '@/lib/tmdb-utls';
+import { enrichWithPosterUrl, getTMDBImageConfig } from '@/lib/tmdbUtils';
 import { ApiError } from '@/lib/apiError';
 
 const querySchema = z.object({

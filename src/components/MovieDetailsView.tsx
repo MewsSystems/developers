@@ -18,7 +18,7 @@ export function MovieDetailsView({ movie }: Props) {
               alt={formatPostImageAlt(movie.title)}
               width={342}
               height={513}
-              className="rounded-md"
+              className="rounded-md border border-cyan-100 object-contain"
               priority
             />
           </div>

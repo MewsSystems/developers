@@ -4,7 +4,7 @@ import { fetchTMDB } from '@/lib/tmdb';
 import type { TMDBMovieDetail } from '@/types/tmdb';
 import type { APIResponse, MovieDetailResponse } from '@/types/api';
 import { ApiError } from '@/lib/apiError';
-import { enrichWithPosterUrl, getTMDBImageConfig } from '@/lib/tmdb-utls';
+import { enrichWithPosterUrl, getTMDBImageConfig } from '@/lib/tmdbUtils';
 
 const paramsSchema = z.object({
   movieId: z.string().regex(/^\d+$/, 'movieId must be a number'),
