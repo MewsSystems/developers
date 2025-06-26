@@ -103,6 +103,7 @@ export function HomeSearchSection() {
 
       {totalPages > 1 && (
         <Pagination
+          data-testid="pagination-top"
           currentPage={currentPage}
           totalPages={totalPages}
           search={search}

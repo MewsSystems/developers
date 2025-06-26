@@ -3,7 +3,7 @@
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 import { MouseEventHandler } from 'react';
 
-interface PaginationProps {
+interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   currentPage: number;
   totalPages: number;
   search: string;
@@ -16,7 +16,7 @@ const getPageRange = (currentPage: number, totalPages: number): number[] => {
   );
 };
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange, ...rest }: PaginationProps) {
   const createPageHandler: (page: number) => MouseEventHandler<HTMLButtonElement> =
     (page) => (e) => {
       e.preventDefault();
@@ -26,7 +26,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   const pageRange = getPageRange(currentPage, totalPages);
 
   return (
-    <nav aria-label="Pagination" className="flex gap-2 mt-4 flex-wrap justify-between items-center">
+    <nav
+      aria-label="Pagination"
+      className="flex gap-2 mt-4 flex-wrap justify-between items-center"
+      {...rest}
+    >
       <div className="w-4 flex justify-start">
         {currentPage > 1 && (
           <button
