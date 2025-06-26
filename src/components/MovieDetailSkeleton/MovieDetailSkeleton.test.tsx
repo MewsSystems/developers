@@ -40,7 +40,7 @@ describe("MovieDetailSkeleton", () => {
 
     const header = mainContainer.children[0] as HTMLElement
     expect(header).toBeInTheDocument()
-    expect(header.children.length).toBe(2) // poster container + info
+    expect(header.children.length).toBe(2)
   })
 
   it("renders poster skeleton", () => {
