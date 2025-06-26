@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router"
 import { ThemeProvider } from "styled-components"
 import { describe, expect, it } from "vitest"
 import { theme } from "@/styles/theme"
-import { NotFoundPage } from "./NotFoundPage"
+import NotFoundPage from "./NotFoundPage"
 
 const renderNotFoundPage = () => {
   return render(

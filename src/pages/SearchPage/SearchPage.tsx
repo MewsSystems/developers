@@ -12,7 +12,7 @@ import { useSearchState } from "@/hooks/useSearchState"
 import { movieService } from "../../services/movieService"
 import { Container, ResultsInfo, SearchSection, SectionTitle, Title } from "./SearchPage.styles"
 
-export const SearchPage = () => {
+const SearchPage = () => {
   const queryClient = useQueryClient()
 
   const {
@@ -151,3 +151,5 @@ export const SearchPage = () => {
     </Container>
   )
 }
+
+export default SearchPage

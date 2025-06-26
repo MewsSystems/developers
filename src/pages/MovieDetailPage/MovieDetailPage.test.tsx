@@ -7,9 +7,9 @@ import { useMovieDetails } from "@/hooks/useMovies"
 import { theme } from "@/styles/theme"
 import { mockMovieDetails } from "@/test/mocks/movieFixtures"
 import type { MovieDetails } from "@/types/movie"
-import { MovieDetailPage } from "./MovieDetailPage"
+import MovieDetailPage from "./MovieDetailPage"
 
-vi.mock("../../hooks/useMovies")
+vi.mock("@/hooks/useMovies")
 vi.mock("react-router", async () => {
   const actual = await vi.importActual("react-router")
   return {

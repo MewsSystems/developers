@@ -25,7 +25,7 @@ import {
   Title,
 } from "./MovieDetailPage.styles"
 
-export const MovieDetailPage = () => {
+const MovieDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const location = useLocation()
@@ -116,3 +116,5 @@ export const MovieDetailPage = () => {
     </Container>
   )
 }
+
+export default MovieDetailPage

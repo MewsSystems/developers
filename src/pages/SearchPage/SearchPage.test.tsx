@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router"
 import { ThemeProvider } from "styled-components"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { theme } from "@/styles/theme"
-import { SearchPage } from "./SearchPage"
+import SearchPage from "./SearchPage"
 
 const createTestQueryClient = () =>
   new QueryClient({

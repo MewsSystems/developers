@@ -9,7 +9,7 @@ import {
   NotFoundTitle,
 } from "./NotFoundPage.styles"
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   return (
     <NotFoundContainer>
       <MovieIcon>
@@ -28,3 +28,5 @@ export const NotFoundPage = () => {
     </NotFoundContainer>
   )
 }
+
+export default NotFoundPage

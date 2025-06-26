@@ -1,1 +1,1 @@
-export { MovieDetailPage } from "./MovieDetailPage"
+export { default } from "./MovieDetailPage"
