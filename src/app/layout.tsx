@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={roboto.className}>
+    <html lang="en" className={`overflow-y-scroll ${roboto.className}`}>
       <body className="bg-cyan-950 text-stone-900">
         <ReactQueryProvider>
           <div className="flex min-h-screen items-stretch justify-center bg-cyan-950">
