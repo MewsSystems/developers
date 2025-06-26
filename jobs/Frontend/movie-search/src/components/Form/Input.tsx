@@ -8,7 +8,7 @@ interface InputProps extends ComponentPropsWithRef<"input"> {
 export const Input = (props: InputProps) => {
   return (
     <InputWrapper>
-      <StyledInput {...props} name={props.name} />
+      <StyledInput {...props} name={props.name} placeholder="Search..." />
     </InputWrapper>
   );
 };

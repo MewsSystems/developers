@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const InputWrapper = styled.div`
-  height: 10%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -9,9 +8,10 @@ export const InputWrapper = styled.div`
 `;
 
 export const StyledInput = styled.input`
-  border: 1px solid #888;
-  border-radius: 11px;
+  border: 0.5px solid #666;
+  border-radius: 15rem;
   font-family: inherit;
-  height: 3.2rem;
-  width: 5rem;
+  height: 2.4rem;
+  width: 20rem;
+  padding: 0.8rem;
 `;
