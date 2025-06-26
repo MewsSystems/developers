@@ -28,7 +28,7 @@ namespace ExchangeRateUpdater
         {
             // Ensure NLog is initialized and test logging
             var logger = LogManager.GetCurrentClassLogger();
-            logger.Info("Application started. NLog is working.");
+            logger.Info("Application started.");
 
             try
             {
@@ -43,12 +43,12 @@ namespace ExchangeRateUpdater
                 }
 
                 #region Another Source of Exchange Rates
-                //var provider2 = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
-                //var rates2 = await provider2.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
+                //var anotherProvider = new ExchangeRateApiProvider(GetExchangeRateApiProviderConfiguration());
+                //var anotherRates = await anotherProvider.GetExchangeRatesAsync<ExchangeRateApiResponse>(currencies);
 
                 //// Print ExchangeRate-API results as returned
-                //Console.WriteLine($"Successfully retrieved {rates2.Count()} exchange rates from Exchange Rates API:");
-                //foreach (var rate in rates2)
+                //Console.WriteLine($"Successfully retrieved {anotherRates.Count()} exchange rates from Exchange Rates API:");
+                //foreach (var rate in anotherRates)
                 //{
                 //    Console.WriteLine(rate.ToString());
                 //}
@@ -57,6 +57,8 @@ namespace ExchangeRateUpdater
             }
             catch (Exception e)
             {
+                logger.Error($"Could not retrieve exchange rates: '{e.Message}'.");
+
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
                 if (e is TypeInitializationException && e.InnerException != null)
                 {
@@ -93,15 +95,15 @@ namespace ExchangeRateUpdater
 
             var rateProviderConfig = new ExchangeRateProviderConfiguration
             {
-                Url = configuration["ApiConfiguration:Url2"] + configuration["ApiConfiguration:BaseCurrency2"],
-                BaseCurrency = configuration["ApiConfiguration:BaseCurrency2"]
+                Url = configuration["ApiConfiguration:AnotherUrl"] + configuration["ApiConfiguration:AnotherBaseCurrency"],
+                BaseCurrency = configuration["ApiConfiguration:AnotherBaseCurrency"]
             };
 
             if (string.IsNullOrWhiteSpace(rateProviderConfig.Url))
-                throw new Exception("ApiConfiguration:Url2 is not set in appsettings.json");
+                throw new Exception("ApiConfiguration:AnotherUrl is not set in appsettings.json");
 
             if (string.IsNullOrWhiteSpace(rateProviderConfig.BaseCurrency))
-                throw new Exception("ApiConfiguration:BaseCurrency2 is not set in appsettings.json");
+                throw new Exception("ApiConfiguration:AnotherBaseCurrency is not set in appsettings.json");
 
             return rateProviderConfig;
         }

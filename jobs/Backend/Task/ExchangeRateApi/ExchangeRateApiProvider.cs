@@ -11,7 +11,7 @@ namespace ExchangeRateUpdater.ExchangeRateApi
 {
     public class ExchangeRateApiProvider : ExchangeRateProviderBase
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static new readonly Logger Logger = LogManager.GetCurrentClassLogger();
         public ExchangeRateApiProvider(IExchangeRateProviderConfiguration config) : base(config) { }
 
         protected override async Task<ExchangeRateApiResponse> FetchRawDataAsync<ExchangeRateApiResponse>()
