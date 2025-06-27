@@ -48,6 +48,7 @@ namespace ExchangeRateUpdater
 
                 //// Print ExchangeRate-API results as returned
                 //Console.WriteLine($"Successfully retrieved {anotherRates.Count()} exchange rates from Exchange Rates API:");
+                //Console.WriteLine($"The Exchange Rates API returns rates values if a different manner. To Compare rates it is needed to calculate it 1/rate");
                 //foreach (var rate in anotherRates)
                 //{
                 //    Console.WriteLine(rate.ToString());
