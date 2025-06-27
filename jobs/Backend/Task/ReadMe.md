@@ -6,5 +6,6 @@
 4. **Add Retry Policies** - Implement automatic retry logic for API calls to handle temporary network failures
 5. **Implement Input Validation** - Add proper validation for currency codes and exchange rate values before processing
 6. **Add Caching** - Implement response caching to reduce API calls and improve performance since exchange rates don't change frequently
-7. **Add more generic methods/classes** Add more flexibility to reuse classes for other available open APIs
+7. **Add more generic methods/classes** - Add more flexibility to reuse classes for other available open APIs
+8. **Use HTTP Client Generation** - Consider using libraries like Refit or NSwag to auto-generate strongly-typed HTTP clients from API specifications
 
