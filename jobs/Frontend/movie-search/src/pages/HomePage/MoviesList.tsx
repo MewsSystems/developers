@@ -33,7 +33,11 @@ export const MoviesList = (props: MoviesListProps) => {
     isFetchingNextPage
   );
 
-  const movies: Movie[] = data?.pages.flatMap((page) => page.results) ?? [];
+  // TBD - handle better duplicated movies
+  const allMovies = data?.pages.flatMap((page) => page.results) ?? [];
+  const movies = Array.from(
+    new Map(allMovies.map((movie) => [movie.id, movie])).values()
+  );
 
   if (status === "pending") {
     return <p>Loading data…</p>;
@@ -57,6 +61,7 @@ export const MoviesList = (props: MoviesListProps) => {
 
           {isFetchingNextPage && <p>Loading more…</p>}
           {!hasNextPage && <p>No more movies.</p>}
+          {isFetching && !isFetchingNextPage && <p>Updating…</p>}
         </>
       ) : (
         <p>No data present</p>
