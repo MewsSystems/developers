@@ -10,9 +10,10 @@ import {
   MovieDetailsTagline,
   MovieDetailsTitle,
   MovieDetailsWrapper,
-  MovieGenresBadge,
-  MovieGenresList,
+  MovieDetailsBadge,
+  MovieDetailsList,
   MovieOverview,
+  MovieDetailsVote,
 } from "./DetailsPage.internal";
 import { Image } from "../../components/Image/Image";
 import {
@@ -21,6 +22,10 @@ import {
   getTranslatedTitle,
   getYearFromDate,
 } from "../HomePage/MovieCard.helpers";
+import ImagePlaceholder from "../../assets/no-image-placeholder.jpg";
+import Button from "../../components/Button/Button";
+import { Clock, MoveLeft, ThumbsUp } from "lucide-react";
+import { SpinnerCircle } from "../../components/Spinner/Spinner.internal";
 
 export const DetailPage = () => {
   const { id } = useParams();
@@ -49,7 +54,10 @@ export const DetailPage = () => {
           <button onClick={() => navigate(-1)}>← Back</button>
         </Header>
         <MainContent>
-          <p>Loading movie details…</p>
+          <MovieDetailsWrapper>
+            <SpinnerCircle />
+            <p>Loading movie details…</p>
+          </MovieDetailsWrapper>
         </MainContent>
       </>
     );
@@ -62,10 +70,12 @@ export const DetailPage = () => {
           <button onClick={() => navigate(-1)}>← Back</button>
         </Header>
         <MainContent>
-          <p>
-            Error loading movie details
-            {error?.message ? `: ${error.message}` : "."}
-          </p>
+          <MovieDetailsWrapper>
+            <p>
+              Error loading movie details
+              {error?.message ? `: ${error.message}` : "."}
+            </p>
+          </MovieDetailsWrapper>
         </MainContent>
       </>
     );
@@ -77,55 +87,83 @@ export const DetailPage = () => {
     data.title
   );
 
+  const releaseYear = data.release_date
+    ? `(${getYearFromDate(data.release_date)})`
+    : "(No release date)";
+
   return (
     <>
       <Header>
-        <button onClick={() => navigate(-1)}>back</button>
+        <Button title="Go back" $isCircle onClick={() => navigate(-1)}>
+          <MoveLeft size={12} color="#333" />
+        </Button>
       </Header>
       <MainContent>
         <MovieDetailsWrapper>
           <ImageSection>
-            <Image src={getImageUrl(data.poster_path)} />
+            <Image
+              src={
+                data.poster_path
+                  ? getImageUrl(data.poster_path)
+                  : ImagePlaceholder
+              }
+              alt={
+                data.poster_path
+                  ? `Poster of ${data.original_title}`
+                  : `No image for ${data.original_title}`
+              }
+              $width="20rem"
+              loading="lazy"
+            />
           </ImageSection>
           <MovieDetailsSection>
             <MovieDetailsRow>
               <Heading>
-                {movieTitle} {`(${getYearFromDate(data.release_date)})`}
+                {movieTitle} {releaseYear}
               </Heading>
               {data.tagline ? (
                 <MovieDetailsTagline>{data.tagline}</MovieDetailsTagline>
               ) : null}
-              <MovieGenresList>
-                {data.genres &&
-                  data.genres.map((genre) => (
-                    <MovieGenresBadge key={genre.id}>
-                      {genre.name}
-                    </MovieGenresBadge>
+              {data.genres.length > 0 ? (
+                <MovieDetailsList>
+                  {data.genres.map((genre) => (
+                    <MovieDetailsBadge key={genre.id}>
+                      <span>{genre.name}</span>
+                    </MovieDetailsBadge>
                   ))}
-                {formatRuntime(data.runtime)}
-              </MovieGenresList>
+                  <MovieDetailsBadge>
+                    <Clock size={12} color="#333" />
+                    <span>
+                      {data.runtime ? formatRuntime(data.runtime) : null}
+                    </span>
+                  </MovieDetailsBadge>
+                </MovieDetailsList>
+              ) : null}
             </MovieDetailsRow>
             <MovieDetailsRow>
-              <MovieDetailsTitle>Vote</MovieDetailsTitle>
-              {data.vote_average.toFixed(1)}
+              <MovieDetailsVote>
+                <ThumbsUp size={24} color="#333" />
+                {data.vote_average.toFixed(1)}
+              </MovieDetailsVote>
             </MovieDetailsRow>
-            <MovieDetailsRow>
-              <MovieDetailsTitle>Runtime</MovieDetailsTitle>
-            </MovieDetailsRow>
+
             <MovieDetailsRow>
               <MovieDetailsTitle>Overview</MovieDetailsTitle>
               <MovieOverview>{data.overview}</MovieOverview>
             </MovieDetailsRow>
             <MovieDetailsRow>
-              <MovieDetailsTitle>Production</MovieDetailsTitle>
-              <MovieGenresList>
-                {data.production_companies &&
-                  data.production_companies.map((company) => (
-                    <>
-                      <MovieGenresBadge>{company.name}</MovieGenresBadge>
-                    </>
-                  ))}
-              </MovieGenresList>
+              {data.production_companies.length > 0 ? (
+                <>
+                  <MovieDetailsTitle>Production</MovieDetailsTitle>
+                  <MovieDetailsList>
+                    {data.production_companies.map((company) => (
+                      <MovieDetailsBadge $isInverted key={company.id}>
+                        <span>{company.name}</span>
+                      </MovieDetailsBadge>
+                    ))}
+                  </MovieDetailsList>
+                </>
+              ) : null}
             </MovieDetailsRow>
           </MovieDetailsSection>
         </MovieDetailsWrapper>

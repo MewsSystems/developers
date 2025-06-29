@@ -1,8 +1,10 @@
 import { useState, useRef } from "react";
 import { type Movie } from "../../api/types";
 import { GridCard } from "../../components/Grid/GridCard";
-import { MovieCardHoveredData, MovieCardImage } from "./MovieCard.internal";
+import { MovieCardHoveredData } from "./MovieCard.internal";
 import { getImageUrl } from "./MovieCard.helpers";
+import ImagePlaceholder from "../../assets/no-image-placeholder.jpg";
+import { Image } from "../../components/Image/Image";
 
 interface MovieCardProps {
   movieData: Movie;
@@ -35,9 +37,18 @@ export const MovieCard = (props: MovieCardProps) => {
       onMouseEnter={() => handleCardHover(props.movieData.id)}
       onMouseLeave={() => handleCardHover(null)}
     >
-      <MovieCardImage
-        src={getImageUrl(props.movieData.poster_path || "")}
-        alt={`Poster of ${props.movieData.original_title}`}
+      <Image
+        src={
+          props.movieData.poster_path
+            ? getImageUrl(props.movieData.poster_path)
+            : ImagePlaceholder
+        }
+        alt={
+          props.movieData.poster_path
+            ? `Poster of ${props.movieData.original_title}`
+            : `No image for ${props.movieData.original_title}`
+        }
+        $width="100%"
         loading="lazy"
       />
 

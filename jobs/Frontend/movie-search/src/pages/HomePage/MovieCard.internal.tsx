@@ -6,13 +6,7 @@ import {
 } from "./MovieCard.helpers";
 import type { Movie } from "../../api/types";
 import { Link } from "react-router";
-
-export const MovieCardImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 0.3s;
-`;
+import { Fullscreen } from "lucide-react";
 
 export const MovieCardInfoContainer = styled.div`
   display: flex;
@@ -64,22 +58,24 @@ export const MovieCardHoveredContent = styled.div`
 `;
 
 export const MovieCardLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: inherit;
   text-decoration: none;
   color: #333;
   font-size: 0.8rem;
   font-weight: 400;
-
-  border: 1px solid #333;
-  padding: 0 0.4rem;
+  background-color: #eee;
+  padding: 0.4rem;
+  border-radius: 50px;
 
   transition: all 0.3s ease-out;
 
   cursor: pointer;
 
   &:hover {
-    background-color: #333;
-    color: #fff;
+    background-color: #ddd;
   }
 `;
 
@@ -103,15 +99,17 @@ export const MovieCardHoveredData = (props: MovieCardHoveredDataProps) => {
             title="More information"
             to={getMovieDetailRouter(props.movieData.id)}
           >
-            i
+            <Fullscreen size={12} color="#333" />
           </MovieCardLink>
         </MovieCardHeaderContainer>
         <MovieMetaContainer>
-          <MovieBadgeInfo>
-            <MoveCardInfo>
-              {getYearFromDate(props.movieData.release_date)}
-            </MoveCardInfo>
-          </MovieBadgeInfo>
+          {props.movieData.release_date ? (
+            <MovieBadgeInfo>
+              <MoveCardInfo>
+                {getYearFromDate(props.movieData.release_date)}
+              </MoveCardInfo>
+            </MovieBadgeInfo>
+          ) : null}
           {props.movieData.adult ? (
             <MovieBadgeInfo>
               <MoveCardInfo>18+</MoveCardInfo>

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledGrid } from "./Grid.internal";
+import { GridWrapper, StyledGrid } from "./Grid.internal";
 
 interface GridProps<T> {
   items: T[];
@@ -9,14 +9,16 @@ interface GridProps<T> {
 
 export const Grid = <T,>(props: GridProps<T>) => {
   return (
-    <StyledGrid>
-      {Array.from(props.items, (item, index) => (
-        <React.Fragment
-          key={props.keyExtractor ? props.keyExtractor(item, index) : index}
-        >
-          {props.renderItem(item)}
-        </React.Fragment>
-      ))}
-    </StyledGrid>
+    <GridWrapper>
+      <StyledGrid>
+        {Array.from(props.items, (item, index) => (
+          <React.Fragment
+            key={props.keyExtractor ? props.keyExtractor(item, index) : index}
+          >
+            {props.renderItem(item)}
+          </React.Fragment>
+        ))}
+      </StyledGrid>
+    </GridWrapper>
   );
 };
