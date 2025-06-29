@@ -14,7 +14,7 @@ import {
   MovieDetailsList,
   MovieOverview,
   MovieDetailsVote,
-} from "./DetailsPage.internal";
+} from "./DetailPage.internal";
 import { Image } from "../../components/Image/Image";
 import {
   formatRuntime,
