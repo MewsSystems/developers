@@ -4,12 +4,14 @@ import { HomePage } from "./pages/HomePage";
 import { DetailPage } from "./pages/DetailPage";
 import { LayoutWrapper } from "./components/Layout/LayoutWrapper";
 import { Footer } from "./components/Footer/Footer";
+import { GlobalStyles } from "./GlobalStyles";
 
 function App() {
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <GlobalStyles />
       <LayoutWrapper>
         <Routes>
           <Route path="/" element={<HomePage />} />
