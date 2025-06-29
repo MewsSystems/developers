@@ -5,8 +5,12 @@ export const MovieDetailsWrapper = styled.div`
   height: auto;
   display: flex;
   justify-content: flex-start;
-  /* flex-wrap: wrap; */
   gap: 2rem;
+
+  @media screen and (max-width: 1024px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `;
 
 export const ImageSection = styled.section`

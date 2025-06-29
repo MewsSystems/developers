@@ -10,4 +10,8 @@ export const StyledMainContent = styled.main`
   gap: 1.2rem;
   overflow: auto;
   flex: 1;
+
+  @media screen and (max-width: 1024px) {
+    padding: 1.2rem;
+  }
 `;

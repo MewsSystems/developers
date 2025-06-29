@@ -16,4 +16,8 @@ export const StyledInput = styled.input`
   height: 2.4rem;
   width: 30%;
   padding: 0.8rem;
+
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
 `;
