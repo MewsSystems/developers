@@ -1,6 +1,11 @@
 import styled from "styled-components";
-import { getTranslatedTitle, getYearFromDate } from "./MovieCard.helpers";
+import {
+  getMovieDetailRouter,
+  getTranslatedTitle,
+  getYearFromDate,
+} from "./MovieCard.helpers";
 import type { Movie } from "../../api/types";
+import { Link } from "react-router";
 
 export const MovieCardImage = styled.img`
   width: 100%;
@@ -14,7 +19,14 @@ export const MovieCardInfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.2rem;
+  gap: 0.4rem;
+`;
+
+export const MovieCardHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 export const MovieMetaContainer = styled.div`
@@ -51,6 +63,26 @@ export const MovieCardHoveredContent = styled.div`
   background-color: #fff;
 `;
 
+export const MovieCardLink = styled(Link)`
+  font-family: inherit;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.8rem;
+  font-weight: 400;
+
+  border: 1px solid #333;
+  padding: 0 0.4rem;
+
+  transition: all 0.3s ease-out;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: #333;
+    color: #fff;
+  }
+`;
+
 interface MovieCardHoveredDataProps {
   movieData: Movie;
 }
@@ -61,10 +93,19 @@ export const MovieCardHoveredData = (props: MovieCardHoveredDataProps) => {
     props.movieData.original_title,
     props.movieData.title
   );
+
   return (
     <MovieCardHoveredContent>
       <MovieCardInfoContainer>
-        <MoveCardInfo>{movieTitle}</MoveCardInfo>
+        <MovieCardHeaderContainer>
+          <MoveCardInfo>{movieTitle}</MoveCardInfo>
+          <MovieCardLink
+            title="More information"
+            to={getMovieDetailRouter(props.movieData.id)}
+          >
+            i
+          </MovieCardLink>
+        </MovieCardHeaderContainer>
         <MovieMetaContainer>
           <MovieBadgeInfo>
             <MoveCardInfo>

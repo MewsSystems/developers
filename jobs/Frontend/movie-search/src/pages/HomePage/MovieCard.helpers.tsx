@@ -1,3 +1,5 @@
+import type { Movie } from "../../api/types";
+
 export const getImageUrl = (
   imageUrl: string | null,
   size: string = "w500"
@@ -26,4 +28,8 @@ export const getTranslatedTitle = (
   } else {
     return `${originalTitle} (${translatedTitle})`;
   }
+};
+
+export const getMovieDetailRouter = (movieId: Movie["id"]): string => {
+  return `/movie/${movieId}`;
 };
