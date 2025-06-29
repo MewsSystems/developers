@@ -39,8 +39,8 @@ describe("useSearchMoviesQuery", () => {
   };
 
   beforeEach(() => {
-    vi.spyOn(api, "getSearchMovies").mockImplementation(
-      (query: string, page = 1) => Promise.resolve(page1)
+    vi.spyOn(api, "getSearchMovies").mockImplementation(() =>
+      Promise.resolve(page1)
     );
   });
 

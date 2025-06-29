@@ -7,7 +7,7 @@ export const usePopularMoviesQuery = () =>
     queryKey: ["popularMovies"],
     queryFn: ({ pageParam = 1 }) => getPopularMovies(pageParam as number),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+    getNextPageParam: (lastPage, _, lastPageParam) => {
       if (lastPage.total_pages === 0) {
         return undefined;
       }

@@ -50,7 +50,7 @@ describe("useMovieDetails", () => {
   };
 
   beforeEach(() => {
-    vi.spyOn(api, "getMovieDetails").mockImplementation((movieId: number) =>
+    vi.spyOn(api, "getMovieDetails").mockImplementation(() =>
       Promise.resolve(mockData)
     );
   });
