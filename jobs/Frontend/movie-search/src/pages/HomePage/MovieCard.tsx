@@ -3,9 +3,10 @@ import { type Movie } from "../../api/types";
 import { GridCard } from "../../components/Grid/GridCard";
 import {
   MovieCardImage,
-  MovieCardTitle,
+  MoveCardInfo,
   MovieCardHoveredContent,
   MovieMetaContainer,
+  MovieBadgeInfo,
 } from "./MovieCard.internal";
 import { getImageUrl, getYearFromDate } from "./MovieCard.helpers";
 
@@ -48,17 +49,23 @@ export const MovieCard = (props: MovieCardProps) => {
 
       {hoveredCardId === props.movieData.id ? (
         <MovieCardHoveredContent>
+          <MoveCardInfo>{props.movieData.original_title}</MoveCardInfo>
           <MovieMetaContainer>
-            <MovieCardTitle>{props.movieData.original_title}</MovieCardTitle>
-            <MovieCardTitle>
-              {getYearFromDate(props.movieData.release_date)}
-            </MovieCardTitle>
+            <MovieBadgeInfo>
+              <MoveCardInfo>
+                {getYearFromDate(props.movieData.release_date)}
+              </MoveCardInfo>
+            </MovieBadgeInfo>
             {props.movieData.adult ? (
-              <MovieCardTitle>+18</MovieCardTitle>
+              <MovieBadgeInfo>
+                <MoveCardInfo>+18</MoveCardInfo>
+              </MovieBadgeInfo>
             ) : null}
-            <MovieCardTitle>
-              {props.movieData.vote_average.toFixed(1)}
-            </MovieCardTitle>
+            <MovieBadgeInfo>
+              <MoveCardInfo>
+                {props.movieData.vote_average.toFixed(1)}
+              </MoveCardInfo>
+            </MovieBadgeInfo>
           </MovieMetaContainer>
         </MovieCardHoveredContent>
       ) : null}

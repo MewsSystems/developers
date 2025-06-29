@@ -8,14 +8,21 @@ export const MovieCardImage = styled.img`
 
 export const MovieMetaContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2rem;
 `;
 
-export const MovieCardTitle = styled.p`
+export const MoveCardInfo = styled.p`
   font-size: 0.6rem;
   color: #000;
   font-weight: 700;
+`;
+
+export const MovieBadgeInfo = styled.div`
+  padding: 0.1rem;
+  border: 1px solid #333;
 `;
 
 export const MovieCardHoveredContent = styled.div`

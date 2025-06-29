@@ -22,13 +22,12 @@ export const StyledGridCard = styled.div<StyledGridCardProps>`
   align-items: center;
   justify-content: flex-start;
   border: none;
-  border-radius: ${(props) => (props.$isHovered ? "0" : "15px")};
   overflow: hidden;
 
   transition: all 0.3s ease-out;
   cursor: pointer;
 
-  transform: ${(props) => (props.$isHovered ? "scale(1.25)" : "scale(1)")};
+  transform: ${(props) => (props.$isHovered ? "scale(1.35)" : "scale(1)")};
   z-index: ${(props) => (props.$isHovered ? "50" : "1")};
   box-shadow: ${(props) =>
     props.$isHovered ? "0 25px 50px -12px rgba(0, 0, 0, 0.25)" : "none"};
