@@ -5,7 +5,7 @@ export const StyledMainContent = styled.main`
   padding: 1.2rem 2.4rem;
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-content: flex-start;
   flex-wrap: wrap;
   gap: 1.2rem;
   overflow: auto;
