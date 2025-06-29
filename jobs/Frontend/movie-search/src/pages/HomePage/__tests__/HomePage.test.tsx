@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import "@testing-library/jest-dom";
 import { HomePage } from "../index";
+import { MemoryRouter } from "react-router";
 
 vi.mock("../../../hooks/useMoviesQueries", () => ({
   usePopularMoviesQuery: () => ({
@@ -98,7 +99,9 @@ function createTestQueryClient() {
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </QueryClientProvider>
   );
 };
 

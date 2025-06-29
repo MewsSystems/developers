@@ -3,7 +3,7 @@ import {
   getImageUrl,
   getYearFromDate,
   getTranslatedTitle,
-  getMovieDetailRouter,
+  getMovieDetailRoute,
   formatRuntime,
 } from "../movieHelpers";
 
@@ -46,7 +46,7 @@ describe("movieHelpers", () => {
 
   describe("getMovieDetailRouter", () => {
     it("returns correct movie detail route", () => {
-      const result = getMovieDetailRouter(123);
+      const result = getMovieDetailRoute(123);
       expect(result).toBe("/movie/123");
     });
   });

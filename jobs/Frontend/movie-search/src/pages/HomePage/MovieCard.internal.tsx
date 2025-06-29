@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {
-  getMovieDetailRouter,
+  getMovieDetailRoute,
   getTranslatedTitle,
   getYearFromDate,
 } from "../../utils/movieHelpers";
@@ -97,7 +97,7 @@ export const MovieCardHoveredData = (props: MovieCardHoveredDataProps) => {
           <MoveCardInfo>{movieTitle}</MoveCardInfo>
           <MovieCardLink
             title="More information"
-            to={getMovieDetailRouter(props.movieData.id)}
+            to={getMovieDetailRoute(props.movieData.id)}
           >
             <Fullscreen size={12} color="#333" />
           </MovieCardLink>

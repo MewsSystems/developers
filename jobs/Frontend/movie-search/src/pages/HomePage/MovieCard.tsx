@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import { type Movie } from "../../api/types";
 import { GridCard } from "../../components/Grid/GridCard";
 import { MovieCardHoveredData } from "./MovieCard.internal";
-import { getImageUrl } from "../../utils/movieHelpers";
+import { getImageUrl, getMovieDetailRoute } from "../../utils/movieHelpers";
 import ImagePlaceholder from "../../assets/no-image-placeholder.jpg";
 import { Image } from "../../components/Image/Image";
+import { useNavigate } from "react-router";
 
 interface MovieCardProps {
   movieData: Movie;
@@ -12,6 +13,7 @@ interface MovieCardProps {
 
 export const MovieCard = (props: MovieCardProps) => {
   const [hoveredCardId, setHoveredCardId] = useState<Movie["id"] | null>(null);
+  const navigate = useNavigate();
   const hoverTimeoutRef = useRef<number | null>(null);
 
   const handleCardHover = (movieId: number | null) => {
@@ -32,7 +34,7 @@ export const MovieCard = (props: MovieCardProps) => {
   return (
     <GridCard
       $item={props.movieData}
-      onClick={() => console.log("clicked")}
+      onClick={() => navigate(getMovieDetailRoute(props.movieData.id))}
       $isHovered={hoveredCardId === props.movieData.id}
       onMouseEnter={() => handleCardHover(props.movieData.id)}
       onMouseLeave={() => handleCardHover(null)}

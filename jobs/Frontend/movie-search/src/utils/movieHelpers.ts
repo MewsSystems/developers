@@ -30,7 +30,7 @@ export const getTranslatedTitle = (
   }
 };
 
-export const getMovieDetailRouter = (movieId: Movie["id"]): string => {
+export const getMovieDetailRoute = (movieId: Movie["id"]): string => {
   return `/movie/${movieId}`;
 };
 
