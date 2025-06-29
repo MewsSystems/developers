@@ -7,8 +7,13 @@ import {
   MovieCardHoveredContent,
   MovieMetaContainer,
   MovieBadgeInfo,
+  MovieCardInfoContainer,
 } from "./MovieCard.internal";
-import { getImageUrl, getYearFromDate } from "./MovieCard.helpers";
+import {
+  getImageUrl,
+  getTranslatedTitle,
+  getYearFromDate,
+} from "./MovieCard.helpers";
 
 interface MovieCardProps {
   movieData: Movie;
@@ -33,6 +38,12 @@ export const MovieCard = (props: MovieCardProps) => {
     }
   };
 
+  const movieTitle = getTranslatedTitle(
+    props.movieData.original_language === "en",
+    props.movieData.original_title,
+    props.movieData.title
+  );
+
   return (
     <GridCard
       item={props.movieData}
@@ -49,24 +60,26 @@ export const MovieCard = (props: MovieCardProps) => {
 
       {hoveredCardId === props.movieData.id ? (
         <MovieCardHoveredContent>
-          <MoveCardInfo>{props.movieData.original_title}</MoveCardInfo>
-          <MovieMetaContainer>
-            <MovieBadgeInfo>
-              <MoveCardInfo>
-                {getYearFromDate(props.movieData.release_date)}
-              </MoveCardInfo>
-            </MovieBadgeInfo>
-            {props.movieData.adult ? (
+          <MovieCardInfoContainer>
+            <MoveCardInfo>{movieTitle}</MoveCardInfo>
+            <MovieMetaContainer>
               <MovieBadgeInfo>
-                <MoveCardInfo>+18</MoveCardInfo>
+                <MoveCardInfo>
+                  {getYearFromDate(props.movieData.release_date)}
+                </MoveCardInfo>
               </MovieBadgeInfo>
-            ) : null}
-            <MovieBadgeInfo>
-              <MoveCardInfo>
-                {props.movieData.vote_average.toFixed(1)}
-              </MoveCardInfo>
-            </MovieBadgeInfo>
-          </MovieMetaContainer>
+              {props.movieData.adult ? (
+                <MovieBadgeInfo>
+                  <MoveCardInfo>+18</MoveCardInfo>
+                </MovieBadgeInfo>
+              ) : null}
+              <MovieBadgeInfo>
+                <MoveCardInfo>
+                  {props.movieData.vote_average.toFixed(1)}
+                </MoveCardInfo>
+              </MovieBadgeInfo>
+            </MovieMetaContainer>
+          </MovieCardInfoContainer>
         </MovieCardHoveredContent>
       ) : null}
     </GridCard>

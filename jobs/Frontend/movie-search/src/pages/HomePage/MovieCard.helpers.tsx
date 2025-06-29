@@ -15,3 +15,15 @@ export const getYearFromDate = (date: string): string => {
   const releaseDate = new Date(date);
   return releaseDate.getFullYear().toString();
 };
+
+export const getTranslatedTitle = (
+  isEnglish: boolean,
+  originalTitle: string,
+  translatedTitle: string
+) => {
+  if (isEnglish) {
+    return originalTitle;
+  } else {
+    return `${originalTitle} (${translatedTitle})`;
+  }
+};
