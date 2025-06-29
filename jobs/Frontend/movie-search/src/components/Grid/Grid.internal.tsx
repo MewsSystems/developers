@@ -25,7 +25,6 @@ export const StyledGridCard = styled.div<StyledGridCardProps>`
   overflow: hidden;
 
   transition: all 0.3s ease-out;
-  cursor: pointer;
 
   transform: ${(props) => (props.$isHovered ? "scale(1.35)" : "scale(1)")};
   z-index: ${(props) => (props.$isHovered ? "50" : "1")};

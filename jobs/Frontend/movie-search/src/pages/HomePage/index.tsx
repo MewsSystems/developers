@@ -9,8 +9,6 @@ import { Heading } from "../../components/Typography/Heading";
 import { usePopularMoviesQuery } from "../../hooks/useMoviesQueries";
 
 export const HomePage = () => {
-  const [movieData, setMovieData] = useState<Movie[]>([]);
-
   const {
     data,
     error,

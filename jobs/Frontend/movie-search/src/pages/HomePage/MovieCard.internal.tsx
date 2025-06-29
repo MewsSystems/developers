@@ -2,8 +2,9 @@ import styled from "styled-components";
 
 export const MovieCardImage = styled.img`
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s;
 `;
 
 export const MovieCardInfoContainer = styled.div`
