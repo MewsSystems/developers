@@ -57,19 +57,6 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
   });
 
   useEffect(() => {
-    let title: string;
-    if (params.search) {
-      title =
-        params.page && params.page > 1
-          ? `Search: ${params.search} (Page ${params.page}) | Movie Search`
-          : `Search: ${params.search} | Movie Search`;
-    } else {
-      title = 'Movie Search';
-    }
-    document.title = title;
-  }, [params.search, params.page]);
-
-  useEffect(() => {
     if (isSuccess && data) {
       lastTotalPagesRef.current = data.total_pages;
     }
@@ -85,8 +72,15 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
 
   const handlePageChange = (page: number) => setParams({ page });
 
+  const title = params.search
+    ? params.page && params.page > 1
+      ? `Search: ${params.search} (Page ${params.page}) | Movie Search`
+      : `Search: ${params.search} | Movie Search`
+    : 'Movie Search';
+
   return (
     <section className="space-y-4">
+      <title>{title}</title>
       <h1 className="text-xl font-bold text-stone-800">Welcome to Movie Search</h1>
       <p className="text-stone-600">
         Use the search box to find your favorite movies. Results will appear below.
@@ -117,6 +111,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
         {showPaging && (
           <Pagination
             data-testid="pagination-top"
+            search={params.search}
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
@@ -141,6 +136,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
       </div>
       {showPaging && (
         <Pagination
+          search={params.search}
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}

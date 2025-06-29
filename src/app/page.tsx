@@ -4,6 +4,8 @@ import { HomeSearchSection } from '@/features/home/HomeSearchSection';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { moviesQueryKey } from '@/lib/queryKeys';
 
+export const revalidate = 300;
+
 interface HomePageProps {
   searchParams: Promise<Record<string, string | undefined>>;
 }

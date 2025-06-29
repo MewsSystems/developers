@@ -1,12 +1,13 @@
 'use client';
 
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
-import { MouseEventHandler } from 'react';
+import { HTMLAttributes } from 'react';
 
-interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
+interface PaginationProps extends HTMLAttributes<HTMLElement> {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  search?: string;
   readonly?: boolean;
 }
 
@@ -16,26 +17,40 @@ const getPageRange = (currentPage: number, totalPages: number): number[] => {
   );
 };
 
+function buildHref(page: number, search?: string) {
+  const params = new URLSearchParams();
+  if (search) params.set('search', search);
+  if (page > 1) params.set('page', String(page));
+  return `?${params.toString()}`;
+}
+
 export function Pagination({
   currentPage,
   totalPages,
   onPageChange,
+  search,
   readonly = false,
   ...rest
 }: PaginationProps) {
-  const buttonBase = 'px-2 py-1 rounded transition text-purple-800 hover:underline focus:underline';
-  const buttonCursor = readonly ? 'cursor-not-allowed' : 'cursor-pointer';
+  const linkBase = 'px-2 py-1 rounded transition text-purple-800 hover:underline focus:underline';
+  const linkCursor = readonly ? 'cursor-not-allowed' : 'cursor-pointer';
 
   const readonlyProps = {
-    disabled: readonly || undefined,
     tabIndex: readonly ? -1 : undefined,
+    'aria-disabled': readonly ? true : undefined,
   };
 
-  const createPageHandler: (page: number) => MouseEventHandler<HTMLButtonElement> =
-    (page) => (e) => {
+  const handleLinkClick = (page: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (readonly) {
       e.preventDefault();
-      if (!readonly) onPageChange(page);
-    };
+      return;
+    }
+    if (e.defaultPrevented || e.metaKey || e.altKey || e.ctrlKey || e.shiftKey || e.button !== 0) {
+      return;
+    }
+    e.preventDefault();
+    onPageChange(page);
+  };
 
   const pageRange = getPageRange(currentPage, totalPages);
 
@@ -49,67 +64,72 @@ export function Pagination({
     >
       <div className="w-4 flex justify-start">
         {currentPage > 1 && (
-          <button
-            onClick={createPageHandler(currentPage - 1)}
-            className={`${buttonBase} ${buttonCursor}`}
+          <a
+            href={buildHref(currentPage - 1, search)}
             aria-label="Previous page"
+            className={`${linkBase} ${linkCursor}`}
+            onClick={handleLinkClick(currentPage - 1)}
             {...readonlyProps}
           >
             <AiFillCaretLeft aria-hidden="true" />
-          </button>
+          </a>
         )}
       </div>
 
       <div className="flex gap-1 items-center">
         {pageRange.map((p) =>
           p === currentPage ? (
-            <button
+            <a
               key={`${currentPage}-${p}`}
               aria-current="page"
-              disabled
               tabIndex={-1}
               className="px-2 py-1 rounded bg-purple-950 text-white pointer-events-none cursor-not-allowed"
+              href={buildHref(p, search)}
+              aria-disabled="true"
             >
               {p}
-            </button>
+            </a>
           ) : (
-            <button
+            <a
               key={`${currentPage}-${p}`}
-              onClick={createPageHandler(p)}
+              href={buildHref(p, search)}
               aria-label={`Page ${p}`}
-              className={`${buttonBase} ${buttonCursor}`}
+              className={`${linkBase} ${linkCursor}`}
+              onClick={handleLinkClick(p)}
               {...readonlyProps}
             >
               {p}
-            </button>
+            </a>
           )
         )}
 
         {!pageRange.includes(totalPages) && (
           <span className="flex gap-2">
             <span aria-hidden="true">…</span>
-            <button
-              onClick={createPageHandler(totalPages)}
-              className={`${buttonBase} ${buttonCursor}`}
+            <a
+              href={buildHref(totalPages, search)}
+              className={`${linkBase} ${linkCursor}`}
               aria-label={`Page ${totalPages}`}
+              onClick={handleLinkClick(totalPages)}
               {...readonlyProps}
             >
               {totalPages}
-            </button>
+            </a>
           </span>
         )}
       </div>
 
       <div className="w-4 flex justify-end">
         {currentPage < totalPages && (
-          <button
-            onClick={createPageHandler(currentPage + 1)}
-            className={`${buttonBase} ${buttonCursor}`}
+          <a
+            href={buildHref(currentPage + 1, search)}
             aria-label="Next page"
+            className={`${linkBase} ${linkCursor}`}
+            onClick={handleLinkClick(currentPage + 1)}
             {...readonlyProps}
           >
             <AiFillCaretRight aria-hidden="true" />
-          </button>
+          </a>
         )}
       </div>
     </nav>

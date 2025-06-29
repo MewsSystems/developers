@@ -5,6 +5,8 @@ import { fetchMovieDetails } from '@/lib/fetch/fetchMovieDetails';
 import MovieDetailsSection from '@/features/movies/MovieDetailsSection';
 import { movieDetailQueryKey } from '@/lib/queryKeys';
 
+export const revalidate = 3600;
+
 const movieIdSlugSchema = z.string().regex(/^(\d+)-.+$/, 'Invalid movie slug format');
 
 type MoviePageProps = {

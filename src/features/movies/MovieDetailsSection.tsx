@@ -26,6 +26,7 @@ export default function MovieDetailsSection({ movieId }: Props) {
 
   return (
     <section className="space-y-4">
+      <title>{`Search for movies: ${data.title}`}</title>
       <BackToSearchLink />
       <MovieDetailsView movie={data} />
     </section>

@@ -151,9 +151,13 @@ over the data loading and give the users benefits of frontend cache data while t
 and forwards in the search page. 
 
 I have also used this on the movie details page. You could argue here that the frontend cache is not as useful 
-as caching on the search page But should the users again go back and forth between search and movie details pages
-maybe view the same page movie details multiple times then this will feel a little more performant to the user.
-I also decide to be consistent across the two pages how their data is initialised and hydrated.
+as caching on the search page. I also decide to be consistent across the two pages in how their data is initialised and hydrated.
+So we have a standard data loading pattern. 
+
+Currently the Next.js Link component isn't always able to provide "Soft navigation", 
+where routing is solely via the frontend rather instead a full page load - but once this problem is resolved the page could take full
+advantage of cache. In the meantime the page can be cached by setting the revalidate time of page.
+
 
 ### Styling
 

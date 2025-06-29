@@ -142,7 +142,7 @@ describe('HomeSearchSection', () => {
     await triggerSearch('test');
 
     const bottomPagination = getBottomPagination();
-    const nextButton = within(bottomPagination!).getByRole('button', { name: /next page/i });
+    const nextButton = within(bottomPagination!).getByRole('link', { name: /next page/i });
     await userEvent.click(nextButton);
 
     await waitFor(() => {
@@ -157,14 +157,14 @@ describe('HomeSearchSection', () => {
     await triggerSearch('test');
 
     const bottomPagination = getBottomPagination();
-    const nextButton = within(bottomPagination!).getByRole('button', { name: /next page/i });
+    const nextButton = within(bottomPagination!).getByRole('link', { name: /next page/i });
     await userEvent.click(nextButton);
 
     await waitFor(() => {
       expect(screen.getByText(/Movie Page 2/)).toBeInTheDocument();
     });
 
-    const prevButton = within(bottomPagination!).getByRole('button', { name: /previous page/i });
+    const prevButton = within(bottomPagination!).getByRole('link', { name: /previous page/i });
     await userEvent.click(prevButton);
 
     await waitFor(() => {
@@ -179,7 +179,7 @@ describe('HomeSearchSection', () => {
     await triggerSearch('test');
 
     const bottomPagination = getBottomPagination();
-    const page3Button = within(bottomPagination!).getByRole('button', { name: 'Page 3' });
+    const page3Button = within(bottomPagination!).getByRole('link', { name: 'Page 3' });
     await userEvent.click(page3Button);
 
     await waitFor(() => {

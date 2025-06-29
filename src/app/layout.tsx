@@ -10,7 +10,6 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'Search for Movies',
   description: 'Discover movies with powerful search and detailed views.',
 };
 
