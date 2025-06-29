@@ -58,8 +58,6 @@ export const HomePage = () => {
               keyExtractor={(movie) => String(movie.id)}
               renderItem={(movie) => <MovieCard movieData={movie} />}
             />
-
-            {/* sentinel div triggers fetchNextPage when visible */}
             <div ref={loadMoreRef} style={{ height: 1 }} />
 
             {isFetchingNextPage && <p>Loading more…</p>}
