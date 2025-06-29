@@ -33,3 +33,11 @@ export const getTranslatedTitle = (
 export const getMovieDetailRouter = (movieId: Movie["id"]): string => {
   return `/movie/${movieId}`;
 };
+
+export function formatRuntime(totalMinutes: number | null): string {
+  if (totalMinutes == null || totalMinutes <= 0) return "N/A";
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  const paddedMins = minutes.toString().padStart(2, "0");
+  return `${hours}h ${paddedMins}m`;
+}
