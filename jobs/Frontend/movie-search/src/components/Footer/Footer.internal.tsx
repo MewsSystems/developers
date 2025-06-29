@@ -13,4 +13,5 @@ export const StyledFooter = styled.footer`
   font-family: inherit;
   color: #333;
   filter: drop-shadow(0.1rem -1.4rem 3.7rem #fff);
+  z-index: 99;
 `;
