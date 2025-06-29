@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { getTranslatedTitle, getYearFromDate } from "./MovieCard.helpers";
+import type { Movie } from "../../api/types";
 
 export const MovieCardImage = styled.img`
   width: 100%;
@@ -48,3 +50,39 @@ export const MovieCardHoveredContent = styled.div`
   left: 0;
   background-color: #fff;
 `;
+
+interface MovieCardHoveredDataProps {
+  movieData: Movie;
+}
+
+export const MovieCardHoveredData = (props: MovieCardHoveredDataProps) => {
+  const movieTitle = getTranslatedTitle(
+    props.movieData.original_language === "en",
+    props.movieData.original_title,
+    props.movieData.title
+  );
+  return (
+    <MovieCardHoveredContent>
+      <MovieCardInfoContainer>
+        <MoveCardInfo>{movieTitle}</MoveCardInfo>
+        <MovieMetaContainer>
+          <MovieBadgeInfo>
+            <MoveCardInfo>
+              {getYearFromDate(props.movieData.release_date)}
+            </MoveCardInfo>
+          </MovieBadgeInfo>
+          {props.movieData.adult ? (
+            <MovieBadgeInfo>
+              <MoveCardInfo>18+</MoveCardInfo>
+            </MovieBadgeInfo>
+          ) : null}
+          <MovieBadgeInfo>
+            <MoveCardInfo>
+              {props.movieData.vote_average.toFixed(1)}
+            </MoveCardInfo>
+          </MovieBadgeInfo>
+        </MovieMetaContainer>
+      </MovieCardInfoContainer>
+    </MovieCardHoveredContent>
+  );
+};

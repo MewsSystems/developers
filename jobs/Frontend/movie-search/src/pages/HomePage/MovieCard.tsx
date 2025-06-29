@@ -1,19 +1,8 @@
 import { useState, useRef } from "react";
 import { type Movie } from "../../api/types";
 import { GridCard } from "../../components/Grid/GridCard";
-import {
-  MovieCardImage,
-  MoveCardInfo,
-  MovieCardHoveredContent,
-  MovieMetaContainer,
-  MovieBadgeInfo,
-  MovieCardInfoContainer,
-} from "./MovieCard.internal";
-import {
-  getImageUrl,
-  getTranslatedTitle,
-  getYearFromDate,
-} from "./MovieCard.helpers";
+import { MovieCardHoveredData, MovieCardImage } from "./MovieCard.internal";
+import { getImageUrl } from "./MovieCard.helpers";
 
 interface MovieCardProps {
   movieData: Movie;
@@ -38,12 +27,6 @@ export const MovieCard = (props: MovieCardProps) => {
     }
   };
 
-  const movieTitle = getTranslatedTitle(
-    props.movieData.original_language === "en",
-    props.movieData.original_title,
-    props.movieData.title
-  );
-
   return (
     <GridCard
       item={props.movieData}
@@ -59,28 +42,7 @@ export const MovieCard = (props: MovieCardProps) => {
       />
 
       {hoveredCardId === props.movieData.id ? (
-        <MovieCardHoveredContent>
-          <MovieCardInfoContainer>
-            <MoveCardInfo>{movieTitle}</MoveCardInfo>
-            <MovieMetaContainer>
-              <MovieBadgeInfo>
-                <MoveCardInfo>
-                  {getYearFromDate(props.movieData.release_date)}
-                </MoveCardInfo>
-              </MovieBadgeInfo>
-              {props.movieData.adult ? (
-                <MovieBadgeInfo>
-                  <MoveCardInfo>+18</MoveCardInfo>
-                </MovieBadgeInfo>
-              ) : null}
-              <MovieBadgeInfo>
-                <MoveCardInfo>
-                  {props.movieData.vote_average.toFixed(1)}
-                </MoveCardInfo>
-              </MovieBadgeInfo>
-            </MovieMetaContainer>
-          </MovieCardInfoContainer>
-        </MovieCardHoveredContent>
+        <MovieCardHoveredData movieData={props.movieData} />
       ) : null}
     </GridCard>
   );
