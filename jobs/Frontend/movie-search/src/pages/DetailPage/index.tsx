@@ -21,7 +21,7 @@ import {
   getImageUrl,
   getTranslatedTitle,
   getYearFromDate,
-} from "../HomePage/MovieCard.helpers";
+} from "../../utils/movieHelpers";
 import ImagePlaceholder from "../../assets/no-image-placeholder.jpg";
 import Button from "../../components/Button/Button";
 import { Clock, MoveLeft, ThumbsUp } from "lucide-react";

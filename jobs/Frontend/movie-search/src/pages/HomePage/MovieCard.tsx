@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { type Movie } from "../../api/types";
 import { GridCard } from "../../components/Grid/GridCard";
 import { MovieCardHoveredData } from "./MovieCard.internal";
-import { getImageUrl } from "./MovieCard.helpers";
+import { getImageUrl } from "../../utils/movieHelpers";
 import ImagePlaceholder from "../../assets/no-image-placeholder.jpg";
 import { Image } from "../../components/Image/Image";
 

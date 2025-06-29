@@ -3,7 +3,7 @@ import {
   getMovieDetailRouter,
   getTranslatedTitle,
   getYearFromDate,
-} from "./MovieCard.helpers";
+} from "../../utils/movieHelpers";
 import type { Movie } from "../../api/types";
 import { Link } from "react-router";
 import { Fullscreen } from "lucide-react";
