@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const StyledMainContent = styled.div`
+export const StyledMainContent = styled.main`
   max-width: 100%;
-  flex: 1;
   padding: 1.2rem 2.4rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 1.2rem;
   overflow: auto;
+  flex: 1;
 `;

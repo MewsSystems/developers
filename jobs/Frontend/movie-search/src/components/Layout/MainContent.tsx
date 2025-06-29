@@ -5,9 +5,5 @@ interface MainContentProps {
 }
 
 export const MainContent = (props: MainContentProps) => {
-  return (
-    <main>
-      <StyledMainContent>{props.children}</StyledMainContent>
-    </main>
-  );
+  return <StyledMainContent>{props.children}</StyledMainContent>;
 };
