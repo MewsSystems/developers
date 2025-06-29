@@ -196,6 +196,40 @@ describe("DetailPage", () => {
     expect(screen.queryByText("Adventure")).not.toBeInTheDocument();
   });
 
+  it("renders runtime when genres array is empty but runtime is present", () => {
+    const movieDataWithoutGenres = { ...mockMovieData, genres: [] };
+    vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
+      data: movieDataWithoutGenres,
+      isLoading: false,
+      isError: false,
+      error: null,
+    } as any);
+
+    render(<DetailPage />, { wrapper });
+
+    expect(screen.getByText("Test Movie (2023)")).toBeInTheDocument();
+    expect(screen.queryByText("Action")).not.toBeInTheDocument();
+    expect(screen.queryByText("Adventure")).not.toBeInTheDocument();
+    expect(screen.getByText("2h 00m")).toBeInTheDocument();
+  });
+
+  it("renders genres when runtime is null but genres are present", () => {
+    const movieDataWithoutRuntime = { ...mockMovieData, runtime: null };
+    vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
+      data: movieDataWithoutRuntime,
+      isLoading: false,
+      isError: false,
+      error: null,
+    } as any);
+
+    render(<DetailPage />, { wrapper });
+
+    expect(screen.getByText("Test Movie (2023)")).toBeInTheDocument();
+    expect(screen.getByText("Action")).toBeInTheDocument();
+    expect(screen.getByText("Adventure")).toBeInTheDocument();
+    expect(screen.queryByText("2h 00m")).not.toBeInTheDocument();
+  });
+
   it("renders movie without production companies when array is empty", () => {
     const movieDataWithoutProduction = {
       ...mockMovieData,
