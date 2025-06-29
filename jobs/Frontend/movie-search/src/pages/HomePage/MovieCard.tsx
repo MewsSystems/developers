@@ -31,7 +31,7 @@ export const MovieCard = (props: MovieCardProps) => {
 
   return (
     <GridCard
-      item={props.movieData}
+      $item={props.movieData}
       onClick={() => console.log("clicked")}
       $isHovered={hoveredCardId === props.movieData.id}
       onMouseEnter={() => handleCardHover(props.movieData.id)}
