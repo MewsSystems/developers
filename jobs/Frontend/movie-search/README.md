@@ -116,6 +116,13 @@ Clicking on a movie card navigates to a detailed view with comprehensive informa
 - Ratings and reviews
 - Production details
 
+### Future improvements
+
+- Add theme in order to unify styling across the App
+- Code cleanup (remove duplicatated components)
+- Introduce requests error handling
+- UI improvements in DetailPage (layout, styling, nice components)
+
 ## Author
 
 **Petar Zayakov**
