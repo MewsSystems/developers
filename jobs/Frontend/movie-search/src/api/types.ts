@@ -1,4 +1,4 @@
-export type Movie = {
+export interface Movie {
   id: number;
   adult: boolean;
   backdrop_path: string | null;
@@ -13,14 +13,14 @@ export type Movie = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-};
+}
 
-export type PopularMoviesResponse = {
+export interface PopularMoviesResponse {
   page: number;
   results: Movie[];
   total_pages: number;
   total_results: number;
-};
+}
 export interface MovieDetailsResponse {
   adult: boolean;
   backdrop_path: string | null;
