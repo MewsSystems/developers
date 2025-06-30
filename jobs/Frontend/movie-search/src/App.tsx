@@ -6,9 +6,8 @@ import { LayoutWrapper } from "./components/Layout/LayoutWrapper";
 import { Footer } from "./components/Footer/Footer";
 import { GlobalStyles } from "./GlobalStyles";
 
+const queryClient = new QueryClient();
 function App() {
-  const queryClient = new QueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalStyles />
