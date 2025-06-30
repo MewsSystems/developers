@@ -1,10 +1,12 @@
 import { render, screen } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import "@testing-library/jest-dom";
 import { DetailPage } from "../index";
 import { MemoryRouter, Routes, Route } from "react-router";
 import * as movieDetailsHook from "../../../hooks/useMovieDetailsQuery";
+import { createTestQueryClient } from "../../../test-utils/wrappers";
+import { movieDetails } from "../../../mocks/data";
 
 vi.mock("../../../hooks/useMovieDetailsQuery", () => ({
   useMovieDetails: vi.fn(),
@@ -29,15 +31,6 @@ vi.mock("../../../assets/no-image-placeholder.jpg", () => ({
   default: "/src/assets/no-image-placeholder.jpg",
 }));
 
-function createTestQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-}
-
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
   return (
@@ -49,50 +42,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
       </MemoryRouter>
     </QueryClientProvider>
   );
-};
-
-const mockMovieData = {
-  adult: false,
-  backdrop_path: "/backdrop.jpg",
-  belongs_to_collection: null,
-  budget: 1000000,
-  genres: [
-    { id: 1, name: "Action" },
-    { id: 2, name: "Adventure" },
-  ],
-  homepage: "https://example.com",
-  id: 123,
-  imdb_id: "tt1234567",
-  original_language: "en",
-  original_title: "Test Movie",
-  overview: "This is a test movie overview with some interesting plot details.",
-  popularity: 100,
-  poster_path: "/poster.jpg",
-  production_companies: [
-    {
-      id: 1,
-      logo_path: null,
-      name: "Test Studio",
-      origin_country: "US",
-    },
-    {
-      id: 2,
-      logo_path: null,
-      name: "Another Studio",
-      origin_country: "UK",
-    },
-  ],
-  production_countries: [{ iso_3166_1: "US", name: "United States" }],
-  release_date: "2023-01-15",
-  revenue: 5000000,
-  runtime: 120,
-  spoken_languages: [{ iso_639_1: "en", name: "English" }],
-  status: "Released",
-  tagline: "A test tagline for the movie",
-  title: "Test Movie",
-  video: false,
-  vote_average: 7.5,
-  vote_count: 1000,
 };
 
 describe("DetailPage", () => {
@@ -132,7 +81,7 @@ describe("DetailPage", () => {
 
   it("renders movie details when data is loaded successfully", () => {
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
-      data: mockMovieData,
+      data: movieDetails,
       isLoading: false,
       isError: false,
       error: null,
@@ -164,7 +113,7 @@ describe("DetailPage", () => {
   });
 
   it("renders movie without tagline when tagline is null", () => {
-    const movieDataWithoutTagline = { ...mockMovieData, tagline: null };
+    const movieDataWithoutTagline = { ...movieDetails, tagline: null };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieDataWithoutTagline,
       isLoading: false,
@@ -181,7 +130,7 @@ describe("DetailPage", () => {
   });
 
   it("renders movie without genres when genres array is empty", () => {
-    const movieDataWithoutGenres = { ...mockMovieData, genres: [] };
+    const movieDataWithoutGenres = { ...movieDetails, genres: [] };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieDataWithoutGenres,
       isLoading: false,
@@ -197,7 +146,7 @@ describe("DetailPage", () => {
   });
 
   it("renders runtime when genres array is empty but runtime is present", () => {
-    const movieDataWithoutGenres = { ...mockMovieData, genres: [] };
+    const movieDataWithoutGenres = { ...movieDetails, genres: [] };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieDataWithoutGenres,
       isLoading: false,
@@ -214,7 +163,7 @@ describe("DetailPage", () => {
   });
 
   it("renders genres when runtime is null but genres are present", () => {
-    const movieDataWithoutRuntime = { ...mockMovieData, runtime: null };
+    const movieDataWithoutRuntime = { ...movieDetails, runtime: null };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieDataWithoutRuntime,
       isLoading: false,
@@ -232,7 +181,7 @@ describe("DetailPage", () => {
 
   it("renders movie without production companies when array is empty", () => {
     const movieDataWithoutProduction = {
-      ...mockMovieData,
+      ...movieDetails,
       production_companies: [],
     };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
@@ -250,7 +199,7 @@ describe("DetailPage", () => {
   });
 
   it("renders movie with placeholder image when poster_path is null", () => {
-    const movieDataWithoutPoster = { ...mockMovieData, poster_path: null };
+    const movieDataWithoutPoster = { ...movieDetails, poster_path: null };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieDataWithoutPoster,
       isLoading: false,
@@ -269,7 +218,7 @@ describe("DetailPage", () => {
 
   it("renders movie with poster image when poster_path is available", () => {
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
-      data: mockMovieData,
+      data: movieDetails,
       isLoading: false,
       isError: false,
       error: null,
@@ -286,7 +235,7 @@ describe("DetailPage", () => {
 
   it("handles non-English movie titles correctly", () => {
     const nonEnglishMovie = {
-      ...mockMovieData,
+      ...movieDetails,
       original_language: "es",
       original_title: "Película de Prueba",
       title: "Test Movie",
@@ -307,7 +256,7 @@ describe("DetailPage", () => {
   });
 
   it("displays 'No release date' when release_date is null", () => {
-    const movieWithoutReleaseDate = { ...mockMovieData, release_date: null };
+    const movieWithoutReleaseDate = { ...movieDetails, release_date: null };
     vi.mocked(movieDetailsHook.useMovieDetails).mockReturnValue({
       data: movieWithoutReleaseDate,
       isLoading: false,
