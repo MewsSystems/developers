@@ -9,6 +9,7 @@ interface PaginationProps extends HTMLAttributes<HTMLElement> {
   onPageChange: (page: number) => void;
   search?: string;
   readonly?: boolean;
+  disableKeyboardNav?: boolean;
 }
 
 const getPageRange = (currentPage: number, totalPages: number): number[] => {
@@ -30,15 +31,14 @@ export function Pagination({
   onPageChange,
   search,
   readonly = false,
+  disableKeyboardNav = false,
   ...rest
 }: PaginationProps) {
   const linkBase = 'px-2 py-1 rounded transition text-purple-800 hover:underline focus:underline';
   const linkCursor = readonly ? 'cursor-not-allowed' : 'cursor-pointer';
 
-  const readonlyProps = {
-    tabIndex: readonly ? -1 : undefined,
-    'aria-disabled': readonly ? true : undefined,
-  };
+  const keyboardNavProps = disableKeyboardNav ? { tabIndex: -1 } : {};
+  const readonlyProps = readonly ? { 'aria-disabled': true } : {};
 
   const handleLinkClick = (page: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (readonly) {
@@ -69,6 +69,7 @@ export function Pagination({
             aria-label="Previous page"
             className={`${linkBase} ${linkCursor}`}
             onClick={handleLinkClick(currentPage - 1)}
+            {...keyboardNavProps}
             {...readonlyProps}
           >
             <AiFillCaretLeft aria-hidden="true" />
@@ -96,6 +97,7 @@ export function Pagination({
               aria-label={`Page ${p}`}
               className={`${linkBase} ${linkCursor}`}
               onClick={handleLinkClick(p)}
+              {...keyboardNavProps}
               {...readonlyProps}
             >
               {p}
@@ -111,6 +113,7 @@ export function Pagination({
               className={`${linkBase} ${linkCursor}`}
               aria-label={`Page ${totalPages}`}
               onClick={handleLinkClick(totalPages)}
+              {...keyboardNavProps}
               {...readonlyProps}
             >
               {totalPages}
@@ -126,6 +129,7 @@ export function Pagination({
             aria-label="Next page"
             className={`${linkBase} ${linkCursor}`}
             onClick={handleLinkClick(currentPage + 1)}
+            {...keyboardNavProps}
             {...readonlyProps}
           >
             <AiFillCaretRight aria-hidden="true" />

@@ -12,6 +12,7 @@ import { DebouncedInput } from '@/components/DebouncedInput';
 import { moviesQueryKey } from '@/lib/queryKeys';
 import { MovieListSkeleton } from '@/components/MovieListSkeleton';
 import { useSsrHydratedUrlState } from '@/hooks/useSsrHydratedUrlState';
+import { AccessibleResultsSummary } from '@/components/AccessibleResultsSummary';
 
 const parsePageParam = (value: string | null): number => {
   let page = 1;
@@ -49,6 +50,8 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
   const staleTime = Number(process.env.NEXT_PUBLIC_CLIENT_SIDE_SEARCH_REVALIDATE_TIME || 0) * 1000;
   const lastTotalPagesRef = useRef<number>(null);
 
+  const resultsSummaryRef = useRef<HTMLDivElement>(null);
+
   const { data, isFetching, isError, isSuccess } = useQuery<MovieSearchResponse>({
     queryKey,
     queryFn: () => fetchMoviesClient(params.search, params.page),
@@ -65,12 +68,22 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
   const movies = data?.results ?? [];
   const totalPages = data?.total_pages ?? lastTotalPagesRef.current ?? 0;
   const currentPage = params.page;
+  const totalResults = data?.total_results ?? 0;
 
   const showPaging = !isError && params.search && totalPages > 1;
 
   const handleInputValue = (value: string) => setParams({ search: value, page: 1 });
 
-  const handlePageChange = (page: number) => setParams({ page });
+  const handlePageChange = (page: number) => {
+    setParams({ page });
+    window.scrollTo({ top: 0 });
+    setTimeout(() => {
+      if (resultsSummaryRef.current) {
+        console.log('focus');
+        resultsSummaryRef.current?.focus();
+      }
+    }, 250);
+  };
 
   const title = params.search
     ? params.page && params.page > 1
@@ -92,18 +105,23 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             value={params.search}
             onChange={handleInputValue}
             placeholder="Search movies..."
-            className="border border-purple-800 p-2 pr-6 flex-1 rounded"
+            className="border border-purple-800 bg-white p-2 pr-6 flex-1 rounded"
             ariaLabel="Search movies"
           />
           {params.search && isFetching && <LoadingIndicator />}
         </div>
 
-        <div className="min-h-[24px] mt-1" aria-live="polite" aria-atomic="true">
-          {isError ? (
-            <ErrorMessage message="There was a problem fetching your search results" />
-          ) : params.search && !isFetching && movies.length === 0 ? (
-            <p className="text-stone-800">No results match your search</p>
-          ) : null}
+        <div className="min-h-[24px] mt-1">
+          {isError && <ErrorMessage message="There was a problem fetching your search results" />}
+          {!isError && !isFetching && params.search && (
+            <AccessibleResultsSummary
+              ref={resultsSummaryRef}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalResults}
+              pageSize={20}
+            />
+          )}
         </div>
       </div>
 
@@ -116,11 +134,12 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             totalPages={totalPages}
             onPageChange={handlePageChange}
             readonly={isFetching}
+            disableKeyboardNav
           />
         )}
       </div>
 
-      <div className="flex flex-col gap-2" role="region" aria-live="polite" aria-atomic="true">
+      <div className="flex flex-col gap-2" role="region" aria-label="search results">
         {isFetching ? (
           <MovieListSkeleton itemNumber={20} />
         ) : (
@@ -134,6 +153,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
           ))
         )}
       </div>
+
       {showPaging && (
         <Pagination
           search={params.search}
