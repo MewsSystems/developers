@@ -1,9 +1,6 @@
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { z } from 'zod';
-import { getQueryClient } from '@/lib/getQueryClient';
 import { fetchMovieDetails } from '@/lib/fetch/fetchMovieDetails';
 import MovieDetailsSection from '@/features/movies/MovieDetailsSection';
-import { movieDetailQueryKey } from '@/lib/queryKeys';
 
 export const revalidate = 3600;
 
@@ -30,16 +27,13 @@ export default async function MoviePage({ params }: MoviePageProps) {
     return <section className="text-red-600 p-4">Could not extract a valid movie ID.</section>;
   }
 
-  const queryClient = getQueryClient();
+  let movieData = null;
+  let fetchError = null;
+  try {
+    movieData = await fetchMovieDetails(movieId);
+  } catch {
+    fetchError = 'Failed to fetch movie details.';
+  }
 
-  await queryClient.prefetchQuery({
-    queryKey: movieDetailQueryKey(movieId),
-    queryFn: () => fetchMovieDetails(movieId),
-  });
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <MovieDetailsSection movieId={movieId} />
-    </HydrationBoundary>
-  );
+  return <MovieDetailsSection movieData={movieData} error={fetchError} />;
 }

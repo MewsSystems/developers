@@ -1,34 +1,21 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
-import { fetchMovieDetailsClient } from '@/lib/fetch/fetchMovieDetailsClient';
-import { movieDetailQueryKey } from '@/lib/queryKeys';
 import { BackToSearchLink } from '@/components/BackToSearchLink';
-import { MovieDetailResponse } from '@/types/api';
 import { MovieDetailsView } from '@/components/MovieDetailsView';
+import { MovieDetailResponse } from '@/types/api';
 
 type Props = {
-  movieId: string;
+  movieData: MovieDetailResponse | null;
+  error?: string | null;
 };
 
-export default function MovieDetailsSection({ movieId }: Props) {
-  const queryKey = movieDetailQueryKey(movieId);
-  const staleTime = Number(process.env.NEXT_PUBLIC_CLIENT_SIDE_MOVIE_REVALIDATE_TIME || 0) * 1000;
-
-  const { data, isPending, isError } = useQuery<MovieDetailResponse>({
-    queryKey,
-    queryFn: () => fetchMovieDetailsClient(movieId),
-    staleTime,
-  });
-
-  if (isPending) return <p>Loading...</p>;
-  if (isError || !data) return <p>Error loading movie details.</p>;
+export default function MovieDetailsSection({ movieData, error }: Props) {
+  if (error) return <p>Error loading movie details.</p>;
+  if (!movieData) return <p>No movie data found.</p>;
 
   return (
     <section className="space-y-4">
-      <title>{`Search for movies: ${data.title}`}</title>
+      <title>{`Search for movies: ${movieData.title}`}</title>
       <BackToSearchLink />
-      <MovieDetailsView movie={data} />
+      <MovieDetailsView movie={movieData} />
     </section>
   );
 }
