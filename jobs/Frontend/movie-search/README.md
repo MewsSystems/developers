@@ -112,8 +112,8 @@ Clicking on a movie card navigates to a detailed view with comprehensive informa
 
 - Movie overview
 - Release date and runtime
-- Cast and crew information
-- Ratings and reviews
+- Genres list
+- Movie rating
 - Production details
 
 ### Future improvements
@@ -122,6 +122,7 @@ Clicking on a movie card navigates to a detailed view with comprehensive informa
 - Code cleanup (remove duplicatated components)
 - Introduce requests error handling
 - UI improvements in DetailPage (layout, styling, nice components)
+- virtualization for grid
 
 ## Author
 
