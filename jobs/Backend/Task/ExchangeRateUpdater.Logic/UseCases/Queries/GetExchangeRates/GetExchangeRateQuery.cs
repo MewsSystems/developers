@@ -29,6 +29,7 @@ namespace ExchangeRateUpdater.Logic.UseCases.Queries.GetExchangeRates
 		{
 			if (_cache.TryGetValue($"{request.TargetCurrency}:{request.Date}", out GetExchangeRateResponse response))
 			{
+				this._logger.LogInformation($"Cache entry found: {request.TargetCurrency}:{request.Date}");
 				return response;
 			}
 			else
@@ -38,6 +39,8 @@ namespace ExchangeRateUpdater.Logic.UseCases.Queries.GetExchangeRates
 				{
 					Rates = rates
 				};
+
+				this._logger.LogInformation($"Adding cache entry: {request.TargetCurrency}:{request.Date}");
 
 				_cache.Set($"{request.TargetCurrency}:{request.Date}", response, 
 					new MemoryCacheEntryOptions()

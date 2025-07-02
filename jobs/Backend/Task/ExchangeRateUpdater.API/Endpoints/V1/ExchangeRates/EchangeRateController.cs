@@ -30,7 +30,10 @@ namespace ExchangeRateUpdater.API.Endpoints.V1.ExchangeRates
 		[SwaggerResponse(400, "Bad request.")]
 		public async Task<ActionResult<IEnumerable<ExchangeRate>>> Get(GetExchangeRateModel model)
 		{
+			this._logger.LogInformation($"Received request for /v1/ExchangeRates/");
 			var response = await this._query.ExecuteAsync(model.ToQueryRequest());
+
+			this._logger.LogInformation($"Returning response for /v1/ExchangeRates/");
 			return Ok(response.Rates);
 		}
 	}

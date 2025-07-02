@@ -6,11 +6,11 @@ namespace ExchangeRateUpdater.API
 	[ApiController]
 	public abstract class ApiControllerBase : ControllerBase
 	{
-		protected readonly ILogger logger;
+		protected readonly ILogger _logger;
 
 		protected ApiControllerBase(ILogger logger)
 		{
-			this.logger = logger;
+			this._logger = logger;
 		}
 	}
 }
