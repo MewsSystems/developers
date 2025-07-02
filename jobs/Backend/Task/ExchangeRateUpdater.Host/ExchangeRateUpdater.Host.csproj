@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ExchangeRateUpdater.API\ExchangeRateUpdater.API.csproj" />
+		<ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
+		<ProjectReference Include="..\ExchangeRateUpdater.Logic\ExchangeRateUpdater.Logic.csproj" />
+	</ItemGroup>
+</Project>

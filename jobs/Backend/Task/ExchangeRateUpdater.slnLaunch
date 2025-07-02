@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "ExchangeRateUpdaterExample",
+    "Projects": [
+      {
+        "Path": "ExchangeRateUpdater.Host\\ExchangeRateUpdater.Host.csproj",
+        "Action": "Start",
+        "DebugTarget": "ExchangeRateUpdater.Host"
+      },
+      {
+        "Path": "ExchangeRateUpdater\\ExchangeRateUpdater.csproj",
+        "Action": "Start",
+        "DebugTarget": "ExchangeRateUpdater"
+      }
+    ]
+  }
+]

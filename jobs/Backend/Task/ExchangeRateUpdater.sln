@@ -1,9 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater.csproj", "{7B2695D6-D24C-4460-A58E-A10F08550CE0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		..\..\..\.gitignore = ..\..\..\.gitignore
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{E39A19C8-6621-203D-F9FE-4698E92A1314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core", "ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj", "{E25055FB-4B1C-0BFA-21CA-519BA05A112A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.API", "ExchangeRateUpdater.API\ExchangeRateUpdater.API.csproj", "{EFCB68D2-E212-784C-0E26-C5B52DEB10AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Logic", "ExchangeRateUpdater.Logic\ExchangeRateUpdater.Logic.csproj", "{CAF56AA4-75CA-6B9B-E9F4-4F1F04EBF0CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Host", "ExchangeRateUpdater.Host\ExchangeRateUpdater.Host.csproj", "{AD35A130-582B-B025-CA47-62C50027E107}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Tests", "ExchangeRateUpdater.Tests\ExchangeRateUpdater.Tests.csproj", "{E9B2A333-F19D-550A-A7B4-26C141664A76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +28,35 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2695D6-D24C-4460-A58E-A10F08550CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E39A19C8-6621-203D-F9FE-4698E92A1314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E39A19C8-6621-203D-F9FE-4698E92A1314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E39A19C8-6621-203D-F9FE-4698E92A1314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E39A19C8-6621-203D-F9FE-4698E92A1314}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E25055FB-4B1C-0BFA-21CA-519BA05A112A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E25055FB-4B1C-0BFA-21CA-519BA05A112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E25055FB-4B1C-0BFA-21CA-519BA05A112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E25055FB-4B1C-0BFA-21CA-519BA05A112A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCB68D2-E212-784C-0E26-C5B52DEB10AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCB68D2-E212-784C-0E26-C5B52DEB10AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCB68D2-E212-784C-0E26-C5B52DEB10AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCB68D2-E212-784C-0E26-C5B52DEB10AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF56AA4-75CA-6B9B-E9F4-4F1F04EBF0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF56AA4-75CA-6B9B-E9F4-4F1F04EBF0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF56AA4-75CA-6B9B-E9F4-4F1F04EBF0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF56AA4-75CA-6B9B-E9F4-4F1F04EBF0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD35A130-582B-B025-CA47-62C50027E107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD35A130-582B-B025-CA47-62C50027E107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD35A130-582B-B025-CA47-62C50027E107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD35A130-582B-B025-CA47-62C50027E107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9B2A333-F19D-550A-A7B4-26C141664A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B2A333-F19D-550A-A7B4-26C141664A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B2A333-F19D-550A-A7B4-26C141664A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B2A333-F19D-550A-A7B4-26C141664A76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1F82FAB9-8F6A-4B7F-AC69-3304FC713A07}
 	EndGlobalSection
 EndGlobal
