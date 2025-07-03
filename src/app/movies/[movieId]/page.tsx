@@ -1,10 +1,8 @@
-import { z } from 'zod';
 import { fetchMovieDetails } from '@/lib/fetch/fetchMovieDetails';
 import MovieDetailsSection from '@/features/movies/MovieDetailsSection';
+import { movieIdSlugSchema } from '@/lib/slug';
 
 export const revalidate = 3600;
-
-const movieIdSlugSchema = z.string().regex(/^(\d+)-.+$/, 'Invalid movie slug format');
 
 type MoviePageProps = {
   params: Promise<{

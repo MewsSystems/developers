@@ -62,6 +62,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+There is also a Storybook set up
+
+```bash
+npm run storybook
+```
+
+This will allow you to look at and work on specific components in isolation
+
 ### Dev scripts
 
 See the scripts section of the package.json for scripts
@@ -155,7 +163,7 @@ as caching on the search page. I also decide to be consistent across the two pag
 So we have a standard data loading pattern. 
 
 Currently the Next.js Link component isn't always able to provide "Soft navigation", 
-where routing is solely via the frontend rather instead a full page load - but once this problem is resolved the page could take full
+where routing is solely via the frontend JSON fetch rather instead a full component page load - but once this problem is resolved the page could take full
 advantage of cache. In the meantime the page can be cached by setting the revalidate time of page.
 
 
@@ -187,7 +195,6 @@ I had limited time so here are a few other things I would look at..
 
 - More tests
 - Manual testing around accessibility
-- Storybook for individual components - this would actually make working on the components a breeze.
 - Better display for small screens - I would love to put more time into this, I think the search page could be optimised quite nicely for smaller screens
   - You could even add additional image sizes to the api endpoint and use different image sizes for different media queries
 - Optimise our endpoints but reducing the payload size - there is currently data we send to the frontend that isn't used
