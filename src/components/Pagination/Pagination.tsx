@@ -1,21 +1,31 @@
 'use client';
 
-import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
+import { FaAngleLeft, FaAnglesLeft, FaAngleRight, FaAnglesRight } from 'react-icons/fa6';
 import { HTMLAttributes } from 'react';
 
-interface PaginationProps extends HTMLAttributes<HTMLElement> {
+export interface PaginationProps extends HTMLAttributes<HTMLElement> {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  search?: string;
+  search: string;
   readonly?: boolean;
   disableKeyboardNav?: boolean;
 }
 
 const getPageRange = (currentPage: number, totalPages: number): number[] => {
-  return Array.from({ length: 5 }, (_, i) => i + Math.max(1, currentPage - 2)).filter(
-    (p) => p <= totalPages
-  );
+  const range: number[] = [];
+  const max = Math.min(totalPages, 5);
+  let start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, start + max - 1);
+
+  if (end - start < max - 1) {
+    start = Math.max(1, end - max + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    range.push(i);
+  }
+  return range;
 };
 
 function buildHref(page: number, search?: string) {
@@ -34,10 +44,11 @@ export function Pagination({
   disableKeyboardNav = false,
   ...rest
 }: PaginationProps) {
-  const linkBase = 'px-2 py-1 rounded transition text-purple-800 hover:underline focus:underline';
+  const linkBase =
+    'px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded transition text-purple-800 hover:underline focus:underline';
   const linkCursor = readonly ? 'cursor-not-allowed' : 'cursor-pointer';
 
-  const keyboardNavProps = disableKeyboardNav ? { tabIndex: -1 } : {};
+  const keyboardNavProps = disableKeyboardNav || readonly ? { tabIndex: -1 } : {};
   const readonlyProps = readonly ? { 'aria-disabled': true } : {};
 
   const handleLinkClick = (page: number) => (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -57,82 +68,102 @@ export function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className={`flex gap-2 flex-wrap justify-between items-center transition-opacity ${
+      className={`flex items-center justify-between transition-opacity ${
         readonly ? 'opacity-60 select-none' : ''
       }`}
       {...rest}
     >
-      <div className="w-4 flex justify-start">
+      <div className="min-w-8 flex justify-start">
         {currentPage > 1 && (
+          <a
+            href={buildHref(1, search)}
+            aria-label="Go to first page"
+            title="Go to first page"
+            className={`${linkBase} ${linkCursor}`}
+            onClick={handleLinkClick(1)}
+            {...keyboardNavProps}
+            {...readonlyProps}
+          >
+            <FaAnglesLeft aria-hidden="true" />
+          </a>
+        )}
+      </div>
+
+      <div className="flex items-center gap-1 sm:gap-2">
+        {currentPage > 1 ? (
           <a
             href={buildHref(currentPage - 1, search)}
             aria-label="Previous page"
+            title="Previous page"
             className={`${linkBase} ${linkCursor}`}
             onClick={handleLinkClick(currentPage - 1)}
             {...keyboardNavProps}
             {...readonlyProps}
           >
-            <AiFillCaretLeft aria-hidden="true" />
+            <FaAngleLeft aria-hidden="true" />
           </a>
-        )}
-      </div>
-
-      <div className="flex gap-1 items-center">
-        {pageRange.map((p) =>
-          p === currentPage ? (
-            <a
-              key={`${currentPage}-${p}`}
-              aria-current="page"
-              tabIndex={-1}
-              className="px-2 py-1 rounded bg-purple-950 text-white pointer-events-none cursor-not-allowed"
-              href={buildHref(p, search)}
-              aria-disabled="true"
-            >
-              {p}
-            </a>
-          ) : (
-            <a
-              key={`${currentPage}-${p}`}
-              href={buildHref(p, search)}
-              aria-label={`Page ${p}`}
-              className={`${linkBase} ${linkCursor}`}
-              onClick={handleLinkClick(p)}
-              {...keyboardNavProps}
-              {...readonlyProps}
-            >
-              {p}
-            </a>
-          )
+        ) : (
+          <div className="min-w-8 sm:min-w-10" />
         )}
 
-        {!pageRange.includes(totalPages) && (
-          <span className="flex gap-2">
-            <span aria-hidden="true">…</span>
-            <a
-              href={buildHref(totalPages, search)}
-              className={`${linkBase} ${linkCursor}`}
-              aria-label={`Page ${totalPages}`}
-              onClick={handleLinkClick(totalPages)}
-              {...keyboardNavProps}
-              {...readonlyProps}
-            >
-              {totalPages}
-            </a>
-          </span>
-        )}
-      </div>
+        <div className="flex gap-1 sm:gap-2">
+          {pageRange.map((p) =>
+            p === currentPage ? (
+              <a
+                key={`${currentPage}-${p}`}
+                aria-current="page"
+                tabIndex={-1}
+                className="px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded bg-purple-950 text-white pointer-events-none cursor-not-allowed"
+                href={buildHref(p, search)}
+                aria-disabled="true"
+              >
+                {p}
+              </a>
+            ) : (
+              <a
+                key={`${currentPage}-${p}`}
+                href={buildHref(p, search)}
+                aria-label={`Go to page ${p}`}
+                className={`${linkBase} ${linkCursor}`}
+                onClick={handleLinkClick(p)}
+                {...keyboardNavProps}
+                {...readonlyProps}
+              >
+                {p}
+              </a>
+            )
+          )}
+        </div>
 
-      <div className="w-4 flex justify-end">
-        {currentPage < totalPages && (
+        {currentPage < totalPages ? (
           <a
             href={buildHref(currentPage + 1, search)}
             aria-label="Next page"
+            title="Next page"
             className={`${linkBase} ${linkCursor}`}
             onClick={handleLinkClick(currentPage + 1)}
             {...keyboardNavProps}
             {...readonlyProps}
           >
-            <AiFillCaretRight aria-hidden="true" />
+            <FaAngleRight aria-hidden="true" />
+          </a>
+        ) : (
+          <div className="min-w-8 sm:min-w-10" />
+        )}
+      </div>
+
+      <div className="min-w-8 flex justify-end">
+        {currentPage !== totalPages && (
+          <a
+            href={buildHref(totalPages, search)}
+            aria-label="Go to last page"
+            title="Go to last page"
+            className={`${linkBase} ${linkCursor}`}
+            onClick={handleLinkClick(totalPages)}
+            {...keyboardNavProps}
+            {...readonlyProps}
+          >
+            <FaAnglesRight aria-hidden="true" />
           </a>
         )}
       </div>

@@ -79,7 +79,6 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
     window.scrollTo({ top: 0 });
     setTimeout(() => {
       if (resultsSummaryRef.current) {
-        console.log('focus');
         resultsSummaryRef.current?.focus();
       }
     }, 250);

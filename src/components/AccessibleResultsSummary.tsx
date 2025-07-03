@@ -46,7 +46,6 @@ export function AccessibleResultsSummary({
 
   return (
     <div
-      id="results-summary"
       role="region"
       aria-label="Search results summary"
       aria-live="polite"

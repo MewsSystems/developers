@@ -6,6 +6,16 @@ import { http, HttpResponse } from 'msw';
 import { server } from '@/test/server';
 import { createTestQueryClient } from '@/test/utils';
 
+let originalScrollTo: typeof window.scrollTo;
+
+beforeAll(() => {
+  originalScrollTo = window.scrollTo;
+  window.scrollTo = vi.fn();
+});
+afterAll(() => {
+  window.scrollTo = originalScrollTo;
+});
+
 function renderWithClient(initialSearch = '', initialPage = 1) {
   const queryClient = createTestQueryClient();
   render(
@@ -135,7 +145,7 @@ describe('HomeSearchSection', () => {
     });
   });
 
-  it('navigates to the next page using the pagination control', async () => {
+  it('navigates to the next page, scrolls and focuses summary region', async () => {
     setupPaginatedMock(3);
     renderWithClient();
 
@@ -145,9 +155,19 @@ describe('HomeSearchSection', () => {
     const nextButton = within(bottomPagination!).getByRole('link', { name: /next page/i });
     await userEvent.click(nextButton);
 
+    // Wait for Movie Page 2 to appear
     await waitFor(() => {
       expect(screen.getByText(/Movie Page 2/)).toBeInTheDocument();
     });
+
+    // Wait for the summary region to be present and focused
+    await waitFor(() => {
+      const summaryRegion = screen.getByRole('region', { name: 'Search results summary' });
+      expect(document.activeElement).toBe(summaryRegion);
+    });
+
+    // Assert window.scrollTo was called correctly
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0 });
   });
 
   it('navigates to the previous page using the pagination control', async () => {
@@ -179,7 +199,7 @@ describe('HomeSearchSection', () => {
     await triggerSearch('test');
 
     const bottomPagination = getBottomPagination();
-    const page3Button = within(bottomPagination!).getByRole('link', { name: 'Page 3' });
+    const page3Button = within(bottomPagination!).getByRole('link', { name: 'Go to page 3' });
     await userEvent.click(page3Button);
 
     await waitFor(() => {
