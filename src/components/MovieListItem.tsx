@@ -1,10 +1,9 @@
-import { AiOutlineFileImage } from 'react-icons/ai';
-import Image from 'next/image';
 import Link from 'next/link';
 import { createMovieSlug } from '@/lib/slug';
 import { formatDate, formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
 import { useId } from 'react';
 import { MovieSearchResult } from '@/types/api';
+import { MoviePoster } from '@/components/MoviePoster';
 
 interface Props {
   movie: MovieSearchResult & {
@@ -20,25 +19,7 @@ export function MovieListItem({ movie, search, page }: Props) {
 
   return (
     <div className="flex gap-4 bg-white rounded-xl p-3 min-h-[255px] border border-cyan-200">
-      <div
-        className={`w-[154px] h-[231px] flex justify-center rounded-md ${
-          movie.poster_url.default
-            ? 'items-start'
-            : 'border border-cyan-100 bg-stone-100 items-center'
-        }`}
-      >
-        {movie.poster_url.default ? (
-          <Image
-            src={movie.poster_url.default}
-            alt={formatPostImageAlt(movie.title)}
-            width={154}
-            height={231}
-            className="border border-cyan-500 rounded-md object-contain"
-          />
-        ) : (
-          <AiOutlineFileImage className="text-stone-400 text-4xl" />
-        )}
-      </div>
+      <MoviePoster posterUrl={movie.poster_url} alt={formatPostImageAlt(movie.title)} />
 
       <div className="flex-1">
         <h3>

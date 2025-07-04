@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import { MovieDetailResponse } from '@/types/api';
 import { ChipList } from '@/components/ChipList';
 import { formatDate, formatPostImageAlt, formatRuntime, formatVote } from '@/lib/format';
+import { LargeMoviePoster } from './MoviePoster';
 
 interface Props {
   movie: MovieDetailResponse;
@@ -11,17 +11,8 @@ export function MovieDetailsView({ movie }: Props) {
   return (
     <div className="bg-white p-4 rounded-xl shadow space-y-6 sm:p-6">
       <div className="flex flex-col sm:flex-row gap-6">
-        {movie.poster_url.default && (
-          <div className="flex justify-center">
-            <Image
-              src={movie.poster_url.default}
-              alt={formatPostImageAlt(movie.title)}
-              width={342}
-              height={513}
-              className="rounded-md border border-cyan-100 object-contain"
-              priority
-            />
-          </div>
+        {(movie.poster_url.default || movie.poster_url.sm || movie.poster_url.lg) && (
+          <LargeMoviePoster posterUrl={movie.poster_url} alt={formatPostImageAlt(movie.title)} />
         )}
 
         <div className="space-y-2 text-stone-800">
