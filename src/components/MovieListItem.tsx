@@ -1,13 +1,13 @@
 import { AiOutlineFileImage } from 'react-icons/ai';
 import Image from 'next/image';
 import Link from 'next/link';
-import { TMDBMovie } from '@/types/tmdb';
 import { createMovieSlug } from '@/lib/slug';
 import { formatDate, formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
 import { useId } from 'react';
+import { MovieSearchResult } from '@/types/api';
 
 interface Props {
-  movie: TMDBMovie & {
+  movie: MovieSearchResult & {
     poster_url: { default: string | null };
   };
   search: string;

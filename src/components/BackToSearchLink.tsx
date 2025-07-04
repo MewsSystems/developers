@@ -8,7 +8,7 @@ export function BackToSearchLink() {
   const search = searchParams.get('search');
   const page = searchParams.get('page');
 
-  const className = 'text-purple-800 hover:underline focus:underline block mb-4';
+  const className = 'text-purple-800 hover:underline focus:underline block mb-4 w-fit';
 
   if (search) {
     const query = new URLSearchParams({ search });

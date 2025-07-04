@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { fetchTMDB } from '@/lib/tmdb';
+import { fetchTMDB } from '@/lib/fetch/fetchTMDB';
 import type { TMDBSearchResponse, TMDBMovie } from '@/types/tmdb';
 import type { APIResponse, MovieSearchResponse } from '@/types/api';
-import { enrichWithPosterUrl, getTMDBImageConfig } from '@/lib/tmdbUtils';
+import {
+  enrichWithPosterUrl,
+  getTMDBImageConfig,
+  stripKeysFromArray,
+  UNUSED_MOVIE_SEARCH_KEYS,
+} from '@/lib/tmdbUtils';
 import { ApiError } from '@/lib/apiError';
 
 const querySchema = z.object({
@@ -41,14 +46,24 @@ export async function GET(
 
     const { base, poster_sizes } = await getTMDBImageConfig();
 
-    const size = poster_sizes.includes('w154') ? 'w154' : '';
+    const sizes = {
+      default: poster_sizes.includes('w92') ? 'w92' : undefined,
+      sm: poster_sizes.includes('w154') ? 'w154' : undefined,
+      md: poster_sizes.includes('w185') ? 'w185' : undefined,
+    };
 
-    const enrichedResults = enrichWithPosterUrl<TMDBMovie>(data.results, base, size);
+    const enrichedResults = enrichWithPosterUrl<TMDBMovie, typeof sizes>(data.results, base, sizes);
 
-    return NextResponse.json({ ...data, results: enrichedResults }, { status: 200 });
+    const cleanedResults = stripKeysFromArray(enrichedResults, UNUSED_MOVIE_SEARCH_KEYS);
+
+    return NextResponse.json<MovieSearchResponse>(
+      { ...data, results: cleanedResults },
+      { status: 200 }
+    );
   } catch (e: unknown) {
     const error = e instanceof ApiError ? e.message : 'unable to get movies';
     const status = e instanceof ApiError ? e.status : 500;
+
     return NextResponse.json({ error }, { status });
   }
 }
