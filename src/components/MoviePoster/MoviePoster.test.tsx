@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MoviePoster } from './MoviePoster';
 import type { PosterUrl } from '@/types/api';

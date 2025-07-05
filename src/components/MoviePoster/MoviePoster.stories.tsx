@@ -2,27 +2,27 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MoviePoster } from './MoviePoster';
 
 const posterAll = {
-  default: '/default.webp',
-  sm: '/sm.webp',
-  md: '/md.webp',
+  default: '/storybook-assets/default.webp',
+  sm: '/storybook-assets/sm.webp',
+  md: '/storybook-assets/md.webp',
 };
 
 const posterOnlyDefault = {
-  default: '/default.webp',
+  default: '/storybook-assets/default.webp',
   sm: null,
   md: null,
 };
 
 const posterOnlySm = {
   default: null,
-  sm: '/sm.webp',
+  sm: '/storybook-assets/sm.webp',
   md: null,
 };
 
 const posterOnlyMd = {
   default: null,
   sm: null,
-  md: '/md.webp',
+  md: '/storybook-assets/md.webp',
 };
 
 const posterNone = {
@@ -57,9 +57,9 @@ Demonstrates per-breakpoint poster rendering and fallback icon logic.
 \`\`\`tsx
 <MoviePoster
   posterUrl={{
-    default: '/default.webp',
-    sm: '/sm.webp',
-    md: '/md.webp',
+    default: '/storybook-assets/default.webp',
+    sm: '/storybook-assets/sm.webp',
+    md: '/storybook-assets/md.webp',
   }}
   alt="My Movie Poster"
 />
@@ -98,9 +98,9 @@ export const AllBreakpoints: Story = {
 \`\`\`tsx
 <MoviePoster
   posterUrl={{
-    default: '/default.webp',
-    sm: '/sm.webp',
-    md: '/md.webp',
+    default: '/storybook-assets/default.webp',
+    sm: '/storybook-assets/sm.webp',
+    md: '/storybook-assets/md.webp',
   }}
   alt="All breakpoints image"
 />
@@ -132,7 +132,7 @@ export const OnlyDefault: Story = {
 
 \`\`\`tsx
 <MoviePoster
-  posterUrl={{ default: '/default.webp', sm: null, md: null }}
+  posterUrl={{ default: '/storybook-assets/default.webp', sm: null, md: null }}
   alt="Only default image"
 />
 \`\`\`
@@ -163,7 +163,7 @@ export const OnlySm: Story = {
 
 \`\`\`tsx
 <MoviePoster
-  posterUrl={{ default: null, sm: '/sm.webp', md: null }}
+  posterUrl={{ default: null, sm: '/storybook-assets/sm.webp', md: null }}
   alt="Only sm image"
 />
 \`\`\`
@@ -194,7 +194,7 @@ export const OnlyMd: Story = {
 
 \`\`\`tsx
 <MoviePoster
-  posterUrl={{ default: null, sm: null, md: '/md.webp' }}
+  posterUrl={{ default: null, sm: null, md: '/storybook-assets/md.webp' }}
   alt="Only md image"
 />
 \`\`\`

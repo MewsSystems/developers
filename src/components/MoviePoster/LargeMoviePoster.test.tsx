@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { LargeMoviePoster } from './LargeMoviePoster';
 import type { DetailedPosterUrl } from '@/types/api';
@@ -75,7 +74,6 @@ describe('LargeMoviePoster', () => {
     render(
       <LargeMoviePoster posterUrl={{ default: null, sm: null, lg: '/lg.jpg' }} alt={altText} />
     );
-    screen.debug();
 
     expect(screen.getByRole('img')).not.toHaveAttribute('src');
 

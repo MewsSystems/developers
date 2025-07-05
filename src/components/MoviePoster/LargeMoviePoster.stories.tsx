@@ -2,27 +2,27 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { LargeMoviePoster } from './LargeMoviePoster';
 
 const posterAll = {
-  default: '/default-w185.webp',
-  sm: '/sm-w342.webp',
-  lg: '/lg-w500.webp',
+  default: '/storybook-assets/default-w185.webp',
+  sm: '/storybook-assets/sm-w342.webp',
+  lg: '/storybook-assets/lg-w500.webp',
 };
 
 const posterOnlyDefault = {
-  default: '/default-w185.webp',
+  default: '/storybook-assets/default-w185.webp',
   sm: null,
   lg: null,
 };
 
 const posterOnlySm = {
   default: null,
-  sm: '/sm-w342.webp',
+  sm: '/storybook-assets/sm-w342.webp',
   lg: null,
 };
 
 const posterOnlyLg = {
   default: null,
   sm: null,
-  lg: '/lg-w500.webp',
+  lg: '/storybook-assets/lg-w500.webp',
 };
 
 const posterNone = {
@@ -55,9 +55,9 @@ Demonstrates per-breakpoint poster rendering and fallback icon logic for large m
 \`\`\`tsx
 <LargeMoviePoster
   posterUrl={{
-    default: '/default-w185.webp',
-    sm: '/sm-w342.webp',
-    lg: '/lg-w500.webp',
+    default: '/storybook-assets/default-w185.webp',
+    sm: '/storybook-assets/sm-w342.webp',
+    lg: '/storybook-assets/lg-w500.webp',
   }}
   alt="Large Movie Poster"
 />
@@ -84,9 +84,9 @@ export const AllBreakpoints: Story = {
     <DemoContainer>
       <h3>
         Try resizing the Storybook canvas to see the LargeMoviePoster respond at different
-        breakpoints!
+        breakpointDefinition!
       </h3>
-      <LargeMoviePoster posterUrl={posterAll} alt="All breakpoints image" />
+      <LargeMoviePoster posterUrl={posterAll} alt="All breakpointDefinition image" />
     </DemoContainer>
   ),
   parameters: {
@@ -98,11 +98,11 @@ export const AllBreakpoints: Story = {
 \`\`\`tsx
 <LargeMoviePoster
   posterUrl={{
-    default: '/default-w185.webp',
-    sm: '/sm-w342.webp',
-    lg: '/lg-w500.webp',
+    default: '/storybook-assets/default-w185.webp',
+    sm: '/storybook-assets/sm-w342.webp',
+    lg: '/storybook-assets/lg-w500.webp',
   }}
-  alt="All breakpoints image"
+  alt="All breakpointDefinition image"
 />
 \`\`\`
         `,
@@ -163,7 +163,7 @@ export const None: Story = {
   },
   render: (args) => (
     <DemoContainer>
-      <h3>No images present, fallback icon shown at all breakpoints</h3>
+      <h3>No images present, fallback icon shown at all breakpointDefinition</h3>
       <LargeMoviePoster {...args} />
     </DemoContainer>
   ),
