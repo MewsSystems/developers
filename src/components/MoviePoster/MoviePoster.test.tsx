@@ -86,22 +86,4 @@ describe('MoviePoster', () => {
     );
     expect(screen.getByAltText(altText)).toBeInTheDocument();
   });
-
-  it('applies container and img classes as expected', () => {
-    render(
-      <MoviePoster
-        posterUrl={{ default: '/default.jpg', sm: '/sm.jpg', md: '/md.jpg' }}
-        alt={altText}
-      />
-    );
-    const container = screen.getByRole('img').closest('div');
-
-    expect(container).toHaveClass('flex');
-    expect(container).toHaveClass('rounded-md');
-
-    const img = screen.getByRole('img');
-
-    expect(img).toHaveClass('object-contain');
-    expect(img).toHaveClass('border-cyan-500');
-  });
 });

@@ -68,6 +68,8 @@ There is also a Storybook set up
 npm run storybook
 ```
 
+It will run on http://localhost:6006/
+
 This will allow you to look at and work on specific components in isolation
 
 ### Dev scripts

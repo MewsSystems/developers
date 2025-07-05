@@ -10,7 +10,7 @@ export function MoviePoster({ posterUrl, alt }: MoviePosterProps) {
   const breakpointDefinition: BreakpointDefinition = {
     default: {
       src: posterUrl.default,
-      containerSize: 'w-[92px] h-[138px]',
+      containerSize: 'w-[92px] h-[137px]',
     },
     sm: {
       src: posterUrl.sm,
@@ -27,7 +27,7 @@ export function MoviePoster({ posterUrl, alt }: MoviePosterProps) {
       breakpointDefinition={breakpointDefinition}
       alt={alt}
       width={92}
-      height={138}
+      height={137}
     />
   );
 }

@@ -164,13 +164,9 @@ export function ResponsiveImage({
                   (breakpoint) => breakpoint.key === breakpointKey
                 )?.media;
 
-                accum.push(
-                  <source
-                    key={breakpointValues.src + mediaQuery}
-                    srcSet={breakpointValues.src}
-                    media={mediaQuery}
-                  />
-                );
+                const key = `${breakpointKey}:${breakpointValues.src}`;
+
+                accum.push(<source key={key} srcSet={breakpointValues.src} media={mediaQuery} />);
               }
 
               return accum;
@@ -182,7 +178,7 @@ export function ResponsiveImage({
             alt={alt}
             width={width}
             height={height}
-            className="border border-cyan-500 rounded-md object-contain w-full h-auto max-w-full"
+            className="border border-stone-400 rounded-md object-contain w-full h-auto max-w-full"
             loading="lazy"
             decoding="async"
             fetchPriority={fetchPriority}

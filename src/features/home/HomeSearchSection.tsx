@@ -4,13 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef } from 'react';
 import { fetchMoviesClient } from '@/lib/fetch/fetchMoviesClient';
 import { LoadingIndicator } from '@/components/LoadingIndicator';
-import { MovieListItem } from '@/components/MovieListItem';
+import { MovieListItem, MovieListSkeleton } from '@/components/MovieListItem';
 import { Pagination } from '@/components/Pagination';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { MovieSearchResponse } from '@/types/api';
 import { DebouncedInput } from '@/components/DebouncedInput';
 import { moviesQueryKey } from '@/lib/queryKeys';
-import { MovieListSkeleton } from '@/components/MovieListSkeleton';
 import { useSsrHydratedUrlState } from '@/hooks/useSsrHydratedUrlState';
 import { AccessibleResultsSummary } from '@/components/AccessibleResultsSummary';
 
@@ -93,8 +92,8 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
   return (
     <section className="space-y-4">
       <title>{title}</title>
-      <h1 className="text-xl font-bold text-stone-800">Welcome to Movie Search</h1>
-      <p className="text-stone-600">
+      <h1 className="text-xl font-extrabold text-stone-600 mb-1">Welcome to Movie Search</h1>
+      <p className="text-stone-700">
         Use the search box to find your favorite movies. Results will appear below.
       </p>
 
@@ -104,7 +103,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             value={params.search}
             onChange={handleInputValue}
             placeholder="Search movies..."
-            className="border border-purple-800 bg-white p-2 pr-6 flex-1 rounded"
+            className="border border-cyan-800 bg-white p-2 pr-6 flex-1 rounded"
             ariaLabel="Search movies"
           />
           {params.search && isFetching && <LoadingIndicator />}
@@ -119,6 +118,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
               totalPages={totalPages}
               totalItems={totalResults}
               pageSize={20}
+              visible
             />
           )}
         </div>

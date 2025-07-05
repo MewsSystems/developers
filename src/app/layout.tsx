@@ -20,10 +20,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ReactQueryProvider>
           <div className="flex min-h-screen items-stretch justify-center bg-cyan-950">
             <div className="flex w-full max-w-[48rem] flex-col bg-main">
-              <header className="h-20 flex items-center justify-start bg-cyan-200 text-cyan-900 text-2xl font-bold px-6">
+              <header className="h-20 flex items-center justify-start bg-cyan-50 text-cyan-900 text-2xl font-bold px-6">
                 Search for Movies
               </header>
-              <main className="bg-cyan-50 flex-1 p-2 flex flex-col sm:p-6">{children}</main>
+              <main className="bg-white flex-1 p-2 flex flex-col sm:p-6">{children}</main>
             </div>
           </div>
         </ReactQueryProvider>

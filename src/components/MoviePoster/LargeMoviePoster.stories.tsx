@@ -40,8 +40,6 @@ const meta: Meta<typeof LargeMoviePoster> = {
     docs: {
       description: {
         component: `
-# LargeMoviePoster Component
-
 Demonstrates per-breakpoint poster rendering and fallback icon logic for large movie posters.
 
 | Breakpoint      | Image Present? | Shows \`<img>\` | Shows Icon | Fallback bg/center?      |

@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import { createMovieSlug } from '@/lib/slug';
-import { formatDate, formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
+import { formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
 import { useId } from 'react';
 import { MovieSearchResult } from '@/types/api';
 import { MoviePoster } from '@/components/MoviePoster';
+import { ReleaseDate } from '@/components/MovieListItem/ReleaseDate';
+import { Score } from '@/components/MovieListItem/Score';
+import { Card } from '@/components//Card';
 
 interface Props {
   movie: MovieSearchResult & {
@@ -13,15 +16,17 @@ interface Props {
   page?: number;
 }
 
+export const movieListItemContainerClasses =
+  'gap-4 p-0 pr-4 min-h-[137px] sm:p-3 sm:min-h-[257px] md:min-h-[304px]';
+
 export function MovieListItem({ movie, search, page }: Props) {
   const slug = createMovieSlug(movie.id, movie.original_title);
   const descriptionId = useId();
 
   return (
-    <div className="flex gap-4 bg-white rounded-xl p-3 min-h-[255px] border border-cyan-200">
+    <Card className={movieListItemContainerClasses}>
       <MoviePoster posterUrl={movie.poster_url} alt={formatPostImageAlt(movie.title)} />
-
-      <div className="flex-1">
+      <div className="flex-1 pt-1 sm:pt-0">
         <h3>
           <Link
             href={{
@@ -31,7 +36,7 @@ export function MovieListItem({ movie, search, page }: Props) {
                 ...(page ? { page } : {}),
               },
             }}
-            className="text-lg font-semibold text-purple-800 hover:underline"
+            className="text-lg font-bold text-cyan-800 hover:underline"
             aria-describedby={descriptionId}
           >
             {movie.title}
@@ -39,19 +44,17 @@ export function MovieListItem({ movie, search, page }: Props) {
         </h3>
         <div id={descriptionId}>
           {movie.original_title !== movie.title && (
-            <p className="text-stone-400 text-sm">{movie.original_title}</p>
+            <p className="text-cyan-700 text-sm italic">{movie.original_title}</p>
           )}
-          <p className="text-stone-500 text-sm mt-1">Date: {formatDate(movie.release_date)}</p>
-          <p className="text-stone-500 text-sm mt-1">
-            Score: {formatVoteFromSearch(movie.vote_average)}
-          </p>
+          <ReleaseDate date={movie.release_date} />
+          <Score score={formatVoteFromSearch(movie.vote_average, movie.vote_count)} />
           {movie.overview && (
-            <p className="hidden mt-2 text-stone-700 text-sm sm:line-clamp-4 sm:display md:line-clamp-6">
+            <p className="hidden mt-2 text-stone-700 text-sm sm:line-clamp-7 sm:display md:line-clamp-9">
               {movie.overview}
             </p>
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

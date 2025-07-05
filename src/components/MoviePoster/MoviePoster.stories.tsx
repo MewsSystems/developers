@@ -40,8 +40,6 @@ const meta: Meta<typeof MoviePoster> = {
     docs: {
       description: {
         component: `
-# MoviePoster Component
-
 Demonstrates per-breakpoint poster rendering and fallback icon logic.
 
 **Summary Table:**

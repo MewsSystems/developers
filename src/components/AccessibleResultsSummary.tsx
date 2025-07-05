@@ -28,7 +28,7 @@ export function AccessibleResultsSummary({
   } else {
     const firstItemIndex = (currentPage - 1) * pageSize + 1;
     const lastItemIndex = Math.min(currentPage * pageSize, totalItems);
-    summary = `Page ${currentPage} of ${totalPages}. Showing results ${firstItemIndex} to ${lastItemIndex} of ${totalItems}.`;
+    summary = `Page ${currentPage} of ${totalPages}. Results ${firstItemIndex} to ${lastItemIndex} of ${totalItems}.`;
   }
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function AccessibleResultsSummary({
       aria-live="polite"
       ref={mergeRefs(ref, summaryRef)}
       tabIndex={visible || isNoResults ? -1 : undefined}
-      className={`${isNoResults ? '' : visible ? '' : 'sr-only'} text-cyan-600`}
+      className={`${isNoResults ? '' : visible ? '' : 'sr-only'} text-cyan-700 text-sm text-center`}
       {...rest}
     >
       {summary}

@@ -45,7 +45,7 @@ export function Pagination({
   ...rest
 }: PaginationProps) {
   const linkBase =
-    'px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded transition text-purple-800 hover:underline focus:underline';
+    'px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded transition text-cyan-800 hover:underline focus:underline';
   const linkCursor = readonly ? 'cursor-not-allowed' : 'cursor-pointer';
 
   const keyboardNavProps = disableKeyboardNav || readonly ? { tabIndex: -1 } : {};
@@ -113,7 +113,7 @@ export function Pagination({
                 key={`${currentPage}-${p}`}
                 aria-current="page"
                 tabIndex={-1}
-                className="px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded bg-purple-950 text-white pointer-events-none cursor-not-allowed"
+                className="px-1 py-0.5 min-w-[2rem] sm:px-2 sm:py-1 sm:min-w-[2.5rem] flex justify-center items-center rounded bg-cyan-950 text-white pointer-events-none cursor-not-allowed"
                 href={buildHref(p, search)}
                 aria-disabled="true"
               >

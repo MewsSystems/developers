@@ -59,6 +59,8 @@ export const UNUSED_MOVIE_SEARCH_KEYS = [
   'backdrop_path',
   'genre_ids',
   'popularity',
+  'poster_path',
+  'original_language',
   'video',
 ] as const satisfies readonly (keyof TMDBMovie)[];
 
