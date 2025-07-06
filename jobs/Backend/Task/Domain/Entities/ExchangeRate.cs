@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Domain.Entities
 {
     public class ExchangeRate
     {
