@@ -1,0 +1,1 @@
+export { BackToSearchLink } from './BackToSearchLink';

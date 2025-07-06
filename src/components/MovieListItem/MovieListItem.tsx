@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { createMovieSlug } from '@/lib/slug';
-import { formatPostImageAlt, formatVoteFromSearch } from '@/lib/format';
+import { formatPostImageAlt } from '@/lib/format';
 import { useId } from 'react';
 import { MovieSearchResult } from '@/types/api';
 import { MoviePoster } from '@/components/MoviePoster';
-import { ReleaseDate } from '@/components/MovieListItem/ReleaseDate';
-import { Score } from '@/components/MovieListItem/Score';
+import { ReleaseDate } from '@/components/ReleaseDate';
+import { Score } from '@/components/Score';
 import { Card } from '@/components//Card';
 
 interface Props {
@@ -46,10 +46,12 @@ export function MovieListItem({ movie, search, page }: Props) {
           {movie.original_title !== movie.title && (
             <p className="text-cyan-700 text-sm italic">{movie.original_title}</p>
           )}
-          <ReleaseDate date={movie.release_date} />
-          <Score score={formatVoteFromSearch(movie.vote_average, movie.vote_count)} />
+          <dl>
+            <ReleaseDate date={movie.release_date} isSmall />
+            <Score score={movie.vote_average} count={movie.vote_count} isSmall />
+          </dl>
           {movie.overview && (
-            <p className="hidden mt-2 text-stone-700 text-sm sm:line-clamp-7 sm:display md:line-clamp-9">
+            <p className="hidden mt-1 text-stone-700 text-sm sm:line-clamp-6 sm:display md:line-clamp-9">
               {movie.overview}
             </p>
           )}

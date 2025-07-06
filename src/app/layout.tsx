@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import { ReactQueryProvider } from '@/providers/ReactQueryProvider';
+import { BsCameraReelsFill } from 'react-icons/bs';
 
 const roboto = Roboto({
   weight: ['200', '400', '700'],
@@ -19,9 +20,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-cyan-950 text-stone-900">
         <ReactQueryProvider>
           <div className="flex min-h-screen items-stretch justify-center bg-cyan-950">
-            <div className="flex w-full max-w-[48rem] flex-col bg-main">
-              <header className="h-20 flex items-center justify-start bg-cyan-50 text-cyan-900 text-2xl font-bold px-6">
-                Search for Movies
+            <div className="flex w-full max-w-[48rem] flex-col bg-main [&:has(.requires-wide-layout)]:md:max-w-[64rem]">
+              <header className="h-20 flex items-center justify-start bg-cyan-50 text-cyan-950 text-3xl font-bold px-6 pt-2 mt-4 rounded-t-xl">
+                <BsCameraReelsFill className="-translate-y-2 mr-3" size="40px" aria-hidden />{' '}
+                MovieSearch
               </header>
               <main className="bg-white flex-1 p-2 flex flex-col sm:p-6">{children}</main>
             </div>

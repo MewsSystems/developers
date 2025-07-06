@@ -6,7 +6,6 @@ export interface AccessibleResultsSummaryProps extends React.HTMLProps<HTMLDivEl
   totalPages: number;
   totalItems: number;
   pageSize: number;
-  visible?: boolean;
   ref?: Ref<HTMLDivElement>;
 }
 
@@ -15,7 +14,6 @@ export function AccessibleResultsSummary({
   totalPages,
   totalItems,
   pageSize,
-  visible = false,
   ref,
   ...rest
 }: AccessibleResultsSummaryProps) {
@@ -50,8 +48,8 @@ export function AccessibleResultsSummary({
       aria-label="Search results summary"
       aria-live="polite"
       ref={mergeRefs(ref, summaryRef)}
-      tabIndex={visible || isNoResults ? -1 : undefined}
-      className={`${isNoResults ? '' : visible ? '' : 'sr-only'} text-cyan-700 text-sm text-center`}
+      tabIndex={isNoResults ? -1 : undefined}
+      className="text-cyan-700 text-sm text-center"
       {...rest}
     >
       {summary}

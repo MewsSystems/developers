@@ -85,14 +85,14 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
 
   const title = params.search
     ? params.page && params.page > 1
-      ? `Search: ${params.search} (Page ${params.page}) | Movie Search`
-      : `Search: ${params.search} | Movie Search`
-    : 'Movie Search';
+      ? `Search: ${params.search} (Page ${params.page}) | MovieSearch`
+      : `Search: ${params.search} | MovieSearch`
+    : 'MovieSearch';
 
   return (
     <section className="space-y-4">
       <title>{title}</title>
-      <h1 className="text-xl font-extrabold text-stone-600 mb-1">Welcome to Movie Search</h1>
+      <h1 className="text-xl font-extrabold text-stone-950 mb-1">Welcome to Movie Search</h1>
       <p className="text-stone-700">
         Use the search box to find your favorite movies. Results will appear below.
       </p>
@@ -118,7 +118,6 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
               totalPages={totalPages}
               totalItems={totalResults}
               pageSize={20}
-              visible
             />
           )}
         </div>

@@ -50,6 +50,7 @@ export const UNUSED_MOVIE_DETAIL_KEYS = [
   'imdb_id',
   'popularity',
   'poster_path',
+  'original_language',
   'revenue',
   'video',
 ] as const satisfies readonly (keyof TMDBMovieDetail)[];
