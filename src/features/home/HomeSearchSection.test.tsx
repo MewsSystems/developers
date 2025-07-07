@@ -67,7 +67,7 @@ describe('HomeSearchSection', () => {
   it('renders welcome message and search input', () => {
     renderWithClient();
 
-    expect(screen.getByText(/Welcome to Movie Search/i)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome to MovieSearch/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Search movies.../i)).toBeInTheDocument();
   });
 
@@ -155,18 +155,15 @@ describe('HomeSearchSection', () => {
     const nextButton = within(bottomPagination!).getByRole('link', { name: /next page/i });
     await userEvent.click(nextButton);
 
-    // Wait for Movie Page 2 to appear
     await waitFor(() => {
       expect(screen.getByText(/Movie Page 2/)).toBeInTheDocument();
     });
 
-    // Wait for the summary region to be present and focused
     await waitFor(() => {
-      const summaryRegion = screen.getByRole('region', { name: 'Search results summary' });
+      const summaryRegion = screen.getByTestId('results-summary-container');
       expect(document.activeElement).toBe(summaryRegion);
     });
 
-    // Assert window.scrollTo was called correctly
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0 });
   });
 

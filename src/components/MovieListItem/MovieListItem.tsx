@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { createMovieSlug } from '@/lib/slug';
 import { formatPostImageAlt } from '@/lib/format';
-import { useId } from 'react';
 import { MovieSearchResult } from '@/types/api';
 import { MoviePoster } from '@/components/MoviePoster';
 import { ReleaseDate } from '@/components/ReleaseDate';
@@ -21,7 +20,6 @@ export const movieListItemContainerClasses =
 
 export function MovieListItem({ movie, search, page }: Props) {
   const slug = createMovieSlug(movie.id, movie.original_title);
-  const descriptionId = useId();
 
   return (
     <Card className={movieListItemContainerClasses}>
@@ -37,12 +35,11 @@ export function MovieListItem({ movie, search, page }: Props) {
               },
             }}
             className="text-lg font-bold text-cyan-800 hover:underline"
-            aria-describedby={descriptionId}
           >
             {movie.title}
           </Link>
         </h3>
-        <div id={descriptionId}>
+        <div>
           {movie.original_title !== movie.title && (
             <p className="text-cyan-700 text-sm italic">{movie.original_title}</p>
           )}

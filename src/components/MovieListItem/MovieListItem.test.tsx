@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
 import { MovieListItem } from './MovieListItem';
 
 const BASE_PROPS = {
@@ -95,13 +94,5 @@ describe('MovieListItem', () => {
     };
     render(<MovieListItem {...props} />);
     expect(screen.queryByText('A cool movie.')).not.toBeInTheDocument();
-  });
-
-  it('sets aria-describedby on the link', () => {
-    render(<MovieListItem {...BASE_PROPS} />);
-    const link = screen.getByRole('link', { name: /test movie/i });
-    const describedby = link.getAttribute('aria-describedby');
-    expect(describedby).toBeTruthy();
-    expect(document.getElementById(describedby!)).toBeInTheDocument();
   });
 });

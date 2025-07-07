@@ -16,7 +16,7 @@ export function MovieDetailsView({ movie }: Props) {
   const hasPosterImage = movie.poster_url.default || movie.poster_url.sm || movie.poster_url.lg;
 
   return (
-    <Card className="flex-col gap-4 p-4 mb-8">
+    <Card className="flex-col gap-4 p-3 sm:p-4 mb-8">
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-[342px_1fr] lg:grid-cols-[500px_1fr]">
         <div className="flex flex-col items-start col-span-1 sm:col-span-2">
           <h1 className="text-2xl font-extrabold mb-0">{movie.title}</h1>

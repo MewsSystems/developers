@@ -8,17 +8,19 @@ interface OverviewContentProps {
 export function OverviewContent({ movie }: OverviewContentProps) {
   const hasProductionCompanies = !!movie.production_companies.length;
   const hasProductionCountries = !!movie.production_countries.length;
+  const hasGenres = !!movie.genres.length;
+  const hasOverview = !!movie.overview;
 
   return (
     <>
-      {movie.overview && (
+      {hasOverview && (
         <div>
           <h3 className="text-lg font-semibold mb-2">Overview</h3>
           <p className="text-stone-700 leading-relaxed">{movie.overview}</p>
         </div>
       )}
 
-      {!!movie.genres.length && (
+      {hasGenres && (
         <ChipList
           title="Genres"
           items={movie.genres.map((genre) => genre.name)}

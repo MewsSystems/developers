@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
 import { MovieDetailsView } from './MovieDetailsView';
 import type { MovieDetailResponse } from '@/types/api';
 

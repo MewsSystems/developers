@@ -1,10 +1,10 @@
-import { PropsWithChildren } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 
-interface MyComponentProps extends PropsWithChildren {
+interface CardProps extends ComponentPropsWithoutRef<'div'> {
   className?: string;
 }
 
-export function Card({ children, className = '', ...rest }: MyComponentProps) {
+export function Card({ children, className = '', ...rest }: CardProps) {
   return (
     <div
       className={`flex grow bg-white rounded-xl border border-stone-200 shadow shadow-stone-200 ${className}`}

@@ -10,15 +10,17 @@ interface DebouncedInputProps {
   placeholder?: string;
   className?: string;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }
 
 export function DebouncedInput({
   value,
   onChange,
   debounceDelay = 500,
-  placeholder = '',
-  className = '',
-  ariaLabel = '',
+  placeholder,
+  className,
+  ariaLabel,
+  ariaDescribedBy,
 }: DebouncedInputProps) {
   const [internalValue, setInternalValue] = useState(value);
 
@@ -51,6 +53,7 @@ export function DebouncedInput({
       onChange={handleChange}
       className={className}
       aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
     />
   );
 }

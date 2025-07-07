@@ -11,7 +11,7 @@ import { MovieSearchResponse } from '@/types/api';
 import { DebouncedInput } from '@/components/DebouncedInput';
 import { moviesQueryKey } from '@/lib/queryKeys';
 import { useSsrHydratedUrlState } from '@/hooks/useSsrHydratedUrlState';
-import { AccessibleResultsSummary } from '@/components/AccessibleResultsSummary';
+import { AccessibleResultsSummary, ResultsSummary } from '@/components/ResultsSummary';
 
 const parsePageParam = (value: string | null): number => {
   let page = 1;
@@ -92,9 +92,9 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
   return (
     <section className="space-y-4">
       <title>{title}</title>
-      <h1 className="text-xl font-extrabold text-stone-950 mb-1">Welcome to Movie Search</h1>
-      <p className="text-stone-700">
-        Use the search box to find your favorite movies. Results will appear below.
+      <h1 className="text-xl font-extrabold text-stone-950 mb-1">Welcome to MovieSearch</h1>
+      <p id="search-description" className="text-stone-700">
+        Use the search input to find your favourite movies. Results will appear below.
       </p>
 
       <div>
@@ -105,22 +105,22 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             placeholder="Search movies..."
             className="border border-cyan-800 bg-white p-2 pr-6 flex-1 rounded"
             ariaLabel="Search movies"
+            ariaDescribedBy="search-description"
           />
           {params.search && isFetching && <LoadingIndicator />}
         </div>
 
-        <div className="min-h-[24px] mt-1">
+        <ResultsSummary ref={resultsSummaryRef}>
           {isError && <ErrorMessage message="There was a problem fetching your search results" />}
           {!isError && !isFetching && params.search && (
             <AccessibleResultsSummary
-              ref={resultsSummaryRef}
               currentPage={currentPage}
               totalPages={totalPages}
               totalItems={totalResults}
               pageSize={20}
             />
           )}
-        </div>
+        </ResultsSummary>
       </div>
 
       <div className="min-h-8">
@@ -133,6 +133,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             onPageChange={handlePageChange}
             readonly={isFetching}
             disableKeyboardNav
+            aria-hidden
           />
         )}
       </div>
