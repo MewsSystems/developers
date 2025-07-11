@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +27,10 @@ namespace ExchangeRateUpdater
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var serviceProvider = Startup.ConfigureServices();
+
+                var provider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
                 var rates = await provider.GetExchangeRatesAsync(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
