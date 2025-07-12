@@ -22,13 +22,26 @@ export const Body = () => {
   const {
     searchMovies,
     loading,
+    setLoading,
     searchMoviesByQuery,
     searchQuery,
     setSearchQuery,
     setCurrentPage,
     currentPage,
     error,
+    debouncedQuery,
+    setDebouncedQuery,
   } = useMovieContext();
+
+  useEffect(() => {
+    setLoading(true);
+    const timeout = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
+
+    // Clear timeout if the component unmounts or searchQuery changes
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
 
   useEffect(() => {
     const newPage = page ? parseInt(page) : 1;
@@ -44,13 +57,13 @@ export const Body = () => {
 
   useEffect(() => {
     // If there is a search query, fetch movies based on that query
-    if (searchQuery && searchQuery.trim() !== "") {
-      searchMoviesByQuery(searchQuery, currentPage);
-    } else if (searchQuery === "" || searchQuery === undefined) {
+    if (debouncedQuery && debouncedQuery.trim() !== "") {
+      searchMoviesByQuery(debouncedQuery, currentPage);
+    } else if (debouncedQuery === "" || debouncedQuery === undefined) {
       // If no search query, fetch popular movies default list
       searchMovies();
     }
-  }, [currentPage, searchQuery]);
+  }, [currentPage, debouncedQuery]);
 
   if (error) {
     return (
@@ -83,7 +96,6 @@ export const Body = () => {
         onChange={(e) => {
           setCurrentPage(1);
           setSearchQuery(e.target.value);
-          searchMoviesByQuery(e.target.value, currentPage);
         }}
         value={searchQuery}
       />

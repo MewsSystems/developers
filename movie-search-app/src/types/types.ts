@@ -23,6 +23,7 @@ export type MovieContextType = {
   movies: Movie[]; // Movie list
   movieDetails: Movie; // Details of a single movie
   loading: boolean;
+  setLoading: (loading: boolean) => void; // Function to set loading state
   error: string | null;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -33,4 +34,6 @@ export type MovieContextType = {
   itemsPerPage: number;
   currentPage: number;
   totalPages: number;
+  debouncedQuery: string;
+  setDebouncedQuery: (query: string) => void;
 }

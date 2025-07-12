@@ -14,6 +14,7 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1); // Current page number, default to 1 if not provided
   const [totalPages, setTotalPages] = useState(1); // Number of items per page
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
   const itemsPerPage = 20; // Number of items per page
 
@@ -92,6 +93,7 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
       value={{
         movies,
         loading,
+        setLoading,
         error,
         searchMovies,
         movieDetails,
@@ -103,6 +105,8 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
         setCurrentPage,
         totalPages,
         searchMoviesByQuery,
+        debouncedQuery,
+        setDebouncedQuery
       }}
     >
       {children}
