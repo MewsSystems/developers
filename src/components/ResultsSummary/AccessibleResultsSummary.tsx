@@ -1,6 +1,4 @@
-'use client';
-
-import { type HTMLProps, useEffect, useState } from 'react';
+import { type HTMLProps, useEffect, useMemo, useState } from 'react';
 
 export interface AccessibleResultsSummaryProps extends HTMLProps<HTMLDivElement> {
   currentPage: number;
@@ -8,6 +6,7 @@ export interface AccessibleResultsSummaryProps extends HTMLProps<HTMLDivElement>
   totalItems: number;
   pageSize: number;
   addSearchGuidance?: boolean;
+  isHidden?: boolean;
 }
 
 export function AccessibleResultsSummary({
@@ -16,42 +15,52 @@ export function AccessibleResultsSummary({
   totalItems,
   pageSize,
   addSearchGuidance = false,
+  isHidden = false,
   ...rest
 }: AccessibleResultsSummaryProps) {
   const isNoResults = totalItems === 0;
 
   const summary = isNoResults
     ? 'No results match your search'
-    : `Page ${currentPage} of ${totalPages}. Results ${(currentPage - 1) * pageSize + 1} to ${Math.min(currentPage * pageSize, totalItems)} of ${totalItems}.`;
+    : `Page ${currentPage} of ${totalPages}. Results ${(currentPage - 1) * pageSize + 1} to ${Math.min(
+        currentPage * pageSize,
+        totalItems
+      )} of ${totalItems}.`;
 
-  const searchGuidance = addSearchGuidance
-    ? `To start a new search navigate to the search input above.`
+  const guidance = addSearchGuidance
+    ? 'To start a new search navigate to the search input above.'
     : '';
 
-  const [displayedSummary, setDisplayedSummary] = useState(summary);
-  const [displayedSearchGuidance, setDisplayedSearchGuidance] = useState(searchGuidance);
+  const announcement = useMemo(() => {
+    if (isHidden) return '';
+    return `${summary}${guidance ? ' ' + guidance : ''}`;
+  }, [isHidden, summary, guidance]);
+
+  const [ariaMessage, setAriaMessage] = useState(announcement);
 
   useEffect(() => {
-    // Clear, then after timer, show the new summary (to trigger screen reader re-announcement)
-    setDisplayedSummary('');
-    setDisplayedSearchGuidance('');
+    setAriaMessage('');
     const timeout = setTimeout(() => {
-      setDisplayedSummary(summary);
-      setDisplayedSearchGuidance(searchGuidance);
+      setAriaMessage(announcement);
     }, 100);
+
     return () => clearTimeout(timeout);
-  }, [summary, searchGuidance]);
+  }, [announcement]);
 
   return (
     <div
       role="region"
       aria-label="Search results summary"
-      aria-live="polite"
       className="text-cyan-700 text-sm text-center"
       {...rest}
     >
-      {displayedSummary}
-      {displayedSearchGuidance && <span className="sr-only">{displayedSearchGuidance}</span>}
+      {/* Screen reader only announcement (always present for live updates) */}
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {ariaMessage}
+      </span>
+
+      {/* Visible summary, only shown when not hidden */}
+      {!isHidden && <span aria-hidden="true">{summary}</span>}
     </div>
   );
 }

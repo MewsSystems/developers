@@ -76,6 +76,7 @@ const baseColors = {
 };
 
 const config: Config = {
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './.storybook/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {

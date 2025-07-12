@@ -3,9 +3,7 @@ import { ChipList } from '@/components/ChipList';
 import { formatPostImageAlt, formatRuntime } from '@/lib/format';
 import { LargeMoviePoster } from '../MoviePoster';
 import { Card } from '@/components/Card';
-import { DescriptionListItem } from '@/components/TermDetail';
-import { ReleaseDate } from '@/components/ReleaseDate';
-import { Score } from '@/components/Score';
+import { DescriptionListItem, ReleaseDate, Score } from '@/components/DescriptionListItem';
 import { OverviewContent } from '@/components/MovieDetailsView/OverviewContent';
 
 interface Props {

@@ -28,7 +28,7 @@ describe('MovieListItem', () => {
   it('renders correct href (slug, search, page) in the link', () => {
     render(<MovieListItem {...BASE_PROPS} />);
     const link = screen.getByRole('link', { name: /test movie/i });
-    // The real slug is created by createMovieSlug
+
     expect(link).toHaveAttribute('href', expect.stringContaining('/movies/123-test-movie'));
     expect(link).toHaveAttribute('href', expect.stringContaining('search=action'));
     expect(link).toHaveAttribute('href', expect.stringContaining('page=2'));
@@ -37,6 +37,7 @@ describe('MovieListItem', () => {
   it('omits page param if not present', () => {
     render(<MovieListItem {...BASE_PROPS} page={undefined} />);
     const link = screen.getByRole('link', { name: /test movie/i });
+
     expect(link).toHaveAttribute('href', expect.stringContaining('search=action'));
     expect(link).not.toHaveAttribute('href', expect.stringContaining('page='));
   });
@@ -46,26 +47,28 @@ describe('MovieListItem', () => {
       ...BASE_PROPS,
       movie: { ...BASE_PROPS.movie, original_title: 'Das Boot' },
     };
+
     render(<MovieListItem {...props} />);
+
     expect(screen.getByText('Das Boot')).toBeInTheDocument();
   });
 
   it('does NOT render original title if same as title', () => {
     render(<MovieListItem {...BASE_PROPS} />);
-    // Only present as heading, not as subtitle/italic
+
     const subtitles = screen.queryAllByText('Test Movie');
     expect(subtitles.some((e) => e.tagName.toLowerCase() === 'p')).toBe(false);
   });
 
   it('renders formatted release date using formatDate', () => {
     render(<MovieListItem {...BASE_PROPS} />);
-    // formatDate('2020-01-01') = '01 Jan 2020' (en-GB)
+
     expect(screen.getByText(/01 Jan 2020/)).toBeInTheDocument();
   });
 
   it('renders formatted score using formatVoteFromSearch', () => {
     render(<MovieListItem {...BASE_PROPS} />);
-    // formatVoteFromSearch(8.1, 1234) = Math.round(8.1*10)+'%' = '81%'
+
     expect(screen.getByText(/81%/)).toBeInTheDocument();
   });
 
@@ -74,7 +77,9 @@ describe('MovieListItem', () => {
       ...BASE_PROPS,
       movie: { ...BASE_PROPS.movie, vote_count: 0 },
     };
+
     render(<MovieListItem {...props} />);
+
     expect(screen.getByText(/no votes/i)).toBeInTheDocument();
   });
 
@@ -83,7 +88,9 @@ describe('MovieListItem', () => {
       ...BASE_PROPS,
       movie: { ...BASE_PROPS.movie, release_date: '' },
     };
+
     render(<MovieListItem {...props} />);
+
     expect(screen.getByText(/unknown/i)).toBeInTheDocument();
   });
 
@@ -92,7 +99,9 @@ describe('MovieListItem', () => {
       ...BASE_PROPS,
       movie: { ...BASE_PROPS.movie, overview: '' },
     };
+
     render(<MovieListItem {...props} />);
+
     expect(screen.queryByText('A cool movie.')).not.toBeInTheDocument();
   });
 });

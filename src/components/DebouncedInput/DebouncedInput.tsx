@@ -51,7 +51,7 @@ export function DebouncedInput({
       placeholder={placeholder}
       value={internalValue}
       onChange={handleChange}
-      className={className}
+      className={`border border-cyan-800 bg-white p-2 flex-1 rounded ${className}`}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
     />

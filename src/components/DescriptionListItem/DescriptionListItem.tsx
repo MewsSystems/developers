@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-interface TermDetailProps {
+interface DescriptionListItemProps {
   term: string;
   detail: ReactNode;
   termClassName?: string;
@@ -12,7 +12,7 @@ export function DescriptionListItem({
   detail,
   termClassName = '',
   detailClassName = '',
-}: TermDetailProps) {
+}: DescriptionListItemProps) {
   return (
     <>
       <dt

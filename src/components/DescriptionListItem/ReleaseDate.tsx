@@ -1,5 +1,5 @@
 import { formatDate } from '@/lib/format';
-import { DescriptionListItem } from '@/components/TermDetail';
+import { DescriptionListItem } from '@/components/DescriptionListItem';
 
 interface ReleaseDateProps {
   date: string;

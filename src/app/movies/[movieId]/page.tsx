@@ -1,5 +1,5 @@
-import { fetchMovieDetails } from '@/lib/fetch/fetchMovieDetails';
-import MovieDetailsSection from '@/features/movies/MovieDetailsSection';
+import { fetchMovieDetails } from '@/lib/fetch/app-serverside/fetchMovieDetails';
+import { MovieDetailsSection } from '@/features/movies/MovieDetailsSection';
 import { movieIdSlugSchema } from '@/lib/slug';
 
 export const revalidate = 3600;

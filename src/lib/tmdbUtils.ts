@@ -1,4 +1,4 @@
-import { fetchTMDB } from '@/lib/fetch/fetchTMDB';
+import { fetchTMDB } from '@/lib/fetch/api/fetchTMDB';
 import type { TMDBConfigurationResponse, TMDBMovie, TMDBMovieDetail } from '@/types/tmdb';
 
 const revalidate = Number(process.env.MOVIES_CONFIGURATION_REVALIDATE ?? '7200');

@@ -1,22 +1,18 @@
-// BackToSearchLink.test.tsx
-
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BackToSearchLink } from './BackToSearchLink';
 
-// Define the mock type for search params
 type SearchParamsMock = {
   get: (key: string) => string | null;
 };
 
-// Mock useSearchParams from next/navigation
 vi.mock('next/navigation', () => ({
   useSearchParams: vi.fn(),
 }));
 
 import { useSearchParams } from 'next/navigation';
-// Cast the import to a ViTest mock
+
 const mockedUseSearchParams = useSearchParams as unknown as ReturnType<typeof vi.fn>;
 
 describe('BackToSearchLink', () => {

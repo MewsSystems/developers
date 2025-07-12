@@ -3,9 +3,8 @@ import { createMovieSlug } from '@/lib/slug';
 import { formatPostImageAlt } from '@/lib/format';
 import { MovieSearchResult } from '@/types/api';
 import { MoviePoster } from '@/components/MoviePoster';
-import { ReleaseDate } from '@/components/ReleaseDate';
-import { Score } from '@/components/Score';
-import { Card } from '@/components//Card';
+import { ReleaseDate, Score } from '@/components/DescriptionListItem';
+import { Card } from '@/components/Card';
 
 interface Props {
   movie: MovieSearchResult & {

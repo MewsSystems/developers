@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useRef } from 'react';
-import { fetchMoviesClient } from '@/lib/fetch/fetchMoviesClient';
+import { fetchMoviesClient } from '@/lib/fetch/app-clientside/fetchMoviesClient';
 import { LoadingIndicator } from '@/components/LoadingIndicator';
 import { MovieListItem, MovieListSkeleton } from '@/components/MovieListItem';
 import { Pagination } from '@/components/Pagination';
@@ -103,7 +103,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
             value={params.search}
             onChange={handleInputValue}
             placeholder="Search movies..."
-            className="border border-cyan-800 bg-white p-2 pr-6 flex-1 rounded"
+            className="pr-6"
             ariaLabel="Search movies"
             ariaDescribedBy="search-description"
           />
@@ -112,14 +112,13 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
 
         <ResultsSummary ref={resultsSummaryRef}>
           {isError && <ErrorMessage message="There was a problem fetching your search results" />}
-          {!isError && !isFetching && params.search && (
-            <AccessibleResultsSummary
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={totalResults}
-              pageSize={20}
-            />
-          )}
+          <AccessibleResultsSummary
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalResults}
+            pageSize={20}
+            isHidden={isError || isFetching || !params.search}
+          />
         </ResultsSummary>
       </div>
 

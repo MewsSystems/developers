@@ -1,4 +1,4 @@
-import { DescriptionListItem } from '@/components/TermDetail';
+import { DescriptionListItem } from '@/components/DescriptionListItem';
 import { formatVote } from '@/lib/format';
 
 interface ScoreProps {

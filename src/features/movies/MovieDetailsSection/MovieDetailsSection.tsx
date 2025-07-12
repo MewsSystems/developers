@@ -7,7 +7,7 @@ type Props = {
   error?: string | null;
 };
 
-export default function MovieDetailsSection({ movieData, error }: Props) {
+export function MovieDetailsSection({ movieData, error }: Props) {
   if (error) return <p>Error loading movie details.</p>;
   if (!movieData) return <p>No movie data found.</p>;
 

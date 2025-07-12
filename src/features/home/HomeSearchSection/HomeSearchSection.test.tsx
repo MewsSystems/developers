@@ -8,6 +8,19 @@ import { createTestQueryClient } from '@/test/utils';
 
 let originalScrollTo: typeof window.scrollTo;
 
+function setSearchParams(params: Record<string, string | number | undefined>) {
+  const searchParams = new URLSearchParams();
+  for (const key in params) {
+    const value = params[key];
+    if (value !== undefined) {
+      searchParams.set(key, String(value));
+    }
+  }
+
+  const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+  window.history.pushState({}, '', newUrl);
+}
+
 beforeAll(() => {
   originalScrollTo = window.scrollTo;
   window.scrollTo = vi.fn();
@@ -18,6 +31,7 @@ afterAll(() => {
 
 function renderWithClient(initialSearch = '', initialPage = 1) {
   const queryClient = createTestQueryClient();
+
   render(
     <QueryClientProvider client={queryClient}>
       <HomeSearchSection initialSearch={initialSearch} initialPage={initialPage} />
@@ -201,6 +215,82 @@ describe('HomeSearchSection', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Movie Page 3/)).toBeInTheDocument();
+    });
+  });
+
+  it('updates the title to include search term', async () => {
+    server.use(
+      http.get('/api/movies', ({ request }) => {
+        const url = new URL(request.url);
+        const search = url.searchParams.get('search');
+        const page = url.searchParams.get('page') ?? '1';
+
+        return HttpResponse.json({
+          results: [
+            {
+              id: Number(page),
+              title: `Mocked movie for "${search}" page ${page}`,
+              original_title: `Mocked movie for "${search}" page ${page}`,
+              release_date: '2000-01-01',
+              vote_average: 7.5,
+              overview: `Overview for ${search} page ${page}`,
+              poster_url: { default: null },
+            },
+          ],
+          total_pages: 1,
+          total_results: 1,
+        });
+      })
+    );
+
+    setSearchParams({ search: 'inception', page: 1 });
+    renderWithClient();
+
+    await waitFor(() => {
+      expect(document.title).toBe('Search: inception | MovieSearch');
+    });
+  });
+
+  it('updates the title to include search and page > 1', async () => {
+    server.use(
+      http.get('/api/movies', ({ request }) => {
+        const url = new URL(request.url);
+        const search = url.searchParams.get('search');
+        const page = url.searchParams.get('page') ?? '1';
+
+        return HttpResponse.json({
+          results: [
+            {
+              id: Number(page),
+              title: `Mocked movie for "${search}" page ${page}`,
+              original_title: `Mocked movie for "${search}" page ${page}`,
+              release_date: '2000-01-01',
+              vote_average: 7.5,
+              overview: `Overview for ${search} page ${page}`,
+              poster_url: { default: null },
+            },
+          ],
+          total_pages: 3,
+          total_results: 60,
+        });
+      })
+    );
+
+    setSearchParams({ search: 'batman', page: 3 });
+    renderWithClient();
+
+    await waitFor(() => {
+      expect(document.title).toBe('Search: batman (Page 3) | MovieSearch');
+    });
+  });
+
+  it('shows default title when no search is active', async () => {
+    setSearchParams({});
+
+    renderWithClient();
+
+    await waitFor(() => {
+      expect(document.title).toBe('MovieSearch');
     });
   });
 });

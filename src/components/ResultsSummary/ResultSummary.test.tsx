@@ -7,6 +7,7 @@ beforeEach(() => {
   vi.useFakeTimers();
 });
 afterEach(() => {
+  vi.runOnlyPendingTimers();
   vi.useRealTimers();
 });
 
@@ -21,7 +22,7 @@ describe('ResultsSummary', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 
-  it('adds addSearchGuidance=true to AccessibleResultsSummary when focused', () => {
+  it('adds addSearchGuidance=true to AccessibleResultsSummary when focused', async () => {
     render(
       <ResultsSummary>
         <AccessibleResultsSummary currentPage={1} totalPages={1} totalItems={1} pageSize={20} />
@@ -29,8 +30,10 @@ describe('ResultsSummary', () => {
     );
 
     const container = screen.getByTestId('results-summary-container');
+
     fireEvent.focus(container);
 
+    await act(() => Promise.resolve()); // let React flush updates
     act(() => {
       vi.runAllTimers();
     });
@@ -42,7 +45,7 @@ describe('ResultsSummary', () => {
     ).toBeInTheDocument();
   });
 
-  it('removes addSearchGuidance (guidance disappears) on blur', () => {
+  it('removes addSearchGuidance (guidance disappears) on blur', async () => {
     render(
       <ResultsSummary>
         <AccessibleResultsSummary currentPage={1} totalPages={1} totalItems={1} pageSize={20} />
@@ -50,8 +53,10 @@ describe('ResultsSummary', () => {
     );
 
     const container = screen.getByTestId('results-summary-container');
+
     fireEvent.focus(container);
 
+    await act(() => Promise.resolve());
     act(() => {
       vi.runAllTimers();
     });
@@ -63,7 +68,11 @@ describe('ResultsSummary', () => {
     ).toBeInTheDocument();
 
     fireEvent.blur(container);
-    vi.runAllTimers();
+
+    await act(() => Promise.resolve());
+    act(() => {
+      vi.runAllTimers();
+    });
 
     expect(
       screen.queryByText(/to start a new search navigate to the search input above/i, {
@@ -115,7 +124,7 @@ describe('ResultsSummary', () => {
     expect(container).toHaveClass('bg-cyan-100');
   });
 
-  it('can handle multiple children and only injects addSearchGuidance to AccessibleResultsSummary', () => {
+  it('can handle multiple children and only injects addSearchGuidance to AccessibleResultsSummary', async () => {
     render(
       <ResultsSummary>
         <div data-testid="first">First</div>
@@ -128,8 +137,10 @@ describe('ResultsSummary', () => {
     expect(screen.getByTestId('last')).toBeInTheDocument();
 
     const container = screen.getByTestId('results-summary-container');
+
     fireEvent.focus(container);
 
+    await act(() => Promise.resolve());
     act(() => {
       vi.runAllTimers();
     });

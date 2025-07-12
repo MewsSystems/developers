@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { fetchTMDB } from '@/lib/fetch/fetchTMDB';
+import { fetchTMDB } from '@/lib/fetch/api/fetchTMDB';
 import type { TMDBMovieDetail } from '@/types/tmdb';
 import type { APIResponse, MovieDetailResponse } from '@/types/api';
 import { ApiError } from '@/lib/apiError';

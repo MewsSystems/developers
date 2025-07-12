@@ -9,10 +9,16 @@ const meta: Meta<typeof AccessibleResultsSummary> = {
     docs: {
       description: {
         component: `
-The **AccessibleResultsSummary** component provides a concise, accessible summary of search results for assistive technology users. It is built to be used with the **ResultSummary** component.
-It automatically updates to announce result changes via \`aria-live="polite"\`, and uses a short timer to clear and then reset the text content, ensuring that screen readers reliably announce the update—even when the summary string is similar or identical to the previous one.
+The **AccessibleResultsSummary** component provides a concise, accessible summary of search results for assistive technology users. It should be used alongside the **ResultsSummary** container.
 
-**Tip:** The \`addSearchGuidance\` prop adds a visually hidden (\`sr-only\`) guidance message for users, for enhanced accessibility on focus or as-needed.
+Key features:
+- Uses \`aria-live="polite"\` and \`aria-atomic="true"\` for reliable screen reader announcements.
+- Separates **visible text** from **screen reader text**, ensuring accessibility and UX.
+- Uses a delayed update pattern to ensure changes are picked up by assistive tech.
+- \`addSearchGuidance\` adds extra instruction text for screen reader users.
+- \`isHidden\` can be used to visually hide the component (keeping it accessible).
+
+_Note: It is intended to be rendered persistently (not conditionally), and updated via props._
         `,
       },
     },
@@ -20,18 +26,28 @@ It automatically updates to announce result changes via \`aria-live="polite"\`, 
   argTypes: {
     currentPage: {
       control: { type: 'number', min: 1 },
-      description: 'The current page being viewed',
+      description: 'The current results page',
     },
     totalPages: {
       control: { type: 'number', min: 1 },
-      description: 'The total number of result pages',
+      description: 'Total number of available pages',
     },
-    totalItems: { control: { type: 'number', min: 0 }, description: 'The total number of results' },
-    pageSize: { control: { type: 'number', min: 1 }, description: 'Results shown per page' },
+    totalItems: {
+      control: { type: 'number', min: 0 },
+      description: 'Total number of search results',
+    },
+    pageSize: {
+      control: { type: 'number', min: 1 },
+      description: 'Number of results per page',
+    },
     addSearchGuidance: {
       control: 'boolean',
       description:
-        'If true, appends a visually-hidden guidance message for assistive tech (screen readers) only.',
+        'Adds an extra visually-hidden message for screen reader users about starting a new search.',
+    },
+    isHidden: {
+      control: 'boolean',
+      description: 'If true, hides the text.',
     },
   },
 };
@@ -88,7 +104,25 @@ export const WithSearchGuidance: Story = {
     docs: {
       description: {
         story:
-          'Shows the summary with the visually-hidden search guidance appended for accessibility. This is not visible, but is available to screen readers.',
+          'Adds a screen-reader-only message that provides guidance on how to begin a new search. This message is not visible to sighted users.',
+      },
+    },
+  },
+};
+
+export const HiddenFromSightedUsers: Story = {
+  args: {
+    currentPage: 2,
+    totalPages: 5,
+    totalItems: 100,
+    pageSize: 20,
+    isHidden: true,
+    addSearchGuidance: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'This version hides the summary',
       },
     },
   },
