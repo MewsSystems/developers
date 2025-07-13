@@ -48,6 +48,8 @@ export function DebouncedInput({
   return (
     <input
       type="text"
+      role="searchbox"
+      autoComplete="off"
       placeholder={placeholder}
       value={internalValue}
       onChange={handleChange}

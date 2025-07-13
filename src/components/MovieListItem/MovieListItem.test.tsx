@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MovieListItem } from './MovieListItem';
+import { createMovieSlug } from '@/lib/slug';
 
 const BASE_PROPS = {
   movie: {
@@ -103,5 +104,22 @@ describe('MovieListItem', () => {
     render(<MovieListItem {...props} />);
 
     expect(screen.queryByText('A cool movie.')).not.toBeInTheDocument();
+  });
+
+  it('renders heading with correct id from slug', () => {
+    render(<MovieListItem {...BASE_PROPS} />);
+    const slug = createMovieSlug(BASE_PROPS.movie.id, BASE_PROPS.movie.original_title);
+    const heading = screen.getByRole('heading', { name: /test movie/i });
+    expect(heading).toHaveAttribute('id', slug);
+  });
+
+  it('slug in heading id matches slug in link href', () => {
+    render(<MovieListItem {...BASE_PROPS} />);
+    const heading = screen.getByRole('heading', { name: /test movie/i });
+    const link = screen.getByRole('link', { name: /test movie/i });
+    // Extract slug from href
+    const href = link.getAttribute('href') || '';
+    const id = heading.getAttribute('id');
+    expect(href).toContain(`/movies/${id}`);
   });
 });

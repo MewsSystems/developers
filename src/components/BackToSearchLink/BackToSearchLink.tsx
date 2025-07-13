@@ -3,8 +3,14 @@
 import { useSearchParams } from 'next/navigation';
 import { FaAngleLeft } from 'react-icons/fa6';
 import Link from 'next/link';
+import { MovieDetailResponse } from '@/types/api';
+import { createMovieSlug } from '@/lib/slug';
 
-export function BackToSearchLink() {
+interface BackToSearchLinkProps {
+  movie: MovieDetailResponse;
+}
+
+export function BackToSearchLink({ movie }: BackToSearchLinkProps) {
   const searchParams = useSearchParams();
   const search = searchParams.get('search');
   const page = searchParams.get('page');
@@ -14,11 +20,12 @@ export function BackToSearchLink() {
 
   let href = '/';
   let text = 'Search for more movies';
+  const hash = search ? `#${createMovieSlug(movie.id, movie.original_title)}` : '';
 
   if (search) {
     const query = new URLSearchParams({ search });
     if (page && page !== '1') query.set('page', page);
-    href = `/?${query.toString()}`;
+    href = `/?${query.toString()}${hash}`;
     text = 'Go back to search';
   }
 

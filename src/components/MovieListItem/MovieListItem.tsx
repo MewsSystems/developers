@@ -24,7 +24,7 @@ export function MovieListItem({ movie, search, page }: Props) {
     <Card className={movieListItemContainerClasses}>
       <MoviePoster posterUrl={movie.poster_url} alt={formatPostImageAlt(movie.title)} />
       <div className="flex-1 pt-1 sm:pt-0">
-        <h3>
+        <h3 id={slug}>
           <Link
             href={{
               pathname: `/movies/${slug}`,

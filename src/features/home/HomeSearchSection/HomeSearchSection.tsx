@@ -12,6 +12,7 @@ import { DebouncedInput } from '@/components/DebouncedInput';
 import { moviesQueryKey } from '@/lib/queryKeys';
 import { useSsrHydratedUrlState } from '@/hooks/useSsrHydratedUrlState';
 import { AccessibleResultsSummary, ResultsSummary } from '@/components/ResultsSummary';
+import { useRemoveHashOnScroll } from '@/hooks/useRemoveHashOnScroll';
 
 const parsePageParam = (value: string | null): number => {
   let page = 1;
@@ -34,6 +35,8 @@ interface Props {
 }
 
 export function HomeSearchSection({ initialSearch, initialPage }: Props) {
+  useRemoveHashOnScroll();
+
   const { params, setParams } = useSsrHydratedUrlState({
     initialParams: { search: initialSearch, page: initialPage },
     paramParse: {
@@ -90,7 +93,7 @@ export function HomeSearchSection({ initialSearch, initialPage }: Props) {
     : 'MovieSearch';
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" role="search">
       <title>{title}</title>
       <h1 className="text-xl font-extrabold text-stone-950 mb-1">Welcome to MovieSearch</h1>
       <p id="search-description" className="text-stone-700">

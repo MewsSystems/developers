@@ -12,10 +12,10 @@ export function MovieDetailsSection({ movieData, error }: Props) {
   if (!movieData) return <p>No movie data found.</p>;
 
   return (
-    <section className="flex flex-col requires-wide-layout gap-3">
+    <section className="flex flex-col requires-wide-layout gap-2 sm:gap-3">
       <title>{`Search for movies: ${movieData.title}`}</title>
       {movieData.overview && <meta name="description" content={movieData.overview} />}
-      <BackToSearchLink />
+      <BackToSearchLink movie={movieData} />
       <MovieDetailsView movie={movieData} />
     </section>
   );

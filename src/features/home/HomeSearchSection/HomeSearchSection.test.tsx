@@ -293,4 +293,41 @@ describe('HomeSearchSection', () => {
       expect(document.title).toBe('MovieSearch');
     });
   });
+
+  it('removes the hash from the URL after user scrolls (useRemoveHashOnScroll)', async () => {
+    window.history.replaceState(
+      {},
+      '',
+      window.location.pathname + window.location.search + '#some-anchor'
+    );
+
+    renderWithClient();
+
+    // Hash should be present before scroll
+    expect(window.location.hash).toBe('#some-anchor');
+
+    // Fire a scroll event
+    window.dispatchEvent(new Event('scroll'));
+
+    // Hash should be removed after scroll
+    await waitFor(() => {
+      expect(window.location.hash).toBe('');
+      // Also check that the URL does not end with the hash
+      expect(window.location.href.endsWith('#some-anchor')).toBe(false);
+    });
+  });
+
+  it('does NOT remove the hash if the user does not scroll', async () => {
+    window.history.replaceState(
+      {},
+      '',
+      window.location.pathname + window.location.search + '#another-anchor'
+    );
+    renderWithClient();
+
+    expect(window.location.hash).toBe('#another-anchor');
+    // Wait to ensure the effect doesn't remove the hash on its own
+    await new Promise((res) => setTimeout(res, 100));
+    expect(window.location.hash).toBe('#another-anchor');
+  });
 });

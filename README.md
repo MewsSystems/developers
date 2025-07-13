@@ -178,36 +178,19 @@ and spacing tokens that are very useful.
 
 ### General Tests
 
-I have written some tests around the endpoints 
-
-- `src/app/api/movies/route.test.ts`
-- `src/app/api/movies/[movieId]/route.test.ts`
-
-And some tests around the search page that are integration tests in style
-
-- `src/features/home/HomeSearchSection.test.tsx`
-
-I would normally write more tests. There are other tests that I could write for the HomeSearchSection,
-I would write more tests for the MovieDetailsSection, test the hydration handling on the serverside page.tsx as 
-well as test some of the components in isolation. I just didn't have the time here to do what I would have liked to do.
+Most of the components and pages currenly have unit tests, some tests would still be good for some of the utils in our lib folder
 
 ### Future improvements
 
-I had limited time so here are a few other things I would look at..
-
-- More tests
-- Manual testing around accessibility
-- Better display for small screens - I would love to put more time into this, I think the search page could be optimised quite nicely for smaller screens
-  - You could even add additional image sizes to the api endpoint and use different image sizes for different media queries
-- Optimise our endpoints but reducing the payload size - there is currently data we send to the frontend that isn't used
-- It's not the prettiest web app (I'm not really a designer) again with a bit more time it would be good to put more polish on it terms of looks
 - Add husky to get checks running on push
-- Start to move the components into their own folders and using barrel files. The folders would contain tests, storybook files and other sub-components
-- There is still some opportunity for code reuse in the endpoints and some of the components (such as MovieListItem and MovieDetailsView)
 - Set up a pipeline using github actions and establish a live environment
+- Functional tests
 
 ### What I would have done differently 
 
-I haven't actually worked much with Tanstack Query hydration in the past and in my real day to day job I would probably 
+I haven't actually worked much with Tanstack Query hydration in the past. I would probably 
 want to do a spike of that before committing to doing it with production code. Because I'm doing this in my free time
 I thought that try this new approach would make the challenge a bit more interesting for myself.
+
+I've focused on creating a small subset of components to show that I can create some basic components here, but I would
+normally consider adopting a component library such as shadcn/ui for some of the asic components

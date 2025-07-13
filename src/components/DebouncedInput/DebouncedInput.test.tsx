@@ -32,7 +32,7 @@ describe('DebouncedInput', () => {
       />
     );
 
-    const input = screen.getByRole('textbox', { name: ariaLabel });
+    const input = screen.getByRole('searchbox', { name: ariaLabel });
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue(initialValue);
 
@@ -43,7 +43,7 @@ describe('DebouncedInput', () => {
   it('updates internal state and debounces onChange call', async () => {
     render(<DebouncedInput value="" onChange={handleChange} debounceDelay={debounceDelay} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('searchbox');
     fireEvent.change(input, { target: { value: 'test' } });
 
     expect(input).toHaveValue('test');
@@ -57,7 +57,7 @@ describe('DebouncedInput', () => {
   it('resets internal state when `value` prop changes externally', () => {
     const { rerender } = render(<DebouncedInput value="foo" onChange={handleChange} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('searchbox');
     expect(input).toHaveValue('foo');
 
     rerender(<DebouncedInput value="bar" onChange={handleChange} />);
@@ -69,7 +69,7 @@ describe('DebouncedInput', () => {
       <DebouncedInput value="" onChange={handleChange} debounceDelay={debounceDelay} />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('searchbox');
     fireEvent.change(input, { target: { value: 'debounced' } });
 
     unmount();
@@ -88,7 +88,7 @@ describe('DebouncedInput', () => {
       />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('searchbox');
     expect(input).toHaveClass('custom-input');
     expect(input).toHaveAttribute('aria-describedby', 'desc');
   });
