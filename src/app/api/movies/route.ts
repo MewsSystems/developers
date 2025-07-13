@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { fetchTMDB } from '@/lib/fetch/api/fetchTMDB';
 import type { TMDBSearchResponse, TMDBMovie } from '@/types/tmdb';
 import type { APIResponse, MovieSearchResponse } from '@/types/api';
@@ -10,11 +9,7 @@ import {
   UNUSED_MOVIE_SEARCH_KEYS,
 } from '@/lib/tmdbUtils';
 import { ApiError } from '@/lib/apiError';
-
-const querySchema = z.object({
-  search: z.string().min(1),
-  page: z.coerce.number().int().positive().default(1),
-});
+import { movieSearchQuerySchema } from '@/lib/validation/movieSearchQuerySchema';
 
 export async function GET(
   req: NextRequest
@@ -23,7 +18,7 @@ export async function GET(
     const url = new URL(req.url);
     const query = Object.fromEntries(url.searchParams.entries());
 
-    const result = querySchema.safeParse(query);
+    const result = movieSearchQuerySchema.safeParse(query);
 
     if (!result.success) {
       throw new ApiError('Invalid query', 400);

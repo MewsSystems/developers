@@ -3,6 +3,7 @@ import { fetchMovies } from '@/lib/fetch/app-serverside/fetchMovies';
 import { HomeSearchSection } from '@/features/home/HomeSearchSection';
 import { getQueryClient } from '@/lib/getQueryClient';
 import { moviesQueryKey } from '@/lib/queryKeys';
+import { movieSearchQuerySchema } from '@/lib/validation/movieSearchQuerySchema';
 
 export const revalidate = 300;
 
@@ -11,21 +12,29 @@ interface HomePageProps {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const { search = '', page = '1' } = await searchParams;
-  const parsedPage = Number.isNaN(parseInt(page, 10)) ? 1 : parseInt(page, 10);
+  const rawParams = await searchParams;
+
+  const searchSchema = movieSearchQuerySchema.shape.search;
+  const pageSchema = movieSearchQuerySchema.shape.page;
+
+  const searchResult = searchSchema.safeParse(rawParams.search);
+  const pageResult = pageSchema.safeParse(rawParams.page);
+
+  const search = searchResult.success ? searchResult.data : '';
+  const page = pageResult.success ? pageResult.data : 1;
 
   const queryClient = getQueryClient();
 
   if (search) {
     await queryClient.prefetchQuery({
-      queryKey: moviesQueryKey(search, parsedPage),
-      queryFn: () => fetchMovies(search, parsedPage),
+      queryKey: moviesQueryKey(search, page),
+      queryFn: () => fetchMovies(search, page),
     });
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <HomeSearchSection initialSearch={search} initialPage={parsedPage} />
+      <HomeSearchSection initialSearch={search} initialPage={page} />
     </HydrationBoundary>
   );
 }
