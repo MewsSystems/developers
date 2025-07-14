@@ -21,14 +21,10 @@ export default async function MoviePage({ params }: MoviePageProps) {
   const match = parsedSlug.data.match(/^(\d+)-/);
   const movieId = match?.[1];
 
-  if (!movieId) {
-    return <section className="text-red-600 p-4">Could not extract a valid movie ID.</section>;
-  }
-
   let movieData = null;
   let fetchError = null;
   try {
-    movieData = await fetchMovieDetails(movieId);
+    movieData = await fetchMovieDetails(movieId!);
   } catch {
     fetchError = 'Failed to fetch movie details.';
   }

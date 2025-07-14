@@ -91,7 +91,7 @@ The project uses eslint and prettier to manage code format
 The basic idea here was to first build a working skeleton for the whole app and then be able to drill in to
 parts of the code later to make improvements and enhance and improve the experience. I have been very constrained
 in terms of time available to work on this so I aimed to get something that I could demo. There are lots of improvements
-that I would make and certainly in terms of process I would probably work a bit differently ifI was doing this for me day job.
+that I would make and certainly in terms of process I would probably work a bit differently if I was doing this for my day job.
 
 
 ### Why use Next.js
@@ -104,70 +104,15 @@ Next.js has the ability to set up backend api endpoints easily and also gives yo
 
 So it made sense to establish BFF for the frontend app.
 
-### data API
+### Site structure and caching strategy
 
-We have two data api endpoints
+You can find information about this on the [Site Structure Overview document](../docs/site-structure-and-caching.md)
 
- - The search `/api/movies?search=cars&page=3` 
-   - The code for which is in `src/app/api/movies/route.ts`
- - The movie details - `/api/movies/21192`
-   - The code for which is in `src/app/api/movies/[movieId]/route.ts`
 
-The search uses 
-- TMDB's search endpoint `https://api.themoviedb.org/3/search/movie?query=car&page=1`
-- and also the TMDB's configuration endpoint `https://api.themoviedb.org/3/configuration`
+### SSR Hydration Pattern with Tanstack Query
 
-The movie details uses 
-- TMDB's movie endpoint `https://api.themoviedb.org/3/movie/11` 
-- and also the TMDB's configuration endpoint `https://api.themoviedb.org/3/configuration`
-
-We assume that the data here will not change very often and take full advantage of the in memory caching 
-feature that has been added to fetch for Next.js. We establish cache times like the following
-- 5 mins for search results - many movies so might change more frequently that the other data
-- 1 hour for movie details - unlikely to change often
-- 2 hours for configuration - might rarely change
-
-Env variables are also established to allow these times to be controlled and adjusted
-
-Configuration is currently used to build the full image urls on both our endpoints. 
-The configuration response from TMDB is cached in memory - while cached it can be accessed relatively quickly with 
-benefits to all users of the endpoint. 
-
-Our endpoints build and aggregate data for the frontend to consume data from multiple sources but using a single request.
-
-### Client code
-
-I am using the App router here rather than the Page router in Next.
-
-We have two frontend pages  
-
-- The search page `/` - http://localhost:3000/?search=Cars&page=9
-    - The code for which starts in `src/app/page.tsx`
-- The movie details page `/movies/:movieId` - `http://localhost:3000/movies/1726-iron-man`
-    - The code for which starts in `src/app/movies/[movieId]/page.tsx`
-
-They use a share layout that is defined in `src/app/layout.tsx`
-
-Both the pages mentioned are serverside rendered they did a fetch to get teh data for the pages initial load
-and pass that data to the frontend for hydration - which again can take advantage of Next.js in memory caching. 
-Cache times can be configured in the env file.
-
-### Tanstack Query hydration
-
-I have also decided to use Tanstack Query hydration as a pattern.
-This allows the serverside render not only hydrate React and quickly present the HTML but also means the 
-Tanstack Query cache can be hydrated. Once loaded and configured on the frontend Tanstack Query can take 
-over the data loading and give the users benefits of frontend cache data while they go backwards 
-and forwards in the search page. 
-
-I have also used this on the movie details page. You could argue here that the frontend cache is not as useful 
-as caching on the search page. I also decide to be consistent across the two pages in how their data is initialised and hydrated.
-So we have a standard data loading pattern. 
-
-Currently the Next.js Link component isn't always able to provide "Soft navigation", 
-where routing is solely via the frontend JSON fetch rather instead a full component page load - but once this problem is resolved the page could take full
-advantage of cache. In the meantime the page can be cached by setting the revalidate time of page.
-
+For the search page we are using the SSR Hydration Pattern with Tanstack Query - you can read more about this in the
+[SSR Hydration Pattern with Tanstack Query document](../docs/hydration-pattern-with-tanstack-query.md)
 
 ### Styling
 
@@ -178,10 +123,11 @@ and spacing tokens that are very useful.
 
 ### General Tests
 
-Most of the components and pages currenly have unit tests, some tests would still be good for some of the utils in our lib folder
+Most of the components and pages currently have unit tests, some tests would still be good for some of the utils in our lib folder
 
 ### Future improvements
 
+- Additional error handling on the home page
 - Add husky to get checks running on push
 - Set up a pipeline using github actions and establish a live environment
 - Functional tests
@@ -192,5 +138,5 @@ I haven't actually worked much with Tanstack Query hydration in the past. I woul
 want to do a spike of that before committing to doing it with production code. Because I'm doing this in my free time
 I thought that try this new approach would make the challenge a bit more interesting for myself.
 
-I've focused on creating a small subset of components to show that I can create some basic components here, but I would
-normally consider adopting a component library such as shadcn/ui for some of the asic components
+I've focused on creating a small subset of components to show that I can work with basic HTML and think about semantic markup, but I would
+normally consider adopting a component library such as shadcn/ui for some of the basic components.

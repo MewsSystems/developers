@@ -6,6 +6,12 @@ vi.mock('@/components/BackToSearchLink', () => ({
   BackToSearchLink: () => <div>Mocked BackToSearchLink</div>,
 }));
 
+vi.mock('@/components/MovieDetailsView', () => ({
+  MovieDetailsView: ({ movie }: { movie: MovieDetailResponse }) => (
+    <div data-testid="mock-movie-details-view">Mocked MovieDetailsView: {movie.id}</div>
+  ),
+}));
+
 beforeAll(() => {
   process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000';
 });
@@ -69,15 +75,13 @@ describe('<MovieDetailsSection />', () => {
     expect(screen.getByText(/No movie data found/i)).toBeInTheDocument();
   });
 
-  it('renders the title, meta, and movie content when movieData is provided', () => {
+  it('renders the title, meta, and mocks for BackToSearchLink and MovieDetailsView', () => {
     render(<MovieDetailsSection movieData={mockMovie} />);
 
     expect(screen.getByText(/Mocked BackToSearchLink/i)).toBeInTheDocument();
-    expect(screen.getByText(/Inception/i)).toBeInTheDocument();
 
-    // Multiple copies due to responsive layout — don't use getByText
-    expect(screen.getAllByText(/A skilled thief enters dreams to steal secrets/i)).not.toHaveLength(
-      0
+    expect(screen.getByTestId('mock-movie-details-view')).toHaveTextContent(
+      `Mocked MovieDetailsView: ${mockMovie.id}`
     );
 
     const title = document.querySelector('title');
