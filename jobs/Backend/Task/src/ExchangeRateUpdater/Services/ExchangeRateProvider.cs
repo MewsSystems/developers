@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Models;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater.Services
 {
-    public class ExchangeRateProvider
+    public interface IExchangeRateProvider
+    {
+        IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies);
+    }
+
+    public class ExchangeRateProvider : IExchangeRateProvider
     {
         /// <summary>
         /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined
@@ -13,6 +19,8 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
+            
+
             return Enumerable.Empty<ExchangeRate>();
         }
     }
