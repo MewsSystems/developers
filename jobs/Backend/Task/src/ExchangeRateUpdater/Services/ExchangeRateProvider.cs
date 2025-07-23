@@ -38,12 +38,12 @@ namespace ExchangeRateUpdater.Services
             var currencyCodes = currencies.Select(c => c.Code).ToHashSet();
 
             var rates = doc.Descendants("radek")
-                       .Where(attr => currencyCodes.Contains(attr.Attribute("kod")?.Value))
-                       .Select(attr => new ExchangeRate(
-                               new(DefaultExchangeCode),
-                               new(attr.GetExchangeCode()),
-                               attr.GetExchangeRate() / attr.GetExchangeAmount())
-                       );
+                .Where(attr => currencyCodes.Contains(attr.GetExchangeCode()))
+                .Select(attr => new ExchangeRate(
+                        new(DefaultExchangeCode),
+                        new(attr.GetExchangeCode()),
+                        attr.GetExchangeRate() / attr.GetExchangeAmount())
+                );
 
             return rates;
         }

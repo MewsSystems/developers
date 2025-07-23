@@ -25,7 +25,6 @@ namespace ExchangeRateUpdater.Services
             {
                 var rates = await _exchangeRateProvider.GetExchangeRates(Constants.Currencies);
 
-                _logger.LogInformation("Successfully retrieved {rates.Count()} exchange rates:", rates.Count());
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from CNB:");
                 foreach (var rate in rates)
                 {
