@@ -5,7 +5,7 @@ namespace ExchangeRateUpdater.Services
 {
     public interface IExchangeRateRunner
     {
-        void Run();
+        Task Run();
     }
 
     public class ExchangeRateRunner : IExchangeRateRunner
@@ -19,16 +19,17 @@ namespace ExchangeRateUpdater.Services
             _exchangeRateProvider = exchangeRateProvider;
         }
 
-        public void Run()
+        public async Task Run()
         {
             try
             {
-                var rates = _exchangeRateProvider.GetExchangeRates(Constants.Currencies);
+                var rates = await _exchangeRateProvider.GetExchangeRates(Constants.Currencies);
 
                 _logger.LogInformation("Successfully retrieved {rates.Count()} exchange rates:", rates.Count());
+                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates from CNB:");
                 foreach (var rate in rates)
                 {
-                    _logger.LogInformation(rate.ToString());
+                    Console.WriteLine(rate.ToString());
                 }
             }
             catch (Exception ex)
