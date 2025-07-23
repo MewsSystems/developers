@@ -17,13 +17,10 @@ namespace ExchangeRateUpdater.Tests.Services
 
         public ExchangeRateProviderTests()
         {
-            // Register encoding provider to support windows-1250
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             _handlerMock = new Mock<HttpMessageHandler>();
             var httpClient = new HttpClient(_handlerMock.Object);
-            //_httpClientFactoryMock = new Mock<IHttpClientFactory>();
-            //_httpClientFactoryMock.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(httpClient);
 
             _optionsMock = new Mock<IOptions<CNBConfigurationOptions>>();
             _optionsMock.Setup(o => o.Value).Returns(new CNBConfigurationOptions
