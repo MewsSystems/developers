@@ -12,6 +12,11 @@ namespace ExchangeRateUpdater.Services
         Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
     }
 
+    /// <summary>
+    /// Information to retrieve the information was taken from:
+    /// https://www.cnb.cz/cs/casto-kladene-dotazy/Kurzy-devizoveho-trhu-na-www-strankach-CNB
+    /// There are three different formats to receive the information (HTML, TXT, XML).
+    /// </summary>
     public class ExchangeRateProvider : IExchangeRateProvider
     {
         private readonly ILogger<ExchangeRateProvider> _logger;
