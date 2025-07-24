@@ -1,18 +1,20 @@
 ﻿using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using System.Net;
 using System.Text;
 
 namespace ExchangeRateUpdater.Tests.Services
 {
     public class ExchangeRateProviderTests
     {
-        private readonly Mock<IHttpClientFactory> _httpClientFactoryMock;
         private readonly Mock<HttpMessageHandler> _handlerMock;
-
+        private readonly Mock<ILogger<ExchangeRateProvider>> _loggerMock;
         private readonly Mock<IOptions<CNBConfigurationOptions>> _optionsMock;
+
         private readonly ExchangeRateProvider _provider;
 
         public ExchangeRateProviderTests()
@@ -27,7 +29,10 @@ namespace ExchangeRateUpdater.Tests.Services
             {
                 DataURL = "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml"
             });
-            _provider = new ExchangeRateProvider(_optionsMock.Object, httpClient); // Adjust constructor if using IHttpClientFactory
+
+            _loggerMock = new Mock<ILogger<ExchangeRateProvider>>();
+
+            _provider = new ExchangeRateProvider(_optionsMock.Object, httpClient, _loggerMock.Object);
         }
 
         [Fact]
@@ -51,14 +56,17 @@ namespace ExchangeRateUpdater.Tests.Services
         public async Task GetExchangeRates_EmptyCurrency_ReturnsEmpty()
         {
             //Arrange
-            BuildingEmptyRequest();
             var currencies = new List<Currency>();
 
-            //Act
-            var rates = await _provider.GetExchangeRates(currencies);
+            //Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => _provider.GetExchangeRates(currencies));
+            Assert.Equal("currencies", exception.ParamName);
 
-            //Assert
-            Assert.Empty(rates);
+            _loggerMock.Verify(logger => logger.Log(LogLevel.Error, 
+                It.IsAny<EventId>(), 
+                It.Is<It.IsAnyType>((v, t) => true), 
+                It.IsAny<Exception>(), 
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once());
         }
 
         [Fact]
@@ -75,6 +83,33 @@ namespace ExchangeRateUpdater.Tests.Services
             Assert.Empty(rates);
         }
 
+        [Fact]
+        public async Task GetExchangeRates_HttpRequestFailure_LogsErrorAndReturnsEmpty()
+        {
+            // Arrange
+            var response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound
+            };
+            _handlerMock.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(response);
+
+            var currencies = new List<Currency> { new ("USD") };
+
+            // Act
+            var rates = await _provider.GetExchangeRates(currencies);
+
+            // Assert
+            Assert.Empty(rates);
+            _loggerMock.Verify(x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("HTTP request failed")),
+                It.IsAny<HttpRequestException>(),
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once());
+        }
+
         private void BuildingRequestSucceed()
         {
             var xmlContent = @"<?xml version=""1.0"" encoding=""UTF-8""?>
@@ -88,21 +123,6 @@ namespace ExchangeRateUpdater.Tests.Services
             var response = new HttpResponseMessage
             {
                 Content = new StringContent(xmlContent, Encoding.UTF8, "application/xml")
-            };
-            _handlerMock.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(response);
-        }
-
-        private void BuildingEmptyRequest()
-        {
-            var xmlContent = @"<?xml version='1.0' encoding='windows-1250'?>
-            <kurzy_vybrane_meny>
-                <kurz id='USD' kurz='23.450' mnozstvi='1' zeme='USA' />
-            </kurzy_vybrane_meny>";
-            var response = new HttpResponseMessage
-            {
-                Content = new StringContent(xmlContent, System.Text.Encoding.GetEncoding("windows-1250"))
             };
             _handlerMock.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
