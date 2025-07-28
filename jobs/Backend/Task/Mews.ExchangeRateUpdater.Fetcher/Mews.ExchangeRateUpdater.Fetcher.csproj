@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-Mews.ExchangeRateUpdater.Fetcher-c7fc8d98-8860-450c-8266-72ec15539001</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.7" />
+        <PackageReference Include="Polly" Version="8.6.2" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+        <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mews.ExchangeRateUpdater.Application\Mews.ExchangeRateUpdater.Application.csproj" />
+      <ProjectReference Include="..\Mews.ExchangeRateUpdater.Infrastructure\Mews.ExchangeRateUpdater.Infrastructure.csproj" />
+    </ItemGroup>
+</Project>

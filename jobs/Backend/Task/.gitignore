@@ -1,0 +1,74 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+# Build output
+/bin/
+/obj/
+/out/
+/publish/
+
+# NuGet packages
+/packages/
+/*.nupkg
+
+# Rider
+.idea/
+/*.sln.iml
+riderModule.iml
+_ReSharper.Caches/
+/*/.idea/
+/*.DotSettings.user
+
+# ReSharper
+*.DotSettings.user
+_ReSharper*/
+
+# Visual Studio
+.vs/
+/*.suo
+/*.user
+/*.userosscache
+/*.sln.docstates
+
+# VS Code
+.vscode/
+/*.code-workspace
+
+# Test results
+TestResults/
+/*.trx
+/*.coverage
+*.coveragexml
+coverage/
+
+# Logs
+logs/
+/*.log
+
+# Entity Framework
+Migrations/*Designer.cs
+Migrations/*Snapshot.cs
+
+# DotNet Watch
+dotnet-watch.json
+
+# Rider and Resharper caches
+*/.idea/
+*/.resharper/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*.local
+
+# Other
+*.db
+*.mdb
+*.sqlite
+*.db-*
