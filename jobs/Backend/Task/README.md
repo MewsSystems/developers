@@ -17,5 +17,7 @@ since CZK is the default
 
 You can test the solution using swagger (/swagger)
 
+The data used by the API comes from https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml
+
 ## Testing
-The solution includes tests for the main logic. It also tests the controller, that although not ideal, it tests the expected return of the API while no integration tests are present
+The solution includes tests for the main logic. It also tests the controller, that although not ideal, it tests the expected return of the API while no integration tests are present.
