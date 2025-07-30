@@ -11,21 +11,18 @@ namespace ExchangeRateUpdater.Parsers;
 
 public class CnbXmlParser : IExchangeRateParser
 {
-    public IEnumerable<ExchangeRate> Parse(string data, Currency baseCurrency)
+    public List<ExchangeRate> Parse(string data, Currency baseCurrency)
     {
         try
         {
             var dataDoc = XDocument.Parse(data);
-            var rates = dataDoc.Descendants("radek")
-                .Select(currency => new ExchangeRate(
-                    new Currency(currency.Attribute("kod")?.Value),
+            return dataDoc.Descendants("radek").Select(currency => new ExchangeRate(
                     baseCurrency,
+                    new Currency(currency.Attribute("kod")!.Value),
                     // make sure the comma is used as a decimal delimiter
                     decimal.Parse(currency.Attribute("kurz")?.Value!, CultureInfo.GetCultureInfo("cs-CZ")) /
-                    int.Parse(currency.Attribute("mnozstvi")?.Value!)
-                ));
-            return rates;
-
+                    int.Parse(currency.Attribute("mnozstvi")!.Value)
+                )).ToList();
         }
         catch (Exception ex)
         {

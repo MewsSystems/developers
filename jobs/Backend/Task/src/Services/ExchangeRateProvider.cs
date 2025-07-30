@@ -4,7 +4,6 @@ using System;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Exceptions;
-using ExchangeRateUpdater.Services;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.Http;
@@ -16,14 +15,14 @@ public class ExchangeRateProvider : IExchangeRateProvider
 {
     private readonly IMemoryCache _cache;
     private readonly HttpClient _httpClient;
-    private readonly ExchangeRateSourceResolver _sourceResolver;
+    private readonly IExchangeRateSettingsResolver _settingsResolver;
     private readonly List<string> _allowedCurrencies;
 
-    public ExchangeRateProvider(IMemoryCache cache, HttpClient httpClient, ExchangeRateSourceResolver sourceResolver, IConfiguration configuration)
+    public ExchangeRateProvider(IMemoryCache cache, HttpClient httpClient, IExchangeRateSettingsResolver settingsResolver, IConfiguration configuration)
     {
         _cache = cache;
         _httpClient = httpClient;
-        _sourceResolver = sourceResolver;
+        _settingsResolver = settingsResolver;
         _allowedCurrencies = configuration.GetSection("AllowedCurrencies").Get<List<string>>();
     }
 
@@ -35,32 +34,30 @@ public class ExchangeRateProvider : IExchangeRateProvider
 
         if (!_cache.TryGetValue(cacheKey, out List<ExchangeRate> rates))
         {
-            ExchangeRateSource source;
-            IExchangeRateParser parser;
+            ExchangeRateSettings settings;
             try
             {
-                (source, parser) = _sourceResolver.ResolveSourceAndParser(baseCurrency);
+                settings = _settingsResolver.ResolveSourceSettings(baseCurrency);
             }
 
             catch (InvalidOperationException ex)
             {
-                throw new ExternalExchangeRateApiException(ex.Message, ex);
+                throw new ExchangeRateApiException(ex.Message, ex);
             }
             try
             {
-                var response = await _httpClient.GetStringAsync(source.Url);
-                rates = parser.Parse(response, baseCurrency).ToList();
+                var response = await _httpClient.GetStringAsync(settings.Url);
+                rates = settings.Parser.Parse(response, baseCurrency).ToList();
             }
             catch (HttpRequestException ex)
             {
-                throw new ExternalExchangeRateApiException($"Failed to retrieve exchange rates from {source.Url}", ex);
+                throw new ExchangeRateApiException($"Failed to retrieve exchange rates from {settings.Url}", ex);
             }
-
             _cache.Set(cacheKey, rates, TimeSpan.FromMinutes(5));
         }
 
         var requestedCodes = new HashSet<string>(currencies.Select(c => c.Code));
-        return rates.Where(r => requestedCodes.Contains(r.SourceCurrency.Code));
+        return rates.Where(r => requestedCodes.Contains(r.TargetCurrency.Code));
     }
 
     private void ValidateCurrencies(List<Currency> currencies, Currency baseCurrency)
@@ -68,6 +65,11 @@ public class ExchangeRateProvider : IExchangeRateProvider
         if (!_allowedCurrencies.Contains(baseCurrency.Code.ToUpper()))
         {
             throw new ArgumentException($"Base currency '{baseCurrency}' is not allowed.");
+        }
+
+        if (!currencies.Any())
+        {
+            throw new ArgumentException("Target currencies cannot be empty.");
         }
 
         var unallowedCurrencies = currencies.Where(c => !_allowedCurrencies.Contains(c.Code.ToUpper())).ToList();

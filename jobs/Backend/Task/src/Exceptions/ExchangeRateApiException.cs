@@ -2,5 +2,5 @@ using System;
 
 namespace ExchangeRateUpdater.Exceptions;
 
-public class ExternalExchangeRateApiException(string message, Exception innerException)
+public class ExchangeRateApiException(string message, Exception innerException)
     : Exception(message, innerException);

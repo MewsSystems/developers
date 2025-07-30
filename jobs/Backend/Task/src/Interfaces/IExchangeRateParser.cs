@@ -5,5 +5,5 @@ namespace ExchangeRateUpdater.Interfaces;
 
 public interface IExchangeRateParser
 {
-    IEnumerable<ExchangeRate> Parse(string data, Currency baseCurrency);
+    List<ExchangeRate> Parse(string data, Currency baseCurrency);
 }

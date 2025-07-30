@@ -4,23 +4,22 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Parsers;
 
 namespace ExchangeRateUpdater.Services;
 
-public class ExchangeRateSourceResolver
+public class ExchangeRateSettingsResolver : IExchangeRateSettingsResolver
 {
     private readonly IConfiguration _configuration;
-    private readonly IParserFactory _parserFactory;
 
-    public ExchangeRateSourceResolver(IConfiguration configuration, IParserFactory parserFactory)
+    public ExchangeRateSettingsResolver(IConfiguration configuration)
     {
         _configuration = configuration;
-        _parserFactory = parserFactory;
     }
 
-    public (ExchangeRateSource Source, IExchangeRateParser Parser) ResolveSourceAndParser(Currency baseCurrency)
+    public ExchangeRateSettings ResolveSourceSettings(Currency baseCurrency)
     {
-        var sources = _configuration.GetSection("ExchangeRateSources").Get<List<ExchangeRateSource>>();
+        var sources = _configuration.GetSection("ExchangeRateSources").Get<List<ExchangeRateSources>>();
 
         var source = sources
             .FirstOrDefault(s => s.BaseCurrency.Equals(baseCurrency.Code, StringComparison.OrdinalIgnoreCase));
@@ -30,8 +29,8 @@ public class ExchangeRateSourceResolver
             throw new InvalidOperationException($"No exchange rate source found for base currency {baseCurrency.Code}");
         }
 
-        var parser = _parserFactory.CreateParser(source.ParserType);
+        var parser = ParserFactory.CreateParser(source.ParserType);
 
-        return (source, parser);
+        return new ExchangeRateSettings(source.Url, parser);
     }   
 }

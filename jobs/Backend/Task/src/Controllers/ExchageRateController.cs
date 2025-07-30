@@ -11,11 +11,11 @@ namespace ExchangeRateUpdater.Controllers;
 
 [ApiController]
 [Route("ExchangeRate")]
-public class ExchageRateController : ControllerBase
+public class ExchangeRateController : ControllerBase
 {
     private readonly IExchangeRateProvider _provider;
 
-    public ExchageRateController(IExchangeRateProvider provider)
+    public ExchangeRateController(IExchangeRateProvider provider)
     {
         _provider = provider;
     }
@@ -28,12 +28,7 @@ public class ExchageRateController : ControllerBase
         {
             return BadRequest("Currency codes cannot be empty.");
         }
-
-        if (string.IsNullOrWhiteSpace(baseCurrency))
-        {
-            return BadRequest("Base currency cannot be empty.");
-        }
-
+        
         var currencyObjects = currencies.Split(',')
             .Select(c => new Currency(c.Trim().ToUpper())).ToList();
 
@@ -41,20 +36,14 @@ public class ExchageRateController : ControllerBase
         {
             var exchangeRates = await _provider.GetExchangeRates(currencyObjects, new Currency(baseCurrency));
 
-            return Ok(exchangeRates.Select(er => new ExchangeRateResponse
-            {
-                SourceCurrency = er.SourceCurrency.Code,
-                TargetCurrency = er.TargetCurrency.Code,
-                ExchangeRate = er.Value
-            }));
+            return Ok(ExchangeRate.GetResponse(exchangeRates));
         }
         catch (ArgumentException ex)
         {
             return BadRequest(ex.Message);
         }
-        catch (ExternalExchangeRateApiException ex)
+        catch (ExchangeRateApiException ex)
         {
-            // Log the exception if logging is configured
             return StatusCode(503, $"Service Unavailable: {ex.Message}");
         }
     }

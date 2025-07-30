@@ -3,9 +3,9 @@ using System;
 
 namespace ExchangeRateUpdater.Parsers;
 
-public class ParserFactory : IParserFactory
+public static class ParserFactory
 {
-    public IExchangeRateParser CreateParser(string parserType)
+    public static IExchangeRateParser CreateParser(string parserType)
     {
         return parserType switch
         {
