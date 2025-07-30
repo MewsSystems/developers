@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExchangeRateUpdater.csproj" />
-  <Content Include="appsettings.test.json">
+    <Content Include="appsettings.test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
