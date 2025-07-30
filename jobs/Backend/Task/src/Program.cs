@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Services;
-using ExchangeRateUpdater.Parsers;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +15,15 @@ builder.Services.AddSingleton<IExchangeRateProvider, ExchangeRateProvider>();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 var app = builder.Build();
 
+app.UseSwagger(c =>
+{
+    c.OpenApiVersion = OpenApiSpecVersion.OpenApi2_0;
+});
+app.UseSwaggerUI();
 app.MapControllers();
 app.Run();
