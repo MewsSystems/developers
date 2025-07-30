@@ -1,19 +1,17 @@
-using NUnit.Framework;
-using Moq;
-using ExchangeRateUpdater.Services;
-using ExchangeRateUpdater.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Exceptions;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Linq;
+using Moq;
 using Moq.Protected;
-using System;
-using System.Net.Http;
-using ExchangeRateUpdater.Exceptions;
-using ExchangeRateUpdater.Parsers;
+using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -60,7 +58,7 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var currencies = TestData.ValidCurrenciesForTest;
-        var baseCurrency = new Currency("CZK");
+        var baseCurrency = new Currency(TestData.BaseCurrency);
         var expectedRates = new List<ExchangeRate>
         {
             new ExchangeRate(baseCurrency, new Currency("EUR"), 24.610m),
@@ -72,7 +70,7 @@ public class ExchangeRateProviderTests
 
         // Assert
         Assert.That(result, Is.EquivalentTo(expectedRates)
-            .Using<ExchangeRate>((ExchangeRate x, ExchangeRate y) => x.SourceCurrency.Code == y.SourceCurrency.Code &&
+            .Using<ExchangeRate>((x, y) => x.SourceCurrency.Code == y.SourceCurrency.Code &&
                                                                      x.TargetCurrency.Code == y.TargetCurrency.Code &&
                                                                      x.Value == y.Value));
     }
@@ -105,7 +103,7 @@ public class ExchangeRateProviderTests
     {
         // Arrange
         var currencies = TestData.InvalidCurrenciesForTest;
-        var baseCurrency = new Currency("CZK");
+        var baseCurrency = new Currency(TestData.BaseCurrency);
 
         // Act & Assert
         Assert.ThrowsAsync<ArgumentException>(() => _provider.GetExchangeRates(currencies, baseCurrency));
@@ -114,8 +112,7 @@ public class ExchangeRateProviderTests
     public void GetExchangeRates_EmptyTargetCurrencies_ThrowsArgumentException()
     {
         // Arrange
-        var currencies = TestData.InvalidCurrenciesForTest;
-        var baseCurrency = new Currency("CZK");
+        var baseCurrency = new Currency(TestData.BaseCurrency);
 
         // Act & Assert
         Assert.ThrowsAsync<ArgumentException>(() => _provider.GetExchangeRates([], baseCurrency));

@@ -1,11 +1,8 @@
-
-using System;
-using System.Collections.Generic;
-using NUnit.Framework;
-using ExchangeRateUpdater.Parsers;
-using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Exceptions;
 using System.Linq;
+using ExchangeRateUpdater.Exceptions;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Parsers;
+using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -31,7 +28,7 @@ public class CnbXmlParserTests
         Assert.That(audRate.Value, Is.EqualTo(13.862m));
     }
     [Test]
-    public void Parse_IvalidXml_ReturnsCorrectExchangeRates()
+    public void Parse_InvalidXml_ReturnsCorrectExchangeRates()
     {
         // Arrange
         var parser = new CnbXmlParser();

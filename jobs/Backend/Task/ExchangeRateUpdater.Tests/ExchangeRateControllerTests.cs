@@ -1,23 +1,17 @@
-using NUnit.Framework;
-using Moq;
-using ExchangeRateUpdater.Services;
-using ExchangeRateUpdater.Interfaces;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Controllers;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Linq;
+using Moq;
 using Moq.Protected;
-using System;
-using System.Net.Http;
-using ExchangeRateUpdater.Exceptions;
-using ExchangeRateUpdater.Controllers;
-using ExchangeRateUpdater.Parsers;
-using System.Net;
-
+using NUnit.Framework;
 
 namespace ExchangeRateUpdater.Tests;
 
@@ -51,7 +45,7 @@ public class ExchangeRateControllerTests
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = System.Net.HttpStatusCode.OK,
+                StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(TestData.CnbExchangeRateXml),
             });
 
@@ -82,8 +76,8 @@ public class ExchangeRateControllerTests
         Assert.That(okResult, Is.Not.Null);
         var returnedRates = okResult.Value as IEnumerable<ExchangeRateResponse>;
         Assert.That(returnedRates, Is.Not.Null);
-        Assert.That(returnedRates.ToList(), Is.EquivalentTo(expectedRates)
-            .Using<ExchangeRateResponse>((ExchangeRateResponse x, ExchangeRateResponse y) => x.SourceCurrency == y.SourceCurrency &&
+        Assert.That(returnedRates, Is.EquivalentTo(expectedRates)
+            .Using<ExchangeRateResponse>((x, y) => x.SourceCurrency == y.SourceCurrency &&
                                                                      x.TargetCurrency == y.TargetCurrency &&
                                                                      x.ExchangeRate == y.ExchangeRate));
     }

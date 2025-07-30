@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Exceptions;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Exceptions;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater.Services;

@@ -1,5 +1,5 @@
-using ExchangeRateUpdater.Interfaces;
 using System;
+using ExchangeRateUpdater.Interfaces;
 
 namespace ExchangeRateUpdater.Parsers;
 

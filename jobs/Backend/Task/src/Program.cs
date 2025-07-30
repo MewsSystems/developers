@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using ExchangeRateUpdater.Interfaces;
-using ExchangeRateUpdater.Services;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,5 +24,6 @@ app.UseSwagger(c =>
     c.OpenApiVersion = OpenApiSpecVersion.OpenApi2_0;
 });
 app.UseSwaggerUI();
+app.MapGet("/", () => "Exchange Rate Updater is running!");
 app.MapControllers();
 app.Run();

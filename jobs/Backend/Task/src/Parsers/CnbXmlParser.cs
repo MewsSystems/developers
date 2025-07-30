@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using ExchangeRateUpdater.Exceptions;
-using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Parsers;
 

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
-using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Parsers;
+using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater.Services;
 

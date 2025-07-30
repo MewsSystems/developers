@@ -2,7 +2,7 @@ namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRateResponse
 {
-    public string SourceCurrency { get; set; }
-    public string TargetCurrency { get; set; }
-    public decimal ExchangeRate { get; set; }
+    public string SourceCurrency { get; init; }
+    public string TargetCurrency { get; init; }
+    public decimal ExchangeRate { get; init; }
 }
