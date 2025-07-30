@@ -71,7 +71,10 @@ public class ExchangeRateProviderTests
         var result = (await _provider.GetExchangeRates(currencies, baseCurrency)).ToList();
 
         // Assert
-        Assert.That(result, Is.EquivalentTo(expectedRates).Using(new ExchangeRateComparer()));
+        Assert.That(result, Is.EquivalentTo(expectedRates)
+            .Using<ExchangeRate>((ExchangeRate x, ExchangeRate y) => x.SourceCurrency.Code == y.SourceCurrency.Code &&
+                                                                     x.TargetCurrency.Code == y.TargetCurrency.Code &&
+                                                                     x.Value == y.Value));
     }
 
 
@@ -116,21 +119,6 @@ public class ExchangeRateProviderTests
 
         // Act & Assert
         Assert.ThrowsAsync<ArgumentException>(() => _provider.GetExchangeRates([], baseCurrency));
-    }
-
-    private class ExchangeRateComparer : IEqualityComparer<ExchangeRate>
-    {
-        public bool Equals(ExchangeRate x, ExchangeRate y)
-        {
-            return x.SourceCurrency.Code == y.SourceCurrency.Code &&
-                   x.TargetCurrency.Code == y.TargetCurrency.Code &&
-                   x.Value == y.Value;
-        }
-
-        public int GetHashCode(ExchangeRate obj)
-        {
-            return HashCode.Combine(obj.SourceCurrency.Code, obj.TargetCurrency.Code, obj.Value);
-        }
     }
 }
 

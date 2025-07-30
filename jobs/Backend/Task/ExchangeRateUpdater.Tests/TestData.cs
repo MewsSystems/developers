@@ -51,7 +51,7 @@ public static class TestData
                                              </kurzy>
                                              """;
 
-
+    public static string BaseCurrency = "CZK"; 
     public static readonly List<Currency> ValidCurrenciesForTest = [new Currency("USD"), new Currency("EUR")];
     public static readonly List<Currency> InvalidCurrenciesForTest = [new Currency("TEST")];
 }

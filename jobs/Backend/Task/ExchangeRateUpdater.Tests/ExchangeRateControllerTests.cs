@@ -16,6 +16,7 @@ using System.Net.Http;
 using ExchangeRateUpdater.Exceptions;
 using ExchangeRateUpdater.Controllers;
 using ExchangeRateUpdater.Parsers;
+using System.Net;
 
 
 namespace ExchangeRateUpdater.Tests;
@@ -65,11 +66,11 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var currencies = "EUR,USD";
-        var baseCurrency = "CZK";
-        var expectedRates = new List<ExchangeRate>
+        var baseCurrency = TestData.BaseCurrency;
+        var expectedRates = new List<ExchangeRateResponse>
         {
-            new ExchangeRate(new Currency("CZK"), new Currency("EUR"), 24.610m),
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), 21.331m)
+            new () { SourceCurrency = baseCurrency, TargetCurrency = "EUR", ExchangeRate =  24.610m },
+            new () { SourceCurrency = baseCurrency, TargetCurrency = "USD", ExchangeRate =  21.331m}
         };
 
         // Act
@@ -81,7 +82,10 @@ public class ExchangeRateControllerTests
         Assert.That(okResult, Is.Not.Null);
         var returnedRates = okResult.Value as IEnumerable<ExchangeRateResponse>;
         Assert.That(returnedRates, Is.Not.Null);
-        Assert.That(returnedRates.Count(), Is.EqualTo(expectedRates.Count));
+        Assert.That(returnedRates.ToList(), Is.EquivalentTo(expectedRates)
+            .Using<ExchangeRateResponse>((ExchangeRateResponse x, ExchangeRateResponse y) => x.SourceCurrency == y.SourceCurrency &&
+                                                                     x.TargetCurrency == y.TargetCurrency &&
+                                                                     x.ExchangeRate == y.ExchangeRate));
     }
 
     [Test]
@@ -89,7 +93,7 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var currencies = "";
-        var baseCurrency = "CZK";
+        var baseCurrency = TestData.BaseCurrency;
 
         // Act
         var result = await _controller.GetExchangeRates(currencies, baseCurrency);
@@ -106,7 +110,7 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var currency = "TEST";
-        var baseCurrency = "CZK";
+        var baseCurrency = TestData.BaseCurrency;
         var errorMessage = $"The following currencies are not allowed: {currency}";
 
 
@@ -120,16 +124,25 @@ public class ExchangeRateControllerTests
         Assert.That(badRequestResult.Value, Is.EqualTo(errorMessage));
     }
 
-    [Test]
-    public async Task GetExchangeRates_ExchangeRateApiExceptionFromProvider_ReturnsServiceUnavailable()
+    [TestCase(HttpStatusCode.ServiceUnavailable)]
+    [TestCase(HttpStatusCode.InternalServerError)]
+    [TestCase(HttpStatusCode.BadRequest)]
+
+    public async Task GetExchangeRates_ExchangeRateApiExceptionFromProvider_ReturnsServiceUnavailable(HttpStatusCode statusCode)
     {
         // Arrange
         var currencies = "EUR";
-        var baseCurrency = "CZK";
+        var baseCurrency = TestData.BaseCurrency;
 
+        var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+        mockHttpMessageHandler.Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = statusCode,
+            });
 
-        var httpClient = new HttpClient();
-
+        var httpClient = new HttpClient(mockHttpMessageHandler.Object);
 
         var provider = new ExchangeRateProvider( _mockCache.Object, httpClient, _settingsResolver, _configuration);
         var controller = new ExchangeRateController(provider);
