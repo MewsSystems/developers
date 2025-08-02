@@ -97,7 +97,7 @@ public class CzeExchangeRateProviderTests
             {
                 Rates = new List<CzeExchangeRate>
                 {
-                    new() { Code = "USD", Amount = 1, RateRaw = "22,0" },
+                    new() { Code = "USD", Amount = 2, RateRaw = "44,0" },
                     new() { Code = "EUR", Amount = 1, RateRaw = "24.0" },
                 }
             }
