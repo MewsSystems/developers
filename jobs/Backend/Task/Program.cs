@@ -24,7 +24,13 @@ public static class Program
             {
                 logging.ClearProviders();
                 logging.AddConfiguration(context.Configuration.GetSection("Logging"));
-                logging.AddConsole();
+                logging.AddSimpleConsole(options =>
+                {
+                    options.TimestampFormat = "[HH:mm:ss] ";
+                    options.IncludeScopes = false;
+                    options.SingleLine = true;
+                    options.UseUtcTimestamp = false;
+                });
             })
             .ConfigureServices((context, services) =>
             {
