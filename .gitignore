@@ -21,3 +21,7 @@
 node_modules
 bower_components
 npm-debug.log
+/jobs/Backend/Task/.vs/ExchangeRateUpdater/CopilotIndices/17.14.939.21063/SemanticSymbols.db
+*.db-shm
+*.db-wal
+*.vsidx
