@@ -42,18 +42,21 @@ public class App
     {
         try
         {
-            _logger.LogDebug("App executing");
+            _logger.LogInformation("Application started execution.");
             var provider = _factory.CreateProvider(CountryIsoAlpha3.CZE);
             var rates = await provider.GetExchangeRates(currencies);
-            _output.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            var count = rates.Count();
+            _logger.LogInformation("Successfully retrieved {Count} exchange rates.", count);
+            _output.WriteLine($"Successfully retrieved {count} exchange rates:");
             foreach (var rate in rates)
             {
                 _output.WriteLine(rate.ToString());
             }
-            _logger.LogDebug("App finalize.");
+            _logger.LogInformation("Application execution finalized successfully.");
         }
         catch (Exception e)
         {
+            _logger.LogError(e, "An error occurred while retrieving exchange rates.");
             _output.WriteLine($"Could not retrieve exchange rates: '{e.Message}'");
         }
     }

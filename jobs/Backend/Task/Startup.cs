@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ExchangeRateUpdater.Factories;
 using ExchangeRateUpdater.Interfaces;
 using ExchangeRateUpdater.Models.Cache;
@@ -16,8 +17,10 @@ public static class Startup
     public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<App>();
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton(Console.Out);
         services.AddExhangeProviders(configuration);
+        services.AddCache(configuration);
     }
 
     public static void AddExhangeProviders(this IServiceCollection services, IConfiguration configuration)
@@ -33,22 +36,29 @@ public static class Startup
     public static void AddCache(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
-        services.AddMemoryCache();
-        services.AddStackExchangeRedisCache(options =>
-        {
-            var redisConfig = configuration.GetSection("CacheSettings:RedisConfiguration").Value;
-            options.Configuration = redisConfig;
-        });
 
-        var provider = configuration.GetValue<string>("CacheSettings:Provider");
+        var provider = configuration.GetValue<string>("CacheSettings:Provider") ?? "file";
 
-        if (string.Equals(provider, "Redis", StringComparison.OrdinalIgnoreCase))
+        switch (provider.Trim().ToLowerInvariant())
         {
-            services.AddSingleton<ICacheService, RedisCacheService>();
-        }
-        else
-        {
-            services.AddSingleton<ICacheService, MemoryCacheService>();
+            case "redis":
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    var redisConfig = configuration.GetSection("CacheSettings:RedisConfiguration").Value;
+                    options.Configuration = redisConfig;
+                });
+                services.AddSingleton<ICacheService, RedisCacheService>();
+                break;
+
+            case "file":
+                var filePath = configuration.GetValue<string>("CacheSettings:FileCachePath") ?? "filecache.json";
+                if (!Path.IsPathRooted(filePath))
+                {
+                    var baseDir = AppContext.BaseDirectory;
+                    filePath = Path.GetFullPath(Path.Combine(baseDir, filePath));
+                }
+                services.AddSingleton<ICacheService>(new FileCacheService(filePath));
+                break;
         }
     }
 }

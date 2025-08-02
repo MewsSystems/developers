@@ -32,4 +32,8 @@
 	<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FileCache\" />
+  </ItemGroup>
+
 </Project>
