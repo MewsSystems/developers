@@ -25,3 +25,6 @@ npm-debug.log
 *.db-shm
 *.db-wal
 *.vsidx
+*.v2
+/jobs/Backend/Task/FileCache
+*.bin
