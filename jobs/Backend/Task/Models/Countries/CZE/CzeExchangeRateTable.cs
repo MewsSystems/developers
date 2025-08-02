@@ -3,11 +3,11 @@ using System.Xml.Serialization;
 
 namespace ExchangeRateUpdater.Models.Countries.CZE;
 
-public class CnbExchangeRateTable
+public class CzeExchangeRateTable
 {
     [XmlAttribute("typ")]
     public string Type { get; set; }
 
     [XmlElement("radek")]
-    public List<CnbExchangeRate> Rates { get; set; }
+    public List<CzeExchangeRate> Rates { get; set; }
 }

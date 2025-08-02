@@ -3,36 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\currency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:currency.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\app.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:app.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\services\\countries\\cze\\czeexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:services\\countries\\cze\\czeexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\factories\\exchangerateproviderfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:factories\\exchangerateproviderfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\services\\exchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:services\\exchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\exchangerateupdater.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:exchangerateupdater.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\services\\countries\\cze\\czeexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:services\\countries\\cze\\czeexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\interfaces\\iexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:interfaces\\iexchangerateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\exchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\exchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\countryisoalpha3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\countryisoalpha3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\countries\\cze\\czesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\countries\\cze\\czesettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\countries\\cze\\czeexchangeratetable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\countries\\cze\\czeexchangeratetable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\countries\\cze\\czeexchangeratesresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\countries\\cze\\czeexchangeratesresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|c:\\users\\josemigueld\u00EDazbello\\documents\\github\\mews\\jobs\\backend\\task\\models\\countries\\cze\\czeexchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B2695D6-D24C-4460-A58E-A10F08550CE0}|ExchangeRateUpdater.csproj|solutionrelative:models\\countries\\cze\\czeexchangerate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,73 +50,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 26,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Startup.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Startup.cs",
-              "RelativeDocumentMoniker": "Startup.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Startup.cs*",
-              "RelativeToolTip": "Startup.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:20:27.19Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "App.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\App.cs",
-              "RelativeDocumentMoniker": "App.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\App.cs*",
-              "RelativeToolTip": "App.cs*",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwB4AAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:20:24.41Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ExchangeRateProvider.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\ExchangeRateProvider.cs",
-              "RelativeDocumentMoniker": "Services\\ExchangeRateProvider.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\ExchangeRateProvider.cs",
-              "RelativeToolTip": "Services\\ExchangeRateProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:15:20.545Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CzeExchangeRateProvider.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
-              "RelativeDocumentMoniker": "Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
-              "RelativeToolTip": "Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwA4AAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:16:01.31Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ExchangeRateUpdater",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\ExchangeRateUpdater.csproj",
-              "RelativeDocumentMoniker": "ExchangeRateUpdater.csproj",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\ExchangeRateUpdater.csproj*",
-              "RelativeToolTip": "ExchangeRateUpdater.csproj*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-08-02T10:14:03.149Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -215,41 +158,132 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ExchangeRateProviderFactory.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Factories\\ExchangeRateProviderFactory.cs",
-              "RelativeDocumentMoniker": "Factories\\ExchangeRateProviderFactory.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Factories\\ExchangeRateProviderFactory.cs*",
-              "RelativeToolTip": "Factories\\ExchangeRateProviderFactory.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAABjAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Currency.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Currency.cs",
+              "RelativeDocumentMoniker": "Currency.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Currency.cs",
+              "RelativeToolTip": "Currency.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:14:25.712Z",
+              "WhenOpened": "2025-08-02T11:56:35.988Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\App.cs",
+              "RelativeDocumentMoniker": "App.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\App.cs",
+              "RelativeToolTip": "App.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:56:34.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ExchangeRateProvider.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\ExchangeRateProvider.cs",
+              "RelativeDocumentMoniker": "Services\\ExchangeRateProvider.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\ExchangeRateProvider.cs",
+              "RelativeToolTip": "Services\\ExchangeRateProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:56:32.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CzeExchangeRateProvider.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
+              "RelativeDocumentMoniker": "Services\\Countries\\CZE\\CzeExchangeRateProvider.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Services\\Countries\\CZE\\CzeExchangeRateProvider.cs*",
+              "RelativeToolTip": "Services\\Countries\\CZE\\CzeExchangeRateProvider.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:56:25.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ExchangeRate.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\ExchangeRate.cs",
+              "RelativeDocumentMoniker": "Models\\ExchangeRate.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\ExchangeRate.cs*",
+              "RelativeToolTip": "Models\\ExchangeRate.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:56:13.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CountryIsoAlpha3.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\CountryIsoAlpha3.cs",
+              "RelativeDocumentMoniker": "Models\\CountryIsoAlpha3.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\CountryIsoAlpha3.cs*",
+              "RelativeToolTip": "Models\\CountryIsoAlpha3.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:56:09.285Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "IExchangeRateProvider.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Interfaces\\IExchangeRateProvider.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IExchangeRateProvider.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Interfaces\\IExchangeRateProvider.cs",
-              "RelativeToolTip": "Interfaces\\IExchangeRateProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAmAAAAAAAAAA==",
+              "Title": "CzeSettings.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeSettings.cs",
+              "RelativeDocumentMoniker": "Models\\Countries\\CZE\\CzeSettings.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeSettings.cs*",
+              "RelativeToolTip": "Models\\Countries\\CZE\\CzeSettings.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:12:15.386Z",
+              "WhenOpened": "2025-08-02T11:55:54.978Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "CountryIsoAlpha3.cs",
-              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\CountryIsoAlpha3.cs",
-              "RelativeDocumentMoniker": "Models\\CountryIsoAlpha3.cs",
-              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\CountryIsoAlpha3.cs",
-              "RelativeToolTip": "Models\\CountryIsoAlpha3.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAHAAAAAAAAAA==",
+              "Title": "CzeExchangeRateTable.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRateTable.cs",
+              "RelativeDocumentMoniker": "Models\\Countries\\CZE\\CzeExchangeRateTable.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRateTable.cs*",
+              "RelativeToolTip": "Models\\Countries\\CZE\\CzeExchangeRateTable.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-02T10:11:58.605Z",
+              "WhenOpened": "2025-08-02T11:55:54.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CzeExchangeRatesResponse.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRatesResponse.cs",
+              "RelativeDocumentMoniker": "Models\\Countries\\CZE\\CzeExchangeRatesResponse.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRatesResponse.cs*",
+              "RelativeToolTip": "Models\\Countries\\CZE\\CzeExchangeRatesResponse.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:55:53.905Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CzeExchangeRate.cs",
+              "DocumentMoniker": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRate.cs",
+              "RelativeDocumentMoniker": "Models\\Countries\\CZE\\CzeExchangeRate.cs",
+              "ToolTip": "C:\\Users\\JoseMiguelD\u00EDazBello\\Documents\\github\\mews\\jobs\\Backend\\Task\\Models\\Countries\\CZE\\CzeExchangeRate.cs*",
+              "RelativeToolTip": "Models\\Countries\\CZE\\CzeExchangeRate.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-02T11:55:50.507Z",
               "EditorCaption": ""
             }
           ]

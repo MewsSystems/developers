@@ -2,7 +2,7 @@
 
 namespace ExchangeRateUpdater.Models.Countries.CZE;
 
-public class CnbExchangeRate
+public class CzeExchangeRate
 {
     [XmlAttribute("kod")]
     public string Code { get; set; }

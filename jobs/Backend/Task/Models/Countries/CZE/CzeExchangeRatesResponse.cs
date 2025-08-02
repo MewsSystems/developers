@@ -3,7 +3,7 @@
 namespace ExchangeRateUpdater.Models.Countries.CZE;
 
 [XmlRoot("kurzy")]
-public class CnbExchangeRatesResponse
+public class CzeExchangeRatesResponse
 {
     [XmlAttribute("banka")]
     public string Bank { get; set; }
@@ -15,5 +15,5 @@ public class CnbExchangeRatesResponse
     public string Sequence { get; set; }
 
     [XmlElement("tabulka")]
-    public CnbExchangeRateTable Table { get; set; }
+    public CzeExchangeRateTable Table { get; set; }
 }
