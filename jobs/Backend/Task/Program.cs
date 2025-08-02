@@ -1,43 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public static class Program
 {
-    public static class Program
+    public static async Task Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
-        public static void Main(string[] args)
-        {
-            try
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                Startup.ConfigureServices(services);
+            })
+            .Build();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
-                {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
-
-            Console.ReadLine();
-        }
+        var app = host.Services.GetRequiredService<App>();
+        await app.Run();
     }
 }
