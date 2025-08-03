@@ -12,6 +12,7 @@ using ExchangeRateUpdater.Models.Cache;
 using ExchangeRateUpdater.Models.Countries.CZE;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TimeZoneConverter;
 
 namespace ExchangeRateUpdater.Services.Countries.CZE;
 
@@ -159,12 +160,20 @@ public class CzeExchangeRateProvider : IExchangeRateProvider
 
     private DateTimeOffset GetUpdateHourInUTC()
     {
-        TimeSpan time = TimeSpan.ParseExact(_settings.UpdateHourInLocalTime, "c", CultureInfo.InvariantCulture);
-        var now = _dateTimeProvider.UtcNow;
-        var localDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.FindSystemTimeZoneById(TimeZone)).Date;
-        DateTime localDateTime = localDate.Add(time);
-        var timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone);
-        DateTimeOffset czechDateTimeOffset = new(localDateTime, timeZone.GetUtcOffset(localDateTime));
-        return czechDateTimeOffset.ToUniversalTime();
+        TimeSpan localUpdateTime = TimeSpan.ParseExact(
+            _settings.UpdateHourInLocalTime,
+            "c",
+            CultureInfo.InvariantCulture);
+
+        var timeZoneInfo = TZConvert.GetTimeZoneInfo(TimeZone);
+
+        var currentUtc = _dateTimeProvider.UtcNow;
+        var localDate = TimeZoneInfo.ConvertTime(currentUtc, timeZoneInfo).Date;
+
+        DateTime localDateTime = localDate.Add(localUpdateTime);
+
+        var localDateTimeOffset = new DateTimeOffset(localDateTime, timeZoneInfo.GetUtcOffset(localDateTime));
+
+        return localDateTimeOffset.ToUniversalTime();
     }
 }

@@ -28,6 +28,8 @@ public class App
         new Currency("XYZ")
     };
 
+    private static readonly CountryIsoAlpha3 country = CountryIsoAlpha3.CZE;
+
     public App(
         ILogger<App> logger,
         TextWriter output,
@@ -43,7 +45,7 @@ public class App
         try
         {
             _logger.LogInformation("Application started execution.");
-            var provider = _factory.CreateProvider(CountryIsoAlpha3.CZE);
+            var provider = _factory.CreateProvider(country);
             var rates = await provider.GetExchangeRates(currencies);
             var count = rates.Count();
             _logger.LogInformation("Successfully retrieved {Count} exchange rates.", count);
