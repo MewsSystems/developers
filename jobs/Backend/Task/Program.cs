@@ -1,43 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public static class Program
 {
-    public static class Program
+    public static async Task Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        var host = Host.CreateDefaultBuilder(args)
+             .ConfigureAppConfiguration((hostingContext, config) =>
+             {
+                 var env = hostingContext.HostingEnvironment;
 
-        public static void Main(string[] args)
-        {
-            try
+                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                       .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+                 config.AddEnvironmentVariables();
+             })
+            .ConfigureLogging((context, logging) =>
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                logging.ClearProviders();
+                logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                logging.AddSimpleConsole(options =>
                 {
-                    Console.WriteLine(rate.ToString());
-                }
-            }
-            catch (Exception e)
+                    options.TimestampFormat = "[HH:mm:ss] ";
+                    options.IncludeScopes = false;
+                    options.SingleLine = true;
+                    options.UseUtcTimestamp = false;
+                });
+            })
+            .ConfigureServices((context, services) =>
             {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+                Startup.ConfigureServices(services, context.Configuration);
+            })
+            .Build();
 
-            Console.ReadLine();
-        }
+        var app = host.Services.GetRequiredService<App>();
+        await app.Run();
     }
 }
