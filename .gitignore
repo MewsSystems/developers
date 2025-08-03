@@ -29,3 +29,4 @@ npm-debug.log
 /jobs/Backend/Task/FileCache
 *.bin
 /jobs/Backend/Task/.vs/ExchangeRateUpdater/v17/TestStore/0/000.testlog
+/.vs
