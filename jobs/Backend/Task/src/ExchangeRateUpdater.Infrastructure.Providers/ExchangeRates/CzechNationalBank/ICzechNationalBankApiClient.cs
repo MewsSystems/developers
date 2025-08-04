@@ -5,9 +5,10 @@ namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNation
 
 public interface ICzechNationalBankApiClient
 {
+    // Todo Andrei: Pag di naccall yung endpoint walang error messages
     [Get("/exrates/daily")]
-    Task<CnbExchangeRateResponse> GetFrequentExchangeRatesAsync(string? date = "", string? lang = "EN");
+    Task<CnbExchangeRateResponse> GetFrequentExchangeRatesAsync(string? date = null, string? lang = "EN");
     
     [Get("/fxrates/daily-month")]
-    Task<CnbExchangeRateResponse> GetOtherExchangeRatesAsync(string? yearMonth = "", string? lang = "EN");
+    Task<CnbExchangeRateResponse> GetOtherExchangeRatesAsync(string? yearMonth = null, string? lang = "EN");
 }
