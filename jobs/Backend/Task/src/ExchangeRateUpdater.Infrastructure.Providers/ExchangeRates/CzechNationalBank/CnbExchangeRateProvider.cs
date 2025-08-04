@@ -4,9 +4,9 @@ using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBa
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 
-public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, string providerName) : IExchangeRateProvider
+public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient) : IExchangeRateProvider
 {
-    public string Name => providerName;
+    public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";
     public string DefaultCurrency => "CZK";
 

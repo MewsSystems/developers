@@ -1,9 +1,10 @@
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
-using Microsoft.Extensions.Http.Logging;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Http.Resilience;
+using Polly;
 using Refit;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.Middleware;
@@ -13,6 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddThirdPartyProviders(this IServiceCollection services, IConfiguration? configuration = null)
     {
         // Todo Andrei: Review different injection scopes
+        // Todo Andrei: Clean up, add exponential backoff
         services.AddTransient<RefitLoggingHandler>();
         
         // Register Refit API clients first
@@ -22,26 +24,45 @@ public static class DependencyInjection
                 // Use configuration if available, otherwise use defaults
                 var baseUrl = configuration?["CzechNationalBank:BaseUrl"] ?? "https://api.cnb.cz/cnbapi/";
                 var timeout = configuration?.GetValue<int>("CzechNationalBank:TimeoutSeconds") ?? 30;
-                
+
                 c.BaseAddress = new Uri(baseUrl);
                 c.Timeout = TimeSpan.FromSeconds(timeout);
             })
-            .AddHttpMessageHandler<RefitLoggingHandler>();
+            .AddHttpMessageHandler<RefitLoggingHandler>()
+            .AddResilienceHandler("standard-resilience-policy", builder =>
+            {
+                // Add retry strategy with exponential backoff
+                builder.AddRetry(new HttpRetryStrategyOptions
+                {
+                    MaxRetryAttempts = 3,
+                    Delay = TimeSpan.FromSeconds(1),
+                    BackoffType = DelayBackoffType.Exponential,
+                    ShouldHandle = args => ValueTask.FromResult(
+                        args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests or >= HttpStatusCode.InternalServerError
+                        || args.Outcome.Exception is not null)
+                });
 
-        // Register exchange rate providers
-        // Note: Using AddSingleton with factory pattern to provide the providerName parameter
-        services.AddSingleton<IExchangeRateProvider>(serviceProvider =>
-        {
-            var cnbApiClient = serviceProvider.GetRequiredService<ICzechNationalBankApiClient>();
-            return new CnbExchangeRateProvider(cnbApiClient, "CzechNationalBank");
-        });
+                // Add circuit breaker
+                builder.AddCircuitBreaker(new HttpCircuitBreakerStrategyOptions
+                {
+                    SamplingDuration = TimeSpan.FromSeconds(30),
+                    FailureRatio = 0.5,
+                    MinimumThroughput = 8,
+                    BreakDuration = TimeSpan.FromSeconds(15),
+                    ShouldHandle = args => ValueTask.FromResult(
+                        args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests or >= HttpStatusCode.InternalServerError
+                        || args.Outcome.Exception is not null)
+                });
 
-        // Example: If you want to add more providers in the future, you can add them here:
-        // services.AddSingleton<IExchangeRateProvider>(serviceProvider =>
-        // {
-        //     var otherApiClient = serviceProvider.GetRequiredService<IOtherApiClient>();
-        //     return new OtherExchangeRateProvider(otherApiClient, "OtherProvider");
-        // });
+                // Add timeout policy
+                builder.AddTimeout(new HttpTimeoutStrategyOptions
+                {
+                    Timeout = TimeSpan.FromSeconds(5)
+                });
+            });
+        
+        // Register exchange rate providers here
+        services.AddSingleton<IExchangeRateProvider, CnbExchangeRateProvider>();
          
         return services;
     }

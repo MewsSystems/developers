@@ -20,5 +20,6 @@ namespace ExchangeRateUpdater
             var exchangeRates = await exchangeRateRepository.FilterAsync(currencies);
             return exchangeRates.Count == 0 ? [] : exchangeRates.First().Value;
         }
+        // Todo Andrei: Implement caching
     }
 }
