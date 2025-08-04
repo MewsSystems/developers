@@ -12,7 +12,11 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, s
 
     public async Task<ExchangeRate[]> FetchAllAsync()
     {
+        // Todo Andrei: Pwedeng may rule dito pag di pa updated yung exchange rates
         var responses = await Task.WhenAll(cnbApiClient.GetFrequentExchangeRatesAsync(), cnbApiClient.GetOtherExchangeRatesAsync());
+        if (responses[1].Rates.Length == 0)
+            responses[1] =
+                await cnbApiClient.GetOtherExchangeRatesAsync(DateTime.UtcNow.AddMonths(-1).ToString("yyyy-MM"));
         return ConvertRatesToExchangeRates(responses);
     }
 
