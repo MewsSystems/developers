@@ -17,6 +17,7 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient) :
         if (responses[1].Rates.Length == 0)
             responses[1] =
                 await cnbApiClient.GetOtherExchangeRatesAsync(DateTime.UtcNow.AddMonths(-1).ToString("yyyy-MM"));
+        // Todo Andrei: Yung rate pag uncommon hindi exactly for 1 CZK
         return ConvertRatesToExchangeRates(responses);
     }
 
@@ -33,3 +34,4 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient) :
             .Select(rateModel => rateModel.ToExchangeRate()).ToArray();
     }
 }
+    

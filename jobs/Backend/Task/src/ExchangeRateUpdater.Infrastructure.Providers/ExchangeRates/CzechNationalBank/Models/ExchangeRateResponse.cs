@@ -17,9 +17,10 @@ public class CnbExchangeRateModel
     public decimal Rate { get; set; }
     public string ValidFor { get; set; }
     
+    
     public ExchangeRate ToExchangeRate()
     {
         // Todo Andrei: Alamin panao implement yung valid for
-        return new ExchangeRate(new Currency(CurrencyCode), new Currency("CZK"), Rate, "CNB", DateTime.Parse(ValidFor));
+        return new ExchangeRate(new Currency(CurrencyCode), new Currency("CZK"), Rate / Amount, "CNB", DateTime.Parse(ValidFor));
     }
 }
