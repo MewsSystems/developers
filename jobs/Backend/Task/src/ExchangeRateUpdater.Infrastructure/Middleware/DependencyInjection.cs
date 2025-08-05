@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ExchangeRateUpdater.Domain.Repositories;
 using ExchangeRateUpdater.Domain.Providers;
+using ExchangeRateUpdater.Infrastructure.Repositories;
 
 namespace ExchangeRateUpdater.Infrastructure.Middleware;
 

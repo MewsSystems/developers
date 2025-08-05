@@ -1,7 +1,8 @@
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Providers;
+using ExchangeRateUpdater.Domain.Repositories;
 
-namespace ExchangeRateUpdater.Domain.Repositories;
+namespace ExchangeRateUpdater.Infrastructure.Repositories;
 
 public class ExchangeRateRepository(IExchangeRateProvider[] exchangeRateProviders) : IExchangeRateRepository
 {
@@ -36,4 +37,4 @@ public class ExchangeRateRepository(IExchangeRateProvider[] exchangeRateProvider
     {
         return await FilterAsync([]);
     }
-}
+} 

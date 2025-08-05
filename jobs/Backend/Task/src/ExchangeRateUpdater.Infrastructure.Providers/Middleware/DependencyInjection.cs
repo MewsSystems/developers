@@ -53,12 +53,6 @@ public static class DependencyInjection
                         args.Outcome.Result?.StatusCode is HttpStatusCode.TooManyRequests or >= HttpStatusCode.InternalServerError
                         || args.Outcome.Exception is not null)
                 });
-
-                // Add timeout policy
-                builder.AddTimeout(new HttpTimeoutStrategyOptions
-                {
-                    Timeout = TimeSpan.FromSeconds(5)
-                });
             });
         
         // Register exchange rate providers here
