@@ -75,6 +75,7 @@ src/
   - `Program.cs` with `IHostBuilder`
   - `ExchangeRateProvider` (application service)
   - Dependency injection configuration
+  - **OpenTelemetry Middleware** for observability
 
 ## 🔧 Technology Stack
 
@@ -100,8 +101,9 @@ src/
 - **Microsoft.Extensions.Configuration** - Configuration management
 - **Microsoft.Extensions.Options** - Strongly-typed configuration
 
-### Logging
+### Logging & Observability
 - **Microsoft.Extensions.Logging** - Structured logging
+- **OpenTelemetry** - Observability framework with correlation IDs
 - **Built-in .NET logging** - Console and debug output
 
 ### Testing
@@ -109,50 +111,129 @@ src/
 - **Moq** - Mocking library
 - **Microsoft.NET.Test.Sdk** - Test discovery and execution
 
-## 🏛️ DDD Concepts Implemented
+## 🔍 OpenTelemetry Configuration
 
-### Value Objects
+### Overview
+OpenTelemetry is **enabled by default** in this application to provide **correlated logs** and **distributed tracing**. This ensures that all operations across different services and components can be traced and correlated using unique trace IDs.
+
+### Why OpenTelemetry?
+- **Correlation IDs**: Every log entry and trace span has a unique correlation ID (if deployed in web)
+- **Distributed Tracing**: Track requests across multiple services and components (if deployed in web)
+- **Observability**: Complete visibility into application behavior
+### Middleware Implementation
+The OpenTelemetry configuration is centralized in the `OpenTelemetryMiddleware` class:
+
 ```csharp
-public record Currency
+// In Program.cs
+logging.AddOpenTelemetryLogging(hostContext.Configuration);
+services.AddOpenTelemetryServices(hostContext.Configuration);
+```
+
+### Default Configuration
+By default, the application is configured with these settings:
+- **Log Level**: Warning (reduces noise)
+- **Tracing**: Disabled (performance optimization)
+- **Logging**: Enabled with correlation IDs
+- **Console Exporters**: Disabled for tracing, enabled for logging
+
+### Configuration Structure
+```json
 {
-    public string Code { get; }
-    
-    public Currency(string code)
-    {
-        if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Currency code cannot be null, empty, or whitespace");
-        
-        if (code.Length != 3)
-            throw new ArgumentException("Currency code must be exactly 3 characters");
-        
-        Code = code.ToUpperInvariant();
+  "OpenTelemetry": {
+    "Enabled": true,
+    "ServiceName": "ExchangeRateUpdater",
+    "ServiceVersion": "1.0.0",
+    "ResourceAttributes": {
+      "deployment.environment": "development"
+    },
+    "Tracing": {
+      "Enabled": false,
+      "ConsoleExporter": {
+        "Enabled": false
+      },
+      "HttpClientInstrumentation": {
+        "Enabled": false
+      }
+    },
+    "Logging": {
+      "Enabled": true,
+      "ConsoleExporter": {
+        "Enabled": true
+      }
     }
+  }
 }
 ```
 
-### Domain Services
-```csharp
-public interface ICacheService
+### Configuration Options
+
+#### **Global Settings**
+- `Enabled`: Master switch for OpenTelemetry (default: `true`)
+- `ServiceName`: Application service name
+- `ServiceVersion`: Application version
+- `ResourceAttributes`: Additional metadata for traces and logs
+
+#### **Tracing Configuration**
+- `Tracing.Enabled`: Enable/disable distributed tracing (default: `false`)
+- `Tracing.ConsoleExporter.Enabled`: Output traces to console (default: `false`)
+- `Tracing.HttpClientInstrumentation.Enabled`: Auto-instrument HTTP calls (default: `false`)
+
+#### **Logging Configuration**
+- `Logging.Enabled`: Enable/disable OpenTelemetry logging (default: `true`)
+- `Logging.ConsoleExporter.Enabled`: Output logs to console (default: `true`)
+
+### Development Configuration
+For development and debugging, you can enable tracing and lower log levels:
+
+```json
 {
-    Task<T?> GetAsync<T>(string key) where T : class;
-    Task SetAsync<T>(string key, T value, DateTimeOffset? absoluteExpiration, 
-                    TimeSpan? absoluteExpirationRelativeNow, TimeSpan? slidingExpiration) where T : class;
-    Task RemoveAsync(string key);
-    Task<bool> ExistsAsync(string key);
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "ExchangeRateUpdater": "Information"
+    }
+  },
+  "OpenTelemetry": {
+    "Tracing": {
+      "Enabled": true,
+      "ConsoleExporter": {
+        "Enabled": true
+      },
+      "HttpClientInstrumentation": {
+        "Enabled": true
+      }
+    }
+  }
 }
 ```
 
-### Repository Pattern
-```csharp
-public interface IExchangeRateRepository
+### Sample Output
+When OpenTelemetry is enabled, you'll see structured logs like:
+```
+LogRecord.Timestamp: 2025-08-06T18:30:15.4913160Z
+LogRecord.CategoryName: ExchangeRateUpdater.Program
+LogRecord.Severity: Information
+LogRecord.Body: Starting exchange rate retrieval process
+Resource associated with LogRecord:
+  service.name: ExchangeRateUpdater
+  service.version: 1.0.0
+  service.instance.id: 9e81e998-a3d1-485f-8bd8-a1f40f03075b
+  telemetry.sdk.name: opentelemetry
+  telemetry.sdk.language: dotnet
+  telemetry.sdk.version: 1.9.0
+```
+
+### Disabling OpenTelemetry
+To disable OpenTelemetry completely, set the configuration:
+```json
 {
-    Task<Dictionary<string, ExchangeRate[]>> FilterAsync(IEnumerable<Currency> currencies);
-    Task<Dictionary<string, ExchangeRate[]>> GetAllAsync();
-    Task<Dictionary<string, ExchangeRate[]>> GetFromProviderAsync(string providerName, IEnumerable<Currency> currencies);
+  "OpenTelemetry": {
+    "Enabled": false
+  }
 }
 ```
 
-## 🛡️ Anti-Corruption Layer Design
+## 🛡️ Anti-Corruption Layer Design (Attempt :D)
 
 ### CNB Provider Implementation
 
@@ -333,7 +414,7 @@ src/
     └── Models/
 ```
 
-### After (Clean Architecture)
+### After (_attempted_ Clean Architecture)
 ```
 src/
 ├── ExchangeRateUpdater/                    # Application Layer
@@ -341,7 +422,8 @@ src/
 │   ├── ExchangeRateProvider.cs
 │   ├── appsettings.json
 │   └── Middleware/
-│       └── DependencyInjection.cs
+│       ├── DependencyInjection.cs
+│       └── OpenTelemetryMiddleware.cs      # Centralized OpenTelemetry config
 ├── ExchangeRateUpdater.Domain/            # Domain Layer
 │   ├── Models/
 │   │   ├── Currency.cs
@@ -389,6 +471,7 @@ tests/
 - **Unit Tests**: Each layer tested independently
 - **Mock Testing**: External dependencies mocked
 - **Real Cache Testing**: Using `MemoryDistributedCache` for realistic testing
+  - _PS: I had troubles mocking and I ran out of time_
 
 ## 🤔 Assumptions and Decisions
 
@@ -409,30 +492,15 @@ tests/
 #### 2. **Monthly Exchange Rates (Uncommon Currencies)**
 - **Decision**: Return empty results when monthly data is unavailable
 - **Reasoning**: 
-  - Monthly rates for uncommon currencies are not always available
+  - Monthly rates for uncommon currencies are not always available especially during the first few days of a month
   - Availability depends on the time of month
   - Returning previous month's data would be inaccurate
   - Better to return empty than provide stale/inaccurate data
-- **Implementation**:
-  ```csharp
-  public async Task<ExchangeRate[]> FetchAllCurrentAsync()
-  {
-      try
-      {
-          var monthlyResponse = await _apiClient.GetOtherExchangeRatesAsync(month);
-          return monthlyResponse?.Rates?.Select(r => r.ToExchangeRate()).ToArray() ?? Array.Empty<ExchangeRate>();
-      }
-      catch (HttpRequestException ex)
-      {
-          _logger.LogWarning(ex, "Monthly exchange rates unavailable for {Month}", month);
-          return Array.Empty<ExchangeRate>();
-      }
-  }
-  ```
 
 #### 3. **Exchange Rate Status Tracking**
 - **Decision**: Not implemented in current version
 - **Reasoning**: 
+  - Need to validate this corner case with product
   - Would add complexity to domain models
   - Requires additional validation logic
   - Could be implemented as future enhancement
@@ -475,6 +543,24 @@ tests/
   - Allows dynamic provider selection
   - Supports multiple providers simultaneously
   - Easy to extend with new providers
+
+#### 4. **OpenTelemetry Integration**
+- **Decision**: Enabled by default with centralized middleware, tracing disabled by default
+- **Reasoning**:
+  - Provides correlated logs for better debugging
+  - Enables distributed tracing across services when needed
+  - Enterprise-grade observability standards
+  - Centralized configuration management
+  - Performance optimization by default (tracing disabled)
+  - Can be easily enabled for development/debugging
+
+#### 5. **Default Logging Configuration**
+- **Decision**: Warning level by default for production-like behavior
+- **Reasoning**:
+  - Reduces noise in production environments
+  - Focuses on important events and errors
+  - Can be easily adjusted for development
+  - Balances observability with performance
 
 ## 🚧 Future Improvements
 
@@ -523,7 +609,7 @@ tests/
 
 ## 📝 Configuration
 
-### appsettings.json
+### Default appsettings.json 
 ```json
 {
   "ExchangeRateProviders": {
@@ -540,8 +626,54 @@ tests/
   },
   "Logging": {
     "LogLevel": {
+      "Default": "Warning",
+      "Microsoft": "Warning",
+      "ExchangeRateUpdater": "Warning"
+    }
+  },
+  "OpenTelemetry": {
+    "Enabled": true,
+    "ServiceName": "ExchangeRateUpdater",
+    "ServiceVersion": "1.0.0",
+    "Tracing": {
+      "Enabled": false,
+      "ConsoleExporter": {
+        "Enabled": false
+      },
+      "HttpClientInstrumentation": {
+        "Enabled": false
+      }
+    },
+    "Logging": {
+      "Enabled": true,
+      "ConsoleExporter": {
+        "Enabled": true
+      }
+    }
+  }
+}
+```
+
+### Development Configuration
+For development and debugging, use this configuration:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
       "Default": "Information",
-      "Microsoft": "Warning"
+      "ExchangeRateUpdater": "Information"
+    }
+  },
+  "OpenTelemetry": {
+    "Tracing": {
+      "Enabled": true,
+      "ConsoleExporter": {
+        "Enabled": true
+      },
+      "HttpClientInstrumentation": {
+        "Enabled": true
+      }
     }
   }
 }

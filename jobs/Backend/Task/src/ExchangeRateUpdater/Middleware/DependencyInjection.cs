@@ -9,7 +9,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration = null)
     {
+        // We can use redis here
         services.AddDistributedMemoryCache();
+        
         // Register infrastructure services
         services.AddInfrastructure();
         services.AddThirdPartyProviders(configuration);
