@@ -30,33 +30,26 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public void Constructor_WithValidProviders_ShouldCreateSuccessfully()
     {
-        // Arrange
         var providers = new[] { _mockProvider1.Object };
 
-        // Act
         var repository = new ExchangeRateRepository(providers, _mockLogger.Object);
 
-        // Assert
         Assert.NotNull(repository);
     }
 
     [Fact]
     public void Constructor_WithEmptyProviders_ShouldCreateSuccessfully()
     {
-        // Arrange
         var providers = Array.Empty<IExchangeRateProvider>();
 
-        // Act
         var repository = new ExchangeRateRepository(providers, _mockLogger.Object);
 
-        // Assert
         Assert.NotNull(repository);
     }
 
     [Fact]
     public async Task FilterAsync_WithValidCurrencies_ShouldReturnFilteredRates()
     {
-        // Arrange
         var currencies = new[] { new Currency("USD"), new Currency("EUR") };
         var expectedRates = new[]
         {
@@ -66,10 +59,8 @@ public class ExchangeRateRepositoryTests
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.FilterAsync(currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("Provider1", result.Keys);
         Assert.Single(result["Provider1"]);
@@ -78,7 +69,6 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task FilterAsync_WithEmptyCurrencies_ShouldReturnAllRates()
     {
-        // Arrange
         var currencies = Array.Empty<Currency>();
         var expectedRates = new[]
         {
@@ -88,10 +78,8 @@ public class ExchangeRateRepositoryTests
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.FilterAsync(currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("Provider1", result.Keys);
         Assert.Single(result["Provider1"]);
@@ -100,7 +88,6 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task FilterAsync_WhenProviderFails_ShouldContinueWithSuccessfulProviders()
     {
-        // Arrange
         var currencies = new[] { new Currency("USD") };
         var expectedRates = new[]
         {
@@ -113,10 +100,8 @@ public class ExchangeRateRepositoryTests
         _mockProvider2.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.FilterAsync(currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.DoesNotContain("Provider1", result.Keys);
         Assert.Contains("Provider2", result.Keys);
@@ -126,7 +111,6 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllRates()
     {
-        // Arrange
         var expectedRates = new[]
         {
             new ExchangeRate(new Currency("USD"), new Currency("EUR"), 0.85m, "Provider1", DateTime.UtcNow.AddDays(1))
@@ -135,10 +119,8 @@ public class ExchangeRateRepositoryTests
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.GetAllAsync();
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("Provider1", result.Keys);
         Assert.Single(result["Provider1"]);
@@ -147,7 +129,6 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task GetFromProviderAsync_WithValidProvider_ShouldReturnProviderRates()
     {
-        // Arrange
         var currencies = new[] { new Currency("USD") };
         var expectedRates = new[]
         {
@@ -157,10 +138,8 @@ public class ExchangeRateRepositoryTests
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("Provider1", result.Keys);
         Assert.Single(result["Provider1"]);
@@ -169,10 +148,8 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task GetFromProviderAsync_WithNonExistentProvider_ShouldThrowArgumentException()
     {
-        // Arrange
         var currencies = new[] { new Currency("USD") };
 
-        // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => 
             _repository.GetFromProviderAsync("NonExistentProvider", currencies));
     }
@@ -180,7 +157,6 @@ public class ExchangeRateRepositoryTests
     [Fact]
     public async Task GetFromProviderAsync_WithEmptyCurrencies_ShouldReturnAllProviderRates()
     {
-        // Arrange
         var currencies = Array.Empty<Currency>();
         var expectedRates = new[]
         {
@@ -191,29 +167,23 @@ public class ExchangeRateRepositoryTests
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ReturnsAsync(expectedRates);
 
-        // Act
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("Provider1", result.Keys);
-        // When currencies is empty, it should return all rates (no filtering)
-        Assert.Empty(result["Provider1"]); // Empty currencies means no rates match
+        Assert.Empty(result["Provider1"]);
     }
 
     [Fact]
     public async Task GetFromProviderAsync_WhenProviderFails_ShouldReturnEmptyResult()
     {
-        // Arrange
         var currencies = new[] { new Currency("USD") };
 
         _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
             .ThrowsAsync(new Exception("Provider failed"));
 
-        // Act
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Empty(result);
     }

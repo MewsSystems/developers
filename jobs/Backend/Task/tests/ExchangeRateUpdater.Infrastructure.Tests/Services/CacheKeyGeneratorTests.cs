@@ -123,27 +123,22 @@ public class CacheKeyGeneratorTests
     [Fact]
     public void GenerateCustomKey_WithNullSuffix_ShouldThrowArgumentException()
     {
-        // Arrange
         var providerName = "TestProvider";
         string? suffix = null;
 
-        // Act & Assert
         Assert.Throws<ArgumentException>(() => CacheKeyGenerator.GenerateCustomKey(providerName, suffix));
     }
 
     [Fact]
     public void GenerateDailyRatesKey_WithDifferentDates_ShouldReturnDifferentKeys()
     {
-        // Arrange
         var providerName = "TestProvider";
         var date1 = new DateTime(2024, 1, 15);
         var date2 = new DateTime(2024, 1, 16);
 
-        // Act
         var result1 = CacheKeyGenerator.GenerateDailyRatesKey(providerName, date1);
         var result2 = CacheKeyGenerator.GenerateDailyRatesKey(providerName, date2);
 
-        // Assert
         Assert.NotEqual(result1, result2);
         Assert.Equal("ExchangeRates:TestProvider:Daily:2024-01-15", result1);
         Assert.Equal("ExchangeRates:TestProvider:Daily:2024-01-16", result2);
@@ -152,16 +147,13 @@ public class CacheKeyGeneratorTests
     [Fact]
     public void GenerateMonthlyRatesKey_WithDifferentDates_ShouldReturnDifferentKeys()
     {
-        // Arrange
         var providerName = "TestProvider";
         var date1 = new DateTime(2024, 1, 15);
         var date2 = new DateTime(2024, 2, 15);
 
-        // Act
         var result1 = CacheKeyGenerator.GenerateMonthlyRatesKey(providerName, date1);
         var result2 = CacheKeyGenerator.GenerateMonthlyRatesKey(providerName, date2);
 
-        // Assert
         Assert.NotEqual(result1, result2);
         Assert.Equal("ExchangeRates:TestProvider:Monthly:2024-01", result1);
         Assert.Equal("ExchangeRates:TestProvider:Monthly:2024-02", result2);
