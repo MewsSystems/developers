@@ -20,6 +20,15 @@ namespace ExchangeRateUpdater
             var exchangeRates = await exchangeRateRepository.FilterAsync(currencies);
             return exchangeRates.Count == 0 ? [] : exchangeRates.First().Value;
         }
-        // Todo Andrei: Implement caching
+        
+        /// <summary>
+        /// Returns a dictionary of exchange rates for each provider.
+        /// </summary>
+        /// <param name="currencies"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<string, ExchangeRate[]>> GetExchangeRatesFromMultipleProviders(IEnumerable<Currency> currencies)
+        {
+            return await exchangeRateRepository.FilterAsync(currencies);
+        }
     }
 }

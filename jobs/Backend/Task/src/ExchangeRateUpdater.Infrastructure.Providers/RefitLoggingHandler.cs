@@ -15,7 +15,7 @@ public class RefitLoggingHandler : DelegatingHandler
         HttpRequestMessage request, 
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Request: {request.Method} {request.RequestUri}");
+        _logger.LogInformation("Request: {RequestMethod} {RequestRequestUri}", request.Method, request.RequestUri);
         return await base.SendAsync(request, cancellationToken);
     }
 }
