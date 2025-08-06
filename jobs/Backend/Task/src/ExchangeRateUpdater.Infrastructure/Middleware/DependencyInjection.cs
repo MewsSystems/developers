@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using ExchangeRateUpdater.Domain.Repositories;
-using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Services;
 using ExchangeRateUpdater.Infrastructure.Repositories;
 using ExchangeRateUpdater.Infrastructure.Services;
@@ -14,12 +13,8 @@ public static class DependencyInjection
         // Register cache services
         services.AddScoped<ICacheService, DistributedCacheService>();
         
-        // Register repositories with factory pattern to inject all IExchangeRateProvider implementations
-        services.AddScoped<IExchangeRateRepository>(serviceProvider =>
-        {
-            var exchangeRateProviders = serviceProvider.GetServices<IExchangeRateProvider>().ToArray();
-            return new ExchangeRateRepository(exchangeRateProviders);
-        });
+        // Register repositories - DI container will automatically inject all IExchangeRateProvider implementations
+        services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
         
         return services;
     }

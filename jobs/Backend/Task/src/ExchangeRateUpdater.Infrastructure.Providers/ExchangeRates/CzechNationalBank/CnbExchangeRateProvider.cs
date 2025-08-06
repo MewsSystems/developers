@@ -3,11 +3,12 @@ using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Services;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank.Models;
 using ExchangeRateUpdater.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 
-public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, ICacheService cacheService, IOptions<CzechNationalBankExchangeRateConfig> exchangeRateConfig) : IExchangeRateProvider
+public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, ICacheService cacheService, IOptions<CzechNationalBankExchangeRateConfig> exchangeRateConfig, ILogger<CnbExchangeRateProvider> logger) : IExchangeRateProvider
 {
     public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";

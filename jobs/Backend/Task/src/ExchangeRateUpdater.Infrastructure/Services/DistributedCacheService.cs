@@ -1,36 +1,38 @@
 using ExchangeRateUpdater.Domain.Services;
-using Microsoft.Extensions.Caching.Memory;
+using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ExchangeRateUpdater.Infrastructure.Services;
 
-public class DistributedCacheService(IMemoryCache cache) : ICacheService
+public class DistributedCacheService(IDistributedCache cache) : ICacheService
 {
     public async Task<T?> GetAsync<T>(string key) where T : class
     {
-        return await Task.FromResult(cache.Get<T>(key));
+        var cachedValue = await cache.GetStringAsync(key);
+        return cachedValue != null ? JsonSerializer.Deserialize<T>(cachedValue) : null;
     }
 
     public async Task SetAsync<T>(string key, T value,  DateTimeOffset? absoluteExpiration, TimeSpan? absoluteExpirationRelativeNow,TimeSpan? slidingExpiration) where T : class
     {
-        var options = new MemoryCacheEntryOptions
+        var options = new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = absoluteExpirationRelativeNow, 
             SlidingExpiration = slidingExpiration,
             AbsoluteExpiration = absoluteExpiration,
         };
         
-         cache.Set(key, value, options);
-         await Task.CompletedTask;
+        var serializedValue = JsonSerializer.Serialize(value);
+        await cache.SetStringAsync(key, serializedValue, options);
     }
 
     public async Task RemoveAsync(string key)
     {
-        cache.Remove(key);
-        await Task.CompletedTask;
+        await cache.RemoveAsync(key);
     }
 
     public async Task<bool> ExistsAsync(string key)
     {
-        return await Task.FromResult(cache.TryGetValue(key, out _));
+        var cachedValue = await cache.GetStringAsync(key);
+        return cachedValue != null;
     }
 } 

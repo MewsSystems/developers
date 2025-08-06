@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Repositories;
 using ExchangeRateUpdater.Middleware;
 
 namespace ExchangeRateUpdater
@@ -31,15 +32,43 @@ namespace ExchangeRateUpdater
             try
             {
                 await host.StartAsync();
-                
                 var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(Currencies);
+                var repository = host.Services.GetRequiredService<IExchangeRateRepository>();
 
-                var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
-                Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");
+                // Get rates from all providers
+                var allRates = await provider.GetExchangeRates(Currencies);
+                var exchangeRates = allRates as ExchangeRate[] ?? allRates.ToArray();
+                Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates from all providers:");
                 foreach (var rate in exchangeRates)
                 {
                     Console.WriteLine(rate.ToString());
+                }
+
+                Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+                // Get rates from specific provider using chain of responsibility
+                try
+                {
+                    var czechRates = await repository.GetFromProviderAsync("CzechNationalBank", Currencies);
+                    Console.WriteLine($"Successfully retrieved {czechRates["CzechNationalBank"].Length} exchange rates from CzechNationalBank:");
+                    foreach (var rate in czechRates["CzechNationalBank"])
+                    {
+                        Console.WriteLine(rate.ToString());
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine($"Provider error: {e.Message}");
+                }
+
+                Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+                // List all available providers
+                var allProvidersRates = await repository.GetAllAsync();
+                Console.WriteLine($"Available providers: {string.Join(", ", allProvidersRates.Keys)}");
+                foreach (var providerRates in allProvidersRates)
+                {
+                    Console.WriteLine($"{providerRates.Key}: {providerRates.Value.Length} rates");
                 }
             }
             catch (Exception e)
@@ -57,7 +86,6 @@ namespace ExchangeRateUpdater
                 {
                     // Register all application services using the modular DI approach
                     services.AddApplicationServices(hostContext.Configuration);
-                    services.AddDistributedMemoryCache();
                 });
     }
 }

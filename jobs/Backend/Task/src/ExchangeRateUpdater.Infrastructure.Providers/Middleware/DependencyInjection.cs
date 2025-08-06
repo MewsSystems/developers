@@ -14,9 +14,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddThirdPartyProviders(this IServiceCollection services, IConfiguration? configuration = null)
     {
-        services.AddTransient<RefitLoggingHandler>();
-        
-        services.AddDistributedMemoryCache(); 
+        services.AddTransient<RefitLoggingHandler>(); 
         
         if (configuration != null)
         {
