@@ -18,6 +18,7 @@ public class CnbExchangeRateModel
     public string ValidFor { get; set; }
     
     
+    // Todo Andrei: Pag weekend saka holiday hindi naguupdate yung exchange rates
     public ExchangeRate ToExchangeRate()
     {
         return new ExchangeRate(new Currency(CurrencyCode), new Currency("CZK"), Rate / Amount, "CNB", DateTime.Parse(ValidFor));
