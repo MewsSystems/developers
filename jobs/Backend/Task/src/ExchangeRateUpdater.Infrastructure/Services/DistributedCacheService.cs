@@ -9,7 +9,16 @@ public class DistributedCacheService(IDistributedCache cache) : ICacheService
     public async Task<T?> GetAsync<T>(string key) where T : class
     {
         var cachedValue = await cache.GetStringAsync(key);
-        return cachedValue != null ? JsonSerializer.Deserialize<T>(cachedValue) : null;
+        if (cachedValue == null) return null;
+        
+        try
+        {
+            return JsonSerializer.Deserialize<T>(cachedValue);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     public async Task SetAsync<T>(string key, T value,  DateTimeOffset? absoluteExpiration, TimeSpan? absoluteExpirationRelativeNow,TimeSpan? slidingExpiration) where T : class
@@ -33,6 +42,6 @@ public class DistributedCacheService(IDistributedCache cache) : ICacheService
     public async Task<bool> ExistsAsync(string key)
     {
         var cachedValue = await cache.GetStringAsync(key);
-        return cachedValue != null;
+        return !string.IsNullOrEmpty(cachedValue);
     }
 } 

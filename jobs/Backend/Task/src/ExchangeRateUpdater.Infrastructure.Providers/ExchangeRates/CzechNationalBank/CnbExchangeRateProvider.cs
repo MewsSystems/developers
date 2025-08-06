@@ -28,17 +28,17 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
         catch (HttpRequestException ex)
         {
             logger.LogWarning(ex, "HTTP request failed while fetching current exchange rates from {ProviderName}. Status: {StatusCode}", Name, ex.StatusCode);
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
         catch (TaskCanceledException ex)
         {
             logger.LogWarning(ex, "Request timeout while fetching current exchange rates from {ProviderName}", Name);
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Unexpected error while fetching current exchange rates from {ProviderName}", Name);
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
     }
 

@@ -6,18 +6,38 @@ public static class CacheKeyGenerator
     
     public static string GenerateDailyRatesKey(string providerName, DateTime? date = null)
     {
-        var dateSuffix = date.HasValue ? $"_{date.Value:yyyy-MM-dd}" : "";
-        return $"{ProviderPrefix}_{providerName}_DailyRates{dateSuffix}";
+        if (string.IsNullOrWhiteSpace(providerName))
+        {
+            throw new ArgumentException("Provider name cannot be null, empty, or whitespace", nameof(providerName));
+        }
+
+        var dateSuffix = date.HasValue ? $":{date.Value:yyyy-MM-dd}" : "";
+        return $"{ProviderPrefix}:{providerName}:Daily{dateSuffix}";
     }
     
     public static string GenerateMonthlyRatesKey(string providerName, DateTime? date = null)
     {
-        var dateSuffix = date.HasValue ? $"_{date.Value:yyyy-MM}" : "";
-        return $"{ProviderPrefix}_{providerName}_MonthlyRates{dateSuffix}";
+        if (string.IsNullOrWhiteSpace(providerName))
+        {
+            throw new ArgumentException("Provider name cannot be null, empty, or whitespace", nameof(providerName));
+        }
+
+        var dateSuffix = date.HasValue ? $":{date.Value:yyyy-MM}" : "";
+        return $"{ProviderPrefix}:{providerName}:Monthly{dateSuffix}";
     }
     
     public static string GenerateCustomKey(string providerName, string suffix)
     {
-        return $"{ProviderPrefix}_{providerName}_{suffix}";
+        if (string.IsNullOrWhiteSpace(providerName))
+        {
+            throw new ArgumentException("Provider name cannot be null, empty, or whitespace", nameof(providerName));
+        }
+
+        if (string.IsNullOrWhiteSpace(suffix))
+        {
+            throw new ArgumentException("Suffix cannot be null, empty, or whitespace", nameof(suffix));
+        }
+
+        return $"{ProviderPrefix}:{providerName}:{suffix}";
     }
 } 
