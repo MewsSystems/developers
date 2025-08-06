@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 
-public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, IDistributedCache cache) : IExchangeRateProvider
+public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient) : IExchangeRateProvider
 {
     public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";
