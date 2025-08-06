@@ -9,6 +9,12 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration? configuration = null)
     {
+        // Register configuration
+        if (configuration != null)
+        {
+            services.AddSingleton(configuration);
+        }
+        
         // Register infrastructure services
         services.AddInfrastructure();
         services.AddThirdPartyProviders(configuration);

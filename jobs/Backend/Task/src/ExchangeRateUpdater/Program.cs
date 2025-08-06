@@ -11,8 +11,8 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
+        private static readonly IEnumerable<Currency> Currencies =
+        [
             new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),
@@ -22,7 +22,7 @@ namespace ExchangeRateUpdater
             new Currency("THB"),
             new Currency("TRY"),
             new Currency("XYZ")
-        };
+        ];
 
         public static async Task Main(string[] args)
         {
@@ -40,7 +40,7 @@ namespace ExchangeRateUpdater
             {
                 // Get the service from DI container
                 var provider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
-                var rates = await provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRates(Currencies);
 
                 var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
                 Console.WriteLine($"Successfully retrieved {exchangeRates.Length} exchange rates:");

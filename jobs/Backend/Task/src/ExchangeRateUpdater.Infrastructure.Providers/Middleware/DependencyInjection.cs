@@ -1,6 +1,8 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 using Microsoft.Extensions.Http.Resilience;
@@ -16,6 +18,16 @@ public static class DependencyInjection
         // Todo Andrei: Review different injection scopes
         // Todo Andrei: Clean up, add exponential backoff
         services.AddTransient<RefitLoggingHandler>();
+        
+        // Register caching services
+        services.AddMemoryCache();
+        services.AddDistributedMemoryCache(); // For development. Use Redis in production
+        
+        // Register configuration if provided
+        if (configuration != null)
+        {
+            services.AddSingleton(configuration);
+        }
         
         // Register Refit API clients first
         services.AddRefitClient<ICzechNationalBankApiClient>()
