@@ -10,7 +10,7 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
     public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";
     public string DefaultCurrency => "CZK";
-    public TimeZoneInfo DefaultTimezone => TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+    private TimeZoneInfo DefaultTimezone => TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
 
     public async Task<ExchangeRate[]> FetchAllAsync()
     {
