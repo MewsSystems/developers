@@ -14,33 +14,24 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddThirdPartyProviders(this IServiceCollection services, IConfiguration? configuration = null)
     {
-        // Todo Andrei: Review different injection scopes
-        // Todo Andrei: Clean up, add exponential backoff
         services.AddTransient<RefitLoggingHandler>();
         
-        // Register caching services
-        services.AddMemoryCache();
-        services.AddDistributedMemoryCache(); // For development. Use Redis in production
+        services.AddDistributedMemoryCache(); 
         
-        // Register configuration if provided
         if (configuration != null)
         {
             services.AddSingleton(configuration);
             
-            // Configure options
             services.Configure<ExchangeRateProvidersConfig>(
                 configuration.GetSection("ExchangeRateProviders"));
             
-            // Configure CzechNationalBank specific options
             services.Configure<CzechNationalBankExchangeRateConfig>(
                 configuration.GetSection("ExchangeRateProviders:CzechNationalBank"));
         }
         
-        // Register Refit API clients first
         services.AddRefitClient<ICzechNationalBankApiClient>()
             .ConfigureHttpClient(c =>
             {
-                // Use configuration if available, otherwise use defaults
                 var baseUrl = configuration?["ExchangeRateProviders:CzechNationalBank:BaseUrl"] ?? "https://api.cnb.cz/cnbapi/";
                 var timeout = configuration?.GetValue<int>("ExchangeRateProviders:CzechNationalBank:TimeoutSeconds") ?? 30;
 
@@ -50,7 +41,6 @@ public static class DependencyInjection
             .AddHttpMessageHandler<RefitLoggingHandler>()
             .AddResilienceHandler("standard-resilience-policy", builder =>
             {
-                // Add retry strategy with exponential backoff
                 builder.AddRetry(new HttpRetryStrategyOptions
                 {
                     MaxRetryAttempts = 3,
@@ -61,7 +51,6 @@ public static class DependencyInjection
                         || args.Outcome.Exception is not null)
                 });
 
-                // Add circuit breaker
                 builder.AddCircuitBreaker(new HttpCircuitBreakerStrategyOptions
                 {
                     SamplingDuration = TimeSpan.FromSeconds(30),
