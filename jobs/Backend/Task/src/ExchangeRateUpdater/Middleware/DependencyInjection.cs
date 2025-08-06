@@ -7,17 +7,14 @@ namespace ExchangeRateUpdater.Middleware;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration? configuration = null)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration = null)
     {
-        // Register configuration
-        if (configuration != null)
-        {
-            services.AddSingleton(configuration);
-        }
-        
         // Register infrastructure services
         services.AddInfrastructure();
         services.AddThirdPartyProviders(configuration);
+        
+        // Register application services
+        services.AddScoped<ExchangeRateProvider>();
         
         return services;
     }

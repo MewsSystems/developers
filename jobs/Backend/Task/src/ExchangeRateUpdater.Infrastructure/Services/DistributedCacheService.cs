@@ -1,42 +1,36 @@
 using ExchangeRateUpdater.Domain.Services;
 using Microsoft.Extensions.Caching.Memory;
-using System.Text.Json;
 
 namespace ExchangeRateUpdater.Infrastructure.Services;
 
-public class DistributedCacheService : ICacheService
+public class DistributedCacheService(IMemoryCache cache) : ICacheService
 {
-    private readonly IMemoryCache _cache;
-
-    public DistributedCacheService(IMemoryCache cache)
-    {
-        _cache = cache;
-    }
-
     public async Task<T?> GetAsync<T>(string key) where T : class
     {
-        return await Task.FromResult(_cache.Get<T>(key));
+        return await Task.FromResult(cache.Get<T>(key));
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan expiration) where T : class
+    public async Task SetAsync<T>(string key, T value,  DateTimeOffset? absoluteExpiration, TimeSpan? absoluteExpirationRelativeNow,TimeSpan? slidingExpiration) where T : class
     {
         var options = new MemoryCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = expiration
+            AbsoluteExpirationRelativeToNow = absoluteExpirationRelativeNow, 
+            SlidingExpiration = slidingExpiration,
+            AbsoluteExpiration = absoluteExpiration,
         };
         
-        _cache.Set(key, value, options);
-        await Task.CompletedTask;
+         cache.Set(key, value, options);
+         await Task.CompletedTask;
     }
 
     public async Task RemoveAsync(string key)
     {
-        _cache.Remove(key);
+        cache.Remove(key);
         await Task.CompletedTask;
     }
 
     public async Task<bool> ExistsAsync(string key)
     {
-        return await Task.FromResult(_cache.TryGetValue(key, out _));
+        return await Task.FromResult(cache.TryGetValue(key, out _));
     }
 } 

@@ -9,7 +9,7 @@ public class ExchangeRateRepository(IExchangeRateProvider[] exchangeRateProvider
 
     public async Task<Dictionary<string, ExchangeRate[]>> FilterAsync(IEnumerable<Currency> currencies)
     {
-        var tasks = exchangeRateProviders.Select(x => new { ExchangeRateProvider = x.Name, Task = x.FetchAllAsync() })
+        var tasks = exchangeRateProviders.Select(x => new { ExchangeRateProvider = x.Name, Task = x.FetchAllCurrentAsync() })
             .ToArray();
         
         try

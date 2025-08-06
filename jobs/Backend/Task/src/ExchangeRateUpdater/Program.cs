@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Middleware;
 
 namespace ExchangeRateUpdater
 {
@@ -13,33 +13,26 @@ namespace ExchangeRateUpdater
     {
         private static readonly IEnumerable<Currency> Currencies =
         [
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
+            new("USD"),
+            new("EUR"),
+            new("CZK"),
+            new("JPY"),
+            new("KES"),
+            new("RUB"),
+            new("THB"),
+            new("TRY"),
+            new("XYZ")
         ];
 
         public static async Task Main(string[] args)
         {
-            // Build configuration
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            // Configure services
-            var services = ServiceConfiguration.ConfigureServices(configuration);
-            var serviceProvider = services.BuildServiceProvider();
+            var host = CreateHostBuilder(args).Build();
 
             try
             {
-                // Get the service from DI container
-                var provider = serviceProvider.GetRequiredService<ExchangeRateProvider>();
+                await host.StartAsync();
+                
+                var provider = host.Services.GetRequiredService<ExchangeRateProvider>();
                 var rates = await provider.GetExchangeRates(Currencies);
 
                 var exchangeRates = rates as ExchangeRate[] ?? rates.ToArray();
@@ -53,16 +46,18 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-            finally
-            {
-                // Dispose the service provider
-                if (serviceProvider is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
 
             Console.ReadLine();
+            await host.StopAsync();
         }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    // Register all application services using the modular DI approach
+                    services.AddApplicationServices(hostContext.Configuration);
+                    services.AddDistributedMemoryCache();
+                });
     }
 }

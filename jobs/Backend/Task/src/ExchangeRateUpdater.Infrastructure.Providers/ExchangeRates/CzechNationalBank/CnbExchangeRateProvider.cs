@@ -3,71 +3,32 @@ using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Services;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank.Models;
 using ExchangeRateUpdater.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 
-public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, ICacheService cacheService, IConfiguration configuration) : IExchangeRateProvider
+public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, ICacheService cacheService, IOptions<CzechNationalBankExchangeRateConfig> exchangeRateConfig) : IExchangeRateProvider
 {
     public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";
     public string DefaultCurrency => "CZK";
     private static TimeZoneInfo DefaultTimezone => TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-
-    // Cache configuration
-    private CacheConfiguration CacheConfig => new()
+    
+    public async Task<ExchangeRate[]> FetchAllCurrentAsync()
     {
-        DailyRatesExpiration = TimeSpan.FromHours(
-            configuration.GetValue<int>("Caching:DailyRatesExpirationHours", 6)),
-        MonthlyRatesExpiration = TimeSpan.FromDays(
-            configuration.GetValue<int>("Caching:MonthlyRatesExpirationDays", 1))
-    };
-
-    public async Task<ExchangeRate[]> FetchAllAsync()
-    {
-        // Try to get from cache first
-        var dailyCacheKey = CacheKeyGenerator.GenerateDailyRatesKey(Name);
-        var monthlyCacheKey = CacheKeyGenerator.GenerateMonthlyRatesKey(Name);
-        
-        var cachedDailyRates = await cacheService.GetAsync<CnbExchangeRateResponse>(dailyCacheKey);
-        var cachedMonthlyRates = await cacheService.GetAsync<CnbExchangeRateResponse>(monthlyCacheKey);
-
-        // If both are cached, return combined results
-        if (cachedDailyRates != null && cachedMonthlyRates != null)
-        {
-            return ConvertRatesToExchangeRates([cachedDailyRates, cachedMonthlyRates]);
-        }
-
-        // Fetch missing data from API
-        var tasks = new List<Task<CnbExchangeRateResponse>>();
-        
-        if (cachedDailyRates == null)
-        {
-            tasks.Add(FetchAndCacheDailyRatesAsync(dailyCacheKey));
-        }
-        else
-        {
-            tasks.Add(Task.FromResult(cachedDailyRates));
-        }
-
-        if (cachedMonthlyRates == null)
-        {
-            tasks.Add(FetchAndCacheMonthlyRatesAsync(monthlyCacheKey));
-        }
-        else
-        {
-            tasks.Add(Task.FromResult(cachedMonthlyRates));
-        }
-
-        var responses = await Task.WhenAll(tasks);
-        return ConvertRatesToExchangeRates(responses);
+        return await FetchByDateAsync(DateTime.UtcNow);
     }
 
     public async Task<ExchangeRate[]> FetchByDateAsync(DateTime date)
     {
+        // If the date is in the future, use the current date
+        if (date > DateTime.UtcNow)
+        {
+            date = DateTime.UtcNow;
+        }
+        
         date = TimeZoneInfo.ConvertTimeFromUtc(date, DefaultTimezone);
         
-        // For specific dates, use date-specific cache keys
         var dailyCacheKey = CacheKeyGenerator.GenerateDailyRatesKey(Name, date);
         var monthlyCacheKey = CacheKeyGenerator.GenerateMonthlyRatesKey(Name, date);
         
@@ -76,62 +37,43 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
 
         if (cachedDailyRates != null && cachedMonthlyRates != null)
         {
-            return ConvertRatesToExchangeRates([cachedDailyRates, cachedMonthlyRates]);
+            return FlattenAndConvertRatesToExchangeRates([cachedDailyRates, cachedMonthlyRates]);
         }
 
-        var tasks = new List<Task<CnbExchangeRateResponse>>();
-        
-        if (cachedDailyRates == null)
+        var tasks = new List<Task<CnbExchangeRateResponse>>
         {
-            tasks.Add(FetchAndCacheDailyRatesByDateAsync(date, dailyCacheKey));
-        }
-        else
-        {
-            tasks.Add(Task.FromResult(cachedDailyRates));
-        }
-
-        if (cachedMonthlyRates == null)
-        {
-            tasks.Add(FetchAndCacheMonthlyRatesByDateAsync(date, monthlyCacheKey));
-        }
-        else
-        {
-            tasks.Add(Task.FromResult(cachedMonthlyRates));
-        }
+            cachedDailyRates == null
+                ? FetchAndCacheDailyRatesByDateAsync(date, dailyCacheKey)
+                : Task.FromResult(cachedDailyRates),
+            cachedMonthlyRates == null
+                ? FetchAndCacheMonthlyRatesByDateAsync(date, monthlyCacheKey)
+                : Task.FromResult(cachedMonthlyRates)
+        };
 
         var responses = await Task.WhenAll(tasks);
-        return ConvertRatesToExchangeRates(responses);
-    }
-
-    private async Task<CnbExchangeRateResponse> FetchAndCacheDailyRatesAsync(string cacheKey)
-    {
-        var response = await cnbApiClient.GetFrequentExchangeRatesAsync();
-        await cacheService.SetAsync(cacheKey, response, CacheConfig.DailyRatesExpiration);
-        return response;
-    }
-
-    private async Task<CnbExchangeRateResponse> FetchAndCacheMonthlyRatesAsync(string cacheKey)
-    {
-        var response = await cnbApiClient.GetOtherExchangeRatesAsync();
-        await cacheService.SetAsync(cacheKey, response, CacheConfig.MonthlyRatesExpiration);
-        return response;
+        return FlattenAndConvertRatesToExchangeRates(responses);
     }
 
     private async Task<CnbExchangeRateResponse> FetchAndCacheDailyRatesByDateAsync(DateTime date, string cacheKey)
     {
         var response = await cnbApiClient.GetFrequentExchangeRatesAsync(date.ToString("yyyy-MM-dd"));
-        await cacheService.SetAsync(cacheKey, response, CacheConfig.DailyRatesExpiration);
+        
+        if (date.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, DefaultTimezone).Date)
+        {
+            await cacheService.SetAsync(cacheKey, response, date.Date.AddDays(1), null, null);
+        }
+        await cacheService.SetAsync(cacheKey, response, null, TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.DailyRatesAbsoluteExpirationInMinutes), TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.DailyRatesSlidingExpirationInMinutes));
         return response;
     }
 
     private async Task<CnbExchangeRateResponse> FetchAndCacheMonthlyRatesByDateAsync(DateTime date, string cacheKey)
     {
         var response = await cnbApiClient.GetOtherExchangeRatesAsync(date.ToString("yyyy-MM"));
-        await cacheService.SetAsync(cacheKey, response, CacheConfig.MonthlyRatesExpiration);
+        await cacheService.SetAsync(cacheKey, response, null, TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.MonthlyRatesAbsoluteExpirationInMinutes), TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.MonthlyRatesSlidingExpirationInMinutes));
         return response;
     }
 
-    private static ExchangeRate[] ConvertRatesToExchangeRates(CnbExchangeRateResponse[] responses)
+    private static ExchangeRate[] FlattenAndConvertRatesToExchangeRates(CnbExchangeRateResponse[] responses)
     {
         return responses.SelectMany(fxModel => fxModel.Rates)
             .Select(rateModel => rateModel.ToExchangeRate()).ToArray();

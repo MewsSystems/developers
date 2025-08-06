@@ -1,10 +1,9 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Caching.Distributed;
 using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
+using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank.Models;
 using Microsoft.Extensions.Http.Resilience;
 using Polly;
 using Refit;
@@ -27,6 +26,14 @@ public static class DependencyInjection
         if (configuration != null)
         {
             services.AddSingleton(configuration);
+            
+            // Configure options
+            services.Configure<ExchangeRateProvidersConfig>(
+                configuration.GetSection("ExchangeRateProviders"));
+            
+            // Configure CzechNationalBank specific options
+            services.Configure<CzechNationalBankExchangeRateConfig>(
+                configuration.GetSection("ExchangeRateProviders:CzechNationalBank"));
         }
         
         // Register Refit API clients first
@@ -34,8 +41,8 @@ public static class DependencyInjection
             .ConfigureHttpClient(c =>
             {
                 // Use configuration if available, otherwise use defaults
-                var baseUrl = configuration?["CzechNationalBank:BaseUrl"] ?? "https://api.cnb.cz/cnbapi/";
-                var timeout = configuration?.GetValue<int>("CzechNationalBank:TimeoutSeconds") ?? 30;
+                var baseUrl = configuration?["ExchangeRateProviders:CzechNationalBank:BaseUrl"] ?? "https://api.cnb.cz/cnbapi/";
+                var timeout = configuration?.GetValue<int>("ExchangeRateProviders:CzechNationalBank:TimeoutSeconds") ?? 30;
 
                 c.BaseAddress = new Uri(baseUrl);
                 c.Timeout = TimeSpan.FromSeconds(timeout);
