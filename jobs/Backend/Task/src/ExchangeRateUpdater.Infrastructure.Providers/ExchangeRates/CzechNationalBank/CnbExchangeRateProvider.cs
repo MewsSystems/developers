@@ -122,6 +122,7 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
             {
                 logger.LogDebug("Caching current day rates with absolute expiration for {ProviderName}", Name);
                 await cacheService.SetAsync(cacheKey, response, date.Date.AddDays(1), null, null);
+                return response;
             }
             
             logger.LogDebug("Caching daily rates with sliding expiration for {ProviderName}. Cache key: {CacheKey}", Name, cacheKey);

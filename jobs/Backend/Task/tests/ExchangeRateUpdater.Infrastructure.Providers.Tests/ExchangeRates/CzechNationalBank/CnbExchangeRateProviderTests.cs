@@ -202,4 +202,201 @@ public class CnbExchangeRateProviderTests
         Assert.Equal(1m, exchangeRate.ExchangeValue);
         Assert.Equal("CNB", exchangeRate.ProviderName);
     }
+
+    [Fact]
+    public async Task FetchByDateAsync_WithCurrentDate_ShouldCacheUntilEndOfDayInTimezone()
+    {
+        var currentDate = DateTime.UtcNow;
+        var pragueTimezone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var pragueCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, pragueTimezone).Date;
+        var dateString = pragueCurrentDate.ToString("yyyy-MM-dd");
+        var monthString = pragueCurrentDate.ToString("yyyy-MM");
+        
+        var mockDailyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "USD",
+                    Rate = 25.5m,
+                    Amount = 1,
+                    Country = "USA",
+                    Currency = "US Dollar",
+                    Order = 1,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        var mockMonthlyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "EUR",
+                    Rate = 26.0m,
+                    Amount = 1,
+                    Country = "Eurozone",
+                    Currency = "Euro",
+                    Order = 2,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        _mockApiClient.Setup(x => x.GetFrequentExchangeRatesAsync(dateString, It.IsAny<string>()))
+            .ReturnsAsync(mockDailyResponse);
+        _mockApiClient.Setup(x => x.GetOtherExchangeRatesAsync(monthString, It.IsAny<string>()))
+            .ReturnsAsync(mockMonthlyResponse);
+
+        var result = await _provider.FetchByDateAsync(pragueCurrentDate);
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Length);
+        Assert.Equal("USD", result[0].SourceCurrency.Code);
+        Assert.Equal("EUR", result[1].SourceCurrency.Code);
+
+        _mockApiClient.Verify(x => x.GetFrequentExchangeRatesAsync(dateString, It.IsAny<string>()), Times.Once);
+        _mockApiClient.Verify(x => x.GetOtherExchangeRatesAsync(monthString, It.IsAny<string>()), Times.Once);
+
+        var dailyCacheKey = $"ExchangeRates:CzechNationalBank:Daily:{pragueCurrentDate:yyyy-MM-dd}";
+        var dailyCachedData = await _cache.GetStringAsync(dailyCacheKey);
+        Assert.NotNull(dailyCachedData);
+
+        var monthlyCacheKey = $"ExchangeRates:CzechNationalBank:Monthly:{pragueCurrentDate:yyyy-MM}";
+        var monthlyCachedData = await _cache.GetStringAsync(monthlyCacheKey);
+        Assert.NotNull(monthlyCachedData);
+    }
+
+    [Fact]
+    public async Task FetchByDateAsync_WithPastDate_ShouldUseSlidingExpiration()
+    {
+        var pastDate = DateTime.UtcNow.AddDays(-1);
+        var pragueTimezone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var praguePastDate = TimeZoneInfo.ConvertTimeFromUtc(pastDate, pragueTimezone).Date;
+        var dateString = praguePastDate.ToString("yyyy-MM-dd");
+        var monthString = praguePastDate.ToString("yyyy-MM");
+        
+        var mockDailyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "EUR",
+                    Rate = 26.0m,
+                    Amount = 1,
+                    Country = "Eurozone",
+                    Currency = "Euro",
+                    Order = 2,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        var mockMonthlyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "JPY",
+                    Rate = 17.0m,
+                    Amount = 100,
+                    Country = "Japan",
+                    Currency = "Japanese Yen",
+                    Order = 4,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        _mockApiClient.Setup(x => x.GetFrequentExchangeRatesAsync(dateString, It.IsAny<string>()))
+            .ReturnsAsync(mockDailyResponse);
+        _mockApiClient.Setup(x => x.GetOtherExchangeRatesAsync(monthString, It.IsAny<string>()))
+            .ReturnsAsync(mockMonthlyResponse);
+
+        var result = await _provider.FetchByDateAsync(praguePastDate);
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Length);
+        Assert.Equal("EUR", result[0].SourceCurrency.Code);
+        Assert.Equal("JPY", result[1].SourceCurrency.Code);
+
+        var dailyCacheKey = $"ExchangeRates:CzechNationalBank:Daily:{praguePastDate:yyyy-MM-dd}";
+        var dailyCachedData = await _cache.GetStringAsync(dailyCacheKey);
+        Assert.NotNull(dailyCachedData);
+
+        var monthlyCacheKey = $"ExchangeRates:CzechNationalBank:Monthly:{praguePastDate:yyyy-MM}";
+        var monthlyCachedData = await _cache.GetStringAsync(monthlyCacheKey);
+        Assert.NotNull(monthlyCachedData);
+    }
+
+    [Fact]
+    public async Task FetchByDateAsync_WithDifferentTimezoneCurrentDate_ShouldCacheUntilEndOfDayInPragueTimezone()
+    {
+        var utcNow = DateTime.UtcNow;
+        var pragueTimezone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var pragueCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(utcNow, pragueTimezone).Date;
+        var dateString = pragueCurrentDate.ToString("yyyy-MM-dd");
+        var monthString = pragueCurrentDate.ToString("yyyy-MM");
+        
+        var mockDailyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "JPY",
+                    Rate = 17.0m,
+                    Amount = 100,
+                    Country = "Japan",
+                    Currency = "Japanese Yen",
+                    Order = 4,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        var mockMonthlyResponse = new CnbExchangeRateResponse
+        {
+            Rates = new[]
+            {
+                new CnbExchangeRateModel
+                {
+                    CurrencyCode = "GBP",
+                    Rate = 30.0m,
+                    Amount = 1,
+                    Country = "United Kingdom",
+                    Currency = "British Pound",
+                    Order = 3,
+                    ValidFor = dateString
+                }
+            }
+        };
+
+        _mockApiClient.Setup(x => x.GetFrequentExchangeRatesAsync(dateString, It.IsAny<string>()))
+            .ReturnsAsync(mockDailyResponse);
+        _mockApiClient.Setup(x => x.GetOtherExchangeRatesAsync(monthString, It.IsAny<string>()))
+            .ReturnsAsync(mockMonthlyResponse);
+
+        var result = await _provider.FetchByDateAsync(pragueCurrentDate);
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Length);
+        Assert.Equal("JPY", result[0].SourceCurrency.Code);
+        Assert.Equal("GBP", result[1].SourceCurrency.Code);
+
+        var dailyCacheKey = $"ExchangeRates:CzechNationalBank:Daily:{pragueCurrentDate:yyyy-MM-dd}";
+        var dailyCachedData = await _cache.GetStringAsync(dailyCacheKey);
+        Assert.NotNull(dailyCachedData);
+
+        var monthlyCacheKey = $"ExchangeRates:CzechNationalBank:Monthly:{pragueCurrentDate:yyyy-MM}";
+        var monthlyCachedData = await _cache.GetStringAsync(monthlyCacheKey);
+        Assert.NotNull(monthlyCachedData);
+    }
+
+
 } 
