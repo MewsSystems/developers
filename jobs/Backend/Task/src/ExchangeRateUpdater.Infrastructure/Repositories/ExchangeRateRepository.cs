@@ -1,18 +1,31 @@
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Providers;
 using ExchangeRateUpdater.Domain.Repositories;
+using ExchangeRateUpdater.Domain.Services;
+using ExchangeRateUpdater.Infrastructure.Repositories;
+using ExchangeRateUpdater.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using ExchangeRateUpdater.Infrastructure.Configuration;
 
 namespace ExchangeRateUpdater.Infrastructure.Repositories;
 
 public class ExchangeRateRepository : IExchangeRateRepository
 {
     private readonly Dictionary<string, IExchangeRateProvider> _providers;
+    private readonly ICacheService _cacheService;
     private readonly ILogger<ExchangeRateRepository> _logger;
+    private readonly IOptions<ExchangeRateProvidersConfig> _config;
 
-    public ExchangeRateRepository(IEnumerable<IExchangeRateProvider> exchangeRateProviders, ILogger<ExchangeRateRepository> logger)
+    public ExchangeRateRepository(
+        IEnumerable<IExchangeRateProvider> exchangeRateProviders, 
+        ICacheService cacheService,
+        IOptions<ExchangeRateProvidersConfig> config,
+        ILogger<ExchangeRateRepository> logger)
     {
         _providers = exchangeRateProviders.ToDictionary(p => p.Name, p => p);
+        _cacheService = cacheService;
+        _config = config;
         _logger = logger;
     }
 
@@ -23,7 +36,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
         
         try
         {
-            var tasks = _providers.Select(x => new { ExchangeRateProvider = x.Key, Task = x.Value.FetchAllCurrentAsync() })
+            var tasks = _providers.Select(x => new { ExchangeRateProvider = x.Key, Task = GetCachedOrFetchRatesAsync(x.Value) })
                 .ToArray();
             
             _logger.LogDebug("Started fetching rates from {ProviderCount} providers", tasks.Length);
@@ -94,7 +107,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
             }
 
             _logger.LogDebug("Fetching rates from provider '{ProviderName}'", providerName);
-            var rates = await provider.FetchAllCurrentAsync();
+            var rates = await GetCachedOrFetchRatesAsync(provider);
             _logger.LogInformation("Retrieved {RateCount} rates from provider '{ProviderName}'", rates.Length, providerName);
             
             var currenciesSet = new HashSet<Currency>(currencyFilter);
@@ -118,5 +131,88 @@ public class ExchangeRateRepository : IExchangeRateRepository
                 providerName, string.Join(", ", currencyFilter.Select(c => c.Code)));
             return new Dictionary<string, ExchangeRate[]>();
         }
+    }
+
+    private async Task<ExchangeRate[]> GetCachedOrFetchRatesAsync(IExchangeRateProvider provider)
+    {
+        var currentDate = DateTime.UtcNow;
+        var providerCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, provider.TimeZone).Date;
+        var cacheKey = $"ExchangeRates:{provider.Name}:Current";
+        
+        try
+        {
+            var cachedRates = await _cacheService.GetAsync<ExchangeRate[]>(cacheKey);
+            if (cachedRates != null)
+            {
+                _logger.LogDebug("Retrieved rates from cache for provider '{ProviderName}'", provider.Name);
+                return cachedRates;
+            }
+
+            _logger.LogDebug("Cache miss for provider '{ProviderName}', fetching from API", provider.Name);
+            var rates = await provider.FetchAllCurrentAsync();
+            
+            if (rates.Length > 0)
+            {
+                await CacheRatesWithTimezoneAwareExpiration(provider, cacheKey, rates, providerCurrentDate);
+            }
+            
+            return rates;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to get cached or fetch rates for provider '{ProviderName}'", provider.Name);
+            return [];
+        }
+    }
+
+    private async Task CacheRatesWithTimezoneAwareExpiration(IExchangeRateProvider provider, string cacheKey, ExchangeRate[] rates, DateTime providerCurrentDate)
+    {
+        var today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, provider.TimeZone).Date;
+        
+        // Check if all rates are for the current day
+        var allRatesAreCurrentDay = rates.All(rate => 
+        {
+            if (rate.ValidUntil.HasValue)
+            {
+                var rateDate = TimeZoneInfo.ConvertTimeFromUtc(rate.ValidUntil.Value, provider.TimeZone).Date;
+                return rateDate == today;
+            }
+            return false;
+        });
+        
+        if (allRatesAreCurrentDay)
+        {
+            // Current day rates: expire at end of day in provider's timezone
+            var endOfDay = today.AddDays(1);
+            await _cacheService.SetAsync(cacheKey, rates, endOfDay, null, null);
+            _logger.LogDebug("Cached {RateCount} current day rates for provider '{ProviderName}' until end of day {EndOfDay} in timezone {Timezone}", 
+                rates.Length, provider.Name, endOfDay, provider.TimeZone.Id);
+        }
+        else
+        {
+            // Past/future rates: use sliding and absolute expiration from config
+            var providerConfig = GetProviderCacheConfig(provider.Name);
+            var absoluteExpiration = TimeSpan.FromMinutes(providerConfig.DailyRatesAbsoluteExpirationInMinutes);
+            var slidingExpiration = TimeSpan.FromMinutes(providerConfig.DailyRatesSlidingExpirationInMinutes);
+            
+            await _cacheService.SetAsync(cacheKey, rates, null, absoluteExpiration, slidingExpiration);
+            _logger.LogDebug("Cached {RateCount} rates for provider '{ProviderName}' with sliding expiration {SlidingExpiration} and absolute expiration {AbsoluteExpiration} in timezone {Timezone}", 
+                rates.Length, provider.Name, slidingExpiration, absoluteExpiration, provider.TimeZone.Id);
+        }
+    }
+
+    private CacheConfig GetProviderCacheConfig(string providerName)
+    {
+        // Try to get provider-specific cache configuration using string access
+        var providerConfig = _config?.Value?[$"{providerName}.Cache"];
+        
+        // Return provider config if available, otherwise return default
+        return providerConfig ?? new CacheConfig
+        {
+            DailyRatesAbsoluteExpirationInMinutes = 30,
+            DailyRatesSlidingExpirationInMinutes = 10,
+            MonthlyRatesAbsoluteExpirationInMinutes = 1440,
+            MonthlyRatesSlidingExpirationInMinutes = 60
+        };
     }
 } 

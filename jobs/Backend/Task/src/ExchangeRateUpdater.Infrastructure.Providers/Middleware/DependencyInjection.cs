@@ -31,10 +31,10 @@ public static class DependencyInjection
             .ConfigureHttpClient(c =>
             {
                 var baseUrl = configuration?["ExchangeRateProviders:CzechNationalBank:BaseUrl"] ?? "https://api.cnb.cz/cnbapi/";
-                var timeout = configuration?.GetValue<int>("ExchangeRateProviders:CzechNationalBank:TimeoutSeconds") ?? 30;
+                var timeoutSeconds = configuration?.GetValue<int>("ExchangeRateProviders:CzechNationalBank:TimeoutSeconds") ?? 30;
 
                 c.BaseAddress = new Uri(baseUrl);
-                c.Timeout = TimeSpan.FromSeconds(timeout);
+                c.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
             })
             .AddHttpMessageHandler<RefitLoggingHandler>()
             .AddResilienceHandler("standard-resilience-policy", builder =>
