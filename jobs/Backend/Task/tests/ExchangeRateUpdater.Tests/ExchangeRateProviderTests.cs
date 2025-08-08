@@ -27,18 +27,21 @@ public class ExchangeRateProviderTests
     public async Task GetExchangeRates_WithValidCurrencies_ShouldReturnExchangeRates()
     {
         var currencies = new[] { new Currency("USD"), new Currency("EUR") };
-        var expectedRates = new[]
+        var provider1Rates = new[]
         {
-            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 23.5m, "CNB"),
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 23.5m, "CNB")
+        };
+        var provider2Rates = new[]
+        {
             new ExchangeRate(new Currency("EUR"), new Currency("CZK"), 25.2m, "CNB")
         };
 
         var repositoryResponse = new Dictionary<string, ExchangeRate[]>
         {
-            { "CzechNationalBank", expectedRates }
+            { "CzechNationalBank", provider1Rates.Concat(provider2Rates).ToArray() }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(repositoryResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -55,7 +58,7 @@ public class ExchangeRateProviderTests
         var currencies = new[] { new Currency("USD"), new Currency("EUR") };
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -70,7 +73,7 @@ public class ExchangeRateProviderTests
         IEnumerable<Currency>? currencies = null;
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -85,7 +88,7 @@ public class ExchangeRateProviderTests
         var currencies = Array.Empty<Currency>();
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -113,7 +116,7 @@ public class ExchangeRateProviderTests
             { "OtherProvider", provider2Rates }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(repositoryResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -130,7 +133,7 @@ public class ExchangeRateProviderTests
     {
         var currencies = new[] { new Currency("USD") };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ThrowsAsync(new Exception("Repository error"));
 
         await Assert.ThrowsAsync<Exception>(() => _provider.GetExchangeRates(currencies));
@@ -155,7 +158,7 @@ public class ExchangeRateProviderTests
             { "OtherProvider", provider2Rates }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(expectedResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -176,7 +179,7 @@ public class ExchangeRateProviderTests
         var currencies = new[] { new Currency("USD"), new Currency("EUR") };
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -191,7 +194,7 @@ public class ExchangeRateProviderTests
         IEnumerable<Currency>? currencies = null;
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -206,7 +209,7 @@ public class ExchangeRateProviderTests
         var currencies = Array.Empty<Currency>();
         var emptyResponse = new Dictionary<string, ExchangeRate[]>();
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(emptyResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -220,7 +223,7 @@ public class ExchangeRateProviderTests
     {
         var currencies = new[] { new Currency("USD") };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ThrowsAsync(new Exception("Repository error"));
 
         await Assert.ThrowsAsync<Exception>(() => _provider.GetExchangeRatesFromMultipleProviders(currencies));
@@ -240,7 +243,7 @@ public class ExchangeRateProviderTests
             { "CzechNationalBank", providerRates }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(expectedResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -270,7 +273,7 @@ public class ExchangeRateProviderTests
             { "EmptyProvider", provider2Rates }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(expectedResponse);
 
         var result = await _provider.GetExchangeRatesFromMultipleProviders(currencies);
@@ -294,7 +297,7 @@ public class ExchangeRateProviderTests
             { "EmptyProvider", emptyRates }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(repositoryResponse);
 
         var result = await _provider.GetExchangeRates(currencies);
@@ -314,7 +317,7 @@ public class ExchangeRateProviderTests
             { "NullProvider", nullRates! }
         };
 
-        _mockRepository.Setup(r => r.FilterAsync(currencies))
+        _mockRepository.Setup(r => r.FilterAsync(currencies, It.IsAny<DateTime?>()))
             .ReturnsAsync(repositoryResponse);
 
         var result = await _provider.GetExchangeRates(currencies);

@@ -12,8 +12,8 @@ public static class DependencyInjection
         // We can use redis here
         services.AddDistributedMemoryCache();
         
-        // Register infrastructure services
-        services.AddInfrastructure();
+        // Register infrastructure services with configuration
+        services.AddInfrastructure(configuration);
         services.AddThirdPartyProviders(configuration);
         
         // Register application services

@@ -1,43 +1,39 @@
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Providers;
-using ExchangeRateUpdater.Domain.Services;
 using ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank.Models;
-using ExchangeRateUpdater.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Net.Http;
 
 namespace ExchangeRateUpdater.Infrastructure.Providers.ExchangeRates.CzechNationalBank;
 
-public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, ICacheService cacheService, IOptions<CzechNationalBankExchangeRateConfig> exchangeRateConfig, ILogger<CnbExchangeRateProvider> logger) : IExchangeRateProvider
+public class CnbExchangeRateProvider(
+    ICzechNationalBankApiClient cnbApiClient,
+    ILogger<CnbExchangeRateProvider> logger)
+    : IExchangeRateProvider
 {
     public string Name => "CzechNationalBank";
     public string DefaultLanguage => "EN";
     public string DefaultCurrency => "CZK";
-    private static TimeZoneInfo DefaultTimezone => TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
-    
+    public TimeZoneInfo TimeZone => TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+
     public async Task<ExchangeRate[]> FetchAllCurrentAsync()
     {
         logger.LogInformation("Fetching current exchange rates from {ProviderName}", Name);
+        
         try
         {
-            var result = await FetchByDateAsync(DateTime.UtcNow);
-            logger.LogInformation("Successfully fetched {Count} current exchange rates from {ProviderName}", result.Length, Name);
+            var currentDate = DateTime.UtcNow;
+            var pragueCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, TimeZone).Date;
+            
+            var result = await FetchByDateAsync(pragueCurrentDate);
+            
+            logger.LogInformation("Successfully fetched {Count} current exchange rates from {ProviderName}", 
+                result.Length, Name);
+            
             return result;
-        }
-        catch (HttpRequestException ex)
-        {
-            logger.LogWarning(ex, "HTTP request failed while fetching current exchange rates from {ProviderName}. Status: {StatusCode}", Name, ex.StatusCode);
-            return [];
-        }
-        catch (TaskCanceledException ex)
-        {
-            logger.LogWarning(ex, "Request timeout while fetching current exchange rates from {ProviderName}", Name);
-            return [];
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Unexpected error while fetching current exchange rates from {ProviderName}", Name);
+            logger.LogWarning(ex, "Failed to fetch current exchange rates from {ProviderName}", Name);
             return [];
         }
     }
@@ -55,33 +51,14 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
                 date = DateTime.UtcNow;
             }
             
-            date = TimeZoneInfo.ConvertTimeFromUtc(date, DefaultTimezone);
+            date = TimeZoneInfo.ConvertTimeFromUtc(date, TimeZone);
             
-            var dailyCacheKey = CacheKeyGenerator.GenerateDailyRatesKey(Name, date);
-            var monthlyCacheKey = CacheKeyGenerator.GenerateMonthlyRatesKey(Name, date);
-            
-            logger.LogDebug("Generated cache keys - Daily: {DailyKey}, Monthly: {MonthlyKey}", dailyCacheKey, monthlyCacheKey);
-            
-            var cachedDailyRates = await cacheService.GetAsync<CnbExchangeRateResponse>(dailyCacheKey);
-            var cachedMonthlyRates = await cacheService.GetAsync<CnbExchangeRateResponse>(monthlyCacheKey);
-
-            if (cachedDailyRates != null && cachedMonthlyRates != null)
-            {
-                logger.LogInformation("Retrieved both daily and monthly rates from cache for {ProviderName}", Name);
-                return FlattenAndConvertRatesToExchangeRates([cachedDailyRates, cachedMonthlyRates]);
-            }
-
-            logger.LogInformation("Cache miss for {ProviderName}. Daily cached: {DailyCached}, Monthly cached: {MonthlyCached}", 
-                Name, cachedDailyRates != null, cachedMonthlyRates != null);
+            logger.LogDebug("Fetching rates for {ProviderName} on {Date}", Name, date.ToString("yyyy-MM-dd"));
 
             var tasks = new List<Task<CnbExchangeRateResponse>>
             {
-                cachedDailyRates == null
-                    ? FetchAndCacheDailyRatesByDateAsync(date, dailyCacheKey)
-                    : Task.FromResult(cachedDailyRates),
-                cachedMonthlyRates == null
-                    ? FetchAndCacheMonthlyRatesByDateAsync(date, monthlyCacheKey)
-                    : Task.FromResult(cachedMonthlyRates)
+                FetchDailyRatesByDateAsync(date),
+                FetchMonthlyRatesByDateAsync(date)
             };
 
             var responses = await Task.WhenAll(tasks);
@@ -95,21 +72,21 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
         catch (HttpRequestException ex)
         {
             logger.LogWarning(ex, "HTTP request failed while fetching exchange rates from {ProviderName} for date {Date}. Status: {StatusCode}", Name, date.ToString("yyyy-MM-dd"), ex.StatusCode);
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
         catch (TaskCanceledException ex)
         {
             logger.LogWarning(ex, "Request timeout while fetching exchange rates from {ProviderName} for date {Date}", Name, date.ToString("yyyy-MM-dd"));
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Unexpected error while fetching exchange rates from {ProviderName} for date {Date}", Name, date.ToString("yyyy-MM-dd"));
-            return Array.Empty<ExchangeRate>();
+            return [];
         }
     }
 
-    private async Task<CnbExchangeRateResponse> FetchAndCacheDailyRatesByDateAsync(DateTime date, string cacheKey)
+    private async Task<CnbExchangeRateResponse> FetchDailyRatesByDateAsync(DateTime date)
     {
         logger.LogInformation("Fetching daily rates from API for {ProviderName} on {Date}", Name, date.ToString("yyyy-MM-dd"));
         
@@ -117,16 +94,6 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
         {
             var response = await cnbApiClient.GetFrequentExchangeRatesAsync(date.ToString("yyyy-MM-dd"));
             logger.LogInformation("Successfully fetched daily rates from API for {ProviderName}. Rate count: {Count}", Name, response.Rates?.Length ?? 0);
-            
-            if (date.Date == TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, DefaultTimezone).Date)
-            {
-                logger.LogDebug("Caching current day rates with absolute expiration for {ProviderName}", Name);
-                await cacheService.SetAsync(cacheKey, response, date.Date.AddDays(1), null, null);
-            }
-            
-            logger.LogDebug("Caching daily rates with sliding expiration for {ProviderName}. Cache key: {CacheKey}", Name, cacheKey);
-            await cacheService.SetAsync(cacheKey, response, null, TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.DailyRatesAbsoluteExpirationInMinutes), TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.DailyRatesSlidingExpirationInMinutes));
-            
             return response;
         }
         catch (HttpRequestException ex)
@@ -146,7 +113,7 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
         }
     }
 
-    private async Task<CnbExchangeRateResponse> FetchAndCacheMonthlyRatesByDateAsync(DateTime date, string cacheKey)
+    private async Task<CnbExchangeRateResponse> FetchMonthlyRatesByDateAsync(DateTime date)
     {
         logger.LogInformation("Fetching monthly rates from API for {ProviderName} on {Date}", Name, date.ToString("yyyy-MM"));
         
@@ -154,10 +121,6 @@ public class CnbExchangeRateProvider(ICzechNationalBankApiClient cnbApiClient, I
         {
             var response = await cnbApiClient.GetOtherExchangeRatesAsync(date.ToString("yyyy-MM"));
             logger.LogInformation("Successfully fetched monthly rates from API for {ProviderName}. Rate count: {Count}", Name, response.Rates?.Length ?? 0);
-            
-            logger.LogDebug("Caching monthly rates for {ProviderName}. Cache key: {CacheKey}", Name, cacheKey);
-            await cacheService.SetAsync(cacheKey, response, null, TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.MonthlyRatesAbsoluteExpirationInMinutes), TimeSpan.FromMinutes(exchangeRateConfig.Value.Cache.MonthlyRatesSlidingExpirationInMinutes));
-            
             return response;
         }
         catch (HttpRequestException ex)

@@ -9,11 +9,11 @@ public class CnbExchangeRateResponseTests
     {
         var response = new CnbExchangeRateResponse
         {
-            Rates = new[]
-            {
+            Rates =
+            [
                 new CnbExchangeRateModel { CurrencyCode = "USD", Rate = 23.5m, Amount = 1, Country = "USA", Currency = "US Dollar", Order = 1, ValidFor = "2024-01-15" },
                 new CnbExchangeRateModel { CurrencyCode = "EUR", Rate = 25.2m, Amount = 1, Country = "EU", Currency = "Euro", Order = 2, ValidFor = "2024-01-15" }
-            }
+            ]
         };
 
         Assert.NotNull(response);
@@ -30,7 +30,7 @@ public class CnbExchangeRateResponseTests
     {
         var response = new CnbExchangeRateResponse
         {
-            Rates = Array.Empty<CnbExchangeRateModel>()
+            Rates = []
         };
 
         Assert.NotNull(response);
