@@ -29,14 +29,16 @@ public class ExchangeRateRepository : IExchangeRateRepository
         _logger = logger;
     }
 
-    public async Task<Dictionary<string, ExchangeRate[]>> FilterAsync(IEnumerable<Currency> currencies)
+    public async Task<Dictionary<string, ExchangeRate[]>> FilterAsync(IEnumerable<Currency> currencies, DateTime? date = null)
     {
         var currencyArray = currencies as Currency[] ?? currencies.ToArray();
-        _logger.LogInformation("Filtering exchange rates for {CurrencyCount} currencies from {ProviderCount} providers", currencyArray.Length, _providers.Count);
+        var targetDate = date ?? DateTime.UtcNow;
+        _logger.LogInformation("Filtering exchange rates for {CurrencyCount} currencies from {ProviderCount} providers for date {Date}", 
+            currencyArray.Length, _providers.Count, targetDate.ToString("yyyy-MM-dd"));
         
         try
         {
-            var tasks = _providers.Select(x => new { ExchangeRateProvider = x.Key, Task = GetCachedOrFetchRatesAsync(x.Value) })
+            var tasks = _providers.Select(x => new { ExchangeRateProvider = x.Key, Task = GetCachedOrFetchRatesAsync(x.Value, targetDate) })
                 .ToArray();
             
             _logger.LogDebug("Started fetching rates from {ProviderCount} providers", tasks.Length);
@@ -76,12 +78,13 @@ public class ExchangeRateRepository : IExchangeRateRepository
         }
     }
 
-    public async Task<Dictionary<string, ExchangeRate[]>> GetAllAsync()
+    public async Task<Dictionary<string, ExchangeRate[]>> GetAllAsync(DateTime? date = null)
     {
-        _logger.LogInformation("Getting all exchange rates from {ProviderCount} providers", _providers.Count);
+        var targetDate = date ?? DateTime.UtcNow;
+        _logger.LogInformation("Getting all exchange rates from {ProviderCount} providers for date {Date}", _providers.Count, targetDate.ToString("yyyy-MM-dd"));
         try
         {
-            var result = await FilterAsync([]);
+            var result = await FilterAsync([], targetDate);
             _logger.LogInformation("Successfully retrieved all exchange rates from {ProviderCount} providers", result.Count);
             return result;
         }
@@ -92,10 +95,12 @@ public class ExchangeRateRepository : IExchangeRateRepository
         }
     }
 
-    public async Task<Dictionary<string, ExchangeRate[]>> GetFromProviderAsync(string providerName, IEnumerable<Currency> currencies)
+    public async Task<Dictionary<string, ExchangeRate[]>> GetFromProviderAsync(string providerName, IEnumerable<Currency> currencies, DateTime? date = null)
     {
         var currencyFilter = currencies as Currency[] ?? currencies.ToArray();
-        _logger.LogInformation("Getting exchange rates from provider '{ProviderName}' for {CurrencyCount} currencies", providerName, currencyFilter.Length);
+        var targetDate = date ?? DateTime.UtcNow;
+        _logger.LogInformation("Getting exchange rates from provider '{ProviderName}' for {CurrencyCount} currencies for date {Date}", 
+            providerName, currencyFilter.Length, targetDate.ToString("yyyy-MM-dd"));
         
         try
         {
@@ -107,7 +112,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
             }
 
             _logger.LogDebug("Fetching rates from provider '{ProviderName}'", providerName);
-            var rates = await GetCachedOrFetchRatesAsync(provider);
+            var rates = await GetCachedOrFetchRatesAsync(provider, targetDate);
             _logger.LogInformation("Retrieved {RateCount} rates from provider '{ProviderName}'", rates.Length, providerName);
             
             var currenciesSet = new HashSet<Currency>(currencyFilter);
@@ -133,54 +138,42 @@ public class ExchangeRateRepository : IExchangeRateRepository
         }
     }
 
-    private async Task<ExchangeRate[]> GetCachedOrFetchRatesAsync(IExchangeRateProvider provider)
+    private async Task<ExchangeRate[]> GetCachedOrFetchRatesAsync(IExchangeRateProvider provider, DateTime date)
     {
-        var currentDate = DateTime.UtcNow;
-        var providerCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, provider.TimeZone).Date;
-        var cacheKey = $"ExchangeRates:{provider.Name}:Current";
+        var providerDate = TimeZoneInfo.ConvertTimeFromUtc(date, provider.TimeZone).Date;
+        var cacheKey = $"ExchangeRates:{provider.Name}:{providerDate:yyyy-MM-dd}";
         
         try
         {
             var cachedRates = await _cacheService.GetAsync<ExchangeRate[]>(cacheKey);
             if (cachedRates != null)
             {
-                _logger.LogDebug("Retrieved rates from cache for provider '{ProviderName}'", provider.Name);
+                _logger.LogDebug("Retrieved rates from cache for provider '{ProviderName}' for date {Date}", provider.Name, providerDate.ToString("yyyy-MM-dd"));
                 return cachedRates;
             }
 
-            _logger.LogDebug("Cache miss for provider '{ProviderName}', fetching from API", provider.Name);
-            var rates = await provider.FetchAllCurrentAsync();
+            _logger.LogDebug("Cache miss for provider '{ProviderName}' for date {Date}, fetching from API", provider.Name, providerDate.ToString("yyyy-MM-dd"));
+            var rates = await provider.FetchByDateAsync(providerDate);
             
             if (rates.Length > 0)
             {
-                await CacheRatesWithTimezoneAwareExpiration(provider, cacheKey, rates, providerCurrentDate);
+                await CacheRatesWithTimezoneAwareExpiration(provider, cacheKey, rates, providerDate);
             }
             
             return rates;
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to get cached or fetch rates for provider '{ProviderName}'", provider.Name);
+            _logger.LogWarning(ex, "Failed to get cached or fetch rates for provider '{ProviderName}' for date {Date}", provider.Name, providerDate.ToString("yyyy-MM-dd"));
             return [];
         }
     }
 
-    private async Task CacheRatesWithTimezoneAwareExpiration(IExchangeRateProvider provider, string cacheKey, ExchangeRate[] rates, DateTime providerCurrentDate)
+    private async Task CacheRatesWithTimezoneAwareExpiration(IExchangeRateProvider provider, string cacheKey, ExchangeRate[] rates, DateTime providerDate)
     {
         var today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, provider.TimeZone).Date;
         
-        // Check if all rates are for the current day
-        var allRatesAreCurrentDay = rates.All(rate => 
-        {
-            if (rate.ValidUntil.HasValue)
-            {
-                var rateDate = TimeZoneInfo.ConvertTimeFromUtc(rate.ValidUntil.Value, provider.TimeZone).Date;
-                return rateDate == today;
-            }
-            return false;
-        });
-        
-        if (allRatesAreCurrentDay)
+        if (providerDate.Date == today)
         {
             // Current day rates: expire at end of day in provider's timezone
             var endOfDay = today.AddDays(1);

@@ -83,7 +83,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.FilterAsync(currencies);
@@ -104,7 +104,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.FilterAsync(currencies);
@@ -125,10 +125,10 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ThrowsAsync(new Exception("Provider1 failed"));
 
-        _mockProvider2.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider2.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.FilterAsync(currencies);
@@ -150,7 +150,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.GetAllAsync();
@@ -171,7 +171,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
@@ -202,7 +202,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
@@ -219,7 +219,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ThrowsAsync(new Exception("Provider failed"));
 
         var result = await _repository.GetFromProviderAsync("Provider1", currencies);
@@ -302,10 +302,10 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
-        await _repository.GetAllAsync();
+        await _repository.GetAllAsync(pastDate);
 
         var expectedAbsoluteExpiration = TimeSpan.FromMinutes(30);
         var expectedSlidingExpiration = TimeSpan.FromMinutes(10);
@@ -335,10 +335,10 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
-        await _repository.GetAllAsync();
+        await _repository.GetAllAsync(futureDate);
 
         var expectedAbsoluteExpiration = TimeSpan.FromMinutes(30);
         var expectedSlidingExpiration = TimeSpan.FromMinutes(10);
@@ -368,10 +368,10 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
-        await _repository.GetAllAsync();
+        await _repository.GetAllAsync(pastDate);
 
         var expectedAbsoluteExpiration = TimeSpan.FromMinutes(30);
         var expectedSlidingExpiration = TimeSpan.FromMinutes(10);
@@ -402,7 +402,7 @@ public class ExchangeRateRepositoryTests
         Assert.Single(result["Provider1"]);
         Assert.Equal(cachedRates[0], result["Provider1"][0]);
 
-        _mockProvider1.Verify(p => p.FetchAllCurrentAsync(), Times.Never);
+        _mockProvider1.Verify(p => p.FetchByDateAsync(It.IsAny<DateTime>()), Times.Never);
     }
 
     [Fact]
@@ -410,7 +410,7 @@ public class ExchangeRateRepositoryTests
     {
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(Array.Empty<ExchangeRate>());
 
         await _repository.GetAllAsync();
@@ -441,7 +441,7 @@ public class ExchangeRateRepositoryTests
 
         _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
             .ReturnsAsync((ExchangeRate[]?)null);
-        _mockProvider1.Setup(p => p.FetchAllCurrentAsync())
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
             .ReturnsAsync(expectedRates);
 
         await _repository.GetAllAsync();
@@ -452,6 +452,205 @@ public class ExchangeRateRepositoryTests
             tokyoEndOfDay,
             null,
             null), Times.Once);
+    }
+
+    [Fact]
+    public async Task Caching_WithCurrentDate_ShouldUseEndOfDayExpiration()
+    {
+        var pragueTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var currentDate = DateTime.UtcNow;
+        var pragueCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, pragueTimeZone).Date;
+        var pragueEndOfDay = pragueCurrentDate.AddDays(1);
+
+        _mockProvider1.Setup(p => p.Name).Returns("CzechNationalBank");
+        _mockProvider1.Setup(p => p.TimeZone).Returns(pragueTimeZone);
+
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.5m, "CzechNationalBank", pragueCurrentDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
+            .ReturnsAsync(expectedRates);
+
+        await _repository.GetAllAsync();
+
+        _mockCacheService.Verify(c => c.SetAsync(
+            It.IsAny<string>(),
+            It.IsAny<ExchangeRate[]>(),
+            pragueEndOfDay,
+            null,
+            null), Times.Once);
+    }
+
+    [Fact]
+    public async Task Caching_WithCurrentDateInUtc_ShouldUseEndOfDayExpiration()
+    {
+        var utcTimeZone = TimeZoneInfo.Utc;
+        var currentDate = DateTime.UtcNow;
+        var utcCurrentDate = TimeZoneInfo.ConvertTimeFromUtc(currentDate, utcTimeZone).Date;
+        var utcEndOfDay = utcCurrentDate.AddDays(1);
+
+        _mockProvider1.Setup(p => p.Name).Returns("UtcProvider");
+        _mockProvider1.Setup(p => p.TimeZone).Returns(utcTimeZone);
+
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("EUR"), 0.85m, "UtcProvider", utcCurrentDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
+            .ReturnsAsync(expectedRates);
+
+        await _repository.GetAllAsync();
+
+        _mockCacheService.Verify(c => c.SetAsync(
+            It.IsAny<string>(),
+            It.IsAny<ExchangeRate[]>(),
+            utcEndOfDay,
+            null,
+            null), Times.Once);
+    }
+
+    [Fact]
+    public async Task FilterAsync_WithSpecificDate_ShouldUseProvidedDate()
+    {
+        var specificDate = new DateTime(2024, 1, 15);
+        var currencies = new[] { new Currency("USD") };
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("EUR"), 0.85m, "Provider1", specificDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(specificDate))
+            .ReturnsAsync(expectedRates);
+
+        var result = await _repository.FilterAsync(currencies, specificDate);
+
+        Assert.NotNull(result);
+        Assert.Contains("Provider1", result.Keys);
+        Assert.Single(result["Provider1"]);
+        
+        _mockProvider1.Verify(p => p.FetchByDateAsync(specificDate), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithSpecificDate_ShouldUseProvidedDate()
+    {
+        var specificDate = new DateTime(2024, 1, 15);
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("EUR"), 0.85m, "Provider1", specificDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(specificDate))
+            .ReturnsAsync(expectedRates);
+
+        var result = await _repository.GetAllAsync(specificDate);
+
+        Assert.NotNull(result);
+        Assert.Contains("Provider1", result.Keys);
+        Assert.Single(result["Provider1"]);
+        
+        _mockProvider1.Verify(p => p.FetchByDateAsync(specificDate), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetFromProviderAsync_WithSpecificDate_ShouldUseProvidedDate()
+    {
+        var specificDate = new DateTime(2024, 1, 15);
+        var currencies = new[] { new Currency("USD") };
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("EUR"), 0.85m, "Provider1", specificDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(specificDate))
+            .ReturnsAsync(expectedRates);
+
+        var result = await _repository.GetFromProviderAsync("Provider1", currencies, specificDate);
+
+        Assert.NotNull(result);
+        Assert.Contains("Provider1", result.Keys);
+        Assert.Single(result["Provider1"]);
+        
+        _mockProvider1.Verify(p => p.FetchByDateAsync(specificDate), Times.Once);
+    }
+
+    [Fact]
+    public async Task Caching_WithPastDate_ShouldUseConfigurableExpiration()
+    {
+        var pastDate = DateTime.UtcNow.AddDays(-1);
+        var pragueTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var praguePastDate = TimeZoneInfo.ConvertTimeFromUtc(pastDate, pragueTimeZone).Date;
+
+        _mockProvider1.Setup(p => p.Name).Returns("CzechNationalBank");
+        _mockProvider1.Setup(p => p.TimeZone).Returns(pragueTimeZone);
+
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.5m, "CzechNationalBank", praguePastDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
+            .ReturnsAsync(expectedRates);
+
+        await _repository.GetAllAsync(pastDate);
+
+        var expectedAbsoluteExpiration = TimeSpan.FromMinutes(30);
+        var expectedSlidingExpiration = TimeSpan.FromMinutes(10);
+
+        _mockCacheService.Verify(c => c.SetAsync(
+            It.IsAny<string>(),
+            It.IsAny<ExchangeRate[]>(),
+            null,
+            expectedAbsoluteExpiration,
+            expectedSlidingExpiration), Times.Once);
+    }
+
+    [Fact]
+    public async Task Caching_WithFutureDate_ShouldUseConfigurableExpiration()
+    {
+        var futureDate = DateTime.UtcNow.AddDays(1);
+        var pragueTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Prague");
+        var pragueFutureDate = TimeZoneInfo.ConvertTimeFromUtc(futureDate, pragueTimeZone).Date;
+
+        _mockProvider1.Setup(p => p.Name).Returns("CzechNationalBank");
+        _mockProvider1.Setup(p => p.TimeZone).Returns(pragueTimeZone);
+
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.5m, "CzechNationalBank", pragueFutureDate)
+        };
+
+        _mockCacheService.Setup(c => c.GetAsync<ExchangeRate[]>(It.IsAny<string>()))
+            .ReturnsAsync((ExchangeRate[]?)null);
+        _mockProvider1.Setup(p => p.FetchByDateAsync(It.IsAny<DateTime>()))
+            .ReturnsAsync(expectedRates);
+
+        await _repository.GetAllAsync(futureDate);
+
+        var expectedAbsoluteExpiration = TimeSpan.FromMinutes(30);
+        var expectedSlidingExpiration = TimeSpan.FromMinutes(10);
+
+        _mockCacheService.Verify(c => c.SetAsync(
+            It.IsAny<string>(),
+            It.IsAny<ExchangeRate[]>(),
+            null,
+            expectedAbsoluteExpiration,
+            expectedSlidingExpiration), Times.Once);
     }
 
     [Fact]
