@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<Version>1.0.0</Version>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ExchangeRateUpdater.Features\ExchangeRateUpdater.Features.csproj" />
+	  <ProjectReference Include="..\ExchangeRateUpdater.Models\ExchangeRateUpdater.Models.csproj" />
+	  <ProjectReference Include="..\ExchangeRateUpdater.ApiClient\ExchangeRateUpdater.ApiClient.csproj" />
+	</ItemGroup>
+
+</Project>
