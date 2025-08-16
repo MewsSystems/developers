@@ -1,0 +1,22 @@
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="AutoMapper" Version="13.0.1" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
+    <PackageVersion Include="FastEndpoints.Swagger" Version="5.25.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.FeatureManagement" Version="3.2.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
+    <PackageVersion Include="Refit.HttpClientFactory" Version="7.0.0" />
+    <PackageVersion Include="Refit.Newtonsoft.Json" Version="7.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageVersion Include="Serilog.Sinks.InMemory" Version="0.11.0" />
+    <PackageVersion Include="SpecFlow.xUnit" Version="3.9.74" />
+    <PackageVersion Include="xunit" Version="2.8.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />
+  </ItemGroup>
+</Project>
