@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Model;
+using ExchangeRateUpdater.Scheduler;
 
 namespace ExchangeRateUpdater
 {
@@ -23,6 +25,7 @@ namespace ExchangeRateUpdater
         {
             try
             {
+                Schedules.SetupSchedules();
                 var provider = new ExchangeRateProvider();
                 var rates = provider.GetExchangeRates(currencies);
 
@@ -36,8 +39,8 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
             Console.ReadLine();
+            Schedules.StopSchedules();
         }
     }
 }
