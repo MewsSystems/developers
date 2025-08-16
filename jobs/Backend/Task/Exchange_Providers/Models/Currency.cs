@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Exchange_Providers.Models
 {
     public class Currency
     {
@@ -12,6 +12,9 @@
         /// </summary>
         public string Code { get; }
 
+        /// <summary>
+        /// Returns the currency code as a string representation of the currency object.
+        /// </summary>
         public override string ToString()
         {
             return Code;
