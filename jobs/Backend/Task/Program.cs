@@ -1,10 +1,20 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
-    public static class Program
+    public class Program
     {
         private static IEnumerable<Currency> currencies = new[]
         {
@@ -19,17 +29,38 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
-            {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+            {               
+                var builder = new HostBuilder()
+                   .ConfigureServices((hostContext, services) =>
+                   {
+                       services.AddHttpClient();
+                       services.RemoveAll<IHttpMessageHandlerBuilderFilter>();
+                       services.AddSingleton<ILogger>(x => CreateLogger());
+                       services.AddSingleton<ExchangeRateProvider>();
+                       services.AddSingleton<IExchangeRateProvider>
+                            (x => new ExchangeRateProviderWithCaching(x.GetRequiredService<ExchangeRateProvider>()));
+                   })
+                   .ConfigureLogging(logging =>
+                   {
+                       logging.ClearProviders();
+                       logging.AddConsole();
+                   })
+                   .UseConsoleLifetime();
+               
+                var host = builder.Build();
+                var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                while(true)
                 {
-                    Console.WriteLine(rate.ToString());
+                    await Execute(provider, CancellationToken.None);
+
+                    if(Console.ReadLine().ToLower() == "q")
+                    {
+                        break;
+                    }
                 }
             }
             catch (Exception e)
@@ -38,6 +69,33 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+
+        private static async Task Execute(IExchangeRateProvider provider, CancellationToken cancellationToken)
+        {
+            var rates = await provider.GetExchangeRates(currencies, cancellationToken);
+
+            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            foreach (var rate in rates)
+            {
+                Console.WriteLine(rate.ToString());
+            }
+        }
+
+        private static ILogger CreateLogger()
+        {
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSimpleConsole(options =>
+                {
+                    options.IncludeScopes = false;
+                    options.SingleLine = true;
+                    options.TimestampFormat = "HH:mm:ss ";
+                });
+            });
+
+            ILogger logger = loggerFactory.CreateLogger<Program>();
+            return logger;
         }
     }
 }
