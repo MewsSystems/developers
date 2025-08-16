@@ -1,0 +1,12 @@
+1. The api contract was implemented with a method to call it assuming it was going to get used from multiple services using the same technology(DOTNET). 
+	This would simplify authentication, exception handling etc.
+
+2. Limited unit test coverage implemented due to time constraints
+
+3. Simplest authentication would use JwtTokens in which case there would be a need for a separate method in the api for logging in
+
+4. In a live app:
+	- Logging would be done to an Azure Insights sink with request correlation, logging levels etc.
+	- CORS would have to be configured for calls to external APIs
+	- Secrets like API keys would be stored in a high security place such as Azure Key Vault
+
