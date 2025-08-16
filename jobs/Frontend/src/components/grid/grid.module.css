@@ -1,0 +1,13 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  gap: 15px;
+  margin: 0 auto;
+  align-items: start;
+  align-content: start;
+  justify-content: center;
+}
+
+.item {
+  flex: 0 0 110px;
+}
