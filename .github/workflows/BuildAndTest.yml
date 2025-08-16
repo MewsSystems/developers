@@ -1,0 +1,18 @@
+name: Build And Test
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+  
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v3
+
+    - name: Run NUnit Tests with Detailed Output
+      run: dotnet test ./jobs/Backend/Task/ExchangeRateUpdater.Tests/ExchangeRateUpdater.Tests.csproj --logger:"console;verbosity=normal"
+      
