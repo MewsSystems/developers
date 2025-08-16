@@ -1,0 +1,36 @@
+.movie {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+
+  .image-container {
+    width: 150px;
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  .movie-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 20px 10px;
+    max-width: calc(100% - 150px - 20px);
+    text-overflow: ellipsis;
+
+    .resume {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.movie:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+

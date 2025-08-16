@@ -1,0 +1,20 @@
+.movie {
+  display: flex;
+  width: 100%;
+
+  .image-container {
+    max-width: 400px;
+    height: auto;
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  .movie-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 10px;
+    text-overflow: ellipsis;
+  }
+}
