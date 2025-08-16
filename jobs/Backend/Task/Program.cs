@@ -1,30 +1,52 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+            var host = CreateHost(args);
+            var config = host.Services.GetRequiredService<IConfiguration>();
+            var specifiedCurrencies = GetSpecifiedCurrencies(config);
+            var provider = host.Services.GetRequiredService<IExchangeRateProvider>();
 
-        public static void Main(string[] args)
+            await FetchExchangeRates(specifiedCurrencies, provider);
+        }
+        
+        private static IHost CreateHost(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddHttpClient<IBankClient, BankClient>(client =>
+                    {
+                        client.BaseAddress = new Uri(context.Configuration["ExchangeRatesApiURL"]);
+                    });
+                    services.AddMemoryCache();
+                    services.AddTransient<IExchangeRateProvider, ExchangeRateProvider>();
+                })
+                .Build();
+        }
+
+        private static IEnumerable<Currency> GetSpecifiedCurrencies(IConfiguration config)
+        {
+            return config.GetRequiredSection("SpecifiedCurrencies")
+                .Get<string[]>()
+                .Select(code => new Currency(code));
+        }
+
+        private static async Task FetchExchangeRates(IEnumerable<Currency> specifiedCurrencies, IExchangeRateProvider provider)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await provider.GetExchangeRatesAsync(specifiedCurrencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
