@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  exchange-rate-service:
+    container_name: exchange-rate-service-demo
+    environment:
+        ASPNETCORE_ENVIRONMENT: Development
+    build:
+      context: .
+      dockerfile: ExchangeRateDemo.API\Dockerfile
+    ports:
+      - "5000:80"
+      - "5001:443"

@@ -1,0 +1,30 @@
+@ExchangeRateDemo.API_HostAddress = https://localhost:44311
+
+GET {{ExchangeRateDemo.API_HostAddress}}/rates
+Accept: application/json
+
+###
+
+GET {{ExchangeRateDemo.API_HostAddress}}/rates?date=2024/01/01
+
+###
+
+POST {{ExchangeRateDemo.API_HostAddress}}/rates/GetFiltered?date=2024/01/01
+Content-Type: application/json
+
+[
+    "AUD"
+]
+
+###
+
+POST {{ExchangeRateDemo.API_HostAddress}}/rates/GetFiltered?
+Content-Type: application/json
+
+[
+    "AUD",
+    "EUR"
+]
+
+###
+
