@@ -38,13 +38,23 @@ public class CnbDataParser : ICnbDataParser
                 $"Expected at least {CnbConstants.ExpectedMinimumLines} lines, got {lines.Length}");
         }
 
+        var dateResult = ParseDate(lines[0]);
+        if (dateResult.IsFailed)
+        {
+            return Result.Fail<CnbExchangeRateData>(dateResult.Errors);
+        }
+
+        var headerResult = ValidateHeader(lines[1]);
+        if (headerResult.IsFailed)
+        {
+            return Result.Fail<CnbExchangeRateData>(headerResult.Errors);
+        }
+
         var result = new CnbExchangeRateData
         {
-            Date = ParseDate(lines[0])
+            Date = dateResult.Value
         };
         _logger.LogDebug("Parsed date: {Date}", result.Date);
-
-        ValidateHeader(lines[1]);
 
         for (int i = 2; i < lines.Length; i++)
         {
@@ -66,32 +76,37 @@ public class CnbDataParser : ICnbDataParser
         return Result.Ok(result);
     }
 
-    private static DateTime ParseDate(string dateLine)
+    private static Result<DateTime> ParseDate(string dateLine)
     {
         var parts = dateLine.Split(' ');
         if (parts.Length < CnbConstants.MinimumDateParts)
         {
-            throw new CnbException(CnbErrorCode.InvalidDateFormat, dateLine);
+            return ErrorHandler.Handle<DateTime>(CnbErrorCode.InvalidDateFormat,
+                $"Invalid date format: {dateLine}");
         }
 
         var dateString = $"{parts[0]} {parts[1]} {parts[2]}";
         if (!DateTime.TryParseExact(dateString, CnbConstants.DateFormat,
             CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
-            throw new CnbException(CnbErrorCode.InvalidDateFormat, dateString);
+            return ErrorHandler.Handle<DateTime>(CnbErrorCode.InvalidDateFormat,
+                $"Unable to parse date: {dateString}");
         }
 
-        return date;
+        return Result.Ok(date);
     }
 
-    private static void ValidateHeader(string headerLine)
+    private static Result<bool> ValidateHeader(string headerLine)
     {
         if (!headerLine.Contains(CnbConstants.FieldSeparator) ||
-                !headerLine.Contains("Country") ||
-                !headerLine.Contains("Rate"))
+            !headerLine.Contains("Country") ||
+            !headerLine.Contains("Rate"))
         {
-            throw new CnbException(CnbErrorCode.InvalidHeaderFormat, headerLine);
+            return ErrorHandler.Handle<object>(CnbErrorCode.InvalidHeaderFormat,
+                $"Invalid header format: {headerLine}").ToResult();
         }
+
+        return Result.Ok(true);
     }
 
     private static bool TryParseExchangeRateEntry(string line, out CnbExchangeRateEntry entry)
