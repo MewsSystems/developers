@@ -11,7 +11,7 @@ body,
 }
 
 body {
-    @apply bg-neutral-950 text-neutral-100 antialiased;
+    @apply bg-[#111111] text-neutral-100 antialiased;
 }
 
 .container {

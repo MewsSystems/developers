@@ -17,12 +17,12 @@ export default function OverviewSection(props: {
     const { posterUrl, overview, details } = props;
     return (
         <div className="grid gap-20 md:grid-cols-12">
-            <div className="col-span-3 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+            <div className="col-span-3 overflow-hidden ">
                 {posterUrl ? (
                     <img
                         src={posterUrl}
                         alt=""
-                        className="w-full object-cover"
+                        className="w-full object-cover rounded-xl border border-white/10 bg-white/5"
                         loading="lazy"
                     />
                 ) : (

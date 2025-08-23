@@ -15,7 +15,7 @@ export default function Stars({
 
     return (
         <div
-            className={`flex items-center gap-0.5 text-yellow-400 ${className}`}
+            className={`flex items-center gap-0.5 text-[#00ad99] ${className}`}
         >
             {Array.from({ length: full }).map((_, i) => (
                 <Star key={`full-${i}`} size={16} fill="currentColor" />

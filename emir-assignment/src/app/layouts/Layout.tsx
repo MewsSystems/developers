@@ -1,4 +1,4 @@
-import { Outlet, Link, NavLink } from "react-router-dom";
+import { Outlet, Link, NavLink, ScrollRestoration } from "react-router-dom";
 
 export default function Layout() {
     return (
@@ -23,7 +23,6 @@ export default function Layout() {
                         >
                             Search
                         </NavLink>
-                        {/* Add other static links here */}
                     </nav>
                 </div>
             </header>
@@ -40,6 +39,9 @@ export default function Layout() {
                     Tailwind
                 </div>
             </footer>
+
+            {/* Scroll to top on route change; restores on back/forward */}
+            <ScrollRestoration getKey={(location) => location.pathname} />
         </div>
     );
 }

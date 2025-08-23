@@ -14,7 +14,7 @@ export default function ErrorState({
     onRetry,
 }: ErrorStateProps) {
     return (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
+        <div className="container p-8 rounded-xl border border-white/10 bg-white/5 text-center">
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-red-500/10">
                 <CircleAlert className="text-red-400" />
             </div>

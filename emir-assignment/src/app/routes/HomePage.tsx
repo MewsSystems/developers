@@ -144,7 +144,7 @@ export default function HomePage() {
     }
 
     return (
-        <section className="space-y-8">
+        <section className="space-y-8 container p-8">
             <h1 className="text-2xl font-semibold">Search</h1>
 
             <SearchBar

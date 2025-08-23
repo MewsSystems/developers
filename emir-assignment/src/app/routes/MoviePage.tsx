@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { fetchJson, posterUrl } from "../../lib/tmdb";
 import type { HttpError } from "../../lib/errors";
-import PageLoader from "../../components/PageLoader";
 import ErrorState from "../../components/ErrorState";
 import PillTabs from "../../components/PillTabs";
 import MovieHero from "../../features/movie/MovieHero";
@@ -13,6 +12,7 @@ import { formatRuntime, joinNames } from "../../features/movie/utils";
 import type { TmdbMovieDetail } from "../../features/movie/types";
 import CastSection from "../../features/movie/CastSection";
 import SimilarSection from "../../features/movie/SimilarSection";
+import MovieHeroSkeleton from "../../features/movie/MovieHeroSkeleton";
 
 function prettyDetailError(err: Error | null): {
     title: string;
@@ -103,8 +103,6 @@ export default function MoviePage() {
         return () => controller.abort();
     }, [movieId]);
 
-    if (loading) return <PageLoader label="Loading movie…" />;
-
     if (error || !data) {
         const pretty = prettyDetailError(error);
         return (
@@ -128,6 +126,27 @@ export default function MoviePage() {
                   .slice(0, 3)
                   .join(", ")
             : (data.original_language ?? "").toUpperCase();
+
+    if (loading) {
+        // skeleton while loading
+        return (
+            <article className="space-y-10 mb-20">
+                <MovieHeroSkeleton />
+                {/* Skeletons for tabs/sections below */}
+                <div className="container px-6 sm:px-8 lg:px-12">
+                    <div className="h-9 w-64 rounded bg-white/10 animate-pulse motion-reduce:animate-none" />
+                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="h-40 rounded-lg bg-white/10 animate-pulse motion-reduce:animate-none"
+                            />
+                        ))}
+                    </div>
+                </div>
+            </article>
+        );
+    }
 
     return (
         <article className="space-y-10">

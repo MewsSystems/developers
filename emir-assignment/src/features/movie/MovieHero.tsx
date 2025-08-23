@@ -129,13 +129,21 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
                             <img
                                 src={poster}
                                 alt={`${title} poster`}
-                                className="w-full object-cover"
-                                loading="lazy"
+                                // Reserve space: intrinsic dimensions of TMDB "w500" posters are 2:3 (e.g., 500x750)
+                                width={500}
+                                height={750}
+                                // Responsive rendering with no CLS
+                                className="block w-full h-auto object-cover"
+                                // Improve perceived speed
+                                decoding="async"
+                                loading="eager"
                             />
                         ) : (
-                            <div className="grid place-items-center text-neutral-500">
-                                No poster
-                            </div>
+                            // Fallback reserves space similarly (no aspect utilities)
+                            <div
+                                className="block w-full"
+                                style={{ height: (750 / 500) * 320 }}
+                            />
                         )}
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                     </div>

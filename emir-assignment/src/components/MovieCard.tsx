@@ -14,7 +14,7 @@ type Props = {
 };
 
 function yearFrom(date?: string) {
-    if (!date) return "";
+    if (!date) return "-";
     const y = date.split("-")[0];
     return y || "";
 }
