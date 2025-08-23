@@ -34,7 +34,7 @@ describe("SearchResultsSection", () => {
             </MemoryRouter>
         );
 
-        expect(screen.getAllByTestId("skeleton-card")).toHaveLength(12); // You may need to add data-testid to CardSkeleton
+        expect(screen.getAllByTestId("skeleton-card")).toHaveLength(12);
     });
 
     it("shows EmptyState when no results found", () => {

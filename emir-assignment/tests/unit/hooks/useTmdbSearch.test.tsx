@@ -70,7 +70,7 @@ describe("useTmdbSearch", () => {
         expect(result.current.error).toBeNull();
         expect(mockedFetch).not.toHaveBeenCalled();
 
-        // if you later provide a query, it should fetch
+        // if provide a query, it should fetch
         mockedFetch.mockResolvedValueOnce(pageResponse(makeMovies(30), 1, 10));
         rerender({ q: "inception", p: 1 });
 
