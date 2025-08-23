@@ -45,8 +45,8 @@ export default function GridSection({ title, endpoint, limit = 12 }: Props) {
     }, [endpoint, limit]);
 
     return (
-        <section className="space-y-3">
-            <h2 className="text-lg font-semibold">{title}</h2>
+        <section className="">
+            <h2 className="text-2xl mb-8 font-semibold">{title}</h2>
 
             {error ? (
                 <ErrorState

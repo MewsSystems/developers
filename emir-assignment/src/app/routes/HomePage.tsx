@@ -10,6 +10,7 @@ import MovieCard from "../../components/MovieCard";
 import type { HttpError } from "../../lib/errors";
 import GridSection from "../../components/GridSection";
 import SearchHeroDynamic from "../../components/SearchHeroDynamic";
+import { Loader2 } from "lucide-react";
 
 function prettySearchError(err: Error | null): {
     title: string;
@@ -113,9 +114,10 @@ export default function HomePage() {
             { signal: controller.signal }
         )
             .then((data) => {
+                const results = data.results.slice(0, 18);
                 setTotalPages(data.total_pages ?? 1);
                 setItems((prev) =>
-                    page === 1 ? data.results : [...prev, ...data.results]
+                    page === 1 ? results : [...prev, ...results]
                 );
                 lastLoadedPage.current = page;
             })
@@ -159,10 +161,10 @@ export default function HomePage() {
                 />
             </SearchHeroDynamic>
 
-            <section className="relative space-y-8 container px-8 pb-8 z-[20] -mt-40">
+            <section className="relative space-y-8 container px-8 pb-8 z-[20] -mt-[310px]">
                 {/* If there's NO query, show stacked rails */}
                 {!debounced ? (
-                    <div className="space-y-10">
+                    <div className="space-y-18">
                         <GridSection
                             title="Most Recent"
                             endpoint="/movie/now_playing"
@@ -222,14 +224,31 @@ export default function HomePage() {
                                     ))}
                                 </div>
 
-                                <div className="mt-6 flex items-center justify-center">
+                                <div className="mt-14 flex items-center justify-center">
                                     {canLoadMore ? (
                                         <button
                                             onClick={handleLoadMore}
-                                            className="inline-flex items-center rounded-lg bg-white/10 px-4 py-2 text-sm hover:bg-white/15 disabled:opacity-50"
                                             disabled={loading}
+                                            className={`
+    inline-flex items-center justify-center gap-2
+    rounded-lg px-5 py-2 text-lg font-medium
+    transition-colors duration-200
+    ${
+        loading
+            ? "bg-[#00ad99]/40 cursor-not-allowed"
+            : "bg-[#00ad99] hover:bg-[#009b89]"
+    }
+    text-white disabled:opacity-60
+  `}
                                         >
-                                            {loading ? "Loading…" : "Load more"}
+                                            {loading ? (
+                                                <>
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                    Loading…
+                                                </>
+                                            ) : (
+                                                "Load more"
+                                            )}
                                         </button>
                                     ) : (
                                         <p className="text-sm text-neutral-500">
@@ -240,7 +259,7 @@ export default function HomePage() {
                             </>
                         )}
 
-                        <div className="text-xs text-neutral-500">
+                        <div className="text-xs text-neutral-500 text-center">
                             <span>
                                 {isDebouncing ? "Typing…" : "Showing results"}{" "}
                                 for <em>“{debounced}”</em>

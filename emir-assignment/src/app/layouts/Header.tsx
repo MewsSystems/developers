@@ -48,7 +48,7 @@ function FakeAvatar() {
 
 export default function Header() {
     return (
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-md py-1">
             <div className="container flex h-14 items-center justify-between gap-3">
                 {/* Left: Logo */}
                 <Logo />

@@ -13,6 +13,7 @@ import type { TmdbMovieDetail } from "../../features/movie/types";
 import CastSection from "../../features/movie/CastSection";
 import SimilarSection from "../../features/movie/SimilarSection";
 import MovieHeroSkeleton from "../../features/movie/MovieHeroSkeleton";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
 function prettyDetailError(err: Error | null): {
     title: string;
@@ -63,6 +64,8 @@ export default function MoviePage() {
     const [tab, setTab] = useState<"overview" | "videos" | "photos">(
         tabParam === "videos" || tabParam === "photos" ? tabParam : "overview"
     );
+
+    useDocumentTitle(data?.title);
 
     useEffect(() => {
         const current = searchParams.get("tab");
