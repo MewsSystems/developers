@@ -18,11 +18,27 @@ export default function Stars({
             className={`flex items-center gap-0.5 text-[#00ad99] ${className}`}
         >
             {Array.from({ length: full }).map((_, i) => (
-                <Star key={`full-${i}`} size={16} fill="currentColor" />
+                <Star
+                    key={`full-${i}`}
+                    size={16}
+                    fill="currentColor"
+                    data-testid="full-star"
+                />
             ))}
-            {hasHalf && <StarHalf size={16} fill="currentColor" />}
+            {hasHalf && (
+                <StarHalf
+                    size={16}
+                    fill="currentColor"
+                    data-testid="half-star"
+                />
+            )}
             {Array.from({ length: empty }).map((_, i) => (
-                <Star key={`empty-${i}`} size={16} className="opacity-30" />
+                <Star
+                    key={`empty-${i}`}
+                    size={16}
+                    className="opacity-30"
+                    data-testid="empty-star"
+                />
             ))}
         </div>
     );

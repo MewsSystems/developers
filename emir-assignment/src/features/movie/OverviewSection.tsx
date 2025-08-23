@@ -21,7 +21,7 @@ export default function OverviewSection(props: {
                 {posterUrl ? (
                     <img
                         src={posterUrl}
-                        alt=""
+                        alt="Movie poster"
                         className="w-full object-cover rounded-xl border border-white/10 bg-white/5"
                         loading="lazy"
                     />

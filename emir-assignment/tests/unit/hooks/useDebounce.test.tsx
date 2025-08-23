@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { useState } from "react";
-import { useDebounce } from "../../src/hooks/useDebounce";
+import { useDebounce } from "../../../src/hooks/useDebounce";
 
 beforeAll(() => vi.useFakeTimers());
 afterAll(() => vi.useRealTimers());
