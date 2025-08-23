@@ -16,8 +16,8 @@ export default function OverviewSection(props: {
 }) {
     const { posterUrl, overview, details } = props;
     return (
-        <div className="grid gap-20 md:grid-cols-12">
-            <div className="col-span-3 overflow-hidden ">
+        <div className="grid gap-4 lg:gap-20 grid-cols-12">
+            <div className="col-span-6 sm:col-span-4 md:col-span-3 overflow-hidden ">
                 {posterUrl ? (
                     <img
                         src={posterUrl}
@@ -29,7 +29,7 @@ export default function OverviewSection(props: {
                     <div className="" />
                 )}
             </div>
-            <div className="col-span-9 space-y-4">
+            <div className="col-span-12 sm:col-span-8 md:col-span-9 space-y-4">
                 <h2 className="text-lg font-semibold">Storyline</h2>
                 {overview ? (
                     <p className="text-neutral-200">{overview}</p>

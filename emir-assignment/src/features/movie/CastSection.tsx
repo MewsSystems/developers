@@ -74,7 +74,7 @@ export default function CastSection({
                     description="No credited cast available."
                 />
             ) : (
-                <div className="-mx-1 overflow-x-auto pb-2">
+                <div className="-mx-1 overflow-x-auto pb-4">
                     <div className="flex snap-x snap-mandatory gap-3 px-1">
                         {cast.map((c) => (
                             <div

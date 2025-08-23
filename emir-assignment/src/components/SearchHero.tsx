@@ -18,7 +18,7 @@ export default function SearchHero({
         <section
             className={[
                 "relative overflow-hidden",
-                "h-[42vh] min-h-[300px] sm:h-[48vh] md:h-[56vh] lg:h-[800px]",
+                "h-[42vh] min-h-[400px] sm:h-[48vh] md:h-[56vh] lg:h-[600px] xl:h-[800px]",
                 className,
             ].join(" ")}
         >
@@ -61,7 +61,7 @@ export default function SearchHero({
             <div className="relative z-10 h-full">
                 <div className="container h-full">
                     <div className="flex h-full flex-col items-center text-center gap-4 sm:gap-5">
-                        <div className="space-y-2 mt-[140px] sm:mt-[140px] md:mt-[140px] lg:mt-[200px]">
+                        <div className="space-y-2 mt-[140px] sm:mt-[140px] md:mt-[140px] xl:mt-[200px]">
                             <h1 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
                                 {title}
                             </h1>

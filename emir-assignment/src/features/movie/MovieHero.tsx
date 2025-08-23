@@ -38,7 +38,7 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
             <div className="absolute inset-0">
                 {heroBg ? (
                     <div
-                        className="absolute inset-0 bg-cover bg-center blur-sm scale-105"
+                        className="absolute inset-0 bg-cover bg-center md:blur-sm scale-105"
                         style={{ backgroundImage: `url(${heroBg})` }}
                         aria-hidden
                     />
@@ -139,7 +139,7 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
                 </div>
 
                 {/* Right: poster */}
-                <div className="relative mx-auto w-full max-w-sm self-stretch md:max-w-md">
+                <div className="hidden md:block relative ml-auto w-full max-w-sm self-stretch md:max-w-md">
                     <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-2xl">
                         {poster ? (
                             <img

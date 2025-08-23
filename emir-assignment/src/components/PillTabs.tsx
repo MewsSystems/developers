@@ -13,7 +13,7 @@ export default function PillTabs({
 }) {
     return (
         <div
-            className={`flex gap-6 w-full font-bold text-xl ${className} mb-16`}
+            className={`flex gap-2 sm:gap-6 w-full text-lg sm:text-xl ${className} mb-16`}
             role="tablist"
         >
             {tabs.map((t) => {
@@ -28,7 +28,7 @@ export default function PillTabs({
                         className={`flex-1 px-4 py-2 rounded-md text-center transition-colors ${
                             active
                                 ? "bg-[#00ad99] text-white"
-                                : "text-neutral-300 hover:text-white hover:bg-white/10"
+                                : "text-neutral-300 bg-white/10 hover:text-white hover:bg-white/30"
                         }`}
                     >
                         {t.label}

@@ -152,10 +152,10 @@ export default function MoviePage() {
             : (data.original_language ?? "").toUpperCase();
 
     return (
-        <article className="space-y-10">
+        <article className="space-y-8">
             <MovieHero movie={data} />
 
-            <section className="space-y-6 container p-8">
+            <section className="space-y-6 container pb-8 px-8">
                 <PillTabs
                     tabs={[
                         { key: "overview", label: "Overview" },

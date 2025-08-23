@@ -69,7 +69,7 @@ export default function SimilarSection({
                     description="We couldn’t find related movies."
                 />
             ) : (
-                <div className="-mx-1 overflow-x-auto pb-2">
+                <div className="-mx-1 overflow-x-auto pb-6">
                     <div className="flex snap-x snap-mandatory gap-4 px-1">
                         {items.map((m) => (
                             <div

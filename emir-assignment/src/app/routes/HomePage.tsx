@@ -61,7 +61,7 @@ export default function HomePage() {
         <div>
             <SearchHeaderSection value={query} onChange={setQuery} />
 
-            <section className="relative space-y-8 container px-8 pb-8 z-[20] -mt-[310px]">
+            <section className="relative space-y-8 container px-8 pb-8 z-[20] lg:-mt-[210px] xl:-mt-[310px]">
                 {!debounced ? (
                     <HomeRails />
                 ) : (
