@@ -12,6 +12,7 @@ import PhotosSection from "../../features/movie/PhotosSection";
 import { formatRuntime, joinNames } from "../../features/movie/utils";
 import type { TmdbMovieDetail } from "../../features/movie/types";
 import CastSection from "../../features/movie/CastSection";
+import SimilarSection from "../../features/movie/SimilarSection";
 
 export default function MoviePage() {
     const { id } = useParams();
@@ -138,6 +139,9 @@ export default function MoviePage() {
             </section>
             <div className="container p-8">
                 <CastSection movieId={data.id} />
+            </div>
+            <div className="container p-8">
+                <SimilarSection movieId={data.id} />
             </div>
         </article>
     );
