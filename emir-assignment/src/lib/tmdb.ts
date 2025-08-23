@@ -32,16 +32,18 @@ type FetchJsonInit = Omit<RequestInit, "headers"> & {
 export async function fetchJson<T = unknown>(
     path: string,
     params?: Record<string, unknown>,
-    init?: FetchJsonInit
+    init?: FetchJsonInit & { raw?: boolean }
 ): Promise<T> {
     const base = BASE_URL.replace(/\/$/, "");
     const cleanedPath = path.replace(/^\//, "");
     const url = new URL(`${base}/${cleanedPath}`);
 
+    const baseParams = init?.raw
+        ? { api_key: API_KEY } // only api_key
+        : { api_key: API_KEY, language: "en-US", include_adult: false };
+
     const search = toSearchParams({
-        api_key: API_KEY,
-        language: "en-US",
-        include_adult: false,
+        ...baseParams,
         ...params,
     });
 
@@ -73,7 +75,6 @@ export async function fetchJson<T = unknown>(
 
     return (await res.json()) as T;
 }
-
 /** Image CDN base for TMDB */
 const IMG_BASE = "https://image.tmdb.org/t/p/";
 

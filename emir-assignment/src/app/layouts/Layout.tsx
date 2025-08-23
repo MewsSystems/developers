@@ -29,7 +29,7 @@ export default function Layout() {
             </header>
 
             <main className="flex-1">
-                <div className="container py-8">
+                <div className="">
                     <Outlet />
                 </div>
             </main>

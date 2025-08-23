@@ -41,3 +41,7 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+button {
+    cursor: pointer;
+}
