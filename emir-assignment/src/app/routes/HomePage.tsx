@@ -167,6 +167,8 @@ export default function HomePage() {
                                         release_date={m.release_date}
                                         vote_average={m.vote_average}
                                         poster_path={m.poster_path}
+                                        backdrop_path={m.backdrop_path}
+                                        overview={m.overview}
                                     />
                                 ))}
                             </div>
