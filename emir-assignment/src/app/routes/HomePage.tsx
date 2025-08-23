@@ -1,47 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import SearchBar from "../../components/SearchBar";
+import SearchHeaderSection from "../../features/search/SearchHeaderSection";
+import HomeRails from "../../features/search/HomeRails";
+import SearchResultsSection from "../../features/search/SearchResultsSection";
 import { useDebounce } from "../../hooks/useDebounce";
-import { fetchJson, type TmdbMovie, type TmdbPage } from "../../lib/tmdb";
-import CardSkeleton from "../../components/CardSkeleton";
-import EmptyState from "../../components/EmptyState";
-import ErrorState from "../../components/ErrorState";
-import MovieCard from "../../components/MovieCard";
-import type { HttpError } from "../../lib/errors";
-import GridSection from "../../components/GridSection";
-import SearchHeroDynamic from "../../components/SearchHeroDynamic";
-import { Loader2 } from "lucide-react";
-
-function prettySearchError(err: Error | null): {
-    title: string;
-    message?: string;
-} {
-    if (!err) return { title: "Search failed" };
-    const http = err as HttpError;
-    const s = http.status;
-    if (s === 401 || s === 403) {
-        return {
-            title: "TMDB authentication failed",
-            message:
-                "Check VITE_TMDB_API_KEY and any API restrictions on your TMDB account.",
-        };
-    }
-    if (s === 429) {
-        return {
-            title: "Rate limited by TMDB",
-            message: "Too many requests. Please try again in a moment.",
-        };
-    }
-    if (s && s >= 500) {
-        return {
-            title: "TMDB is having issues",
-            message: `Server error (${s}). Please retry.`,
-        };
-    }
-    return { title: "Search failed", message: err.message };
-}
-
-type SearchResponse = TmdbPage<TmdbMovie>;
+import { useTmdbSearch } from "../../hooks/useTmdbSearch";
 
 export default function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -54,25 +17,10 @@ export default function HomePage() {
     }, [searchParams]);
 
     const [query, setQuery] = useState(initialQ);
+    const [page, setPage] = useState(initialPage);
     const { debounced, isDebouncing } = useDebounce(query, 500);
 
-    // Search data state
-    const [items, setItems] = useState<TmdbMovie[]>([]);
-    const [page, setPage] = useState(initialPage);
-    const [totalPages, setTotalPages] = useState<number | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<Error | null>(null);
-    const lastLoadedQuery = useRef<string>("");
-    const lastLoadedPage = useRef<number>(0);
-
-    // Keep input in sync if URL changes externally
-    useEffect(() => {
-        if (initialQ !== query) setQuery(initialQ);
-        if (initialPage !== page) setPage(initialPage);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialQ, initialPage]);
-
-    // When typing settles, update ?q= and reset ?page=
+    // Reflect debounced value into URL
     useEffect(() => {
         const next = new URLSearchParams(searchParams);
         if (debounced) {
@@ -88,53 +36,16 @@ export default function HomePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced]);
 
-    // -------- SEARCH FETCH --------
+    // Sync local state if URL changed externally
     useEffect(() => {
-        if (!debounced) {
-            setItems([]);
-            setTotalPages(null);
-            setError(null);
-            return;
-        }
+        if (initialQ !== query) setQuery(initialQ);
+        if (initialPage !== page) setPage(initialPage);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialQ, initialPage]);
 
-        if (debounced !== lastLoadedQuery.current) {
-            setItems([]);
-            lastLoadedPage.current = 0;
-            lastLoadedQuery.current = debounced;
-        }
-        if (page === lastLoadedPage.current) return;
-
-        const controller = new AbortController();
-        setLoading(true);
-        setError(null);
-
-        fetchJson<SearchResponse>(
-            "/search/movie",
-            { query: debounced, page },
-            { signal: controller.signal }
-        )
-            .then((data) => {
-                const results = data.results.slice(0, 18);
-                setTotalPages(data.total_pages ?? 1);
-                setItems((prev) =>
-                    page === 1 ? results : [...prev, ...results]
-                );
-                lastLoadedPage.current = page;
-            })
-            .catch((err: unknown) => {
-                if (controller.signal.aborted) return;
-                if (err instanceof Error) {
-                    setError(err);
-                } else {
-                    setError(new Error("Unknown error"));
-                }
-            })
-            .finally(() => {
-                if (!controller.signal.aborted) setLoading(false);
-            });
-
-        return () => controller.abort();
-    }, [debounced, page]);
+    // Data fetching (encapsulated)
+    const { items, totalPages, loading, error, retry, lastLoadedPage } =
+        useTmdbSearch(debounced, page);
 
     const canLoadMore = !!debounced && totalPages !== null && page < totalPages;
 
@@ -148,127 +59,27 @@ export default function HomePage() {
 
     return (
         <div>
-            <SearchHeroDynamic
-                title="Discover movies you’ll love"
-                subtitle="Search the TMDB catalog"
-            >
-                <SearchBar
-                    value={query}
-                    onChange={setQuery}
-                    autoFocus
-                    className="w-full"
-                    placeholder="Search for a movie (e.g., Parasite)…"
-                />
-            </SearchHeroDynamic>
+            <SearchHeaderSection value={query} onChange={setQuery} />
 
             <section className="relative space-y-8 container px-8 pb-8 z-[20] -mt-[310px]">
-                {/* If there's NO query, show stacked rails */}
                 {!debounced ? (
-                    <div className="space-y-18">
-                        <GridSection
-                            title="Most Recent"
-                            endpoint="/movie/now_playing"
-                            limit={12}
-                        />
-                        <GridSection
-                            title="Upcoming"
-                            endpoint="/movie/upcoming"
-                            limit={12}
-                        />
-                        <GridSection
-                            title="Popular"
-                            endpoint="/movie/popular"
-                            limit={12}
-                        />
-                    </div>
+                    <HomeRails />
                 ) : (
-                    // Otherwise show the search results section
-                    <>
-                        {error ? (
-                            (() => {
-                                const pretty = prettySearchError(error);
-                                return (
-                                    <ErrorState
-                                        title={pretty.title}
-                                        status={(error as HttpError).status}
-                                        message={pretty.message}
-                                        onRetry={() => {
-                                            // re-fetch current page for current query
-                                            lastLoadedPage.current = 0;
-                                            setPage((p) => p); // trigger effect path
-                                        }}
-                                    />
-                                );
-                            })()
-                        ) : loading && items.length === 0 ? (
-                            <CardSkeleton count={12} />
-                        ) : items.length === 0 ? (
-                            <EmptyState
-                                title="No results"
-                                description={`We couldn’t find anything for “${debounced}”. Try another title.`}
-                            />
-                        ) : (
-                            <>
-                                <div className="grid grid-cols-2 gap-y-8 gap-x-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                                    {items.map((m) => (
-                                        <MovieCard
-                                            key={m.id}
-                                            id={m.id}
-                                            title={m.title}
-                                            release_date={m.release_date}
-                                            vote_average={m.vote_average}
-                                            poster_path={m.poster_path}
-                                            backdrop_path={m.backdrop_path}
-                                            overview={m.overview}
-                                        />
-                                    ))}
-                                </div>
-
-                                <div className="mt-14 flex items-center justify-center">
-                                    {canLoadMore ? (
-                                        <button
-                                            onClick={handleLoadMore}
-                                            disabled={loading}
-                                            className={`
-    inline-flex items-center justify-center gap-2
-    rounded-lg px-5 py-2 text-lg font-medium
-    transition-colors duration-200
-    ${
-        loading
-            ? "bg-[#00ad99]/40 cursor-not-allowed"
-            : "bg-[#00ad99] hover:bg-[#009b89]"
-    }
-    text-white disabled:opacity-60
-  `}
-                                        >
-                                            {loading ? (
-                                                <>
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    Loading…
-                                                </>
-                                            ) : (
-                                                "Load more"
-                                            )}
-                                        </button>
-                                    ) : (
-                                        <p className="text-sm text-neutral-500">
-                                            End of results
-                                        </p>
-                                    )}
-                                </div>
-                            </>
-                        )}
-
-                        <div className="text-xs text-neutral-500 text-center">
-                            <span>
-                                {isDebouncing ? "Typing…" : "Showing results"}{" "}
-                                for <em>“{debounced}”</em>
-                                {totalPages
-                                    ? ` · Page ${page} of ${totalPages}`
-                                    : null}
-                            </span>
-                        </div>
-                    </>
+                    <SearchResultsSection
+                        debounced={debounced}
+                        items={items}
+                        page={page}
+                        totalPages={totalPages}
+                        loading={loading}
+                        error={error}
+                        isDebouncing={isDebouncing}
+                        canLoadMore={canLoadMore}
+                        onLoadMore={handleLoadMore}
+                        onRetry={() => {
+                            lastLoadedPage.current = 0;
+                            retry();
+                        }}
+                    />
                 )}
             </section>
         </div>
