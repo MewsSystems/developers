@@ -50,7 +50,7 @@ export default function MovieHeroSkeleton() {
                 <div className="relative mx-auto w-full max-w-sm self-stretch md:max-w-md">
                     <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-2xl">
                         {/* Give the container a sensible min height so layout is stable */}
-                        <div className="h-[22rem] sm:h-[26rem] md:h-[28rem] bg-white/10 animate-pulse motion-reduce:animate-none" />
+                        <div className="h-[22rem] sm:h-[26rem] md:h-[40rem] bg-white/10 animate-pulse motion-reduce:animate-none" />
                         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                     </div>
                 </div>

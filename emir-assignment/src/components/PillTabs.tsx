@@ -13,7 +13,7 @@ export default function PillTabs({
 }) {
     return (
         <div
-            className={`inline-flex rounded-lg border border-white/10 bg-white/5 p-1 text-sm ${className}`}
+            className={`flex gap-6 w-full  text-lg ${className} mb-16`}
             role="tablist"
         >
             {tabs.map((t) => {
@@ -25,9 +25,9 @@ export default function PillTabs({
                         role="tab"
                         aria-selected={active}
                         onClick={() => onChange(t.key)}
-                        className={`px-3 py-1.5 rounded-md transition-colors ${
+                        className={`flex-1 px-4 py-2 rounded-md text-center transition-colors ${
                             active
-                                ? "bg-white/15 text-white"
+                                ? "bg-[#00ad99] text-white"
                                 : "text-neutral-300 hover:text-white hover:bg-white/10"
                         }`}
                     >

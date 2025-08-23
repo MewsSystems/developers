@@ -9,6 +9,7 @@ import ErrorState from "../../components/ErrorState";
 import MovieCard from "../../components/MovieCard";
 import type { HttpError } from "../../lib/errors";
 import GridSection from "../../components/GridSection";
+import SearchHeroDynamic from "../../components/SearchHeroDynamic";
 
 function prettySearchError(err: Error | null): {
     title: string;
@@ -144,108 +145,113 @@ export default function HomePage() {
     }
 
     return (
-        <section className="space-y-8 container p-8">
-            <h1 className="text-2xl font-semibold">Search</h1>
+        <div>
+            <SearchHeroDynamic
+                title="Discover movies you’ll love"
+                subtitle="Search the TMDB catalog"
+            >
+                <SearchBar
+                    value={query}
+                    onChange={setQuery}
+                    autoFocus
+                    className="w-full"
+                    placeholder="Search for a movie (e.g., Parasite)…"
+                />
+            </SearchHeroDynamic>
 
-            <SearchBar
-                value={query}
-                onChange={setQuery}
-                autoFocus
-                className="max-w-xl"
-                placeholder="Search for a movie (e.g., Parasite)…"
-            />
-
-            {/* If there's NO query, show stacked rails */}
-            {!debounced ? (
-                <div className="space-y-10">
-                    <GridSection
-                        title="Most Recent"
-                        endpoint="/movie/now_playing"
-                        limit={12}
-                    />
-                    <GridSection
-                        title="Upcoming"
-                        endpoint="/movie/upcoming"
-                        limit={12}
-                    />
-                    <GridSection
-                        title="Popular"
-                        endpoint="/movie/popular"
-                        limit={12}
-                    />
-                </div>
-            ) : (
-                // Otherwise show the search results section
-                <>
-                    {error ? (
-                        (() => {
-                            const pretty = prettySearchError(error);
-                            return (
-                                <ErrorState
-                                    title={pretty.title}
-                                    status={(error as HttpError).status}
-                                    message={pretty.message}
-                                    onRetry={() => {
-                                        // re-fetch current page for current query
-                                        lastLoadedPage.current = 0;
-                                        setPage((p) => p); // trigger effect path
-                                    }}
-                                />
-                            );
-                        })()
-                    ) : loading && items.length === 0 ? (
-                        <CardSkeleton count={12} />
-                    ) : items.length === 0 ? (
-                        <EmptyState
-                            title="No results"
-                            description={`We couldn’t find anything for “${debounced}”. Try another title.`}
+            <section className="relative space-y-8 container px-8 pb-8 z-[20] -mt-40">
+                {/* If there's NO query, show stacked rails */}
+                {!debounced ? (
+                    <div className="space-y-10">
+                        <GridSection
+                            title="Most Recent"
+                            endpoint="/movie/now_playing"
+                            limit={12}
                         />
-                    ) : (
-                        <>
-                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                                {items.map((m) => (
-                                    <MovieCard
-                                        key={m.id}
-                                        id={m.id}
-                                        title={m.title}
-                                        release_date={m.release_date}
-                                        vote_average={m.vote_average}
-                                        poster_path={m.poster_path}
-                                        backdrop_path={m.backdrop_path}
-                                        overview={m.overview}
-                                    />
-                                ))}
-                            </div>
-
-                            <div className="mt-6 flex items-center justify-center">
-                                {canLoadMore ? (
-                                    <button
-                                        onClick={handleLoadMore}
-                                        className="inline-flex items-center rounded-lg bg-white/10 px-4 py-2 text-sm hover:bg-white/15 disabled:opacity-50"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Loading…" : "Load more"}
-                                    </button>
-                                ) : (
-                                    <p className="text-sm text-neutral-500">
-                                        End of results
-                                    </p>
-                                )}
-                            </div>
-                        </>
-                    )}
-
-                    <div className="text-xs text-neutral-500">
-                        <span>
-                            {isDebouncing ? "Typing…" : "Showing results"} for{" "}
-                            <em>“{debounced}”</em>
-                            {totalPages
-                                ? ` · Page ${page} of ${totalPages}`
-                                : null}
-                        </span>
+                        <GridSection
+                            title="Upcoming"
+                            endpoint="/movie/upcoming"
+                            limit={12}
+                        />
+                        <GridSection
+                            title="Popular"
+                            endpoint="/movie/popular"
+                            limit={12}
+                        />
                     </div>
-                </>
-            )}
-        </section>
+                ) : (
+                    // Otherwise show the search results section
+                    <>
+                        {error ? (
+                            (() => {
+                                const pretty = prettySearchError(error);
+                                return (
+                                    <ErrorState
+                                        title={pretty.title}
+                                        status={(error as HttpError).status}
+                                        message={pretty.message}
+                                        onRetry={() => {
+                                            // re-fetch current page for current query
+                                            lastLoadedPage.current = 0;
+                                            setPage((p) => p); // trigger effect path
+                                        }}
+                                    />
+                                );
+                            })()
+                        ) : loading && items.length === 0 ? (
+                            <CardSkeleton count={12} />
+                        ) : items.length === 0 ? (
+                            <EmptyState
+                                title="No results"
+                                description={`We couldn’t find anything for “${debounced}”. Try another title.`}
+                            />
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-2 gap-y-8 gap-x-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+                                    {items.map((m) => (
+                                        <MovieCard
+                                            key={m.id}
+                                            id={m.id}
+                                            title={m.title}
+                                            release_date={m.release_date}
+                                            vote_average={m.vote_average}
+                                            poster_path={m.poster_path}
+                                            backdrop_path={m.backdrop_path}
+                                            overview={m.overview}
+                                        />
+                                    ))}
+                                </div>
+
+                                <div className="mt-6 flex items-center justify-center">
+                                    {canLoadMore ? (
+                                        <button
+                                            onClick={handleLoadMore}
+                                            className="inline-flex items-center rounded-lg bg-white/10 px-4 py-2 text-sm hover:bg-white/15 disabled:opacity-50"
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Loading…" : "Load more"}
+                                        </button>
+                                    ) : (
+                                        <p className="text-sm text-neutral-500">
+                                            End of results
+                                        </p>
+                                    )}
+                                </div>
+                            </>
+                        )}
+
+                        <div className="text-xs text-neutral-500">
+                            <span>
+                                {isDebouncing ? "Typing…" : "Showing results"}{" "}
+                                for <em>“{debounced}”</em>
+                                {totalPages
+                                    ? ` · Page ${page} of ${totalPages}`
+                                    : null}
+                            </span>
+                        </div>
+                    </>
+                )}
+            </section>
+        </div>
     );
 }

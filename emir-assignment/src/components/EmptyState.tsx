@@ -14,7 +14,7 @@ export default function EmptyState({
     children,
 }: EmptyStateProps) {
     return (
-        <div className="container p-8  rounded-xl border border-white/10 bg-white/5  text-center">
+        <div className="container py-40 px-8  rounded-xl border border-white/10 bg-white/5  text-center">
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-white/5">
                 {icon ?? <ImageOff />}
             </div>

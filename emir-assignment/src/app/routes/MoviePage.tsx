@@ -103,6 +103,27 @@ export default function MoviePage() {
         return () => controller.abort();
     }, [movieId]);
 
+    if (loading || (!data && !error)) {
+        // skeleton while loading
+        return (
+            <article className="space-y-10 mb-20">
+                <MovieHeroSkeleton />
+                {/* Skeletons for tabs/sections below */}
+                <div className="container px-6 sm:px-8 lg:px-12">
+                    <div className="h-9 w-64 rounded bg-white/10 animate-pulse motion-reduce:animate-none" />
+                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="h-40 rounded-lg bg-white/10 animate-pulse motion-reduce:animate-none"
+                            />
+                        ))}
+                    </div>
+                </div>
+            </article>
+        );
+    }
+
     if (error || !data) {
         const pretty = prettyDetailError(error);
         return (
@@ -126,27 +147,6 @@ export default function MoviePage() {
                   .slice(0, 3)
                   .join(", ")
             : (data.original_language ?? "").toUpperCase();
-
-    if (loading) {
-        // skeleton while loading
-        return (
-            <article className="space-y-10 mb-20">
-                <MovieHeroSkeleton />
-                {/* Skeletons for tabs/sections below */}
-                <div className="container px-6 sm:px-8 lg:px-12">
-                    <div className="h-9 w-64 rounded bg-white/10 animate-pulse motion-reduce:animate-none" />
-                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                        {Array.from({ length: 8 }).map((_, i) => (
-                            <div
-                                key={i}
-                                className="h-40 rounded-lg bg-white/10 animate-pulse motion-reduce:animate-none"
-                            />
-                        ))}
-                    </div>
-                </div>
-            </article>
-        );
-    }
 
     return (
         <article className="space-y-10">
