@@ -11,6 +11,7 @@ import VideosSection from "../../features/movie/VideosSection";
 import PhotosSection from "../../features/movie/PhotosSection";
 import { formatRuntime, joinNames } from "../../features/movie/utils";
 import type { TmdbMovieDetail } from "../../features/movie/types";
+import CastSection from "../../features/movie/CastSection";
 
 export default function MoviePage() {
     const { id } = useParams();
@@ -135,6 +136,9 @@ export default function MoviePage() {
                 {tab === "videos" && <VideosSection movieId={data.id} />}
                 {tab === "photos" && <PhotosSection movieId={data.id} />}
             </section>
+            <div className="container p-8">
+                <CastSection movieId={data.id} />
+            </div>
         </article>
     );
 }
