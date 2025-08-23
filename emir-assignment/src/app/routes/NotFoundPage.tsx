@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import EmptyState from "../../components/EmptyState";
 import { SearchX } from "lucide-react";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
 export default function NotFoundPage() {
+    useDocumentTitle("Page Not Found");
+
     return (
         <div className="container py-10">
             <EmptyState

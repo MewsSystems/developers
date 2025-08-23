@@ -30,7 +30,7 @@ export default function OverviewSection(props: {
                 )}
             </div>
             <div className="col-span-12 sm:col-span-8 md:col-span-9 space-y-4">
-                <h2 className="text-lg font-semibold">Storyline</h2>
+                <h2 className="text-2xl font-semibold">Storyline</h2>
                 {overview ? (
                     <p className="text-neutral-200">{overview}</p>
                 ) : (

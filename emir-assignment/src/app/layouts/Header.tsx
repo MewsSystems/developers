@@ -1,7 +1,13 @@
 import { Link, NavLink } from "react-router-dom";
 import { Clapperboard, Sparkles, UserRound } from "lucide-react";
+import type { CSSProperties } from "react";
 
 const ACCENT = "#00ad99";
+
+// Typed custom CSS variable
+const accentStyle: CSSProperties & Record<"--accent", string> = {
+    "--accent": ACCENT,
+};
 
 function Logo() {
     return (
@@ -9,7 +15,7 @@ function Logo() {
             to="/"
             aria-label="CinEmir home"
             className="group inline-flex items-center gap-2 rounded px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            style={{ ["--accent" as any]: ACCENT }}
+            style={accentStyle}
         >
             {/* Icon mark */}
             <span className="relative grid h-9 w-9 place-items-center rounded-lg bg-[color:var(--accent)]/12 ring-1 ring-[color:var(--accent)]/30">
@@ -37,7 +43,7 @@ function FakeAvatar() {
             title="Account"
             aria-label="Account"
             className="relative inline-grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-            style={{ ["--accent" as any]: ACCENT }}
+            style={accentStyle}
         >
             <UserRound className="h-5 w-5 text-neutral-300" aria-hidden />
             {/* tiny online dot for flair */}

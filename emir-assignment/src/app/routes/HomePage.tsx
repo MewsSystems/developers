@@ -5,6 +5,7 @@ import HomeRails from "../../features/search/HomeRails";
 import SearchResultsSection from "../../features/search/SearchResultsSection";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useTmdbSearch } from "../../hooks/useTmdbSearch";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
 export default function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -56,6 +57,8 @@ export default function HomePage() {
         setSearchParams(next);
         setPage(nextPage);
     }
+
+    useDocumentTitle("Home");
 
     return (
         <div>
