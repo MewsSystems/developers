@@ -7,8 +7,8 @@ import CardSkeleton from "../../components/CardSkeleton";
 import EmptyState from "../../components/EmptyState";
 import ErrorState from "../../components/ErrorState";
 import MovieCard from "../../components/MovieCard";
-import RailSection from "../../components/RailSection";
 import type { HttpError } from "../../lib/errors";
+import GridSection from "../../components/GridSection";
 
 type SearchResponse = TmdbPage<TmdbMovie>;
 
@@ -129,16 +129,20 @@ export default function HomePage() {
             {/* If there's NO query, show stacked rails */}
             {!debounced ? (
                 <div className="space-y-10">
-                    <RailSection
+                    <GridSection
                         title="Most Recent"
                         endpoint="/movie/now_playing"
+                        limit={12}
                     />
-                    <RailSection title="Upcoming" endpoint="/movie/upcoming" />
-                    <RailSection title="Popular" endpoint="/movie/popular" />
-
-                    <RailSection
-                        title="Top Rated"
-                        endpoint="/movie/top_rated"
+                    <GridSection
+                        title="Upcoming"
+                        endpoint="/movie/upcoming"
+                        limit={12}
+                    />
+                    <GridSection
+                        title="Popular"
+                        endpoint="/movie/popular"
+                        limit={12}
                     />
                 </div>
             ) : (
