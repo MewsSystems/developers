@@ -10,7 +10,7 @@ export default function NotFoundPage() {
         <div className="container py-10">
             <EmptyState
                 title="Page not found (404)"
-                description="The page you’re looking for doesn’t exist."
+                description="The page you’re looking for doesn’t exist here."
                 icon={<SearchX />}
             >
                 <Link
