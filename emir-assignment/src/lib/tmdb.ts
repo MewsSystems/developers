@@ -1,4 +1,7 @@
+import type { HttpError } from "./errors";
+
 const BASE_URL = "https://api.themoviedb.org/3";
+
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY as string | undefined;
 
 if (!API_KEY) {
@@ -31,7 +34,9 @@ export async function fetchJson<T = unknown>(
     params?: Record<string, unknown>,
     init?: FetchJsonInit
 ): Promise<T> {
-    const url = new URL(path.replace(/^\//, ""), BASE_URL);
+    const base = BASE_URL.replace(/\/$/, "");
+    const cleanedPath = path.replace(/^\//, "");
+    const url = new URL(`${base}/${cleanedPath}`);
 
     const search = toSearchParams({
         api_key: API_KEY,
@@ -45,17 +50,21 @@ export async function fetchJson<T = unknown>(
     const res = await fetch(url.toString(), init);
 
     if (!res.ok) {
-        let body: any = null;
+        let body: unknown = null;
         try {
             body = await res.json();
         } catch {
             /* ignore */
         }
-        const error = new Error(
+        const error: HttpError = new Error(
             `[TMDB] ${res.status} ${res.statusText}${
-                body?.status_message ? ` — ${body.status_message}` : ""
+                (body as { status_message?: string })?.status_message
+                    ? ` — ${
+                          (body as { status_message?: string }).status_message
+                      }`
+                    : ""
             }`
-        ) as Error & { status?: number; data?: unknown; url?: string };
+        );
         error.status = res.status;
         error.data = body;
         error.url = url.toString();
