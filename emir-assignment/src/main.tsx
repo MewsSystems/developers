@@ -6,6 +6,7 @@ import Layout from "./app/layouts/Layout";
 import HomePage from "./app/routes/HomePage";
 import MoviePage from "./app/routes/MoviePage";
 import RouteErrorElement from "./app/errors/RouteErrorElement";
+import NotFoundPage from "./app/routes/NotFoundPage";
 
 const router = createBrowserRouter([
     {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
         children: [
             { path: "/", element: <HomePage /> },
             { path: "/movie/:id", element: <MoviePage /> },
+            { path: "*", element: <NotFoundPage /> },
         ],
     },
 ]);

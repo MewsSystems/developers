@@ -14,6 +14,40 @@ import type { TmdbMovieDetail } from "../../features/movie/types";
 import CastSection from "../../features/movie/CastSection";
 import SimilarSection from "../../features/movie/SimilarSection";
 
+function prettyDetailError(err: Error | null): {
+    title: string;
+    message?: string;
+} {
+    if (!err) return { title: "Couldn’t load movie" };
+    const http = err as HttpError;
+    const s = http.status;
+    if (s === 404) {
+        return {
+            title: "Movie not found",
+            message: "This title may have been removed or is unavailable.",
+        };
+    }
+    if (s === 401 || s === 403) {
+        return {
+            title: "TMDB authentication failed",
+            message: "Verify your API key and permissions.",
+        };
+    }
+    if (s === 429) {
+        return {
+            title: "Rate limited by TMDB",
+            message: "Too many requests. Please try again shortly.",
+        };
+    }
+    if (s && s >= 500) {
+        return {
+            title: "TMDB is having issues",
+            message: `Server error (${s}). Please retry.`,
+        };
+    }
+    return { title: "Couldn’t load movie", message: err.message };
+}
+
 export default function MoviePage() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -72,14 +106,14 @@ export default function MoviePage() {
     if (loading) return <PageLoader label="Loading movie…" />;
 
     if (error || !data) {
-        const http = error as HttpError | null;
+        const pretty = prettyDetailError(error);
         return (
             <div className="py-8">
                 <ErrorState
-                    title="Couldn’t load movie"
-                    status={http?.status}
-                    message={error ? error.message : "Unknown error"}
-                    onRetry={() => navigate(0)}
+                    title={pretty.title}
+                    status={(error as HttpError | null)?.status}
+                    message={pretty.message}
+                    onRetry={() => navigate(0)} // full refetch of this route
                 />
             </div>
         );
