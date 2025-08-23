@@ -7,6 +7,7 @@ import CardSkeleton from "../../components/CardSkeleton";
 import EmptyState from "../../components/EmptyState";
 import ErrorState from "../../components/ErrorState";
 import MovieCard from "../../components/MovieCard";
+import RailSection from "../../components/RailSection";
 import type { HttpError } from "../../lib/errors";
 
 type SearchResponse = TmdbPage<TmdbMovie>;
@@ -24,13 +25,13 @@ export default function HomePage() {
     const [query, setQuery] = useState(initialQ);
     const { debounced, isDebouncing } = useDebounce(query, 500);
 
-    // Data state
+    // Search data state
     const [items, setItems] = useState<TmdbMovie[]>([]);
     const [page, setPage] = useState(initialPage);
     const [totalPages, setTotalPages] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
-    const lastLoadedQuery = useRef<string>(""); // to reset on query change
+    const lastLoadedQuery = useRef<string>("");
     const lastLoadedPage = useRef<number>(0);
 
     // Keep input in sync if URL changes externally
@@ -56,24 +57,20 @@ export default function HomePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced]);
 
-    // Fetch data whenever debounced query or page changes
+    // -------- SEARCH FETCH --------
     useEffect(() => {
         if (!debounced) {
-            // No query: reset list and stop (we’ll show a hint)
             setItems([]);
             setTotalPages(null);
             setError(null);
             return;
         }
 
-        // Reset list when the query changed
         if (debounced !== lastLoadedQuery.current) {
             setItems([]);
             lastLoadedPage.current = 0;
             lastLoadedQuery.current = debounced;
         }
-
-        // Avoid duplicate fetches for the same page
         if (page === lastLoadedPage.current) return;
 
         const controller = new AbortController();
@@ -114,11 +111,11 @@ export default function HomePage() {
         const next = new URLSearchParams(searchParams);
         next.set("page", String(nextPage));
         setSearchParams(next);
-        setPage(nextPage); // Optimistic local update; effect will fetch
+        setPage(nextPage);
     }
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-8">
             <h1 className="text-2xl font-semibold">Search</h1>
 
             <SearchBar
@@ -126,30 +123,38 @@ export default function HomePage() {
                 onChange={setQuery}
                 autoFocus
                 className="max-w-xl"
-                placeholder="Search for a movie (e.g., Interstellar)…"
+                placeholder="Search for a movie (e.g., Parasite)…"
             />
 
-            {!debounced && (
-                <p className="text-sm text-neutral-400">
-                    Start typing a title above. Your search is shareable via{" "}
-                    <code>?q=</code>.
-                </p>
-            )}
+            {/* If there's NO query, show stacked rails */}
+            {!debounced ? (
+                <div className="space-y-10">
+                    <RailSection
+                        title="Most Recent"
+                        endpoint="/movie/now_playing"
+                    />
+                    <RailSection title="Upcoming" endpoint="/movie/upcoming" />
+                    <RailSection title="Popular" endpoint="/movie/popular" />
 
-            {error ? (
-                <ErrorState
-                    title="Search failed"
-                    status={(error as HttpError).status}
-                    message={error.message}
-                    onRetry={() => {
-                        lastLoadedPage.current = 0;
-                        setPage((p) => p);
-                    }}
-                />
-            ) : debounced ? (
+                    <RailSection
+                        title="Top Rated"
+                        endpoint="/movie/top_rated"
+                    />
+                </div>
+            ) : (
+                // Otherwise show the search results section
                 <>
-                    {/* First page loading skeleton */}
-                    {loading && items.length === 0 ? (
+                    {error ? (
+                        <ErrorState
+                            title="Search failed"
+                            status={(error as HttpError).status}
+                            message={error.message}
+                            onRetry={() => {
+                                lastLoadedPage.current = 0;
+                                setPage((p) => p);
+                            }}
+                        />
+                    ) : loading && items.length === 0 ? (
                         <CardSkeleton count={12} />
                     ) : items.length === 0 ? (
                         <EmptyState
@@ -190,18 +195,18 @@ export default function HomePage() {
                             </div>
                         </>
                     )}
-                </>
-            ) : null}
 
-            <div className="text-xs text-neutral-500">
-                {debounced && (
-                    <span>
-                        {isDebouncing ? "Typing…" : "Showing results"} for{" "}
-                        <em>“{debounced}”</em>
-                        {totalPages ? ` · Page ${page} of ${totalPages}` : null}
-                    </span>
-                )}
-            </div>
+                    <div className="text-xs text-neutral-500">
+                        <span>
+                            {isDebouncing ? "Typing…" : "Showing results"} for{" "}
+                            <em>“{debounced}”</em>
+                            {totalPages
+                                ? ` · Page ${page} of ${totalPages}`
+                                : null}
+                        </span>
+                    </div>
+                </>
+            )}
         </section>
     );
 }
