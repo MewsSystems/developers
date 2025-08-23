@@ -6,6 +6,12 @@ A sleek, fast movie browser built with React + TypeScript + Vite, styled with Ta
 
 ---
 
+## 🌐 Live Demo
+
+👉 [cinemir.vercel.app](https://cinemir.vercel.app)
+
+---
+
 ## ✨ Highlights
 
 -   Smart search with debounce, grid results, and “Load more”
