@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        // ensure Vitest globals & Vite client types are available in tests
+        "types": ["vitest/globals", "vite/client", "@testing-library/jest-dom"]
+    },
+    // include both app code (for imports) and test files
+    "include": ["src", "tests"]
+}
