@@ -60,19 +60,42 @@ export default function MoviePage() {
     const [error, setError] = useState<Error | null>(null);
 
     // Tab state synced with URL (?tab=overview|videos|photos)
-    const tabParam = searchParams.get("tab");
     const [tab, setTab] = useState<"overview" | "videos" | "photos">(
-        tabParam === "videos" || tabParam === "photos" ? tabParam : "overview"
+        "overview"
     );
 
     useDocumentTitle(data?.title);
 
+    // When URL or movie changes, pull tab from URL (or default to "overview")
+    useEffect(() => {
+        const p = searchParams.get("tab");
+        const next: "overview" | "videos" | "photos" =
+            p === "videos" || p === "photos" ? p : "overview";
+
+        // only update local state if it actually changed
+        setTab((prev) => (prev !== next ? next : prev));
+
+        // if URL had no valid tab, remove it so we don't leave stale ?tab=
+        if (!p || (p !== "videos" && p !== "photos")) {
+            const sp = new URLSearchParams(searchParams);
+            if (sp.has("tab")) {
+                sp.delete("tab");
+                setSearchParams(sp, { replace: true });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [movieId, searchParams]); // reacts to navigating to a new movie or URL param changes
+
+    // When local tab changes (via UI), write it to URL if needed
     useEffect(() => {
         const current = searchParams.get("tab");
-        if (current !== tab) {
-            const next = new URLSearchParams(searchParams);
-            next.set("tab", tab);
-            setSearchParams(next, { replace: true });
+        const shouldBe = tab === "overview" ? null : tab; // we don't keep ?tab=overview in URL
+
+        if (shouldBe !== current) {
+            const sp = new URLSearchParams(searchParams);
+            if (shouldBe) sp.set("tab", shouldBe);
+            else sp.delete("tab");
+            setSearchParams(sp, { replace: true });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tab]);
