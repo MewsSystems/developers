@@ -52,24 +52,23 @@ button {
 
 /* Firefox */
 * {
-    scrollbar-width: thin; /* auto | thin | none */
-    scrollbar-color: #00ad99 #111111; /* thumb | track */
+    scrollbar-color: #00ad99 #111111;
 }
 
 /* WebKit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-    width: 10px; /* adjust thickness */
+    width: 12px;
     height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #111111; /* track color, matches site background */
+    background: #111111;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #00ad99; /* accent color */
-    border-radius: 8px; /* rounded corners */
-    border: 2px solid #111111; /* creates spacing effect around thumb */
+    background-color: #00ad99;
+    border-radius: 8px;
+    border: 2px solid #111111;
 }
 
 ::-webkit-scrollbar-thumb:hover {

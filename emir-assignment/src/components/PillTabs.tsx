@@ -13,7 +13,7 @@ export default function PillTabs({
 }) {
     return (
         <div
-            className={`flex gap-6 w-full  text-lg ${className} mb-16`}
+            className={`flex gap-6 w-full font-bold text-xl ${className} mb-16`}
             role="tablist"
         >
             {tabs.map((t) => {

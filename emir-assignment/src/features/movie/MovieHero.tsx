@@ -34,7 +34,7 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
 
     return (
         <section className="relative overflow-hidden">
-            {/* Backdrop + gradient */}
+            {/* Backdrop + gradients (match SearchHero) */}
             <div className="absolute inset-0">
                 {heroBg ? (
                     <div
@@ -48,9 +48,25 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
                         aria-hidden
                     />
                 )}
+
+                {/* Radial vignette */}
                 <div
-                    className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20"
+                    className="absolute inset-0"
                     aria-hidden
+                    style={{
+                        background:
+                            "radial-gradient(120% 80% at 50% 20%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.75) 100%)",
+                    }}
+                />
+
+                {/* Bottom fade to black */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    aria-hidden
+                    style={{
+                        background:
+                            "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.7) 70%, rgba(17,17,17,1) 100%)",
+                    }}
                 />
             </div>
 
@@ -129,17 +145,13 @@ export default function MovieHero({ movie }: { movie: TmdbMovieDetail }) {
                             <img
                                 src={poster}
                                 alt={`${title} poster`}
-                                // Reserve space: intrinsic dimensions of TMDB "w500" posters are 2:3 (e.g., 500x750)
                                 width={500}
                                 height={750}
-                                // Responsive rendering with no CLS
                                 className="block w-full h-auto object-cover"
-                                // Improve perceived speed
                                 decoding="async"
                                 loading="eager"
                             />
                         ) : (
-                            // Fallback reserves space similarly (no aspect utilities)
                             <div
                                 className="block w-full"
                                 style={{ height: (750 / 500) * 320 }}
