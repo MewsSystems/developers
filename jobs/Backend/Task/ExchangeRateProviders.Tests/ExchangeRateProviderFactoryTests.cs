@@ -1,6 +1,7 @@
 using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Czk;
 using ExchangeRateProviders.Czk.Config;
+using ExchangeRateProviders.Czk.Services;
 using ExchangeRateProviders.Tests.TestHelpers;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -46,7 +47,7 @@ public class ExchangeRateProviderFactoryTests
     {
         // Arrange
         var providerLogger = Substitute.For<ILogger<CzkExchangeRateProvider>>();
-        var dataProvider = Substitute.For<IExchangeRateDataProvider>();
+        var dataProvider = Substitute.For<ICzkExchangeRateDataProvider>();
         var provider = new CzkExchangeRateProvider(dataProvider, providerLogger);
         var factoryLogger = Substitute.For<ILogger<ExchangeRateProviderFactory>>();
         var factory = new ExchangeRateProviderFactory(new[] { provider }, factoryLogger);

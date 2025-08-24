@@ -8,7 +8,7 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace ExchangeRateProviders.Czk.Services
 {
-	public class CzkExchangeRateDataProviderSevice : IExchangeRateDataProvider
+	public class CzkExchangeRateDataProviderSevice : ICzkExchangeRateDataProvider
 	{
 		private const string CacheKey = "CnbDailyRates";
 

@@ -1,16 +1,17 @@
 using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Core.Model;
 using ExchangeRateProviders.Czk.Config;
+using ExchangeRateProviders.Czk.Services;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateProviders.Czk;
 
 public class CzkExchangeRateProvider : IExchangeRateProvider
 {
-    private readonly IExchangeRateDataProvider _dataProvider;
+    private readonly ICzkExchangeRateDataProvider _dataProvider;
     private readonly ILogger<CzkExchangeRateProvider> _logger;
 
-    public CzkExchangeRateProvider(IExchangeRateDataProvider dataProvider, ILogger<CzkExchangeRateProvider> logger)
+    public CzkExchangeRateProvider(ICzkExchangeRateDataProvider dataProvider, ILogger<CzkExchangeRateProvider> logger)
     {
         _dataProvider = dataProvider;
         _logger = logger;

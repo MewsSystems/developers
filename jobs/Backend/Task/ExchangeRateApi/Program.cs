@@ -81,7 +81,7 @@ static void ConfigureExchangeRateServices(IServiceCollection services)
 {
 	services.AddFusionCache();
 	services.AddHttpClient<ICzkCnbApiClient, CzkCnbApiClient>();
-	services.AddTransient<IExchangeRateDataProvider, CzkExchangeRateDataProviderSevice>();
+	services.AddTransient<ICzkExchangeRateDataProvider, CzkExchangeRateDataProviderSevice>();
 	services.AddSingleton<IExchangeRateProvider, CzkExchangeRateProvider>();
 	services.AddSingleton<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
 }

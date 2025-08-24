@@ -2,6 +2,7 @@ using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Core.Model;
 using ExchangeRateProviders.Czk;
 using ExchangeRateProviders.Czk.Config;
+using ExchangeRateProviders.Czk.Services;
 using ExchangeRateProviders.Tests.TestHelpers;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -16,7 +17,7 @@ public class CzkExchangeRateProviderTests
     public async Task GetExchangeRatesAsync_NullCurrencies_ReturnsEmpty()
     {
         // Arrange
-        var dataProvider = Substitute.For<IExchangeRateDataProvider>();
+        var dataProvider = Substitute.For<ICzkExchangeRateDataProvider>();
         var logger = Substitute.For<ILogger<CzkExchangeRateProvider>>();
         var provider = new CzkExchangeRateProvider(dataProvider, logger);
 
@@ -36,7 +37,7 @@ public class CzkExchangeRateProviderTests
     {
         // Arrange
         var logger = Substitute.For<ILogger<CzkExchangeRateProvider>>();
-        var dataProvider = Substitute.For<IExchangeRateDataProvider>();
+        var dataProvider = Substitute.For<ICzkExchangeRateDataProvider>();
         var allRates = new[]
         {
             new ExchangeRate(new Currency("USD"), new Currency("CZK"), 22.5m),
