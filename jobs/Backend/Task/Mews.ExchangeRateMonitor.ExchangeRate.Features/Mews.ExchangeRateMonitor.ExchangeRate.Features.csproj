@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mews.ExchangeRateMonitor.Common.API\Mews.ExchangeRateMonitor.Common.API.csproj" />
+    <ProjectReference Include="..\Mews.ExchangeRateMonitor.Common.Application\Mews.ExchangeRateMonitor.Common.Application.csproj" />
+    <ProjectReference Include="..\Mews.ExchangeRateMonitor.ExchangeRate.Domain\Mews.ExchangeRateMonitor.ExchangeRate.Domain.csproj" />
+  </ItemGroup>
+	
+</Project>
