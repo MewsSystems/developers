@@ -50,7 +50,7 @@ export default function MovieCard({
                     />
                 ) : (
                     <div
-                        className="aspect-[2/3] grid place-items-center text-neutral-500"
+                        className="aspect-[2/3] grid place-items-center text-white"
                         data-testid="no-poster"
                     >
                         <ImageOff size={28} />
@@ -87,9 +87,9 @@ export default function MovieCard({
                     {/* Content */}
                     <div className="absolute inset-x-0 bottom-0 p-3 text-white">
                         <div className="flex items-center justify-between gap-2">
-                            <h4 className="line-clamp-1 text-sm font-semibold">
+                            <a className="line-clamp-1 text-sm font-semibold">
                                 {title}
-                            </h4>
+                            </a>
                             <span className="shrink-0 text-xs text-neutral-200">
                                 {year}
                             </span>

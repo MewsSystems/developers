@@ -90,12 +90,12 @@ export default function CastSection({
                                             loading="lazy"
                                         />
                                     ) : (
-                                        <div className="h-[200px] grid place-items-center py-12 text-neutral-600">
+                                        <div className="h-[200px] grid place-items-center py-12 text-white">
                                             <UserRound
                                                 size={40}
                                                 strokeWidth={1.5}
                                             />
-                                            <span className="mt-2 text-xs text-neutral-500">
+                                            <span className="mt-2 text-xs text-white">
                                                 No photo
                                             </span>
                                         </div>
