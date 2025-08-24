@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>33ea9262-d378-4002-a3f4-e5ad71b54e4d</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Mews.ExchangeRateMonitor.Common.API\Mews.ExchangeRateMonitor.Common.API.csproj" />
+	  <ProjectReference Include="..\Mews.ExchangeRateMonitor.Common.Infrastructure\Mews.ExchangeRateMonitor.Common.Infrastructure.csproj" />
+	  <ProjectReference Include="..\Mews.ExchangeRateMonitor.ExchangeRate.Features\Mews.ExchangeRateMonitor.ExchangeRate.Features.csproj" />
+	</ItemGroup>
+
+</Project>

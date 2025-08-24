@@ -1,0 +1,25 @@
+services:
+  mews.exchangeratemonitor.host:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      # - ASPNETCORE_ENVIRONMENT=Development
+      # - ASPNETCORE_URLS=http://+:8080
+      # - ASPNETCORE_URLS=http://+:8080;https://+:8081
+      # Uncomment If you want to have https - put you certificate here: ${USERPROFILE}/.aspnet/https. 
+      # - Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      # - Kestrel__Certificates__Default__Password=DevPass123!
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      # Uncomment If you want to have https
+      # - "5001:8081"
+    # volumes:
+      # Windows: host folder -> C:\Users\YourName\.aspnet\https. Inside the container that folder will appear as /https (ro - readonly mount)
+      # - ${USERPROFILE}/.aspnet/https:/https:ro
