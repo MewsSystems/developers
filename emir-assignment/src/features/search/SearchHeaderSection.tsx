@@ -18,7 +18,7 @@ export default function SearchHeaderSection({
                 onChange={onChange}
                 autoFocus
                 className="w-full"
-                placeholder="Search for a movie (e.g., Parasite)…"
+                placeholder="Search for a movie (e.g., Parasite)..."
             />
         </SearchHeroDynamic>
     );
