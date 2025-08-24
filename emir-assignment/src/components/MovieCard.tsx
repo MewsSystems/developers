@@ -87,9 +87,9 @@ export default function MovieCard({
                     {/* Content */}
                     <div className="absolute inset-x-0 bottom-0 p-3 text-white">
                         <div className="flex items-center justify-between gap-2">
-                            <a className="line-clamp-1 text-sm font-semibold">
+                            <span className="line-clamp-1 text-sm font-semibold">
                                 {title}
-                            </a>
+                            </span>
                             <span className="shrink-0 text-xs text-neutral-200">
                                 {year}
                             </span>
