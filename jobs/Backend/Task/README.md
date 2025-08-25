@@ -63,8 +63,8 @@ docker compose -f docker-compose.dev.yml up -d --build
 
 All endpoints are versioned under `v1/api`.
 
-- `POST v1/api/exchange-rates/rates` - Request rates via JSON body (list of source currency codes + optional target currency; defaults to CZK).
-- `GET v1/api/exchange-rates/rates?currencies=USD,EUR&targetCurrency=CZK` - Query version.
+- `POST v1/api/exchange-rates` - Request rates via JSON body (list of source currency codes + optional target currency; defaults to CZK).
+- `GET v1/api/exchange-rates?currencies=USD,EUR&targetCurrency=CZK` - Query version.
 - `GET v1/api/providers` - List available providers.
 
 Swagger UI: `/swagger` (served once the API is running).
