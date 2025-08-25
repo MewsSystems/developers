@@ -6,25 +6,27 @@ using ExchangeRateProviders.Czk.Mappers;
 using Microsoft.Extensions.Logging;
 using ZiggyCreatures.Caching.Fusion;
 
-namespace ExchangeRateProviders.Czk.Services
+namespace ExchangeRateProviders.Czk
 {
-	public class CzkExchangeRateDataProviderSevice : ICzkExchangeRateDataProvider
+	public class CzkExchangeRateDataProvider : IExchangeRateDataProvider
 	{
 		private const string CacheKey = "CnbDailyRates";
 
 		private readonly IFusionCache _cache;
 		private readonly ICzkCnbApiClient _apiClient;
-		private readonly ILogger<CzkExchangeRateDataProviderSevice> _logger;
+		private readonly ILogger<CzkExchangeRateDataProvider> _logger;
 
-		public CzkExchangeRateDataProviderSevice(
+		public CzkExchangeRateDataProvider(
 			IFusionCache cache,
 			ICzkCnbApiClient apiClient,
-			ILogger<CzkExchangeRateDataProviderSevice> logger)
+			ILogger<CzkExchangeRateDataProvider> logger)
 		{
 			_cache = cache;
 			_apiClient = apiClient;
 			_logger = logger;
 		}
+
+		public string ExchangeRateProviderTargetCurrencyCode => Constants.ExchangeRateProviderCurrencyCode;
 
 		public async Task<IEnumerable<ExchangeRate>> GetDailyRatesAsync(CancellationToken cancellationToken = default)
 		{
@@ -37,7 +39,7 @@ namespace ExchangeRateProviders.Czk.Services
 				var raw = await _apiClient.GetDailyRatesRawAsync(cancellationToken).ConfigureAwait(false);
 				var mapped = raw.MapToExchangeRates();
 				_logger.LogInformation("Mapped {Count} CNB exchange rates (target currency {TargetCurrency}).", mapped.Count(), Constants.ExchangeRateProviderCurrencyCode);
-				return (IEnumerable<ExchangeRate>)mapped;
+				return mapped;
 			}, cacheOptions);
 		}
 	}

@@ -1,13 +1,12 @@
 using ExchangeRateProviders;
 using ExchangeRateProviders.Core;
-using ExchangeRateProviders.Czk;
 using ExchangeRateProviders.Czk.Clients;
-using ExchangeRateProviders.Czk.Services;
 using ExchangeRateApi.Models;
 using ExchangeRateApi.Models.Validators;
 using FluentValidation;
 using Microsoft.OpenApi.Models;
 using ExchangeRateApi;
+using ExchangeRateProviders.Czk;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,8 +79,14 @@ app.Run();
 static void ConfigureExchangeRateServices(IServiceCollection services)
 {
 	services.AddFusionCache();
+
+	//Register HtpClients for API clients
 	services.AddHttpClient<ICzkCnbApiClient, CzkCnbApiClient>();
-	services.AddTransient<ICzkExchangeRateDataProvider, CzkExchangeRateDataProviderSevice>();
-	services.AddSingleton<IExchangeRateProvider, CzkExchangeRateProvider>();
-	services.AddSingleton<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
+
+	//Register exchange rate providers and factory
+	services.AddSingleton<IExchangeRateDataProvider, CzkExchangeRateDataProvider>();
+	services.AddSingleton<IExchangeRateDataProviderFactory, ExchangeRateDataProviderFactory>();
+
+	//Register the exchange rate service
+	services.AddSingleton<IExchangeRateService, ExchangeRateService>();
 }

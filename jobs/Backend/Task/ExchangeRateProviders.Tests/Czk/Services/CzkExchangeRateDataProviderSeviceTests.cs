@@ -1,4 +1,3 @@
-using ExchangeRateProviders.Czk.Services;
 using ExchangeRateProviders.Czk.Clients;
 using ExchangeRateProviders.Czk.Model;
 using ExchangeRateProviders.Tests.TestHelpers;
@@ -7,6 +6,7 @@ using NSubstitute;
 using NUnit.Framework;
 using ZiggyCreatures.Caching.Fusion;
 using ExchangeRateProviders.Czk.Config;
+using ExchangeRateProviders.Czk;
 
 namespace ExchangeRateProviders.Tests.Czk.Services;
 
@@ -19,8 +19,8 @@ public class CzkExchangeRateDataProviderSeviceTests
         // Arrange
         var cache = new FusionCache(new FusionCacheOptions());
         var apiClient = Substitute.For<ICzkCnbApiClient>();
-        var logger = Substitute.For<ILogger<CzkExchangeRateDataProviderSevice>>();
-        var service = new CzkExchangeRateDataProviderSevice(cache, apiClient, logger);
+        var logger = Substitute.For<ILogger<CzkExchangeRateDataProvider>>();
+        var service = new CzkExchangeRateDataProvider(cache, apiClient, logger);
 
         var raw = new List<CnbApiExchangeRateDto>
         {
@@ -52,8 +52,8 @@ public class CzkExchangeRateDataProviderSeviceTests
         // Arrange
         var cache = new FusionCache(new FusionCacheOptions());
         var apiClient = Substitute.For<ICzkCnbApiClient>();
-        var logger = Substitute.For<ILogger<CzkExchangeRateDataProviderSevice>>();
-        var service = new CzkExchangeRateDataProviderSevice(cache, apiClient, logger);
+        var logger = Substitute.For<ILogger<CzkExchangeRateDataProvider>>();
+        var service = new CzkExchangeRateDataProvider(cache, apiClient, logger);
 
         var raw = new List<CnbApiExchangeRateDto>
         {

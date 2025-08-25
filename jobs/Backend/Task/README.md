@@ -21,7 +21,7 @@ A .NET 9 multi-project solution demonstrating a clean, extensible approach to fe
 ## Get up and Running with docker
 
 ```
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build 
+docker compose -f docker-compose.dev.yml up -d --build
 ```
 
 - The API will be available at `http://localhost:8080/swagger/index.html`

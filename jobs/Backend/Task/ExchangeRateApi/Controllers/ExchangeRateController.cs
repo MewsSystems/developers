@@ -1,11 +1,11 @@
 using ExchangeRateApi.Models;
-using ExchangeRateProviders;
 using ExchangeRateProviders.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
+using ExchangeRateProviders.Core;
 
 namespace ExchangeRateApi.Controllers;
 
@@ -13,17 +13,17 @@ namespace ExchangeRateApi.Controllers;
 [SwaggerTag("Exchange Rate operations for retrieving currency exchange rates")]
 public class ExchangeRateController : ControllerBase
 {
-    private readonly IExchangeRateProviderFactory _exchangeRateProviderFactory;
+    private readonly IExchangeRateService _exchangeRateService;
     private readonly ILogger<ExchangeRateController> _logger;
     private readonly IValidator<ExchangeRateRequest>? _requestValidator;
     private static readonly Regex QueryCodesRegex = new("^[A-Za-z]{3}(?:,[A-Za-z]{3})*$", RegexOptions.Compiled);
 
     public ExchangeRateController(
-        IExchangeRateProviderFactory exchangeRateProviderFactory, 
+		IExchangeRateService exchangeRateService, 
         ILogger<ExchangeRateController> logger,
         IValidator<ExchangeRateRequest>? requestValidator = null)
     {
-        _exchangeRateProviderFactory = exchangeRateProviderFactory;
+		_exchangeRateService = exchangeRateService;
         _logger = logger;
         _requestValidator = requestValidator;
     }
@@ -75,9 +75,6 @@ public class ExchangeRateController : ControllerBase
             // Use provided target currency or default to CZK
             var targetCurrency = request.TargetCurrency ?? "CZK";
             
-            // Get the exchange rate provider for the target currency
-            var provider = _exchangeRateProviderFactory.GetProvider(targetCurrency);
-            
             // Convert currency codes to Currency objects
             var currencies = request.CurrencyCodes
                 .Where(code => !string.IsNullOrWhiteSpace(code))
@@ -91,7 +88,7 @@ public class ExchangeRateController : ControllerBase
             }
 
             // Get exchange rates
-            var exchangeRates = await provider.GetExchangeRatesAsync(currencies, cancellationToken);
+            var exchangeRates = await _exchangeRateService.GetExchangeRatesAsync(targetCurrency, currencies, cancellationToken);
             var ratesList = exchangeRates.ToList();
 
             _logger.LogInformation("Successfully retrieved {Count} exchange rates for target currency {TargetCurrency}", 

@@ -3,11 +3,10 @@ using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Core.Model;
 using ExchangeRateProviders.Czk;
 using ExchangeRateProviders.Czk.Clients;
-using ExchangeRateProviders.Czk.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-const string ExchangeRateProviderCurrencyCode = "CZK";
+const string ExchangeRateProviderTargetCurrencyCode = "CZK";
 
 var currencies = new List<Currency>
 {
@@ -29,9 +28,8 @@ using var host = builder.Build();
 
 try
 {
-    var factory = host.Services.GetRequiredService<IExchangeRateProviderFactory>();
-    var provider = factory.GetProvider(ExchangeRateProviderCurrencyCode);
-    var rates = await provider.GetExchangeRatesAsync(currencies, CancellationToken.None);
+    var exchangeRateService = host.Services.GetRequiredService<IExchangeRateService>();
+    var rates = await exchangeRateService.GetExchangeRatesAsync(ExchangeRateProviderTargetCurrencyCode, currencies, CancellationToken.None);
 
 	Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
     foreach (var rate in rates)
@@ -49,8 +47,14 @@ return;
 static void ConfigureServices(IServiceCollection services)
 {
     services.AddFusionCache();
-    services.AddHttpClient<ICzkCnbApiClient, CzkCnbApiClient>();
-    services.AddSingleton<ICzkExchangeRateDataProvider, CzkExchangeRateDataProviderSevice>();
-    services.AddSingleton<IExchangeRateProvider, CzkExchangeRateProvider>();
-    services.AddSingleton<IExchangeRateProviderFactory, ExchangeRateProviderFactory>();
+
+	//Register HtpClients for API clients
+	services.AddHttpClient<ICzkCnbApiClient, CzkCnbApiClient>();
+
+	//Register exchange rate providers and factory
+	services.AddSingleton<IExchangeRateDataProvider, CzkExchangeRateDataProvider>();
+	services.AddSingleton<IExchangeRateDataProviderFactory, ExchangeRateDataProviderFactory>();
+
+	//Register the exchange rate service
+	services.AddSingleton<IExchangeRateService, ExchangeRateService>();
 }

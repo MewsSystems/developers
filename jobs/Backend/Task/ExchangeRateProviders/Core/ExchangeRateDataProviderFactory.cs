@@ -1,20 +1,19 @@
-using ExchangeRateProviders.Core;
 using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateProviders;
+namespace ExchangeRateProviders.Core;
 
-public class ExchangeRateProviderFactory : IExchangeRateProviderFactory
+public class ExchangeRateDataProviderFactory : IExchangeRateDataProviderFactory
 {
-    private readonly Dictionary<string, IExchangeRateProvider> _providers;
-    private readonly ILogger<ExchangeRateProviderFactory> _logger;
+    private readonly Dictionary<string, IExchangeRateDataProvider> _providers;
+    private readonly ILogger<ExchangeRateDataProviderFactory> _logger;
 
-    public ExchangeRateProviderFactory(IEnumerable<IExchangeRateProvider> providers, ILogger<ExchangeRateProviderFactory> logger)
+    public ExchangeRateDataProviderFactory(IEnumerable<IExchangeRateDataProvider> providers, ILogger<ExchangeRateDataProviderFactory> logger)
     {
         _logger = logger;
-		_providers = providers.ToDictionary(p => p.ExchangeRateProviderCurrencyCode, StringComparer.OrdinalIgnoreCase);
+		_providers = providers.ToDictionary(p => p.ExchangeRateProviderTargetCurrencyCode, StringComparer.OrdinalIgnoreCase);
     }
 
-    public IExchangeRateProvider GetProvider(string exchangeRateProviderCurrencyCode)
+    public IExchangeRateDataProvider GetProvider(string exchangeRateProviderCurrencyCode)
     {
         if (exchangeRateProviderCurrencyCode == null)
         {

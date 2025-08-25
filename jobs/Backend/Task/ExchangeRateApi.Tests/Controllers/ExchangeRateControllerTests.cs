@@ -1,6 +1,5 @@
 ﻿using ExchangeRateApi.Controllers;
 using ExchangeRateApi.Models;
-using ExchangeRateProviders;
 using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Core.Model;
 using FluentValidation;
@@ -15,9 +14,8 @@ namespace ExchangeRateApi.Tests.Controllers;
 [TestFixture]
 public class ExchangeRateControllerTests
 {
-    private IExchangeRateProviderFactory _factory = null!;
+    private IExchangeRateService _exchangeRateService = null!;
     private ILogger<ExchangeRateController> _logger = null!;
-    private IExchangeRateProvider _provider = null!;
     private IValidator<ExchangeRateRequest> _validator = null!;
     private ExchangeRateController _controller = null!;
 
@@ -26,11 +24,10 @@ public class ExchangeRateControllerTests
     [SetUp]
     public void SetUp()
     {
-        _factory = Substitute.For<IExchangeRateProviderFactory>();
+        _exchangeRateService = Substitute.For<IExchangeRateService>();
         _logger = Substitute.For<ILogger<ExchangeRateController>>();
-        _provider = Substitute.For<IExchangeRateProvider>();
         _validator = Substitute.For<IValidator<ExchangeRateRequest>>();
-        _controller = new ExchangeRateController(_factory, _logger, _validator);
+        _controller = new ExchangeRateController(_exchangeRateService, _logger, _validator);
     }
 
     [Test]
@@ -45,8 +42,7 @@ public class ExchangeRateControllerTests
         };
         _validator.ValidateAsync(request, Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
-        _factory.GetProvider("CZK").Returns(_provider);
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
+        _exchangeRateService.GetExchangeRatesAsync("CZK", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
 
         // Act
         var result = await _controller.GetExchangeRates(request, TestToken);
@@ -71,7 +67,6 @@ public class ExchangeRateControllerTests
         var failures = new List<FluentValidation.Results.ValidationFailure>{ new("CurrencyCodes","Invalid") };
         _validator.ValidateAsync(request, Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult(failures));
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(Enumerable.Empty<ExchangeRate>());
 
         // Act
         var result = await _controller.GetExchangeRates(request, TestToken);
@@ -92,7 +87,6 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var request = new ExchangeRateRequest { CurrencyCodes = new List<string>(), TargetCurrency = "CZK" };
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(Enumerable.Empty<ExchangeRate>());
 
         // Act
         var result = await _controller.GetExchangeRates(request, TestToken);
@@ -114,8 +108,7 @@ public class ExchangeRateControllerTests
         var rates = new List<ExchangeRate>{ new(new Currency("USD"), new Currency("CZK"), 22.5m)};
         _validator.ValidateAsync(request, Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
-        _factory.GetProvider("CZK").Returns(_provider);
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
+        _exchangeRateService.GetExchangeRatesAsync("CZK", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
 
         // Act
         var result = await _controller.GetExchangeRates(request, TestToken);
@@ -137,8 +130,8 @@ public class ExchangeRateControllerTests
         var request = new ExchangeRateRequest { CurrencyCodes = new List<string>{"USD"}, TargetCurrency = "XXX" };
         _validator.ValidateAsync(request, Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
-        _factory.When(f => f.GetProvider("XXX")).Do(_ => throw new InvalidOperationException("no provider"));
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(Enumerable.Empty<ExchangeRate>());
+        _exchangeRateService.When(s => s.GetExchangeRatesAsync("XXX", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()))
+            .Do(_ => throw new InvalidOperationException("no provider"));
 
         // Act
         var result = await _controller.GetExchangeRates(request, TestToken);
@@ -159,8 +152,7 @@ public class ExchangeRateControllerTests
         var request = new ExchangeRateRequest { CurrencyCodes = new List<string>{"USD"}, TargetCurrency = "CZK" };
         _validator.ValidateAsync(request, Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
-        _factory.GetProvider("CZK").Returns(_provider);
-        _provider.When(p => p.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()))
+        _exchangeRateService.When(s => s.GetExchangeRatesAsync("CZK", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()))
             .Do(_ => throw new Exception("boom"));
 
         // Act
@@ -183,8 +175,7 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var rates = new List<ExchangeRate>{ new(new Currency("USD"), new Currency("CZK"), 22.5m)};
-        _factory.GetProvider("CZK").Returns(_provider);
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
+        _exchangeRateService.GetExchangeRatesAsync("CZK", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
         _validator.ValidateAsync(Arg.Any<ExchangeRateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
 
@@ -228,8 +219,7 @@ public class ExchangeRateControllerTests
     {
         // Arrange
         var rates = new List<ExchangeRate>{ new(new Currency("USD"), new Currency("CZK"), 22.5m)};
-        _factory.GetProvider("CZK").Returns(_provider);
-        _provider.GetExchangeRatesAsync(Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
+        _exchangeRateService.GetExchangeRatesAsync("CZK", Arg.Any<IEnumerable<Currency>>(), Arg.Any<CancellationToken>()).Returns(rates);
         _validator.ValidateAsync(Arg.Any<ExchangeRateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new FluentValidation.Results.ValidationResult());
 
