@@ -1,6 +1,5 @@
 using ExchangeRateProviders.Core;
 using ExchangeRateProviders.Core.Model;
-using ExchangeRateProviders.Czk.Config;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateProviders;
@@ -25,6 +24,9 @@ public class ExchangeRateService : IExchangeRateService
         }
 
         var requestedCurrencies = new HashSet<string>(currencies.Select(c => c.Code), StringComparer.OrdinalIgnoreCase);
+
+		CurrencyValidator.ValidateCurrencyCodes(currencies);
+
 		_logger.LogDebug("Fetching exchange rates for {Count} requested currencies via provider {ProviderCurrency}.", requestedCurrencies.Count, TargetCurrency);
 
 		var provider = _dataProviderFactory.GetProvider(TargetCurrency);

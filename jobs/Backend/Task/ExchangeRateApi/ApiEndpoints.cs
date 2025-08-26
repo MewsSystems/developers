@@ -15,6 +15,6 @@ public static class ApiEndpoints
 	public static class Providers
 	{
 		public const string Base = $"{ApiBase}/providers";
-		public const string GetAll= Base;
+		public const string GetAll = Base;
 	}
 }
