@@ -15,7 +15,7 @@ A .NET 8 service for fetching Czech National Bank (CNB) exchange rates with inte
 - [Testing](#testing)
 - [Docker Deployment](#docker-deployment)
 - [Adding New Providers](#adding-new-providers)
-- [Production Features](#production-features)
+- [Future Enhancements](#future-enhancements)
 
 ## Prerequisites
 
@@ -25,30 +25,7 @@ A .NET 8 service for fetching Czech National Bank (CNB) exchange rates with inte
 
 ## Architecture
 
-This project follows **Clean Architecture** principles with clear separation of concerns:
-
-- **Domain Layer** (`ExchangeRateProvider.Domain`): Core business entities, value objects, and interfaces
-  - `Currency` and `ExchangeRate` entities with validation
-  - `IExchangeRateProvider` interface for provider abstraction
-  - `IProviderRegistry` for managing multiple providers
-
-- **Application Layer** (`ExchangeRateProvider.Application`): Business logic and use cases
-  - MediatR-based command/query pattern
-  - `GetExchangeRatesQuery` and handler for rate retrieval
-
-- **Infrastructure Layer** (`ExchangeRateProvider.Infrastructure`): External concerns and implementations
-  - `CnbExchangeRateProvider`: CNB API integration
-  - `CnbCacheStrategy`: Intelligent caching based on CNB publication schedule
-  - `DistributedCachingExchangeRateProvider`: Redis-based caching decorator
-  - Polly policies for resilience (retry, circuit breaker)
-
-- **API Layer** (`ExchangeRateProvider.Api`): RESTful web API
-  - ASP.NET Core controllers with validation
-  - Swagger/OpenAPI documentation
-  - Health checks and Prometheus metrics
-
-- **Console Layer** (`ExchangeRateProvider.Console`): Command-line interface
-  - Simple console app for testing and batch operations
+This project follows **Clean Architecture** principles with clear separation of concerns. For detailed architectural diagrams, layer descriptions, and design decisions, refer to [`Architecture.md`](Architecture.md).
 
 ## Features
 
@@ -318,27 +295,29 @@ services.AddScoped<IExchangeRateProvider, NewProvider>(provider =>
 });
 ```
 
-## Production Features
 
-### Implemented Features
-- ✅ **Rate Limiting**: 100 requests/minute per IP using ASP.NET Core Rate Limiting
-- ✅ **Health Checks**: CNB API and Redis connectivity monitoring
-- ✅ **Prometheus Metrics**: Request counts, response times, cache hit rates
-- ✅ **Structured Logging**: Request/response logging with correlation IDs
-- ✅ **Swagger/OpenAPI**: Interactive API documentation
-- ✅ **Circuit Breaker**: Automatic failure detection and recovery using Polly
-- ✅ **Retry Policies**: Exponential backoff for transient failures
-- ✅ **Distributed Caching**: Redis support for multi-instance deployments
-- ✅ **Docker Support**: Production-ready containerization
+## Future Enhancements If we wish to consider
 
-### Security Considerations
-- Input validation for currency codes
-- Rate limiting to prevent abuse
-- HTTPS redirection in production
-- Secure defaults for Redis configuration
+### Phase 1: Production Readiness
 
-### Monitoring and Observability
-- Health endpoints for load balancer checks
-- Prometheus metrics for alerting
-- Structured logging for debugging
-- Request tracing and correlation
+- **API Versioning**: Add version headers for backward compatibility
+- **Basic Authentication**: Implement API key authentication for production use
+- **Database Storage**: Add PostgreSQL for caching historical rates
+- **Health Checks**: Enhanced monitoring endpoints for production deployment
+- **Configuration Management**: Environment-specific configuration handling
+
+### Phase 2: Enhanced Features
+
+- **Multiple Providers** 
+- **Rate History**: Store and retrieve historical exchange rate data
+- **Bulk Operations**: Support for converting multiple currency pairs at once
+- **WebSocket Updates**: Real-time rate change notifications
+- **Better Caching**: Improved cache invalidation and refresh strategies
+
+### Phase 3: Scale & Performance
+
+- **Horizontal Scaling**: Support for multiple API instances with load balancing
+- **Performance Monitoring**: APM integration and detailed performance metrics
+- **CDN Integration**: Global distribution for better response times
+- **Advanced Security**: OAuth2 integration and enhanced security measures
+- **Analytics Dashboard**: Usage statistics and business intelligence features

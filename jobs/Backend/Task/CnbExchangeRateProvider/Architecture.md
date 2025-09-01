@@ -9,55 +9,34 @@ The Exchange Rate Provider is built using Clean Architecture principles to ensur
 ### Clean Architecture Layers
 
 ```mermaid
-graph TB
-    subgraph "Presentation Layer<br/>(Entry Points)"
-        API[ExchangeRateProvider.Api<br/>- ExchangeRatesController<br/>- Program.cs<br/>- Swagger/OpenAPI<br/>- Health Checks]
-        Console[ExchangeRateProvider.Console<br/>- Program.cs<br/>- Command-line Interface]
-    end
+graph TD
+    %% Presentation Layer (Outer)
+    A[Presentation Layer<br/>🌐 Entry Points<br/>├── <b>ExchangeRateProvider.Api</b><br/>│   ├── REST Controllers<br/>│   ├── Swagger/OpenAPI<br/>│   └── Health Monitoring<br/>└── <b>ExchangeRateProvider.Console</b><br/>    └── CLI Interface]
 
-    subgraph "Application Layer<br/>(Use Cases & Business Logic)"
-        App[ExchangeRateProvider.Application<br/>- GetExchangeRatesQuery<br/>- GetExchangeRatesQueryHandler<br/>- MediatR Pipeline<br/>- ServiceCollectionExtensions]
-    end
+    %% Application Layer
+    B[Application Layer<br/>⚙️ Use Cases & Business Logic<br/>├── MediatR CQRS Pipeline<br/>├── GetExchangeRatesQuery<br/>├── Query Handlers<br/>└── Dependency Injection]
 
-    subgraph "Domain Layer<br/>(Core Business Rules)"
-        Domain[ExchangeRateProvider.Domain<br/>- Currency Entity<br/>- ExchangeRate Entity<br/>- IExchangeRateProvider Interface<br/>- IProviderRegistry Interface<br/>- ProviderRegistry Implementation]
-    end
+    %% Domain Layer (Core)
+    C[Domain Layer<br/>🎯 Core Business Rules<br/>├── <b>Entities</b><br/>│   ├── Currency<br/>│   └── ExchangeRate<br/>├── <b>Interfaces</b><br/>│   ├── IExchangeRateProvider<br/>│   └── IProviderRegistry<br/>└── Business Logic]
 
-    subgraph "Infrastructure Layer<br/>(External Concerns)"
-        Infra[ExchangeRateProvider.Infrastructure<br/>- CnbExchangeRateProvider<br/>- DistributedCachingExchangeRateProvider<br/>- CnbCacheStrategy<br/>- ProviderRegistrationHostedService<br/>- ProviderRegistrationService<br/>- Polly Policies<br/>- ServiceCollectionExtensions]
-    end
+    %% Infrastructure Layer
+    D[Infrastructure Layer<br/>🔧 External Concerns<br/>├── CnbExchangeRateProvider<br/>├── Intelligent Caching<br/>├── Distributed Cache<br/>├── Resilience Policies<br/>└── Service Registration]
 
-    subgraph "Tests Layer<br/>(Quality Assurance)"
-        Tests[ExchangeRateProvider.Tests<br/>- Unit Tests<br/>- Integration Tests<br/>- Infrastructure Tests<br/>- API E2E Tests]
-    end
+    %% External Systems
+    E[External Systems<br/>🌍 Third-Party Services<br/>├── CNB API<br/>├── Redis Cache<br/>└── Docker Runtime]
 
-    subgraph "External Systems"
-        CNB[CNB API<br/>https://api.cnb.cz]
-        Redis[(Redis Cache<br/>Distributed Storage)]
-        Docker[Docker<br/>Containerization]
-    end
+    %% Dependencies (Outer layers depend on inner layers)
+    A -->|depends on| B
+    B -->|depends on| C
+    D -->|depends on| C
+    D -->|integrates with| E
 
-    API --> App
-    Console --> App
-    App --> Domain
-    Infra --> Domain
-    Tests --> App
-    Tests --> Domain
-    Tests --> Infra
-    Infra --> CNB
-    Infra --> Redis
-    API --> Docker
-    Console --> Docker
-
-    style Domain fill:#e1f5fe,stroke:#01579b,stroke-width:3px
-    style App fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    style Infra fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    style API fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style Console fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style Tests fill:#fafafa,stroke:#424242,stroke-width:1px
-    style CNB fill:#ffebee,stroke:#b71c1c
-    style Redis fill:#f3e5f5,stroke:#4a148c
-    style Docker fill:#e8f5e8,stroke:#1b5e20
+    %% Enhanced Styling - Beautiful, eye-friendly colors
+    style C fill:#e3f2fd,stroke:#1976d2,stroke-width:4px,color:#0d47a1
+    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#4a148c
+    style A fill:#fff8e1,stroke:#f57c00,stroke-width:2px,color:#e65100
+    style D fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#1b5e20
+    style E fill:#f5f5f5,stroke:#757575,stroke-width:1px,color:#424242
 ```
 
 ### Data Flow Diagram
@@ -129,13 +108,6 @@ flowchart TD
   - **Console Layer** (`ExchangeRateProvider.Console`): Command-line interface for testing
 - **Dependencies**: Application Layer
 
-### Tests Layer
-- **Purpose**: Comprehensive testing coverage
-- **Components**:
-  - Unit tests for business logic
-  - Integration tests for API and external services
-  - Infrastructure tests for service registration
-- **Dependencies**: All layers
 
 ## Key Architectural Decisions
 
@@ -214,6 +186,29 @@ flowchart TD
 7. **Provider**: If cache miss, fetches data from CNB API
 8. **Response**: Data flows back through layers to client
 
+## Production Features
+
+### Implemented Features
+- ✅ **Rate Limiting**: ASP.NET Core Rate Limiting
+- ✅ **Health Checks**
+- ✅ **Prometheus Metrics**: Request counts, response times, cache hit rates
+- ✅ **Swagger/OpenAPI**: Interactive API documentation
+- ✅ **Circuit Breaker**: Automatic failure detection and recovery using Polly
+- ✅ **Retry Policies**: Exponential backoff for transient failures
+- ✅ **Distributed Caching**: Redis support for multi-instance deployments
+- ✅ **Docker Support**: Production-ready containerization
+
+### Security Considerations
+- Input validation for currency codes
+- Rate limiting to prevent abuse
+- Secure defaults for Redis configuration
+
+### Monitoring and Observability
+- Health endpoints for load balancer checks
+- Prometheus metrics for alerting
+- Structured logging with Serilog
+- Request tracing and correlation IDs
+
 ## Deployment Architecture
 
 The application supports multiple deployment scenarios:
@@ -221,10 +216,3 @@ The application supports multiple deployment scenarios:
 - **Development**: Local Docker Compose with Redis
 - **Production**: Containerized deployment with external Redis
 - **Console**: Standalone executable for batch operations
-
-## Monitoring and Observability
-
-- Health checks for CNB API and Redis connectivity
-- Prometheus metrics for performance monitoring
-- Structured logging with Serilog
-- Request tracing and correlation IDs
