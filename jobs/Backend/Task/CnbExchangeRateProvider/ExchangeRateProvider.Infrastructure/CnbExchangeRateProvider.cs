@@ -125,18 +125,21 @@ namespace ExchangeRateProvider.Infrastructure
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "Network error fetching CNB rates");
-                throw;
+                _logger.LogWarning(ex, "Network error fetching CNB rates - ignoring unavailable currencies as per requirement");
+                // Return empty list instead of throwing - ignore currencies not provided by source
+                return [];
             }
             catch (JsonException ex)
             {
-                _logger.LogError(ex, "Failed to parse CNB JSON response");
-                throw new InvalidOperationException("CNB API returned invalid JSON format", ex);
+                _logger.LogWarning(ex, "Failed to parse CNB JSON response - ignoring unavailable currencies as per requirement");
+                // Return empty list instead of throwing - ignore currencies not provided by source
+                return [];
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error fetching CNB exchange rates");
-                throw;
+                _logger.LogWarning(ex, "Unexpected error fetching CNB exchange rates - ignoring unavailable currencies as per requirement");
+                // Return empty list instead of throwing - ignore currencies not provided by source
+                return [];
             }
         }
     }

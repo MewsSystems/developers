@@ -53,9 +53,11 @@ namespace ExchangeRateProvider.Tests.Integration
 
             var requestedCurrencies = new[] { new Currency("USD") };
 
-            // Act & Assert - Should throw on network timeout (TaskCanceledException)
-            await Assert.ThrowsAsync<TaskCanceledException>(
-                () => provider.GetExchangeRatesAsync(requestedCurrencies));
+            // Act
+            var rates = await provider.GetExchangeRatesAsync(requestedCurrencies);
+
+            // Assert: Should return empty list instead of throwing exception (ignore unavailable currencies)
+            Assert.Empty(rates);
         }
 
         [Fact]

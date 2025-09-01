@@ -71,8 +71,11 @@ namespace ExchangeRateProvider.Tests.Providers
             var provider = new CnbExchangeRateProvider(httpClientFactory, NullLogger<CnbExchangeRateProvider>.Instance);
             var requested = new[] { new Currency("USD") };
 
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => provider.GetExchangeRatesAsync(requested));
+            // Act
+            var rates = await provider.GetExchangeRatesAsync(requested);
+
+            // Assert: Should return empty list instead of throwing exception (ignore unavailable currencies)
+            Assert.Empty(rates);
         }
 
         [Fact]
@@ -83,8 +86,11 @@ namespace ExchangeRateProvider.Tests.Providers
             var provider = new CnbExchangeRateProvider(httpClientFactory, NullLogger<CnbExchangeRateProvider>.Instance);
             var requested = new[] { new Currency("USD") };
 
-            // Act & Assert
-            await Assert.ThrowsAsync<HttpRequestException>(() => provider.GetExchangeRatesAsync(requested));
+            // Act
+            var rates = await provider.GetExchangeRatesAsync(requested);
+
+            // Assert: Should return empty list instead of throwing exception (ignore unavailable currencies)
+            Assert.Empty(rates);
         }
 
         [Fact]

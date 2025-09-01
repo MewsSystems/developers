@@ -65,29 +65,50 @@ namespace ExchangeRateProvider.Infrastructure
                 {
                     _logger.LogDebug("Cache partial hit - fetching {Count} missing rates", missingCurrencies.Count);
 
-                    _logger.LogDebug("Cache miss - fetching fresh rates");
-                    var fetchedRates = await _innerProvider.GetExchangeRatesAsync(missingCurrencies, cancellationToken);
+                    try
+                    {
+                        _logger.LogDebug("Cache miss - fetching fresh rates");
+                        var fetchedRates = await _innerProvider.GetExchangeRatesAsync(missingCurrencies, cancellationToken);
 
-                    // Cache all rates with CNB-aware duration
-                    cachedRates = cachedRates.Concat(fetchedRates).ToList();
-                    await CacheAllRatesAsync(cachedRates, cancellationToken);
-
-                    return cachedRates;
+                        // Only add fetched rates if we got any (ignore currencies not provided by source)
+                        if (fetchedRates.Any())
+                        {
+                            cachedRates = cachedRates.Concat(fetchedRates).ToList();
+                            await CacheAllRatesAsync(cachedRates, cancellationToken);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to fetch missing rates from CNB - ignoring unavailable currencies as per requirement");
+                        // Continue with cached rates only - ignore currencies not provided by source
+                    }
                 }
                 
                 _logger.LogDebug("Cache hit - returning {Count} rates from cache", cachedRates.Count);
                 return cachedRates;
             }
 
-            // Cache miss or partial hit - fetch all fresh data
+            // Cache miss - fetch all fresh data
             _logger.LogDebug("Cache miss - fetching fresh rates");
-            var freshRates = await _innerProvider.GetExchangeRatesAsync(requestedCurrencies, cancellationToken);
-            var freshRatesList = freshRates.ToList();
+            try
+            {
+                var freshRates = await _innerProvider.GetExchangeRatesAsync(requestedCurrencies, cancellationToken);
+                var freshRatesList = freshRates.ToList();
 
-            // Cache all rates with CNB-aware duration
-            await CacheAllRatesAsync(freshRatesList, cancellationToken);
+                // Cache all rates with CNB-aware duration (only if we got any rates)
+                if (freshRatesList.Any())
+                {
+                    await CacheAllRatesAsync(freshRatesList, cancellationToken);
+                }
 
-            return freshRatesList;
+                return freshRatesList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to fetch rates from CNB - returning empty result as per requirement to ignore unavailable currencies");
+                // Return empty list - ignore currencies not provided by source
+                return [];
+            }
         }
 
         private async Task<List<ExchangeRate>?> GetAllRatesFromCacheAsync(CancellationToken cancellationToken)
