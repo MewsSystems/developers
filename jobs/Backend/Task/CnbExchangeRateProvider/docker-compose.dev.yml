@@ -1,0 +1,62 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Api/Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Debug
+      - ExchangeRateProvider__CnbExchangeRateUrl=https://api.cnb.cz
+      - ExchangeRateProvider__CacheExpirationMinutes=5  # Shorter cache for dev
+      - ExchangeRateProvider__TimeoutSeconds=30
+      - ExchangeRateProvider__MaxCurrencies=50  # More currencies for testing
+      - Redis__Enabled=true
+      - Redis__Configuration=redis:6379
+      - Redis__InstanceName=ExchangeRatesDev
+      - CnbCacheStrategy__PublicationWindowMinutes=5
+      - CnbCacheStrategy__WeekdayHours=1
+      - CnbCacheStrategy__WeekendHours=12
+    volumes:
+      - ./logs:/app/logs  # Mount logs for development
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  console:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Console/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Debug
+      - ExchangeRateProvider__CnbExchangeRateUrl=https://api.cnb.cz
+      - ExchangeRateProvider__CacheExpirationMinutes=5
+      - ExchangeRateProvider__TimeoutSeconds=30
+      - ExchangeRateProvider__MaxCurrencies=50
+      - Redis__Enabled=true
+      - Redis__Configuration=redis:6379
+      - Redis__InstanceName=ExchangeRatesDev
+      - CnbCacheStrategy__PublicationWindowMinutes=5
+      - CnbCacheStrategy__WeekdayHours=1
+      - CnbCacheStrategy__WeekendHours=12
+    volumes:
+      - ./logs:/app/logs
+    entrypoint: ["dotnet", "ExchangeRateProvider.Console.dll"]
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"  # Expose port for development tools
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data_dev:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data_dev:
