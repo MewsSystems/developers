@@ -1,0 +1,26 @@
+# Base configuration - common settings for both environments
+# Use with docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Api/Dockerfile
+    networks:
+      - exchange-rate-network
+
+  console:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Console/Dockerfile
+    networks:
+      - exchange-rate-network
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - exchange-rate-network
+
+networks:
+  exchange-rate-network:
+    driver: bridge

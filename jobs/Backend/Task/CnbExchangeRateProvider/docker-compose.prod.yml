@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Api/Dockerfile
+      target: production  # Use production stage if multi-stage Dockerfile
+    image: exchange-rate-provider-api:latest
+    ports:
+      - "80:8080"  # Standard HTTP port for production
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
+      - ASPNETCORE_LOGGING__LOGLEVEL__MICROSOFT=Warning
+      - ExchangeRateProvider__CnbExchangeRateUrl=https://api.cnb.cz
+      - ExchangeRateProvider__CacheExpirationMinutes=60
+      - ExchangeRateProvider__TimeoutSeconds=30
+      - ExchangeRateProvider__MaxCurrencies=20
+      - Redis__Enabled=true
+      - Redis__Configuration=redis:6379
+      - Redis__InstanceName=ExchangeRates
+      - CnbCacheStrategy__PublicationWindowMinutes=5
+      - CnbCacheStrategy__WeekdayHours=1
+      - CnbCacheStrategy__WeekendHours=12
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  console:
+    build:
+      context: .
+      dockerfile: ExchangeRateProvider.Console/Dockerfile
+      target: production
+    image: exchange-rate-provider-console:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT=Warning
+      - ASPNETCORE_LOGGING__LOGLEVEL__MICROSOFT=Warning
+      - ExchangeRateProvider__CnbExchangeRateUrl=https://api.cnb.cz
+      - ExchangeRateProvider__CacheExpirationMinutes=60
+      - ExchangeRateProvider__TimeoutSeconds=30
+      - ExchangeRateProvider__MaxCurrencies=20
+      - Redis__Enabled=true
+      - Redis__Configuration=redis:6379
+      - Redis__InstanceName=ExchangeRates
+      - CnbCacheStrategy__PublicationWindowMinutes=5
+      - CnbCacheStrategy__WeekdayHours=1
+      - CnbCacheStrategy__WeekendHours=12
+    entrypoint: ["dotnet", "ExchangeRateProvider.Console.dll"]
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    # Don't expose port in production for security
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis_data_prod:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data_prod:

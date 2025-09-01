@@ -1,0 +1,9 @@
+# genelated files
+bin/
+obj/
+
+# Visual Studio Code
+.vscode/
+
+# Git
+.git/
