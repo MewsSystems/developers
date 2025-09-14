@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="ExchangeRateUpdater.Interfaces\Class1.cs">
+      <Link>ExchanteRateUpdater.Interfaces\Class1.cs</Link>
+    </Compile>
+  </ItemGroup>
 
 </Project>

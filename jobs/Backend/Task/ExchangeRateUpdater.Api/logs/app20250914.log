@@ -1,0 +1,91 @@
+2025-09-14 19:53:04.380 +02:00 [INF] Now listening on: https://localhost:7076
+2025-09-14 19:53:04.559 +02:00 [INF] Now listening on: http://localhost:5029
+2025-09-14 19:53:04.603 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-14 19:53:04.629 +02:00 [INF] Hosting environment: Development
+2025-09-14 19:53:04.694 +02:00 [INF] Content root path: C:\Git\developers\jobs\Backend\Task\ExchangeRateUpdater.Api
+2025-09-14 19:53:07.309 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger - null null
+2025-09-14 19:53:07.744 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger - 301 0 null 439.2876ms
+2025-09-14 19:53:10.991 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/index.html - null null
+2025-09-14 19:53:11.423 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/index.html - 200 null text/html;charset=utf-8 432.7132ms
+2025-09-14 19:53:11.515 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/swagger-ui.css - null null
+2025-09-14 19:53:11.519 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/index.css - null null
+2025-09-14 19:53:11.610 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/index.js - null null
+2025-09-14 19:53:11.773 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/index.css - 304 null null 254.0953ms
+2025-09-14 19:53:11.524 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/swagger-ui-bundle.js - null null
+2025-09-14 19:53:11.610 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/swagger-ui-standalone-preset.js - null null
+2025-09-14 19:53:12.050 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/swagger-ui.css - 200 23647 text/css 531.7449ms
+2025-09-14 19:53:12.083 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/index.js - 200 null application/javascript;charset=utf-8 471.7917ms
+2025-09-14 19:53:12.212 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/swagger-ui-standalone-preset.js - 304 null null 601.2183ms
+2025-09-14 19:53:12.220 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/swagger-ui-bundle.js - 304 null null 696.3745ms
+2025-09-14 19:53:12.497 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - null null
+2025-09-14 19:53:13.302 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 805.0054ms
+2025-09-14 19:53:31.549 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - null null
+2025-09-14 19:53:31.604 +02:00 [INF] Executing endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 19:53:31.716 +02:00 [INF] Route matched with {action = "Get", controller = "ExchangeRates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[ExchangeRateUpdater.Abstractions.Model.ExchangeRate]]] Get(System.String) on controller ExchangeRateUpdater.Api.Controllers.ExchangeRatesController (ExchangeRateUpdater.Api).
+2025-09-14 19:53:31.947 +02:00 [INF] Executing action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) - Validation state: "Valid"
+2025-09-14 19:53:31.988 +02:00 [INF] Requested Get Exchange rates for: EUR,XYX,USD
+2025-09-14 19:53:43.759 +02:00 [INF] Start processing HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:53:43.776 +02:00 [INF] Sending HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:53:44.238 +02:00 [INF] Received HTTP response headers after 434.7224ms - 200
+2025-09-14 19:53:44.251 +02:00 [INF] End processing HTTP request after 500.8048ms - 200
+2025-09-14 19:54:49.465 +02:00 [INF] Start processing HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:54:49.595 +02:00 [INF] Sending HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:54:50.012 +02:00 [INF] Received HTTP response headers after 404.2004ms - 200
+2025-09-14 19:54:50.023 +02:00 [INF] End processing HTTP request after 559.2449ms - 200
+2025-09-14 19:56:40.314 +02:00 [INF] Now listening on: https://localhost:7076
+2025-09-14 19:56:40.415 +02:00 [INF] Now listening on: http://localhost:5029
+2025-09-14 19:56:40.422 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-14 19:56:40.424 +02:00 [INF] Hosting environment: Development
+2025-09-14 19:56:40.427 +02:00 [INF] Content root path: C:\Git\developers\jobs\Backend\Task\ExchangeRateUpdater.Api
+2025-09-14 19:56:40.530 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger - null null
+2025-09-14 19:56:40.606 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger - 301 0 null 79.1797ms
+2025-09-14 19:56:40.861 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - null null
+2025-09-14 19:56:41.105 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 243.5582ms
+2025-09-14 19:56:50.813 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - null null
+2025-09-14 19:56:50.898 +02:00 [INF] Executing endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 19:56:50.998 +02:00 [INF] Route matched with {action = "Get", controller = "ExchangeRates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[ExchangeRateUpdater.Abstractions.Model.ExchangeRate]]] Get(System.String) on controller ExchangeRateUpdater.Api.Controllers.ExchangeRatesController (ExchangeRateUpdater.Api).
+2025-09-14 19:56:51.181 +02:00 [INF] Executing action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) - Validation state: "Valid"
+2025-09-14 19:56:51.207 +02:00 [INF] Requested Get Exchange rates for: EUR,XYX,USD
+2025-09-14 19:56:58.977 +02:00 [INF] Start processing HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:56:58.984 +02:00 [INF] Sending HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 19:56:59.553 +02:00 [INF] Received HTTP response headers after 551.3475ms - 200
+2025-09-14 19:56:59.567 +02:00 [INF] End processing HTTP request after 593.8266ms - 200
+2025-09-14 20:24:05.931 +02:00 [INF] Now listening on: https://localhost:7076
+2025-09-14 20:24:06.091 +02:00 [INF] Now listening on: http://localhost:5029
+2025-09-14 20:24:06.110 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-14 20:24:06.116 +02:00 [INF] Hosting environment: Development
+2025-09-14 20:24:06.119 +02:00 [INF] Content root path: C:\Git\developers\jobs\Backend\Task\ExchangeRateUpdater.Api
+2025-09-14 20:24:06.227 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger - null null
+2025-09-14 20:24:06.369 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger - 301 0 null 145.6974ms
+2025-09-14 20:24:06.956 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - null null
+2025-09-14 20:24:07.193 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 236.7321ms
+2025-09-14 20:24:08.325 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - null null
+2025-09-14 20:24:08.393 +02:00 [INF] Executing endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 20:24:08.435 +02:00 [INF] Route matched with {action = "Get", controller = "ExchangeRates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[ExchangeRateUpdater.Abstractions.Model.ExchangeRate]]] Get(System.String) on controller ExchangeRateUpdater.Api.Controllers.ExchangeRatesController (ExchangeRateUpdater.Api).
+2025-09-14 20:24:08.512 +02:00 [INF] Executing action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) - Validation state: "Valid"
+2025-09-14 20:24:08.523 +02:00 [INF] Requested Get Exchange rates for: EUR,XYX,USD
+2025-09-14 20:24:15.245 +02:00 [INF] Start processing HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 20:24:15.260 +02:00 [INF] Sending HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 20:24:15.628 +02:00 [INF] Received HTTP response headers after 341.9439ms - 200
+2025-09-14 20:24:15.640 +02:00 [INF] End processing HTTP request after 405.4168ms - 200
+2025-09-14 20:24:37.963 +02:00 [WRN] Using expired cached exchange rates as the source is not available.
+2025-09-14 20:24:39.871 +02:00 [INF] Executed action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 31332.3055ms.
+2025-09-14 20:24:39.918 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ExchangeRateUpdater.Abstractions.Model.ExchangeRate, ExchangeRateUpdater.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-14 20:24:39.981 +02:00 [INF] Executed action ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) in 31522.1052ms
+2025-09-14 20:24:39.995 +02:00 [INF] Executed endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 20:24:40.021 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - 200 null application/json; charset=utf-8 31696.5073ms
+2025-09-14 20:24:51.611 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - null null
+2025-09-14 20:24:51.647 +02:00 [INF] Executing endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 20:24:51.664 +02:00 [INF] Route matched with {action = "Get", controller = "ExchangeRates"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[ExchangeRateUpdater.Abstractions.Model.ExchangeRate]]] Get(System.String) on controller ExchangeRateUpdater.Api.Controllers.ExchangeRatesController (ExchangeRateUpdater.Api).
+2025-09-14 20:24:51.692 +02:00 [INF] Executing action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) - Validation state: "Valid"
+2025-09-14 20:24:51.703 +02:00 [INF] Requested Get Exchange rates for: EUR,XYX,USD
+2025-09-14 20:25:06.555 +02:00 [INF] Start processing HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 20:25:06.565 +02:00 [INF] Sending HTTP request GET https://api.cnb.cz/cnbapi/exrates/daily
+2025-09-14 20:25:06.789 +02:00 [INF] Received HTTP response headers after 213.8402ms - 200
+2025-09-14 20:25:06.802 +02:00 [INF] End processing HTTP request after 245.8375ms - 200
+2025-09-14 20:25:17.776 +02:00 [WRN] Using expired cached exchange rates as the source is not available.
+2025-09-14 20:25:17.783 +02:00 [INF] Executed action method ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 26080.2727ms.
+2025-09-14 20:25:17.801 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[ExchangeRateUpdater.Abstractions.Model.ExchangeRate, ExchangeRateUpdater.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-09-14 20:25:17.821 +02:00 [INF] Executed action ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api) in 26134.1841ms
+2025-09-14 20:25:17.835 +02:00 [INF] Executed endpoint 'ExchangeRateUpdater.Api.Controllers.ExchangeRatesController.Get (ExchangeRateUpdater.Api)'
+2025-09-14 20:25:17.844 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7076/api/ExchangeRates?codes=EUR%2CXYX%2CUSD - 200 null application/json; charset=utf-8 26233.5266ms
