@@ -1,5 +1,5 @@
-﻿using ExchangeRateUpdater.Contracts;   // IExchangeRateProvider
-using ExchangeRateUpdater.Src.Cnb;     // CnbApiExchangeRateProvider, CnbOptions
+﻿using ExchangeRateUpdater.Contracts;
+using ExchangeRateUpdater.Src.Cnb;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
@@ -66,7 +66,7 @@ public static class Program
         }
 
         // Register the provider (JSON API + Polly + cache inside the provider)
-        services.AddHttpClient<IExchangeRateProvider, CnbApiExchangeRateProvider>();
+        services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>();
 
         ServiceProvider sp = services.BuildServiceProvider();
         ILogger logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Main");

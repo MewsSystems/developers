@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace ExchangeRateUpdater.UnitTests;
 
 [TestFixture]
-public class CnbApiExchangeRateProviderTests
+public class ExchangeRateProviderTests
 {
     [Test]
     public async Task JsonApi_ParsesAndCaches_OnSecondCallHitsCache()
@@ -45,7 +45,7 @@ public class CnbApiExchangeRateProviderTests
 
         var cache = services.GetRequiredService<IDistributedCache>();
         var opts = Options.Create(new CnbOptions());
-        var provider = new CnbApiExchangeRateProvider(http, cache, opts, NullLogger<CnbApiExchangeRateProvider>.Instance);
+        var provider = new ExchangeRateProvider(http, cache, opts, NullLogger<ExchangeRateProvider>.Instance);
 
         var date = new DateOnly(2025, 9, 12);
 
@@ -89,7 +89,7 @@ public class CnbApiExchangeRateProviderTests
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
         });
 
-        var provider = new CnbApiExchangeRateProvider(http, cache, opts, NullLogger<CnbApiExchangeRateProvider>.Instance);
+        var provider = new ExchangeRateProvider(http, cache, opts, NullLogger<ExchangeRateProvider>.Instance);
         var result = await provider.GetAsync(resolved);
 
         Assert.That(result.First().ValidFor, Is.EqualTo(prevDay));
@@ -120,7 +120,7 @@ public class CnbApiExchangeRateProviderTests
 
         var cache = services.GetRequiredService<IDistributedCache>();
         var opts = Options.Create(new CnbOptions());
-        var provider = new CnbApiExchangeRateProvider(http, cache, opts, NullLogger<CnbApiExchangeRateProvider>.Instance);
+        var provider = new ExchangeRateProvider(http, cache, opts, NullLogger<ExchangeRateProvider>.Instance);
 
         var date = new DateOnly(2025, 9, 12);
         var rates = await provider.GetAsync(date);

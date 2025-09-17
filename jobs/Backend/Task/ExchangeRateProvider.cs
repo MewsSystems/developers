@@ -1,4 +1,5 @@
 ﻿using ExchangeRateUpdater.Contracts;
+using ExchangeRateUpdater.Src.Cnb;
 using ExchangeRateUpdater.Src.Infrastructure;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -8,13 +9,13 @@ using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace ExchangeRateUpdater.Src.Cnb;
+namespace ExchangeRateUpdater;
 
 public sealed class ExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _http;
     private readonly IDistributedCache _cache;
-    private readonly ILogger<CnbApiExchangeRateProvider> _log;
+    private readonly ILogger<ExchangeRateProvider> _log;
     private readonly CnbOptions _opt;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
 
@@ -22,7 +23,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
         HttpClient httpClient,
         IDistributedCache cache,
         IOptions<CnbOptions> options,
-        ILogger<CnbApiExchangeRateProvider> log)
+        ILogger<ExchangeRateProvider> log)
     {
         _http = httpClient;
         _cache = cache;
