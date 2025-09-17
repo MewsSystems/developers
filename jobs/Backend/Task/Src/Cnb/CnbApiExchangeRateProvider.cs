@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace ExchangeRateUpdater.Src.Cnb;
 
-public sealed class ExchangeRateProvider : IExchangeRateProvider
+public sealed class CnbApiExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _http;
     private readonly IDistributedCache _cache;
@@ -18,10 +18,10 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     private readonly CnbOptions _opt;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
 
-    public ExchangeRateProvider(
-        HttpClient httpClient,
-        IDistributedCache cache,
-        IOptions<CnbOptions> options,
+    public CnbApiExchangeRateProvider(
+        HttpClient httpClient, 
+        IDistributedCache cache, 
+        IOptions<CnbOptions> options, 
         ILogger<CnbApiExchangeRateProvider> log)
     {
         _http = httpClient;

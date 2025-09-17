@@ -17,6 +17,10 @@
 [Tt]humbs.db
 *.tgz
 *.sublime-*
+**/bin/
+**/obj/
+.vs/
+packages/
 
 node_modules
 bower_components
