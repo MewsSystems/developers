@@ -13,6 +13,7 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddCnbApiClient(context.Configuration);
+        services.AddInMemoryCache();
         services.AddExchangeRateProvider();
         services.AddTransient<App>();
     })
