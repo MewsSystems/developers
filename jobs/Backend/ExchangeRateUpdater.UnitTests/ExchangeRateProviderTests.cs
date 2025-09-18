@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Src.Cnb;
+﻿using ExchangeRateUpdater.Src;
+using ExchangeRateUpdater.Src.Cnb;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
