@@ -19,6 +19,6 @@ public class ExchangeRate
 
     public override string ToString()
     {
-        return $"{SourceCurrency}/{TargetCurrency}={Value}";
+        return $"{SourceCurrency.Code}/{TargetCurrency.Code}={Value:0.000000}";
     }
 }

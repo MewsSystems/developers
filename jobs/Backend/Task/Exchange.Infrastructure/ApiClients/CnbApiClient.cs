@@ -8,12 +8,13 @@ public class CnbApiClient(HttpClient httpClient) : ICnbApiClient
 {
     private const string ExchangeRatesUrl = "cnbapi/exrates/daily?lang=EN";
 
-    public async Task<IEnumerable<ExchangeRateResponse>> GetExchangeRatesAsync()
+    public async Task<IEnumerable<CnbExchangeRate>> GetExchangeRatesAsync(CancellationToken cancellationToken = default)
     {
-        var response = await httpClient.GetAsync(ExchangeRatesUrl);
-        var exchangeRates = await response.Content.ReadFromJsonAsync<ExchangeRatesResponse>();
+        var response = await httpClient.GetAsync(ExchangeRatesUrl, cancellationToken);
+        var exchangeRates =
+            await response.Content.ReadFromJsonAsync<ExchangeRatesResponse>(cancellationToken: cancellationToken);
         return exchangeRates?.Rates ?? [];
     }
 }
 
-file record ExchangeRatesResponse(List<ExchangeRateResponse> Rates);
+file record ExchangeRatesResponse(List<CnbExchangeRate> Rates);

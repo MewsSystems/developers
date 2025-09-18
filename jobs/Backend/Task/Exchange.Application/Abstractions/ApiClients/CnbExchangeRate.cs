@@ -1,6 +1,6 @@
 namespace Exchange.Application.Abstractions.ApiClients;
 
-public record ExchangeRateResponse(
+public record CnbExchangeRate(
     string ValidFor,
     int Order,
     string Country,

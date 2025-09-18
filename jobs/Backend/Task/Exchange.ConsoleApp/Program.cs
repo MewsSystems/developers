@@ -1,4 +1,5 @@
-﻿using Exchange.ConsoleApp;
+﻿using Exchange.Application.Extensions;
+using Exchange.ConsoleApp;
 using Exchange.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
         services.AddCnbApiClient(context.Configuration);
+        services.AddExchangeRateProvider();
         services.AddTransient<App>();
     })
     .Build();
