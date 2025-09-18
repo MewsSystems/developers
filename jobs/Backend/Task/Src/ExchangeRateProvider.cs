@@ -15,24 +15,25 @@ namespace ExchangeRateUpdater.Src;
 public sealed class ExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _http;
-    private readonly IDistributedCache _cache;
     private readonly ILogger<ExchangeRateProvider> _log;
     private readonly CnbOptions _opt;
     private readonly IAsyncPolicy<HttpResponseMessage> _policy;
+    private readonly IExchangeRateCache _rateCache;
 
+    // ctor
     public ExchangeRateProvider(
         HttpClient httpClient,
-        IDistributedCache cache,
+        IExchangeRateCache rateCache,
         IOptions<CnbOptions> options,
         ILogger<ExchangeRateProvider> log)
     {
         _http = httpClient;
-        _cache = cache;
+        _rateCache = rateCache;
         _log = log;
         _opt = options.Value;
 
         _http.Timeout = _opt.HttpTimeout;
-        _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mews-BackendTask", "1.0"));
+        _http.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Mews-BackendTask", "1.0"));
         _policy = Policies.CreateHttpPolicy(_opt.RetryCount, _log);
     }
 
@@ -49,7 +50,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
 
         var key = $"{_opt.CacheKeyPrefix}{resolved:yyyy-MM-dd}";
 
-        var cached = await CacheGetAsync(key, ct);
+        var cached = await _rateCache.GetAsync(key, ct);
         if (cached is not null)
         {
             _log.LogInformation("Cache hit for {ResolvedDate}", resolved.ToString("yyyy-MM-dd"));
@@ -71,7 +72,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             string payload = await resp.Content.ReadAsStringAsync(ct);
             List<ExchangeRate> rates = ParseJsonRows(payload, resolved);
 
-            await CacheSetAsync(key, rates, ct);
+            await _rateCache.SetAsync(key, rates, ct);
             _log.LogInformation("Cached {Count} rates for {Date}", rates.Count, rates[0].ValidFor.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             return rates;
         }
@@ -82,7 +83,7 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
             foreach (var prev in PreviousBusinessDays(resolved, 7))
             {
                 var prevKey = $"{_opt.CacheKeyPrefix}{prev:yyyy-MM-dd}";
-                var stale = await CacheGetAsync(prevKey, ct);
+                var stale = await _rateCache.GetAsync(prevKey, ct);
                 if (stale is not null)
                 {
                     _log.LogInformation("Serving stale data for {StaleDate}", prev.ToString("yyyy-MM-dd"));
@@ -199,35 +200,5 @@ public sealed class ExchangeRateProvider : IExchangeRateProvider
     {
         var d = start;
         for (int i = 0; i < days; i++) { d = PreviousBusinessDay(d); yield return d; }
-    }
-
-    private async Task<List<ExchangeRate>?> CacheGetAsync(string key, CancellationToken ct)
-    {
-        try
-        {
-            var hit = await _cache.GetStringAsync(key, ct);
-            return string.IsNullOrEmpty(hit) ? null : JsonSerializer.Deserialize<List<ExchangeRate>>(hit)!;
-        }
-        catch (Exception ex)
-        {
-            _log.LogWarning(ex, "Redis get failed (key: {Key})", key);
-            return null;
-        }
-    }
-
-    private async Task CacheSetAsync(string key, List<ExchangeRate> value, CancellationToken ct)
-    {
-        try
-        {
-            var payload = JsonSerializer.Serialize(value);
-            await _cache.SetStringAsync(key, payload, new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = _opt.CacheTtl
-            }, ct);
-        }
-        catch (Exception ex)
-        {
-            _log.LogWarning(ex, "Redis set failed (key: {Key})", key);
-        }
     }
 }

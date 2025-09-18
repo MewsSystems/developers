@@ -1,6 +1,7 @@
 ﻿using ExchangeRateUpdater.Contracts;
 using ExchangeRateUpdater.Src;
 using ExchangeRateUpdater.Src.Cnb;
+using ExchangeRateUpdater.Src.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
@@ -20,6 +21,9 @@ public static class Program
             : DateOnly.FromDateTime(DateTime.UtcNow);
 
         ServiceCollection services = new ServiceCollection();
+
+        services.AddSingleton<IExchangeRateCache, ExchangeRateCache>();
+        services.AddHttpClient<IExchangeRateProvider, ExchangeRateProvider>();
 
         services.AddLogging(b => b.AddSimpleConsole(o =>
         {
