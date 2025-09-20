@@ -1,6 +1,6 @@
 ﻿using Exchange.Application.Extensions;
 using Exchange.ConsoleApp;
-using Exchange.Infrastructure.Extensions;
+using Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
