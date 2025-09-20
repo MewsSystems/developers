@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Extensions.Http;
 
-namespace Exchange.Infrastructure.Extensions;
+namespace Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
 
 public static class CnbApiClientServiceCollectionExtension
 {
@@ -18,9 +18,13 @@ public static class CnbApiClientServiceCollectionExtension
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddSingleton<ICnbApiClientDataUpdateCalculator, CnbApiClientDataUpdateCalculator>();
+
         services.AddHttpClient<ICnbApiClient, CnbApiClient>(ConfigureCnbApiClient())
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
+
+        services.Decorate<ICnbApiClient, CnbApiClientCacheDecorator>();
 
         return services;
     }

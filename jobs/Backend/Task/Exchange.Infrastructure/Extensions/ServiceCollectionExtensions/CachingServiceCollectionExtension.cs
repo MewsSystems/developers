@@ -2,7 +2,7 @@ using Exchange.Application.Abstractions.Caching;
 using Exchange.Infrastructure.Caching;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Exchange.Infrastructure.Extensions;
+namespace Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
 
 public static class CachingServiceCollectionExtension
 {

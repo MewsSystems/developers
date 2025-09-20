@@ -1,7 +1,7 @@
 using Exchange.Infrastructure.DateTimeProviders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Exchange.Infrastructure.Extensions;
+namespace Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
 
 public static class DateTimeServiceCollectionExtension
 {
