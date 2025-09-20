@@ -32,7 +32,11 @@ export function MediaTabs({ movieMedia }: { movieMedia: MovieMedia }) {
     <Tabs.Root defaultValue={tabsAvailable[0].value}>
       <Tabs.List>
         {tabsAvailable.map((tab) => {
-          return <Tabs.Trigger value={tab.value}>{tab.name}</Tabs.Trigger>;
+          return (
+            <Tabs.Trigger key={tab.value} value={tab.value}>
+              {tab.name}
+            </Tabs.Trigger>
+          );
         })}
       </Tabs.List>
       <Tabs.Content value="videos">
