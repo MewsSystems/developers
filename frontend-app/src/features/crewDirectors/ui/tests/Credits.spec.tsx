@@ -1,13 +1,11 @@
 import { defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
-import { Credits } from "./Credits";
+import { expect, test } from "vitest";
+import { Credits } from "@/features/crewDirectors/ui/Credits";
 import { ChakraProvider } from "@chakra-ui/react";
 import "@testing-library/jest-dom/vitest";
 
-test("loads and displays greeting", async () => {
-  vi.mock("@uidotdev/usehooks", { spy: true });
-
+test("Credits crew directors", async () => {
   render(
     <TestProvider>
       <Credits

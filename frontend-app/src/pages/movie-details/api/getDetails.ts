@@ -53,7 +53,12 @@ export async function getDetails(
   return {
     title: parseTitle({ movie, language }),
     info: parseInfo({ movie }),
-    movie,
+    favorite: movie.account_states.favorite,
+    watchlist: movie.account_states.watchlist,
+    movieId: movie.id,
+    tagline: movie.tagline,
+    overview: movie.overview,
+    voteAverage: Math.round(movie.vote_average * 10),
     images,
     configuration,
     language,
@@ -62,6 +67,7 @@ export async function getDetails(
     videoYoutubeTrailer: parseVideoTrailer({ videos: movie.videos }),
     castImgs: parseCastImgs({ movie, configuration }),
     media: parseMediaAttrs({ movie, images, configuration }),
+    totalReviews: movie.reviews.results.length,
     reviews: parseReviews({ movie }),
     collection: collection
       ? parseCollection({ collection, configuration, language })

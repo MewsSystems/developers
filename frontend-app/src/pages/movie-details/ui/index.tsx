@@ -34,9 +34,7 @@ export function MovieDetailsRouteComponent() {
     console.error(error);
     return <Box>Sorry, error</Box>;
   }
-  return (
-    <div>{details?.movie && <DetailsComponent detailsProps={details} />}</div>
-  );
+  return <div>{details && <DetailsComponent detailsProps={details} />}</div>;
 }
 
 function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
@@ -55,25 +53,23 @@ function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
               <Container>
                 <Flex>
                   <ToggleFavorite
-                    movieId={detailsProps.movie.id}
-                    favorite={detailsProps.movie.account_states.favorite}
+                    movieId={detailsProps.movieId}
+                    favorite={detailsProps.favorite}
                   />
                   <ToggleWatchList
-                    movieId={detailsProps.movie.id}
-                    watchlist={detailsProps.movie.account_states.watchlist}
+                    movieId={detailsProps.movieId}
+                    watchlist={detailsProps.watchlist}
                   />
                   <PlayTrailer
                     videoYoutubeTrailer={detailsProps.videoYoutubeTrailer}
                   />
                 </Flex>
               </Container>
-              <TaglineComponent tagline={detailsProps.movie.tagline} />
-              <OverviewComponent overview={detailsProps.movie.overview} />
+              <TaglineComponent tagline={detailsProps.tagline} />
+              <OverviewComponent overview={detailsProps.overview} />
               <Credits crewDirectors={detailsProps.crewDirectors} />
               <Container height={"100px"}>
-                <RatingChart
-                  percent={Math.round(detailsProps.movie.vote_average * 10)}
-                />
+                <RatingChart percent={detailsProps.voteAverage} />
               </Container>
             </Flex>
           </Box>
@@ -89,10 +85,10 @@ function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
             <Box overflowX="auto" maxW={"100%"} datatest-id="media">
               <MediaTabs movieMedia={detailsProps.media} />
             </Box>
-            {detailsProps.movie.reviews.results.length > 0 && (
+            {detailsProps.totalReviews > 0 && (
               <Box overflowX="auto" maxW={"100%"} datatest-id="social">
                 <SocialTabs
-                  totalReviews={detailsProps.movie.reviews.results.length}
+                  totalReviews={detailsProps.totalReviews}
                   reviews={detailsProps.reviews}
                 />
               </Box>

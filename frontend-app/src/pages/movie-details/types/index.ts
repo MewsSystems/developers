@@ -12,7 +12,12 @@ import type { MovieTitle } from "@/features/title/types";
 export type DetailsProps = {
   title: MovieTitle;
   info: MovieInfo;
-  movie: MovieDetailsAppended;
+  favorite: boolean;
+  watchlist: boolean;
+  movieId: number;
+  tagline: string;
+  overview: string;
+  voteAverage: number;
   collection?: CollectionDetail;
   configuration: Configuration;
   images?: Images;
@@ -22,6 +27,7 @@ export type DetailsProps = {
   videoYoutubeTrailer: string;
   castImgs: CastImg[];
   media: MovieMedia;
+  totalReviews: number;
   reviews: ReviewDetails[];
   crewDirectors: CrewDirectorDetails[];
   recommendations: RecommendationDetail[];

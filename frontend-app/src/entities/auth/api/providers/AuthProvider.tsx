@@ -4,7 +4,7 @@ import { createSessionApi } from "@/entities/auth/api/createSessionApi";
 import { getAccountApi } from "@/entities/account/api/accountApi";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
-export interface AuthContext {
+export interface AuthContextType {
     isAuthenticated: boolean
     accountId: number | null;
     sessionId: string | null;
@@ -13,7 +13,7 @@ export interface AuthContext {
     createSession: (requestToken: string) => Promise<boolean>;
 }
 
-const AuthContext = React.createContext<AuthContext | null>(null)
+export const AuthContext = React.createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [sessionId, setSessionId] = useLocalStorage<string | null>('sessionId');
