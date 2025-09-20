@@ -1,3 +1,5 @@
+import { useParams } from "@tanstack/react-router";
+import { useQueryMovieDetails } from "@/pages/movie-details/hooks/useQueryMovieDetails";
 import { Flex, Box, Container, Text } from "@chakra-ui/react"
 import RatingChart from '@/shared/ui/RatingChart';
 import { OpacityBackgroundBox } from '@/shared/ui/OpacityBackground';
@@ -17,7 +19,27 @@ import { PlayTrailer } from "@/pages/movie-details/ui/PlayTrailer";
 import { ToggleFavorite } from "@/pages/movie-details/ui/ToggleFavorite";
 import { ToggleWatchList } from "@/pages/movie-details/ui/ToggleWatchList";
 
-export function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
+export function MovieDetailsRouteComponent() {
+  const { movieId } = useParams({ from: "/_auth/moviedetails/$movieId" });
+  const {
+    data: details,
+    isLoading,
+    isError,
+    error,
+  } = useQueryMovieDetails({ movie_id: movieId });
+  if (isLoading) {
+    return <div>LOADING</div>;
+  }
+  if (isError) {
+    console.error(error);
+    return <Box>Sorry, error</Box>;
+  }
+  return (
+    <div>{details?.movie && <DetailsComponent detailsProps={details} />}</div>
+  );
+}
+
+function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
     const backdrop_img_path = detailsProps.movie.backdrop_path ? detailsProps.boundIncludeConfiguration(detailsProps.movie.backdrop_path, 6) : "";
     const bgImage = `url(${backdrop_img_path})`
 
@@ -40,7 +62,7 @@ export function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps 
                         </Container>
                         <TaglineComponent tagline={detailsProps.movie.tagline} />
                         <OverviewComponent overview={detailsProps.movie.overview} />
-                        <Credits detailsProps={detailsProps} />
+                        <Credits credits={detailsProps.movie.credits} />
                         <Container height={"100px"}>
                             <RatingChart percent={Math.round(detailsProps.movie.vote_average * 10)} />
                         </Container>

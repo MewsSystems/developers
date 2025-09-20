@@ -1,3 +1,4 @@
+import { AuthCallbackRouteComponent } from '@/pages/auth/AuthCallback';
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/authcallback')({
@@ -14,11 +15,6 @@ export const Route = createFileRoute('/authcallback')({
     }
     throw redirect({ to: "/login" });
   },
-  component: RouteComponent,
+  component: AuthCallbackRouteComponent,
 })
 
-function RouteComponent() {
-  return (<div className="p-2">
-    <h3>Authenticating...</h3>
-  </div>)
-}
