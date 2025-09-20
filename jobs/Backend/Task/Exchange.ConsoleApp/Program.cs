@@ -12,6 +12,7 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices((context, services) =>
     {
+        services.AddDateTimeProvider();
         services.AddCnbApiClient(context.Configuration);
         services.AddInMemoryCache();
         services.AddExchangeRateProvider();
