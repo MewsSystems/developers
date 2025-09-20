@@ -8,9 +8,8 @@ public static class ExchangeRateProviderServiceCollectionExtension
     public static IServiceCollection AddExchangeRateProvider(this IServiceCollection services)
     {
         services
-            .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
-            .Decorate<IExchangeRateProvider, ExchangeRateProviderCacheDecorator>();
-        
+            .AddScoped<IExchangeRateProvider, ExchangeRateProvider>();
+
         return services;
     }
 }

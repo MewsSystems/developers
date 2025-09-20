@@ -8,6 +8,7 @@ public class App(IExchangeRateProvider exchangeRateProvider)
     private static readonly IEnumerable<Currency> Currencies =
     [
         Currency.USD,
+        Currency.BRL,
         Currency.EUR,
         Currency.CZK,
         Currency.JPY,
