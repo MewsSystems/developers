@@ -10,7 +10,7 @@ export function toLocaleYear(date: string, language: string) {
     return DateTime.fromISO(date).setLocale(language).toLocaleString({ year: 'numeric' })
 }
 
-export function toDurationFormat(durationMin: number) {
+export function toDurationFormat(durationMin: number): string {
     if (durationMin > 60) {
         return Duration.fromObject({ minutes: durationMin }).normalize().toFormat('h\'h\' m\'m\'')
     }

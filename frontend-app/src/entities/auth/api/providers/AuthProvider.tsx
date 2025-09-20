@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const login = React.useCallback(async () => {
         const data = await requestTokenApi();
-        if (data.success) {
+        if (data?.success) {
             // Redirect user to TMDB to approve the request token
             window.location.href = openPermissionPageTMDB(data.request_token, `${window.location.origin}/authcallback`);
         }
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setSessionId(data.session_id)
             // Get the account ID and store it
             const accountData = await getAccountApi({ session_id: data.session_id });
-            if (accountData.id) {
+            if (accountData?.id) {
                 setAccountId(parseInt(accountData.id))
             }
             return true;
