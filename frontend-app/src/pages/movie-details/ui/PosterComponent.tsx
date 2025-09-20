@@ -1,15 +1,10 @@
 import { Box } from "@chakra-ui/react";
-import type { DetailsProps } from "../types";
 
-export function PosterComponent({
-  detailsProps,
-}: {
-  detailsProps: DetailsProps;
-}) {
+export function PosterComponent({ poster_img }: { poster_img: string }) {
   return (
-    detailsProps.poster_img && (
+    poster_img && (
       <Box>
-        <img src={detailsProps.poster_img} />
+        <img src={poster_img} />
       </Box>
     )
   );

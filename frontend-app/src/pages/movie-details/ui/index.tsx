@@ -3,19 +3,19 @@ import { useQueryMovieDetails } from "@/pages/movie-details/hooks/useQueryMovieD
 import { Flex, Box, Container, Text } from "@chakra-ui/react";
 import RatingChart from "@/shared/ui/RatingChart";
 import { OpacityBackgroundBox } from "@/shared/ui/OpacityBackground";
-import { MediaTabs } from "@/pages/movie-details/ui/MediaTabs";
+import { MediaTabs } from "@/features/media/ui/MediaTabs";
 import type { DetailsProps } from "@/pages/movie-details/types";
 import { PosterComponent } from "@/pages/movie-details/ui/PosterComponent";
-import { Info } from "@/pages/movie-details/ui/Info";
-import { CastComponent } from "@/pages/movie-details/ui/CastComponent";
-import { RecommendationsComponent } from "@/pages/movie-details/ui/RecommendationsComponent";
-import { SocialTabs } from "@/pages/movie-details/ui/SocialTabs";
-import { CollectionComponent } from "@/pages/movie-details/ui/CollectionComponent";
+import { Info } from "@/features/info/ui/Info";
+import { CastComponent } from "@/features/topBilledCast/ui/CastComponent";
+import { RecommendationsComponent } from "@/features/recommendation/ui/RecommendationsComponent";
+import { SocialTabs } from "@/features/social/ui/SocialTabs";
+import { CollectionComponent } from "@/features/collection/ui/CollectionComponent";
 import { TaglineComponent } from "@/pages/movie-details/ui/TaglineComponent";
-import { TitleComponent } from "@/pages/movie-details/ui/TitleComponent";
+import { TitleComponent } from "@/features/title/ui/TitleComponent";
 import { OverviewComponent } from "@/pages/movie-details/ui/OverviewComponent";
-import { Credits } from "@/pages/movie-details/ui/Credits";
-import { PlayTrailer } from "@/pages/movie-details/ui/PlayTrailer";
+import { Credits } from "@/features/crewDirectors/ui/Credits";
+import { PlayTrailer } from "@/features/videoTrailer/ui/PlayTrailer";
 import { ToggleFavorite } from "@/pages/movie-details/ui/ToggleFavorite";
 import { ToggleWatchList } from "@/pages/movie-details/ui/ToggleWatchList";
 
@@ -47,21 +47,29 @@ function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
       <Flex direction="column" gap="4">
         <OpacityBackgroundBox bgImage={bgImage}>
           <Box flexBasis="25%">
-            <PosterComponent detailsProps={detailsProps} />
+            <PosterComponent poster_img={detailsProps.poster_img} />
           </Box>
           <Box flexBasis="75%">
             <Flex direction="column" gap="4">
-              <TitleComponent detailsProps={detailsProps} />
+              <TitleComponent title={detailsProps.title} />
               <Container>
                 <Flex>
-                  <ToggleFavorite detailsProps={detailsProps} />
-                  <ToggleWatchList detailsProps={detailsProps} />
-                  <PlayTrailer detailsProps={detailsProps} />
+                  <ToggleFavorite
+                    movieId={detailsProps.movie.id}
+                    favorite={detailsProps.movie.account_states.favorite}
+                  />
+                  <ToggleWatchList
+                    movieId={detailsProps.movie.id}
+                    watchlist={detailsProps.movie.account_states.watchlist}
+                  />
+                  <PlayTrailer
+                    videoYoutubeTrailer={detailsProps.videoYoutubeTrailer}
+                  />
                 </Flex>
               </Container>
               <TaglineComponent tagline={detailsProps.movie.tagline} />
               <OverviewComponent overview={detailsProps.movie.overview} />
-              <Credits credits={detailsProps.movie.credits} />
+              <Credits crewDirectors={detailsProps.crewDirectors} />
               <Container height={"100px"}>
                 <RatingChart
                   percent={Math.round(detailsProps.movie.vote_average * 10)}
@@ -96,11 +104,13 @@ function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
             )}
             <Box datatest-id="recommendations" overflowX="auto" maxW={"100%"}>
               <Text textStyle={"3xl"}>Recommendations</Text>
-              <RecommendationsComponent detailsProps={detailsProps} />
+              <RecommendationsComponent
+                recommendations={detailsProps.recommendations}
+              />
             </Box>
           </Flex>
           <Flex flexBasis="25%">
-            <Info detailsProps={detailsProps} />
+            <Info info={detailsProps.info} />
           </Flex>
         </Flex>
       </Flex>

@@ -1,9 +1,8 @@
 import { Image, Flex, Box } from "@chakra-ui/react";
 import { Tabs } from "@chakra-ui/react";
-import { HorizontalItem } from "./HorizontalItem";
-import type { MovieMedia } from "@/pages/movie-details/types";
-
 import { FaRegPlayCircle } from "react-icons/fa";
+import { HorizontalItem } from "@/shared/ui/HorizontalItem";
+import type { MovieMedia } from "@/features/media/types";
 
 export function MediaTabs({ movieMedia }: { movieMedia: MovieMedia }) {
   const tabs = [

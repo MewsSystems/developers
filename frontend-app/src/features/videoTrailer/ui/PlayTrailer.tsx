@@ -1,9 +1,11 @@
-import type { DetailsProps } from "@/pages/movie-details/types";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { FaPlay } from "react-icons/fa";
 
-export function PlayTrailer({ detailsProps }: { detailsProps: DetailsProps }) {
-  const videoYoutubeTrailer = detailsProps.videoYoutubeTrailer;
+export function PlayTrailer({
+  videoYoutubeTrailer,
+}: {
+  videoYoutubeTrailer: string;
+}) {
   if (videoYoutubeTrailer) {
     return (
       <Box marginTop="8px">

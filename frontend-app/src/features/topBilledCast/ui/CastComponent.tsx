@@ -1,6 +1,6 @@
 import { Image, Flex, Box, Text } from "@chakra-ui/react";
-import type { CastImg } from "@/pages/movie-details/types";
-import { HorizontalItem } from "@/pages/movie-details/ui/HorizontalItem";
+import { HorizontalItem } from "@/shared/ui/HorizontalItem";
+import type { CastImg } from "@/features/topBilledCast/types";
 
 export function CastComponent({ castImgs }: { castImgs: CastImg[] }) {
   return (

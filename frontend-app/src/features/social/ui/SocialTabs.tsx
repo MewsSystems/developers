@@ -1,8 +1,8 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { Tabs } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
-import type { ReviewDetails } from "@/pages/movie-details/types";
 import { ReadRestLink } from "./ReadRestLink";
+import type { ReviewDetails } from "@/features/social/types";
 
 export function SocialTabs({
   reviews,

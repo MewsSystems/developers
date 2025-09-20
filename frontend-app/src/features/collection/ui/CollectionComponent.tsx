@@ -1,6 +1,6 @@
 import { Flex, Box, Container, Text } from "@chakra-ui/react";
 import { OpacityBackgroundBox } from "@/shared/ui/OpacityBackground";
-import type { CollectionDetail } from "@/pages/movie-details/types";
+import type { CollectionDetail } from "@/features/collection/types";
 
 export function CollectionComponent({
   collection,

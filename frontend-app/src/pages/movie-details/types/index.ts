@@ -1,74 +1,28 @@
 import type { Configuration } from "@/entities/configuration/types";
-import type {
-  Images,
-  MovieDetailsAppended,
-  MovieProductionCompanyWithImg,
-} from "@/entities/movie/types";
+import type { Images, MovieDetailsAppended } from "@/entities/movie/types";
+import type { MovieMedia } from "@/features/media/types";
+import type { ReviewDetails } from "@/features/social/types";
+import type { CastImg } from "@/features/topBilledCast/types";
+import type { CrewDirectorDetails } from "@/features/crewDirectors/types";
+import type { CollectionDetail } from "@/features/collection/types";
+import type { RecommendationDetail } from "@/features/recommendation/types";
+import type { MovieInfo } from "@/features/info/types";
+import type { MovieTitle } from "@/features/title/types";
 
-export type CollectionDetail = {
-  bgImage: string;
-  parts: string;
-  name: string;
-};
-
-export type CastImg = {
-  id: number;
-  width: string;
-  img: string;
-  name: string;
-  character: string;
-};
 export type DetailsProps = {
+  title: MovieTitle;
+  info: MovieInfo;
   movie: MovieDetailsAppended;
   collection?: CollectionDetail;
   configuration: Configuration;
   images?: Images;
   language: string;
-  productionCompaniesWithImg: MovieProductionCompanyWithImg[];
-  backdrop_img: string;
   backdrop_img_url_css: string;
   poster_img: string;
-  countriesOrigin: string;
-  genres: string;
-  duration: string;
-  releaseDateLocale: string;
-  releaseDateYearLocale: string;
   videoYoutubeTrailer: string;
   castImgs: CastImg[];
   media: MovieMedia;
   reviews: ReviewDetails[];
-};
-
-export type ReviewDetails = {
-  id: string;
-  sliced_content: string;
-  fullContent: string;
-};
-
-type PosterMedia = {
-  file_path: string;
-  width: string;
-  imgSrc: string;
-};
-type VideoMedia = {
-  id: string;
-  width: string;
-  height: string;
-  youtubeUrl: string;
-  youtubeImgSrc: string;
-};
-
-type BackdropMedia = {
-  width: string;
-  file_path: string;
-  imgSrc: string;
-};
-
-export type MovieMedia = {
-  totalPosters: number;
-  postersMedia: PosterMedia[];
-  totalVideos: number;
-  videosMedia: VideoMedia[];
-  totalBackdrops: number;
-  backdropsMedia: BackdropMedia[];
+  crewDirectors: CrewDirectorDetails[];
+  recommendations: RecommendationDetail[];
 };
