@@ -2,10 +2,10 @@ namespace Exchange.Infrastructure.DateTimeProviders;
 
 public interface IDateTimeProvider
 {
-    DateTimeOffset Now { get; }
+    DateTime Now { get; }
 }
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTimeOffset Now => DateTimeOffset.Now;
+    public DateTime Now => DateTime.Now;
 }
