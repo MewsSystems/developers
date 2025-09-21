@@ -15,7 +15,8 @@ public class App(IExchangeRateProvider exchangeRateProvider)
         Currency.KES,
         Currency.RUB,
         Currency.THB,
-        Currency.TRY
+        Currency.TRY,
+        Currency.IDR
     ];
 
     public async Task RunAsync()
