@@ -1,4 +1,5 @@
 using Exchange.Application.Services;
+using Exchange.Domain.Abstractions.Exceptions;
 using Exchange.Domain.ValueObjects;
 
 namespace Exchange.ConsoleApp;
@@ -70,7 +71,7 @@ public class App(IExchangeRateProvider exchangeRateProvider)
         {
             return codes.Select(c => Currency.FromCode(c.Trim()));
         }
-        catch (ArgumentException ex)
+        catch (BadRequestException ex)
         {
             Console.WriteLine(ex.Message);
         }
