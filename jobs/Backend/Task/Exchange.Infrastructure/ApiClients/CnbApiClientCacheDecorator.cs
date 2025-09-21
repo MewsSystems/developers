@@ -22,7 +22,10 @@ public class CnbApiClientCacheDecorator(
         var cached = await cacheService.GetAsync<IEnumerable<CnbExchangeRate>>(CacheKey);
 
         if (cached is not null)
+        {
+            logger.LogInformation("Data retrieved from cache.");
             return cached;
+        }
 
         var cnbExchangeRates = await cnbApiClient.GetExchangeRatesAsync(cancellationToken);
 
@@ -36,7 +39,7 @@ public class CnbApiClientCacheDecorator(
         logger.LogInformation("Caching exchange rates.");
         var cacheExpiration = CalculateCacheExpiration(cnbExchangeRates);
         logger.LogInformation(
-            "Cache expiration: {Days} days, {Hours} hours, {Minutes} minutes, {Seconds} seconds}}",
+            "Cache expiration: {Days} days, {Hours} hours, {Minutes} minutes, {Seconds} seconds",
             cacheExpiration.Days,
             cacheExpiration.Hours,
             cacheExpiration.Minutes,
