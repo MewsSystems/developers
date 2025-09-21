@@ -18,6 +18,14 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddExchangeRateProvider();
         services.AddTransient<App>();
     })
+    .UseDefaultServiceProvider((context, options) =>
+    {
+        options.ValidateScopes = true;
+        options.ValidateOnBuild = true;
+    })
     .Build();
 
-await host.Services.GetRequiredService<App>().RunAsync();
+using var scope = host.Services.CreateScope();
+await scope.ServiceProvider
+    .GetRequiredService<App>()
+    .RunAsync();
