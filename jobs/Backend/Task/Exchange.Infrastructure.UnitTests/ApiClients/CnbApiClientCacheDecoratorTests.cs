@@ -3,6 +3,7 @@ using Exchange.Application.Abstractions.Caching;
 using Exchange.Infrastructure.ApiClients;
 using Exchange.Infrastructure.DateTimeProviders;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Exchange.Infrastructure.UnitTests.ApiClients;
@@ -13,6 +14,7 @@ public class CnbApiClientCacheDecoratorTests
     private readonly Mock<ICacheService> _mockCacheService = new();
     private readonly Mock<IDateTimeProvider> _mockDateTimeProvider = new();
     private readonly Mock<ICnbApiClientDataUpdateCalculator> _mockUpdateCalculator = new();
+    private readonly Mock<ILogger<CnbApiClientCacheDecorator>> _mockLogger = new();
     private readonly CnbApiClientCacheDecorator _sut;
 
     private readonly List<CnbExchangeRate> _sampleExchangeRates =
@@ -26,7 +28,8 @@ public class CnbApiClientCacheDecoratorTests
             _mockCnbApiClient.Object,
             _mockCacheService.Object,
             _mockUpdateCalculator.Object,
-            _mockDateTimeProvider.Object
+            _mockDateTimeProvider.Object,
+            _mockLogger.Object
         );
     }
 

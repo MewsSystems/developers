@@ -1,5 +1,6 @@
 using Exchange.Infrastructure.DateTimeProviders;
 using Exchange.Infrastructure.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Exchange.Infrastructure.ApiClients;
 
@@ -8,7 +9,10 @@ public interface ICnbApiClientDataUpdateCalculator
     DateTime GetNextExpectedUpdateDate(DateOnly lastUpdate);
 }
 
-public class CnbApiClientDataUpdateCalculator(IDateTimeProvider dateTimeProvider) : ICnbApiClientDataUpdateCalculator
+public class CnbApiClientDataUpdateCalculator(
+    IDateTimeProvider dateTimeProvider,
+    ILogger<CnbApiClientDataUpdateCalculator> logger
+) : ICnbApiClientDataUpdateCalculator
 {
     private static readonly TimeOnly DataUpdateTime = new(14, 30);
 
@@ -27,9 +31,11 @@ public class CnbApiClientDataUpdateCalculator(IDateTimeProvider dateTimeProvider
 
         if (CanUpdateOnSameDay(targetDate, dateTimeProvider.Now))
         {
+            logger.LogInformation("Data update is expected on the same day.");
             return targetDate.ToDateTime(DataUpdateTime);
         }
 
+        logger.LogInformation("Data update is expected on the next working day.");
         return GetNextWorkingDate(targetDate).ToDateTime(DataUpdateTime);
     }
 

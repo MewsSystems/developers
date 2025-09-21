@@ -1,6 +1,7 @@
 using Exchange.Infrastructure.ApiClients;
 using Exchange.Infrastructure.DateTimeProviders;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Exchange.Infrastructure.UnitTests.ApiClients;
@@ -8,12 +9,13 @@ namespace Exchange.Infrastructure.UnitTests.ApiClients;
 public class CnbApiClientDataUpdateCalculatorTests
 {
     private readonly Mock<IDateTimeProvider> _dateTimeProviderMock;
+    private readonly Mock<ILogger<CnbApiClientDataUpdateCalculator>> _loggerMock = new();
     private readonly CnbApiClientDataUpdateCalculator _sut;
 
     public CnbApiClientDataUpdateCalculatorTests()
     {
         _dateTimeProviderMock = new Mock<IDateTimeProvider>();
-        _sut = new CnbApiClientDataUpdateCalculator(_dateTimeProviderMock.Object);
+        _sut = new CnbApiClientDataUpdateCalculator(_dateTimeProviderMock.Object, _loggerMock.Object);
     }
 
     [Fact]

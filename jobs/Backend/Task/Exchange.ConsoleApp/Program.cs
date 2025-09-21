@@ -4,8 +4,14 @@ using Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 var host = Host.CreateDefaultBuilder(args)
+    .ConfigureLogging(builder =>
+    {
+        builder.ClearProviders();
+        builder.AddConsole();
+    })
     .ConfigureAppConfiguration(builder =>
     {
         builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
