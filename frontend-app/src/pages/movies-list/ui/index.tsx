@@ -41,30 +41,34 @@ export function Index() {
   ].some((a) => a);
 
   return (
-    <Box px="2" height={"100%"}>
-      <Input
-        autoFocus
-        type="search"
-        value={searchText}
-        onChange={updateValue}
-        placeholder="Type to search..."
-        style={{ width: "100%" }}
-      />
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <Box py="4">
-          <MoviesCards movieCardItems={data} favoritesMap={favoritesMap} />
-        </Box>
-      )}
-      {total_results > 20 && (
-        <Pagination
-          page={page}
-          pageSize={total_pages}
-          onPageChange={(pageChangeDetails: any) => {
-            setPage(pageChangeDetails.page);
-          }}
+    <Box>
+      <Box px="2" height={"100%"}>
+        <Input
+          autoFocus
+          type="search"
+          value={searchText}
+          onChange={updateValue}
+          placeholder="Type to search..."
+          style={{ width: "100%" }}
         />
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <Box py="4">
+            <MoviesCards movieCardItems={data} favoritesMap={favoritesMap} />
+          </Box>
+        )}
+      </Box>
+      {total_results > 20 && (
+        <Box height={"100%"}>
+          <Pagination
+            page={page}
+            pageSize={total_pages}
+            onPageChange={(pageChangeDetails: any) => {
+              setPage(pageChangeDetails.page);
+            }}
+          />
+        </Box>
       )}
     </Box>
   );
