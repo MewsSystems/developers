@@ -13,11 +13,22 @@ public class CnbApiClientCacheDecoratorTests
     private readonly Mock<ICacheService> _mockCacheService = new();
     private readonly Mock<IDateTimeProvider> _mockDateTimeProvider = new();
     private readonly Mock<ICnbApiClientDataUpdateCalculator> _mockUpdateCalculator = new();
+    private readonly CnbApiClientCacheDecorator _sut;
 
     private readonly List<CnbExchangeRate> _sampleExchangeRates =
     [
         new("2023-01-01", 1, "USA", "Dollar", 1, "USD", 22.5)
     ];
+
+    public CnbApiClientCacheDecoratorTests()
+    {
+        _sut = new CnbApiClientCacheDecorator(
+            _mockCnbApiClient.Object,
+            _mockCacheService.Object,
+            _mockUpdateCalculator.Object,
+            _mockDateTimeProvider.Object
+        );
+    }
 
     [Fact]
     public async Task GetExchangeRatesAsync_WhenExchangeRatesCached_ReturnsFromCache()
@@ -29,15 +40,8 @@ public class CnbApiClientCacheDecoratorTests
             .Setup(x => x.GetAsync<IEnumerable<CnbExchangeRate>>(It.IsAny<string>()))
             .ReturnsAsync(_sampleExchangeRates);
 
-        var decorator = new CnbApiClientCacheDecorator(
-            _mockCnbApiClient.Object,
-            _mockCacheService.Object,
-            _mockUpdateCalculator.Object,
-            _mockDateTimeProvider.Object
-        );
-
         // Act
-        var result = await decorator.GetExchangeRatesAsync();
+        var result = await _sut.GetExchangeRatesAsync();
 
         // Assert
         result.Should().BeEquivalentTo(_sampleExchangeRates);
@@ -60,16 +64,8 @@ public class CnbApiClientCacheDecoratorTests
             .Setup(x => x.GetExchangeRatesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(_sampleExchangeRates);
 
-
-        var decorator = new CnbApiClientCacheDecorator(
-            _mockCnbApiClient.Object,
-            _mockCacheService.Object,
-            _mockUpdateCalculator.Object,
-            _mockDateTimeProvider.Object
-        );
-
         // Act
-        var result = await decorator.GetExchangeRatesAsync();
+        var result = await _sut.GetExchangeRatesAsync();
 
         // Assert
         result.Should().BeEquivalentTo(_sampleExchangeRates);
@@ -103,15 +99,8 @@ public class CnbApiClientCacheDecoratorTests
 
         _mockDateTimeProvider.Setup(x => x.Now).Returns(currentDateTime);
 
-        var decorator = new CnbApiClientCacheDecorator(
-            _mockCnbApiClient.Object,
-            _mockCacheService.Object,
-            _mockUpdateCalculator.Object,
-            _mockDateTimeProvider.Object
-        );
-
         // Act
-        var result = await decorator.GetExchangeRatesAsync();
+        var result = await _sut.GetExchangeRatesAsync();
 
         // Assert
         result.Should().BeEquivalentTo(_sampleExchangeRates);
@@ -149,15 +138,8 @@ public class CnbApiClientCacheDecoratorTests
             .Setup(x => x.GetNextExpectedUpdateDate(new DateOnly(2023, 1, 2)))
             .Returns(nextUpdateDateTime);
 
-        var decorator = new CnbApiClientCacheDecorator(
-            _mockCnbApiClient.Object,
-            _mockCacheService.Object,
-            _mockUpdateCalculator.Object,
-            _mockDateTimeProvider.Object
-        );
-
         // Act
-        var result = await decorator.GetExchangeRatesAsync();
+        var result = await _sut.GetExchangeRatesAsync();
 
         // Assert
         result.Should().BeEquivalentTo(updatedExchangeRates);

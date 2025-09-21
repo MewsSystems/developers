@@ -8,12 +8,12 @@ namespace Exchange.Infrastructure.UnitTests.ApiClients;
 public class CnbApiClientDataUpdateCalculatorTests
 {
     private readonly Mock<IDateTimeProvider> _dateTimeProviderMock;
-    private readonly CnbApiClientDataUpdateCalculator _calculator;
+    private readonly CnbApiClientDataUpdateCalculator _sut;
 
     public CnbApiClientDataUpdateCalculatorTests()
     {
         _dateTimeProviderMock = new Mock<IDateTimeProvider>();
-        _calculator = new CnbApiClientDataUpdateCalculator(_dateTimeProviderMock.Object);
+        _sut = new CnbApiClientDataUpdateCalculator(_dateTimeProviderMock.Object);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(currentDateWednesday);
+        var result = _sut.GetNextExpectedUpdateDate(currentDateWednesday);
 
         // Assert
         result.Should().Be(currentDateWednesday.ToDateTime(new TimeOnly(14, 30)));
@@ -44,7 +44,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(currentDateWednesday);
+        var result = _sut.GetNextExpectedUpdateDate(currentDateWednesday);
 
         // Assert
         var expectedDate = new DateOnly(2025, 10, 16);
@@ -61,7 +61,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(currentDateSaturday);
+        var result = _sut.GetNextExpectedUpdateDate(currentDateSaturday);
 
         // Assert
         var expectedDate = new DateOnly(2025, 10, 20);
@@ -78,7 +78,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(holidayDate);
+        var result = _sut.GetNextExpectedUpdateDate(holidayDate);
 
         // Assert
         var expectedDate = new DateOnly(2025, 12, 26);
@@ -95,7 +95,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(timeAfterDataUpdateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(currentDateFriday);
+        var result = _sut.GetNextExpectedUpdateDate(currentDateFriday);
 
         // Assert
         var expectedDate = new DateOnly(2025, 10, 20);
@@ -112,7 +112,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(dayBeforeHoliday);
+        var result = _sut.GetNextExpectedUpdateDate(dayBeforeHoliday);
 
         // Assert
         var expectedDate = new DateOnly(2025, 12, 1);
@@ -129,7 +129,7 @@ public class CnbApiClientDataUpdateCalculatorTests
         _dateTimeProviderMock.Setup(p => p.Now).Returns(currentDateTime);
 
         // Act
-        var result = _calculator.GetNextExpectedUpdateDate(dayBeforeWeekendAndHolidays);
+        var result = _sut.GetNextExpectedUpdateDate(dayBeforeWeekendAndHolidays);
 
         // Assert
         var expectedDate = new DateOnly(2025, 12, 9);
