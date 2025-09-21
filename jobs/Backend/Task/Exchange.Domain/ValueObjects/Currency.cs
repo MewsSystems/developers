@@ -1,3 +1,5 @@
+using Exchange.Domain.Exceptions;
+
 namespace Exchange.Domain.ValueObjects;
 
 public record Currency
@@ -95,11 +97,11 @@ public record Currency
     public static Currency FromCode(string code)
     {
         if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Currency code cannot be null or whitespace.", nameof(code));
+            throw new InvalidCurrencyCodeException(code);
 
         if (Currencies.TryGetValue(code, out var currency))
             return currency;
 
-        throw new ArgumentException($"Unsupported currency code: {code}", nameof(code));
+        throw new NotSupportedCurrencyCodeException(code);
     }
 }
