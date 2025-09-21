@@ -1,3 +1,11 @@
+using Exchange.Api.Dtos;
+using Exchange.Api.Middlewares;
+using Exchange.Application.Extensions;
+using Exchange.Application.Services;
+using Exchange.Domain.ValueObjects;
+using Exchange.Infrastructure.Extensions.ServiceCollectionExtensions;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDateTimeProvider();
+builder.Services.AddCnbApiClient(builder.Configuration);
+builder.Services.AddInMemoryCache(builder.Configuration);
+builder.Services.AddExchangeRateProvider();
+
 var app = builder.Build();
+
+app.UseMiddleware<RequestTimingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -14,31 +30,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/exchange-rates", async (
+        [FromServices] IExchangeRateProvider exchangeRateProvider,
+        [FromQuery] string[] currencyCodes,
+        CancellationToken cancellationToken
+    ) =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
+        var requestedCurrencies = currencyCodes.Select(Currency.FromCode).ToList();
+
+        var exchangeRates = await exchangeRateProvider.GetExchangeRatesAsync(requestedCurrencies, cancellationToken);
+
+        return exchangeRates.Select(er =>
+            new ExchangeRateDto(
+                er.SourceCurrency.Code,
+                er.TargetCurrency.Code,
+                er.Value)
+        ).ToList();
     })
-    .WithName("GetWeatherForecast")
     .WithOpenApi();
 
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+await app.RunAsync();
