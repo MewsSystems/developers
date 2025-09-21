@@ -9,23 +9,15 @@ namespace Exchange.Infrastructure.UnitTests.ApiClients;
 
 public class CnbApiClientCacheDecoratorTests
 {
-    private readonly Mock<ICnbApiClient> _mockCnbApiClient;
-    private readonly Mock<ICacheService> _mockCacheService;
-    private readonly Mock<IDateTimeProvider> _mockDateTimeProvider;
-    private readonly Mock<ICnbApiClientDataUpdateCalculator> _mockUpdateCalculator;
+    private readonly Mock<ICnbApiClient> _mockCnbApiClient = new();
+    private readonly Mock<ICacheService> _mockCacheService = new();
+    private readonly Mock<IDateTimeProvider> _mockDateTimeProvider = new();
+    private readonly Mock<ICnbApiClientDataUpdateCalculator> _mockUpdateCalculator = new();
 
     private readonly List<CnbExchangeRate> _sampleExchangeRates =
     [
         new("2023-01-01", 1, "USA", "Dollar", 1, "USD", 22.5)
     ];
-
-    public CnbApiClientCacheDecoratorTests()
-    {
-        _mockCnbApiClient = new Mock<ICnbApiClient>();
-        _mockCacheService = new Mock<ICacheService>();
-        _mockDateTimeProvider = new Mock<IDateTimeProvider>();
-        _mockUpdateCalculator = new Mock<ICnbApiClientDataUpdateCalculator>();
-    }
 
     [Fact]
     public async Task GetExchangeRatesAsync_WhenExchangeRatesCached_ReturnsFromCache()
