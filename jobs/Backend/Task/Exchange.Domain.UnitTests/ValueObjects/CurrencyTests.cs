@@ -1,3 +1,4 @@
+using Exchange.Domain.Exceptions;
 using Exchange.Domain.ValueObjects;
 using FluentAssertions;
 
@@ -28,7 +29,7 @@ public class CurrencyTests
         var act = () => Currency.FromCode(code);
 
         // Assert
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<NotSupportedCurrencyCodeException>();
     }
 
     [Fact]
@@ -41,6 +42,6 @@ public class CurrencyTests
         var act = () => Currency.FromCode(code);
 
         // Assert
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<InvalidCurrencyCodeException>();
     }
 }
