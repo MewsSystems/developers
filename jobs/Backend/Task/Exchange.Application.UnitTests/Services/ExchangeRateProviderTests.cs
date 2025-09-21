@@ -10,6 +10,12 @@ namespace Exchange.Application.UnitTests.Services;
 public class ExchangeRateProviderTests
 {
     private readonly Mock<ICnbApiClient> _cnbApiClientMock = new();
+    private readonly ExchangeRateProvider _sut;
+
+    public ExchangeRateProviderTests()
+    {
+        _sut = new ExchangeRateProvider(_cnbApiClientMock.Object);
+    }
 
     [Fact]
     public async Task GetExchangeRatesAsync_WhenCurrenciesExistInSource_ThenReturnsFilteredRates()
@@ -25,10 +31,8 @@ public class ExchangeRateProviderTests
             .Setup(x => x.GetExchangeRatesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(cnbExchangeRates);
 
-        var sut = new ExchangeRateProvider(_cnbApiClientMock.Object);
-
         // Act
-        var result = await sut.GetExchangeRatesAsync(requestedCurrencies);
+        var result = await _sut.GetExchangeRatesAsync(requestedCurrencies);
 
         // Assert
         var expectedResult = new List<ExchangeRate>()
@@ -53,13 +57,35 @@ public class ExchangeRateProviderTests
             .Setup(x => x.GetExchangeRatesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(cnbExchangeRates);
 
-        var sut = new ExchangeRateProvider(_cnbApiClientMock.Object);
-
         // Act
-        var result = await sut.GetExchangeRatesAsync(requestedCurrencies);
+        var result = await _sut.GetExchangeRatesAsync(requestedCurrencies);
 
         // Assert
         var expectedResult = Enumerable.Empty<ExchangeRate>();
+        result.Should().BeEquivalentTo(expectedResult);
+    }
+
+    [Fact]
+    public async Task GetExchangeRatesAsync_WhenAmountBiggerThanOne_ThenCalculateCalculateExchangeRateForOneCzk()
+    {
+        // Arrange
+        IEnumerable<Currency> requestedCurrencies = [Currency.IDR];
+        IEnumerable<CnbExchangeRate> cnbExchangeRates =
+        [
+            new("2025-01-01", 1, Currency.IDR.Country, Currency.IDR.Name, 1000, Currency.IDR.Code, 2)
+        ];
+        _cnbApiClientMock
+            .Setup(x => x.GetExchangeRatesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(cnbExchangeRates);
+        
+        // Act
+        var result = await _sut.GetExchangeRatesAsync(requestedCurrencies);
+        
+        // Assert
+        var expectedResult = new List<ExchangeRate>()
+        {
+            new(Currency.IDR, Currency.CZK, 500m)
+        };
         result.Should().BeEquivalentTo(expectedResult);
     }
 }

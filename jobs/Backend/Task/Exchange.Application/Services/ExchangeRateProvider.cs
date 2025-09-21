@@ -34,13 +34,18 @@ public class ExchangeRateProvider(ICnbApiClient cnbApiClient) : IExchangeRatePro
 
         var filteredExchangeRates = allCnbExchangeRates
             .Where(r => requestedCurrencyCodes.Contains(r.CurrencyCode))
-            .Select(rate => new ExchangeRate(
+            .Select(er => new ExchangeRate(
+                Currency.FromCode(er.CurrencyCode),
                 Currency.CZK,
-                Currency.FromCode(rate.CurrencyCode),
-                (decimal)rate.Amount / (decimal)rate.Rate
+                CalculateValue(er)
             ))
             .ToList();
 
         return filteredExchangeRates;
+
+        decimal CalculateValue(CnbExchangeRate exchangeRate)
+        {
+            return (decimal)(exchangeRate.Amount == 1 ? exchangeRate.Rate : exchangeRate.Amount / exchangeRate.Rate);
+        }
     }
 }
