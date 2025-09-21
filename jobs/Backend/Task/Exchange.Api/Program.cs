@@ -43,6 +43,9 @@ app.MapGet("/exchange-rates", async (
                 er.Value)
         ).ToList();
     })
+    .WithName("GetExchangeRates")
+    .Produces<IEnumerable<ExchangeRateDto>>()
+    .Produces(StatusCodes.Status400BadRequest)
     .WithOpenApi();
 
 await app.RunAsync();
