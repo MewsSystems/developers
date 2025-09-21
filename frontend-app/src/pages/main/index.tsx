@@ -1,8 +1,28 @@
-import { Link } from '@tanstack/react-router'
+import { useAuth } from "@/entities/auth/api/providers/AuthProvider";
+import { Button, Flex, Text } from "@chakra-ui/react";
+import { Link } from "@tanstack/react-router";
 export function MainPageRouteComponent() {
-    return <div>
-        <Link to="/movies" className="[&.active]:font-bold">
-            List movies
-        </Link>{' '}
-    </div>
+  const auth = useAuth();
+
+  return !auth.isAuthenticated ? (
+    <Flex
+      direction="column"
+      justifyContent="center"
+      justifyItems="items"
+      alignContent="center"
+      alignItems="center"
+    >
+      <Text>Please login</Text>
+      <Button
+        width="50%"
+        onClick={() => {
+          auth.login();
+        }}
+      >
+        Login
+      </Button>
+    </Flex>
+  ) : (
+    <Text>You are logged</Text>
+  );
 }

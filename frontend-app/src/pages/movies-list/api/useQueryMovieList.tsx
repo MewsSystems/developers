@@ -1,10 +1,7 @@
 import useQueryConfiguration from "@/entities/configuration/hooks/useQueryConfiguration";
-import type { Configuration } from "@/entities/configuration/types";
 import useQueryMovies from "@/entities/movie/hooks/useQueryMovies";
-import type { MovieListItem } from "@/entities/movie/types";
 import { usePreferredLanguage } from "@uidotdev/usehooks";
-import type { MovieCardItem } from "../types";
-import { toLocaleDate } from "@/shared/lib/utils";
+import { moviesToMovieCards } from "@/pages/movies-list/lib/parseMoviesToCardMovies";
 
 export function useQueryMovieList({
   query,
@@ -37,24 +34,4 @@ export function useQueryMovieList({
     total_results: data?.total_results ?? 0,
     total_pages: data?.total_pages ?? 0,
   };
-}
-
-function moviesToMovieCards({
-  movies,
-  configuration,
-  language,
-}: {
-  movies: MovieListItem[];
-  configuration: Configuration;
-  language: string;
-}): MovieCardItem[] {
-  const posterBaseUrl =
-    configuration.images.base_url + configuration.images.poster_sizes[1];
-  return movies.map((movie) => {
-    return {
-      movie,
-      poster_img: movie.poster_path ? posterBaseUrl + movie.poster_path : "",
-      release_date_locale: toLocaleDate(movie.release_date, language),
-    };
-  });
 }

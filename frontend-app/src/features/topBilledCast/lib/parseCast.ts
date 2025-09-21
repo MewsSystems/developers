@@ -22,11 +22,13 @@ export function parseCastImgs({
     return {
       id: c.id,
       width: profileWidth,
-      img: parseProfileToImgPath(
-        configuration.images,
-        c.profile_path + "",
-        profileSizePosition
-      ),
+      img: c.profile_path
+        ? parseProfileToImgPath(
+            configuration.images,
+            c.profile_path,
+            profileSizePosition
+          )
+        : "",
       character: c.character,
       name: c.name,
     };

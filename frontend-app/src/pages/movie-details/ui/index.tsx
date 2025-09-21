@@ -18,6 +18,7 @@ import { Credits } from "@/features/crewDirectors/ui/Credits";
 import { PlayTrailer } from "@/features/videoTrailer/ui/PlayTrailer";
 import { ToggleFavorite } from "@/pages/movie-details/ui/ToggleFavorite";
 import { ToggleWatchList } from "@/pages/movie-details/ui/ToggleWatchList";
+import LoadingSpinner from "@/shared/ui/LoadingSpinner";
 
 export function MovieDetailsRouteComponent() {
   const { movieId } = useParams({ from: "/_auth/moviedetails/$movieId" });
@@ -27,12 +28,18 @@ export function MovieDetailsRouteComponent() {
     isError,
     error,
   } = useQueryMovieDetails({ movie_id: movieId });
+
   if (isLoading) {
-    return <div>LOADING</div>;
+    return <LoadingSpinner />;
   }
   if (isError) {
     console.error(error);
     return <Box>Sorry, error</Box>;
+  }
+
+  //Blocks porn
+  if (details?.blocked) {
+    return <div>This movie is blocked to view.</div>;
   }
   return <div>{details && <DetailsComponent detailsProps={details} />}</div>;
 }
@@ -99,10 +106,16 @@ function DetailsComponent({ detailsProps }: { detailsProps: DetailsProps }) {
               </Box>
             )}
             <Box datatest-id="recommendations" overflowX="auto" maxW={"100%"}>
-              <Text textStyle={"3xl"}>Recommendations</Text>
-              <RecommendationsComponent
-                recommendations={detailsProps.recommendations}
-              />
+              {detailsProps.recommendations.length > 0 ? (
+                <>
+                  <Text textStyle={"3xl"}>Recommendations</Text>
+                  <RecommendationsComponent
+                    recommendations={detailsProps.recommendations}
+                  />
+                </>
+              ) : (
+                ""
+              )}
             </Box>
           </Flex>
           <Flex flexBasis="25%">

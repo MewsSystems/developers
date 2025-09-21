@@ -1,40 +1,15 @@
-import { useAuth } from '@/entities/auth/api/providers/AuthProvider'
-import { Box, Button, Flex } from '@chakra-ui/react'
-import { Link, Outlet, useNavigate, useRouter } from '@tanstack/react-router'
-
+import useQueryAccount from "@/entities/account/hooks/useQueryAccount";
+import { Outlet } from "@tanstack/react-router";
 
 export function AuthLayout() {
-  const router = useRouter()
-  const navigate = useNavigate()
-  const auth = useAuth()
+  const { data: account, isLoading } = useQueryAccount();
 
-  const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      auth.logout().then(() => {
-        router.invalidate().finally(() => {
-          navigate({ to: '/' })
-        })
-      })
-    }
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-  return (
-    <div >
-      <Flex justifyContent="space-between">
-        <Link to="/movies" className="[&.active]:font-bold">
-          Search movies
-        </Link>{' '}
+  if (!account) {
+    return <></>;
+  }
 
-        <Box>
-          <Button
-            size="md"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
-
-        </Box>
-      </Flex>
-      <Outlet />
-    </div>
-  )
+  return <Outlet />;
 }

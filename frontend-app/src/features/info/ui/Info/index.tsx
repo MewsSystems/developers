@@ -8,8 +8,8 @@ export function Info({ info }: { info: MovieInfo }) {
   return (
     <Flex direction={"column"} gap="4">
       <Flex gap="5">
-        <IMDBLink imdbLink={info.imdbLink} />{" "}
-        <HomepageComponent homepage={info.homepage} />{" "}
+        {info.imdbLink && <IMDBLink imdbLink={info.imdbLink} />}
+        {info.homepage && <HomepageComponent homepage={info.homepage} />}
       </Flex>{" "}
       <Box>
         <Text textStyle={"lg"}>Status</Text>

@@ -10,6 +10,7 @@ import type { MovieInfo } from "@/features/info/types";
 import type { MovieTitle } from "@/features/title/types";
 
 export type DetailsProps = {
+  blocked: boolean;
   title: MovieTitle;
   info: MovieInfo;
   favorite: boolean;

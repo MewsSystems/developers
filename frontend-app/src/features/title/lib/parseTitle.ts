@@ -17,8 +17,12 @@ export function parseTitle({
     duration: toDurationFormat(movie.runtime),
     countriesOrigin: movie.origin_country.map((c) => c).join(", "),
     genres: movie.genres.map((g) => g.name).join(", "),
-    releaseDateLocale: toLocaleDate(movie.release_date, language),
-    releaseDateYearLocale: toLocaleYear(movie.release_date, language),
+    releaseDateLocale: movie.release_date
+      ? toLocaleDate(movie.release_date, language)
+      : "Not available",
+    releaseDateYearLocale: movie.release_date
+      ? toLocaleYear(movie.release_date, language)
+      : "Not available",
     title: movie.title,
   };
 }

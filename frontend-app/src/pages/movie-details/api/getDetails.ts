@@ -51,6 +51,7 @@ export async function getDetails(
   );
 
   return {
+    blocked: movie.adult,
     title: parseTitle({ movie, language }),
     info: parseInfo({ movie }),
     favorite: movie.account_states.favorite,
