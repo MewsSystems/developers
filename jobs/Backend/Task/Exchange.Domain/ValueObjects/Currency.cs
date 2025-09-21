@@ -94,6 +94,9 @@ public record Currency
 
     public static Currency FromCode(string code)
     {
+        if (string.IsNullOrWhiteSpace(code))
+            throw new ArgumentException("Currency code cannot be null or whitespace.", nameof(code));
+
         if (Currencies.TryGetValue(code, out var currency))
             return currency;
 

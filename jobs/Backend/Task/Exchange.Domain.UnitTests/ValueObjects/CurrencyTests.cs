@@ -30,4 +30,17 @@ public class CurrencyTests
         // Assert
         act.Should().Throw<ArgumentException>();
     }
+
+    [Fact]
+    public void FromCode_WhenCodeIsEmpty_ThenThrowsException()
+    {
+        // Arrange
+        const string code = "";
+
+        // Act
+        var act = () => Currency.FromCode(code);
+
+        // Assert
+        act.Should().Throw<ArgumentException>();
+    }
 }
