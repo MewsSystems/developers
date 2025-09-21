@@ -1,3 +1,5 @@
+import { getApiKey } from "./config";
+
 export async function basePostApi({
   version,
   payload,
@@ -45,8 +47,7 @@ export async function baseGetApi<T>({
     }
     return await response.json();
   } catch (error: any) {
-    console.error(error?.message);
-    return undefined;
+    throw new Error("Unknown error");
   }
 }
 
@@ -71,10 +72,6 @@ function createUrl({
   );
 
   return `${url}?${searchParams.toString()}`;
-}
-
-function getApiKey() {
-  return import.meta.env["VITE_TMDB_API_KEY"];
 }
 
 function getBasicHeaders() {

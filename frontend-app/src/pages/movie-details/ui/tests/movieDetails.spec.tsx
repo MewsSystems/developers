@@ -1,5 +1,5 @@
 import { defaultSystem } from "@chakra-ui/react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import {
   expect,
   test,
@@ -8,21 +8,37 @@ import {
   describe,
   type MockInstance,
   beforeEach,
+  afterEach,
 } from "vitest";
 import { MovieDetailsRouteComponent } from "../index";
 import { ChakraProvider } from "@chakra-ui/react";
 import "@testing-library/jest-dom/vitest";
 import { useParams } from "@tanstack/react-router";
-import { useQueryMovieDetails } from "@/pages/movie-details/hooks/useQueryMovieDetails";
-import { data as dataMock } from "./data.mock";
 import { AuthContext } from "@/entities/auth/api/providers/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import nock from "nock";
+import { mockGetMovieAppended } from "./dataGetMovieAppended.mock";
+import { mockGetMovieCollection } from "./dataGetMovieCollection.mock";
+import { mockGetConfiguration } from "./dataGetConfiguration.mock";
+import { mockGetMovieImages } from "./dataGetMovieImages.mock";
+
+const MOCK_API_KEY = "XXXXXXXXXXXXXXXXXXXXX";
 
 describe("MovieDetailsRouteComponent", async () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
   let notifyResizeObserverChange: (arg: unknown) => void,
     consoleWarnSpy: MockInstance<(...args: any[]) => void>,
     resizeObserverMock: Mock<(arg: any) => any>;
+
   beforeEach(() => {
+    vi.mock("@/shared/api/config", () => {
+      return {
+        getApiKey: () => MOCK_API_KEY,
+      };
+    });
+
     //copied from https://github.com/recharts/recharts/blob/0525504e798ccf968eeed0faf9456001fb04ba08/test/component/ResponsiveContainer.spec.tsx#L25
     /**
      * ResizeObserver is not available, so we have to create a mock to avoid error coming
@@ -49,17 +65,28 @@ describe("MovieDetailsRouteComponent", async () => {
 
     window.ResizeObserver = resizeObserverMock;
   });
-  test("error", () => {
+  test("error", async () => {
     vi.mock("@tanstack/react-router", { spy: true });
-    vi.mock("@/pages/movie-details/hooks/useQueryMovieDetails", { spy: true });
     vi.spyOn(console, "error").mockImplementation(() => {});
     (useParams as Mock).mockImplementation(() => ({ movieId: "123" }));
-    (useQueryMovieDetails as Mock).mockImplementation(() => ({
-      data: undefined,
-      isLoading: false,
-      isError: true,
-      error: "some error",
-    }));
+
+    nock("https://api.themoviedb.org")
+      .get("/3/movie/123")
+      .once()
+      .query({
+        api_key: MOCK_API_KEY,
+        session_id: "aaa",
+        language: "en-US",
+        append_to_response: [
+          "keywords",
+          "videos",
+          "reviews",
+          "recommendations",
+          "credits",
+          "account_states",
+        ].join(","),
+      })
+      .reply(500, { error: "some error" });
 
     render(
       <TestProvider>
@@ -67,21 +94,58 @@ describe("MovieDetailsRouteComponent", async () => {
       </TestProvider>
     );
 
-    expect(screen.getByText(/Sorry, error/)).toBeInTheDocument();
-    expect(console.error).toHaveBeenCalledWith("some error");
+    expect(screen.getByText(/LOADING/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Sorry, error/)).toBeInTheDocument();
+    });
   });
 
-  test("render", () => {
+  test("render", async () => {
     vi.mock("@tanstack/react-router", { spy: true });
-    vi.mock("@/pages/movie-details/hooks/useQueryMovieDetails", { spy: true });
-    vi.spyOn(console, "error").mockImplementation(() => {});
     (useParams as Mock).mockImplementation(() => ({ movieId: "123" }));
-    (useQueryMovieDetails as Mock).mockImplementation(() => ({
-      data: dataMock,
-      isLoading: false,
-      isError: false,
-      error: undefined,
-    }));
+
+    nock("https://api.themoviedb.org")
+      .get("/3/movie/123")
+      .once()
+      .query({
+        api_key: MOCK_API_KEY,
+        session_id: "aaa",
+        language: "en-US",
+        append_to_response: [
+          "keywords",
+          "videos",
+          "reviews",
+          "recommendations",
+          "credits",
+          "account_states",
+        ].join(","),
+      })
+      .reply(200, mockGetMovieAppended);
+
+    nock("https://api.themoviedb.org/")
+      .get("/3/collection/2344")
+      .once()
+      .query({
+        api_key: MOCK_API_KEY,
+        language: "en-US",
+      })
+      .reply(200, mockGetMovieCollection);
+
+    nock("https://api.themoviedb.org/")
+      .get("/3/configuration")
+      .once()
+      .query({
+        api_key: MOCK_API_KEY,
+      })
+      .reply(200, mockGetConfiguration);
+
+    nock("https://api.themoviedb.org/")
+      .get("/3/movie/123/images")
+      .once()
+      .query({
+        api_key: MOCK_API_KEY,
+      })
+      .reply(200, mockGetMovieImages);
 
     render(
       <TestProvider>
@@ -89,17 +153,28 @@ describe("MovieDetailsRouteComponent", async () => {
       </TestProvider>
     );
 
-    expect(screen.getByText(/Lana Wachowski/)).toBeInTheDocument();
-    expect(screen.getByText(/Keanu Reeves/)).toBeInTheDocument();
-    expect(screen.getByText(/Recommendations/)).toBeInTheDocument();
-    expect(screen.queryAllByText(/The Matrix Revolutions/)[1]).toBeInTheDocument();
-    expect(screen.getByText(/Part of The Matrix Collection/)).toBeInTheDocument();
-    
+    await waitFor(() => {
+      expect(screen.getByText(/Lana Wachowski/)).toBeInTheDocument();
+      expect(screen.getByText(/Keanu Reeves/)).toBeInTheDocument();
+      expect(screen.getByText(/Recommendations/)).toBeInTheDocument();
+      expect(
+        screen.queryAllByText(/The Matrix Revolutions/)[1]
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/Part of The Matrix Collection/)
+      ).toBeInTheDocument();
+    });
   });
 });
 
 function TestProvider({ children }: React.PropsWithChildren) {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
   return (
     <QueryClientProvider client={queryClient}>
       <AuthContext.Provider
