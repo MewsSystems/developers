@@ -1,7 +1,7 @@
-import React from 'react'
-import { Header } from '../header'
+import React from "react";
+import { Header } from "../Header/Header";
 
-export const getNoneLayout = (page: React.ReactElement) => page
+export const getNoneLayout = (page: React.ReactElement) => page;
 
 export const getDefaultLayout = (page: React.ReactElement) => {
   return (
@@ -9,5 +9,5 @@ export const getDefaultLayout = (page: React.ReactElement) => {
       <Header />
       {page}
     </div>
-  )
-}
+  );
+};
