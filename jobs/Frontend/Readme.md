@@ -19,3 +19,22 @@ The use of any additional library is allowed and up to you.
 `npm run storybook`
 
 `npm run generate:tmdb-types`
+
+## Tech Stack
+
+- [vite](https://vitejs.dev/)
+- [react](https://reactjs.org/)
+- [shadcn ui](https://ui.shadcn.com/)
+- [react-i18next](https://github.com/i18next/react-i18next)
+- [react-lucide](https://lucide.dev/)
+- [transmart](https://github.com/Quilljou/transmart)
+- [react-query](https://tanstack.com/query/latest/)
+- [tailwindcss](https://tailwindcss.com/)
+- [less](http://lesscss.org/)
+- [postcss](https://postcss.org/)
+- [react-router-dom](https://reactrouter.com/en/6.16.0)
+- [eslint](https://eslint.org/)/[stylelint](https://stylelint.io/)
+- [prettier](https://prettier.io/)
+- [editorconfig](https://editorconfig.org/)
+- [husky](https://typicode.github.io/husky/#/)/[lint-staged](https://github.com/okonet/lint-staged)
+- [commitlint](https://commitlint.js.org/)

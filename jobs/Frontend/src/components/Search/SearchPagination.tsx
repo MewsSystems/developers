@@ -18,8 +18,6 @@ export const SearchPagination = ({ data }: { data: MovieSearchResponse }) => {
   const previousActive = currentPage > 1;
   const nextActive = currentPage < totalPages;
 
-  // const paginationRange = getPaginationRange(currentPage, totalPages);
-
   const pages = getPages(totalPages, currentPage);
 
   return (
@@ -30,7 +28,6 @@ export const SearchPagination = ({ data }: { data: MovieSearchResponse }) => {
             isActive={previousActive}
             onClick={() => {
               if (currentPage > 1)
-                // setSearchParams({ page: (currentPage - 1).toString() });
                 setSearchParams(
                   (prev) => {
                     const newParams = new URLSearchParams(prev);
@@ -51,7 +48,6 @@ export const SearchPagination = ({ data }: { data: MovieSearchResponse }) => {
                 isActive={pageNumber === currentPage}
                 onClick={() =>
                   isSelectable &&
-                  // setSearchParams({ page: pageNumber?.toString()! })
                   setSearchParams(
                     (prev) => {
                       const newParams = new URLSearchParams(prev);
@@ -68,44 +64,11 @@ export const SearchPagination = ({ data }: { data: MovieSearchResponse }) => {
           )
         )}
 
-        {/* Page numbers */}
-        {/* {paginationRange.map((page, idx) => {
-          if (page === "ellipsis-left" || page === "ellipsis-right") {
-            return (
-              <PaginationItem key={idx}>
-                <PaginationEllipsis />
-              </PaginationItem>
-            );
-          }
-          return (
-            <PaginationItem key={page}>
-              <PaginationLink
-                isActive={page === currentPage}
-                onClick={() => setSearchParams({ page })}
-                className="cursor-pointer"
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })} */}
-
-        {/* {Array.from({ length: totalPages }).map((_, i) => (
-          <PaginationItem>
-            <PaginationLink
-              onClick={() => setSearchParams({ page: i.toString() })}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>
-        ))} */}
-
         <PaginationItem tabIndex={0}>
           <PaginationNext
             isActive={nextActive}
             onClick={() => {
               if (currentPage < totalPages)
-                // setSearchParams({ page: (currentPage + 1).toString() });
                 setSearchParams(
                   (prev) => {
                     const newParams = new URLSearchParams(prev);
@@ -121,44 +84,6 @@ export const SearchPagination = ({ data }: { data: MovieSearchResponse }) => {
     </Pagination>
   );
 };
-
-// Utility: generate pages with ellipsis
-// function getPaginationRange(
-//   currentPage: number,
-//   totalPages: number,
-//   siblingCount = 1
-// ) {
-//   const totalNumbers = siblingCount * 2 + 5; // first, last, current, siblings, 2 ellipses
-//   if (totalPages <= totalNumbers) {
-//     return Array.from({ length: totalPages }, (_, i) => i + 1);
-//   }
-
-//   const leftSibling = Math.max(currentPage - siblingCount, 1);
-//   const rightSibling = Math.min(currentPage + siblingCount, totalPages);
-
-//   const showLeftEllipsis = leftSibling > 2;
-//   const showRightEllipsis = rightSibling < totalPages - 1;
-
-//   const range = [];
-
-//   range.push(1);
-
-//   if (showLeftEllipsis) {
-//     range.push("ellipsis-left");
-//   }
-
-//   for (let i = leftSibling; i <= rightSibling; i++) {
-//     range.push(i);
-//   }
-
-//   if (showRightEllipsis) {
-//     range.push("ellipsis-right");
-//   }
-
-//   range.push(totalPages);
-
-//   return range;
-// }
 
 const pageNumberToObject = (pageNumber: number) => ({
   displayValue: pageNumber.toString(),

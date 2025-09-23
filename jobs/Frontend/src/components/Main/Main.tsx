@@ -27,10 +27,7 @@ export const Main = () => {
   );
   const movieDetails = useMovieDetails(movieId!);
 
-  console.log(movieDetails);
-
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -44,8 +41,6 @@ export const Main = () => {
   }, [debouncedSearch]);
 
   useEffect(() => {
-    console.log(123);
-
     setSearch(searchParams.get("search")!);
   }, [setSearchParams]);
 
@@ -66,9 +61,7 @@ export const Main = () => {
             <Button
               className="h-full w-48 rounded-sm"
               onClick={() => {
-                // setSearchParams({}, { replace: false });
                 navigate("/", { replace: false });
-                // queryClient.removeQueries();
               }}
             >
               Clear search
@@ -77,9 +70,6 @@ export const Main = () => {
           <div className="mt-4 grid grid-cols-12 gap-6">
             <div className="col-span-7 flex flex-col justify-center text-center">
               <div className="mb-2">
-                {/* <h1 className="mb-6 text-3xl font-bold tracking-tighter text-transparent text-white sm:text-5xl xl:text-6xl/none">
-                  {t("hero-title")}
-                </h1> */}
                 <SearchResults movies={movies} />
               </div>
             </div>
