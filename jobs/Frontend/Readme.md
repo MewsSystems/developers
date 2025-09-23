@@ -2,7 +2,7 @@
 
 You should start with creating a fork of the repository. When you're finished with the task, you should create a pull request.
 
-Your task will be to create a simple movie search application. The application will have 2 views - search and movie detail. The search view is the default view, and should contain search input and display paginated list of found movies with a way to load additional batch. Search should start automatically after typing into the input is finished - there is no need for a search button. Clicking on a movie gets you to the movie detail view where detailed information about the movie should be listed. 
+Your task will be to create a simple movie search application. The application will have 2 views - search and movie detail. The search view is the default view, and should contain search input and display paginated list of found movies with a way to load additional batch. Search should start automatically after typing into the input is finished - there is no need for a search button. Clicking on a movie gets you to the movie detail view where detailed information about the movie should be listed.
 
 To retrieve information about movies, use [TheMovieDb API](https://developers.themoviedb.org/3/getting-started/introduction) - for this purpose **you need to generate api key to authorize requests** (free service account needed).
 
@@ -11,3 +11,30 @@ To retrieve information about movies, use [TheMovieDb API](https://developers.th
 To test your proficiency with the technologies we use the most, we require the solution to be written in React and TypeScript.
 We use styled-components as our main CSS-in-JS framework, yet feel free to use other solutions you are more familiar with.
 The use of any additional library is allowed and up to you.
+
+## Commands
+
+`npm run dev`
+
+`npm run storybook`
+
+`npm run generate:tmdb-types`
+
+## Tech Stack
+
+- [vite](https://vitejs.dev/)
+- [react](https://reactjs.org/)
+- [shadcn ui](https://ui.shadcn.com/)
+- [react-i18next](https://github.com/i18next/react-i18next)
+- [react-lucide](https://lucide.dev/)
+- [transmart](https://github.com/Quilljou/transmart)
+- [react-query](https://tanstack.com/query/latest/)
+- [tailwindcss](https://tailwindcss.com/)
+- [less](http://lesscss.org/)
+- [postcss](https://postcss.org/)
+- [react-router-dom](https://reactrouter.com/en/6.16.0)
+- [eslint](https://eslint.org/)/[stylelint](https://stylelint.io/)
+- [prettier](https://prettier.io/)
+- [editorconfig](https://editorconfig.org/)
+- [husky](https://typicode.github.io/husky/#/)/[lint-staged](https://github.com/okonet/lint-staged)
+- [commitlint](https://commitlint.js.org/)
