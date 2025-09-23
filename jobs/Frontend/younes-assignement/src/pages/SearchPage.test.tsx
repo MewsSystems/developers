@@ -11,7 +11,7 @@ vi.mock("../hooks/useMovieSearch", () => ({
 
 const mockUseDebounce = vi.fn();
 vi.mock("../hooks/useDebounce", () => ({
-  default: (value, delay) => mockUseDebounce(value, delay),
+  default: (value: string, delay: number) => mockUseDebounce(value, delay),
 }));
 
 describe("SearchPage", () => {
@@ -90,7 +90,7 @@ describe("SearchPage", () => {
     render(<SearchPage />);
     expect(screen.getByTestId("empty-state")).toBeInTheDocument();
     expect(
-      screen.getByText("No movies found for your search."),
+      screen.getByText("No movies found for your search.")
     ).toBeInTheDocument();
   });
 
@@ -159,7 +159,7 @@ describe("SearchPage", () => {
 
     // Button should not be present when loading
     expect(
-      screen.queryByRole("button", { name: "Load More" }),
+      screen.queryByRole("button", { name: "Load More" })
     ).not.toBeInTheDocument();
   });
 
@@ -222,7 +222,7 @@ describe("SearchPage", () => {
     render(<SearchPage />);
 
     expect(
-      screen.queryByRole("button", { name: "Load More" }),
+      screen.queryByRole("button", { name: "Load More" })
     ).not.toBeInTheDocument();
   });
 
@@ -240,7 +240,7 @@ describe("SearchPage", () => {
     render(<SearchPage />);
 
     expect(
-      screen.queryByRole("button", { name: "Load More" }),
+      screen.queryByRole("button", { name: "Load More" })
     ).not.toBeInTheDocument();
   });
 });

@@ -29,6 +29,8 @@ const SearchPage = () => {
 
   const loadMore = () => search(debouncedQuery, page + 1);
 
+  console.log(movies);
+
   return (
     <Layout>
       <h1>Movie Search</h1>
@@ -54,6 +56,7 @@ const SearchPage = () => {
             id={movie.id}
             title={movie.title}
             poster_path={movie.poster_path}
+            vote_average={movie.vote_average}
           />
         ))}
       </MovieCardGrid>

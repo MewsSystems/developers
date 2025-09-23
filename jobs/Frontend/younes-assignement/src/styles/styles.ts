@@ -45,6 +45,16 @@ export const MovieCardTitle = styled.h3`
   text-align: center;
 `;
 
+export const MovieRating = styled.p`
+  background-color: #fff0e5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #d4690c;
+  margin: 8px 0;
+`;
+
 export const LoadMoreButton = styled.button`
   display: block;
   margin: 20px auto;

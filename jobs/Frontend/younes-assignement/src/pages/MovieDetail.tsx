@@ -49,7 +49,7 @@ const MovieDetail = () => {
           <strong>Release Date:</strong> {movie.release_date}
         </p>
         <p>
-          <strong>Rating:</strong> {movie.vote_average}
+          <strong>Rating:</strong> {`${movie.vote_average.toFixed(1)}`}
         </p>
       </MovieTextContainer>
       <Link to="/">Back to search</Link>

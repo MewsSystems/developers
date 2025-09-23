@@ -23,7 +23,7 @@ describe("MovieDetail", () => {
     vi.clearAllMocks();
   });
 
-  const renderWithRouter = (component) => {
+  const renderWithRouter = (component: React.ReactElement) => {
     return render(<MemoryRouter>{component}</MemoryRouter>);
   };
 
@@ -49,8 +49,8 @@ describe("MovieDetail", () => {
 
     expect(
       screen.getByText(
-        "The Avengers assemble once more to reverse the damage caused by Thanos.",
-      ),
+        "The Avengers assemble once more to reverse the damage caused by Thanos."
+      )
     ).toBeInTheDocument();
     expect(screen.getByText("2019-04-26")).toBeInTheDocument();
     expect(screen.getByText("8.4")).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe("MovieDetail", () => {
     const posterImage = screen.getByTestId("poster-image");
     expect(posterImage).toHaveAttribute(
       "src",
-      "/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+      "/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
     );
     expect(posterImage).toHaveAttribute("alt", "Avengers: Endgame");
   });
@@ -156,7 +156,7 @@ describe("MovieDetail", () => {
     rerender(
       <MemoryRouter>
         <MovieDetail />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     await waitFor(() => {
