@@ -1,0 +1,11 @@
+/.vs
+/.vscode
+/Task/.vs
+/jobs/Backend/Task/.vscode
+/jobs/Backend/Task/.vs
+/jobs/Backend/Task/bin
+/jobs/Backend/Task/obj
+/jobs/Backend/Task/Properties
+/jobs/Backend/Task/appsettings.json
+/jobs/Backend/Task/appsettings.Development.json
+/jobs/Backend/Task/appsettings.Production.json
