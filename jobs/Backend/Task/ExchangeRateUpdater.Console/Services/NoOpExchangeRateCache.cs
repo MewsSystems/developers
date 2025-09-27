@@ -5,9 +5,6 @@ using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Console.Services;
 
-/// <summary>
-/// No-operation cache implementation for console application (caching disabled)
-/// </summary>
 public class NoOpExchangeRateCache : IExchangeRateCache
 {
     public Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, Maybe<DateTime> date)

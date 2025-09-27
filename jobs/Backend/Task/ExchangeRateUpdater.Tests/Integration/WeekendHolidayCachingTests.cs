@@ -13,13 +13,13 @@ public class WeekendHolidayCachingTests
 {
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ApiExchangeRateCache> _logger;
-    private readonly ApiExchangeRateCache _cache;
+    private readonly ApiExchangeRateCache _sut;
 
     public WeekendHolidayCachingTests()
     {
         _memoryCache = new MemoryCache(new MemoryCacheOptions());
         _logger = Substitute.For<ILogger<ApiExchangeRateCache>>();
-        _cache = new ApiExchangeRateCache(_memoryCache, _logger);
+        _sut = new ApiExchangeRateCache(_memoryCache, _logger);
     }
 
     [Fact]
@@ -34,11 +34,11 @@ public class WeekendHolidayCachingTests
             new(new Currency("EUR"), new Currency("CZK"), 27.0m, friday)
         };
 
-        await _cache.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
 
         // Act
-        var result = await _cache.GetCachedRates(
-            new[] { new Currency("USD"), new Currency("EUR") }, 
+        var result = await _sut.GetCachedRates(
+            [new Currency("USD"), new Currency("EUR")], 
             saturday.AsMaybe());
 
         // Assert
@@ -64,8 +64,8 @@ public class WeekendHolidayCachingTests
         };
 
         // Act
-        await _cache.CacheRates(mondayRates, TimeSpan.FromHours(1));
-        await _cache.CacheRates(tuesdayRates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(mondayRates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(tuesdayRates, TimeSpan.FromHours(1));
 
         // Assert
         var cachedMondayRates = _memoryCache.Get<IEnumerable<ExchangeRate>>(monday);
@@ -91,11 +91,11 @@ public class WeekendHolidayCachingTests
             new(new Currency("GBP"), new Currency("CZK"), 30.0m, businessDay)
         };
 
-        await _cache.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
 
         // Act
-        var result = await _cache.GetCachedRates(
-            new[] { new Currency("USD"), new Currency("GBP") }, 
+        var result = await _sut.GetCachedRates(
+            [new Currency("USD"), new Currency("GBP")], 
             businessDay.AsMaybe());
 
         // Assert
@@ -117,11 +117,11 @@ public class WeekendHolidayCachingTests
             new(new Currency("USD"), new Currency("CZK"), 25.0m, businessDay)
         };
 
-        await _cache.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
 
         // Act
-        var result = await _cache.GetCachedRates(
-            new[] { new Currency("usd") },
+        var result = await _sut.GetCachedRates(
+            [new Currency("usd")],
             businessDay.AsMaybe());
 
         // Assert

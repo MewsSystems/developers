@@ -48,17 +48,19 @@ public class ExchangeRatesController : ControllerBase
             var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
             if (!TryCreateCurrencyObjects(currencyCodes, out var currencyObjects))
             {
-                return BadRequest(CreateErrorResponse("At least one currency code must be provided", "At least one currency code must be provided"));
+                return BadRequest(
+                    CreateErrorResponse("At least one currency code must be provided", "At least one currency code must be provided")
+                    );
             }
 
             var exchangeRates = await _exchangeRateService.GetExchangeRates(currencyObjects, dateValidationResult.ParsedDate.AsMaybe());
-
             if (!exchangeRates.Any())
             {
                 var currencyList = string.Join(", ", currencyObjects.Select(c => c.Code));
                 return NotFound(CreateErrorResponse(
-                    $"No exchange rates found for the specified currencies: {currencyList}",
-                    $"No exchange rates found for the specified currencies: {currencyList}"));
+                    $"No results found",
+                    $"No exchange rates found for the specified currencies: {currencyList}")
+                    );
             }
 
             var response = exchangeRates.ToExchangeRateResponse(dateValidationResult.ParsedDate ?? DateTime.Today);
@@ -72,13 +74,12 @@ public class ExchangeRatesController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("Invalid currency code provided: {Message}", ex.Message);
-            return BadRequest(CreateErrorResponse($"Invalid currency code: {ex.Message}", $"Invalid currency code: {ex.Message}"));
+            return BadRequest(CreateErrorResponse($"Invalid currency code provided", $"Invalid currency code: {ex.Message}"));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred while fetching exchange rates");
-            return StatusCode(StatusCodes.Status500InternalServerError, CreateErrorResponse("An error occurred while processing your request", "An error occurred while processing your request"));
+            return StatusCode(StatusCodes.Status500InternalServerError, CreateErrorResponse("An error occurred while processing your request", $"Error details: {ex.Message}"));
         }
     }
 

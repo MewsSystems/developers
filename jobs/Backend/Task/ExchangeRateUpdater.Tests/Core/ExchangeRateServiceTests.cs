@@ -6,24 +6,26 @@ using ExchangeRateUpdater.Core.Extensions;
 using ExchangeRateUpdater.Core.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Moq;
+using FluentAssertions;
+using NSubstitute;
 
 namespace ExchangeRateUpdater.Tests.Core;
 
 public class ExchangeRateServiceTests
 {
-    private readonly Mock<IExchangeRateProvider> _mockProvider;
-    private readonly Mock<IExchangeRateCache> _mockCache;
-    private readonly Mock<ILogger<ExchangeRateService>> _mockLogger;
-    private readonly Mock<IOptions<ExchangeRateOptions>> _mockOptions;
-    private readonly ExchangeRateService _service;
+    private readonly IExchangeRateProvider _exchangeProvider;
+    private readonly IExchangeRateCache _exchangeCache;
+    private readonly ILogger<ExchangeRateService> _exchangeRateservice;
+    private readonly IOptions<ExchangeRateOptions> exchangeOptions;
+    private readonly ExchangeRateService _sut;
+    private readonly DateTime _testDate = new DateTime(2025, 9, 26);
 
     public ExchangeRateServiceTests()
     {
-        _mockProvider = new Mock<IExchangeRateProvider>();
-        _mockCache = new Mock<IExchangeRateCache>();
-        _mockLogger = new Mock<ILogger<ExchangeRateService>>();
-        _mockOptions = new Mock<IOptions<ExchangeRateOptions>>();
+        _exchangeProvider = Substitute.For<IExchangeRateProvider>();
+        _exchangeCache = Substitute.For<IExchangeRateCache>();
+        _exchangeRateservice = Substitute.For<ILogger<ExchangeRateService>>();
+        exchangeOptions = Substitute.For<IOptions<ExchangeRateOptions>>();
 
         var options = new ExchangeRateOptions
         {
@@ -31,9 +33,9 @@ public class ExchangeRateServiceTests
             DefaultCacheExpiry = TimeSpan.FromHours(1)
         };
 
-        _mockOptions.Setup(x => x.Value).Returns(options);
+        exchangeOptions.Value.Returns(options);
 
-        _service = new ExchangeRateService(_mockProvider.Object, _mockCache.Object, _mockLogger.Object, _mockOptions.Object);
+        _sut = new ExchangeRateService(_exchangeProvider, _exchangeCache, _exchangeRateservice, exchangeOptions);
     }
 
     [Fact]
@@ -43,19 +45,19 @@ public class ExchangeRateServiceTests
         var currencies = new[] { new Currency("USD"), new Currency("EUR") };
         var cachedRates = new[]
         {
-            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m, DateTime.Today),
-            new ExchangeRate(new Currency("EUR"), new Currency("CZK"), 27.0m, DateTime.Today)
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m, _testDate),
+            new ExchangeRate(new Currency("EUR"), new Currency("CZK"), 27.0m, _testDate)
         };
 
-        _mockCache.Setup(x => x.GetCachedRates(It.IsAny<IEnumerable<Currency>>(), It.IsAny<Maybe<DateTime>>()))
-                  .ReturnsAsync(((IReadOnlyList<ExchangeRate>)cachedRates).AsMaybe());
+        _exchangeCache.GetCachedRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateTime>>())
+                  .Returns(((IReadOnlyList<ExchangeRate>)cachedRates).AsMaybe());
 
         // Act
-        var result = await _service.GetExchangeRates(currencies, DateTime.Today.AsMaybe());
+        var result = await _sut.GetExchangeRates(currencies, _testDate.AsMaybe());
 
         // Assert
-        Assert.Equal(2, result.Count());
-        _mockProvider.Verify(x => x.GetExchangeRatesForDate(It.IsAny<Maybe<DateTime>>()), Times.Never);
+        result.Should().HaveCount(2);
+        await _exchangeProvider.Received(1).GetExchangeRatesForDate(Arg.Any<Maybe<DateTime>>());
     }
 
     [Fact]
@@ -65,22 +67,22 @@ public class ExchangeRateServiceTests
         var currencies = new[] { new Currency("USD") };
         var providerRates = new[]
         {
-            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m, DateTime.Today)
+            new ExchangeRate(new Currency("USD"), new Currency("CZK"), 25.0m, _testDate)
         };
 
-        _mockCache.Setup(x => x.GetCachedRates(It.IsAny<IReadOnlyList<Currency>>(), It.IsAny<Maybe<DateTime>>()))
-                  .ReturnsAsync(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
+        _exchangeCache.GetCachedRates(Arg.Any<IReadOnlyList<Currency>>(), Arg.Any<Maybe<DateTime>>())
+                  .Returns(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
 
-        _mockProvider.Setup(x => x.GetExchangeRatesForDate(It.IsAny<Maybe<DateTime>>()))
-                     .ReturnsAsync(((IReadOnlyCollection<ExchangeRate>)providerRates).AsMaybe());
+        _exchangeProvider.GetExchangeRatesForDate(Arg.Any<Maybe<DateTime>>())
+                     .Returns(((IReadOnlyCollection<ExchangeRate>)providerRates).AsMaybe());
 
         // Act
-        var result = await _service.GetExchangeRates(currencies, DateTime.Today.AsMaybe());
+        var result = await _sut.GetExchangeRates(currencies, _testDate.AsMaybe());
 
         // Assert
-        Assert.Single(result);
-        Assert.Equal("USD", result.First().SourceCurrency.Code);
-        _mockCache.Verify(x => x.CacheRates(It.IsAny<IReadOnlyList<ExchangeRate>>(), It.IsAny<TimeSpan>()), Times.Once);
+        result.Should().HaveCount(1);
+        result.First().SourceCurrency.Code.Should().Be("USD");
+        await _exchangeCache.Received(1).CacheRates(Arg.Any<IReadOnlyList<ExchangeRate>>(), Arg.Any<TimeSpan>());
     }
 
     [Fact]
@@ -88,7 +90,7 @@ public class ExchangeRateServiceTests
     {
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => 
-            _service.GetExchangeRates(null!, DateTime.Today.AsMaybe()));
+            _sut.GetExchangeRates(null!, _testDate.AsMaybe()));
     }
 
     [Fact]
@@ -98,9 +100,9 @@ public class ExchangeRateServiceTests
         var emptyCurrencies = Array.Empty<Currency>();
 
         // Act
-        var result = await _service.GetExchangeRates(emptyCurrencies, DateTime.Today.AsMaybe());
+        var result = await _sut.GetExchangeRates(emptyCurrencies, _testDate.AsMaybe());
 
         // Assert
-        Assert.Empty(result);
+        result.Should().BeEmpty();
     }
 }

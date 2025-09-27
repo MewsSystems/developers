@@ -10,16 +10,13 @@ using Polly.Extensions.Http;
 
 namespace ExchangeRateUpdater.Core;
 
-/// <summary>
-/// Configuration for dependency injection in Core library
-/// </summary>
 public static class CoreServiceConfiguration
 {
     public static IServiceCollection AddExchangeRateCoreDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<ExchangeRateOptions>(configuration.GetSection(ExchangeRateOptions.SectionName));
         services.Configure<CzechNationalBankOptions>(configuration.GetSection(CzechNationalBankOptions.SectionName));
-        var exchangeRateOptions = services.BuildServiceProvider().GetRequiredService<IOptions<ExchangeRateOptions>>().Value;
+        var exchangeRateOptions = configuration.GetSection(ExchangeRateOptions.SectionName).Get<ExchangeRateOptions>() ?? new ExchangeRateOptions();
 
         services.AddHttpClient<CzechNationalBankProvider>((serviceProvider, client) =>
         {

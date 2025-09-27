@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text.Json;
 using ExchangeRateUpdater.Api.Models;
-using ExchangeRateUpdater.Core.Interfaces;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Common;
-using Moq;
+using NSubstitute;
+using Microsoft.Extensions.Logging;
+using ExchangeRateUpdater.Api.Controllers;
 
 namespace ExchangeRateUpdater.Tests.Api;
 
@@ -14,51 +12,57 @@ public class ExchangeRatesControllerTests : IClassFixture<WebApplicationFactory<
 {
     private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
+    private readonly IExchangeRateService _exchangeRateService;
+    private readonly ILogger<ExchangeRatesController> _logger;
+    private readonly ExchangeRatesController _sut;
 
     public ExchangeRatesControllerTests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
+        _exchangeRateService = Substitute.For<IExchangeRateService>();
+        _logger = Substitute.For<ILogger<ExchangeRatesController>>();
+
+        _sut = new ExchangeRatesController(_exchangeRateService, _logger);
     }
 
     [Fact]
     public async Task GetExchangeRates_ValidCurrencies_ShouldReturnOk()
     {
         // Act
-        var response = await _client.GetAsync("/api/exchangerates?currencies=USD,EUR");
+        var response = await _sut.GetExchangeRates("USD,EUR");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = response.Result as OkObjectResult;
+        Assert.Equal((int)HttpStatusCode.OK, result?.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<ApiResponse<ExchangeRateResponse>>(content, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
+        var apiResponse = result?.Value as ApiResponse<ExchangeRateResponse>;
 
-        Assert.NotNull(result);
-        Assert.True(result.Success);
-        Assert.NotNull(result.Data);
-        Assert.NotEmpty(result.Data.Rates);
+        Assert.NotNull(apiResponse);
+        Assert.True(apiResponse.Success);
+        Assert.NotNull(apiResponse.Data);
+        Assert.NotEmpty(apiResponse.Data.Rates);
     }
 
     [Fact]
     public async Task GetExchangeRates_EmptyCurrencies_ShouldReturnBadRequest()
     {
         // Act
-        var response = await _client.GetAsync("/api/exchangerates?currencies=");
+        var response = await _sut.GetExchangeRates("");
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = response.Result as BadRequestObjectResult;
+        Assert.Equal((int)HttpStatusCode.BadRequest, result?.StatusCode);
     }
 
     [Fact]
     public async Task GetExchangeRates_NoCurrenciesParameter_ShouldReturnBadRequest()
     {
         // Act
-        var response = await _client.GetAsync("/api/exchangerates");
+        var response = await _sut.GetExchangeRates("");
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var result = response.Result as BadRequestObjectResult;
+        Assert.Equal((int)HttpStatusCode.BadRequest, result?.StatusCode);
     }
 }
