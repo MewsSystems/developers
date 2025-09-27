@@ -7,9 +7,7 @@ using ExchangeRateUpdater.Core.Extensions;
 
 namespace ExchangeRateUpdater.Api.Services;
 
-/// <summary>
-/// Enhanced memory cache implementation for the API that caches all exchange rates per the date returned by CNB's API
-/// </summary>
+// Memory cache implementation for exchange rates that handles business day logic and provides efficient currency filtering.
 public class ApiExchangeRateCache : IExchangeRateCache
 {
     private readonly IMemoryCache _memoryCache;
@@ -41,7 +39,7 @@ public class ApiExchangeRateCache : IExchangeRateCache
             
             if (filteredRates.Any())
             {
-                return ((IReadOnlyList<ExchangeRate>)filteredRates).AsMaybe().AsTask();
+                return filteredRates.AsReadOnlyList().AsMaybe().AsTask();
             }
         }
 
@@ -63,7 +61,7 @@ public class ApiExchangeRateCache : IExchangeRateCache
         var cacheOptions = new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = cacheExpiry,
-            SlidingExpiration = cacheExpiry / 2, // Refresh cache if accessed within half the expiry time
+            SlidingExpiration = cacheExpiry / 2,
             Size = rates.Count
         };
 
@@ -73,27 +71,17 @@ public class ApiExchangeRateCache : IExchangeRateCache
 
         return Task.CompletedTask;
     }
-
-    public Task ClearCache()
-    {
-        if (_memoryCache is MemoryCache mc)
-        {
-            mc.Clear();
-            _logger.LogInformation("Cleared all cached entries");
-        }
-        return Task.CompletedTask;
-    }
-
+    
     private static DateTime GetBusinessDayForCacheCheck(Maybe<DateTime> date)
     {
         if (!date.TryGetValue(out var dateValue))
             dateValue = DateTime.Today;
-            
+
         while (new CzechRepublicPublicHoliday().IsPublicHoliday(dateValue) || dateValue.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
         {
             dateValue = dateValue.AddDays(-1);
         }
-        
+
         return dateValue;
     }
 }

@@ -12,8 +12,8 @@ namespace ExchangeRateUpdater.Console;
 
 public static class Program
 {
-    private static readonly IEnumerable<Currency> DefaultCurrenciesList = new[]
-    {
+    private static readonly IEnumerable<Currency> DefaultCurrenciesList =
+    [
         new Currency("USD"),
         new Currency("EUR"),
         new Currency("CZK"),
@@ -23,7 +23,7 @@ public static class Program
         new Currency("THB"),
         new Currency("TRY"),
         new Currency("XYZ"),
-    };
+    ];
 
     public static async Task Main(string[] args)
     {

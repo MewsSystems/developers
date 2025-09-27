@@ -12,18 +12,21 @@ public class ExchangeRateService : IExchangeRateService
     private readonly IExchangeRateProvider _provider;
     private readonly IExchangeRateCache _cache;
     private readonly ILogger<ExchangeRateService> _logger;
-    private readonly ExchangeRateOptions _options;
+    private readonly ExchangeRateOptions _exchangeOptions;
+    private readonly CacheSettings _cacheSettings;
 
     public ExchangeRateService(
         IExchangeRateProvider provider,
         IExchangeRateCache cache,
         ILogger<ExchangeRateService> logger,
-        IOptions<ExchangeRateOptions> options)
+        IOptions<ExchangeRateOptions> options,
+        IOptions<CacheSettings> cacheSettings)
     {
         _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        _exchangeOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        _cacheSettings = cacheSettings?.Value ?? throw new ArgumentNullException(nameof(cacheSettings));
     }
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(
@@ -43,7 +46,7 @@ public class ExchangeRateService : IExchangeRateService
 
         try
         {
-            if (_options.EnableCaching)
+            if (_exchangeOptions.EnableCaching)
             {
                 var cachedRates = await _cache.GetCachedRates(currencyList, targetDate);
                 if (cachedRates.HasValue)
@@ -61,9 +64,9 @@ public class ExchangeRateService : IExchangeRateService
             {
                 if (rateList.Any())
                 {
-                    if (_options.EnableCaching)
+                    if (_exchangeOptions.EnableCaching)
                     {
-                        await _cache.CacheRates(rateList, _options.DefaultCacheExpiry);
+                        await _cache.CacheRates(rateList, _cacheSettings.DefaultCacheExpiry);
                     }
                     
                     _logger.LogInformation($"Successfully retrieved {rateList.Count()} exchange rates");

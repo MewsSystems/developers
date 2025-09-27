@@ -37,83 +37,55 @@ public class ExchangeRatesController : ControllerBase
         [FromQuery] string currencies,
         [FromQuery] string? date = null)
     {
-        try
+        var parsedDate = ValidateAndParseDate(date);
+        var currencyObjects = ValidateAndrParseCurrencies(currencies);
+
+        var exchangeRates = await _exchangeRateService.GetExchangeRates(currencyObjects, parsedDate.AsMaybe());
+        if (!exchangeRates.Any())
         {
-            var dateValidationResult = ValidateAndParseDate(date);
-            if (dateValidationResult.HasError)
+            var currencyList = string.Join(", ", currencyObjects.Select(c => c.Code));
+            return NotFound(new ApiResponse
             {
-                return BadRequest(dateValidationResult.ErrorResponse);
-            }
-
-            var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
-            if (!TryCreateCurrencyObjects(currencyCodes, out var currencyObjects))
-            {
-                return BadRequest(
-                    CreateErrorResponse("At least one currency code must be provided", "At least one currency code must be provided")
-                    );
-            }
-
-            var exchangeRates = await _exchangeRateService.GetExchangeRates(currencyObjects, dateValidationResult.ParsedDate.AsMaybe());
-            if (!exchangeRates.Any())
-            {
-                var currencyList = string.Join(", ", currencyObjects.Select(c => c.Code));
-                return NotFound(CreateErrorResponse(
-                    $"No results found",
-                    $"No exchange rates found for the specified currencies: {currencyList}")
-                    );
-            }
-
-            var response = exchangeRates.ToExchangeRateResponse(dateValidationResult.ParsedDate ?? DateTime.Today);
-
-            return Ok(new ApiResponse<ExchangeRateResponse>
-            {
-                Data = response,
-                Success = true,
-                Message = "Exchange rates retrieved successfully"
+                Success = false,
+                Message = "No results found",
+                Errors = new List<string> { $"No exchange rates found for the specified currencies: {currencyList}" }
             });
         }
-        catch (ArgumentException ex)
+
+        return Ok(new ApiResponse<ExchangeRateResponse>
         {
-            return BadRequest(CreateErrorResponse($"Invalid currency code provided", $"Invalid currency code: {ex.Message}"));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while fetching exchange rates");
-            return StatusCode(StatusCodes.Status500InternalServerError, CreateErrorResponse("An error occurred while processing your request", $"Error details: {ex.Message}"));
-        }
+            Data = exchangeRates.ToExchangeRateResponse(parsedDate ?? DateTime.Today),
+            Success = true,
+            Message = "Exchange rates retrieved successfully"
+        });
     }
 
-    private static bool TryCreateCurrencyObjects(HashSet<string> currencyCodes, out IEnumerable<Currency> currencies)
-    {
-        currencies = new List<Currency>();
-        if (!currencyCodes.Any())
-            return false;
-
-        currencies = currencyCodes.Select(code => new Currency(code.Trim().ToUpperInvariant()));
-        return true;
-    }
-
-    private static ApiResponse CreateErrorResponse(string message, string error)
-    {
-        return new ApiResponse
-        {
-            Message = message,
-            Errors = new List<string> { error },
-            Success = false
-        };
-    }
-
-    private static (bool HasError, ApiResponse? ErrorResponse, DateTime? ParsedDate) ValidateAndParseDate(string? date)
+    private static DateTime? ValidateAndParseDate(string? date)
     {
         if (string.IsNullOrEmpty(date))
-            return (false, null, null);
+        {
+            return null;
+        }
 
         if (!DateTime.TryParseExact(date, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out var validDate))
         {
-            var errorMessage = $"Invalid date format. Expected format: YYYY-MM-DD (e.g., 2024-01-15). Received: '{date}'";
-            return (true, CreateErrorResponse(errorMessage, errorMessage), null);
+            throw new ArgumentException($"Invalid date format. Expected format: YYYY-MM-DD (e.g., 2024-01-15). Received: '{date}'");
         }
 
-        return (false, null, validDate);
+        return validDate;
+    }
+
+    private static IEnumerable<Currency> ValidateAndrParseCurrencies(string currencies)
+    {
+        var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(code => code.Trim().ToUpperInvariant())
+            .ToHashSet();
+
+        if (!currencyCodes.Any())
+        {
+            throw new ArgumentException("At least one currency code must be provided");
+        }
+
+        return currencyCodes.Select(code => new Currency(code));
     }
 }

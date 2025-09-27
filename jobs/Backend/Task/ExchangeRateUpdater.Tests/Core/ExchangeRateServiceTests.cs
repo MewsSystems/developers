@@ -16,7 +16,8 @@ public class ExchangeRateServiceTests
     private readonly IExchangeRateProvider _exchangeProvider;
     private readonly IExchangeRateCache _exchangeCache;
     private readonly ILogger<ExchangeRateService> _exchangeRateservice;
-    private readonly IOptions<ExchangeRateOptions> exchangeOptions;
+    private readonly IOptions<ExchangeRateOptions> _exchangeOptions;
+    private readonly IOptions<CacheSettings> _cacheSettings;
     private readonly ExchangeRateService _sut;
     private readonly DateTime _testDate = new DateTime(2025, 9, 26);
 
@@ -25,17 +26,23 @@ public class ExchangeRateServiceTests
         _exchangeProvider = Substitute.For<IExchangeRateProvider>();
         _exchangeCache = Substitute.For<IExchangeRateCache>();
         _exchangeRateservice = Substitute.For<ILogger<ExchangeRateService>>();
-        exchangeOptions = Substitute.For<IOptions<ExchangeRateOptions>>();
+        _exchangeOptions = Substitute.For<IOptions<ExchangeRateOptions>>();
+        _cacheSettings = Substitute.For<IOptions<CacheSettings>>();
 
         var options = new ExchangeRateOptions
         {
-            EnableCaching = true,
+            EnableCaching = true
+        };
+
+        var cacheSettings = new CacheSettings
+        {
             DefaultCacheExpiry = TimeSpan.FromHours(1)
         };
 
-        exchangeOptions.Value.Returns(options);
+        _exchangeOptions.Value.Returns(options);
+        _cacheSettings.Value.Returns(cacheSettings);
 
-        _sut = new ExchangeRateService(_exchangeProvider, _exchangeCache, _exchangeRateservice, exchangeOptions);
+        _sut = new ExchangeRateService(_exchangeProvider, _exchangeCache, _exchangeRateservice, _exchangeOptions, _cacheSettings);
     }
 
     [Fact]
@@ -57,7 +64,7 @@ public class ExchangeRateServiceTests
 
         // Assert
         result.Should().HaveCount(2);
-        await _exchangeProvider.Received(1).GetExchangeRatesForDate(Arg.Any<Maybe<DateTime>>());
+        await _exchangeProvider.DidNotReceive().GetExchangeRatesForDate(Arg.Any<Maybe<DateTime>>());
     }
 
     [Fact]

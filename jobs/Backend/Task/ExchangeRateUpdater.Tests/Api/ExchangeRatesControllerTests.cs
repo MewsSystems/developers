@@ -1,68 +1,107 @@
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using ExchangeRateUpdater.Api.Models;
-using NSubstitute;
-using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Api.Controllers;
+using ExchangeRateUpdater.Api.Models;
+using ExchangeRateUpdater.Core.Common;
+using ExchangeRateUpdater.Core.Models;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using FluentAssertions;
 
 namespace ExchangeRateUpdater.Tests.Api;
 
-public class ExchangeRatesControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class ExchangeRatesControllerTests
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
     private readonly IExchangeRateService _exchangeRateService;
     private readonly ILogger<ExchangeRatesController> _logger;
     private readonly ExchangeRatesController _sut;
 
-    public ExchangeRatesControllerTests(WebApplicationFactory<Program> factory)
+    public ExchangeRatesControllerTests()
     {
-        _factory = factory;
-        _client = _factory.CreateClient();
         _exchangeRateService = Substitute.For<IExchangeRateService>();
         _logger = Substitute.For<ILogger<ExchangeRatesController>>();
-
         _sut = new ExchangeRatesController(_exchangeRateService, _logger);
     }
 
     [Fact]
-    public async Task GetExchangeRates_ValidCurrencies_ShouldReturnOk()
+    public async Task GetExchangeRates_ValidRequest_ReturnsOkResult()
     {
+        // Arrange
+        var expectedRates = new[]
+        {
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), 21.5m, DateTime.Today),
+            new ExchangeRate(new Currency("CZK"), new Currency("EUR"), 25.5m, DateTime.Today)
+        };
+
+        _exchangeRateService
+            .GetExchangeRates(
+                Arg.Is<IEnumerable<Currency>>(c => c.Any(x => x.Code == "USD" || x.Code == "EUR")), 
+                Arg.Any<Maybe<DateTime>>())
+            .Returns(expectedRates);
+
         // Act
-        var response = await _sut.GetExchangeRates("USD,EUR");
+        var result = await _sut.GetExchangeRates("USD,EUR");
 
         // Assert
-        var result = response.Result as OkObjectResult;
-        Assert.Equal((int)HttpStatusCode.OK, result?.StatusCode);
-
-        var apiResponse = result?.Value as ApiResponse<ExchangeRateResponse>;
-
-        Assert.NotNull(apiResponse);
-        Assert.True(apiResponse.Success);
-        Assert.NotNull(apiResponse.Data);
-        Assert.NotEmpty(apiResponse.Data.Rates);
+        result.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<ApiResponse<ExchangeRateResponse>>()
+            .Which.Should().Match<ApiResponse<ExchangeRateResponse>>(r => 
+                r.Success &&
+                r.Data != null &&
+                r.Data.Rates.Count() == 2);
     }
 
     [Fact]
-    public async Task GetExchangeRates_EmptyCurrencies_ShouldReturnBadRequest()
+    public async Task GetExchangeRates_EmptyCurrencies_ThrowsArgumentException()
     {
-        // Act
-        var response = await _sut.GetExchangeRates("");
+        // Act & Assert
+        var action = () => _sut.GetExchangeRates("");
 
-        // Assert
-        var result = response.Result as BadRequestObjectResult;
-        Assert.Equal((int)HttpStatusCode.BadRequest, result?.StatusCode);
+        await action.Should().ThrowAsync<ArgumentException>()
+            .WithMessage("At least one currency code must be provided");
     }
 
     [Fact]
-    public async Task GetExchangeRates_NoCurrenciesParameter_ShouldReturnBadRequest()
+    public async Task GetExchangeRates_InvalidDate_ThrowsArgumentException()
     {
+        // Act & Assert
+        var action = () => _sut.GetExchangeRates("USD", "invalid-date");
+
+        await action.Should().ThrowAsync<ArgumentException>()
+            .WithMessage("*Invalid date format*");
+    }
+
+    [Fact]
+    public async Task GetExchangeRates_ServiceThrowsException_PropagatesException()
+    {
+        // Arrange
+        _exchangeRateService
+            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateTime>>())
+            .Returns(Task.FromException<IEnumerable<ExchangeRate>>(
+                new ExchangeRateProviderException("Provider error")));
+
+        // Act & Assert
+        var action = () => _sut.GetExchangeRates("USD");
+
+        await action.Should().ThrowAsync<ExchangeRateProviderException>()
+            .WithMessage("Provider error");
+    }
+
+    [Fact]
+    public async Task GetExchangeRates_NoRatesFound_ReturnsNotFound()
+    {
+        // Arrange
+        _exchangeRateService
+            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateTime>>())
+            .Returns(Array.Empty<ExchangeRate>());
+
         // Act
-        var response = await _sut.GetExchangeRates("");
+        var result = await _sut.GetExchangeRates("USD");
 
         // Assert
-        var result = response.Result as BadRequestObjectResult;
-        Assert.Equal((int)HttpStatusCode.BadRequest, result?.StatusCode);
+        var response = result.Result.Should().BeOfType<NotFoundObjectResult>().Subject;
+        var apiResponse = response.Value.Should().BeOfType<ApiResponse>().Subject;
+        
+        apiResponse.Success.Should().BeFalse();
+        apiResponse.Errors.Should().ContainMatch("*No exchange rates found*");
     }
 }

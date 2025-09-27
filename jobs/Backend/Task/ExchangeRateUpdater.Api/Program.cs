@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Core;
 using ExchangeRateUpdater.Core.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using ExchangeRateUpdater.Core.Configuration;
+using ExchangeRateUpdater.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseGlobalExceptionHandling();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.MapOpenApi();
