@@ -55,7 +55,7 @@ public class ExchangeRateService : IExchangeRateService
 
             // Fetch from provider
             _logger.LogInformation($"Fetching fresh exchange rates from {_provider.ProviderName}");
-            var maybeRates = await _provider.GetExchangeRates(currencyList, date);
+            var maybeRates = await _provider.GetExchangeRatesForDate(date);
 
             if (maybeRates.TryGetValue(out var rateList))
             {
@@ -67,7 +67,7 @@ public class ExchangeRateService : IExchangeRateService
                     }
                     
                     _logger.LogInformation($"Successfully retrieved {rateList.Count()} exchange rates");
-                    return rateList;
+                    return rateList.Where(rate => currencyList.Contains(rate.SourceCurrency));
                 }
                 else
                 {

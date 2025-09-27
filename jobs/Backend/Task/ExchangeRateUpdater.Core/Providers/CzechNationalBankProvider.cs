@@ -31,17 +31,10 @@ public class CzechNationalBankProvider : IExchangeRateProvider
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRates(IEnumerable<Currency> currencies, Maybe<DateTime> date)
+    public async Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRatesForDate(Maybe<DateTime> date)
     {
-        if (currencies == null)
-            throw new ArgumentNullException(nameof(currencies));
-
-        var currencyList = currencies.ToList();
-        if (!currencyList.Any())
-            return Maybe<IReadOnlyCollection<ExchangeRate>>.Nothing;
-
         var targetDate = date.GetValueOrDefault(DateTime.Today);
-        _logger.LogInformation($"Fetching exchange rates from {ProviderName} for {currencyList.Count} currencies for date {targetDate:yyyy-MM-dd}");
+        _logger.LogInformation($"Fetching exchange rates from {ProviderName} currencies for date {targetDate:yyyy-MM-dd}");
 
         try
         {
@@ -52,7 +45,7 @@ public class CzechNationalBankProvider : IExchangeRateProvider
             response.EnsureSuccessStatusCode();
 
             var jsonContent = await response.Content.ReadAsStringAsync();
-            var rates = ParseCnbJsonFormat(jsonContent, currencyList);
+            var rates = ParseCnbJsonFormat(jsonContent);
 
             if (!rates.Any())
             {
@@ -87,10 +80,9 @@ public class CzechNationalBankProvider : IExchangeRateProvider
         return $"{_options.BaseUrl}?date={dateString}&lang={_options.Language}";
     }
 
-    private List<ExchangeRate> ParseCnbJsonFormat(string jsonContent, IEnumerable<Currency> requestedCurrencies)
+    private List<ExchangeRate> ParseCnbJsonFormat(string jsonContent)
     {
         var rates = new List<ExchangeRate>();
-        var requestedCurrencyCodes = requestedCurrencies.Select(c => c.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         try
         {
@@ -109,19 +101,16 @@ public class CzechNationalBankProvider : IExchangeRateProvider
 
             foreach (var rateDto in apiResponse.Rates)
             {
-                if (requestedCurrencyCodes.Contains(rateDto.CurrencyCode))
-                {
-                    // CNB rates are given as: amount units = rate CZK
-                    // We want: 1 unit = (rate / amount) CZK
-                    var ratePerUnit = rateDto.Rate / rateDto.Amount;
-                    var sourceCurrency = new Currency(rateDto.CurrencyCode);
-                    var targetCurrency = new Currency(BaseCurrency);
+                // CNB rates are given as: amount units = rate CZK
+                // We want: 1 unit = (rate / amount) CZK
+                var ratePerUnit = rateDto.Rate / rateDto.Amount;
+                var sourceCurrency = new Currency(rateDto.CurrencyCode);
+                var targetCurrency = new Currency(BaseCurrency);
 
-                    DateTime exchangeDate = DateTime.TryParse(rateDto.ValidFor, out var parsedDate) ? parsedDate : DateTime.Today;
+                DateTime exchangeDate = DateTime.TryParse(rateDto.ValidFor, out var parsedDate) ? parsedDate : DateTime.Today;
 
-                    var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, ratePerUnit, exchangeDate);
-                    rates.Add(exchangeRate);
-                }
+                var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, ratePerUnit, exchangeDate);
+                rates.Add(exchangeRate);
             }
         }
         catch (JsonException ex)

@@ -55,7 +55,7 @@ public class ExchangeRateServiceTests
 
         // Assert
         Assert.Equal(2, result.Count());
-        _mockProvider.Verify(x => x.GetExchangeRates(It.IsAny<IEnumerable<Currency>>(), It.IsAny<Maybe<DateTime>>()), Times.Never);
+        _mockProvider.Verify(x => x.GetExchangeRatesForDate(It.IsAny<Maybe<DateTime>>()), Times.Never);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class ExchangeRateServiceTests
         _mockCache.Setup(x => x.GetCachedRates(It.IsAny<IReadOnlyList<Currency>>(), It.IsAny<Maybe<DateTime>>()))
                   .ReturnsAsync(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
 
-        _mockProvider.Setup(x => x.GetExchangeRates(It.IsAny<IEnumerable<Currency>>(), It.IsAny<Maybe<DateTime>>()))
+        _mockProvider.Setup(x => x.GetExchangeRatesForDate(It.IsAny<Maybe<DateTime>>()))
                      .ReturnsAsync(((IReadOnlyCollection<ExchangeRate>)providerRates).AsMaybe());
 
         // Act
