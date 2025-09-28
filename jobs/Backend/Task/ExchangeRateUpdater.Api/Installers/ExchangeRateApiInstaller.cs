@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Caching.Memory;
-using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Infrastructure.Installers;
 using ExchangeRateUpdater.Api.Middleware;
 
@@ -15,21 +13,6 @@ public static class ExchangeRateApiInstaller
 
         return services;
     }
-
-    //public static IServiceCollection AddCachingServices(this IServiceCollection services, IConfiguration configuration)
-    //{
-    //    services.AddMemoryCache();
-    //    services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
-    //    var cacheSettings = configuration.GetSection("CacheSettings").Get<CacheSettings>() ?? new CacheSettings();
-    //    services.Configure<MemoryCacheOptions>(options =>
-    //    {
-    //        options.SizeLimit = cacheSettings.SizeLimit;
-    //        options.CompactionPercentage = cacheSettings.CompactionPercentage;
-    //        options.ExpirationScanFrequency = cacheSettings.ExpirationScanFrequency;
-    //    });
-
-    //    return services;
-    //}
 
     public static IServiceCollection AddOpenApiServices(this IServiceCollection services)
     {

@@ -6,6 +6,7 @@ using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Extensions;
 using FluentAssertions;
 using NSubstitute;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests.Api;
 
@@ -13,14 +14,21 @@ public class ApiExchangeRateCacheTests
 {
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ApiExchangeRateCache> _logger;
+    private readonly IOptions<CacheSettings> _cacheSettings;
     private readonly ApiExchangeRateCache _sut;
-    private readonly DateTime _testDate = new(2025, 9, 26);
+    private readonly DateOnly _testDate = new(2025, 9, 26);
 
     public ApiExchangeRateCacheTests()
     {
         _memoryCache = Substitute.For<IMemoryCache>();
         _logger = Substitute.For<ILogger<ApiExchangeRateCache>>();
-        _sut = new ApiExchangeRateCache(_memoryCache, _logger);
+        _cacheSettings = Substitute.For<IOptions<CacheSettings>>();
+        _cacheSettings.Value.Returns(new CacheSettings
+        {
+            DefaultCacheExpiry = TimeSpan.FromHours(1)
+        });
+
+        _sut = new ApiExchangeRateCache(_memoryCache, _logger, _cacheSettings);
     }
 
     [Fact]
@@ -28,7 +36,7 @@ public class ApiExchangeRateCacheTests
     {
         // Act & Assert
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            _sut.GetCachedRates(null!, DateTime.Today.AsMaybe()));
+            _sut.GetCachedRates(null!, DateHelper.Today));
 
         exception.ParamName.Should().Be("currencies");
     }
@@ -40,7 +48,7 @@ public class ApiExchangeRateCacheTests
         var emptyCurrencies = Array.Empty<Currency>();
 
         // Act
-        var result = await _sut.GetCachedRates(emptyCurrencies, DateTime.Today.AsMaybe());
+        var result = await _sut.GetCachedRates(emptyCurrencies, DateHelper.Today);
 
         // Assert
         result.Should().Be(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -67,7 +75,7 @@ public class ApiExchangeRateCacheTests
             });
 
         // Act
-        var result = await _sut.GetCachedRates(currencies, _testDate.AsMaybe());
+        var result = await _sut.GetCachedRates(currencies, _testDate);
 
         // Assert
         result.Should().NotBe(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -89,7 +97,7 @@ public class ApiExchangeRateCacheTests
             .Returns(false);
 
         // Act
-        var result = await _sut.GetCachedRates(currencies, _testDate.AsMaybe());
+        var result = await _sut.GetCachedRates(currencies, _testDate);
 
         // Assert
         result.Should().Be(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -115,7 +123,7 @@ public class ApiExchangeRateCacheTests
             });
 
         // Act
-        var result = await _sut.GetCachedRates(currencies, _testDate.AsMaybe());
+        var result = await _sut.GetCachedRates(currencies, _testDate);
 
         // Assert
         result.Should().Be(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -126,7 +134,7 @@ public class ApiExchangeRateCacheTests
     {
         // Act & Assert
         var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            _sut.CacheRates(null!, TimeSpan.FromHours(1)));
+            _sut.CacheRates(null!));
 
         exception.ParamName.Should().Be("rates");
     }

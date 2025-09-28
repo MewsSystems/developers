@@ -7,12 +7,12 @@ namespace ExchangeRateUpdater.Infrastructure.Caching;
 
 public class NoOpExchangeRateCache : IExchangeRateCache
 {
-    public Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, Maybe<DateTime> date)
+    public Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, DateOnly date)
     {
         return Maybe<IReadOnlyList<ExchangeRate>>.Nothing.AsTask();
     }
 
-    public Task CacheRates(IReadOnlyCollection<ExchangeRate> rates, TimeSpan cacheExpiry)
+    public Task CacheRates(IReadOnlyCollection<ExchangeRate> rates)
     {
         return Task.CompletedTask;
     }

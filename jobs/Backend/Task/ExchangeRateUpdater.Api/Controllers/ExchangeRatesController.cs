@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Api.Extensions;
 using ExchangeRateUpdater.Api.Models;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Extensions;
+using ExchangeRateUpdater.Api.Binders;
 
 namespace ExchangeRateUpdater.Api.Controllers;
 
@@ -23,7 +24,7 @@ public class ExchangeRatesController : ControllerBase
     /// <summary>
     /// Get exchange rates for specified currencies
     /// </summary>
-    /// <param name="currencies">Comma-separated list of currency codes (e.g., USD,EUR,JPY)</param>
+    /// <param name="currencies">Comma-separated list of currency codes (e.g., USD,EUR,JPY), provided as a list of strings (e.g., currencies=USD&currencies=EUR)</param>
     /// <param name="date">Optional date in YYYY-MM-DD format. Defaults to today.</param>
     /// <returns>Exchange rates for the specified currencies</returns>
     /// <response code="200">Returns the exchange rates</response>
@@ -34,13 +35,12 @@ public class ExchangeRatesController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ApiResponse<ExchangeRateResponseDto>>> GetExchangeRates(
-        [FromQuery] string currencies,
-        [FromQuery] string? date = null)
+        [ModelBinder(BinderType = typeof(CommaSeparatedQueryBinder))] List<string> currencies,
+        [FromQuery] DateOnly? date = null)
     {
-        var parsedDate = ValidateAndParseDate(date);
-        var currencyObjects = ValidateAndrParseCurrencies(currencies);
+        var currencyObjects = ParseCurrencies(currencies);
 
-        var exchangeRates = await _exchangeRateService.GetExchangeRates(currencyObjects, parsedDate.AsMaybe());
+        var exchangeRates = await _exchangeRateService.GetExchangeRates(currencyObjects, date.AsMaybe());
         if (!exchangeRates.Any())
         {
             var currencyList = string.Join(", ", currencyObjects.Select(c => c.Code));
@@ -54,32 +54,15 @@ public class ExchangeRatesController : ControllerBase
 
         return Ok(new ApiResponse<ExchangeRateResponseDto>
         {
-            Data = exchangeRates.ToExchangeRateResponse(parsedDate ?? DateTime.Today),
+            Data = exchangeRates.ToExchangeRateResponse(date.AsMaybe()),
             Success = true,
             Message = "Exchange rates retrieved successfully"
         });
     }
 
-    private static DateTime? ValidateAndParseDate(string? date)
+    private static IEnumerable<Currency> ParseCurrencies(List<string> currencies)
     {
-        if (string.IsNullOrEmpty(date))
-        {
-            return null;
-        }
-
-        if (!DateTime.TryParseExact(date, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out var validDate))
-        {
-            throw new ArgumentException($"Invalid date format. Expected format: YYYY-MM-DD (e.g., 2024-01-15). Received: '{date}'");
-        }
-
-        return validDate;
-    }
-
-    private static IEnumerable<Currency> ValidateAndrParseCurrencies(string currencies)
-    {
-        var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(code => code.Trim().ToUpperInvariant())
-            .ToHashSet();
+        var currencyCodes = currencies.Select(code => code.Trim().ToUpperInvariant()).ToHashSet();
 
         if (!currencyCodes.Any())
         {

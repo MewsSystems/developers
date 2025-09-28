@@ -30,10 +30,10 @@ public class CzechNationalBankProvider : IExchangeRateProvider
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRatesForDate(Maybe<DateTime> date)
+    public async Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRatesForDate(Maybe<DateOnly> date)
     {
-        var targetDate = date.GetValueOrDefault(DateTime.Today);
-        _logger.LogInformation($"Fetching exchange rates from {ProviderName} currencies for date {targetDate:yyyy-MM-dd}");
+        var targetDate = date.GetValueOrDefault(DateHelper.Today);
+        _logger.LogInformation($"Fetching exchange rates from {ProviderName} currencies for date {targetDate}");
 
         try
         {
@@ -73,7 +73,7 @@ public class CzechNationalBankProvider : IExchangeRateProvider
         }
     }
 
-    private string BuildApiUrl(DateTime date)
+    private string BuildApiUrl(DateOnly date)
     {
         var dateString = date.ToString(_options.DateFormat);
         return $"{_options.BaseUrl}?date={dateString}&lang={_options.Language}";
@@ -106,7 +106,7 @@ public class CzechNationalBankProvider : IExchangeRateProvider
                 var sourceCurrency = new Currency(rateDto.CurrencyCode);
                 var targetCurrency = new Currency(BaseCurrency);
 
-                DateTime exchangeDate = DateTime.TryParse(rateDto.ValidFor, out var parsedDate) ? parsedDate : DateTime.Today;
+                DateOnly exchangeDate = DateOnly.TryParse(rateDto.ValidFor, out var parsedDate) ? parsedDate : DateHelper.Today;
 
                 var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, ratePerUnit, exchangeDate);
                 rates.Add(exchangeRate);

@@ -29,18 +29,18 @@ public class ExchangeRatesControllerTests
         // Arrange
         var expectedRates = new[]
         {
-            new ExchangeRate(new Currency("CZK"), new Currency("USD"), 21.5m, DateTime.Today),
-            new ExchangeRate(new Currency("CZK"), new Currency("EUR"), 25.5m, DateTime.Today)
+            new ExchangeRate(new Currency("CZK"), new Currency("USD"), 21.5m, DateHelper.Today),
+            new ExchangeRate(new Currency("CZK"), new Currency("EUR"), 25.5m, DateHelper.Today)
         };
 
         _exchangeRateService
             .GetExchangeRates(
                 Arg.Is<IEnumerable<Currency>>(c => c.Any(x => x.Code == "USD" || x.Code == "EUR")), 
-                Arg.Any<Maybe<DateTime>>())
+                Arg.Any<Maybe<DateOnly>>())
             .Returns(expectedRates);
 
         // Act
-        var result = await _sut.GetExchangeRates("USD,EUR");
+        var result = await _sut.GetExchangeRates(["USD", "EUR"]);
 
         // Assert
         result.Result.Should().BeOfType<OkObjectResult>()
@@ -52,36 +52,16 @@ public class ExchangeRatesControllerTests
     }
 
     [Fact]
-    public async Task GetExchangeRates_EmptyCurrencies_ThrowsArgumentException()
-    {
-        // Act & Assert
-        var action = () => _sut.GetExchangeRates("");
-
-        await action.Should().ThrowAsync<ArgumentException>()
-            .WithMessage("At least one currency code must be provided");
-    }
-
-    [Fact]
-    public async Task GetExchangeRates_InvalidDate_ThrowsArgumentException()
-    {
-        // Act & Assert
-        var action = () => _sut.GetExchangeRates("USD", "invalid-date");
-
-        await action.Should().ThrowAsync<ArgumentException>()
-            .WithMessage("*Invalid date format*");
-    }
-
-    [Fact]
     public async Task GetExchangeRates_ServiceThrowsException_PropagatesException()
     {
         // Arrange
         _exchangeRateService
-            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateTime>>())
+            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateOnly>>())
             .Returns(Task.FromException<IEnumerable<ExchangeRate>>(
                 new ExchangeRateProviderException("Provider error")));
 
         // Act & Assert
-        var action = () => _sut.GetExchangeRates("USD");
+        var action = () => _sut.GetExchangeRates(["USD", "EUR"]);
 
         await action.Should().ThrowAsync<ExchangeRateProviderException>()
             .WithMessage("Provider error");
@@ -92,11 +72,11 @@ public class ExchangeRatesControllerTests
     {
         // Arrange
         _exchangeRateService
-            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateTime>>())
+            .GetExchangeRates(Arg.Any<IEnumerable<Currency>>(), Arg.Any<Maybe<DateOnly>>())
             .Returns(Array.Empty<ExchangeRate>());
 
         // Act
-        var result = await _sut.GetExchangeRates("USD");
+        var result = await _sut.GetExchangeRates(["USD", "EUR"]);
 
         // Assert
         var response = result.Result.Should().BeOfType<NotFoundObjectResult>().Subject;

@@ -10,7 +10,7 @@ public interface IExchangeRateProvider
     /// </summary>
     /// <param name="date">The date to get exchange rates for (uses today if None)</param>
     /// <returns>Maybe containing collection of exchange rates</returns>
-    Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRatesForDate(Maybe<DateTime> date);
+    Task<Maybe<IReadOnlyCollection<ExchangeRate>>> GetExchangeRatesForDate(Maybe<DateOnly> date);
 
     string ProviderName { get; }
     string BaseCurrency { get; }

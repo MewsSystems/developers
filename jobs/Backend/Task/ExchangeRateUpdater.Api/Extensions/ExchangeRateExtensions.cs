@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Api.Models;
+using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Models;
 
 namespace ExchangeRateUpdater.Api.Extensions;
@@ -7,7 +8,7 @@ public static class ExchangeRateExtensions
 {
     public static ExchangeRateResponseDto ToExchangeRateResponse(
         this IEnumerable<ExchangeRate> exchangeRates,
-        DateTime requestedDate)
+        Maybe<DateOnly> requestedDate)
     {
         var rateList = exchangeRates.ToList();
 
@@ -16,9 +17,9 @@ public static class ExchangeRateExtensions
                 SourceCurrency: rate.SourceCurrency.Code,
                 TargetCurrency: rate.TargetCurrency.Code,
                 Value: rate.Value,
-                Date: rate.Date
+                Date: rate.Date.ToDateTime(TimeOnly.MinValue)
             )).ToList(),
-            RequestedDate: requestedDate,
+            RequestedDate: requestedDate.TryGetValue(out var date) ? date.ToDateTime(TimeOnly.MinValue) : DateHelper.Today.ToDateTime(TimeOnly.MinValue),
             TotalCount: rateList.Count
         );
     }

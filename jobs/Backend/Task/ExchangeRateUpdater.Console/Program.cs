@@ -1,3 +1,4 @@
+using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Extensions;
 using ExchangeRateUpdater.Infrastructure.Installers;
@@ -27,7 +28,7 @@ public static class Program
     public static async Task Main(string[] args)
     {
         // Define command line options
-        var dateOption = new Option<DateTime?>(
+        var dateOption = new Option<DateOnly?>( 
             "--date",
             description: "The date to fetch exchange rates for (format: yyyy-MM-dd). Defaults to today.",
             parseArgument: result =>
@@ -36,7 +37,7 @@ public static class Program
                     return null;
                 
                 var dateString = result.Tokens.Single().Value;
-                if (DateTime.TryParseExact(dateString, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+                if (DateOnly.TryParseExact(dateString, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
                 {
                     return date;
                 }
@@ -66,7 +67,7 @@ public static class Program
             currenciesOption
         };
 
-        rootCommand.SetHandler(async (DateTime? date, string[] currencyCodes) =>
+        rootCommand.SetHandler(async (DateOnly? date, string[] currencyCodes) =>
         {
             await RunExchangeRateUpdaterAsync(date, currencyCodes);
         }, dateOption, currenciesOption);
@@ -75,7 +76,7 @@ public static class Program
         await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task RunExchangeRateUpdaterAsync(DateTime? date, string[] currencyCodes)
+    private static async Task RunExchangeRateUpdaterAsync(DateOnly? date, string[] currencyCodes)
     {
         try
         {

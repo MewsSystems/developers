@@ -6,6 +6,7 @@ using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Extensions;
 using FluentAssertions;
 using NSubstitute;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Tests.Integration;
 
@@ -14,32 +15,39 @@ public class WeekendHolidayCachingTests
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ApiExchangeRateCache> _logger;
     private readonly ApiExchangeRateCache _sut;
+    private readonly IOptions<CacheSettings> _cacheSettings;
 
     public WeekendHolidayCachingTests()
     {
         _memoryCache = new MemoryCache(new MemoryCacheOptions());
         _logger = Substitute.For<ILogger<ApiExchangeRateCache>>();
-        _sut = new ApiExchangeRateCache(_memoryCache, _logger);
+        _cacheSettings = Substitute.For<IOptions<CacheSettings>>();
+        _cacheSettings.Value.Returns(new CacheSettings
+        {
+            DefaultCacheExpiry = TimeSpan.FromHours(1)
+        });
+
+        _sut = new ApiExchangeRateCache(_memoryCache, _logger, _cacheSettings);
     }
 
     [Fact]
     public async Task GetCachedRates_OnWeekend_ShouldReturnPreviousBusinessDayRates()
     {
         // Arrange
-        var friday = new DateTime(2024, 1, 5); // Friday
-        var saturday = new DateTime(2024, 1, 6); // Saturday
+        var friday = new DateOnly(2024, 1, 5); // Friday
+        var saturday = new DateOnly(2024, 1, 6); // Saturday
         var rates = new List<ExchangeRate>
         {
             new(new Currency("USD"), new Currency("CZK"), 25.0m, friday),
             new(new Currency("EUR"), new Currency("CZK"), 27.0m, friday)
         };
 
-        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates);
 
         // Act
         var result = await _sut.GetCachedRates(
             [new Currency("USD"), new Currency("EUR")], 
-            saturday.AsMaybe());
+            saturday);
 
         // Assert
         result.Should().NotBe(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -52,8 +60,8 @@ public class WeekendHolidayCachingTests
     public async Task CacheRates_WithDifferentDates_ShouldCacheSeparately()
     {
         // Arrange
-        var tuesday = new DateTime(2024, 1, 2);
-        var wednesday = new DateTime(2024, 1, 3);
+        var tuesday = new DateOnly(2024, 1, 2);
+        var wednesday = new DateOnly(2024, 1, 3);
         var tuesdayRates = new List<ExchangeRate>
         {
             new(new Currency("USD"), new Currency("CZK"), 25.0m, tuesday)
@@ -64,8 +72,8 @@ public class WeekendHolidayCachingTests
         };
 
         // Act
-        await _sut.CacheRates(tuesdayRates, TimeSpan.FromHours(1));
-        await _sut.CacheRates(wednesdayRates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(tuesdayRates);
+        await _sut.CacheRates(wednesdayRates);
 
         // Assert
         var tuesdayCachedRates = _memoryCache.Get<IEnumerable<ExchangeRate>>($"ExchangeRates_{tuesday:yyyy-MM-dd}");
@@ -83,7 +91,7 @@ public class WeekendHolidayCachingTests
     public async Task GetCachedRates_WithPartialCurrencyMatch_ShouldReturnOnlyMatchingCurrencies()
     {
         // Arrange
-        var businessDay = new DateTime(2024, 1, 2); // Tuesday
+        var businessDay = new DateOnly(2024, 1, 2); // Tuesday
         var rates = new List<ExchangeRate>
         {
             new(new Currency("USD"), new Currency("CZK"), 25.0m, businessDay),
@@ -91,12 +99,12 @@ public class WeekendHolidayCachingTests
             new(new Currency("GBP"), new Currency("CZK"), 30.0m, businessDay)
         };
 
-        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates);
 
         // Act
         var result = await _sut.GetCachedRates(
             [new Currency("USD"), new Currency("GBP")], 
-            businessDay.AsMaybe());
+            businessDay);
 
         // Assert
         result.Should().NotBe(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);
@@ -111,18 +119,18 @@ public class WeekendHolidayCachingTests
     public async Task GetCachedRates_WithCaseInsensitiveCurrencyMatch_ShouldReturnRates()
     {
         // Arrange
-        var businessDay = new DateTime(2024, 1, 2); // Tuesday
+        var businessDay = new DateOnly(2024, 1, 2); // Tuesday
         var rates = new List<ExchangeRate>
         {
             new(new Currency("USD"), new Currency("CZK"), 25.0m, businessDay)
         };
 
-        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(rates);
 
         // Act
         var result = await _sut.GetCachedRates(
             [new Currency("usd")],
-            businessDay.AsMaybe());
+            businessDay);
 
         // Assert
         result.Should().NotBe(Maybe<IReadOnlyList<ExchangeRate>>.Nothing);

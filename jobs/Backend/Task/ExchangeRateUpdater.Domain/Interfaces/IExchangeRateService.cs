@@ -3,5 +3,5 @@ using ExchangeRateUpdater.Domain.Models;
 
 public interface IExchangeRateService
 {
-    Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, Maybe<DateTime> date);
+    Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies, Maybe<DateOnly> date);
 }

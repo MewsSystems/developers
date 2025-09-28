@@ -5,6 +5,6 @@ namespace ExchangeRateUpdater.Domain.Interfaces;
 
 public interface IExchangeRateCache
 {
-    Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, Maybe<DateTime> date);
-    Task CacheRates(IReadOnlyCollection<ExchangeRate> rates, TimeSpan cacheExpiry);
+    Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, DateOnly date);
+    Task CacheRates(IReadOnlyCollection<ExchangeRate> rates);
 }

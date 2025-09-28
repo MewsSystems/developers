@@ -5,6 +5,7 @@ using ExchangeRateUpdater.Domain.Interfaces;
 using ExchangeRateUpdater.Domain.Models;
 using PublicHoliday;
 using ExchangeRateUpdater.Domain.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure.Caching;
 
@@ -14,14 +15,16 @@ public class ApiExchangeRateCache : IExchangeRateCache
     private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ApiExchangeRateCache> _logger;
     private readonly CzechRepublicPublicHoliday _czechRepublicPublicHoliday = new();
+    private readonly CacheSettings _cacheSettings;
 
-    public ApiExchangeRateCache(IMemoryCache memoryCache, ILogger<ApiExchangeRateCache> logger)
+    public ApiExchangeRateCache(IMemoryCache memoryCache, ILogger<ApiExchangeRateCache> logger, IOptions<CacheSettings> cacheSettings)
     {
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _cacheSettings = cacheSettings?.Value ?? throw new ArgumentNullException(nameof(cacheSettings));
     }
 
-    public Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, Maybe<DateTime> date)
+    public Task<Maybe<IReadOnlyList<ExchangeRate>>> GetCachedRates(IEnumerable<Currency> currencies, DateOnly date)
     {
         if (currencies == null)
             throw new ArgumentNullException(nameof(currencies));
@@ -30,11 +33,10 @@ public class ApiExchangeRateCache : IExchangeRateCache
         if (!currencyList.Any())
             return Maybe<IReadOnlyList<ExchangeRate>>.Nothing.AsTask();
 
-        var targetDate = date.TryGetValue(out var dateValue) ? dateValue.Date : DateTime.Today;
-        var businessDate = GetBusinessDayForCacheCheck(targetDate);
+        var businessDate = GetBusinessDayForCacheCheck(date);
         var cacheKey = GetCacheKey(businessDate);
         
-        if (_memoryCache.TryGetValue(cacheKey, out List<ExchangeRate> cachedRates))
+        if (_memoryCache.TryGetValue(cacheKey, out List<ExchangeRate>? cachedRates) && cachedRates != null)
         {
             var requestedCurrencyCodes = currencyList.Select(c => c.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
             var filteredRates = cachedRates.Where(rate => requestedCurrencyCodes.Contains(rate.SourceCurrency.Code)).ToList();
@@ -50,7 +52,7 @@ public class ApiExchangeRateCache : IExchangeRateCache
         return Maybe<IReadOnlyList<ExchangeRate>>.Nothing.AsTask();
     }
 
-    public Task CacheRates(IReadOnlyCollection<ExchangeRate> rates, TimeSpan cacheExpiry)
+    public Task CacheRates(IReadOnlyCollection<ExchangeRate> rates)
     {
         if (rates == null)
             throw new ArgumentNullException(nameof(rates));
@@ -58,29 +60,32 @@ public class ApiExchangeRateCache : IExchangeRateCache
         if (!rates.Any())
             return Task.CompletedTask;
 
-        // Get the provider date and its corresponding business day
-        var providerDate = rates.First().Date.Date;
-        var businessDate = GetBusinessDayForCacheCheck(providerDate); // Should return the same date
+        var providerDate = rates.First().Date;
 
         var cacheOptions = new MemoryCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = cacheExpiry,
-            SlidingExpiration = cacheExpiry / 2,
+            AbsoluteExpirationRelativeToNow = _cacheSettings.DefaultCacheExpiry,
+            SlidingExpiration = _cacheSettings.DefaultCacheExpiry / 2,
             Size = 1
         };
 
-        var cacheKey = GetCacheKey(businessDate);
+        var cacheKey = GetCacheKey(providerDate);
         _memoryCache.Set(cacheKey, rates, cacheOptions);
 
-        _logger.LogInformation($"Cache SET - Key: {cacheKey}, Rates: {rates.Count}, Business date: {businessDate:yyyy-MM-dd}, Provider date: {providerDate:yyyy-MM-dd}");
+        _logger.LogInformation($"Cache SET - Key: {cacheKey}, Rates: {rates.Count}, Provider date: {providerDate:yyyy-MM-dd}");
         return Task.CompletedTask;
     }
     
-    private DateTime GetBusinessDayForCacheCheck(DateTime date)
+    /// <summary>
+    /// CNB API returns the closest busines date in case we request rates for a holiday or weekend. This is to match that behaviour when reading the cache.
+    /// </summary>
+    /// <param name="date"></param>
+    /// <returns></returns>/
+    private DateOnly GetBusinessDayForCacheCheck(DateOnly date)
     {
-        var checkDate = date.Date;
-        
-        while (_czechRepublicPublicHoliday.IsPublicHoliday(checkDate) || checkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+        var checkDate = date;
+
+        while (_czechRepublicPublicHoliday.IsPublicHoliday(checkDate.ToDateTime(TimeOnly.MinValue)) || checkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
         {
             checkDate = checkDate.AddDays(-1);
         }
@@ -88,7 +93,7 @@ public class ApiExchangeRateCache : IExchangeRateCache
         return checkDate;
     }
 
-    private static string GetCacheKey(DateTime businessDate)
+    private static string GetCacheKey(DateOnly businessDate)
     {
         return $"ExchangeRates_{businessDate:yyyy-MM-dd}";
     }
