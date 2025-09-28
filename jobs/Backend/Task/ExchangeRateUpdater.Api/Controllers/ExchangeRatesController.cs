@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ExchangeRateUpdater.Api.Extensions;
 using ExchangeRateUpdater.Api.Models;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Extensions;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Extensions;
 
 namespace ExchangeRateUpdater.Api.Controllers;
 
@@ -30,10 +30,10 @@ public class ExchangeRatesController : ControllerBase
     /// <response code="400">If the request is invalid</response>
     /// <response code="404">If no exchange rates found for the specified currencies</response>
     [HttpGet]
-    [ProducesResponseType(typeof(ApiResponse<ExchangeRateResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<ExchangeRateResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ApiResponse<ExchangeRateResponse>>> GetExchangeRates(
+    public async Task<ActionResult<ApiResponse<ExchangeRateResponseDto>>> GetExchangeRates(
         [FromQuery] string currencies,
         [FromQuery] string? date = null)
     {
@@ -52,7 +52,7 @@ public class ExchangeRatesController : ControllerBase
             });
         }
 
-        return Ok(new ApiResponse<ExchangeRateResponse>
+        return Ok(new ApiResponse<ExchangeRateResponseDto>
         {
             Data = exchangeRates.ToExchangeRateResponse(parsedDate ?? DateTime.Today),
             Success = true,

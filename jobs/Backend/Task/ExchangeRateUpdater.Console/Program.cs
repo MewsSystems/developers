@@ -1,8 +1,7 @@
-﻿using ExchangeRateUpdater.Console.Services;
-using ExchangeRateUpdater.Core;
-using ExchangeRateUpdater.Core.Interfaces;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Extensions;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Extensions;
+using ExchangeRateUpdater.Infrastructure.Installers;
+using ExchangeRateUpdater.Infrastructure.Caching;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.CommandLine;
@@ -88,10 +87,9 @@ public static class Program
                 .AddEnvironmentVariables()
                 .Build();
 
-            // Add Core services
+            // Configure services
             var services = new ServiceCollection();
-            services.AddExchangeRateCoreDependencies(configuration);
-            services.AddScoped<IExchangeRateCache, NoOpExchangeRateCache>();
+            services.AddExchangeRateInfrastructure(configuration, useApiCache: false);
 
             // Build service provider
             var serviceProvider = services.BuildServiceProvider();

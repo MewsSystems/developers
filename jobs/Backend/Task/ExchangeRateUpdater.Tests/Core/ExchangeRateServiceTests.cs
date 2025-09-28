@@ -1,9 +1,8 @@
-using ExchangeRateUpdater.Core.Common;
-using ExchangeRateUpdater.Core.Configuration;
-using ExchangeRateUpdater.Core.Interfaces;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Extensions;
-using ExchangeRateUpdater.Core.Services;
+using ExchangeRateUpdater.Domain.Common;
+using ExchangeRateUpdater.Domain.Interfaces;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Extensions;
+using ExchangeRateUpdater.Infrastructure.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FluentAssertions;

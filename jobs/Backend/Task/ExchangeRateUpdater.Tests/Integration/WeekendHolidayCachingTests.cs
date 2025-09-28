@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using ExchangeRateUpdater.Api.Services;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Common;
-using ExchangeRateUpdater.Core.Extensions;
+using ExchangeRateUpdater.Infrastructure.Caching;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Common;
+using ExchangeRateUpdater.Domain.Extensions;
 using FluentAssertions;
 using NSubstitute;
 
@@ -52,31 +52,31 @@ public class WeekendHolidayCachingTests
     public async Task CacheRates_WithDifferentDates_ShouldCacheSeparately()
     {
         // Arrange
-        var monday = new DateTime(2024, 1, 1);
         var tuesday = new DateTime(2024, 1, 2);
-        var mondayRates = new List<ExchangeRate>
-        {
-            new(new Currency("USD"), new Currency("CZK"), 25.0m, monday)
-        };
+        var wednesday = new DateTime(2024, 1, 3);
         var tuesdayRates = new List<ExchangeRate>
         {
-            new(new Currency("USD"), new Currency("CZK"), 26.0m, tuesday)
+            new(new Currency("USD"), new Currency("CZK"), 25.0m, tuesday)
+        };
+        var wednesdayRates = new List<ExchangeRate>
+        {
+            new(new Currency("USD"), new Currency("CZK"), 26.0m, wednesday)
         };
 
         // Act
-        await _sut.CacheRates(mondayRates, TimeSpan.FromHours(1));
         await _sut.CacheRates(tuesdayRates, TimeSpan.FromHours(1));
+        await _sut.CacheRates(wednesdayRates, TimeSpan.FromHours(1));
 
         // Assert
-        var cachedMondayRates = _memoryCache.Get<IEnumerable<ExchangeRate>>(monday);
-        var cachedTuesdayRates = _memoryCache.Get<IEnumerable<ExchangeRate>>(tuesday);
+        var tuesdayCachedRates = _memoryCache.Get<IEnumerable<ExchangeRate>>($"ExchangeRates_{tuesday:yyyy-MM-dd}");
+        var wednesdayCachedRates = _memoryCache.Get<IEnumerable<ExchangeRate>>($"ExchangeRates_{wednesday:yyyy-MM-dd}");
 
-        cachedMondayRates.Should().NotBeNull();
-        cachedTuesdayRates.Should().NotBeNull();
-        cachedMondayRates.Should().HaveCount(1);
-        cachedTuesdayRates.Should().HaveCount(1);
-        cachedMondayRates.First().Value.Should().Be(25.0m);
-        cachedTuesdayRates.First().Value.Should().Be(26.0m);
+        tuesdayCachedRates.Should().NotBeNull();
+        wednesdayCachedRates.Should().NotBeNull();
+        tuesdayCachedRates.Should().HaveCount(1);
+        wednesdayCachedRates.Should().HaveCount(1);
+        tuesdayCachedRates!.First().Value.Should().Be(25.0m);
+        wednesdayCachedRates!.First().Value.Should().Be(26.0m);
     }
 
     [Fact]

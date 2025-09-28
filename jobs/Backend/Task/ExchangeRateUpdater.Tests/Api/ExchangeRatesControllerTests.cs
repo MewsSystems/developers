@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ExchangeRateUpdater.Api.Controllers;
 using ExchangeRateUpdater.Api.Models;
-using ExchangeRateUpdater.Core.Common;
-using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Domain.Common;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using FluentAssertions;
@@ -43,8 +44,8 @@ public class ExchangeRatesControllerTests
 
         // Assert
         result.Result.Should().BeOfType<OkObjectResult>()
-            .Which.Value.Should().BeOfType<ApiResponse<ExchangeRateResponse>>()
-            .Which.Should().Match<ApiResponse<ExchangeRateResponse>>(r => 
+            .Which.Value.Should().BeOfType<ApiResponse<ExchangeRateResponseDto>>()
+            .Which.Should().Match<ApiResponse<ExchangeRateResponseDto>>(r => 
                 r.Success &&
                 r.Data != null &&
                 r.Data.Rates.Count() == 2);

@@ -1,17 +1,17 @@
 using ExchangeRateUpdater.Api.Models;
-using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Domain.Models;
 
 namespace ExchangeRateUpdater.Api.Extensions;
 
 public static class ExchangeRateExtensions
 {
-    public static ExchangeRateResponse ToExchangeRateResponse(
+    public static ExchangeRateResponseDto ToExchangeRateResponse(
         this IEnumerable<ExchangeRate> exchangeRates,
         DateTime requestedDate)
     {
         var rateList = exchangeRates.ToList();
 
-        return new ExchangeRateResponse(
+        return new ExchangeRateResponseDto(
             Rates: rateList.Select(rate => new ExchangeRateDto(
                 SourceCurrency: rate.SourceCurrency.Code,
                 TargetCurrency: rate.TargetCurrency.Code,

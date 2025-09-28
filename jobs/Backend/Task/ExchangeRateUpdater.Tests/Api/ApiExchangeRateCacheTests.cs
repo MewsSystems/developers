@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using ExchangeRateUpdater.Api.Services;
-using ExchangeRateUpdater.Core.Models;
-using ExchangeRateUpdater.Core.Common;
-using ExchangeRateUpdater.Core.Extensions;
+using ExchangeRateUpdater.Infrastructure.Caching;
+using ExchangeRateUpdater.Domain.Models;
+using ExchangeRateUpdater.Domain.Common;
+using ExchangeRateUpdater.Domain.Extensions;
 using FluentAssertions;
 using NSubstitute;
 
@@ -58,7 +58,8 @@ public class ApiExchangeRateCacheTests
             new(new Currency("GBP"), new Currency("CZK"), 30.0m, _testDate)
         };
 
-        _memoryCache.TryGetValue(_testDate, out Arg.Any<object>())
+        var expectedCacheKey = $"ExchangeRates_{_testDate:yyyy-MM-dd}";
+        _memoryCache.TryGetValue(expectedCacheKey, out object? _)
             .Returns(x =>
             {
                 x[1] = allCachedRates;
@@ -83,7 +84,8 @@ public class ApiExchangeRateCacheTests
         // Arrange
         var currencies = new[] { new Currency("USD") };
 
-        _memoryCache.TryGetValue(_testDate, out Arg.Any<object>())
+        var expectedCacheKey = $"ExchangeRates_{_testDate:yyyy-MM-dd}";
+        _memoryCache.TryGetValue(expectedCacheKey, out object? _)
             .Returns(false);
 
         // Act
@@ -104,7 +106,8 @@ public class ApiExchangeRateCacheTests
             new(new Currency("GBP"), new Currency("CZK"), 30.0m, _testDate)
         };
 
-        _memoryCache.TryGetValue(_testDate, out Arg.Any<object>())
+        var expectedCacheKey = $"ExchangeRates_{_testDate:yyyy-MM-dd}";
+        _memoryCache.TryGetValue(expectedCacheKey, out object? _)
             .Returns(x =>
             {
                 x[1] = allCachedRates;
@@ -126,25 +129,5 @@ public class ApiExchangeRateCacheTests
             _sut.CacheRates(null!, TimeSpan.FromHours(1)));
 
         exception.ParamName.Should().Be("rates");
-    }
-
-    [Fact]
-    public async Task CacheRates_WithDifferentDates_ShouldCacheWithFirstRateDate()
-    {
-        // Arrange
-        var yesterday = _testDate.AddDays(-1);
-        var rates = new List<ExchangeRate>
-        {
-            new(new Currency("USD"), new Currency("CZK"), 25.0m, yesterday),
-            new(new Currency("EUR"), new Currency("CZK"), 27.0m, _testDate)
-        };
-
-        // Act
-        await _sut.CacheRates(rates, TimeSpan.FromHours(1));
-
-        // Assert
-        _memoryCache.Received(1).Set(
-            yesterday,
-            rates);
     }
 }

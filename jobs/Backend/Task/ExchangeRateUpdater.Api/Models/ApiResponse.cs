@@ -4,7 +4,6 @@ public class ApiResponse
     public string Message { get; set; } = string.Empty;
     public List<string> Errors { get; set; } = new List<string>();
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-    public int StatusCode { get; set; }
 }
 
 public class ApiResponse<T> : ApiResponse

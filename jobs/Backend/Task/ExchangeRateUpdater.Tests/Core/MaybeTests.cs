@@ -1,4 +1,4 @@
-using ExchangeRateUpdater.Core.Common;
+using ExchangeRateUpdater.Domain.Common;
 
 namespace ExchangeRateUpdater.Tests.Core;
 

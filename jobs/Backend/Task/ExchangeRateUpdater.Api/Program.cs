@@ -1,9 +1,4 @@
-using ExchangeRateUpdater.Api.Services;
-using ExchangeRateUpdater.Core;
-using ExchangeRateUpdater.Core.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
-using ExchangeRateUpdater.Core.Configuration;
-using ExchangeRateUpdater.Api.Middleware;
+using ExchangeRateUpdater.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,31 +8,21 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
-// Add services to the container
-builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
-builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
-var cacheSettings = builder.Configuration.GetSection("CacheSettings").Get<CacheSettings>() ?? new CacheSettings();
-builder.Services.Configure<MemoryCacheOptions>(options =>
-{
-    options.SizeLimit = cacheSettings.SizeLimit;
-    options.CompactionPercentage = cacheSettings.CompactionPercentage;
-    options.ExpirationScanFrequency = cacheSettings.ExpirationScanFrequency;
-});
-
-builder.Services.AddExchangeRateCoreDependencies(builder.Configuration);
-builder.Services.AddSingleton<IExchangeRateCache, ApiExchangeRateCache>();
-
-builder.Services.AddOpenApi();
+builder.Services.AddApiServices(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/openapi/v1.json", "Exchange Rate API V1");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseGlobalExceptionHandling();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.MapOpenApi();
-
-app.MapGet("/", () => "Exchange Rate Updater API is running.");
 
 app.Run();
 

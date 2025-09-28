@@ -6,11 +6,7 @@ public record ExchangeRateDto(
     decimal Value,
     DateTime Date);
 
-public record ExchangeRateRequest(
-    List<string> Currencies,
-    DateTime? Date = null);
-
-public record ExchangeRateResponse(
+public record ExchangeRateResponseDto(
     List<ExchangeRateDto> Rates,
     DateTime RequestedDate,
     int TotalCount);

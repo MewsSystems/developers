@@ -8,7 +8,8 @@ WORKDIR /src
 
 COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater.Api/"]
 COPY ["ExchangeRateUpdater.Console/ExchangeRateUpdater.Console.csproj", "ExchangeRateUpdater.Console/"]
-COPY ["ExchangeRateUpdater.Core/ExchangeRateUpdater.Core.csproj", "ExchangeRateUpdater.Core/"]
+COPY ["ExchangeRateUpdater.Domain/ExchangeRateUpdater.Domain.csproj", "ExchangeRateUpdater.Domain/"]
+COPY ["ExchangeRateUpdater.Infrastructure/ExchangeRateUpdater.Infrastructure.csproj", "ExchangeRateUpdater.Infrastructure/"]
 
 RUN dotnet restore "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
 

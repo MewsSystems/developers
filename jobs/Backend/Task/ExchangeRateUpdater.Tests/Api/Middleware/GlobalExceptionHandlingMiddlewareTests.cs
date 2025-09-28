@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using ExchangeRateUpdater.Api.Middleware;
-using ExchangeRateUpdater.Core.Common;
+using ExchangeRateUpdater.Domain.Common;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
