@@ -91,6 +91,7 @@ public static class Program
             // Configure services
             var services = new ServiceCollection();
             services.AddExchangeRateInfrastructure(configuration, useApiCache: false);
+            services.AddOpenTelemetry(configuration, "ExchangeRateUpdaterConsole");
 
             // Build service provider
             var serviceProvider = services.BuildServiceProvider();

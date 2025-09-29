@@ -1,6 +1,7 @@
 using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Interfaces;
+using ExchangeRateUpdater.Infrastructure.Telemetry;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -30,6 +31,10 @@ public class ExchangeRateService : IExchangeRateService
         Maybe<DateOnly> date
     )
     {
+        using var activity = ExchangeRateTelemetry.ActivitySource.StartActivity("GetExchangeRates");
+        activity?.SetTag("currency.count", currencies.Count());
+        activity?.SetTag("date", date.ToString());
+
         if (currencies == null)
             throw new ArgumentNullException(nameof(currencies));
 
@@ -39,16 +44,22 @@ public class ExchangeRateService : IExchangeRateService
 
         var targetDate = date.GetValueOrDefault(DateHelper.Today);
         _logger.LogInformation($"Getting exchange rates for {currencyList.Count} currencies ({string.Join(", ", currencyList.Select(c => c.Code))}) for date {targetDate:yyyy-MM-dd}");
+        var cachedRates = Maybe<IReadOnlyList<ExchangeRate>>.Nothing;
 
         try
         {
             if (_exchangeOptions.EnableCaching)
             {
-                var cachedRates = await _cache.GetCachedRates(currencyList, targetDate);
+                cachedRates = await _cache.GetCachedRates(currencyList, targetDate);
                 if (cachedRates.HasValue)
                 {
                     _logger.LogInformation($"Returning {cachedRates.Value.Count()} cached exchange rates");
+                    ExchangeRateTelemetry.CacheHits.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
                     return cachedRates.Value;
+                }
+                else
+                {
+                    ExchangeRateTelemetry.CacheMisses.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
                 }
             }
 
@@ -64,8 +75,9 @@ public class ExchangeRateService : IExchangeRateService
                     {
                         await _cache.CacheRates(rateList);
                     }
-                    
+
                     _logger.LogInformation($"Successfully retrieved {rateList.Count()} exchange rates");
+                    ExchangeRateTelemetry.ExchangeRateRequests.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
                     return rateList.Where(rate => currencyList.Contains(rate.SourceCurrency));
                 }
                 else
@@ -88,6 +100,13 @@ public class ExchangeRateService : IExchangeRateService
         {
             _logger.LogError(ex, "Unexpected error occurred while getting exchange rates");
             throw new ExchangeRateServiceException("An unexpected error occurred while getting exchange rates", ex);
+        }
+        finally
+        {
+            ExchangeRateTelemetry.ExchangeRateDuration.Record(
+                activity?.Duration.TotalSeconds ?? 0,
+                new KeyValuePair<string, object?>("source", cachedRates.HasValue ? "cache" : "provider")
+            );
         }
     }
 }

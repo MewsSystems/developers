@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using ExchangeRateUpdater.Infrastructure.Caching;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Common;
-using ExchangeRateUpdater.Domain.Extensions;
 using FluentAssertions;
 using NSubstitute;
 using Microsoft.Extensions.Options;
@@ -46,7 +45,7 @@ public class WeekendHolidayCachingTests
 
         // Act
         var result = await _sut.GetCachedRates(
-            [new Currency("USD"), new Currency("EUR")], 
+            [new Currency("USD"), new Currency("EUR")],
             saturday);
 
         // Assert
@@ -103,7 +102,7 @@ public class WeekendHolidayCachingTests
 
         // Act
         var result = await _sut.GetCachedRates(
-            [new Currency("USD"), new Currency("GBP")], 
+            [new Currency("USD"), new Currency("GBP")],
             businessDay);
 
         // Assert

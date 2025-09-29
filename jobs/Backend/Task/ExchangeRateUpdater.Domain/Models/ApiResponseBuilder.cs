@@ -1,4 +1,4 @@
-namespace ExchangeRateUpdater.Api.Models;
+namespace ExchangeRateUpdater.Domain.Models;
 
 public class ApiResponseBuilder
 {

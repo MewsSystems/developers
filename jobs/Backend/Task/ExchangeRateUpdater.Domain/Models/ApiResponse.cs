@@ -1,3 +1,5 @@
+namespace ExchangeRateUpdater.Domain.Models;
+
 public class ApiResponse
 {
     public bool Success { get; set; }

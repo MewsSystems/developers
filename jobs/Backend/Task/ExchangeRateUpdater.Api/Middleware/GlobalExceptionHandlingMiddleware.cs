@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using ExchangeRateUpdater.Domain.Common;
+using ExchangeRateUpdater.Domain.Models;
 
 namespace ExchangeRateUpdater.Api.Middleware;
 

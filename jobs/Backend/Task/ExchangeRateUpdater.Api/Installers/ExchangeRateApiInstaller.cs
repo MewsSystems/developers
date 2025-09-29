@@ -10,6 +10,7 @@ public static class ExchangeRateApiInstaller
         services.AddControllers();
         services.AddOpenApiServices();
         services.AddExchangeRateInfrastructure(configuration, useApiCache: true);
+        services.AddOpenTelemetry(configuration, "ExchangeRateUpdaterApi");
 
         return services;
     }
