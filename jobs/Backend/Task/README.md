@@ -2,6 +2,22 @@
 
 A .NET application that provides exchange rates from the Czech National Bank. Available as both a REST API service (with caching) and a command-line application.
 
+## Features
+
+- REST API with built-in caching for efficient rate lookups
+- Command-line interface for quick rate checks
+- Supports multiple currency queries
+- Historical exchange rate lookups
+- Swagger/OpenAPI documentation
+- Docker support for easy deployment
+- Telemetry integration
+- Global error handling
+
+## Prerequisites
+
+- .NET 9.0 or later
+- Docker (optional, for containerized deployment)
+
 ## Usage Examples
 
 ### Console Application

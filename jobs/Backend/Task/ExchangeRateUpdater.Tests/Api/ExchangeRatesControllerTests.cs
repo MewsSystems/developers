@@ -13,14 +13,12 @@ namespace ExchangeRateUpdater.Tests.Api;
 public class ExchangeRatesControllerTests
 {
     private readonly IExchangeRateService _exchangeRateService;
-    private readonly ILogger<ExchangeRatesController> _logger;
     private readonly ExchangeRatesController _sut;
 
     public ExchangeRatesControllerTests()
     {
         _exchangeRateService = Substitute.For<IExchangeRateService>();
-        _logger = Substitute.For<ILogger<ExchangeRatesController>>();
-        _sut = new ExchangeRatesController(_exchangeRateService, _logger);
+        _sut = new ExchangeRatesController(_exchangeRateService);
     }
 
     [Fact]

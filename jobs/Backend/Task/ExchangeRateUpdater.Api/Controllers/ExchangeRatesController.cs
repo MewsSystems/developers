@@ -13,19 +13,17 @@ namespace ExchangeRateUpdater.Api.Controllers;
 public class ExchangeRatesController : ControllerBase
 {
     private readonly IExchangeRateService _exchangeRateService;
-    private readonly ILogger<ExchangeRatesController> _logger;
 
-    public ExchangeRatesController(IExchangeRateService exchangeRateService, ILogger<ExchangeRatesController> logger)
+    public ExchangeRatesController(IExchangeRateService exchangeRateService)
     {
         _exchangeRateService = exchangeRateService ?? throw new ArgumentNullException(nameof(exchangeRateService));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
     /// Get exchange rates for specified currencies on specified date or closest business day if date is not provided.
     /// </summary>
-    /// <param name="currencies">Comma-separated list of currency codes provided as a list of strings like [USD,EUR,JPY] or currencies=USD&currencies=EUR</param>
-    /// <param name="date">Optional date in YYYY-MM-DD format. Defaults to today.</param>
+    /// <param name="currencies">Comma-separated list of currency codes provided as a list of strings like [USD,EUR,JPY] or multiple currency parameters</param>
+    /// <param name="date">Optional date in YYYY-MM-DD format. Defaults to today if not present or if a future date is provided.</param>
     /// <returns>Exchange rates for the specified currencies</returns>
     /// <response code="200">Returns the exchange rates</response>
     /// <response code="400">If the request is invalid</response>

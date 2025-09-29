@@ -38,25 +38,22 @@ public class ApiExchangeRateCache : IExchangeRateCache
         if (!currencyList.Any())
             return Maybe<IReadOnlyList<ExchangeRate>>.Nothing.AsTask();
 
-        var businessDate = GetBusinessDayForCacheCheck(date);
-        var cacheKey = GetCacheKey(businessDate);
-        
         try
         {
-            if (_memoryCache.TryGetValue(cacheKey, out List<ExchangeRate>? cachedRates) && cachedRates != null)
-            {
-                var requestedCurrencyCodes = currencyList.Select(c => c.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
-                var filteredRates = cachedRates.Where(rate => requestedCurrencyCodes.Contains(rate.SourceCurrency.Code)).ToList();
-                _logger.LogInformation($"Cache HIT - Key: {cacheKey}, Total rates: {cachedRates.Count}, Filtered rates: {filteredRates.Count}");
+            // First, try to get cached rates for the exact requested date
+            var exactDateKey = GetCacheKey(date);
+            if (TryGetCachedRates(exactDateKey, currencyList, out var cachedRatesT))
+                return cachedRatesT.AsTask();
 
-                if (filteredRates.Any())
-                {
-                    ExchangeRateTelemetry.CacheHits.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
-                    return filteredRates.AsReadOnlyList().AsMaybe().AsTask();
-                }
+            // If exact date not found, check if it is a business day; if not, find the previous business day
+            var businessDate = GetBusinessDayForCacheCheck(date);
+            if (businessDate != date){
+                var businessDateKey = GetCacheKey(businessDate);
+                if (TryGetCachedRates(businessDateKey, currencyList, out var cachedRates))
+                    return cachedRates.AsTask();
             }
             
-            _logger.LogInformation($"Cache MISS - Key: {cacheKey} not found");
+            _logger.LogInformation($"Cache MISS - No rates found for date {date:yyyy-MM-dd} or previous business day {businessDate:yyyy-MM-dd}");
             ExchangeRateTelemetry.CacheMisses.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
             return Maybe<IReadOnlyList<ExchangeRate>>.Nothing.AsTask();
         }
@@ -101,9 +98,30 @@ public class ApiExchangeRateCache : IExchangeRateCache
             ExchangeRateTelemetry.CacheOperationDuration.Record(activity?.Duration.TotalSeconds ?? 0);
         }
     }
+    
+    private bool TryGetCachedRates(string cacheKey, List<Currency> currencyList, out Maybe<IReadOnlyList<ExchangeRate>> cachedRatesValue)
+    {
+        if (_memoryCache.TryGetValue(cacheKey, out List<ExchangeRate>? cachedRates) && cachedRates != null)
+        {
+            _logger.LogInformation($"Cache HIT - date key: {cacheKey}");
+            ExchangeRateTelemetry.CacheHits.Add(1, new KeyValuePair<string, object?>("currency.count", currencyList.Count));
+
+            var requestedCurrencyCodes = currencyList.Select(c => c.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var filteredRates = cachedRates.Where(rate => requestedCurrencyCodes.Contains(rate.SourceCurrency.Code)).ToList();
+
+            if (filteredRates.Any())
+            {
+                cachedRatesValue = filteredRates.AsReadOnlyList().AsMaybe();
+                return true;
+            }
+        }
+        
+        cachedRatesValue = Maybe<IReadOnlyList<ExchangeRate>>.Nothing;
+        return false;
+    }
+
     /// <summary>
-    /// CNB API returns the closest business date in case we request rates for a holiday or weekend. 
-    /// For today's date, if it's before 3PM, we use the previous business day since CNB publishes rates at 2:30PM.
+    /// CNB API returns the closest business date in case we request rates for a holiday or weekend or simply before 2:30 PM when the rates are published.
     /// This is to match that behaviour when reading the cache.
     /// </summary>
     /// <param name="date"></param>
@@ -112,10 +130,7 @@ public class ApiExchangeRateCache : IExchangeRateCache
     {
         var checkDate = date;
         
-        var czechTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-        var czechTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, czechTimeZone);
-        
-        if (checkDate == DateHelper.Today && czechTime.Hour < 15)
+        if (checkDate == DateHelper.Today)
         {
             checkDate = checkDate.AddDays(-1);
         }

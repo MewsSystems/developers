@@ -42,7 +42,10 @@ public class ExchangeRateService : IExchangeRateService
         if (!currencyList.Any())
             return Enumerable.Empty<ExchangeRate>();
 
-        var targetDate = date.GetValueOrDefault(DateHelper.Today);
+        var targetDate = DateHelper.Today;
+        if (date.TryGetValue(out var providedValue))
+            targetDate = providedValue > DateHelper.Today ? DateHelper.Today : providedValue;
+
         _logger.LogInformation($"Getting exchange rates for {currencyList.Count} currencies ({string.Join(", ", currencyList.Select(c => c.Code))}) for date {targetDate:yyyy-MM-dd}");
         var cachedRates = Maybe<IReadOnlyList<ExchangeRate>>.Nothing;
 

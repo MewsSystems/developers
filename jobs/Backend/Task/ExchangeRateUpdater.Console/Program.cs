@@ -1,8 +1,6 @@
-using ExchangeRateUpdater.Domain.Common;
 using ExchangeRateUpdater.Domain.Models;
 using ExchangeRateUpdater.Domain.Extensions;
 using ExchangeRateUpdater.Infrastructure.Installers;
-using ExchangeRateUpdater.Infrastructure.Caching;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.CommandLine;
