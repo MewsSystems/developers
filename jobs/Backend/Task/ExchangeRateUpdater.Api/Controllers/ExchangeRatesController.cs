@@ -22,9 +22,9 @@ public class ExchangeRatesController : ControllerBase
     }
 
     /// <summary>
-    /// Get exchange rates for specified currencies
+    /// Get exchange rates for specified currencies on specified date or closest business day if date is not provided.
     /// </summary>
-    /// <param name="currencies">Comma-separated list of currency codes (e.g., USD,EUR,JPY), provided as a list of strings (e.g., currencies=USD&currencies=EUR)</param>
+    /// <param name="currencies">Comma-separated list of currency codes provided as a list of strings like [USD,EUR,JPY] or currencies=USD&currencies=EUR</param>
     /// <param name="date">Optional date in YYYY-MM-DD format. Defaults to today.</param>
     /// <returns>Exchange rates for the specified currencies</returns>
     /// <response code="200">Returns the exchange rates</response>
@@ -44,20 +44,13 @@ public class ExchangeRatesController : ControllerBase
         if (!exchangeRates.Any())
         {
             var currencyList = string.Join(", ", currencyObjects.Select(c => c.Code));
-            return NotFound(new ApiResponse
-            {
-                Success = false,
-                Message = "No results found",
-                Errors = new List<string> { $"No exchange rates found for the specified currencies: {currencyList}" }
-            });
+            return NotFound(ApiResponseBuilder.NotFound("No results found",
+                $"No exchange rates found for the specified currencies: {currencyList}"));
         }
 
-        return Ok(new ApiResponse<ExchangeRateResponseDto>
-        {
-            Data = exchangeRates.ToExchangeRateResponse(date.AsMaybe()),
-            Success = true,
-            Message = "Exchange rates retrieved successfully"
-        });
+        return Ok(ApiResponseBuilder.Success(
+            exchangeRates.ToExchangeRateResponse(date.AsMaybe()),
+            "Exchange rates retrieved successfully"));
     }
 
     private static IEnumerable<Currency> ParseCurrencies(List<string> currencies)
