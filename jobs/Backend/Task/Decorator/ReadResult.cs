@@ -11,14 +11,15 @@ namespace ExchangeRateUpdater.Decorator
 {
     internal class ReadResult
     {
-        readonly List<Rate> rates;
+        //readonly List<Rate> rates;
+        readonly Dictionary<string, Rate> rates;
 
         public ReadResult()
         {
             rates = new();
         }
 
-        public async Task ReadString() //string
+        public async Task<Dictionary<string, Rate>> ReadString() //string
         {
             APICall aPICall = new();
 
@@ -32,10 +33,11 @@ namespace ExchangeRateUpdater.Decorator
             foreach(string line in lines)
             {
                 string[] list = line.Split('|');
-                rates.Add(new Rate(list[0], list[1], Convert.ToInt16(list[2]), list[3], Convert.ToDouble(list[4])));
+                //rates.Add(new Rate(list[0], list[1], Convert.ToInt16(list[2]), list[3], Convert.ToDouble(list[4])));
+                rates.Add(list[3], new Rate(list[0], list[1], Convert.ToInt16(list[2]), list[3], Convert.ToDecimal(list[4])));
             }
 
-            rates.ForEach(rate => Console.WriteLine(rate));
+            return rates;
         }
     }
 }
