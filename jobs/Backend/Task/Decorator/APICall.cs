@@ -26,7 +26,6 @@ namespace ExchangeRateUpdater.CNB
 
         public async Task<string> DayliExchange()
         {
-
             response = await client.GetAsync(path);
             
             if(response.IsSuccessStatusCode)
