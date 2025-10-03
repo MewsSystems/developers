@@ -12,10 +12,10 @@ namespace ExchangeRateUpdater.Models
         string Country { get; init; }
         string Currency { get; init; }
         int Amount { get; init; }
-        string Code { get; init; }
-        double rate { get; init; }
+        public string Code { get; init; }
+        public decimal rate { get; init; }
 
-        public Rate(string country, string currency, int amount, string code, double rate)
+        public Rate(string country, string currency, int amount, string code, decimal rate)
         {
             Country = country;
             Currency = currency;
