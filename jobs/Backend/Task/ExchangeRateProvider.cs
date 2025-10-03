@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
+using ExchangeRateUpdater.Decorator;
+using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater
 {
@@ -11,9 +14,24 @@ namespace ExchangeRateUpdater
         /// do not return exchange rate "USD/CZK" with value calculated as 1 / "CZK/USD". If the source does not provide
         /// some of the currencies, ignore them.
         /// </summary>
+
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            List<ExchangeRate> exchangeRates = new();
+
+            ReadResult r = new();
+
+            Dictionary<string, Rate> rates = r.ReadString().Result;
+
+            foreach (Currency currency in currencies)
+            {
+                if (rates.TryGetValue(currency.Code, out Rate rate))
+                {
+                    exchangeRates.Add(new(currency, new Currency("CZK"), rate.rate));
+                }
+            }
+
+            return exchangeRates;
         }
     }
 }
