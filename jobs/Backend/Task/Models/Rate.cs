@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExchangeRateUpdater.Models
 {
@@ -12,7 +8,11 @@ namespace ExchangeRateUpdater.Models
         string Country { get; init; }
         string Currency { get; init; }
         int Amount { get; init; }
+
+        [StringLength(3, MinimumLength = 3)]
         public string Code { get; init; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Rate must be a positive number")]
         public decimal rate { get; init; }
 
         public Rate(string country, string currency, int amount, string code, decimal rate)
