@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Decorator;
 
 namespace ExchangeRateUpdater.CNB
 {
-    internal class APICall
+    internal class APICall : LoadRates
     {
         readonly string path;
 
@@ -16,7 +17,7 @@ namespace ExchangeRateUpdater.CNB
         
         HttpResponseMessage response;
 
-        public APICall()
+        public APICall(ILoadRates loadRates) : base(loadRates)
         {
             path = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
             
@@ -24,16 +25,16 @@ namespace ExchangeRateUpdater.CNB
             result = new();
         }
 
-        public async Task<string> DayliExchange()
+        public override async Task<bool> Load(string data)
         {
             response = await client.GetAsync(path);
-            
-            if(response.IsSuccessStatusCode)
+
+            if (response.IsSuccessStatusCode)
             {
                 result.Append(await response.Content.ReadAsStringAsync());
             }
 
-            return result.ToString();
+            return await wrapper.Load(result.ToString());
         }
     }
 }
