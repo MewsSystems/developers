@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Singleton;
 
 namespace ExchangeRateUpdater.Decorator
 {
     internal class LoadData : ILoadRates
     {
-        readonly Dictionary<string, Rate> rates;
+        private DB rates;
 
-        public LoadData() => rates = new();
+        public LoadData() => rates = DB.GetInstance();
 
         public async Task<bool> Load(string data)
         {

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using ExchangeRateUpdater.CNB;
 using ExchangeRateUpdater.Decorator;
 using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Singleton;
 
 namespace ExchangeRateUpdater
 {
@@ -15,13 +17,20 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
 
+        private DB rates;
+        private LoadRates load;
+        private List<ExchangeRate> exchangeRates;
+
+        public ExchangeRateProvider()
+        {
+            rates = DB.GetInstance();
+            exchangeRates = new();
+            load = new APICall(new LoadData());
+        }
+
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            List<ExchangeRate> exchangeRates = new();
-
-            ReadResult r = new();
-
-            Dictionary<string, Rate> rates = r.ReadString().Result;
+            bool result = load.Load(string.Empty).Result;
 
             foreach (Currency currency in currencies)
             {

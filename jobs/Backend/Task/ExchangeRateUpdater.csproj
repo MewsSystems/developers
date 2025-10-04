@@ -6,7 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Chain of Responsibility\" />
+    <Compile Remove="Chain of Responsibility\**" />
+    <EmbeddedResource Remove="Chain of Responsibility\**" />
+    <None Remove="Chain of Responsibility\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ExchangeRateProvider.cs~RF143d8135.TMP" />
   </ItemGroup>
 
   <ItemGroup>
