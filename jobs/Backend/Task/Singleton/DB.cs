@@ -21,5 +21,7 @@ namespace ExchangeRateUpdater.Singleton
         public void Add(string key, Rate value) => _rates.Add(key, value);
 
         public bool TryGetValue(string key, out Rate rate) => _rates.TryGetValue(key, out rate);
+
+        public bool IsEmpty() => !_rates.Any();
     }
 }
