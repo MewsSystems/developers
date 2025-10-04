@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Decorator;
-using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Helpers;
 
 namespace ExchangeRateUpdater.CNB
 {
@@ -21,7 +18,7 @@ namespace ExchangeRateUpdater.CNB
 
         public APICall(ILoadRates loadRates) : base(loadRates)
         {
-            path = "https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt";
+            path = ConfigHelper.GetCnbApiPath();
             
             client = new();
             result = new();
