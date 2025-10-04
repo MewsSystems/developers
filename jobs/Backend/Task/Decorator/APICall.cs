@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Decorator;
+using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.CNB
 {
     internal class APICall : LoadRates
     {
-        readonly string path;
+        string path;
 
         readonly HttpClient client;
         readonly StringBuilder result;
@@ -26,6 +28,16 @@ namespace ExchangeRateUpdater.CNB
         }
 
         public override async Task<bool> Load(string data)
+        {
+            if (Regex.IsMatch(data, @"^([0-2]?[0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$"))
+            {
+                path += $"?date = {data}";
+            }
+
+            return await load();
+        }
+
+        private async Task<bool> load()
         {
             response = await client.GetAsync(path);
 

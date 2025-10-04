@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
@@ -12,21 +13,20 @@ namespace ExchangeRateUpdater.Decorator
 {
     internal class LoadData : ILoadRates
     {
+        private string _line;
         private DB rates;
 
         public LoadData() => rates = DB.GetInstance();
 
         public async Task<bool> Load(string data)
         {
-            var lines = new StringReader(data)
-                .ReadToEnd()
-                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                .Skip(2);
-
-            foreach (string line in lines)
+            using (StringReader reader = new(data))
             {
-                string[] list = line.Split('|');
-                rates.Add(list[3], new Rate(list[0], list[1], Convert.ToInt16(list[2]), list[3], Convert.ToDecimal(list[4], CultureInfo.InvariantCulture)));
+                while ((_line = reader.ReadLine()) != null)
+                {
+                    string[] list = _line.Split('|');
+                    rates.Add(list[3], new Rate(list[0], list[1], Convert.ToInt16(list[2]), list[3], Convert.ToDecimal(list[4], CultureInfo.InvariantCulture)));
+                }
             }
 
             return true;
