@@ -1,10 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using ExchangeRateUpdater.CNB;
-using ExchangeRateUpdater.Decorator;
-using ExchangeRateUpdater.Models;
-using ExchangeRateUpdater.Singleton;
+using ExchangeRateUpdater.Chain_of_Responsibility;
 
 namespace ExchangeRateUpdater
 {
@@ -17,30 +12,31 @@ namespace ExchangeRateUpdater
         /// some of the currencies, ignore them.
         /// </summary>
 
-        private DB rates;
-        private LoadRates load;
-        private List<ExchangeRate> exchangeRates;
+        private Handler handler;
+        private List<ExchangeRate> _exchangeRates;
 
         public ExchangeRateProvider()
         {
-            rates = DB.GetInstance();
-            exchangeRates = new();
-            load = new APICall(new LoadData());
+            _exchangeRates = new();
+
+            handler = new Redis();
+            Chain_of_Responsibility.CNB cnb = new();
+            handler.SetNext(cnb);
         }
 
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            bool result = load.Load(string.Empty).Result;
-
             foreach (Currency currency in currencies)
             {
-                if (rates.TryGetValue(currency.Code, out Rate rate))
-                {
-                    exchangeRates.Add(new(currency, new Currency("CZK"), rate.rate));
+                ExchangeRate exchangeRate = handler.GetExchangeRate(currency);
+
+                if(exchangeRate is not null)
+                { 
+                    _exchangeRates.Add(exchangeRate);
                 }
             }
 
-            return exchangeRates;
+            return _exchangeRates;
         }
     }
 }
