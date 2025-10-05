@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,30 +13,34 @@ namespace ExchangeRateUpdater.CNB
         string path;
 
         readonly HttpClient client;
-        readonly StringBuilder result;
+        StringBuilder result;
         
         HttpResponseMessage response;
 
         public APICall(ILoadRates loadRates) : base(loadRates)
         {
             path = ConfigHelper.GetCnbApiPath();
-            
             client = new();
-            result = new();
         }
 
         public APICall(ILoadRates loadRates, HttpClient httpClient) : base(loadRates)
         {
             path = ConfigHelper.GetCnbApiPath();
             client = httpClient;
-            result = new();
         }
 
         public override async Task<bool> Load(string data)
         {
-            if (Regex.IsMatch(data, @"^([0-2]?[0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$"))
+            try
             {
-                path += $"?date = {data}";
+                if (Regex.IsMatch(data, @"^([0-2]?[0-9]|3[0-1])\.(0[1-9]|1[0-2])\.\d{4}$"))
+                {
+                    path += $"?date = {data}";
+                }
+            }
+            catch(ArgumentNullException e)
+            {
+                Console.WriteLine($"Wrong input: '{e.Message}'.");
             }
 
             return await load();
@@ -43,11 +48,24 @@ namespace ExchangeRateUpdater.CNB
 
         private async Task<bool> load()
         {
-            response = await client.GetAsync(path);
+            result = new();
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                result.Append(await response.Content.ReadAsStringAsync());
+                response = await client.GetAsync(path);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result.Append(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    throw new Exception("No data from the resource");
+                }
+            }
+            catch(HttpRequestException)
+            {
+                throw;
             }
 
             return await wrapper.Load(result.ToString());
