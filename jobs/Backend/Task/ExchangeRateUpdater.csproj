@@ -6,17 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Chain of Responsibility\**" />
-    <EmbeddedResource Remove="Chain of Responsibility\**" />
-    <None Remove="Chain of Responsibility\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="ExchangeRateProvider.cs~RF143d8135.TMP" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

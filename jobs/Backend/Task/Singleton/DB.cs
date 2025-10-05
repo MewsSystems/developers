@@ -8,7 +8,7 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Singleton
 {
-    internal sealed class DB
+    public sealed class DB
     {
         private static DB? _instance;
 

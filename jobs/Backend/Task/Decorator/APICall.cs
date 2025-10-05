@@ -7,7 +7,7 @@ using ExchangeRateUpdater.Helpers;
 
 namespace ExchangeRateUpdater.CNB
 {
-    internal class APICall : LoadRates
+    public class APICall : LoadRates
     {
         string path;
 
@@ -21,6 +21,13 @@ namespace ExchangeRateUpdater.CNB
             path = ConfigHelper.GetCnbApiPath();
             
             client = new();
+            result = new();
+        }
+
+        public APICall(ILoadRates loadRates, HttpClient httpClient) : base(loadRates)
+        {
+            path = ConfigHelper.GetCnbApiPath();
+            client = httpClient;
             result = new();
         }
 

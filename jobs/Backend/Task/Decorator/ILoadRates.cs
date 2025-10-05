@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater.Decorator
 {
-    internal interface ILoadRates
+    public interface ILoadRates
     {
         public Task<bool> Load(string data);
     }

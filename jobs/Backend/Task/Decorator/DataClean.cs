@@ -10,18 +10,19 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Decorator
 {
-    internal class DataClean : LoadRates
+    public class DataClean : LoadRates
     {
         private string _line;
         private StringBuilder _correctLines;
 
         public DataClean(ILoadRates wrapper) : base(wrapper)
         {
-            _correctLines = new();
         }
 
-        public override Task<bool> Load(string data)
+        public override async Task<bool> Load(string data)
         {
+            _correctLines = new();
+
             using (StringReader reader = new(data))
             {
                 while ((_line = reader.ReadLine()) != null)
@@ -33,7 +34,7 @@ namespace ExchangeRateUpdater.Decorator
                 }
             }
 
-            return wrapper.Load(_correctLines.ToString());
+            return await wrapper.Load(_correctLines.ToString());
         }
     }
 }

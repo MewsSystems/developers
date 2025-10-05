@@ -9,7 +9,7 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Decorator
 {
-    internal abstract class LoadRates : ILoadRates
+    public abstract class LoadRates : ILoadRates
     {
         protected ILoadRates wrapper;
 

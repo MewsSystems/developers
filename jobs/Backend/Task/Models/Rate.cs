@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExchangeRateUpdater.Models
 {
-    internal class Rate
+    public class Rate
     {
-        string Country { get; init; }
-        string Currency { get; init; }
-        int Amount { get; init; }
+        public string Country { get; init; }
+        public string Currency { get; init; }
+        public int Amount { get; init; }
 
         [StringLength(3, MinimumLength = 3)]
         public string Code { get; init; }

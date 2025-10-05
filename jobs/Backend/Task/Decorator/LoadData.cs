@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Singleton;
 
 namespace ExchangeRateUpdater.Decorator
 {
-    internal class LoadData : ILoadRates
+    public class LoadData : ILoadRates
     {
         private string _line;
         private DB rates;
