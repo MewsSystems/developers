@@ -3,6 +3,7 @@ using ExchangeRateUpdater.Decorator;
 using ExchangeRateUpdater.Singleton;
 using ExchangeRateUpdater.Models;
 using Xunit;
+using System.Runtime.CompilerServices;
 
 namespace TestExchangeRateUpdater.Decorator
 {
@@ -47,5 +48,61 @@ namespace TestExchangeRateUpdater.Decorator
             Assert.Equal("GBP", rate3.Code);
             Assert.Equal(30.00m, rate3.rate);
         }
+
+        [Fact]
+        public async Task Load_EmptyData()
+        {
+            // Assert
+            string input = string.Empty;
+
+            DB db = DB.GetInstance();
+
+            LoadData loader = new();
+
+            // Act
+            bool result = await loader.Load(input);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task Load_Throw_ArgumentNullException()
+        {
+            // Assert
+            LoadData load = new();
+
+            //Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => load.Load(null));
+        }
+
+        [Theory]
+        [InlineData("fail1")]
+        [InlineData("fail2|fail2")]
+        [InlineData("fail3|fail3|3")]
+        [InlineData("fail4|fail4|4|fail4")]
+        public async Task Load_Throw_IndexOutOfRangeException_String_With_Wrong_Data_Less_Than_needed(string data)
+        {
+            // Assert
+            LoadData load = new();
+
+            //Act & Assert
+            await Assert.ThrowsAsync<IndexOutOfRangeException>(() => load.Load(data));
+        }
+
+        [Theory]
+        [InlineData("fail1|fail1|fail1|fail1")]
+        [InlineData("fail2|fail2|fail2|fail2|2")]
+        [InlineData("fail3|fail3|3|fail3|fail3")]
+        [InlineData("fail4|fail4|fail4|fail4|fail4")]
+        public async Task Load_Throw_FormatException_String_With_Wrong_Data(string data)
+        {
+            // Assert
+            LoadData load = new();
+
+            //Act & Assert
+            await Assert.ThrowsAsync<FormatException>(() => load.Load(data));
+        }
+
     }
 }
