@@ -3,7 +3,7 @@ using ExchangeRateUpdater.Singleton;
 
 namespace ExchangeRateUpdater.Chain_of_Responsibility
 {
-    internal class Redis : Handler
+    public class Redis : Handler
     {
         private DB _rates;
 

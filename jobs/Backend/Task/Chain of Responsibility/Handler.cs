@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExchangeRateUpdater.Chain_of_Responsibility
+﻿namespace ExchangeRateUpdater.Chain_of_Responsibility
 {
-    internal abstract class Handler : IHandler
+    public abstract class Handler : IHandler
     {
         protected IHandler? next;
 
