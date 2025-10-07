@@ -14,10 +14,14 @@ namespace TestExchangeRateUpdater.Decorator
         {
             // Arrange
             string input = "United States|Dollar|1|USD|25.50\n" +
-                           "Germany|Euro|100|EUR|27.30\n" +
+                           "Germany|Euro|1|EUR|27.00\n" +
                            "United Kingdom|Pound|1000|GBP|30.00";
 
-            DB db = DB.GetInstance();
+            // Arrange
+            var db = DB.GetInstance();
+            // Clear DB for test isolation
+            var ratesField = typeof(DB).GetField("_rates", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            ratesField.SetValue(db, new Dictionary<string, Rate>());
 
             LoadData loader = new();
 
@@ -37,9 +41,9 @@ namespace TestExchangeRateUpdater.Decorator
             Assert.True(db.TryGetValue("EUR", out Rate rate2));
             Assert.Equal("Germany", rate2.Country);
             Assert.Equal("Euro", rate2.Currency);
-            Assert.Equal(100, rate2.Amount);
+            Assert.Equal(1, rate2.Amount);
             Assert.Equal("EUR", rate2.Code);
-            Assert.Equal(27.30m, rate2.rate);
+            Assert.Equal(27.00m, rate2.rate);
 
             Assert.True(db.TryGetValue("GBP", out Rate rate3));
             Assert.Equal("United Kingdom", rate3.Country);
