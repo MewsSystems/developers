@@ -16,14 +16,14 @@ namespace TestExchangeRateUpdater.Chain_of_Responsibility
             var ratesField = typeof(DB).GetField("_rates", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             ratesField.SetValue(db, new Dictionary<string, Rate>());
 
-            var currency = new Currency("USD");
-            var expectedRate = new Rate("United States", "Dollar", 1, "USD", 25.50m);
+            Currency currency = new("USD");
+            Rate expectedRate = new("United States", "Dollar", 1, "USD", 25.50m);
             db.Add("USD", expectedRate);
 
-            var redis = new Redis();
+            Redis redis = new();
 
             // Act
-            var result = redis.GetExchangeRate(currency);
+            ExchangeRate result = redis.GetExchangeRate(currency);
 
             // Assert
             Assert.NotNull(result);
@@ -44,11 +44,11 @@ namespace TestExchangeRateUpdater.Chain_of_Responsibility
             // Add a different rate to make DB not empty
             db.Add("EUR", new Rate("Germany", "Euro", 1, "EUR", 27.00m));
 
-            var redis = new Redis();
-            var currency = new Currency("USD");
+            Redis redis = new ();
+            Currency currency = new ("USD");
 
             // Act
-            var result = redis.GetExchangeRate(currency);
+            ExchangeRate result = redis.GetExchangeRate(currency);
 
             // Assert
             Assert.Null(result);
@@ -63,15 +63,15 @@ namespace TestExchangeRateUpdater.Chain_of_Responsibility
             var ratesField = typeof(DB).GetField("_rates", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             ratesField.SetValue(db, new Dictionary<string, Rate>());
 
-            var redis = new Redis();
-            var currency = new Currency("USD");
+            Redis redis = new ();
+            Currency currency = new ("USD");
 
             // Set up a mock next handler
-            var nextHandler = new TestHandler();
+            TestHandler nextHandler = new ();
             redis.SetNext(nextHandler);
 
             // Act
-            var result = redis.GetExchangeRate(currency);
+            ExchangeRate result = redis.GetExchangeRate(currency);
 
             // Assert
             Assert.True(nextHandler.WasCalled);
