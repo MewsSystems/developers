@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using ExchangeRateUpdater.Interfaces;
+using ExchangeRateUpdater.Models;
+using ExchangeRateUpdater.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
+        private static IEnumerable<Currency> currencies =
+        [
             new Currency("USD"),
             new Currency("EUR"),
             new Currency("CZK"),
@@ -17,14 +24,26 @@ namespace ExchangeRateUpdater
             new Currency("THB"),
             new Currency("TRY"),
             new Currency("XYZ")
-        };
+        ];
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(configuration)
+                .AddScoped<IExchangeRateProvider, ExchangeRateProvider>()
+                .BuildServiceProvider();
+
+            IExchangeRateProvider exchangeRateProvider = serviceProvider.GetRequiredService<IExchangeRateProvider>();
+
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var rates = await exchangeRateProvider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
