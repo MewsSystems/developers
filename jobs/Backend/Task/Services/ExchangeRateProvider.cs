@@ -48,22 +48,20 @@ namespace ExchangeRateUpdater.Services
 
             using (var client = new HttpClientAdapter())
             {
-                using (var reader = new StreamReader(await client.GetStreamAsync(url)))
+                using var reader = new StreamReader(await client.GetStreamAsync(url));
+                await SkipFileHeaderAsync(reader);
+
+                string fileLine;
+                while ((fileLine = await reader.ReadLineAsync()) != null)
                 {
-                    await SkipFileHeaderAsync(reader);
+                    string[] commaSeparatedLine = fileLine.Split(DELIMITER);
 
-                    string fileLine;
-                    while ((fileLine = await reader.ReadLineAsync()) != null)
+                    if (currencies.Select(c => c.Code).Contains(commaSeparatedLine[CODE_COLUMN]))
                     {
-                        string[] commaSeparatedLine = fileLine.Split(DELIMITER);
-
-                        if (currencies.Select(c => c.Code).Contains(commaSeparatedLine[CODE_COLUMN]))
+                        if (decimal.TryParse(commaSeparatedLine[AMOUNT_COLUMN], out decimal amount)
+                            && decimal.TryParse(commaSeparatedLine[RATE_COLUMN], out decimal rate))
                         {
-                            if (decimal.TryParse(commaSeparatedLine[AMOUNT_COLUMN], out decimal amount)
-                                && decimal.TryParse(commaSeparatedLine[RATE_COLUMN], out decimal rate))
-                            {
-                                result.Add(new ExchangeRate(new Currency(commaSeparatedLine[CODE_COLUMN]), _targetCurrency, rate / amount));
-                            }
+                            result.Add(new ExchangeRate(new Currency(commaSeparatedLine[CODE_COLUMN]), _targetCurrency, rate / amount));
                         }
                     }
                 }
