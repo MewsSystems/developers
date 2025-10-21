@@ -26,5 +26,6 @@ A clean, modular .NET application that retrieves and processes daily exchange ra
 
 - Replace console app with an API or background worker service for continuous rate updates  
 - Add caching or persistence for performance under heavy load  
-- Implement unit tests for service and provider layers  
+- Implement unit tests for service and provider layers
+- Circuit breaker or retry policy for the Http call to CNB API
 
