@@ -2,12 +2,11 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import HomePage from "@/app/page";
 
-// Mock the movie service
 jest.mock("@/lib/services/movieService", () => ({
   searchMovies: jest.fn(),
 }));
 
-describe("Search Debounce", () => {
+describe("HomePage search debounce", () => {
   let mockSearchMovies: jest.MockedFunction<any>;
 
   beforeEach(async () => {
@@ -17,21 +16,25 @@ describe("Search Debounce", () => {
       results: [{ id: 1, title: "Test Movie" }],
       total_pages: 1,
     });
+    jest.useRealTimers();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should call searchMovies after typing", async () => {
+  it("calls searchMovies once after debounce with the final query", async () => {
     render(<HomePage />);
-    
-    const input = screen.getByTestId("search-input");
+
+    await Promise.resolve();
+    mockSearchMovies.mockClear();
+
+    const input = screen.getByPlaceholderText(/search for movies/i);
     await userEvent.type(input, "test");
-    
-    // Wait for debounce
-    await new Promise(resolve => setTimeout(resolve, 400));
-    
+
+    await new Promise((r) => setTimeout(r, 400));
+
+    expect(mockSearchMovies).toHaveBeenCalledTimes(1);
     expect(mockSearchMovies).toHaveBeenCalledWith("test", 1);
-  });
+  }, 15000);
 });
