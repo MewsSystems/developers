@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import type { Movie, MoviesResponse } from "@/types"
 import { searchMovies } from "@/lib/services/movieService"
-import { useDebounce } from "@/hooks/use-debounce"
+import { useDebounce } from "@/hooks/useDebounce"
 import { DEFAULT_DEBOUNCE_MS } from "@/lib/constants"
 import { MovieCard } from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
