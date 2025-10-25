@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { fetchSearchResults } from "@/lib/api/tmdb"
+import { tmdbGet } from "@/services/tmdb"
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -7,7 +7,19 @@ export async function GET(request: NextRequest) {
   const page = searchParams.get("page") || "1"
 
   try {
-    const data = await fetchSearchResults(query, parseInt(page))
+    const params = new URLSearchParams({
+      page: page,
+    })
+
+    if (query.trim()) {
+      params.append("query", query)
+    }
+
+    const endpoint = query.trim()
+      ? `/search/movie?${params}`
+      : `/movie/popular?${params}`
+
+    const data = await tmdbGet(endpoint)
     return NextResponse.json(data)
   } catch (error) {
     console.error("Error in search route:", error)

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getImageUrl } from "@/lib/tmdb"
-import { fetchMovieDetails } from "@/lib/api/tmdb"
+import { tmdbGet } from "@/services/tmdb"
 import type { MovieDetail } from "@/types"
 import { MoviePoster } from "@/components/MoviePoster"
 import { Header } from "@/components/Header"
@@ -22,7 +22,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
   let movie: MovieDetail
 
   try {
-    movie = await fetchMovieDetails(id)
+    movie = await tmdbGet(`/movie/${id}`)
     
     if (!movie || !movie.id || !movie.title) {
       console.error('Invalid movie data received:', movie)

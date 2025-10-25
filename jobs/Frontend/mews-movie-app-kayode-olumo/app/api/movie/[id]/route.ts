@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
+import { tmdbGet } from "@/services/tmdb";
 
 export async function GET(
   _req: Request,
   { params }: { params: { id: string } }
 ) {
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?language=en-US`, {
-    headers: {
-      Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN!}`,
-      accept: "application/json",
-    },
-    cache: "no-store",
-  });
-
-  if (!res.ok) return NextResponse.json({ error: "Upstream error" }, { status: 502 });
-  return NextResponse.json(await res.json());
+  try {
+    const data = await tmdbGet(`/movie/${params.id}?language=en-US`);
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error fetching movie details:", error);
+    return NextResponse.json({ error: "Failed to fetch movie details" }, { status: 500 });
+  }
 }
