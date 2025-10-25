@@ -1,15 +1,16 @@
 const TMDB_BASE_URL = "https://api.themoviedb.org/3"
 
 export async function fetchMovieDetails(id: string) {
-  const TMDB_API_KEY = process.env.TMDB_API_KEY
+  const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN
   
-  if (!TMDB_API_KEY) {
-    throw new Error("TMDB_API_KEY not configured")
+  if (!TMDB_ACCESS_TOKEN) {
+    throw new Error("TMDB_ACCESS_TOKEN not configured")
   }
 
   const response = await fetch(`${TMDB_BASE_URL}/movie/${id}`, {
     headers: {
-      Authorization: `Bearer ${TMDB_API_KEY}`,
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      accept: "application/json",
       "Content-Type": "application/json",
     },
   })
@@ -25,10 +26,10 @@ export async function fetchMovieDetails(id: string) {
 }
 
 export async function fetchSearchResults(query: string, page = 1) {
-  const TMDB_API_KEY = process.env.TMDB_API_KEY
+  const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN
   
-  if (!TMDB_API_KEY) {
-    throw new Error("TMDB_API_KEY not configured")
+  if (!TMDB_ACCESS_TOKEN) {
+    throw new Error("TMDB_ACCESS_TOKEN not configured")
   }
 
   const params = new URLSearchParams({
@@ -45,7 +46,7 @@ export async function fetchSearchResults(query: string, page = 1) {
 
   const response = await fetch(`${TMDB_BASE_URL}${endpoint}`, {
     headers: {
-      Authorization: `Bearer ${TMDB_API_KEY}`,
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
       "Content-Type": "application/json",
     },
   })

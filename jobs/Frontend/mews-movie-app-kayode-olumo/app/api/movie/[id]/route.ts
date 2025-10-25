@@ -1,21 +1,17 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { fetchMovieDetails } from "@/lib/api/tmdb"
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+export async function GET(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
+  const res = await fetch(`https://api.themoviedb.org/3/movie/${params.id}?language=en-US`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN!}`,
+      accept: "application/json",
+    },
+    cache: "no-store",
+  });
 
-  if (!id || isNaN(Number(id))) {
-    return NextResponse.json({ error: "Invalid movie ID" }, { status: 400 })
-  }
-
-  try {
-    const data = await fetchMovieDetails(id)
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error("Error fetching movie details:", error)
-    if (error instanceof Error && error.message === "Movie not found") {
-      return NextResponse.json({ error: "Movie not found" }, { status: 404 })
-    }
-    return NextResponse.json({ error: "Failed to fetch movie details" }, { status: 500 })
-  }
+  if (!res.ok) return NextResponse.json({ error: "Upstream error" }, { status: 502 });
+  return NextResponse.json(await res.json());
 }
