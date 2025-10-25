@@ -1,13 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import { tmdbGet } from "@/services/tmdbClient";
+import { NextResponse } from "next/server";
+import { tmdbGet } from "@/services/tmdb";
 
-export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
-    const data = await tmdbGet(`/movie/${id}?language=en-US`);
+    const data = await tmdbGet(`/movie/${params.id}?language=en-US`);
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Movie API Error:', error);
-    return NextResponse.json({ error: "TMDB error" }, { status: 502 });
+    console.error("Error fetching movie details:", error);
+    return NextResponse.json({ error: "Failed to fetch movie details" }, { status: 500 });
   }
 }
