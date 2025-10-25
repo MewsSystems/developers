@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { getImageUrl } from "@/lib/tmdb"
 import { fetchMovieDetails } from "@/lib/api/tmdb"
-import type { MovieDetail } from "@/lib/types"
+import type { MovieDetail } from "@/types"
 import { MoviePoster } from "@/components/MoviePoster"
 import { Header } from "@/components/Header"
 import { MovieMeta } from "@/components/MovieMeta"

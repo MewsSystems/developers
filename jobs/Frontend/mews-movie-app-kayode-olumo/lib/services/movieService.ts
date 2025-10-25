@@ -1,4 +1,4 @@
-import type { MoviesResponse } from "@/lib/types"
+import type { MoviesResponse } from "@/types"
 
 export async function searchMovies(query: string, page = 1): Promise<MoviesResponse> {
   const params = new URLSearchParams({

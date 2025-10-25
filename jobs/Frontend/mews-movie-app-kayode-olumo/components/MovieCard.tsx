@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import type { Movie } from "@/lib/types"
+import type { Movie } from "@/types"
 import { getImageUrl } from "@/lib/tmdb"
 import { formatYear } from "@/lib/utils/formatters"
 import { Skeleton } from "@/components/ui/skeleton"

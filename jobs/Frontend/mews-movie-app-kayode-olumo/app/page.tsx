@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import type { Movie, MoviesResponse } from "@/lib/types"
+import type { Movie, MoviesResponse } from "@/types"
 import { searchMovies } from "@/lib/services/movieService"
 import { useDebounce } from "@/hooks/use-debounce"
 import { DEFAULT_DEBOUNCE_MS } from "@/lib/constants"
