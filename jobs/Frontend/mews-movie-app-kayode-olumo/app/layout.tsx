@@ -11,6 +11,7 @@ const _playfair = Playfair_Display({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "flixDB - Movie Database",
   description: "Search and discover movies",
+  generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -19,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en-GB">
-      <body className={`font-sans antialiased`} suppressHydrationWarning>
+    <html lang="en">
+      <body className={`font-sans antialiased`}>
         {children}
       </body>
     </html>

@@ -7,6 +7,9 @@ import { useDebounce } from "@/hooks/use-debounce"
 import { MovieCard } from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
 import { ScrollToTop } from "@/components/ScrollToTop"
+import { Header } from "@/components/Header"
+import { SectionTitle } from "@/components/SectionTitle"
+import { Container } from "@/components/Container"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 
@@ -45,28 +48,22 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
-        {/* Header */}
-        <header className="mb-8 sm:mb-12">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">flixDB</h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            {searchQuery ? "Search results" : "Discover popular movies"}
-          </p>
-        </header>
+      <Container className="py-6 sm:py-8 lg:py-12">
+        <Header 
+          title="flixDB" 
+          subtitle={searchQuery ? "Search results" : "Discover popular movies"} 
+        />
 
-        {/* Search Bar */}
         <div className="mb-8 sm:mb-12">
           <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search for movies..." />
         </div>
 
-        {/* Section Title */}
         <div className="mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+          <SectionTitle>
             {searchQuery ? "Search Results" : "Now Showing"}
-          </h2>
+          </SectionTitle>
         </div>
 
-        {/* Movies Grid */}
         {loading && movies.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -83,7 +80,6 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Load More Button */}
             {page < totalPages && (
               <div className="flex justify-center mt-8 sm:mt-12">
                 <Button onClick={loadMore} disabled={loading} size="lg" className="min-w-[140px]">
@@ -100,9 +96,8 @@ export default function HomePage() {
             )}
           </>
         )}
-      </div>
+      </Container>
 
-      {/* Scroll To Top Button */}
       <ScrollToTop />
     </div>
   )

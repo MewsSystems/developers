@@ -4,7 +4,6 @@ import { fetchMovieDetails } from "@/lib/api/tmdb"
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  // Validate movie ID
   if (!id || isNaN(Number(id))) {
     return NextResponse.json({ error: "Invalid movie ID" }, { status: 400 })
   }
