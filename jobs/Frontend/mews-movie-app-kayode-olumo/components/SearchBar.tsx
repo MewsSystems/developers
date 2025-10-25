@@ -19,6 +19,7 @@ export function SearchBar({ value, onChange, placeholder = "Search movies..." }:
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="pl-12 h-12 text-base rounded-xl border-2 focus-visible:ring-2"
+        data-testid="search-input"
       />
     </div>
   )
