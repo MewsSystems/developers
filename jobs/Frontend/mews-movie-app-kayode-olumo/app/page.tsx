@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import type { Movie, MoviesResponse } from "@/lib/types"
 import { searchMovies } from "@/lib/services/movieService"
 import { useDebounce } from "@/hooks/use-debounce"
+import { DEFAULT_DEBOUNCE_MS } from "@/lib/constants"
 import { MovieCard } from "@/components/MovieCard"
 import { SearchBar } from "@/components/SearchBar"
 import { ScrollToTop } from "@/components/ScrollToTop"
@@ -20,7 +21,7 @@ export default function HomePage() {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(false)
 
-  const debouncedSearch = useDebounce(searchQuery, 500)
+  const debouncedSearch = useDebounce(searchQuery, DEFAULT_DEBOUNCE_MS)
 
   const fetchMovies = async (searchTerm: string, pageNum: number, append = false) => {
     setLoading(true)

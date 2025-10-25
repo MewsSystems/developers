@@ -1,4 +1,4 @@
-const TMDB_BASE_URL = "https://api.themoviedb.org/3"
+import { TMDB_BASE_URL } from "@/lib/constants"
 
 export async function fetchMovieDetails(id: string) {
   const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN
