@@ -6,21 +6,46 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#0b0b0b",
-        foreground: "#f3f4f6",
-        muted: "#9ca3af",
-        card: "#161616",
-        border: "#27272a",
-        accent: "#00c2a8"
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
       },
-      boxShadow: { 
-        card: "0 8px 24px rgba(0,0,0,0.4)" 
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
-      borderRadius: { 
-        xl: "1rem", 
-        "2xl": "1.25rem" 
-      }
     }
   },
-  plugins: []
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;

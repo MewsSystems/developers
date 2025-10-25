@@ -1,18 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import { tmdbGet } from "@/services/tmdbClient";
+import { type NextRequest, NextResponse } from "next/server"
+import { fetchSearchResults } from "@/lib/api/tmdb"
 
 export async function GET(request: NextRequest) {
-  const query = (request.nextUrl.searchParams.get("q") ?? "").trim();
-  const pageNumber = request.nextUrl.searchParams.get("page") ?? "1";
-
-  if (!query) {
-    return NextResponse.json({ page: 1, results: [], total_pages: 0, total_results: 0 });
-  }
+  const searchParams = request.nextUrl.searchParams
+  const query = searchParams.get("query") || ""
+  const page = searchParams.get("page") || "1"
 
   try {
-    const data = await tmdbGet(`/search/movie?query=${encodeURIComponent(query)}&page=${pageNumber}&include_adult=false&language=en-GB`);
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json({ error: "TMDB error" }, { status: 502 });
+    const data = await fetchSearchResults(query, parseInt(page))
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error("Error in search route:", error)
+    return NextResponse.json({ error: "Failed to fetch movies" }, { status: 500 })
   }
 }
