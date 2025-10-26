@@ -11,7 +11,6 @@ const _playfair = Playfair_Display({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "flixDB - Movie Database",
   description: "Search and discover movies",
-  generator: 'v0.app'
 }
 
 export default function RootLayout({
