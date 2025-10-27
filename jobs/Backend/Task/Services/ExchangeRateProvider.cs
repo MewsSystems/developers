@@ -31,12 +31,12 @@ namespace ExchangeRateUpdater.Services
                 return [];
 
             var cachedRates = cacheService.GetCachedRates(currencyCodes);
-            var cachedCodes = cachedRates.Select(r => r.SourceCurrency.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var cachedCodes = cachedRates.Select(r => r.SourceCurrency.Code);
 
             // Check if any of the missing currency codes have already been cached as invalid. 
             // There's no need to call the API if all the remain missing codes are simply invalid.
             var invalidCodes = cacheService.GetInvalidCodes();
-            var missingCodes = currencyCodes.Except(cachedCodes).Except(invalidCodes).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var missingCodes = currencyCodes.Except(cachedCodes).Except(invalidCodes).ToHashSet();
 
             if (missingCodes.Count == 0)
                 return cachedRates;
@@ -46,33 +46,31 @@ namespace ExchangeRateUpdater.Services
 
             if (exchangeRates.Count < currencyCodes.Count)
             {
-                var codesNotFound = currencyCodes.Except(exchangeRates.Keys);
+                var codesNotFound = currencyCodes.Except(exchangeRates.Select(r => r.SourceCurrency.Code));
                 cacheService.UpdateInvalidCodes(codesNotFound);
                 logger.LogWarning("Unable to find rates for the following currencies: [{CodesNotFound}]", string.Join(", ", codesNotFound));
             }
 
-            return cachedRates.Concat(exchangeRates.Values).ToList();
+            return cachedRates.Concat(exchangeRates).ToList();
         }
 
-        private static Dictionary<string, ExchangeRate> FilterExchangeRates(IEnumerable<CnbRate> rates, HashSet<string> currencyCodes)
+        private static HashSet<ExchangeRate> FilterExchangeRates(IEnumerable<CnbRate> rates, HashSet<string> currencyCodes)
         {
             if (rates is null || currencyCodes.Count == 0)
                 return [];
 
-            // Add matching rates to a dictionary with currency code as the key
-            // and `ExchangeRate` as its value. To ensure consistent output,
-            // normalise currency rates return by the api so it's per 1 unit.
+            // Filter rates with matching currency codes to a new collection.
+            // To ensure consistent output, normalise currency rates returned
+            // by the api so it's always per 1 unit.
             return rates
                 .Where(rate =>
-                    !string.IsNullOrWhiteSpace(rate.CurrencyCode) &&
-                    currencyCodes.Contains(rate.CurrencyCode))
-                .ToDictionary(
-                    rate => rate.CurrencyCode,
-                    rate => new ExchangeRate(
-                        new Currency(rate.CurrencyCode),
-                        new Currency(TargetCurrencyCode),
-                        rate.Amount == 1 ? rate.Rate : rate.Rate / rate.Amount),
-                    StringComparer.OrdinalIgnoreCase);
+                        currencyCodes.Contains(rate.CurrencyCode))
+                .Select(rate =>
+                        new ExchangeRate(
+                            new Currency(rate.CurrencyCode),
+                            new Currency(TargetCurrencyCode),
+                            rate.Amount == 1 ? rate.Rate : rate.Rate / rate.Amount))
+                .ToHashSet();
         }
     }
 }

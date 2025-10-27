@@ -102,4 +102,4 @@ Example `appsettings.json`:
 - Add new providers by implementing `IApiClient<T>`
 - Expose rates via REST or gRPC
 - Add health checks or metrics
-- Add CD pipeline for automated deployment
+- Add CI/CD pipeline for automated testing and deployment
