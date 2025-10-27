@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Services.Interfaces;
+﻿using ExchangeRateUpdater.Common;
+using ExchangeRateUpdater.Services.Interfaces;
 using ExchangeRateUpdater.Services.Models;
 using ExchangeRateUpdater.Services.Models.External;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,8 @@ namespace ExchangeRateUpdater.Services
 {
     public class ExchangeRateProvider(
             IApiClient<CnbRate> apiClient,
+            IExchangeRateCacheService cacheService,
+            IDateTimeSource dateTimeSource,
             ILogger<ExchangeRateProvider> logger)
     {
         private const string TargetCurrencyCode = "CZK";
@@ -29,6 +32,17 @@ namespace ExchangeRateUpdater.Services
             if (currencyCodes.Count == 0)
                 return [];
 
+            var cachedRates = cacheService.GetCachedRates(currencyCodes);
+            var cachedCodes = cachedRates.Select(r => r.SourceCurrency.Code).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            // Check if any of the missing currency codes have already been cached as invalid. 
+            // There's no need to call the API if all the remain missing codes are simply invalid.
+            var invalidCodes = cacheService.GetInvalidCodes();
+            var missingCodes = currencyCodes.Except(cachedCodes).Except(invalidCodes).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (missingCodes.Count == 0)
+                return cachedRates;
+
             var apiResponse = await apiClient.GetExchangeRatesAsync();
             var exchangeRates = FilterExchangeRates(apiResponse, currencyCodes);
 
@@ -38,7 +52,7 @@ namespace ExchangeRateUpdater.Services
                 logger.LogWarning("Unable to find rates for the following currencies: [{CodesNotFound}]", string.Join(", ", codesNotFound));
             }
 
-            return exchangeRates.Values;
+            return cachedRates.Concat(exchangeRates.Values).ToList();
         }
 
         private static Dictionary<string, ExchangeRate> FilterExchangeRates(IEnumerable<CnbRate> rates, HashSet<string> currencyCodes)

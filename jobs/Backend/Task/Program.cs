@@ -5,6 +5,7 @@ using ExchangeRateUpdater.Services;
 using ExchangeRateUpdater.Services.Interfaces;
 using ExchangeRateUpdater.Services.Models;
 using ExchangeRateUpdater.Services.Models.External;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,18 +15,20 @@ namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             var builder = Host.CreateApplicationBuilder(args);
             builder.Services.AddServices(builder.Configuration);
-            var serviceProvider = builder.Build().Services;
+            var app = builder.Build();
 
+            var serviceProvider = app.Services;
             var currencies = GetCurrencies(builder.Configuration);
-            GetExchangeRate(serviceProvider, currencies);
+            await GetExchangeRate(serviceProvider, currencies);
+            await app.RunAsync();
         }
 
-        private static void GetExchangeRate(
+        private static async Task GetExchangeRate(
             IServiceProvider serviceProvider,
             IEnumerable<Currency> currencies)
         {
@@ -34,14 +37,17 @@ namespace ExchangeRateUpdater
                 var apiClient = serviceProvider.GetRequiredService<IApiClient<CnbRate>>();
                 var logger = serviceProvider.GetService<ILogger<ExchangeRateProvider>>();
                 var dateTimeSource = serviceProvider.GetService<IDateTimeSource>();
+                var exchangeRateCache = serviceProvider.GetService<IExchangeRateCacheService>();
 
                 var provider = new ExchangeRateProvider(
                     apiClient,
+                    exchangeRateCache!,
+                    dateTimeSource!,
                     logger!);
 
-                var rates = provider.GetExchangeRates(currencies).Result;
+                var rates = await provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates at {dateTimeSource?.UtcNow} UTC:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -51,8 +57,6 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
-
-            Console.ReadLine();
         }
 
         private static IEnumerable<Currency> GetCurrencies(IConfiguration configuration)

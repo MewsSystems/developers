@@ -1,5 +1,6 @@
 ﻿using ExchangeRateUpdater.Common;
 using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Jobs;
 using ExchangeRateUpdater.Services;
 using ExchangeRateUpdater.Services.Interfaces;
 using ExchangeRateUpdater.Services.Models.External;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
+using Quartz;
 
 namespace ExchangeRateUpdater.Extensions
 {
@@ -39,10 +41,34 @@ namespace ExchangeRateUpdater.Extensions
                 .AddPolicyHandler((serviceProvider, _) =>
                     CreateDefaultTransientRetryPolicy(serviceProvider, apiConfiguration.RetryTimeOutInSeconds));
 
+            services.AddQuartz(q =>
+             {
+                 var jobKey = new JobKey("ExchangeRateRefreshJob");
+
+                 q.AddJob<ExchangeRateRefreshJob>(opts => opts.WithIdentity(jobKey));
+
+                 // Scheduled trigger (14:30:30 CEST weekdays), allowing a buffer of 30 seconds
+                 q.AddTrigger(opts => opts
+                     .ForJob(jobKey)
+                     .WithIdentity("ExchangeRateRefreshTrigger")
+                     .WithSchedule(CronScheduleBuilder
+                         .CronSchedule("30 30 14 ? * MON-FRI")
+                         .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"))));
+
+                 // Immediate trigger on startup
+                 q.AddTrigger(opts => opts
+                     .ForJob(jobKey)
+                     .WithIdentity("ExchangeRateStartupTrigger")
+                     .StartNow());
+             });
+
+            services.AddMemoryCache();
+            services.AddQuartzHostedService();
             services.AddSingleton(apiConfiguration);
             services.AddScoped<IDateTimeSource, DateTimeSource>();
-            services.AddScoped<ExchangeRateProvider>();
+            services.AddScoped<IExchangeRateCacheService, ExchangeRateCacheService>();
             httpClientBuilder.AddTypedClient<IApiClient<CnbRate>, CnbApiClient>();
+            services.AddScoped<ExchangeRateProvider>();
         }
 
         // Set up up to 3 retries with Polly with random jitter
