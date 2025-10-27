@@ -1,5 +1,4 @@
-﻿using ExchangeRateUpdater.Common;
-using ExchangeRateUpdater.Services.Interfaces;
+﻿using ExchangeRateUpdater.Services.Interfaces;
 using ExchangeRateUpdater.Services.Models;
 using ExchangeRateUpdater.Services.Models.External;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,6 @@ namespace ExchangeRateUpdater.Services
     public class ExchangeRateProvider(
             IApiClient<CnbRate> apiClient,
             IExchangeRateCacheService cacheService,
-            IDateTimeSource dateTimeSource,
             ILogger<ExchangeRateProvider> logger)
     {
         private const string TargetCurrencyCode = "CZK";
@@ -49,6 +47,7 @@ namespace ExchangeRateUpdater.Services
             if (exchangeRates.Count < currencyCodes.Count)
             {
                 var codesNotFound = currencyCodes.Except(exchangeRates.Keys);
+                cacheService.UpdateInvalidCodes(codesNotFound);
                 logger.LogWarning("Unable to find rates for the following currencies: [{CodesNotFound}]", string.Join(", ", codesNotFound));
             }
 

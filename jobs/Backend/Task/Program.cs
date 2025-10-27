@@ -35,19 +35,18 @@ namespace ExchangeRateUpdater
             try
             {
                 var apiClient = serviceProvider.GetRequiredService<IApiClient<CnbRate>>();
-                var logger = serviceProvider.GetService<ILogger<ExchangeRateProvider>>();
-                var dateTimeSource = serviceProvider.GetService<IDateTimeSource>();
-                var exchangeRateCache = serviceProvider.GetService<IExchangeRateCacheService>();
+                var exchangeRateCache = serviceProvider.GetRequiredService<IExchangeRateCacheService>();
+                var logger = serviceProvider.GetRequiredService<ILogger<ExchangeRateProvider>>();
+                var dateTimeSource = serviceProvider.GetRequiredService<IDateTimeSource>();
 
                 var provider = new ExchangeRateProvider(
                     apiClient,
-                    exchangeRateCache!,
-                    dateTimeSource!,
-                    logger!);
+                    exchangeRateCache,
+                    logger);
 
                 var rates = await provider.GetExchangeRates(currencies);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates at {dateTimeSource?.UtcNow} UTC:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates at {dateTimeSource.UtcNow} UTC:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());

@@ -12,14 +12,16 @@ namespace ExchangeRateUpdater.Tests.Services;
 public class ExchangeRateProviderTests
 {
     private readonly IApiClient<CnbRate> _apiClient;
+    private readonly IExchangeRateCacheService _cacheService;
     private readonly TestLogger<ExchangeRateProvider> _logger;
     private readonly ExchangeRateProvider _provider;
 
     public ExchangeRateProviderTests()
     {
         _apiClient = A.Fake<IApiClient<CnbRate>>();
+        _cacheService = A.Fake<ExchangeRateCacheService>();
         _logger = new TestLogger<ExchangeRateProvider>();
-        _provider = new ExchangeRateProvider(_apiClient, _logger);
+        _provider = new ExchangeRateProvider(_apiClient, _cacheService, _logger);
     }
 
     [Fact]

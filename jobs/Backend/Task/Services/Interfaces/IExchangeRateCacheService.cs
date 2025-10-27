@@ -1,6 +1,4 @@
 ﻿using ExchangeRateUpdater.Services.Models;
-using System.Collections.Generic;
-
 namespace ExchangeRateUpdater.Services.Interfaces
 {
     public interface IExchangeRateCacheService
