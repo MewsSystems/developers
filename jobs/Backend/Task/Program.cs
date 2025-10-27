@@ -1,29 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+using ExchangeRateUpdater.Common;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
-
         public static void Main(string[] args)
+        {
+            var builder = Host.CreateApplicationBuilder(args);
+            builder.Services.AddServices(builder.Configuration);
+
+            var currencies = GetCurrencies(builder.Configuration);
+            GetExchangeRate(currencies);
+        }
+
+        private static void GetExchangeRate(
+            IEnumerable<Currency> currencies)
         {
             try
             {
                 var provider = new ExchangeRateProvider();
+
                 var rates = provider.GetExchangeRates(currencies);
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
@@ -38,6 +39,15 @@ namespace ExchangeRateUpdater
             }
 
             Console.ReadLine();
+        }
+        
+        private static IEnumerable<Currency> GetCurrencies(IConfiguration configuration)
+        {
+            var section  = configuration
+                .GetSection(Constants.ExchangeRateConfiguration)
+                .Get<ExchangeRateConfiguration>();
+
+            return section!.CurrencyCodes.Select(code => new Currency(code));
         }
     }
 }
