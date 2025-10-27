@@ -16,7 +16,8 @@ namespace ExchangeRateUpdater
             new Currency("RUB"),
             new Currency("THB"),
             new Currency("TRY"),
-            new Currency("XYZ")
+            new Currency("XYZ"),
+            new Currency(""),
         };
 
         public static void Main(string[] args)
@@ -24,7 +25,8 @@ namespace ExchangeRateUpdater
             try
             {
                 var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                // Use of .GetAwaiter().GetResult() as async not supported for Main() in .NET 6
+                var rates = provider.GetExchangeRates(currencies).GetAwaiter().GetResult();
 
                 Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
                 foreach (var rate in rates)
