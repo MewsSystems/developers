@@ -1,9 +1,14 @@
-﻿
-using ExchangeRateUpdater.Common;
+﻿using ExchangeRateUpdater.Common;
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Services;
+using ExchangeRateUpdater.Services.Interfaces;
+using ExchangeRateUpdater.Services.Models;
+using ExchangeRateUpdater.Services.Models.External;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
@@ -11,23 +16,32 @@ namespace ExchangeRateUpdater
     {
         public static void Main(string[] args)
         {
+
             var builder = Host.CreateApplicationBuilder(args);
             builder.Services.AddServices(builder.Configuration);
+            var serviceProvider = builder.Build().Services;
 
             var currencies = GetCurrencies(builder.Configuration);
-            GetExchangeRate(currencies);
+            GetExchangeRate(serviceProvider, currencies);
         }
 
         private static void GetExchangeRate(
+            IServiceProvider serviceProvider,
             IEnumerable<Currency> currencies)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
+                var apiClient = serviceProvider.GetRequiredService<IApiClient<CnbRate>>();
+                var logger = serviceProvider.GetService<ILogger<ExchangeRateProvider>>();
+                var dateTimeSource = serviceProvider.GetService<IDateTimeSource>();
 
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(
+                    apiClient,
+                    logger!);
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var rates = provider.GetExchangeRates(currencies).Result;
+
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -40,10 +54,10 @@ namespace ExchangeRateUpdater
 
             Console.ReadLine();
         }
-        
+
         private static IEnumerable<Currency> GetCurrencies(IConfiguration configuration)
         {
-            var section  = configuration
+            var section = configuration
                 .GetSection(Constants.ExchangeRateConfiguration)
                 .Get<ExchangeRateConfiguration>();
 

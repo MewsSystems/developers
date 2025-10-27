@@ -1,4 +1,4 @@
-﻿namespace ExchangeRateUpdater
+﻿namespace ExchangeRateUpdater.Services.Models
 {
     public class ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
     {

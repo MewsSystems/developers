@@ -1,0 +1,65 @@
+﻿using ExchangeRateUpdater.Services.Interfaces;
+using ExchangeRateUpdater.Services.Models;
+using ExchangeRateUpdater.Services.Models.External;
+using Microsoft.Extensions.Logging;
+
+namespace ExchangeRateUpdater.Services
+{
+    public class ExchangeRateProvider(
+            IApiClient<CnbRate> apiClient,
+            ILogger<ExchangeRateProvider> logger)
+    {
+        private const string TargetCurrencyCode = "CZK";
+
+        /// <summary>
+        /// Returns exchange rates among the specified currencies that are defined by the source.
+        /// Omits the currencies if they are not returned in the external API response.
+        /// </summary>
+        public async Task<ICollection<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+        {
+            ArgumentNullException.ThrowIfNull(currencies);
+
+            var currencyCodes = currencies
+                .Select(c => c.Code)
+                .Where(code =>
+                    !string.IsNullOrWhiteSpace(code) &&
+                    !string.Equals(code, TargetCurrencyCode, StringComparison.OrdinalIgnoreCase))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (currencyCodes.Count == 0)
+                return [];
+
+            var apiResponse = await apiClient.GetExchangeRatesAsync();
+            var exchangeRates = FilterExchangeRates(apiResponse, currencyCodes);
+
+            if (exchangeRates.Count < currencyCodes.Count)
+            {
+                var codesNotFound = currencyCodes.Except(exchangeRates.Keys);
+                logger.LogWarning("Unable to find rates for the following currencies: [{CodesNotFound}]", string.Join(", ", codesNotFound));
+            }
+
+            return exchangeRates.Values;
+        }
+
+        private static Dictionary<string, ExchangeRate> FilterExchangeRates(IEnumerable<CnbRate> rates, HashSet<string> currencyCodes)
+        {
+            if (rates is null || currencyCodes.Count == 0)
+                return [];
+
+            // Add matching rates to a dictionary with currency code as the key
+            // and `ExchangeRate` as its value. To ensure consistent output,
+            // normalise currency rates return by the api so it's per 1 unit.
+            return rates
+                .Where(rate =>
+                    !string.IsNullOrWhiteSpace(rate.CurrencyCode) &&
+                    currencyCodes.Contains(rate.CurrencyCode))
+                .ToDictionary(
+                    rate => rate.CurrencyCode,
+                    rate => new ExchangeRate(
+                        new Currency(rate.CurrencyCode),
+                        new Currency(TargetCurrencyCode),
+                        rate.Amount == 1 ? rate.Rate : rate.Rate / rate.Amount),
+                    StringComparer.OrdinalIgnoreCase);
+        }
+    }
+}
