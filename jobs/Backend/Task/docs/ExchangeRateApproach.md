@@ -25,6 +25,14 @@ The main flow is calls the http method which using async Task allows for the asy
 # Testing
 The test that could be used is to read the mocked XML response instead of calling the http method. It would test to ensure that the data is being properly read and processed according to main implementation.
 
+# Output
+Successfully retrieved 5 exchange rates:
+CZK/EUR=24.325
+CZK/JPY=0.13671
+CZK/THB=0.6394
+CZK/TRY=0.49848
+CZK/USD=20.897
+
 # Challenges 
 
 * Instead of using a reader to read based off the model of the XML file, stream was used instead as it provided direct extraction from the response itself.
