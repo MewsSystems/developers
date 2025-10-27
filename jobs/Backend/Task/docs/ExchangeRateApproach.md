@@ -27,10 +27,15 @@ The test that could be used is to read the mocked XML response instead of callin
 
 # Output
 Successfully retrieved 5 exchange rates:
+
 CZK/EUR=24.325
+
 CZK/JPY=0.13671
+
 CZK/THB=0.6394
+
 CZK/TRY=0.49848
+
 CZK/USD=20.897
 
 # Challenges 
