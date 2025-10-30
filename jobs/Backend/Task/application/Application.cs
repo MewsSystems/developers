@@ -19,7 +19,8 @@ public class Application
     {
         try
         {
-            _logger.LogInformation("Starting exchange rate retrieval for currencies: {Currencies}", _appConfiguration.GetCurrencies());
+            _logger.LogInformation("Starting exchange rate retrieval for currencies: {Currencies}",
+                _appConfiguration.GetCurrencies());
 
             // var provider = new ExchangeRateProvider();
             // var rates = provider.GetExchangeRates(currencies);
