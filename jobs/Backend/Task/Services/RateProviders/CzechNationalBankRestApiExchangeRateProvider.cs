@@ -29,10 +29,11 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
     {
         using var httpClient = new HttpClient();
         var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+        var url = $"{_appConfiguration.DailyRateUrl}/cnbapi/exrates/daily?date={currentDate}&lang=EN";
 
-        var response =
-            await httpClient.GetStringAsync(
-                $"{_appConfiguration.DailyRateUrl}/cnbapi/exrates/daily?date={currentDate}&lang=EN");
+        _logger.LogDebug("Fetching exchange rates from {Url}", url);
+        var response = await httpClient.GetStringAsync(url);
+        
         var dto = JsonSerializer.Deserialize<ExchangeRateResponseDto>(response, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -48,12 +49,25 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
             currencies.Select(c => c.Code),
             StringComparer.OrdinalIgnoreCase);
 
-        return dto.Rates
-            .Where(r => currencyCodesToFilter.Contains(r.CurrencyCode))
-            .Select(r => new ExchangeRate(
-                new Currency(r.CurrencyCode),
+        var exchangeRates = new List<ExchangeRate>();
+        foreach (var rate in dto.Rates)
+        {
+            if (!currencyCodesToFilter.Contains(rate.CurrencyCode))
+            {
+                _logger.LogInformation("Currency {Code} is not in the requested list, skipping.", rate.CurrencyCode);
+                continue;
+            }
+
+            var exchangeRate = new ExchangeRate(
+                new Currency(rate.CurrencyCode),
                 new Currency(_appConfiguration.CzkCurrencyCode),
-                DateTime.Parse(r.ValidFor),
-                r.Rate / r.Amount));
+                DateTime.Parse(rate.ValidFor),
+                rate.Rate / rate.Amount);
+            
+            _logger.LogDebug("Adding exchange rate: {ExchangeRate}", exchangeRate);
+            exchangeRates.Add(exchangeRate);
+        }
+
+        return exchangeRates;
     }
 }

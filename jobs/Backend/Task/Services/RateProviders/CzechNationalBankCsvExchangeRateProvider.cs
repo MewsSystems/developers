@@ -29,6 +29,8 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
         using var httpClient = new HttpClient();
+        
+        _logger.LogDebug("Fetching exchange rates from {Url}", _appConfiguration.DailyRateUrl);
         var response = await httpClient.GetStringAsync(_appConfiguration.DailyRateUrl);
 
         var lines = response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
@@ -48,6 +50,8 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
         // Country|Currency|Amount|Code|Rate
         foreach (var line in lines.Skip(2))
         {
+            _logger.LogDebug("Processing line: {Line}", line);
+            
             var parts = line.Split('|');
             if (parts.Length != 5) continue;
 
@@ -55,7 +59,7 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 
             if (!currencyCodesToFilter.Contains(code))
             {
-                _logger.LogInformation("Currency {Code} not in the requested list, skipping.", code);
+                _logger.LogInformation("Currency {Code} is not in the requested list, skipping.", code);
                 continue;
             }
 
@@ -65,7 +69,9 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
             var targetCurrency = new Currency(_appConfiguration.CzkCurrencyCode);
             var normalizedRate = rate / amount; // Normalize to 1 unit of source currency to avoid amount discrepancies
 
-            exchangeRates.Add(new ExchangeRate(sourceCurrency, targetCurrency, rateDate, normalizedRate));
+            var exchangeRate = new ExchangeRate(sourceCurrency, targetCurrency, rateDate, normalizedRate);
+            _logger.LogDebug("Adding exchange rate: {ExchangeRate}", exchangeRate);
+            exchangeRates.Add(exchangeRate);
         }
 
         return exchangeRates;
