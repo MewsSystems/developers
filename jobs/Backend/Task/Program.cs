@@ -21,6 +21,7 @@ public static class Program
         var serviceProvider = new ServiceCollection()
             .AddLogging(builder => { builder.AddSerilog(Log.Logger); })
             .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+            .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton(config)
             .AddSingleton<Application>()
             .BuildServiceProvider();

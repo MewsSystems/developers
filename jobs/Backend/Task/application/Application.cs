@@ -1,5 +1,6 @@
 using System;
 using ExchangeRateUpdater.config;
+using ExchangeRateUpdater.services;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.application;
@@ -8,28 +9,26 @@ public class Application
 {
     private readonly AppConfiguration _appConfiguration;
     private readonly ILogger<Application> _logger;
+    private readonly IExchangeRateProvider _exchangeRateProvider;
+    private readonly IExchangeRateExporter _exchangeRateExporter;
 
-    public Application(ILogger<Application> logger, AppConfiguration appConfiguration)
+    public Application(ILogger<Application> logger, AppConfiguration appConfiguration, IExchangeRateProvider exchangeRateProvider, IExchangeRateExporter exchangeRateExporter)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;
+        _exchangeRateProvider = exchangeRateProvider;
+        _exchangeRateExporter = exchangeRateExporter;
     }
 
     public void Run()
     {
         try
         {
-            _logger.LogInformation("Starting exchange rate retrieval for currencies: {Currencies}",
-                _appConfiguration.GetCurrencies());
+            var currencies = _appConfiguration.GetCurrencies();
+            _logger.LogInformation("Starting exchange rate retrieval for currencies: {Currencies}", currencies);
 
-            // var provider = new ExchangeRateProvider();
-            // var rates = provider.GetExchangeRates(currencies);
-            //
-            // Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-            // foreach (var rate in rates)
-            // {
-            //     Console.WriteLine(rate.ToString());
-            // }
+            var rates = _exchangeRateProvider.GetExchangeRates(currencies);
+            _exchangeRateExporter.ExportExchangeRates(rates);
         }
         catch (Exception e)
         {

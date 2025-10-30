@@ -8,7 +8,7 @@ namespace ExchangeRateUpdater.config;
 
 public class AppConfiguration
 {
-    public string CnbDailyRateUrl { get; set; }
+    public string DailyRateUrl { get; set; }
 
     public int HttpTimeoutSeconds { get; set; }
 
@@ -30,9 +30,9 @@ public class AppConfiguration
 
     public void Validate()
     {
-        if (string.IsNullOrWhiteSpace(CnbDailyRateUrl))
+        if (string.IsNullOrWhiteSpace(DailyRateUrl))
             throw new InvalidOperationException(
-                "CNB_DAILY_RATE_URL environment variable is required and cannot be empty");
+                "DAILY_RATE_URL environment variable is required and cannot be empty");
 
         if (!Enum.IsDefined(typeof(LogEventLevel), LogLevel))
         {

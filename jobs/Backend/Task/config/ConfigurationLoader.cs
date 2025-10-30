@@ -12,7 +12,7 @@ public static class ConfigurationLoader
 
         return new AppConfiguration
         {
-            CnbDailyRateUrl = configuration["CNB_DAILY_RATE_URL"] ?? "",
+            DailyRateUrl = configuration["DAILY_RATE_URL"] ?? "",
             HttpTimeoutSeconds = int.TryParse(configuration["HTTP_TIMEOUT_SECONDS"], out var timeout) ? timeout : 30,
             Currencies = configuration["CURRENCIES"] ?? "",
             LogLevel = configuration["LOG_LEVEL"] ?? "Information"
