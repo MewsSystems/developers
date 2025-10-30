@@ -27,15 +27,17 @@ public class AppConfiguration
         .Distinct()
         .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-    public string DailyRateUrl { get; set; }
+    public string DailyRateUrl { get; init; }
 
-    public int HttpTimeoutSeconds { get; set; }
+    public string Currencies { get; init; }
 
-    public string Currencies { get; set; }
+    public string LogLevel { get; init; }
 
-    public string LogLevel { get; set; }
-
-    public string CzkCurrencyCode { get; set; }
+    public string CzkCurrencyCode { get; init; }
+    
+    public RateProviderType ProviderType { get; init; }
+    
+    public RateExporterType ExporterType { get; init; }
 
     public IEnumerable<Currency> GetCurrencies()
     {
@@ -52,8 +54,10 @@ public class AppConfiguration
     public void Validate()
     {
         if (string.IsNullOrWhiteSpace(DailyRateUrl))
+        {
             throw new InvalidOperationException(
                 "DAILY_RATE_URL environment variable is required and cannot be empty");
+        }
 
         if (!Enum.IsDefined(typeof(LogEventLevel), LogLevel))
         {
@@ -73,6 +77,12 @@ public class AppConfiguration
             if (invalidCodes.Any())
                 throw new InvalidOperationException(
                     $"Invalid currency code(s): {string.Join(", ", invalidCodes)}. Must be valid ISO 4217 codes.");
+        }
+        
+        if (!Enum.IsDefined(typeof(RateProviderType), ProviderType))
+        {
+            var validTypes = string.Join(", ", Enum.GetNames(typeof(RateProviderType)));
+            throw new InvalidOperationException($"Invalid provider type: {ProviderType}. Valid options are: {validTypes}");
         }
     }
 

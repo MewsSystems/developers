@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 
 namespace ExchangeRateUpdater.Config;
@@ -13,10 +14,11 @@ public static class ConfigurationLoader
         return new AppConfiguration
         {
             DailyRateUrl = configuration["DAILY_RATE_URL"] ?? "",
-            HttpTimeoutSeconds = int.TryParse(configuration["HTTP_TIMEOUT_SECONDS"], out var timeout) ? timeout : 30,
             Currencies = configuration["CURRENCIES"] ?? "",
             LogLevel = configuration["LOG_LEVEL"] ?? "Debug",
-            CzkCurrencyCode = "CZK"
+            CzkCurrencyCode = "CZK",
+            ProviderType = Enum.Parse<RateProviderType>(Environment.GetEnvironmentVariable("PROVIDER_TYPE") ?? "Csv", ignoreCase: true),
+            ExporterType = Enum.Parse<RateExporterType>(Environment.GetEnvironmentVariable("EXPORTER_TYPE") ?? "Console", ignoreCase: true)
         };
     }
 }
