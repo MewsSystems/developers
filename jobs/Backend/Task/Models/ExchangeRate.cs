@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExchangeRateUpdater.model;
+namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRate
 {

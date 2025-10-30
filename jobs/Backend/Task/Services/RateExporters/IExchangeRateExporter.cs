@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.model;
+using ExchangeRateUpdater.Models;
 
-namespace ExchangeRateUpdater.services;
+namespace ExchangeRateUpdater.Services.RateExporters;
 
 public interface IExchangeRateExporter
 {

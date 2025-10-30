@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ExchangeRateUpdater.model;
+namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRateResponseDto
 {

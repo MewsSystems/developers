@@ -1,19 +1,21 @@
 using System;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.config;
-using ExchangeRateUpdater.services;
+using ExchangeRateUpdater.Config;
+using ExchangeRateUpdater.Services.RateExporters;
+using ExchangeRateUpdater.Services.RateProviders;
 using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater.application;
+namespace ExchangeRateUpdater.Application;
 
 public class Application
 {
     private readonly AppConfiguration _appConfiguration;
-    private readonly ILogger<Application> _logger;
-    private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly IExchangeRateExporter _exchangeRateExporter;
+    private readonly IExchangeRateProvider _exchangeRateProvider;
+    private readonly ILogger<Application> _logger;
 
-    public Application(ILogger<Application> logger, AppConfiguration appConfiguration, IExchangeRateProvider exchangeRateProvider, IExchangeRateExporter exchangeRateExporter)
+    public Application(ILogger<Application> logger, AppConfiguration appConfiguration,
+        IExchangeRateProvider exchangeRateProvider, IExchangeRateExporter exchangeRateExporter)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;
@@ -30,7 +32,7 @@ public class Application
 
             var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
             await _exchangeRateExporter.ExportExchangeRatesAsync(rates);
-            
+
             _logger.LogInformation("Exchange rate retrieval and export completed successfully.");
         }
         catch (Exception e)

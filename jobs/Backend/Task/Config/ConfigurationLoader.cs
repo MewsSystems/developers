@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace ExchangeRateUpdater.config;
+namespace ExchangeRateUpdater.Config;
 
 public static class ConfigurationLoader
 {

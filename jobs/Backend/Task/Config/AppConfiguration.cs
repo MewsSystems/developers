@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using ExchangeRateUpdater.model;
+using ExchangeRateUpdater.Models;
 using Serilog.Events;
 
-namespace ExchangeRateUpdater.config;
+namespace ExchangeRateUpdater.Config;
 
 public class AppConfiguration
 {
-    private static readonly HashSet<string> ValidCurrencyCodes = System.Globalization.CultureInfo
-        .GetCultures(System.Globalization.CultureTypes.AllCultures)
+    private static readonly HashSet<string> ValidCurrencyCodes = CultureInfo
+        .GetCultures(CultureTypes.AllCultures)
         .Where(c => !c.IsNeutralCulture)
         .Select(culture =>
         {
             try
             {
-                return new System.Globalization.RegionInfo(culture.Name).ISOCurrencySymbol;
+                return new RegionInfo(culture.Name).ISOCurrencySymbol;
             }
             catch
             {
@@ -25,7 +26,7 @@ public class AppConfiguration
         .Where(x => x != null)
         .Distinct()
         .ToHashSet(StringComparer.OrdinalIgnoreCase);
-    
+
     public string DailyRateUrl { get; set; }
 
     public int HttpTimeoutSeconds { get; set; }
@@ -33,7 +34,7 @@ public class AppConfiguration
     public string Currencies { get; set; }
 
     public string LogLevel { get; set; }
-    
+
     public string CzkCurrencyCode { get; set; }
 
     public IEnumerable<Currency> GetCurrencies()
@@ -59,7 +60,7 @@ public class AppConfiguration
             var validLevels = string.Join(", ", Enum.GetNames(typeof(LogEventLevel)));
             throw new InvalidOperationException($"Invalid log level: {LogLevel}. Valid options are: {validLevels}");
         }
-        
+
         if (!string.IsNullOrWhiteSpace(Currencies))
         {
             var invalidCodes = Currencies
@@ -70,10 +71,8 @@ public class AppConfiguration
                 .ToList();
 
             if (invalidCodes.Any())
-            {
                 throw new InvalidOperationException(
                     $"Invalid currency code(s): {string.Join(", ", invalidCodes)}. Must be valid ISO 4217 codes.");
-            }
         }
     }
 

@@ -1,29 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.config;
-using ExchangeRateUpdater.model;
+using ExchangeRateUpdater.Config;
+using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Logging;
 
-namespace ExchangeRateUpdater.services;
+namespace ExchangeRateUpdater.Services.RateProviders;
 
 /// <summary>
-/// Gets exchange rates from a CSV file provided by the Czech National Bank (daily.txt file)
+///     Gets exchange rates from a CSV file provided by the Czech National Bank (daily.txt file)
 /// </summary>
 public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 {
     private const string DateFormat = "dd MMM yyyy";
     private readonly AppConfiguration _appConfiguration;
     private readonly ILogger<CzechNationalBankCsvExchangeRateProvider> _logger;
-    
-    public CzechNationalBankCsvExchangeRateProvider(ILogger<CzechNationalBankCsvExchangeRateProvider> logger, AppConfiguration appConfiguration)
+
+    public CzechNationalBankCsvExchangeRateProvider(ILogger<CzechNationalBankCsvExchangeRateProvider> logger,
+        AppConfiguration appConfiguration)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;
     }
-    
+
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
         using var httpClient = new HttpClient();
@@ -58,7 +60,7 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
             }
 
             var amount = int.Parse(parts[2]);
-            var rate = decimal.Parse(parts[4], System.Globalization.CultureInfo.InvariantCulture);
+            var rate = decimal.Parse(parts[4], CultureInfo.InvariantCulture);
             var sourceCurrency = new Currency(code);
             var targetCurrency = new Currency(_appConfiguration.CzkCurrencyCode);
             var normalizedRate = rate / amount; // Normalize to 1 unit of source currency to avoid amount discrepancies
@@ -72,8 +74,8 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
     private DateTime GetExtractionDate(string[] lines)
     {
         var dateString = lines[0].Split('#')[0].Trim();
-        var rateDate = DateTime.ParseExact(dateString, DateFormat, 
-            System.Globalization.CultureInfo.InvariantCulture);
+        var rateDate = DateTime.ParseExact(dateString, DateFormat,
+            CultureInfo.InvariantCulture);
         return rateDate;
     }
 }

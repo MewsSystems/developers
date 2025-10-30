@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ExchangeRateUpdater.application;
-using ExchangeRateUpdater.config;
-using ExchangeRateUpdater.services;
+using ExchangeRateUpdater.Config;
+using ExchangeRateUpdater.Services.RateExporters;
+using ExchangeRateUpdater.Services.RateProviders;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -25,16 +25,15 @@ public static class Program
             .AddLogging(builder => { builder.AddSerilog(Log.Logger); })
             .AddSingleton<IExchangeRateProvider, CzechNationalBankRestApiExchangeRateProvider>()
             .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
-            .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton(config)
-            .AddSingleton<Application>()
+            .AddSingleton<Application.Application>()
             .BuildServiceProvider();
 
         try
         {
             config.Validate();
 
-            var app = serviceProvider.GetRequiredService<Application>();
+            var app = serviceProvider.GetRequiredService<Application.Application>();
             await app.RunAsync();
         }
         catch (Exception e)
