@@ -12,16 +12,16 @@ public class ExchangeRate
         Value = value;
     }
 
-    public Currency SourceCurrency { get; }
+    private Currency SourceCurrency { get; }
 
-    public Currency TargetCurrency { get; }
+    private Currency TargetCurrency { get; }
 
-    public decimal Value { get; }
-    
-    public DateTime Date { get; }
+    private decimal Value { get; }
+
+    private DateTime Date { get; }
 
     public override string ToString()
     {
-        return $"({Date}) {SourceCurrency}/{TargetCurrency}={Value}";
+        return $"({Date.ToShortDateString()}) {SourceCurrency}/{TargetCurrency}={Value}";
     }
 }
