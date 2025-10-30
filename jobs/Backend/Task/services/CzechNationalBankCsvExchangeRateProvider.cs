@@ -30,7 +30,9 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
         using var httpClient = new HttpClient();
         var response = await httpClient.GetStringAsync(_appConfiguration.DailyRateUrl);
 
-        var lines = response.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        var lines = response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(part => part.Trim())
+            .ToArray();
 
         var rateDate = GetExtractionDate(lines);
 
