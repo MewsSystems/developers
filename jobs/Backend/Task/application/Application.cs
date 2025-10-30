@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.config;
 using ExchangeRateUpdater.services;
 using Microsoft.Extensions.Logging;
@@ -20,15 +21,17 @@ public class Application
         _exchangeRateExporter = exchangeRateExporter;
     }
 
-    public void Run()
+    public async Task RunAsync()
     {
         try
         {
             var currencies = _appConfiguration.GetCurrencies();
             _logger.LogInformation("Starting exchange rate retrieval for currencies: {Currencies}", currencies);
 
-            var rates = _exchangeRateProvider.GetExchangeRates(currencies);
-            _exchangeRateExporter.ExportExchangeRates(rates);
+            var rates = await _exchangeRateProvider.GetExchangeRatesAsync(currencies);
+            await _exchangeRateExporter.ExportExchangeRatesAsync(rates);
+            
+            _logger.LogInformation("Exchange rate retrieval and export completed successfully.");
         }
         catch (Exception e)
         {

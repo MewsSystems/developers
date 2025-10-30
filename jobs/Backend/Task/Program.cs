@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.application;
 using ExchangeRateUpdater.config;
 using ExchangeRateUpdater.services;
@@ -9,18 +10,21 @@ namespace ExchangeRateUpdater;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var config = ConfigurationLoader.Load();
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Is(config.GetLogLevel())
-            .WriteTo.Console()
+            .WriteTo.Console(
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u}] {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
+
 
         var serviceProvider = new ServiceCollection()
             .AddLogging(builder => { builder.AddSerilog(Log.Logger); })
-            .AddSingleton<IExchangeRateProvider, ExchangeRateProvider>()
+            .AddSingleton<IExchangeRateProvider, CzechNationalBankCsvExchangeRateProvider>()
+            .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton(config)
             .AddSingleton<Application>()
@@ -31,7 +35,7 @@ public static class Program
             config.Validate();
 
             var app = serviceProvider.GetRequiredService<Application>();
-            app.Run();
+            await app.RunAsync();
         }
         catch (Exception e)
         {
@@ -39,8 +43,8 @@ public static class Program
         }
         finally
         {
-            serviceProvider.Dispose();
-            Log.CloseAndFlush();
+            await serviceProvider.DisposeAsync();
+            await Log.CloseAndFlushAsync();
         }
     }
 }

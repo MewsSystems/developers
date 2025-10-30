@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ExchangeRateUpdater.model;
 using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.services;
 
+/// <summary>
+/// Exports the rate information to the console
+/// </summary>
 public class ConsoleExchangeRateExporter : IExchangeRateExporter
 {
     private readonly ILogger<ConsoleExchangeRateExporter> _logger;
@@ -15,12 +19,13 @@ public class ConsoleExchangeRateExporter : IExchangeRateExporter
         _logger = logger;
     }
     
-    public void ExportExchangeRates(IEnumerable<ExchangeRate> exchangeRates)
+    public async Task ExportExchangeRatesAsync(IEnumerable<ExchangeRate> exchangeRates)
     {
         _logger.LogInformation($"Successfully retrieved {exchangeRates.Count()} exchange rates:");
+        
         foreach (var rate in exchangeRates)
         {
-            Console.WriteLine(rate.ToString());
+            await Console.Out.WriteLineAsync(rate.ToString());
         }
     }
 }
