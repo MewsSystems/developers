@@ -4,7 +4,7 @@ using ExchangeRateUpdater.model;
 
 namespace ExchangeRateUpdater.services;
 
-public class ExchangeRateProvider
+public class ExchangeRateProvider : IExchangeRateProvider
 {
     /// <summary>
     ///     Should return exchange rates among the specified currencies that are defined by the source. But only those defined
