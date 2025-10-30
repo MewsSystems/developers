@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.services;
 
 /// <summary>
-/// Gets exchange rates from a CSV file provided by the Czech National Bank
+/// Gets exchange rates from a CSV file provided by the Czech National Bank (daily.txt file)
 /// </summary>
 public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 {
