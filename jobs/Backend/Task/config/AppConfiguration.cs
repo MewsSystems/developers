@@ -33,6 +33,8 @@ public class AppConfiguration
     public string Currencies { get; set; }
 
     public string LogLevel { get; set; }
+    
+    public string CzkCurrencyCode { get; set; }
 
     public IEnumerable<Currency> GetCurrencies()
     {

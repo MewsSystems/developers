@@ -23,7 +23,7 @@ public static class Program
 
         var serviceProvider = new ServiceCollection()
             .AddLogging(builder => { builder.AddSerilog(Log.Logger); })
-            .AddSingleton<IExchangeRateProvider, CzechNationalBankCsvExchangeRateProvider>()
+            .AddSingleton<IExchangeRateProvider, CzechNationalBankRestApiExchangeRateProvider>()
             .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>()
             .AddSingleton(config)

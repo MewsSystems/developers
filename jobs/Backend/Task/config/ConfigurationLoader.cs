@@ -15,7 +15,8 @@ public static class ConfigurationLoader
             DailyRateUrl = configuration["DAILY_RATE_URL"] ?? "",
             HttpTimeoutSeconds = int.TryParse(configuration["HTTP_TIMEOUT_SECONDS"], out var timeout) ? timeout : 30,
             Currencies = configuration["CURRENCIES"] ?? "",
-            LogLevel = configuration["LOG_LEVEL"] ?? "Information"
+            LogLevel = configuration["LOG_LEVEL"] ?? "Information",
+            CzkCurrencyCode = "CZK"
         };
     }
 }
