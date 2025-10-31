@@ -1,0 +1,19 @@
+services:
+  exchange-rate-database:
+    container_name: exchange-rate-database
+    image: postgres:15.14-alpine3.22
+    restart: unless-stopped
+    environment:
+      - POSTGRES_INITDB_ARGS=--data-checksums
+      - POSTGRES_PASSWORD=this-user-will-be-disabled
+      - ADMIN_USER_PASSWORD=admin
+      - DB_USER_PASSWORD=123456
+      - TZ=Europe/Madrid
+      - PGTZ=Europe/Madrid
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database-init.sh:/docker-entrypoint-initdb.d/database-init.sh
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    command: -c password_encryption=scram-sha-256

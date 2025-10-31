@@ -77,10 +77,10 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
         return exchangeRates;
     }
 
-    private DateTime GetExtractionDate(string[] lines)
+    private DateOnly GetExtractionDate(string[] lines)
     {
         var dateString = lines[0].Split('#')[0].Trim();
-        var rateDate = DateTime.ParseExact(dateString, DateFormat,
+        var rateDate = DateOnly.ParseExact(dateString, DateFormat,
             CultureInfo.InvariantCulture);
         return rateDate;
     }

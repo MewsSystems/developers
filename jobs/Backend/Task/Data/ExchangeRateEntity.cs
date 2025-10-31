@@ -22,5 +22,5 @@ public class ExchangeRateEntity
 
     [Column("rate")] public decimal Rate { get; set; }
 
-    [Column("date")] public DateTime Date { get; set; }
+    [Column("date")] public DateOnly Date { get; set; }
 }

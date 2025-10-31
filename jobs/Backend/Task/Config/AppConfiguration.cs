@@ -35,6 +35,8 @@ public class AppConfiguration
 
     public string CzkCurrencyCode { get; init; }
 
+    public string DatabaseConnectionString { get; init; }
+
     public RateProviderType ProviderType { get; init; }
 
     public RateExporterType ExporterType { get; init; }
@@ -82,6 +84,13 @@ public class AppConfiguration
             var validTypes = string.Join(", ", Enum.GetNames(typeof(RateProviderType)));
             throw new InvalidOperationException(
                 $"Invalid provider type: {ProviderType}. Valid options are: {validTypes}");
+        }
+
+        if (!Enum.IsDefined(typeof(RateExporterType), ExporterType))
+        {
+            var validTypes = string.Join(", ", Enum.GetNames(typeof(RateExporterType)));
+            throw new InvalidOperationException(
+                $"Invalid exporter type: {ExporterType}. Valid options are: {validTypes}");
         }
     }
 

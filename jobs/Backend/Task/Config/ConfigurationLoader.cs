@@ -17,6 +17,7 @@ public static class ConfigurationLoader
             Currencies = configuration["CURRENCIES"] ?? "",
             LogLevel = configuration["LOG_LEVEL"] ?? "Debug",
             CzkCurrencyCode = "CZK",
+            DatabaseConnectionString = configuration["DATABASE_CONNECTION_STRING"] ?? "",
             ProviderType =
                 Enum.Parse<RateProviderType>(Environment.GetEnvironmentVariable("PROVIDER_TYPE") ?? "Csv", true),
             ExporterType =

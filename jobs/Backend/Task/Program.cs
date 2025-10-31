@@ -50,6 +50,9 @@ public static class Program
                 case RateExporterType.Console:
                     serviceCollection.AddSingleton<IExchangeRateExporter, ConsoleExchangeRateExporter>();
                     break;
+                case RateExporterType.Database:
+                    serviceCollection.AddSingleton<IExchangeRateExporter, DatabaseExchangeRateExporter>();
+                    break;
                 default:
                     throw new InvalidOperationException($"Unsupported exporter type: {config.ExporterType}");
             }

@@ -4,7 +4,7 @@ namespace ExchangeRateUpdater.Models;
 
 public class ExchangeRate
 {
-    public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, DateTime date, decimal value)
+    public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, DateOnly date, decimal value)
     {
         SourceCurrency = sourceCurrency;
         TargetCurrency = targetCurrency;
@@ -18,7 +18,7 @@ public class ExchangeRate
 
     public decimal Value { get; }
 
-    public DateTime Date { get; }
+    public DateOnly Date { get; }
 
     public override string ToString()
     {

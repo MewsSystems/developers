@@ -61,7 +61,7 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
             var exchangeRate = new ExchangeRate(
                 new Currency(rate.CurrencyCode),
                 new Currency(_appConfiguration.CzkCurrencyCode),
-                DateTime.Parse(rate.ValidFor),
+                DateOnly.Parse(rate.ValidFor),
                 rate.Rate / rate.Amount);
 
             _logger.LogDebug("Adding exchange rate: {ExchangeRate}", exchangeRate);
