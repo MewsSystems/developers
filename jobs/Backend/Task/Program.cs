@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Config;
+using ExchangeRateUpdater.Data;
 using ExchangeRateUpdater.Services.RateExporters;
 using ExchangeRateUpdater.Services.RateProviders;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,16 +27,19 @@ public static class Program
 
             var serviceCollection = new ServiceCollection()
                 .AddLogging(builder => { builder.AddSerilog(Log.Logger); })
+                .AddDbContext<ExchangeRateDbContext>()
+                .AddSingleton<IRepository<ExchangeRateEntity>, Repository<ExchangeRateEntity>>()
                 .AddSingleton(config)
                 .AddSingleton<Application.Application>();
-            
+
             switch (config.ProviderType)
             {
                 case RateProviderType.Csv:
                     serviceCollection.AddSingleton<IExchangeRateProvider, CzechNationalBankCsvExchangeRateProvider>();
                     break;
                 case RateProviderType.Rest:
-                    serviceCollection.AddSingleton<IExchangeRateProvider, CzechNationalBankRestApiExchangeRateProvider>();
+                    serviceCollection
+                        .AddSingleton<IExchangeRateProvider, CzechNationalBankRestApiExchangeRateProvider>();
                     break;
                 default:
                     throw new InvalidOperationException($"Unsupported provider type: {config.ProviderType}");
@@ -49,9 +53,9 @@ public static class Program
                 default:
                     throw new InvalidOperationException($"Unsupported exporter type: {config.ExporterType}");
             }
-            
+
             var serviceProvider = serviceCollection.BuildServiceProvider();
-            
+
 
             var app = serviceProvider.GetRequiredService<Application.Application>();
             await app.RunAsync();

@@ -33,7 +33,7 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
 
         _logger.LogDebug("Fetching exchange rates from {Url}", url);
         var response = await httpClient.GetStringAsync(url);
-        
+
         var dto = JsonSerializer.Deserialize<ExchangeRateResponseDto>(response, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -63,7 +63,7 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
                 new Currency(_appConfiguration.CzkCurrencyCode),
                 DateTime.Parse(rate.ValidFor),
                 rate.Rate / rate.Amount);
-            
+
             _logger.LogDebug("Adding exchange rate: {ExchangeRate}", exchangeRate);
             exchangeRates.Add(exchangeRate);
         }

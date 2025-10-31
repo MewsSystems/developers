@@ -17,8 +17,10 @@ public static class ConfigurationLoader
             Currencies = configuration["CURRENCIES"] ?? "",
             LogLevel = configuration["LOG_LEVEL"] ?? "Debug",
             CzkCurrencyCode = "CZK",
-            ProviderType = Enum.Parse<RateProviderType>(Environment.GetEnvironmentVariable("PROVIDER_TYPE") ?? "Csv", ignoreCase: true),
-            ExporterType = Enum.Parse<RateExporterType>(Environment.GetEnvironmentVariable("EXPORTER_TYPE") ?? "Console", ignoreCase: true)
+            ProviderType =
+                Enum.Parse<RateProviderType>(Environment.GetEnvironmentVariable("PROVIDER_TYPE") ?? "Csv", true),
+            ExporterType =
+                Enum.Parse<RateExporterType>(Environment.GetEnvironmentVariable("EXPORTER_TYPE") ?? "Console", true)
         };
     }
 }

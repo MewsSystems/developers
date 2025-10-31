@@ -12,13 +12,13 @@ public class ExchangeRate
         Value = value;
     }
 
-    private Currency SourceCurrency { get; }
+    public Currency SourceCurrency { get; }
 
-    private Currency TargetCurrency { get; }
+    public Currency TargetCurrency { get; }
 
-    private decimal Value { get; }
+    public decimal Value { get; }
 
-    private DateTime Date { get; }
+    public DateTime Date { get; }
 
     public override string ToString()
     {
