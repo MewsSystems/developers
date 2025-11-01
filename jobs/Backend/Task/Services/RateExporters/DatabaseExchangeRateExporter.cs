@@ -7,6 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Services.RateExporters;
 
+/// <summary>
+///     Exports exchange rate information to a database using a repository pattern.
+///     Implements <see cref="IExchangeRateExporter" /> to persist exchange rates as <see cref="ExchangeRateEntity" />
+///     records.
+/// </summary>
 public class DatabaseExchangeRateExporter : IExchangeRateExporter
 {
     private readonly ILogger<DatabaseExchangeRateExporter> _logger;

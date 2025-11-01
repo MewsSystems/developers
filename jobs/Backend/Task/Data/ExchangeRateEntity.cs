@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExchangeRateUpdater.Data;
 
+/// <summary>
+///     Represents an exchange rate record stored in the database.
+///     Maps currency conversion rates between source and target currencies for a specific date.
+/// </summary>
 [Table("exchange_rates")]
 public class ExchangeRateEntity
 {

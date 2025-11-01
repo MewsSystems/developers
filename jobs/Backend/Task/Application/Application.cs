@@ -7,6 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Application;
 
+/// <summary>
+///     Main application class that orchestrates the exchange rate retrieval and export process.
+///     Retrieves exchange rates from a provider and exports them using the configured exporter.
+/// </summary>
 public class Application
 {
     private readonly AppConfiguration _appConfiguration;

@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.Services.RateProviders;
 
 /// <summary>
-///     Gets exchange rates from a CSV file provided by the Czech National Bank (daily.txt file)
+///     Retrieves exchange rates from the Czech National Bank's daily CSV file (daily.txt).
+///     Implements <see cref="IExchangeRateProvider" /> to fetch and parse exchange rates in CZK,
+///     normalizing values to a base of 1 unit of the source currency.
 /// </summary>
 public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 {

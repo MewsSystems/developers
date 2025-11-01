@@ -4,6 +4,10 @@ using ExchangeRateUpdater.Models;
 
 namespace ExchangeRateUpdater.Services.RateProviders;
 
+/// <summary>
+///     Defines a contract for retrieving exchange rates from external data sources.
+///     Implementations provide access to exchange rate data from various providers (CSV, REST API, etc.).
+/// </summary>
 public interface IExchangeRateProvider
 {
     /// <summary>

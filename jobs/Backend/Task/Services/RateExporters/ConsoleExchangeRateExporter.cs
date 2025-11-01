@@ -8,7 +8,8 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.Services.RateExporters;
 
 /// <summary>
-///     Exports the rate information to the console
+///     Exports exchange rate information to the console output.
+///     Implements <see cref="IExchangeRateExporter" /> to provide console-based rate visualization.
 /// </summary>
 public class ConsoleExchangeRateExporter : IExchangeRateExporter
 {

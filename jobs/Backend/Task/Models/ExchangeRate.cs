@@ -2,6 +2,9 @@
 
 namespace ExchangeRateUpdater.Models;
 
+/// <summary>
+///     Represents an immutable exchange rate between two currencies for a specific date.
+/// </summary>
 public class ExchangeRate
 {
     public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, DateOnly date, decimal value)

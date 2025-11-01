@@ -6,9 +6,14 @@ using ExchangeRateUpdater.Services.RateExporters;
 using ExchangeRateUpdater.Services.RateProviders;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace ExchangeRateUpdater;
 
+/// <summary>
+///     Entry point of the application that configures logging, dependency injection,
+///     and orchestrates the exchange rate update process.
+/// </summary>
 public static class Program
 {
     public static async Task Main(string[] args)
@@ -18,7 +23,8 @@ public static class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Is(config.GetLogLevel())
             .WriteTo.Console(
-                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u}] {Message:lj}{NewLine}{Exception}")
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u}] {Message:lj}{NewLine}{Exception}",
+                theme: AnsiConsoleTheme.Sixteen)
             .CreateLogger();
 
         try

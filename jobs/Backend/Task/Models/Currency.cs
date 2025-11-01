@@ -1,5 +1,8 @@
 ﻿namespace ExchangeRateUpdater.Models;
 
+/// <summary>
+///     Gets the three-letter ISO 4217 currency code (e.g., "USD", "EUR", "CZK").
+/// </summary>
 public class Currency
 {
     public Currency(string code)
@@ -7,9 +10,6 @@ public class Currency
         Code = code;
     }
 
-    /// <summary>
-    ///     Three-letter ISO 4217 code of the currency.
-    /// </summary>
     public string Code { get; }
 
     public override string ToString()

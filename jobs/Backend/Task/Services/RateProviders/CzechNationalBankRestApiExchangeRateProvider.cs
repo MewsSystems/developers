@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 namespace ExchangeRateUpdater.Services.RateProviders;
 
 /// <summary>
-///     Gets exchange rates from the REST API provided by the Czech National Bank
+///     Retrieves exchange rates from the Czech National Bank's REST API endpoint.
+///     Implements <see cref="IExchangeRateProvider" /> to fetch and parse JSON exchange rates in CZK,
+///     normalizing values to a base of 1 unit of the source currency.
 /// </summary>
 public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvider
 {
