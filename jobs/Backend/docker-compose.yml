@@ -2,7 +2,6 @@ services:
   exchange-rate-database:
     container_name: exchange-rate-database
     image: postgres:15.14-alpine3.22
-    restart: unless-stopped
     environment:
       - POSTGRES_INITDB_ARGS=--data-checksums
       - POSTGRES_PASSWORD=this-user-will-be-disabled
