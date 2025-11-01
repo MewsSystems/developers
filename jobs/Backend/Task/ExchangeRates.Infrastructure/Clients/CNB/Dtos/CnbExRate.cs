@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace ExchangesRates.Infrastructure.External.CNB.Dtos
+﻿namespace ExchangesRates.Infrastructure.External.CNB.Dtos
 {
-    public class ExRateDailyRest
+    public class CnbExRate
     {
         public long Amount { get; set; }
         public string Country { get; set; }

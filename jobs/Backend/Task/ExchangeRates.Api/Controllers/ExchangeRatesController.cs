@@ -1,45 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExchangeRates.Application.Providers;
 using ExchangeRates.Domain.Entities;
-using ExchangeRates.Application.Providers;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
-namespace ExchangeRates.Api.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class ExchangeRatesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ExchangeRatesController : ControllerBase
+    private readonly IExchangeRatesProvider _exchangeRatesProvider;
+    private readonly ILogger<ExchangeRatesController> _logger;
+
+    public ExchangeRatesController(IExchangeRatesProvider exchangeRatesProvider, ILogger<ExchangeRatesController> logger)
     {
-        private readonly ExchangeRatesProvider _exchangeRatesService;
+        _exchangeRatesProvider = exchangeRatesProvider;
+        _logger = logger;
+    }
 
-        public ExchangeRatesController(ExchangeRatesProvider exchangeRatesService)
+    [HttpGet]
+    [SwaggerOperation(
+    Summary = "Retrieves daily exchange rates",
+    Description = "Returns the latest exchange rates against the Czech koruna (CZK)."
+    )]
+    [ProducesResponseType(typeof(IEnumerable<ExchangeRate>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<ExchangeRate>>> Get([FromQuery] string[]? currencies, CancellationToken cancellationToken)
+    {
+        var rates = await _exchangeRatesProvider.GetExchangeRatesAsync(currencies, cancellationToken);
+
+        if (!rates.Any())
         {
-            _exchangeRatesService = exchangeRatesService;
+            _logger.LogWarning("No exchange rates found for {Currencies}", currencies ?? Array.Empty<string>());
+            return NotFound("No exchange rates found.");
         }
 
-        /// <summary>
-        /// Returns exchange rates for the specified currencies.
-        /// </summary>
-        /// <param name="currencies">Optional list of currency codes (e.g., USD, EUR). If empty, defaults will be used.</param>
-        [HttpGet]
-        public async Task<IActionResult> GetExchangeRates([FromQuery] string[]? currencies)
-        {
-            var currencyList = (currencies != null && currencies.Any())
-                ? currencies.Select(c => new Currency(c)).ToArray()
-                : new[]
-                {
-                    new Currency("USD"),
-                    new Currency("EUR"),
-                    new Currency("CZK"),
-                    new Currency("JPY"),
-                    new Currency("KES"),
-                    new Currency("RUB"),
-                    new Currency("THB"),
-                    new Currency("TRY"),
-                    new Currency("XYZ")
-                };
-
-            var rates = await _exchangeRatesService.GetExchangeRatesAsync(currencyList);
-
-            return Ok(rates);
-        }
+        return Ok(rates);
     }
 }

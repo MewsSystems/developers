@@ -1,44 +1,110 @@
-﻿using ExchangeRates.Domain.Entities;
+﻿using ExchangeRates.Application.Options;
+using ExchangeRates.Domain.Entities;
+using ExchangeRates.Infrastructure.Cache;
 using ExchangeRates.Infrastructure.External.CNB;
+using ExchangesRates.Infrastructure.External.CNB.Dtos;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace ExchangeRates.Application.Providers
 {
-    public interface IExchangeRatesService
+    public interface IExchangeRatesProvider
     {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string[]? currencyCodes = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
     }
 
-    public class ExchangeRatesProvider : IExchangeRatesService
+    public class ExchangeRatesProvider : IExchangeRatesProvider
     {
-        private readonly CNBHttpClient _cnbHttpClient;
+        private readonly ICnbHttpClient _cnbHttpClient;
+        private readonly IDistributedCache _cache;
+        private readonly TimeOnly _refreshTimeCZ;
+        private readonly string[] _defaultCurrencies;
+        private readonly ILogger<ExchangeRatesProvider> _logger;
 
-        public ExchangeRatesProvider(CNBHttpClient cnbHttpClient)
+        public ExchangeRatesProvider(
+            ICnbHttpClient cnbHttpClient,
+            IDistributedCache cache,
+            IOptions<CnbHttpClientOptions> cnbSettings,
+            IOptions<ExchangeRatesOptions> exchangeRatesSettings,
+            ILogger<ExchangeRatesProvider> logger)
         {
             _cnbHttpClient = cnbHttpClient;
+            _cache = cache;
+            _logger = logger;
+
+            _refreshTimeCZ = cnbSettings.Value.DailyRefreshTimeCZ;
+            _defaultCurrencies = exchangeRatesSettings.Value.DefaultCurrencies;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string[]? currencyCodes = null, CancellationToken cancellationToken = default)
         {
-            var response = await _cnbHttpClient.GetDailyExchangeRatesAsync();
+            var currencies = (currencyCodes != null && currencyCodes.Any())
+                ? currencyCodes.Select(c => new Currency(c.Trim().ToUpperInvariant()))
+                : _defaultCurrencies.Select(c => new Currency(c.Trim().ToUpperInvariant()));
 
-            if (response?.Rates == null || !response.Rates.Any())
-                return Enumerable.Empty<ExchangeRate>();
+            return await GetExchangeRatesAsync(currencies, cancellationToken);
+        }
 
-            var result = new List<ExchangeRate>();
-            var czk = new Currency("CZK");
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
+        {
+            var cacheKey = CacheKeys.ExchangeRatesDaily();
+            CnbExRatesResponse response;
 
-            foreach (var target in currencies)
+            _logger.LogInformation("Fetching exchange rates for currencies: {Currencies}", string.Join(", ", currencies.Select(c => c.Code)));
+
+            try
             {
-                var rateEntry = response.Rates.FirstOrDefault(r => r.CurrencyCode == target.Code);
-                if (rateEntry == null)
-                    continue;
+                var cachedData = await _cache.GetStringAsync(cacheKey, cancellationToken);
 
-                var rateValue = rateEntry.Rate / rateEntry.Amount;
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    response = JsonSerializer.Deserialize<CnbExRatesResponse>(cachedData)!;
+                }
+                else
+                {
+                    response = await _cnbHttpClient.GetDailyExchangeRatesAsync(cancellationToken: cancellationToken);
 
-                result.Add(new ExchangeRate(czk, target, rateValue));
+                    if (response?.Rates == null || !response.Rates.Any())
+                    {
+                        _logger.LogError("CNB API returned no exchange rate data.");
+                        return Enumerable.Empty<ExchangeRate>();
+                    }
+
+                    var serialized = JsonSerializer.Serialize(response);
+                    var expiration = CacheExpirationHelper.GetCacheExpirationToNextCzTime(_refreshTimeCZ);
+                    await _cache.SetStringAsync(
+                        cacheKey,
+                        serialized,
+                        new DistributedCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = expiration
+                        },
+                        cancellationToken);
+                }
+
+                var czk = new Currency("CZK");
+                var currencySet = currencies.Select(c => c.Code).ToHashSet();
+
+                var result = response.Rates
+                    .Where(r => currencySet.Contains(r.CurrencyCode))
+                    .Select(r =>
+                    {
+                        var target = currencies.First(c => c.Code == r.CurrencyCode);
+                        return new ExchangeRate(czk, target, r.Rate / r.Amount);
+                    })
+                    .ToList();
+
+                _logger.LogInformation("Returning {Count} exchange rates.", result.Count);
+                return result;
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching exchange rates.");
+                throw;
+            }
         }
     }
 }
