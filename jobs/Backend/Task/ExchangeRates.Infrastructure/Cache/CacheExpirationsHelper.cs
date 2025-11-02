@@ -1,23 +1,36 @@
-﻿namespace ExchangeRates.Infrastructure.Cache
+﻿using System;
+
+namespace ExchangeRates.Infrastructure.Cache
 {
     public static class CacheExpirationHelper
     {
-        public static TimeSpan GetCacheExpirationToNextCzTime(TimeOnly expirationTime, DateTime? utcNow = null)
+        public static TimeSpan GetCacheExpirationToNextCzTime(TimeOnly dailyRefreshTime, DateTime? utcNow = null)
         {
             var nowUtc = utcNow ?? DateTime.UtcNow;
             var czTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
             var nowCz = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, czTimeZone);
 
-            var nextExpirationCz = nowCz.Date.AddHours(expirationTime.Hour)
-                                             .AddMinutes(expirationTime.Minute)
-                                             .AddSeconds(expirationTime.Second);
+            var candidateRefreshCz = nowCz.Date.AddHours(dailyRefreshTime.Hour)
+                                             .AddMinutes(dailyRefreshTime.Minute)
+                                             .AddSeconds(dailyRefreshTime.Second);
 
-            if (nowCz >= nextExpirationCz)
-                nextExpirationCz = nextExpirationCz.AddDays(1);
+            // Move to next business day if today is weekend or the time has passed
+            var nextRefreshCz = GetNextBusinessDay(candidateRefreshCz);
+            if (nowCz >= nextRefreshCz)
+                nextRefreshCz = GetNextBusinessDay(nextRefreshCz.AddDays(1));
 
-            var nextExpirationUtc = TimeZoneInfo.ConvertTimeToUtc(nextExpirationCz, czTimeZone);
-            return nextExpirationUtc - nowUtc;
+            var nextRefreshUtc = TimeZoneInfo.ConvertTimeToUtc(nextRefreshCz, czTimeZone);
+
+            return nextRefreshUtc - nowUtc;
+        }
+
+        private static DateTime GetNextBusinessDay(DateTime date)
+        {
+            while (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                date = date.AddDays(1);
+            }
+            return date;
         }
     }
-
 }

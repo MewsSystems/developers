@@ -1,7 +1,7 @@
 ﻿using ExchangeRates.Application.Options;
 using ExchangeRates.Domain.Entities;
 using ExchangeRates.Infrastructure.Cache;
-using ExchangeRates.Infrastructure.External.CNB;
+using ExchangeRates.Infrastructure.Clients.CNB;
 using ExchangesRates.Infrastructure.External.CNB.Dtos;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ namespace ExchangeRates.Application.Providers
 {
     public interface IExchangeRatesProvider
     {
-        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string[]? currencyCodes = null, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
         Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
     }
 
@@ -39,7 +39,7 @@ namespace ExchangeRates.Application.Providers
             _defaultCurrencies = exchangeRatesSettings.Value.DefaultCurrencies;
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(string[]? currencyCodes = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<string>? currencyCodes, CancellationToken cancellationToken = default)
         {
             var currencies = (currencyCodes != null && currencyCodes.Any())
                 ? currencyCodes.Select(c => new Currency(c.Trim().ToUpperInvariant()))
@@ -51,7 +51,7 @@ namespace ExchangeRates.Application.Providers
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
         {
             var cacheKey = CacheKeys.ExchangeRatesDaily();
-            CnbExRatesResponse response;
+            CnbExRatesResponse? response;
 
             _logger.LogInformation("Fetching exchange rates for currencies: {Currencies}", string.Join(", ", currencies.Select(c => c.Code)));
 
@@ -61,6 +61,7 @@ namespace ExchangeRates.Application.Providers
 
                 if (!string.IsNullOrEmpty(cachedData))
                 {
+                    _logger.LogInformation("Cache hit for key '{CacheKey}'. Deserializing exchange rates.", cacheKey);
                     response = JsonSerializer.Deserialize<CnbExRatesResponse>(cachedData)!;
                 }
                 else
@@ -75,6 +76,8 @@ namespace ExchangeRates.Application.Providers
 
                     var serialized = JsonSerializer.Serialize(response);
                     var expiration = CacheExpirationHelper.GetCacheExpirationToNextCzTime(_refreshTimeCZ);
+
+                    _logger.LogInformation("Caching exchange rates under key '{CacheKey}' for {Expiration:F0} seconds.", cacheKey, expiration.TotalSeconds);
                     await _cache.SetStringAsync(
                         cacheKey,
                         serialized,

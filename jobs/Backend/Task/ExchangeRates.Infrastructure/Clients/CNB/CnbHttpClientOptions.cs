@@ -1,8 +1,8 @@
-﻿namespace ExchangeRates.Infrastructure.External.CNB
+﻿namespace ExchangeRates.Infrastructure.Clients.CNB
 {
     public class CnbHttpClientOptions
     {
-        public string BaseUrl { get; set; }
+        public string? BaseUrl { get; set; }
         public TimeOnly DailyRefreshTimeCZ { get; set; }
 
         public int TimeoutSeconds { get; set; } = 10;

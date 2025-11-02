@@ -7,6 +7,7 @@ namespace ExchangeRates.Api
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Logging.ClearProviders();
+            builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
             builder.Logging.AddConsole();
 
             Configuration.ConfigureServices(builder.Services, builder.Configuration);

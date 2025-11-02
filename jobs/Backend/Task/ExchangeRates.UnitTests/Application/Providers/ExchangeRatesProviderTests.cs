@@ -1,6 +1,6 @@
 ﻿using ExchangeRates.Application.Options;
 using ExchangeRates.Application.Providers;
-using ExchangeRates.Infrastructure.External.CNB;
+using ExchangeRates.Infrastructure.Clients.CNB;
 using ExchangesRates.Infrastructure.External.CNB.Dtos;
 using FluentAssertions;
 using Microsoft.Extensions.Caching.Distributed;
@@ -135,7 +135,7 @@ namespace ExchangeRates.UnitTests.Application.Providers
             var provider = new ExchangeRatesProvider(_cnbMock.Object, _cacheMock.Object, _cnbOptions, _exchangeOptions, _logger);
 
             // Act
-            var result = await provider.GetExchangeRatesAsync((string[]?)null, CancellationToken.None);
+            var result = await provider.GetExchangeRatesAsync((IEnumerable<string>?)null, CancellationToken.None);
 
             // Assert
             result.Should().HaveCount(3);
@@ -154,7 +154,7 @@ namespace ExchangeRates.UnitTests.Application.Providers
                 .Returns<string, string, CancellationToken>((date, lang, token) =>
                 {
                     token.ThrowIfCancellationRequested();
-                    return Task.FromResult(new CnbExRatesResponse
+                    return Task.FromResult<CnbExRatesResponse?>(new CnbExRatesResponse
                     {
                         Rates = new List<CnbExRate> { new CnbExRate { CurrencyCode = "USD", Amount = 1, Rate = 22 } }
                     });

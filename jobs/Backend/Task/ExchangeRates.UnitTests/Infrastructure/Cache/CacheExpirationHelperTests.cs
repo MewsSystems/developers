@@ -1,58 +1,65 @@
 ﻿using ExchangeRates.Infrastructure.Cache;
 using FluentAssertions;
+
 namespace ExchangeRates.UnitTests.Infrastructure.Cache
 {
     public class CacheExpirationHelperTests
     {
         [Fact]
-        public void GetCacheExpirationToNextCzTime_BeforeExpiration_ReturnsPositiveTimeSpan()
+        public void GetCacheExpirationToNextCzTime_BeforeRefresh_ReturnsPositiveTimeSpan()
         {
-            // Arrange
+            // Arrange: Current time is before daily refresh on a weekday
             var czTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-            var nowCz = new DateTime(2025, 10, 31, 12, 0, 0); // 12:00 CZ
+            var nowCz = new DateTime(2025, 10, 31, 12, 0, 0); // Friday 12:00 CZ
             var nowUtc = TimeZoneInfo.ConvertTimeToUtc(nowCz, czTimeZone);
 
-            var expirationTime = new TimeOnly(14, 0); // 14:00 CZ
+            var dailyRefreshTime = new TimeOnly(14, 0); // 14:00 CZ
 
             // Act
-            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(expirationTime, nowUtc);
+            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(dailyRefreshTime, nowUtc);
 
-            // Assert
-            timespan.Should().Be(TimeSpan.FromHours(2)); // ~2h until 14:00 CZ
+            // Assert: 2 hours until next refresh
+            timespan.Should().Be(TimeSpan.FromHours(2));
         }
 
         [Fact]
-        public void GetCacheExpirationToNextCzTime_AfterExpiration_ReturnsTimeUntilTomorrow()
+        public void GetCacheExpirationToNextCzTime_AfterRefresh_OnWeekday_ReturnsTimeUntilNextBusinessDay()
         {
-            // Arrange
+            // Arrange: Current time is after daily refresh on Friday
             var czTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-            var nowCz = new DateTime(2025, 10, 31, 15, 0, 0); // 15:00 CZ
+            var nowCz = new DateTime(2025, 10, 31, 15, 0, 0); // Friday 15:00 CZ
             var nowUtc = TimeZoneInfo.ConvertTimeToUtc(nowCz, czTimeZone);
 
-            var expirationTime = new TimeOnly(14, 0); // 14:00 CZ
+            var dailyRefreshTime = new TimeOnly(14, 0); // 14:00 CZ
 
             // Act
-            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(expirationTime, nowUtc);
+            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(dailyRefreshTime, nowUtc);
 
-            // Assert
-            timespan.Should().Be(TimeSpan.FromHours(23)); // ~23h until tomorrow 14:00 CZ
+            // Assert: Next refresh is Monday 3 Nov 14:00
+            var nextRefreshCz = new DateTime(2025, 11, 3, 14, 0, 0);
+            var expected = nextRefreshCz - nowCz;
+
+            timespan.Should().Be(expected);
         }
 
         [Fact]
-        public void GetCacheExpirationToNextCzTime_ExactlyAtExpiration_ReturnsTimeUntilTomorrow()
+        public void GetCacheExpirationToNextCzTime_OnSaturday_ReturnsTimeUntilMonday()
         {
-            // Arrange
+            // Arrange: Current time is on Saturday
             var czTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-            var nowCz = new DateTime(2025, 10, 31, 14, 0, 0); // 14:00 CZ
+            var nowCz = new DateTime(2025, 11, 1, 10, 0, 0); // Saturday 10:00 CZ
             var nowUtc = TimeZoneInfo.ConvertTimeToUtc(nowCz, czTimeZone);
 
-            var expirationTime = new TimeOnly(14, 0); // 14:00 CZ
+            var dailyRefreshTime = new TimeOnly(14, 0); // 14:00 CZ
 
             // Act
-            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(expirationTime, nowUtc);
+            var timespan = CacheExpirationHelper.GetCacheExpirationToNextCzTime(dailyRefreshTime, nowUtc);
 
-            // Assert
-            timespan.Should().Be(TimeSpan.FromHours(24)); // ~24h until tomorrow 14:00 CZ
+            // Assert: Next refresh is Monday 3 Nov 14:00
+            var nextRefreshCz = new DateTime(2025, 11, 3, 14, 0, 0);
+            var expected = nextRefreshCz - nowCz;
+
+            timespan.Should().Be(expected);
         }
     }
 }

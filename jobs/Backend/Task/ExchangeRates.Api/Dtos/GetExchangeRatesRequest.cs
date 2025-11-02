@@ -1,7 +1,10 @@
-﻿namespace ExchangeRates.Api.DTOs
+﻿using ExchangeRates.Api.Dtos;
+
+namespace ExchangeRates.Api.DTOs
 {
     public class GetExchangeRatesRequest
     {
-        public string[]? Currencies { get; set; }
+        [ValidCurrencyCodes]
+        public IEnumerable<string>? Currencies { get; set; }
     }
 }

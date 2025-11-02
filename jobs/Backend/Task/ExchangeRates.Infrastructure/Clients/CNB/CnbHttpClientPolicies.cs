@@ -2,7 +2,7 @@
 using Polly;
 using Polly.Extensions.Http;
 
-namespace ExchangeRates.Infrastructure.External.CNB
+namespace ExchangeRates.Infrastructure.Clients.CNB
 {
     public static class CnbHttpClientPolicies
     {

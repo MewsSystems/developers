@@ -4,11 +4,11 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace ExchangeRates.Infrastructure.External.CNB
+namespace ExchangeRates.Infrastructure.Clients.CNB
 {
     public interface ICnbHttpClient
     {
-        Task<CnbExRatesResponse> GetDailyExchangeRatesAsync(string date = null, string lang = "EN", CancellationToken cancellationToken = default);
+        Task<CnbExRatesResponse?> GetDailyExchangeRatesAsync(string? date = null, string lang = "EN", CancellationToken cancellationToken = default);
     }
 
     public class CnbHttpClient : ICnbHttpClient
@@ -30,7 +30,7 @@ namespace ExchangeRates.Infrastructure.External.CNB
         /// <summary>
         /// Gets the daily exchange rates from the Czech National Bank API.
         /// </summary>
-        public async Task<CnbExRatesResponse> GetDailyExchangeRatesAsync(string date = null, string lang = "EN", CancellationToken cancellationToken = default)
+        public async Task<CnbExRatesResponse?> GetDailyExchangeRatesAsync(string? date = null, string lang = "EN", CancellationToken cancellationToken = default)
         {
             var query = $"?lang={lang}";
             if (!string.IsNullOrEmpty(date))

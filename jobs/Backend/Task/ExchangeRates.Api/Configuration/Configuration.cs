@@ -1,8 +1,7 @@
-﻿using ExchangeRates.Api.Validators;
-using ExchangeRates.Application.Options;
+﻿using ExchangeRates.Application.Options;
 using ExchangeRates.Application.Providers;
-using ExchangeRates.Infrastructure.External.CNB;
-using FluentValidation;
+using ExchangeRates.Infrastructure.Clients.CNB;
+using Microsoft.OpenApi.Models;
 
 namespace ExchangeRates.Api
 {
@@ -28,15 +27,13 @@ namespace ExchangeRates.Api
         private static void AddControllers(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddValidatorsFromAssemblyContaining<GetExchangeRatesRequestValidator>();
         }
 
         private static void AddSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
-                options.EnableAnnotations();
-                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Exchange Rates API",
@@ -44,6 +41,7 @@ namespace ExchangeRates.Api
                 });
             });
         }
+
 
         private static void AddCors(IServiceCollection services)
         {
@@ -73,14 +71,16 @@ namespace ExchangeRates.Api
             if (options == null)
                 throw new InvalidOperationException("CNBApi configuration section is missing.");
 
-            services.AddHttpClient<CnbHttpClient>((serviceProvider, client) =>
+            if (string.IsNullOrWhiteSpace(options.BaseUrl))
+                throw new InvalidOperationException("CNBApi:HttpClient:BaseUrl configuration value is missing.");
+
+            services.AddHttpClient<ICnbHttpClient, CnbHttpClient>((serviceProvider, client) =>
             {
                 client.BaseAddress = new Uri(options.BaseUrl);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             })
             .AddPolicyHandler((serviceProvider, request) =>
             {
-                var logger = serviceProvider.GetRequiredService<ILogger<CnbHttpClient>>();
                 return CnbHttpClientPolicies.TimeoutPolicy(options);
             })
             .AddPolicyHandler((serviceProvider, request) =>
@@ -88,15 +88,11 @@ namespace ExchangeRates.Api
                 var logger = serviceProvider.GetRequiredService<ILogger<CnbHttpClient>>();
                 return CnbHttpClientPolicies.RetryPolicy(options, logger);
             });
-
-            services.Configure<CnbHttpClientOptions>(
-                configuration.GetSection("CNBApi:HttpClient"));
         }
 
 
         private static void AddServices(IServiceCollection services)
         {
-            services.AddScoped<ICnbHttpClient, CnbHttpClient>();
             services.AddScoped<IExchangeRatesProvider, ExchangeRatesProvider>();
         }
 
@@ -107,7 +103,11 @@ namespace ExchangeRates.Api
             app.UseRouting();
 
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exchange Rates API v1");
+                c.RoutePrefix = "swagger"; // mantiene la ruta /swagger/index.html
+            });
 
             app.MapControllers();
             app.Map("/error", (HttpContext httpContext) =>
