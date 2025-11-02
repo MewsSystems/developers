@@ -26,7 +26,7 @@ destinations.
 
 ## Assumptions and comments
 
-### Arquitectura de la solución
+### Solution architecture
 
 Throughout the development process, I made several assumptions and design decisions that I would like to explain below.
 
