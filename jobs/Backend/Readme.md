@@ -48,7 +48,53 @@ This architecture allows the solution to scale horizontally: increasing the numb
 potentially adding components such as a **load balancer** or **Redis cache** to improve performance — especially given
 that currency rates are only updated once per day.
 
-Below is a diagram illustrating the proposed solution:
+Below is a diagram in mermaid illustrating the proposed solution:
+
+```mermaid
+graph TD
+%% Cloud Worker for fetching exchange rates
+    subgraph Cloud_Worker["ExchangeRateProvider (Worker Pool, GCP)"]
+        direction TB
+        ER[ExchangeRateProvider Service]:::worker
+        ER -->|Fetches exchange rates from| CNB[External Provider: CNB]:::external
+        ER -->|Stores exchange rates in| PDB[(PostgreSQL Database)]:::db
+    end
+
+%% API Layer
+    subgraph API_Layer["REST API"]
+        direction TB
+        API[Serverless service]:::api
+        API -->|Reads from| PDB
+        API -->|Reads and writes frequent queries to| REDIS[(Redis Cache)]:::cache
+    end
+
+%% Frontend Layer
+    subgraph Frontend["Consumers"]
+        direction LR
+        LB[Load Balancer]:::lb
+        WebUI[Web UI]:::ui
+        MobileApp[Mobile App]:::ui
+        LB -->|Sends requests to| API
+        WebUI -->|Fetches data through| LB
+        MobileApp -->|Fetches data through| LB
+    end
+
+%% Styling
+    classDef worker fill: #c6f0ff, stroke: #333, stroke-width: 1px;
+    classDef db fill: #d4f4dd, stroke: #333, stroke-width: 1px;
+    classDef api fill: #fce5cd, stroke: #333, stroke-width: 1px;
+    classDef cache fill: #fff2b2, stroke: #333, stroke-width: 1px;
+    classDef ui fill: #e3d4f4, stroke: #333, stroke-width: 1px;
+    classDef lb fill: #ffcccc, stroke: #333, stroke-width: 1px;
+    classDef external fill: #ffe6cc, stroke: #333, stroke-width: 1px;
+
+%% Comments
+%% ExchangeRateProvider fetches data from CNB and stores it in PostgreSQL
+%% REST API reads data from PostgreSQL and reads/writes cache in Redis
+%% Load Balancer sends requests from consumers to REST API
+%% Web UI and Mobile App fetch data from Load Balancer using React Query for caching
+
+```
 
 ### Code Changes and Architectural Improvements
 
@@ -74,9 +120,9 @@ Take a look to the mermaid diagram below for a visual representation of the arch
 
 ```mermaid
 graph TD
-    %% Main
+%% Main
     subgraph Main
-        style Main fill:#f9f,stroke:#333,stroke-width:2px
+        style Main fill: #f9f, stroke: #333, stroke-width: 2px
         A[Program.cs]:::main
         B[AppConfiguration]:::main
         C[Application]:::main
@@ -84,18 +130,18 @@ graph TD
         A -->|Initializes| C
     end
 
-    %% Application Layer
+%% Application Layer
     subgraph Application_Layer
-        style Application_Layer fill:#bbf,stroke:#333,stroke-width:2px
+        style Application_Layer fill: #bbf, stroke: #333, stroke-width: 2px
         D[IExchangeRateProvider]:::app
         E[IExchangeRateExporter]:::app
         C -->|Uses| D
         C -->|Uses| E
     end
 
-    %% Providers
+%% Providers
     subgraph Providers
-        style Providers fill:#bfb,stroke:#333,stroke-width:2px
+        style Providers fill: #bfb, stroke: #333, stroke-width: 2px
         F[CzechNationalBankCsvExchangeRateProvider]:::prov
         G[CzechNationalBankRestApiExchangeRateProvider]:::prov
         H[CNB daily.txt]:::prov
@@ -106,9 +152,9 @@ graph TD
         G -->|Fetches data from| I
     end
 
-    %% Exporters
+%% Exporters
     subgraph Exporters
-        style Exporters fill:#ffb,stroke:#333,stroke-width:2px
+        style Exporters fill: #ffb, stroke: #333, stroke-width: 2px
         J[ConsoleExchangeRateExporter]:::exp
         K[DatabaseExchangeRateExporter]:::exp
         L[IRepository]:::exp
@@ -119,11 +165,11 @@ graph TD
         L -->|Accesses| M
     end
 
-    %% Classes styles
-    classDef main fill:#fdd,stroke:#333,stroke-width:1px;
-    classDef app fill:#ddf,stroke:#333,stroke-width:1px;
-    classDef prov fill:#dfd,stroke:#333,stroke-width:1px;
-    classDef exp fill:#ffd,stroke:#333,stroke-width:1px;
+%% Classes styles
+    classDef main fill: #fdd, stroke: #333, stroke-width: 1px;
+    classDef app fill: #ddf, stroke: #333, stroke-width: 1px;
+    classDef prov fill: #dfd, stroke: #333, stroke-width: 1px;
+    classDef exp fill: #ffd, stroke: #333, stroke-width: 1px;
 
 ```
 
