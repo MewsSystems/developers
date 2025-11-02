@@ -62,7 +62,7 @@ public class AppConfiguration
             throw new InvalidOperationException(
                 "DAILY_RATE_URL environment variable is required and cannot be empty");
 
-        if (!Enum.IsDefined(typeof(LogEventLevel), LogLevel))
+        if (!Enum.TryParse<LogEventLevel>(LogLevel, true, out _))
         {
             var validLevels = string.Join(", ", Enum.GetNames(typeof(LogEventLevel)));
             throw new InvalidOperationException($"Invalid log level: {LogLevel}. Valid options are: {validLevels}");
@@ -82,14 +82,14 @@ public class AppConfiguration
                     $"Invalid currency code(s): {string.Join(", ", invalidCodes)}. Must be valid ISO 4217 codes.");
         }
 
-        if (!Enum.IsDefined(typeof(RateProviderType), ProviderType))
+        if (!Enum.TryParse<RateProviderType>(ProviderType.ToString(), true, out _))
         {
             var validTypes = string.Join(", ", Enum.GetNames(typeof(RateProviderType)));
             throw new InvalidOperationException(
                 $"Invalid provider type: {ProviderType}. Valid options are: {validTypes}");
         }
 
-        if (!Enum.IsDefined(typeof(RateExporterType), ExporterType))
+        if (!Enum.TryParse<RateExporterType>(ExporterType.ToString(), true, out _))
         {
             var validTypes = string.Join(", ", Enum.GetNames(typeof(RateExporterType)));
             throw new InvalidOperationException(

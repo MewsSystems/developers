@@ -61,7 +61,7 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 
             if (!currencyCodesToFilter.Contains(code))
             {
-                _logger.LogInformation("Currency {Code} is not in the requested list, skipping.", code);
+                _logger.LogDebug("Currency {Code} is not in the requested list, skipping.", code);
                 continue;
             }
 

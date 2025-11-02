@@ -64,8 +64,6 @@ public static class Program
             }
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
-
-
             var app = serviceProvider.GetRequiredService<Application.Application>();
             await app.RunAsync();
         }

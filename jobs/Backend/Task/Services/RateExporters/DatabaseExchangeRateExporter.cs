@@ -38,7 +38,7 @@ public class DatabaseExchangeRateExporter : IExchangeRateExporter
         foreach (var entity in entities)
         {
             await _repository.AddExchangeRateAsync(entity);
-            _logger.LogDebug("Added exchange rate: {Source} to {Target} = {Rate} on {Date}",
+            _logger.LogInformation("Added exchange rate: {Source} to {Target} = {Rate} on {Date}",
                 entity.SourceCurrency, entity.TargetCurrency, entity.Rate, entity.Date);
         }
 

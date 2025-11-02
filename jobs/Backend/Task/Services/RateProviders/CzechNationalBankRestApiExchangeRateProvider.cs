@@ -56,7 +56,7 @@ public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvide
         {
             if (!currencyCodesToFilter.Contains(rate.CurrencyCode))
             {
-                _logger.LogInformation("Currency {Code} is not in the requested list, skipping.", rate.CurrencyCode);
+                _logger.LogDebug("Currency {Code} is not in the requested list, skipping.", rate.CurrencyCode);
                 continue;
             }
 
