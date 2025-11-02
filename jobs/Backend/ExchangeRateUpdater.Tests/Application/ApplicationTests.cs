@@ -14,6 +14,10 @@ public class ApplicationTests
     private readonly Mock<IExchangeRateProvider> _rateProviderMock;
     private readonly Mock<IExchangeRateExporter> _rateExporterMock;
     private readonly ExchangeRateUpdater.Application.Application _sut;
+    
+    private readonly List<Currency> _currencies;
+    private readonly List<ExchangeRate> _rates;
+
 
     public ApplicationTests()
     {
@@ -22,6 +26,13 @@ public class ApplicationTests
         _rateProviderMock = new Mock<IExchangeRateProvider>();
         _rateExporterMock = new Mock<IExchangeRateExporter>();
 
+        _currencies = new List<Currency> { new("USD"), new("EUR") };
+        _rates = new List<ExchangeRate>
+        {
+            new(new Currency("USD"), new Currency("CZK"), DateOnly.MinValue, 23.5m),
+            new(new Currency("EUR"), new Currency("CZK"), DateOnly.MinValue, 25.0m)
+        };
+        
         _sut = new ExchangeRateUpdater.Application.Application(
             _loggerMock.Object,
             _appConfigurationMock.Object,
@@ -32,34 +43,25 @@ public class ApplicationTests
     [Fact]
     public async Task RunAsync_WhenSuccessful_RetrievesAndExportsRates()
     {
-        // Arrange
-        var currencies = new List<Currency> { new("USD"), new("EUR") };
-        var rates = new List<ExchangeRate>
-        {
-            new(new Currency("USD"), new Currency("CZK"), DateOnly.MinValue, 23.5m),
-            new(new Currency("EUR"), new Currency("CZK"), DateOnly.MinValue, 25.0m)
-        };
-
-        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(currencies);
-        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(currencies)).ReturnsAsync(rates);
+        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(_currencies);
+        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(_currencies)).ReturnsAsync(_rates);
 
         // Act
         await _sut.RunAsync();
 
         // Assert
-        _rateProviderMock.Verify(x => x.GetExchangeRatesAsync(currencies), Times.Once);
-        _rateExporterMock.Verify(x => x.ExportExchangeRatesAsync(rates), Times.Once);
+        _rateProviderMock.Verify(x => x.GetExchangeRatesAsync(_currencies), Times.Once);
+        _rateExporterMock.Verify(x => x.ExportExchangeRatesAsync(_rates), Times.Once);
     }
 
     [Fact]
     public async Task RunAsync_WhenProviderThrowsException_LogsError()
     {
         // Arrange
-        var currencies = new List<Currency> { new("USD") };
         var exception = new Exception("Provider error");
 
-        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(currencies);
-        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(currencies)).ThrowsAsync(exception);
+        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(_currencies);
+        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(_currencies)).ThrowsAsync(exception);
 
         // Act
         await _sut.RunAsync();
@@ -81,13 +83,11 @@ public class ApplicationTests
     public async Task RunAsync_WhenExporterThrowsException_LogsError()
     {
         // Arrange
-        var currencies = new List<Currency> { new("USD") };
-        var rates = new List<ExchangeRate> { new(new Currency("USD"), new Currency("CZK"), DateOnly.MinValue, 23.5m) };
         var exception = new Exception("Exporter error");
 
-        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(currencies);
-        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(currencies)).ReturnsAsync(rates);
-        _rateExporterMock.Setup(x => x.ExportExchangeRatesAsync(rates)).ThrowsAsync(exception);
+        _appConfigurationMock.Setup(x => x.GetCurrencies()).Returns(_currencies);
+        _rateProviderMock.Setup(x => x.GetExchangeRatesAsync(_currencies)).ReturnsAsync(_rates);
+        _rateExporterMock.Setup(x => x.ExportExchangeRatesAsync(_rates)).ThrowsAsync(exception);
 
         // Act
         await _sut.RunAsync();
