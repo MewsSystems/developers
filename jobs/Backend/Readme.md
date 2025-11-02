@@ -70,6 +70,63 @@ The application is logically divided into three main layers:
 - **Exporters** – Push processed data to various targets (e.g., database, console, etc.)
 - **Application layer** – Coordinates the flow between providers and exporters.
 
+Take a look to the mermaid diagram below for a visual representation of the architecture:
+
+```mermaid
+graph TD
+    %% Main
+    subgraph Main
+        style Main fill:#f9f,stroke:#333,stroke-width:2px
+        A[Program.cs]:::main
+        B[AppConfiguration]:::main
+        C[Application]:::main
+        A -->|Loads config| B
+        A -->|Initializes| C
+    end
+
+    %% Application Layer
+    subgraph Application_Layer
+        style Application_Layer fill:#bbf,stroke:#333,stroke-width:2px
+        D[IExchangeRateProvider]:::app
+        E[IExchangeRateExporter]:::app
+        C -->|Uses| D
+        C -->|Uses| E
+    end
+
+    %% Providers
+    subgraph Providers
+        style Providers fill:#bfb,stroke:#333,stroke-width:2px
+        F[CzechNationalBankCsvExchangeRateProvider]:::prov
+        G[CzechNationalBankRestApiExchangeRateProvider]:::prov
+        H[CNB daily.txt]:::prov
+        I[CNB REST API]:::prov
+        D --> F
+        D --> G
+        F -->|Fetches data from| H
+        G -->|Fetches data from| I
+    end
+
+    %% Exporters
+    subgraph Exporters
+        style Exporters fill:#ffb,stroke:#333,stroke-width:2px
+        J[ConsoleExchangeRateExporter]:::exp
+        K[DatabaseExchangeRateExporter]:::exp
+        L[IRepository]:::exp
+        M[PostgreSQL Database]:::exp
+        E --> J
+        E --> K
+        K -->|Uses| L
+        L -->|Accesses| M
+    end
+
+    %% Classes styles
+    classDef main fill:#fdd,stroke:#333,stroke-width:1px;
+    classDef app fill:#ddf,stroke:#333,stroke-width:1px;
+    classDef prov fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef exp fill:#ffd,stroke:#333,stroke-width:1px;
+
+```
+
 By defining **interfaces** for both providers and exporters, the system supports easy extension — new data sources or
 output destinations can be added without modifying existing components.
 
