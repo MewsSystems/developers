@@ -6,13 +6,13 @@ namespace ExchangeRateUpdater.Data;
 
 /// <summary>
 ///     Database context for managing exchange rate data in PostgreSQL.
-///     Configures the connection using settings from <see cref="AppConfiguration" />.
+///     Configures the connection using settings from <see cref="IAppConfiguration" />.
 /// </summary>
 public class ExchangeRateDbContext : DbContext
 {
-    private readonly AppConfiguration _appConfiguration;
+    private readonly IAppConfiguration _appConfiguration;
 
-    public ExchangeRateDbContext(DbContextOptions<ExchangeRateDbContext> options, AppConfiguration appConfiguration)
+    public ExchangeRateDbContext(DbContextOptions<ExchangeRateDbContext> options, IAppConfiguration appConfiguration)
         : base(options)
     {
         _appConfiguration = appConfiguration;

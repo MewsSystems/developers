@@ -17,11 +17,11 @@ namespace ExchangeRateUpdater.Services.RateProviders;
 /// </summary>
 public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvider
 {
-    private readonly AppConfiguration _appConfiguration;
+    private readonly IAppConfiguration _appConfiguration;
     private readonly ILogger<CzechNationalBankRestApiExchangeRateProvider> _logger;
 
     public CzechNationalBankRestApiExchangeRateProvider(ILogger<CzechNationalBankRestApiExchangeRateProvider> logger,
-        AppConfiguration appConfiguration)
+        IAppConfiguration appConfiguration)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;

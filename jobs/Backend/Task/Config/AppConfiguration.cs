@@ -10,7 +10,7 @@ namespace ExchangeRateUpdater.Config;
 /// <summary>
 ///     Represents the application configuration settings loaded from environment variables.
 /// </summary>
-public class AppConfiguration
+public class AppConfiguration : IAppConfiguration
 {
     private static readonly HashSet<string> ValidCurrencyCodes = CultureInfo
         .GetCultures(CultureTypes.AllCultures)

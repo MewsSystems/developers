@@ -10,7 +10,7 @@ namespace ExchangeRateUpdater.Config;
 /// </summary>
 public static class ConfigurationLoader
 {
-    public static AppConfiguration Load()
+    public static IAppConfiguration Load()
     {
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()

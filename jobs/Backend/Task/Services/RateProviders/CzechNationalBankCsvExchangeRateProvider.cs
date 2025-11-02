@@ -18,11 +18,11 @@ namespace ExchangeRateUpdater.Services.RateProviders;
 public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 {
     private const string DateFormat = "dd MMM yyyy";
-    private readonly AppConfiguration _appConfiguration;
+    private readonly IAppConfiguration _appConfiguration;
     private readonly ILogger<CzechNationalBankCsvExchangeRateProvider> _logger;
 
     public CzechNationalBankCsvExchangeRateProvider(ILogger<CzechNationalBankCsvExchangeRateProvider> logger,
-        AppConfiguration appConfiguration)
+        IAppConfiguration appConfiguration)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;

@@ -124,7 +124,7 @@ graph TD
     subgraph Main
         style Main fill: #f9f, stroke: #333, stroke-width: 2px
         A[Program.cs]:::main
-        B[AppConfiguration]:::main
+        B[IAppConfiguration]:::main
         C[Application]:::main
         A -->|Loads config| B
         A -->|Initializes| C

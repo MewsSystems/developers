@@ -13,12 +13,12 @@ namespace ExchangeRateUpdater.Application;
 /// </summary>
 public class Application
 {
-    private readonly AppConfiguration _appConfiguration;
+    private readonly IAppConfiguration _appConfiguration;
     private readonly IExchangeRateExporter _exchangeRateExporter;
     private readonly IExchangeRateProvider _exchangeRateProvider;
     private readonly ILogger<Application> _logger;
 
-    public Application(ILogger<Application> logger, AppConfiguration appConfiguration,
+    public Application(ILogger<Application> logger, IAppConfiguration appConfiguration,
         IExchangeRateProvider exchangeRateProvider, IExchangeRateExporter exchangeRateExporter)
     {
         _logger = logger;
