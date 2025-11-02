@@ -75,9 +75,10 @@ namespace ExchangeRates.Application.Providers
                     }
 
                     var serialized = JsonSerializer.Serialize(response);
-                    var expiration = CacheExpirationHelper.GetCacheExpirationToNextCzTime(_refreshTimeCZ);
+                    var apiDataLastUpdated = response.Rates.Min(c => c.ValidFor);
+                    var expiration = CacheExpirationHelper.GetCacheExpirationToNextCzTime(_refreshTimeCZ, apiDataLastUpdated);
 
-                    _logger.LogInformation("Caching exchange rates under key '{CacheKey}' for {Expiration:F0} seconds.", cacheKey, expiration.TotalSeconds);
+                    _logger.LogInformation("Caching exchange rates under key '{CacheKey}' for {Expiration} seconds.", cacheKey, expiration.TotalSeconds);
                     await _cache.SetStringAsync(
                         cacheKey,
                         serialized,

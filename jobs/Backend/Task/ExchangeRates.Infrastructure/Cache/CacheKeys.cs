@@ -1,7 +1,6 @@
-﻿
-namespace ExchangeRates.Infrastructure.Cache
+﻿namespace ExchangeRates.Infrastructure.Cache
 {
-    public class CacheKeys
+    public static class CacheKeys
     {
         public static string ExchangeRatesDaily() => "ExchangeRatesDaily";
     }

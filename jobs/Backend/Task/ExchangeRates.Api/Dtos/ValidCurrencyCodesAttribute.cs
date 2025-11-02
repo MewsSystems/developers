@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace ExchangeRates.Api.Dtos
 {
@@ -11,7 +12,7 @@ namespace ExchangeRates.Api.Dtos
             {
                 foreach (var c in arr)
                 {
-                    if (string.IsNullOrWhiteSpace(c) || !System.Text.RegularExpressions.Regex.IsMatch(c, "^[A-Za-z]{3}$"))
+                    if (string.IsNullOrWhiteSpace(c) || !Regex.IsMatch(c, "^[A-Za-z]{3}$"))
                         return new ValidationResult("All currency codes must be exactly 3 alphabetic characters.");
                 }
             }

@@ -90,7 +90,6 @@ namespace ExchangeRates.Api
             });
         }
 
-
         private static void AddServices(IServiceCollection services)
         {
             services.AddScoped<IExchangeRatesProvider, ExchangeRatesProvider>();
@@ -106,7 +105,7 @@ namespace ExchangeRates.Api
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exchange Rates API v1");
-                c.RoutePrefix = "swagger"; // mantiene la ruta /swagger/index.html
+                c.RoutePrefix = "swagger";
             });
 
             app.MapControllers();

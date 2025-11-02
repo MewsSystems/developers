@@ -1,27 +1,33 @@
-﻿using System;
-
-namespace ExchangeRates.Infrastructure.Cache
+﻿namespace ExchangeRates.Infrastructure.Cache
 {
     public static class CacheExpirationHelper
     {
-        public static TimeSpan GetCacheExpirationToNextCzTime(TimeOnly dailyRefreshTime, DateTime? utcNow = null)
+        public static TimeSpan GetCacheExpirationToNextCzTime(
+            TimeOnly dailyRefreshTime,
+            DateTime dataLastUpdated,
+            DateTime? utcNow = null)
         {
             var nowUtc = utcNow ?? DateTime.UtcNow;
             var czTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
             var nowCz = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, czTimeZone);
 
-            var candidateRefreshCz = nowCz.Date.AddHours(dailyRefreshTime.Hour)
-                                             .AddMinutes(dailyRefreshTime.Minute)
-                                             .AddSeconds(dailyRefreshTime.Second);
+            var lastUpdateCz = TimeZoneInfo.ConvertTimeFromUtc(dataLastUpdated.Date, czTimeZone);
+            var candidateRefreshCz = lastUpdateCz.Date
+                                                  .AddDays(1)
+                                                  .AddHours(dailyRefreshTime.Hour)
+                                                  .AddMinutes(dailyRefreshTime.Minute)
+                                                  .AddSeconds(dailyRefreshTime.Second);
 
-            // Move to next business day if today is weekend or the time has passed
+            // Move to next business day if next refresh is weekend 
             var nextRefreshCz = GetNextBusinessDay(candidateRefreshCz);
+
+            // If the current time has already passed the scheduled refresh, set the cache to expire in 5 minutes
             if (nowCz >= nextRefreshCz)
-                nextRefreshCz = GetNextBusinessDay(nextRefreshCz.AddDays(1));
+            {
+                return TimeSpan.FromMinutes(5);
+            }
 
-            var nextRefreshUtc = TimeZoneInfo.ConvertTimeToUtc(nextRefreshCz, czTimeZone);
-
-            return nextRefreshUtc - nowUtc;
+            return nextRefreshCz - nowCz;
         }
 
         private static DateTime GetNextBusinessDay(DateTime date)

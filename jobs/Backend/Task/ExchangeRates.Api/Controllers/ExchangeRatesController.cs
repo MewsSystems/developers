@@ -2,7 +2,6 @@
 using ExchangeRates.Application.Providers;
 using ExchangeRates.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 [ApiController]
 [Route("api/[controller]")]
