@@ -20,7 +20,6 @@ public class ExchangeRatesController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ExchangeRate>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<ExchangeRate>>> Get([FromQuery] GetExchangeRatesRequest request, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
@@ -28,13 +27,6 @@ public class ExchangeRatesController : ControllerBase
 
         var currencies = request.Currencies ?? Array.Empty<string>();
         var rates = await _exchangeRatesProvider.GetExchangeRatesAsync(currencies, cancellationToken);
-
-        if (!rates.Any())
-        {
-            _logger.LogWarning("No exchange rates found for {Currencies}", request.Currencies ?? Array.Empty<string>());
-            return NotFound("No exchange rates found.");
-        }
-
         return Ok(rates);
     }
 }
