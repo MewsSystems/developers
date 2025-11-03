@@ -22,10 +22,14 @@ public class ExchangeRateDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (string.IsNullOrEmpty(_appConfiguration.DatabaseConnectionString))
-            throw new InvalidOperationException("Database connection string is not configured.");
-
-        optionsBuilder.UseNpgsql(_appConfiguration.DatabaseConnectionString);
+        if (!optionsBuilder.IsConfigured)
+        {
+            if (string.IsNullOrWhiteSpace(_appConfiguration.DatabaseConnectionString))
+            {
+                throw new InvalidOperationException("Database connection string is not configured.");
+            }
+            optionsBuilder.UseNpgsql(_appConfiguration.DatabaseConnectionString);
+        }
         base.OnConfiguring(optionsBuilder);
     }
 }

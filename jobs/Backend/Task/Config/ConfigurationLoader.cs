@@ -25,14 +25,14 @@ public static class ConfigurationLoader
         }
 
         var providerTypeStr = configuration["PROVIDER_TYPE"];
-        if (string.IsNullOrEmpty(providerTypeStr))
+        if (string.IsNullOrWhiteSpace(providerTypeStr))
         {
             Log.Logger.Information("PROVIDER_TYPE not configured. Using default provider: CSV.");
             providerTypeStr = "CSV";
         }
 
         var exporterTypeStr = configuration["EXPORTER_TYPE"];
-        if (string.IsNullOrEmpty(exporterTypeStr))
+        if (string.IsNullOrWhiteSpace(exporterTypeStr))
         {
             Log.Logger.Information("EXPORTER_TYPE not configured. Using default exporter: Console.");
             exporterTypeStr = "Console";
