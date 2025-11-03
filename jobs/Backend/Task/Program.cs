@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        private static readonly IEnumerable<Currency> Currencies = new[]
         {
             new Currency("USD"),
             new Currency("EUR"),
@@ -19,17 +21,18 @@ namespace ExchangeRateUpdater
             new Currency("XYZ")
         };
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var provider = new ExchangeRateProvider(new ExchangeRateHttpClient(new HttpClient()));
+                var rates = (await provider.GetExchangeRatesAsync(Currencies)).ToList();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
+
                 foreach (var rate in rates)
                 {
-                    Console.WriteLine(rate.ToString());
+                    Console.WriteLine(rate);
                 }
             }
             catch (Exception e)
