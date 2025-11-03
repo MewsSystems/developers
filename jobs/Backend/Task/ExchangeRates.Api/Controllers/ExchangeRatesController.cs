@@ -8,12 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 public class ExchangeRatesController : ControllerBase
 {
     private readonly IExchangeRatesProvider _exchangeRatesProvider;
-    private readonly ILogger<ExchangeRatesController> _logger;
 
     public ExchangeRatesController(IExchangeRatesProvider exchangeRatesProvider, ILogger<ExchangeRatesController> logger)
     {
         _exchangeRatesProvider = exchangeRatesProvider;
-        _logger = logger;
     }
 
     [HttpGet]

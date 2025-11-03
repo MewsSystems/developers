@@ -13,7 +13,6 @@ namespace ExchangeRates.Application.Providers
     public interface IExchangeRatesProvider
     {
         Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<string> currencyCodes, CancellationToken cancellationToken = default);
-        Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken);
     }
 
     public class ExchangeRatesProvider : IExchangeRatesProvider
@@ -48,7 +47,7 @@ namespace ExchangeRates.Application.Providers
             return await GetExchangeRatesAsync(currencies, cancellationToken);
         }
 
-        public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
+        private async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies, CancellationToken cancellationToken = default)
         {
             var cacheKey = CacheKeys.ExchangeRatesDaily();
             CnbExRatesResponse? response;
@@ -93,7 +92,7 @@ namespace ExchangeRates.Application.Providers
                 var currencySet = currencies.Select(c => c.Code).ToHashSet();
 
                 var result = response.Rates
-                    .Where(r => currencySet.Contains(r.CurrencyCode))
+                    .Where(r => currencySet.Contains(r.CurrencyCode!))
                     .Select(r =>
                     {
                         var target = currencies.First(c => c.Code == r.CurrencyCode);

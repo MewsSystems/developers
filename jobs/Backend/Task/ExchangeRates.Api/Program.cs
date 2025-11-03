@@ -1,3 +1,5 @@
+using ExchangeRates.Api.Extensions;
+
 namespace ExchangeRates.Api
 {
     public class Program
@@ -10,11 +12,11 @@ namespace ExchangeRates.Api
             builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
             builder.Logging.AddConsole();
 
-            Configuration.ConfigureServices(builder.Services, builder.Configuration);
+            builder.Services.AddExchangeRatesServices(builder.Configuration);
 
             var app = builder.Build();
 
-            Configuration.Configure(app, app.Environment);
+            app.ConfigureApp(builder.Environment);
 
             app.Run();
         }

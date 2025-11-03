@@ -44,10 +44,10 @@ namespace ExchangeRates.UnitTests.Application.Providers
             var cnbResponse = new CnbExRatesResponse
             {
                 Rates = new List<CnbExRate>
-            {
-                new CnbExRate { CurrencyCode = "USD", Amount = 1, Rate = 22 },
-                new CnbExRate { CurrencyCode = "EUR", Amount = 1, Rate = 24 }
-            }
+                {
+                    new CnbExRate { CurrencyCode = "USD", Amount = 1, Rate = 22 },
+                    new CnbExRate { CurrencyCode = "EUR", Amount = 1, Rate = 24 }
+                }
             };
 
             _cnbMock.Setup(c => c.GetDailyExchangeRatesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -122,11 +122,11 @@ namespace ExchangeRates.UnitTests.Application.Providers
             var cnbResponse = new CnbExRatesResponse
             {
                 Rates = new List<CnbExRate>
-            {
-                new CnbExRate { CurrencyCode = "USD", Amount = 1, Rate = 22 },
-                new CnbExRate { CurrencyCode = "EUR", Amount = 1, Rate = 24 },
-                new CnbExRate { CurrencyCode = "CZK", Amount = 1, Rate = 1 }
-            }
+                {
+                    new CnbExRate { CurrencyCode = "USD", Amount = 1, Rate = 22 },
+                    new CnbExRate { CurrencyCode = "EUR", Amount = 1, Rate = 24 },
+                    new CnbExRate { CurrencyCode = "CZK", Amount = 1, Rate = 1 }
+                }
             };
 
             _cnbMock.Setup(c => c.GetDailyExchangeRatesAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))

@@ -3,33 +3,33 @@ using ExchangeRates.Application.Providers;
 using ExchangeRates.Infrastructure.Clients.CNB;
 using Microsoft.OpenApi.Models;
 
-namespace ExchangeRates.Api
+namespace ExchangeRates.Api.Extensions
 {
-    public static class Configuration
+    public static class ServiceCollectionExtensions
     {
-        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddExchangeRatesServices(this IServiceCollection services, IConfiguration configuration)
         {
-            AddControllers(services);
-            AddSwagger(services);
-            AddCors(services);
-            AddCache(services);
-            AddAppSettings(services, configuration);
-            AddCNBClient(services, configuration);
-            AddServices(services);
+            services.AddControllers();
+
+            services
+                .AddSwaggerDocumentation()
+                .AddCorsPolicy()
+                .AddCacheSupport()
+                .AddAppSettings(configuration)
+                .AddCNBClient(configuration)
+                .AddApplicationServices();
+
+            return services;
         }
 
-        private static void AddAppSettings(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAppSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ExchangeRatesOptions>(configuration.GetSection("ExchangeRates"));
             services.Configure<CnbHttpClientOptions>(configuration.GetSection("CNBApi:HttpClient"));
+            return services;
         }
 
-        private static void AddControllers(IServiceCollection services)
-        {
-            services.AddControllers();
-        }
-
-        private static void AddSwagger(IServiceCollection services)
+        public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
@@ -40,10 +40,10 @@ namespace ExchangeRates.Api
                     Description = "API that provides daily exchange rates from the Czech National Bank."
                 });
             });
+            return services;
         }
 
-
-        private static void AddCors(IServiceCollection services)
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -54,14 +54,16 @@ namespace ExchangeRates.Api
                           .AllowAnyHeader();
                 });
             });
+            return services;
         }
 
-        private static void AddCache(IServiceCollection services)
+        public static IServiceCollection AddCacheSupport(this IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
+            return services;
         }
 
-        private static void AddCNBClient(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCNBClient(this IServiceCollection services, IConfiguration configuration)
         {
             var options = configuration
                 .GetSection("CNBApi:HttpClient")
@@ -88,31 +90,14 @@ namespace ExchangeRates.Api
                 var logger = serviceProvider.GetRequiredService<ILogger<CnbHttpClient>>();
                 return CnbHttpClientPolicies.RetryPolicy(options, logger);
             });
+
+            return services;
         }
 
-        private static void AddServices(IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IExchangeRatesProvider, ExchangeRatesProvider>();
-        }
-
-        public static void Configure(WebApplication app, IHostEnvironment env)
-        {
-            app.UseExceptionHandler("/error");
-            app.UseCors("AllowAll");
-            app.UseRouting();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exchange Rates API v1");
-                c.RoutePrefix = "swagger";
-            });
-
-            app.MapControllers();
-            app.Map("/error", (HttpContext httpContext) =>
-            {
-                return Results.Problem("An unexpected error occurred. Please try again later.");
-            });
+            return services;
         }
     }
 }
