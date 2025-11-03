@@ -18,23 +18,24 @@ namespace ExchangeRateUpdater.Services.RateProviders;
 public class CzechNationalBankRestApiExchangeRateProvider : IExchangeRateProvider
 {
     private readonly IAppConfiguration _appConfiguration;
+    private readonly HttpClient _httpClient;
     private readonly ILogger<CzechNationalBankRestApiExchangeRateProvider> _logger;
 
     public CzechNationalBankRestApiExchangeRateProvider(ILogger<CzechNationalBankRestApiExchangeRateProvider> logger,
-        IAppConfiguration appConfiguration)
+        IAppConfiguration appConfiguration, HttpClient httpClient)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;
+        _httpClient = httpClient;
     }
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
-        using var httpClient = new HttpClient();
         var currentDate = DateTime.Now.ToString("yyyy-MM-dd");
         var url = $"{_appConfiguration.DailyRateUrl}/cnbapi/exrates/daily?date={currentDate}&lang=EN";
 
         _logger.LogDebug("Fetching exchange rates from {Url}", url);
-        var response = await httpClient.GetStringAsync(url);
+        var response = await _httpClient.GetStringAsync(url);
 
         var dto = JsonSerializer.Deserialize<ExchangeRateResponseDto>(response, new JsonSerializerOptions
         {

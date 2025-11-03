@@ -36,6 +36,7 @@ public static class Program
                 .AddDbContext<ExchangeRateDbContext>()
                 .AddSingleton<IRepository<ExchangeRateEntity>, Repository<ExchangeRateEntity>>()
                 .AddSingleton(config)
+                .AddHttpClient()
                 .AddSingleton<Application.Application>();
 
             switch (config.ProviderType)

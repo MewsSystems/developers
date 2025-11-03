@@ -19,21 +19,21 @@ public class CzechNationalBankCsvExchangeRateProvider : IExchangeRateProvider
 {
     private const string DateFormat = "dd MMM yyyy";
     private readonly IAppConfiguration _appConfiguration;
+    private readonly HttpClient _httpClient;
     private readonly ILogger<CzechNationalBankCsvExchangeRateProvider> _logger;
 
     public CzechNationalBankCsvExchangeRateProvider(ILogger<CzechNationalBankCsvExchangeRateProvider> logger,
-        IAppConfiguration appConfiguration)
+        IAppConfiguration appConfiguration, HttpClient httpClient)
     {
         _logger = logger;
         _appConfiguration = appConfiguration;
+        _httpClient = httpClient;
     }
 
     public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesAsync(IEnumerable<Currency> currencies)
     {
-        using var httpClient = new HttpClient();
-
         _logger.LogDebug("Fetching exchange rates from {Url}", _appConfiguration.DailyRateUrl);
-        var response = await httpClient.GetStringAsync(_appConfiguration.DailyRateUrl);
+        var response = await _httpClient.GetStringAsync(_appConfiguration.DailyRateUrl);
 
         var lines = response.Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .Select(part => part.Trim())
