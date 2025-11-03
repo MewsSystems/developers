@@ -16,7 +16,7 @@ namespace ExchangeRateUpdater;
 /// </summary>
 public static class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task Main()
     {
         var config = ConfigurationLoader.Load();
 

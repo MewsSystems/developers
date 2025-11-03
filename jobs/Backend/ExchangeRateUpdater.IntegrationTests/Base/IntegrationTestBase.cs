@@ -4,7 +4,7 @@ using ExchangeRateUpdater.Data;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
 
-namespace ExchangeRateUpdater.IntegrationTests.Integration;
+namespace ExchangeRateUpdater.IntegrationTests.Base;
 
 public class IntegrationTestBase : IAsyncLifetime
 {
@@ -14,7 +14,7 @@ public class IntegrationTestBase : IAsyncLifetime
         .WithUsername("postgres")
         .WithPassword("postgres")
         .WithPortBinding(5432)
-        .WithBindMount(Path.Combine(Directory.GetCurrentDirectory(), "Integration/database-init.sql"),
+        .WithBindMount(Path.Combine(Directory.GetCurrentDirectory(), "Base/database-init.sql"),
             "/docker-entrypoint-initdb.d/database-init.sql")
         .WithEnvironment("POSTGRES_INITDB_ARGS", "--data-checksums")
         .WithEnvironment("TZ", "Europe/Madrid")

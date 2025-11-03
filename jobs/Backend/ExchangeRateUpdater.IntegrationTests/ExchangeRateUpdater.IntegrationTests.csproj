@@ -27,9 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Integration\database-init.sql">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+      <None Update="Base\database-init.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

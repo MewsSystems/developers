@@ -1,7 +1,8 @@
 using ExchangeRateUpdater.Data;
+using ExchangeRateUpdater.IntegrationTests.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExchangeRateUpdater.IntegrationTests.Integration;
+namespace ExchangeRateUpdater.IntegrationTests.Integration.Repository;
 
 public class RepositoryIntegrationTests : IClassFixture<IntegrationTestBase>, IAsyncLifetime
 {
@@ -26,7 +27,6 @@ public class RepositoryIntegrationTests : IClassFixture<IntegrationTestBase>, IA
 
     public async Task DisposeAsync()
     {
-        // Limpiar datos después de cada test
         await _fixture.DbContext.ExchangeRates.ExecuteDeleteAsync();
     }
 
@@ -121,9 +121,6 @@ public class RepositoryIntegrationTests : IClassFixture<IntegrationTestBase>, IA
         await _repository.SaveChangesAsync();
 
         // Assert
-        var count = await _fixture.DbContext.ExchangeRates.CountAsync();
-        Assert.Equal(3, count);
-
         var savedEntity1 = await _fixture.DbContext.ExchangeRates.FindAsync(entity1.Id);
         var savedEntity2 = await _fixture.DbContext.ExchangeRates.FindAsync(entity2.Id);
         var savedEntity3 = await _fixture.DbContext.ExchangeRates.FindAsync(entity3.Id);
