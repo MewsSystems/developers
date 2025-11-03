@@ -123,7 +123,9 @@ public class RepositoryTests : IDisposable
 
         // Assert
         var savedEntity = await _context.ExchangeRates
-            .FirstOrDefaultAsync(e => e.SourceCurrency == _validExchangeRate.SourceCurrency && e.TargetCurrency == _validExchangeRate.TargetCurrency);
+            .FirstOrDefaultAsync(e =>
+                e.SourceCurrency == _validExchangeRate.SourceCurrency &&
+                e.TargetCurrency == _validExchangeRate.TargetCurrency);
 
         Assert.NotNull(savedEntity);
         Assert.Equal(_validExchangeRate.Rate, savedEntity.Rate);

@@ -25,11 +25,10 @@ public class ExchangeRateDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             if (string.IsNullOrWhiteSpace(_appConfiguration.DatabaseConnectionString))
-            {
                 throw new InvalidOperationException("Database connection string is not configured.");
-            }
             optionsBuilder.UseNpgsql(_appConfiguration.DatabaseConnectionString);
         }
+
         base.OnConfiguring(optionsBuilder);
     }
 }
