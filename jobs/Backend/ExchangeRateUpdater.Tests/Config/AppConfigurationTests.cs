@@ -211,7 +211,7 @@ public class AppConfigurationTests
             CzkCurrencyCode = ValidCzkCurrencyCode,
             DatabaseConnectionString = ValidConnectionString,
             ProviderType = RateProviderType.Csv,
-            ExporterType = Enum.Parse<RateExporterType>(exporterType, true),
+            ExporterType = Enum.Parse<RateExporterType>(exporterType, true)
         };
 
         // Act & Assert
