@@ -53,7 +53,7 @@ Below is a diagram in mermaid illustrating the proposed solution:
 ```mermaid
 graph TD
 %% Cloud Worker for fetching exchange rates
-    subgraph Cloud_Worker["ExchangeRateProvider (Worker Pool, GCP)"]
+    subgraph Cloud_Worker["ExchangeRateProvider (Daemon)"]
         direction TB
         ER[ExchangeRateProvider Service]:::worker
         ER -->|Fetches exchange rates from| CNB[External Provider: CNB]:::external

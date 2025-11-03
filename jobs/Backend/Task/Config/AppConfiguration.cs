@@ -82,23 +82,33 @@ public class AppConfiguration : IAppConfiguration
                     $"Invalid currency code(s): {string.Join(", ", invalidCodes)}. Must be valid ISO 4217 codes.");
         }
 
-        if (!Enum.TryParse<RateProviderType>(ProviderType.ToString(), true, out _))
+        if (!Enum.TryParse<RateProviderType>(ProviderType.ToString(), true, out var parsedProviderType) 
+            || !Enum.IsDefined(typeof(RateProviderType), parsedProviderType))
         {
             var validTypes = string.Join(", ", Enum.GetNames(typeof(RateProviderType)));
             throw new InvalidOperationException(
                 $"Invalid provider type: {ProviderType}. Valid options are: {validTypes}");
         }
 
-        if (!Enum.TryParse<RateExporterType>(ExporterType.ToString(), true, out _))
+        if (!Enum.TryParse<RateExporterType>(ExporterType.ToString(), true, out var parsedExporterType) 
+            || !Enum.IsDefined(typeof(RateExporterType), parsedExporterType))
         {
             var validTypes = string.Join(", ", Enum.GetNames(typeof(RateExporterType)));
             throw new InvalidOperationException(
                 $"Invalid exporter type: {ExporterType}. Valid options are: {validTypes}");
         }
+
     }
 
     public LogEventLevel GetLogLevel()
     {
-        return Enum.TryParse<LogEventLevel>(LogLevel, true, out var level) ? level : LogEventLevel.Information;
+        if (Enum.TryParse<LogEventLevel>(LogLevel, true, out var level) 
+            && Enum.IsDefined(typeof(LogEventLevel), level))
+        {
+            return level;
+        }
+    
+        return LogEventLevel.Information;
     }
+
 }

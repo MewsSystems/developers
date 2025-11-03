@@ -16,7 +16,7 @@ public interface IAppConfiguration
     string DatabaseConnectionString { get; }
     RateProviderType ProviderType { get; }
     RateExporterType ExporterType { get; }
-    
+
     IEnumerable<Currency> GetCurrencies();
     void Validate();
     LogEventLevel GetLogLevel();

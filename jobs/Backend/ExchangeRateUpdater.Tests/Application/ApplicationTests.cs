@@ -9,14 +9,14 @@ namespace ExchangeRateUpdater.Tests.Application;
 
 public class ApplicationTests
 {
-    private readonly Mock<ILogger<ExchangeRateUpdater.Application.Application>> _loggerMock;
     private readonly Mock<IAppConfiguration> _appConfigurationMock;
-    private readonly Mock<IExchangeRateProvider> _rateProviderMock;
-    private readonly Mock<IExchangeRateExporter> _rateExporterMock;
-    private readonly ExchangeRateUpdater.Application.Application _sut;
-    
+
     private readonly List<Currency> _currencies;
+    private readonly Mock<ILogger<ExchangeRateUpdater.Application.Application>> _loggerMock;
+    private readonly Mock<IExchangeRateExporter> _rateExporterMock;
+    private readonly Mock<IExchangeRateProvider> _rateProviderMock;
     private readonly List<ExchangeRate> _rates;
+    private readonly ExchangeRateUpdater.Application.Application _sut;
 
 
     public ApplicationTests()
@@ -32,7 +32,7 @@ public class ApplicationTests
             new(new Currency("USD"), new Currency("CZK"), DateOnly.MinValue, 23.5m),
             new(new Currency("EUR"), new Currency("CZK"), DateOnly.MinValue, 25.0m)
         };
-        
+
         _sut = new ExchangeRateUpdater.Application.Application(
             _loggerMock.Object,
             _appConfigurationMock.Object,
