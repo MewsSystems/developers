@@ -277,13 +277,22 @@ docker build . --tag=mews-dleon && docker run --rm -t \
   -e LOG_LEVEL="INFORMATION" mews-dleon
 ```
 
+## Testing
+
+The solution includes unit tests to ensure code reliability. To execute them, run the following command from the
+solution folder Task:
+
+```bash
+dotnet test --logger "console;verbosity=detailed"
+```
+
 ## Missing features and potential improvements
 
 Due to time constraints, I was not able to implement all the functionalities I would have liked. Below are some
 enhancements and additional features that could be implemented in the future:
 
 - **Pipelines** for building and publishing Docker images.
-- **Unit and integration tests** to ensure code reliability.
+- **Integration tests** to validate end-to-end functionality.
 - **Error handling and retries** for network operations.
 - Enhanced error handling by using **custom exceptions** instead of the generic `Exception`.
 - **Health checks and monitoring** to track the application's status.
