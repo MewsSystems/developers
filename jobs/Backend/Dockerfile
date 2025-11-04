@@ -2,7 +2,7 @@
 WORKDIR /src
 
 COPY Task/. ./
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish ExchangeRateUpdater.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS final
 WORKDIR /app

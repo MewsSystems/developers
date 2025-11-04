@@ -13,7 +13,7 @@ public class TestBase : IAsyncLifetime
         .WithDatabase("exchange_rates_db")
         .WithUsername("postgres")
         .WithPassword("postgres")
-        .WithPortBinding(5432)
+        .WithPortBinding(5432, true)
         .WithBindMount(Path.Combine(Directory.GetCurrentDirectory(), "Base/database-init.sql"),
             "/docker-entrypoint-initdb.d/database-init.sql")
         .WithEnvironment("POSTGRES_INITDB_ARGS", "--data-checksums")
