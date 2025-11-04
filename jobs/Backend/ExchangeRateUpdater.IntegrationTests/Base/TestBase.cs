@@ -6,7 +6,7 @@ using Testcontainers.PostgreSql;
 
 namespace ExchangeRateUpdater.IntegrationTests.Base;
 
-public class IntegrationTestBase : IAsyncLifetime
+public class TestBase : IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres:15.14-alpine3.22")
@@ -24,6 +24,7 @@ public class IntegrationTestBase : IAsyncLifetime
         .Build();
 
     protected internal ExchangeRateDbContext DbContext = null!;
+    protected internal string DbConnectionString => _postgresContainer.GetConnectionString();
 
     public async Task InitializeAsync()
     {
@@ -33,10 +34,9 @@ public class IntegrationTestBase : IAsyncLifetime
         var options = new DbContextOptionsBuilder<ExchangeRateDbContext>()
             .UseNpgsql(connectionString)
             .Options;
-
+        
         DbContext = new ExchangeRateDbContext(options,
             new AppConfiguration { DatabaseConnectionString = connectionString });
-        await DbContext.Database.MigrateAsync();
     }
 
     public async Task DisposeAsync()

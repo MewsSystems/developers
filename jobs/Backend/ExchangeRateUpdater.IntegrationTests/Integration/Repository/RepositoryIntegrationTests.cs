@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeRateUpdater.IntegrationTests.Integration.Repository;
 
-public class RepositoryIntegrationTests : IClassFixture<IntegrationTestBase>, IAsyncLifetime
+public class RepositoryIntegrationTests : IClassFixture<TestBase>, IAsyncLifetime
 {
     private const string SourceCurrency = "USD";
     private const string TargetCurrency = "CZK";
     private const decimal ValidRate = 22.500m;
-    private readonly IntegrationTestBase _fixture;
-
+    
+    private readonly TestBase _fixture;
     private readonly DateOnly _testDate = DateOnly.FromDateTime(DateTime.UtcNow);
     private Repository<ExchangeRateEntity> _repository = null!;
 
-    public RepositoryIntegrationTests(IntegrationTestBase fixture)
+    public RepositoryIntegrationTests(TestBase fixture)
     {
         _fixture = fixture;
     }
