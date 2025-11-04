@@ -5,6 +5,7 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests.Data;
 
+[Trait("Category", "Unit")]
 public class ExchangeRateDbContextTests
 {
     private const string ValidConnectionString = "Host=localhost;Database=test;Username=user;Password=pass";

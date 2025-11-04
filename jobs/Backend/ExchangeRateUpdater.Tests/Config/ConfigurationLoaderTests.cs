@@ -2,6 +2,7 @@ using ExchangeRateUpdater.Config;
 
 namespace ExchangeRateUpdater.Tests.Config;
 
+[Trait("Category", "Unit")]
 public class ConfigurationLoaderTests : IDisposable
 {
     private const string ValidDailyRateUrl = "https://example.com/rates";

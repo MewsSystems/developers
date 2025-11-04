@@ -3,6 +3,7 @@ using Serilog.Events;
 
 namespace ExchangeRateUpdater.Tests.Config;
 
+[Trait("Category", "Unit")]
 public class AppConfigurationTests
 {
     private const string ValidDailyRateUrl = "https://api.example.com/rates";

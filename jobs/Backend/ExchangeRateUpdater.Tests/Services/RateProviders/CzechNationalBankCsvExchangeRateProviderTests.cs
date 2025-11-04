@@ -9,6 +9,7 @@ using Moq.Protected;
 
 namespace ExchangeRateUpdater.Tests.Services.RateProviders;
 
+[Trait("Category", "Unit")]
 public class CzechNationalBankCsvExchangeRateProviderTests : IDisposable
 {
     private readonly HttpClient _httpClient;

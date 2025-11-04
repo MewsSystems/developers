@@ -7,6 +7,7 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests.Application;
 
+[Trait("Category", "Unit")]
 public class ApplicationTests
 {
     private readonly Mock<IAppConfiguration> _appConfigurationMock;

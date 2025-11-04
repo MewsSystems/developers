@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeRateUpdater.IntegrationTests.Integration.Repository;
 
+[Trait("Category", "Integration")]
 public class RepositoryIntegrationTests : IClassFixture<TestBase>, IAsyncLifetime
 {
     private const string SourceCurrency = "USD";

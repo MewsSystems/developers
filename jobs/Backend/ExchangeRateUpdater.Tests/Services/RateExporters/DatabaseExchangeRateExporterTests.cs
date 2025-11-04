@@ -6,6 +6,7 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests.Services.RateExporters;
 
+[Trait("Category", "Unit")]
 public class DatabaseExchangeRateExporterTests
 {
     private readonly DatabaseExchangeRateExporter _exporter;

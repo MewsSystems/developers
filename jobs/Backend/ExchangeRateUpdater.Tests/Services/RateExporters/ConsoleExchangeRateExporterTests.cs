@@ -5,6 +5,7 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests.Services.RateExporters;
 
+[Trait("Category", "Unit")]
 public class ConsoleExchangeRateExporterTests : IDisposable
 {
     private readonly StringWriter _consoleOutput;

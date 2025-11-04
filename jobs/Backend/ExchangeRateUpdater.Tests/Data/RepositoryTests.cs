@@ -5,6 +5,7 @@ using Moq;
 
 namespace ExchangeRateUpdater.Tests.Data;
 
+[Trait("Category", "Unit")]
 public class RepositoryTests : IDisposable
 {
     private readonly ExchangeRateDbContext _context;

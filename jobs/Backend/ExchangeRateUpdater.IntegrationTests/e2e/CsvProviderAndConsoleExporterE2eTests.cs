@@ -4,6 +4,7 @@ using WireMock.Server;
 
 namespace ExchangeRateUpdater.IntegrationTests.e2e;
 
+[Trait("Category", "e2e")]
 public class CsvProviderAndConsoleExporterE2ETests : IDisposable
 {
     private readonly WireMockServer _mockServer;
