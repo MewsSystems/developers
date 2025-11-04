@@ -79,15 +79,6 @@ graph TD
         MobileApp -->|Fetches data through| LB
     end
 
-%% Styling
-    classDef worker fill: #c6f0ff, stroke: #333, stroke-width: 1px;
-    classDef db fill: #d4f4dd, stroke: #333, stroke-width: 1px;
-    classDef api fill: #fce5cd, stroke: #333, stroke-width: 1px;
-    classDef cache fill: #fff2b2, stroke: #333, stroke-width: 1px;
-    classDef ui fill: #e3d4f4, stroke: #333, stroke-width: 1px;
-    classDef lb fill: #ffcccc, stroke: #333, stroke-width: 1px;
-    classDef external fill: #ffe6cc, stroke: #333, stroke-width: 1px;
-
 %% Comments
 %% ExchangeRateProvider fetches data from CNB and stores it in PostgreSQL
 %% REST API reads data from PostgreSQL and reads/writes cache in Redis
@@ -122,7 +113,6 @@ Take a look to the mermaid diagram below for a visual representation of the arch
 graph TD
 %% Main
     subgraph Main
-        style Main fill: #f9f, stroke: #333, stroke-width: 2px
         A[Program.cs]:::main
         B[IAppConfiguration]:::main
         C[Application]:::main
@@ -132,7 +122,6 @@ graph TD
 
 %% Application Layer
     subgraph Application_Layer
-        style Application_Layer fill: #bbf, stroke: #333, stroke-width: 2px
         D[IExchangeRateProvider]:::app
         E[IExchangeRateExporter]:::app
         C -->|Uses| D
@@ -141,7 +130,6 @@ graph TD
 
 %% Providers
     subgraph Providers
-        style Providers fill: #bfb, stroke: #333, stroke-width: 2px
         F[CzechNationalBankCsvExchangeRateProvider]:::prov
         G[CzechNationalBankRestApiExchangeRateProvider]:::prov
         H[CNB daily.txt]:::prov
@@ -154,7 +142,6 @@ graph TD
 
 %% Exporters
     subgraph Exporters
-        style Exporters fill: #ffb, stroke: #333, stroke-width: 2px
         J[ConsoleExchangeRateExporter]:::exp
         K[DatabaseExchangeRateExporter]:::exp
         L[IRepository]:::exp
@@ -164,13 +151,6 @@ graph TD
         K -->|Uses| L
         L -->|Accesses| M
     end
-
-%% Classes styles
-    classDef main fill: #fdd, stroke: #333, stroke-width: 1px;
-    classDef app fill: #ddf, stroke: #333, stroke-width: 1px;
-    classDef prov fill: #dfd, stroke: #333, stroke-width: 1px;
-    classDef exp fill: #ffd, stroke: #333, stroke-width: 1px;
-
 ```
 
 By defining **interfaces** for both providers and exporters, the system supports easy extension — new data sources or
@@ -285,7 +265,8 @@ The solution includes comprehensive test coverage at multiple levels to ensure c
 - **Integration tests:** Verify interactions between components, such as database operations and external service calls.
 - **End-to-end (E2E) tests:** Test the complete application workflow from data retrieval to export.
 
-To run the tests, locate in the `Task` directory and execute the following command depending on the type of tests you want
+To run the tests, locate in the `Task` directory and execute the following command depending on the type of tests you
+want
 to run:
 
 Unit Tests:
