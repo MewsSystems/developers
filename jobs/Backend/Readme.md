@@ -279,11 +279,31 @@ docker build . --tag=mews-dleon && docker run --rm -t \
 
 ## Testing
 
-The solution includes unit tests to ensure code reliability. To execute them, run the following command from the
-solution folder Task:
+The solution includes comprehensive test coverage at multiple levels to ensure code reliability and correctness:
+
+- **Unit tests:** Validate individual components and business logic in isolation.
+- **Integration tests:** Verify interactions between components, such as database operations and external service calls.
+- **End-to-end (E2E) tests:** Test the complete application workflow from data retrieval to export.
+
+To run the tests, locate in the `Task` directory and execute the following command depending on the type of tests you want
+to run:
+
+Unit Tests:
 
 ```bash
-dotnet test --logger "console;verbosity=detailed"
+dotnet test --filter "Category=Unit" --logger "console;verbosity=detailed"
+```
+
+Integration Tests:
+
+```bash
+dotnet test --filter "Category=Integration" --logger "console;verbosity=detailed"
+```
+
+E2E Tests:
+
+```bash
+dotnet test --filter "Category=E2E" --logger "console;verbosity=detailed"
 ```
 
 ## Missing features and potential improvements
@@ -292,9 +312,10 @@ Due to time constraints, I was not able to implement all the functionalities I w
 enhancements and additional features that could be implemented in the future:
 
 - **Pipelines** for building and publishing Docker images.
-- **Integration tests** to validate end-to-end functionality.
 - **Error handling and retries** for network operations.
-- Enhanced error handling by using **custom exceptions** instead of the generic `Exception`.
+- **Enhanced error handling** by using **custom exceptions** instead of the generic `Exception`. Currently, all errors
+  are just logged, but in a production scenario, it would be better to have specific exception types to handle different
+  error cases appropriately.
 - **Health checks and monitoring** to track the application's status.
 - **Security enhancements** for sensitive data handling, such as the database connection string.
 - Avoid inserting **duplicate exchange rates** into the database for the same date.
