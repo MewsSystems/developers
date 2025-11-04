@@ -1,0 +1,6 @@
+room_type,total_rooms,nightly_rate,floor,amenities
+Standard Queen,50,150,2-5,"WiFi,TV,Coffee Maker"
+Deluxe King,30,200,6-8,"WiFi,TV,Coffee Maker,Mini Bar,City View"
+Suite,15,350,9-10,"WiFi,TV,Coffee Maker,Mini Bar,City View,Balcony,Sitting Area"
+Executive Suite,10,500,10,"WiFi,TV,Coffee Maker,Mini Bar,Panoramic View,Balcony,Sitting Area,Jacuzzi"
+Standard Double,40,140,2-5,"WiFi,TV,Coffee Maker"
