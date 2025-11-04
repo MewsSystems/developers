@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Core.Models;
 
-namespace ExchangeRateUpdater
-{
+namespace ExchangeRateUpdater.Core.Providers;
     public class ExchangeRateProvider
     {
         /// <summary>
@@ -13,7 +13,7 @@ namespace ExchangeRateUpdater
         /// </summary>
         public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
         {
-            return Enumerable.Empty<ExchangeRate>();
+            return [];
         }
     }
-}
+

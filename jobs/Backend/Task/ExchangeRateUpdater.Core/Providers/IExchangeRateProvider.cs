@@ -1,0 +1,8 @@
+using ExchangeRateUpdater.Core.Models;
+
+namespace ExchangeRateUpdater.Core.Providers;
+
+public interface IExchangeRateProvider
+{
+    Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies);
+}

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Core.Providers;
 
 namespace ExchangeRateUpdater
 {
