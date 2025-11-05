@@ -16,7 +16,7 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .ConfigureServices((context, services) =>
     {
-        services.AddCore();
+        services.AddCore(context.Configuration);
         services.AddInfrastructure(context.Configuration);
         services.AddLogging();
         services.AddHostedService<ExchangeRateUpdater.Startup.ExchangeRateStartupService>();

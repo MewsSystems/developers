@@ -3,35 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Core.Configuration.Options;
 using ExchangeRateUpdater.Core.Models;
 using ExchangeRateUpdater.Core.Providers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Startup;
 
-public class ExchangeRateStartupService(IExchangeRateProvider provider, IConfiguration configuration) : BackgroundService
+public class ExchangeRateStartupService(
+        IExchangeRateProvider provider,
+        IOptions<CurrencyOptions> options
+    ) : BackgroundService
 {
-    private static readonly string[] DefaultCurrencyCodes =
-    [
-        "USD", "EUR", "CZK", "JPY", "KES", "RUB", "THB", "TRY", "XYZ"
-    ];
+    private static readonly IEnumerable<Currency> DefaultCurrencies = new[]
+    {
+        new Currency("USD"), 
+        new Currency("EUR"), 
+        new Currency("CZK"), 
+        new Currency("JPY"), 
+        new Currency("KES"), 
+        new Currency("RUB"), 
+        new Currency("THB"), 
+        new Currency("TRY"), 
+        new Currency("XYZ")
+    };
+    
+    private readonly IEnumerable<Currency> _currencies = !options.Value.Currencies.Any() ? DefaultCurrencies : options.Value.Currencies;
+
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         try
         {
-            var codes = configuration.GetSection("Currencies").Get<string[]>() ?? DefaultCurrencyCodes;
-            var currencies = codes
-                .Where(c => !string.IsNullOrWhiteSpace(c))
-                .Select(c => c.Trim().ToUpperInvariant())
-                .Distinct()
-                .Select(c => new Currency(c))
-                .ToArray();
+            var provider = new ExchangeRateProvider();
+            var rates = await provider.GetExchangeRates(_currencies);
 
-            var rates = await provider.GetExchangeRates(currencies);
-
-            Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+            Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
             foreach (var rate in rates)
             {
                 Console.WriteLine(rate.ToString());
@@ -41,5 +49,7 @@ public class ExchangeRateStartupService(IExchangeRateProvider provider, IConfigu
         {
             Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
         }
+
+        Console.ReadLine();
     }
 }
