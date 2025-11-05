@@ -1,11 +1,14 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ExchangeRateUpdater.Core.Models;
+using ExchangeRateUpdater.Infrastructure.Dtos;
 using ExchangeRateUpdater.Infrastructure.ExchangeRateVendors;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -29,16 +32,12 @@ public class CurrencyApiExchangeRateVendorTests
     {
         // Arrange
         var baseUri = new Uri("https://api.currencyapi.com/v3/");
+        
+        var jsonResponse =  File.ReadAllText("Mocks/ExchangeRates.json");
         var mock = new MockHttpMessageHandler();
         mock.When(HttpMethod.Get, baseUri + "latest?base_currency=CZK")
             .WithHeaders("apiKey", "TEST_KEY")
-            .Respond("application/json",
-                "{" +
-                "\"data\": {" +
-                "  \"USD\": { \"code\": \"USD\", \"value\": 0.043 }," +
-                "  \"EUR\": { \"code\": \"EUR\", \"value\": 0.039 }" +
-                "}}"
-            );
+            .Respond("application/json", jsonResponse);
 
         var sut = CreateSut(mock, baseUri, "TEST_KEY");
 

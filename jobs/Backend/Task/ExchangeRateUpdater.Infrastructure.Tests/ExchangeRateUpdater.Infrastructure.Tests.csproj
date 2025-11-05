@@ -21,4 +21,9 @@
     <ProjectReference Include="..\ExchangeRateUpdater.Infrastructure\ExchangeRateUpdater.Infrastructure.csproj" />
     <ProjectReference Include="..\ExchangeRateUpdater.Core\ExchangeRateUpdater.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Mocks\ExchangeRates.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

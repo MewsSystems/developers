@@ -34,12 +34,11 @@ public class CzechNationalBankExchangeRateProviderTests
         var vendorMock = new Mock<IExchangeRateVendor>();
         vendorMock
             .Setup(v => v.GetExchangeRates("CZK"))
-            .ReturnsAsync(new List<ExchangeRate>
-            {
+            .ReturnsAsync([
                 new(new Currency("CZK"), new Currency("USD"), 0.043m),
                 new(new Currency("CZK"), new Currency("EUR"), 0.039m),
                 new(new Currency("CZK"), new Currency("GBP"), 0.034m)
-            });
+            ]);
 
         var sut = new CzechNationalBankExchangeRateProvider(vendorMock.Object);
 
