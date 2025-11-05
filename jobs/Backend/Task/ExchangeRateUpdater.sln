@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Infrast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater", "ExchangeRateUpdater\ExchangeRateUpdater.csproj", "{5C09772B-C470-4D42-8EE8-E016B574454F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Core.Tests", "ExchangeRateUpdater.Core.Tests\ExchangeRateUpdater.Core.Tests.csproj", "{41760885-F21C-4928-A490-C8464A9A815F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRateUpdater.Infrastructure.Tests", "ExchangeRateUpdater.Infrastructure.Tests\ExchangeRateUpdater.Infrastructure.Tests.csproj", "{35F75B67-93C1-4B05-8803-611A1EDAD49A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EE6A45A1-223B-4647-8578-61ECFBEB2634}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +33,20 @@ Global
 		{5C09772B-C470-4D42-8EE8-E016B574454F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C09772B-C470-4D42-8EE8-E016B574454F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C09772B-C470-4D42-8EE8-E016B574454F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41760885-F21C-4928-A490-C8464A9A815F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41760885-F21C-4928-A490-C8464A9A815F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41760885-F21C-4928-A490-C8464A9A815F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41760885-F21C-4928-A490-C8464A9A815F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F75B67-93C1-4B05-8803-611A1EDAD49A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F75B67-93C1-4B05-8803-611A1EDAD49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F75B67-93C1-4B05-8803-611A1EDAD49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F75B67-93C1-4B05-8803-611A1EDAD49A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{41760885-F21C-4928-A490-C8464A9A815F} = {EE6A45A1-223B-4647-8578-61ECFBEB2634}
+		{35F75B67-93C1-4B05-8803-611A1EDAD49A} = {EE6A45A1-223B-4647-8578-61ECFBEB2634}
 	EndGlobalSection
 EndGlobal
