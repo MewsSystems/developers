@@ -8,6 +8,7 @@
 	[Rate] DECIMAL(19, 6) NOT NULL,
 	[ValidDate] DATE NOT NULL,
 	[Created] DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[Modified] DATETIMEOFFSET NULL,
 	CONSTRAINT FK_ExchangeRate_Provider FOREIGN KEY ([ProviderId])
 		REFERENCES [dbo].[ExchangeRateProvider] ([Id]),
 	CONSTRAINT FK_ExchangeRate_BaseCurrency FOREIGN KEY ([BaseCurrencyId])
