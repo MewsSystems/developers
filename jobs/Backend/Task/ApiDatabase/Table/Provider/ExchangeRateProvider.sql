@@ -1,0 +1,18 @@
+﻿CREATE TABLE [dbo].[ExchangeRateProvider]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(100) NOT NULL,
+	[Code] NVARCHAR(10) UNIQUE NOT NULL,
+	[Url] NVARCHAR(500) NOT NULL,
+	[BaseCurrencyId] INT NOT NULL,
+	[RequiresAuthentication] BIT NOT NULL DEFAULT 0,
+	[ApiKeyVaultReference] NVARCHAR(255) NULL,
+	[IsActive] BIT NOT NULL DEFAULT 1,
+	[LastSuccessfulFetch] DATETIMEOFFSET NULL,
+	[LastFailedFetch] DATETIMEOFFSET NULL,
+	[ConsecutiveFailures] INT NOT NULL DEFAULT 0,
+	[Created] DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+	[Modified] DATETIMEOFFSET NULL,
+	CONSTRAINT FK_Provider_BaseCurrency FOREIGN KEY ([BaseCurrencyId])
+		REFERENCES [dbo].[Currency] ([Id])
+)
