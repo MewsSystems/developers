@@ -54,6 +54,13 @@ public class BnrConverter : IExchangeRateConverter<BnrDataSet>
             if (cube.Rates == null || cube.Rates.Count == 0)
                 continue;
 
+            // Parse the cube date (format: yyyy-MM-dd)
+            if (string.IsNullOrWhiteSpace(cube.Date))
+                continue;
+
+            if (!DateTime.TryParse(cube.Date, out var validDate))
+                continue;
+
             foreach (var rate in cube.Rates)
             {
                 // Skip null rates
@@ -78,7 +85,8 @@ public class BnrConverter : IExchangeRateConverter<BnrDataSet>
                     BaseCurrencyCode = _baseCurrency,
                     TargetCurrencyCode = rate.Currency.ToUpperInvariant(),
                     Multiplier = rate.Multiplier,
-                    Rate = rate.Value
+                    Rate = rate.Value,
+                    ValidDate = validDate
                 });
             }
         }

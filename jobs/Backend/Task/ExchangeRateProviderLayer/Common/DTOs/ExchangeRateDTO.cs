@@ -12,5 +12,6 @@ namespace Common.DTOs
         public string TargetCurrencyCode { get; set; }
         public int Multiplier { get; set; }
         public decimal Rate { get; set; }
+        public DateTime ValidDate { get; set; }
     }
 }

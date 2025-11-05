@@ -55,6 +55,13 @@ public class EcbConverter : IExchangeRateConverter<EcbEnvelope>
             if (dateCube.Rates == null || dateCube.Rates.Count == 0)
                 continue;
 
+            // Parse the date cube time (format: YYYY-MM-DD)
+            if (string.IsNullOrWhiteSpace(dateCube.Time))
+                continue;
+
+            if (!DateTime.TryParse(dateCube.Time, out var validDate))
+                continue;
+
             foreach (var rate in dateCube.Rates)
             {
                 // Skip null rates
@@ -77,7 +84,8 @@ public class EcbConverter : IExchangeRateConverter<EcbEnvelope>
                     BaseCurrencyCode = _baseCurrency,
                     TargetCurrencyCode = rate.Currency.ToUpperInvariant(),
                     Multiplier = 1, // ECB always uses 1 as multiplier
-                    Rate = rate.Rate
+                    Rate = rate.Rate,
+                    ValidDate = validDate
                 });
             }
         }
