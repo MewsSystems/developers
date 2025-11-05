@@ -17,17 +17,17 @@ CREATE NONCLUSTERED INDEX IX_ErrorLog_Timestamp
 CREATE NONCLUSTERED INDEX IX_ErrorLog_Severity 
     ON [dbo].[ErrorLog] ([Severity], [Timestamp] DESC);
 
-CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_Active 
-    ON [dbo].[ExchangeRateProvider] ([IsActive]) 
-    INCLUDE ([Code], [Name], [BaseCurrencyId], [Priority]);
+CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_Active
+    ON [dbo].[ExchangeRateProvider] ([IsActive])
+    INCLUDE ([Code], [Name], [BaseCurrencyId]);
 
 CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_Health 
     ON [dbo].[ExchangeRateProvider] ([ConsecutiveFailures], [LastSuccessfulFetch]) 
     WHERE [IsActive] = 1;
 
-CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_BaseCurrency 
-    ON [dbo].[ExchangeRateProvider] ([BaseCurrencyId], [IsActive]) 
-    INCLUDE ([Code], [Name], [Url], [Priority]);
+CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_BaseCurrency
+    ON [dbo].[ExchangeRateProvider] ([BaseCurrencyId], [IsActive])
+    INCLUDE ([Code], [Name], [Url]);
 
 CREATE NONCLUSTERED INDEX IX_ExchangeRateProvider_Auth 
     ON [dbo].[ExchangeRateProvider] ([RequiresAuthentication]) 

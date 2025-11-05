@@ -1,36 +1,4 @@
-﻿-- =============================================
--- 1. Fetch Schedule Settings
--- =============================================
-PRINT '';
-PRINT '1. Fetch Schedule Settings...';
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'EnableAutoFetch')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('EnableAutoFetch', 'true', 'Automatically fetch rates on schedule', 'Bool');
-    PRINT '  ✓ EnableAutoFetch';
-END
-
--- =============================================
--- 2. Caching Settings
--- =============================================
-PRINT '';
-PRINT '2. Caching Settings...';
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'EnableCaching')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('EnableCaching', 'true', 'Enable in-memory caching of exchange rates', 'Bool');
-    PRINT '  ✓ EnableCaching';
-END
-
--- =============================================
--- 3. Retry & Resilience Settings
--- =============================================
-PRINT '';
-PRINT '3. Retry & Resilience Settings...';
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'MaxRetryAttempts')
+﻿IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'MaxRetryAttempts')
 BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
     VALUES ('MaxRetryAttempts', '3', 'Number of retry attempts on fetch failure', 'Int');
@@ -65,12 +33,6 @@ BEGIN
     PRINT '  ✓ CircuitBreakerDurationSeconds';
 END
 
--- =============================================
--- 4. Provider Health Settings
--- =============================================
-PRINT '';
-PRINT '4. Provider Health Settings...';
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'AutoDisableProviderAfterFailures')
 BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
@@ -91,12 +53,6 @@ BEGIN
     VALUES ('StaleDataThresholdHours', '48', 'Consider data stale after N hours without update', 'Int');
     PRINT '  ✓ StaleDataThresholdHours';
 END
-
--- =============================================
--- 5. Data Retention Settings
--- =============================================
-PRINT '';
-PRINT '5. Data Retention Settings...';
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'RetainExchangeRatesDays')
 BEGIN
@@ -126,12 +82,6 @@ BEGIN
     PRINT '  ✓ EnableAutoCleanup';
 END
 
--- =============================================
--- 6. Logging Settings
--- =============================================
-PRINT '';
-PRINT '6. Logging Settings...';
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'LogLevel')
 BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
@@ -153,12 +103,6 @@ BEGIN
     PRINT '  ✓ LogSuccessfulFetches';
 END
 
--- =============================================
--- 7. API Settings
--- =============================================
-PRINT '';
-PRINT '7. API Settings...';
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'ApiRateLimitPerMinute')
 BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
@@ -179,59 +123,6 @@ BEGIN
     VALUES ('MaxResultsPerPage', '100', 'Maximum results per page in API responses', 'Int');
     PRINT '  ✓ MaxResultsPerPage';
 END
-
--- =============================================
--- 8. Notification Settings
--- =============================================
-PRINT '';
-PRINT '8. Notification Settings...';
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'EnableEmailNotifications')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('EnableEmailNotifications', 'false', 'Send email notifications for critical events', 'Bool');
-    PRINT '  ✓ EnableEmailNotifications';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'NotifyOnProviderFailure')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('NotifyOnProviderFailure', 'true', 'Send notification when provider fails', 'Bool');
-    PRINT '  ✓ NotifyOnProviderFailure';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'NotifyOnStaleData')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('NotifyOnStaleData', 'true', 'Send notification when data becomes stale', 'Bool');
-    PRINT '  ✓ NotifyOnStaleData';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'AdminEmailAddress')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('AdminEmailAddress', 'admin@example.com', 'Email address for system notifications', 'String');
-    PRINT '  ✓ AdminEmailAddress';
-END
-
--- =============================================
--- 9. Feature Flags
--- =============================================
-PRINT '';
-PRINT '9. Feature Flags...';
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'EnableHistoricalDataFetch')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('EnableHistoricalDataFetch', 'true', 'Allow fetching historical exchange rates', 'Bool');
-    PRINT '  ✓ EnableHistoricalDataFetch';
-END
-
--- =============================================
--- 10. System Information
--- =============================================
-PRINT '';
-PRINT '10. System Information...';
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'SystemVersion')
 BEGIN
