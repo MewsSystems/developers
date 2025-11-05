@@ -27,6 +27,8 @@ public class CurrencyApiExchangeRateVendor(
                 logger.LogError("Could not retrieve exchange rates: '{StatusCode}', Reason: '{ReasonPhrase}'.", result.StatusCode, reasonPhrase);
                 return [];
             }
+            
+            logger.LogInformation("Successfully retrieved exchange rates.");
             var jsonString = await result.Content.ReadAsStringAsync();
             
             var exchangeRates = JsonSerializer.Deserialize<CurrencyApiResponse>(jsonString);

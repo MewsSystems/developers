@@ -36,7 +36,6 @@ public class ExchangeRateStartupService(
     {
         try
         {
-            var provider = new ExchangeRateProvider();
             var rates = await provider.GetExchangeRates(_currencies);
 
             Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates:");
