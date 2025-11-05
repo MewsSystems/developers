@@ -4,5 +4,5 @@ namespace ExchangeRateUpdater.Core.ApiVendors;
 
 public interface IExchangeRateVendor
 {
-    Task<IEnumerable<ExchangeRate>> GetExchangeRates(string baseCurrencyCode, IEnumerable<Currency> currencies);
+    Task<List<ExchangeRate>> GetExchangeRates(string baseCurrencyCode);
 }

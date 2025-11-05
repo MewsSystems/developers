@@ -9,10 +9,15 @@ public class CzechNationalBankExchangeRateProvider(
 {
     private const string BaseCurrencyCode = "CZK";
 
-    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    public async Task<List<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        var currencyConversion = await exchangeRateVendor.GetExchangeRates(BaseCurrencyCode, currencies);
+        currencies = currencies.ToArray();
+        if (!currencies.Any()) return [];
 
-        return currencyConversion;
+        var rates = await exchangeRateVendor.GetExchangeRates(BaseCurrencyCode);
+
+        return rates
+                .Where(rate => currencies.Any(currency => currency.ToString() == rate.TargetCurrency.ToString()))
+                .ToList();
     }
 }

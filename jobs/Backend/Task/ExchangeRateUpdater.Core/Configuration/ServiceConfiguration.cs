@@ -5,7 +5,7 @@ namespace ExchangeRateUpdater.Core.Configuration;
 
 public static class ServiceConfiguration
 {
-    public static IServiceCollection AddCore(IServiceCollection services)
+    public static IServiceCollection AddCore(this IServiceCollection services)
     {
         services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
         

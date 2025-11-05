@@ -8,11 +8,11 @@ public record CurrencyApiResponse()
     public Dictionary<string, CurrencyApiRate> Data { get; set; }
 };
 
-public abstract record CurrencyApiRate
+public record CurrencyApiRate
 {
     [JsonPropertyName("code")] 
     public string Code { get; init; } = string.Empty;
 
-    [JsonPropertyName("value")] 
+    [JsonPropertyName("value")]
     public decimal Value { get; init; }
 }

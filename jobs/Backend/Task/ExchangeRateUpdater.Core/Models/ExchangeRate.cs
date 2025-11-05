@@ -1,19 +1,16 @@
 ﻿namespace ExchangeRateUpdater.Core.Models;
 
-    public class ExchangeRate
+    public class ExchangeRate(
+            Currency sourceCurrency,
+            Currency targetCurrency,
+            decimal value
+        )
     {
-        public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
-        {
-            SourceCurrency = sourceCurrency;
-            TargetCurrency = targetCurrency;
-            Value = value;
-        }
+        public Currency SourceCurrency { get; } = sourceCurrency;
 
-        private Currency SourceCurrency { get; }
+        public Currency TargetCurrency { get; } = targetCurrency;
 
-        private Currency TargetCurrency { get; }
-
-        private decimal Value { get; }
+        public decimal Value { get; } = value;
 
         public override string ToString()
         {
