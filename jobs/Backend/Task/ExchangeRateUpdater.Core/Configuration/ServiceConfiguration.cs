@@ -10,7 +10,6 @@ public static class ServiceConfiguration
 {
     public static IServiceCollection AddCore(this IServiceCollection services, IConfiguration configuration)
     {
-        // In-memory caching for one day is used by providers; register the cache service.
         services.AddMemoryCache();
         services.AddTransient<IExchangeRateProvider, CzechNationalBankExchangeRateProvider>();
         services.AddOptions<CurrencyOptions>().Configure(opts =>
