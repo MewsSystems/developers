@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ExchangeRateUpdater.Core.AppExceptions;
 using ExchangeRateUpdater.Core.Models;
 using ExchangeRateUpdater.Infrastructure.Dtos;
 using ExchangeRateUpdater.Infrastructure.ExchangeRateVendors;
@@ -78,9 +79,9 @@ public class CurrencyApiExchangeRateVendorTests
         var sut = CreateSut(mock, baseUri, "KEY");
 
         // Act
-        var result = await sut.GetExchangeRates("CZK");
-
+        Action act = () => sut.GetExchangeRates("CZK").GetAwaiter().GetResult();
+        
         // Assert
-        result.Should().BeEmpty();
+        act.Should().Throw<VendorFailureException>().WithMessage("Could not retrieve exchange rates");
     }
 }
