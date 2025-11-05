@@ -1,11 +1,18 @@
+using ExchangeRateUpdater.Core.ApiVendors;
 using ExchangeRateUpdater.Core.Models;
 
 namespace ExchangeRateUpdater.Core.Providers;
 
-public class CzechNationalBankExchangeRateProvider : IExchangeRateProvider
+public class CzechNationalBankExchangeRateProvider(
+        IExchangeRateVendor exchangeRateVendor
+    ) : IExchangeRateProvider
 {
-    public Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
+    private const string BaseCurrencyCode = "CZK";
+
+    public async Task<IEnumerable<ExchangeRate>> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        throw new NotImplementedException();
+        var currencyConversion = await exchangeRateVendor.GetExchangeRates(BaseCurrencyCode, currencies);
+
+        return currencyConversion;
     }
 }
