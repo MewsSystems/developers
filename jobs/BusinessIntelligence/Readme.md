@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-Welcome to the Mews Senior Data Engineer take-home exercise! This exercise evaluates your **real-time data engineering skills** through a realistic hospitality data scenario focusing on **streaming ingestion** and **incremental processing strategies**.
+Welcome to the Mews Senior BI Engineer take-home exercise! This exercise evaluates your **real-time data engineering skills** through a realistic hospitality data scenario focusing on **streaming ingestion** and **incremental processing strategies**.
 
 **Time Estimate**: 4-6 hours    
 **Domain**: Hospitality (Hotel Property Management)    
