@@ -16,6 +16,7 @@ builder.Services.AddDataLayer(builder.Configuration);
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+builder.Services.AddSingleton<IProviderConfigurationService, ProviderConfigurationService>();
 
 // Add services to the container.
 

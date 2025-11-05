@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8 d17.14
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{AD34FBE9-B60B-491D-B5AD-EDC615336BAE}"
 EndProject
@@ -12,6 +12,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{1AED0834-0715-4460-B3D3-5B7555A5797E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "DomainLayer\DomainLayer.csproj", "{07333395-5390-43E5-AE7A-1C7D8905B55F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExchangeRateProviderLayer", "ExchangeRateProviderLayer", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "ExchangeRateProviderLayer\Common\Common.csproj", "{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuropeanCentralBank", "ExchangeRateProviderLayer\EuropeanCentralBank\EuropeanCentralBank.csproj", "{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CzechNationalBank", "ExchangeRateProviderLayer\CzechNationalBank\CzechNationalBank.csproj", "{97E6FD54-87B7-4939-8FC5-F77F090F7F20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomanianNationalBank", "ExchangeRateProviderLayer\RomanianNationalBank\RomanianNationalBank.csproj", "{C0EFCDF1-95F2-422E-964F-840547701C8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,9 +51,31 @@ Global
 		{07333395-5390-43E5-AE7A-1C7D8905B55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07333395-5390-43E5-AE7A-1C7D8905B55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07333395-5390-43E5-AE7A-1C7D8905B55F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E6FD54-87B7-4939-8FC5-F77F090F7F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E6FD54-87B7-4939-8FC5-F77F090F7F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E6FD54-87B7-4939-8FC5-F77F090F7F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E6FD54-87B7-4939-8FC5-F77F090F7F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0EFCDF1-95F2-422E-964F-840547701C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0EFCDF1-95F2-422E-964F-840547701C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0EFCDF1-95F2-422E-964F-840547701C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0EFCDF1-95F2-422E-964F-840547701C8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AECA35F4-9AD5-41D6-8387-3A0EC3E335E1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{04D4373B-ADE5-41ED-BF90-A8D0E8AC4E18} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{97E6FD54-87B7-4939-8FC5-F77F090F7F20} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C0EFCDF1-95F2-422E-964F-840547701C8B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C1203EC1-83AD-49C1-8196-5842E77973D4}
