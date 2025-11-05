@@ -15,7 +15,7 @@ public static class ServiceConfiguration
         services.AddHttpClient<IExchangeRateVendor, CurrencyApiExchangeRateVendor>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
-            httpClient.DefaultRequestHeaders.Add("apiKey", apiKey);
+            httpClient.DefaultRequestHeaders.Add("apiKey", !string.IsNullOrWhiteSpace(apiKey) ? apiKey : throw new ArgumentException("CurrencyApi:ApiKey is not set in configuration"));
         });
         
         return services;

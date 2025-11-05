@@ -11,7 +11,7 @@ var host = Host.CreateDefaultBuilder(args)
         {
             config.AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json")
-                .AddUserSecrets<Program>();
+            .AddUserSecrets<Program>();
         }
     })
     .ConfigureServices((context, services) =>

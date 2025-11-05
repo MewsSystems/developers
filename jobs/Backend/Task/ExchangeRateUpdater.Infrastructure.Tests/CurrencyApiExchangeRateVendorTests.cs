@@ -74,7 +74,7 @@ public class CurrencyApiExchangeRateVendorTests
         var baseUri = new Uri("https://api.currencyapi.com/v3/");
         var mock = new MockHttpMessageHandler();
         mock.When(HttpMethod.Get, baseUri + "latest?base_currency=CZK")
-            .Throw(new HttpRequestException("boom"));
+            .Throw(new HttpRequestException("something happened"));
         var sut = CreateSut(mock, baseUri, "KEY");
 
         // Act

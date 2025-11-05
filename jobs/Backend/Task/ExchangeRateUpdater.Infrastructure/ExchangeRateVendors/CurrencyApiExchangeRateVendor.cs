@@ -1,5 +1,6 @@
 using System.Text.Json;
 using ExchangeRateUpdater.Core.ApiVendors;
+using ExchangeRateUpdater.Core.AppExceptions;
 using ExchangeRateUpdater.Core.Models;
 using ExchangeRateUpdater.Infrastructure.Dtos;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,7 @@ public class CurrencyApiExchangeRateVendor(
         catch (Exception e)
         {
             logger.LogError(e, "Could not retrieve exchange rates: '{EMessage}'.", e.Message);
-            return [];
+            throw new VendorFailureException("Could not retrieve exchange rates");
         }
     }
 }
