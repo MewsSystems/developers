@@ -6,14 +6,6 @@ namespace DomainLayer.ValueObjects;
 /// </summary>
 public record Currency
 {
-    private static readonly HashSet<string> ValidCurrencyCodes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "USD", "EUR", "CZK", "GBP", "JPY", "KRW", "CNY", "AUD", "CAD", "CHF",
-        "HKD", "NZD", "SEK", "KRW", "SGD", "NOK", "MXN", "INR", "RUB", "ZAR",
-        "TRY", "BRL", "TWD", "DKK", "PLN", "THB", "IDR", "HUF", "ISK", "PHP",
-        "MYR", "RON", "BGN", "HRK", "ILS"
-    };
-
     public string Code { get; }
 
     private Currency(string code)
@@ -36,9 +28,6 @@ public record Currency
 
         if (normalizedCode.Length != 3)
             throw new ArgumentException($"Currency code must be exactly 3 characters. Got: '{code}'", nameof(code));
-
-        if (!ValidCurrencyCodes.Contains(normalizedCode))
-            throw new ArgumentException($"Invalid or unsupported currency code: '{code}'", nameof(code));
 
         return new Currency(normalizedCode);
     }
@@ -69,15 +58,8 @@ public record Currency
             return false;
 
         var normalizedCode = code.Trim().ToUpperInvariant();
-        return normalizedCode.Length == 3 && ValidCurrencyCodes.Contains(normalizedCode);
+        return normalizedCode.Length == 3;
     }
 
     public override string ToString() => Code;
-
-    // Common currencies as static properties for convenience
-    public static Currency USD => new("USD");
-    public static Currency EUR => new("EUR");
-    public static Currency CZK => new("CZK");
-    public static Currency GBP => new("GBP");
-    public static Currency JPY => new("JPY");
 }
