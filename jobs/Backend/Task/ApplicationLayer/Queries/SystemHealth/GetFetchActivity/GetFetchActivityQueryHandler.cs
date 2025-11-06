@@ -1,22 +1,26 @@
 using ApplicationLayer.Common.Abstractions;
 using ApplicationLayer.DTOs.Common;
 using ApplicationLayer.DTOs.SystemHealth;
-using DomainLayer.Interfaces.Persistence;
+using DomainLayer.Interfaces.Queries;
 using Microsoft.Extensions.Logging;
 
 namespace ApplicationLayer.Queries.SystemHealth.GetFetchActivity;
 
+/// <summary>
+/// Handler for retrieving recent fetch activity.
+/// Uses optimized database view vw_RecentFetchActivity for performance.
+/// </summary>
 public class GetFetchActivityQueryHandler
     : IQueryHandler<GetFetchActivityQuery, PagedResult<FetchActivityDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISystemViewQueries _systemViewQueries;
     private readonly ILogger<GetFetchActivityQueryHandler> _logger;
 
     public GetFetchActivityQueryHandler(
-        IUnitOfWork unitOfWork,
+        ISystemViewQueries systemViewQueries,
         ILogger<GetFetchActivityQueryHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _systemViewQueries = systemViewQueries;
         _logger = logger;
     }
 
@@ -25,33 +29,33 @@ public class GetFetchActivityQueryHandler
         CancellationToken cancellationToken)
     {
         _logger.LogDebug(
-            "Getting fetch activity (Count: {Count}, ProviderId: {ProviderId}, FailedOnly: {FailedOnly})",
+            "Getting fetch activity from view (Count: {Count}, ProviderId: {ProviderId}, FailedOnly: {FailedOnly})",
             request.Count,
             request.ProviderId,
             request.FailedOnly);
 
         try
         {
-            IEnumerable<DomainLayer.Interfaces.Repositories.FetchLogEntry> logs;
+            // Query optimized database view with generous limit for filtering
+            var viewResults = await _systemViewQueries.GetRecentFetchActivityAsync(
+                request.Count * 2, // Get more records to account for filtering
+                cancellationToken);
+
+            // Apply filters
+            var filtered = viewResults.AsEnumerable();
 
             if (request.FailedOnly)
             {
-                logs = await _unitOfWork.FetchLogs.GetFailedLogsAsync(cancellationToken);
-            }
-            else if (request.ProviderId.HasValue)
-            {
-                logs = await _unitOfWork.FetchLogs.GetLogsByProviderAsync(
-                    request.ProviderId.Value,
-                    cancellationToken);
-            }
-            else
-            {
-                logs = await _unitOfWork.FetchLogs.GetRecentLogsAsync(
-                    request.Count,
-                    cancellationToken);
+                filtered = filtered.Where(log => log.Status == "Failed" || log.Status == "Error");
             }
 
-            var activity = logs
+            if (request.ProviderId.HasValue)
+            {
+                filtered = filtered.Where(log => log.ProviderId == request.ProviderId.Value);
+            }
+
+            // Map to DTOs
+            var activity = filtered
                 .Take(request.Count)
                 .Select(log => new FetchActivityDto
                 {
@@ -73,7 +77,7 @@ public class GetFetchActivityQueryHandler
                 })
                 .ToList();
 
-            _logger.LogDebug("Retrieved {Count} fetch activity records", activity.Count);
+            _logger.LogDebug("Retrieved {Count} fetch activity records from view", activity.Count);
 
             return PagedResult<FetchActivityDto>.Create(
                 activity,
@@ -83,7 +87,7 @@ public class GetFetchActivityQueryHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving fetch activity");
+            _logger.LogError(ex, "Error retrieving fetch activity from view");
             throw;
         }
     }

@@ -1,26 +1,29 @@
 using ApplicationLayer.Common.Abstractions;
 using ApplicationLayer.DTOs.SystemHealth;
-using DomainLayer.Interfaces.Persistence;
+using DomainLayer.Interfaces.Queries;
+using DomainLayer.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 
 namespace ApplicationLayer.Queries.SystemHealth.GetSystemHealth;
 
 /// <summary>
 /// Handler for GetSystemHealthQuery - aggregates system-wide statistics.
-/// TODO: Complete when full repository adapters are implemented in InfrastructureLayer.
-/// Currently returns limited statistics based on available logging repositories.
+/// Uses optimized database view vw_SystemHealthDashboard for comprehensive metrics.
 /// </summary>
 public class GetSystemHealthQueryHandler
     : IQueryHandler<GetSystemHealthQuery, SystemHealthDto>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISystemViewQueries _systemViewQueries;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILogger<GetSystemHealthQueryHandler> _logger;
 
     public GetSystemHealthQueryHandler(
-        IUnitOfWork unitOfWork,
+        ISystemViewQueries systemViewQueries,
+        IDateTimeProvider dateTimeProvider,
         ILogger<GetSystemHealthQueryHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _systemViewQueries = systemViewQueries;
+        _dateTimeProvider = dateTimeProvider;
         _logger = logger;
     }
 
@@ -28,53 +31,63 @@ public class GetSystemHealthQueryHandler
         GetSystemHealthQuery request,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Getting system health statistics");
+        _logger.LogDebug("Getting system health statistics from view");
 
         try
         {
-            // Get today's fetch statistics from logs
-            var todayStart = DateTimeOffset.UtcNow.Date;
-            var todayEnd = todayStart.AddDays(1);
-            var todayLogs = await _unitOfWork.FetchLogs.GetLogsByDateRangeAsync(
-                todayStart,
-                todayEnd,
-                cancellationToken);
+            // Query optimized database view (returns metrics as key-value pairs)
+            var metrics = await _systemViewQueries.GetSystemHealthDashboardAsync(cancellationToken);
+            var metricDict = metrics.ToDictionary(m => m.Metric, m => m.Value);
 
-            var todayLogsList = todayLogs.ToList();
-            var totalFetchesToday = todayLogsList.Count;
-            var successfulFetchesToday = todayLogsList.Count(l => l.Status == "Success" || l.Status == "Completed");
-            var failedFetchesToday = todayLogsList.Count(l => l.Status == "Failed");
-
-            var successRateToday = totalFetchesToday > 0
-                ? (decimal)successfulFetchesToday / totalFetchesToday * 100
-                : 0;
-
-            // TODO: Add provider, currency, and exchange rate statistics when repository adapters are implemented
-            // For now, return placeholder values
-            _logger.LogDebug(
-                "System health: {TotalFetchesToday} fetches today ({SuccessfulFetches} successful)",
-                totalFetchesToday,
-                successfulFetchesToday);
-
-            return new SystemHealthDto
+            // Helper function to safely parse metric values
+            int ParseInt(string metricName, int defaultValue = 0)
             {
-                TotalProviders = 0, // TODO: Implement when ExchangeRateProviders repository adapter is ready
-                ActiveProviders = 0, // TODO: Implement when ExchangeRateProviders repository adapter is ready
-                QuarantinedProviders = 0, // TODO: Implement when ExchangeRateProviders repository adapter is ready
-                TotalCurrencies = 0, // TODO: Implement when Currencies repository adapter is ready
-                TotalExchangeRates = 0, // TODO: Implement when ExchangeRates repository adapter is ready
-                LatestRateDate = null, // TODO: Implement when ExchangeRates repository adapter is ready
-                OldestRateDate = null, // TODO: Implement when ExchangeRates repository adapter is ready
-                TotalFetchesToday = totalFetchesToday,
-                SuccessfulFetchesToday = successfulFetchesToday,
-                FailedFetchesToday = failedFetchesToday,
-                SuccessRateToday = successRateToday,
-                LastUpdated = DateTimeOffset.UtcNow
+                return metricDict.TryGetValue(metricName, out var value) && int.TryParse(value, out var parsed)
+                    ? parsed
+                    : defaultValue;
+            }
+
+            decimal ParseDecimal(string metricName, decimal defaultValue = 0m)
+            {
+                return metricDict.TryGetValue(metricName, out var value) && decimal.TryParse(value, out var parsed)
+                    ? parsed
+                    : defaultValue;
+            }
+
+            DateOnly? ParseDateOnly(string metricName)
+            {
+                return metricDict.TryGetValue(metricName, out var value) && DateOnly.TryParse(value, out var parsed)
+                    ? parsed
+                    : null;
+            }
+
+            var result = new SystemHealthDto
+            {
+                TotalProviders = ParseInt("TotalProviders"),
+                ActiveProviders = ParseInt("ActiveProviders"),
+                QuarantinedProviders = ParseInt("QuarantinedProviders"),
+                TotalCurrencies = ParseInt("TotalCurrencies"),
+                TotalExchangeRates = ParseInt("TotalExchangeRates"),
+                LatestRateDate = ParseDateOnly("LatestRateDate"),
+                OldestRateDate = ParseDateOnly("OldestRateDate"),
+                TotalFetchesToday = ParseInt("TotalFetchesToday"),
+                SuccessfulFetchesToday = ParseInt("SuccessfulFetchesToday"),
+                FailedFetchesToday = ParseInt("FailedFetchesToday"),
+                SuccessRateToday = ParseDecimal("SuccessRateToday"),
+                LastUpdated = _dateTimeProvider.UtcNow
             };
+
+            _logger.LogDebug(
+                "System health from view: {TotalProviders} providers, {TotalCurrencies} currencies, {TotalExchangeRates} rates",
+                result.TotalProviders,
+                result.TotalCurrencies,
+                result.TotalExchangeRates);
+
+            return result;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting system health");
+            _logger.LogError(ex, "Error getting system health from view");
             throw;
         }
     }

@@ -1,3 +1,4 @@
+using DataLayer.Dapper;
 using DomainLayer.Interfaces.Persistence;
 using DomainLayer.Interfaces.Repositories;
 using InfrastructureLayer.Persistence.Adapters;
@@ -11,6 +12,7 @@ namespace InfrastructureLayer.Persistence;
 public class DomainUnitOfWork : IUnitOfWork
 {
     private readonly DataLayer.IUnitOfWork _dataLayerUnitOfWork;
+    private readonly IStoredProcedureService _storedProcedureService;
     private ICurrencyRepository? _currencies;
     private IExchangeRateProviderRepository? _exchangeRateProviders;
     private IExchangeRateRepository? _exchangeRates;
@@ -18,9 +20,12 @@ public class DomainUnitOfWork : IUnitOfWork
     private DomainLayer.Interfaces.Repositories.IExchangeRateFetchLogRepository? _fetchLogs;
     private DomainLayer.Interfaces.Repositories.IErrorLogRepository? _errorLogs;
 
-    public DomainUnitOfWork(DataLayer.IUnitOfWork dataLayerUnitOfWork)
+    public DomainUnitOfWork(
+        DataLayer.IUnitOfWork dataLayerUnitOfWork,
+        IStoredProcedureService storedProcedureService)
     {
         _dataLayerUnitOfWork = dataLayerUnitOfWork;
+        _storedProcedureService = storedProcedureService;
     }
 
     public ICurrencyRepository Currencies
@@ -35,7 +40,7 @@ public class DomainUnitOfWork : IUnitOfWork
 
     public IExchangeRateRepository ExchangeRates
     {
-        get { return _exchangeRates ??= new ExchangeRateRepositoryAdapter(_dataLayerUnitOfWork); }
+        get { return _exchangeRates ??= new ExchangeRateRepositoryAdapter(_dataLayerUnitOfWork, _storedProcedureService); }
     }
 
     public IUserRepository Users

@@ -51,13 +51,21 @@ BEGIN
         
         IF EXISTS (SELECT 1 FROM #TempRates WHERE Multiplier <= 0)
             THROW 50105, 'All multipliers must be positive', 1;
-        
-        -- Count currencies that don't exist
-        SELECT @SkippedCount = COUNT(*)
-        FROM #TempRates tr
-        LEFT JOIN [dbo].[Currency] c ON tr.CurrencyCode = c.Code
-        WHERE c.Id IS NULL;
-        
+
+        -- Ensure all currencies exist (using MERGE for thread-safety)
+        MERGE [dbo].[Currency] AS target
+        USING (
+            SELECT DISTINCT CurrencyCode
+            FROM #TempRates
+        ) AS source (Code)
+        ON target.Code = source.Code
+        WHEN NOT MATCHED BY TARGET THEN
+            INSERT (Code)
+            VALUES (source.Code);
+
+        -- After ensuring all currencies exist, skipped count should be 0
+        SET @SkippedCount = 0;
+
         -- Merge operation with proper output capture
         DECLARE @MergeOutput TABLE (
             Action NVARCHAR(10),

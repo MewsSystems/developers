@@ -51,6 +51,9 @@ public static class InfrastructureLayerServiceExtensions
         // which adapts DataLayer.IUnitOfWork (repository adapters handle entity-aggregate mapping)
         services.AddScoped<DomainLayer.Interfaces.Persistence.IUnitOfWork, Persistence.DomainUnitOfWork>();
 
+        // System View Queries Adapter - Bridge between DomainLayer and DataLayer views
+        services.AddScoped<DomainLayer.Interfaces.Queries.ISystemViewQueries, Persistence.Adapters.ViewQueryRepositoryAdapter>();
+
         return services;
     }
 

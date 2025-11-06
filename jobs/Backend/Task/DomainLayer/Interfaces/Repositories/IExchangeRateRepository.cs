@@ -67,4 +67,38 @@ public interface IExchangeRateRepository
     /// Deletes an exchange rate aggregate.
     /// </summary>
     Task DeleteAsync(ExchangeRate exchangeRate, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Performs bulk upsert of exchange rates using optimized database operations.
+    /// This method uses stored procedures for high-performance bulk operations.
+    /// </summary>
+    /// <param name="providerId">The exchange rate provider ID</param>
+    /// <param name="validDate">The date for which the rates are valid</param>
+    /// <param name="rates">Collection of exchange rates to upsert</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Result containing counts of inserted, updated, and skipped records</returns>
+    Task<BulkExchangeRateResult> BulkUpsertAsync(
+        int providerId,
+        DateOnly validDate,
+        IEnumerable<BulkExchangeRateItem> rates,
+        CancellationToken cancellationToken = default);
 }
+
+/// <summary>
+/// Represents a single exchange rate item for bulk operations.
+/// </summary>
+public record BulkExchangeRateItem(
+    string CurrencyCode,
+    decimal Rate,
+    int Multiplier);
+
+/// <summary>
+/// Result of a bulk exchange rate operation.
+/// </summary>
+public record BulkExchangeRateResult(
+    int InsertedCount,
+    int UpdatedCount,
+    int SkippedCount,
+    int ProcessedCount,
+    int TotalInJson,
+    string Status);

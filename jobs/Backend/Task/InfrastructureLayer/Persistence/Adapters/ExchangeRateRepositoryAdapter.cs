@@ -1,4 +1,5 @@
 using DataLayer;
+using DataLayer.Dapper;
 using DomainLayer.Aggregates.ExchangeRateAggregate;
 using DomainLayer.Interfaces.Repositories;
 
@@ -11,10 +12,14 @@ namespace InfrastructureLayer.Persistence.Adapters;
 public class ExchangeRateRepositoryAdapter : IExchangeRateRepository
 {
     private readonly IUnitOfWork _dataLayerUnitOfWork;
+    private readonly IStoredProcedureService _storedProcedureService;
 
-    public ExchangeRateRepositoryAdapter(IUnitOfWork dataLayerUnitOfWork)
+    public ExchangeRateRepositoryAdapter(
+        IUnitOfWork dataLayerUnitOfWork,
+        IStoredProcedureService storedProcedureService)
     {
         _dataLayerUnitOfWork = dataLayerUnitOfWork;
+        _storedProcedureService = storedProcedureService;
     }
 
     public async Task<ExchangeRate?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -106,6 +111,37 @@ public class ExchangeRateRepositoryAdapter : IExchangeRateRepository
         {
             await _dataLayerUnitOfWork.ExchangeRates.DeleteAsync(entity, cancellationToken);
         }
+    }
+
+    public async Task<BulkExchangeRateResult> BulkUpsertAsync(
+        int providerId,
+        DateOnly validDate,
+        IEnumerable<BulkExchangeRateItem> rates,
+        CancellationToken cancellationToken = default)
+    {
+        // Convert domain DTOs to DataLayer DTOs
+        var dataLayerRates = rates.Select(r => new DataLayer.DTOs.ExchangeRateInput
+        {
+            CurrencyCode = r.CurrencyCode,
+            Rate = r.Rate,
+            Multiplier = r.Multiplier
+        });
+
+        // Call the stored procedure via DataLayer service
+        var result = await _storedProcedureService.BulkUpsertExchangeRatesAsync(
+            providerId,
+            validDate,
+            dataLayerRates,
+            cancellationToken);
+
+        // Convert DataLayer result to Domain result
+        return new BulkExchangeRateResult(
+            InsertedCount: result.InsertedCount,
+            UpdatedCount: result.UpdatedCount,
+            SkippedCount: result.SkippedCount,
+            ProcessedCount: result.ProcessedCount,
+            TotalInJson: result.TotalInJson,
+            Status: result.Status);
     }
 
     /// <summary>

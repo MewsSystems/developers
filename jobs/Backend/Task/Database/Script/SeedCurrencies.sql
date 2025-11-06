@@ -10,12 +10,6 @@ BEGIN
     VALUES ('CZK');
     PRINT '  ✓ CZK created (ID: ' + CAST(SCOPE_IDENTITY() AS NVARCHAR(10)) + ')';
 END
-ELSE
-BEGIN
-    DECLARE @CzkId INT;
-    SELECT @CzkId = Id FROM [dbo].[Currency] WHERE Code = 'CZK';
-    PRINT '  ⚠ CZK already exists (ID: ' + CAST(@CzkId AS NVARCHAR(10)) + ')';
-END
 
 -- =============================================
 -- Insert EUR (Euro)
@@ -29,12 +23,6 @@ BEGIN
     VALUES ('EUR');
     PRINT '  ✓ EUR created (ID: ' + CAST(SCOPE_IDENTITY() AS NVARCHAR(10)) + ')';
 END
-ELSE
-BEGIN
-    DECLARE @EurId INT;
-    SELECT @EurId = Id FROM [dbo].[Currency] WHERE Code = 'EUR';
-    PRINT '  ⚠ EUR already exists (ID: ' + CAST(@EurId AS NVARCHAR(10)) + ')';
-END
 
 -- =============================================
 -- Insert RON (Romanian Leu)
@@ -47,10 +35,4 @@ BEGIN
     INSERT INTO [dbo].[Currency] (Code)
     VALUES ('RON');
     PRINT '  ✓ RON created (ID: ' + CAST(SCOPE_IDENTITY() AS NVARCHAR(10)) + ')';
-END
-ELSE
-BEGIN
-    DECLARE @RonId INT;
-    SELECT @RonId = Id FROM [dbo].[Currency] WHERE Code = 'RON';
-    PRINT '  ⚠ RON already exists (ID: ' + CAST(@RonId AS NVARCHAR(10)) + ')';
 END

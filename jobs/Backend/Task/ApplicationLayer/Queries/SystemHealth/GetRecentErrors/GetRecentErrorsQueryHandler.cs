@@ -1,22 +1,26 @@
 using ApplicationLayer.Common.Abstractions;
 using ApplicationLayer.DTOs.Common;
 using ApplicationLayer.DTOs.SystemHealth;
-using DomainLayer.Interfaces.Persistence;
+using DomainLayer.Interfaces.Queries;
 using Microsoft.Extensions.Logging;
 
 namespace ApplicationLayer.Queries.SystemHealth.GetRecentErrors;
 
+/// <summary>
+/// Handler for retrieving recent error summaries.
+/// Uses optimized database view vw_ErrorSummary for performance.
+/// </summary>
 public class GetRecentErrorsQueryHandler
     : IQueryHandler<GetRecentErrorsQuery, PagedResult<ErrorSummaryDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISystemViewQueries _systemViewQueries;
     private readonly ILogger<GetRecentErrorsQueryHandler> _logger;
 
     public GetRecentErrorsQueryHandler(
-        IUnitOfWork unitOfWork,
+        ISystemViewQueries systemViewQueries,
         ILogger<GetRecentErrorsQueryHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _systemViewQueries = systemViewQueries;
         _logger = logger;
     }
 
@@ -24,27 +28,23 @@ public class GetRecentErrorsQueryHandler
         GetRecentErrorsQuery request,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Getting recent errors (Count: {Count}, Severity: {Severity})", request.Count, request.Severity);
+        _logger.LogDebug("Getting recent errors from view (Count: {Count}, Severity: {Severity})",
+            request.Count, request.Severity);
 
         try
         {
-            IEnumerable<DomainLayer.Interfaces.Repositories.ErrorLogEntry> errors;
+            // Query optimized database view (24 hours by default)
+            var viewResults = await _systemViewQueries.GetErrorSummaryAsync(24, cancellationToken);
 
+            // Apply severity filter if specified
+            var filtered = viewResults.AsEnumerable();
             if (!string.IsNullOrEmpty(request.Severity))
             {
-                errors = await _unitOfWork.ErrorLogs.GetErrorsBySeverityAsync(
-                    request.Severity,
-                    cancellationToken);
-            }
-            else
-            {
-                errors = await _unitOfWork.ErrorLogs.GetRecentErrorsAsync(
-                    request.Count,
-                    cancellationToken);
+                filtered = filtered.Where(e => e.Severity.Equals(request.Severity, StringComparison.OrdinalIgnoreCase));
             }
 
             // Group errors by error type and message for summary
-            var errorsList = errors.Take(request.Count).ToList();
+            var errorsList = filtered.Take(request.Count * 10).ToList(); // Get more for grouping
             var groupedErrors = errorsList
                 .GroupBy(e => new { e.Source, e.Message })
                 .Select(g => new ErrorSummaryDto
@@ -57,9 +57,10 @@ public class GetRecentErrorsQueryHandler
                     AffectedProviders = new List<string>() // TODO: Extract from error log data when available
                 })
                 .OrderByDescending(e => e.LastOccurrence)
+                .Take(request.Count)
                 .ToList();
 
-            _logger.LogDebug("Retrieved {Count} error summaries from {TotalErrors} errors",
+            _logger.LogDebug("Retrieved {Count} error summaries from {TotalErrors} errors from view",
                 groupedErrors.Count,
                 errorsList.Count);
 
@@ -71,7 +72,7 @@ public class GetRecentErrorsQueryHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving recent errors");
+            _logger.LogError(ex, "Error retrieving recent errors from view");
             throw;
         }
     }

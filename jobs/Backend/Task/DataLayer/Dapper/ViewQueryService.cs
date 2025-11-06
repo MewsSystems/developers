@@ -1,9 +1,12 @@
 using Dapper;
 using DataLayer.DTOs;
-using System.Data;
 
 namespace DataLayer.Dapper;
 
+/// <summary>
+/// Implementation of IViewQueryService using Dapper for efficient view queries.
+/// Maps database views to DataLayer DTOs.
+/// </summary>
 public class ViewQueryService : IViewQueryService
 {
     private readonly IDapperContext _dapperContext;
