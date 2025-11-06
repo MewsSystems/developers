@@ -16,7 +16,7 @@ public class ExchangeRateCache(
 {
     private readonly IMemoryCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     private readonly ILogger<ExchangeRateCache> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly CnbExchangeRateConfiguration _configuration = (configuration?.Value ?? throw new ArgumentNullException(nameof(configuration)));
     private readonly HashSet<string> _cacheKeys = new();
     private readonly object _lock = new();
     private const string CacheKeyPrefix = "ExchangeRates_";
@@ -25,10 +25,9 @@ public class ExchangeRateCache(
     {
         var cacheKey = GenerateCacheKey(currencyCodes);
 
-        if (_cache.TryGetValue<List<ExchangeRate>>(cacheKey, out var cachedRates))
+        if (_cache.TryGetValue<List<ExchangeRate>>(cacheKey, out var cachedRates) && cachedRates != null)
         {
-            _logger.LogInformation(LogMessages.ExchangeRateCache.CacheHit,
-                cacheKey, cachedRates?.Count ?? 0);
+            _logger.LogInformation(LogMessages.ExchangeRateCache.CacheHit, cacheKey, cachedRates.Count);
             return cachedRates;
         }
 

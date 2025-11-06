@@ -12,18 +12,9 @@ public class CnbApiClient(
     ILogger<CnbApiClient> logger,
     IOptions<CnbExchangeRateConfiguration> configuration) : ICnbApiClient
 {
-    private readonly HttpClient _httpClient = InitializeHttpClient(httpClient, configuration);
+    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     private readonly ILogger<CnbApiClient> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
-
-    private static HttpClient InitializeHttpClient(HttpClient httpClient, IOptions<CnbExchangeRateConfiguration> configuration)
-    {
-        ArgumentNullException.ThrowIfNull(httpClient);
-        ArgumentNullException.ThrowIfNull(configuration);
-
-        httpClient.Timeout = TimeSpan.FromSeconds(configuration.Value.TimeoutSeconds);
-        return httpClient;
-    }
+    private readonly CnbExchangeRateConfiguration _configuration = (configuration?.Value ?? throw new ArgumentNullException(nameof(configuration)));
 
     public async Task<string> FetchExchangeRatesAsync(CancellationToken cancellationToken = default)
     {

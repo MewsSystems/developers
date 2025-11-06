@@ -22,7 +22,7 @@ public class ExchangeRateProvider(
     private readonly IExchangeRateCache? _cache = cache;
     private readonly ISupportedCurrenciesCache? _supportedCurrenciesCache = supportedCurrenciesCache;
     private readonly ILogger<ExchangeRateProvider> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly CnbExchangeRateConfiguration _configuration = (configuration?.Value ?? throw new ArgumentNullException(nameof(configuration)));
 
     private static readonly Currency CzkCurrency = new("CZK");
 
@@ -50,21 +50,16 @@ public class ExchangeRateProvider(
         IEnumerable<Currency> currencies,
         CancellationToken cancellationToken = default)
     {
-        if (currencies == null)
-        {
-            throw new ArgumentNullException(nameof(currencies));
-        }
+        ArgumentNullException.ThrowIfNull(currencies);
 
-        var currencyList = currencies.ToList();
-        if (!currencyList.Any())
+        var currencyCodes = currencies.Select(c => c.Code).ToList();
+        if (currencyCodes.Count == 0)
         {
             _logger.LogInformation(LogMessages.ExchangeRateProvider.NoCurrenciesRequested);
             return Enumerable.Empty<ExchangeRate>();
         }
 
-        var currencyCodes = currencyList.Select(c => c.Code).ToList();
-
-        _logger.LogInformation(LogMessages.ExchangeRateProvider.FetchingExchangeRates, currencyList.Count);
+        _logger.LogInformation(LogMessages.ExchangeRateProvider.FetchingExchangeRates, currencyCodes.Count);
 
         if (_configuration.EnableCache && _cache != null)
         {
@@ -94,7 +89,7 @@ public class ExchangeRateProvider(
             _logger.LogInformation(
                 LogMessages.ExchangeRateProvider.RetrievalSuccessful,
                 exchangeRates.Count,
-                currencyList.Count);
+                currencyCodes.Count);
 
             if (_configuration.EnableCache && _cache != null && exchangeRates.Any())
             {

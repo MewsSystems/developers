@@ -51,63 +51,26 @@ public static class ExchangeRateEndpoints
         [FromServices] ILogger<Program> logger,
         CancellationToken cancellationToken)
     {
-        try
+        if (string.IsNullOrWhiteSpace(currencies))
         {
-            if (string.IsNullOrWhiteSpace(currencies))
+            return Results.BadRequest(new ErrorResponse
             {
-                return Results.BadRequest(new ErrorResponse
-                {
-                    Error = ApiMessages.Validation.CurrencyCodesRequired,
-                    Details = ApiMessages.Validation.CurrencyCodesRequiredDetails
-                });
-            }
-
-            var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-            if (currencyCodes.Length == 0)
-            {
-                return Results.BadRequest(new ErrorResponse
-                {
-                    Error = ApiMessages.Validation.AtLeastOneCurrencyRequired
-                });
-            }
-
-            var currencyList = currencyCodes.Select(code => new Currency(code)).ToList();
-
-            logger.LogInformation("Fetching exchange rates for currencies: {Currencies}", string.Join(", ", currencyCodes));
-
-            var rates = await provider.GetExchangeRatesAsync(currencyList, cancellationToken);
-            var ratesList = rates.ToList();
-
-            var response = ratesList.Select(r => new ExchangeRateResponse
-            {
-                SourceCurrency = r.SourceCurrency.Code,
-                TargetCurrency = r.TargetCurrency.Code,
-                Rate = r.Value
-            }).ToList();
-
-            logger.LogInformation("Successfully retrieved {Count} exchange rates", response.Count);
-
-            return Results.Ok(response);
+                Error = ApiMessages.Validation.CurrencyCodesRequired,
+                Details = ApiMessages.Validation.CurrencyCodesRequiredDetails
+            });
         }
-        catch (ExchangeRateProviderException ex)
+
+        var currencyCodes = currencies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (currencyCodes.Length == 0)
         {
-            logger.LogError(ex, "Failed to retrieve exchange rates");
-            return Results.Problem(
-                detail: ex.Message,
-                statusCode: StatusCodes.Status503ServiceUnavailable,
-                title: ApiMessages.Error.ServiceUnavailable
-            );
+            return Results.BadRequest(new ErrorResponse
+            {
+                Error = ApiMessages.Validation.AtLeastOneCurrencyRequired
+            });
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Unexpected error occurred");
-            return Results.Problem(
-                detail: ApiMessages.Error.UnexpectedErrorFetchingRates,
-                statusCode: StatusCodes.Status500InternalServerError,
-                title: ApiMessages.Error.InternalServerError
-            );
-        }
+
+        return await FetchExchangeRatesAsync(currencyCodes, provider, logger, cancellationToken);
     }
 
     private static async Task<IResult> PostExchangeRates(
@@ -116,25 +79,33 @@ public static class ExchangeRateEndpoints
         [FromServices] ILogger<Program> logger,
         CancellationToken cancellationToken)
     {
+        if (request.CurrencyCodes == null || request.CurrencyCodes.Length == 0)
+        {
+            return Results.BadRequest(new ErrorResponse
+            {
+                Error = ApiMessages.Validation.CurrencyCodesRequired,
+                Details = ApiMessages.Validation.CurrencyCodesRequiredBodyDetails
+            });
+        }
+
+        return await FetchExchangeRatesAsync(request.CurrencyCodes, provider, logger, cancellationToken);
+    }
+
+    private static async Task<IResult> FetchExchangeRatesAsync(
+        string[] currencyCodes,
+        ExchangeRateProvider provider,
+        ILogger<Program> logger,
+        CancellationToken cancellationToken)
+    {
         try
         {
-            if (request.CurrencyCodes == null || request.CurrencyCodes.Length == 0)
-            {
-                return Results.BadRequest(new ErrorResponse
-                {
-                    Error = ApiMessages.Validation.CurrencyCodesRequired,
-                    Details = ApiMessages.Validation.CurrencyCodesRequiredBodyDetails
-                });
-            }
+            var currencyList = currencyCodes.Select(code => new Currency(code));
 
-            var currencyList = request.CurrencyCodes.Select(code => new Currency(code)).ToList();
-
-            logger.LogInformation("Fetching exchange rates for currencies: {Currencies}", string.Join(", ", request.CurrencyCodes));
+            logger.LogInformation("Fetching exchange rates for currencies: {Currencies}", string.Join(", ", currencyCodes));
 
             var rates = await provider.GetExchangeRatesAsync(currencyList, cancellationToken);
-            var ratesList = rates.ToList();
 
-            var response = ratesList.Select(r => new ExchangeRateResponse
+            var response = rates.Select(r => new ExchangeRateResponse
             {
                 SourceCurrency = r.SourceCurrency.Code,
                 TargetCurrency = r.TargetCurrency.Code,

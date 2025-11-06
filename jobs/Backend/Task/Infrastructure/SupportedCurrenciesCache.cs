@@ -15,14 +15,14 @@ public class SupportedCurrenciesCache(
 {
     private readonly IMemoryCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     private readonly ILogger<SupportedCurrenciesCache> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly CnbExchangeRateConfiguration _configuration = (configuration?.Value ?? throw new ArgumentNullException(nameof(configuration)));
     private const string CacheKey = "SupportedCurrencies_All";
 
     public IEnumerable<string>? GetCachedCurrencies()
     {
-        if (_cache.TryGetValue<List<string>>(CacheKey, out var cachedCurrencies))
+        if (_cache.TryGetValue<List<string>>(CacheKey, out var cachedCurrencies) && cachedCurrencies != null)
         {
-            _logger.LogInformation(LogMessages.SupportedCurrenciesCache.CacheHit, cachedCurrencies?.Count ?? 0);
+            _logger.LogInformation(LogMessages.SupportedCurrenciesCache.CacheHit, cachedCurrencies.Count);
             return cachedCurrencies;
         }
 
