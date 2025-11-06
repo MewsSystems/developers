@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0067837e-005b-4b79-8688-148e1b5442d2" name="alexg@LAPTOP-K8P1E18V 2025-09-14 19:21:54" runUser="LAPTOP-K8P1E18V\alexg" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-14T19:21:54.7695301+02:00" queuing="2025-09-14T19:21:54.7695306+02:00" start="2025-09-14T19:21:53.0722837+02:00" finish="2025-09-14T19:21:54.7798624+02:00" />
+  <TestSettings name="default" id="d424bbdb-269b-49f9-8a24-9b6169bb31f8">
+    <Deployment runDeploymentRoot="alexg_LAPTOP-K8P1E18V_2025-09-14_19_21_54" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a06a7e90-a3d0-4631-a305-6f3b43b795c1" testId="9921e012-45d1-97d6-279e-0aaea6c71a78" testName="GetExchangeRates_ShouldReturnRates" computerName="LAPTOP-K8P1E18V" duration="00:00:00.0316800" startTime="2025-09-14T19:21:54.3595407+02:00" endTime="2025-09-14T19:21:54.3911403+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a06a7e90-a3d0-4631-a305-6f3b43b795c1">
+      <Output>
+        <StdOut>OneTimeSetUp: Runs against the real CNB API. Enable manually.</StdOut>
+        <ErrorInfo>
+          <Message>OneTimeSetUp: Runs against the real CNB API. Enable manually.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="GetExchangeRates_ShouldReturnRates" storage="c:\git\developers\jobs\backend\task\exchangerateupdater.tests\bin\debug\net9.0\exchangerateupdater.tests.dll" id="9921e012-45d1-97d6-279e-0aaea6c71a78">
+      <Execution id="a06a7e90-a3d0-4631-a305-6f3b43b795c1" />
+      <TestMethod codeBase="C:\Git\developers\jobs\Backend\Task\ExchangeRateUpdater.Tests\bin\Debug\net9.0\ExchangeRateUpdater.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="ExchangeRateUpdater.Tests.CnbClient.CnbClientIntegration" name="GetExchangeRates_ShouldReturnRates" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="9921e012-45d1-97d6-279e-0aaea6c71a78" executionId="a06a7e90-a3d0-4631-a305-6f3b43b795c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Resultados sin formato de lista" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Todos los resultados cargados" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="0" passed="0" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.6.0.0: Test execution started&#xD;
+Running all tests in C:\Git\developers\jobs\Backend\Task\ExchangeRateUpdater.Tests\bin\Debug\net9.0\ExchangeRateUpdater.Tests.dll&#xD;
+   NUnit3TestExecutor discovered 1 of 1 NUnit test cases using Current Discovery mode, Explicit run&#xD;
+GetExchangeRates_ShouldReturnRates: OneTimeSetUp: Runs against the real CNB API. Enable manually.&#xD;
+NUnit Adapter 4.6.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
