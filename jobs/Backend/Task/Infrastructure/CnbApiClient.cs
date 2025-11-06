@@ -44,17 +44,17 @@ public class CnbApiClient : ICnbApiClient
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, LogMessages.CnbApiClient.HttpRequestFailed);
-            throw new ExchangeRateProviderException("Failed to fetch exchange rates from CNB API due to network error", ex);
+            throw new ExchangeRateProviderException(ExceptionMessages.CnbApiClient.NetworkError, ex);
         }
         catch (TaskCanceledException ex)
         {
             _logger.LogError(ex, LogMessages.CnbApiClient.RequestTimedOut);
-            throw new ExchangeRateProviderException("Request to CNB API timed out", ex);
+            throw new ExchangeRateProviderException(ExceptionMessages.CnbApiClient.Timeout, ex);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, LogMessages.CnbApiClient.UnexpectedError);
-            throw new ExchangeRateProviderException("Unexpected error occurred while fetching exchange rates", ex);
+            throw new ExchangeRateProviderException(ExceptionMessages.CnbApiClient.UnexpectedError, ex);
         }
     }
 }

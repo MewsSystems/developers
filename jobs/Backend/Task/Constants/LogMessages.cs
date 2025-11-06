@@ -56,3 +56,52 @@ public static class LogMessages
         public const string FailedToFetchSupportedCurrencies = "Failed to fetch supported currencies from CNB";
     }
 }
+
+/// <summary>
+/// Contains all exception messages thrown throughout the application.
+/// </summary>
+public static class ExceptionMessages
+{
+    public static class CnbApiClient
+    {
+        public const string NetworkError = "Failed to fetch exchange rates from CNB API due to network error";
+        public const string Timeout = "Request to CNB API timed out";
+        public const string UnexpectedError = "Unexpected error occurred while fetching exchange rates";
+    }
+
+    public static class ExchangeRateProvider
+    {
+        public const string FailedToRetrieveRates = "Failed to retrieve exchange rates";
+        public const string FailedToRetrieveSupportedCurrencies = "Failed to retrieve supported currencies";
+    }
+}
+
+/// <summary>
+/// Contains all API response messages and descriptions.
+/// </summary>
+public static class ApiMessages
+{
+    public static class Validation
+    {
+        public const string CurrencyCodesRequired = "Currency codes are required";
+        public const string CurrencyCodesRequiredDetails = "Provide currency codes as a comma-separated query parameter (e.g., ?currencies=USD,EUR,GBP)";
+        public const string AtLeastOneCurrencyRequired = "At least one currency code is required";
+        public const string CurrencyCodesRequiredBodyDetails = "Provide at least one currency code in the request body";
+    }
+
+    public static class Error
+    {
+        public const string ServiceUnavailable = "Service Unavailable";
+        public const string InternalServerError = "Internal Server Error";
+        public const string UnexpectedErrorFetchingRates = "An unexpected error occurred while fetching exchange rates";
+        public const string UnexpectedErrorFetchingSupportedCurrencies = "An unexpected error occurred while fetching supported currencies";
+    }
+
+    public static class Response
+    {
+        public const string BaseCurrency = "CZK";
+        public const string SupportedCurrenciesNote = "This list is dynamically fetched from Czech National Bank and includes all currently available currencies.";
+        public const string HealthStatus = "Healthy";
+        public const string ServiceName = "Exchange Rate API";
+    }
+}

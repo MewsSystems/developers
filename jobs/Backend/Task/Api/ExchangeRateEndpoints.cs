@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Api;
+using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Models;
 using ExchangeRateUpdater.Services;
@@ -57,8 +58,8 @@ public static class ExchangeRateEndpoints
             {
                 return Results.BadRequest(new ErrorResponse
                 {
-                    Error = "Currency codes are required",
-                    Details = "Provide currency codes as a comma-separated query parameter (e.g., ?currencies=USD,EUR,GBP)"
+                    Error = ApiMessages.Validation.CurrencyCodesRequired,
+                    Details = ApiMessages.Validation.CurrencyCodesRequiredDetails
                 });
             }
 
@@ -68,7 +69,7 @@ public static class ExchangeRateEndpoints
             {
                 return Results.BadRequest(new ErrorResponse
                 {
-                    Error = "At least one currency code is required"
+                    Error = ApiMessages.Validation.AtLeastOneCurrencyRequired
                 });
             }
 
@@ -96,16 +97,16 @@ public static class ExchangeRateEndpoints
             return Results.Problem(
                 detail: ex.Message,
                 statusCode: StatusCodes.Status503ServiceUnavailable,
-                title: "Service Unavailable"
+                title: ApiMessages.Error.ServiceUnavailable
             );
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error occurred");
             return Results.Problem(
-                detail: "An unexpected error occurred while fetching exchange rates",
+                detail: ApiMessages.Error.UnexpectedErrorFetchingRates,
                 statusCode: StatusCodes.Status500InternalServerError,
-                title: "Internal Server Error"
+                title: ApiMessages.Error.InternalServerError
             );
         }
     }
@@ -122,8 +123,8 @@ public static class ExchangeRateEndpoints
             {
                 return Results.BadRequest(new ErrorResponse
                 {
-                    Error = "Currency codes are required",
-                    Details = "Provide at least one currency code in the request body"
+                    Error = ApiMessages.Validation.CurrencyCodesRequired,
+                    Details = ApiMessages.Validation.CurrencyCodesRequiredBodyDetails
                 });
             }
 
@@ -151,16 +152,16 @@ public static class ExchangeRateEndpoints
             return Results.Problem(
                 detail: ex.Message,
                 statusCode: StatusCodes.Status503ServiceUnavailable,
-                title: "Service Unavailable"
+                title: ApiMessages.Error.ServiceUnavailable
             );
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error occurred");
             return Results.Problem(
-                detail: "An unexpected error occurred while fetching exchange rates",
+                detail: ApiMessages.Error.UnexpectedErrorFetchingRates,
                 statusCode: StatusCodes.Status500InternalServerError,
-                title: "Internal Server Error"
+                title: ApiMessages.Error.InternalServerError
             );
         }
     }
@@ -178,10 +179,10 @@ public static class ExchangeRateEndpoints
 
             return Results.Ok(new
             {
-                BaseCurrency = "CZK",
+                BaseCurrency = ApiMessages.Response.BaseCurrency,
                 SupportedCurrencies = supportedCurrencies.ToArray(),
                 Count = supportedCurrencies.Count(),
-                Note = "This list is dynamically fetched from Czech National Bank and includes all currently available currencies."
+                Note = ApiMessages.Response.SupportedCurrenciesNote
             });
         }
         catch (ExchangeRateProviderException ex)
@@ -190,16 +191,16 @@ public static class ExchangeRateEndpoints
             return Results.Problem(
                 detail: ex.Message,
                 statusCode: StatusCodes.Status503ServiceUnavailable,
-                title: "Service Unavailable"
+                title: ApiMessages.Error.ServiceUnavailable
             );
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error occurred");
             return Results.Problem(
-                detail: "An unexpected error occurred while fetching supported currencies",
+                detail: ApiMessages.Error.UnexpectedErrorFetchingSupportedCurrencies,
                 statusCode: StatusCodes.Status500InternalServerError,
-                title: "Internal Server Error"
+                title: ApiMessages.Error.InternalServerError
             );
         }
     }
@@ -208,9 +209,9 @@ public static class ExchangeRateEndpoints
     {
         return Results.Ok(new
         {
-            Status = "Healthy",
+            Status = ApiMessages.Response.HealthStatus,
             Timestamp = DateTime.UtcNow,
-            Service = "Exchange Rate API"
+            Service = ApiMessages.Response.ServiceName
         });
     }
 }

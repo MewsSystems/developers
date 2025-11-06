@@ -121,7 +121,7 @@ public class ExchangeRateProvider
         catch (Exception ex)
         {
             _logger.LogError(ex, LogMessages.ExchangeRateProvider.UnexpectedError);
-            throw new ExchangeRateProviderException("Failed to retrieve exchange rates", ex);
+            throw new ExchangeRateProviderException(ExceptionMessages.ExchangeRateProvider.FailedToRetrieveRates, ex);
         }
     }
 
@@ -162,7 +162,7 @@ public class ExchangeRateProvider
         catch (Exception ex)
         {
             _logger.LogError(ex, LogMessages.ExchangeRateProvider.FailedToFetchSupportedCurrencies);
-            throw new ExchangeRateProviderException("Failed to retrieve supported currencies", ex);
+            throw new ExchangeRateProviderException(ExceptionMessages.ExchangeRateProvider.FailedToRetrieveSupportedCurrencies, ex);
         }
     }
 
