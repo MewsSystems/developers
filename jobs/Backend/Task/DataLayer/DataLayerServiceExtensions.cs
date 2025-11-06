@@ -10,14 +10,26 @@ public static class DataLayerServiceExtensions
 {
     public static IServiceCollection AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register DbContext
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        // Register Pooled DbContextFactory for use in both Singleton and Scoped services
+        // This uses connection pooling and is safe for all lifetimes
+        services.AddPooledDbContextFactory<ApplicationDbContext>(
+            options => options.UseSqlServer(
+                connectionString,
                 sqlOptions => sqlOptions.EnableRetryOnFailure(
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null)));
+                    errorNumbersToAdd: null)),
+            poolSize: 128); // Configure pool size
+
+        // Register scoped DbContext using the factory
+        // This allows repositories to receive ApplicationDbContext directly
+        services.AddScoped(sp =>
+        {
+            var factory = sp.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+            return factory.CreateDbContext();
+        });
 
         // Register Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

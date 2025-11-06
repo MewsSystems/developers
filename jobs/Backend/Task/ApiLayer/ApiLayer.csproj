@@ -13,6 +13,11 @@
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
     <ProjectReference Include="..\ConfigurationLayer\ConfigurationLayer.csproj" />
+    <ProjectReference Include="..\ApplicationLayer\ApplicationLayer.csproj" />
+    <ProjectReference Include="..\InfrastructureLayer\InfrastructureLayer.csproj" />
+    <ProjectReference Include="..\ExchangeRateProviderLayer\EuropeanCentralBank\EuropeanCentralBank.csproj" />
+    <ProjectReference Include="..\ExchangeRateProviderLayer\CzechNationalBank\CzechNationalBank.csproj" />
+    <ProjectReference Include="..\ExchangeRateProviderLayer\RomanianNationalBank\RomanianNationalBank.csproj" />
   </ItemGroup>
 
   <ItemGroup>
