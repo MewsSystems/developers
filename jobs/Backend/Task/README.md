@@ -29,7 +29,7 @@ A production-ready REST API for fetching real-time exchange rates from the Czech
 - **Comprehensive Logging** - Structured logging with correlation
 - **Input Validation** - Proper error handling and HTTP status codes
 - **Production Ready** - Non-root user, health checks, configurable settings
-- **43 Tests** - 18 unit tests + 25 E2E tests, all passing ✅
+- **43 Tests** - 22 unit tests + 21 integration tests, all passing ✅
 
 ### Technical Stack
 
@@ -53,7 +53,7 @@ A production-ready REST API for fetching real-time exchange rates from the Czech
 ### Run Locally (Fastest)
 
 ```bash
-cd C:\mews-task\mews-backend-task\jobs\Backend\Task
+cd jobs\Backend\Task
 dotnet run
 ```
 
@@ -127,7 +127,7 @@ curl -X POST "http://localhost:5000/api/exchange-rates" \
 
 ### 3. Get Supported Currencies
 
-Get a list of commonly supported currency codes.
+Get a dynamically fetched list of all currencies currently supported by CNB.
 
 **Endpoint:** `GET /api/exchange-rates/supported`
 
@@ -146,7 +146,8 @@ curl "http://localhost:5000/api/exchange-rates/supported"
     "KRW", "MXN", "NOK", "NZD", "PHP", "PLN", "RON", "RUB",
     "SEK", "SGD", "THB", "TRY", "USD", "ZAR"
   ],
-  "note": "This list includes commonly available currencies. CNB may support additional currencies."
+  "count": 30,
+  "note": "This list is dynamically fetched from CNB and cached for performance."
 }
 ```
 
@@ -428,32 +429,37 @@ print(rates)
 
 ```
 Task/
-├── Api/                          # API models and DTOs
-│   ├── ExchangeRateRequest.cs
-│   ├── ExchangeRateResponse.cs
-│   └── ErrorResponse.cs
+├── Api/                          # API models and endpoints
+│   ├── ExchangeRateEndpoints.cs  # API endpoint definitions
+│   ├── ExchangeRateRequest.cs    # Request DTOs
+│   ├── ExchangeRateResponse.cs   # Response DTOs
+│   └── ErrorResponse.cs          # Error DTOs
 ├── Configuration/                # Configuration classes
 │   └── CnbExchangeRateConfiguration.cs
+├── Constants/                    # Application constants
+│   └── LogMessages.cs            # Log message templates
 ├── Infrastructure/               # Infrastructure layer
-│   ├── CnbApiClient.cs          # HTTP client for CNB API
-│   ├── CnbDataParser.cs         # Parse CNB text format
-│   ├── ExchangeRateCache.cs     # In-memory caching
+│   ├── CnbApiClient.cs           # HTTP client for CNB API
+│   ├── CnbDataParser.cs          # Parse CNB text format
+│   ├── ExchangeRateCache.cs      # In-memory caching for rates
+│   ├── SupportedCurrenciesCache.cs # Cache for supported currencies
 │   ├── ExchangeRateProviderException.cs
 │   ├── ServiceCollectionExtensions.cs
-│   └── Interfaces/
-│       ├── ICnbApiClient.cs
-│       ├── ICnbDataParser.cs
-│       └── IExchangeRateCache.cs
+│   ├── ICnbApiClient.cs          # Interface
+│   ├── ICnbDataParser.cs         # Interface
+│   ├── IExchangeRateCache.cs     # Interface
+│   └── ISupportedCurrenciesCache.cs # Interface
 ├── Models/                       # Domain models
-│   ├── Currency.cs
-│   ├── ExchangeRate.cs
-│   └── CnbExchangeRateDto.cs
+│   ├── Currency.cs               # Currency value object (record)
+│   ├── ExchangeRate.cs           # Exchange rate value object (record)
+│   └── CnbExchangeRateDto.cs     # CNB data transfer object
 ├── Services/                     # Business logic
-│   └── ExchangeRateProvider.cs
-├── Program.cs                    # API endpoints and startup
-├── appsettings.json             # Configuration
+│   └── ExchangeRateProvider.cs   # Main service
+├── Program.cs                    # Application entry point
+├── GlobalUsings.cs               # Global using statements
+├── appsettings.json              # Configuration
 ├── Dockerfile                    # Docker image definition
-├── docker-compose.yml           # Docker Compose configuration
+├── docker-compose.yml            # Docker Compose configuration
 └── README.md                     # This file
 ```
 
@@ -469,10 +475,12 @@ Task/
 ### Key Components
 
 1. **ExchangeRateProvider** - Main service orchestrating the workflow
-2. **CnbApiClient** - HTTP client with resilience patterns
+2. **CnbApiClient** - HTTP client with resilience patterns (retry, timeout, circuit breaker)
 3. **CnbDataParser** - Parses CNB's pipe-delimited text format
-4. **ExchangeRateCache** - In-memory cache with TTL
-5. **Program.cs** - Minimal API endpoints configuration
+4. **ExchangeRateCache** - In-memory cache for exchange rates with TTL
+5. **SupportedCurrenciesCache** - Dedicated cache for supported currency codes
+6. **ExchangeRateEndpoints** - API endpoint definitions separated from Program.cs
+7. **LogMessages** - Centralized log message templates for consistency
 
 ### Data Flow
 
@@ -504,25 +512,31 @@ Return to client
 
 ```bash
 # Unit tests
-cd C:\mews-task\mews-backend-task\jobs\Backend\Tests
+cd C:\mews-task\mews-backend-task\jobs\Backend\UnitTests
 dotnet test
 
-# E2E tests (requires internet connection)
-cd C:\mews-task\mews-backend-task\jobs\Backend\E2ETests
+# Integration tests (requires internet connection)
+cd C:\mews-task\mews-backend-task\jobs\Backend\IntegrationTests
+dotnet test
+
+# Run all tests from solution
+cd C:\mews-task\mews-backend-task\jobs\Backend\Task
+dotnet build
 dotnet test
 ```
 
 ### Test Coverage
 
-**Unit Tests (18 tests):**
-- `CnbDataParserTests` - 6 tests for parsing logic
-- `ExchangeRateProviderTests` - 6 tests for provider logic
-- `ExchangeRateCacheTests` - 6 tests for caching behavior
+**Unit Tests (22 tests):**
+- `CnbDataParserTests` - 7 tests for parsing logic and edge cases
+- `ExchangeRateProviderTests` - 10 tests for provider logic, caching, and supported currencies
+- `ExchangeRateCacheTests` - 5 tests for caching behavior
 
-**E2E Tests (25 tests):**
-- `ExchangeRateProviderE2ETests` - 7 tests with real CNB API
-- `CachingE2ETests` - 8 tests for cache behavior
-- `ErrorScenarioE2ETests` - 10 tests for error handling
+**Integration Tests (21 tests):**
+- `ExchangeRateProviderE2ETests` - 6 tests with real CNB API
+- `CachingE2ETests` - 6 tests for end-to-end cache behavior
+- `ErrorScenarioE2ETests` - 1 test for cancellation token handling
+- `ApiEndpointTests` - 8 tests for HTTP API endpoints (GET, POST, validation)
 
 **Total: 43 tests, all passing ✅**
 
@@ -536,13 +550,16 @@ dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
 ```bash
 # Run only unit tests
-dotnet test --filter "FullyQualifiedName~ExchangeRateUpdater.Tests"
+dotnet test --filter "FullyQualifiedName~ExchangeRateUpdater.UnitTests"
 
-# Run only E2E tests
-dotnet test --filter "FullyQualifiedName~ExchangeRateUpdater.E2ETests"
+# Run only integration tests
+dotnet test --filter "FullyQualifiedName~ExchangeRateUpdater.IntegrationTests"
 
 # Run tests matching a pattern
 dotnet test --filter "FullyQualifiedName~Cache"
+
+# Run specific test class
+dotnet test --filter "FullyQualifiedName~ApiEndpointTests"
 ```
 
 ---
@@ -750,7 +767,6 @@ The second call should be significantly faster (< 10ms vs 200ms+)
 ## 📝 Notes
 
 - **Base Currency:** All rates are in CZK (Czech Koruna)
-- **Update Frequency:** CNB updates rates once daily after 2:30 PM CET
 - **Cache Duration:** Default 60 minutes (configurable)
 - **Invalid Currencies:** Silently omitted from response (no error thrown)
 - **Rate Normalization:** Rates provided per 1 unit of source currency (CNB sometimes provides rates per 100 units, which are automatically normalized)
@@ -764,31 +780,3 @@ https://github.com/MewsSystems/developers/blob/master/jobs/Backend/DotNet.md
 
 ---
 
-## 📄 License
-
-This project is a task implementation for Mews Systems.
-
----
-
-## 🔗 Resources
-
-- [Czech National Bank Exchange Rates](https://www.cnb.cz/en/financial-markets/foreign-exchange-market/central-bank-exchange-rate-fixing/)
-- [.NET 8.0 Documentation](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8)
-- [ASP.NET Core Minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis)
-- [Polly Resilience Library](https://www.pollydocs.org/)
-- [Swagger/OpenAPI](https://swagger.io/specification/)
-- [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
-
----
-
-## 📞 Support
-
-For issues or questions:
-- Open the Swagger UI at http://localhost:5000
-- Check logs in console output
-- Review the troubleshooting section above
-- GitHub: https://github.com/MewsSystems/developers
-
----
-
-**Made with ❤️ using .NET 8.0 and ASP.NET Core**
