@@ -1,8 +1,6 @@
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Services;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http.Resilience;
 
 namespace ExchangeRateUpdater.Infrastructure;
 

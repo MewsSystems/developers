@@ -1,4 +1,3 @@
-using ExchangeRateUpdater.Api;
 using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Models;

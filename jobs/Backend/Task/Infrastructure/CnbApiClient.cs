@@ -1,6 +1,5 @@
 using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Constants;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Infrastructure;

@@ -1,7 +1,6 @@
 using System.Globalization;
 using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Models;
-using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater.Infrastructure;
 

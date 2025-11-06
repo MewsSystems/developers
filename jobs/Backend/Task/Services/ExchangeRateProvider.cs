@@ -2,7 +2,6 @@ using ExchangeRateUpdater.Configuration;
 using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Models;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ExchangeRateUpdater.Services;
