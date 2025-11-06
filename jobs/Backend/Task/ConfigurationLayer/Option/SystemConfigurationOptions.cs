@@ -8,21 +8,12 @@ namespace ConfigurationLayer.Option
 {
     public class SystemConfigurationOptions
     {
-        public RetryOptions Retry { get; set; } = new();
         public ProviderHealthOptions ProviderHealth { get; set; } = new();
         public DataRetentionOptions DataRetention { get; set; } = new();
         public LoggingOptions Logging { get; set; } = new();
         public ApiOptions Api { get; set; } = new();
         public SystemOptions System { get; set; } = new();
-    }
-
-    public class RetryOptions
-    {
-        public int MaxRetryAttempts { get; set; } = 3;
-        public int RetryDelaySeconds { get; set; } = 5;
-        public int RequestTimeoutSeconds { get; set; } = 30;
-        public int CircuitBreakerThreshold { get; set; } = 5;
-        public int CircuitBreakerDurationSeconds { get; set; } = 60;
+        public BackgroundJobOptions BackgroundJobs { get; set; } = new();
     }
 
     public class ProviderHealthOptions
@@ -59,5 +50,17 @@ namespace ConfigurationLayer.Option
         public string Version { get; set; } = "1.0.0";
         public bool MaintenanceMode { get; set; } = false;
         public string MaintenanceMessage { get; set; } = "System is under maintenance. Please try again later.";
+    }
+
+    public class BackgroundJobOptions
+    {
+        public int HistoricalDataDays { get; set; } = 90;
+        public int DefaultRetryDelayMinutes { get; set; } = 30;
+        public int MaxRetries { get; set; } = 3;
+        public int HealthCheckIntervalMinutes { get; set; } = 5;
+        public int RecentDataThresholdHours { get; set; } = 2;
+        public int HangfireWorkerCount { get; set; } = 5;
+        public string DefaultCronExpression { get; set; } = "0 16 * * *";
+        public string DefaultTimezone { get; set; } = "UTC";
     }
 }

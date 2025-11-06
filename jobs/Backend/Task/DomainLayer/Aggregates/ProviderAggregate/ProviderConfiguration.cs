@@ -1,12 +1,13 @@
+using DomainLayer.Common;
+
 namespace DomainLayer.Aggregates.ProviderAggregate;
 
 /// <summary>
 /// Represents a configuration setting for an exchange rate provider.
 /// Part of the ExchangeRateProvider aggregate.
 /// </summary>
-public class ProviderConfiguration
+public class ProviderConfiguration : Entity<int>
 {
-    public int Id { get; private set; }
     public int ProviderId { get; private set; }
     public string SettingKey { get; private set; }
     public string SettingValue { get; private set; }
@@ -15,7 +16,7 @@ public class ProviderConfiguration
     public DateTimeOffset? Modified { get; private set; }
 
     // EF Core constructor
-    private ProviderConfiguration()
+    private ProviderConfiguration() : base()
     {
         SettingKey = string.Empty;
         SettingValue = string.Empty;
@@ -25,7 +26,7 @@ public class ProviderConfiguration
         int providerId,
         string settingKey,
         string settingValue,
-        string? description = null)
+        string? description = null) : base()
     {
         if (string.IsNullOrWhiteSpace(settingKey))
             throw new ArgumentException("Setting key cannot be null or empty.", nameof(settingKey));

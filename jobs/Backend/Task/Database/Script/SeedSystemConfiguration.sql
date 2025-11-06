@@ -1,39 +1,4 @@
-﻿IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'MaxRetryAttempts')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('MaxRetryAttempts', '3', 'Number of retry attempts on fetch failure', 'Int');
-    PRINT '  ✓ MaxRetryAttempts';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'RetryDelaySeconds')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('RetryDelaySeconds', '5', 'Delay between retry attempts (in seconds)', 'Int');
-    PRINT '  ✓ RetryDelaySeconds';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'RequestTimeoutSeconds')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('RequestTimeoutSeconds', '30', 'HTTP request timeout (in seconds)', 'Int');
-    PRINT '  ✓ RequestTimeoutSeconds';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'CircuitBreakerThreshold')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('CircuitBreakerThreshold', '5', 'Consecutive failures before circuit breaker opens', 'Int');
-    PRINT '  ✓ CircuitBreakerThreshold';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'CircuitBreakerDurationSeconds')
-BEGIN
-    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
-    VALUES ('CircuitBreakerDurationSeconds', '60', 'Circuit breaker open duration (in seconds)', 'Int');
-    PRINT '  ✓ CircuitBreakerDurationSeconds';
-END
-
-IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'AutoDisableProviderAfterFailures')
+﻿IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'AutoDisableProviderAfterFailures')
 BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
     VALUES ('AutoDisableProviderAfterFailures', '10', 'Auto-disable provider after N consecutive failures (0 = never)', 'Int');
@@ -143,4 +108,61 @@ BEGIN
     INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
     VALUES ('MaintenanceMessage', 'System is under maintenance. Please try again later.', 'Message to display during maintenance', 'String');
     PRINT '  ✓ MaintenanceMessage';
+END
+
+-- Background Jobs Configuration
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'HistoricalDataDays')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('HistoricalDataDays', '90', 'Number of days of historical data to fetch on startup', 'Int');
+    PRINT '  ✓ HistoricalDataDays';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'DefaultRetryDelayMinutes')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('DefaultRetryDelayMinutes', '30', 'Default delay (in minutes) before retrying a failed fetch', 'Int');
+    PRINT '  ✓ DefaultRetryDelayMinutes';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'MaxRetries')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('MaxRetries', '3', 'Maximum number of retry attempts for a failed fetch', 'Int');
+    PRINT '  ✓ MaxRetries';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'HealthCheckIntervalMinutes')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('HealthCheckIntervalMinutes', '5', 'Interval (in minutes) between provider health checks', 'Int');
+    PRINT '  ✓ HealthCheckIntervalMinutes';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'RecentDataThresholdHours')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('RecentDataThresholdHours', '2', 'Time (in hours) to consider existing data as recent and schedule a retry', 'Int');
+    PRINT '  ✓ RecentDataThresholdHours';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'HangfireWorkerCount')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('HangfireWorkerCount', '5', 'Number of concurrent Hangfire background job workers', 'Int');
+    PRINT '  ✓ HangfireWorkerCount';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'DefaultCronExpression')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('DefaultCronExpression', '0 16 * * *', 'Default cron expression for scheduled fetches (daily at 4 PM UTC)', 'String');
+    PRINT '  ✓ DefaultCronExpression';
+END
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[SystemConfiguration] WHERE [Key] = 'DefaultTimezone')
+BEGIN
+    INSERT INTO [dbo].[SystemConfiguration] ([Key], [Value], [Description], [DataType])
+    VALUES ('DefaultTimezone', 'UTC', 'Default timezone for cron expressions', 'String');
+    PRINT '  ✓ DefaultTimezone';
 END

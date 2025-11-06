@@ -38,4 +38,16 @@ public class ExchangeRateFetchLogRepository : Repository<ExchangeRateFetchLog>, 
             .OrderByDescending(l => l.FetchStarted)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<ExchangeRateFetchLog>> GetLogsByDateRangeAsync(
+        DateTimeOffset startDate,
+        DateTimeOffset endDate,
+        CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(l => l.Provider)
+            .Where(l => l.FetchStarted >= startDate && l.FetchStarted <= endDate)
+            .OrderByDescending(l => l.FetchStarted)
+            .ToListAsync(cancellationToken);
+    }
 }

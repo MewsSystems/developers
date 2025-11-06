@@ -157,13 +157,6 @@ namespace ConfigurationLayer.Service
             // Map database configuration keys to appsettings.json values
             return key switch
             {
-                // Retry & Resilience
-                "MaxRetryAttempts" => config.Retry.MaxRetryAttempts.ToString(),
-                "RetryDelaySeconds" => config.Retry.RetryDelaySeconds.ToString(),
-                "RequestTimeoutSeconds" => config.Retry.RequestTimeoutSeconds.ToString(),
-                "CircuitBreakerThreshold" => config.Retry.CircuitBreakerThreshold.ToString(),
-                "CircuitBreakerDurationSeconds" => config.Retry.CircuitBreakerDurationSeconds.ToString(),
-
                 // Provider Health
                 "AutoDisableProviderAfterFailures" => config.ProviderHealth.AutoDisableAfterFailures.ToString(),
                 "ProviderHealthCheckIntervalMinutes" => config.ProviderHealth.HealthCheckIntervalMinutes.ToString(),
@@ -189,6 +182,16 @@ namespace ConfigurationLayer.Service
                 "SystemVersion" => config.System.Version,
                 "MaintenanceMode" => config.System.MaintenanceMode.ToString(),
                 "MaintenanceMessage" => config.System.MaintenanceMessage,
+
+                // Background Jobs
+                "HistoricalDataDays" => config.BackgroundJobs.HistoricalDataDays.ToString(),
+                "DefaultRetryDelayMinutes" => config.BackgroundJobs.DefaultRetryDelayMinutes.ToString(),
+                "MaxRetries" => config.BackgroundJobs.MaxRetries.ToString(),
+                "HealthCheckIntervalMinutes" => config.BackgroundJobs.HealthCheckIntervalMinutes.ToString(),
+                "RecentDataThresholdHours" => config.BackgroundJobs.RecentDataThresholdHours.ToString(),
+                "HangfireWorkerCount" => config.BackgroundJobs.HangfireWorkerCount.ToString(),
+                "DefaultCronExpression" => config.BackgroundJobs.DefaultCronExpression,
+                "DefaultTimezone" => config.BackgroundJobs.DefaultTimezone,
 
                 // Not found
                 _ => null

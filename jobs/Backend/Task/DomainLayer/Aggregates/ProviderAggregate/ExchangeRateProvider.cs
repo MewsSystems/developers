@@ -1,4 +1,6 @@
+using DomainLayer.Common;
 using DomainLayer.Enums;
+using DomainLayer.Events.ProviderAggregate;
 using DomainLayer.Exceptions;
 using DomainLayer.ValueObjects;
 
@@ -8,12 +10,10 @@ namespace DomainLayer.Aggregates.ProviderAggregate;
 /// Aggregate root representing an exchange rate provider.
 /// Encapsulates provider health monitoring, configuration, and lifecycle management.
 /// </summary>
-public class ExchangeRateProvider
+public class ExchangeRateProvider : AggregateRoot<int>
 {
     private const int MaxConsecutiveFailuresBeforeQuarantine = 5;
     private readonly List<ProviderConfiguration> _configurations = new();
-
-    public int Id { get; private set; }
     public string Name { get; private set; }
     public string Code { get; private set; }
     public string Url { get; private set; }
@@ -115,13 +115,59 @@ public class ExchangeRateProvider
         bool requiresAuthentication = false,
         string? apiKeyVaultReference = null)
     {
-        return new ExchangeRateProvider(
+        var provider = new ExchangeRateProvider(
             name,
             code,
             url,
             baseCurrencyId,
             requiresAuthentication,
             apiKeyVaultReference);
+
+        provider.AddDomainEvent(new ProviderCreatedEvent(
+            provider.Id,
+            provider.Code,
+            provider.Name,
+            provider.BaseCurrencyId,
+            provider.Created));
+
+        return provider;
+    }
+
+    /// <summary>
+    /// Reconstructs an ExchangeRateProvider aggregate from persistence without validation or domain events.
+    /// For use by infrastructure layer only when loading from database.
+    /// </summary>
+    public static ExchangeRateProvider Reconstruct(
+        int id,
+        string name,
+        string code,
+        string url,
+        int baseCurrencyId,
+        bool requiresAuthentication,
+        string? apiKeyVaultReference,
+        bool isActive,
+        DateTimeOffset? lastSuccessfulFetch,
+        DateTimeOffset? lastFailedFetch,
+        int consecutiveFailures,
+        DateTimeOffset created,
+        DateTimeOffset? modified)
+    {
+        return new ExchangeRateProvider
+        {
+            Id = id,
+            Name = name,
+            Code = code,
+            Url = url,
+            BaseCurrencyId = baseCurrencyId,
+            RequiresAuthentication = requiresAuthentication,
+            ApiKeyVaultReference = apiKeyVaultReference,
+            IsActive = isActive,
+            LastSuccessfulFetch = lastSuccessfulFetch,
+            LastFailedFetch = lastFailedFetch,
+            ConsecutiveFailures = consecutiveFailures,
+            Created = created,
+            Modified = modified
+        };
     }
 
     /// <summary>
@@ -134,6 +180,8 @@ public class ExchangeRateProvider
 
         IsActive = true;
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new ProviderActivatedEvent(Id, Code, DateTimeOffset.UtcNow));
     }
 
     /// <summary>
@@ -143,24 +191,28 @@ public class ExchangeRateProvider
     {
         IsActive = false;
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new ProviderDeactivatedEvent(Id, Code, DateTimeOffset.UtcNow));
     }
 
     /// <summary>
     /// Records a successful fetch operation.
     /// Resets consecutive failures counter.
     /// </summary>
-    public void RecordSuccessfulFetch()
+    public void RecordSuccessfulFetch(int ratesFetched = 0)
     {
         LastSuccessfulFetch = DateTimeOffset.UtcNow;
         ConsecutiveFailures = 0;
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new FetchSucceededEvent(Id, Code, ratesFetched, DateTimeOffset.UtcNow));
     }
 
     /// <summary>
     /// Records a failed fetch operation.
     /// Increments consecutive failures counter and may quarantine the provider.
     /// </summary>
-    public void RecordFailedFetch()
+    public void RecordFailedFetch(string? errorMessage = null)
     {
         LastFailedFetch = DateTimeOffset.UtcNow;
         ConsecutiveFailures++;
@@ -169,6 +221,11 @@ public class ExchangeRateProvider
         if (ShouldBeQuarantined)
         {
             IsActive = false;
+            AddDomainEvent(new ProviderQuarantinedEvent(Id, Code, ConsecutiveFailures, DateTimeOffset.UtcNow));
+        }
+        else
+        {
+            AddDomainEvent(new FetchFailedEvent(Id, Code, ConsecutiveFailures, errorMessage, DateTimeOffset.UtcNow));
         }
     }
 
@@ -180,6 +237,8 @@ public class ExchangeRateProvider
         ConsecutiveFailures = 0;
         LastFailedFetch = null;
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new ProviderHealthResetEvent(Id, Code, DateTimeOffset.UtcNow));
     }
 
     /// <summary>
@@ -196,6 +255,8 @@ public class ExchangeRateProvider
         Name = name.Trim();
         Url = url.Trim();
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new ProviderInfoUpdatedEvent(Id, Code, Name, Url, DateTimeOffset.UtcNow));
     }
 
     /// <summary>
@@ -232,6 +293,8 @@ public class ExchangeRateProvider
         }
 
         Modified = DateTimeOffset.UtcNow;
+
+        AddDomainEvent(new ProviderConfigurationSetEvent(Id, Code, key, value, DateTimeOffset.UtcNow));
     }
 
     /// <summary>

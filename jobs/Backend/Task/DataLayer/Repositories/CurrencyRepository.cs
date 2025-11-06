@@ -21,4 +21,12 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
             .OrderBy(c => c.Code)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Currency>> GetActiveCurrenciesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.Code)
+            .ToListAsync(cancellationToken);
+    }
 }

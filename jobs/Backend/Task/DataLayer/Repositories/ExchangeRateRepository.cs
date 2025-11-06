@@ -66,4 +66,12 @@ public class ExchangeRateRepository : Repository<ExchangeRate>, IExchangeRateRep
                 r.TargetCurrencyId == targetCurrencyId &&
                 r.ValidDate == validDate, cancellationToken);
     }
+
+    public async Task<IEnumerable<ExchangeRate>> GetRatesByProviderAndDateRangeAsync(int providerId, DateOnly startDate, DateOnly endDate, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(r => r.ProviderId == providerId && r.ValidDate >= startDate && r.ValidDate <= endDate)
+            .OrderBy(r => r.ValidDate)
+            .ToListAsync(cancellationToken);
+    }
 }
