@@ -21,6 +21,9 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+# Install curl for health checks (as root before switching to non-root user)
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
@@ -39,7 +42,7 @@ ENV CnbExchangeRate__CacheDurationMinutes=60
 
 # Health check - ping the /health endpoint
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+  CMD curl --fail http://localhost:8080/health || exit 1
 
 # Run the application
 ENTRYPOINT ["dotnet", "ExchangeRateUpdater.dll"]
