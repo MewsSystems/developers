@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -34,12 +35,12 @@ public class ExchangeRateCache : IExchangeRateCache
 
         if (_cache.TryGetValue<List<ExchangeRate>>(cacheKey, out var cachedRates))
         {
-            _logger.LogInformation("Cache hit for key: {CacheKey}, {Count} rates retrieved",
+            _logger.LogInformation(LogMessages.ExchangeRateCache.CacheHit,
                 cacheKey, cachedRates?.Count ?? 0);
             return cachedRates;
         }
 
-        _logger.LogInformation("Cache miss for key: {CacheKey}", cacheKey);
+        _logger.LogInformation(LogMessages.ExchangeRateCache.CacheMiss, cacheKey);
         return null;
     }
 
@@ -53,7 +54,7 @@ public class ExchangeRateCache : IExchangeRateCache
         var ratesList = rates.ToList();
         if (!ratesList.Any())
         {
-            _logger.LogWarning("Attempted to cache empty rate list");
+            _logger.LogWarning(LogMessages.ExchangeRateCache.AttemptedCacheEmpty);
             return;
         }
 
@@ -78,7 +79,7 @@ public class ExchangeRateCache : IExchangeRateCache
         }
 
         _logger.LogInformation(
-            "Cached {Count} exchange rates with key: {CacheKey}, TTL: {TTL} minutes",
+            LogMessages.ExchangeRateCache.CachedRates,
             ratesList.Count,
             cacheKey,
             _configuration.CacheDurationMinutes);
@@ -96,7 +97,7 @@ public class ExchangeRateCache : IExchangeRateCache
             var count = _cacheKeys.Count;
             _cacheKeys.Clear();
 
-            _logger.LogInformation("Cleared {Count} cache entries", count);
+            _logger.LogInformation(LogMessages.ExchangeRateCache.ClearedEntries, count);
         }
     }
 

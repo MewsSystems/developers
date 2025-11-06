@@ -1,22 +1,18 @@
-﻿namespace ExchangeRateUpdater.Models;
+namespace ExchangeRateUpdater.Models;
 
-public class ExchangeRate
+/// <summary>
+/// Represents an exchange rate between two currencies.
+/// </summary>
+/// <param name="SourceCurrency">The source currency.</param>
+/// <param name="TargetCurrency">The target currency.</param>
+/// <param name="Value">The exchange rate value (how many target currency units per 1 source currency unit).</param>
+public record ExchangeRate(
+    Currency SourceCurrency,
+    Currency TargetCurrency,
+    decimal Value)
 {
-    public ExchangeRate(Currency sourceCurrency, Currency targetCurrency, decimal value)
-    {
-        SourceCurrency = sourceCurrency;
-        TargetCurrency = targetCurrency;
-        Value = value;
-    }
-
-    public Currency SourceCurrency { get; }
-
-    public Currency TargetCurrency { get; }
-
-    public decimal Value { get; }
-
     public override string ToString()
     {
-        return $"{SourceCurrency}/{TargetCurrency}={Value}";
+        return $"{SourceCurrency.Code}/{TargetCurrency.Code}={Value}";
     }
 }

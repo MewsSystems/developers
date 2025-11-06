@@ -164,4 +164,122 @@ public class ExchangeRateProviderTests
         // Assert
         result.Should().HaveCount(2);
     }
+
+    [Fact]
+    public async Task GetSupportedCurrenciesAsync_ReturnsAllCurrencyCodes()
+    {
+        // Arrange
+        var rawData = "sample data";
+        var cnbRates = new List<CnbExchangeRateDto>
+        {
+            new() { Code = "USD", Amount = 1, Rate = 22.950m, Country = "USA", CurrencyName = "dollar" },
+            new() { Code = "EUR", Amount = 1, Rate = 24.375m, Country = "EMU", CurrencyName = "euro" },
+            new() { Code = "GBP", Amount = 1, Rate = 28.123m, Country = "UK", CurrencyName = "pound" }
+        };
+
+        _apiClientMock.Setup(x => x.FetchExchangeRatesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(rawData);
+
+        _dataParserMock.Setup(x => x.Parse(rawData))
+            .Returns(cnbRates);
+
+        // Act
+        var result = await _provider.GetSupportedCurrenciesAsync();
+        var resultList = result.ToList();
+
+        // Assert
+        resultList.Should().HaveCount(3);
+        resultList.Should().Contain("EUR");
+        resultList.Should().Contain("GBP");
+        resultList.Should().Contain("USD");
+        resultList.Should().BeInAscendingOrder();
+    }
+
+    [Fact]
+    public async Task GetSupportedCurrenciesAsync_WhenApiClientThrows_ThrowsExchangeRateProviderException()
+    {
+        // Arrange
+        _apiClientMock.Setup(x => x.FetchExchangeRatesAsync(It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new HttpRequestException("Network error"));
+
+        // Act & Assert
+        await _provider.Invoking(p => p.GetSupportedCurrenciesAsync())
+            .Should().ThrowAsync<ExchangeRateProviderException>()
+            .WithMessage("Failed to retrieve supported currencies");
+    }
+
+    [Fact]
+    public async Task GetSupportedCurrenciesAsync_WithCachingEnabled_UsesCachedData()
+    {
+        // Arrange
+        var configuration = Options.Create(new CnbExchangeRateConfiguration
+        {
+            EnableCache = true
+        });
+
+        var supportedCurrenciesCacheMock = new Mock<ISupportedCurrenciesCache>();
+        var cachedCurrencies = new List<string> { "EUR", "USD" };
+
+        supportedCurrenciesCacheMock.Setup(x => x.GetCachedCurrencies())
+            .Returns(cachedCurrencies);
+
+        var provider = new ExchangeRateProvider(
+            _apiClientMock.Object,
+            _dataParserMock.Object,
+            _loggerMock.Object,
+            configuration,
+            _cacheMock.Object,
+            supportedCurrenciesCacheMock.Object);
+
+        // Act
+        var result = await provider.GetSupportedCurrenciesAsync();
+        var resultList = result.ToList();
+
+        // Assert
+        resultList.Should().HaveCount(2);
+        resultList.Should().Contain("EUR");
+        resultList.Should().Contain("USD");
+        _apiClientMock.Verify(x => x.FetchExchangeRatesAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetSupportedCurrenciesAsync_WithCachingEnabled_CachesResults()
+    {
+        // Arrange
+        var configuration = Options.Create(new CnbExchangeRateConfiguration
+        {
+            EnableCache = true
+        });
+
+        var supportedCurrenciesCacheMock = new Mock<ISupportedCurrenciesCache>();
+
+        supportedCurrenciesCacheMock.Setup(x => x.GetCachedCurrencies())
+            .Returns((IEnumerable<string>?)null);
+
+        var provider = new ExchangeRateProvider(
+            _apiClientMock.Object,
+            _dataParserMock.Object,
+            _loggerMock.Object,
+            configuration,
+            _cacheMock.Object,
+            supportedCurrenciesCacheMock.Object);
+
+        var rawData = "sample data";
+        var cnbRates = new List<CnbExchangeRateDto>
+        {
+            new() { Code = "USD", Amount = 1, Rate = 22.950m, Country = "USA", CurrencyName = "dollar" }
+        };
+
+        _apiClientMock.Setup(x => x.FetchExchangeRatesAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(rawData);
+
+        _dataParserMock.Setup(x => x.Parse(rawData))
+            .Returns(cnbRates);
+
+        // Act
+        await provider.GetSupportedCurrenciesAsync();
+
+        // Assert
+        supportedCurrenciesCacheMock.Verify(x => x.SetCachedCurrencies(It.IsAny<IEnumerable<string>>()), Times.Once);
+    }
 }

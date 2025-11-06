@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         // Register caching
         services.AddMemoryCache();
         services.AddSingleton<IExchangeRateCache, ExchangeRateCache>();
+        services.AddSingleton<ISupportedCurrenciesCache, SupportedCurrenciesCache>();
 
         // Register services
         services.AddSingleton<ICnbDataParser, CnbDataParser>();

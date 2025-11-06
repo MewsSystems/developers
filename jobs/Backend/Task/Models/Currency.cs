@@ -1,19 +1,7 @@
-﻿namespace ExchangeRateUpdater.Models;
+namespace ExchangeRateUpdater.Models;
 
-public class Currency
-{
-    public Currency(string code)
-    {
-        Code = code;
-    }
-
-    /// <summary>
-    /// Three-letter ISO 4217 code of the currency.
-    /// </summary>
-    public string Code { get; }
-
-    public override string ToString()
-    {
-        return Code;
-    }
-}
+/// <summary>
+/// Represents a currency with its ISO 4217 code.
+/// </summary>
+/// <param name="Code">Three-letter ISO 4217 code of the currency.</param>
+public record Currency(string Code);

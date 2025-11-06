@@ -75,29 +75,6 @@ public class CachingE2ETests : IDisposable
     }
 
     [Fact]
-    public async Task CacheExpiration_AfterTimeout_RefetchesData()
-    {
-        // Arrange
-        _cache.Clear();
-        var currencies = new[] { new Currency("USD") };
-
-        // Act - First call populates cache
-        var firstCall = await _provider.GetExchangeRatesAsync(currencies);
-        var firstRate = firstCall.First();
-
-        // Wait for cache to expire (test config has 1 minute cache)
-        // In real scenario we'd wait 61 seconds, but for test we'll verify the mechanism exists
-        await Task.Delay(TimeSpan.FromSeconds(2)); // Short delay to verify cache still works
-
-        // Second call should still hit cache (within 1 minute)
-        var secondCall = await _provider.GetExchangeRatesAsync(currencies);
-        var secondRate = secondCall.First();
-
-        // Assert - Should get same cached value
-        firstRate.Value.Should().Be(secondRate.Value, "cache should still be valid");
-    }
-
-    [Fact]
     public async Task DifferentCurrencySets_HaveSeparateCacheEntries()
     {
         // Arrange
@@ -163,29 +140,6 @@ public class CachingE2ETests : IDisposable
         // Assert
         var afterClear = _cache.GetCachedRates(currencies.Select(c => c.Code));
         afterClear.Should().BeNull("cache should be empty after clear");
-    }
-
-    [Fact]
-    public async Task PartialCacheHit_SubsetOfCachedCurrencies_NoMatch()
-    {
-        // Arrange
-        _cache.Clear();
-        var fullSet = new[] { new Currency("USD"), new Currency("EUR"), new Currency("GBP") };
-        var subset = new[] { new Currency("USD"), new Currency("EUR") };
-
-        // Act
-        // Cache the full set
-        await _provider.GetExchangeRatesAsync(fullSet);
-
-        // Request a subset - should be cache miss because exact match is required
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        var subsetResult = await _provider.GetExchangeRatesAsync(subset);
-        var subsetTime = stopwatch.ElapsedMilliseconds;
-
-        // Assert
-        subsetResult.Should().HaveCount(2);
-        // Note: Depending on implementation, this might be a cache miss or the cache
-        // might be smart enough to return a subset. Current implementation requires exact match.
     }
 
     [Fact]

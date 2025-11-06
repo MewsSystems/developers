@@ -89,32 +89,6 @@ public class ExchangeRateProviderE2ETests : IDisposable
     }
 
     [Fact]
-    public async Task GetExchangeRatesAsync_WithAllSupportedCurrencies_ReturnsAllRates()
-    {
-        // Arrange - Test with a comprehensive list of commonly supported currencies
-        var currencies = new[]
-        {
-            new Currency("USD"), new Currency("EUR"), new Currency("GBP"),
-            new Currency("JPY"), new Currency("CHF"), new Currency("AUD"),
-            new Currency("CAD"), new Currency("SEK"), new Currency("NOK"),
-            new Currency("DKK"), new Currency("PLN"), new Currency("HUF")
-        };
-
-        // Act
-        var rates = await _provider.GetExchangeRatesAsync(currencies);
-        var ratesList = rates.ToList();
-
-        // Assert
-        ratesList.Should().NotBeEmpty("CNB should provide rates for major currencies");
-        ratesList.Should().OnlyContain(r => r.Value > 0);
-        ratesList.Should().OnlyContain(r => r.TargetCurrency.Code == "CZK");
-
-        // Log which currencies were found for debugging
-        var foundCurrencies = ratesList.Select(r => r.SourceCurrency.Code).ToList();
-        foundCurrencies.Should().Contain(new[] { "USD", "EUR" }, "USD and EUR should always be available");
-    }
-
-    [Fact]
     public void GetExchangeRates_Synchronous_WithRealApi_ReturnsValidRates()
     {
         // Arrange

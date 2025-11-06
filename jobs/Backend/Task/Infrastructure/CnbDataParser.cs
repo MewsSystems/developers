@@ -1,4 +1,5 @@
 using System.Globalization;
+using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Logging;
 
@@ -24,7 +25,7 @@ public class CnbDataParser : ICnbDataParser
     {
         if (string.IsNullOrWhiteSpace(rawData))
         {
-            _logger.LogWarning("Received empty or null data to parse");
+            _logger.LogWarning(LogMessages.CnbDataParser.EmptyOrNullData);
             return Enumerable.Empty<CnbExchangeRateDto>();
         }
 
@@ -32,7 +33,7 @@ public class CnbDataParser : ICnbDataParser
 
         if (lines.Length < 3)
         {
-            _logger.LogWarning("Data contains fewer than expected lines (header + column names + data)");
+            _logger.LogWarning(LogMessages.CnbDataParser.InsufficientLines);
             return Enumerable.Empty<CnbExchangeRateDto>();
         }
 
@@ -52,12 +53,12 @@ public class CnbDataParser : ICnbDataParser
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to parse line: {Line}", line);
+                _logger.LogWarning(ex, LogMessages.CnbDataParser.FailedToParseLine, line);
                 // Continue parsing other lines even if one fails
             }
         }
 
-        _logger.LogInformation("Successfully parsed {Count} exchange rates", results.Count);
+        _logger.LogInformation(LogMessages.CnbDataParser.ParseSuccessful, results.Count);
         return results;
     }
 
@@ -67,20 +68,20 @@ public class CnbDataParser : ICnbDataParser
 
         if (parts.Length != ExpectedColumnCount)
         {
-            _logger.LogWarning("Line has unexpected number of columns. Expected: {Expected}, Actual: {Actual}, Line: {Line}",
+            _logger.LogWarning(LogMessages.CnbDataParser.UnexpectedColumnCount,
                 ExpectedColumnCount, parts.Length, line);
             return null;
         }
 
         if (!int.TryParse(parts[2], out var amount))
         {
-            _logger.LogWarning("Failed to parse amount: {Amount}", parts[2]);
+            _logger.LogWarning(LogMessages.CnbDataParser.FailedToParseAmount, parts[2]);
             return null;
         }
 
         if (!decimal.TryParse(parts[4], NumberStyles.Number, CultureInfo.InvariantCulture, out var rate))
         {
-            _logger.LogWarning("Failed to parse rate: {Rate}", parts[4]);
+            _logger.LogWarning(LogMessages.CnbDataParser.FailedToParseRate, parts[4]);
             return null;
         }
 

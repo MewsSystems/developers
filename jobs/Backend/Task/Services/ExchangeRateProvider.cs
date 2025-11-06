@@ -1,4 +1,5 @@
-﻿using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Constants;
 using ExchangeRateUpdater.Infrastructure;
 using ExchangeRateUpdater.Models;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,10 @@ public class ExchangeRateProvider
     private readonly ICnbApiClient _apiClient;
     private readonly ICnbDataParser _dataParser;
     private readonly IExchangeRateCache? _cache;
+    private readonly ISupportedCurrenciesCache? _supportedCurrenciesCache;
     private readonly ILogger<ExchangeRateProvider> _logger;
     private readonly CnbExchangeRateConfiguration _configuration;
 
-    // CNB provides rates as foreign currency/CZK
     private static readonly Currency CzkCurrency = new("CZK");
 
     public ExchangeRateProvider(
@@ -25,13 +26,15 @@ public class ExchangeRateProvider
         ICnbDataParser dataParser,
         ILogger<ExchangeRateProvider> logger,
         IOptions<CnbExchangeRateConfiguration> configuration,
-        IExchangeRateCache? cache = null)
+        IExchangeRateCache? cache = null,
+        ISupportedCurrenciesCache? supportedCurrenciesCache = null)
     {
         _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
         _dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
-        _cache = cache; // Cache is optional
+        _cache = cache;
+        _supportedCurrenciesCache = supportedCurrenciesCache;
     }
 
     /// <summary>
@@ -42,7 +45,6 @@ public class ExchangeRateProvider
     /// </summary>
     public IEnumerable<ExchangeRate> GetExchangeRates(IEnumerable<Currency> currencies)
     {
-        // Use async wrapper for backward compatibility with the interface
         return GetExchangeRatesAsync(currencies, CancellationToken.None)
             .ConfigureAwait(false)
             .GetAwaiter()
@@ -67,34 +69,30 @@ public class ExchangeRateProvider
         var currencyList = currencies.ToList();
         if (!currencyList.Any())
         {
-            _logger.LogInformation("No currencies requested");
+            _logger.LogInformation(LogMessages.ExchangeRateProvider.NoCurrenciesRequested);
             return Enumerable.Empty<ExchangeRate>();
         }
 
         var currencyCodes = currencyList.Select(c => c.Code).ToList();
 
-        _logger.LogInformation("Fetching exchange rates for {Count} currencies", currencyList.Count);
+        _logger.LogInformation(LogMessages.ExchangeRateProvider.FetchingExchangeRates, currencyList.Count);
 
-        // Check cache if enabled
         if (_configuration.EnableCache && _cache != null)
         {
             var cachedRates = _cache.GetCachedRates(currencyCodes);
             if (cachedRates != null)
             {
-                _logger.LogInformation("Returning {Count} exchange rates from cache", cachedRates.Count());
+                _logger.LogInformation(LogMessages.ExchangeRateProvider.ReturningFromCache, cachedRates.Count());
                 return cachedRates;
             }
         }
 
         try
         {
-            // Fetch raw data from CNB
             var rawData = await _apiClient.FetchExchangeRatesAsync(cancellationToken);
 
-            // Parse the data
             var cnbRates = _dataParser.Parse(rawData);
 
-            // Convert to ExchangeRate objects, filtering for requested currencies
             var requestedCurrencyCodes = new HashSet<string>(
                 currencyCodes,
                 StringComparer.OrdinalIgnoreCase);
@@ -105,11 +103,10 @@ public class ExchangeRateProvider
                 .ToList();
 
             _logger.LogInformation(
-                "Successfully retrieved {Retrieved} exchange rates out of {Requested} requested currencies",
+                LogMessages.ExchangeRateProvider.RetrievalSuccessful,
                 exchangeRates.Count,
                 currencyList.Count);
 
-            // Cache the results if enabled
             if (_configuration.EnableCache && _cache != null && exchangeRates.Any())
             {
                 _cache.SetCachedRates(exchangeRates);
@@ -119,25 +116,61 @@ public class ExchangeRateProvider
         }
         catch (ExchangeRateProviderException)
         {
-            // Re-throw provider exceptions as-is
             throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error while getting exchange rates");
+            _logger.LogError(ex, LogMessages.ExchangeRateProvider.UnexpectedError);
             throw new ExchangeRateProviderException("Failed to retrieve exchange rates", ex);
+        }
+    }
+
+    /// <summary>
+    /// Gets all currency codes currently supported by CNB.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>List of supported currency codes.</returns>
+    public async Task<IEnumerable<string>> GetSupportedCurrenciesAsync(CancellationToken cancellationToken = default)
+    {
+        if (_configuration.EnableCache && _supportedCurrenciesCache != null)
+        {
+            var cached = _supportedCurrenciesCache.GetCachedCurrencies();
+            if (cached != null)
+            {
+                _logger.LogInformation(LogMessages.ExchangeRateProvider.ReturningCachedSupportedCurrencies);
+                return cached;
+            }
+        }
+
+        try
+        {
+            _logger.LogInformation(LogMessages.ExchangeRateProvider.FetchingSupportedCurrencies);
+
+            var rawData = await _apiClient.FetchExchangeRatesAsync(cancellationToken);
+            var cnbRates = _dataParser.Parse(rawData);
+
+            var currencyCodes = cnbRates.Select(dto => dto.Code).OrderBy(c => c).ToList();
+
+            if (_configuration.EnableCache && _supportedCurrenciesCache != null && currencyCodes.Any())
+            {
+                _supportedCurrenciesCache.SetCachedCurrencies(currencyCodes);
+            }
+
+            _logger.LogInformation(LogMessages.ExchangeRateProvider.FoundSupportedCurrencies, currencyCodes.Count);
+            return currencyCodes;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, LogMessages.ExchangeRateProvider.FailedToFetchSupportedCurrencies);
+            throw new ExchangeRateProviderException("Failed to retrieve supported currencies", ex);
         }
     }
 
     private ExchangeRate ConvertToExchangeRate(CnbExchangeRateDto dto)
     {
-        // CNB provides rates as: Amount of foreign currency = Rate in CZK
-        // Example: 1 USD = 22.950 CZK
-        // So the rate represents: source (foreign) / target (CZK) = rate
         var sourceCurrency = new Currency(dto.Code);
-        var rate = dto.Rate / dto.Amount; // Normalize to rate per 1 unit of currency
+        var rate = dto.Rate / dto.Amount;
 
         return new ExchangeRate(sourceCurrency, CzkCurrency, rate);
     }
 }
-

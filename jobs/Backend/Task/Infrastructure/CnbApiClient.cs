@@ -1,4 +1,5 @@
 using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Constants;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -29,30 +30,30 @@ public class CnbApiClient : ICnbApiClient
     {
         try
         {
-            _logger.LogInformation("Fetching exchange rates from CNB API: {ApiUrl}", _configuration.ApiUrl);
+            _logger.LogInformation(LogMessages.CnbApiClient.FetchingExchangeRates, _configuration.ApiUrl);
 
             var response = await _httpClient.GetAsync(_configuration.ApiUrl, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            _logger.LogInformation("Successfully fetched exchange rates from CNB API");
+            _logger.LogInformation(LogMessages.CnbApiClient.FetchSuccessful);
 
             return content;
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "HTTP request failed while fetching exchange rates from CNB");
+            _logger.LogError(ex, LogMessages.CnbApiClient.HttpRequestFailed);
             throw new ExchangeRateProviderException("Failed to fetch exchange rates from CNB API due to network error", ex);
         }
         catch (TaskCanceledException ex)
         {
-            _logger.LogError(ex, "Request to CNB API timed out");
+            _logger.LogError(ex, LogMessages.CnbApiClient.RequestTimedOut);
             throw new ExchangeRateProviderException("Request to CNB API timed out", ex);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error while fetching exchange rates from CNB");
+            _logger.LogError(ex, LogMessages.CnbApiClient.UnexpectedError);
             throw new ExchangeRateProviderException("Unexpected error occurred while fetching exchange rates", ex);
         }
     }
