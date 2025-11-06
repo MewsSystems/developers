@@ -7,22 +7,22 @@ namespace ExchangeRateUpdater.Infrastructure;
 /// <summary>
 /// HTTP client for interacting with the Czech National Bank API.
 /// </summary>
-public class CnbApiClient : ICnbApiClient
+public class CnbApiClient(
+    HttpClient httpClient,
+    ILogger<CnbApiClient> logger,
+    IOptions<CnbExchangeRateConfiguration> configuration) : ICnbApiClient
 {
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<CnbApiClient> _logger;
-    private readonly CnbExchangeRateConfiguration _configuration;
+    private readonly HttpClient _httpClient = InitializeHttpClient(httpClient, configuration);
+    private readonly ILogger<CnbApiClient> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
 
-    public CnbApiClient(
-        HttpClient httpClient,
-        ILogger<CnbApiClient> logger,
-        IOptions<CnbExchangeRateConfiguration> configuration)
+    private static HttpClient InitializeHttpClient(HttpClient httpClient, IOptions<CnbExchangeRateConfiguration> configuration)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
+        ArgumentNullException.ThrowIfNull(httpClient);
+        ArgumentNullException.ThrowIfNull(configuration);
 
-        _httpClient.Timeout = TimeSpan.FromSeconds(_configuration.TimeoutSeconds);
+        httpClient.Timeout = TimeSpan.FromSeconds(configuration.Value.TimeoutSeconds);
+        return httpClient;
     }
 
     public async Task<string> FetchExchangeRatesAsync(CancellationToken cancellationToken = default)

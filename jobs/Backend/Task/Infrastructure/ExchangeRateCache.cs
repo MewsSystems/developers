@@ -9,24 +9,17 @@ namespace ExchangeRateUpdater.Infrastructure;
 /// <summary>
 /// In-memory cache implementation for exchange rates.
 /// </summary>
-public class ExchangeRateCache : IExchangeRateCache
+public class ExchangeRateCache(
+    IMemoryCache cache,
+    ILogger<ExchangeRateCache> logger,
+    IOptions<CnbExchangeRateConfiguration> configuration) : IExchangeRateCache
 {
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<ExchangeRateCache> _logger;
-    private readonly CnbExchangeRateConfiguration _configuration;
+    private readonly IMemoryCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+    private readonly ILogger<ExchangeRateCache> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
     private readonly HashSet<string> _cacheKeys = new();
     private readonly object _lock = new();
     private const string CacheKeyPrefix = "ExchangeRates_";
-
-    public ExchangeRateCache(
-        IMemoryCache cache,
-        ILogger<ExchangeRateCache> logger,
-        IOptions<CnbExchangeRateConfiguration> configuration)
-    {
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
-    }
 
     public IEnumerable<ExchangeRate>? GetCachedRates(IEnumerable<string> currencyCodes)
     {

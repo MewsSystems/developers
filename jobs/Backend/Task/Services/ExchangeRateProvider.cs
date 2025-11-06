@@ -9,32 +9,22 @@ namespace ExchangeRateUpdater.Services;
 /// <summary>
 /// Provides exchange rates from the Czech National Bank with optional caching.
 /// </summary>
-public class ExchangeRateProvider
+public class ExchangeRateProvider(
+    ICnbApiClient apiClient,
+    ICnbDataParser dataParser,
+    ILogger<ExchangeRateProvider> logger,
+    IOptions<CnbExchangeRateConfiguration> configuration,
+    IExchangeRateCache? cache = null,
+    ISupportedCurrenciesCache? supportedCurrenciesCache = null)
 {
-    private readonly ICnbApiClient _apiClient;
-    private readonly ICnbDataParser _dataParser;
-    private readonly IExchangeRateCache? _cache;
-    private readonly ISupportedCurrenciesCache? _supportedCurrenciesCache;
-    private readonly ILogger<ExchangeRateProvider> _logger;
-    private readonly CnbExchangeRateConfiguration _configuration;
+    private readonly ICnbApiClient _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+    private readonly ICnbDataParser _dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
+    private readonly IExchangeRateCache? _cache = cache;
+    private readonly ISupportedCurrenciesCache? _supportedCurrenciesCache = supportedCurrenciesCache;
+    private readonly ILogger<ExchangeRateProvider> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
 
     private static readonly Currency CzkCurrency = new("CZK");
-
-    public ExchangeRateProvider(
-        ICnbApiClient apiClient,
-        ICnbDataParser dataParser,
-        ILogger<ExchangeRateProvider> logger,
-        IOptions<CnbExchangeRateConfiguration> configuration,
-        IExchangeRateCache? cache = null,
-        ISupportedCurrenciesCache? supportedCurrenciesCache = null)
-    {
-        _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
-        _dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
-        _cache = cache;
-        _supportedCurrenciesCache = supportedCurrenciesCache;
-    }
 
     /// <summary>
     /// Should return exchange rates among the specified currencies that are defined by the source. But only those defined

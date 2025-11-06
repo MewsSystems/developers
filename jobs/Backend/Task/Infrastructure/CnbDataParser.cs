@@ -9,16 +9,11 @@ namespace ExchangeRateUpdater.Infrastructure;
 /// CNB format: Country|Currency|Amount|Code|Rate
 /// Example: USA|dollar|1|USD|22.950
 /// </summary>
-public class CnbDataParser : ICnbDataParser
+public class CnbDataParser(ILogger<CnbDataParser> logger) : ICnbDataParser
 {
-    private readonly ILogger<CnbDataParser> _logger;
+    private readonly ILogger<CnbDataParser> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private const char Delimiter = '|';
     private const int ExpectedColumnCount = 5;
-
-    public CnbDataParser(ILogger<CnbDataParser> logger)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
 
     public IEnumerable<CnbExchangeRateDto> Parse(string rawData)
     {

@@ -8,22 +8,15 @@ namespace ExchangeRateUpdater.Infrastructure;
 /// <summary>
 /// In-memory cache implementation for supported currency codes.
 /// </summary>
-public class SupportedCurrenciesCache : ISupportedCurrenciesCache
+public class SupportedCurrenciesCache(
+    IMemoryCache cache,
+    ILogger<SupportedCurrenciesCache> logger,
+    IOptions<CnbExchangeRateConfiguration> configuration) : ISupportedCurrenciesCache
 {
-    private readonly IMemoryCache _cache;
-    private readonly ILogger<SupportedCurrenciesCache> _logger;
-    private readonly CnbExchangeRateConfiguration _configuration;
+    private readonly IMemoryCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+    private readonly ILogger<SupportedCurrenciesCache> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    private readonly CnbExchangeRateConfiguration _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
     private const string CacheKey = "SupportedCurrencies_All";
-
-    public SupportedCurrenciesCache(
-        IMemoryCache cache,
-        ILogger<SupportedCurrenciesCache> logger,
-        IOptions<CnbExchangeRateConfiguration> configuration)
-    {
-        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _configuration = configuration?.Value ?? throw new ArgumentNullException(nameof(configuration));
-    }
 
     public IEnumerable<string>? GetCachedCurrencies()
     {
