@@ -1,0 +1,118 @@
+using DataLayer;
+using DomainLayer.Aggregates.ProviderAggregate;
+using DomainLayer.Interfaces.Repositories;
+
+namespace InfrastructureLayer.Persistence.Adapters;
+
+/// <summary>
+/// Adapts DataLayer provider repository to DomainLayer interface.
+/// Uses the ExchangeRateProvider.Reconstruct factory method for proper aggregate hydration.
+/// </summary>
+public class ExchangeRateProviderRepositoryAdapter : IExchangeRateProviderRepository
+{
+    private readonly IUnitOfWork _dataLayerUnitOfWork;
+
+    public ExchangeRateProviderRepositoryAdapter(IUnitOfWork dataLayerUnitOfWork)
+    {
+        _dataLayerUnitOfWork = dataLayerUnitOfWork;
+    }
+
+    public async Task<ExchangeRateProvider?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dataLayerUnitOfWork.ExchangeRateProviders.GetByIdAsync(id, cancellationToken);
+        return entity != null ? MapToDomain(entity) : null;
+    }
+
+    public async Task<ExchangeRateProvider?> GetByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dataLayerUnitOfWork.ExchangeRateProviders.GetByCodeAsync(code, cancellationToken);
+        return entity != null ? MapToDomain(entity) : null;
+    }
+
+    public async Task<IEnumerable<ExchangeRateProvider>> GetActiveProvidersAsync(CancellationToken cancellationToken = default)
+    {
+        var entities = await _dataLayerUnitOfWork.ExchangeRateProviders.GetActiveProvidersAsync(cancellationToken);
+        return entities.Select(MapToDomain);
+    }
+
+    public async Task<IEnumerable<ExchangeRateProvider>> GetQuarantinedProvidersAsync(CancellationToken cancellationToken = default)
+    {
+        var entities = await _dataLayerUnitOfWork.ExchangeRateProviders.GetAllAsync(cancellationToken);
+        return entities.Where(e => e.ConsecutiveFailures >= 5).Select(MapToDomain);
+    }
+
+    public async Task<IEnumerable<ExchangeRateProvider>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var entities = await _dataLayerUnitOfWork.ExchangeRateProviders.GetAllAsync(cancellationToken);
+        return entities.Select(MapToDomain);
+    }
+
+    public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dataLayerUnitOfWork.ExchangeRateProviders.GetByCodeAsync(code, cancellationToken);
+        return entity != null;
+    }
+
+    public async Task AddAsync(ExchangeRateProvider provider, CancellationToken cancellationToken = default)
+    {
+        var entity = MapToEntity(provider);
+        await _dataLayerUnitOfWork.ExchangeRateProviders.AddAsync(entity, cancellationToken);
+    }
+
+    public async Task UpdateAsync(ExchangeRateProvider provider, CancellationToken cancellationToken = default)
+    {
+        var entity = MapToEntity(provider);
+        await _dataLayerUnitOfWork.ExchangeRateProviders.UpdateAsync(entity, cancellationToken);
+    }
+
+    public async Task DeleteAsync(ExchangeRateProvider provider, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dataLayerUnitOfWork.ExchangeRateProviders.GetByIdAsync(provider.Id, cancellationToken);
+        if (entity != null)
+        {
+            await _dataLayerUnitOfWork.ExchangeRateProviders.DeleteAsync(entity, cancellationToken);
+        }
+    }
+
+    /// <summary>
+    /// Maps DataLayer entity to Domain aggregate.
+    /// Uses the Reconstruct factory method for proper aggregate hydration.
+    /// </summary>
+    private static ExchangeRateProvider MapToDomain(DataLayer.Entities.ExchangeRateProvider entity)
+    {
+        return ExchangeRateProvider.Reconstruct(
+            id: entity.Id,
+            name: entity.Name,
+            code: entity.Code,
+            url: entity.Url,
+            baseCurrencyId: entity.BaseCurrencyId,
+            requiresAuthentication: entity.RequiresAuthentication,
+            apiKeyVaultReference: entity.ApiKeyVaultReference,
+            isActive: entity.IsActive,
+            lastSuccessfulFetch: entity.LastSuccessfulFetch,
+            lastFailedFetch: entity.LastFailedFetch,
+            consecutiveFailures: entity.ConsecutiveFailures,
+            created: entity.Created,
+            modified: entity.Modified);
+    }
+
+    private static DataLayer.Entities.ExchangeRateProvider MapToEntity(ExchangeRateProvider domain)
+    {
+        return new DataLayer.Entities.ExchangeRateProvider
+        {
+            Id = domain.Id,
+            Name = domain.Name,
+            Code = domain.Code,
+            Url = domain.Url,
+            BaseCurrencyId = domain.BaseCurrencyId,
+            RequiresAuthentication = domain.RequiresAuthentication,
+            ApiKeyVaultReference = domain.ApiKeyVaultReference,
+            IsActive = domain.IsActive,
+            LastSuccessfulFetch = domain.LastSuccessfulFetch,
+            LastFailedFetch = domain.LastFailedFetch,
+            ConsecutiveFailures = domain.ConsecutiveFailures,
+            Created = domain.Created,
+            Modified = domain.Modified
+        };
+    }
+}
