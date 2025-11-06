@@ -8,10 +8,10 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet build -c Release -o /app/build
+RUN dotnet build ExchangeRateUpdater.csproj -c Release -o /app/build
 
 # Publish the application
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish ExchangeRateUpdater.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 # Use the official .NET 8 ASP.NET runtime image for running web apps
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
