@@ -62,6 +62,8 @@ public class UpdateProviderConfigurationCommandHandler
                     requiresAuth);
             }
 
+            // Persist the updated provider
+            await _unitOfWork.ExchangeRateProviders.UpdateAsync(provider, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation(

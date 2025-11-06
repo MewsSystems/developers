@@ -74,14 +74,7 @@ public class GetAllCurrenciesQueryHandler
         return new CurrencyDto
         {
             Id = currency.Id,
-            Code = currency.Code,
-            // Note: Name, Symbol, DecimalPlaces, Created are not tracked in the Currency value object
-            // They're set to null to indicate unavailable data
-            Name = null,
-            Symbol = null,
-            DecimalPlaces = null,
-            IsActive = true, // Default for value objects
-            Created = null
+            Code = currency.Code
         };
     }
 }

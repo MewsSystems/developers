@@ -54,13 +54,17 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Resul
             await _unitOfWork.Users.AddAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+            // Query back to get the generated ID
+            var savedUser = await _unitOfWork.Users.GetByEmailAsync(request.Email, cancellationToken);
+            var userId = savedUser?.Id ?? 0;
+
             _logger.LogInformation(
                 "Created user {Email} with ID {UserId} and role {Role}",
-                user.Email,
-                user.Id,
-                user.Role);
+                request.Email,
+                userId,
+                request.Role);
 
-            return Result.Success(user.Id);
+            return Result.Success(userId);
         }
         catch (ArgumentException ex)
         {

@@ -63,12 +63,16 @@ public class CreateExchangeRateProviderCommandHandler
             // Save changes (will dispatch domain events)
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+            // Query back to get the generated ID
+            var savedProvider = await _unitOfWork.ExchangeRateProviders.GetByCodeAsync(request.Code, cancellationToken);
+            var providerId = savedProvider?.Id ?? 0;
+
             _logger.LogInformation(
                 "Created exchange rate provider {ProviderCode} with ID {ProviderId}",
                 provider.Code,
-                provider.Id);
+                providerId);
 
-            return Result.Success(provider.Id);
+            return Result.Success(providerId);
         }
         catch (Exception ex)
         {

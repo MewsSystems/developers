@@ -1,7 +1,7 @@
 namespace ApplicationLayer.DTOs.Users;
 
 /// <summary>
-/// DTO for detailed user information including modification timestamps.
+/// DTO for detailed user information.
 /// </summary>
 public class UserDetailDto
 {
@@ -11,8 +11,4 @@ public class UserDetailDto
     public string LastName { get; set; } = string.Empty;
     public string FullName { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
-    public bool IsActive { get; set; }
-    public DateTimeOffset? LastLogin { get; set; }
-    public DateTimeOffset Created { get; set; }
-    public DateTimeOffset? Modified { get; set; }
 }

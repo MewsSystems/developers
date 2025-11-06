@@ -24,19 +24,14 @@ public class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, PagedResu
         CancellationToken cancellationToken)
     {
         _logger.LogDebug(
-            "Getting all users with PageNumber: {PageNumber}, PageSize: {PageSize}, SearchTerm: {SearchTerm}, RoleFilter: {RoleFilter}, ActiveOnly: {ActiveOnly}",
-            request.PageNumber, request.PageSize, request.SearchTerm, request.RoleFilter, request.ActiveOnly);
+            "Getting all users with PageNumber: {PageNumber}, PageSize: {PageSize}, SearchTerm: {SearchTerm}, RoleFilter: {RoleFilter}",
+            request.PageNumber, request.PageSize, request.SearchTerm, request.RoleFilter);
 
         // Get all users
         var allUsers = await _unitOfWork.Users.GetAllAsync(cancellationToken);
 
         // Apply filtering
         var filteredUsers = allUsers.AsEnumerable();
-
-        if (request.ActiveOnly.HasValue)
-        {
-            filteredUsers = filteredUsers.Where(u => u.IsActive == request.ActiveOnly.Value);
-        }
 
         if (request.RoleFilter.HasValue)
         {
@@ -70,10 +65,7 @@ public class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, PagedResu
             FirstName = u.FirstName,
             LastName = u.LastName,
             FullName = u.FullName,
-            Role = u.Role.ToString(),
-            IsActive = u.IsActive,
-            LastLogin = u.LastLogin,
-            Created = u.Created
+            Role = u.Role.ToString()
         }).ToList();
 
         _logger.LogDebug("Retrieved {Count} users out of {TotalCount} total", dtos.Count, totalCount);

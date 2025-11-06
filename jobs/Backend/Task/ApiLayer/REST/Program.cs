@@ -119,3 +119,6 @@ InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerB
 // RUN APPLICATION
 // ============================================================
 app.Run();
+
+// Make Program accessible to integration tests
+public partial class Program { }

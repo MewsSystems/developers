@@ -55,14 +55,14 @@ public class CurrencyRepositoryAdapter : ICurrencyRepository
 
     public async Task UpdateAsync(Currency currency, CancellationToken cancellationToken = default)
     {
-        // Get the existing entity to preserve Created timestamp and IsActive flag
+        // Get the existing entity
         var existingEntity = await _dataLayerUnitOfWork.Currencies.GetByIdAsync(currency.Id, cancellationToken);
         if (existingEntity == null)
         {
             throw new InvalidOperationException($"Cannot update currency with Id {currency.Id}: entity not found.");
         }
 
-        var entity = MapToEntity(currency, existingEntity.Created, existingEntity.IsActive);
+        var entity = MapToEntity(currency);
         await _dataLayerUnitOfWork.Currencies.UpdateAsync(entity, cancellationToken);
     }
 
@@ -80,14 +80,12 @@ public class CurrencyRepositoryAdapter : ICurrencyRepository
         return Currency.FromCode(entity.Code, entity.Id);
     }
 
-    private static DataLayer.Entities.Currency MapToEntity(Currency domain, DateTimeOffset? created = null, bool? isActive = null)
+    private static DataLayer.Entities.Currency MapToEntity(Currency domain)
     {
         return new DataLayer.Entities.Currency
         {
             Id = domain.Id,
-            Code = domain.Code,
-            IsActive = isActive ?? true, // Default to active for new entities, preserve existing for updates
-            Created = created ?? DateTimeOffset.UtcNow // Use provided timestamp or current time for new entities
+            Code = domain.Code
         };
     }
 }

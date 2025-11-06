@@ -24,8 +24,8 @@ public class CurrencyRepository : Repository<Currency>, ICurrencyRepository
 
     public async Task<IEnumerable<Currency>> GetActiveCurrenciesAsync(CancellationToken cancellationToken = default)
     {
+        // Since IsActive column was removed, return all currencies ordered by code
         return await _dbSet
-            .Where(c => c.IsActive)
             .OrderBy(c => c.Code)
             .ToListAsync(cancellationToken);
     }

@@ -36,16 +36,16 @@ public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand, Resul
                 throw new NotFoundException("User", request.UserId);
             }
 
-            // Check if this is the last active admin
-            if (user.Role == UserRole.Admin && user.IsActive)
+            // Check if this is the last admin
+            if (user.Role == UserRole.Admin)
             {
                 var allUsers = await _unitOfWork.Users.GetAllAsync(cancellationToken);
-                var adminCount = allUsers.Count(u => u.Role == UserRole.Admin && u.IsActive);
+                var adminCount = allUsers.Count(u => u.Role == UserRole.Admin);
 
                 if (adminCount <= 1)
                 {
-                    _logger.LogWarning("Attempt to delete the last active admin user {UserId}", request.UserId);
-                    return Result.Failure("Cannot delete the last active admin user.");
+                    _logger.LogWarning("Attempt to delete the last admin user {UserId}", request.UserId);
+                    return Result.Failure("Cannot delete the last admin user.");
                 }
             }
 

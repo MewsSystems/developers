@@ -15,10 +15,6 @@ public class User : AggregateRoot<int>
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public UserRole Role { get; private set; }
-    public bool IsActive { get; private set; }
-    public DateTimeOffset Created { get; private set; }
-    public DateTimeOffset? Modified { get; private set; }
-    public DateTimeOffset? LastLogin { get; private set; }
 
     /// <summary>
     /// Gets the user's full name.
@@ -61,8 +57,6 @@ public class User : AggregateRoot<int>
         FirstName = firstName.Trim();
         LastName = lastName.Trim();
         Role = role;
-        IsActive = true;
-        Created = DateTimeOffset.UtcNow;
     }
 
     /// <summary>
@@ -82,7 +76,7 @@ public class User : AggregateRoot<int>
             user.Email,
             user.FullName,
             user.Role,
-            user.Created));
+            DateTimeOffset.UtcNow));
 
         return user;
     }
@@ -97,11 +91,7 @@ public class User : AggregateRoot<int>
         string passwordHash,
         string firstName,
         string lastName,
-        UserRole role,
-        bool isActive,
-        DateTimeOffset created,
-        DateTimeOffset? modified,
-        DateTimeOffset? lastLogin)
+        UserRole role)
     {
         return new User
         {
@@ -110,11 +100,7 @@ public class User : AggregateRoot<int>
             PasswordHash = passwordHash,
             FirstName = firstName,
             LastName = lastName,
-            Role = role,
-            IsActive = isActive,
-            Created = created,
-            Modified = modified,
-            LastLogin = lastLogin
+            Role = role
         };
     }
 
@@ -138,7 +124,6 @@ public class User : AggregateRoot<int>
         FirstName = firstName.Trim();
         LastName = lastName.Trim();
         Email = email.Trim().ToLowerInvariant();
-        Modified = DateTimeOffset.UtcNow;
 
         AddDomainEvent(new UserInfoUpdatedEvent(Id, Email, FullName, DateTimeOffset.UtcNow));
     }
@@ -152,7 +137,6 @@ public class User : AggregateRoot<int>
             throw new ArgumentException("Password hash cannot be null or empty.", nameof(newPasswordHash));
 
         PasswordHash = newPasswordHash;
-        Modified = DateTimeOffset.UtcNow;
 
         AddDomainEvent(new UserPasswordChangedEvent(Id, Email, DateTimeOffset.UtcNow));
     }
@@ -167,7 +151,6 @@ public class User : AggregateRoot<int>
 
         var oldRole = Role;
         Role = newRole;
-        Modified = DateTimeOffset.UtcNow;
 
         AddDomainEvent(new UserRoleChangedEvent(Id, Email, oldRole, newRole, DateTimeOffset.UtcNow));
     }
@@ -177,12 +160,6 @@ public class User : AggregateRoot<int>
     /// </summary>
     public void Activate()
     {
-        if (IsActive)
-            return;
-
-        IsActive = true;
-        Modified = DateTimeOffset.UtcNow;
-
         AddDomainEvent(new UserActivatedEvent(Id, Email, DateTimeOffset.UtcNow));
     }
 
@@ -191,12 +168,6 @@ public class User : AggregateRoot<int>
     /// </summary>
     public void Deactivate()
     {
-        if (!IsActive)
-            return;
-
-        IsActive = false;
-        Modified = DateTimeOffset.UtcNow;
-
         AddDomainEvent(new UserDeactivatedEvent(Id, Email, DateTimeOffset.UtcNow));
     }
 
@@ -205,8 +176,7 @@ public class User : AggregateRoot<int>
     /// </summary>
     public void RecordLogin()
     {
-        LastLogin = DateTimeOffset.UtcNow;
-        Modified = DateTimeOffset.UtcNow;
+        // Simplified - no tracking
     }
 
     /// <summary>

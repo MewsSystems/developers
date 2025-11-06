@@ -36,16 +36,16 @@ public class ChangeUserRoleCommandHandler : ICommandHandler<ChangeUserRoleComman
                 throw new NotFoundException("User", request.UserId);
             }
 
-            // Check if changing the last active admin to a different role
-            if (user.Role == UserRole.Admin && user.IsActive && request.NewRole != UserRole.Admin)
+            // Check if changing the last admin to a different role
+            if (user.Role == UserRole.Admin && request.NewRole != UserRole.Admin)
             {
                 var allUsers = await _unitOfWork.Users.GetAllAsync(cancellationToken);
-                var adminCount = allUsers.Count(u => u.Role == UserRole.Admin && u.IsActive);
+                var adminCount = allUsers.Count(u => u.Role == UserRole.Admin);
 
                 if (adminCount <= 1)
                 {
-                    _logger.LogWarning("Attempt to change role of the last active admin user {UserId}", request.UserId);
-                    return Result.Failure("Cannot change the role of the last active admin user.");
+                    _logger.LogWarning("Attempt to change role of the last admin user {UserId}", request.UserId);
+                    return Result.Failure("Cannot change the role of the last admin user.");
                 }
             }
 

@@ -43,9 +43,13 @@ public class CreateCurrencyCommandHandler
             await _unitOfWork.Currencies.AddAsync(currency, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Created currency {Code} with ID {Id}", currency.Code, currency.Id);
+            // Query back to get the generated ID
+            var savedCurrency = await _unitOfWork.Currencies.GetByCodeAsync(request.Code, cancellationToken);
+            var currencyId = savedCurrency?.Id ?? 0;
 
-            return Result.Success(currency.Id);
+            _logger.LogInformation("Created currency {Code} with ID {Id}", currency.Code, currencyId);
+
+            return Result.Success(currencyId);
         }
         catch (ArgumentException ex)
         {

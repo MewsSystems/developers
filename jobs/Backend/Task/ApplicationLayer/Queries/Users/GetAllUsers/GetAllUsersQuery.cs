@@ -12,5 +12,4 @@ public record GetAllUsersQuery(
     int PageNumber = 1,
     int PageSize = 10,
     string? SearchTerm = null,
-    UserRole? RoleFilter = null,
-    bool? ActiveOnly = null) : IQuery<PagedResult<UserDto>>;
+    UserRole? RoleFilter = null) : IQuery<PagedResult<UserDto>>;

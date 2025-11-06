@@ -22,7 +22,12 @@ public class StoredProcedureService : IStoredProcedureService
     {
         using var connection = await _dapperContext.CreateConnectionAsync(cancellationToken);
 
-        var ratesJson = JsonSerializer.Serialize(rates);
+        // Use camelCase for JSON property names to match stored procedure expectations
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+        var ratesJson = JsonSerializer.Serialize(rates, jsonOptions);
 
         var parameters = new DynamicParameters();
         parameters.Add("@ProviderId", providerId);

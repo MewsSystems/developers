@@ -22,10 +22,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         builder.HasIndex(c => c.Code)
             .IsUnique();
 
-        builder.Property(c => c.Created)
-            .IsRequired()
-            .HasDefaultValueSql("SYSDATETIMEOFFSET()");
-
         // Navigation properties
         builder.HasMany(c => c.ProvidersWithBaseCurrency)
             .WithOne(p => p.BaseCurrency)

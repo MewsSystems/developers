@@ -40,11 +40,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDetai
             FirstName = user.FirstName,
             LastName = user.LastName,
             FullName = user.FullName,
-            Role = user.Role.ToString(),
-            IsActive = user.IsActive,
-            LastLogin = user.LastLogin,
-            Created = user.Created,
-            Modified = user.Modified
+            Role = user.Role.ToString()
         };
     }
 }

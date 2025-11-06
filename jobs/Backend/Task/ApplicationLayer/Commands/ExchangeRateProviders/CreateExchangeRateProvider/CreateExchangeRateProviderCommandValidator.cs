@@ -15,7 +15,7 @@ public class CreateExchangeRateProviderCommandValidator : AbstractValidator<Crea
 
         RuleFor(x => x.Code)
             .NotEmpty().WithMessage("Provider code is required.")
-            .MaximumLength(50).WithMessage("Provider code must not exceed 50 characters.")
+            .MaximumLength(10).WithMessage("Provider code must not exceed 10 characters.")
             .Matches("^[A-Z0-9_]+$").WithMessage("Provider code must contain only uppercase letters, numbers, and underscores.");
 
         RuleFor(x => x.Url)

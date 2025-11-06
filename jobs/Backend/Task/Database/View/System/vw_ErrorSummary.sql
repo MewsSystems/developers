@@ -1,17 +1,14 @@
 ﻿CREATE VIEW [dbo].[vw_ErrorSummary]
 AS
-SELECT 
-    el.Source,
+SELECT
+    el.Id,
+    el.Timestamp,
     el.Severity,
-    CAST(el.Timestamp AS DATE) AS ErrorDate,
-    COUNT(*) AS ErrorCount,
-    MIN(el.Timestamp) AS FirstOccurrence,
-    MAX(el.Timestamp) AS LastOccurrence,
-    COUNT(DISTINCT el.UserId) AS AffectedUsers
+    el.Source,
+    el.Message,
+    u.Email AS UserEmail,
+    DATEDIFF(MINUTE, el.Timestamp, GETDATE()) AS MinutesAgo
 FROM [dbo].[ErrorLog] el
-WHERE el.Timestamp >= DATEADD(DAY, -30, GETDATE())
-GROUP BY 
-    el.Source,
-    el.Severity,
-    CAST(el.Timestamp AS DATE);
+LEFT JOIN [dbo].[User] u ON el.UserId = u.Id
+WHERE el.Timestamp >= DATEADD(DAY, -30, GETDATE());
 GO

@@ -61,8 +61,25 @@ public class ExchangeRateProviderRepositoryAdapter : IExchangeRateProviderReposi
 
     public async Task UpdateAsync(ExchangeRateProvider provider, CancellationToken cancellationToken = default)
     {
-        var entity = MapToEntity(provider);
-        await _dataLayerUnitOfWork.ExchangeRateProviders.UpdateAsync(entity, cancellationToken);
+        // Get the tracked entity and update its properties instead of creating a new entity
+        // This avoids EF Core tracking conflicts
+        var existingEntity = await _dataLayerUnitOfWork.ExchangeRateProviders.GetByIdAsync(provider.Id, cancellationToken);
+        if (existingEntity != null)
+        {
+            existingEntity.Name = provider.Name;
+            existingEntity.Code = provider.Code;
+            existingEntity.Url = provider.Url;
+            existingEntity.BaseCurrencyId = provider.BaseCurrencyId;
+            existingEntity.RequiresAuthentication = provider.RequiresAuthentication;
+            existingEntity.ApiKeyVaultReference = provider.ApiKeyVaultReference;
+            existingEntity.IsActive = provider.IsActive;
+            existingEntity.LastSuccessfulFetch = provider.LastSuccessfulFetch;
+            existingEntity.LastFailedFetch = provider.LastFailedFetch;
+            existingEntity.ConsecutiveFailures = provider.ConsecutiveFailures;
+            existingEntity.Modified = provider.Modified;
+
+            await _dataLayerUnitOfWork.ExchangeRateProviders.UpdateAsync(existingEntity, cancellationToken);
+        }
     }
 
     public async Task DeleteAsync(ExchangeRateProvider provider, CancellationToken cancellationToken = default)

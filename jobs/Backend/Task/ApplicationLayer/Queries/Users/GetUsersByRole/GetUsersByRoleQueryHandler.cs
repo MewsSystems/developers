@@ -24,8 +24,8 @@ public class GetUsersByRoleQueryHandler : IQueryHandler<GetUsersByRoleQuery, Pag
         CancellationToken cancellationToken)
     {
         _logger.LogDebug(
-            "Getting users by role: {Role}, PageNumber: {PageNumber}, PageSize: {PageSize}, ActiveOnly: {ActiveOnly}",
-            request.Role, request.PageNumber, request.PageSize, request.ActiveOnly);
+            "Getting users by role: {Role}, PageNumber: {PageNumber}, PageSize: {PageSize}",
+            request.Role, request.PageNumber, request.PageSize);
 
         // Get all users
         var allUsers = await _unitOfWork.Users.GetAllAsync(cancellationToken);
@@ -33,11 +33,6 @@ public class GetUsersByRoleQueryHandler : IQueryHandler<GetUsersByRoleQuery, Pag
         // Apply filtering
         var filteredUsers = allUsers
             .Where(u => u.Role == request.Role);
-
-        if (request.ActiveOnly.HasValue)
-        {
-            filteredUsers = filteredUsers.Where(u => u.IsActive == request.ActiveOnly.Value);
-        }
 
         var totalCount = filteredUsers.Count();
 
@@ -56,10 +51,7 @@ public class GetUsersByRoleQueryHandler : IQueryHandler<GetUsersByRoleQuery, Pag
             FirstName = u.FirstName,
             LastName = u.LastName,
             FullName = u.FullName,
-            Role = u.Role.ToString(),
-            IsActive = u.IsActive,
-            LastLogin = u.LastLogin,
-            Created = u.Created
+            Role = u.Role.ToString()
         }).ToList();
 
         _logger.LogDebug("Retrieved {Count} users with role {Role} out of {TotalCount} total",

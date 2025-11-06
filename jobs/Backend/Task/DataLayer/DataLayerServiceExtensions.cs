@@ -1,3 +1,4 @@
+using Dapper;
 using DataLayer.Dapper;
 using DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,9 @@ public static class DataLayerServiceExtensions
 {
     public static IServiceCollection AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
+        // Register Dapper TypeHandlers
+        SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         // Register Pooled DbContextFactory for use in both Singleton and Scoped services

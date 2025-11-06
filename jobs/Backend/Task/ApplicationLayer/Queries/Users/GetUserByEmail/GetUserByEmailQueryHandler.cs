@@ -40,10 +40,7 @@ public class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQuery, Use
             FirstName = user.FirstName,
             LastName = user.LastName,
             FullName = user.FullName,
-            Role = user.Role.ToString(),
-            IsActive = user.IsActive,
-            LastLogin = user.LastLogin,
-            Created = user.Created
+            Role = user.Role.ToString()
         };
     }
 }

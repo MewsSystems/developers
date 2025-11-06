@@ -48,8 +48,19 @@ public class UserRepositoryAdapter : IUserRepository
 
     public async Task UpdateAsync(DomainLayer.Aggregates.UserAggregate.User user, CancellationToken cancellationToken = default)
     {
-        var entity = MapToEntity(user);
-        await _dataLayerUnitOfWork.Users.UpdateAsync(entity, cancellationToken);
+        // Get the tracked entity and update its properties instead of creating a new entity
+        // This avoids EF Core tracking conflicts
+        var existingEntity = await _dataLayerUnitOfWork.Users.GetByIdAsync(user.Id, cancellationToken);
+        if (existingEntity != null)
+        {
+            existingEntity.Email = user.Email;
+            existingEntity.FirstName = user.FirstName;
+            existingEntity.LastName = user.LastName;
+            existingEntity.Role = user.Role.ToString();
+            existingEntity.PasswordHash = user.PasswordHash;
+
+            await _dataLayerUnitOfWork.Users.UpdateAsync(existingEntity, cancellationToken);
+        }
     }
 
     public async Task DeleteAsync(DomainLayer.Aggregates.UserAggregate.User user, CancellationToken cancellationToken = default)
@@ -80,11 +91,7 @@ public class UserRepositoryAdapter : IUserRepository
             passwordHash: entity.PasswordHash,
             firstName: entity.FirstName,
             lastName: entity.LastName,
-            role: role,
-            isActive: entity.IsActive,
-            created: entity.Created,
-            modified: entity.Modified,
-            lastLogin: entity.LastLogin);
+            role: role);
     }
 
     private static DataLayer.Entities.User MapToEntity(DomainLayer.Aggregates.UserAggregate.User domain)
@@ -96,11 +103,7 @@ public class UserRepositoryAdapter : IUserRepository
             FirstName = domain.FirstName,
             LastName = domain.LastName,
             Role = domain.Role.ToString(),
-            PasswordHash = domain.PasswordHash,
-            IsActive = domain.IsActive,
-            Created = domain.Created,
-            Modified = domain.Modified,
-            LastLogin = domain.LastLogin
+            PasswordHash = domain.PasswordHash
         };
     }
 }
