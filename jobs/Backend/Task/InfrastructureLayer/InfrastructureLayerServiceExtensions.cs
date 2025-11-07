@@ -4,6 +4,7 @@ using ConfigurationLayer.Option;
 using DomainLayer.Interfaces.Services;
 using Hangfire;
 using Hangfire.SqlServer;
+using Hangfire.Storage.SQLite;
 using InfrastructureLayer.BackgroundJobs;
 using InfrastructureLayer.BackgroundJobs.Jobs;
 using InfrastructureLayer.ExternalServices;
@@ -73,9 +74,8 @@ public static class InfrastructureLayerServiceExtensions
 
     private static void ConfigureHangfire(IServiceCollection services, IConfiguration configuration)
     {
-        // Get connection string
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
+        // Check if using in-memory database
+        var useInMemoryDatabase = configuration.GetValue<bool>("Database:UseInMemoryDatabase");
 
         // Read worker count from appsettings.json
         // Note: ConfigurationService is not available during service registration
@@ -89,8 +89,20 @@ public static class InfrastructureLayerServiceExtensions
         {
             config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                 .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+                .UseRecommendedSerializerSettings();
+
+            if (useInMemoryDatabase)
+            {
+                // Use SQLite for in-memory mode (shared cache to match application database)
+                config.UseSQLiteStorage("DataSource=file:hangfire.db?mode=memory&cache=shared");
+            }
+            else
+            {
+                // Use SQL Server for production
+                var connectionString = configuration.GetConnectionString("DefaultConnection")
+                    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
+
+                config.UseSqlServerStorage(connectionString, new SqlServerStorageOptions
                 {
                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
@@ -98,6 +110,7 @@ public static class InfrastructureLayerServiceExtensions
                     UseRecommendedIsolationLevel = true,
                     DisableGlobalLocks = true
                 });
+            }
         });
 
         // Add Hangfire server with configured worker count
@@ -135,9 +148,9 @@ public static class InfrastructureLayerServiceExtensions
             // Convert time (hh:mm) to cron expression (0 minute hour * * *)
             var cronExpression = ConvertTimeToCronExpression(updateTime, defaultCronExpression);
 
-            RecurringJob.AddOrUpdate(
+            RecurringJob.AddOrUpdate<FetchLatestRatesJob>(
                 recurringJobId: $"fetch-latest-{provider.Code}",
-                methodCall: () => ExecuteFetchLatestJob(provider.Code),
+                methodCall: job => job.ExecuteAsync(provider.Code, CancellationToken.None),
                 cronExpression: cronExpression,
                 new RecurringJobOptions
                 {
@@ -193,13 +206,5 @@ public static class InfrastructureLayerServiceExtensions
             _ when timezone?.StartsWith("Europe/") == true => timezone, // IANA format (may not work on Windows)
             _ => "UTC" // Default fallback
         };
-    }
-
-    // Helper method for recurring job (needs to be public static for Hangfire)
-    public static async Task ExecuteFetchLatestJob(string providerCode)
-    {
-        // This is a simplified version - in production, you'd use proper DI
-        // Hangfire will handle the actual job execution with proper service provider
-        await Task.CompletedTask;
     }
 }

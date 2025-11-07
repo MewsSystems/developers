@@ -7,26 +7,26 @@ namespace EuropeanCentralBank.Models;
 /// The ECB provides exchange rates via XML at: https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
 /// Format: Triple-nested Cube structure (Envelope > Cube > Cube > Cube)
 /// </summary>
-[XmlRoot("Envelope", Namespace = "http://www.gesmes.org/xml/2002-08-01")]
+[XmlRoot("Envelope")]
 public class EcbEnvelope
 {
     /// <summary>
     /// Subject of the data (typically "Reference rates").
     /// </summary>
-    [XmlElement("subject", Namespace = "http://www.gesmes.org/xml/2002-08-01")]
+    [XmlElement("subject")]
     public string? Subject { get; set; }
 
     /// <summary>
     /// Sender information (European Central Bank).
     /// </summary>
-    [XmlElement("Sender", Namespace = "http://www.gesmes.org/xml/2002-08-01")]
+    [XmlElement("Sender")]
     public EcbSender? Sender { get; set; }
 
     /// <summary>
     /// Outer Cube element containing date cubes.
     /// This is the outermost container in the triple-nested structure.
     /// </summary>
-    [XmlElement("Cube", Namespace = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")]
+    [XmlElement("Cube")]
     public EcbOuterCube? Cube { get; set; }
 }
 
@@ -38,7 +38,7 @@ public class EcbSender
     /// <summary>
     /// Name of the sender organization (e.g., "European Central Bank").
     /// </summary>
-    [XmlElement("name", Namespace = "http://www.gesmes.org/xml/2002-08-01")]
+    [XmlElement("name")]
     public string? Name { get; set; }
 }
 
@@ -52,7 +52,7 @@ public class EcbOuterCube
     /// Collection of date-specific Cube elements.
     /// Daily file typically has one, historical files may have multiple.
     /// </summary>
-    [XmlElement("Cube", Namespace = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")]
+    [XmlElement("Cube")]
     public List<EcbDateCube> DateCubes { get; set; } = new();
 }
 
@@ -72,7 +72,7 @@ public class EcbDateCube
     /// Collection of rate Cube elements.
     /// Each represents an exchange rate for a specific currency.
     /// </summary>
-    [XmlElement("Cube", Namespace = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")]
+    [XmlElement("Cube")]
     public List<EcbRate> Rates { get; set; } = new();
 }
 

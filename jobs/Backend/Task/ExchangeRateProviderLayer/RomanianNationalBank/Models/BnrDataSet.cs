@@ -7,14 +7,44 @@ namespace RomanianNationalBank.Models;
 /// The BNR provides exchange rates via XML at: https://www.bnr.ro/nbrfxrates.xml
 /// XML Structure: DataSet/Body/Cube/Rate with namespace http://www.bnr.ro/xsd
 /// </summary>
-[XmlRoot("DataSet", Namespace = "http://www.bnr.ro/xsd")]
+[XmlRoot("DataSet")]
 public class BnrDataSet
 {
     /// <summary>
+    /// Header element containing metadata about the response.
+    /// </summary>
+    [XmlElement("Header")]
+    public BnrHeader? Header { get; set; }
+
+    /// <summary>
     /// Body element containing the exchange rate data structure.
     /// </summary>
-    [XmlElement("Body", Namespace = "http://www.bnr.ro/xsd")]
+    [XmlElement("Body")]
     public BnrBody? Body { get; set; }
+}
+
+/// <summary>
+/// Represents the Header element containing metadata.
+/// </summary>
+public class BnrHeader
+{
+    /// <summary>
+    /// Publisher of the data (e.g., "National Bank of Romania").
+    /// </summary>
+    [XmlElement("Publisher")]
+    public string? Publisher { get; set; }
+
+    /// <summary>
+    /// Publishing date of the data.
+    /// </summary>
+    [XmlElement("PublishingDate")]
+    public string? PublishingDate { get; set; }
+
+    /// <summary>
+    /// Message type (e.g., "DR" for Daily Rates).
+    /// </summary>
+    [XmlElement("MessageType")]
+    public string? MessageType { get; set; }
 }
 
 /// <summary>
@@ -26,7 +56,7 @@ public class BnrBody
     /// Exchange rates for a specific date.
     /// The BNR typically publishes one Cube per day.
     /// </summary>
-    [XmlElement("Cube", Namespace = "http://www.bnr.ro/xsd")]
+    [XmlElement("Cube")]
     public List<BnrCube> Cubes { get; set; } = new();
 }
 
@@ -45,7 +75,7 @@ public class BnrCube
     /// List of exchange rates for different currencies.
     /// All rates are relative to RON (Romanian Leu) as the base currency.
     /// </summary>
-    [XmlElement("Rate", Namespace = "http://www.bnr.ro/xsd")]
+    [XmlElement("Rate")]
     public List<BnrRate> Rates { get; set; } = new();
 }
 

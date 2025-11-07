@@ -27,7 +27,33 @@ BEGIN
         
         IF ISJSON(@RatesJson) = 0
             THROW 50102, 'Invalid JSON format', 1;
-        
+
+        -- Check if validDate is within HistoricalDataDays range
+        DECLARE @HistoricalDataDays INT;
+        DECLARE @CutoffDate DATE;
+
+        SELECT @HistoricalDataDays = TRY_CAST([Value] AS INT)
+        FROM [dbo].[SystemConfiguration]
+        WHERE [Key] = 'HistoricalDataDays';
+
+        IF @HistoricalDataDays IS NULL
+            SET @HistoricalDataDays = 90; -- Default value
+
+        SET @CutoffDate = DATEADD(DAY, -@HistoricalDataDays, GETUTCDATE());
+
+        IF @ValidDate < @CutoffDate
+        BEGIN
+            -- Return skipped result without processing
+            SELECT
+                0 AS InsertedCount,
+                0 AS UpdatedCount,
+                (SELECT COUNT(*) FROM OPENJSON(@RatesJson)) AS SkippedCount,
+                0 AS ProcessedCount,
+                (SELECT COUNT(*) FROM OPENJSON(@RatesJson)) AS TotalInJson,
+                'SKIPPED - Date is outside ' + CAST(@HistoricalDataDays AS NVARCHAR(10)) + '-day range' AS [Status];
+            RETURN;
+        END
+
         BEGIN TRANSACTION;
         
         -- Parse JSON into temp table with validation

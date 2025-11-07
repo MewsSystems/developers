@@ -86,6 +86,40 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // ============================================================
+// DATABASE INITIALIZATION (In-Memory Mode)
+// ============================================================
+// If using in-memory database, create schema and seed data
+var useInMemoryDatabase = builder.Configuration.GetValue<bool>("Database:UseInMemoryDatabase");
+if (useInMemoryDatabase)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger<Program>>();
+
+        try
+        {
+            logger.LogInformation("Initializing in-memory database...");
+
+            // Create database schema
+            var context = services.GetRequiredService<DataLayer.ApplicationDbContext>();
+            await context.Database.EnsureCreatedAsync();
+            logger.LogInformation("Database schema created successfully.");
+
+            // Seed initial data
+            var seeder = services.GetRequiredService<DataLayer.Seeding.DatabaseSeeder>();
+            await seeder.SeedAllAsync();
+            logger.LogInformation("Database seeded successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while initializing the in-memory database.");
+            throw;
+        }
+    }
+}
+
+// ============================================================
 // MIDDLEWARE PIPELINE
 // ============================================================
 // Configure the HTTP request pipeline.

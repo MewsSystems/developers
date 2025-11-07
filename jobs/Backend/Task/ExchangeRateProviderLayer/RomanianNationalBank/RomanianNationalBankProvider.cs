@@ -3,6 +3,7 @@ using Common.Interfaces;
 using ConfigurationLayer.Option;
 using RomanianNationalBank.Converters;
 using RomanianNationalBank.Models;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace RomanianNationalBank;
@@ -85,10 +86,14 @@ public class RomanianNationalBankProvider : IExchangeRateProvider
             }
 
             // Read XML content
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            var xmlContent = await response.Content.ReadAsStringAsync();
+
+            // Remove namespaces from XML to handle both namespaced and non-namespaced responses
+            xmlContent = RemoveXmlNamespaces(xmlContent);
 
             // Deserialize XML to BnrDataSet
-            var bnrDataSet = _xmlSerializer.Deserialize(stream) as BnrDataSet;
+            using var stringReader = new StringReader(xmlContent);
+            var bnrDataSet = _xmlSerializer.Deserialize(stringReader) as BnrDataSet;
 
             if (bnrDataSet == null)
             {
@@ -166,10 +171,14 @@ public class RomanianNationalBankProvider : IExchangeRateProvider
             }
 
             // Read XML content
-            await using var stream = await response.Content.ReadAsStreamAsync();
+            var xmlContent = await response.Content.ReadAsStringAsync();
+
+            // Remove namespaces from XML to handle both namespaced and non-namespaced responses
+            xmlContent = RemoveXmlNamespaces(xmlContent);
 
             // Deserialize XML to BnrDataSet (same structure as daily endpoint)
-            var bnrDataSet = _xmlSerializer.Deserialize(stream) as BnrDataSet;
+            using var stringReader = new StringReader(xmlContent);
+            var bnrDataSet = _xmlSerializer.Deserialize(stringReader) as BnrDataSet;
 
             if (bnrDataSet == null)
             {
@@ -197,6 +206,24 @@ public class RomanianNationalBankProvider : IExchangeRateProvider
         {
             return ((500, $"{_options.Name}: Historical data unexpected error - {ex.Message}"), new List<ExchangeRateDTO>());
         }
+    }
+
+    /// <summary>
+    /// Removes XML namespaces and namespace prefixes from XML string.
+    /// This makes deserialization more robust and handles both namespaced and non-namespaced responses.
+    /// </summary>
+    private static string RemoveXmlNamespaces(string xml)
+    {
+        // Remove xmlns declarations
+        xml = Regex.Replace(xml, @"\s+xmlns(:\w+)?=""[^""]*""", string.Empty);
+
+        // Remove namespace-prefixed attributes (e.g., xsi:schemaLocation)
+        xml = Regex.Replace(xml, @"\s+\w+:\w+=""[^""]*""", string.Empty);
+
+        // Remove namespace prefixes from elements (e.g., <ns:element> becomes <element>)
+        xml = Regex.Replace(xml, @"<(/?)(\w+:)?(\w+)", "<$1$3");
+
+        return xml;
     }
 
     /// <summary>

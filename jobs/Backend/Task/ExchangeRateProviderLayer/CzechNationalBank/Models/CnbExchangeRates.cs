@@ -7,7 +7,7 @@ namespace CzechNationalBank.Models;
 /// The CNB provides exchange rates via XML at: https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml
 /// XML Structure: kurzy/tabulka/radek with namespace http://www.cnb.cz/xsd/Filharmonie/modely/Denni_kurz/1.1
 /// </summary>
-[XmlRoot("kurzy", Namespace = "http://www.cnb.cz/xsd/Filharmonie/modely/Denni_kurz/1.1")]
+[XmlRoot("kurzy")]
 public class CnbExchangeRates
 {
     /// <summary>
@@ -37,7 +37,7 @@ public class CnbExchangeRates
     /// <summary>
     /// Table wrapper containing the list of exchange rates
     /// </summary>
-    [XmlElement("tabulka", Namespace = "http://www.cnb.cz/xsd/Filharmonie/modely/Denni_kurz/1.1")]
+    [XmlElement("tabulka")]
     public CnbTable? Table { get; set; }
 }
 
@@ -49,7 +49,7 @@ public class CnbTable
     /// <summary>
     /// List of individual exchange rates for different currencies
     /// </summary>
-    [XmlElement("radek", Namespace = "http://www.cnb.cz/xsd/Filharmonie/modely/Denni_kurz/1.1")]
+    [XmlElement("radek")]
     public List<CnbRate> Rates { get; set; } = new();
 }
 

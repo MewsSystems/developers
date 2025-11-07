@@ -851,7 +851,7 @@ dotnet build Database.sqlproj -c Release
 # bin/Release/Database.dacpac
 ```
 
-#### Publish to ExchangeRateUpdaterTest (ApiLayer)
+#### Publish to ExchangeRateUpdaterTest (REST)
 
 **Windows (LocalDB):**
 ```powershell
@@ -871,7 +871,7 @@ sqlpackage /Action:Publish \
   /p:BlockOnPossibleDataLoss=True
 ```
 
-#### Publish to ExchangeRateUpdaterMicroTest (MicroApiLayer)
+#### Publish to ExchangeRateUpdaterMicroTest (gRPC)
 
 **Windows (LocalDB):**
 ```powershell
