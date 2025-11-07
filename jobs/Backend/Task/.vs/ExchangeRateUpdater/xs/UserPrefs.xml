@@ -1,0 +1,33 @@
+﻿<Properties StartupConfiguration="{7B2695D6-D24C-4460-A58E-A10F08550CE0}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Program.cs">
+    <Files>
+      <File FileName="../../../../../../usr/local/share/dotnet/sdk/7.0.317/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.TargetFrameworkInference.targets" Line="148" Column="43" IsPinned="True" />
+      <File FileName="Program.cs" Line="1" Column="1" />
+      <File FileName="Config/AppConfig.cs" />
+      <File FileName="Models/Currency.cs" />
+      <File FileName="Models/ExchangeRate.cs" />
+      <File FileName="Services/CnbClient.cs" />
+      <File FileName="Services/CnbParser.cs" />
+      <File FileName="Services/ExchangeRateProvider.cs" />
+      <File FileName="appsettings.json" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ExchangeRateUpdater">
+            <Node name="ExchangeRateUpdater">
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.ExchangeRateUpdater PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+</Properties>
