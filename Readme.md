@@ -1,1 +1,1 @@
-Mews repository foe external-facing resources.
+Mews repository for external-facing resources.
