@@ -30,6 +30,7 @@ public class DatabaseSeeder
         await SeedUsersAsync();
         await SeedSystemConfigurationAsync();
         await SeedExchangeRateProvidersAsync();
+        await CreateViewsAsync();
 
         _logger.LogInformation("Database seeding completed successfully.");
     }
@@ -74,7 +75,7 @@ public class DatabaseSeeder
         _logger.LogInformation("Seeding users...");
 
         // BCrypt hash for password "simple" (cost factor 11)
-        const string passwordHash = "$2a$11$K3g3L8LmH5K3g3L8LmH5KeO5KqW3ZN3J3PO5KqW3ZN3J3PO5KqW3Zm";
+        const string passwordHash = "$2a$11$i0UZQX8ZlJ2yY6DuZ4Y0HO0efKgQjvFMeMFv7wYJUVSIqmuzKSBJ.";
 
         var users = new[]
         {
@@ -294,5 +295,104 @@ public class DatabaseSeeder
         {
             _logger.LogInformation("  ⚠ {ProviderCode} provider already exists (ID: {ProviderId})", provider.Code, existingProvider.Id);
         }
+    }
+
+    /// <summary>
+    /// Creates database views for in-memory database.
+    /// Based on views from Database/View directory.
+    /// </summary>
+    private async Task CreateViewsAsync()
+    {
+        _logger.LogInformation("Creating database views...");
+
+        // Drop views if they exist (for re-seeding scenarios)
+        await ExecuteSqlAsync("DROP VIEW IF EXISTS vw_SystemHealthDashboard");
+        await ExecuteSqlAsync("DROP VIEW IF EXISTS vw_ErrorSummary");
+        await ExecuteSqlAsync("DROP VIEW IF EXISTS vw_RecentFetchActivity");
+        await ExecuteSqlAsync("DROP VIEW IF EXISTS vw_ProviderHealthStatus");
+
+        // Create vw_SystemHealthDashboard
+        await ExecuteSqlAsync(@"
+            CREATE VIEW vw_SystemHealthDashboard AS
+            SELECT
+                (SELECT COUNT(*) FROM ExchangeRateProvider) AS TotalProviders,
+                (SELECT COUNT(*) FROM ExchangeRateProvider WHERE IsActive = 1) AS ActiveProviders,
+                (SELECT COUNT(*) FROM ExchangeRateProvider WHERE IsActive = 0) AS QuarantinedProviders,
+                (SELECT COUNT(*) FROM Currency) AS TotalCurrencies,
+                (SELECT COUNT(*) FROM ExchangeRate) AS TotalExchangeRates,
+                (SELECT MAX(Date) FROM ExchangeRate) AS LatestRateDate,
+                (SELECT MIN(Date) FROM ExchangeRate) AS OldestRateDate,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog WHERE date(FetchedAt) = date('now')) AS TotalFetchesToday,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog WHERE date(FetchedAt) = date('now') AND IsSuccess = 1) AS SuccessfulFetchesToday,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog WHERE date(FetchedAt) = date('now') AND IsSuccess = 0) AS FailedFetchesToday,
+                CAST((SELECT COUNT(*) FROM ExchangeRateFetchLog WHERE date(FetchedAt) = date('now') AND IsSuccess = 1) AS REAL) * 100.0 /
+                    NULLIF((SELECT COUNT(*) FROM ExchangeRateFetchLog WHERE date(FetchedAt) = date('now')), 0) AS SuccessRateToday,
+                datetime('now') AS LastUpdated
+        ");
+        _logger.LogInformation("  ✓ vw_SystemHealthDashboard created");
+
+        // Create vw_ErrorSummary
+        await ExecuteSqlAsync(@"
+            CREATE VIEW vw_ErrorSummary AS
+            SELECT
+                el.Id,
+                el.Severity,
+                el.Source,
+                el.Message,
+                el.OccurredAt,
+                p.Code AS ProviderCode,
+                p.Name AS ProviderName
+            FROM ErrorLog el
+            LEFT JOIN ExchangeRateProvider p ON el.ProviderId = p.Id
+        ");
+        _logger.LogInformation("  ✓ vw_ErrorSummary created");
+
+        // Create vw_RecentFetchActivity
+        await ExecuteSqlAsync(@"
+            CREATE VIEW vw_RecentFetchActivity AS
+            SELECT
+                fl.Id,
+                fl.FetchedAt,
+                fl.IsSuccess,
+                fl.HttpStatusCode,
+                fl.ResponseTimeMs,
+                fl.RatesFetched,
+                fl.ErrorMessage,
+                p.Code AS ProviderCode,
+                p.Name AS ProviderName
+            FROM ExchangeRateFetchLog fl
+            INNER JOIN ExchangeRateProvider p ON fl.ProviderId = p.Id
+        ");
+        _logger.LogInformation("  ✓ vw_RecentFetchActivity created");
+
+        // Create vw_ProviderHealthStatus
+        await ExecuteSqlAsync(@"
+            CREATE VIEW vw_ProviderHealthStatus AS
+            SELECT
+                p.Id AS ProviderId,
+                p.Code AS ProviderCode,
+                p.Name AS ProviderName,
+                p.IsActive,
+                p.ConsecutiveFailures,
+                p.LastSuccessfulFetch,
+                p.LastFailedFetch,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id) AS TotalFetchAttempts,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id AND fl.IsSuccess = 1) AS SuccessfulFetches,
+                (SELECT COUNT(*) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id AND fl.IsSuccess = 0) AS FailedFetches,
+                (SELECT SUM(fl.RatesFetched) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id AND fl.IsSuccess = 1) AS TotalRatesProvided,
+                (SELECT MIN(fl.FetchedAt) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id) AS FirstFetchDate,
+                (SELECT MAX(fl.FetchedAt) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id) AS LastFetchDate,
+                CAST((SELECT COUNT(*) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id AND fl.IsSuccess = 1) AS REAL) * 100.0 /
+                    NULLIF((SELECT COUNT(*) FROM ExchangeRateFetchLog fl WHERE fl.ProviderId = p.Id), 0) AS SuccessRate
+            FROM ExchangeRateProvider p
+        ");
+        _logger.LogInformation("  ✓ vw_ProviderHealthStatus created");
+
+        _logger.LogInformation("Database views created successfully.");
+    }
+
+    private async Task ExecuteSqlAsync(string sql)
+    {
+        await _context.Database.ExecuteSqlRawAsync(sql);
     }
 }

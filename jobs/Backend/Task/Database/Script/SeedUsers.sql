@@ -12,7 +12,7 @@ Post-Deployment Script Template
 
 -- BCrypt hash for password "simple" (cost factor 11)
 -- This is a REAL BCrypt hash generated for "simple"
-DECLARE @PasswordHash NVARCHAR(512) = '$2a$11$K3g3L8LmH5K3g3L8LmH5KeO5KqW3ZN3J3PO5KqW3ZN3J3PO5KqW3Zm';
+DECLARE @PasswordHash NVARCHAR(512) = '$2a$11$i0UZQX8ZlJ2yY6DuZ4Y0HO0efKgQjvFMeMFv7wYJUVSIqmuzKSBJ.';
 
 -- Insert Admin User
 IF NOT EXISTS (SELECT 1 FROM [dbo].[User] WHERE Email = 'admin@example.com')
