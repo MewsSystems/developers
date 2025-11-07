@@ -1,9 +1,14 @@
+using System.Runtime.Serialization;
+using System.Text;
+using System.Xml;
 using ApplicationLayer.Queries.ExchangeRates.GetAllLatestExchangeRates;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using SOAP.Converters;
+using SOAP.Models.ExchangeRates;
 
-namespace REST.Hubs;
+namespace SOAP.Hubs;
 
 /// <summary>
 /// SignalR hub for real-time exchange rate updates.
@@ -48,7 +53,10 @@ public class ExchangeRatesHub : Hub
 
             if (rates.Any())
             {
-                await Clients.Caller.SendAsync("HistoricalRatesUpdated", rates);
+                var groupedRates = rates.ToNestedGroupedSoap();
+                var xmlData = SerializeToXml(groupedRates);
+
+                await Clients.Caller.SendAsync("HistoricalRatesUpdated", xmlData);
                 _logger.LogInformation("Current rates sent to new subscriber: {ConnectionId}", Context.ConnectionId);
             }
         }
@@ -66,5 +74,34 @@ public class ExchangeRatesHub : Hub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
+    }
+
+    /// <summary>
+    /// Serializes SOAP models to XML string wrapped in SOAP envelope using DataContractSerializer.
+    /// </summary>
+    private static string SerializeToXml(LatestExchangeRatesGroupedSoap[] data)
+    {
+        var serializer = new DataContractSerializer(typeof(LatestExchangeRatesGroupedSoap[]));
+        using var stringWriter = new StringWriter();
+        using var xmlWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings
+        {
+            Indent = true,
+            OmitXmlDeclaration = false,
+            Encoding = Encoding.UTF8
+        });
+
+        // Write SOAP Envelope
+        xmlWriter.WriteStartElement("soap", "Envelope", "http://schemas.xmlsoap.org/soap/envelope/");
+        xmlWriter.WriteStartElement("Body", "http://schemas.xmlsoap.org/soap/envelope/");
+
+        // Serialize the data inside the Body
+        serializer.WriteObject(xmlWriter, data);
+
+        // Close Body and Envelope
+        xmlWriter.WriteEndElement(); // </soap:Body>
+        xmlWriter.WriteEndElement(); // </soap:Envelope>
+
+        xmlWriter.Flush();
+        return stringWriter.ToString();
     }
 }

@@ -22,6 +22,19 @@ public interface IExchangeRateService
     /// </summary>
     [OperationContract]
     Task<GetAllLatestRatesGroupedResponse> GetHistoricalRatesUpdateAsync(GetAllLatestRatesGroupedRequest request);
+
+    /// <summary>
+    /// Get current exchange rates grouped by provider and base currency.
+    /// Returns nested structure: Provider → Base Currencies → Target Currencies.
+    /// </summary>
+    [OperationContract]
+    Task<GetCurrentRatesResponse> GetCurrentRatesAsync(GetCurrentRatesRequest request);
+
+    /// <summary>
+    /// Convert an amount from one currency to another.
+    /// </summary>
+    [OperationContract]
+    Task<ConvertCurrencyResponse> ConvertCurrencyAsync(ConvertCurrencyRequest request);
 }
 
 // ============================================================
@@ -51,6 +64,69 @@ public class GetAllLatestRatesGroupedResponse
 
     [System.Runtime.Serialization.DataMember]
     public LatestExchangeRatesGroupedSoap[] Data { get; set; } = Array.Empty<LatestExchangeRatesGroupedSoap>();
+
+    [System.Runtime.Serialization.DataMember]
+    public SoapFault? Fault { get; set; }
+}
+
+/// <summary>
+/// Request for getting current exchange rates.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class GetCurrentRatesRequest
+{
+    // Empty request - no parameters needed for getting current rates
+}
+
+/// <summary>
+/// Response containing grouped current exchange rates.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class GetCurrentRatesResponse
+{
+    [System.Runtime.Serialization.DataMember]
+    public bool Success { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public string? Message { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public CurrentExchangeRatesGroupedSoap[] Data { get; set; } = Array.Empty<CurrentExchangeRatesGroupedSoap>();
+
+    [System.Runtime.Serialization.DataMember]
+    public SoapFault? Fault { get; set; }
+}
+
+/// <summary>
+/// Request for converting currency.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class ConvertCurrencyRequest
+{
+    [System.Runtime.Serialization.DataMember]
+    public string FromCurrency { get; set; } = string.Empty;
+
+    [System.Runtime.Serialization.DataMember]
+    public string ToCurrency { get; set; } = string.Empty;
+
+    [System.Runtime.Serialization.DataMember]
+    public decimal Amount { get; set; }
+}
+
+/// <summary>
+/// Response containing currency conversion result.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class ConvertCurrencyResponse
+{
+    [System.Runtime.Serialization.DataMember]
+    public bool Success { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public string? Message { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public CurrencyConversionSoap? Data { get; set; }
 
     [System.Runtime.Serialization.DataMember]
     public SoapFault? Fault { get; set; }

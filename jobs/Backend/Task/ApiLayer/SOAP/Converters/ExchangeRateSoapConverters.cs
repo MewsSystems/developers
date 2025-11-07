@@ -1,4 +1,5 @@
 using ApplicationLayer.DTOs.ExchangeRates;
+using ApplicationLayer.Queries.ExchangeRates.ConvertCurrency;
 using SOAP.Models.Common;
 using SOAP.Models.ExchangeRates;
 
@@ -51,5 +52,75 @@ public static class ExchangeRateSoapConverters
                 TotalRates = providerGroup.Count()
             })
             .ToArray();
+    }
+
+    /// <summary>
+    /// Converts a collection of CurrentExchangeRateDto to grouped SOAP response.
+    /// Groups by Provider → Base Currency → Target Currencies.
+    /// </summary>
+    public static CurrentExchangeRatesGroupedSoap[] ToCurrentNestedGroupedSoap(
+        this IEnumerable<CurrentExchangeRateDto> dtos)
+    {
+        return dtos
+            .GroupBy(dto => dto.ProviderCode)
+            .Select(providerGroup => new CurrentExchangeRatesGroupedSoap
+            {
+                Provider = new ProviderInfoSoap
+                {
+                    Id = 0, // CurrentExchangeRateDto doesn't have ProviderId
+                    Code = providerGroup.Key,
+                    Name = providerGroup.Key
+                },
+                BaseCurrencies = providerGroup
+                    .GroupBy(dto => dto.BaseCurrencyCode)
+                    .Select(baseCurrencyGroup => new CurrentBaseCurrencyGroupSoap
+                    {
+                        BaseCurrency = baseCurrencyGroup.Key,
+                        Rates = baseCurrencyGroup.Select(dto => new CurrentTargetCurrencyRateSoap
+                        {
+                            TargetCurrency = dto.TargetCurrencyCode,
+                            RateInfo = new RateInfoSoap
+                            {
+                                Rate = dto.Rate,
+                                Multiplier = dto.Multiplier,
+                                EffectiveRate = dto.EffectiveRate
+                            },
+                            ValidDate = dto.ValidDate.ToString("yyyy-MM-dd"),
+                            LastUpdated = dto.LastUpdated.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                            DaysOld = dto.DaysOld
+                        }).ToArray(),
+                        TotalTargetCurrencies = baseCurrencyGroup.Count()
+                    }).ToArray(),
+                TotalBaseCurrencies = providerGroup.GroupBy(dto => dto.BaseCurrencyCode).Count(),
+                TotalRates = providerGroup.Count()
+            })
+            .ToArray();
+    }
+
+    /// <summary>
+    /// Converts a CurrencyConversionResult to SOAP model.
+    /// </summary>
+    public static CurrencyConversionSoap ToSoap(this CurrencyConversionResult result)
+    {
+        return new CurrencyConversionSoap
+        {
+            SourceAmount = result.SourceAmount,
+            TargetAmount = result.TargetAmount,
+            SourceCurrency = result.SourceCurrencyCode,
+            TargetCurrency = result.TargetCurrencyCode,
+            RateInfo = new RateInfoSoap
+            {
+                Rate = result.Rate,
+                Multiplier = result.Multiplier,
+                EffectiveRate = result.EffectiveRate
+            },
+            ValidDate = result.ValidDate.ToString("yyyy-MM-dd"),
+            Provider = new ProviderInfoSoap
+            {
+                Id = result.ProviderId,
+                Code = string.Empty, // Not available in CurrencyConversionResult
+                Name = result.ProviderName
+            }
+        };
     }
 }

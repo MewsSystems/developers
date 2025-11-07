@@ -60,24 +60,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
 
         foreach (var provider in pagedResult.Items)
         {
-            response.Providers.Add(new ProviderInfo
-            {
-                Id = provider.Id,
-                Code = provider.Code,
-                Name = provider.Name,
-                Url = provider.Url,
-                IsActive = provider.IsActive,
-                BaseCurrencyCode = provider.BaseCurrencyCode,
-                Status = provider.Status,
-                ConsecutiveFailures = provider.ConsecutiveFailures,
-                LastSuccessfulFetch = provider.LastSuccessfulFetch.HasValue
-                    ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastSuccessfulFetch.Value)
-                    : null,
-                LastFailedFetch = provider.LastFailedFetch.HasValue
-                    ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastFailedFetch.Value)
-                    : null,
-                Created = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.Created)
-            });
+            response.Providers.Add(ProviderMappers.ToProtoProviderInfo(provider));
         }
 
         return response;
@@ -102,24 +85,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
             {
                 Success = true,
                 Message = $"Provider {request.Code} retrieved successfully",
-                Data = new ProviderInfo
-                {
-                    Id = provider.Id,
-                    Code = provider.Code,
-                    Name = provider.Name,
-                    Url = provider.Url,
-                    IsActive = provider.IsActive,
-                    BaseCurrencyCode = provider.BaseCurrencyCode,
-                    Status = provider.Status,
-                    ConsecutiveFailures = provider.ConsecutiveFailures,
-                    LastSuccessfulFetch = provider.LastSuccessfulFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastSuccessfulFetch.Value)
-                        : null,
-                    LastFailedFetch = provider.LastFailedFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastFailedFetch.Value)
-                        : null,
-                    Created = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.Created)
-                }
+                Data = ProviderMappers.ToProtoProviderInfo(provider)
             };
         }
 
@@ -163,21 +129,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
             {
                 Success = true,
                 Message = $"Health status for provider {request.Code} retrieved successfully",
-                Data = new ProviderHealthInfo
-                {
-                    ProviderId = healthDto.ProviderId,
-                    ProviderCode = healthDto.ProviderCode,
-                    ProviderName = healthDto.ProviderName,
-                    HealthStatus = healthDto.Status,
-                    ConsecutiveFailures = healthDto.ConsecutiveFailures,
-                    LastSuccessfulFetch = healthDto.LastSuccessfulFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(healthDto.LastSuccessfulFetch.Value)
-                        : null,
-                    LastFailedFetch = healthDto.LastFailedFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(healthDto.LastFailedFetch.Value)
-                        : null,
-                    LastErrorMessage = ""
-                }
+                Data = ProviderMappers.ToProtoProviderHealthInfo(healthDto)
             };
         }
 
@@ -220,39 +172,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
             {
                 Success = true,
                 Message = $"Statistics for provider {request.Code} retrieved successfully",
-                Data = new ProviderStatisticsInfo
-                {
-                    ProviderId = statsDto.ProviderId,
-                    ProviderCode = statsDto.ProviderCode,
-                    ProviderName = statsDto.ProviderName,
-                    TotalRatesProvided = statsDto.TotalRatesProvided,
-                    TotalFetchAttempts = statsDto.TotalFetchAttempts,
-                    SuccessfulFetches = statsDto.SuccessfulFetches,
-                    FailedFetches = statsDto.FailedFetches,
-                    SuccessRate = (double)statsDto.SuccessRate,
-                    FirstFetchDate = statsDto.FirstFetchDate.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(statsDto.FirstFetchDate.Value)
-                        : null,
-                    LastFetchDate = statsDto.LastFetchDate.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(statsDto.LastFetchDate.Value)
-                        : null,
-                    OldestRateDate = statsDto.OldestRateDate.HasValue
-                        ? new gRPC.Protos.Common.Date
-                        {
-                            Year = statsDto.OldestRateDate.Value.Year,
-                            Month = statsDto.OldestRateDate.Value.Month,
-                            Day = statsDto.OldestRateDate.Value.Day
-                        }
-                        : null,
-                    NewestRateDate = statsDto.NewestRateDate.HasValue
-                        ? new gRPC.Protos.Common.Date
-                        {
-                            Year = statsDto.NewestRateDate.Value.Year,
-                            Month = statsDto.NewestRateDate.Value.Month,
-                            Day = statsDto.NewestRateDate.Value.Day
-                        }
-                        : null
-                }
+                Data = ProviderMappers.ToProtoProviderStatisticsInfo(statsDto)
             };
         }
 
@@ -295,29 +215,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
             {
                 Success = true,
                 Message = $"Configuration for provider {request.Code} retrieved successfully",
-                Data = new ProviderDetailInfo
-                {
-                    Id = detailDto.Id,
-                    Code = detailDto.Code,
-                    Name = detailDto.Name,
-                    Url = detailDto.Url,
-                    IsActive = detailDto.IsActive,
-                    BaseCurrencyCode = detailDto.BaseCurrencyCode,
-                    RequiresAuthentication = detailDto.RequiresAuthentication,
-                    ApiKeyVaultReference = detailDto.ApiKeyVaultReference ?? "",
-                    Status = detailDto.Status,
-                    ConsecutiveFailures = detailDto.ConsecutiveFailures,
-                    LastSuccessfulFetch = detailDto.LastSuccessfulFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(detailDto.LastSuccessfulFetch.Value)
-                        : null,
-                    LastFailedFetch = detailDto.LastFailedFetch.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(detailDto.LastFailedFetch.Value)
-                        : null,
-                    Created = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(detailDto.Created),
-                    Modified = detailDto.Modified.HasValue
-                        ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(detailDto.Modified.Value)
-                        : null
-                }
+                Data = ProviderMappers.ToProtoProviderDetailInfo(detailDto)
             };
         }
 
@@ -521,24 +419,7 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
                 {
                     Success = true,
                     Message = $"Provider {request.Code} created successfully",
-                    Data = new ProviderInfo
-                    {
-                        Id = provider.Id,
-                        Code = provider.Code,
-                        Name = provider.Name,
-                        Url = provider.Url,
-                        IsActive = provider.IsActive,
-                        BaseCurrencyCode = provider.BaseCurrencyCode,
-                        Status = provider.Status,
-                        ConsecutiveFailures = provider.ConsecutiveFailures,
-                        LastSuccessfulFetch = provider.LastSuccessfulFetch.HasValue
-                            ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastSuccessfulFetch.Value)
-                            : null,
-                        LastFailedFetch = provider.LastFailedFetch.HasValue
-                            ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.LastFailedFetch.Value)
-                            : null,
-                        Created = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(provider.Created)
-                    }
+                    Data = ProviderMappers.ToProtoProviderInfo(provider)
                 };
             }
         }

@@ -57,4 +57,47 @@ public static class ProviderSoapConverters
     {
         return dtos.Select(dto => dto.ToSoap()).ToArray();
     }
+
+    /// <summary>
+    /// Converts a ProviderHealthDto to SOAP model.
+    /// </summary>
+    public static ProviderHealthSoap ToSoap(this ProviderHealthDto dto)
+    {
+        return new ProviderHealthSoap
+        {
+            ProviderId = dto.ProviderId,
+            ProviderCode = dto.ProviderCode,
+            ProviderName = dto.ProviderName,
+            Status = dto.Status,
+            IsHealthy = dto.IsHealthy,
+            ConsecutiveFailures = dto.ConsecutiveFailures,
+            LastSuccessfulFetch = dto.LastSuccessfulFetch?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            LastFailedFetch = dto.LastFailedFetch?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            TimeSinceLastSuccess = dto.TimeSinceLastSuccess?.ToString(@"d\.hh\:mm\:ss"),
+            TimeSinceLastFailure = dto.TimeSinceLastFailure?.ToString(@"d\.hh\:mm\:ss")
+        };
+    }
+
+    /// <summary>
+    /// Converts a ProviderStatisticsDto to SOAP model.
+    /// </summary>
+    public static ProviderStatisticsSoap ToSoap(this ProviderStatisticsDto dto)
+    {
+        return new ProviderStatisticsSoap
+        {
+            ProviderId = dto.ProviderId,
+            ProviderCode = dto.ProviderCode,
+            ProviderName = dto.ProviderName,
+            TotalRatesProvided = dto.TotalRatesProvided,
+            TotalFetchAttempts = dto.TotalFetchAttempts,
+            SuccessfulFetches = dto.SuccessfulFetches,
+            FailedFetches = dto.FailedFetches,
+            SuccessRate = dto.SuccessRate,
+            FirstFetchDate = dto.FirstFetchDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            LastFetchDate = dto.LastFetchDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            AverageFetchInterval = dto.AverageFetchInterval?.ToString(@"d\.hh\:mm\:ss"),
+            OldestRateDate = dto.OldestRateDate?.ToString("yyyy-MM-dd"),
+            NewestRateDate = dto.NewestRateDate?.ToString("yyyy-MM-dd")
+        };
+    }
 }

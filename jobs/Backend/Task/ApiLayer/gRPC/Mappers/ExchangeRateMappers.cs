@@ -54,7 +54,9 @@ public static class ExchangeRateMappers
                     baseCurrencyRates.TargetCurrencies.Add(new LatestTargetCurrencyRate
                     {
                         TargetCurrencyCode = rate.TargetCurrencyCode,
-                        Rate = rate.EffectiveRate.ToString("G29"), // Preserve full precision
+                        Rate = rate.Rate.ToString("G29"), // Raw rate from provider
+                        Multiplier = rate.Multiplier,
+                        EffectiveRate = rate.EffectiveRate.ToString("G29"), // Preserve full precision
                         ValidDate = ToProtoDate(rate.ValidDate),
                         UpdatedAt = rate.Modified.HasValue
                             ? Timestamp.FromDateTimeOffset(rate.Modified.Value)
@@ -84,7 +86,9 @@ public static class ExchangeRateMappers
             ProviderName = dto.ProviderCode, // Use code as name fallback
             SourceCurrencyCode = dto.BaseCurrencyCode,
             TargetCurrencyCode = dto.TargetCurrencyCode,
-            Rate = dto.EffectiveRate.ToString("G29"),
+            Rate = dto.Rate.ToString("G29"), // Raw rate from provider
+            Multiplier = dto.Multiplier,
+            EffectiveRate = dto.EffectiveRate.ToString("G29"),
             ValidDate = ToProtoDate(dto.ValidDate)
         };
     }
@@ -102,7 +106,9 @@ public static class ExchangeRateMappers
             ProviderName = dto.ProviderName,
             SourceCurrencyCode = dto.BaseCurrencyCode,
             TargetCurrencyCode = dto.TargetCurrencyCode,
-            Rate = dto.EffectiveRate.ToString("G29"),
+            Rate = dto.Rate.ToString("G29"), // Raw rate from provider
+            Multiplier = dto.Multiplier,
+            EffectiveRate = dto.EffectiveRate.ToString("G29"),
             ValidDate = ToProtoDate(dto.ValidDate),
             UpdatedAt = dto.Modified.HasValue
                 ? Timestamp.FromDateTimeOffset(dto.Modified.Value)
@@ -123,7 +129,9 @@ public static class ExchangeRateMappers
             ProviderName = dto.ProviderName,
             SourceCurrencyCode = dto.BaseCurrencyCode,
             TargetCurrencyCode = dto.TargetCurrencyCode,
-            Rate = dto.EffectiveRate.ToString("G29"),
+            Rate = dto.Rate.ToString("G29"), // Raw rate from provider
+            Multiplier = dto.Multiplier,
+            EffectiveRate = dto.EffectiveRate.ToString("G29"),
             ValidDate = ToProtoDate(dto.ValidDate)
         };
     }

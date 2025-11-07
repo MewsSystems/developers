@@ -60,8 +60,10 @@ message CurrentExchangeRate {
   string provider_name = 3;
   string source_currency_code = 4;
   string target_currency_code = 5;
-  string rate = 6; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 7;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
 }
 
 // ============================================================
@@ -87,8 +89,10 @@ message BaseCurrencyGroup {
 
 message TargetCurrencyRate {
   string target_currency_code = 1;
-  string rate = 2; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 3;
+  string rate = 2; // decimal as string (raw rate from provider)
+  int32 multiplier = 3; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 4; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 5;
 }
 
 // ============================================================
@@ -113,8 +117,10 @@ message ExchangeRateData {
   string provider_name = 3;
   string source_currency_code = 4;
   string target_currency_code = 5;
-  string rate = 6; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 7;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
 }
 
 // ============================================================
@@ -136,9 +142,11 @@ message LatestExchangeRate {
   string provider_name = 3;
   string source_currency_code = 4;
   string target_currency_code = 5;
-  string rate = 6; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 
 // ============================================================
@@ -164,9 +172,11 @@ message LatestBaseCurrencyGroup {
 
 message LatestTargetCurrencyRate {
   string target_currency_code = 1;
-  string rate = 2; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 3;
-  google.protobuf.Timestamp updated_at = 4;
+  string rate = 2; // decimal as string (raw rate from provider)
+  int32 multiplier = 3; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 4; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 5;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 // ============================================================
@@ -192,8 +202,10 @@ message ExchangeRateHistory {
   string provider_name = 3;
   string source_currency_code = 4;
   string target_currency_code = 5;
-  string rate = 6; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 7;
+  string rate = 6; // decimal as string (raw rate from provider)
+  int32 multiplier = 7; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 8; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 9;
 }
 
 // ============================================================
@@ -223,8 +235,10 @@ message HistoryTargetCurrencyGroup {
 }
 
 message HistoricalRate {
-  string rate = 1; // decimal as string
-  .exchangerates.common.v1.Date valid_date = 2;
+  string rate = 1; // decimal as string (raw rate from provider)
+  int32 multiplier = 2; // Rate multiplier (typically 1, could be 100 for currencies like JPY)
+  string effective_rate = 3; // Actual conversion rate after applying multiplier: 1 Base = EffectiveRate Target (decimal as string)
+  .exchangerates.common.v1.Date valid_date = 4;
 }
 
 // ============================================================

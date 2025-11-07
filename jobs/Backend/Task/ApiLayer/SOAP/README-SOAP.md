@@ -7,6 +7,7 @@ A SOAP 1.1 implementation of the Exchange Rates API, providing traditional XML-b
 This SOAP API provides:
 - **13 SOAP operations** across 5 service domains
 - **WSDL-based service contracts** for automatic client generation
+- **SignalR hub** for real-time exchange rate updates
 - **Full feature parity** with core REST API functionality
 - **Shared business logic** via MediatR and Clean Architecture
 - **JWT authentication** for secure access
@@ -206,6 +207,190 @@ Configure the server via `appsettings.json`:
 | `DeleteUser` | Remove a user (Admin only) |
 | `ChangeUserRole` | Change user's role (Admin only) |
 
+## Real-Time Updates (SignalR)
+
+**Hub URL:** `http://localhost:5002/hubs/exchange-rates`
+
+The SOAP API includes a SignalR hub for real-time exchange rate notifications, enabling clients to receive push updates when new rates are fetched.
+
+### Events
+
+| Event | Description | Payload |
+|-------|-------------|---------|
+| `LatestRatesUpdated` | Triggered when daily exchange rates are fetched | XML string (DataContract serialized) |
+| `HistoricalRatesUpdated` | Triggered when historical rates are fetched | XML string (DataContract serialized) |
+| `Connected` | Triggered when client connects | Connection info (JSON) |
+
+### Connecting to the Hub
+
+**JavaScript Example:**
+```javascript
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:5002/hubs/exchange-rates", {
+        accessTokenFactory: () => "your-jwt-token-here"
+    })
+    .withAutomaticReconnect()
+    .build();
+
+// Listen for latest rates updates (receives SOAP envelope as XML string)
+connection.on("LatestRatesUpdated", (xmlString) => {
+    console.log("Latest rates updated (SOAP XML):", xmlString);
+
+    // Parse SOAP envelope
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    // Navigate to SOAP Body
+    const body = xmlDoc.getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Body")[0];
+
+    // Extract data from Body
+    const providers = body.getElementsByTagName("LatestExchangeRatesGroupedSoap");
+    console.log(`Received ${providers.length} provider groups`);
+
+    // Process each provider...
+    for (let i = 0; i < providers.length; i++) {
+        const providerCode = providers[i].getElementsByTagName("Code")[0].textContent;
+        console.log(`Provider: ${providerCode}`);
+    }
+});
+
+// Listen for historical rates updates (receives SOAP envelope as XML string)
+connection.on("HistoricalRatesUpdated", (xmlString) => {
+    console.log("Historical rates updated (SOAP XML):", xmlString);
+
+    // Parse SOAP envelope
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    // Navigate to SOAP Body
+    const body = xmlDoc.getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Body")[0];
+
+    // Extract and process data...
+});
+
+// Listen for connection confirmation
+connection.on("Connected", (data) => {
+    console.log("Connected to hub:", data);
+});
+
+await connection.start();
+console.log("SignalR Connected");
+```
+
+**C# Example:**
+```csharp
+using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.AspNetCore.SignalR.Client;
+using SOAP.Models.ExchangeRates;
+
+var connection = new HubConnectionBuilder()
+    .WithUrl("http://localhost:5002/hubs/exchange-rates", options =>
+    {
+        options.AccessTokenProvider = () => Task.FromResult("your-jwt-token-here");
+    })
+    .WithAutomaticReconnect()
+    .Build();
+
+// Helper method to deserialize SOAP envelope XML string
+LatestExchangeRatesGroupedSoap[] DeserializeSoapXml(string soapXml)
+{
+    // Parse the SOAP envelope
+    var doc = XDocument.Parse(soapXml);
+    var soapNamespace = XNamespace.Get("http://schemas.xmlsoap.org/soap/envelope/");
+
+    // Navigate to SOAP Body element
+    var bodyElement = doc.Root?.Element(soapNamespace + "Body");
+    if (bodyElement == null)
+        throw new InvalidOperationException("SOAP Body element not found");
+
+    // Get the first child element inside Body (the actual data)
+    var dataElement = bodyElement.FirstNode;
+    if (dataElement == null)
+        throw new InvalidOperationException("No data found inside SOAP Body");
+
+    // Deserialize the data inside the Body
+    var serializer = new DataContractSerializer(typeof(LatestExchangeRatesGroupedSoap[]));
+    using var reader = dataElement.CreateReader();
+    return (LatestExchangeRatesGroupedSoap[])serializer.ReadObject(reader)!;
+}
+
+// Listen for latest rates (receives SOAP envelope as XML string)
+connection.On<string>("LatestRatesUpdated", (soapXml) =>
+{
+    Console.WriteLine("Latest rates updated (SOAP XML)");
+    var rates = DeserializeSoapXml(soapXml);
+    Console.WriteLine($"Received {rates.Length} provider groups");
+
+    // Process rates...
+    foreach (var providerGroup in rates)
+    {
+        Console.WriteLine($"Provider: {providerGroup.Provider.Code}");
+    }
+});
+
+// Listen for historical rates (receives SOAP envelope as XML string)
+connection.On<string>("HistoricalRatesUpdated", (soapXml) =>
+{
+    Console.WriteLine("Historical rates updated (SOAP XML)");
+    var rates = DeserializeSoapXml(soapXml);
+    Console.WriteLine($"Received {rates.Length} provider groups");
+});
+
+await connection.StartAsync();
+Console.WriteLine("SignalR Connected");
+```
+
+### Authentication
+
+SignalR hub requires JWT authentication (Consumer or Admin role). Pass the JWT token via:
+- Query string: `?access_token=your-jwt-token`
+- Or using the `accessTokenFactory` option in SignalR client
+
+### Data Format
+
+The SignalR events send data as **XML strings wrapped in SOAP envelopes**, fully consistent with SOAP protocol:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ArrayOfLatestExchangeRatesGroupedSoap xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+      <LatestExchangeRatesGroupedSoap>
+        <Provider>
+          <Id>1</Id>
+          <Code>ECB</Code>
+          <Name>European Central Bank</Name>
+        </Provider>
+        <BaseCurrencies>
+          <BaseCurrencyGroupSoap>
+            <BaseCurrency>EUR</BaseCurrency>
+            <Rates>
+              <TargetCurrencyRateSoap>
+                <TargetCurrency>USD</TargetCurrency>
+                <RateInfo>
+                  <Rate>1.0850</Rate>
+                  <Multiplier>1</Multiplier>
+                  <EffectiveRate>1.0850</EffectiveRate>
+                </RateInfo>
+                <ValidDate>2025-11-07</ValidDate>
+                <FetchedAt>2025-11-07T16:00:00Z</FetchedAt>
+              </TargetCurrencyRateSoap>
+            </Rates>
+            <TotalTargetCurrencies>30</TotalTargetCurrencies>
+          </BaseCurrencyGroupSoap>
+        </BaseCurrencies>
+        <TotalBaseCurrencies>1</TotalBaseCurrencies>
+        <TotalRates>30</TotalRates>
+      </LatestExchangeRatesGroupedSoap>
+    </ArrayOfLatestExchangeRatesGroupedSoap>
+  </soap:Body>
+</soap:Envelope>
+```
+
+Clients receive this XML as a **string** and need to parse it using XML parsers (DOMParser in JavaScript, XmlReader/DataContractSerializer in C#).
+
 ## Authentication
 
 All SOAP operations except `Login` require JWT authentication.
@@ -384,7 +569,9 @@ SOAP/
 │   ├── ICurrencyService.cs
 │   ├── IProviderService.cs
 │   ├── IUserService.cs
-│   └── NoOpExchangeRatesNotificationService.cs
+│   └── SignalRExchangeRatesNotificationService.cs  # SignalR notifications
+├── Hubs/                            # SignalR hubs
+│   └── ExchangeRatesHub.cs         # Real-time updates hub
 ├── Models/                          # SOAP data contracts
 │   ├── Common/                      # Shared models
 │   ├── ExchangeRates/              # Exchange rate models
@@ -436,7 +623,7 @@ This limitation affects REST, gRPC, and SOAP APIs equally.
 | Protocol | SOAP 1.1 | HTTP/1.1 | HTTP/2 |
 | Serialization | XML (DataContract) | JSON | Protocol Buffers |
 | Contract | WSDL | OpenAPI/Swagger | .proto files |
-| Real-time | Not supported | SignalR (WebSocket) | Server Streaming |
+| Real-time | SignalR (WebSocket) | SignalR (WebSocket) | Server Streaming |
 | Authentication | JWT (HTTP Header) | JWT (Bearer token) | JWT (Metadata header) |
 | Business Logic | Shared via MediatR | Shared via MediatR | Shared via MediatR |
 | Port | 5002/7002 | 5000/5001 | 5001 |
@@ -551,9 +738,9 @@ Check server logs for details. Common causes:
 ## Limitations
 
 - **Larger payload size**: XML is more verbose than JSON or Protocol Buffers
-- **No real-time updates**: SOAP doesn't support streaming or push notifications
 - **Slower performance**: XML parsing is slower than binary protocols
 - **Limited browser support**: Modern browsers don't have native SOAP clients
+- **Hybrid architecture**: Real-time updates require SignalR connection in addition to SOAP operations
 
 ## When to Use SOAP vs REST/gRPC
 
@@ -567,7 +754,7 @@ Check server logs for details. Common causes:
 - Building web applications or mobile apps
 - You need human-readable messages (JSON)
 - Browser compatibility is important
-- You want SignalR for real-time updates
+- Simpler architecture preferred (SignalR available in both REST and SOAP)
 
 **Use gRPC when:**
 - Performance is critical

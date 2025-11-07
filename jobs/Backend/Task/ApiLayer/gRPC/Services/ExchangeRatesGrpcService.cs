@@ -107,7 +107,9 @@ public class ExchangeRatesGrpcService : ExchangeRatesService.ExchangeRatesServic
                     ProviderName = rateDto.ProviderName,
                     SourceCurrencyCode = rateDto.BaseCurrencyCode,
                     TargetCurrencyCode = rateDto.TargetCurrencyCode,
-                    Rate = rateDto.EffectiveRate.ToString("G29"),
+                    Rate = rateDto.Rate.ToString("G29"), // Raw rate from provider
+                    Multiplier = rateDto.Multiplier,
+                    EffectiveRate = rateDto.EffectiveRate.ToString("G29"),
                     ValidDate = ExchangeRateMappers.ToProtoDate(rateDto.ValidDate)
                 }
             };
@@ -300,6 +302,33 @@ public class ExchangeRatesGrpcService : ExchangeRatesService.ExchangeRatesServic
                 responseStream,
                 request.SubscriptionTypes,
                 context.CancellationToken);
+
+            // Send current rates to new subscriber immediately
+            try
+            {
+                _logger.LogInformation("Sending current rates to new subscriber: {ClientId}", clientId);
+
+                var query = new GetAllLatestExchangeRatesQuery();
+                var rates = await _mediator.Send(query, context.CancellationToken);
+
+                if (rates.Any())
+                {
+                    var protoData = ExchangeRateMappers.ToProtoGroupedData(rates);
+                    var updateEvent = new ExchangeRateUpdateEvent
+                    {
+                        EventType = "LatestRatesUpdated",
+                        Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow),
+                        Data = protoData
+                    };
+
+                    await responseStream.WriteAsync(updateEvent, context.CancellationToken);
+                    _logger.LogInformation("Current rates sent to new subscriber: {ClientId}", clientId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending current rates to new subscriber: {ClientId}", clientId);
+            }
 
             // Keep the connection alive indefinitely
             // The stream manager will push updates to this client when events occur

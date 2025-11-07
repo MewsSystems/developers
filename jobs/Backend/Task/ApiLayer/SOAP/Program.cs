@@ -103,16 +103,37 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
         ClockSkew = TimeSpan.Zero // Remove default 5-minute clock skew
     };
+
+    // Allow SignalR to receive JWT token from query string
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            // If the request is for our SignalR hub...
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/exchange-rates"))
+            {
+                // Read the token out of the query string
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization();
 
 // ============================================================
-// NOTIFICATION SERVICE (NO-OP FOR SOAP)
+// SIGNALR
 // ============================================================
-// Register no-op notification service since SOAP doesn't support real-time updates
+builder.Services.AddSignalR();
+
+// Register SignalR notification service for real-time updates
 builder.Services.AddScoped<ApplicationLayer.Common.Interfaces.IExchangeRatesNotificationService,
-    SOAP.Services.NoOpExchangeRatesNotificationService>();
+    SOAP.Services.SignalRExchangeRatesNotificationService>();
 
 // ============================================================
 // SOAP SERVICES
@@ -234,6 +255,10 @@ app.UseEndpoints(endpoints =>
         soapEncoderOptions,
         SoapSerializer.DataContractSerializer,
         caseInsensitivePath: true);
+
+    // Map SignalR hub for real-time exchange rate updates
+    // Access at: /hubs/exchange-rates
+    endpoints.MapHub<SOAP.Hubs.ExchangeRatesHub>("/hubs/exchange-rates");
 });
 
 // ============================================================
