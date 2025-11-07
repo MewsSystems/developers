@@ -1,4 +1,5 @@
 using ApplicationLayer.Commands.ExchangeRateProviders.CreateExchangeRateProvider;
+using ApplicationLayer.Common.Interfaces;
 using ConfigurationLayer.Interface;
 using DomainLayer.Interfaces.Persistence;
 using DomainLayer.Interfaces.Services;
@@ -18,6 +19,7 @@ public class FetchHistoricalRatesJob
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IConfigurationService _configService;
+    private readonly IExchangeRatesNotificationService _notificationService;
     private readonly ILogger<FetchHistoricalRatesJob> _logger;
 
     public FetchHistoricalRatesJob(
@@ -26,6 +28,7 @@ public class FetchHistoricalRatesJob
         IMediator mediator,
         IDateTimeProvider dateTimeProvider,
         IConfigurationService configService,
+        IExchangeRatesNotificationService notificationService,
         ILogger<FetchHistoricalRatesJob> logger)
     {
         _providerDiscovery = providerDiscovery;
@@ -33,6 +36,7 @@ public class FetchHistoricalRatesJob
         _mediator = mediator;
         _dateTimeProvider = dateTimeProvider;
         _configService = configService;
+        _notificationService = notificationService;
         _logger = logger;
     }
 
@@ -49,6 +53,7 @@ public class FetchHistoricalRatesJob
 
         foreach (var providerAdapter in providers)
         {
+            long? fetchLogId = null;
             try
             {
                 _logger.LogInformation(
@@ -76,6 +81,12 @@ public class FetchHistoricalRatesJob
                     continue;
                 }
 
+                // Start fetch log tracking
+                fetchLogId = await _unitOfWork.FetchLogs.StartFetchLogAsync(
+                    provider.Id,
+                    requestedBy: null,
+                    cancellationToken);
+
                 // Fetch historical rates (the existing providers handle date ranges internally)
                 var response = await providerAdapter.FetchHistoricalRatesAsync(cancellationToken);
 
@@ -85,6 +96,15 @@ public class FetchHistoricalRatesJob
                         "Failed to fetch historical rates for {ProviderCode}: {Error}",
                         providerAdapter.ProviderCode,
                         response.ErrorMessage);
+
+                    // Complete fetch log with failure
+                    await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                        fetchLogId.Value,
+                        "Failed",
+                        ratesImported: 0,
+                        ratesUpdated: 0,
+                        errorMessage: response.ErrorMessage,
+                        cancellationToken);
 
                     provider.RecordFailedFetch(response.ErrorMessage);
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -121,6 +141,18 @@ public class FetchHistoricalRatesJob
                         upsertResult.Value.RatesUpdated,
                         upsertResult.Value.RatesUnchanged);
 
+                    // Complete fetch log with success
+                    if (fetchLogId.HasValue)
+                    {
+                        await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                            fetchLogId.Value,
+                            "Success",
+                            ratesImported: upsertResult.Value.RatesInserted,
+                            ratesUpdated: upsertResult.Value.RatesUpdated,
+                            errorMessage: null,
+                            cancellationToken);
+                    }
+
                     // Update provider health
                     provider.RecordSuccessfulFetch(upsertResult.Value.RatesInserted + upsertResult.Value.RatesUpdated);
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -132,6 +164,18 @@ public class FetchHistoricalRatesJob
                         providerAdapter.ProviderCode,
                         upsertResult.Error);
 
+                    // Complete fetch log with failure
+                    if (fetchLogId.HasValue)
+                    {
+                        await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                            fetchLogId.Value,
+                            "Failed",
+                            ratesImported: 0,
+                            ratesUpdated: 0,
+                            errorMessage: upsertResult.Error,
+                            cancellationToken);
+                    }
+
                     provider.RecordFailedFetch(upsertResult.Error);
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
                 }
@@ -142,9 +186,54 @@ public class FetchHistoricalRatesJob
                     ex,
                     "Unexpected error fetching historical rates for {ProviderCode}",
                     providerAdapter.ProviderCode);
+
+                // Complete fetch log with error if it was started
+                if (fetchLogId.HasValue)
+                {
+                    try
+                    {
+                        await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                            fetchLogId.Value,
+                            "Error",
+                            ratesImported: 0,
+                            ratesUpdated: 0,
+                            errorMessage: ex.Message,
+                            cancellationToken);
+                    }
+                    catch
+                    {
+                        // Ignore errors in error handling
+                    }
+                }
+
+                // Log error to database
+                try
+                {
+                    await _unitOfWork.ErrorLogs.LogErrorAsync(
+                        "Error",
+                        "FetchHistoricalRatesJob",
+                        $"Unexpected error fetching historical rates for {providerAdapter.ProviderCode}",
+                        ex.ToString(),
+                        ex.StackTrace,
+                        cancellationToken);
+                }
+                catch
+                {
+                    // Ignore errors in error logging
+                }
             }
         }
 
         _logger.LogInformation("Completed historical rates fetch for all providers");
+
+        // Notify all connected SignalR clients about the update
+        try
+        {
+            await _notificationService.NotifyHistoricalRatesUpdatedAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending SignalR notification after historical rates fetch");
+        }
     }
 }

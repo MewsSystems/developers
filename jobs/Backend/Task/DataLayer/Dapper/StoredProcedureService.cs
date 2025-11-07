@@ -546,4 +546,76 @@ public class StoredProcedureService : IStoredProcedureService
             throw new InvalidOperationException($"Complete fetch log failed: {ex.Message}", ex);
         }
     }
+
+    public async Task<long> LogErrorAsync(
+        string severity,
+        string source,
+        string message,
+        string? exception = null,
+        string? stackTrace = null,
+        CancellationToken cancellationToken = default)
+    {
+        var connection = await _dapperContext.CreateConnectionAsync(cancellationToken);
+
+        if (_useInMemoryDatabase)
+        {
+            return await LogErrorSqliteAsync(connection, severity, source, message, exception, stackTrace, cancellationToken);
+        }
+        else
+        {
+            return await LogErrorSqlServerAsync(connection, severity, source, message, exception, stackTrace, cancellationToken);
+        }
+    }
+
+    private async Task<long> LogErrorSqliteAsync(
+        IDbConnection connection,
+        string severity,
+        string source,
+        string message,
+        string? exception,
+        string? stackTrace,
+        CancellationToken cancellationToken)
+    {
+        var sql = @"
+            INSERT INTO ErrorLog (Timestamp, Severity, Source, Message, Exception, StackTrace)
+            VALUES (datetime('now'), @Severity, @Source, @Message, @Exception, @StackTrace);
+            SELECT last_insert_rowid();";
+
+        return await connection.ExecuteScalarAsync<long>(
+            sql,
+            new
+            {
+                Severity = severity,
+                Source = source,
+                Message = message,
+                Exception = exception,
+                StackTrace = stackTrace
+            });
+    }
+
+    private async Task<long> LogErrorSqlServerAsync(
+        IDbConnection connection,
+        string severity,
+        string source,
+        string message,
+        string? exception,
+        string? stackTrace,
+        CancellationToken cancellationToken)
+    {
+        var sql = @"
+            INSERT INTO ErrorLog (Timestamp, Severity, Source, Message, Exception, StackTrace)
+            VALUES (SYSDATETIMEOFFSET(), @Severity, @Source, @Message, @Exception, @StackTrace);
+            SELECT CAST(SCOPE_IDENTITY() AS BIGINT);";
+
+        return await connection.ExecuteScalarAsync<long>(
+            sql,
+            new
+            {
+                Severity = severity,
+                Source = source,
+                Message = message,
+                Exception = exception,
+                StackTrace = stackTrace
+            });
+    }
 }

@@ -91,4 +91,18 @@ public class ViewQueryService : IViewQueryService
         return await connection.QueryAsync<CurrencyPairAvailabilityView>(
             "SELECT * FROM [dbo].[vw_CurrencyPairAvailability] ORDER BY BaseCurrencyCode, TargetCurrencyCode");
     }
+
+    public async Task<IEnumerable<AllLatestExchangeRatesView>> GetAllLatestExchangeRatesAsync(CancellationToken cancellationToken = default)
+    {
+        using var connection = await _dapperContext.CreateConnectionAsync(cancellationToken);
+        return await connection.QueryAsync<AllLatestExchangeRatesView>(
+            "SELECT * FROM [dbo].[vw_AllLatestExchangeRates] ORDER BY BaseCurrencyCode, TargetCurrencyCode");
+    }
+
+    public async Task<IEnumerable<AllLatestUpdatedExchangeRatesView>> GetAllLatestUpdatedExchangeRatesAsync(CancellationToken cancellationToken = default)
+    {
+        using var connection = await _dapperContext.CreateConnectionAsync(cancellationToken);
+        return await connection.QueryAsync<AllLatestUpdatedExchangeRatesView>(
+            "SELECT * FROM [dbo].[vw_AllLatestUpdatedExchangeRates] ORDER BY BaseCurrencyCode, TargetCurrencyCode");
+    }
 }

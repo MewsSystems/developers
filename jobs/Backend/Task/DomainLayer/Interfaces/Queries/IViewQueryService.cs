@@ -61,4 +61,17 @@ public interface ISystemViewQueries
     /// Shows which currency pairs are available from which providers.
     /// </summary>
     Task<IEnumerable<CurrencyPairAvailabilityView>> GetCurrencyPairAvailabilityAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all latest exchange rates across all providers.
+    /// Returns the most recent rate (by ValidDate) for each currency pair, regardless of provider.
+    /// </summary>
+    Task<IEnumerable<AllLatestExchangeRatesView>> GetAllLatestExchangeRatesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all latest updated exchange rates across all providers.
+    /// Returns the most recently updated rate (by Created timestamp) for each currency pair.
+    /// Useful when multiple providers publish rates for the same ValidDate at different times.
+    /// </summary>
+    Task<IEnumerable<AllLatestUpdatedExchangeRatesView>> GetAllLatestUpdatedExchangeRatesAsync(CancellationToken cancellationToken = default);
 }

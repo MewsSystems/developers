@@ -1,8 +1,7 @@
 namespace DomainLayer.Interfaces.Repositories;
 
 /// <summary>
-/// Repository for accessing exchange rate fetch logs.
-/// Note: This is primarily for read-only queries and monitoring.
+/// Repository for accessing and managing exchange rate fetch logs.
 /// </summary>
 public interface IExchangeRateFetchLogRepository
 {
@@ -32,6 +31,35 @@ public interface IExchangeRateFetchLogRepository
     Task<IEnumerable<FetchLogEntry>> GetLogsByDateRangeAsync(
         DateTimeOffset startDate,
         DateTimeOffset endDate,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Starts a new fetch log entry for tracking provider fetch operations.
+    /// </summary>
+    /// <param name="providerId">The ID of the exchange rate provider</param>
+    /// <param name="requestedBy">Optional ID of the entity that requested the fetch</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The ID of the created fetch log entry</returns>
+    Task<long> StartFetchLogAsync(
+        int providerId,
+        int? requestedBy = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Completes a fetch log entry with the results of the fetch operation.
+    /// </summary>
+    /// <param name="logId">The ID of the fetch log entry to complete</param>
+    /// <param name="status">The status of the fetch operation (e.g., "Success", "Failed")</param>
+    /// <param name="ratesImported">Number of new rates imported</param>
+    /// <param name="ratesUpdated">Number of existing rates updated</param>
+    /// <param name="errorMessage">Error message if the fetch failed</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    Task CompleteFetchLogAsync(
+        long logId,
+        string status,
+        int? ratesImported = null,
+        int? ratesUpdated = null,
+        string? errorMessage = null,
         CancellationToken cancellationToken = default);
 }
 

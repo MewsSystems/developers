@@ -1,4 +1,5 @@
 using DataLayer;
+using DataLayer.Dapper;
 using DomainLayer.Interfaces.Repositories;
 
 namespace InfrastructureLayer.Persistence.Adapters;
@@ -10,10 +11,14 @@ namespace InfrastructureLayer.Persistence.Adapters;
 public class FetchLogRepositoryAdapter : IExchangeRateFetchLogRepository
 {
     private readonly IUnitOfWork _dataLayerUnitOfWork;
+    private readonly IStoredProcedureService _storedProcedureService;
 
-    public FetchLogRepositoryAdapter(IUnitOfWork dataLayerUnitOfWork)
+    public FetchLogRepositoryAdapter(
+        IUnitOfWork dataLayerUnitOfWork,
+        IStoredProcedureService storedProcedureService)
     {
         _dataLayerUnitOfWork = dataLayerUnitOfWork;
+        _storedProcedureService = storedProcedureService;
     }
 
     public async Task<IEnumerable<FetchLogEntry>> GetRecentLogsAsync(
@@ -49,6 +54,35 @@ public class FetchLogRepositoryAdapter : IExchangeRateFetchLogRepository
             endDate,
             cancellationToken);
         return logs.Select(MapToFetchLogEntry);
+    }
+
+    public async Task<long> StartFetchLogAsync(
+        int providerId,
+        int? requestedBy = null,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _storedProcedureService.StartFetchLogAsync(
+            providerId,
+            requestedBy,
+            cancellationToken);
+        return result.LogId;
+    }
+
+    public async Task CompleteFetchLogAsync(
+        long logId,
+        string status,
+        int? ratesImported = null,
+        int? ratesUpdated = null,
+        string? errorMessage = null,
+        CancellationToken cancellationToken = default)
+    {
+        await _storedProcedureService.CompleteFetchLogAsync(
+            logId,
+            status,
+            ratesImported,
+            ratesUpdated,
+            errorMessage,
+            cancellationToken);
     }
 
     private static FetchLogEntry MapToFetchLogEntry(DataLayer.Entities.ExchangeRateFetchLog log)

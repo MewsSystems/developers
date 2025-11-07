@@ -1,8 +1,7 @@
 namespace DomainLayer.Interfaces.Repositories;
 
 /// <summary>
-/// Repository for accessing error logs.
-/// Note: This is primarily for read-only queries and monitoring.
+/// Repository for accessing and managing error logs.
 /// </summary>
 public interface IErrorLogRepository
 {
@@ -26,6 +25,24 @@ public interface IErrorLogRepository
     Task<IEnumerable<ErrorLogEntry>> GetErrorsByDateRangeAsync(
         DateTimeOffset startDate,
         DateTimeOffset endDate,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Logs an error to the database.
+    /// </summary>
+    /// <param name="severity">The severity level (e.g., "Error", "Warning", "Critical")</param>
+    /// <param name="source">The source of the error (e.g., component or class name)</param>
+    /// <param name="message">The error message</param>
+    /// <param name="exception">Optional exception details</param>
+    /// <param name="stackTrace">Optional stack trace</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The ID of the created error log entry</returns>
+    Task<long> LogErrorAsync(
+        string severity,
+        string source,
+        string message,
+        string? exception = null,
+        string? stackTrace = null,
         CancellationToken cancellationToken = default);
 }
 

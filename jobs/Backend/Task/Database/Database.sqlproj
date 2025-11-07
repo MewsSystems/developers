@@ -89,6 +89,8 @@
     <Build Include="View\System\vw_ErrorSummary.sql" />
     <Build Include="View\ExchangeRate\vw_CurrencyPairAvailability.sql" />
     <Build Include="View\System\vw_SystemHealthDashboard.sql" />
+    <Build Include="View\ExchangeRate\vw_AllLatestExchangeRates.sql" />
+    <Build Include="View\ExchangeRate\vw_AllLatestUpdatedExchangeRates.sql" />
     <Build Include="Procedure\ExchangeRate\sp_BulkUpsertExchangeRates.sql" />
     <Build Include="Procedure\Audit\sp_StartFetchLog.sql" />
     <Build Include="Procedure\Audit\sp_CompleteFetchLog.sql" />

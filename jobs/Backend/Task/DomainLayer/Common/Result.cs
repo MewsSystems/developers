@@ -21,11 +21,18 @@ public class Result
         Error = error;
     }
 
-    public static Result Success() => new(true, null);
-    public static Result Failure(string error) => new(false, error);
+    protected Result(bool isSuccess, Common.Error? error)
+        : this(isSuccess, error?.ToString())
+    {
+    }
 
-    public static Result<T> Success<T>(T value) => new(true, value, null);
+    public static Result Success() => new(true, (string?)null);
+    public static Result Failure(string error) => new(false, error);
+    public static Result Failure(Common.Error error) => new(false, error);
+
+    public static Result<T> Success<T>(T value) => new(true, value, (string?)null);
     public static Result<T> Failure<T>(string error) => new(false, default, error);
+    public static Result<T> Failure<T>(Common.Error error) => new(false, default, error);
 }
 
 /// <summary>
@@ -41,4 +48,15 @@ public class Result<T> : Result
     {
         Value = value;
     }
+
+    protected internal Result(bool isSuccess, T? value, Common.Error? error)
+        : base(isSuccess, error)
+    {
+        Value = value;
+    }
+
+    // Static factory methods that hide base class methods
+    public new static Result<T> Success(T value) => new(true, value, (string?)null);
+    public new static Result<T> Failure(string error) => new(false, default, error);
+    public new static Result<T> Failure(Common.Error error) => new(false, default, error);
 }

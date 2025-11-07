@@ -5,6 +5,7 @@ using DomainLayer.Interfaces.Services;
 using Hangfire;
 using Hangfire.SqlServer;
 using Hangfire.Storage.SQLite;
+using InfrastructureLayer.Authentication;
 using InfrastructureLayer.BackgroundJobs;
 using InfrastructureLayer.BackgroundJobs.Jobs;
 using InfrastructureLayer.ExternalServices;
@@ -28,10 +29,14 @@ public static class InfrastructureLayerServiceExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        // Authentication
+        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IPasswordHasher, Services.BCryptPasswordHasher>();
+
         // Services
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IBackgroundJobService, BackgroundJobService>();
-        services.AddSingleton<IPasswordHasher, Services.BCryptPasswordHasher>();
 
         // Provider discovery
         services.AddSingleton<IProviderDiscoveryService, ProviderDiscoveryService>();

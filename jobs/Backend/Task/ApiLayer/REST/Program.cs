@@ -1,3 +1,4 @@
+using System.Text;
 using ApplicationLayer;
 using Common.Interfaces;
 using ConfigurationLayer.Interface;
@@ -9,8 +10,13 @@ using EuropeanCentralBank;
 using Hangfire;
 using Hangfire.Dashboard;
 using InfrastructureLayer;
+using InfrastructureLayer.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using REST.Middleware;
 using RomanianNationalBank;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,8 +83,80 @@ builder.Services.AddSingleton<IExchangeRateProvider>(sp =>
 // ============================================================
 builder.Services.AddControllers();
 
-// OpenAPI/Swagger
-builder.Services.AddOpenApi();
+// ============================================================
+// AUTHENTICATION & AUTHORIZATION
+// ============================================================
+// Configure JWT authentication
+var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
+    ?? throw new InvalidOperationException("JWT settings not found in configuration");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+        ClockSkew = TimeSpan.Zero // Remove default 5-minute clock skew
+    };
+});
+
+builder.Services.AddAuthorization();
+
+// ============================================================
+// SIGNALR
+// ============================================================
+builder.Services.AddSignalR();
+
+// Register notification service for real-time updates
+builder.Services.AddScoped<ApplicationLayer.Common.Interfaces.IExchangeRatesNotificationService,
+    REST.Services.ExchangeRatesNotificationService>();
+
+// OpenAPI/Swagger with comprehensive documentation
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Info = new()
+        {
+            Title = "Exchange Rate Provider API",
+            Version = "v1",
+            Description = """
+                RESTful API for managing exchange rate providers and exchange rates.
+
+                ## Features
+                - Exchange rate management (query, create, update)
+                - Provider management (activate/deactivate, health monitoring)
+                - Currency management
+                - User authentication and authorization
+                - System health monitoring
+
+                ## Areas
+                - **Exchange Rates**: Query exchange rates with filtering and conversion
+                - **Providers**: Manage exchange rate data providers
+                - **Currencies**: Manage supported currencies
+                - **Users**: User management and authentication
+                - **System Health**: Monitor system and provider health
+                """,
+            Contact = new()
+            {
+                Name = "API Support",
+                Email = "support@example.com"
+            }
+        };
+        return Task.CompletedTask;
+    });
+});
 
 // ============================================================
 // BUILD APPLICATION
@@ -122,10 +200,24 @@ if (useInMemoryDatabase)
 // ============================================================
 // MIDDLEWARE PIPELINE
 // ============================================================
+// Global exception handler (must be first to catch all exceptions)
+app.UseGlobalExceptionHandler();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Map OpenAPI specification endpoint
     app.MapOpenApi();
+
+    // Scalar provides a beautiful API documentation UI
+    // Access at: /scalar/v1
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("Exchange Rate Provider API")
+            .WithTheme(ScalarTheme.Purple)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
 }
 
 app.UseHttpsRedirection();
@@ -139,9 +231,15 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     Authorization = Array.Empty<IDashboardAuthorizationFilter>() // Allow all in development
 });
 
+// Authentication must come before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Map SignalR hub for real-time exchange rate updates
+// Access at: /hubs/exchange-rates
+app.MapHub<REST.Hubs.ExchangeRatesHub>("/hubs/exchange-rates");
 
 // ============================================================
 // INITIALIZE BACKGROUND JOBS

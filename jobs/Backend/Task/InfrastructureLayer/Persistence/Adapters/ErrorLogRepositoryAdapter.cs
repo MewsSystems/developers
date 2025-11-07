@@ -1,4 +1,5 @@
 using DataLayer;
+using DataLayer.Dapper;
 using DomainLayer.Interfaces.Repositories;
 
 namespace InfrastructureLayer.Persistence.Adapters;
@@ -10,10 +11,14 @@ namespace InfrastructureLayer.Persistence.Adapters;
 public class ErrorLogRepositoryAdapter : IErrorLogRepository
 {
     private readonly IUnitOfWork _dataLayerUnitOfWork;
+    private readonly IStoredProcedureService _storedProcedureService;
 
-    public ErrorLogRepositoryAdapter(IUnitOfWork dataLayerUnitOfWork)
+    public ErrorLogRepositoryAdapter(
+        IUnitOfWork dataLayerUnitOfWork,
+        IStoredProcedureService storedProcedureService)
     {
         _dataLayerUnitOfWork = dataLayerUnitOfWork;
+        _storedProcedureService = storedProcedureService;
     }
 
     public async Task<IEnumerable<ErrorLogEntry>> GetRecentErrorsAsync(
@@ -42,6 +47,23 @@ public class ErrorLogRepositoryAdapter : IErrorLogRepository
             endDate,
             cancellationToken);
         return errors.Select(MapToErrorLogEntry);
+    }
+
+    public async Task<long> LogErrorAsync(
+        string severity,
+        string source,
+        string message,
+        string? exception = null,
+        string? stackTrace = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await _storedProcedureService.LogErrorAsync(
+            severity,
+            source,
+            message,
+            exception,
+            stackTrace,
+            cancellationToken);
     }
 
     private static ErrorLogEntry MapToErrorLogEntry(DataLayer.Entities.ErrorLog error)

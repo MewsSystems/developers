@@ -50,12 +50,12 @@ public class DomainUnitOfWork : IUnitOfWork
 
     public DomainLayer.Interfaces.Repositories.IExchangeRateFetchLogRepository FetchLogs
     {
-        get { return _fetchLogs ??= new FetchLogRepositoryAdapter(_dataLayerUnitOfWork); }
+        get { return _fetchLogs ??= new FetchLogRepositoryAdapter(_dataLayerUnitOfWork, _storedProcedureService); }
     }
 
     public DomainLayer.Interfaces.Repositories.IErrorLogRepository ErrorLogs
     {
-        get { return _errorLogs ??= new ErrorLogRepositoryAdapter(_dataLayerUnitOfWork); }
+        get { return _errorLogs ??= new ErrorLogRepositoryAdapter(_dataLayerUnitOfWork, _storedProcedureService); }
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

@@ -71,6 +71,18 @@ public class ViewQueryRepositoryAdapter : ISystemViewQueries
         return dataLayerViews.Select(MapCurrencyPairAvailability);
     }
 
+    public async Task<IEnumerable<AllLatestExchangeRatesView>> GetAllLatestExchangeRatesAsync(CancellationToken cancellationToken = default)
+    {
+        var dataLayerViews = await _viewQueryService.GetAllLatestExchangeRatesAsync(cancellationToken);
+        return dataLayerViews.Select(MapAllLatestExchangeRates);
+    }
+
+    public async Task<IEnumerable<AllLatestUpdatedExchangeRatesView>> GetAllLatestUpdatedExchangeRatesAsync(CancellationToken cancellationToken = default)
+    {
+        var dataLayerViews = await _viewQueryService.GetAllLatestUpdatedExchangeRatesAsync(cancellationToken);
+        return dataLayerViews.Select(MapAllLatestUpdatedExchangeRates);
+    }
+
     // Mapping methods from DataLayer DTOs to Domain view models
     private static CurrentExchangeRateView MapCurrentExchangeRate(DataLayer.DTOs.CurrentExchangeRateView dto)
     {
@@ -203,6 +215,53 @@ public class ViewQueryRepositoryAdapter : ISystemViewQueries
             AvailableProviders = dto.AvailableProviders,
             LatestDate = dto.LatestDate,
             DaysSinceUpdate = dto.DaysSinceUpdate
+        };
+    }
+
+    private static AllLatestExchangeRatesView MapAllLatestExchangeRates(DataLayer.DTOs.AllLatestExchangeRatesView dto)
+    {
+        return new AllLatestExchangeRatesView
+        {
+            Id = dto.Id,
+            ProviderId = dto.ProviderId,
+            ProviderCode = dto.ProviderCode,
+            ProviderName = dto.ProviderName,
+            BaseCurrencyCode = dto.BaseCurrencyCode,
+            BaseCurrencyId = dto.BaseCurrencyId,
+            TargetCurrencyCode = dto.TargetCurrencyCode,
+            TargetCurrencyId = dto.TargetCurrencyId,
+            Rate = dto.Rate,
+            Multiplier = dto.Multiplier,
+            RatePerUnit = dto.RatePerUnit,
+            ValidDate = dto.ValidDate,
+            Created = dto.Created,
+            Modified = dto.Modified,
+            DaysOld = dto.DaysOld,
+            FreshnessStatus = dto.FreshnessStatus
+        };
+    }
+
+    private static AllLatestUpdatedExchangeRatesView MapAllLatestUpdatedExchangeRates(DataLayer.DTOs.AllLatestUpdatedExchangeRatesView dto)
+    {
+        return new AllLatestUpdatedExchangeRatesView
+        {
+            Id = dto.Id,
+            ProviderId = dto.ProviderId,
+            ProviderCode = dto.ProviderCode,
+            ProviderName = dto.ProviderName,
+            BaseCurrencyCode = dto.BaseCurrencyCode,
+            BaseCurrencyId = dto.BaseCurrencyId,
+            TargetCurrencyCode = dto.TargetCurrencyCode,
+            TargetCurrencyId = dto.TargetCurrencyId,
+            Rate = dto.Rate,
+            Multiplier = dto.Multiplier,
+            RatePerUnit = dto.RatePerUnit,
+            ValidDate = dto.ValidDate,
+            Created = dto.Created,
+            Modified = dto.Modified,
+            DaysOld = dto.DaysOld,
+            MinutesSinceUpdate = dto.MinutesSinceUpdate,
+            UpdateFreshness = dto.UpdateFreshness
         };
     }
 }

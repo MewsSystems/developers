@@ -22,4 +22,12 @@ public interface IStoredProcedureService
         int? ratesUpdated = null,
         string? errorMessage = null,
         CancellationToken cancellationToken = default);
+
+    Task<long> LogErrorAsync(
+        string severity,
+        string source,
+        string message,
+        string? exception = null,
+        string? stackTrace = null,
+        CancellationToken cancellationToken = default);
 }

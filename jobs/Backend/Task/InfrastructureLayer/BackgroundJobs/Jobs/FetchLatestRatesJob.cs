@@ -1,3 +1,4 @@
+using ApplicationLayer.Common.Interfaces;
 using ConfigurationLayer.Interface;
 using DomainLayer.Interfaces.Persistence;
 using DomainLayer.Interfaces.Services;
@@ -19,6 +20,7 @@ public class FetchLatestRatesJob
     private readonly IMediator _mediator;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IConfigurationService _configService;
+    private readonly IExchangeRatesNotificationService _notificationService;
     private readonly ILogger<FetchLatestRatesJob> _logger;
 
     public FetchLatestRatesJob(
@@ -27,6 +29,7 @@ public class FetchLatestRatesJob
         IMediator mediator,
         IDateTimeProvider dateTimeProvider,
         IConfigurationService configService,
+        IExchangeRatesNotificationService notificationService,
         ILogger<FetchLatestRatesJob> logger)
     {
         _providerDiscovery = providerDiscovery;
@@ -34,6 +37,7 @@ public class FetchLatestRatesJob
         _mediator = mediator;
         _dateTimeProvider = dateTimeProvider;
         _configService = configService;
+        _notificationService = notificationService;
         _logger = logger;
     }
 
@@ -41,6 +45,7 @@ public class FetchLatestRatesJob
     {
         _logger.LogInformation("Starting latest rates fetch for provider {ProviderCode}", providerCode);
 
+        long? fetchLogId = null;
         try
         {
             // Get provider adapter
@@ -75,6 +80,12 @@ public class FetchLatestRatesJob
                 return;
             }
 
+            // Start fetch log tracking
+            fetchLogId = await _unitOfWork.FetchLogs.StartFetchLogAsync(
+                provider.Id,
+                requestedBy: null,
+                cancellationToken);
+
             // Fetch latest rates
             var response = await providerAdapter.FetchLatestRatesAsync(cancellationToken);
 
@@ -84,6 +95,15 @@ public class FetchLatestRatesJob
                     "Failed to fetch latest rates for {ProviderCode}: {Error}",
                     providerCode,
                     response.ErrorMessage);
+
+                // Complete fetch log with failure
+                await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                    fetchLogId.Value,
+                    "Failed",
+                    ratesImported: 0,
+                    ratesUpdated: 0,
+                    errorMessage: response.ErrorMessage,
+                    cancellationToken);
 
                 provider.RecordFailedFetch(response.ErrorMessage);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -159,6 +179,18 @@ public class FetchLatestRatesJob
                     upsertResult.Value.RatesUpdated,
                     upsertResult.Value.RatesUnchanged);
 
+                // Complete fetch log with success
+                if (fetchLogId.HasValue)
+                {
+                    await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                        fetchLogId.Value,
+                        "Success",
+                        ratesImported: upsertResult.Value.RatesInserted,
+                        ratesUpdated: upsertResult.Value.RatesUpdated,
+                        errorMessage: null,
+                        cancellationToken);
+                }
+
                 // Update provider health
                 provider.RecordSuccessfulFetch(upsertResult.Value.RatesInserted + upsertResult.Value.RatesUpdated);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -166,6 +198,16 @@ public class FetchLatestRatesJob
                 _logger.LogInformation(
                     "Successfully processed latest rates for {ProviderCode}",
                     providerCode);
+
+                // Notify all connected SignalR clients about the update
+                try
+                {
+                    await _notificationService.NotifyLatestRatesUpdatedAsync(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending SignalR notification after latest rates fetch for {ProviderCode}", providerCode);
+                }
             }
             else
             {
@@ -173,6 +215,18 @@ public class FetchLatestRatesJob
                     "Failed to upsert rates for {ProviderCode}: {Error}",
                     providerCode,
                     upsertResult.Error);
+
+                // Complete fetch log with failure
+                if (fetchLogId.HasValue)
+                {
+                    await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                        fetchLogId.Value,
+                        "Failed",
+                        ratesImported: 0,
+                        ratesUpdated: 0,
+                        errorMessage: upsertResult.Error,
+                        cancellationToken);
+                }
 
                 provider.RecordFailedFetch(upsertResult.Error);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -184,6 +238,41 @@ public class FetchLatestRatesJob
                 ex,
                 "Unexpected error fetching latest rates for {ProviderCode}",
                 providerCode);
+
+            // Complete fetch log with error if it was started
+            if (fetchLogId.HasValue)
+            {
+                try
+                {
+                    await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                        fetchLogId.Value,
+                        "Error",
+                        ratesImported: 0,
+                        ratesUpdated: 0,
+                        errorMessage: ex.Message,
+                        cancellationToken);
+                }
+                catch
+                {
+                    // Ignore errors in error handling
+                }
+            }
+
+            // Log error to database
+            try
+            {
+                await _unitOfWork.ErrorLogs.LogErrorAsync(
+                    "Error",
+                    "FetchLatestRatesJob",
+                    $"Unexpected error fetching latest rates for {providerCode}",
+                    ex.ToString(),
+                    ex.StackTrace,
+                    cancellationToken);
+            }
+            catch
+            {
+                // Ignore errors in error logging
+            }
         }
     }
 }
