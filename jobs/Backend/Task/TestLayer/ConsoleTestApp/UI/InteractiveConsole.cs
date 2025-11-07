@@ -35,6 +35,8 @@ public class InteractiveConsole
                 var input = AnsiConsole.Prompt(
                     new TextPrompt<string>("[bold cyan1]>[/]")
                         .AllowEmpty()
+                        .AddChoices(CommandParser.GetAutoCompleteOptions())
+                        .ShowChoices(false)
                 );
 
                 if (string.IsNullOrWhiteSpace(input))

@@ -128,7 +128,7 @@ public static class DisplayUtilities
         // Streaming
         table.AddRow("[bold yellow]═══ STREAMING ═══[/]", "", "");
         table.AddRow(
-            "[yellow]stream-start[/]",
+            "[yellow]stream / stream-start[/]",
             "Start real-time streaming for a protocol",
             "stream rest\nstream-start grpc"
         );

@@ -34,6 +34,17 @@ public class StartupEntertainment
             var elapsed = DateTime.UtcNow - startTime;
             var progressPercentage = (int)((elapsed.TotalSeconds / _settings.StartupDurationSeconds) * 100);
 
+            // Clear screen except header before redrawing
+            if (factIndex > 0)
+            {
+                Console.SetCursorPosition(0, 3);
+                for (int i = 3; i < Console.WindowHeight; i++)
+                {
+                    Console.Write(new string(' ', Console.WindowWidth));
+                }
+                Console.SetCursorPosition(0, 3);
+            }
+
             // Display progress bar
             DisplayProgressBar(progressPercentage, remaining);
 
@@ -52,9 +63,6 @@ public class StartupEntertainment
             {
                 await Task.Delay(TimeSpan.FromSeconds(_settings.FactIntervalSeconds), cancellationToken);
                 factIndex++;
-
-                // Clear for next update (except header)
-                Console.SetCursorPosition(0, 8);
             }
             catch (TaskCanceledException)
             {
@@ -75,22 +83,10 @@ public class StartupEntertainment
         rule.Justification = Justify.Center;
         AnsiConsole.Write(rule);
         AnsiConsole.WriteLine();
-
-        var panel = new Panel("[yellow]⏳ Initializing APIs and fetching historical data...[/]")
-        {
-            Border = BoxBorder.Rounded,
-            BorderStyle = new Style(Color.Yellow)
-        };
-        AnsiConsole.Write(panel);
-        AnsiConsole.WriteLine();
     }
 
     private static void DisplayProgressBar(int percentage, TimeSpan remaining)
     {
-        var progressRule = new Rule($"[grey]Progress: {percentage}%[/]");
-        progressRule.Justification = Justify.Left;
-        AnsiConsole.Write(progressRule);
-
         AnsiConsole.Progress()
             .AutoClear(false)
             .Columns(new ProgressColumn[]
@@ -116,13 +112,14 @@ public class StartupEntertainment
             Header = new PanelHeader($"[cyan]💡 DID YOU KNOW? (Fact #{factNumber})[/]"),
             Border = BoxBorder.Double,
             BorderStyle = new Style(foreground: Spectre.Console.Color.Cyan1),
-            Padding = new Padding(2, 1)
+            Padding = new Padding(2, 1),
+            Expand = true
         };
         AnsiConsole.Write(factPanel);
         AnsiConsole.WriteLine();
     }
 
-    private static void DisplayApiStatus(double elapsedSeconds)
+    private void DisplayApiStatus(double elapsedSeconds)
     {
         var table = new Table()
         {
@@ -135,10 +132,10 @@ public class StartupEntertainment
         table.AddColumn(new TableColumn("[bold]Details[/]"));
 
         // Simulate progressive startup
-        var restReady = elapsedSeconds > 5;
-        var soapReady = elapsedSeconds > 8;
-        var grpcReady = elapsedSeconds > 6;
-        var historicalProgress = Math.Min(100, (int)((elapsedSeconds / 60) * 100)); // Simulate 60s for historical fetch
+        var restReady = elapsedSeconds >= _settings.StartupDurationSeconds - 5;
+        var soapReady = elapsedSeconds >= _settings.StartupDurationSeconds - 5;
+        var grpcReady = elapsedSeconds >= _settings.StartupDurationSeconds - 5;
+        var historicalProgress = Math.Min(100, (int)((elapsedSeconds / _settings.StartupDurationSeconds) * 100));
 
         table.AddRow(
             "[cyan]REST[/]",

@@ -3,6 +3,7 @@ using DataLayer.DTOs;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace DataLayer.Dapper;
@@ -74,19 +75,45 @@ public class StoredProcedureService : IStoredProcedureService
 
         for (int retry = 0; retry <= maxRetries; retry++)
         {
-            try
+            var result = new BulkUpsertResult
             {
-                return await ExecuteBulkUpsertWithTransactionAsync(providerId, validDate, rates, cancellationToken);
-            }
-            catch (Microsoft.Data.Sqlite.SqliteException ex) when (
-                (ex.SqliteErrorCode == 5 || ex.SqliteErrorCode == 6) && // SQLITE_BUSY or SQLITE_LOCKED
-                retry < maxRetries)
+                InsertedCount = 0,
+                TotalInJson = 0,
+                ProcessedCount = 0,
+                SkippedCount = 0,
+                UpdatedCount = 0,
+                Status = ""
+            };
+            var chunks = rates.Chunk(16);
+            var index = 0;
+            Debug.WriteLine($"Started processing for provider {providerId}.");
+            LETS_TRY_AGAIN:
+            for (var i = index; i < chunks.Count(); i++)
             {
-                // Exponential backoff with jitter: 50-150ms, 100-300ms, 200-600ms, 400-1200ms, 800-2400ms
-                var delayMs = (50 * Math.Pow(2, retry)) + random.Next(0, (int)(50 * Math.Pow(2, retry)));
-                await Task.Delay((int)delayMs, cancellationToken);
-                continue;
+                try
+                {
+                    await Task.Delay(random.Next(0, 1000));
+                    Debug.WriteLine($"Processing chunk {i} of {chunks.Count()} for provider {providerId}.");
+                    var chunkResult = await ExecuteBulkUpsertWithTransactionAsync(providerId, validDate, chunks.ElementAt(i), cancellationToken);
+                    result.InsertedCount += chunkResult.InsertedCount;
+                    result.TotalInJson += chunkResult.TotalInJson;
+                    result.ProcessedCount += chunkResult.ProcessedCount;
+                    result.SkippedCount += chunkResult.SkippedCount;
+                    result.UpdatedCount += chunkResult.UpdatedCount;
+                    result.Status = chunkResult.Status;
+                    Debug.WriteLine($"Completed processing chunk {i} of {chunks.Count()} for provider {providerId}.");
+                    await Task.Delay(random.Next(0, 1000));
+                }
+                catch (Microsoft.Data.Sqlite.SqliteException ex) when (
+                        (ex.SqliteErrorCode == 5 || ex.SqliteErrorCode == 6) && // SQLITE_BUSY or SQLITE_LOCKED
+                        retry < maxRetries)
+                {
+                    Debug.WriteLine($"Failed processing chunk {i} of {chunks.Count()} for provider {providerId}.");
+                    goto LETS_TRY_AGAIN;
+                }
             }
+            Debug.WriteLine($"Completed processing for provider {providerId}.");
+            return result;
         }
 
         throw new InvalidOperationException("Bulk upsert failed after multiple retries due to database locking");
