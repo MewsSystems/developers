@@ -1,0 +1,114 @@
+trigger:
+  - master
+  - release/*
+
+resources:
+- repo: self
+
+parameters:
+  - name: SubscriptionNameQa
+    default: 'pipelines-qa-dev'
+    type: string
+
+variables:
+  defaultImageRepository: 'mews/exchangerateupdater'
+  defaultDockerRegistryServiceConnection: 'cd1dd5c0-613c-4bbe-ba93-7604a3311b6e'
+  containerRegistry: 'junocr'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  sourcePath: .\src
+  buildConfiguration: 'Release'
+  buildConfigurationPro: 'prod'
+
+stages:
+  - stage: Build
+    displayName: Build image
+    jobs:
+    - job: DockerImage  
+      pool:
+        vmImage: 'ubuntu-latest'
+      displayName: Build and push Docker image
+      steps:
+
+      - task: PowerShell@2
+        displayName: 'Version generation'
+        inputs:
+          targetType: 'inline'
+          workingDirectory: $(System.DefaultWorkingDirectory)
+          script: |
+            $xml = [Xml] (Get-Content '.\Directory.Build.props')
+            $version = $xml.Project.PropertyGroup.Version
+            $version = "$($version).$($Env:BUILD_BUILDNUMBER)".Trim()
+            write-Host $version
+            Write-Output("##vso[build.updatebuildnumber]$version")
+
+      - powershell: |
+          $xml = [Xml] (Get-Content '.\Directory.Build.props')
+          $version = $xml.Project.PropertyGroup.Version
+          $version = "$($version)".Trim()
+
+          echo "##vso[task.setvariable variable=version]$version"
+          echo "##vso[task.setvariable variable=version;isOutput=true]$version"
+          echo "##vso[task.setvariable variable=defaultImageTag]$(Build.BuildNumber)"
+          echo "##vso[task.setvariable variable=defaultImageTag;isOutput=true]$(Build.BuildNumber)"
+        displayName: Get api project version
+        name: ProjectVariable
+
+      - task: Docker@2
+        displayName: Login to ACR
+        inputs:
+          command: login
+          containerRegistry: $(containerRegistry)
+
+      - task: Docker@2
+        displayName: Build and push an image to container registry (default)
+        inputs:
+          command: buildAndPush
+          repository: $(defaultImageRepository)
+          dockerfile: $(dockerfilePath)
+          containerRegistry: $(containerRegistry)
+          buildContext: '$(Build.Repository.LocalPath)'
+          tags: $(defaultImageTag)
+
+  - stage: TerraformCopy
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Publish terraform files
+    jobs:
+    - job: TerraformCopyFiles
+      displayName: Publish terraform files
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+
+      - powershell: |
+          $xml = [Xml] (Get-Content '.\Directory.Build.props')
+          $version = $xml.Project.PropertyGroup.Version
+          $version = "$($version)".Trim()
+
+          $content = Get-Content -Path .\deployment\scripts\updateReleaseVersion.ps1
+          $content[0] = '$version = "{0}"' -f $version
+          Set-Content -Path .\deployment\scripts\updateReleaseVersion.ps1 -Value $content
+
+      - task: CopyFiles@2
+        displayName: 'Copy Files to: $(build.ArtifactStagingDirectory)/terraformProd'
+        inputs:
+          SourceFolder: deployment/terraformProd
+          TargetFolder: '$(build.ArtifactStagingDirectory)/terraformProd'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: terraformProd'
+        inputs:
+          artifactName: $(buildConfigurationPro)Terraform
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/terraformProd'
+
+      - task: CopyFiles@2
+        displayName: 'Copy Files to: $(build.ArtifactStagingDirectory)/scripts'
+        inputs:
+          SourceFolder: deployment/scripts
+          TargetFolder: '$(build.ArtifactStagingDirectory)/scripts'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: scripts'
+        inputs:
+          artifactName: scripts
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/scripts'
