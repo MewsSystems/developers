@@ -857,7 +857,7 @@ dotnet build Database.sqlproj -c Release
 ```powershell
 sqlpackage /Action:Publish `
   /SourceFile:"Database\bin\Release\Database.dacpac" `
-  /TargetConnectionString:"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=ExchangeRateUpdaterTest;" `
+  /TargetConnectionString:"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=ExchangeRateUpdaterTestREST;" `
   /p:IncludeTransactionalScripts=True `
   /p:BlockOnPossibleDataLoss=True
 ```
@@ -866,7 +866,7 @@ sqlpackage /Action:Publish `
 ```bash
 sqlpackage /Action:Publish \
   /SourceFile:"Database/bin/Release/Database.dacpac" \
-  /TargetConnectionString:"Server=localhost,1433;User Id=sa;Password=YourStrong@Passw0rd;Database=ExchangeRateUpdaterTest;TrustServerCertificate=True;" \
+  /TargetConnectionString:"Server=localhost,1433;User Id=sa;Password=YourStrong@Passw0rd;Database=ExchangeRateUpdaterTestREST;TrustServerCertificate=True;" \
   /p:IncludeTransactionalScripts=True \
   /p:BlockOnPossibleDataLoss=True
 ```
@@ -877,7 +877,7 @@ sqlpackage /Action:Publish \
 ```powershell
 sqlpackage /Action:Publish `
   /SourceFile:"Database\bin\Release\Database.dacpac" `
-  /TargetConnectionString:"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=ExchangeRateUpdaterMicroTest;" `
+  /TargetConnectionString:"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=ExchangeRateUpdaterTestgRPC;" `
   /p:IncludeTransactionalScripts=True `
   /p:BlockOnPossibleDataLoss=True
 ```
@@ -886,7 +886,27 @@ sqlpackage /Action:Publish `
 ```bash
 sqlpackage /Action:Publish \
   /SourceFile:"Database/bin/Release/Database.dacpac" \
-  /TargetConnectionString:"Server=localhost,1433;User Id=sa;Password=YourStrong@Passw0rd;Database=ExchangeRateUpdaterMicroTest;TrustServerCertificate=True;" \
+  /TargetConnectionString:"Server=localhost,1433;User Id=sa;Password=YourStrong@Passw0rd;Database=ExchangeRateUpdaterTestgRPC;TrustServerCertificate=True;" \
+  /p:IncludeTransactionalScripts=True \
+  /p:BlockOnPossibleDataLoss=True
+```
+
+#### Publish to ExchangeRateUpdaterMicroTest (SOAP)
+
+**Windows (LocalDB):**
+```powershell
+sqlpackage /Action:Publish `
+  /SourceFile:"Database\bin\Release\Database.dacpac" `
+  /TargetConnectionString:"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=ExchangeRateUpdaterTestSOAP;" `
+  /p:IncludeTransactionalScripts=True `
+  /p:BlockOnPossibleDataLoss=True
+```
+
+**Mac/Linux (Docker):**
+```bash
+sqlpackage /Action:Publish \
+  /SourceFile:"Database/bin/Release/Database.dacpac" \
+  /TargetConnectionString:"Server=localhost,1433;User Id=sa;Password=YourStrong@Passw0rd;Database=ExchangeRateUpdaterTestSOAP;TrustServerCertificate=True;" \
   /p:IncludeTransactionalScripts=True \
   /p:BlockOnPossibleDataLoss=True
 ```
