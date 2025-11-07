@@ -1,43 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using ExchangeRateUpdater.Api;
+using ExchangeRateUpdater.Infrastructure;
 
-namespace ExchangeRateUpdater
+namespace ExchangeRateUpdater;
+
+public class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        private static IEnumerable<Currency> currencies = new[]
-        {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
+        var builder = WebApplication.CreateBuilder(args);
 
-        public static void Main(string[] args)
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
         {
-            try
+            c.SwaggerDoc("v1", new()
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
-
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
-                foreach (var rate in rates)
+                Title = "Exchange Rate API",
+                Version = "v1",
+                Description = "API for fetching exchange rates from Czech National Bank",
+                Contact = new()
                 {
-                    Console.WriteLine(rate.ToString());
+                    Name = "Exchange Rate Updater",
+                    Url = new Uri("https://github.com/MewsSystems/developers")
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
-            }
+            });
+        });
 
-            Console.ReadLine();
+        builder.Services.AddExchangeRateProvider(builder.Configuration);
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Exchange Rate API v1");
+                c.RoutePrefix = string.Empty;
+            });
         }
+
+        app.UseHttpsRedirection();
+
+        app.MapExchangeRateEndpoints();
+
+        app.Run();
     }
 }
