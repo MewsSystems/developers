@@ -1,32 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ExchangeRateUpdater.Common;
+using ExchangeRateUpdater.Configuration;
+using ExchangeRateUpdater.Extensions;
+using ExchangeRateUpdater.Services;
+using ExchangeRateUpdater.Services.Interfaces;
+using ExchangeRateUpdater.Services.Models;
+using ExchangeRateUpdater.Services.Models.External;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExchangeRateUpdater
 {
     public static class Program
     {
-        private static IEnumerable<Currency> currencies = new[]
+        public static async Task Main(string[] args)
         {
-            new Currency("USD"),
-            new Currency("EUR"),
-            new Currency("CZK"),
-            new Currency("JPY"),
-            new Currency("KES"),
-            new Currency("RUB"),
-            new Currency("THB"),
-            new Currency("TRY"),
-            new Currency("XYZ")
-        };
 
-        public static void Main(string[] args)
+            var builder = Host.CreateApplicationBuilder(args);
+            builder.Services.AddServices(builder.Configuration);
+            var app = builder.Build();
+
+            var serviceProvider = app.Services;
+            var currencies = GetCurrencies(builder.Configuration);
+            await GetExchangeRate(serviceProvider, currencies);
+            await app.RunAsync();
+        }
+
+        private static async Task GetExchangeRate(
+            IServiceProvider serviceProvider,
+            IEnumerable<Currency> currencies)
         {
             try
             {
-                var provider = new ExchangeRateProvider();
-                var rates = provider.GetExchangeRates(currencies);
+                var apiClient = serviceProvider.GetRequiredService<IApiClient<CnbRate>>();
+                var exchangeRateCache = serviceProvider.GetRequiredService<IExchangeRateCacheService>();
+                var logger = serviceProvider.GetRequiredService<ILogger<ExchangeRateProvider>>();
+                var dateTimeSource = serviceProvider.GetRequiredService<IDateTimeSource>();
 
-                Console.WriteLine($"Successfully retrieved {rates.Count()} exchange rates:");
+                var provider = new ExchangeRateProvider(
+                    apiClient,
+                    exchangeRateCache,
+                    logger);
+
+                var rates = await provider.GetExchangeRates(currencies);
+
+                Console.WriteLine($"Successfully retrieved {rates.Count} exchange rates at {dateTimeSource.UtcNow} UTC:");
                 foreach (var rate in rates)
                 {
                     Console.WriteLine(rate.ToString());
@@ -36,8 +56,15 @@ namespace ExchangeRateUpdater
             {
                 Console.WriteLine($"Could not retrieve exchange rates: '{e.Message}'.");
             }
+        }
 
-            Console.ReadLine();
+        private static IEnumerable<Currency> GetCurrencies(IConfiguration configuration)
+        {
+            var section = configuration
+                .GetSection(Constants.ExchangeRateConfiguration)
+                .Get<ExchangeRateConfiguration>();
+
+            return section!.CurrencyCodes.Select(code => new Currency(code));
         }
     }
 }
