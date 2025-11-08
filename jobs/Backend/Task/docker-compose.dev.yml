@@ -1,0 +1,17 @@
+services:
+  exchange-rate-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "5216:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+
+      - ExchangeRate__DefaultCacheExpiry=00:05:00
+      - ExchangeRate__MaxRetryAttempts=1
+
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Information
+    restart: unless-stopped

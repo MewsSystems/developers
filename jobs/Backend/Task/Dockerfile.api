@@ -1,0 +1,39 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+
+WORKDIR /src
+
+COPY ["ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj", "ExchangeRateUpdater.Api/"]
+COPY ["ExchangeRateUpdater.Console/ExchangeRateUpdater.Console.csproj", "ExchangeRateUpdater.Console/"]
+COPY ["ExchangeRateUpdater.Domain/ExchangeRateUpdater.Domain.csproj", "ExchangeRateUpdater.Domain/"]
+COPY ["ExchangeRateUpdater.Infrastructure/ExchangeRateUpdater.Infrastructure.csproj", "ExchangeRateUpdater.Infrastructure/"]
+
+RUN dotnet restore "ExchangeRateUpdater.Api/ExchangeRateUpdater.Api.csproj"
+
+COPY . .
+
+WORKDIR "/src/ExchangeRateUpdater.Api"
+RUN dotnet build "ExchangeRateUpdater.Api.csproj" -c Release -o /app/build
+
+WORKDIR "/src/ExchangeRateUpdater.Console"
+RUN dotnet build "ExchangeRateUpdater.Console.csproj" -c Release -o /app/build
+
+FROM build AS publish
+
+WORKDIR "/src/ExchangeRateUpdater.Api"
+RUN dotnet publish "ExchangeRateUpdater.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+WORKDIR "/src/ExchangeRateUpdater.Console"
+RUN dotnet publish "ExchangeRateUpdater.Console.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:8080
+
+ENTRYPOINT ["dotnet", "ExchangeRateUpdater.Api.dll"]
