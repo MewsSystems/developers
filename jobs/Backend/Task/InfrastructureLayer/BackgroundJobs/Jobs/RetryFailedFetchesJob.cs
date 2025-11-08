@@ -125,7 +125,7 @@ public class RetryFailedFetchesJob
             // Execute bulk upsert command
             var upsertCommand = new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.BulkUpsertExchangeRatesCommand(
                 provider.Id,
-                response.ValidDate,
+                response.Rates.Max(x => x.ValidDate),
                 rateItems);
 
             var upsertResult = await _mediator.Send(upsertCommand, cancellationToken);

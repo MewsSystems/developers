@@ -112,7 +112,7 @@ public class FetchLatestRatesJob
 
             // Check if rates for this ValidDate already exist
             var existingRates = await _unitOfWork.ExchangeRates
-                .GetByProviderAndDateAsync(provider.Id, response.ValidDate, cancellationToken);
+                .GetByProviderAndDateAsync(provider.Id, response.Rates.Max(x => x.ValidDate), cancellationToken);
 
             if (existingRates.Any())
             {
@@ -129,12 +129,12 @@ public class FetchLatestRatesJob
                     var retryDelay = TimeSpan.FromMinutes(defaultRetryDelayMinutes);
 
                     BackgroundJob.Schedule<RetryFailedFetchesJob>(
-                        job => job.ExecuteAsync(provider.Id, response.ValidDate, 1, cancellationToken),
+                        job => job.ExecuteAsync(provider.Id, response.Rates.Max(x => x.ValidDate), 1, cancellationToken),
                         retryDelay);
 
                     _logger.LogInformation(
                         "Rates for {ValidDate} already exist for {ProviderCode} (updated {TimeSince} ago). Scheduled retry in {Delay}",
-                        response.ValidDate,
+                        response.Rates.Max(x => x.ValidDate),
                         providerCode,
                         timeSinceUpdate,
                         retryDelay);
@@ -144,7 +144,7 @@ public class FetchLatestRatesJob
 
                 _logger.LogInformation(
                     "Rates for {ValidDate} exist but are stale ({TimeSince} old). Updating.",
-                    response.ValidDate,
+                    response.Rates.Max(x => x.ValidDate),
                     timeSinceUpdate);
             }
 
@@ -153,7 +153,7 @@ public class FetchLatestRatesJob
                 "Processing {Count} rates for {ProviderCode} with ValidDate {ValidDate}",
                 response.Rates.Count,
                 providerCode,
-                response.ValidDate);
+                response.Rates.Max(x => x.ValidDate));
 
             // Convert provider rates to command DTOs
             var rateItems = response.Rates.Select(r => new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.ExchangeRateItemDto(
@@ -165,7 +165,7 @@ public class FetchLatestRatesJob
             // Execute bulk upsert command
             var upsertCommand = new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.BulkUpsertExchangeRatesCommand(
                 provider.Id,
-                response.ValidDate,
+                response.Rates.Max(x => x.ValidDate),
                 rateItems);
 
             var upsertResult = await _mediator.Send(upsertCommand, cancellationToken);

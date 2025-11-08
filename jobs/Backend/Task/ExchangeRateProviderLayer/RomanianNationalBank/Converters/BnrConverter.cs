@@ -1,6 +1,7 @@
 using Common.DTOs;
 using Common.Interfaces;
 using RomanianNationalBank.Models;
+using System.Globalization;
 
 namespace RomanianNationalBank.Converters;
 
@@ -58,7 +59,7 @@ public class BnrConverter : IExchangeRateConverter<BnrDataSet>
             if (string.IsNullOrWhiteSpace(cube.Date))
                 continue;
 
-            if (!DateTime.TryParse(cube.Date, out var validDate))
+            if (!DateOnly.TryParse(cube.Date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate))
                 continue;
 
             foreach (var rate in cube.Rates)

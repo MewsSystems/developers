@@ -47,7 +47,7 @@ public class CnbConverter : IExchangeRateConverter<CnbExchangeRates>
         if (string.IsNullOrWhiteSpace(response.Date))
             throw new InvalidOperationException("CNB response date is missing");
 
-        if (!DateTime.TryParseExact(response.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate))
+        if (!DateOnly.TryParseExact(response.Date, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate))
             throw new InvalidOperationException($"CNB response date '{response.Date}' is not in expected format (DD.MM.YYYY)");
 
         var exchangeRates = new List<ExchangeRateDTO>();

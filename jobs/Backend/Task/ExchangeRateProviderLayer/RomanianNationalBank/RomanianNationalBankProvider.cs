@@ -157,7 +157,7 @@ public class RomanianNationalBankProvider : IExchangeRateProvider
         try
         {
             // Fetch current year's historical data
-            var currentYear = DateTime.Now.Year;
+            var currentYear = DateTime.UtcNow.Year;
             var historicalUrl = historicalUrlTemplate.Replace("{year}", currentYear.ToString());
 
             // Fetch XML from historical URL

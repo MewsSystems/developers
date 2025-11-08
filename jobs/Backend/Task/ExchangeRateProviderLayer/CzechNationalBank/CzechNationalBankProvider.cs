@@ -165,7 +165,7 @@ public class CzechNationalBankProvider : IExchangeRateProvider
             // Fetch rates for each of the last 30 days
             for (int daysAgo = 0; daysAgo < daysToFetch; daysAgo++)
             {
-                var targetDate = DateTime.Now.AddDays(-daysAgo);
+                var targetDate = DateTime.UtcNow.AddDays(-daysAgo);
 
                 // Skip weekends (CNB doesn't publish rates on weekends)
                 if (targetDate.DayOfWeek == DayOfWeek.Saturday || targetDate.DayOfWeek == DayOfWeek.Sunday)

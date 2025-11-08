@@ -48,24 +48,22 @@ public class ExchangeRateProviderAdapter : IExchangeRateProviderAdapter
                 return ProviderRateResponse.Failure($"Status {statusCode}: {message}");
             }
 
-            // Get ValidDate from first rate (all should have same date for "today")
-            var validDate = rates.First().ValidDate;
-
             var providerRates = rates.Select(r => new ProviderRate
             {
                 SourceCurrencyCode = r.BaseCurrencyCode,
                 TargetCurrencyCode = r.TargetCurrencyCode,
                 Rate = r.Rate,
-                Multiplier = r.Multiplier
+                Multiplier = r.Multiplier,
+                ValidDate = r.ValidDate
             }).ToList();
 
             _logger.LogInformation(
                 "Successfully fetched {Count} rates for {ProviderCode} with ValidDate {ValidDate}",
                 providerRates.Count,
                 ProviderCode,
-                validDate);
+                rates.Max(x => x.ValidDate));
 
-            return ProviderRateResponse.Success(DateOnly.FromDateTime(validDate), providerRates);
+            return ProviderRateResponse.Success(rates.Max(x => x.ValidDate), providerRates);
         }
         catch (Exception ex)
         {
@@ -101,7 +99,8 @@ public class ExchangeRateProviderAdapter : IExchangeRateProviderAdapter
                 SourceCurrencyCode = r.BaseCurrencyCode,
                 TargetCurrencyCode = r.TargetCurrencyCode,
                 Rate = r.Rate,
-                Multiplier = r.Multiplier
+                Multiplier = r.Multiplier,
+                ValidDate = r.ValidDate
             }).ToList();
 
             _logger.LogInformation(
@@ -110,7 +109,7 @@ public class ExchangeRateProviderAdapter : IExchangeRateProviderAdapter
                 ProviderCode,
                 validDate);
 
-            return ProviderRateResponse.Success(DateOnly.FromDateTime(validDate), providerRates);
+            return ProviderRateResponse.Success(validDate, providerRates);
         }
         catch (Exception ex)
         {

@@ -6,14 +6,12 @@ namespace InfrastructureLayer.ExternalServices.Adapters.Models;
 public class ProviderRateResponse
 {
     public bool IsSuccess { get; }
-    public DateOnly ValidDate { get; }
     public List<ProviderRate> Rates { get; }
     public string? ErrorMessage { get; }
 
     private ProviderRateResponse(bool isSuccess, DateOnly validDate, List<ProviderRate> rates, string? errorMessage)
     {
         IsSuccess = isSuccess;
-        ValidDate = validDate;
         Rates = rates ?? new List<ProviderRate>();
         ErrorMessage = errorMessage;
     }

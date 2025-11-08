@@ -69,7 +69,32 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
-        _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        // Check if already in a transaction
+        if (_context.Database.CurrentTransaction != null)
+        {
+            _transaction = _context.Database.CurrentTransaction;
+            return;
+        }
+
+        // When using execution strategies (like EnableRetryOnFailure for SQL Server),
+        // the strategy doesn't support user-initiated transactions.
+        // We need to use the execution strategy to execute the transaction.
+        var strategy = _context.Database.CreateExecutionStrategy();
+
+        // If the execution strategy supports user-initiated transactions, use it normally
+        // Otherwise, skip manual transaction management (the execution strategy will handle it)
+        if (strategy.RetriesOnFailure)
+        {
+            // For retrying strategies, we don't manually begin transactions
+            // The strategy handles transactions internally
+            // Just mark that we're in "transaction mode" but don't actually create one
+            _transaction = null;
+        }
+        else
+        {
+            // For non-retrying strategies, use normal transaction management
+            _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        }
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)

@@ -10,4 +10,5 @@ public class ProviderRate
     public string TargetCurrencyCode { get; set; } = string.Empty;
     public decimal Rate { get; set; }
     public decimal Multiplier { get; set; }
+    public DateOnly ValidDate { get; set; }
 }

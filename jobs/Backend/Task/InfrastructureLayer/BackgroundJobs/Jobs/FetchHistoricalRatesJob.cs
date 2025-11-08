@@ -117,66 +117,96 @@ public class FetchHistoricalRatesJob
                     response.Rates.Count,
                     providerAdapter.ProviderCode);
 
+                // Track totals across all date groups
+                int totalInserted = 0;
+                int totalUpdated = 0;
+                var errors = new List<string>();
+
                 // Convert provider rates to command DTOs
-                var rateItems = response.Rates.Select(r => new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.ExchangeRateItemDto(
-                    r.SourceCurrencyCode,
-                    r.TargetCurrencyCode,
-                    r.Rate,
-                    r.Multiplier)).ToList();
-
-                // Execute bulk upsert command
-                var upsertCommand = new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.BulkUpsertExchangeRatesCommand(
-                    provider.Id,
-                    response.ValidDate,
-                    rateItems);
-
-                var upsertResult = await _mediator.Send(upsertCommand, cancellationToken);
-
-                if (upsertResult.IsSuccess)
+                var groupByDate = response.Rates.GroupBy(x => x.ValidDate);
+                foreach (var group in groupByDate)
                 {
-                    _logger.LogInformation(
-                        "Bulk upsert for {ProviderCode}: {Inserted} inserted, {Updated} updated, {Unchanged} unchanged",
-                        providerAdapter.ProviderCode,
-                        upsertResult.Value!.RatesInserted,
-                        upsertResult.Value.RatesUpdated,
-                        upsertResult.Value.RatesUnchanged);
+                    var rateItems = group.Select(r => new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.ExchangeRateItemDto(
+                        r.SourceCurrencyCode,
+                        r.TargetCurrencyCode,
+                        r.Rate,
+                        r.Multiplier)).ToList();
+                    // Execute bulk upsert command
+                    var upsertCommand = new ApplicationLayer.Commands.ExchangeRates.BulkUpsertExchangeRates.BulkUpsertExchangeRatesCommand(
+                        provider.Id,
+                        group.Key,
+                        rateItems);
 
-                    // Complete fetch log with success
-                    if (fetchLogId.HasValue)
+                    var upsertResult = await _mediator.Send(upsertCommand, cancellationToken);
+
+                    if (upsertResult.IsSuccess)
                     {
+                        _logger.LogInformation(
+                            "Bulk upsert for {ProviderCode} on {Date}: {Inserted} inserted, {Updated} updated, {Unchanged} unchanged",
+                            providerAdapter.ProviderCode,
+                            group.Key,
+                            upsertResult.Value!.RatesInserted,
+                            upsertResult.Value.RatesUpdated,
+                            upsertResult.Value.RatesUnchanged);
+
+                        totalInserted += upsertResult.Value.RatesInserted;
+                        totalUpdated += upsertResult.Value.RatesUpdated;
+                    }
+                    else
+                    {
+                        _logger.LogError(
+                            "Failed to upsert rates for {ProviderCode} on {Date}: {Error}",
+                            providerAdapter.ProviderCode,
+                            group.Key,
+                            upsertResult.Error);
+
+                        errors.Add($"Date {group.Key}: {upsertResult.Error}");
+                    }
+                }
+
+                // Complete fetch log once after processing all date groups
+                if (fetchLogId.HasValue)
+                {
+                    if (errors.Count == 0)
+                    {
+                        // All successful
                         await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
                             fetchLogId.Value,
                             "Success",
-                            ratesImported: upsertResult.Value.RatesInserted,
-                            ratesUpdated: upsertResult.Value.RatesUpdated,
+                            ratesImported: totalInserted,
+                            ratesUpdated: totalUpdated,
                             errorMessage: null,
                             cancellationToken);
+
+                        provider.RecordSuccessfulFetch(totalInserted + totalUpdated);
                     }
-
-                    // Update provider health
-                    provider.RecordSuccessfulFetch(upsertResult.Value.RatesInserted + upsertResult.Value.RatesUpdated);
-                    await _unitOfWork.SaveChangesAsync(cancellationToken);
-                }
-                else
-                {
-                    _logger.LogError(
-                        "Failed to upsert rates for {ProviderCode}: {Error}",
-                        providerAdapter.ProviderCode,
-                        upsertResult.Error);
-
-                    // Complete fetch log with failure
-                    if (fetchLogId.HasValue)
+                    else if (totalInserted > 0 || totalUpdated > 0)
                     {
+                        // Partial success
+                        await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
+                            fetchLogId.Value,
+                            "PartialSuccess",
+                            ratesImported: totalInserted,
+                            ratesUpdated: totalUpdated,
+                            errorMessage: string.Join("; ", errors),
+                            cancellationToken);
+
+                        provider.RecordSuccessfulFetch(totalInserted + totalUpdated);
+                    }
+                    else
+                    {
+                        // Complete failure
                         await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
                             fetchLogId.Value,
                             "Failed",
                             ratesImported: 0,
                             ratesUpdated: 0,
-                            errorMessage: upsertResult.Error,
+                            errorMessage: string.Join("; ", errors),
                             cancellationToken);
+
+                        provider.RecordFailedFetch(string.Join("; ", errors));
                     }
 
-                    provider.RecordFailedFetch(upsertResult.Error);
                     await _unitOfWork.SaveChangesAsync(cancellationToken);
                 }
             }
@@ -194,7 +224,7 @@ public class FetchHistoricalRatesJob
                     {
                         await _unitOfWork.FetchLogs.CompleteFetchLogAsync(
                             fetchLogId.Value,
-                            "Error",
+                            "Failed",
                             ratesImported: 0,
                             ratesUpdated: 0,
                             errorMessage: ex.Message,

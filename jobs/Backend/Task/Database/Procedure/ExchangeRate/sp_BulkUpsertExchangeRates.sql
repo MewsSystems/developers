@@ -55,19 +55,32 @@ BEGIN
         END
 
         BEGIN TRANSACTION;
-        
-        -- Parse JSON into temp table with validation
-        SELECT 
-            JSON_VALUE(value, '$.currencyCode') AS CurrencyCode,
-            TRY_CAST(JSON_VALUE(value, '$.rate') AS DECIMAL(19,6)) AS Rate,
-            TRY_CAST(JSON_VALUE(value, '$.multiplier') AS INT) AS Multiplier
+
+        -- Track original JSON entry count for accurate reporting
+        DECLARE @OriginalJsonCount INT = (SELECT COUNT(*) FROM OPENJSON(@RatesJson));
+
+        -- Parse JSON into temp table with validation and deduplication
+        -- If provider sends duplicate currency codes, keep the first one
+        WITH ParsedRates AS (
+            SELECT
+                JSON_VALUE(value, '$.currencyCode') AS CurrencyCode,
+                TRY_CAST(JSON_VALUE(value, '$.rate') AS DECIMAL(19,6)) AS Rate,
+                TRY_CAST(JSON_VALUE(value, '$.multiplier') AS INT) AS Multiplier,
+                ROW_NUMBER() OVER (PARTITION BY JSON_VALUE(value, '$.currencyCode') ORDER BY (SELECT NULL)) AS RowNum
+            FROM OPENJSON(@RatesJson)
+        )
+        SELECT
+            CurrencyCode,
+            Rate,
+            Multiplier
         INTO #TempRates
-        FROM OPENJSON(@RatesJson);
-        
+        FROM ParsedRates
+        WHERE RowNum = 1; -- Keep first occurrence of each currency
+
         -- Validate parsed data
         IF EXISTS (SELECT 1 FROM #TempRates WHERE CurrencyCode IS NULL OR Rate IS NULL)
             THROW 50103, 'JSON contains invalid rate entries (missing currencyCode or rate)', 1;
-        
+
         -- Set default multiplier if NULL
         UPDATE #TempRates SET Multiplier = 1 WHERE Multiplier IS NULL;
         
@@ -88,9 +101,6 @@ BEGIN
         WHEN NOT MATCHED BY TARGET THEN
             INSERT (Code)
             VALUES (source.Code);
-
-        -- After ensuring all currencies exist, skipped count should be 0
-        SET @SkippedCount = 0;
 
         -- Merge operation with proper output capture
         DECLARE @MergeOutput TABLE (
@@ -130,18 +140,21 @@ BEGIN
         -- Calculate actual counts from merge output
         SELECT @InsertedCount = COUNT(*) FROM @MergeOutput WHERE Action = 'INSERT';
         SELECT @UpdatedCount = COUNT(*) FROM @MergeOutput WHERE Action = 'UPDATE';
-        
+
+        -- Calculate skipped count (duplicates in JSON + base currency + any filtered entries)
+        SET @SkippedCount = @OriginalJsonCount - (@InsertedCount + @UpdatedCount);
+
         DROP TABLE #TempRates;
-        
+
         COMMIT TRANSACTION;
-        
+
         -- Return summary
-        SELECT 
+        SELECT
             @InsertedCount AS InsertedCount,
             @UpdatedCount AS UpdatedCount,
             @SkippedCount AS SkippedCount,
             @InsertedCount + @UpdatedCount AS ProcessedCount,
-            @InsertedCount + @UpdatedCount + @SkippedCount AS TotalInJson,
+            @OriginalJsonCount AS TotalInJson,
             'SUCCESS' AS Status;
             
     END TRY

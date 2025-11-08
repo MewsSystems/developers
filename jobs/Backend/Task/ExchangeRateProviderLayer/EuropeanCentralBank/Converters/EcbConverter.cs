@@ -1,6 +1,7 @@
 using Common.DTOs;
 using Common.Interfaces;
 using EuropeanCentralBank.Models;
+using System.Globalization;
 
 namespace EuropeanCentralBank.Converters;
 
@@ -59,7 +60,7 @@ public class EcbConverter : IExchangeRateConverter<EcbEnvelope>
             if (string.IsNullOrWhiteSpace(dateCube.Time))
                 continue;
 
-            if (!DateTime.TryParse(dateCube.Time, out var validDate))
+            if (!DateOnly.TryParse(dateCube.Time, CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate))
                 continue;
 
             foreach (var rate in dateCube.Rates)
