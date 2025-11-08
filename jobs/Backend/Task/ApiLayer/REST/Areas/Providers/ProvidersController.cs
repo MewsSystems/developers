@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationLayer.Queries.Providers.GetAllProviders;
+using ApplicationLayer.Queries.Providers.GetProviderById;
 using ApplicationLayer.Queries.Providers.GetProviderHealth;
 using ApplicationLayer.Queries.Providers.GetProviderStatistics;
 using ApplicationLayer.Queries.Providers.GetProviderConfiguration;
@@ -12,6 +13,7 @@ using ApplicationLayer.Commands.ExchangeRateProviders.TriggerManualFetch;
 using ApplicationLayer.Commands.ExchangeRateProviders.CreateExchangeRateProvider;
 using ApplicationLayer.Commands.ExchangeRateProviders.UpdateProviderConfiguration;
 using ApplicationLayer.Commands.ExchangeRateProviders.DeleteProvider;
+using ApplicationLayer.Commands.ExchangeRateProviders.RescheduleProvider;
 using REST.Response.Models.Common;
 using REST.Response.Models.Areas.Providers;
 using REST.Response.Models.Areas.ExchangeRates;
@@ -64,6 +66,30 @@ public class ProvidersController : ControllerBase
             Message = "Providers retrieved successfully"
         };
         return Ok(response);
+    }
+
+    /// <summary>
+    /// Get a specific provider by ID.
+    /// </summary>
+    /// <param name="id">Provider ID</param>
+    [HttpGet("id/{id}")]
+    [ProducesResponseType(typeof(ApiResponse<ProviderDetailResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse), 404)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var query = new GetProviderByIdQuery(id);
+        var providerDto = await _mediator.Send(query);
+
+        if (providerDto != null)
+        {
+            var response = ApiResponse<ProviderDetailResponse>.Ok(
+                providerDto.ToResponse(),
+                $"Provider with ID {id} retrieved successfully"
+            );
+            return Ok(response);
+        }
+
+        return NotFound(ApiResponse<ProviderDetailResponse>.NotFound($"Provider with ID {id} not found"));
     }
 
     /// <summary>
@@ -438,6 +464,26 @@ public class ProvidersController : ControllerBase
 
         return result.IsSuccess
             ? Ok(result.ToApiResponse($"Provider {code} deleted successfully"))
+            : BadRequest(result.ToApiResponse());
+    }
+
+    /// <summary>
+    /// Reschedule a provider's job with new time and timezone.
+    /// </summary>
+    /// <param name="code">Provider code</param>
+    /// <param name="request">Reschedule request with UpdateTime and TimeZone</param>
+    [HttpPost("{code}/reschedule")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(typeof(ApiResponse), 200)]
+    [ProducesResponseType(typeof(ApiResponse), 404)]
+    [ProducesResponseType(typeof(ApiResponse), 400)]
+    public async Task<IActionResult> RescheduleProvider(string code, [FromBody] RescheduleProviderRequest request)
+    {
+        var command = new RescheduleProviderCommand(code, request.UpdateTime, request.TimeZone);
+        var result = await _mediator.Send(command);
+
+        return result.IsSuccess
+            ? Ok(result.ToApiResponse($"Provider {code} rescheduled to {request.UpdateTime} ({request.TimeZone})"))
             : BadRequest(result.ToApiResponse());
     }
 }

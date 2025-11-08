@@ -3,9 +3,11 @@ using ApplicationLayer.Commands.ExchangeRateProviders.CreateExchangeRateProvider
 using ApplicationLayer.Commands.ExchangeRateProviders.DeactivateProvider;
 using ApplicationLayer.Commands.ExchangeRateProviders.DeleteProvider;
 using ApplicationLayer.Commands.ExchangeRateProviders.ResetProviderHealth;
+using ApplicationLayer.Commands.ExchangeRateProviders.RescheduleProvider;
 using ApplicationLayer.Commands.ExchangeRateProviders.TriggerManualFetch;
 using ApplicationLayer.Commands.ExchangeRateProviders.UpdateProviderConfiguration;
 using ApplicationLayer.Queries.Providers.GetAllProviders;
+using ApplicationLayer.Queries.Providers.GetProviderById;
 using ApplicationLayer.Queries.Providers.GetProviderConfiguration;
 using ApplicationLayer.Queries.Providers.GetProviderHealth;
 using ApplicationLayer.Queries.Providers.GetProviderStatistics;
@@ -64,6 +66,33 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
         }
 
         return response;
+    }
+
+    public override async Task<GetProviderByIdResponse> GetProviderById(
+        GetProviderByIdRequest request,
+        ServerCallContext context)
+    {
+        _logger.LogInformation("GetProviderById request: {Id}", request.Id);
+
+        var query = new GetProviderByIdQuery(request.Id);
+        var provider = await _mediator.Send(query, context.CancellationToken);
+
+        if (provider != null)
+        {
+            return new GetProviderByIdResponse
+            {
+                Success = true,
+                Message = $"Provider {request.Id} retrieved successfully",
+                Data = ProviderMappers.ToProtoProviderDetailInfo(provider)
+            };
+        }
+
+        return new GetProviderByIdResponse
+        {
+            Success = false,
+            Message = $"Provider with ID {request.Id} not found",
+            Error = CommonMappers.ToProtoError("NOT_FOUND", $"Provider with ID {request.Id} not found")
+        };
     }
 
     public override async Task<GetProviderByCodeResponse> GetProviderByCode(
@@ -512,6 +541,29 @@ public class ProvidersGrpcService : ProvidersService.ProvidersServiceBase
                 : result.Error ?? "Failed to delete provider",
             Error = !result.IsSuccess
                 ? CommonMappers.ToProtoError("DELETE_ERROR", result.Error ?? "Failed to delete provider")
+                : null
+        };
+    }
+
+    [Authorize(Roles = "Admin")]
+    public override async Task<RescheduleProviderResponse> RescheduleProvider(
+        RescheduleProviderRequest request,
+        ServerCallContext context)
+    {
+        _logger.LogInformation("RescheduleProvider request: {Code}, UpdateTime: {UpdateTime}, TimeZone: {TimeZone}",
+            request.Code, request.UpdateTime, request.TimeZone);
+
+        var command = new RescheduleProviderCommand(request.Code, request.UpdateTime, request.TimeZone);
+        var result = await _mediator.Send(command, context.CancellationToken);
+
+        return new RescheduleProviderResponse
+        {
+            Success = result.IsSuccess,
+            Message = result.IsSuccess
+                ? $"Provider {request.Code} rescheduled to {request.UpdateTime} ({request.TimeZone})"
+                : result.Error ?? "Failed to reschedule provider",
+            Error = !result.IsSuccess
+                ? CommonMappers.ToProtoError("RESCHEDULE_ERROR", result.Error ?? "Failed to reschedule provider")
                 : null
         };
     }

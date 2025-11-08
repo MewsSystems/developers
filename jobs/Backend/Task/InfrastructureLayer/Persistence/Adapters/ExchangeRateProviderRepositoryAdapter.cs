@@ -78,7 +78,58 @@ public class ExchangeRateProviderRepositoryAdapter : IExchangeRateProviderReposi
             existingEntity.ConsecutiveFailures = provider.ConsecutiveFailures;
             existingEntity.Modified = provider.Modified;
 
+            // Sync configurations from domain to data layer
+            SyncConfigurations(provider, existingEntity);
+
             await _dataLayerUnitOfWork.ExchangeRateProviders.UpdateAsync(existingEntity, cancellationToken);
+        }
+    }
+
+    /// <summary>
+    /// Syncs configuration settings from domain aggregate to DataLayer entity.
+    /// Adds new configurations, updates existing ones, and removes deleted ones.
+    /// </summary>
+    private static void SyncConfigurations(ExchangeRateProvider domain, DataLayer.Entities.ExchangeRateProvider entity)
+    {
+        // Get all domain configurations
+        var domainConfigs = domain.Configurations.ToList();
+
+        // Remove configurations that no longer exist in domain
+        var configsToRemove = entity.Configurations
+            .Where(ec => !domainConfigs.Any(dc => dc.SettingKey.Equals(ec.SettingKey, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        foreach (var config in configsToRemove)
+        {
+            entity.Configurations.Remove(config);
+        }
+
+        // Add or update configurations
+        foreach (var domainConfig in domainConfigs)
+        {
+            var existingConfig = entity.Configurations
+                .FirstOrDefault(ec => ec.SettingKey.Equals(domainConfig.SettingKey, StringComparison.OrdinalIgnoreCase));
+
+            if (existingConfig != null)
+            {
+                // Update existing
+                existingConfig.SettingValue = domainConfig.SettingValue;
+                existingConfig.Description = domainConfig.Description;
+                existingConfig.Modified = domainConfig.Modified;
+            }
+            else
+            {
+                // Add new
+                entity.Configurations.Add(new DataLayer.Entities.ExchangeRateProviderConfiguration
+                {
+                    ProviderId = entity.Id,
+                    SettingKey = domainConfig.SettingKey,
+                    SettingValue = domainConfig.SettingValue,
+                    Description = domainConfig.Description,
+                    Created = domainConfig.Created,
+                    Modified = domainConfig.Modified
+                });
+            }
         }
     }
 

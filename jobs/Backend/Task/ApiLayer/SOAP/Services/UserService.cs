@@ -1,9 +1,13 @@
+using ApplicationLayer.Commands.Users.ChangeUserPassword;
 using ApplicationLayer.Commands.Users.ChangeUserRole;
 using ApplicationLayer.Commands.Users.CreateUser;
 using ApplicationLayer.Commands.Users.DeleteUser;
+using ApplicationLayer.Commands.Users.UpdateUserInfo;
+using ApplicationLayer.Queries.Users.CheckEmailExists;
 using ApplicationLayer.Queries.Users.GetAllUsers;
 using ApplicationLayer.Queries.Users.GetUserByEmail;
 using ApplicationLayer.Queries.Users.GetUserById;
+using ApplicationLayer.Queries.Users.GetUsersByRole;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using SOAP.Converters;
@@ -353,6 +357,203 @@ public class UserService : IUserService
             {
                 Success = false,
                 Message = "An error occurred while changing user role",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    [Authorize(Roles = "Consumer,Admin")]
+    public async Task<UpdateUserResponse> UpdateUserAsync(UpdateUserRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: UpdateUser called for UserId: {UserId}", request.UserId);
+
+            var command = new UpdateUserInfoCommand(
+                request.UserId,
+                request.FirstName,
+                request.LastName,
+                request.Email
+            );
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return new UpdateUserResponse
+                {
+                    Success = true,
+                    Message = "User updated successfully"
+                };
+            }
+
+            return new UpdateUserResponse
+            {
+                Success = false,
+                Message = result.Error,
+                Fault = new SoapFault
+                {
+                    FaultCode = "Client",
+                    FaultString = "ValidationError",
+                    Detail = result.Error
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in UpdateUser SOAP operation");
+
+            return new UpdateUserResponse
+            {
+                Success = false,
+                Message = "An error occurred while updating user",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    [Authorize(Roles = "Consumer,Admin")]
+    public async Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: ChangePassword called for UserId: {UserId}", request.UserId);
+
+            var command = new ChangeUserPasswordCommand(
+                request.UserId,
+                request.CurrentPassword,
+                request.NewPassword
+            );
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return new ChangePasswordResponse
+                {
+                    Success = true,
+                    Message = "Password changed successfully"
+                };
+            }
+
+            return new ChangePasswordResponse
+            {
+                Success = false,
+                Message = result.Error,
+                Fault = new SoapFault
+                {
+                    FaultCode = "Client",
+                    FaultString = "ValidationError",
+                    Detail = result.Error
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in ChangePassword SOAP operation");
+
+            return new ChangePasswordResponse
+            {
+                Success = false,
+                Message = "An error occurred while changing password",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<CheckEmailExistsResponse> CheckEmailExistsAsync(CheckEmailExistsRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: CheckEmailExists called for email: {Email}", request.Email);
+
+            var query = new CheckEmailExistsQuery(request.Email);
+            var exists = await _mediator.Send(query);
+
+            return new CheckEmailExistsResponse
+            {
+                Success = true,
+                Message = exists ? "Email is already registered" : "Email is available",
+                Exists = exists
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in CheckEmailExists SOAP operation");
+
+            return new CheckEmailExistsResponse
+            {
+                Success = false,
+                Message = "An error occurred while checking email",
+                Exists = false,
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<GetUsersByRoleResponse> GetUsersByRoleAsync(GetUsersByRoleRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetUsersByRole called for role: {Role}", request.Role);
+
+            // Parse role string to enum
+            if (!Enum.TryParse<DomainLayer.Enums.UserRole>(request.Role, ignoreCase: true, out var roleEnum))
+            {
+                return new GetUsersByRoleResponse
+                {
+                    Success = false,
+                    Message = $"Invalid role: {request.Role}. Valid roles are: Admin, Consumer",
+                    Data = Array.Empty<Models.Users.UserSoap>(),
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "ValidationError",
+                        Detail = $"Invalid role: {request.Role}"
+                    }
+                };
+            }
+
+            var query = new GetUsersByRoleQuery(roleEnum, 1, 1000);
+            var pagedResult = await _mediator.Send(query);
+
+            return new GetUsersByRoleResponse
+            {
+                Success = true,
+                Message = $"Users with role '{request.Role}' retrieved successfully",
+                Data = pagedResult.Items.ToSoap()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetUsersByRole SOAP operation");
+
+            return new GetUsersByRoleResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving users by role",
+                Data = Array.Empty<Models.Users.UserSoap>(),
                 Fault = new SoapFault
                 {
                     FaultCode = "Server",

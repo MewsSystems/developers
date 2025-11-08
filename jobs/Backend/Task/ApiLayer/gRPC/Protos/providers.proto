@@ -16,6 +16,9 @@ service ProvidersService {
   /// Get all providers with optional filtering and pagination
   rpc GetAllProviders(GetAllProvidersRequest) returns (GetAllProvidersResponse);
 
+  /// Get a specific provider by ID
+  rpc GetProviderById(GetProviderByIdRequest) returns (GetProviderByIdResponse);
+
   /// Get a specific provider by code
   rpc GetProviderByCode(GetProviderByCodeRequest) returns (GetProviderByCodeResponse);
 
@@ -48,6 +51,9 @@ service ProvidersService {
 
   /// Delete a provider
   rpc DeleteProvider(DeleteProviderRequest) returns (DeleteProviderResponse);
+
+  /// Reschedule a provider's job
+  rpc RescheduleProvider(RescheduleProviderRequest) returns (RescheduleProviderResponse);
 }
 
 // ============================================================
@@ -78,6 +84,21 @@ message ProviderInfo {
   optional google.protobuf.Timestamp last_successful_fetch = 9;
   optional google.protobuf.Timestamp last_failed_fetch = 10;
   google.protobuf.Timestamp created = 11;
+}
+
+// ============================================================
+// GET PROVIDER BY ID
+// ============================================================
+
+message GetProviderByIdRequest {
+  int32 id = 1;
+}
+
+message GetProviderByIdResponse {
+  bool success = 1;
+  string message = 2;
+  ProviderDetailInfo data = 3;
+  .exchangerates.common.v1.ErrorDetails error = 4;
 }
 
 // ============================================================
@@ -288,6 +309,22 @@ message DeleteProviderRequest {
 }
 
 message DeleteProviderResponse {
+  bool success = 1;
+  string message = 2;
+  .exchangerates.common.v1.ErrorDetails error = 3;
+}
+
+// ============================================================
+// RESCHEDULE PROVIDER
+// ============================================================
+
+message RescheduleProviderRequest {
+  string code = 1;
+  string update_time = 2; // Time in HH:mm format (e.g., "14:30")
+  string time_zone = 3;   // Timezone (e.g., "CET", "UTC", "EET")
+}
+
+message RescheduleProviderResponse {
   bool success = 1;
   string message = 2;
   .exchangerates.common.v1.ErrorDetails error = 3;

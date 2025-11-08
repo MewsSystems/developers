@@ -1,6 +1,8 @@
 using ApplicationLayer.Queries.ExchangeRates.GetAllLatestExchangeRates;
 using ApplicationLayer.Queries.ExchangeRates.GetCurrentExchangeRates;
 using ApplicationLayer.Queries.ExchangeRates.ConvertCurrency;
+using ApplicationLayer.Queries.ExchangeRates.GetLatestExchangeRate;
+using ApplicationLayer.Queries.ExchangeRates.GetExchangeRateHistory;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using SOAP.Converters;
@@ -192,6 +194,283 @@ public class ExchangeRateService : IExchangeRateService
             {
                 Success = false,
                 Message = "An error occurred while converting currency",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetLatestRateResponse> GetLatestRateAsync(GetLatestRateRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetLatestRate called for {Source} to {Target}, ProviderId: {ProviderId}",
+                request.SourceCurrency, request.TargetCurrency, request.ProviderId);
+
+            var query = new GetLatestExchangeRateQuery(
+                request.SourceCurrency,
+                request.TargetCurrency,
+                request.ProviderId
+            );
+
+            var rateDto = await _mediator.Send(query);
+
+            if (rateDto != null)
+            {
+                return new GetLatestRateResponse
+                {
+                    Success = true,
+                    Message = "Latest exchange rate retrieved successfully",
+                    Data = rateDto.ToSoap()
+                };
+            }
+
+            return new GetLatestRateResponse
+            {
+                Success = false,
+                Message = $"No exchange rate found for {request.SourceCurrency} to {request.TargetCurrency}",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Client",
+                    FaultString = "NotFound",
+                    Detail = $"No exchange rate found for {request.SourceCurrency} to {request.TargetCurrency}"
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetLatestRate SOAP operation");
+
+            return new GetLatestRateResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving the latest exchange rate",
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetAllLatestRatesResponse> GetAllLatestRatesAsync(GetAllLatestRatesRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetAllLatestRates called");
+
+            var query = new GetAllLatestExchangeRatesQuery();
+            var rates = await _mediator.Send(query);
+
+            return new GetAllLatestRatesResponse
+            {
+                Success = true,
+                Message = "All latest exchange rates retrieved successfully",
+                Data = rates.ToFlatSoap()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetAllLatestRates SOAP operation");
+
+            return new GetAllLatestRatesResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving all latest exchange rates",
+                Data = Array.Empty<Models.ExchangeRates.LatestExchangeRateSoap>(),
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetCurrentRatesFlatResponse> GetCurrentRatesFlatAsync(GetCurrentRatesFlatRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetCurrentRatesFlat called");
+
+            var query = new GetCurrentExchangeRatesQuery();
+            var rates = await _mediator.Send(query);
+
+            return new GetCurrentRatesFlatResponse
+            {
+                Success = true,
+                Message = "Current exchange rates retrieved successfully",
+                Data = rates.ToFlatSoap()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetCurrentRatesFlat SOAP operation");
+
+            return new GetCurrentRatesFlatResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving current exchange rates",
+                Data = Array.Empty<Models.ExchangeRates.CurrentExchangeRateSoap>(),
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetHistoryResponse> GetHistoryAsync(GetHistoryRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetHistory called for {Source} to {Target}, from {Start} to {End}",
+                request.SourceCurrency, request.TargetCurrency, request.StartDate, request.EndDate);
+
+            // Parse dates
+            if (!DateOnly.TryParse(request.StartDate, out var startDate))
+            {
+                return new GetHistoryResponse
+                {
+                    Success = false,
+                    Message = "Invalid start date format. Use YYYY-MM-DD",
+                    Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistorySoap>(),
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "ValidationError",
+                        Detail = "Invalid start date format. Use YYYY-MM-DD"
+                    }
+                };
+            }
+
+            if (!DateOnly.TryParse(request.EndDate, out var endDate))
+            {
+                return new GetHistoryResponse
+                {
+                    Success = false,
+                    Message = "Invalid end date format. Use YYYY-MM-DD",
+                    Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistorySoap>(),
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "ValidationError",
+                        Detail = "Invalid end date format. Use YYYY-MM-DD"
+                    }
+                };
+            }
+
+            var query = new GetExchangeRateHistoryQuery(
+                request.SourceCurrency,
+                request.TargetCurrency,
+                startDate,
+                endDate,
+                request.ProviderId
+            );
+
+            var history = await _mediator.Send(query);
+
+            return new GetHistoryResponse
+            {
+                Success = true,
+                Message = "Exchange rate history retrieved successfully",
+                Data = history.ToFlatSoap()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetHistory SOAP operation");
+
+            return new GetHistoryResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving exchange rate history",
+                Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistorySoap>(),
+                Fault = new SoapFault
+                {
+                    FaultCode = "Server",
+                    FaultString = "Internal server error",
+                    Detail = ex.Message
+                }
+            };
+        }
+    }
+
+    public async Task<GetHistoryGroupedResponse> GetHistoryGroupedAsync(GetHistoryGroupedRequest request)
+    {
+        try
+        {
+            _logger.LogInformation("SOAP: GetHistoryGrouped called for {Source} to {Target}, from {Start} to {End}",
+                request.SourceCurrency, request.TargetCurrency, request.StartDate, request.EndDate);
+
+            // Parse dates
+            if (!DateOnly.TryParse(request.StartDate, out var startDate))
+            {
+                return new GetHistoryGroupedResponse
+                {
+                    Success = false,
+                    Message = "Invalid start date format. Use YYYY-MM-DD",
+                    Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistoryGroupedSoap>(),
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "ValidationError",
+                        Detail = "Invalid start date format. Use YYYY-MM-DD"
+                    }
+                };
+            }
+
+            if (!DateOnly.TryParse(request.EndDate, out var endDate))
+            {
+                return new GetHistoryGroupedResponse
+                {
+                    Success = false,
+                    Message = "Invalid end date format. Use YYYY-MM-DD",
+                    Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistoryGroupedSoap>(),
+                    Fault = new SoapFault
+                    {
+                        FaultCode = "Client",
+                        FaultString = "ValidationError",
+                        Detail = "Invalid end date format. Use YYYY-MM-DD"
+                    }
+                };
+            }
+
+            var query = new GetExchangeRateHistoryQuery(
+                request.SourceCurrency,
+                request.TargetCurrency,
+                startDate,
+                endDate,
+                request.ProviderId
+            );
+
+            var history = await _mediator.Send(query);
+
+            return new GetHistoryGroupedResponse
+            {
+                Success = true,
+                Message = "Exchange rate history (grouped) retrieved successfully",
+                Data = history.ToGroupedSoap()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetHistoryGrouped SOAP operation");
+
+            return new GetHistoryGroupedResponse
+            {
+                Success = false,
+                Message = "An error occurred while retrieving exchange rate history",
+                Data = Array.Empty<Models.ExchangeRates.ExchangeRateHistoryGroupedSoap>(),
                 Fault = new SoapFault
                 {
                     FaultCode = "Server",

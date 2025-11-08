@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ApplicationLayer.Queries.Users.GetAllUsers;
 using ApplicationLayer.Queries.Users.GetUserById;
 using ApplicationLayer.Queries.Users.GetUserByEmail;
+using ApplicationLayer.Queries.Users.CheckEmailExists;
+using ApplicationLayer.Queries.Users.GetUsersByRole;
 using ApplicationLayer.Commands.Users.CreateUser;
 using ApplicationLayer.Commands.Users.UpdateUserInfo;
 using ApplicationLayer.Commands.Users.ChangeUserPassword;
@@ -97,6 +99,60 @@ public class UsersController : ControllerBase
         }
 
         return NotFound(ApiResponse<UserResponse>.NotFound($"User with email '{email}' not found"));
+    }
+
+    /// <summary>
+    /// Check if a user with the given email exists.
+    /// </summary>
+    /// <param name="email">Email address to check</param>
+    [HttpGet("check-email/{email}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
+    public async Task<IActionResult> CheckEmailExists(string email)
+    {
+        var query = new CheckEmailExistsQuery(email);
+        var exists = await _mediator.Send(query);
+
+        var response = ApiResponse<bool>.Ok(
+            exists,
+            exists ? "Email is already registered" : "Email is available"
+        );
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Get users filtered by role.
+    /// </summary>
+    /// <param name="role">User role (Consumer or Admin)</param>
+    /// <param name="pageNumber">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 10)</param>
+    [HttpGet("by-role/{role}")]
+    [ProducesResponseType(typeof(PagedResponse<UserResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse), 400)]
+    public async Task<IActionResult> GetByRole(string role, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        // Parse role string to UserRole enum
+        if (!Enum.TryParse<UserRole>(role, true, out var roleEnum))
+        {
+            return BadRequest(ApiResponse.Fail(
+                $"Invalid role: {role}. Valid roles are: Consumer, Admin",
+                400
+            ));
+        }
+
+        var query = new GetUsersByRoleQuery(roleEnum, pageNumber, pageSize);
+        var pagedResult = await _mediator.Send(query);
+
+        var pagedResponse = PagedResponse<UserResponse>.Ok(
+            pagedResult.Items.Select(u => u.ToResponse()),
+            pagedResult.PageNumber,
+            pagedResult.PageSize,
+            pagedResult.TotalCount,
+            "Users retrieved successfully"
+        );
+
+        return Ok(pagedResponse);
     }
 
     /// <summary>

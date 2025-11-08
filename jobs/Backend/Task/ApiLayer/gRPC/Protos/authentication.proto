@@ -14,9 +14,6 @@ option csharp_namespace = "gRPC.Protos.Authentication";
 service AuthenticationService {
   /// Authenticate a user and generate JWT token
   rpc Login(LoginRequest) returns (LoginResponse);
-
-  /// Register a new user account
-  rpc Register(RegisterRequest) returns (RegisterResponse);
 }
 
 // ============================================================
@@ -49,24 +46,4 @@ message UserInfo {
   string email = 2;
   string full_name = 3;
   string role = 4;
-}
-
-// ============================================================
-// REGISTER
-// ============================================================
-
-/// Request message for user registration
-message RegisterRequest {
-  string email = 1;
-  string password = 2;
-  string full_name = 3;
-  string role = 4;
-}
-
-/// Response message for registration
-message RegisterResponse {
-  bool success = 1;
-  string message = 2;
-  AuthenticationData data = 3;
-  .exchangerates.common.v1.ErrorDetails error = 4;
 }

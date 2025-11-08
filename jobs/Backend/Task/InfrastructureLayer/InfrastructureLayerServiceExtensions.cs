@@ -37,6 +37,7 @@ public static class InfrastructureLayerServiceExtensions
         // Services
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddScoped<IBackgroundJobService, BackgroundJobService>();
+        services.AddScoped<ApplicationLayer.Common.Interfaces.IBackgroundJobScheduler, BackgroundJobs.Services.BackgroundJobScheduler>();
 
         // Provider discovery
         services.AddSingleton<IProviderDiscoveryService, ProviderDiscoveryService>();

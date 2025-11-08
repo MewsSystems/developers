@@ -100,4 +100,28 @@ public static class ProviderSoapConverters
             NewestRateDate = dto.NewestRateDate?.ToString("yyyy-MM-dd")
         };
     }
+
+    /// <summary>
+    /// Converts an ExchangeRateProviderDetailDto to ProviderDetailSoap model with full configuration details.
+    /// </summary>
+    public static ProviderDetailSoap ToDetailSoap(this ExchangeRateProviderDetailDto dto)
+    {
+        return new ProviderDetailSoap
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Code = dto.Code,
+            Url = dto.Url,
+            BaseCurrency = dto.BaseCurrencyCode,
+            RequiresAuthentication = dto.RequiresAuthentication,
+            ApiKeyVaultReference = dto.ApiKeyVaultReference,
+            IsActive = dto.IsActive,
+            Status = dto.Status,
+            ConsecutiveFailures = dto.ConsecutiveFailures,
+            LastSuccessfulFetch = dto.LastSuccessfulFetch,
+            LastFailedFetch = dto.LastFailedFetch,
+            Created = dto.Created,
+            Modified = dto.Modified
+        };
+    }
 }

@@ -20,6 +20,18 @@ public interface ICurrencyService
     /// </summary>
     [OperationContract]
     Task<GetCurrencyByCodeResponse> GetCurrencyByCodeAsync(GetCurrencyByCodeRequest request);
+
+    /// <summary>
+    /// Create a new currency (Admin only).
+    /// </summary>
+    [OperationContract]
+    Task<CreateCurrencyResponse> CreateCurrencyAsync(CreateCurrencyRequest request);
+
+    /// <summary>
+    /// Delete a currency (Admin only).
+    /// </summary>
+    [OperationContract]
+    Task<DeleteCurrencyResponse> DeleteCurrencyAsync(DeleteCurrencyRequest request);
 }
 
 // ============================================================
@@ -78,6 +90,61 @@ public class GetCurrencyByCodeResponse
 
     [System.Runtime.Serialization.DataMember]
     public CurrencySoap? Data { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public SoapFault? Fault { get; set; }
+}
+
+/// <summary>
+/// Request for creating a currency.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class CreateCurrencyRequest
+{
+    [System.Runtime.Serialization.DataMember]
+    public string Code { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Response for currency creation.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class CreateCurrencyResponse
+{
+    [System.Runtime.Serialization.DataMember]
+    public bool Success { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public string? Message { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public CurrencySoap? Data { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public SoapFault? Fault { get; set; }
+}
+
+/// <summary>
+/// Request for deleting a currency.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class DeleteCurrencyRequest
+{
+    [System.Runtime.Serialization.DataMember]
+    public string Code { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Response for currency deletion.
+/// </summary>
+[System.Runtime.Serialization.DataContract]
+public class DeleteCurrencyResponse
+{
+    [System.Runtime.Serialization.DataMember]
+    public bool Success { get; set; }
+
+    [System.Runtime.Serialization.DataMember]
+    public string? Message { get; set; }
 
     [System.Runtime.Serialization.DataMember]
     public SoapFault? Fault { get; set; }

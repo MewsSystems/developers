@@ -34,30 +34,6 @@ public static class AuthenticationMappers
     }
 
     // ============================================================
-    // REGISTER RESPONSE
-    // ============================================================
-
-    public static RegisterResponse ToProtoRegisterResponse(Result<AuthenticationResultDto> result)
-    {
-        if (result.IsSuccess && result.Value != null)
-        {
-            return new RegisterResponse
-            {
-                Success = true,
-                Message = "Registration successful",
-                Data = ToProtoAuthenticationData(result.Value)
-            };
-        }
-
-        return new RegisterResponse
-        {
-            Success = false,
-            Message = result.Error ?? "Registration failed",
-            Error = result.Error != null ? CommonMappers.ToProtoError("REG_ERROR", result.Error) : null
-        };
-    }
-
-    // ============================================================
     // AUTHENTICATION DATA
     // ============================================================
 

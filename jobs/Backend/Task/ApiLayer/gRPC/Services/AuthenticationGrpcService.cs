@@ -1,5 +1,4 @@
 using ApplicationLayer.Commands.Authentication.Login;
-using ApplicationLayer.Commands.Authentication.Register;
 using gRPC.Mappers;
 using gRPC.Protos.Authentication;
 using Grpc.Core;
@@ -61,48 +60,6 @@ public class AuthenticationGrpcService : AuthenticationService.AuthenticationSer
         {
             _logger.LogError(ex, "Error during login for email: {Email}", request.Email);
             throw new RpcException(new Status(StatusCode.Internal, "An error occurred during login"));
-        }
-    }
-
-    /// <summary>
-    /// Registers a new user account.
-    /// </summary>
-    public override async Task<RegisterResponse> Register(
-        RegisterRequest request,
-        ServerCallContext context)
-    {
-        _logger.LogInformation("Registration request received for email: {Email}", request.Email);
-
-        try
-        {
-            // Create command from proto request
-            var command = new RegisterCommand(
-                request.Email,
-                request.Password,
-                request.FullName,
-                request.Role);
-
-            // Execute via MediatR (reuses existing business logic!)
-            var result = await _mediator.Send(command, context.CancellationToken);
-
-            // Map result to proto response
-            var response = AuthenticationMappers.ToProtoRegisterResponse(result);
-
-            if (response.Success)
-            {
-                _logger.LogInformation("Registration successful for email: {Email}", request.Email);
-            }
-            else
-            {
-                _logger.LogWarning("Registration failed for email: {Email}", request.Email);
-            }
-
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error during registration for email: {Email}", request.Email);
-            throw new RpcException(new Status(StatusCode.Internal, "An error occurred during registration"));
         }
     }
 }
