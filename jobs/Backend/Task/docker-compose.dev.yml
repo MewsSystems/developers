@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  exchangerate-api:
+    build:
+      context: .
+      dockerfile: ExchangeRateApi/Dockerfile
+    container_name: exchangerate-api-dev
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Logging__LogLevel__Default=Information
+      - Logging__LogLevel__Microsoft.AspNetCore=Information
+    networks:
+      - exchangerate-network
+    restart: unless-stopped
+    volumes:
+      - ./ExchangeRateApi/logs:/app/logs
+
+networks:
+  exchangerate-network:
+    driver: bridge
