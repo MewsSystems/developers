@@ -74,6 +74,7 @@ public abstract class IntegrationTestBase : IAsyncLifetime
 
         // Register Fake BackgroundJobService for testing (avoids Hangfire dependency)
         services.AddScoped<ApplicationLayer.Common.Interfaces.IBackgroundJobService, FakeBackgroundJobService>();
+        services.AddScoped<ApplicationLayer.Common.Interfaces.IBackgroundJobScheduler, FakeBackgroundJobScheduler>();
 
         // Register ApplicationLayer with MediatR
         services.AddApplicationLayer();

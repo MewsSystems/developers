@@ -136,6 +136,10 @@ public class InteractiveConsole
                 await HandleGetProviderStatsAsync(command.Arguments);
                 break;
 
+            case CommandType.RescheduleProvider:
+                await HandleRescheduleProviderAsync(command.Arguments);
+                break;
+
             case CommandType.GetUsers:
                 await HandleGetUsersAsync(command.Arguments);
                 break;
@@ -146,6 +150,110 @@ public class InteractiveConsole
 
             case CommandType.TestAll:
                 await HandleTestAllAsync(command.Arguments);
+                break;
+
+            case CommandType.IsApiAvailable:
+                await HandleIsApiAvailableAsync(command.Arguments);
+                break;
+
+            case CommandType.GetCurrentGrouped:
+                await HandleGetCurrentGroupedAsync(command.Arguments);
+                break;
+
+            case CommandType.GetLatestRate:
+                await HandleGetLatestRateAsync(command.Arguments);
+                break;
+
+            case CommandType.GetCurrencyById:
+                await HandleGetCurrencyByIdAsync(command.Arguments);
+                break;
+
+            case CommandType.CreateCurrency:
+                await HandleCreateCurrencyAsync(command.Arguments);
+                break;
+
+            case CommandType.DeleteCurrency:
+                await HandleDeleteCurrencyAsync(command.Arguments);
+                break;
+
+            case CommandType.GetProviderById:
+                await HandleGetProviderByIdAsync(command.Arguments);
+                break;
+
+            case CommandType.GetProviderConfiguration:
+                await HandleGetProviderConfigurationAsync(command.Arguments);
+                break;
+
+            case CommandType.ActivateProvider:
+                await HandleActivateProviderAsync(command.Arguments);
+                break;
+
+            case CommandType.DeactivateProvider:
+                await HandleDeactivateProviderAsync(command.Arguments);
+                break;
+
+            case CommandType.ResetProviderHealth:
+                await HandleResetProviderHealthAsync(command.Arguments);
+                break;
+
+            case CommandType.TriggerManualFetch:
+                await HandleTriggerManualFetchAsync(command.Arguments);
+                break;
+
+            case CommandType.CreateProvider:
+                await HandleCreateProviderAsync(command.Arguments);
+                break;
+
+            case CommandType.UpdateProviderConfiguration:
+                await HandleUpdateProviderConfigurationAsync(command.Arguments);
+                break;
+
+            case CommandType.DeleteProvider:
+                await HandleDeleteProviderAsync(command.Arguments);
+                break;
+
+            case CommandType.GetUserByEmail:
+                await HandleGetUserByEmailAsync(command.Arguments);
+                break;
+
+            case CommandType.GetUsersByRole:
+                await HandleGetUsersByRoleAsync(command.Arguments);
+                break;
+
+            case CommandType.CheckEmailExists:
+                await HandleCheckEmailExistsAsync(command.Arguments);
+                break;
+
+            case CommandType.CreateUser:
+                await HandleCreateUserAsync(command.Arguments);
+                break;
+
+            case CommandType.UpdateUser:
+                await HandleUpdateUserAsync(command.Arguments);
+                break;
+
+            case CommandType.ChangePassword:
+                await HandleChangePasswordAsync(command.Arguments);
+                break;
+
+            case CommandType.ChangeUserRole:
+                await HandleChangeUserRoleAsync(command.Arguments);
+                break;
+
+            case CommandType.DeleteUser:
+                await HandleDeleteUserAsync(command.Arguments);
+                break;
+
+            case CommandType.GetSystemHealth:
+                await HandleGetSystemHealthAsync(command.Arguments);
+                break;
+
+            case CommandType.GetRecentErrors:
+                await HandleGetRecentErrorsAsync(command.Arguments);
+                break;
+
+            case CommandType.GetFetchActivity:
+                await HandleGetFetchActivityAsync(command.Arguments);
                 break;
 
             case CommandType.Invalid:
@@ -574,7 +682,7 @@ public class InteractiveConsole
         await AnsiConsole.Status()
             .StartAsync($"Fetching currency {code} from {protocol}...", async ctx =>
             {
-                var (data, metrics) = await client.GetCurrencyAsync(code);
+                var (data, metrics) = await client.GetCurrencyByCodeAsync(code);
 
                 DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
 
@@ -665,7 +773,7 @@ public class InteractiveConsole
         await AnsiConsole.Status()
             .StartAsync($"Fetching provider {code} from {protocol}...", async ctx =>
             {
-                var (data, metrics) = await client.GetProviderAsync(code);
+                var (data, metrics) = await client.GetProviderByCodeAsync(code);
 
                 DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
 
@@ -772,6 +880,45 @@ public class InteractiveConsole
                     table.AddRow("Total Rates Provided", data.TotalRatesProvided.ToString());
 
                     AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleRescheduleProviderAsync(string[] args)
+    {
+        if (args.Length < 4)
+        {
+            DisplayUtilities.ShowError("Usage: reschedule-provider <protocol> <code> <time> <timezone>");
+            DisplayUtilities.ShowInfo("Example: reschedule-provider rest ECB 14:30 UTC");
+            DisplayUtilities.ShowInfo("Example: reschedule-provider grpc CNB 16:00 CET");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var updateTime = args[2];
+        var timeZone = args[3];
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Rescheduling provider {code} to {updateTime} ({timeZone}) via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.RescheduleProviderAsync(code, updateTime, timeZone);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
                 }
             });
     }
@@ -933,7 +1080,7 @@ public class InteractiveConsole
                 tasks[4].Item2.Value = 100;
 
                 // Test Get Currency
-                var (_, currencyMetrics) = await client.GetCurrencyAsync("EUR");
+                var (_, currencyMetrics) = await client.GetCurrencyByCodeAsync("EUR");
                 results["Get Currency"] = (currencyMetrics.Success, currencyMetrics.ResponseTimeMs, currencyMetrics.ErrorMessage ?? "");
                 tasks[5].Item2.Value = 100;
 
@@ -943,7 +1090,7 @@ public class InteractiveConsole
                 tasks[6].Item2.Value = 100;
 
                 // Test Get Provider
-                var (_, providerMetrics) = await client.GetProviderAsync("ECB");
+                var (_, providerMetrics) = await client.GetProviderByCodeAsync("ECB");
                 results["Get Provider"] = (providerMetrics.Success, providerMetrics.ResponseTimeMs, providerMetrics.ErrorMessage ?? "");
                 tasks[7].Item2.Value = 100;
 
@@ -994,6 +1141,1133 @@ public class InteractiveConsole
         var failedTests = totalTests - passedTests;
 
         DisplayUtilities.ShowInfo($"Tests completed: {passedTests}/{totalTests} passed, {failedTests} failed");
+    }
+
+    private async Task HandleIsApiAvailableAsync(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            DisplayUtilities.ShowError("Please specify protocol: check-api <rest|soap|grpc>");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Checking if {protocol} API is available...", async ctx =>
+            {
+                var isAvailable = await client.IsApiAvailableAsync();
+
+                if (isAvailable)
+                {
+                    DisplayUtilities.ShowSuccess($"{protocol.ToString().ToUpper()} API is available");
+                }
+                else
+                {
+                    DisplayUtilities.ShowError($"{protocol.ToString().ToUpper()} API is not available");
+                }
+            });
+    }
+
+    private async Task HandleGetCurrentGroupedAsync(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            DisplayUtilities.ShowError("Please specify protocol: current-grouped <rest|soap|grpc>");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching current rates (grouped) from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetCurrentRatesGroupedAsync();
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success)
+                {
+                    DisplayUtilities.ShowExchangeRateData(data, protocol.ToString().ToUpper());
+                }
+            });
+    }
+
+    private async Task HandleGetLatestRateAsync(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            DisplayUtilities.ShowError("Usage: latest-rate <protocol> <source> <target> [providerId]");
+            DisplayUtilities.ShowInfo("Example: latest-rate rest EUR USD");
+            DisplayUtilities.ShowInfo("Example: latest-rate grpc EUR USD 1");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var source = args[1].ToUpper();
+        var target = args[2].ToUpper();
+        int? providerId = null;
+
+        if (args.Length >= 4 && int.TryParse(args[3], out var pid))
+        {
+            providerId = pid;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching latest rate {source}/{target} from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetLatestRateAsync(source, target, providerId);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success)
+                {
+                    DisplayUtilities.ShowExchangeRateData(data, protocol.ToString().ToUpper());
+                }
+            });
+    }
+
+    private async Task HandleGetCurrencyByIdAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: currency-id <protocol> <id>");
+            DisplayUtilities.ShowInfo("Example: currency-id rest 1");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid currency ID. Please provide a valid number");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching currency {id} from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetCurrencyAsync(id);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && !string.IsNullOrEmpty(data.Code))
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Property[/]")
+                        .AddColumn("[bold]Value[/]");
+
+                    table.AddRow("ID", data.Id.ToString());
+                    table.AddRow("Code", data.Code);
+                    table.AddRow("Name", data.Name);
+                    table.AddRow("Symbol", data.Symbol ?? "-");
+                    table.AddRow("Decimal Places", data.DecimalPlaces.ToString());
+                    table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
+
+                    AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleCreateCurrencyAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: create-currency <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: create-currency rest GBP");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Creating currency {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.CreateCurrencyAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleDeleteCurrencyAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: delete-currency <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: delete-currency rest GBP");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Deleting currency {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.DeleteCurrencyAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleGetProviderByIdAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: provider-id <protocol> <id>");
+            DisplayUtilities.ShowInfo("Example: provider-id rest 1");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid provider ID. Please provide a valid number");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching provider {id} from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetProviderAsync(id);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && !string.IsNullOrEmpty(data.Code))
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Property[/]")
+                        .AddColumn("[bold]Value[/]");
+
+                    table.AddRow("ID", data.Id.ToString());
+                    table.AddRow("Code", data.Code);
+                    table.AddRow("Name", data.Name);
+                    table.AddRow("Base URL", data.BaseUrl);
+                    table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
+
+                    AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleGetProviderConfigurationAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: provider-config <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: provider-config rest ECB");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching configuration for provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetProviderConfigurationAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && !string.IsNullOrEmpty(data.Code))
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Property[/]")
+                        .AddColumn("[bold]Value[/]");
+
+                    table.AddRow("Provider Code", data.Code);
+                    table.AddRow("Name", data.Name ?? "-");
+                    table.AddRow("URL", data.Url ?? "-");
+                    table.AddRow("Description", data.Description ?? "-");
+                    table.AddRow("Base Currency Code", data.BaseCurrencyCode ?? "-");
+                    table.AddRow("Requires Auth", data.RequiresAuthentication ? "[green]Yes[/]" : "[red]No[/]");
+                    table.AddRow("Is Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
+
+                    AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleActivateProviderAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: activate-provider <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: activate-provider rest ECB");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Activating provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.ActivateProviderAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleDeactivateProviderAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: deactivate-provider <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: deactivate-provider rest ECB");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Deactivating provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.DeactivateProviderAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleResetProviderHealthAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: reset-provider-health <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: reset-provider-health rest ECB");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Resetting health for provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.ResetProviderHealthAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleTriggerManualFetchAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: trigger-fetch <protocol> <code>");
+            DisplayUtilities.ShowInfo("Example: trigger-fetch rest ECB");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Triggering manual fetch for provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.TriggerManualFetchAsync(code);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleCreateProviderAsync(string[] args)
+    {
+        if (args.Length < 6)
+        {
+            DisplayUtilities.ShowError("Usage: create-provider <protocol> <name> <code> <url> <baseCurrencyId> <requiresAuth> [apiKeyRef]");
+            DisplayUtilities.ShowInfo("Example: create-provider rest \"European Central Bank\" ECB https://api.ecb.eu 1 false");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var name = args[1];
+        var code = args[2].ToUpper();
+        var url = args[3];
+
+        if (!int.TryParse(args[4], out var baseCurrencyId))
+        {
+            DisplayUtilities.ShowError("Invalid base currency ID. Please provide a valid number");
+            return;
+        }
+
+        if (!bool.TryParse(args[5], out var requiresAuth))
+        {
+            DisplayUtilities.ShowError("Invalid requiresAuth value. Use: true or false");
+            return;
+        }
+
+        string? apiKeyRef = args.Length >= 7 ? args[6] : null;
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Creating provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.CreateProviderAsync(name, code, url, baseCurrencyId, requiresAuth, apiKeyRef);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleUpdateProviderConfigurationAsync(string[] args)
+    {
+        if (args.Length < 5)
+        {
+            DisplayUtilities.ShowError("Usage: update-provider-config <protocol> <code> <name> <url> <requiresAuth> [apiKeyRef]");
+            DisplayUtilities.ShowInfo("Example: update-provider-config rest ECB \"European Bank\" https://new-api.ecb.eu false");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+        var name = args[2];
+        var url = args[3];
+
+        if (!bool.TryParse(args[4], out var requiresAuth))
+        {
+            DisplayUtilities.ShowError("Invalid requiresAuth value. Use: true or false");
+            return;
+        }
+
+        string? apiKeyRef = args.Length >= 6 ? args[5] : null;
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Updating configuration for provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.UpdateProviderConfigurationAsync(code, name, url, requiresAuth, apiKeyRef);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleDeleteProviderAsync(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            DisplayUtilities.ShowError("Usage: delete-provider <protocol> <code> <force>");
+            DisplayUtilities.ShowInfo("Example: delete-provider rest ECB false");
+            DisplayUtilities.ShowInfo("Example: delete-provider grpc CNB true");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var code = args[1].ToUpper();
+
+        if (!bool.TryParse(args[2], out var force))
+        {
+            DisplayUtilities.ShowError("Invalid force value. Use: true or false");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Deleting provider {code} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.DeleteProviderAsync(code, force);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleGetUserByEmailAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: user-by-email <protocol> <email>");
+            DisplayUtilities.ShowInfo("Example: user-by-email rest admin@example.com");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var email = args[1];
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching user by email {email} from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetUserByEmailAsync(email);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Id > 0)
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Property[/]")
+                        .AddColumn("[bold]Value[/]");
+
+                    table.AddRow("ID", data.Id.ToString());
+                    table.AddRow("Email", data.Email);
+                    table.AddRow("Role", data.Role);
+                    table.AddRow("Active", data.IsActive ? "[green]Yes[/]" : "[red]No[/]");
+                    table.AddRow("Created", data.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                    AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleGetUsersByRoleAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: users-by-role <protocol> <role>");
+            DisplayUtilities.ShowInfo("Example: users-by-role rest Admin");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var role = args[1];
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching users with role {role} from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetUsersByRoleAsync(role);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Users.Any())
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]ID[/]")
+                        .AddColumn("[bold]Email[/]")
+                        .AddColumn("[bold]Role[/]")
+                        .AddColumn("[bold]Active[/]");
+
+                    foreach (var user in data.Users)
+                    {
+                        table.AddRow(
+                            user.Id.ToString(),
+                            user.Email,
+                            user.Role,
+                            user.IsActive ? "[green]Yes[/]" : "[red]No[/]"
+                        );
+                    }
+
+                    AnsiConsole.Write(table);
+                    DisplayUtilities.ShowSuccess($"Total users: {data.Users.Count}");
+                }
+            });
+    }
+
+    private async Task HandleCheckEmailExistsAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: check-email <protocol> <email>");
+            DisplayUtilities.ShowInfo("Example: check-email rest user@example.com");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var email = args[1];
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Checking if email {email} exists via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.CheckEmailExistsAsync(email);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] Email exists: {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[yellow]○[/] Email does not exist");
+                }
+            });
+    }
+
+    private async Task HandleCreateUserAsync(string[] args)
+    {
+        if (args.Length < 6)
+        {
+            DisplayUtilities.ShowError("Usage: create-user <protocol> <email> <password> <firstName> <lastName> <role>");
+            DisplayUtilities.ShowInfo("Example: create-user rest john@example.com Pass123! John Doe User");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var email = args[1];
+        var password = args[2];
+        var firstName = args[3];
+        var lastName = args[4];
+        var role = args[5];
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Creating user {email} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.CreateUserAsync(email, password, firstName, lastName, role);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleUpdateUserAsync(string[] args)
+    {
+        if (args.Length < 4)
+        {
+            DisplayUtilities.ShowError("Usage: update-user <protocol> <id> <firstName> <lastName>");
+            DisplayUtilities.ShowInfo("Example: update-user rest 1 John Doe");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid user ID. Please provide a valid number");
+            return;
+        }
+
+        var firstName = args[2];
+        var lastName = args[3];
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Updating user {id} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.UpdateUserAsync(id, firstName, lastName);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleChangePasswordAsync(string[] args)
+    {
+        if (args.Length < 4)
+        {
+            DisplayUtilities.ShowError("Usage: change-password <protocol> <id> <currentPassword> <newPassword>");
+            DisplayUtilities.ShowInfo("Example: change-password rest 1 OldPass123! NewPass456!");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid user ID. Please provide a valid number");
+            return;
+        }
+
+        var currentPassword = args[2];
+        var newPassword = args[3];
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Changing password for user {id} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.ChangePasswordAsync(id, currentPassword, newPassword);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleChangeUserRoleAsync(string[] args)
+    {
+        if (args.Length < 3)
+        {
+            DisplayUtilities.ShowError("Usage: change-user-role <protocol> <id> <newRole>");
+            DisplayUtilities.ShowInfo("Example: change-user-role rest 1 Admin");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid user ID. Please provide a valid number");
+            return;
+        }
+
+        var newRole = args[2];
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Changing role for user {id} to {newRole} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.ChangeUserRoleAsync(id, newRole);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleDeleteUserAsync(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            DisplayUtilities.ShowError("Usage: delete-user <protocol> <id>");
+            DisplayUtilities.ShowInfo("Example: delete-user rest 5");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        if (!int.TryParse(args[1], out var id))
+        {
+            DisplayUtilities.ShowError("Invalid user ID. Please provide a valid number");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Deleting user {id} via {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.DeleteUserAsync(id);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Success)
+                {
+                    AnsiConsole.MarkupLine($"[green]✓[/] {data.Message}");
+                }
+                else
+                {
+                    AnsiConsole.MarkupLine($"[red]✗[/] {data.ErrorMessage}");
+                }
+            });
+    }
+
+    private async Task HandleGetSystemHealthAsync(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            DisplayUtilities.ShowError("Please specify protocol: system-health <rest|soap|grpc>");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching system health from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetSystemHealthAsync();
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success)
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Metric[/]")
+                        .AddColumn("[bold]Value[/]");
+
+                    table.AddRow("Status", data.Status ?? "Unknown");
+                    table.AddRow("Total Providers", data.TotalProviders.ToString());
+                    table.AddRow("Healthy Providers", data.HealthyProviders.ToString());
+                    table.AddRow("Unhealthy Providers", data.UnhealthyProviders.ToString());
+                    table.AddRow("Total Currencies", data.TotalCurrencies.ToString());
+                    table.AddRow("Total Users", data.TotalUsers.ToString());
+                    table.AddRow("Total Exchange Rates", data.TotalExchangeRates.ToString());
+                    table.AddRow("Last Fetch Time", data.LastFetchTime?.ToString("yyyy-MM-dd HH:mm:ss") ?? "Never");
+                    table.AddRow("System Uptime (hrs)", data.SystemUptime.ToString("F2"));
+
+                    AnsiConsole.Write(table);
+                }
+            });
+    }
+
+    private async Task HandleGetRecentErrorsAsync(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            DisplayUtilities.ShowError("Usage: errors <protocol> [count] [severity]");
+            DisplayUtilities.ShowInfo("Example: errors rest 10 Error");
+            DisplayUtilities.ShowInfo("Example: errors grpc 20");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        int count = 20;
+        if (args.Length >= 2 && int.TryParse(args[1], out var c))
+        {
+            count = c;
+        }
+
+        string? severity = args.Length >= 3 ? args[2] : null;
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching recent errors from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetRecentErrorsAsync(count, severity);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Errors.Any())
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Timestamp[/]")
+                        .AddColumn("[bold]Severity[/]")
+                        .AddColumn("[bold]Message[/]");
+
+                    foreach (var error in data.Errors)
+                    {
+                        var severityColor = error.Severity?.ToLower() == "error" ? "red" : "yellow";
+                        table.AddRow(
+                            error.OccurredAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                            $"[{severityColor}]{error.Severity}[/]",
+                            error.ErrorMessage ?? "-"
+                        );
+                    }
+
+                    AnsiConsole.Write(table);
+                    DisplayUtilities.ShowSuccess($"Total errors: {data.Errors.Count}");
+                }
+                else
+                {
+                    DisplayUtilities.ShowInfo("No errors found");
+                }
+            });
+    }
+
+    private async Task HandleGetFetchActivityAsync(string[] args)
+    {
+        if (args.Length == 0)
+        {
+            DisplayUtilities.ShowError("Usage: fetch-activity <protocol> [count] [providerId] [failedOnly]");
+            DisplayUtilities.ShowInfo("Example: fetch-activity rest 10");
+            DisplayUtilities.ShowInfo("Example: fetch-activity grpc 20 1 true");
+            return;
+        }
+
+        if (!TryParseProtocol(args[0], out var protocol))
+        {
+            DisplayUtilities.ShowError("Invalid protocol. Use: rest, soap, or grpc");
+            return;
+        }
+
+        int count = 20;
+        if (args.Length >= 2 && int.TryParse(args[1], out var c))
+        {
+            count = c;
+        }
+
+        int? providerId = null;
+        if (args.Length >= 3 && int.TryParse(args[2], out var pid))
+        {
+            providerId = pid;
+        }
+
+        bool failedOnly = false;
+        if (args.Length >= 4 && bool.TryParse(args[3], out var fo))
+        {
+            failedOnly = fo;
+        }
+
+        var client = _factory.CreateClient(protocol);
+
+        await AnsiConsole.Status()
+            .StartAsync($"Fetching fetch activity from {protocol}...", async ctx =>
+            {
+                var (data, metrics) = await client.GetFetchActivityAsync(count, providerId, failedOnly);
+
+                DisplayUtilities.ShowMetrics(metrics, protocol.ToString().ToUpper());
+
+                if (metrics.Success && data.Activities.Any())
+                {
+                    var table = new Table()
+                        .Border(TableBorder.Rounded)
+                        .AddColumn("[bold]Timestamp[/]")
+                        .AddColumn("[bold]Provider[/]")
+                        .AddColumn("[bold]Success[/]")
+                        .AddColumn("[bold]Rates Count[/]")
+                        .AddColumn("[bold]Duration (ms)[/]");
+
+                    foreach (var activity in data.Activities)
+                    {
+                        table.AddRow(
+                            activity.FetchedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                            activity.ProviderCode ?? "-",
+                            activity.Success ? "[green]Yes[/]" : "[red]No[/]",
+                            (activity.RatesCount ?? 0).ToString(),
+                            activity.DurationMs.ToString()
+                        );
+                    }
+
+                    AnsiConsole.Write(table);
+                    DisplayUtilities.ShowSuccess($"Total activities: {data.Activities.Count}");
+                }
+                else
+                {
+                    DisplayUtilities.ShowInfo("No fetch activity found");
+                }
+            });
     }
 
     private async Task CleanupAndExitAsync()

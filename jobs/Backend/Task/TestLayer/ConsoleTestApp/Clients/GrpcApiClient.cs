@@ -7,6 +7,7 @@ using gRPC.Protos.Authentication;
 using gRPC.Protos.Currencies;
 using gRPC.Protos.ExchangeRates;
 using gRPC.Protos.Providers;
+using gRPC.Protos.SystemHealth;
 using gRPC.Protos.Users;
 using AppModels = ConsoleTestApp.Models;
 
@@ -253,6 +254,77 @@ public class GrpcApiClient : IApiClient
             var request = new GetCurrentRatesRequest();
 
             var headers = CreateAuthHeaders();
+            var response = await client.GetCurrentRatesAsync(request, headers);
+
+            stopwatch.Stop();
+
+            // Map flat rate list to grouped structure
+            var grouped = response.Rates
+                .GroupBy(r => r.ProviderCode)
+                .Select(providerGroup => new AppModels.ProviderRates
+                {
+                    ProviderCode = providerGroup.Key ?? "",
+                    ProviderName = providerGroup.First().ProviderName ?? "",
+                    BaseCurrencies = providerGroup
+                        .GroupBy(r => r.SourceCurrencyCode)
+                        .Select(baseGroup => new AppModels.BaseCurrencyRates
+                        {
+                            CurrencyCode = baseGroup.Key ?? "",
+                            TargetRates = baseGroup.Select(r => new AppModels.TargetRate
+                            {
+                                CurrencyCode = r.TargetCurrencyCode ?? "",
+                                Rate = decimal.TryParse(r.EffectiveRate, out var rate) ? rate : 0m,
+                                Multiplier = r.Multiplier,
+                                ValidDate = r.ValidDate != null ? new DateTime(r.ValidDate.Year, r.ValidDate.Month, r.ValidDate.Day) : DateTime.UtcNow
+                            }).ToList()
+                        }).ToList()
+                }).ToList();
+
+            var data = new AppModels.ExchangeRateData
+            {
+                Providers = grouped,
+                FetchedAt = DateTime.UtcNow,
+                TotalRates = response.Rates.Count
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                PayloadSizeBytes = response.CalculateSize(),
+                Success = true
+            });
+        }
+        catch (RpcException ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ExchangeRateData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}"
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ExchangeRateData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.ExchangeRateData Data, AppModels.ApiCallMetrics Metrics)> GetCurrentRatesGroupedAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ExchangeRatesService.ExchangeRatesServiceClient(_channel);
+            var request = new GetCurrentRatesRequest();
+
+            var headers = CreateAuthHeaders();
             var response = await client.GetCurrentRatesGroupedAsync(request, headers);
 
             stopwatch.Stop();
@@ -264,6 +336,96 @@ public class GrpcApiClient : IApiClient
                 ResponseTimeMs = stopwatch.ElapsedMilliseconds,
                 PayloadSizeBytes = response.CalculateSize(),
                 Success = true
+            });
+        }
+        catch (RpcException ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ExchangeRateData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}"
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ExchangeRateData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.ExchangeRateData Data, AppModels.ApiCallMetrics Metrics)> GetLatestRateAsync(string sourceCurrency, string targetCurrency, int? providerId = null)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ExchangeRatesService.ExchangeRatesServiceClient(_channel);
+            var request = new GetLatestRateRequest
+            {
+                SourceCurrency = sourceCurrency,
+                TargetCurrency = targetCurrency
+            };
+
+            if (providerId.HasValue)
+            {
+                request.ProviderId = providerId.Value;
+            }
+
+            var headers = CreateAuthHeaders();
+            var response = await client.GetLatestRateAsync(request, headers);
+
+            stopwatch.Stop();
+
+            if (response.Success && response.Data != null)
+            {
+                var data = new AppModels.ExchangeRateData
+                {
+                    Providers = new List<AppModels.ProviderRates>
+                    {
+                        new AppModels.ProviderRates
+                        {
+                            ProviderCode = response.Data.ProviderCode ?? "Unknown",
+                            ProviderName = response.Data.ProviderCode ?? "Unknown",
+                            BaseCurrencies = new List<AppModels.BaseCurrencyRates>
+                            {
+                                new AppModels.BaseCurrencyRates
+                                {
+                                    CurrencyCode = sourceCurrency,
+                                    TargetRates = new List<AppModels.TargetRate>
+                                    {
+                                        new AppModels.TargetRate
+                                        {
+                                            CurrencyCode = targetCurrency,
+                                            Rate = decimal.TryParse(response.Data.EffectiveRate, out var rate) ? rate : 0m,
+                                            Multiplier = response.Data.Multiplier,
+                                            ValidDate = response.Data.ValidDate != null ? new DateTime(response.Data.ValidDate.Year, response.Data.ValidDate.Month, response.Data.ValidDate.Day) : DateTime.UtcNow
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                return (data, new AppModels.ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    PayloadSizeBytes = response.CalculateSize(),
+                    Success = true
+                });
+            }
+
+            return (new AppModels.ExchangeRateData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = response.Message
             });
         }
         catch (RpcException ex)
@@ -410,7 +572,69 @@ public class GrpcApiClient : IApiClient
         }
     }
 
-    public async Task<(AppModels.CurrencyData Data, AppModels.ApiCallMetrics Metrics)> GetCurrencyAsync(string code)
+    public async Task<(AppModels.CurrencyData Data, AppModels.ApiCallMetrics Metrics)> GetCurrencyAsync(int id)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new CurrenciesService.CurrenciesServiceClient(_channel);
+            var request = new GetCurrencyByIdRequest { Id = id };
+
+            var headers = CreateAuthHeaders();
+            var response = await client.GetCurrencyByIdAsync(request, headers);
+
+            stopwatch.Stop();
+
+            if (response.Success && response.Data != null)
+            {
+                var data = new AppModels.CurrencyData
+                {
+                    Id = response.Data.Id,
+                    Code = response.Data.Code,
+                    Name = response.Data.Name,
+                    Symbol = response.Data.Symbol,
+                    DecimalPlaces = 2, // Default value
+                    IsActive = true // Default value
+                };
+
+                return (data, new AppModels.ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    PayloadSizeBytes = response.CalculateSize(),
+                    Success = true
+                });
+            }
+
+            return (new AppModels.CurrencyData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = response.Message
+            });
+        }
+        catch (RpcException ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.CurrencyData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}"
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.CurrencyData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.CurrencyData Data, AppModels.ApiCallMetrics Metrics)> GetCurrencyByCodeAsync(string code)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -527,7 +751,69 @@ public class GrpcApiClient : IApiClient
         }
     }
 
-    public async Task<(AppModels.ProviderData Data, AppModels.ApiCallMetrics Metrics)> GetProviderAsync(string code)
+    public async Task<(AppModels.ProviderData Data, AppModels.ApiCallMetrics Metrics)> GetProviderAsync(int id)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new GetProviderByIdRequest { Id = id };
+
+            var headers = CreateAuthHeaders();
+            var response = await client.GetProviderByIdAsync(request, headers);
+
+            stopwatch.Stop();
+
+            if (response.Success && response.Data != null)
+            {
+                var data = new AppModels.ProviderData
+                {
+                    Id = response.Data.Id,
+                    Code = response.Data.Code,
+                    Name = response.Data.Name,
+                    BaseUrl = response.Data.Url,
+                    IsActive = response.Data.IsActive,
+                    CreatedAt = response.Data.Created.ToDateTime()
+                };
+
+                return (data, new AppModels.ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    PayloadSizeBytes = response.CalculateSize(),
+                    Success = true
+                });
+            }
+
+            return (new AppModels.ProviderData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = response.Message
+            });
+        }
+        catch (RpcException ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ProviderData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}"
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ProviderData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.ProviderData Data, AppModels.ApiCallMetrics Metrics)> GetProviderByCodeAsync(string code)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -713,6 +999,62 @@ public class GrpcApiClient : IApiClient
         }
     }
 
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> RescheduleProviderAsync(string code, string updateTime, string timeZone)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new RescheduleProviderRequest
+            {
+                Code = code,
+                UpdateTime = updateTime,
+                TimeZone = timeZone
+            };
+
+            var headers = CreateAuthHeaders();
+            var response = await client.RescheduleProviderAsync(request, headers);
+
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message,
+                ErrorMessage = response.Success ? string.Empty : response.Message
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                PayloadSizeBytes = response.CalculateSize(),
+                Success = response.Success
+            });
+        }
+        catch (RpcException ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}" },
+                new AppModels.ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = $"gRPC {ex.Status.StatusCode}: {ex.Status.Detail}"
+                });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message },
+                new AppModels.ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = ex.Message
+                });
+        }
+    }
+
     public async Task<(AppModels.UsersListData Data, AppModels.ApiCallMetrics Metrics)> GetUsersAsync()
     {
         var stopwatch = Stopwatch.StartNew();
@@ -829,6 +1171,836 @@ public class GrpcApiClient : IApiClient
         {
             stopwatch.Stop();
             return (new AppModels.UserData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    // Provider management operations
+    public async Task<(AppModels.ProviderConfigurationData Data, AppModels.ApiCallMetrics Metrics)> GetProviderConfigurationAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new GetProviderConfigurationRequest { Code = code };
+            var response = await client.GetProviderConfigurationAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.ProviderConfigurationData
+            {
+                Id = response.Data?.Id ?? 0,
+                Code = response.Data?.Code ?? "",
+                Name = response.Data?.Name ?? "",
+                Url = response.Data?.Url ?? "",
+                IsActive = response.Data?.IsActive ?? false,
+                BaseCurrencyCode = response.Data?.BaseCurrencyCode,
+                RequiresAuthentication = response.Data?.RequiresAuthentication ?? false,
+                ApiKeyVaultReference = response.Data?.ApiKeyVaultReference,
+                CreatedAt = response.Data?.Created?.ToDateTime() ?? DateTime.UtcNow,
+                LastModifiedAt = response.Data?.Modified?.ToDateTime()
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success,
+                ErrorMessage = response.Success ? "" : response.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ProviderConfigurationData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> ActivateProviderAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new ActivateProviderRequest { Code = code };
+            var response = await client.ActivateProviderAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> DeactivateProviderAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new DeactivateProviderRequest { Code = code };
+            var response = await client.DeactivateProviderAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> ResetProviderHealthAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new ResetProviderHealthRequest { Code = code };
+            var response = await client.ResetProviderHealthAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> TriggerManualFetchAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new TriggerManualFetchRequest { Code = code };
+            var response = await client.TriggerManualFetchAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> CreateProviderAsync(string name, string code, string url, int baseCurrencyId, bool requiresAuth, string? apiKeyRef)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new CreateProviderRequest
+            {
+                Name = name,
+                Code = code,
+                Url = url,
+                BaseCurrencyId = baseCurrencyId,
+                RequiresAuthentication = requiresAuth,
+                ApiKeyVaultReference = apiKeyRef ?? ""
+            };
+            var response = await client.CreateProviderAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> UpdateProviderConfigurationAsync(string code, string name, string url, bool requiresAuth, string? apiKeyRef)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new UpdateProviderConfigurationRequest
+            {
+                Code = code,
+                Name = name,
+                Url = url,
+                RequiresAuthentication = requiresAuth,
+                ApiKeyVaultReference = apiKeyRef ?? ""
+            };
+            var response = await client.UpdateProviderConfigurationAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> DeleteProviderAsync(string code, bool force)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new ProvidersService.ProvidersServiceClient(_channel);
+            var request = new DeleteProviderRequest { Code = code, Force = force };
+            var response = await client.DeleteProviderAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    // User management operations
+    public async Task<(AppModels.UserData Data, AppModels.ApiCallMetrics Metrics)> GetUserByEmailAsync(string email)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new GetUserByEmailRequest { Email = email };
+            var response = await client.GetUserByEmailAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.UserData
+            {
+                Id = response.Data?.Id ?? 0,
+                Email = response.Data?.Email ?? "",
+                FirstName = response.Data?.FullName?.Split(' ').FirstOrDefault() ?? "",
+                LastName = response.Data?.FullName?.Contains(' ') == true ? string.Join(" ", response.Data.FullName.Split(' ').Skip(1)) : "",
+                Role = response.Data?.Role ?? "",
+                IsActive = true,
+                CreatedAt = response.Data?.CreatedAt?.ToDateTime() ?? DateTime.UtcNow
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.UserData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.UsersListData Data, AppModels.ApiCallMetrics Metrics)> GetUsersByRoleAsync(string role)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new GetUsersByRoleRequest { Role = role };
+            var response = await client.GetUsersByRoleAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.UsersListData
+            {
+                Users = response.Users?.Select(u => new AppModels.UserData
+                {
+                    Id = u.Id,
+                    Email = u.Email ?? "",
+                    FirstName = u.FullName?.Split(' ').FirstOrDefault() ?? "",
+                    LastName = u.FullName?.Contains(' ') == true ? string.Join(" ", u.FullName.Split(' ').Skip(1)) : "",
+                    Role = u.Role ?? "",
+                    IsActive = true,
+                    CreatedAt = u.CreatedAt?.ToDateTime() ?? DateTime.UtcNow
+                }).ToList() ?? new List<AppModels.UserData>()
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.UsersListData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> CheckEmailExistsAsync(string email)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new CheckEmailExistsRequest { Email = email };
+            var response = await client.CheckEmailExistsAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            return (new AppModels.OperationResult
+            {
+                Success = response.Exists,
+                Message = response.Message ?? (response.Exists ? "Email exists" : "Email does not exist")
+            }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult
+            {
+                Success = false,
+                Message = ex.Message
+            }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> CreateUserAsync(string email, string password, string firstName, string lastName, string role)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new CreateUserRequest
+            {
+                Email = email,
+                Password = password,
+                FullName = $"{firstName} {lastName}",
+                Role = role
+            };
+            var response = await client.CreateUserAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> UpdateUserAsync(int id, string firstName, string lastName)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new UpdateUserInfoRequest
+            {
+                Id = id,
+                FullName = $"{firstName} {lastName}",
+                Email = "" // Email not being updated
+            };
+            var response = await client.UpdateUserInfoAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> ChangePasswordAsync(int id, string currentPassword, string newPassword)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new ChangeUserPasswordRequest
+            {
+                Id = id,
+                CurrentPassword = currentPassword,
+                NewPassword = newPassword
+            };
+            var response = await client.ChangeUserPasswordAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> ChangeUserRoleAsync(int id, string newRole)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new ChangeUserRoleRequest
+            {
+                Id = id,
+                NewRole = newRole
+            };
+            var response = await client.ChangeUserRoleAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> DeleteUserAsync(int id)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new UsersService.UsersServiceClient(_channel);
+            var request = new DeleteUserRequest { Id = id };
+            var response = await client.DeleteUserAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    // Currency management operations
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> CreateCurrencyAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new CurrenciesService.CurrenciesServiceClient(_channel);
+            var request = new CreateCurrencyRequest
+            {
+                Code = code,
+                Name = code, // Default to code as name
+                Symbol = code // Default to code as symbol
+            };
+            var response = await client.CreateCurrencyAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.OperationResult Data, AppModels.ApiCallMetrics Metrics)> DeleteCurrencyAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new CurrenciesService.CurrenciesServiceClient(_channel);
+            var request = new DeleteCurrencyRequest { Code = code };
+            var response = await client.DeleteCurrencyAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.OperationResult
+            {
+                Success = response.Success,
+                Message = response.Message ?? "",
+                ErrorMessage = response.Success ? "" : (response.Message ?? "")
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = response.Success
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.OperationResult { Success = false, ErrorMessage = ex.Message }, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    // System Health operations
+    public async Task<(AppModels.SystemHealthData Data, AppModels.ApiCallMetrics Metrics)> GetSystemHealthAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new SystemHealthService.SystemHealthServiceClient(_channel);
+            var request = new GetSystemHealthRequest();
+            var response = await client.GetSystemHealthAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.SystemHealthData
+            {
+                Status = "Healthy",
+                TotalProviders = response.Health?.TotalProviders ?? 0,
+                HealthyProviders = response.Health?.ActiveProviders ?? 0,
+                UnhealthyProviders = response.Health?.QuarantinedProviders ?? 0,
+                TotalCurrencies = response.Health?.TotalCurrencies ?? 0,
+                TotalUsers = 0, // Not provided in gRPC response
+                TotalExchangeRates = response.Health?.TotalExchangeRates ?? 0,
+                SystemUptime = 0 // Not provided in gRPC response
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.SystemHealthData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.ErrorsListData Data, AppModels.ApiCallMetrics Metrics)> GetRecentErrorsAsync(int count, string? severity)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new SystemHealthService.SystemHealthServiceClient(_channel);
+            var request = new GetRecentErrorsRequest { Limit = count };
+            var response = await client.GetRecentErrorsAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var data = new AppModels.ErrorsListData
+            {
+                Errors = response.Errors.Select(e => new AppModels.ErrorSummaryData
+                {
+                    Id = (int)e.Id,
+                    ErrorMessage = e.ErrorMessage ?? "",
+                    Severity = e.ErrorType ?? "",
+                    SourceComponent = "",
+                    OccurredAt = e.OccurredAt?.ToDateTime() ?? DateTime.UtcNow,
+                    ProviderId = e.ProviderId,
+                    ProviderCode = e.ProviderCode
+                }).ToList(),
+                TotalCount = response.Errors.Count
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.ErrorsListData(), new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(AppModels.FetchActivityListData Data, AppModels.ApiCallMetrics Metrics)> GetFetchActivityAsync(int count, int? providerId, bool failedOnly)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var client = new SystemHealthService.SystemHealthServiceClient(_channel);
+            var request = new GetFetchActivityRequest { Limit = count };
+            if (providerId.HasValue)
+            {
+                request.ProviderId = providerId.Value;
+            }
+            var response = await client.GetFetchActivityAsync(request, headers: CreateAuthHeaders());
+            stopwatch.Stop();
+
+            var activities = response.FetchLogs
+                .Where(f => !failedOnly || f.Status == "Failed")
+                .Select(f => new AppModels.FetchActivityData
+                {
+                    Id = (int)f.Id,
+                    ProviderId = f.ProviderId,
+                    ProviderCode = f.ProviderCode ?? "",
+                    ProviderName = f.ProviderCode ?? "",
+                    FetchedAt = f.StartedAt?.ToDateTime() ?? DateTime.UtcNow,
+                    Success = f.Status == "Success",
+                    RatesCount = f.RecordsFetched,
+                    ErrorMessage = f.ErrorMessage,
+                    DurationMs = 0 // Calculate if possible
+                }).ToList();
+
+            var data = new AppModels.FetchActivityListData
+            {
+                Activities = activities,
+                TotalCount = activities.Count
+            };
+
+            return (data, new AppModels.ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = true
+            });
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new AppModels.FetchActivityListData(), new AppModels.ApiCallMetrics
             {
                 ResponseTimeMs = stopwatch.ElapsedMilliseconds,
                 Success = false,

@@ -344,6 +344,162 @@ public class SoapApiClient : IApiClient
         }
     }
 
+    public async Task<(ExchangeRateData Data, ApiCallMetrics Metrics)> GetCurrentRatesGroupedAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding
+            {
+                MaxReceivedMessageSize = 10485760,
+                Security = { Mode = BasicHttpSecurityMode.None }
+            };
+
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetCurrentRatesGroupedRequest();
+                var response = await client.GetCurrentRatesGroupedAsync(request);
+
+                factory.Close();
+                stopwatch.Stop();
+
+                if (response.Success && response.Data != null)
+                {
+                    var data = MapToExchangeRateData(response.Data);
+                    var payloadSize = EstimateXmlSize(response.Data);
+
+                    return (data, new ApiCallMetrics
+                    {
+                        ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                        PayloadSizeBytes = payloadSize,
+                        Success = true
+                    });
+                }
+
+                return (new ExchangeRateData(), new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = response.Message ?? "Request failed"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new ExchangeRateData(), new ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"SOAP Exception: {ex.Message}"
+            });
+        }
+    }
+
+    public async Task<(ExchangeRateData Data, ApiCallMetrics Metrics)> GetLatestRateAsync(string sourceCurrency, string targetCurrency, int? providerId = null)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding
+            {
+                MaxReceivedMessageSize = 10485760,
+                Security = { Mode = BasicHttpSecurityMode.None }
+            };
+
+            var endpoint = new EndpointAddress($"{_soapUrl}/ExchangeRateService.svc");
+            var factory = new ChannelFactory<IExchangeRateServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetLatestRateRequest
+                {
+                    SourceCurrency = sourceCurrency,
+                    TargetCurrency = targetCurrency,
+                    ProviderId = providerId
+                };
+                var response = await client.GetLatestRateAsync(request);
+
+                factory.Close();
+                stopwatch.Stop();
+
+                if (response.Success && response.Data != null)
+                {
+                    var data = new ExchangeRateData
+                    {
+                        Providers = new List<ProviderRates>
+                        {
+                            new ProviderRates
+                            {
+                                ProviderCode = response.Data.ProviderCode ?? "Unknown",
+                                ProviderName = response.Data.ProviderCode ?? "Unknown",
+                                BaseCurrencies = new List<BaseCurrencyRates>
+                                {
+                                    new BaseCurrencyRates
+                                    {
+                                        CurrencyCode = sourceCurrency,
+                                        TargetRates = new List<TargetRate>
+                                        {
+                                            new TargetRate
+                                            {
+                                                CurrencyCode = targetCurrency,
+                                                Rate = response.Data.Rate,
+                                                ValidDate = DateTime.TryParse(response.Data.Timestamp, out var ts) ? ts : DateTime.UtcNow
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                    return (data, new ApiCallMetrics
+                    {
+                        ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                        PayloadSizeBytes = 200, // Estimate
+                        Success = true
+                    });
+                }
+
+                return (new ExchangeRateData(), new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = response.Message ?? "Request failed"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new ExchangeRateData(), new ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"SOAP Exception: {ex.Message}"
+            });
+        }
+    }
+
     public async Task<(ConversionResult Data, ApiCallMetrics Metrics)> ConvertCurrencyAsync(string from, string to, decimal amount)
     {
         var stopwatch = Stopwatch.StartNew();
@@ -492,7 +648,77 @@ public class SoapApiClient : IApiClient
         }
     }
 
-    public async Task<(CurrencyData Data, ApiCallMetrics Metrics)> GetCurrencyAsync(string code)
+    public async Task<(CurrencyData Data, ApiCallMetrics Metrics)> GetCurrencyAsync(int id)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding
+            {
+                MaxReceivedMessageSize = 10485760,
+                Security = { Mode = BasicHttpSecurityMode.None }
+            };
+
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetCurrencyByIdRequest { Id = id };
+                var response = await client.GetCurrencyByIdAsync(request);
+
+                factory.Close();
+                stopwatch.Stop();
+
+                if (response.Success && response.Data != null)
+                {
+                    var data = new CurrencyData
+                    {
+                        Id = response.Data.Id,
+                        Code = response.Data.Code,
+                        Name = response.Data.Name,
+                        Symbol = response.Data.Symbol,
+                        DecimalPlaces = 2, // Default
+                        IsActive = true // Default
+                    };
+
+                    return (data, new ApiCallMetrics
+                    {
+                        ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                        PayloadSizeBytes = 150, // Estimate
+                        Success = true
+                    });
+                }
+
+                return (new CurrencyData(), new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = response.Message ?? "Request failed"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new CurrencyData(), new ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = $"SOAP Exception: {ex.Message}"
+            });
+        }
+    }
+
+    public async Task<(CurrencyData Data, ApiCallMetrics Metrics)> GetCurrencyByCodeAsync(string code)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -633,7 +859,77 @@ public class SoapApiClient : IApiClient
         }
     }
 
-    public async Task<(ProviderData Data, ApiCallMetrics Metrics)> GetProviderAsync(string code)
+    public async Task<(ProviderData Data, ApiCallMetrics Metrics)> GetProviderAsync(int id)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding
+            {
+                MaxReceivedMessageSize = 10485760,
+                Security = { Mode = BasicHttpSecurityMode.None }
+            };
+
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetProviderByIdRequest { Id = id };
+                var response = await client.GetProviderByIdAsync(request);
+
+                factory.Close();
+                stopwatch.Stop();
+
+                if (response.Success && response.Data != null)
+                {
+                    var data = new ProviderData
+                    {
+                        Id = response.Data.Id,
+                        Code = response.Data.Code,
+                        Name = response.Data.Name,
+                        Description = response.Data.Description,
+                        BaseUrl = response.Data.BaseUrl,
+                        IsActive = response.Data.IsActive
+                    };
+
+                    return (data, new ApiCallMetrics
+                    {
+                        ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                        PayloadSizeBytes = 150, // Estimate
+                        Success = true
+                    });
+                }
+
+                return (new ProviderData(), new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = response.Message ?? "Request failed"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new ProviderData(), new ApiCallMetrics
+            {
+                ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                Success = false,
+                ErrorMessage = ex.Message
+            });
+        }
+    }
+
+    public async Task<(ProviderData Data, ApiCallMetrics Metrics)> GetProviderByCodeAsync(string code)
     {
         var stopwatch = Stopwatch.StartNew();
         try
@@ -842,6 +1138,654 @@ public class SoapApiClient : IApiClient
                 Success = false,
                 ErrorMessage = $"SOAP Exception: {ex.Message}"
             });
+        }
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> RescheduleProviderAsync(string code, string updateTime, string timeZone)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding
+            {
+                MaxReceivedMessageSize = 10485760,
+                Security = { Mode = BasicHttpSecurityMode.None }
+            };
+
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapRescheduleProviderRequest
+                {
+                    ProviderCode = code,
+                    UpdateTime = updateTime,
+                    TimeZone = timeZone
+                };
+                var response = await client.RescheduleProviderAsync(request);
+
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new OperationResult
+                {
+                    Success = response.Success,
+                    Message = response.Message ?? string.Empty,
+                    ErrorMessage = response.Success ? string.Empty : (response.Message ?? "Request failed")
+                };
+
+                return (data, new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    PayloadSizeBytes = 100, // Estimate
+                    Success = response.Success
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new OperationResult { Success = false, ErrorMessage = $"SOAP Exception: {ex.Message}" },
+                new ApiCallMetrics
+                {
+                    ResponseTimeMs = stopwatch.ElapsedMilliseconds,
+                    Success = false,
+                    ErrorMessage = $"SOAP Exception: {ex.Message}"
+                });
+        }
+    }
+
+    // Provider management operations - Fully implemented in SOAP
+    public async Task<(ProviderConfigurationData Data, ApiCallMetrics Metrics)> GetProviderConfigurationAsync(string code)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/ProviderService.svc");
+            var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetProviderConfigurationRequest { Code = code };
+                var response = await client.GetProviderConfigurationAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new ProviderConfigurationData
+                {
+                    Id = response.Data?.Id ?? 0,
+                    Code = response.Data?.Code ?? "",
+                    Name = response.Data?.Name ?? "",
+                    Url = response.Data?.Url ?? "",
+                    IsActive = response.Data?.IsActive ?? false,
+                    BaseCurrencyCode = response.Data?.BaseCurrencyCode,
+                    RequiresAuthentication = response.Data?.RequiresAuthentication ?? false,
+                    ApiKeyVaultReference = response.Data?.ApiKeyVaultReference,
+                    CreatedAt = string.IsNullOrEmpty(response.Data?.CreatedAt) ? DateTime.UtcNow : DateTime.Parse(response.Data.CreatedAt),
+                    LastModifiedAt = string.IsNullOrEmpty(response.Data?.LastModifiedAt) ? null : DateTime.Parse(response.Data.LastModifiedAt)
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new ProviderConfigurationData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ActivateProviderAsync(string code)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapActivateProviderRequest, SoapActivateProviderResponse>(
+            "ProviderService.svc",
+            new SoapActivateProviderRequest { Code = code },
+            (client, request) => client.ActivateProviderAsync(request),
+            "Provider activated successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeactivateProviderAsync(string code)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapDeactivateProviderRequest, SoapDeactivateProviderResponse>(
+            "ProviderService.svc",
+            new SoapDeactivateProviderRequest { Code = code },
+            (client, request) => client.DeactivateProviderAsync(request),
+            "Provider deactivated successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ResetProviderHealthAsync(string code)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapResetProviderHealthRequest, SoapResetProviderHealthResponse>(
+            "ProviderService.svc",
+            new SoapResetProviderHealthRequest { Code = code },
+            (client, request) => client.ResetProviderHealthAsync(request),
+            "Provider health reset successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> TriggerManualFetchAsync(string code)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapTriggerManualFetchRequest, SoapTriggerManualFetchResponse>(
+            "ProviderService.svc",
+            new SoapTriggerManualFetchRequest { Code = code },
+            (client, request) => client.TriggerManualFetchAsync(request),
+            "Manual fetch triggered successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> CreateProviderAsync(string name, string code, string url, int baseCurrencyId, bool requiresAuth, string? apiKeyRef)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapCreateProviderRequest, SoapCreateProviderResponse>(
+            "ProviderService.svc",
+            new SoapCreateProviderRequest { Name = name, Code = code, Url = url, BaseCurrencyId = baseCurrencyId, RequiresAuthentication = requiresAuth, ApiKeyVaultReference = apiKeyRef },
+            (client, request) => client.CreateProviderAsync(request),
+            "Provider created successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> UpdateProviderConfigurationAsync(string code, string name, string url, bool requiresAuth, string? apiKeyRef)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapUpdateProviderConfigurationRequest, SoapUpdateProviderConfigurationResponse>(
+            "ProviderService.svc",
+            new SoapUpdateProviderConfigurationRequest { Code = code, Name = name, Url = url, RequiresAuthentication = requiresAuth, ApiKeyVaultReference = apiKeyRef },
+            (client, request) => client.UpdateProviderConfigurationAsync(request),
+            "Provider configuration updated successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeleteProviderAsync(string code, bool force)
+    {
+        return await ExecuteSoapProviderOperationAsync<SoapDeleteProviderRequest, SoapDeleteProviderResponse>(
+            "ProviderService.svc",
+            new SoapDeleteProviderRequest { Code = code, Force = force },
+            (client, request) => client.DeleteProviderAsync(request),
+            "Provider deleted successfully"
+        );
+    }
+
+    private async Task<(OperationResult Data, ApiCallMetrics Metrics)> ExecuteSoapProviderOperationAsync<TRequest, TResponse>(
+        string serviceName, TRequest request, Func<IProviderServiceSoap, TRequest, Task<TResponse>> operation, string successMessage)
+        where TResponse : class, new()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/{serviceName}");
+            var factory = new ChannelFactory<IProviderServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var response = await operation(client, request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var successProp = response.GetType().GetProperty("Success");
+                var messageProp = response.GetType().GetProperty("Message");
+                var success = (bool)(successProp?.GetValue(response) ?? false);
+                var message = (string?)(messageProp?.GetValue(response)) ?? successMessage;
+
+                return (new OperationResult { Success = success, Message = message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new OperationResult { Success = false, ErrorMessage = ex.Message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    // User management operations - Fully implemented in SOAP
+    public async Task<(UserData Data, ApiCallMetrics Metrics)> GetUserByEmailAsync(string email)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetUserByEmailRequest { Email = email };
+                var response = await client.GetUserByEmailAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new UserData
+                {
+                    Id = response.Data?.Id ?? 0,
+                    Email = response.Data?.Email ?? "",
+                    FirstName = response.Data?.FirstName ?? "",
+                    LastName = response.Data?.LastName ?? "",
+                    Role = response.Data?.Role ?? "",
+                    IsActive = response.Data?.IsActive ?? false,
+                    CreatedAt = string.IsNullOrEmpty(response.Data?.CreatedAt) ? DateTime.UtcNow : DateTime.Parse(response.Data.CreatedAt)
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new UserData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(UsersListData Data, ApiCallMetrics Metrics)> GetUsersByRoleAsync(string role)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetUsersByRoleRequest { Role = role };
+                var response = await client.GetUsersByRoleAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new UsersListData
+                {
+                    Users = response.Data?.Select(u => new UserData
+                    {
+                        Id = u.Id,
+                        Email = u.Email ?? "",
+                        FirstName = u.FirstName ?? "",
+                        LastName = u.LastName ?? "",
+                        Role = u.Role ?? "",
+                        IsActive = u.IsActive,
+                        CreatedAt = string.IsNullOrEmpty(u.CreatedAt) ? DateTime.UtcNow : DateTime.Parse(u.CreatedAt)
+                    }).ToList() ?? new List<UserData>()
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new UsersListData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> CheckEmailExistsAsync(string email)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapCheckEmailExistsRequest { Email = email };
+                var response = await client.CheckEmailExistsAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                return (new OperationResult
+                {
+                    Success = response.Exists,
+                    Message = response.Message ?? (response.Exists ? "Email exists" : "Email does not exist")
+                }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new OperationResult
+            {
+                Success = false,
+                Message = ex.Message
+            }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> CreateUserAsync(string email, string password, string firstName, string lastName, string role)
+    {
+        return await ExecuteSoapUserOperationAsync<SoapCreateUserRequest, SoapCreateUserResponse>(
+            new SoapCreateUserRequest { Email = email, Password = password, FirstName = firstName, LastName = lastName, Role = role },
+            (client, request) => client.CreateUserAsync(request),
+            "User created successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> UpdateUserAsync(int id, string firstName, string lastName)
+    {
+        return await ExecuteSoapUserOperationAsync<SoapUpdateUserRequest, SoapUpdateUserResponse>(
+            new SoapUpdateUserRequest { Id = id, FirstName = firstName, LastName = lastName },
+            (client, request) => client.UpdateUserAsync(request),
+            "User updated successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ChangePasswordAsync(int id, string currentPassword, string newPassword)
+    {
+        return await ExecuteSoapUserOperationAsync<SoapChangePasswordRequest, SoapChangePasswordResponse>(
+            new SoapChangePasswordRequest { Id = id, CurrentPassword = currentPassword, NewPassword = newPassword },
+            (client, request) => client.ChangePasswordAsync(request),
+            "Password changed successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> ChangeUserRoleAsync(int id, string newRole)
+    {
+        return await ExecuteSoapUserOperationAsync<SoapChangeUserRoleRequest, SoapChangeUserRoleResponse>(
+            new SoapChangeUserRoleRequest { Id = id, NewRole = newRole },
+            (client, request) => client.ChangeUserRoleAsync(request),
+            "User role changed successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeleteUserAsync(int id)
+    {
+        return await ExecuteSoapUserOperationAsync<SoapDeleteUserRequest, SoapDeleteUserResponse>(
+            new SoapDeleteUserRequest { Id = id },
+            (client, request) => client.DeleteUserAsync(request),
+            "User deleted successfully"
+        );
+    }
+
+    private async Task<(OperationResult Data, ApiCallMetrics Metrics)> ExecuteSoapUserOperationAsync<TRequest, TResponse>(
+        TRequest request, Func<IUserServiceSoap, TRequest, Task<TResponse>> operation, string successMessage)
+        where TResponse : class, new()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/UserService.svc");
+            var factory = new ChannelFactory<IUserServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var response = await operation(client, request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var successProp = response.GetType().GetProperty("Success");
+                var messageProp = response.GetType().GetProperty("Message");
+                var success = (bool)(successProp?.GetValue(response) ?? false);
+                var message = (string?)(messageProp?.GetValue(response)) ?? successMessage;
+
+                return (new OperationResult { Success = success, Message = message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new OperationResult { Success = false, ErrorMessage = ex.Message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    // Currency management operations - Fully implemented in SOAP
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> CreateCurrencyAsync(string code)
+    {
+        return await ExecuteSoapCurrencyOperationAsync<SoapCreateCurrencyRequest, SoapCreateCurrencyResponse>(
+            new SoapCreateCurrencyRequest { Code = code },
+            (client, request) => client.CreateCurrencyAsync(request),
+            "Currency created successfully"
+        );
+    }
+
+    public async Task<(OperationResult Data, ApiCallMetrics Metrics)> DeleteCurrencyAsync(string code)
+    {
+        return await ExecuteSoapCurrencyOperationAsync<SoapDeleteCurrencyRequest, SoapDeleteCurrencyResponse>(
+            new SoapDeleteCurrencyRequest { Code = code },
+            (client, request) => client.DeleteCurrencyAsync(request),
+            "Currency deleted successfully"
+        );
+    }
+
+    private async Task<(OperationResult Data, ApiCallMetrics Metrics)> ExecuteSoapCurrencyOperationAsync<TRequest, TResponse>(
+        TRequest request, Func<ICurrencyServiceSoap, TRequest, Task<TResponse>> operation, string successMessage)
+        where TResponse : class, new()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/CurrencyService.svc");
+            var factory = new ChannelFactory<ICurrencyServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var response = await operation(client, request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var successProp = response.GetType().GetProperty("Success");
+                var messageProp = response.GetType().GetProperty("Message");
+                var success = (bool)(successProp?.GetValue(response) ?? false);
+                var message = (string?)(messageProp?.GetValue(response)) ?? successMessage;
+
+                return (new OperationResult { Success = success, Message = message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new OperationResult { Success = false, ErrorMessage = ex.Message }, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    // System Health operations - Fully implemented in SOAP
+    public async Task<(SystemHealthData Data, ApiCallMetrics Metrics)> GetSystemHealthAsync()
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetSystemHealthRequest();
+                var response = await client.GetSystemHealthAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new SystemHealthData
+                {
+                    Status = response.Data?.Status ?? "",
+                    TotalProviders = response.Data?.TotalProviders ?? 0,
+                    HealthyProviders = response.Data?.HealthyProviders ?? 0,
+                    UnhealthyProviders = response.Data?.UnhealthyProviders ?? 0,
+                    TotalCurrencies = response.Data?.TotalCurrencies ?? 0,
+                    TotalUsers = response.Data?.TotalUsers ?? 0,
+                    TotalExchangeRates = response.Data?.TotalExchangeRates ?? 0
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new SystemHealthData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(ErrorsListData Data, ApiCallMetrics Metrics)> GetRecentErrorsAsync(int count, string? severity)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetRecentErrorsRequest { Count = count, Severity = severity };
+                var response = await client.GetRecentErrorsAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new ErrorsListData
+                {
+                    Errors = response.Data?.Select(e => new ErrorSummaryData
+                    {
+                        Id = e.Id,
+                        ErrorMessage = e.ErrorMessage,
+                        Severity = e.Severity,
+                        SourceComponent = e.SourceComponent,
+                        OccurredAt = string.IsNullOrEmpty(e.OccurredAt) ? DateTime.UtcNow : DateTime.Parse(e.OccurredAt),
+                        ProviderId = e.ProviderId,
+                        ProviderCode = e.ProviderCode
+                    }).ToList() ?? new(),
+                    TotalCount = response.Data?.Length ?? 0
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new ErrorsListData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
+        }
+    }
+
+    public async Task<(FetchActivityListData Data, ApiCallMetrics Metrics)> GetFetchActivityAsync(int count, int? providerId, bool failedOnly)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var binding = new BasicHttpBinding { MaxReceivedMessageSize = 10485760, Security = { Mode = BasicHttpSecurityMode.None } };
+            var endpoint = new EndpointAddress($"{_soapUrl}/SystemHealthService.svc");
+            var factory = new ChannelFactory<ISystemHealthServiceSoap>(binding, endpoint);
+            var client = factory.CreateChannel();
+
+            using (new OperationContextScope((IContextChannel)client))
+            {
+                if (!string.IsNullOrEmpty(_authToken))
+                {
+                    var httpRequestProperty = new HttpRequestMessageProperty();
+                    httpRequestProperty.Headers["Authorization"] = $"Bearer {_authToken}";
+                    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = httpRequestProperty;
+                }
+
+                var request = new SoapGetFetchActivityRequest { Count = count, ProviderId = providerId, FailedOnly = failedOnly };
+                var response = await client.GetFetchActivityAsync(request);
+                factory.Close();
+                stopwatch.Stop();
+
+                var data = new FetchActivityListData
+                {
+                    Activities = response.Data?.Select(f => new FetchActivityData
+                    {
+                        Id = f.Id,
+                        ProviderId = f.ProviderId,
+                        ProviderCode = f.ProviderCode,
+                        ProviderName = f.ProviderName,
+                        FetchedAt = string.IsNullOrEmpty(f.FetchedAt) ? DateTime.UtcNow : DateTime.Parse(f.FetchedAt),
+                        Success = f.Success,
+                        RatesCount = f.RatesCount,
+                        ErrorMessage = f.ErrorMessage,
+                        DurationMs = f.DurationMs
+                    }).ToList() ?? new(),
+                    TotalCount = response.Data?.Length ?? 0
+                };
+
+                return (data, new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = response.Success });
+            }
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return (new FetchActivityListData(), new ApiCallMetrics { ResponseTimeMs = stopwatch.ElapsedMilliseconds, Success = false, ErrorMessage = ex.Message });
         }
     }
 
@@ -1127,17 +2071,13 @@ public class SoapApiClient : IApiClient
         Task<SoapGetAllLatestRatesGroupedResponse> GetCurrentRatesAsync(SoapGetCurrentRatesRequest request);
 
         [OperationContract]
+        Task<SoapGetCurrentRatesGroupedResponse> GetCurrentRatesGroupedAsync(SoapGetCurrentRatesGroupedRequest request);
+
+        [OperationContract]
+        Task<SoapGetLatestRateResponse> GetLatestRateAsync(SoapGetLatestRateRequest request);
+
+        [OperationContract]
         Task<SoapConvertCurrencyResponse> ConvertCurrencyAsync(SoapConvertCurrencyRequest request);
-    }
-
-    [ServiceContract]
-    private interface ICurrencyServiceSoap
-    {
-        [OperationContract]
-        Task<SoapGetAllCurrenciesResponse> GetAllCurrenciesAsync(SoapGetAllCurrenciesRequest request);
-
-        [OperationContract]
-        Task<SoapGetCurrencyByCodeResponse> GetCurrencyByCodeAsync(SoapGetCurrencyByCodeRequest request);
     }
 
     [ServiceContract]
@@ -1147,6 +2087,9 @@ public class SoapApiClient : IApiClient
         Task<SoapGetAllProvidersResponse> GetAllProvidersAsync(SoapGetAllProvidersRequest request);
 
         [OperationContract]
+        Task<SoapGetProviderByIdResponse> GetProviderByIdAsync(SoapGetProviderByIdRequest request);
+
+        [OperationContract]
         Task<SoapGetProviderByCodeResponse> GetProviderByCodeAsync(SoapGetProviderByCodeRequest request);
 
         [OperationContract]
@@ -1154,6 +2097,33 @@ public class SoapApiClient : IApiClient
 
         [OperationContract]
         Task<SoapGetProviderStatisticsResponse> GetProviderStatisticsAsync(SoapGetProviderStatisticsRequest request);
+
+        [OperationContract]
+        Task<SoapGetProviderConfigurationResponse> GetProviderConfigurationAsync(SoapGetProviderConfigurationRequest request);
+
+        [OperationContract]
+        Task<SoapActivateProviderResponse> ActivateProviderAsync(SoapActivateProviderRequest request);
+
+        [OperationContract]
+        Task<SoapDeactivateProviderResponse> DeactivateProviderAsync(SoapDeactivateProviderRequest request);
+
+        [OperationContract]
+        Task<SoapResetProviderHealthResponse> ResetProviderHealthAsync(SoapResetProviderHealthRequest request);
+
+        [OperationContract]
+        Task<SoapTriggerManualFetchResponse> TriggerManualFetchAsync(SoapTriggerManualFetchRequest request);
+
+        [OperationContract]
+        Task<SoapCreateProviderResponse> CreateProviderAsync(SoapCreateProviderRequest request);
+
+        [OperationContract]
+        Task<SoapUpdateProviderConfigurationResponse> UpdateProviderConfigurationAsync(SoapUpdateProviderConfigurationRequest request);
+
+        [OperationContract]
+        Task<SoapDeleteProviderResponse> DeleteProviderAsync(SoapDeleteProviderRequest request);
+
+        [OperationContract]
+        Task<SoapRescheduleProviderResponse> RescheduleProviderAsync(SoapRescheduleProviderRequest request);
     }
 
     [ServiceContract]
@@ -1164,6 +2134,62 @@ public class SoapApiClient : IApiClient
 
         [OperationContract]
         Task<SoapGetUserByIdResponse> GetUserByIdAsync(SoapGetUserByIdRequest request);
+
+        [OperationContract]
+        Task<SoapGetUserByEmailResponse> GetUserByEmailAsync(SoapGetUserByEmailRequest request);
+
+        [OperationContract]
+        Task<SoapGetUsersByRoleResponse> GetUsersByRoleAsync(SoapGetUsersByRoleRequest request);
+
+        [OperationContract]
+        Task<SoapCheckEmailExistsResponse> CheckEmailExistsAsync(SoapCheckEmailExistsRequest request);
+
+        [OperationContract]
+        Task<SoapCreateUserResponse> CreateUserAsync(SoapCreateUserRequest request);
+
+        [OperationContract]
+        Task<SoapUpdateUserResponse> UpdateUserAsync(SoapUpdateUserRequest request);
+
+        [OperationContract]
+        Task<SoapChangePasswordResponse> ChangePasswordAsync(SoapChangePasswordRequest request);
+
+        [OperationContract]
+        Task<SoapChangeUserRoleResponse> ChangeUserRoleAsync(SoapChangeUserRoleRequest request);
+
+        [OperationContract]
+        Task<SoapDeleteUserResponse> DeleteUserAsync(SoapDeleteUserRequest request);
+    }
+
+    [ServiceContract]
+    private interface ICurrencyServiceSoap
+    {
+        [OperationContract]
+        Task<SoapGetAllCurrenciesResponse> GetAllCurrenciesAsync(SoapGetAllCurrenciesRequest request);
+
+        [OperationContract]
+        Task<SoapGetCurrencyByIdResponse> GetCurrencyByIdAsync(SoapGetCurrencyByIdRequest request);
+
+        [OperationContract]
+        Task<SoapGetCurrencyByCodeResponse> GetCurrencyByCodeAsync(SoapGetCurrencyByCodeRequest request);
+
+        [OperationContract]
+        Task<SoapCreateCurrencyResponse> CreateCurrencyAsync(SoapCreateCurrencyRequest request);
+
+        [OperationContract]
+        Task<SoapDeleteCurrencyResponse> DeleteCurrencyAsync(SoapDeleteCurrencyRequest request);
+    }
+
+    [ServiceContract]
+    private interface ISystemHealthServiceSoap
+    {
+        [OperationContract]
+        Task<SoapGetSystemHealthResponse> GetSystemHealthAsync(SoapGetSystemHealthRequest request);
+
+        [OperationContract]
+        Task<SoapGetRecentErrorsResponse> GetRecentErrorsAsync(SoapGetRecentErrorsRequest request);
+
+        [OperationContract]
+        Task<SoapGetFetchActivityResponse> GetFetchActivityAsync(SoapGetFetchActivityRequest request);
     }
 
     // ============================================================
@@ -1357,6 +2383,26 @@ public class SoapApiClient : IApiClient
     }
 
     [DataContract]
+    private class SoapGetCurrencyByIdRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetCurrencyByIdResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapCurrencyData? Data { get; set; }
+    }
+
+    [DataContract]
     private class SoapGetCurrencyByCodeRequest
     {
         [DataMember]
@@ -1538,6 +2584,29 @@ public class SoapApiClient : IApiClient
     }
 
     [DataContract]
+    private class SoapRescheduleProviderRequest
+    {
+        [DataMember]
+        public string ProviderCode { get; set; } = string.Empty;
+
+        [DataMember]
+        public string UpdateTime { get; set; } = string.Empty;
+
+        [DataMember]
+        public string TimeZone { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapRescheduleProviderResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
     private class SoapGetAllUsersRequest
     {
         // Empty request
@@ -1586,6 +2655,12 @@ public class SoapApiClient : IApiClient
         public string Email { get; set; } = string.Empty;
 
         [DataMember]
+        public string FirstName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string LastName { get; set; } = string.Empty;
+
+        [DataMember]
         public string Role { get; set; } = string.Empty;
 
         [DataMember]
@@ -1593,5 +2668,651 @@ public class SoapApiClient : IApiClient
 
         [DataMember]
         public string CreatedAt { get; set; } = string.Empty;
+    }
+
+    // Provider Management Data Contracts
+    [DataContract]
+    private class SoapGetProviderConfigurationRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapGetProviderConfigurationResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapProviderDetailData? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapProviderDetailData
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Name { get; set; } = string.Empty;
+
+        [DataMember]
+        public string? Description { get; set; }
+
+        [DataMember]
+        public string Url { get; set; } = string.Empty;
+
+        [DataMember]
+        public string BaseUrl { get; set; } = string.Empty;
+
+        [DataMember]
+        public bool IsActive { get; set; }
+
+        [DataMember]
+        public string? BaseCurrencyCode { get; set; }
+
+        [DataMember]
+        public bool RequiresAuthentication { get; set; }
+
+        [DataMember]
+        public string? ApiKeyVaultReference { get; set; }
+
+        [DataMember]
+        public string CreatedAt { get; set; } = string.Empty;
+
+        [DataMember]
+        public string? LastModifiedAt { get; set; }
+    }
+
+    [DataContract]
+    private class SoapActivateProviderRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapActivateProviderResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeactivateProviderRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapDeactivateProviderResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapResetProviderHealthRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapResetProviderHealthResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapTriggerManualFetchRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapTriggerManualFetchResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapCreateProviderRequest
+    {
+        [DataMember]
+        public string Name { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Url { get; set; } = string.Empty;
+
+        [DataMember]
+        public int BaseCurrencyId { get; set; }
+
+        [DataMember]
+        public bool RequiresAuthentication { get; set; }
+
+        [DataMember]
+        public string? ApiKeyVaultReference { get; set; }
+    }
+
+    [DataContract]
+    private class SoapCreateProviderResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapUpdateProviderConfigurationRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Name { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Url { get; set; } = string.Empty;
+
+        [DataMember]
+        public bool RequiresAuthentication { get; set; }
+
+        [DataMember]
+        public string? ApiKeyVaultReference { get; set; }
+    }
+
+    [DataContract]
+    private class SoapUpdateProviderConfigurationResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeleteProviderRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+
+        [DataMember]
+        public bool Force { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeleteProviderResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    // User Management Data Contracts
+    [DataContract]
+    private class SoapGetUserByEmailRequest
+    {
+        [DataMember]
+        public string Email { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapGetUserByEmailResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapUserData? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapCreateUserRequest
+    {
+        [DataMember]
+        public string Email { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Password { get; set; } = string.Empty;
+
+        [DataMember]
+        public string FirstName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string LastName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string Role { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapCreateUserResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapUpdateUserRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string FirstName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string LastName { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapUpdateUserResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapChangePasswordRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [DataMember]
+        public string NewPassword { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapChangePasswordResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapChangeUserRoleRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string NewRole { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapChangeUserRoleResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeleteUserRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeleteUserResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    // Currency Management Data Contracts
+    [DataContract]
+    private class SoapCreateCurrencyRequest
+    {
+        [DataMember]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapCreateCurrencyResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    [DataContract]
+    private class SoapDeleteCurrencyRequest
+    {
+        [DataMember]
+        public string Code { get; set; }= string.Empty;
+    }
+
+    [DataContract]
+    private class SoapDeleteCurrencyResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+    }
+
+    // System Health Data Contracts
+    [DataContract]
+    private class SoapGetSystemHealthRequest
+    {
+        // Empty request
+    }
+
+    [DataContract]
+    private class SoapGetSystemHealthResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapSystemHealthData? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapSystemHealthData
+    {
+        [DataMember]
+        public string Status { get; set; } = string.Empty;
+
+        [DataMember]
+        public int TotalProviders { get; set; }
+
+        [DataMember]
+        public int HealthyProviders { get; set; }
+
+        [DataMember]
+        public int UnhealthyProviders { get; set; }
+
+        [DataMember]
+        public int TotalCurrencies { get; set; }
+
+        [DataMember]
+        public int TotalUsers { get; set; }
+
+        [DataMember]
+        public long TotalExchangeRates { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetRecentErrorsRequest
+    {
+        [DataMember]
+        public int Count { get; set; }
+
+        [DataMember]
+        public string? Severity { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetRecentErrorsResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapErrorData[] Data { get; set; } = Array.Empty<SoapErrorData>();
+    }
+
+    [DataContract]
+    private class SoapErrorData
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string ErrorMessage { get; set; } = string.Empty;
+
+        [DataMember]
+        public string? Severity { get; set; }
+
+        [DataMember]
+        public string? SourceComponent { get; set; }
+
+        [DataMember]
+        public string OccurredAt { get; set; } = string.Empty;
+
+        [DataMember]
+        public int? ProviderId { get; set; }
+
+        [DataMember]
+        public string? ProviderCode { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetFetchActivityRequest
+    {
+        [DataMember]
+        public int Count { get; set; }
+
+        [DataMember]
+        public int? ProviderId { get; set; }
+
+        [DataMember]
+        public bool FailedOnly { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetFetchActivityResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapFetchActivityData[] Data { get; set; } = Array.Empty<SoapFetchActivityData>();
+    }
+
+    [DataContract]
+    private class SoapFetchActivityData
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public int ProviderId { get; set; }
+
+        [DataMember]
+        public string ProviderCode { get; set; } = string.Empty;
+
+        [DataMember]
+        public string ProviderName { get; set; } = string.Empty;
+
+        [DataMember]
+        public string FetchedAt { get; set; } = string.Empty;
+
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public int? RatesCount { get; set; }
+
+        [DataMember]
+        public string? ErrorMessage { get; set; }
+
+        [DataMember]
+        public long DurationMs { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetProviderByIdRequest
+    {
+        [DataMember]
+        public int Id { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetProviderByIdResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapProviderDetailData? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetUsersByRoleRequest
+    {
+        [DataMember]
+        public string Role { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapGetUsersByRoleResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapUserData[]? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapCheckEmailExistsRequest
+    {
+        [DataMember]
+        public string Email { get; set; } = string.Empty;
+    }
+
+    [DataContract]
+    private class SoapCheckEmailExistsResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public bool Exists { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetCurrentRatesGroupedRequest
+    {
+        // Empty request
+    }
+
+    [DataContract]
+    private class SoapGetCurrentRatesGroupedResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapLatestExchangeRatesGrouped[]? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetLatestRateRequest
+    {
+        [DataMember]
+        public string SourceCurrency { get; set; } = string.Empty;
+
+        [DataMember]
+        public string TargetCurrency { get; set; } = string.Empty;
+
+        [DataMember]
+        public int? ProviderId { get; set; }
+    }
+
+    [DataContract]
+    private class SoapGetLatestRateResponse
+    {
+        [DataMember]
+        public bool Success { get; set; }
+
+        [DataMember]
+        public string? Message { get; set; }
+
+        [DataMember]
+        public SoapLatestRateData? Data { get; set; }
+    }
+
+    [DataContract]
+    private class SoapLatestRateData
+    {
+        [DataMember]
+        public string? ProviderCode { get; set; }
+
+        [DataMember]
+        public decimal Rate { get; set; }
+
+        [DataMember]
+        public string? Timestamp { get; set; }
     }
 }

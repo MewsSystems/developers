@@ -16,9 +16,9 @@
     <PackageReference Include="System.ServiceModel.Primitives" Version="8.0.0" />
 
     <!-- gRPC Client -->
-    <PackageReference Include="Grpc.Net.Client" Version="2.68.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
     <PackageReference Include="Google.Protobuf" Version="3.28.3" />
-    <PackageReference Include="Grpc.Tools" Version="2.68.0">
+    <PackageReference Include="Grpc.Tools" Version="2.76.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

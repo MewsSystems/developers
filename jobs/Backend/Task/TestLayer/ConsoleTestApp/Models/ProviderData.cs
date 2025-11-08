@@ -39,3 +39,19 @@ public class ProviderStatisticsData
     public int TotalRatesProvided { get; set; }
     public DateTime? LastFetchAt { get; set; }
 }
+
+public class ProviderConfigurationData
+{
+    public int Id { get; set; }
+    public string Code { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string Url { get; set; } = string.Empty;
+    public bool IsActive { get; set; }
+    public int BaseCurrencyId { get; set; }
+    public string? BaseCurrencyCode { get; set; }
+    public bool RequiresAuthentication { get; set; }
+    public string? ApiKeyVaultReference { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? LastModifiedAt { get; set; }
+}
