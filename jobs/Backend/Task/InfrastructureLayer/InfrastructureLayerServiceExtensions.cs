@@ -71,10 +71,19 @@ public static class InfrastructureLayerServiceExtensions
     /// Initializes and schedules background jobs.
     /// Call this after the application has started and database is ready.
     /// </summary>
-    public static void UseInfrastructureLayerBackgroundJobs(IServiceProvider serviceProvider)
+    public static void UseInfrastructureLayerBackgroundJobs(IServiceProvider serviceProvider, IConfiguration configuration)
     {
-        // Schedule historical fetch on startup (one-time)
-        BackgroundJob.Enqueue<FetchHistoricalRatesJob>(job => job.ExecuteAsync(CancellationToken.None));
+        // Bind SystemConfiguration to get the FetchHistoricalOnStartup setting
+        var systemConfig = new ConfigurationLayer.Option.SystemConfigurationOptions();
+        configuration.GetSection("SystemConfiguration").Bind(systemConfig);
+
+        bool fetchHistoricalOnStartup = systemConfig.BackgroundJobs.FetchHistoricalOnStartup;
+
+        if (fetchHistoricalOnStartup)
+        {
+            // Schedule historical fetch on startup (one-time)
+            BackgroundJob.Enqueue<FetchHistoricalRatesJob>(job => job.ExecuteAsync(CancellationToken.None));
+        }
 
         // Schedule recurring jobs for each provider
         // In a real implementation, you would get provider configurations from database

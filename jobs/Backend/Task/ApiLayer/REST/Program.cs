@@ -245,7 +245,7 @@ app.MapHub<REST.Hubs.ExchangeRatesHub>("/hubs/exchange-rates");
 // INITIALIZE BACKGROUND JOBS
 // ============================================================
 // Schedule background jobs after application is built
-InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services);
+InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services, app.Configuration);
 
 // ============================================================
 // RUN APPLICATION

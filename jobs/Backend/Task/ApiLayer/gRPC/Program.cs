@@ -206,7 +206,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 // ============================================================
 // INITIALIZE BACKGROUND JOBS
 // ============================================================
-InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services);
+InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services, app.Configuration);
 
 // ============================================================
 // RUN APPLICATION

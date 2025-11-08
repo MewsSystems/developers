@@ -301,7 +301,7 @@ public class InteractiveConsole
                 data =>
                 {
                     AnsiConsole.WriteLine();
-                    DisplayUtilities.ShowInfo($"Stream update received at {DateTime.Now:HH:mm:ss}");
+                    DisplayUtilities.ShowInfo($"Stream update received at {DateTime.UtcNow:HH:mm:ss} UTC");
                     DisplayUtilities.ShowExchangeRateData(data, protocol.ToString().ToUpper());
                 },
                 _cts.Token

@@ -54,6 +54,7 @@ namespace ConfigurationLayer.Option
 
     public class BackgroundJobOptions
     {
+        public bool FetchHistoricalOnStartup { get; set; } = true;
         public int HistoricalDataDays { get; set; } = 90;
         public int DefaultRetryDelayMinutes { get; set; } = 30;
         public int MaxRetries { get; set; } = 3;

@@ -265,7 +265,7 @@ app.UseEndpoints(endpoints =>
 // INITIALIZE BACKGROUND JOBS
 // ============================================================
 // Schedule background jobs after application is built
-InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services);
+InfrastructureLayer.InfrastructureLayerServiceExtensions.UseInfrastructureLayerBackgroundJobs(app.Services, app.Configuration);
 
 // ============================================================
 // RUN APPLICATION
