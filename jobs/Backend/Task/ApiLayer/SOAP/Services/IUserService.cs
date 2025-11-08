@@ -58,7 +58,7 @@ public interface IUserService
     Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request);
 
     /// <summary>
-    /// Check if an email address is already registered.
+    /// Check if an email address is already registered (Admin only).
     /// </summary>
     [OperationContract]
     Task<CheckEmailExistsResponse> CheckEmailExistsAsync(CheckEmailExistsRequest request);

@@ -25,7 +25,7 @@ service UsersService {
   /// Get users by role
   rpc GetUsersByRole(GetUsersByRoleRequest) returns (GetUsersByRoleResponse);
 
-  /// Check if email exists
+  /// Check if email exists (Admin only)
   rpc CheckEmailExists(CheckEmailExistsRequest) returns (CheckEmailExistsResponse);
 
   /// Create a new user

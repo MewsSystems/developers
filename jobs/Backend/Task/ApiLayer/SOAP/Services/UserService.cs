@@ -476,6 +476,7 @@ public class UserService : IUserService
         }
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<CheckEmailExistsResponse> CheckEmailExistsAsync(CheckEmailExistsRequest request)
     {
         try

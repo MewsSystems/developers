@@ -102,11 +102,10 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
-    /// Check if a user with the given email exists.
+    /// Check if a user with the given email exists (Admin only).
     /// </summary>
     /// <param name="email">Email address to check</param>
     [HttpGet("check-email/{email}")]
-    [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<bool>), 200)]
     public async Task<IActionResult> CheckEmailExists(string email)
     {
